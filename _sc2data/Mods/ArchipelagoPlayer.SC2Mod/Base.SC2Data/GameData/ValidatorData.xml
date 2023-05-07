@@ -155,6 +155,16 @@
         <Find value="1"/>
         <Value value="AP_HaveWidowMineImprovedConcealment"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveCycloneLockOnDamageUpgrade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveCycloneLockOnDamageUpgrade"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveCycloneLockOnRangeUpgrade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_CycloneLockOnRangeUpgrade"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaBanshee"/>
@@ -467,4 +477,115 @@
     <CValidatorUnitFilters id="AP_OwnedBySelf">
         <Filters value="-;Ally,Neutral,Enemy"/>
     </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_LockOnAirTargetNotDead">
+        <WhichUnit Effect="AP_LockOnAirFireSet"/>
+        <Filters value="Air;Dead"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_LockOnCasterFilters">
+        <WhichUnit Value="Caster"/>
+        <Filters value="-;Stasis,Dead,Hidden,Stunned"/>
+    </CValidatorUnitFilters>
+    <CValidatorLocationCompareRange id="AP_LockOnCasterNearTarget">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="12"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_LockOnCasterNearTargetUpgraded">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="15"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="AP_LockOnGroundAirPeriodicValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_LockOnCasterNearTargetUpgraded"/>
+        <CombineArray value="AP_LockOnTargetFilters"/>
+        <CombineArray value="AP_LockOnCasterFilters"/>
+        <CombineArray value="AP_CasterLockingOn"/>
+        <!-- <CombineArray value="CasterDoesNotHaveScramblerMissileBehavior"/> --><!-- Not Applicable to WoL environment -->
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_LockOnPeriodicValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_LockOnCasterNearTarget"/>
+        <CombineArray value="AP_LockOnTargetFilters"/>
+        <CombineArray value="AP_LockOnCasterFilters"/>
+        <CombineArray value="AP_CasterLockingOn"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_LockOnPeriodicValidatorsUpgraded">
+        <Type value="And"/>
+        <CombineArray value="AP_LockOnCasterNearTargetUpgraded"/>
+        <CombineArray value="AP_LockOnTargetFilters"/>
+        <CombineArray value="AP_LockOnCasterFilters"/>
+        <CombineArray value="AP_CasterLockingOn"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_LockOnTargetFilters">
+        <Filters value="Visible;Player,Ally,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_LockOnTargetNotDead">
+        <WhichUnit Effect="AP_LockOnFireSet"/>
+        <Filters value="-;Dead"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_LockOnTargetNotDeadNew">
+        <WhichUnit Effect="AP_LockOnInitialSetNew"/>
+        <Filters value="-;Dead"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_LockOnTargetNotDeadSet">
+        <CombineArray value="AP_LockOnTargetNotDead"/>
+        <CombineArray value="AP_LockOnAirTargetNotDead"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_LockingOn">
+        <ResultFailed value="Error,AP_NotLockingOn"/>
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="AP_LockOnDisableAttack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotLockingOn">
+        <ResultFailed value="Error,NotLockingOn"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LockOnDisableAttack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotLockOn">
+        <Behavior value="AP_LockOn"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterLockingOn">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="AP_LockOnDisableAttack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsVanillaBunker">
+        <Value value="Bunker"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsDefensiveStructure">
+        <CombineArray value="NotStructure"/>
+        <CombineArray value="IsPhotonCannon"/>
+        <CombineArray value="AP_IsVanillaBunker"/> <!-- FIXME: Add AP_Bunker -->
+        <CombineArray value="IsMissileTurret"/>
+        <CombineArray value="AP_IsVanillaSpineCrawler"/> <!-- FIXME: Add AP_SpineCrawler -->
+        <CombineArray value="AP_IsVanillaSporeCrawler"/> <!-- FIXME: Add AP_SporeCrawler -->
+        <CombineArray value="IsPlanetaryFortress"/>
+        <CombineArray value="IsAutoTurret"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsNotVanillaInterceptor">
+        <Value value="Interceptor"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsVanillaSpineCrawler">
+        <CombineArray value="AP_IsVanillaSpineCrawlerRooted"/>
+        <CombineArray value="AP_IsVanillaSpineCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaSpineCrawlerRooted">
+        <Value value="SpineCrawler"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaSpineCrawlerUprooted">
+        <Value value="SpineCrawlerUprooted"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsVanillaSporeCrawler">
+        <CombineArray value="AP_IsVanillaSporeCrawlerRooted"/>
+        <CombineArray value="AP_IsVanillaSporeCrawlerUprooted"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaSporeCrawlerRooted">
+        <Value value="SporeCrawler"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaSporeCrawlerUprooted">
+        <Value value="SporeCrawlerUprooted"/>
+    </CValidatorUnitType>
 </Catalog>

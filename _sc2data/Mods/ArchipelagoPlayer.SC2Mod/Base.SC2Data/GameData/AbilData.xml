@@ -950,4 +950,65 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilEffectTarget id="AP_LockOn">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <PrepEffect value="AP_LockOnInitialAB"/>
+        <Effect index="0" value="AP_LockOnInitialSetNew"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="6"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSThreatensCyclone"/>
+            <SortArray value="AirTarget"/>
+        </TargetSorts>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <AutoCastFilters value="Visible;Player,Ally,Neutral"/>
+        <AutoCastRange value="7.5"/>
+        <AutoCastValidatorArray value="noMarkers"/>
+        <AutoCastValidatorArray value="AP_TargetNotLockOn"/>
+        <AutoCastValidatorArray value="AP_IsNotVanillaInterceptor"/> <!-- FIXME: Add AP_Interceptor -->
+        <AutoCastValidatorArray value="TargetNotChangeling"/>
+        <AutoCastValidatorArray value="IsNotNeuralParasited"/>
+        <AutoCastValidatorArray value="TargetNotChangeling"/>
+        <AutoCastValidatorArray value="AP_IsDefensiveStructure"/>
+        <AutoCastValidatorArray value="NotLarva"/>
+        <AutoCastValidatorArray value="CasterIsNotHidden"/>
+        <AutoCastValidatorArray value="NotLarvaEgg"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_LockOn" Requirements="AP_NoLockedOn"/>
+        <FollowRange value="7"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_LockOnAir">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <PrepEffect value="AP_LockOnInitialAB"/>
+        <Effect index="0" value="LockOnAirInitialSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown Link="LockOnShared" Location="Unit" TimeUse="6"/>
+        </Cost>
+        <TargetFilters value="Air,Visible;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <AutoCastFilters value="Visible;Player,Ally,Neutral"/>
+        <AutoCastRange value="7"/>
+        <AutoCastValidatorArray value="noMarkers"/>
+        <AutoCastValidatorArray value="AP_TargetNotLockOn"/>
+        <AutoCastValidatorArray value="IsNotInterceptor"/>
+        <AutoCastValidatorArray value="TargetNotChangeling"/>
+        <AutoCastValidatorArray value="IsNotNeuralParasited"/>
+        <AutoCastValidatorArray value="IsFlying"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_LockOnAir" Requirements="AP_NoLockedOn"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_LockOnCancel">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_LockOnDisableAttackRB"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_LockOnCancel" Requirements="AP_LockedOn"/>
+    </CAbilEffectInstant>
 </Catalog>

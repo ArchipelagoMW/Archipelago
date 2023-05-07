@@ -3413,7 +3413,6 @@
         <LaunchSiteOps Ops="SOpForwardPointsUp"/>
         <LaunchAttachQuery Methods="Center"/>
         <LaunchAssets Sound="WidowMine_Attack"/>
-        <Missile value="AP_WidowMineAirAttackMissile"/>
         <ImpactMap index="None" Model="WidowMineAirAttackImpact" Sound="WidowMine_Death"/>
         <ImpactPhysics Name="WidowMineImpact" MatchKeys="Basic" Physics="WidowMineAirAttackForce"/>
         <ShieldFlashType value="Full"/>
@@ -3442,7 +3441,6 @@
         <LaunchAttachQuery Methods="Center"/>
         <LaunchAssets Model="WidowMineAttackLaunch" Sound="WidowMine_Attack"/>
         <LaunchSound value="AP_WidowMineAttackLaunchSound"/>
-        <Missile value="AP_WidowMineAttackMissile"/>
         <ImpactMap index="None" Model="" Sound=""/>
         <ImpactPhysics Name="WidowMineImpact" MatchKeys="Basic" Physics="WidowMineAttackForce"/>
         <ShieldFlashType value="Full"/>
@@ -3558,5 +3556,272 @@
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
         <Sound value="WidowMine_Unburrow"/>
+    </CActorSound>
+    <CActorUnit id="AP_Cyclone" parent="GenericUnitBase" unitName="AP_Cyclone">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Cyclone_Land"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileLeft.Start; At Caster" Send="AnimPlay Attack Attack"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileRight.Start; At Caster" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="StatusSet CoverOn 0"/>
+        <On Terms="Abil.attack.ReadyStart; IsStatus CoverOn 0" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Abil.attack.ReadyStart; IsStatus CoverOn 0" Send="StatusSet CoverOn 1"/>
+        <On Terms="Abil.attack.ReadyStart" Send="TimerKill CoverDelay"/>
+        <On Terms="Abil.attack.ReadyStart" Send="TimerSet 3.000000 CoverDelay"/>
+        <On Terms="WeaponStart.*.AttackStart; IsStatus CoverOn 0" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="WeaponStart.*.AttackStart; IsStatus CoverOn 0" Send="StatusSet CoverOn 1"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="TimerKill CoverDelay"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="TimerSet 3.000000 CoverDelay"/>
+        <On Terms="TurretTarget.AP_CycloneWeaponTurret.Set" Target="AP_CycloneWeaponTurretLookAt" Send="LookAtEngage"/>
+        <On Terms="TurretTarget.AP_CycloneWeaponTurret.Clear" Target="AP_CycloneWeaponTurretLookAt" Send="LookAtDisengage"/>
+        <On Terms="TurretTarget.AP_Cyclone.Set" Target="AP_CycloneLockOnTurretLookAt" Send="LookAtEngage"/>
+        <On Terms="TurretTarget.AP_Cyclone.Clear" Target="AP_CycloneLockOnTurretLookAt" Send="LookAtDisengage"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileLeft.Start; At Caster; IsStatus CoverOn 0" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileLeft.Start; At Caster; IsStatus CoverOn 0" Send="StatusSet CoverOn 1"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileRight.Start; At Caster; IsStatus CoverOn 0" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileRight.Start; At Caster; IsStatus CoverOn 0" Send="StatusSet CoverOn 1"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileLeft.Start; At Caster" Send="TimerKill CoverDelay"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileLeft.Start; At Caster" Send="TimerSet 3.000000 CoverDelay"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileRight.Start; At Caster" Send="TimerKill CoverDelay"/>
+        <On Terms="Effect.AP_CycloneWeaponLaunchMissileRight.Start; At Caster" Send="TimerSet 3.000000 CoverDelay"/>
+        <On Terms="Effect.AP_LockOnCP.Start; At Caster" Send="Create AP_CycloneLockOnTrackingBeam"/>
+        <On Terms="Effect.AP_LockOnAirCP.Start; At Caster" Send="Create AP_CycloneLockOnTrackingBeam"/>
+        <On Terms="TimerExpired; TimerName CoverDelay" Send="AnimBracketStop Cover"/>
+        <On Terms="TimerExpired; TimerName CoverDelay" Send="StatusSet CoverOn 0"/>
+        <On Terms="Behavior.AP_LockOnDisableAttack.On" Target="::PortraitGameSelf" Send="AnimGroupApply Morph Morph,Start Morph,End"/>
+        <On Terms="Behavior.AP_LockOnDisableAttack.Off" Target="::PortraitGameSelf" Send="AnimGroupRemove Morph"/>
+        <On Terms="UnitPortrait.*.Configure; ValidateUnit AP_LockingOn" Target="::PortraitGameSelf" Send="AnimBracketStart Morph Morph,Start Morph,Stand Morph,End Instant"/>
+        <On Terms="UnitPortrait.*.Configure; ValidateUnit AP_NotLockingOn" Target="::PortraitGameSelf" Send="AnimBracketStop Morph Instant"/>
+        <Model value="Cyclone"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <LookAtPriorityList value="AP_CycloneWeaponTurretLookAt"/>
+        <LookAtPriorityList value="AP_CycloneLockOnTurretLookAt"/>
+        <BuildModel value="Cyclone"/>
+        <DeathArray index="Normal" ModelLink="CycloneDeath" SoundLink="AP_WarHound_Explode"/>
+        <DeathCustoms ActorModel="AP_CycloneDeathRagdoll" ModelLink="CycloneDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="BloodReduced"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollBloodPrevent" ModelLink="CycloneDeathRagdoll" Name="RagdollSpineCrawlerHurl">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <PlacementModel value="Cyclone"/>
+        <PortraitModel value="CyclonePortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleSiegeTank"/>
+        </TerrainSquibs>
+        <AbilSoundArray AbilCmd="AP_LockOn,0" Sound="Cyclone_LockOnVO"/>
+        <AbilSoundArray AbilCmd="AP_LockOnAir,0" Sound="Cyclone_LockOnVO"/>
+        <BarOffset value="75"/>
+        <BarWidth value="75"/>
+        <ErrorArray Error="CantSeeBuildLocation" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <ErrorArray Error="CantSeeLandLocation" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <ErrorArray Error="CantLandLocationInvalid" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <ErrorArray Error="CouldntReachTarget" Sound="UI_GenericError" GroupSound="UI_GenericError"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-terran-cyclone.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="SiegeTank_GroupWhat"/>
+        <GroupSoundArray index="Yes" value="SiegeTank_GroupYes"/>
+        <GroupSoundArray index="Attack" value="SiegeTank_GroupAttack"/>
+        <GroupSoundArray index="Board" value="SiegeTank_GroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-warhound.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Birth" value="SiegeTank_Birth"/>
+        <SoundArray index="Ready" value="Cyclone_Ready"/>
+        <SoundArray index="Help" value="Cyclone_Help"/>
+        <SoundArray index="What" value="Cyclone_What"/>
+        <SoundArray index="Yes" value="Cyclone_Yes"/>
+        <SoundArray index="Attack" value="Cyclone_Attack"/>
+        <SoundArray index="Pissed" value="Cyclone_Pissed"/>
+        <SoundArray index="Movement" value="Cyclone_Move_Start"/>
+        <SoundArray index="Turning" value="SiegeTank_Turning"/>
+        <SoundArray index="Board" value="SiegeTank_Board"/>
+        <SoundArray index="Click" value="SiegeTank_Click"/>
+        <SoundArray index="ClickError" value="SiegeTank_ClickError"/>
+        <SoundArray index="Highlight" value="SiegeTank_Highlight"/>
+        <UnitFlags index="StandAnimBirthVariation" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-cyclone.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-terran-cyclone.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_CycloneAirAttackLeft" parent="GenericAttack" effectImpact="AP_CycloneAirWeaponDamage" effectLaunch="AP_CycloneAirWeaponLaunchMissileLeft">
+        <LaunchAttachQuery Methods="Weapon 1"/>
+        <LaunchAssets Model="CycloneMissileLaunch" Sound="Cyclone_Missile_Launch"/>
+        <Missile value="AP_CycloneMissileLargeAir"/>
+        <ImpactMap index="None" Model="CycloneMissileImpactLarge" Sound="Cyclone_Missile_Impact"/>
+        <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
+    </CActorAction>
+    <CActorAction id="AP_CycloneAirAttackRight" parent="GenericAttack" effectImpact="AP_CycloneAirWeaponDamage" effectLaunch="AP_CycloneAirWeaponLaunchMissileRight">
+        <LaunchAttachQuery Methods="Weapon 2"/>
+        <LaunchAssets Model="CycloneMissileLaunch" Sound="Cyclone_Missile_Launch"/>
+        <Missile value="CycloneMissileLargeAir"/>
+        <ImpactMap index="None" Model="CycloneMissileImpactLarge" Sound="Cyclone_Missile_Impact"/>
+        <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
+    </CActorAction>
+    <CActorAction id="AP_CycloneAttackLeft" parent="GenericAttack" effectImpact="AP_CycloneWeaponDamage" effectLaunch="AP_CycloneWeaponLaunchMissileLeft">
+        <LaunchAttachQuery Methods="Weapon 1"/>
+        <LaunchAssets Sound="Cyclone_Missile_Launch"/>
+        <Missile value="CycloneMissileLarge"/>
+        <ImpactMap index="None" Model="CycloneMissileImpactLarge" Sound="Cyclone_Missile_Impact"/>
+        <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
+    </CActorAction>
+    <CActorAction id="AP_CycloneAttackRight" parent="GenericAttack" effectImpact="AP_CycloneWeaponDamage" effectLaunch="AP_CycloneWeaponLaunchMissileRight">
+        <LaunchAttachQuery Methods="Weapon 2"/>
+        <LaunchAssets Sound="Cyclone_Missile_Launch"/>
+        <Missile value="CycloneMissileLarge"/>
+        <ImpactMap index="None" Model="CycloneMissileImpactLarge" Sound="Cyclone_Missile_Impact"/>
+        <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
+    </CActorAction>
+    <CActorModel id="AP_CycloneDeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionGround"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorRange id="AP_CycloneLockOnAirRange" parent="RangeAbil" abil="AP_LockOnAir">
+        <Range value="7.000000"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+    </CActorRange>
+    <CActorRange id="AP_CycloneLockOnRange" parent="RangeAbil" abil="AP_LockOn">
+        <Range value="7.000000"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+    </CActorRange>
+    <CActorBeamSimple id="AP_CycloneLockOnTrackingBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.AP_LockOnTurretClear.Start; At Caster" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="Create AP_CycloneLockOnTrackingRange"/>
+        <Model value="CycloneTargetingBeam"/>
+        <HostLaunch Subject="_Unit" Scope="Caster"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Unit" Scope="Target"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorRange id="AP_CycloneLockOnTrackingRange">
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <On Terms="Effect.AP_LockOnTurretClear.Start" Send="Destroy"/>
+        <Range value="15.000000"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+    </CActorRange>
+    <CActorLookAt id="AP_CycloneLockOnTurretLookAt" parent="UnitTurret">
+        <On Terms="TurretEnable.AP_Cyclone" Send="Create"/>
+        <Types Id="DefaultLookAtTurret" Name="LookAtType/CycloneTurret">
+            <Start Group="Turret_Right" Weight="1" Time="250"/>
+            <Stop Group="Turret_Right" Weight="1" Time="250"/>
+        </Types>
+    </CActorLookAt>
+    <CActorMissile id="AP_CycloneMissile" parent="GenericAttackMissile" unitName="AP_CycloneMissile">
+        <Model value="CycloneMissile"/>
+    </CActorMissile>
+    <CActorMissile id="AP_CycloneMissileLarge" parent="GenericAttackMissile" unitName="AP_CycloneMissileLarge">
+        <Model value="CycloneMissileLarge"/>
+    </CActorMissile>
+    <CActorMissile id="AP_CycloneMissileLargeAir" parent="GenericAttackMissile" unitName="AP_CycloneMissileLargeAir">
+        <Model value="CycloneMissileLarge"/>
+    </CActorMissile>
+    <CActorAction id="AP_CycloneMissilesAttack" parent="GenericAttack" effectImpact="AP_CycloneMissilesDamage" effectLaunch="AP_CycloneMissilesLM">
+        <LaunchAttachQuery Methods="AMFilterWeapon01"/>
+        <LaunchAssets Model="CycloneMissilesAttackLaunch" Sound="WarHound_Missile_Launch"/>
+        <Missile value="AP_CycloneMissilesAttackMissile"/>
+        <ImpactMap index="None" Model="CycloneMissilesAttackImpact" Sound="WarHound_Missile_Impact"/>
+        <ImpactPhysics Name="CycloneMissileImpact" MatchKeys="Basic" Physics="WarhoundMissileAttackForce"/>
+    </CActorAction>
+    <CActorMissile id="AP_CycloneMissilesAttackMissile" parent="GenericAttackMissile" unitName="AP_CycloneMissilesWeapon"/>
+    <CActorAction id="AP_CycloneWeaponAttackLeft" parent="GenericAttack" effectImpact="AP_CycloneAttackWeaponDamage" effectLaunch="AP_CycloneAttackWeaponLaunchMissileLeft">
+        <LaunchAttachQuery Methods="Weapon 1"/>
+        <LaunchAssets Model="CycloneMissileLaunch" Sound="Cyclone_Missile_Launch"/>
+        <Missile value="AP_CycloneMissile"/>
+        <ImpactMap index="None" Model="CycloneMissileImpact" Sound="Cyclone_Missile_Impact"/>
+        <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
+    </CActorAction>
+    <CActorAction id="AP_CycloneWeaponAttackRight" parent="GenericAttack" effectImpact="AP_CycloneAttackWeaponDamage" effectLaunch="AP_CycloneAttackWeaponLaunchMissileRight">
+        <LaunchAttachQuery Methods="Weapon 2"/>
+        <LaunchAssets Model="CycloneMissileLaunch" Sound="Cyclone_Missile_Launch"/>
+        <Missile value="AP_CycloneMissile"/>
+        <ImpactMap index="None" Model="CycloneMissileImpact" Sound="Cyclone_Missile_Impact"/>
+        <ImpactPhysics Name="90mmCannonImpact" MatchKeys="Basic" Physics="SiegeTankAttackForce"/>
+    </CActorAction>
+    <CActorLookAt id="AP_CycloneWeaponTurretLookAt" parent="UnitTurret">
+        <On Terms="TurretEnable.AP_CycloneWeaponTurret" Send="Create"/>
+        <Types Id="DefaultLookAtTurret" Name="LookAtType/CycloneTurret">
+            <Start Group="Turret_Right" Weight="1" Time="250"/>
+            <Stop Group="Turret_Right" Weight="1" Time="250"/>
+        </Types>
+    </CActorLookAt>
+    <CActorSound id="AP_Cyclone_Land" parent="SoundOneShot">
+        <Sound value="Cyclone_Land"/>
+    </CActorSound>
+    <CActorSound id="AP_Cyclone_TargetLock_On_ActorSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_LockOnAirCP.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_LockOnCP.Start; At Caster" Send="Create"/>
+        <Sound value="Cyclone_TargetLock_On"/>
     </CActorSound>
 </Catalog>

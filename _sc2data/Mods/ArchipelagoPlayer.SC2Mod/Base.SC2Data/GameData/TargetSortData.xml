@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CTargetSortValidator id="AP_TSThreatensCyclone">
+        <Validator value="AP_ThreatensCyclone"/>
+    </CTargetSortValidator>
+</Catalog>

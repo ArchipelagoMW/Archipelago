@@ -372,7 +372,7 @@
         <AlertIcon value="Assets\Textures\BTN-Ability-Terran-HunterMissile-color.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
-    <CButton id="BuildAP_ScienceVessel">
+    <CButton id="AP_BuildScienceVessel">
         <Icon value="Assets\Textures\btn-unit-terran-sciencevessel.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-sciencevessel.dds"/>
         <Hotkey value="Button/Hotkey/ScienceVessel"/>
@@ -502,6 +502,74 @@
     <CButton id="AP_DrillClaws">
         <Icon value="Assets\Textures\BTN-Upgrade-Terran-ResearchDrillingClaws.dds"/>
         <AlertIcon value="Assets\Textures\BTN-Upgrade-Terran-ResearchDrillingClaws.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_BuildCyclone">
+        <Icon value="Assets\Textures\btn-unit-terran-cyclone.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-cyclone.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CycloneLockOnAir">
+        <Icon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CycloneLockOnDamageUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CycloneMissiles">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-hellstormbatteries.dds"/>
+        <AlertIcon value="Assets\Textures\btn-techupgrade-terran-hellstormbatteries.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CycloneRapidFireLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CycloneResearchLockOnAir">
+        <Icon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CycloneResearchLockOnDamageUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_LockOn">
+        <Icon value="Assets\Textures\btn-ability-terran-lockon.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-lockon.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_LockOnAir">
+        <Icon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_LockOnCancel">
+        <Icon value="Assets\Textures\btn-command-cancel.dds"/>
+        <AlertIcon value="Assets\Textures\btn-command-cancel.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="Cancel"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_MagFieldLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_ResearchCycloneRapidFireLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_ResearchMagFieldLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
 </Catalog>

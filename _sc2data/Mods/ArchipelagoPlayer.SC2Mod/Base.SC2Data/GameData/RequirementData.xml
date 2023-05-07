@@ -359,4 +359,53 @@
         <EditorCategories value="Race:Zerg,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountBehaviorWidowMineArmedCompleteOnlyAtUnit"/>
     </CRequirement>
+    <CRequirement id="AP_HaveCycloneLockOnAirUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeCycloneAirUpgradeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveCycloneLockOnDamageUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeCycloneLockOnDamageUpgradeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveCycloneLockOnRangeUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeCycloneLockOnRangeUpgradeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveCycloneRapidFireLaunchers">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeCycloneRapidFireLaunchersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveMagFieldLaunchers">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeMagFieldLaunchersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnCycloneLockOnAirUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <!-- <NodeArray index="Use" Link="CountUnitFusionCoreCompleteOnly"/> -->
+        <NodeArray index="Show" Link="AP_NotCountUpgradeCycloneAirUpgradeQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnCycloneLockOnDamageUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeCycloneLockOnDamageUpgradeQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnCycloneLockOnRangeUpgrade">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <!-- <NodeArray index="Use" Link="CountUnitArmoryCompleteOnly"/> -->
+        <NodeArray index="Show" Link="AP_NotCountUpgradeCycloneLockOnRangeUpgradeQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnCycloneRapidFireLaunchers">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeCycloneRapidFireLaunchersQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_PurchaseCycloneMissiles">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_NotCountBehaviorMercenaryCycloneMissilesCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_LockedOn">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorLockOnDisableAttackCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_NoLockedOn">
+        <NodeArray index="Use" Link="AP_NotCountBehaviorLockOnDisableAttackCompleteOnlyAtUnit"/>
+    </CRequirement>
 </Catalog>

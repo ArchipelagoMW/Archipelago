@@ -667,4 +667,92 @@
     <CUpgrade id="AP_ImprovedConcealment">
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_ArmorPiercingRockets">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Effect,AP_CycloneAirWeaponDamageAlternative,AttributeBonus[Armored]" Value="2"/>
+        <EffectArray Operation="Set" Reference="Button,AP_LockOn,Tooltip" Value="Button/Tooltip/AP_LockOnArmorPiercingUpgrade"/>
+        <EffectArray Operation="Set" Reference="Button,AP_LockOn,AlertTooltip" Value="Button/Tooltip/AP_LockOnArmorPiercingUpgrade"/>
+        <EffectArray Reference="Effect,AP_CycloneAirWeaponDamage,AttributeBonus[Armored]" Value="2"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CycloneAirUpgrade">
+        <Icon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,TargetFilters" Value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_LockOn,IgnoreFilters" Value="-;-"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Cyclone,Description" Value="Button/Tooltip/AP_CycloneUpgrade"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CycloneLockOnDamageUpgrade">
+        <Icon value="Assets\Textures\btn-upgrade-terran-magfieldaccelerator.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Effect,AP_CycloneAirWeaponDamage,Amount" Value="10"/>
+        <EffectArray Reference="Effect,AP_CycloneWeaponDamage,Amount" Value="10"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CycloneLockOnRangeUpgrade">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-durablematerials.dds"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Abil,AP_LockOn,Range[0]" Value="3"/>
+        <EffectArray Reference="Abil,AP_LockOn,AutoCastRange" Value="3"/>
+        <EffectArray Reference="Actor,AP_CycloneLockOnRange,Range" Value="3.000000"/>
+        <EffectArray Reference="Actor,AP_CycloneLockOnTrackingRange,Range" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnCP,PeriodicValidator" Value="AP_LockOnPeriodicValidatorsUpgraded"/>
+        <AffectedUnitArray value="AP_Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CycloneRapidFireLaunchers">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-raynor-ripwavemissiles.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[4]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[5]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[6]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[7]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[8]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[9]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[10]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicPeriodArray[11]" Value="0.294"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[4]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[5]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[6]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[7]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[8]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[9]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[10]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_LockOnAirCP,PeriodicEffectArray[11]" Value="AP_CycloneAirWeaponLaunchMissileSwitchAlternative"/>
+        <EffectArray Operation="Set" Reference="Button,AP_LockOn,AlertTooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
+        <EffectArray Operation="Set" Reference="Button,AP_LockOn,Tooltip" Value="Button/Tooltip/AP_LockOnRapidFireLaunchers"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MagFieldLaunchers">
+        <Icon value="Assets\Textures\btn-upgrade-terran-cyclonerangeupgrade.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Weapon,AP_TyphoonMissilePod,Range" Value="2"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Cyclone"/>
+    </CUpgrade>
 </Catalog>

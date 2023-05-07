@@ -462,4 +462,74 @@
         <Tooltip value=""/>
         <OperandArray index="0" value="AP_CountUpgradeImprovedConcealmentQueuedOrBetter"/>
     </CRequirementNot>
+    <CRequirementCountBehavior id="AP_CountBehaviorLockOnDisableAttackCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_LockOnDisableAttack" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountBehavior id="AP_CountBehaviorMercenaryCycloneMissilesCompleteOnlyAtUnit">
+        <Count Link="AP_MercenaryCycloneMissiles" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCycloneAirUpgradeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CycloneAirUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCycloneAirUpgradeQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_CycloneAirUpgrade" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCycloneLockOnDamageUpgradeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CycloneLockOnDamageUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCycloneLockOnDamageUpgradeQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CycloneLockOnDamageUpgrade" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCycloneLockOnRangeUpgradeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_CycloneLockOnRangeUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCycloneLockOnRangeUpgradeQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_CycloneLockOnRangeUpgrade" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCycloneRapidFireLaunchersCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CycloneRapidFireLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCycloneRapidFireLaunchersCompleteOnlyTechTreeCheat">
+        <Count Link="AP_CycloneRapidFireLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCycloneRapidFireLaunchersQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CycloneRapidFireLaunchers" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountBehaviorLockOnDisableAttackCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorLockOnDisableAttackCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountBehaviorMercenaryCycloneMissilesCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorMercenaryCycloneMissilesCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeCycloneAirUpgradeQueuedOrBetter">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUpgradeCycloneAirUpgradeQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeCycloneLockOnDamageUpgradeQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeCycloneLockOnDamageUpgradeQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeCycloneLockOnRangeUpgradeQueuedOrBetter">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUpgradeCycloneLockOnRangeUpgradeQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeCycloneRapidFireLaunchersQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeCycloneRapidFireLaunchersQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMagFieldLaunchersCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MagFieldLaunchers" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

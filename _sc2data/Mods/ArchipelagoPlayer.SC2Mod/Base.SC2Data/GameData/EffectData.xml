@@ -1742,7 +1742,6 @@
     </CEffectSet>
     <CEffectApplyBehavior id="AP_WidowMineDelayRemoveAB">
         <WhichUnit Value="Caster"/>
-        <Behavior value="AP_WidowMineDelayRemoveAB"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="AP_WidowMineExplodeDirect" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
@@ -1837,4 +1836,329 @@
         <Kind value="Splash"/>
         <Amount value="50"/>
     </CEffectDamage>
+    <CEffectDamage id="AP_CycloneAirWeaponDamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="20"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_CycloneAirWeaponDamageAlternative" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="8"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_CycloneAirWeaponLaunchMissileLeft">
+        <ValidatorArray index="0" value="AirUnitFilter"/>
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_CycloneAirWeaponDamage"/>
+        <AmmoUnit value="AP_CycloneMissileLargeAir"/>
+        <Movers Link="AP_CycloneMissileLeft"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_CycloneAirWeaponLaunchMissileLeftAlternative">
+        <ValidatorArray index="0" value="AirUnitFilter"/>
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_CycloneAirWeaponDamageAlternative"/>
+        <AmmoUnit value="AP_CycloneMissileLargeAirAlternative"/>
+        <Movers Link="AP_CycloneMissileLeft"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_CycloneAirWeaponLaunchMissileLeftSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CycloneAirWeaponLaunchMissileLeft"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileLeft"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateAB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_CycloneAirWeaponLaunchMissileLeftSetAlternative">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CycloneAirWeaponLaunchMissileLeftAlternative"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateAB"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_CycloneAirWeaponLaunchMissileRight">
+        <ValidatorArray index="0" value="AirUnitFilter"/>
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_CycloneAirWeaponDamage"/>
+        <AmmoUnit value="AP_CycloneMissileLargeAir"/>
+        <Movers Link="AP_CycloneMissileRight"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_CycloneAirWeaponLaunchMissileRightAlternative">
+        <ValidatorArray index="0" value="AirUnitFilter"/>
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_CycloneAirWeaponDamageAlternative"/>
+        <AmmoUnit value="AP_CycloneMissileLargeAirAlternative"/>
+        <Movers Link="AP_CycloneMissileRight"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_CycloneAirWeaponLaunchMissileRightSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CycloneAirWeaponLaunchMissileRight"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileRight"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateRB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_CycloneAirWeaponLaunchMissileRightSetAlternative">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CycloneAirWeaponLaunchMissileRightAlternative"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateRB"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_CycloneAirWeaponLaunchMissileSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="AP_CycloneWeaponLaunchMissileAlternate" Effect="AP_CycloneAirWeaponLaunchMissileRightSet"/>
+        <CaseDefault value="AP_CycloneAirWeaponLaunchMissileLeftSet"/>
+    </CEffectSwitch>
+    <CEffectSwitch id="AP_CycloneAirWeaponLaunchMissileSwitchAlternative">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="AP_CycloneWeaponLaunchMissileAlternate" Effect="AP_CycloneAirWeaponLaunchMissileRightSetAlternative"/>
+        <CaseDefault value="AP_CycloneAirWeaponLaunchMissileLeftSetAlternative"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_CycloneAttackWeaponDamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="18"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_CycloneAttackWeaponLaunchMissileLeft">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_CycloneAttackWeaponDamage"/>
+        <AmmoUnit value="AP_CycloneMissile"/>
+        <Movers Link="AP_CycloneMissileLeft"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_CycloneAttackWeaponLaunchMissileLeftSet">
+        <EffectArray value="AP_CycloneAttackWeaponLaunchMissileLeft"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateAB"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_CycloneAttackWeaponLaunchMissileRight">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_CycloneAttackWeaponDamage"/>
+        <AmmoUnit value="AP_CycloneMissile"/>
+        <Movers Link="AP_CycloneMissileRight"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_CycloneAttackWeaponLaunchMissileRightSet">
+        <EffectArray value="AP_CycloneAttackWeaponLaunchMissileRight"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateRB"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_CycloneAttackWeaponLaunchMissileSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="AP_CycloneWeaponLaunchMissileAlternate" Effect="AP_CycloneAttackWeaponLaunchMissileRightSet"/>
+        <CaseDefault value="AP_CycloneAttackWeaponLaunchMissileLeftSet"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_CycloneFakeWeaponDummyDamage">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_CycloneWeaponLaunchMissileAlternateAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_CycloneWeaponLaunchMissileAlternate"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_CycloneWeaponLaunchMissileAlternateRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_CycloneWeaponLaunchMissileAlternate"/>
+    </CEffectRemoveBehavior>
+    <CEffectLaunchMissile id="AP_CycloneWeaponLaunchMissileLeft">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_CycloneWeaponDamage"/>
+        <AmmoUnit value="AP_CycloneMissileLarge"/>
+        <Movers Link="AP_CycloneMissileLeft"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_CycloneWeaponLaunchMissileLeftSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileLeft"/>
+        <EffectArray value="AP_CycloneAirWeaponLaunchMissileLeft"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateAB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_CycloneWeaponLaunchMissileLeftSetNew">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileLeft"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateAB"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_CycloneWeaponLaunchMissileRight">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_CycloneWeaponDamage"/>
+        <AmmoUnit value="AP_CycloneMissileLarge"/>
+        <Movers Link="AP_CycloneMissileRight"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_CycloneWeaponDamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="20"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_CycloneWeaponLaunchMissileRightSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileRight"/>
+        <EffectArray value="AP_CycloneAirWeaponLaunchMissileRight"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateRB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_CycloneWeaponLaunchMissileRightSetNew">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileRight"/>
+        <EffectArray value="AP_CycloneWeaponLaunchMissileAlternateRB"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_CycloneWeaponLaunchMissileSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="AP_CycloneWeaponLaunchMissileAlternate" Effect="AP_CycloneWeaponLaunchMissileRightSetNew"/>
+        <CaseDefault value="AP_CycloneWeaponLaunchMissileLeftSetNew"/>
+    </CEffectSwitch>
+    <CEffectModifyUnit id="AP_CycloneWeaponTurretClearLook">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Action="ClearTarget" Turret="AP_Cyclone">
+            <Target Effect="AP_CycloneAttackWeaponLaunchMissileSwitch" Value="TargetUnit"/>
+        </ModifyTurret>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_CycloneWeaponTurretLook">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Turret="AP_Cyclone" AimCompleteEffect="AP_CycloneWeaponTurretClearLook">
+            <Target Effect="AP_CycloneAttackWeaponLaunchMissileSwitch" Value="TargetUnit"/>
+            <Flags index="Tracking" value="1"/>
+        </ModifyTurret>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="AP_LockOnAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_LockOn"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_LockOnAirCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <FinalEffect value="AP_LockOnClearSet"/>
+        <PeriodCount value="20"/>
+        <PeriodicValidator value="AP_LockOnGroundAirPeriodicValidators"/>
+        <PeriodicEffectArray value="AP_CycloneAirWeaponLaunchMissileSwitch"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_LockOnAirFireSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_LockOnAB"/>
+        <EffectArray value="AP_LockOnDisableAttackAB"/>
+        <EffectArray value="AP_LockOnAirCP"/>
+        <EffectArray value="AP_LockOnResetCooldownInitial"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LockOnAirInitialSet">
+        <ValidatorArray value="AirUnitFilter"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_LockOnAirTurretStart"/>
+        <EffectArray value="AP_LockOnResetCooldownInitial"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_LockOnAirTurretStart">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <ValidatorArray value="AP_NotLockingOn"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Turret="AP_Cyclone" AimCompleteEffect="AP_LockOnAirFireSet">
+            <Target Value="TargetUnit"/>
+            <Flags index="Tracking" value="1"/>
+        </ModifyTurret>
+    </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_LockOnCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <FinalEffect value="AP_LockOnClearSet"/>
+        <PeriodCount value="20"/>
+        <PeriodicValidator value="AP_LockOnGroundAirPeriodicValidators"/>
+        <PeriodicEffectArray value="AP_CycloneWeaponLaunchMissileSwitch"/>
+        <PeriodicPeriodArray value="1"/>
+        <RevealRadius value="2"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_LockOnClearSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_LockOnRB"/>
+        <EffectArray value="AP_LockOnDisableAttackRB"/>
+        <EffectArray value="AP_LockOnTurretClear"/>
+        <EffectArray value="AP_LockOnResetCooldown"/>
+        <EffectArray value="AP_LockOnDummyWeaponRB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_LockOnDisableAttackAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LockOnDisableAttack"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_LockOnDisableAttackRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_LockOnDisableAttack"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_LockOnDummyWeaponAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LockOnDummyWeapon"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_LockOnEndDisableAttack">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LockOnEndDisableAttack"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_LockOnFireSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_LockOnAB"/>
+        <EffectArray value="AP_LockOnDisableAttackAB"/>
+        <EffectArray value="AP_LockOnCP"/>
+        <EffectArray value="AP_LockOnResetCooldownInitial"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LockOnGroundAirSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_LockOnInitialSet"/>
+        <EffectArray value="AP_LockOnAirInitialSet"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_LockOnInitialAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_LockOn"/>
+        <Flags index="UseDuration" value="1"/>
+        <Duration value="1"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_LockOnInitialSet">
+        <ValidatorArray value="GroundUnitFilter"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_LockOnTurretStart"/>
+        <EffectArray value="AP_LockOnResetCooldownInitial"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LockOnInitialSetNew">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_LockOnTurretStart"/>
+        <EffectArray value="AP_LockOnResetCooldownInitial"/>
+        <EffectArray value="AP_LockOnDummyWeaponAB"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_LockOnRB">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_LockOn"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectModifyUnit id="AP_LockOnResetCooldown">
+        <ImpactUnit Value="Caster"/>
+        <Cost Abil="AP_LockOn,Execute" CooldownOperation="Set" CooldownTimeUse="6"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_LockOnResetCooldownInitial">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <Cost Abil="AP_LockOn,Execute" CooldownOperation="Set"/>
+        <Cost Abil="AP_LockOnAir,Execute" CooldownOperation="Set"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_LockOnTurretClear">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Action="ClearTarget" Turret="AP_Cyclone"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_LockOnTurretStart">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <ValidatorArray value="AP_NotLockingOn"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Turret="AP_Cyclone" AimCompleteEffect="AP_LockOnFireSet">
+            <Target Value="TargetUnit"/>
+            <Flags index="Tracking" value="1"/>
+        </ModifyTurret>
+    </CEffectModifyUnit>
+    <CEffectRemoveBehavior id="AP_NeuralParasiteLockOnRemove">
+        <EditorCategories value=""/>
+        <WhichUnit Effect="NeuralParasiteLaunchMissile"/>
+        <BehaviorLink value="AP_LockOnDisableAttack"/>
+    </CEffectRemoveBehavior>
 </Catalog>
