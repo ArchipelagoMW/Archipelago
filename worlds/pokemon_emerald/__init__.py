@@ -483,13 +483,13 @@ class PokemonEmeraldWorld(World):
 
             for i, starter in enumerate([starter_2, starter_3, starter_1]):
                 potential_evolutions = [evolution.species_id for evolution in starter.evolutions]
-                picked_evolution = starter
+                picked_evolution = starter.species_id
                 if len(potential_evolutions) > 0:
                     picked_evolution = random.choice(potential_evolutions)
 
                 for trainer_name, starter_position, is_evolved in rival_teams[i]:
                     trainer_data = self.modified_data.trainers[emerald_data.constants[trainer_name]]
-                    trainer_data.party.pokemon[starter_position].species_id = picked_evolution if is_evolved else starter
+                    trainer_data.party.pokemon[starter_position].species_id = picked_evolution if is_evolved else starter.species_id
 
         self.modified_data = copy.deepcopy(emerald_data)
 
