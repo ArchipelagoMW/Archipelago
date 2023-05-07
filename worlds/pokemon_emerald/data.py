@@ -125,6 +125,52 @@ class LearnsetMove(NamedTuple):
     move_id: int
 
 
+class EvolutionMethodEnum(IntEnum):
+    LEVEL = 0
+    LEVEL_ATK_LT_DEF = 1
+    LEVEL_ATK_EQ_DEF = 2
+    LEVEL_ATK_GT_DEF = 3
+    LEVEL_SILCOON = 4
+    LEVEL_CASCOON = 5
+    LEVEL_NINJASK = 6
+    LEVEL_SHEDINJA = 7
+    ITEM = 8
+    FRIENDSHIP = 9
+    FRIENDSHIP_DAY = 10
+    FRIENDSHIP_NIGHT = 11
+
+
+def _str_to_evolution_method(string: str) -> EvolutionMethodEnum:
+    if string == "LEVEL":
+        return EvolutionMethodEnum.LEVEL
+    if string == "LEVEL_ATK_LT_DEF":
+        return EvolutionMethodEnum.LEVEL_ATK_LT_DEF
+    if string == "LEVEL_ATK_EQ_DEF":
+        return EvolutionMethodEnum.LEVEL_ATK_EQ_DEF
+    if string == "LEVEL_ATK_GT_DEF":
+        return EvolutionMethodEnum.LEVEL_ATK_GT_DEF
+    if string == "LEVEL_SILCOON":
+        return EvolutionMethodEnum.LEVEL_SILCOON
+    if string == "LEVEL_CASCOON":
+        return EvolutionMethodEnum.LEVEL_CASCOON
+    if string == "LEVEL_NINJASK":
+        return EvolutionMethodEnum.LEVEL_NINJASK
+    if string == "LEVEL_SHEDINJA":
+        return EvolutionMethodEnum.LEVEL_SHEDINJA
+    if string == "FRIENDSHIP":
+        return EvolutionMethodEnum.FRIENDSHIP
+    if string == "FRIENDSHIP_DAY":
+        return EvolutionMethodEnum.FRIENDSHIP_DAY
+    if string == "FRIENDSHIP_NIGHT":
+        return EvolutionMethodEnum.FRIENDSHIP_NIGHT
+
+
+class EvolutionData(NamedTuple):
+    method: EvolutionMethodEnum
+    param: int
+    species_id: int
+
+
 @dataclass
 class SpeciesData:
     name: str
@@ -134,6 +180,7 @@ class SpeciesData:
     base_stats: BaseStats
     types: Tuple[int, int]
     abilities: Tuple[int, int]
+    evolutions: List[EvolutionData]
     catch_rate: int
     learnset: List[LearnsetMove]
     tm_hm_compatibility: int
@@ -362,6 +409,11 @@ def _init():
             ),
             (individual_species_json["types"][0], individual_species_json["types"][1]),
             (individual_species_json["abilities"][0], individual_species_json["abilities"][1]),
+            [EvolutionData(
+                _str_to_evolution_method(evolution_json["method"]),
+                evolution_json["param"],
+                evolution_json["species"],
+            ) for evolution_json in individual_species_json["evolutions"]],
             individual_species_json["catch_rate"],
             learnset,
             int(individual_species_json["tmhm_learnset"], 16),

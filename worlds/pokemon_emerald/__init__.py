@@ -338,7 +338,6 @@ class PokemonEmeraldWorld(World):
 
             for species in self.modified_data.species:
                 combatibility_array = int_to_bool_array(species.tm_hm_compatibility)
-                print(combatibility_array)
 
                 # TMs
                 for i in range(0, 50):
@@ -424,9 +423,9 @@ class PokemonEmeraldWorld(World):
             starter_2_type = random.choice(get_species_by_name("Torchic").types) if should_match_type else None
             starter_3_type = random.choice(get_species_by_name("Mudkip").types)  if should_match_type else None
 
-            starter_1 = get_random_species(random, self.modified_data.species, starter_1_bst, starter_1_type, should_allow_legendaries).species_id
-            starter_2 = get_random_species(random, self.modified_data.species, starter_2_bst, starter_2_type, should_allow_legendaries).species_id
-            starter_3 = get_random_species(random, self.modified_data.species, starter_3_bst, starter_3_type, should_allow_legendaries).species_id
+            starter_1 = get_random_species(random, self.modified_data.species, starter_1_bst, starter_1_type, should_allow_legendaries)
+            starter_2 = get_random_species(random, self.modified_data.species, starter_2_bst, starter_2_type, should_allow_legendaries)
+            starter_3 = get_random_species(random, self.modified_data.species, starter_3_bst, starter_3_type, should_allow_legendaries)
 
             egg_code = get_option_value(self.multiworld, self.player, "easter_egg")
             egg_check_1 = 0
@@ -438,11 +437,9 @@ class PokemonEmeraldWorld(World):
 
             if egg_check_2 == 0x14E03A:
                 egg = 96 + egg_check_2 - (egg_check_1 * 0x077C)
-                starter_1 = egg
-                starter_2 = egg
-                starter_3 = egg
-
-            self.modified_data.starters = (starter_1, starter_2, starter_3)
+                self.modified_data.starters = (egg, egg, egg)
+            else:
+                self.modified_data.starters = (starter_1.species_id, starter_2.species_id, starter_3.species_id)
 
             # Putting the unchosen starter onto the rival's team
             rival_teams = [
@@ -485,9 +482,14 @@ class PokemonEmeraldWorld(World):
             ]
 
             for i, starter in enumerate([starter_2, starter_3, starter_1]):
+                potential_evolutions = [evolution.species_id for evolution in starter.evolutions]
+                picked_evolution = starter
+                if len(potential_evolutions) > 0:
+                    picked_evolution = random.choice(potential_evolutions)
+
                 for trainer_name, starter_position, is_evolved in rival_teams[i]:
                     trainer_data = self.modified_data.trainers[emerald_data.constants[trainer_name]]
-                    trainer_data.party.pokemon[starter_position].species_id = starter
+                    trainer_data.party.pokemon[starter_position].species_id = picked_evolution if is_evolved else starter
 
         self.modified_data = copy.deepcopy(emerald_data)
 

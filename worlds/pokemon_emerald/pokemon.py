@@ -63,6 +63,7 @@ _legendary_pokemon = frozenset([
 ])
 
 
+# List is sorted, so we can search it faster
 def get_species_by_id(species_id: int) -> Optional[SpeciesData]:
     for species in data.species:
         if species.species_id == species_id:
