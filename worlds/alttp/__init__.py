@@ -537,6 +537,44 @@ class ALTTPWorld(World):
                             er_hint_data[region.player][location.address] = main_entrance.name
         hint_data.update(er_hint_data)
 
+    @classmethod
+    def stage_modify_multidata(cls, multiworld, multidata: dict):
+
+        ordered_areas = (
+            'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
+            'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
+            'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total"
+        )
+
+        checks_in_area = {player: {area: list() for area in ordered_areas}
+                          for player in multiworld.get_game_players(cls.game)}
+
+        for player in checks_in_area:
+            checks_in_area[player]["Total"] = 0
+
+        for location in multiworld.get_locations():
+            if location.game == cls.game and type(location.address) is int:
+                main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
+                if location.parent_region.dungeon:
+                    dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
+                                   'Inverted Ganons Tower': 'Ganons Tower'} \
+                        .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
+                    checks_in_area[location.player][dungeonname].append(location.address)
+                elif location.parent_region.type == LTTPRegionType.LightWorld:
+                    checks_in_area[location.player]["Light World"].append(location.address)
+                elif location.parent_region.type == LTTPRegionType.DarkWorld:
+                    checks_in_area[location.player]["Dark World"].append(location.address)
+                elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
+                    checks_in_area[location.player]["Light World"].append(location.address)
+                elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
+                    checks_in_area[location.player]["Dark World"].append(location.address)
+                else:
+                    assert False, "Unknown Location area."
+                # TODO: remove Total as it's duplicated data and breaks consistent typing
+                checks_in_area[location.player]["Total"] += 1
+
+        multidata["checks_in_area"].update(checks_in_area)
+
     def modify_multidata(self, multidata: dict):
         import base64
         # wait for self.rom_name to be available.

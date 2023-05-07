@@ -171,6 +171,7 @@ def FillDisabledShopSlots(world):
         shop: Shop = location.parent_region.shop
         location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
         location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
+        location.locked = True
 
 
 def ShopSlotFill(world):
@@ -276,6 +277,8 @@ def ShopSlotFill(world):
                                         location.item.player if location.item.player != location.player else 0)
                     if 'P' in world.shop_shuffle[location.player]:
                         price_to_funny_price(world, shop.inventory[location.shop_slot], location.player)
+
+    FillDisabledShopSlots(world)
 
 
 def create_shops(world, player: int):

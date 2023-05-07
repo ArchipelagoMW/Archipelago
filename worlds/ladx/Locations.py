@@ -83,6 +83,7 @@ class LinksAwakeningLocation(Location):
 def has_free_weapon(state: "CollectionState", player: int) -> bool:
     return state.has("Progressive Sword", player) or state.has("Magic Rod", player) or state.has("Boomerang", player) or state.has("Hookshot", player)
 
+
 # If the player has access to farm enough rupees to afford a game, we assume that they can keep beating the game
 def can_farm_rupees(state: "CollectionState", player: int) -> bool:
     return has_free_weapon(state, player) and (state.has("Can Play Trendy Game", player=player) or state.has("RAFT", player=player))
