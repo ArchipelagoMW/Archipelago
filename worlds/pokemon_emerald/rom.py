@@ -1,7 +1,6 @@
 """
 Classes and functions related to creating a ROM patch
 """
-from typing import List
 import os
 
 import bsdiff4
@@ -13,9 +12,8 @@ import Utils
 
 from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, data
 from .items import reverse_offset_item_value
-from .options import (RandomizeWildPokemon, RandomizeTrainerParties, TmCompatibility,
-    HmCompatibility, EliteFourRequirement, NormanRequirement, get_option_value)
-from .pokemon import get_random_species, get_random_move
+from .options import (RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement, get_option_value)
+from .pokemon import get_random_species
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -79,10 +77,6 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     # Set species data
     _set_species_info(modified_data, patched_rom)
 
-    # Randomize TM moves
-    if get_option_value(multiworld, player, "tm_moves") == Toggle.option_true:
-        _randomize_tm_moves(multiworld, player, patched_rom)
-
     # Set encounter tables
     if get_option_value(multiworld, player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
         _set_encounter_tables(modified_data, patched_rom)
@@ -91,14 +85,17 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     if get_option_value(multiworld, player, "trainer_parties") != RandomizeTrainerParties.option_vanilla:
         _set_opponents(modified_data, patched_rom)
 
-    # Randomize opponent double or single
-    _randomize_opponent_battle_type(multiworld, player, patched_rom)
-
     # Set starters
     _set_starters(modified_data, patched_rom)
 
-    # Modify TM/HM compatibility
-    _modify_tmhm_compatibility(multiworld, player, patched_rom)
+    # Set TM moves
+    _set_tm_moves(modified_data, patched_rom)
+
+    # Set TM/HM compatibility
+    _set_tmhm_compatibility(modified_data, patched_rom)
+
+    # Randomize opponent double or single
+    _randomize_opponent_battle_type(multiworld, player, patched_rom)
 
     # Options
     # struct ArchipelagoOptions
@@ -282,6 +279,33 @@ def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
                 _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
 
 
+def _set_starters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+    address = data.rom_addresses["sStarterMon"]
+    (starter_1, starter_2, starter_3) = modified_data.starters
+
+    _set_bytes_little_endian(rom, address + 0, 2, starter_1)
+    _set_bytes_little_endian(rom, address + 2, 2, starter_2)
+    _set_bytes_little_endian(rom, address + 4, 2, starter_3)
+
+
+def _set_tm_moves(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+    tmhm_list_address = data.rom_addresses["sTMHMMoves"]
+
+    for i, move in enumerate(modified_data.tmhm_moves):
+        # Don't modify HMs
+        if i >= 50:
+            break
+
+        _set_bytes_little_endian(rom, tmhm_list_address + (i * 2), 2, move)
+
+
+def _set_tmhm_compatibility(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+    learnsets_address = data.rom_addresses["gTMHMLearnsets"]
+
+    for species in modified_data.species:
+        _set_bytes_little_endian(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
+
+
 def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
     probability = get_option_value(multiworld, player, "double_battle_chance") / 100
 
@@ -303,69 +327,3 @@ def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: by
                 original_battle_type = rom[trainer_data.battle_script_rom_address + 1]
                 if original_battle_type in battle_type_map:
                     _set_bytes_little_endian(rom, trainer_data.battle_script_rom_address + 1, 1, battle_type_map[original_battle_type])
-
-
-def _set_starters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
-    address = data.rom_addresses["sStarterMon"]
-    (starter_1, starter_2, starter_3) = modified_data.starters
-
-    _set_bytes_little_endian(rom, address + 0, 2, starter_1)
-    _set_bytes_little_endian(rom, address + 2, 2, starter_2)
-    _set_bytes_little_endian(rom, address + 4, 2, starter_3)
-
-
-def _randomize_tm_moves(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
-    random = multiworld.per_slot_randoms[player]
-    tm_list_address = data.rom_addresses["sTMHMMoves"]
-
-    for i in range(50):
-        new_move = get_random_move(random)
-        _set_bytes_little_endian(rom, tm_list_address + (i * 2), 2, new_move)
-
-
-def _modify_tmhm_compatibility(multiworld: MultiWorld, player: int, rom: bytearray) -> None:
-    random = multiworld.per_slot_randoms[player]
-
-    learnsets_address = data.rom_addresses["gTMHMLearnsets"]
-    size_of_learnset = 8
-
-    tm_compatibility = get_option_value(multiworld, player, "tm_compatibility")
-    hm_compatibility = get_option_value(multiworld, player, "hm_compatibility")
-
-    for species in data.species:
-        compatibility_array = [False if bit == "0" else True for bit in list(species.tm_hm_compatibility)]
-
-        tm_compatibility_array = compatibility_array[0:50]
-        if tm_compatibility == TmCompatibility.option_fully_compatible:
-            tm_compatibility_array = [True for i in tm_compatibility_array]
-        elif tm_compatibility == TmCompatibility.option_completely_random:
-            tm_compatibility_array = [random.choice([True, False]) for i in tm_compatibility_array]
-
-        hm_compatibility_array = compatibility_array[50:58]
-        if hm_compatibility == HmCompatibility.option_fully_compatible:
-            hm_compatibility_array = [True for i in hm_compatibility_array]
-        elif hm_compatibility == HmCompatibility.option_completely_random:
-            hm_compatibility_array = [random.choice([True, False]) for i in hm_compatibility_array]
-
-        compatibility_array = [] + tm_compatibility_array + hm_compatibility_array + [False, False, False, False, False, False]
-        compatibility_bytes = _tmhm_compatibility_array_to_bytearray(compatibility_array)
-
-        for i, byte in enumerate(compatibility_bytes):
-            address = learnsets_address + (species.species_id * size_of_learnset) + i
-            _set_bytes_little_endian(rom, address, 1, byte)
-
-
-# TODO: Read compatibility from ROM during extraction
-def _tmhm_compatibility_array_to_bytearray(compatibility: List[bool]) -> bytearray:
-    bits = [1 if bit else 0 for bit in compatibility]
-    bits.reverse()
-
-    bytes = []
-    while len(bits) > 0:
-        byte = 0
-        for i in range(8):
-            byte += bits.pop() << i
-
-        bytes.append(byte)
-
-    return bytearray(bytes)

@@ -136,7 +136,7 @@ class SpeciesData:
     abilities: Tuple[int, int]
     catch_rate: int
     learnset: List[LearnsetMove]
-    tm_hm_compatibility: str
+    tm_hm_compatibility: int
     learnset_rom_address: int
     rom_address: int
 
@@ -180,6 +180,7 @@ def _str_to_pokemon_data_type(string: str) -> TrainerPokemonDataTypeEnum:
 @dataclass
 class TrainerPokemonData:
     species_id: int
+    level: int
     moves: Optional[Tuple[int, int, int, int]]
 
 
@@ -206,6 +207,7 @@ class PokemonEmeraldData:
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
     species: List[SpeciesData]
+    tmhm_moves: List[int]
     abilities: List[AbilityData]
     maps: List[MapData]
     warps: Dict[str, Warp]
@@ -220,6 +222,7 @@ class PokemonEmeraldData:
         self.locations = {}
         self.items = {}
         self.species = []
+        self.tmhm_moves = []
         self.abilities = []
         self.maps = []
         self.warps = {}
@@ -361,12 +364,14 @@ def _init():
             (individual_species_json["abilities"][0], individual_species_json["abilities"][1]),
             individual_species_json["catch_rate"],
             learnset,
-            species_attributes["tm_hm_compatibility"],
+            int(individual_species_json["tmhm_learnset"], 16),
             individual_species_json["learnset"]["rom_address"],
             individual_species_json["rom_address"]
         ))
 
     data.species.sort(key=lambda species: species.species_id)
+
+    data.tmhm_moves = extracted_data["tmhm_moves"]
 
     # Create ability data
     abilities_json = load_json(os.path.join(os.path.dirname(__file__), "data/abilities.json"))
@@ -426,6 +431,7 @@ def _init():
             TrainerPartyData(
                 [TrainerPokemonData(
                     p["species"],
+                    p["level"],
                     (p["moves"][0], p["moves"][1], p["moves"][2], p["moves"][3])
                 ) for p in party_json],
                 pokemon_data_type,

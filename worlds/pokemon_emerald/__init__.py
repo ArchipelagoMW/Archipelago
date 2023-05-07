@@ -14,13 +14,14 @@ from worlds.AutoWorld import WebWorld, World
 from .data import PokemonEmeraldData, MapData, SpeciesData, EncounterTableData, LearnsetMove, TrainerData, TrainerPartyData, TrainerPokemonData, data as emerald_data
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, ItemPoolType, LevelUpMoves, get_option_value, option_definitions
+from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, ItemPoolType, LevelUpMoves, TmCompatibility, HmCompatibility, get_option_value, option_definitions
 from .pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_move, get_random_damaging_move
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
     set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import sanity_check
+from .util import int_to_bool_array, bool_array_to_int
 
 
 class PokemonEmeraldWebWorld(WebWorld):
@@ -271,7 +272,7 @@ class PokemonEmeraldWorld(World):
 
             self.multiworld.random.shuffle(hm_items)
             fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), hm_locations, hm_items, True, True)
-    
+
 
     def post_fill(self):
         random = self.multiworld.random
@@ -296,6 +297,14 @@ class PokemonEmeraldWorld(World):
                 species.abilities = new_abilities
 
         def randomize_learnsets():
+            new_moves = set()
+
+            for i in range(50):
+                new_move = get_random_move(random, new_moves)
+                new_moves.add(new_move)
+                self.modified_data.tmhm_moves[i] = new_move
+
+        def randomize_tm_hm_compatibility():
             should_start_with_four_moves = get_option_value(self.multiworld, self.player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves
 
             for species in self.modified_data.species:
@@ -322,6 +331,30 @@ class PokemonEmeraldWorld(World):
                     i += 1
 
                 species.learnset = new_learnset
+
+        def randomize_tm_moves():
+            tm_compatibility = get_option_value(self.multiworld, self.player, "tm_compatibility")
+            hm_compatibility = get_option_value(self.multiworld, self.player, "hm_compatibility")
+
+            for species in self.modified_data.species:
+                combatibility_array = int_to_bool_array(species.tm_hm_compatibility)
+                print(combatibility_array)
+
+                # TMs
+                for i in range(0, 50):
+                    if tm_compatibility == TmCompatibility.option_fully_compatible:
+                        combatibility_array[i] = True
+                    elif tm_compatibility == TmCompatibility.option_completely_random:
+                        combatibility_array[i] = random.choice([True, False])
+
+                # HMs
+                for i in range(50, 58):
+                    if hm_compatibility == HmCompatibility.option_fully_compatible:
+                        combatibility_array[i] = True
+                    elif hm_compatibility == HmCompatibility.option_completely_random:
+                        combatibility_array[i] = random.choice([True, False])
+
+                species.tm_hm_compatibility = bool_array_to_int(combatibility_array)
 
         def randomize_wild_encounters():
             should_match_bst = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
@@ -362,10 +395,11 @@ class PokemonEmeraldWorld(World):
 
                     new_species = get_random_species(random, self.modified_data.species, target_bst, target_type, should_allow_legendaries)
 
-                    # TODO: Extract level and filter movepool
-                    # TODO: Add compatible TMs to movepool
                     # Could cache this per species
-                    movepool = list(set([move.move_id for move in new_species.learnset]))
+                    movepool = set([move.move_id for move in new_species.learnset if move.level <= pokemon.level])
+                    movepool |= set([self.modified_data.tmhm_moves[i] for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility)) if is_compatible])
+
+                    movepool = list(movepool)
                     new_moves = (
                         random.choice(movepool),
                         random.choice(movepool),
@@ -373,7 +407,7 @@ class PokemonEmeraldWorld(World):
                         random.choice(movepool)
                     )
 
-                    new_party.append(TrainerPokemonData(new_species.species_id, new_moves))
+                    new_party.append(TrainerPokemonData(new_species.species_id, pokemon.level, new_moves))
 
                 trainer.party.pokemon = new_party
 
@@ -418,8 +452,8 @@ class PokemonEmeraldWorld(World):
                     ("TRAINER_BRENDAN_ROUTE_110_TREECKO", 2, True ),
                     ("TRAINER_BRENDAN_ROUTE_119_TREECKO", 2, True ),
                     ("TRAINER_BRENDAN_LILYCOVE_TREECKO",  3, True ),
-                    ("TRAINER_MAY_ROUTE_103_TREECKO",     0, True ),
-                    ("TRAINER_MAY_RUSTBORO_TREECKO",      1, True ),
+                    ("TRAINER_MAY_ROUTE_103_TREECKO",     0, False),
+                    ("TRAINER_MAY_RUSTBORO_TREECKO",      1, False),
                     ("TRAINER_MAY_ROUTE_110_TREECKO",     2, True ),
                     ("TRAINER_MAY_ROUTE_119_TREECKO",     2, True ),
                     ("TRAINER_MAY_LILYCOVE_TREECKO",      3, True )
@@ -430,8 +464,8 @@ class PokemonEmeraldWorld(World):
                     ("TRAINER_BRENDAN_ROUTE_110_TORCHIC", 2, True ),
                     ("TRAINER_BRENDAN_ROUTE_119_TORCHIC", 2, True ),
                     ("TRAINER_BRENDAN_LILYCOVE_TORCHIC",  3, True ),
-                    ("TRAINER_MAY_ROUTE_103_TORCHIC",     0, True ),
-                    ("TRAINER_MAY_RUSTBORO_TORCHIC",      1, True ),
+                    ("TRAINER_MAY_ROUTE_103_TORCHIC",     0, False),
+                    ("TRAINER_MAY_RUSTBORO_TORCHIC",      1, False),
                     ("TRAINER_MAY_ROUTE_110_TORCHIC",     2, True ),
                     ("TRAINER_MAY_ROUTE_119_TORCHIC",     2, True ),
                     ("TRAINER_MAY_LILYCOVE_TORCHIC",      3, True )
@@ -442,8 +476,8 @@ class PokemonEmeraldWorld(World):
                     ("TRAINER_BRENDAN_ROUTE_110_MUDKIP", 2, True ),
                     ("TRAINER_BRENDAN_ROUTE_119_MUDKIP", 2, True ),
                     ("TRAINER_BRENDAN_LILYCOVE_MUDKIP",  3, True ),
-                    ("TRAINER_MAY_ROUTE_103_MUDKIP",     0, True ),
-                    ("TRAINER_MAY_RUSTBORO_MUDKIP",      1, True ),
+                    ("TRAINER_MAY_ROUTE_103_MUDKIP",     0, False),
+                    ("TRAINER_MAY_RUSTBORO_MUDKIP",      1, False),
                     ("TRAINER_MAY_ROUTE_110_MUDKIP",     2, True ),
                     ("TRAINER_MAY_ROUTE_119_MUDKIP",     2, True ),
                     ("TRAINER_MAY_LILYCOVE_MUDKIP",      3, True )
@@ -464,9 +498,14 @@ class PokemonEmeraldWorld(World):
         if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
             randomize_learnsets()
 
+        randomize_tm_hm_compatibility()
+
         min_catch_rate = min(get_option_value(self.multiworld, self.player, "min_catch_rate"), 255)
         for species in self.modified_data.species:
             species.catch_rate = max(species.catch_rate, min_catch_rate)
+
+        if get_option_value(self.multiworld, self.player, "tm_moves") == Toggle.option_true:
+            randomize_tm_moves()
 
         # Randomize wild encounters
         if get_option_value(self.multiworld, self.player, "wild_pokemon") != RandomizeWildPokemon.option_vanilla:
