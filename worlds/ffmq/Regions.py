@@ -9,153 +9,6 @@ rooms = yaml.load(pkgutil.get_data(__name__, "data/rooms.yaml"), yaml.Loader)
 
 entrance_pairs = yaml.load(pkgutil.get_data(__name__, "data/entrancespairs.yaml"), yaml.Loader)
 
-# base_path = Path(__file__).parent
-# file_path = (base_path / "data/rooms.yaml").resolve()
-
-# battlefields = [
-#     {"name": "Battlefield - Level Forest",
-#      "object_id": 0x01,
-#      "type": "Battlefield",
-#      "region": "Earth Region"},
-#     {"name": "Battlefield - West Sand",
-#      "object_id": 0x02,
-#      "type": "Battlefield",
-#      "region": "Earth Region"},
-#     {"name": "Battlefield - East Sand",
-#      "object_id": 0x03,
-#      "type": "Battlefield",
-#      "region": "Earth Region"},
-#     {"name": "Battlefield - Sand Door",
-#      "object_id": 0x04,
-#      "type": "Battlefield",
-#      "region": "Water Region"},
-#     {"name": "Battlefield - Lake Corner",
-#      "object_id": 0x05,
-#      "type": "Battlefield",
-#      "region": "Water Region"},
-#     {"name": "Battlefield - Aquaria",
-#      "object_id": 0x06,
-#      "type": "Battlefield",
-#      "region": "Water Region"},
-#     {"name": "Battlefield - Wintry Cave South",
-#      "object_id": 0x07,
-#      "type": "Battlefield",
-#      "region": "Water Region"},
-#     {"name": "Battlefield - Wintry Cave West",
-#      "object_id": 0x08,
-#      "type": "Battlefield",
-#      "region": "Water Region"},
-#     {"name": "Battlefield - Waterfall",
-#      "object_id": 0x09,
-#      "type": "Battlefield",
-#      "region": "Water Region"},
-#     {"name": "Battlefield - Frozen Strip East",
-#      "object_id": 0x0A,
-#      "type": "Battlefield",
-#      "region": "Frozen Strip"},
-#     {"name": "Battlefield - Frozen Strip West",
-#      "object_id": 0x0B,
-#      "type": "Battlefield",
-#      "region": "Frozen Strip"},
-#     {"name": "Battlefield - Earthquake Shelf South",
-#      "object_id": 0x0C,
-#      "type": "Battlefield",
-#      "region": "Fire Region"},
-#     {"name": "Battlefield - Earthquake Shelf Center",
-#      "object_id": 0x0D,
-#      "type": "Battlefield",
-#      "region": "Fire Region"},
-#     {"name": "Battlefield - Earthquake Shelf North",
-#      "object_id": 0x0E,
-#      "type": "Battlefield",
-#      "region": "Fire Region"},
-#     {"name": "Battlefield - Boulder Path",
-#      "object_id": 0x0F,
-#      "type": "Battlefield",
-#      "region": "Fire Region"},
-#     {"name": "Battlefield - Earthquake Plains",
-#      "object_id": 0x10,
-#      "type": "Battlefield",
-#      "region": "Fire Region"},
-#     {"name": "Battlefield - Earthquake Hills",
-#      "object_id": 0x11,
-#      "type": "Battlefield",
-#      "region": "Fire Region"},
-#     {"name": "Battlefield - Volcano",
-#      "object_id": 0x12,
-#      "type": "Battlefield",
-#      "region": "Volcano Battlefield"},
-#     {"name": "Battlefield - Ocean View West",
-#      "object_id": 0x13,
-#      "type": "Battlefield",
-#      "region": "Wind Region"},
-#     {"name": "Battlefield - Ocean View East",
-#      "object_id": 0x14,
-#      "type": "Battlefield",
-#      "region": "Wind Region"},
-#
-# ]
-
-# file_path = (base_path / "data/shufflingdata.yaml").resolve()
-# with open(file_path) as file:
-#     shuffling_data = yaml.load(file, yaml.Loader)
-# file_path = (base_path / "data/entrancespairs.yaml").resolve()
-# with open(file_path) as file:
-#     entrance_pairs = yaml.load(file, yaml.Loader)
-#
-# teleports_to = {}
-# dead_ends = []
-# connectors = []
-# branches = []
-#
-#
-# for room in rooms:
-#     for link in room["links"]:
-#         if "teleporter" in link:
-#             if link["target_room"] not in teleports_to:
-#                 teleports_to[link["target_room"]] = []
-#             teleports_to[link["target_room"]].append(link["teleporter"])
-#     # if len(room["links"]) == 1:
-#     #     dead_ends.append(room["id"])
-#     # elif len(room["links"]) == 2:
-#     #     connectors.append(room["id"])
-#     # else:
-#     #     branches.append(room["id"])
-#
-# room_sets = []
-# entrance_pairs_copy = deepcopy(entrance_pairs)
-# def add_room(room_set, rooms, id):
-#     for room in room_sets:
-#         if id in room:
-#             break
-#     else:
-#         for room in rooms:
-#             if room["id"] == id:
-#                 break
-#         else:
-#             raise Exception
-#     if room in rooms:
-#         rooms.remove(room)
-#     room_set.append(room["id"])
-#     for link in room["links"]:
-#         if link["target_room"] not in room_set:
-#             if "teleporter" not in link or link["entrance"] in shuffling_data["fixed_entrances"]:
-#                 add_room(room_set, rooms, link["target_room"])
-#         # for pair in entrance_pairs_copy:
-#         #     if link["entrance"] in pair:
-#         #         pair.remove(link["entrance"])
-#         #         add_room()
-#
-#
-# rooms_copy = deepcopy(rooms)
-#
-# while rooms_copy:
-#     room_set = []
-#     add_room(room_set, rooms_copy, rooms_copy[0]["id"])
-#     room_sets.append(room_set)
-#
-# breakpoint()
-
 object_id_table = {}
 object_type_table = {}
 offset = {"Chest": 0x420000, "Box": 0x420000, "NPC": 0x420000 + 300, "BattlefieldItem": 0x420000 + 350}
@@ -166,35 +19,13 @@ for room in rooms:
         if object["type"] in ("BattlefieldItem", "BattlefieldXp", "BattlefieldGp"):
             object_type_table[object["name"]] = "BattlefieldItem"
         elif object["type"] in ("Chest", "NPC", "Box"):
-            #     location_table[object["name"]] = index
             object_type_table[object["name"]] = object["type"]
         object_id_table[object["name"]] = object["object_id"]
-        #     index += 1
-# for battlefield in battlefields:
-    #location_table[battlefield["name"]] = offset["Battlefield"] + battlefield["object_id"]
-    # object_id_table[battlefield["name"]] = battlefield["object_id"]
-    # object_type_table[battlefield["name"]] = "Battlefield"
+
 location_table = {loc_name: offset[object_type_table[loc_name]] + obj_id for loc_name, obj_id in
                   object_id_table.items()}
 
-
-ow_regions = {
-    "Earth Region": ([*range(445, 450)], ([2, 6], [25, 0], [31, 0], [36, 0], [37, 0]), [*range(1, 4)]),
-    "Water Region": ([*range(450, 454), *range(455, 457)], ([4, 6], [13, 6], [8, 6], [49, 0], [53, 0], [56, 0]), [*range(4, 10)]),
-    "Fire Region": ([*range(460, 466)], ([6, 6], [9, 6], [98, 0], [16, 6], [103, 0], [104, 0]), [*range(12, 18)]),
-    "Wind Region": ([*range(466, 475)], ([3, 6], [140, 0], [142, 0], [18, 6], [173, 0], [174, 0], [10, 6], [184, 0]), [*range(19, 21)]),
-    "Frozen Strip": ([*range(458, 460)], ([5, 6], [15, 6]), [*range(10, 12)]),
-    "Volcano Battlefield": ([], [], [18]),
-    "Spencer's Place": ([457], ([7, 6])),
-    "Ship Dock Region": ([475, 477], ([17, 6])),
-    "Life Temple Region": ([454], [[14, 6]]),
-    "Light Temple Region": ([477], ([19, 6])),
-    "Mac's Ship": ([*range(478, 480)], ([37, 8])),
-    "Doom Castle": ([476], ([1, 6])),
-}
-
 weapons = ("Claw", "Bomb", "Sword", "Axe")
-
 
 def process_rules(spot, access):
     for weapon in weapons:
@@ -221,26 +52,17 @@ def get_entrance_to(entrance_to):
     for room in rooms:
         if room["id"] == entrance_to["target_room"]:
             for link in room["links"]:
-                # if "entrance" in link and link["entrance"] == entrance_to["entrance"]:
-                #     return link
                 if link["target_room"] == entrance_to["room"]:
                     return link
     else:
         raise Exception(f"Did not find entrance {entrance_to}")
-    # for room in rooms:
-    #     for link in room["links"]:
-    #         if link["entrance"] == entrance_from:
-    #             return link
-    # else:
-    #     raise Exception(f"Did not find entrance {entrance_to}")
 
 
 crest_dead_ends = (51, 52, 53, 108, 158, 396, 397)
 dupe_rooms = ((336, 171), (175, 96))
 
 
-def create_regions(self):
-    #
+def crest_shuffle(self):
     def pair(entrance_a, entrance_b, access_rule, barred=False):
         entrance_a_to = get_entrance_to(entrance_a)
         entrance_b_to = get_entrance_to(entrance_b)
@@ -320,61 +142,100 @@ def create_regions(self):
             else:
                 crest_tile = crest_tiles.pop()
             pair(entrance_a, entrance_b, crest_tile, barred=self.multiworld.logic[self.player] != "expert")
-    # 8 mobius
-    # 4 Libra
-    # 6 gemini
-    menu_region = create_region(self.multiworld, self.player, "Menu")
-    self.multiworld.regions.append(menu_region)
-    # menu_region.locations.append(FFMQLocation(self.player, "Starting Weapon", None, "Trigger",
-    #     event=self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " "))))
-    # menu_region.locations[-1].parent_region = menu_region
-    # menu_region.locations.append(FFMQLocation(self.player, "Starting Armor", None, "Trigger",
-    #                                           event=self.create_item("Steel Armor")))
-    # menu_region.locations[-1].parent_region = menu_region
-    # if self.multiworld.sky_coin_mode[self.player] == "start_with":
-    #     menu_region.locations.append(FFMQLocation(self.player, "Starting Coin", None, "Trigger",
-    #                                               event=self.create_item("Sky Coin")))
-    #     menu_region.locations[-1].parent_region = menu_region
-    # if self.multiworld.map_shuffle[self.player]:
-    #     self.rooms = rooms.deepcopy()
-    #     local_connectors = connectors.copy()
-    #     local_branches = branches.copy()
-    #     local_dead_ends = dead_ends.copy()
-    #
-    #     # dungeon floor shuffle
-    #     if self.multiworld.map_shuffle[self.player] in ("everything", "dungeons", "overworld_and_dungeons"):
-    #         map_sets = [[] for _ in range(35)]
-    #         while branches:
-    #             map = self.random.randint(len(map_sets))
 
+
+non_shuffled_things = ("FocusTowerForesta", "FocusTowerAquaria", "LifeTemple", "FocusTowerFrozen", "FocusTowerFireburg",
+                       "FocusTowerWindia", "GiantTree", "SpencersPlace", "ShipDock", "MacsShip", "LightTemple",
+                       "DoomCastle", "MacsShipDoom")
+
+
+def overworld_shuffle(self):
+
+    overworld_things = []
 
     for room in self.rooms:
-        if room["id"] == 0:
-            for region in ow_regions:
-                self.multiworld.regions.append(create_region(self.multiworld, self.player, region, 0,
-                    [], [link for link in room["links"] if link["entrance"] in ow_regions[region][0]]))
+        if "type" in room and room["type"] == "Subregion":
+            if "game_objects" in room:
+                for object in room["game_objects"]:
+                    if "location" in object:
+                        overworld_things.append(object.copy())
+            for object in room["links"]:
+                if "location" in object and object["location"] not in non_shuffled_things:
+                    overworld_things.append(object.copy())
+    self.multiworld.random.shuffle(overworld_things)
+
+    def swap_ow_things(room_id, links, objects):
+        thing = overworld_things.pop()
+        thing["location_slot"] = object["location_slot"]
+        if "target_room" in thing:
+            links.append(thing)
+            target_room = thing["target_room"]
+            for room in self.rooms:
+                if room["id"] == target_room:
+                    for link in room["links"]:
+                        if link["target_room"] >= 220 <= 231:
+                            link["target_room"] = room_id
         else:
-            self.multiworld.regions.append(create_region(self.multiworld, self.player, room["name"], room["id"],
-                [FFMQLocation(self.player, object["name"], location_table[object["name"]] if object["name"] in
-                location_table else None, object["type"], object["access"],
-                self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
-                object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
-                self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
+            objects.append(thing)
 
+    for room in self.rooms:
+        if "type" in room and room["type"] == "Subregion":
+            modified_objects = []
+            modified_links = []
+            if "game_objects" in room:
+                for object in room["game_objects"]:
+                    if "location" in object:
+                        swap_ow_things(room["id"], modified_links, modified_objects)
+
+                    else:
+                        modified_objects.append(object)
+            for link in room["links"]:
+                if "location" in link and link["location"] not in non_shuffled_things:
+                    swap_ow_things(room["id"], modified_links, modified_objects)
+                else:
+                    modified_links.append(link)
+            room["game_objects"] = modified_objects
+            room["links"] = modified_links
+
+def create_regions(self):
+
+    crest_shuffle(self)
+
+    overworld_shuffle(self)
+
+    menu_region = create_region(self.multiworld, self.player, "Menu")
+    self.multiworld.regions.append(menu_region)
+
+    battlefields = []
     if self.multiworld.shuffle_battlefield_rewards[self.player]:
-        item_battlefields = self.multiworld.random.sample(list(range(1, 21)), 5)
-    else:
-        item_battlefields = [2, 6, 10, 13, 16]
+        battlefield_types = (["BattlefieldItem"] * 5) + (["BattlefieldXp"] * 10) + (["BattlefieldGp"] * 5)
+        self.multiworld.random.shuffle(battlefield_types)
 
-    for battlefield in self.rooms[0]["game_objects"]:
-        if battlefield["object_id"] in item_battlefields:
-            for region_name in ow_regions:
-                if battlefield["object_id"] in ow_regions[region_name][2]:
-                    break
-            location = FFMQLocation(self.player, battlefield["name"], location_table[battlefield["name"]], "BattlefieldItem")
-            region = self.multiworld.get_region(region_name, self.player)
-            location.parent_region = region
-            region.locations.append(location)
+    for room in self.rooms:
+        if "type" not in room or room["type"] != "Subregion":
+            continue
+        for object in room["game_objects"]:
+            if object["type"].startswith("Battlefield"):
+                if self.multiworld.shuffle_battlefield_rewards[self.player]:
+                    object["type"] = battlefield_types.pop()
+                battlefields.append(object)
+
+    for room in self.rooms:
+        self.multiworld.regions.append(create_region(self.multiworld, self.player, room["name"], room["id"],
+            [FFMQLocation(self.player, object["name"], location_table[object["name"]] if object["name"] in
+            location_table else None, object["type"], object["access"],
+            self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
+            object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
+            self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
+
+    for battlefield in battlefields:
+        if battlefield["type"] == "BattlefieldItem":
+            continue
+        elif battlefield["type"] == "BattlefieldXp":
+            item = self.create_item("XP")
+        elif battlefield["type"] == "BattlefieldGp":
+            item = self.create_item("GP")
+        self.multiworld.get_location(battlefield["name"], self.player).place_locked_item(item)
 
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
     dark_king = FFMQLocation(self.player, "Dark King", None, "Trigger", [])
@@ -382,43 +243,12 @@ def create_regions(self):
     dark_king.place_locked_item(self.create_item("Dark King"))
     dark_king_room.locations.append(dark_king)
 
-    ow_rules = {
-        "Earth Region": lambda state: True,
-        "Water Region": lambda state: state.has("Sand Coin", self.player) or state.has_all(
-            ["River Coin", "Dualhead Hydra", "Summer Aquaria"], self.player),
-        "Spencer's Place": lambda state: state.has_all(["Sun Coin", "Rainbow Bridge"], self.player),
-        "Frozen Strip": lambda state: state.has_all(["Sand Coin", "Wakewater", "Summer Aquaria"], self.player) \
-            or state.has_all(["River Coin", "Dualhead Hydra", "Summer Aquaria"], self.player),
-        "Fire Region": lambda state: state.has("River Coin", self.player) or state.has_all(
-            ["Sand Coin", "Dualhead Hydra", "Summer Aquaria"], self.player),
-        "Wind Region": lambda state: state.has("Sun Coin", self.player),
-        "Mac's Ship": lambda state: state.has_all(["Ship Dock Access", "Ship Liberated"], self.player),
-        "Life Temple Region": lambda state: False,
-        "Light Temple Region": lambda state: False,
-        "Ship Dock Region": lambda state: False,
-        "Doom Castle": lambda state: state.has_all(
-            ["Ship Dock Access", "Ship Steering Wheel", "Ship Loaned"], self.player),
-        "Volcano Battlefield": lambda state: state.has_all(["River Coin", "Dualhead Hydra"], self.player) or
-                                             state.has_all(["Sand Coin", "Summer Aquaria"], self.player)
-    }
-
-    for region in ow_regions:
-        connection = Entrance(self.player, f"Enter Overworld Subregion: {region}", menu_region)
-        connection.connect(self.multiworld.get_region(region, self.player))
-        connection.access_rule = ow_rules[region]
-        menu_region.exits.append(connection)
+    connection = Entrance(self.player, f"Enter Overworld", menu_region)
+    connection.connect(self.multiworld.get_region("Subregion Foresta", self.player))
+    menu_region.exits.append(connection)
 
     for region in self.multiworld.get_regions(self.player):
         for link in region.links:
-            if link["target_room"] == 0:
-                for sub_region, c in ow_regions.items():
-                    if link["teleporter"] in c[1]:
-                        connection = Entrance(self.player, f"{region.name} to {sub_region}", region)
-                        region.exits.append(connection)
-                        connection.connect(self.multiworld.get_region(sub_region, self.player))
-                        if link["access"]:
-                            process_rules(connection, link["access"])
-                        continue
             for connect_room in self.multiworld.get_regions(self.player):
                 if connect_room.id == link["target_room"]:
                     connection = Entrance(self.player, f"{region.name} to {connect_room.name}", region)
@@ -429,27 +259,6 @@ def create_regions(self):
                     connection.connect(connect_room)
                     break
 
-    # prioritized_locations = []
-    # non_prioritized_locations = []
-    # for location in self.multiworld.get_locations(self.player):
-    #     if (location.type == "Battlefield" and self.multiworld.prioritize_battlefields[self.player] or location.type ==
-    #             "NPC" and self.multiworld.prioritize_npcs[self.player] or location.type == "Chest" and
-    #             self.multiworld.prioritize_chests[self.player]):
-    #         prioritized_locations.append(location)
-    #     elif location.type == "Box":
-    #         non_prioritized_locations.append(location)
-    # if prioritized_locations:
-    #     self.multiworld.random.shuffle(prioritized_locations)
-    #     self.multiworld.random.shuffle(non_prioritized_locations)
-    #     non_prioritized_locations = non_prioritized_locations[:len(prioritized_locations) * 3]
-    #     friendly = 2 if self.multiworld.logic[self.player] == "friendly" else 0
-    #     useful_locations = prioritized_locations[int(len(prioritized_locations) / 2) + friendly:]
-    #     prioritized_locations = prioritized_locations[:int(len(prioritized_locations) / 2) + friendly]
-    #     for location in prioritized_locations:
-    #         location.progress_type = LocationProgressType.PRIORITY
-    #     for location in non_prioritized_locations:
-    #         location.progress_type = LocationProgressType.EXCLUDED
-    #     self.multiworld.ffmq_useful_locations += useful_locations
 
 
 def set_rules(self) -> None:
@@ -503,10 +312,6 @@ def set_rules(self) -> None:
             connection.connect(self.multiworld.get_region("Wintry Temple Outer Room", self.player))
             connection.access_rule = lambda state: state.has("Exit Book", self.player)
             inner_room.exits.append(connection)
-        for region in ow_regions:
-            for entrance in self.multiworld.get_region(region, self.player).entrances:
-                if entrance.parent_region.name != "Menu":
-                    entrance.access_rule = lambda state: False
 
     if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
         logic_coins = [16, 24, 32, 32, 38][self.multiworld.shattered_sky_coin_quantity[self.player].value]
