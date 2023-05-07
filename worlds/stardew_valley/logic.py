@@ -649,7 +649,7 @@ class StardewLogic:
         return self.has_max_fishing_rod() & skill_rule
 
     def can_buy_seed(self, seed: SeedItem):
-        if self.options[options.SeedShuffle] == options.SeedShuffle.option_disabled or seed.name == "Rare Seed":
+        if self.options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
             item_rule = True_()
         else:
             item_rule = self.received(seed.name)

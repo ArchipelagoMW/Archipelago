@@ -187,6 +187,7 @@ id,name,classification,groups
 199,Willy: 1 <3,progression,FRIENDSANITY
 200,Wizard: 1 <3,progression,FRIENDSANITY
 201,Pet: 1 <3,progression,FRIENDSANITY
+251,Rare Seed,progression,"SEED_SHUFFLE"
 5000,Resource Pack: 500 Money,filler,"BASE_RESOURCE,RESOURCE_PACK"
 5001,Resource Pack: 1000 Money,filler,"BASE_RESOURCE,RESOURCE_PACK"
 5002,Resource Pack: 1500 Money,filler,"BASE_RESOURCE,RESOURCE_PACK"
