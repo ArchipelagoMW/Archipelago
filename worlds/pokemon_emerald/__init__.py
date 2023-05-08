@@ -12,7 +12,7 @@ from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 
 from .data import PokemonEmeraldData, MapData, SpeciesData, EncounterTableData, LearnsetMove, TrainerData, TrainerPartyData, TrainerPokemonData, data as emerald_data
-from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
+from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value, create_item_groups
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, LevelUpMoves, Abilities, ItemPoolType, TmCompatibility, HmCompatibility, get_option_value, option_definitions
 from .pokemon import get_random_species, get_species_by_name, get_random_move, get_random_damaging_move, get_random_type
@@ -54,6 +54,7 @@ class PokemonEmeraldWorld(World):
 
     item_name_to_id = create_item_label_to_code_map()
     location_name_to_id = create_location_label_to_id_map()
+    item_name_groups = create_item_groups()
 
     data_version = 0
 
