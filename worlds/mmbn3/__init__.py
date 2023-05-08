@@ -365,17 +365,11 @@ class MMBN3World(World):
         self.multiworld.get_location(LocationName.WWW_Control_Room_1_Screen, self.player).item_rule = not_undernet
         self.multiworld.get_location(LocationName.WWW_Wilys_Desk, self.player).item_rule = not_undernet
 
-    def generate_basic(self) -> None:
-        """
-        called after the previous steps. Some placement and player specific randomizations can be done here. After this
-        step all regions and items have to be in the MultiWorld's regions and itempool.
-        """
         # place "Victory" at "Final Boss" and set collection as win condition
         self.multiworld.get_location(LocationName.Alpha_Defeated, self.player) \
             .place_locked_item(self.create_event(ItemName.Victory))
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has(ItemName.Victory, self.player)
-
 
     def generate_output(self, output_directory: str) -> None:
         rompath: str = ""

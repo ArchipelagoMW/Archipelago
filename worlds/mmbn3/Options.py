@@ -29,6 +29,5 @@ class IncludeJobs(DefaultOnToggle):
 
 MMBN3Options = {
     "extra_ranks": ExtraRanks,
-    # "job_progression": JobProgression
     "include_jobs": IncludeJobs
 }
