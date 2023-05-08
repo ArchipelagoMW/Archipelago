@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import json
 import os
 import multiprocessing
@@ -26,6 +27,7 @@ CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, t
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
+CONNECTION_INCORRECT_ROM = "Supplied Base Rom does not match US GBA Blue Version. Please provide the correct ROM version"
 
 mmbn3_loc_name_to_id = network_data_package["games"]["MegaMan Battle Network 3"]["location_name_to_id"]
 
@@ -35,6 +37,8 @@ debugEnabled = False
 locations_checked = []
 items_sent = []
 itemIndex = 1
+
+CHECKSUM_BLUE = "6fe31df0144759b34ad666badaacc442"
 
 
 class MMBN3CommandProcessor(ClientCommandProcessor):
@@ -172,6 +176,9 @@ def check_item_packet(name, packet):
 
 async def gba_sync_task(ctx: MMBN3Context):
     logger.info("Starting GBA connector. Use /gba for status information.")
+    if not confirm_checksum():
+        logger.error('Supplied Base Rom does not match US GBA Blue Version. Please provide the correct ROM version')
+
     while not ctx.exit_event.is_set():
         error_status = None
         if ctx.gba_streams:
@@ -277,12 +284,24 @@ async def patch_and_run_game(apmmbn3_file):
 
     with open(rom_file, 'rb') as rom:
         rom_bytes = rom.read()
+
     patched_bytes = bsdiff4.patch(rom_bytes, patch_data)
     patched_rom_file = base_name+".gba"
     with open(patched_rom_file,'wb') as patched_rom:
         patched_rom.write(patched_bytes)
 
     asyncio.create_task(run_game(patched_rom_file))
+
+
+def confirm_checksum():
+    rom_file = get_base_rom_path()
+    with open(rom_file, 'rb') as rom:
+        rom_bytes = rom.read()
+
+    basemd5 = hashlib.md5()
+    basemd5.update(rom_bytes)
+    return CHECKSUM_BLUE == basemd5.hexdigest()
+
 
 if __name__ == "__main__":
     Utils.init_logging("MMBN3Client")
@@ -293,8 +312,10 @@ if __name__ == "__main__":
         parser.add_argument("patch_file", default="", type=str, nargs="?",
                             help="Path to an APMMBN3 file")
         args = parser.parse_args()
-        if args.patch_file:
-            asyncio.create_task(patch_and_run_game(args.patch_file))
+        checksum_matches = confirm_checksum()
+        if checksum_matches:
+            if args.patch_file:
+                asyncio.create_task(patch_and_run_game(args.patch_file))
 
         ctx = MMBN3Context(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
@@ -305,7 +326,6 @@ if __name__ == "__main__":
         ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name="GBA Sync")
         await ctx.exit_event.wait()
         ctx.server_address = None
-
         await ctx.shutdown()
 
         if ctx.gba_sync_task:

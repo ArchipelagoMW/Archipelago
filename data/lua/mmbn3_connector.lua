@@ -824,7 +824,7 @@ local SendItem = function(item)
             -- Generate Extra BugFrags
             changeFrags(20)
             gui.addmessage("Receiving extra Undernet Rank from "..item["sender"]..", +20 BugFrags")
-            print("Receiving extra Undernet Rank from "..item["sender"]..", +20 BugFrags")
+            -- print("Receiving extra Undernet Rank from "..item["sender"]..", +20 BugFrags")
         else
             itemAddress = key_item_start_address + Next_Progressive_Undernet_ID(undernet_id)
 
@@ -832,12 +832,12 @@ local SendItem = function(item)
             itemCount = itemCount + item["count"]
             memory.write_u8(itemAddress, itemCount)
             gui.addmessage("Received Undernet Rank from player "..item["sender"])
-            print("Received Undernet Rank from player "..item["sender"])
+            -- print("Received Undernet Rank from player "..item["sender"])
         end
     elseif item["type"] == "chip" then
         addChip(item["itemID"], item["subItemID"], item["count"])
         gui.addmessage("Received Chip "..item["itemName"].." from player "..item["sender"])
-        print("Received Chip "..item["itemName"].." from player "..item["sender"])
+        -- print("Received Chip "..item["itemName"].." from player "..item["sender"])
     elseif item["type"] == "key" then
         itemAddress = key_item_start_address + item["itemID"]
         itemCount = memory.read_u8(itemAddress)
@@ -858,23 +858,23 @@ local SendItem = function(item)
             changeRegMemory(3)
         end
         gui.addmessage("Received Key Item "..item["itemName"].." from player "..item["sender"])
-        print("Received Key Item "..item["itemName"].." from player "..item["sender"])
+        -- print("Received Key Item "..item["itemName"].." from player "..item["sender"])
     elseif item["type"] == "subchip" then
         addSubChip(item["itemID"], item["count"])
         gui.addmessage("Received SubChip "..item["itemName"].." from player "..item["sender"])
-        print("Received SubChip "..item["itemName"].." from player "..item["sender"])
+        -- print("Received SubChip "..item["itemName"].." from player "..item["sender"])
     elseif item["type"] == "zenny" then
         changeZenny(item["count"])
         gui.addmessage("Received "..item["count"].."z from "..item["sender"])
-        print("Received "..item["count"].."z from "..item["sender"])
+        -- print("Received "..item["count"].."z from "..item["sender"])
     elseif item["type"] == "program" then
         addProgram(item["itemID"], item["subItemID"], item["count"])
         gui.addmessage("Received Program "..item["itemName"].." from player "..item["sender"])
-        print("Received Program "..item["itemName"].." from player "..item["sender"])
+        -- print("Received Program "..item["itemName"].." from player "..item["sender"])
     elseif item["type"] == "bugfrag" then
         changeFrags(item["count"])
         gui.addmessage("Received "..item["count"].." BugFrag(s) from "..item["sender"])
-        print("Received "..item["count"].." BugFrag(s) from "..item["sender"])
+        -- print("Received "..item["count"].." BugFrag(s) from "..item["sender"])
     end
 end
 
