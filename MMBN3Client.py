@@ -10,9 +10,11 @@ from asyncio import StreamReader, StreamWriter
 
 import bsdiff4
 
+import Patch
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
+from NetUtils import ClientStatus
 from worlds import network_data_package
 from worlds.mmbn3.Items import items_by_id
 from worlds.mmbn3.Rom import get_base_rom_path
@@ -155,7 +157,7 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
     if payload["gameComplete"] and not ctx.finished_game:
         await ctx.send_msgs([{
             "cmd": "StatusUpdate",
-            "status": 30
+            "status": ClientStatus.CLIENT_GOAL
         }])
         ctx.finished_game = True
 
