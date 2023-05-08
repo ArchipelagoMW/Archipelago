@@ -356,14 +356,6 @@ class PokemonEmeraldWorld(World):
                 species.types = (type_1, type_2)
 
         def randomize_learnsets():
-            new_moves = set()
-
-            for i in range(50):
-                new_move = get_random_move(random, new_moves)
-                new_moves.add(new_move)
-                self.modified_data.tmhm_moves[i] = new_move
-
-        def randomize_tm_hm_compatibility():
             should_start_with_four_moves = get_option_value(self.multiworld, self.player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves
 
             for species in self.modified_data.species:
@@ -394,7 +386,7 @@ class PokemonEmeraldWorld(World):
 
                 species.learnset = new_learnset
 
-        def randomize_tm_moves():
+        def randomize_tm_hm_compatibility():
             tm_compatibility = get_option_value(self.multiworld, self.player, "tm_compatibility")
             hm_compatibility = get_option_value(self.multiworld, self.player, "hm_compatibility")
 
@@ -419,6 +411,14 @@ class PokemonEmeraldWorld(World):
                         combatibility_array[i] = random.choice([True, False])
 
                 species.tm_hm_compatibility = bool_array_to_int(combatibility_array)
+
+        def randomize_tm_moves():
+            new_moves = set()
+
+            for i in range(50):
+                new_move = get_random_move(random, new_moves)
+                new_moves.add(new_move)
+                self.modified_data.tmhm_moves[i] = new_move
 
         def randomize_wild_encounters():
             should_match_bst = get_option_value(self.multiworld, self.player, "wild_pokemon") in [RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type]
