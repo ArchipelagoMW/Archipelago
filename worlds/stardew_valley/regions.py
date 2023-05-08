@@ -216,7 +216,7 @@ stardew_valley_regions = [
 mandatory_connections = [
     ConnectionData(SVEntrance.to_stardew_valley, SVRegion.stardew_valley),
     ConnectionData(SVEntrance.to_farmhouse, SVRegion.farm_house),
-    ConnectionData(SVEntrance.farmhouse_to_farm, SVRegion.farm, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(SVEntrance.farmhouse_to_farm, SVRegion.farm),
     ConnectionData(SVEntrance.downstairs_to_cellar, SVRegion.cellar),
     ConnectionData(SVEntrance.farm_to_backwoods, SVRegion.backwoods),
     ConnectionData(SVEntrance.farm_to_bus_stop, SVRegion.bus_stop),
@@ -366,8 +366,6 @@ def create_regions(region_factory: RegionFactory, random: Random, world_options:
     for connection in connections:
         if connection.name in entrances:
             entrances[connection.name].connect(regions[connection.destination])
-        if connection.reverse in entrances:
-            entrances[connection.reverse].connect(regions[connection.destination])
 
     return regions.values(), randomized_data
 
@@ -402,29 +400,11 @@ def randomize_connections(random: Random, world_options: StardewOptions) -> Tupl
 
 
 def randomize_chosen_connections(connections_to_randomize, destination_pool, randomized_connections, randomized_data):
-    farmhouse_done = False
+    # farmhouse_done = False
     for connection in connections_to_randomize:
-        if not farmhouse_done and RandomizationFlag.LEAD_TO_OPEN_AREA in connection.flag:
-            randomize_with_farmhouse(connection, destination_pool, randomized_connections, randomized_data)
-            farmhouse_done = True
-            continue
         destination = destination_pool.pop()
-        if connection.name == SVEntrance.farmhouse_to_farm:
-            create_randomized_connection(connection, destination.inverted(), randomized_connections)
-            create_randomized_data(connection.inverted(), destination, randomized_data)
-        else:
-            create_randomized_connection(connection, destination, randomized_connections)
-            create_randomized_data(connection, destination, randomized_data)
-
-
-def randomize_with_farmhouse(connection, destination_pool, randomized_connections, randomized_data):
-    for destination in destination_pool:
-        if destination.name == SVEntrance.farmhouse_to_farm:
-            farm_to_farmhouse = destination.inverted()
-            create_randomized_connection(connection, farm_to_farmhouse, randomized_connections)
-            create_randomized_data(connection, farm_to_farmhouse, randomized_data)
-            destination_pool.remove(destination)
-            return
+        create_randomized_connection(connection, destination, randomized_connections)
+        create_randomized_data(connection, destination, randomized_data)
 
 
 def create_randomized_connection(connection, destination, randomized_connections):
