@@ -157,6 +157,7 @@ class CommonContext:
     disconnected_intentionally: bool = False
     server: typing.Optional[Endpoint] = None
     server_version: Version = Version(0, 0, 0)
+    generator_version: Version = Version(0, 0, 0)
     current_energy_link_value: typing.Optional[int] = None  # to display in UI, gets set by server
 
     last_death_link: float = time.time()  # last send/received death link on AP layer
@@ -260,6 +261,7 @@ class CommonContext:
         self.items_received = []
         self.locations_info = {}
         self.server_version = Version(0, 0, 0)
+        self.generator_version = Version(0, 0, 0)
         self.server = None
         self.server_task = None
         self.hint_cost = None
@@ -646,11 +648,16 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.info('Room Information:')
             logger.info('--------------------------------')
             version = args["version"]
-            ctx.server_version = tuple(version)
-            version = ".".join(str(item) for item in version)
+            ctx.server_version = Version(*version)
 
-            logger.info(f'Server protocol version: {version}')
-            logger.info("Server protocol tags: " + ", ".join(args["tags"]))
+            if "generator_version" in args:
+                ctx.generator_version = Version(*args["generator_version"])
+                logger.info(f'Server protocol version: {ctx.server_version.as_simple_string()}, '
+                            f'generator version: {ctx.generator_version.as_simple_string()}, '
+                            f'tags: {", ".join(args["tags"])}')
+            else:
+                logger.info(f'Server protocol version: {ctx.server_version.as_simple_string()}, '
+                            f'tags: {", ".join(args["tags"])}')
             if args['password']:
                 logger.info('Password required')
             ctx.update_permissions(args.get("permissions", {}))
