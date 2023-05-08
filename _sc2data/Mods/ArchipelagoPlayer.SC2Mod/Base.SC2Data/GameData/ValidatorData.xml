@@ -588,4 +588,7 @@
     <CValidatorUnitType id="AP_IsVanillaSporeCrawlerUprooted">
         <Value value="SporeCrawlerUprooted"/>
     </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_NoMarineShield">
+        <Value value="AP_UseShieldWall"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

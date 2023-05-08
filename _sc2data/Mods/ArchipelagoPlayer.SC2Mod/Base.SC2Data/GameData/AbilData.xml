@@ -971,7 +971,8 @@
         <AutoCastRange value="7.5"/>
         <AutoCastValidatorArray value="noMarkers"/>
         <AutoCastValidatorArray value="AP_TargetNotLockOn"/>
-        <AutoCastValidatorArray value="AP_IsNotVanillaInterceptor"/> <!-- FIXME: Add AP_Interceptor -->
+        <AutoCastValidatorArray value="AP_IsNotVanillaInterceptor"/>
+        <!-- FIXME: Add AP_Interceptor -->
         <AutoCastValidatorArray value="TargetNotChangeling"/>
         <AutoCastValidatorArray value="IsNotNeuralParasited"/>
         <AutoCastValidatorArray value="TargetNotChangeling"/>

@@ -408,4 +408,11 @@
     <CRequirement id="AP_NoLockedOn">
         <NodeArray index="Use" Link="AP_NotCountBehaviorLockOnDisableAttackCompleteOnlyAtUnit"/>
     </CRequirement>
+    <CRequirement id="AP_SummonKelmorianMiners">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUnitWarPigTotalNotCountUnitWarPigQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_UseShieldWall">
+        <NodeArray index="Use" Link="AP_OrCountUpgradeCombatShieldCompleteOnlyCountUpgradeShieldWallCompleteOnly"/>
+    </CRequirement>
 </Catalog>

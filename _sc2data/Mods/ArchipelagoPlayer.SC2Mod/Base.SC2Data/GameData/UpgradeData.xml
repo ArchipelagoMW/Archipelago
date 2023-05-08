@@ -40,6 +40,8 @@
         <EffectArray Operation="Set" Reference="Actor,AP_Marine,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-marine-shield.dds"/>
         <EffectArray Reference="Unit,AP_WarPig,LifeMax" Value="10"/>
         <EffectArray Reference="Unit,AP_WarPig,LifeStart" Value="10"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KelmorianMiner,GroupIcon.Image[0]" Value="AP\Assets\Textures\wireframe-terran-marine-mercenary-shield.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KelmorianMiner,Wireframe.Image[0]" Value="AP\Assets\Textures\wireframe-terran-marine-mercenary-shield.dds"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Marine"/>
         <AffectedUnitArray value="AP_WarPig"/>
@@ -754,5 +756,9 @@
         <EffectArray Reference="Weapon,AP_TyphoonMissilePod,Range" Value="2"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Cyclone"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HireKelmorianMinersPH">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
 </Catalog>

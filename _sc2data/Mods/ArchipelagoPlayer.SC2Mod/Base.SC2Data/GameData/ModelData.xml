@@ -909,7 +909,6 @@
         <Model value="AP\Assets\Portraits\Terran\Valkyrie@PortraitSCBW\Valkyrie@PortraitSCBW.m3"/>
         <FacialController value="LocalizedData\Facial\WraithPortrait.fxa"/>
         <Image value="Assets\Textures\WraithPortrait_Static.dds"/>
-        <Lighting value="AP_ValkyrieSCBW@Portrait"/>
     </CModel>
     <CModel id="AP_ValkyrieSCBWWeapon@Impact" parent="ImpactFX">
         <Model value="Assets\Effects\Terran\WraithMissileImpact\WraithMissileImpact.m3"/>
@@ -922,5 +921,27 @@
         <ScaleMin value="0.750000,0.750000,0.750000"/>
         <SelectionRadius value="0.666500"/>
         <ShadowRadius value="0.666500"/>
+    </CModel>
+    <CModel id="AP_KelmorianMinerDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Terran\MarineMercenaryDeath\MarineMercenaryDeath.m3"/>
+        <LowQualityModel value="TerranBloodDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_MarineMercenaryPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\MarineMercenaryPortrait\MarineMercenaryPortrait.m3"/>
+        <Image value="Assets\Textures\MarineMercenaryPortrait_Static.dds"/>
+        <Lighting value="MarineMercenaryPortrait"/>
+    </CModel>
+    <CModel id="AP_WarPig" parent="Unit">
+        <Model value="Assets\Units\Terran\MarineMercenary\MarineMercenary.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <Radius value="0.375000"/>
+        <ScaleMax value="1.100000,1.100000,1.100000"/>
+        <ScaleMin value="1.100000,1.100000,1.100000"/>
+        <SelectionRadius value="0.340800"/>
+        <ShadowRadius value="0.340800"/>
+        <UnitGlossaryCamera value="Star2CameraMid03"/>
     </CModel>
 </Catalog>

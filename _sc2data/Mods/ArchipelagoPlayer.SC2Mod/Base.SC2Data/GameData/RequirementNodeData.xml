@@ -532,4 +532,30 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MagFieldLaunchers" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementAnd id="AP_AndCountUpgradeHireKelmorianMinersPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+        <OperandArray value="AP_CountUpgradeHireKelmorianMinersPHCompleteOnly"/>
+        <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUnitWarPigTotalNotCountUnitWarPigQueuedOrBetter">
+        <OperandArray value="AP_NotCountUnitWarPigTotal"/>
+        <OperandArray value="AP_NotCountUnitWarPigQueuedOrBetter"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitWarPigQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_WarPig" State="QueuedOrBetter"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitWarPigTotal">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_WarPig" State="Total"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHireKelmorianMinersPHCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HireKelmorianMinersPH" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUnitWarPigQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUnitWarPigQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUnitWarPigTotal">
+        <OperandArray index="0" value="AP_CountUnitWarPigTotal"/>
+    </CRequirementNot>
 </Catalog>

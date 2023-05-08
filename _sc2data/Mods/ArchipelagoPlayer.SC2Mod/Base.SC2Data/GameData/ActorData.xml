@@ -152,7 +152,7 @@
         <Macros value="UnloadDropAnim"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
         <Macros value="TerrainSquibAnimations"/>
-        <On Terms="ActorCreation; ValidatePlayer NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
         <On Terms="Upgrade.AP_ShieldWall.Add" Send="AnimClear Cover"/>
         <On Terms="Upgrade.AP_ShieldWall.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
         <On Terms="UnitDeath.AP_Marine; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
@@ -2229,6 +2229,95 @@
             <Image value="Assets\Textures\Wireframe-Terran-Thor.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorUnit id="AP_KelmorianMiner" parent="GenericUnitBase" unitName="AP_WarPig">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Behavior.MercGroundDrop.Create" Send="Create AP_WarPigDropModel"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On Terms="Upgrade.AP_ShieldWall.Add" Send="AnimClear Cover"/>
+        <On Terms="Upgrade.AP_ShieldWall.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On Terms="Upgrade.AP_CombatShield.Add" Send="AnimClear Cover"/>
+        <On Terms="Upgrade.AP_CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On Terms="UnitDeath.AP_WarPig; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever"/>
+        <Model value="AP_WarPig"/>
+        <BuildModel value="AP_WarPig"/>
+        <DeathArray index="Normal" ModelLink="AP_KelmorianMinerDeath" SoundLink="Marine_DeathFXBloodSpray"/>
+        <DeathArray index="Blast" ModelLink="MarineDeathBlast" SoundLink="Marine_DeathFXBlast"/>
+        <DeathArray index="Disintegrate" ModelLink="MarineDeathAcid" SoundLink="Marine_DeathFXFire"/>
+        <DeathArray index="Eat" AnimProps="Stand" ModelLink="MarineDeathEat" SoundLink="Marine_DeathFXEat"/>
+        <DeathArray index="Eviscerate" ModelLink="MarineDeathEviscerate" SoundLink="Marine_DeathFXEviscerate"/>
+        <DeathArray index="Fire" ModelLink="MarineDeathFire" SoundLink="Marine_DeathFXFire"/>
+        <DeathArray index="Silentkill" SoundLink="Marine_DeathFXSilentKill"/>
+        <DeathArray index="Squish" SoundLink="Marine_DeathFXBloodSpray"/>
+        <PlacementModel value="AP_WarPig"/>
+        <PortraitModel value="AP_MarineMercenaryPortrait"/>
+        <StandAnimTurnTime value="5"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\wireframe-terran-marine-mercenary.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="MarineGroupWhat"/>
+        <GroupSoundArray index="Yes" value="MarineGroupYes"/>
+        <GroupSoundArray index="Attack" value="MarineGroupAttack"/>
+        <GroupSoundArray index="Board" value="MarineGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-MarineMercenary.dds"/>
+        <HighlightTooltip value="Unit/Name/WarPig"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="MarineBirth"/>
+        <SoundArray index="Ready" value="Marine_Ready"/>
+        <SoundArray index="Help" value="Marine_Help"/>
+        <SoundArray index="What" value="Marine_What"/>
+        <SoundArray index="Yes" value="Marine_Yes"/>
+        <SoundArray index="Attack" value="Marine_Attack"/>
+        <SoundArray index="Pissed" value="Marine_Pissed"/>
+        <SoundArray index="Movement" value="MarineMovement"/>
+        <SoundArray index="Turning" value="MarineTurning"/>
+        <SoundArray index="Board" value="MarineBoard"/>
+        <SoundArray index="Click" value="MarineClick"/>
+        <SoundArray index="ClickError" value="MarineClickError"/>
+        <SoundArray index="Highlight" value="MarineHighlight"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-MarineMercenary.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\wireframe-terran-marine-mercenary.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_KelmorianMinerAttack" parent="GenericAttack" effectAttack="AP_KelmorianMinerDamage">
+        <LaunchAssets Model="MarineAttackLaunch" Sound="Marine_AttackLaunch"/>
+        <ContainerAssets Model="MarineAttackLaunch" Sound="Marine_AttackLaunch"/>
+        <ImpactMap index="None" Model="MarineAttackImpact" Sound="Marine_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorModel default="1" id="AP_MercDropModelBase">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="DropPodFalling"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="ActorCreation" Send="Create AP_MercCalldownDrop"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.100000 DelayDropPod"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Send="Create AP_MercCalldownImpact"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Target="AP_MercCalldownDrop" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Create DropPodUnload"/>
+        <On Terms="AnimDone; AnimName Birth" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Inherits index="TeamColor" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_WarPigDropModel" parent="AP_MercDropModelBase">
+        <On Terms="ActorCreation" Send="SetScale 0.700000"/>
+    </CActorModel>
+    <CActorSound id="AP_MercCalldownDrop" parent="SoundOneShot">
+        <Sound value="OrbitalCommand_CalldownMuleDrop"/>
+    </CActorSound>
+    <CActorSound id="AP_MercCalldownImpact" parent="SoundOneShot">
+        <Sound value="OrbitalCommand_CalldownMuleImpact"/>
+    </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -3790,7 +3879,6 @@
     <CActorAction id="AP_CycloneMissilesAttack" parent="GenericAttack" effectImpact="AP_CycloneMissilesDamage" effectLaunch="AP_CycloneMissilesLM">
         <LaunchAttachQuery Methods="AMFilterWeapon01"/>
         <LaunchAssets Model="CycloneMissilesAttackLaunch" Sound="WarHound_Missile_Launch"/>
-        <Missile value="AP_CycloneMissilesAttackMissile"/>
         <ImpactMap index="None" Model="CycloneMissilesAttackImpact" Sound="WarHound_Missile_Impact"/>
         <ImpactPhysics Name="CycloneMissileImpact" MatchKeys="Basic" Physics="WarhoundMissileAttackForce"/>
     </CActorAction>

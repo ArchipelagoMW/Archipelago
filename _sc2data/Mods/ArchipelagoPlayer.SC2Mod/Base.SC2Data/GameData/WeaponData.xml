@@ -410,4 +410,14 @@
         <Period value="1"/>
         <Effect value="AP_CycloneAttackWeaponLaunchMissileSwitch"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_KelmorianMinerGaussRifle">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <DisplayEffect value="AP_KelmorianMinerDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Period value="0.8608"/>
+        <DamagePoint value="0.05"/>
+        <Backswing value="0.75"/>
+        <Effect value="AP_KelmorianMinerDamage"/>
+    </CWeaponLegacy>
 </Catalog>

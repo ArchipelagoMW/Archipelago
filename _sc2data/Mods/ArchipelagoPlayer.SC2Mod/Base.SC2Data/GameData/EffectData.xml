@@ -2094,7 +2094,6 @@
     <CEffectApplyBehavior id="AP_LockOnEndDisableAttack">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
-        <Behavior value="AP_LockOnEndDisableAttack"/>
     </CEffectApplyBehavior>
     <CEffectSet id="AP_LockOnFireSet">
         <EditorCategories value="Race:Terran"/>
@@ -2161,4 +2160,16 @@
         <WhichUnit Effect="NeuralParasiteLaunchMissile"/>
         <BehaviorLink value="AP_LockOnDisableAttack"/>
     </CEffectRemoveBehavior>
+    <CEffectDamage id="AP_KelmorianMinerDamage">
+        <!-- War Pig -->
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="8"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectDamage>
 </Catalog>
