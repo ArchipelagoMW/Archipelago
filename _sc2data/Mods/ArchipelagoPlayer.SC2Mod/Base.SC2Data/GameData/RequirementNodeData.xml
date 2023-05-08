@@ -610,4 +610,12 @@
     <CRequirementNot id="AP_NotCountUnitHammerSecurityTotal">
         <OperandArray index="0" value="AP_CountUnitHammerSecurityTotal"/>
     </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUpgradeHireSpartanCompanyPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+        <OperandArray value="AP_CountUpgradeHireSpartanCompanyPHCompleteOnly"/>
+        <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHireSpartanCompanyPHCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HireSpartanCompanyPH" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

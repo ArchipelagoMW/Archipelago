@@ -602,4 +602,14 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_HireSpartanCompany">
+        <Icon value="Assets\Textures\btn-unit-terran-goliathmercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireSpartanCompanyPH">
+        <Icon value="Assets\Textures\btn-unit-terran-goliathmercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

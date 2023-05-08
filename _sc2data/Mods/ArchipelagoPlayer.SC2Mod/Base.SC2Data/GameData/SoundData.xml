@@ -557,8 +557,6 @@
         <AssetArray>
             <File value="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed00.ogg"/>
             <FacialAnim value="Goliath_Pissed00"/>
-            <PortraitModel value="AP_GoliathPortrait"/>
-            <Speaker value="ConversationState/Characters/CharGoliath"/>
         </AssetArray>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed01.ogg" FacialAnim="Goliath_Pissed01"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Goliath\Goliath_Pissed02.ogg" FacialAnim="Goliath_Pissed02"/>

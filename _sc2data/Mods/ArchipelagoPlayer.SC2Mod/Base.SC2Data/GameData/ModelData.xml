@@ -1001,4 +1001,98 @@
         <Model value="Assets\Portraits\Terran\MarauderMercenaryPortrait\MarauderMercenaryPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\MarauderPortrait.fxa"/>
     </CModel>
+    <CModel id="AP_GoliathMercenaryPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\GoliathMercenaryPortrait\GoliathMercenaryPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\GoliathPortrait.fxa"/>
+        <Image value="Assets\Textures\GoliathMercenaryPortrait_Static.dds"/>
+        <Lighting value="AP_GoliathMercenaryPortrait"/>
+    </CModel>
+    <CModel id="AP_SpartanCompany" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\GoliathMercenary\GoliathMercenary.m3"/>
+        <AttachProps Id="Ref_TurretZ">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 02">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 03">
+            <Keys index="SetB" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 04">
+            <Keys index="SetB" value="4"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 05">
+            <Keys index="SetB" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 06">
+            <Keys index="SetB" value="3"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 07">
+            <Keys index="SetB" value="5"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh12"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.650000,0.650000,0.650000"/>
+        <ScaleMin value="0.650000,0.650000,0.650000"/>
+        <SelectionRadius value="0.999700"/>
+        <ShadowRadius value="0.999700"/>
+        <TechPurchaseCamera value="Star2CameraHigh12"/>
+        <UnitGlossaryCamera value="Star2CameraHigh12"/>
+    </CModel>
+    <CModel id="AP_SpartanCompanyAirAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\GoliathAirMissileImpact\GoliathAirMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpartanCompanyAirAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\VikingFighterMissileLaunch\VikingFighterMissileLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpartanCompanyDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\GoliathMercenaryDeath\GoliathMercenaryDeath.m3"/>
+        <LowQualityModel value="TerranMediumUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="GoliathDeathFXA"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Goliath_DeathFXA"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="GoliathDeathFXA"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Goliath_DeathFXA"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="GoliathDeathFXB"/>
+            <Type value="Sound"/>
+            <Time value="2.000000"/>
+            <Payload value="Goliath_DeathFXB"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="GoliathDeathFXB"/>
+            <Type value="Sound"/>
+            <Time value="0.870000"/>
+            <Payload value="Goliath_DeathFXB"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_SpartanCompanyGroundAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\VikingAssaultWeaponImpact\VikingAssaultWeaponImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SpartanCompanyGroundAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\VikingAssaultWeaponLaunch\VikingAssaultWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

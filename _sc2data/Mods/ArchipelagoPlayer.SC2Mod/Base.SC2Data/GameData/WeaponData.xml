@@ -446,4 +446,53 @@
         <Backswing value="0"/>
         <Effect value="AP_HammerSecurityLM"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_SpartanCompanyA">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_SpartanCompanyAU"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Arc value="29.9926"/>
+        <Period value="1.5"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_SpartanCompanyAUpgraded">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_SpartanCompanyAU"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Arc value="29.9926"/>
+        <Period value="1.5"/>
+        <Effect value="AP_SpartanCompanyA"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_SpartanCompanyG">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Arc value="29.9926"/>
+        <Period value="1.5"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_SpartanCompanyGUpgraded">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_SpartanCompanyG"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Arc value="29.9926"/>
+        <Period value="1.5"/>
+        <Effect value="AP_SpartanCompanyG"/>
+    </CWeaponLegacy>
 </Catalog>

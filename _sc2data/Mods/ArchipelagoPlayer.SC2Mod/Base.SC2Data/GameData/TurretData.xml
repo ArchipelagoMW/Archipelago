@@ -77,4 +77,9 @@
         <YawIdleRate value="360"/>
         <Fidget DelayMax="30" DelayMin="10"/>
     </CTurret>
+    <CTurret id="AP_SpartanCompany">
+        <YawArc value="135"/>
+        <YawRate value="360"/>
+        <YawIdleRate value="360"/>
+    </CTurret>
 </Catalog>

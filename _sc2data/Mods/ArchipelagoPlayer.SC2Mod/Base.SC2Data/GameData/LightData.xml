@@ -199,4 +199,14 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_GoliathMercenaryPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.325490,0.211765,0.000000">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <DirectionalLight index="Key" Direction="0.166695,0.311145,-0.935629"/>
+            <DirectionalLight index="Fill" Color="0.000000,0.239216,1.000000" ColorMultiplier="1.585000" Direction="-0.954559,-0.137554,0.264378"/>
+            <DirectionalLight index="Back" Color="1.000000,0.501961,0.000000" ColorMultiplier="0.188000" Direction="-0.943813,0.309397,-0.116151"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAttachMethodPattern id="AP_AMPatternSpartanCompany">
+        <Keyword value="SetB"/>
+        <Base value="::RollingIndex"/>
+        <Multiplier value="2"/>
+        <Driver value="AP_SpartanCompanyALM"/>
+    </CAttachMethodPattern>
     <CAttachMethodFilter id="AP_AMFilterBattlecruiserHurricaneLeft">
         <Keys Keyword="Weapon" Index="20"/>
         <Keys Keyword="Weapon" Index="21"/>

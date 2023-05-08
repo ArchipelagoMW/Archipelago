@@ -769,4 +769,8 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_HireSpartanCompanyPH">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

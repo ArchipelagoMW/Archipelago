@@ -22,6 +22,21 @@
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
         <Inherits index="TeamColor" value="1"/>
     </CActorModel>
+    <CActorAction default="1" id="AP_MarauderAttackBase" parent="GenericAttackNoCreateBase">
+        <Missile value="AP_MarauderAttackMissile"/>
+        <LaunchAssets Sound="Marauder_AttackLaunch"/>
+        <ImpactAttachQuery Methods="AMFilterTarget AMProximityAll"/>
+        <ImpactMap index="None" Model="MarauderBaseAttackImpact" Sound="Marauder_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ContainerAssets Sound="Marauder_AttackLaunch"/>
+    </CActorAction>
+    <CActorAction default="1" id="AP_HammerSecurityAttackBase" parent="GenericAttackNoCreateBase">
+        <Missile value="AP_HammerSecurityAttackMissile"/>
+        <LaunchAssets Sound="Marauder_AttackLaunch"/>
+        <ImpactAttachQuery Methods="AMFilterTarget AMProximityAll"/>
+        <ImpactMap index="None" Model="MarauderBaseAttackImpact" Sound="Marauder_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
     <CActorModel id="AP_250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
@@ -316,19 +331,10 @@
             <Image value="Assets\Textures\Wireframe-Terran-Marauder.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction default="1" id="AP_MarauderAttackBase" parent="GenericAttackNoCreateBase">
-        <Missile value="AP_MarauderAttackMissile"/>
-        <LaunchAssets Sound="Marauder_AttackLaunch"/>
-        <ImpactAttachQuery Methods="AMFilterTarget AMProximityAll"/>
-        <ImpactMap index="None" Model="MarauderBaseAttackImpact" Sound="Marauder_AttackImpact"/>
-        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
-        <ContainerAssets Sound="Marauder_AttackLaunch"/>
-    </CActorAction>
     <CActorAction id="AP_MarauderAttack" parent="AP_MarauderAttackBase" effectImpact="AP_PunisherGrenadesU" effectLaunch="AP_PunisherGrenadesLM">
         <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; !ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
         <LaunchAttachQuery Methods="AMPatternMarauder"/>
         <LaunchAssets Model="MarauderAttackLaunch"/>
-        <Missile value="AP_MarauderAttackMissile"/>
     </CActorAction>
     <CActorMissile id="AP_MarauderAttackMissile" parent="GenericAttackMissile" unitName="AP_PunisherGrenadesLMWeapon">
         <Model value="PunisherGrenadesLMWeapon"/>
@@ -337,7 +343,6 @@
         <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
         <LaunchAttachQuery Methods="AMPatternMarauder"/>
         <LaunchAssets Model="MarauderAttackLaunch"/>
-        <Missile value="AP_MarauderAttackMissile"/>
         <ImpactMap index="None" Model="MarauderUpgradedAttackImpact"/>
     </CActorAction>
     <CActorSound id="AP_Firebat_Stand" parent="SoundOneShot">
@@ -4025,17 +4030,9 @@
             <Image value="AP\Assets\Textures\Wireframe-Terran-Marauder-mercenary.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction default="1" id="AP_HammerSecurityAttackBase" parent="GenericAttackNoCreateBase">
-        <Missile value="AP_HammerSecurityAttackMissile"/>
-        <LaunchAssets Sound="Marauder_AttackLaunch"/>
-        <ImpactAttachQuery Methods="AMFilterTarget AMProximityAll"/>
-        <ImpactMap index="None" Model="MarauderBaseAttackImpact" Sound="Marauder_AttackImpact"/>
-        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
-    </CActorAction>
     <CActorAction id="AP_HammerSecurityAttack" parent="AP_HammerSecurityAttackBase" effectImpact="AP_HammerSecurityDamage" effectLaunch="AP_HammerSecurityLM">
         <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster; !ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
         <LaunchAttachQuery Methods="AMPatternMarauder"/>
-        <Missile value="AP_HammerSecurityAttackMissile"/>
     </CActorAction>
     <CActorMissile id="AP_HammerSecurityAttackMissile" parent="GenericAttackMissile" unitName="AP_HammerSecurityLMWeapon"/>
     <CActorModel id="AP_HammerSecurityDropModel" parent="AP_MercDropModelBase">
@@ -4044,7 +4041,66 @@
     <CActorAction id="AP_HammerSecurityUpgradedAttack" parent="AP_HammerSecurityAttackBase" effectImpact="AP_HammerSecurityDamage" effectLaunch="AP_HammerSecurityLM">
         <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster; ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
         <LaunchAttachQuery Methods="AMPatternMarauder"/>
-        <Missile value="AP_HammerSecurityAttackMissile"/>
         <ImpactMap index="None" Model="MarauderUpgradedAttackImpact"/>
     </CActorAction>
+    <CActorUnit id="AP_SpartanCompany" parent="GenericUnitBase" unitName="AP_SpartanCompany">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="WeaponStart.AP_SpartanCompanyG.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_SpartanCompanyG.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_SpartanCompanyA.AttackStart" Send="AnimBracketStart Spell Spell"/>
+        <On Terms="WeaponStop.AP_SpartanCompanyA.AttackStop" Send="AnimBracketStop Spell"/>
+        <On Terms="WeaponStart.AP_SpartanCompanyAUpgraded.AttackStart" Send="AnimBracketStart Spell Spell"/>
+        <On Terms="WeaponStop.AP_SpartanCompanyAUpgraded.AttackStop" Send="AnimBracketStop Spell"/>
+        <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_SpartanCompanyDropModel"/>
+        <DeathArray index="Normal" ModelLink="AP_SpartanCompanyDeath" SoundLink="Goliath_Explode"/>
+        <PortraitModel value="AP_GoliathMercenaryPortrait"/>
+        <StandAnimTurnTime value="4"/>
+        <WalkAnimMoveSpeed value="3.6093"/>
+        <BarOffset value="95"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-goliath-mercenary.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Birth" value="AP_Goliath_Birth"/>
+        <GroupSoundArray index="Ready" value="AP_Goliath_Ready"/>
+        <GroupSoundArray index="Help" value="AP_Goliath_Help"/>
+        <GroupSoundArray index="What" value="AP_Goliath_What"/>
+        <GroupSoundArray index="Yes" value="AP_Goliath_Yes"/>
+        <GroupSoundArray index="Attack" value="AP_Goliath_Attack"/>
+        <GroupSoundArray index="Pissed" value="AP_Goliath_Pissed"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-GoliathMercenary.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Birth" value="AP_Goliath_Birth"/>
+        <SoundArray index="Ready" value="AP_Goliath_Ready"/>
+        <SoundArray index="Help" value="AP_Goliath_Help"/>
+        <SoundArray index="What" value="AP_Goliath_What"/>
+        <SoundArray index="Yes" value="AP_Goliath_Yes"/>
+        <SoundArray index="Attack" value="AP_Goliath_Attack"/>
+        <SoundArray index="Pissed" value="AP_Goliath_Pissed"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-GoliathMercenary.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-goliath-mercenary.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_SpartanCompanyAirAttack" parent="GenericAttack" effectImpact="AP_SpartanCompanyAU" effectLaunch="AP_SpartanCompanyALM">
+        <LaunchAttachQuery Methods="AP_AMPatternSpartanCompany"/>
+        <LaunchAssets Model="AP_SpartanCompanyAirAttackLaunch" Sound="VikingFighter_AttackLaunch"/>
+        <Missile value="AP_SpartanCompanyAirAttackMissile"/>
+        <ImpactMap index="None" Model="AP_SpartanCompanyAirAttackImpact" Sound="VikingFighter_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_SpartanCompanyAirAttackMissile" parent="GenericAttackMissile" unitName="AP_SpartanCompanyAWeapon">
+        <Model value="AP_GoliathAWeapon"/>
+    </CActorMissile>
+    <CActorModel id="AP_SpartanCompanyDropModel" parent="MercDropModelBase">
+        <On Terms="ActorCreation" Send="SetScale 1.300000,1.300000,1.000000"/>
+    </CActorModel>
+    <CActorAction id="AP_SpartanCompanyGroundAttack" parent="GenericAttack" effectAttack="AP_SpartanCompanyG">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
+        <LaunchAssets Model="AP_SpartanCompanyGroundAttackLaunch" Sound="AP_GoliathGroundAttackLaunch"/>
+        <ImpactMap index="None" Model="AP_SpartanCompanyGroundAttackImpact" Sound="AP_Goliath_GroundAttackImpact"/>
+    </CActorAction>
+    <CActorTurret id="AP_SpartanCompanyTurret">
+        <On Terms="TurretEnable.AP_SpartanCompany" Send="Create"/>
+    </CActorTurret>
 </Catalog>
