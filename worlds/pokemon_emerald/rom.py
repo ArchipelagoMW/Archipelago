@@ -238,6 +238,8 @@ def _set_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> 
 
 def _set_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
     for species in modified_data.species:
+        _set_bytes_little_endian(rom, species.rom_address + 6, 1, species.types[0])
+        _set_bytes_little_endian(rom, species.rom_address + 7, 1, species.types[1])
         _set_bytes_little_endian(rom, species.rom_address + 8, 1, species.catch_rate)
         _set_bytes_little_endian(rom, species.rom_address + 22, 1, species.abilities[0])
         _set_bytes_little_endian(rom, species.rom_address + 23, 1, species.abilities[1])

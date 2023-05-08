@@ -234,6 +234,13 @@ class AllowTrainerLegendaries(DefaultOnToggle):
     display_name = "Allow Trainer Legendaries"
 
 
+class RandomizeTypes(Toggle):
+    """
+    Randomizes the types of every pokemon. If a species is dual-typed in vanilla, it will still be dual-typed. Types do not remain consistent across evolutions.
+    """
+    display_name = "Randomize Types"
+
+
 class RandomizeAbilities(Toggle):
     """
     Randomizes the abilities of every pokemon. Each species will have the same number of abilities. Abilities do not remain consistent across evolutions.
@@ -427,6 +434,7 @@ option_definitions: Dict[str, Option] = {
   "trainer_parties": RandomizeTrainerParties,
   "allow_trainer_legendaries": AllowTrainerLegendaries,
 
+  "types": RandomizeTypes,
   "abilities": RandomizeAbilities,
   "ability_blacklist": AbilityBlacklist,
   "level_up_moves": LevelUpMoves,

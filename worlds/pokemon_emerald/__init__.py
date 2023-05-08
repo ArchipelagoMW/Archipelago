@@ -15,7 +15,7 @@ from .data import PokemonEmeraldData, MapData, SpeciesData, EncounterTableData, 
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, LevelUpMoves, ItemPoolType, LevelUpMoves, TmCompatibility, HmCompatibility, get_option_value, option_definitions
-from .pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_move, get_random_damaging_move
+from .pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
@@ -296,6 +296,18 @@ class PokemonEmeraldWorld(World):
 
                 species.abilities = new_abilities
 
+        def randomize_types():
+            for species in self.modified_data.species:
+                type_1 = get_random_type(random)
+                if species.types[0] == species.types[1]:
+                    type_2 = type_1
+                else:
+                    type_2 = get_random_type(random)
+                    while type_2 == type_1:
+                        type_2 = get_random_type(random)
+
+                species.types = (type_1, type_2)
+
         def randomize_learnsets():
             new_moves = set()
 
@@ -495,6 +507,9 @@ class PokemonEmeraldWorld(World):
         # Randomize species data
         if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
             randomize_abilities()
+
+        if get_option_value(self.multiworld, self.player, "types") == Toggle.option_true:
+            randomize_types()
 
         if get_option_value(self.multiworld, self.player, "level_up_moves") != LevelUpMoves.option_vanilla:
             randomize_learnsets()

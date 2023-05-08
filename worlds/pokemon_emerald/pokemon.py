@@ -63,15 +63,17 @@ _legendary_pokemon = frozenset([
 
 
 # List is sorted, so we can search it faster
-def get_species_by_id(species_id: int) -> Optional[SpeciesData]:
-    for species in data.species:
+def get_species_by_id(species_id: int, species_list: Optional[List[SpeciesData]] = None) -> Optional[SpeciesData]:
+    species_list = data.species if species_list is None else species_list
+    for species in species_list:
         if species.species_id == species_id:
             return species
 
     return None
 
 
-def get_species_by_name(name: str) -> Optional[SpeciesData]:
+def get_species_by_name(name: str, species_list: Optional[List[SpeciesData]] = None) -> Optional[SpeciesData]:
+    species_list = data.species if species_list is None else species_list
     for species in data.species:
         if species.label == name:
             return species
@@ -98,6 +100,14 @@ def get_random_species(
         candidates = [species for species in candidates if species.label not in _legendary_pokemon]
 
     return candidates[rand.randrange(0, len(candidates))]
+
+
+def get_random_type(rand: random):
+    picked_type = rand.randrange(0, 18)
+    while picked_type == 9: # Don't pick the ??? type
+        picked_type = rand.randrange(0, 18)
+
+    return picked_type
 
 
 def get_random_move(rand: random, blacklist: Optional[Set[int]] = None) -> int:
