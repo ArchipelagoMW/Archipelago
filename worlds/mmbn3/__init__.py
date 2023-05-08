@@ -148,8 +148,10 @@ class MMBN3World(World):
 
         remaining = len(all_locations) - len(required_items)
         for i in range(remaining):
-            item = self.create_item(self.multiworld.random.choice(filler_items))
+            filler_item_name = self.multiworld.random.choice(filler_items)
+            item = self.create_item(filler_item_name)
             self.multiworld.itempool.append(item)
+            filler_items.remove(filler_item_name)
 
     def set_rules(self) -> None:
         """
