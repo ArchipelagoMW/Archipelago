@@ -182,7 +182,7 @@ def create_levels(world: World) -> None:
     tlv5 = Entrance(world.player, "To Level 5", level4)
     level4.exits.append(tlv5)
     tlv5.connect(level5)
-    tlv6 = Entrance(world.player, "To Level 6", level5)
-    level5.exits.append(tlv6)
+    tlv6 = Entrance(world.player, "To Level 6", menu)
+    menu.exits.append(tlv6)
     tlv6.connect(level6)
     world.multiworld.regions += [menu, level1, level2, level3, level4, level5, level6]
