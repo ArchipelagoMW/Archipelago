@@ -970,6 +970,35 @@
         <Model value="Assets\Portraits\Terran\FirebatMercenaryPortrait\FirebatMercenaryPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\FirebatPortrait.fxa"/>
         <Image value="Assets\Textures\FirebatMercenaryPortrait_Static.dds"/>
-        <Lighting value="AP_FirebatMercenaryPortrait"/>
+    </CModel>
+    <CModel id="AP_HammerSecurity" parent="Unit">
+        <Model value="Assets\Units\Terran\MarauderMercenary\MarauderMercenary.m3"/>
+        <AttachProps Id="Ref_Weapon Left">
+            <Keys index="Weapon" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Right">
+            <Keys index="Weapon" value="1"/>
+        </AttachProps>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <TextureDeclares Prefix="marauder_">
+            <Adaptions Slot="main"/>
+        </TextureDeclares>
+        <TextureDeclares Prefix="merc_marauder_">
+            <Adaptions Slot="main"/>
+        </TextureDeclares>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+    </CModel>
+    <CModel id="AP_HammerSecurityLMWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\MarauderMissile\MarauderMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_MarauderMercenaryDeath" parent="UnitDeath" Race="Terran">
+        <Occlusion value="Show"/>
+        <LowQualityModel value="TerranSmallUnitDeathLow"/>
+    </CModel>
+    <CModel id="AP_MarauderMercenaryPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\MarauderMercenaryPortrait\MarauderMercenaryPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\MarauderPortrait.fxa"/>
     </CModel>
 </Catalog>

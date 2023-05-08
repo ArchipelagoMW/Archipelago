@@ -316,7 +316,15 @@
             <Image value="Assets\Textures\Wireframe-Terran-Marauder.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="AP_MarauderAttack" parent="MarauderAttackBase" effectImpact="AP_PunisherGrenadesU" effectLaunch="AP_PunisherGrenadesLM">
+    <CActorAction default="1" id="AP_MarauderAttackBase" parent="GenericAttackNoCreateBase">
+        <Missile value="AP_MarauderAttackMissile"/>
+        <LaunchAssets Sound="Marauder_AttackLaunch"/>
+        <ImpactAttachQuery Methods="AMFilterTarget AMProximityAll"/>
+        <ImpactMap index="None" Model="MarauderBaseAttackImpact" Sound="Marauder_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ContainerAssets Sound="Marauder_AttackLaunch"/>
+    </CActorAction>
+    <CActorAction id="AP_MarauderAttack" parent="AP_MarauderAttackBase" effectImpact="AP_PunisherGrenadesU" effectLaunch="AP_PunisherGrenadesLM">
         <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; !ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
         <LaunchAttachQuery Methods="AMPatternMarauder"/>
         <LaunchAssets Model="MarauderAttackLaunch"/>
@@ -325,7 +333,7 @@
     <CActorMissile id="AP_MarauderAttackMissile" parent="GenericAttackMissile" unitName="AP_PunisherGrenadesLMWeapon">
         <Model value="PunisherGrenadesLMWeapon"/>
     </CActorMissile>
-    <CActorAction id="AP_MarauderUpgradedAttack" parent="MarauderAttackBase" effectImpact="AP_PunisherGrenadesU" effectLaunch="AP_PunisherGrenadesLM">
+    <CActorAction id="AP_MarauderUpgradedAttack" parent="AP_MarauderAttackBase" effectImpact="AP_PunisherGrenadesU" effectLaunch="AP_PunisherGrenadesLM">
         <On Terms="Effect.AP_PunisherGrenadesLM.Start; At Caster; ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
         <LaunchAttachQuery Methods="AMPatternMarauder"/>
         <LaunchAssets Model="MarauderAttackLaunch"/>
@@ -3974,4 +3982,69 @@
         <HostSiteOps Ops="SOpAttachRandomDamage"/>
         <Model value="ImpactModelFlames"/>
     </CActorModel>
+    <CActorUnit id="AP_HammerSecurity" parent="GenericUnitBase" unitName="AP_HammerSecurity">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="ActorCreation" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Behavior.MercGroundDrop.Create" Send="Create AP_HammerSecurityDropModel"/>
+        <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster" Send="StatusIncrement WeaponNext"/>
+        <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster; IsStatus WeaponNext 2" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster; IsStatus WeaponNext 0" Send="AnimPlay AttackLeft Attack,Left"/>
+        <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster; IsStatus WeaponNext 1" Send="AnimPlay AttackRight Attack,Right"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear AttackLeft"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear AttackRight"/>
+        <DeathArray index="Normal" ModelLink="AP_MarauderMercenaryDeath" SoundLink="Marauder_Explode"/>
+        <PortraitModel value="AP_MarauderMercenaryPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="60"/>
+        <BarWidth value="50"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Marauder-mercenary.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="MarauderGroupWhat"/>
+        <GroupSoundArray index="Yes" value="MarauderGroupYes"/>
+        <GroupSoundArray index="Attack" value="MarauderGroupAttack"/>
+        <GroupSoundArray index="Board" value="MarauderGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-MarauderMercenary.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="MarauderBirth"/>
+        <SoundArray index="Ready" value="Marauder_Ready"/>
+        <SoundArray index="Help" value="Marauder_Help"/>
+        <SoundArray index="What" value="Marauder_What"/>
+        <SoundArray index="Yes" value="Marauder_Yes"/>
+        <SoundArray index="Attack" value="Marauder_Attack"/>
+        <SoundArray index="Pissed" value="Marauder_Pissed"/>
+        <SoundArray index="Movement" value="MarauderMovement"/>
+        <SoundArray index="Turning" value="MarauderTurning"/>
+        <SoundArray index="Board" value="MarauderBoard"/>
+        <SoundArray index="Click" value="MarauderClick"/>
+        <SoundArray index="ClickError" value="MarauderClickError"/>
+        <SoundArray index="Highlight" value="MarauderHighlight"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-MarauderMercenary.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Marauder-mercenary.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction default="1" id="AP_HammerSecurityAttackBase" parent="GenericAttackNoCreateBase">
+        <Missile value="AP_HammerSecurityAttackMissile"/>
+        <LaunchAssets Sound="Marauder_AttackLaunch"/>
+        <ImpactAttachQuery Methods="AMFilterTarget AMProximityAll"/>
+        <ImpactMap index="None" Model="MarauderBaseAttackImpact" Sound="Marauder_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_HammerSecurityAttack" parent="AP_HammerSecurityAttackBase" effectImpact="AP_HammerSecurityDamage" effectLaunch="AP_HammerSecurityLM">
+        <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster; !ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
+        <LaunchAttachQuery Methods="AMPatternMarauder"/>
+        <Missile value="AP_HammerSecurityAttackMissile"/>
+    </CActorAction>
+    <CActorMissile id="AP_HammerSecurityAttackMissile" parent="GenericAttackMissile" unitName="AP_HammerSecurityLMWeapon"/>
+    <CActorModel id="AP_HammerSecurityDropModel" parent="AP_MercDropModelBase">
+        <On Terms="ActorCreation" Send="SetScale 0.900000"/>
+    </CActorModel>
+    <CActorAction id="AP_HammerSecurityUpgradedAttack" parent="AP_HammerSecurityAttackBase" effectImpact="AP_HammerSecurityDamage" effectLaunch="AP_HammerSecurityLM">
+        <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster; ValidateEffect AP_PunisherGrenadesResearched" Send="Create"/>
+        <LaunchAttachQuery Methods="AMPatternMarauder"/>
+        <Missile value="AP_HammerSecurityAttackMissile"/>
+        <ImpactMap index="None" Model="MarauderUpgradedAttackImpact"/>
+    </CActorAction>
 </Catalog>

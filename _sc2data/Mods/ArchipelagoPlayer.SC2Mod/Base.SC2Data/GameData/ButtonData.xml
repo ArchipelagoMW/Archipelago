@@ -592,4 +592,14 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_HireHammerSecurities">
+        <Icon value="Assets\Textures\btn-unit-terran-maraudermercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireHammerSecuritiesPH">
+        <Icon value="Assets\Textures\btn-unit-terran-maraudermercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

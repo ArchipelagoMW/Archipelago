@@ -131,6 +131,8 @@ Button/Name/AP_GhostHoldFire=Hold Fire
 Button/Name/AP_Heal=Heal
 Button/Name/AP_HerculesLoad=Load
 Button/Name/AP_HerculesUnloadAll=Unload All
+Button/Name/AP_HireDevilDogs=Devil Dogs
+Button/Name/AP_HireDevilDogsPH=Devil Dogs
 Button/Name/AP_HireKelmorianMiners=War Pigs
 Button/Name/AP_HireKelmorianMinersPH=War Pigs
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
@@ -201,8 +203,8 @@ Button/Name/AP_WidowMineUnburrow=Deactivate Mine
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_HireDevilDogs=Devil Dogs
-Button/Name/AP_HireDevilDogsPH=Devil Dogs
+Button/Name/AP_HireHammerSecurities=Hammer Securities
+Button/Name/AP_HireHammerSecuritiesPH=Hammer Securities
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
@@ -232,6 +234,7 @@ Button/Tooltip/AP_CycloneResearchLockOnAir=Allows the Cyclone's Typhoon Missile 
 Button/Tooltip/AP_CycloneResearchLockOnDamageUpgrade=Increases <c val="ffff8a">Cyclone</c> Lock On damage. Deals 600 over <d ref="Effect,AP_LockOnCP,PeriodCount * Effect,AP_LockOnCP,PeriodicPeriodArray[0]"/> seconds to ground and flying targets.
 Button/Tooltip/AP_D8Charge=Timed explosive that does heavy area damage.
 Button/Tooltip/AP_DefensiveMatrix=Surrounds the Battlecruiser with a shield that can absorb <d ref="Behavior,AP_DefensiveMatrix,Modification.VitalMaxArray[1]"/> damage. Ability can only be used once every <d ref="Abil,AP_DefensiveMatrix,Cost[0].Cooldown.TimeUse"/> seconds.
+Button/Tooltip/AP_DevilDog=Specialized anti-infantry attacker.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Diamondback=Fast, high-damage hovertank. Rail Gun can fire while the Diamondback is moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_DisplacementField=A detected Wraith evades 20% of incoming attacks while cloaked.
 Button/Tooltip/AP_DrillClaws=This unit burrows faster.
@@ -246,6 +249,8 @@ Button/Tooltip/AP_Hellion=Fast scout. Has a flame attack that damages all enemy 
 Button/Tooltip/AP_Hercules=Massive transport ship that deploys its cargo almost instantly.
 Button/Tooltip/AP_HerculesLoad=Loads units into the Hercules' hold.
 Button/Tooltip/AP_HerculesUnloadAll=Unloads all units.
+Button/Tooltip/AP_HireDevilDogs=Request 2 Devil Dog Mercenaries.<n/><n/>Veteran unit of ex-Confederate Firebats.
+Button/Tooltip/AP_HireDevilDogsPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Button/Tooltip/AP_HireKelmorianMiners=Request 4 War Pig Mercenaries.<n/><n/>Elite Marines with upgraded equipment.
 Button/Tooltip/AP_HireKelmorianMinersPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
@@ -331,9 +336,9 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_DevilDog=Specialized anti-infantry attacker.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_HireDevilDogs=Request 2 Devil Dog Mercenaries.<n/><n/>Veteran unit of ex-Confederate Firebats.
-Button/Tooltip/AP_HireDevilDogsPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
+Button/Tooltip/AP_HammerSecurity=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HireHammerSecurities=Request 2 Hammer Securities Mercenaries.<n/><n/>Marauders with superior equipment and training.
+Button/Tooltip/AP_HireHammerSecuritiesPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -413,6 +418,10 @@ Effect/Name/AP_DefensiveMatrixApplyDummyBehavior=Defensive Matrix Apply Dummy Be
 Effect/Name/AP_DefensiveMatrixModifyUnit=Defensive Matrix Modify Unit
 Effect/Name/AP_DefensiveMatrixRemoveDummyBehavior=Defensive Matrix Remove Dummy Behavior
 Effect/Name/AP_DefensiveMatrixSet=Defensive Matrix Set
+Effect/Name/AP_DevilDogCreatePersistent=Flame Thrower (Create Persistent)
+Effect/Name/AP_DevilDogDamage=Flame Thrower (Damage)
+Effect/Name/AP_DevilDogSearchArea=Flame Thrower (Search Area)
+Effect/Name/AP_DevilDogSet=Flame Thrower (Set)
 Effect/Name/AP_Diamondback=Eviscerator (Set)
 Effect/Name/AP_DiamondbackBeam=Eviscerator (Beam)
 Effect/Name/AP_EMPApplyDecloakBehavior=EMP
@@ -616,10 +625,9 @@ Effect/Name/AP_WraithGU=Hurricane Laser
 Effect/Name/AP_Yamato=Yamato Cannon (Missile)
 Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
-Effect/Name/AP_DevilDogCreatePersistent=Flame Thrower (Create Persistent)
-Effect/Name/AP_DevilDogDamage=Flame Thrower (Damage)
-Effect/Name/AP_DevilDogSearchArea=Flame Thrower (Search Area)
-Effect/Name/AP_DevilDogSet=Flame Thrower (Set)
+Effect/Name/AP_HammerSecurityDamage=Concussive Grenade (Damage)
+Effect/Name/AP_HammerSecurityLM=Hammer Security LM
+Effect/Name/AP_HammerSecuritySet=Concussive Grenade (Set)
 UI/AP_SpiderMineBuilding=Constructing
 Unit/Name/AP_ATALaserBatteryLMWeapon=ATA Laser Battery
 Unit/Name/AP_ATSLaserBatteryLMWeapon=ATS Laser Battery
@@ -634,6 +642,7 @@ Unit/Name/AP_D8Charge=G-4 Charge
 Unit/Name/AP_D8ChargeWeapon=D8 Charge
 Unit/Name/AP_D8ClusterBomb=G-4 Clusterbomb
 Unit/Name/AP_D8ClusterBombWeapon=G-4 Cluster Bomb Weapon
+Unit/Name/AP_DevilDog=Devil Dog
 Unit/Name/AP_Diamondback=Diamondback
 Unit/Name/AP_EMP2Weapon=EMP
 Unit/Name/AP_Firebat=Firebat
@@ -689,7 +698,8 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_DevilDog=Devil Dog
+Unit/Name/AP_HammerSecurity=Hammer Securities
+Unit/Name/AP_HammerSecurityLMWeapon=Hammer Securities
 Upgrade/Name/AP_330mmBarrageCannons=330 mm Barrage Cannons
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Upgrade/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
@@ -728,6 +738,7 @@ Upgrade/Name/AP_GhostMoebiusReactor=Moebius Reactor
 Upgrade/Name/AP_HALORockets=Ripwave Missiles
 Upgrade/Name/AP_HellionCampaignInfernalPreIgniter=Thermite Filaments
 Upgrade/Name/AP_HighCapacityBarrels=Infernal Pre-igniter
+Upgrade/Name/AP_HireDevilDogsPH=Hire Devil Dogs PH
 Upgrade/Name/AP_HireKelmorianMinersPH=Hire War Pigs PH
 Upgrade/Name/AP_HunterSeeker=Seeker Missile
 Upgrade/Name/AP_HurricaneMissiles=Missile Pods
@@ -783,7 +794,7 @@ Upgrade/Name/AP_VikingJotunBoosters=Jotun Boosters
 Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
-Upgrade/Name/AP_HireDevilDogsPH=Hire Devil Dogs PH
+Upgrade/Name/AP_HireHammerSecuritiesPH=Hire Hammer Securities PH
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
@@ -794,6 +805,7 @@ Weapon/Name/AP_CrucioShockCannon=Crucio Shock Cannon
 Weapon/Name/AP_CycloneFakeWeapon=Cyclone Fake Weapon
 Weapon/Name/AP_CycloneLockOnDummy=Lock On Dummy
 Weapon/Name/AP_D8Charge=D-8 Charge
+Weapon/Name/AP_DevilDogFlameThrower=Firestorm Flamethrower
 Weapon/Name/AP_Diamondback=Eviscerator Rail Gun
 Weapon/Name/AP_Firebat=Perdition Flamethrower
 Weapon/Name/AP_GaussRifle=C-14 Gauss Rifle
@@ -821,5 +833,5 @@ Weapon/Name/AP_VultureSpiderMines=Spider Mines
 Weapon/Name/AP_WidowMineDummy=Detonate
 Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
-Weapon/Name/AP_DevilDogFlameThrower=Firestorm Flamethrower
+Weapon/Name/AP_HammerSecurity=The Mediator
 Weapon/Tip/AP_D8Charge=Only used against structures.

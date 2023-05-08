@@ -584,4 +584,30 @@
     <CRequirementNot id="AP_NotCountUnitDevilDogTotal">
         <OperandArray index="0" value="AP_CountUnitDevilDogTotal"/>
     </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUpgradeHireHammerSecuritiesPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+        <OperandArray value="AP_CountUpgradeHireHammerSecuritiesPHCompleteOnly"/>
+        <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUnitHammerSecurityTotalNotCountUnitHammerSecurityQueuedOrBetter">
+        <OperandArray value="AP_NotCountUnitHammerSecurityTotal"/>
+        <OperandArray value="AP_NotCountUnitHammerSecurityQueuedOrBetter"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitHammerSecurityQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HammerSecurity" State="QueuedOrBetter"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitHammerSecurityTotal">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HammerSecurity" State="Total"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHireHammerSecuritiesPHCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HireHammerSecuritiesPH" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUnitHammerSecurityQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUnitHammerSecurityQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUnitHammerSecurityTotal">
+        <OperandArray index="0" value="AP_CountUnitHammerSecurityTotal"/>
+    </CRequirementNot>
 </Catalog>

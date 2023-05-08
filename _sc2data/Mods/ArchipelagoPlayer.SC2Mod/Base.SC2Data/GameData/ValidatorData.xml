@@ -5,6 +5,9 @@
         <Find value="1"/>
         <Value value="AP_JackhammerConcussionGrenadesResearched"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_PunisherGrenadesSlowTargetFilters">
+        <Filters value="-;Massive"/>
+    </CValidatorUnitFilters>
     <CValidatorPlayerRequirement id="AP_BearclawNozzlesPurchased">
         <ResultNoPlayer value="Error"/>
         <Find value="1"/>

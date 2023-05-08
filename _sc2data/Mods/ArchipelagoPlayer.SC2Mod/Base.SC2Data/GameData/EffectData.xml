@@ -167,7 +167,6 @@
         <EffectArray value="AP_PunisherGrenadesSlow"/>
         <EffectArray value="AP_PunisherGrenadesU"/>
         <EffectArray value="AP_MarauderSlowAOE"/>
-        <EffectArray value="AP_MarauderSlowAOE"/>
     </CEffectSet>
     <CEffectApplyBehavior id="AP_PunisherGrenadesSlow">
         <ValidatorArray index="0" value="AP_PunisherGrenadesResearched"/>
@@ -2204,5 +2203,24 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="AP_DevilDogCreatePersistent"/>
         <EffectArray value="AP_DevilDogDamage"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_HammerSecurityDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="12"/>
+        <Kind value="Ranged"/>
+        <Amount value="12"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_HammerSecurityLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_HammerSecuritySet"/>
+        <AmmoUnit value="AP_HammerSecurityLMWeapon"/>
+        <Movers Link="PunisherGrenadesWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_HammerSecuritySet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_PunisherGrenadesSlow"/>
+        <EffectArray value="AP_HammerSecurityDamage"/>
+        <EffectArray value="AP_MarauderSlowAOE"/>
     </CEffectSet>
 </Catalog>

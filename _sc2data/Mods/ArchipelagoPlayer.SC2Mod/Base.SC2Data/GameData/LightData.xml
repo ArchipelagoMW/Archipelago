@@ -175,4 +175,28 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_MarauderMercenaryPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.090196,0.168627,0.239216" Colorize="1">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="HDRSpecMultiplier" value="1.013000"/>
+            <Param index="HDREmisMultiplier" value="1.660000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.584314,0.921569,1.000000"/>
+                <ColorMultiplier value="0.977000"/>
+                <SpecColorMultiplier value="2.265000"/>
+                <Direction value="-0.054503,0.925581,-0.374607"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.301961,0.737255,1.000000" ColorMultiplier="3.508000" Direction="0.729383,-0.664619,-0.162121"/>
+            <DirectionalLight index="Back" Color="0.321569,0.819608,1.000000" ColorMultiplier="0.209000" Direction="-0.877733,0.413592,0.241922"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>
