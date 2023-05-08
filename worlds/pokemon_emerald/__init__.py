@@ -395,15 +395,14 @@ class PokemonEmeraldWorld(World):
                     new_species = get_random_species(random, self.modified_data.species, target_bst, target_type, should_allow_legendaries)
 
                     # Could cache this per species
-                    movepool = set([move.move_id for move in new_species.learnset if move.level <= pokemon.level])
-                    movepool |= set([self.modified_data.tmhm_moves[i] for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility)) if is_compatible])
+                    tm_hm_movepool = list(set([self.modified_data.tmhm_moves[i] for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility)) if is_compatible]))
+                    level_up_movepool = list(set([move.move_id for move in new_species.learnset if move.level <= pokemon.level]))
 
-                    movepool = list(movepool)
                     new_moves = (
-                        random.choice(movepool),
-                        random.choice(movepool),
-                        random.choice(movepool),
-                        random.choice(movepool)
+                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
+                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
+                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
+                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool)
                     )
 
                     new_party.append(TrainerPokemonData(new_species.species_id, pokemon.level, new_moves))
