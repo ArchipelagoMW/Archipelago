@@ -133,7 +133,7 @@ def set_entrance_rules(logic, multi_world, player):
                              logic.received("Island Obelisk").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_farm_obelisk, player),
                              logic.received("Farm Obelisk").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.talk_to_traveling_merchant, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.buy_from_traveling_merchant, player),
                              logic.has_traveling_merchant())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_greenhouse, player),
                              logic.received("Greenhouse"))
@@ -189,6 +189,8 @@ def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_north, player),
                              logic.received("Island North Turtle").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_islandfarmhouse, player),
+                             logic.received("Island Farmhouse").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_gourmand_cave, player),
                              logic.received("Island Farmhouse").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_north_to_dig_site, player),
                              logic.received("Dig Site Bridge").simplify())

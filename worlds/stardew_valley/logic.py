@@ -223,7 +223,7 @@ class StardewLogic:
                       (self.has_season("Spring") | self.has_season("Summer") | self.has_season("Fall"))),
             "Hot Java Ring": self.can_reach_region(SVRegion.volcano_floor_10),
             "Ice Cream": (self.has_season("Summer") & self.can_reach_region(SVRegion.town)) | self.can_reach_region(
-                "The Desert"),
+                SVRegion.desert),
             # | (self.can_cook() & self.has_relationship("Jodi", 7) & self.has("Cow Milk") & self.has("Sugar")),
             "Iridium Bar": self.can_smelt("Iridium Ore"),
             "Iridium Ore": self.can_mine_in_the_skull_cavern(),

@@ -59,7 +59,7 @@ id,region,name,tags
 121,Clint's Blacksmith,Gold Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
 122,Clint's Blacksmith,Iridium Trash Can Upgrade,"TOOL_UPGRADE,TRASH_CAN_UPGRADE"
 123,Willy's Fish Shop,Purchase Training Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
-124,Stardew Valley,Bamboo Pole Cutscene,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
+124,Beach,Bamboo Pole Cutscene,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
 125,Willy's Fish Shop,Purchase Fiberglass Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
 126,Willy's Fish Shop,Purchase Iridium Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE"
 201,The Mines - Floor 10,The Mines Floor 10 Treasure,"MANDATORY,THE_MINES_TREASURE"
@@ -190,7 +190,7 @@ id,region,name,tags
 521,Town,Knee Therapy,"MANDATORY,QUEST"
 522,Town,Robin's Request,"MANDATORY,QUEST"
 523,Skull Cavern,Qi's Challenge,"MANDATORY,QUEST"
-524,The Desert,The Mysterious Qi,"MANDATORY,QUEST"
+524,Desert,The Mysterious Qi,"MANDATORY,QUEST"
 525,Town,Carving Pumpkins,"MANDATORY,QUEST"
 526,Town,A Winter Mystery,"MANDATORY,QUEST"
 527,Secret Woods,Strange Note,"MANDATORY,QUEST"
@@ -235,7 +235,7 @@ id,region,name,tags
 621,Junimo Kart 3,Junimo Kart: Sunset Speedway (Victory),"ARCADE_MACHINE_VICTORY,JUNIMO_KART"
 701,Secret Woods,Old Master Cannoli,MANDATORY
 702,Beach,Beach Bridge Repair,MANDATORY
-703,The Desert,Galaxy Sword Shrine,MANDATORY
+703,Desert,Galaxy Sword Shrine,MANDATORY
 801,Town,Help Wanted: Gathering 1,HELP_WANTED
 802,Town,Help Wanted: Gathering 2,HELP_WANTED
 803,Town,Help Wanted: Gathering 3,HELP_WANTED
@@ -343,7 +343,7 @@ id,region,name,tags
 1028,Forest,Fishsanity: Tiger Trout,FISHSANITY
 1029,Island West,Fishsanity: Blue Discus,"FISHSANITY,GINGER_ISLAND"
 1030,Beach,Fishsanity: Albacore,FISHSANITY
-1031,The Desert,Fishsanity: Sandfish,FISHSANITY
+1031,Desert,Fishsanity: Sandfish,FISHSANITY
 1032,The Mines - Floor 20,Fishsanity: Stonefish,FISHSANITY
 1033,Beach,Fishsanity: Tuna,FISHSANITY
 1034,Beach,Fishsanity: Eel,FISHSANITY
@@ -357,7 +357,7 @@ id,region,name,tags
 1042,Pirate Cove,Fishsanity: Stingray,"FISHSANITY,GINGER_ISLAND"
 1043,The Mines - Floor 60,Fishsanity: Ice Pip,FISHSANITY
 1044,Forest,Fishsanity: Lingcod,FISHSANITY
-1045,The Desert,Fishsanity: Scorpion Carp,FISHSANITY
+1045,Desert,Fishsanity: Scorpion Carp,FISHSANITY
 1046,The Mines - Floor 100,Fishsanity: Lava Eel,FISHSANITY
 1047,Beach,Fishsanity: Octopus,FISHSANITY
 1048,Beach,Fishsanity: Midnight Squid,FISHSANITY
@@ -434,10 +434,10 @@ id,region,name,tags
 1225,The Mines - Floor 20,Museumsanity: Dwarvish Helm,MUSEUM_DONATIONS
 1226,The Mines - Floor 60,Museumsanity: Dwarf Gadget,MUSEUM_DONATIONS
 1227,Forest,Museumsanity: Ancient Drum,MUSEUM_DONATIONS
-1228,The Desert,Museumsanity: Golden Mask,MUSEUM_DONATIONS
-1229,The Desert,Museumsanity: Golden Relic,MUSEUM_DONATIONS
+1228,Desert,Museumsanity: Golden Mask,MUSEUM_DONATIONS
+1229,Desert,Museumsanity: Golden Relic,MUSEUM_DONATIONS
 1230,Town,Museumsanity: Strange Doll (Green),MUSEUM_DONATIONS
-1231,The Desert,Museumsanity: Strange Doll,MUSEUM_DONATIONS
+1231,Desert,Museumsanity: Strange Doll,MUSEUM_DONATIONS
 1232,Forest,Museumsanity: Prehistoric Scapula,MUSEUM_DONATIONS
 1233,Forest,Museumsanity: Prehistoric Tibia,MUSEUM_DONATIONS
 1234,Dig Site,Museumsanity: Prehistoric Skull,MUSEUM_DONATIONS
@@ -850,16 +850,16 @@ id,region,name,tags
 1663,Carpenter Shop,Friendsanity: Robin 8 <3,FRIENDSANITY
 1664,Carpenter Shop,Friendsanity: Robin 9 <3,FRIENDSANITY
 1665,Carpenter Shop,Friendsanity: Robin 10 <3,FRIENDSANITY
-1667,The Desert,Friendsanity: Sandy 1 <3,FRIENDSANITY
-1668,The Desert,Friendsanity: Sandy 2 <3,FRIENDSANITY
-1669,The Desert,Friendsanity: Sandy 3 <3,FRIENDSANITY
-1670,The Desert,Friendsanity: Sandy 4 <3,FRIENDSANITY
-1671,The Desert,Friendsanity: Sandy 5 <3,FRIENDSANITY
-1672,The Desert,Friendsanity: Sandy 6 <3,FRIENDSANITY
-1673,The Desert,Friendsanity: Sandy 7 <3,FRIENDSANITY
-1674,The Desert,Friendsanity: Sandy 8 <3,FRIENDSANITY
-1675,The Desert,Friendsanity: Sandy 9 <3,FRIENDSANITY
-1676,The Desert,Friendsanity: Sandy 10 <3,FRIENDSANITY
+1667,Oasis,Friendsanity: Sandy 1 <3,FRIENDSANITY
+1668,Oasis,Friendsanity: Sandy 2 <3,FRIENDSANITY
+1669,Oasis,Friendsanity: Sandy 3 <3,FRIENDSANITY
+1670,Oasis,Friendsanity: Sandy 4 <3,FRIENDSANITY
+1671,Oasis,Friendsanity: Sandy 5 <3,FRIENDSANITY
+1672,Oasis,Friendsanity: Sandy 6 <3,FRIENDSANITY
+1673,Oasis,Friendsanity: Sandy 7 <3,FRIENDSANITY
+1674,Oasis,Friendsanity: Sandy 8 <3,FRIENDSANITY
+1675,Oasis,Friendsanity: Sandy 9 <3,FRIENDSANITY
+1676,Oasis,Friendsanity: Sandy 10 <3,FRIENDSANITY
 1678,Town,Friendsanity: Vincent 1 <3,FRIENDSANITY
 1679,Town,Friendsanity: Vincent 2 <3,FRIENDSANITY
 1680,Town,Friendsanity: Vincent 3 <3,FRIENDSANITY
