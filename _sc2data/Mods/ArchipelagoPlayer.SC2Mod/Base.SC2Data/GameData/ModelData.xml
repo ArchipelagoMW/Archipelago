@@ -944,4 +944,32 @@
         <ShadowRadius value="0.340800"/>
         <UnitGlossaryCamera value="Star2CameraMid03"/>
     </CModel>
+    <CModel id="AP_DevilDog" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\FirebatMercenary\FirebatMercenary.m3"/>
+        <Occlusion value="Show"/>
+        <TextureDeclares Prefix="incinerator_">
+            <Adaptions Slot="main"/>
+        </TextureDeclares>
+        <TextureDeclares Prefix="merc_incinerator_">
+            <Adaptions Slot="main"/>
+        </TextureDeclares>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+    </CModel>
+    <CModel id="AP_DevilDogDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\FirebatMercenaryDeath\FirebatMercenaryDeath.m3"/>
+        <LowQualityModel value="TerranSmallUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <TextureDeclares Prefix="incinerator_">
+            <Adaptions Slot="main"/>
+        </TextureDeclares>
+        <TextureDeclares Prefix="merc_incinerator_">
+            <Adaptions Slot="main"/>
+        </TextureDeclares>
+    </CModel>
+    <CModel id="AP_FirebatMercenaryPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\FirebatMercenaryPortrait\FirebatMercenaryPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\FirebatPortrait.fxa"/>
+        <Image value="Assets\Textures\FirebatMercenaryPortrait_Static.dds"/>
+        <Lighting value="AP_FirebatMercenaryPortrait"/>
+    </CModel>
 </Catalog>

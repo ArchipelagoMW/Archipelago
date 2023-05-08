@@ -7,6 +7,21 @@
         <ImpactMap index="None" Sound="VikingFighter_AttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
     </CActorAction>
+    <CActorModel default="1" id="AP_MercDropModelBase">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="DropPodFalling"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="ActorCreation" Send="Create AP_MercCalldownDrop"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.100000 DelayDropPod"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Send="Create AP_MercCalldownImpact"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Target="AP_MercCalldownDrop" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Create DropPodUnload"/>
+        <On Terms="AnimDone; AnimName Birth" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Inherits index="TeamColor" value="1"/>
+    </CActorModel>
     <CActorModel id="AP_250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
@@ -2244,8 +2259,6 @@
         <On Terms="Upgrade.AP_CombatShield.Add" Send="AnimClear Cover"/>
         <On Terms="Upgrade.AP_CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
         <On Terms="UnitDeath.AP_WarPig; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever"/>
-        <Model value="AP_WarPig"/>
-        <BuildModel value="AP_WarPig"/>
         <DeathArray index="Normal" ModelLink="AP_KelmorianMinerDeath" SoundLink="Marine_DeathFXBloodSpray"/>
         <DeathArray index="Blast" ModelLink="MarineDeathBlast" SoundLink="Marine_DeathFXBlast"/>
         <DeathArray index="Disintegrate" ModelLink="MarineDeathAcid" SoundLink="Marine_DeathFXFire"/>
@@ -2254,7 +2267,6 @@
         <DeathArray index="Fire" ModelLink="MarineDeathFire" SoundLink="Marine_DeathFXFire"/>
         <DeathArray index="Silentkill" SoundLink="Marine_DeathFXSilentKill"/>
         <DeathArray index="Squish" SoundLink="Marine_DeathFXBloodSpray"/>
-        <PlacementModel value="AP_WarPig"/>
         <PortraitModel value="AP_MarineMercenaryPortrait"/>
         <StandAnimTurnTime value="5"/>
         <WalkAnimMoveSpeed value="2.25"/>
@@ -2294,21 +2306,6 @@
         <ImpactMap index="None" Model="MarineAttackImpact" Sound="Marine_AttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
     </CActorAction>
-    <CActorModel default="1" id="AP_MercDropModelBase">
-        <Flags index="SuppressSaveLoad" value="1"/>
-        <Host Subject="_Selectable"/>
-        <HostSiteOps Ops="SOpAttachOriginStationary"/>
-        <Model value="DropPodFalling"/>
-        <On Terms="ActorCreation" Send="$Birth"/>
-        <On Terms="ActorCreation" Send="Create AP_MercCalldownDrop"/>
-        <On Terms="ActorCreation" Send="TimerSet 2.100000 DelayDropPod"/>
-        <On Terms="TimerExpired; TimerName DelayDropPod" Send="Create AP_MercCalldownImpact"/>
-        <On Terms="TimerExpired; TimerName DelayDropPod" Target="AP_MercCalldownDrop" Send="Destroy"/>
-        <On Terms="AnimDone; AnimName Birth" Send="Create DropPodUnload"/>
-        <On Terms="AnimDone; AnimName Birth" Send="$Death"/>
-        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
-        <Inherits index="TeamColor" value="1"/>
-    </CActorModel>
     <CActorModel id="AP_WarPigDropModel" parent="AP_MercDropModelBase">
         <On Terms="ActorCreation" Send="SetScale 0.700000"/>
     </CActorModel>
@@ -3912,4 +3909,69 @@
         <On Terms="Effect.AP_LockOnCP.Start; At Caster" Send="Create"/>
         <Sound value="Cyclone_TargetLock_On"/>
     </CActorSound>
+    <CActorUnit id="AP_DevilDog" parent="GenericUnitStandard" unitName="AP_DevilDog">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_DevilDogDropModel"/>
+        <On Terms="Abil.attack.ReadyStop" Target="AP_DevilDogAttackModel" Send="SetOpacity 0.000000 0.250000"/>
+        <DeathArray index="Normal" ModelLink="AP_DevilDogDeath" SoundLink="Firebat_Explode"/>
+        <PortraitModel value="AP_FirebatMercenaryPortrait"/>
+        <WalkAnimMoveSpeed value="1.875"/>
+        <BarOffset value="77"/>
+        <BarWidth value="45"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-firebat-mercenary.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="AP_FirebatGroupWhat"/>
+        <GroupSoundArray index="Yes" value="AP_FirebatGroupYes"/>
+        <GroupSoundArray index="Attack" value="AP_FirebatGroupAttack"/>
+        <GroupSoundArray index="Board" value="AP_FirebatGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-FirebatMercenary.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="AP_FirebatBirth"/>
+        <SoundArray index="Ready" value="AP_Firebat_Ready"/>
+        <SoundArray index="Help" value="AP_Firebat_Help"/>
+        <SoundArray index="What" value="AP_Firebat_What"/>
+        <SoundArray index="Yes" value="AP_Firebat_Yes"/>
+        <SoundArray index="Attack" value="AP_Firebat_Attack"/>
+        <SoundArray index="Pissed" value="AP_Firebat_Pissed"/>
+        <SoundArray index="Movement" value="AP_FirebatMovement"/>
+        <SoundArray index="Turning" value="AP_FirebatTurning"/>
+        <SoundArray index="Board" value="AP_FirebatBoard"/>
+        <SoundArray index="Click" value="AP_FirebatClick"/>
+        <SoundArray index="ClickError" value="AP_FirebatClickError"/>
+        <SoundArray index="Highlight" value="AP_FirebatHighlight"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-FirebatMercenary.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-firebat-mercenary.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_DevilDogAttack" parent="GenericAttackBase" effectAttack="DevilDogCreatePersistent">
+        <On Terms="Effect.AP_DevilDogSet.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_DevilDogDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Model="AP_FirebatAttackLaunch" Sound="AP_FirebatAttackLaunch"/>
+        <LaunchModel value="AP_DevilDogAttackModel"/>
+        <ContainerAssets Model="AP_FirebatBunkerAttackLaunch" Sound="AP_FirebatAttackLaunch"/>
+        <ImpactMap index="None" Model="AP_FirebatAttackImpact" Sound="AP_Firebat_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_DevilDogAttackModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <On Terms="ActorCreation; ValidateUnit AP_BearclawNozzlesPurchased" Send="SetScale 2.250000,1.800000,1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_DevilDogDropModel" parent="MercDropModelBase">
+        <On Terms="ActorCreation" Send="SetScale 0.900000"/>
+    </CActorModel>
+    <CActorFoliageFXSpawner id="AP_DevilDogFoliageFXSpawner" parent="FoliageFXSpawnerFire">
+        <On Terms="Effect.AP_DevilDogSearchArea.Start" Send="Create"/>
+        <Radius value="0.600000"/>
+    </CActorFoliageFXSpawner>
+    <CActorModel id="AP_DevilDogImpactModelFlames" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.AP_DevilDogDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="ImpactModelFlames"/>
+    </CActorModel>
 </Catalog>

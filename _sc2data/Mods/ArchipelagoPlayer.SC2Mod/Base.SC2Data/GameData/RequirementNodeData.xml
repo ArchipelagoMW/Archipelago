@@ -558,4 +558,30 @@
     <CRequirementNot id="AP_NotCountUnitWarPigTotal">
         <OperandArray index="0" value="AP_CountUnitWarPigTotal"/>
     </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUpgradeHireDevilDogsPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+        <OperandArray value="AP_CountUpgradeHireDevilDogsPHCompleteOnly"/>
+        <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUnitDevilDogTotalNotCountUnitDevilDogQueuedOrBetter">
+        <OperandArray value="AP_NotCountUnitDevilDogTotal"/>
+        <OperandArray value="AP_NotCountUnitDevilDogQueuedOrBetter"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitDevilDogQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DevilDog" State="QueuedOrBetter"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitDevilDogTotal">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DevilDog" State="Total"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHireDevilDogsPHCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HireDevilDogsPH" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUnitDevilDogQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUnitDevilDogQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUnitDevilDogTotal">
+        <OperandArray index="0" value="AP_CountUnitDevilDogTotal"/>
+    </CRequirementNot>
 </Catalog>

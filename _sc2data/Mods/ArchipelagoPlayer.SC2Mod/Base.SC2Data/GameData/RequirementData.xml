@@ -415,4 +415,8 @@
     <CRequirement id="AP_UseShieldWall">
         <NodeArray index="Use" Link="AP_OrCountUpgradeCombatShieldCompleteOnlyCountUpgradeShieldWallCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_SummonDevilDogs">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUnitDevilDogTotalNotCountUnitDevilDogQueuedOrBetter"/>
+    </CRequirement>
 </Catalog>

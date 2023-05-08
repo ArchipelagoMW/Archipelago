@@ -582,4 +582,14 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_HireDevilDogs">
+        <Icon value="Assets\Textures\btn-unit-terran-firebatmercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireDevilDogsPH">
+        <Icon value="Assets\Textures\btn-unit-terran-firebatmercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

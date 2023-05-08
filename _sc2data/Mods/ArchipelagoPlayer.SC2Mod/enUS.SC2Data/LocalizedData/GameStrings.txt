@@ -131,6 +131,8 @@ Button/Name/AP_GhostHoldFire=Hold Fire
 Button/Name/AP_Heal=Heal
 Button/Name/AP_HerculesLoad=Load
 Button/Name/AP_HerculesUnloadAll=Unload All
+Button/Name/AP_HireKelmorianMiners=War Pigs
+Button/Name/AP_HireKelmorianMinersPH=War Pigs
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
 Button/Name/AP_ImmortalityProtocol=Immortality Protocol
 Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
@@ -199,8 +201,8 @@ Button/Name/AP_WidowMineUnburrow=Deactivate Mine
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_HireKelmorianMiners=War Pigs
-Button/Name/AP_HireKelmorianMinersPH=War Pigs
+Button/Name/AP_HireDevilDogs=Devil Dogs
+Button/Name/AP_HireDevilDogsPH=Devil Dogs
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
@@ -244,6 +246,8 @@ Button/Tooltip/AP_Hellion=Fast scout. Has a flame attack that damages all enemy 
 Button/Tooltip/AP_Hercules=Massive transport ship that deploys its cargo almost instantly.
 Button/Tooltip/AP_HerculesLoad=Loads units into the Hercules' hold.
 Button/Tooltip/AP_HerculesUnloadAll=Unloads all units.
+Button/Tooltip/AP_HireKelmorianMiners=Request 4 War Pig Mercenaries.<n/><n/>Elite Marines with upgraded equipment.
+Button/Tooltip/AP_HireKelmorianMinersPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
 Button/Tooltip/AP_ImmortalityProtocol=Allows a destroyed Thor to be rebuilt in the field.
 Button/Tooltip/AP_IncineratorNozzles=Increases the Firebat's damage radius by 40%.
@@ -315,6 +319,7 @@ Button/Tooltip/AP_ValkyrieSCBW=Advanced anti-aircraft fighter. Able to use clust
 Button/Tooltip/AP_VikingAssault=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_VikingFighter=Durable support flyer. Loaded with strong anti-capital air missiles. Can switch into Assault Mode to attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
 Button/Tooltip/AP_Vulture=Fast skirmish unit. Can use the Spider Mine ability.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_WarPig=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_WeaponsFree=Orders selected units to fire at will. They will engage enemy units within range and chase them as normal.
 Button/Tooltip/AP_WidowMine=Robotic mine. Launches missiles at nearby enemy units while burrowed. Attacks deal splash damage in a small area around the target. Widow Mine is revealed when Sentinel Missile is on cooldown. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_WidowMineAttack=Attacks any nearby enemy unit.
@@ -326,9 +331,9 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_HireKelmorianMiners=Request 4 War Pig Mercenaries.<n/><n/>Elite Marines with upgraded equipment.
-Button/Tooltip/AP_HireKelmorianMinersPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
-Button/Tooltip/AP_WarPig=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_DevilDog=Specialized anti-infantry attacker.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HireDevilDogs=Request 2 Devil Dog Mercenaries.<n/><n/>Veteran unit of ex-Confederate Firebats.
+Button/Tooltip/AP_HireDevilDogsPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -455,6 +460,7 @@ Effect/Name/AP_IrradiateSet=Irradiate Set
 Effect/Name/AP_JavelinMissileLaunchersDamage=Anti Air (Damage)
 Effect/Name/AP_JavelinMissileLaunchersLM=Anti Air (Launch Missile)
 Effect/Name/AP_JavelinMissileLaunchersPersistent=Anti Air (Persistent)
+Effect/Name/AP_KelmorianMinerDamage=Gauss Rifle (Damage)
 Effect/Name/AP_LanzerTorpedoes=Halo Rockets (Persistent)
 Effect/Name/AP_LanzerTorpedoesDamage=Halo Rockets (Damage)
 Effect/Name/AP_LanzerTorpedoesLM=Halo Rockets (Launch Missile)
@@ -610,7 +616,10 @@ Effect/Name/AP_WraithGU=Hurricane Laser
 Effect/Name/AP_Yamato=Yamato Cannon (Missile)
 Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
-Effect/Name/AP_KelmorianMinerDamage=Gauss Rifle (Damage)
+Effect/Name/AP_DevilDogCreatePersistent=Flame Thrower (Create Persistent)
+Effect/Name/AP_DevilDogDamage=Flame Thrower (Damage)
+Effect/Name/AP_DevilDogSearchArea=Flame Thrower (Search Area)
+Effect/Name/AP_DevilDogSet=Flame Thrower (Set)
 UI/AP_SpiderMineBuilding=Constructing
 Unit/Name/AP_ATALaserBatteryLMWeapon=ATA Laser Battery
 Unit/Name/AP_ATSLaserBatteryLMWeapon=ATS Laser Battery
@@ -670,6 +679,7 @@ Unit/Name/AP_VikingFighter=Viking
 Unit/Name/AP_VikingFighterWeapon=Viking Fighter
 Unit/Name/AP_Vulture=Vulture
 Unit/Name/AP_VultureWeapon=Vulture
+Unit/Name/AP_WarPig=War Pig
 Unit/Name/AP_WidowMine=Widow Mine
 Unit/Name/AP_WidowMineAirWeapon=Widow Mine Air Weapon
 Unit/Name/AP_WidowMineBurrowed=Widow Mine
@@ -679,7 +689,7 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_WarPig=War Pig
+Unit/Name/AP_DevilDog=Devil Dog
 Upgrade/Name/AP_330mmBarrageCannons=330 mm Barrage Cannons
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Upgrade/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
@@ -718,6 +728,7 @@ Upgrade/Name/AP_GhostMoebiusReactor=Moebius Reactor
 Upgrade/Name/AP_HALORockets=Ripwave Missiles
 Upgrade/Name/AP_HellionCampaignInfernalPreIgniter=Thermite Filaments
 Upgrade/Name/AP_HighCapacityBarrels=Infernal Pre-igniter
+Upgrade/Name/AP_HireKelmorianMinersPH=Hire War Pigs PH
 Upgrade/Name/AP_HunterSeeker=Seeker Missile
 Upgrade/Name/AP_HurricaneMissiles=Missile Pods
 Upgrade/Name/AP_Hyperfluxor=Hyperfluxor
@@ -772,7 +783,7 @@ Upgrade/Name/AP_VikingJotunBoosters=Jotun Boosters
 Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
-Upgrade/Name/AP_HireKelmorianMinersPH=Hire War Pigs PH
+Upgrade/Name/AP_HireDevilDogsPH=Hire Devil Dogs PH
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
@@ -792,6 +803,7 @@ Weapon/Name/AP_GoliathG=Autocannon
 Weapon/Name/AP_GoliathGUpgraded=Autocannon
 Weapon/Name/AP_InfernalFlameThrower=Infernal Flamethrower
 Weapon/Name/AP_JavelinMissileLaunchers=Javelin Missile Launchers
+Weapon/Name/AP_KelmorianMinerGaussRifle=Gauss Rifle
 Weapon/Name/AP_LanzerTorpedoes=Lanzer Torpedoes
 Weapon/Name/AP_LiberatorAGWeapon=Concord Cannon
 Weapon/Name/AP_LiberatorMissileLaunchers=Lexington Rockets
@@ -809,5 +821,5 @@ Weapon/Name/AP_VultureSpiderMines=Spider Mines
 Weapon/Name/AP_WidowMineDummy=Detonate
 Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
-Weapon/Name/AP_KelmorianMinerGaussRifle=Gauss Rifle
+Weapon/Name/AP_DevilDogFlameThrower=Firestorm Flamethrower
 Weapon/Tip/AP_D8Charge=Only used against structures.
