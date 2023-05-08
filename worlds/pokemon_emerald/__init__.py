@@ -4,7 +4,7 @@ Archipelago World definition for Pokemon Emerald Version
 import copy
 import hashlib
 import os
-from typing import Dict, List, Optional, Tuple
+from typing import Set, List, Optional, Tuple
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial, Counter
 from Fill import fill_restrictive
@@ -14,8 +14,8 @@ from worlds.AutoWorld import WebWorld, World
 from .data import PokemonEmeraldData, MapData, SpeciesData, EncounterTableData, LearnsetMove, TrainerData, TrainerPartyData, TrainerPokemonData, data as emerald_data
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, LevelUpMoves, ItemPoolType, LevelUpMoves, TmCompatibility, HmCompatibility, get_option_value, option_definitions
-from .pokemon import get_random_species, get_species_by_id, get_species_by_name, get_random_move, get_random_damaging_move, get_random_type
+from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, LevelUpMoves, Abilities, ItemPoolType, TmCompatibility, HmCompatibility, get_option_value, option_definitions
+from .pokemon import get_random_species, get_species_by_name, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
@@ -278,6 +278,7 @@ class PokemonEmeraldWorld(World):
         random = self.multiworld.random
 
         def randomize_abilities():
+            # Creating list of potential abilities
             ability_label_to_value = {ability.label.lower(): ability.ability_id for ability in emerald_data.abilities}
 
             ability_blacklist_labels = set(["cacophony"])
@@ -288,16 +289,61 @@ class PokemonEmeraldWorld(World):
             ability_blacklist = set([ability_label_to_value[label] for label in ability_blacklist_labels])
             ability_whitelist = [ability.ability_id for ability in emerald_data.abilities if ability.ability_id not in ability_blacklist]
 
-            for species in self.modified_data.species:
-                new_abilities = (
-                    0 if species.abilities[0] == 0 else random.choice(ability_whitelist),
-                    0 if species.abilities[1] == 0 else random.choice(ability_whitelist)
-                )
+            if get_option_value(self.multiworld, self.player, "abilities") == Abilities.option_follow_evolutions:
+                already_modified: Set[int] = set()
 
-                species.abilities = new_abilities
+                # Loops through species and only tries to modify abilities if the pokemon has no pre-evolution
+                # or if the pre-evolution has already been modified. Then tries to modify all species that evolve
+                # from this one which have the same abilities.
+                # The outer while loop only runs three times for vanilla ordering: Once for a first pass, once for
+                # Hitmonlee/Hitmonchan, and once to verify that there's nothing left to do.
+                while True:
+                    had_clean_pass = True
+                    for species in self.modified_data.species:
+                        if species is None:
+                            continue
+                        if species.species_id in already_modified:
+                            continue
+                        if species.pre_evolution is not None and species.pre_evolution not in already_modified:
+                            continue
+
+                        had_clean_pass = False
+
+                        old_abilities = species.abilities
+                        new_abilities = (
+                            0 if old_abilities[0] == 0 else random.choice(ability_whitelist),
+                            0 if old_abilities[1] == 0 else random.choice(ability_whitelist)
+                        )
+
+                        evolutions = [species]
+                        while len(evolutions) > 0:
+                            evolution = evolutions.pop()
+                            if evolution.abilities == old_abilities:
+                                evolution.abilities = new_abilities
+                                already_modified.add(evolution.species_id)
+                                evolutions += [self.modified_data.species[evolution.species_id] for evolution in evolution.evolutions]
+
+                    if had_clean_pass:
+                        break
+            else: # Not following evolutions
+                for species in self.modified_data.species:
+                    if species is None:
+                        continue
+
+                    old_abilities = species.abilities
+                    new_abilities = (
+                        0 if old_abilities[0] == 0 else random.choice(ability_whitelist),
+                        0 if old_abilities[1] == 0 else random.choice(ability_whitelist)
+                    )
+
+                    species.abilities = new_abilities
+
 
         def randomize_types():
             for species in self.modified_data.species:
+                if species is None:
+                    continue
+
                 type_1 = get_random_type(random)
                 if species.types[0] == species.types[1]:
                     type_2 = type_1
@@ -320,6 +366,9 @@ class PokemonEmeraldWorld(World):
             should_start_with_four_moves = get_option_value(self.multiworld, self.player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves
 
             for species in self.modified_data.species:
+                if species is None:
+                    continue
+
                 old_learnset = species.learnset
                 new_learnset = []
 
@@ -349,6 +398,9 @@ class PokemonEmeraldWorld(World):
             hm_compatibility = get_option_value(self.multiworld, self.player, "hm_compatibility")
 
             for species in self.modified_data.species:
+                if species is None:
+                    continue
+
                 combatibility_array = int_to_bool_array(species.tm_hm_compatibility)
 
                 # TMs
@@ -380,7 +432,7 @@ class PokemonEmeraldWorld(World):
                     if table is not None:
                         new_species = []
                         for species_id in table.slots:
-                            original_species = get_species_by_id(species_id)
+                            original_species = emerald_data.species[species_id]
                             target_bst = sum(original_species.base_stats) if should_match_bst else None
                             target_type = random.choice(original_species.types) if should_match_type else None
 
@@ -400,7 +452,7 @@ class PokemonEmeraldWorld(World):
             for trainer in self.modified_data.trainers:
                 new_party = []
                 for pokemon in trainer.party.pokemon:
-                    original_species = get_species_by_id(pokemon.species_id)
+                    original_species = emerald_data.species[pokemon.species_id]
                     target_bst = sum(original_species.base_stats) if should_match_bst else None
                     target_type = random.choice(original_species.types) if should_match_type else None
 
@@ -505,7 +557,7 @@ class PokemonEmeraldWorld(World):
         self.modified_data = copy.deepcopy(emerald_data)
 
         # Randomize species data
-        if get_option_value(self.multiworld, self.player, "abilities") == Toggle.option_true:
+        if get_option_value(self.multiworld, self.player, "abilities") != Abilities.option_vanilla:
             randomize_abilities()
 
         if get_option_value(self.multiworld, self.player, "types") == Toggle.option_true:
@@ -518,7 +570,8 @@ class PokemonEmeraldWorld(World):
 
         min_catch_rate = min(get_option_value(self.multiworld, self.player, "min_catch_rate"), 255)
         for species in self.modified_data.species:
-            species.catch_rate = max(species.catch_rate, min_catch_rate)
+            if species is not None:
+                species.catch_rate = max(species.catch_rate, min_catch_rate)
 
         if get_option_value(self.multiworld, self.player, "tm_moves") == Toggle.option_true:
             randomize_tm_moves()

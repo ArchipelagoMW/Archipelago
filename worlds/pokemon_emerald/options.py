@@ -241,11 +241,18 @@ class RandomizeTypes(Toggle):
     display_name = "Randomize Types"
 
 
-class RandomizeAbilities(Toggle):
+class Abilities(Choice):
     """
-    Randomizes the abilities of every pokemon. Each species will have the same number of abilities. Abilities do not remain consistent across evolutions.
+    Randomizes abilities of every species. Each species will have the same number of abilities.
+    Vanilla: Abilities are unchanged
+    Randomized: Each species has its abilities randomized
+    Follow Evolutions: Abilities are randomized, but if a pokemon would normally retain its ability when evolving, the random ability will also be retained
     """
-    display_name = "Randomize Abilities"
+    display_name = "Abilities"
+    default = 0
+    option_vanilla = 0
+    option_randomized = 1
+    option_follow_evolutions = 2
 
 
 class AbilityBlacklist(OptionSet):
@@ -259,10 +266,10 @@ class AbilityBlacklist(OptionSet):
 
 class LevelUpMoves(Choice):
     """
-    Randomizes the moves a pokemon learns when they reach a level where they would learn a move. Your starter is guaranteed to have a move with which it can gain experience.
+    Randomizes the moves a pokemon learns when they reach a level where they would learn a move. Your starter is guaranteed to have a usable damaging move.
     Vanilla: Learnset is unchanged
     Randomized: Moves are randomized
-    Start with Four Moves: Moves are randomized and all Pokemon have 4 starting moves
+    Start with Four Moves: Moves are randomized and all Pokemon know 4 moves at level 1
     """
     display_name = "Level Up Moves"
     default = 0
@@ -435,7 +442,7 @@ option_definitions: Dict[str, Option] = {
   "allow_trainer_legendaries": AllowTrainerLegendaries,
 
   "types": RandomizeTypes,
-  "abilities": RandomizeAbilities,
+  "abilities": Abilities,
   "ability_blacklist": AbilityBlacklist,
   "level_up_moves": LevelUpMoves,
   "tm_moves": TmMoves,

@@ -181,6 +181,7 @@ class SpeciesData:
     types: Tuple[int, int]
     abilities: Tuple[int, int]
     evolutions: List[EvolutionData]
+    pre_evolution: Optional[int]
     catch_rate: int
     learnset: List[LearnsetMove]
     tm_hm_compatibility: int
@@ -253,7 +254,7 @@ class PokemonEmeraldData:
     regions: Dict[str, RegionData]
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
-    species: List[SpeciesData]
+    species: List[Optional[SpeciesData]]
     tmhm_moves: List[int]
     abilities: List[AbilityData]
     maps: List[MapData]
@@ -388,13 +389,16 @@ def _init():
 
     # Create species data
     species_json = load_json(os.path.join(os.path.dirname(__file__), "data/pokemon.json"))
+    species_list: List[SpeciesData] = []
+    max_species_id = 0
     for species_name, species_attributes in species_json.items():
         species_id = data.constants[species_name]
+        max_species_id = max(species_id, max_species_id)
         individual_species_json = extracted_data["species"][species_id]
 
         learnset = [LearnsetMove(item["level"], item["move_id"]) for item in individual_species_json["learnset"]["moves"]]
 
-        data.species.append(SpeciesData(
+        species_list.append(SpeciesData(
             species_name,
             species_attributes["label"],
             species_id,
@@ -414,6 +418,7 @@ def _init():
                 evolution_json["param"],
                 evolution_json["species"],
             ) for evolution_json in individual_species_json["evolutions"]],
+            None,
             individual_species_json["catch_rate"],
             learnset,
             int(individual_species_json["tmhm_learnset"], 16),
@@ -421,7 +426,15 @@ def _init():
             individual_species_json["rom_address"]
         ))
 
-    data.species.sort(key=lambda species: species.species_id)
+    data.species = [None for i in range(max_species_id + 1)]
+
+    for species in species_list:
+        data.species[species.species_id] = species
+
+    for species in data.species:
+        if species is not None:
+            for evolution in species.evolutions:
+                data.species[evolution.species_id].pre_evolution = species.species_id
 
     data.tmhm_moves = extracted_data["tmhm_moves"]
 

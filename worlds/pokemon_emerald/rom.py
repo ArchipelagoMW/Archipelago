@@ -238,15 +238,16 @@ def _set_encounter_tables(modified_data: PokemonEmeraldData, rom: bytearray) -> 
 
 def _set_species_info(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
     for species in modified_data.species:
-        _set_bytes_little_endian(rom, species.rom_address + 6, 1, species.types[0])
-        _set_bytes_little_endian(rom, species.rom_address + 7, 1, species.types[1])
-        _set_bytes_little_endian(rom, species.rom_address + 8, 1, species.catch_rate)
-        _set_bytes_little_endian(rom, species.rom_address + 22, 1, species.abilities[0])
-        _set_bytes_little_endian(rom, species.rom_address + 23, 1, species.abilities[1])
+        if species is not None:
+            _set_bytes_little_endian(rom, species.rom_address + 6, 1, species.types[0])
+            _set_bytes_little_endian(rom, species.rom_address + 7, 1, species.types[1])
+            _set_bytes_little_endian(rom, species.rom_address + 8, 1, species.catch_rate)
+            _set_bytes_little_endian(rom, species.rom_address + 22, 1, species.abilities[0])
+            _set_bytes_little_endian(rom, species.rom_address + 23, 1, species.abilities[1])
 
-        for i, learnset_move in enumerate(species.learnset):
-            level_move = learnset_move.level << 9 | learnset_move.move_id
-            _set_bytes_little_endian(rom, species.learnset_rom_address + (i * 2), 2, level_move)
+            for i, learnset_move in enumerate(species.learnset):
+                level_move = learnset_move.level << 9 | learnset_move.move_id
+                _set_bytes_little_endian(rom, species.learnset_rom_address + (i * 2), 2, level_move)
 
 
 def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
@@ -305,7 +306,8 @@ def _set_tmhm_compatibility(modified_data: PokemonEmeraldData, rom: bytearray) -
     learnsets_address = data.rom_addresses["gTMHMLearnsets"]
 
     for species in modified_data.species:
-        _set_bytes_little_endian(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
+        if species is not None:
+            _set_bytes_little_endian(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
 
 
 def _randomize_opponent_battle_type(multiworld: MultiWorld, player: int, rom: bytearray) -> None:

@@ -62,31 +62,24 @@ _legendary_pokemon = frozenset([
 ])
 
 
-# List is sorted, so we can search it faster
-def get_species_by_id(species_id: int, species_list: Optional[List[SpeciesData]] = None) -> Optional[SpeciesData]:
-    species_list = data.species if species_list is None else species_list
-    for species in species_list:
-        if species.species_id == species_id:
-            return species
-
-    return None
-
-
-def get_species_by_name(name: str, species_list: Optional[List[SpeciesData]] = None) -> Optional[SpeciesData]:
+def get_species_by_name(name: str, species_list: Optional[List[Optional[SpeciesData]]] = None) -> Optional[SpeciesData]:
     species_list = data.species if species_list is None else species_list
     for species in data.species:
-        if species.label == name:
-            return species
+        if species is not None:
+            if species.label == name:
+                return species
 
     return None
 
 
 def get_random_species(
         rand: random,
-        candidates: List[SpeciesData],
+        candidates: List[Optional[SpeciesData]],
         nearby_bst: Optional[int] = None,
         species_type: Optional[int] = None,
         allow_legendaries: bool = True) -> SpeciesData:
+    candidates = [species for species in candidates if species is not None]
+
     if nearby_bst is not None:
         def has_nearby_bst(species: SpeciesData):
             return abs(sum(species.base_stats) - nearby_bst) < nearby_bst / 10
