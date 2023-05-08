@@ -219,6 +219,12 @@ item_table: List[ItemDict] = [
     {'name': "Three Gnarled Tongues",
         'count': 1,
         'classification': ItemClassification.progression},
+    {'name': "Boots of Pleading",
+        'count': 1,
+        'classification': ItemClassification.progression},
+    {'name': "Purified Hand of the Nun",
+        'count': 1,
+        'classification': ItemClassification.progression},
 
     # Mea Culpa Hearts
     {'name': "Smoking Heart of Incense",
@@ -411,6 +417,12 @@ item_table: List[ItemDict] = [
     {'name': "Lunge Skill",
         'count': 3,
         'classification': ItemClassification.useful},
+    {'name': "Dash",
+        'count': 1,
+        'classification': ItemClassification.progression},
+    {'name': "Wall Climb",
+        'count': 1,
+        'classification': ItemClassification.progression},
 
     # Other
     {'name': "Parietal bone of Lasser, the Inquisitor",

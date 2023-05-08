@@ -4,9 +4,9 @@ from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassifi
 from ..AutoWorld import World, WebWorld
 from .Items import base_id, item_table, group_table, tears_set, reliquary_set
 from .Locations import location_table
-from .Regions import area_table, region_exit_table, exit_lookup_table
+from .Rooms import room_table, door_table
 from .Rules import rules
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import set_rule, add_rule
 from .Options import blasphemous_options
 from . import Vanilla
 
@@ -42,8 +42,8 @@ class BlasphemousWorld(World):
     option_definitions = blasphemous_options
 
 
-    def set_rules(self):
-        rules(self)
+    #def set_rules(self):
+        #rules(self)
 
 
     def create_item(self, name: str) -> "BlasphemousItem":
@@ -273,29 +273,61 @@ class BlasphemousWorld(World):
 
 
     def create_regions(self) -> None:
-        
         player = self.player
         world = self.multiworld
+        
+        menu = Region("Menu", player, world)
+        misc = Region("Misc", player, world)
 
-        for short, long in area_table.items():
-            reg = Region(long, player, world)
+        world.regions.append(menu)
+        world.regions.append(misc)
+
+        for room in room_table:
+            reg = Region(room, player, world)
             world.regions.append(reg)
 
-        for rname, exits in region_exit_table.items():
-            for i in exits:
-                parent = world.get_region(area_table[rname], player)
-                ent = Entrance(player, i, parent)
-                ent.connect(world.get_region(area_table[exit_lookup_table[i]], player))
-                parent.exits.append(ent)
+        ent = Entrance(player, "Misc", world.get_region("D17Z01S01", player))
+        ent.connect(misc)
+        world.get_region("D17Z01S01", player).exits.append(ent)
+
+        ent2 = Entrance(player, "New Game", menu)
+        ent2.connect(world.get_region("D17Z01S01", player))
+        menu.exits.append(ent2)
+
+        if not world.door_randomizer[player]:
+            for door in door_table:
+                if door.get("OriginalDoor") is None:
+                    continue
+                else:
+                    parent: Region = self.get_room_from_door(door["Id"])
+                    target: Region = self.get_room_from_door(door["OriginalDoor"])
+                    exit = Entrance(player, door["Id"], parent)
+
+                    exit.connect(target)
+                    parent.exits.append(exit)
+
+        for door in door_table:
+            if door.get("RequiredDoors") is not None:
+                for d in door["RequiredDoors"]:
+                    #print(d, self.get_connected_door(d))
+                    connection = self.get_connected_door(d)
+                    add_rule(world.get_entrance(door["Id"], player), lambda state: state.can_reach(connection), "or")
+                add_rule(world.get_entrance(door["Id"], player), lambda state: state.can_reach(self.get_connected_door(door["Id"])), "or")
 
         for loc in location_table:
+            reg: Region
+
+            if loc["room"] == "misc":
+                reg = world.get_region("Misc", player)
+            else:
+                reg = world.get_region(loc["room"], player)
+
             id = base_id + location_table.index(loc)
-            world.get_region(area_table[loc["region"]], player).locations\
-                .append(BlasphemousLocation(self.player, loc["name"], id, world.get_region(area_table[loc["region"]], player)))
+            reg.locations.append(BlasphemousLocation(player, loc["name"], id, reg))
         
-        victory = Location(player, "His Holiness Escribar", None, world.get_region("Deambulatory of His Holiness", player))
+        victory = Location(player, "His Holiness Escribar", None, world.get_region("D07Z01S03", player))
         victory.place_locked_item(self.create_event("Victory"))
-        world.get_region("Deambulatory of His Holiness", player).locations.append(victory)
+        world.get_region("D07Z01S03", player).locations.append(victory)
 
         if world.ending[self.player].value == 1:
             set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8))
@@ -304,13 +336,47 @@ class BlasphemousWorld(World):
                 state.has("Holy Wound of Abnegation", player))
 
         world.completion_condition[self.player] = lambda state: state.has("Victory", player)
+        
+
+    def get_room_from_door(self, door: str) -> Region:
+        return self.multiworld.get_region(door.split("[")[0], self.player)
+
+    
+    def get_connected_door(self, door: str) -> Entrance:
+        player = self.player
+        world = self.multiworld
+
+        target: str
+
+        try: 
+            world.get_entrance(door, player)
+        except KeyError:
+            parent = self.get_room_from_door(door)
+            for r in world.get_regions(player):
+                for e in r.exits:
+                    if e.connected_region == parent:
+                        target = e.name
+        else:
+            parent = world.get_entrance(door, player)
+            for e in parent.connected_region.exits:
+                if e.connected_region == parent.parent_region:
+                    target = e.name
+
+        return world.get_entrance(target, player)
 
     
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
         locations = []
 
-        for loc in self.multiworld.get_filled_locations(self.player):
+        world = self.multiworld
+        player = self.player
+        thorns: bool = True
+
+        if world.thorn_shuffle[player].value == 2:
+            thorns = False
+
+        for loc in world.get_filled_locations(player):
             if loc.name == "His Holiness Escribar":
                 continue
             else:
@@ -318,50 +384,44 @@ class BlasphemousWorld(World):
                     "id": self.location_name_to_game_id[loc.name],
                     "ap_id": loc.address,
                     "name": loc.item.name,
-                    "player_name": self.multiworld.player_name[loc.item.player]
+                    "player_name": world.player_name[loc.item.player]
                 }
 
                 locations.append(data)
 
         config = {
-            "versionCreated": "AP",
-            "general": {
-                "teleportationAlwaysUnlocked": bool(self.multiworld.prie_dieu_warp[self.player].value),
-                "skipCutscenes": bool(self.multiworld.skip_cutscenes[self.player].value),
-                "enablePenitence": bool(self.multiworld.penitence[self.player].value),
-                "hardMode": False,
-                "customSeed": 0,
-                "allowHints": bool(self.multiworld.corpse_hints[self.player].value)
-            },
-            "items": {
-                "type": 1,
-                "lungDamage": False,
-                "disableNPCDeath": True,
-                "startWithWheel": bool(self.multiworld.start_wheel[self.player].value),
-                "shuffleReliquaries": bool(self.multiworld.reliquary_shuffle[self.player].value)
-            },
-            "enemies": {
-                "type": self.multiworld.enemy_randomizer[self.player].value,
-                "maintainClass": bool(self.multiworld.enemy_groups[self.player].value),
-                "areaScaling": bool(self.multiworld.enemy_scaling[self.player].value)
-            },
-            "prayers": {
-                "type": 0,
-                "removeMirabis": False
-            },
-            "doors": {
-                "type": 0
-            },
-            "debug": {
-                "type": 0
-            }
+            "LogicDifficulty": world.difficulty[player].value,
+            "StartingLocation": "",
+            "VersionCreated": "AP",
+            
+            "UnlockTeleportation": bool(world.prie_dieu_warp[player].value),
+            "AllowHints": bool(world.corpse_hints[player].value),
+            "AllowPenitence": bool(world.penitence[player].value),
+            
+            "ShuffleReliquaries": bool(world.reliquary_shuffle[player].value),
+            "ShuffleDash": "",
+            "ShuffleWallClimb": "",
+            "ShuffleBootsOfPleading": "",
+            "ShufflePurifiedHand": "",
+            
+            "ShuffleSwordSkills": bool(world.skill_randomizer[player].value),
+            "ShuffleThorns": thorns,
+            "JunkLongQuests": "",
+            "StartWithWheel": bool(world.start_wheel[player].value),
+
+            "EnemyShuffleType": world.enemy_randomizer[player].value,
+            "MaintainClass": bool(world.enemy_groups[player].value),
+            "AreaScaling": bool(world.enemy_scaling[player].value),
+
+            "BossShuffleType": 0,
+            "DoorShuffleType": 0
         }
     
         slot_data = {
             "locations": locations,
             "cfg": config,
-            "ending": self.multiworld.ending[self.player].value,
-            "death_link": bool(self.multiworld.death_link[self.player].value)
+            "ending": world.ending[self.player].value,
+            "death_link": bool(world.death_link[self.player].value)
         }
     
         return slot_data
