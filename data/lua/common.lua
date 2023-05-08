@@ -1,3 +1,5 @@
+print("Loading AP lua connector script")
+
 local lua_major, lua_minor = _VERSION:match("Lua (%d+)%.(%d+)")
 lua_major = tonumber(lua_major)
 lua_minor = tonumber(lua_minor)
@@ -100,4 +102,8 @@ function checkBizhawkVersion()
     print(untestedBizhawkMessage)
   end
   return true
+end
+
+function stripPrefix(s, p)
+  return (s:sub(0, #p) == p) and s:sub(#p+1) or s
 end
