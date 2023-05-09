@@ -234,24 +234,33 @@ class AllowTrainerLegendaries(DefaultOnToggle):
     display_name = "Allow Trainer Legendaries"
 
 
-class RandomizeTypes(Toggle):
+class RandomizeTypes(Choice):
     """
-    Randomizes the types of every pokemon. If a species is dual-typed in vanilla, it will still be dual-typed. Types do not remain consistent across evolutions.
+    Randomizes the type(s) of every pokemon. Each species will have the same number of types.
+    Vanilla: Types are unchanged
+    Shuffle: Types are shuffled globally for all species (e.g. every Water-type pokemon becomes Fire-type)
+    Completely Random: Each species has its type(s) randomized
+    Follow Evolutions: Types are randomized per evolution line instead of per species
     """
     display_name = "Randomize Types"
+    default = 0
+    option_vanilla = 0
+    option_shuffle = 1
+    option_completely_random = 2
+    option_follow_evolutions = 3
 
 
-class Abilities(Choice):
+class RandomizeAbilities(Choice):
     """
     Randomizes abilities of every species. Each species will have the same number of abilities.
     Vanilla: Abilities are unchanged
-    Randomized: Each species has its abilities randomized
+    Completely Random: Each species has its abilities randomized
     Follow Evolutions: Abilities are randomized, but if a pokemon would normally retain its ability when evolving, the random ability will also be retained
     """
     display_name = "Abilities"
     default = 0
     option_vanilla = 0
-    option_randomized = 1
+    option_completely_random = 1
     option_follow_evolutions = 2
 
 
@@ -442,7 +451,7 @@ option_definitions: Dict[str, Option] = {
   "allow_trainer_legendaries": AllowTrainerLegendaries,
 
   "types": RandomizeTypes,
-  "abilities": Abilities,
+  "abilities": RandomizeAbilities,
   "ability_blacklist": AbilityBlacklist,
   "level_up_moves": LevelUpMoves,
   "tm_moves": TmMoves,

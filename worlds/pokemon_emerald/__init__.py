@@ -14,7 +14,7 @@ from worlds.AutoWorld import WebWorld, World
 from .data import PokemonEmeraldData, MapData, SpeciesData, EncounterTableData, LearnsetMove, TrainerData, TrainerPartyData, TrainerPokemonData, data as emerald_data
 from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value, create_item_groups
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, LevelUpMoves, Abilities, ItemPoolType, TmCompatibility, HmCompatibility, get_option_value, option_definitions
+from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, ItemPoolType, TmCompatibility, HmCompatibility, get_option_value, option_definitions
 from .pokemon import get_random_species, get_species_by_name, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
@@ -290,7 +290,7 @@ class PokemonEmeraldWorld(World):
             ability_blacklist = set([ability_label_to_value[label] for label in ability_blacklist_labels])
             ability_whitelist = [ability.ability_id for ability in emerald_data.abilities if ability.ability_id not in ability_blacklist]
 
-            if get_option_value(self.multiworld, self.player, "abilities") == Abilities.option_follow_evolutions:
+            if get_option_value(self.multiworld, self.player, "abilities") == RandomizeAbilities.option_follow_evolutions:
                 already_modified: Set[int] = set()
 
                 # Loops through species and only tries to modify abilities if the pokemon has no pre-evolution
@@ -339,21 +339,62 @@ class PokemonEmeraldWorld(World):
 
                     species.abilities = new_abilities
 
-
         def randomize_types():
-            for species in self.modified_data.species:
-                if species is None:
-                    continue
+            if get_option_value(self.multiworld, self.player, "types") == RandomizeTypes.option_shuffle:
+                type_map = list(range(18))
+                random.shuffle(type_map)
 
-                type_1 = get_random_type(random)
-                if species.types[0] == species.types[1]:
-                    type_2 = type_1
-                else:
-                    type_2 = get_random_type(random)
-                    while type_2 == type_1:
-                        type_2 = get_random_type(random)
+                # We never want to map to the ??? type, so swap whatever index maps to ??? with ???
+                # So ??? will always map to itself, and there are no pokemon which have the ??? type
+                mystery_type_index = type_map.index(9)
+                type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
 
-                species.types = (type_1, type_2)
+                for species in self.modified_data.species:
+                    species.types = (type_map[species.types[0]], type_map[species.types[1]])
+            elif get_option_value(self.multiworld, self.player, "types") == RandomizeTypes.option_completely_random:
+                for species in self.modified_data.species:
+                    new_type_1 = get_random_type(random)
+                    new_type_2 = new_type_1
+                    if species.types[0] != species.types[1]:
+                        while new_type_1 == new_type_2:
+                            new_type_2 = get_random_type(random)
+
+                    species.types = (new_type_1, new_type_2)
+            elif get_option_value(self.multiworld, self.player, "types") == RandomizeTypes.option_follow_evolutions:
+                already_modified: Set[int] = set()
+
+                # Similar to follow evolutions for abilities, but only needs to loop through once.
+                # For every pokemon without a pre-evolution, generates a random mapping from old types to new types
+                # and then walks through the evolution tree applying that map. This means that evolutions that share
+                # types will have those types mapped to the same new types, and evolutions with new or diverging types
+                # will still have new or diverging types.
+                # Consider:
+                # - Charmeleon (Fire/Fire) -> Charizard (Fire/Flying)
+                # - Onyx (Rock/Ground) -> Steelix (Steel/Ground)
+                # - Nincada (Bug/Ground) -> Ninjask (Bug/Flying) && Shedinja (Bug/Ghost)
+                # - Azurill (Normal/Normal) -> Marill (Water/Water)
+                for species in self.modified_data.species:
+                    if species is None:
+                        continue
+                    if species.species_id in already_modified:
+                        continue
+                    if species.pre_evolution is not None and species.pre_evolution not in already_modified:
+                        continue
+
+                    type_map = list(range(18))
+                    random.shuffle(type_map)
+
+                    # We never want to map to the ??? type, so swap whatever index maps to ??? with ???
+                    # So ??? will always map to itself, and there are no pokemon which have the ??? type
+                    mystery_type_index = type_map.index(9)
+                    type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
+
+                    evolutions = [species]
+                    while len(evolutions) > 0:
+                        evolution = evolutions.pop()
+                        evolution.types = (type_map[evolution.types[0]], type_map[evolution.types[1]])
+                        already_modified.add(evolution.species_id)
+                        evolutions += [self.modified_data.species[evolution.species_id] for evolution in evolution.evolutions]
 
         def randomize_learnsets():
             should_start_with_four_moves = get_option_value(self.multiworld, self.player, "level_up_moves") == LevelUpMoves.option_start_with_four_moves
@@ -558,10 +599,10 @@ class PokemonEmeraldWorld(World):
         self.modified_data = copy.deepcopy(emerald_data)
 
         # Randomize species data
-        if get_option_value(self.multiworld, self.player, "abilities") != Abilities.option_vanilla:
+        if get_option_value(self.multiworld, self.player, "abilities") != RandomizeAbilities.option_vanilla:
             randomize_abilities()
 
-        if get_option_value(self.multiworld, self.player, "types") == Toggle.option_true:
+        if get_option_value(self.multiworld, self.player, "types") != RandomizeTypes.option_vanilla:
             randomize_types()
 
         if get_option_value(self.multiworld, self.player, "level_up_moves") != LevelUpMoves.option_vanilla:
