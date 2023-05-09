@@ -1,6 +1,15 @@
 def dig_to_mines_floor(floor: int) -> str:
     return f"Dig to The Mines - Floor {floor}"
 
+
+def dig_to_skull_floor(floor: int) -> str:
+    return f"Mine to Skull Cavern Floor {floor}"
+
+
+def move_to_woods_depth(depth: int) -> str:
+    return f"Enter Deep Woods Depth {depth}"
+
+
 class SVEntrance:
     to_stardew_valley = "To Stardew Valley"
     to_farmhouse = "To Farmhouse"
@@ -83,8 +92,8 @@ class SVEntrance:
     enter_casino = "Oasis to Casino"
     enter_skull_cavern_entrance = "Desert to Skull Cavern Entrance"
     enter_skull_cavern = "Skull Cavern Entrance to Skull Cavern"
-    mine_to_skull_cavern_floor_25 = "Mine to Skull Cavern Floor 25"
-    mine_to_skull_cavern_floor_100 = "Mine to Skull Cavern Floor 100"
+    mine_to_skull_cavern_floor_25 = dig_to_skull_floor(25)
+    mine_to_skull_cavern_floor_100 = dig_to_skull_floor(100)
     dig_to_mines_floor_5 = dig_to_mines_floor(5)
     dig_to_mines_floor_10 = dig_to_mines_floor(10)
     dig_to_mines_floor_15 = dig_to_mines_floor(15)
@@ -139,3 +148,40 @@ class SVEntrance:
     parrot_express_jungle_to_docks = "Parrot Express Jungle to Docks"
     parrot_express_dig_site_to_docks = "Parrot Express Dig Site to Docks"
     parrot_express_volcano_to_docks = "Parrot Express Volcano to Docks"
+
+# Skull Cavern Elevator
+
+
+class DeepWoodsEntrance:
+    secret_woods_to_deep_woods = "Secret Woods to Deep Woods"
+    use_woods_obelisk = "Use Woods Obelisk"
+    deep_woods_house = "Deep Woods to Deep Woods House"
+    deep_woods_depth_10 = move_to_woods_depth(10)
+    deep_woods_depth_30 = move_to_woods_depth(30)
+    deep_woods_depth_50 = move_to_woods_depth(50)
+    deep_woods_depth_70 = move_to_woods_depth(70)
+    deep_woods_depth_90 = move_to_woods_depth(90)
+    deep_woods_depth_100 = move_to_woods_depth(100)
+
+
+class EugeneEntrance:
+    forest_to_garden = "Forest to Eugene's Garden"
+    garden_to_bedroom = "Garden to Eugene's Bedroom"
+
+
+class JasperEntrance:
+    museum_to_bedroom = "Museum to Jasper's Bedroom"
+
+
+class AlecEntrance:
+    forest_to_petshop = "Forest to Alec's Pet Shop"
+    petshop_to_bedroom = "Alec's Pet Shop to Bedroom"
+
+
+class YobaEntrance:
+    secret_woods_to_clearing = "Woods to Yoba Clearing"
+
+
+class JunaEntrance:
+    forest_to_juna_cave = "Forest to Juna's Cave"
+

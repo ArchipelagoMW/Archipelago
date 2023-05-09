@@ -119,3 +119,35 @@ class SVRegion:
     mines_floor_115 = "The Mines - Floor 115"
     mines_floor_120 = "The Mines - Floor 120"
 
+
+class DeepWoodsRegion:
+    entrance_to_deep_woods = "Entrance to the Deep Woods"
+    abandoned_home_in_deep_woods = "Abandoned Home in Deep Woods"
+    deep_woods_floor_10 = "The Deep Woods Depth 10"
+    deep_woods_floor_30 = "The Deep Woods Depth 30"
+    deep_woods_floor_50 = "The Deep Woods Depth 50"
+    deep_woods_floor_70 = "The Deep Woods Depth 70"
+    deep_woods_floor_90 = "The Deep Woods Depth 90"
+    deep_woods_floor_100 = "The Deep Woods Depth 100"
+
+
+class EugeneRegion:
+    eugene_garden = "Eugene's Garden"
+    eugene_bedroom = "Eugene's Bedroom"
+
+
+class JasperRegion:
+    jasper_bedroom = "Jasper's Bedroom"
+
+
+class AlecRegion:
+    pet_store = "Alec's Pet Shop"
+    alec_bedroom = "Alec's Bedroom"
+
+
+class YobaRegion:
+    yoba_clearing = "Yoba's Clearing"
+
+
+class JunaRegion:
+    juna_cave = "Juna's Cave"
