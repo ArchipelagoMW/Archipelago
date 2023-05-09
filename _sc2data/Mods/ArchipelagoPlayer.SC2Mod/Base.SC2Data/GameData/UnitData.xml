@@ -1440,7 +1440,7 @@
                 <AbilCmd value="255"/>
                 <Requirements value="AP_ClusterWarheadsResearched"/>
                 <Row value="2"/>
-                <Column value="1"/>
+                <Column value="2"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_CrossSpectrumDampeners"/>
@@ -1448,7 +1448,7 @@
                 <AbilCmd value="255"/>
                 <Requirements value="AP_CrossSpectrumDampenersResearched"/>
                 <Row value="2"/>
-                <Column value="0"/>
+                <Column value="3"/>
             </LayoutButtons>
         </CardLayouts>
         <Radius value="0.75"/>
