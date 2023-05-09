@@ -4164,7 +4164,7 @@
         <GroupIcon>
             <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
         </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-unit-terran-siegetanksiegemode.dds"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Sieged.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <NameOffset value="50"/>
         <SoundArray index="Ready" value="SiegeTank_Ready"/>
@@ -4173,7 +4173,7 @@
         <SoundArray index="Yes" value="SiegeTank_Yes"/>
         <SoundArray index="Attack" value="SiegeTank_Attack"/>
         <SoundArray index="Pissed" value="SiegeTank_Pissed"/>
-        <UnitIcon value="Assets\Textures\btn-unit-terran-siegetanksiegemode.dds"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Sieged.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
         </Wireframe>
@@ -4255,7 +4255,7 @@
         <GroupIcon>
             <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-tankmode.dds"/>
         </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Tank.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <NameOffset value="50"/>
         <SoundArray index="Ready" value="SiegeTank_Ready"/>
@@ -4264,7 +4264,7 @@
         <SoundArray index="Yes" value="SiegeTank_Yes"/>
         <SoundArray index="Attack" value="SiegeTank_Attack"/>
         <SoundArray index="Pissed" value="SiegeTank_Pissed"/>
-        <UnitIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Tank.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-tankmode.dds"/>
         </Wireframe>
@@ -4326,7 +4326,7 @@
         <GroupIcon>
             <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-assault.dds"/>
         </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-VikingMercenary-Assault.dds"/>
         <HighlightTooltip value="Unit/Name/AP_WreckingCrewAssaultMorphModel"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
         <SoundArray index="Ready" value="Viking_Ready"/>
@@ -4335,7 +4335,7 @@
         <SoundArray index="Yes" value="Viking_Yes"/>
         <SoundArray index="Attack" value="Viking_Attack"/>
         <SoundArray index="Pissed" value="Viking_Pissed"/>
-        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-VikingMercenary-Assault.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-Assault.dds"/>
         </Wireframe>
@@ -4417,7 +4417,7 @@
         <GroupIcon>
             <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-Fighter.dds"/>
         </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-VikingMercenary-Fighter.dds"/>
         <HighlightTooltip value="Unit/Name/AP_WreckingCrewFighterMorphModel"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
         <SoundArray index="Ready" value="Viking_Ready"/>
@@ -4426,7 +4426,7 @@
         <SoundArray index="Yes" value="Viking_Yes"/>
         <SoundArray index="Attack" value="Viking_Attack"/>
         <SoundArray index="Pissed" value="Viking_Pissed"/>
-        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-VikingMercenary-Fighter.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-Fighter.dds"/>
         </Wireframe>
