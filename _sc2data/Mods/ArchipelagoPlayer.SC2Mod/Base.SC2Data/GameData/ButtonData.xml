@@ -642,4 +642,14 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_HireDukesRevenge">
+        <Icon value="Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireDukesRevengePH">
+        <Icon value="Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

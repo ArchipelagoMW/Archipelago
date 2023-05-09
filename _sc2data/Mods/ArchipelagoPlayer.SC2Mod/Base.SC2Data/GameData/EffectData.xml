@@ -2427,4 +2427,36 @@
         <EffectArray value="AP_DuskWingBansheeDamage"/>
         <EffectArray value="AP_DuskWingScreecherMissilesCreateCarpetBombPersistent"/>
     </CEffectSet>
+    <CEffectLaunchMissile id="AP_DRBattlecruiserALM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_DRBattlecruiserAU"/>
+        <AmmoUnit value="AP_DRBattlecruiserALMWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_DRBattlecruiserAU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Amount value="8"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_DRBattlecruiserGLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_DRBattlecruiserGU"/>
+        <AmmoUnit value="AP_DRBattlecruiserGLMWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_DRBattlecruiserGU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Amount value="12"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_DRCannonsA" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Amount value="8"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_DRCannonsG" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Visibility value="Visible"/>
+        <Amount value="12"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
 </Catalog>

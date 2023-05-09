@@ -1327,4 +1327,141 @@
         <Model value="Assets\Portraits\Terran\BansheeMercenaryPortrait\BansheeMercenaryPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\BansheePortrait.fxa"/>
     </CModel>
+    <CModel id="AP_BattlecruiserMercenaryPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\BattlecruiserMercenaryPortrait\BattlecruiserMercenaryPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\BattlecruiserPortrait.fxa"/>
+        <Image value="Assets\Textures\BattlecruiserMercenaryPortrait_Static.dds"/>
+        <Lighting value="BattlecruiserMercenaryPortrait"/>
+    </CModel>
+    <CModel id="AP_DRBattlecruiserALMWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\BattleCruiserMissile\BattleCruiserMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DRBattlecruiserAirAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\BattlecruiserMissileImpact\BattleCruiserMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DRBattlecruiserGLMWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\BattleCruiserMissile\BattleCruiserMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DRBattlecruiserGroundAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\BattlecruiserMissileImpact\BattleCruiserMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value="BattlecruiserAirAttackImpact"/>
+    </CModel>
+    <CModel id="AP_DRCannonsImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\ThorArmMissileImpact\ThorArmMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DRCannonsLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\ThorArmMissileLaunch\ThorArmMissileLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DukesRevenge" parent="Unit">
+        <Model value="Assets\Units\Terran\BattlecruiserLoki\BattlecruiserLoki.m3"/>
+        <AttachProps Id="Ref_Weapon 20">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 21">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 22">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 23">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 24">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 25">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 10">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 11">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 20">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 21">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 22">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 23">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 24">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 25">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <Radius value="1.300000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.700000"/>
+        <SelectionRadius value="1.562500"/>
+        <ShadowRadius value="1.562500"/>
+        <Tipability value="0.150000"/>
+        <UnitGlossaryCamera value="Star2CameraLow12"/>
+    </CModel>
+    <CModel id="AP_DukesRevengeDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Terran\BattlecruiserLokiDeath\BattlecruiserLokiDeath.m3"/>
+        <LowQualityModel value="AP_DukesRevengeDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.333000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.666000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="1.000000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="1.600000"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_DukesRevengeDeathLow" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Effects\Terran\TerranLargeUnitDeath\TerranLargeUnitDeath_Low.m3"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Flags index="TeenSafe" value="1"/>
+        <Lighting value="TerranLargeUnitDeathLow"/>
+        <SelectionRadius value="0.263000"/>
+        <ShadowRadius value="0.263000"/>
+    </CModel>
+    <CModel id="AP_BattlecruiserLokiReentry" parent="FX">
+        <Model value="Assets\Effects\Terran\BattlecruiserLokiReentry\BattlecruiserLokiReentry.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

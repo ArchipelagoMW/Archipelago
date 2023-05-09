@@ -549,4 +549,76 @@
         <LegacyOptions index="KeepChanneling" value="1"/>
         <AllowedMovement value="Slowing"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_DRBattlecruiserA">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_DRBattlecruiserAU"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="2"/>
+        <Period value="0.225"/>
+        <Effect value="AP_DRBattlecruiserALM"/>
+        <AllowedMovement value="Slowing"/>
+        <RandomDelayMax value="0.1875"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_DRBattlecruiserFakeA">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_DRBattlecruiserAU"/>
+        <TargetFilters value="Air,Visible;Player,Ally,Neutral,Enemy"/>
+        <Range value="6"/>
+        <Arc value="360"/>
+        <Period value="0.225"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_DRBattlecruiserFakeG">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_DRBattlecruiserGU"/>
+        <TargetFilters value="Ground,Visible;Player,Ally,Neutral,Enemy"/>
+        <Range value="6"/>
+        <Arc value="360"/>
+        <Period value="0.225"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_DRBattlecruiserG">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_DRBattlecruiserGU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="2"/>
+        <Period value="0.225"/>
+        <Effect value="AP_DRBattlecruiserGLM"/>
+        <AllowedMovement value="Slowing"/>
+        <RandomDelayMax value="0.1875"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_DRCannonsA">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_DRBattlecruiserAU"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="6"/>
+        <MinimumRange value="2"/>
+        <Period value="0.3"/>
+        <AllowedMovement value="Slowing"/>
+        <RandomDelayMin value="0"/>
+        <RandomDelayMax value="0"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_DRCannonsG">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_DRBattlecruiserGU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="6"/>
+        <MinimumRange value="2"/>
+        <Period value="0.3"/>
+        <AllowedMovement value="Slowing"/>
+        <RandomDelayMin value="0"/>
+        <RandomDelayMax value="0"/>
+    </CWeaponLegacy>
 </Catalog>

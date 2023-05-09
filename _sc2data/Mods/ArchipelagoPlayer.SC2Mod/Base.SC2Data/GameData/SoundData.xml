@@ -1897,4 +1897,30 @@
         <AssetArray File="LocalizedData\Sounds\TerranUnitVO\SiegeTank\SiegeTank_Yes16.ogg" FacialAnim="SiegeTank_Yes16"/>
         <Volume value="1.000000,1.000000"/>
     </CSound>
+    <CSound id="AP_Loki_CannonImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall9.wav" Pitch="-3.000000,3.000000"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="5"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Loki_CannonLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Thor\Thor_AttackLaunch2.wav"/>
+        <DupeDestroyCount value="4"/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="-1.000000,1.000000"/>
+    </CSound>
 </Catalog>

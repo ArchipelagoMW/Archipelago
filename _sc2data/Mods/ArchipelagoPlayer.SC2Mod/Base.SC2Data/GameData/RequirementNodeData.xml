@@ -700,4 +700,30 @@
     <CRequirementNot id="AP_NotCountUnitDuskWingTotal">
         <OperandArray index="0" value="AP_CountUnitDuskWingTotal"/>
     </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUpgradeHireDukesRevengeCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+        <OperandArray value="AP_CountUpgradeHireDukesRevengeCompleteOnly"/>
+        <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUnitDukesRevengeTotalNotCountUnitDukesRevengeQueuedOrBetter">
+        <OperandArray value="AP_NotCountUnitDukesRevengeTotal"/>
+        <OperandArray value="AP_NotCountUnitDukesRevengeQueuedOrBetter"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitDukesRevengeQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DukesRevenge" State="QueuedOrBetter"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitDukesRevengeTotal">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DukesRevenge" State="Total"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHireDukesRevengeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HireDukesRevenge" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUnitDukesRevengeQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUnitDukesRevengeQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUnitDukesRevengeTotal">
+        <OperandArray index="0" value="AP_CountUnitDukesRevengeTotal"/>
+    </CRequirementNot>
 </Catalog>

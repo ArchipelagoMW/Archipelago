@@ -286,4 +286,29 @@
             <DirectionalLight index="Back" Color="1.000000,0.701961,0.627451" ColorMultiplier="0.442000" Direction="-0.566812,0.526346,0.633786"/>
         </ToDInfoArray>
     </CLight>
+    <CLight id="AP_BattlecruiserMercenaryPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.031373,0.180392,0.000000" Colorize="1">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="HDRSpecMultiplier" value="1.613000"/>
+            <Param index="HDREmisMultiplier" value="5.620000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.556863,0.658824,0.882353"/>
+                <ColorMultiplier value="1.995000"/>
+                <SpecularColor value="0.800000,0.800000,0.749020"/>
+                <SpecColorMultiplier value="1.995000"/>
+                <Direction value="-0.928067,0.340542,0.150743"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.427451,0.937255,0.929412" ColorMultiplier="1.462000" Direction="0.178950,0.145377,0.973058"/>
+            <DirectionalLight index="Back" Color="0.466667,0.909804,1.000000" ColorMultiplier="4.786000" Direction="-0.576418,-0.595857,0.559193"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>

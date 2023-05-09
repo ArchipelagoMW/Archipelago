@@ -438,4 +438,8 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_AndNotCountUnitDuskWingTotalNotCountUnitDuskWingQueuedOrBetter"/>
     </CRequirement>
+    <CRequirement id="AP_SummonDukesRevenge">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUnitDukesRevengeTotalNotCountUnitDukesRevengeQueuedOrBetter"/>
+    </CRequirement>
 </Catalog>

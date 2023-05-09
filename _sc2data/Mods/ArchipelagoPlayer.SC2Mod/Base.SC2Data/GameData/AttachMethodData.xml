@@ -32,4 +32,19 @@
         <Multiplier value="2"/>
         <Driver value="AP_GoliathALM"/>
     </CAttachMethodPattern>
+    <CAttachMethodFilter id="AP_AMFilterDRCannons">
+        <Logic value="OR"/>
+        <Keys Keyword="Weapon" Index="10"/>
+        <Keys Keyword="Weapon" Index="11"/>
+    </CAttachMethodFilter>
+    <CAttachMethodPattern id="AP_AMPatternDRCannonsG">
+        <Keyword value="Weapon"/>
+        <Base value="::RollingIndex"/>
+        <Driver value="DRCannonsG"/>
+    </CAttachMethodPattern>
+    <CAttachMethodPattern id="AP_AMPatternDRCannonsA">
+        <Keyword value="Weapon"/>
+        <Base value="::RollingIndex"/>
+        <Driver value="DRCannonsA"/>
+    </CAttachMethodPattern>
 </Catalog>

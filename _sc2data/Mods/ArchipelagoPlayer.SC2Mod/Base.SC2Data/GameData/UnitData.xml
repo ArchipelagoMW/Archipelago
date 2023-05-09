@@ -3575,4 +3575,87 @@
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
         <TacticalAI value="DuskWingBansheeWeapon"/>
     </CUnit>
+    <CUnit id="AP_DRBattlecruiserALMWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_DRBattlecruiserGLMWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_DukesRevenge">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Massive" value="1"/>
+        <LifeStart value="700"/>
+        <LifeMax value="700"/>
+        <LifeArmor value="3"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranShipPlating"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/DefensiveMatrixShields"/>
+        <Mover value="Fly"/>
+        <Speed value="1.4062"/>
+        <Acceleration value="1"/>
+        <Sight value="12"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-6"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="400"/>
+        <CostResource index="Vespene" value="300"/>
+        <RepairTime value="110.833"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="140"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_DukesRevengeYamato"/>
+        <AbilArray Link="AP_DukesRevengeMissilePods"/>
+        <AbilArray Link="AP_DukesRevengeDefensiveMatrix"/>
+        <WeaponArray Link="AP_DRBattlecruiserG"/>
+        <WeaponArray Link="AP_DRCannonsG"/>
+        <WeaponArray Link="AP_DRBattlecruiserA"/>
+        <WeaponArray Link="AP_DRCannonsA"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AP_YamatoGun" Type="AbilCmd" AbilCmd="AP_DukesRevengeYamato,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_DukesRevengeMissilePods,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DukesRevengeDefensiveMatrix,0" Row="2" Column="2"/>
+        </CardLayouts>
+        <Radius value="1.25"/>
+        <SeparationRadius value="1.25"/>
+        <ScoreMake value="1200"/>
+        <ScoreKill value="2400"/>
+        <SubgroupPriority value="20"/>
+        <MinimapRadius value="1.25"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="Battlecruiser"/>
+        <TacticalAIThink value="AIThinkBattleCruiser"/>
+        <Mass value="0.6"/>
+        <SelectAlias value="Battlecruiser"/>
+        <EquipmentArray Weapon="AP_DRBattlecruiserFakeG"/>
+        <EquipmentArray Weapon="AP_DRBattlecruiserFakeA"/>
+        <GlossaryPriority value="281"/>
+        <GlossaryStrongArray value="Phoenix"/>
+        <GlossaryStrongArray value="Mutalisk"/>
+        <GlossaryWeakArray value="VikingFighter"/>
+        <GlossaryWeakArray value="VoidRay"/>
+        <GlossaryWeakArray value="Corruptor"/>
+        <AIEvaluateAlias value="Battlecruiser"/>
+    </CUnit>
 </Catalog>

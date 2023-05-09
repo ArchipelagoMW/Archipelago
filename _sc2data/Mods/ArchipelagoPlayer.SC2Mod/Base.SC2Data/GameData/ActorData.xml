@@ -4473,7 +4473,6 @@
     <CActorAction id="AP_DuskWingBansheeAttack" parent="GenericAttack" effectImpact="AP_DuskWingBansheeDamage" effectLaunch="AP_DuskWingBansheeLaunchMissile">
         <LaunchAttachQuery Methods="AP_AMPatternDuskWingBanshee"/>
         <LaunchAssets Sound="Banshee_AttackLaunch2"/>
-        <Missile value="AP_DuskWingBansheeAttackMissile"/>
         <ImpactMap index="None" Model="BansheeAttackImpact" Sound="Banshee_AttackImpact2"/>
     </CActorAction>
     <CActorMissile id="AP_DuskWingBansheeAttackMissile" parent="GenericAttackMissile" unitName="AP_DuskWingWeapon"/>
@@ -4486,6 +4485,101 @@
         <Sound value="AP_BansheeCarpetBombImpact"/>
     </CActorSound>
     <CActorModel id="AP_BansheeMercenaryReentry" parent="ModelAdditionNoAnims">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSDb Birth Stand Death ContentPlayOnce"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSDb" Send="Destroy"/>
+    </CActorModel>
+    <CActorAction id="AP_DRBattlecruiserAirAttack" parent="GenericAttack" effectImpact="AP_DRBattlecruiserAU" effectLaunch="AP_DRBattlecruiserALM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
+        <LaunchAssets Sound="Battlecruiser_AirAttackLaunch"/>
+        <Missile value="AP_DRBattlecruiserAirAttackMissile"/>
+        <ImpactMap index="None" Model="AP_DRBattlecruiserAirAttackImpact" Sound="Battlecruiser_AirAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_DRBattlecruiserAirAttackMissile" parent="GenericAttackMissile" unitName="AP_DRBattlecruiserALMWeapon">
+        <BarHeight value="1"/>
+        <BarWidth value="1"/>
+    </CActorMissile>
+    <CActorAction id="AP_DRBattlecruiserGroundAttack" parent="GenericAttack" effectImpact="AP_DRBattlecruiserGU" effectLaunch="AP_DRBattlecruiserGLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
+        <LaunchAssets Sound="Battlecruiser_GroundAttackLaunch"/>
+        <Missile value="AP_DRBattlecruiserGroundAttackMissile"/>
+        <ImpactMap index="None" Model="AP_DRBattlecruiserGroundAttackImpact" Sound="Battlecruiser_GroundAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_DRBattlecruiserGroundAttackMissile" parent="GenericAttackMissile" unitName="AP_DRBattlecruiserGLMWeapon">
+        <BarHeight value="1"/>
+        <BarWidth value="1"/>
+    </CActorMissile>
+    <CActorAction id="AP_DRCannonsA" parent="GenericAttack" effectAttack="AP_DRCannonsA">
+        <LaunchAttachQuery Methods="AP_AMFilterDRCannons AP_AMPatternDRCannonsA"/>
+        <LaunchAssets Model="AP_DRCannonsLaunch" Sound="AP_Loki_CannonLaunch"/>
+        <ImpactMap index="None" Model="AP_DRCannonsImpact" Sound="AP_Loki_CannonImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_DRCannonsG" parent="GenericAttack" effectAttack="AP_DRCannonsG">
+        <LaunchAttachQuery Methods="AP_AMFilterDRCannons AP_AMPatternDRCannonsG"/>
+        <LaunchAssets Model="AP_DRCannonsLaunch" Sound="AP_Loki_CannonLaunch"/>
+        <ImpactMap index="None" Model="AP_DRCannonsImpact" Sound="AP_Loki_CannonImpact"/>
+    </CActorAction>
+    <CActorUnit id="AP_DukesRevenge" parent="GenericUnitStandard" unitName="AP_DukesRevenge">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="Behavior.AP_MercAirDropB.Create" Send="Create AP_BattlecruiserLokiReentry"/>
+        <HostSiteOps Ops="SOpBankerBattlecruiser"/>
+        <DeathArray index="Normal" ModelLink="AP_DukesRevengeDeath" SoundLink=""/>
+        <DeathArray index="Squish" ModelLink="BattlecruiserDeathSquish"/>
+        <PortraitModel value="AP_BattlecruiserMercenaryPortrait"/>
+        <BarOffset value="75"/>
+        <BarWidth value="144"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Battlecruiser-Loki.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="BattlecruiserGroupWhat"/>
+        <GroupSoundArray index="Yes" value="BattlecruiserGroupYes"/>
+        <GroupSoundArray index="Attack" value="BattlecruiserGroupAttack"/>
+        <GroupSoundArray index="Board" value="BattlecruiserGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-BattlecruiserLoki.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Birth" value="BattlecruiserBirth"/>
+        <SoundArray index="Ready" value="Battlecruiser_Ready"/>
+        <SoundArray index="Help" value="Battlecruiser_Help"/>
+        <SoundArray index="What" value="Battlecruiser_What"/>
+        <SoundArray index="Yes" value="Battlecruiser_Yes"/>
+        <SoundArray index="Attack" value="Battlecruiser_Attack"/>
+        <SoundArray index="Pissed" value="Battlecruiser_Pissed"/>
+        <SoundArray index="Movement" value="Battlecruiser_Movement"/>
+        <SoundArray index="Turning" value="BattlecruiserTurning"/>
+        <SoundArray index="Board" value="BattlecruiserBoard"/>
+        <SoundArray index="Click" value="BattlecruiserClick"/>
+        <SoundArray index="ClickError" value="BattlecruiserClickError"/>
+        <SoundArray index="Highlight" value="BattlecruiserHighlight"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-BattlecruiserLoki.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Battlecruiser-Loki.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_DukesRevengeMissilePodsCursorModel" parent="TerranCursorModel" abil="AP_DukesRevengeMissilePods"/>
+    <CActorSplat id="AP_DukesRevengeMissilePodsCursorSplat" parent="TerranCursorSplat" abil="AP_DukesRevengeMissilePods"/>
+    <CActorSound id="AP_DukesRevengeMissilePodsLaunch" parent="SoundOneShot">
+        <On Terms="Abil.AP_DukesRevengeMissilePods.SourcePrepStart" Send="Create"/>
+        <Sound value="Battlecruiser_MissilePodsLaunch"/>
+    </CActorSound>
+    <CActorRange id="AP_DukesRevengeMissilePodsRange" parent="RangeAbil" abil="AP_DukesRevengeMissilePods"/>
+    <CActorModel id="AP_DukesRevengeYamatoAttackChargeModel" parent="ModelAddition">
+        <On Terms="Abil.AP_DukesRevengeYamato.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.AP_DukesRevengeYamato.SourcePrepStop" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="BattlecruiserYamatoAttackChargeModel"/>
+    </CActorModel>
+    <CActorSound id="AP_DukesRevengeYamatoAttackChargeSound" parent="SoundContinuous">
+        <On Terms="Abil.AP_DukesRevengeYamato.SourcePrepStart" Send="Create"/>
+        <On Terms="Abil.AP_DukesRevengeYamato.SourcePrepStop" Send="Destroy"/>
+        <Host Subject="AP_DukesRevengeYamatoAttackChargeModel"/>
+        <Sound value="Battlecruiser_YamatoAttackChargeUp"/>
+    </CActorSound>
+    <CActorSound id="AP_DukesRevengeYamatoLaunch" parent="SoundOneShot">
+        <On Terms="Abil.AP_DukesRevengeYamato.SourceCastStart" Send="Create"/>
+        <Sound value="Battlecruiser_YamatoAttackLaunch"/>
+    </CActorSound>
+    <CActorRange id="AP_DukesRevengeYamatoRange" parent="RangeAbil" abil="AP_DukesRevengeYamato"/>
+    <CActorModel id="AP_BattlecruiserLokiReentry" parent="ModelAdditionNoAnims">
         <On Terms="ActorCreation" Send="AnimBracketStart BSDb Birth Stand Death ContentPlayOnce"/>
         <On Terms="AnimBracketState.*.AfterClosing; AnimName BSDb" Send="Destroy"/>
     </CActorModel>
