@@ -554,7 +554,7 @@
         <ValidatorArray value="TargetRadiusSmall"/>
         <ValidatorArray value="AP_HasShapedBlast"/>
         <EditorCategories value="Race:Terran"/>
-        <ImpactUnitValidator value="FriendlyOrNeutralTarget"/>
+        <ImpactUnitValidator value="AP_FriendlyOrNeutralTarget"/>
         <Kind value="Splash"/>
         <KindSplash value="Splash"/>
         <Amount value="15"/>
@@ -569,9 +569,9 @@
     <CEffectDamage id="AP_CrucioShockCannonFriendlyTargetDamage" parent="DU_WEAP">
         <ValidatorArray value="TargetRadiusSmall"/>
         <ValidatorArray value="AP_HasShapedBlast"/>
-        <ValidatorArray value="FriendlyOrNeutralTarget"/>
+        <ValidatorArray value="AP_FriendlyOrNeutralTarget"/>
         <EditorCategories value="Race:Terran"/>
-        <ImpactUnitValidator value="FriendlyOrNeutralTarget"/>
+        <ImpactUnitValidator value="AP_FriendlyOrNeutralTarget"/>
         <ArmorReduction value="0"/>
         <Kind value="Splash"/>
         <KindSplash value="Splash"/>
@@ -2247,5 +2247,93 @@
         <EditorCategories value="Race:Terran"/>
         <Kind value="Ranged"/>
         <Amount value="24"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_ArcliteShockCannonBlast" parent="DU_WEAP">
+        <ValidatorArray value="TargetRadiusSmall"/>
+        <ValidatorArray value="AP_NoShapedBlast"/>
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="100"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.4687" Fraction="1"/>
+        <AreaArray Radius="0.7812" Fraction="0.5"/>
+        <AreaArray Radius="1.25" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_ArcliteShockCannonBlastSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_ArcliteShockCannonBlast"/>
+        <EffectArray value="AP_ArcliteShockCannonFriendlyDamage"/>
+        <EffectArray value="AP_ArcliteShockCannonEnemyDamage"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_ArcliteShockCannonDirected" parent="DU_WEAP">
+        <ValidatorArray value="TargetRadiusLarge"/>
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="100"/>
+        <Death value="Blast"/>
+        <SearchFilters value="Ground;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_ArcliteShockCannonDummy" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="100"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_ArcliteShockCannonEnemyDamage" parent="DU_WEAP">
+        <ValidatorArray value="TargetRadiusSmall"/>
+        <ValidatorArray value="AP_HasShapedBlast"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnitValidator value="EnemyTarget"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="100"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.4687" Fraction="1"/>
+        <AreaArray Radius="0.7812" Fraction="0.5"/>
+        <AreaArray Radius="1.25" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_ArcliteShockCannonFriendlyDamage" parent="DU_WEAP">
+        <ValidatorArray value="TargetRadiusSmall"/>
+        <ValidatorArray value="AP_HasShapedBlast"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnitValidator value="AP_FriendlyOrNeutralTarget"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="25"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.4687" Fraction="1"/>
+        <AreaArray Radius="0.7812" Fraction="0.5"/>
+        <AreaArray Radius="1.25" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Enemy,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_ArcliteShockCannonSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_ArcliteShockCannonBlastSet"/>
+        <EffectArray value="AP_ArcliteShockCannonDirected"/>
+        <EffectArray value="AP_MaelstromRounds"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_SiegeBreakerDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="10"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="25"/>
+        <Death value="Blast"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
     </CEffectDamage>
 </Catalog>

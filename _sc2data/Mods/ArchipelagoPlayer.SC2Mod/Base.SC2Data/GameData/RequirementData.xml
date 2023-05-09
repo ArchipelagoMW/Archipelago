@@ -423,4 +423,11 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_AndNotCountUnitHammerSecurityTotalNotCountUnitHammerSecurityQueuedOrBetter"/>
     </CRequirement>
+    <CRequirement id="AP_MercPHTrainSiegeTank">
+        <NodeArray index="Show" Link="AP_AndCountUpgradeHireSiegeBreakersPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_SummonSiegeBreakers">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUnitSiegeBreakerTotalNotCountUnitSiegeBreakerQueuedOrBetter"/>
+    </CRequirement>
 </Catalog>

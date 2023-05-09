@@ -594,4 +594,11 @@
     <CValidatorPlayerRequirement id="AP_NoMarineShield">
         <Value value="AP_UseShieldWall"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasMaelstromRounds">
+        <Find value="1"/>
+        <Value value="AP_UseMaelstromRounds"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_FriendlyOrNeutralTarget">
+        <Filters value="-;Self,Enemy"/>
+    </CValidatorUnitFilters>
 </Catalog>

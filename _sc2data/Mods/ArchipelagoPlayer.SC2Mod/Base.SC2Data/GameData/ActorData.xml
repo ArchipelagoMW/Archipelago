@@ -4085,9 +4085,8 @@
     </CActorUnit>
     <CActorAction id="AP_SpartanCompanyAirAttack" parent="GenericAttack" effectImpact="AP_SpartanCompanyAU" effectLaunch="AP_SpartanCompanyALM">
         <LaunchAttachQuery Methods="AP_AMPatternSpartanCompany"/>
-        <LaunchAssets Model="AP_SpartanCompanyAirAttackLaunch" Sound="VikingFighter_AttackLaunch"/>
-        <Missile value="AP_SpartanCompanyAirAttackMissile"/>
-        <ImpactMap index="None" Model="AP_SpartanCompanyAirAttackImpact" Sound="VikingFighter_AttackImpact"/>
+        <LaunchAssets Sound="VikingFighter_AttackLaunch"/>
+        <ImpactMap index="None" Sound="VikingFighter_AttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_SpartanCompanyAirAttackMissile" parent="GenericAttackMissile" unitName="AP_SpartanCompanyAWeapon">
         <Model value="AP_GoliathAWeapon"/>
@@ -4097,10 +4096,192 @@
     </CActorModel>
     <CActorAction id="AP_SpartanCompanyGroundAttack" parent="GenericAttack" effectAttack="AP_SpartanCompanyG">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
-        <LaunchAssets Model="AP_SpartanCompanyGroundAttackLaunch" Sound="AP_GoliathGroundAttackLaunch"/>
-        <ImpactMap index="None" Model="AP_SpartanCompanyGroundAttackImpact" Sound="AP_Goliath_GroundAttackImpact"/>
+        <LaunchAssets Sound="AP_GoliathGroundAttackLaunch"/>
+        <ImpactMap index="None" Sound="AP_Goliath_GroundAttackImpact"/>
     </CActorAction>
     <CActorTurret id="AP_SpartanCompanyTurret">
         <On Terms="TurretEnable.AP_SpartanCompany" Send="Create"/>
     </CActorTurret>
+    <CActorUnit id="AP_SiegeBreaker" parent="GenericUnitMorph" unitName="AP_SiegeBreaker">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_SiegeBreakerDropModel"/>
+        <DeathArray index="Normal" ModelLink="AP_SiegeBreakerDeath" SoundLink="AP_SiegeBreaker_Explode"/>
+        <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
+        <StandAnimTurnTime value="3.33"/>
+        <WalkAnimMoveSpeed value="1"/>
+        <AbilSoundArray AbilCmd="AP_SiegeBreakerSiege,0" Sound="SiegeTank_SiegeModeVO"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-tankmode.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="SiegeTankGroupWhat"/>
+        <GroupSoundArray index="Yes" value="SiegeTankGroupYes"/>
+        <GroupSoundArray index="Attack" value="SiegeTankGroupAttack"/>
+        <GroupSoundArray index="Board" value="SiegeTankGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Tank.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Birth" value="SiegeTankBirth"/>
+        <SoundArray index="Ready" value="AP_SiegeBreaker_Ready"/>
+        <SoundArray index="Help" value="AP_SiegeBreaker_Help"/>
+        <SoundArray index="What" value="AP_SiegeBreaker_What"/>
+        <SoundArray index="Yes" value="AP_SiegeBreaker_Yes"/>
+        <SoundArray index="Attack" value="AP_SiegeBreaker_Attack"/>
+        <SoundArray index="Pissed" value="AP_SiegeBreaker_Pissed"/>
+        <SoundArray index="Movement" value="SiegeTankMovement"/>
+        <SoundArray index="Turning" value="SiegeTankTurning"/>
+        <SoundArray index="Board" value="SiegeTankBoard"/>
+        <SoundArray index="Click" value="SiegeTankClick"/>
+        <SoundArray index="ClickError" value="SiegeTankClickError"/>
+        <SoundArray index="Highlight" value="SiegeTankHighlight"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Tank.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-tankmode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_SiegeBreakerAttack" parent="GenericAttack" effectAttack="AP_SiegeBreakerDamage">
+        <LaunchAttachQuery Methods="AMPatternRollingStripe"/>
+        <LaunchAssets Model="SiegeTankAttackLaunch" Sound="AP_SiegeBreaker_AttackLaunch"/>
+        <ImpactMap index="None" Model="SiegeTankAttackImpact" Sound="AP_SiegeBreaker_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_SiegeBreakerDropModel" parent="AP_MercDropModelBase">
+        <On Terms="ActorCreation" Send="SetScale 1.500000,1.500000,1.000000"/>
+    </CActorModel>
+    <CActorUnit id="AP_SiegeBreakerSiegeModeMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_SiegeBreakerSiegeModeMorphModel">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreakerSieged" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreakerSieged" Send="AnimPlay Start Morph,Start"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreakerSieged" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreaker" Send="Destroy"/>
+        <Model value="AP_SiegeBreakerSiegedMorph"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
+        <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
+        <BarOffset value="65"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-siegetanksiegemode.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_SiegeBreakerSiegeModeMorphModel"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Ready" value="SiegeTank_Ready"/>
+        <SoundArray index="Help" value="SiegeTank_Help"/>
+        <SoundArray index="What" value="SiegeTank_What"/>
+        <SoundArray index="Yes" value="SiegeTank_Yes"/>
+        <SoundArray index="Attack" value="SiegeTank_Attack"/>
+        <SoundArray index="Pissed" value="SiegeTank_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-siegetanksiegemode.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="AP_SiegeBreakerSiegeModeSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreakerSieged" Send="Create"/>
+        <Sound value="AP_SiegeBreaker_MorphToSiege"/>
+    </CActorSound>
+    <CActorUnit id="AP_SiegeBreakerSieged" parent="GenericUnitMorph" unitName="AP_SiegeBreakerSieged">
+        <Aliases value="_UnitLarge"/>
+        <DeathArray index="Normal" ModelLink="AP_SiegeBreakerSiegedDeath" SoundLink="SiegeTank_Explode"/>
+        <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
+        <BarOffset value="65"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="SiegeTankSiegedGroupWhat"/>
+        <GroupSoundArray index="Yes" value="SiegeTankSiegedGroupYes"/>
+        <GroupSoundArray index="Attack" value="SiegeTankSiegedGroupAttack"/>
+        <GroupSoundArray index="Board" value="SiegeTankSiegedGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Sieged.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Birth" value="SiegeTankSiegedBirth"/>
+        <SoundArray index="Ready" value="SiegeTank_Ready"/>
+        <SoundArray index="Help" value="SiegeTank_Help"/>
+        <SoundArray index="What" value="SiegeTank_What"/>
+        <SoundArray index="Yes" value="SiegeTank_Yes"/>
+        <SoundArray index="Attack" value="SiegeTank_Attack"/>
+        <SoundArray index="Pissed" value="SiegeTank_Pissed"/>
+        <SoundArray index="Movement" value="SiegeTankSiegedMovement"/>
+        <SoundArray index="Turning" value="SiegeTankSiegedTurning"/>
+        <SoundArray index="Board" value="SiegeTankSiegedBoard"/>
+        <SoundArray index="Click" value="SiegeTankSiegedClick"/>
+        <SoundArray index="ClickError" value="SiegeTankSiegedClickError"/>
+        <SoundArray index="Highlight" value="SiegeTankSiegedHighlight"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-SiegeTankMercenary-Sieged.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_SiegeBreakerSiegedAttack" parent="GenericAttack" effectAttack="AP_ArcliteShockCannonBlast">
+        <On Terms="Effect.AP_ArcliteShockCannonFriendlyDamage.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_ArcliteShockCannonEnemyDamage.Start; At Caster" Send="Create"/>
+        <LaunchAssets Model="AP_SiegeBreakerSiegedAttackLaunch" Sound="SiegeTank_SiegedAttackLaunch"/>
+        <ImpactSiteOps Ops="SOpActionCenter SOpTargetUnitZ" HoldPosition="1"/>
+        <ImpactMap index="None" Model="AP_SiegeBreakerSiegedAttackImpact" Sound="SiegeTank_SiegedAttackImpact"/>
+        <DamageSiteOps Ops="SOpAttachHarness"/>
+        <DamageMap index="None" Model="AP_SiegeBreakerSiegedAttackDamage"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorAction id="AP_SiegeBreakerSiegedAttackDirected" parent="GenericAttack" effectAttack="AP_ArcliteShockCannonDirected">
+        <LaunchAssets Model="AP_SiegeBreakerSiegedAttackDirectedLaunch" Sound="SiegeTank_SiegedAttackLaunch"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="AP_SiegeBreakerSiegedAttackDirectedImpact" Sound="SiegeTank_SiegedAttackImpact"/>
+        <DamageMap index="None" Model="AP_SiegeBreakerSiegedAttackDirectedDamage"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorRange id="AP_SiegeBreakerSiegedRange">
+        <On Terms="SelectionLocalUpdate.AP_SiegeBreakerSieged.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_SiegeBreakerSieged.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_SiegeBreakerSieged.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_SiegeBreakerSieged.Stop" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreakerSieged" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreakerSieged" Send="Destroy"/>
+        <Weapon value="AP_ArcliteShockCannon"/>
+    </CActorRange>
+    <CActorUnit id="AP_SiegeBreakerTankModeMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_SiegeBreakerTankModeMorphModel">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreaker" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreaker" Send="AnimPlay End Morph,End"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreaker" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreakerSieged" Send="Destroy"/>
+        <Model value="AP_SiegeBreakerSiegedMorph"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
+        <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
+        <AbilSoundArray AbilCmd="SiegeMode,Execute" Sound="SiegeTank_SiegeModeVO"/>
+        <BarOffset value="80"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-tankmode.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_SiegeBreakerTankModeMorphModel"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Ready" value="SiegeTank_Ready"/>
+        <SoundArray index="Help" value="SiegeTank_Help"/>
+        <SoundArray index="What" value="SiegeTank_What"/>
+        <SoundArray index="Yes" value="SiegeTank_Yes"/>
+        <SoundArray index="Attack" value="SiegeTank_Attack"/>
+        <SoundArray index="Pissed" value="SiegeTank_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-tankmode.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="AP_SiegeBreakerTankModeSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreaker" Send="Create"/>
+        <Sound value="AP_SiegeBreaker_MorphToTank"/>
+    </CActorSound>
+    <CActorModel id="AP_SiegeTankSiegedTargetImpactFire" parent="ModelAnimationStyleOneShotUNIT">
+        <On Terms="Effect.AP_ArcliteShockCannonSet.Start; At Target" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachTarget"/>
+        <Model value="SiegeTankSiegedAttackDamage"/>
+        <Scale value="1.200000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
 </Catalog>

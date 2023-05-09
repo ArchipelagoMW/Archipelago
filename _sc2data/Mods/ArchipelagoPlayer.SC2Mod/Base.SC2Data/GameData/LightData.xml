@@ -209,4 +209,23 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_SiegeTankMercenaryPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.227451,0.152941,0.156863">
+            <Param index="HDRExposure" value="1.600000"/>
+            <Param index="HDRBloomThreshold" value="1.500000"/>
+            <Param index="HDREmisMultiplier" value="2.000000"/>
+            <Param index="CreepSpecularExp" value="40.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="5.900000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.219608,0.866667,0.956863"/>
+                <ColorMultiplier value="1.318000"/>
+                <SpecularColor value="0.792157,0.956863,0.992157"/>
+                <SpecColorMultiplier value="1.161000"/>
+                <Direction value="-0.828419,0.536134,0.162121"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.000000,0.258824,0.827451" ColorMultiplier="0.902000" Direction="-0.888682,-0.329086,0.319290"/>
+            <DirectionalLight index="Back" Color="0.000000,0.200000,0.768627" ColorMultiplier="1.445000" Direction="0.381720,-0.754369,-0.534057"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>

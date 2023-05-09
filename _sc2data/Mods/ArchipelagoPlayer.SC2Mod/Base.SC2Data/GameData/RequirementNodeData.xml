@@ -618,4 +618,38 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HireSpartanCompanyPH" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementAnd id="AP_AndCountUpgradeHireSiegeBreakersPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+        <OperandArray value="AP_CountUpgradeHireSiegeBreakersPHCompleteOnly"/>
+        <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUnitSiegeBreakerTotalNotCountUnitSiegeBreakerQueuedOrBetter">
+        <OperandArray value="AP_NotCountUnitSiegeBreakerTotal"/>
+        <OperandArray value="AP_NotCountUnitSiegeBreakerQueuedOrBetter"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitSiegeBreakerQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SiegeBreaker" State="QueuedOrBetter"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitSiegeBreakerTotal">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SiegeBreaker" State="Total"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHireSiegeBreakersPHCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HireSiegeBreakersPH" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSiegeTechCompleteOnlyTechTreeCheat">
+        <Tooltip value="RequirementNode/Tooltip/CountUpgradeSiegeTechCompleteOnly1316718431"/>
+        <Count Link="SiegeTech" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSiegeTechQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="SiegeTech" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUnitSiegeBreakerQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUnitSiegeBreakerQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUnitSiegeBreakerTotal">
+        <OperandArray index="0" value="AP_CountUnitSiegeBreakerTotal"/>
+    </CRequirementNot>
 </Catalog>

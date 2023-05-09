@@ -1005,7 +1005,6 @@
         <Model value="Assets\Portraits\Terran\GoliathMercenaryPortrait\GoliathMercenaryPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\GoliathPortrait.fxa"/>
         <Image value="Assets\Textures\GoliathMercenaryPortrait_Static.dds"/>
-        <Lighting value="AP_GoliathMercenaryPortrait"/>
     </CModel>
     <CModel id="AP_SpartanCompany" parent="Unit" Race="Terran">
         <Model value="Assets\Units\Terran\GoliathMercenary\GoliathMercenary.m3"/>
@@ -1094,5 +1093,96 @@
     <CModel id="AP_SpartanCompanyGroundAttackLaunch" parent="LaunchFX">
         <Model value="Assets\Effects\Terran\VikingAssaultWeaponLaunch\VikingAssaultWeaponLaunch.m3"/>
         <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SiegeBreaker" parent="Unit">
+        <Model value="Assets\Units\Terran\TankMercenary\TankMercenary.m3"/>
+        <AttachProps Id="Ref_Hardpoint">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <Radius value="1.050000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="1.250000"/>
+        <ShadowRadius value="1.250000"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.400000"/>
+        <UnitGlossaryCamera value="Star2CameraMid08"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Terran\SiegeTankMercenaryDeath\SiegeTankMercenaryDeath.m3"/>
+        <LowQualityModel value="TerranLargeUnitDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerSieged" parent="Unit">
+        <Model value="Assets\Units\Terran\SiegeTankMercenary\SiegeTankMercenary.m3"/>
+        <AttachProps Id="Ref_Hardpoint">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <Radius value="1.050000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="1.250000"/>
+        <ShadowRadius value="1.250000"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.400000"/>
+        <UnitGlossaryCamera value="Star2CameraMid08"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerSiegedAttackDamage" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\FireImpact\FireImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerSiegedAttackDirectedDamage" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\FireImpact\FireImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerSiegedAttackDirectedImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\SiegeTankWeaponImpact\SiegeTankWeaponImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.750000,0.750000,1.000000"/>
+        <ScaleMin value="0.750000,0.750000,1.000000"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerSiegedAttackDirectedLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\SiegeTankWeaponLaunch\SiegeTankWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerSiegedAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\SiegeTankWeaponImpact\SiegeTankWeaponImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerSiegedAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\SiegeTankWeaponLaunch\SiegeTankWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerSiegedDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Terran\SiegeTankMercenarySiegedDeath\SiegeTankMercenarySiegedDeath.m3"/>
+        <LowQualityModel value="TerranLargeUnitDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_SiegeBreakerSiegedMorph" parent="Unit">
+        <Model value="Assets\Units\Terran\SiegeTankMercenaryMorph\SiegeTankMercenaryMorph.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <Radius value="1.050000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="1.250000"/>
+        <ShadowRadius value="1.250000"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.400000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankMercenaryPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\SiegeTankMercenaryPortrait\SiegeTankMercenaryPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\SiegeTankPortrait.fxa"/>
+        <Image value="Assets\Textures\SiegeTankMercenaryPortrait_Static.dds"/>
+        <Lighting value="AP_SiegeTankMercenaryPortrait"/>
     </CModel>
 </Catalog>
