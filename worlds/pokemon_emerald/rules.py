@@ -330,14 +330,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
 
     # Route 110
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE110/SOUTH -> REGION_ROUTE110/MAIN", player),
-        lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_ROUTE110/MAIN -> REGION_ROUTE110/SOUTH", player),
-        lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player)
-    )
-    set_rule(
         multiworld.get_entrance("REGION_ROUTE110/MAIN -> REGION_ROUTE110/SOUTH_WATER", player),
         can_surf
     )
@@ -353,6 +345,15 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/WEST -> REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/EAST", player),
         lambda state: _can_use_acro_bike(state, player) or _can_use_mach_bike(state, player)
     )
+    if "Route 110 Aqua Grunts" not in get_option_value(multiworld, player, "remove_roadblocks"):
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE110/SOUTH -> REGION_ROUTE110/MAIN", player),
+            lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player)
+        )
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE110/MAIN -> REGION_ROUTE110/SOUTH", player),
+            lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player)
+        )
 
     # Mauville City
     set_rule(
@@ -383,14 +384,15 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
 
     # Route 112
-    set_rule(
-        multiworld.get_entrance("REGION_ROUTE112/SOUTH_EAST -> REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE", player),
-        lambda state: state.has("EVENT_MAGMA_STEALS_METEORITE", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE -> REGION_ROUTE112/SOUTH_EAST", player),
-        lambda state: state.has("EVENT_MAGMA_STEALS_METEORITE", player)
-    )
+    if "Route 112 Magma Grunts" not in get_option_value(multiworld, player, "remove_roadblocks"):
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE112/SOUTH_EAST -> REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE", player),
+            lambda state: state.has("EVENT_MAGMA_STEALS_METEORITE", player)
+        )
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE -> REGION_ROUTE112/SOUTH_EAST", player),
+            lambda state: state.has("EVENT_MAGMA_STEALS_METEORITE", player)
+        )
 
     # Fiery Path
     set_rule(
@@ -544,14 +546,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: _can_use_acro_bike(state, player)
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE119/MIDDLE -> REGION_ROUTE119/UPPER", player),
-        lambda state: state.has("EVENT_DEFEAT_SHELLY", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_ROUTE119/UPPER -> REGION_ROUTE119/MIDDLE", player),
-        lambda state: state.has("EVENT_DEFEAT_SHELLY", player)
-    )
-    set_rule(
         multiworld.get_entrance("REGION_ROUTE119/UPPER -> REGION_ROUTE119/MIDDLE_RIVER", player),
         can_surf
     )
@@ -567,6 +561,15 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE119/ABOVE_WATERFALL -> REGION_ROUTE119/ABOVE_WATERFALL_ACROSS_RAILS", player),
         lambda state: _can_use_acro_bike(state, player)
     )
+    if "Route 119 Aqua Grunts" not in get_option_value(multiworld, player, "remove_roadblocks"):
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE119/MIDDLE -> REGION_ROUTE119/UPPER", player),
+            lambda state: state.has("EVENT_DEFEAT_SHELLY", player)
+        )
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE119/UPPER -> REGION_ROUTE119/MIDDLE", player),
+            lambda state: state.has("EVENT_DEFEAT_SHELLY", player)
+        )
 
     # Fortree City
     set_rule(
@@ -611,10 +614,11 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_NORTHWEST/MAIN", player),
         lambda state: _can_use_mach_bike(state, player)
     )
-    set_rule(
-        multiworld.get_entrance("REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_SOUTHEAST/MAIN", player),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
-    )
+    if "Safari Zone Construction Workers" not in get_option_value(multiworld, player, "remove_roadblocks"):
+        set_rule(
+            multiworld.get_entrance("REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_SOUTHEAST/MAIN", player),
+            lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+        )
 
     # Route 122
     set_rule(
@@ -634,13 +638,14 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         can_surf
     )
     set_rule(
-        multiworld.get_entrance("REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN", player),
-        lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", player)
-    )
-    set_rule(
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
     )
+    if "Lilycove City Wailmer" not in get_option_value(multiworld, player, "remove_roadblocks"):
+        set_rule(
+            multiworld.get_entrance("REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN", player),
+            lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", player)
+        )
 
     # Magma Hideout
     set_rule(
@@ -653,14 +658,15 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
 
     # Aqua Hideout
-    set_rule(
-        multiworld.get_entrance("REGION_AQUA_HIDEOUT_1F/WATER -> REGION_AQUA_HIDEOUT_1F/MAIN", player),
-        lambda state: state.has("EVENT_AQUA_STEALS_SUBMARINE", player)
-    )
-    set_rule(
-        multiworld.get_entrance("REGION_AQUA_HIDEOUT_1F/MAIN -> REGION_AQUA_HIDEOUT_1F/WATER", player),
-        lambda state: can_surf(state) and state.has("EVENT_AQUA_STEALS_SUBMARINE", player)
-    )
+    if "Aqua Hideout Grunts" not in get_option_value(multiworld, player, "remove_roadblocks"):
+        set_rule(
+            multiworld.get_entrance("REGION_AQUA_HIDEOUT_1F/WATER -> REGION_AQUA_HIDEOUT_1F/MAIN", player),
+            lambda state: state.has("EVENT_AQUA_STEALS_SUBMARINE", player)
+        )
+        set_rule(
+            multiworld.get_entrance("REGION_AQUA_HIDEOUT_1F/MAIN -> REGION_AQUA_HIDEOUT_1F/WATER", player),
+            lambda state: can_surf(state) and state.has("EVENT_AQUA_STEALS_SUBMARINE", player)
+        )
 
     # Route 124
     set_rule(
