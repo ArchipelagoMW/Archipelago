@@ -1245,7 +1245,6 @@
     <CModel id="AP_VikingMercenaryFighterPortrait" parent="FXAPortrait" Race="Terran">
         <Model value="Assets\Portraits\Terran\VikingMercenaryFighterPortrait\VikingMercenaryFighterPortrait.m3"/>
         <Image value="Assets\Textures\VikingMercenaryFighterPortrait_Static.dds"/>
-        <Lighting value="AP_VikingMercenaryFighterPortrait"/>
     </CModel>
     <CModel id="AP_WreckingCrewAssaultAttackImpact" parent="ImpactFX">
         <Model value="Assets\Effects\Terran\VikingAssaultWeaponImpact\VikingAssaultWeaponImpact.m3"/>
@@ -1291,5 +1290,41 @@
     <CModel id="AP_VikingMercenaryFighterReentry" parent="FX">
         <Model value="Assets\Effects\Terran\VikingMercenaryFighterReentry\VikingMercenaryFighterReentry.m3"/>
         <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DuskWing" parent="Unit">
+        <Model value="Assets\Units\Terran\BansheeMercenary\BansheeMercenary.m3"/>
+        <AttachProps Id="Ref_Hit 01">
+            <Keys index="Weapon" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Hit 04">
+            <Keys index="Weapon" value="1"/>
+        </AttachProps>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+        <Radius value="0.850000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.500000"/>
+        <SelectionRadius value="0.937500"/>
+        <ShadowRadius value="0.937500"/>
+        <Tipability value="0.650000"/>
+        <UnitGlossaryCamera value="Star2CameraLow07"/>
+    </CModel>
+    <CModel id="AP_DuskWingBansheeDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Terran\BansheeMercenaryDeath\BansheeMercenaryDeath.m3"/>
+        <LowQualityModel value="TerranLargeUnitDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_DuskWingWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\BansheeMissile\BansheeMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_BansheeMercenaryReentry" parent="FX">
+        <Model value="Assets\Effects\Terran\BansheeMercenaryReentry\BansheeMercenaryReentry.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_BansheeMercenaryPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\BansheeMercenaryPortrait\BansheeMercenaryPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\BansheePortrait.fxa"/>
     </CModel>
 </Catalog>

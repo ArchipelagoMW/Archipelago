@@ -262,4 +262,28 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_BansheeMercenaryPortrait" parent="default">
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+        <ToDInfoArray index="0" AmbientColor="0.207843,0.156863,0.227451" Colorize="1">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="HDRSpecMultiplier" value="0.825000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.921569,0.784314,0.647059"/>
+                <ColorMultiplier value="1.202000"/>
+                <SpecularColor value="1.000000,0.992157,1.000000"/>
+                <SpecColorMultiplier value="1.950000"/>
+                <Direction value="0.072856,0.707426,-0.703023"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.509804,0.674510,1.000000" ColorMultiplier="3.589000" Direction="-0.482623,-0.396854,-0.780757"/>
+            <DirectionalLight index="Back" Color="1.000000,0.701961,0.627451" ColorMultiplier="0.442000" Direction="-0.566812,0.526346,0.633786"/>
+        </ToDInfoArray>
+    </CLight>
 </Catalog>

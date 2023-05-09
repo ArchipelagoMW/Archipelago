@@ -3489,4 +3489,90 @@
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
         <TacticalAI value="WreckingCrewFighterWeapon"/>
     </CUnit>
+    <CUnit id="AP_DuskWing">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="175"/>
+        <LifeMax value="175"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranShipPlating"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <Mover value="Fly"/>
+        <Speed value="2.75"/>
+        <Acceleration value="3.25"/>
+        <StationaryTurningRate value="1499.9414"/>
+        <TurningRate value="1499.9414"/>
+        <Sight value="10"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-3"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="175"/>
+        <CostResource index="Vespene" value="100"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_DuskWingBansheeCloakingField"/>
+        <BehaviorArray Link="DistortionBlasters"/>
+        <WeaponArray Link="AP_DuskWingBanshee"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_CloakOnBanshee" Type="AbilCmd" AbilCmd="AP_DuskWingBansheeCloakingField,0" Row="2" Column="0"/>
+            <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_DuskWingBansheeCloakingField,1" Row="2" Column="1"/>
+            <LayoutButtons>
+                <Face value="AP_ShockwaveMissilePattern"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_ClusterWarheadsResearched"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="AP_CrossSpectrumDampeners"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_CrossSpectrumDampenersResearched"/>
+                <Row value="2"/>
+                <Column value="3"/>
+            </LayoutButtons>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
+        <ScoreMake value="350"/>
+        <ScoreKill value="700"/>
+        <SubgroupPriority value="16"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="Banshee"/>
+        <SelectAlias value="Banshee"/>
+        <GlossaryPriority value="221"/>
+        <GlossaryStrongArray value="Ghost"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryWeakArray value="Hydralisk"/>
+        <GlossaryWeakArray value="Phoenix"/>
+        <GlossaryWeakArray value="Marine"/>
+        <AIEvaluateAlias value="Banshee"/>
+    </CUnit>
+    <CUnit id="AP_DuskWingWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="BacklashRocketsLMWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+        <TacticalAI value="DuskWingBansheeWeapon"/>
+    </CUnit>
 </Catalog>

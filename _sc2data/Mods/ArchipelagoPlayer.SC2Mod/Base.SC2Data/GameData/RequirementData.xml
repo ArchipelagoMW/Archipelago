@@ -434,4 +434,8 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_AndNotCountUnitHelsAngelFighterTotalNotCountUnitHelsAngelFighterQueuedOrBetter"/>
     </CRequirement>
+    <CRequirement id="AP_SummonDuskWing">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUnitDuskWingTotalNotCountUnitDuskWingQueuedOrBetter"/>
+    </CRequirement>
 </Catalog>

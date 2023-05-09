@@ -50,12 +50,13 @@ Abil/Name/AP_WidowMineAttack=Widow Mine Attack
 Abil/Name/AP_WidowMineBurrow=Widow Mine Burrow
 Abil/Name/AP_WidowMineUnburrow=Widow Mine Unburrow
 Abil/Name/AP_WraithCloak=Cloaking Field
+Abil/Name/AP_WreckingCrewAssaultMode=Hel's Angels Assault Mode
+Abil/Name/AP_WreckingCrewFighterMode=Hel's Angels Fighter Mode
 Abil/Name/AP_Yamato=Yamato Gun
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_que1=Queue (1)
+Abil/Name/AP_DuskWingBansheeCloakingField=Cloaking Field
 Abil/Name/Stimpack2=Stimpack
-Abil/Name/AP_WreckingCrewAssaultMode=Hel's Angels Assault Mode
-Abil/Name/AP_WreckingCrewFighterMode=Hel's Angels Fighter Mode
 Behavior/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Behavior/Name/AP_330mmBarrageCannons=330mm Barrage Cannon
 Behavior/Name/AP_BansheeCloak=Cloak
@@ -139,6 +140,8 @@ Button/Name/AP_HireDevilDogs=Devil Dogs
 Button/Name/AP_HireDevilDogsPH=Devil Dogs
 Button/Name/AP_HireHammerSecurities=Hammer Securities
 Button/Name/AP_HireHammerSecuritiesPH=Hammer Securities
+Button/Name/AP_HireHelsAngels=Hel's Angels
+Button/Name/AP_HireHelsAngelsPH=Hel's Angels
 Button/Name/AP_HireKelmorianMiners=War Pigs
 Button/Name/AP_HireKelmorianMinersPH=War Pigs
 Button/Name/AP_HireSiegeBreakers=Siege Breakers
@@ -213,8 +216,8 @@ Button/Name/AP_WidowMineUnburrow=Deactivate Mine
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_HireHelsAngels=Hel's Angels
-Button/Name/AP_HireHelsAngelsPH=Hel's Angels
+Button/Name/AP_HireDuskWing=Dusk Wings
+Button/Name/AP_HireDuskWingPH=Dusk Wings
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
@@ -257,6 +260,8 @@ Button/Tooltip/AP_Goliath=Heavy-fire support unit.<n/><n/><c val="#ColorAttackIn
 Button/Tooltip/AP_HammerSecurity=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Heal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_MedivacHeal,RechargeVitalRate*Effect,AP_MedivacHeal,DrainVitalCostFactor"/> life per 1 energy.</c>
 Button/Tooltip/AP_Hellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HelsAngelAssault=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HelsAngelFighter=Durable support flyer. Loaded with strong anti-capital air missiles. Can switch into Assault Mode to attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
 Button/Tooltip/AP_Hercules=Massive transport ship that deploys its cargo almost instantly.
 Button/Tooltip/AP_HerculesLoad=Loads units into the Hercules' hold.
 Button/Tooltip/AP_HerculesUnloadAll=Unloads all units.
@@ -264,6 +269,8 @@ Button/Tooltip/AP_HireDevilDogs=Request 2 Devil Dog Mercenaries.<n/><n/>Veteran 
 Button/Tooltip/AP_HireDevilDogsPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Button/Tooltip/AP_HireHammerSecurities=Request 2 Hammer Securities Mercenaries.<n/><n/>Marauders with superior equipment and training.
 Button/Tooltip/AP_HireHammerSecuritiesPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
+Button/Tooltip/AP_HireHelsAngels=Request 3 Hel's Angels Mercenaries.<n/><n/>Pirate Vikings with exceptional aerial expertise.
+Button/Tooltip/AP_HireHelsAngelsPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Button/Tooltip/AP_HireKelmorianMiners=Request 4 War Pig Mercenaries.<n/><n/>Elite Marines with upgraded equipment.
 Button/Tooltip/AP_HireKelmorianMinersPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Button/Tooltip/AP_HireSiegeBreakers=Request 2 Siege Breaker Mercenaries.<n/><n/>Elite unit of ex-confederate Siege Tanks.
@@ -356,10 +363,9 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_HelsAngelAssault=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_HelsAngelFighter=Durable support flyer. Loaded with strong anti-capital air missiles. Can switch into Assault Mode to attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
-Button/Tooltip/AP_HireHelsAngels=Request 3 Hel's Angels Mercenaries.<n/><n/>Pirate Vikings with exceptional aerial expertise.
-Button/Tooltip/AP_HireHelsAngelsPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
+Button/Tooltip/AP_DuskWing=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HireDuskWing=Request 2 Dusk Wing Mercenaries.<n/><n/>Dominion deserters piloting modified Banshees.
+Button/Tooltip/AP_HireDuskWingPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -656,13 +662,20 @@ Effect/Name/AP_WraithARightLaunchMissile=Hurricane Missiles (Launch Missile)(Rig
 Effect/Name/AP_WraithAU=Hurricane Missiles
 Effect/Name/AP_WraithGLaunchMissile=Hurricane Laser (Launch Missile)
 Effect/Name/AP_WraithGU=Hurricane Laser
-Effect/Name/AP_Yamato=Yamato Cannon (Missile)
-Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
-Effect/Name/AP_heal=Heal
 Effect/Name/AP_WreckingCrewAssault=Twin Gatling Cannon (Damage)
 Effect/Name/AP_WreckingCrewFighter=Halo Rockets (Persistent)
 Effect/Name/AP_WreckingCrewFighterLM=Halo Rockets
 Effect/Name/AP_WreckingCrewFighterU=Halo Rockets (Damage)
+Effect/Name/AP_Yamato=Yamato Cannon (Missile)
+Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
+Effect/Name/AP_heal=Heal
+Effect/Name/AP_DuskWingBansheeCreatePersistent=Screecher Missiles (Create Persistent)
+Effect/Name/AP_DuskWingBansheeDamage=Screecher Missiles (Damage)
+Effect/Name/AP_DuskWingBansheeLaunchMissile=Screecher Missiles (Launch Missile)
+Effect/Name/AP_DuskWingScreecherMissilesCarpetBombDamage=Screecher Missiles (Carpet Bomb Damage)
+Effect/Name/AP_DuskWingScreecherMissilesCarpetBombSearchArea=Screecher Missiles (Carpet Bomb Search Area)
+Effect/Name/AP_DuskWingScreecherMissilesCreateCarpetBombPersistent=Screecher Missiles (Create Carpet Bomb Persistent)
+Effect/Name/AP_DuskWingScreecherMissilesSet=Screecher Missiles (Set)
 UI/AP_SpiderMineBuilding=Constructing
 Unit/Name/AP_ATALaserBatteryLMWeapon=ATA Laser Battery
 Unit/Name/AP_ATSLaserBatteryLMWeapon=ATS Laser Battery
@@ -688,6 +701,9 @@ Unit/Name/AP_GoliathAWeapon=Goliath Air Weapon
 Unit/Name/AP_HammerSecurity=Hammer Securities
 Unit/Name/AP_HammerSecurityLMWeapon=Hammer Securities
 Unit/Name/AP_Hellion=Hellion
+Unit/Name/AP_HelsAngelAssault=Hel's Angel
+Unit/Name/AP_HelsAngelFighter=Hel's Angel
+Unit/Name/AP_HelsAngelFighterWeapon=Hel's Angels (Fighter Weapon)
 Unit/Name/AP_Hercules=Hercules
 Unit/Name/AP_HunterSeekerWeapon=Seeker
 Unit/Name/AP_HurricaneMissileLeft=Hurricane Missile Left
@@ -739,9 +755,8 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_HelsAngelAssault=Hel's Angel
-Unit/Name/AP_HelsAngelFighter=Hel's Angel
-Unit/Name/AP_HelsAngelFighterWeapon=Hel's Angels (Fighter Weapon)
+Unit/Name/AP_DuskWing=Dusk Wings
+Unit/Name/AP_DuskWingWeapon=Dusk Wing
 Upgrade/Name/AP_330mmBarrageCannons=330 mm Barrage Cannons
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Upgrade/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
@@ -782,6 +797,7 @@ Upgrade/Name/AP_HellionCampaignInfernalPreIgniter=Thermite Filaments
 Upgrade/Name/AP_HighCapacityBarrels=Infernal Pre-igniter
 Upgrade/Name/AP_HireDevilDogsPH=Hire Devil Dogs PH
 Upgrade/Name/AP_HireHammerSecuritiesPH=Hire Hammer Securities PH
+Upgrade/Name/AP_HireHelsAngelsPH=Hire Hels Angels PH
 Upgrade/Name/AP_HireKelmorianMinersPH=Hire War Pigs PH
 Upgrade/Name/AP_HireSiegeBreakersPH=Hire Siege Breakers PH
 Upgrade/Name/AP_HireSpartanCompanyPH=Hire Spartan Company PH
@@ -839,7 +855,7 @@ Upgrade/Name/AP_VikingJotunBoosters=Jotun Boosters
 Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
-Upgrade/Name/AP_HireHelsAngelsPH=Hire Hels Angels PH
+Upgrade/Name/AP_HireDuskWingPH=Hire Dusk Wing PH
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
@@ -887,4 +903,5 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
+Weapon/Name/AP_DuskWingBanshee=Screecher Missiles
 Weapon/Tip/AP_D8Charge=Only used against structures.

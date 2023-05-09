@@ -674,4 +674,30 @@
     <CRequirementNot id="AP_NotCountUnitHelsAngelFighterTotal">
         <OperandArray index="0" value="AP_CountUnitHelsAngelFighterTotal"/>
     </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUpgradeHireDuskWingPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+        <OperandArray value="AP_CountUpgradeHireDuskWingPHCompleteOnly"/>
+        <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUnitDuskWingTotalNotCountUnitDuskWingQueuedOrBetter">
+        <OperandArray value="AP_NotCountUnitDuskWingTotal"/>
+        <OperandArray value="AP_NotCountUnitDuskWingQueuedOrBetter"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitDuskWingQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DuskWing" State="QueuedOrBetter"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitDuskWingTotal">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DuskWing" State="Total"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHireDuskWingPHCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HireDuskWingPH" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUnitDuskWingQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUnitDuskWingQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUnitDuskWingTotal">
+        <OperandArray index="0" value="AP_CountUnitDuskWingTotal"/>
+    </CRequirementNot>
 </Catalog>

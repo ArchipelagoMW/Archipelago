@@ -3979,7 +3979,7 @@
         <Flags index="SuppressCreationErrors" value="1"/>
         <On Terms="ActorCreation; ValidateUnit AP_BearclawNozzlesPurchased" Send="SetScale 2.250000,1.800000,1.000000"/>
     </CActorModel>
-    <CActorModel id="AP_DevilDogDropModel" parent="MercDropModelBase">
+    <CActorModel id="AP_DevilDogDropModel" parent="AP_MercDropModelBase">
         <On Terms="ActorCreation" Send="SetScale 0.900000"/>
     </CActorModel>
     <CActorFoliageFXSpawner id="AP_DevilDogFoliageFXSpawner" parent="FoliageFXSpawnerFire">
@@ -4098,7 +4098,7 @@
     <CActorMissile id="AP_SpartanCompanyAirAttackMissile" parent="GenericAttackMissile" unitName="AP_SpartanCompanyAWeapon">
         <Model value="AP_GoliathAWeapon"/>
     </CActorMissile>
-    <CActorModel id="AP_SpartanCompanyDropModel" parent="MercDropModelBase">
+    <CActorModel id="AP_SpartanCompanyDropModel" parent="AP_MercDropModelBase">
         <On Terms="ActorCreation" Send="SetScale 1.300000,1.300000,1.000000"/>
     </CActorModel>
     <CActorAction id="AP_SpartanCompanyGroundAttack" parent="GenericAttack" effectAttack="AP_SpartanCompanyG">
@@ -4303,8 +4303,8 @@
     </CActorUnit>
     <CActorAction id="AP_WreckingCrewAssaultAttack" parent="GenericAttack" effectAttack="AP_WreckingCrewAssault">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
-        <LaunchAssets Model="AP_WreckingCrewAssaultAttackLaunch" Sound="VikingAssault_AttackLaunch"/>
-        <ImpactMap index="None" Model="AP_WreckingCrewAssaultAttackImpact" Sound="Viking_AssaultAttackImpact"/>
+        <LaunchAssets Sound="VikingAssault_AttackLaunch"/>
+        <ImpactMap index="None" Sound="Viking_AssaultAttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
     </CActorAction>
     <CActorSound id="AP_WreckingCrewAssaultMode" parent="SoundOneShot">
@@ -4345,7 +4345,7 @@
         <Macros value="AssaultModeAnim"/>
         <AcceptedTransfers index="Status" value="0"/>
         <On Terms="ActorDestruction; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
-        <On Terms="Behavior.MercAirDropB.Create" Send="Create AP_VikingMercenaryFighterReentry"/>
+        <On Terms="Behavior.AP_MercAirDropB.Create" Send="Create AP_VikingMercenaryFighterReentry"/>
         <HostSiteOps Ops="SOpBankerViking"/>
         <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
         <DeathArray index="Normal" ModelLink="AP_AP_WreckingCrewFighterDeath" SoundLink="Viking_Explode"/>
@@ -4378,9 +4378,6 @@
     </CActorModel>
     <CActorAction id="AP_WreckingCrewFighterAttack" parent="AP_WreckingCrewFighterAttackBase" effectImpact="AP_WreckingCrewFighterU" effectLaunch="AP_WreckingCrewFighterLM">
         <On Terms="Effect.AP_WreckingCrewFighterLM.Start; At Caster; !ValidateEffect AP_HALORocketsResearched" Send="Create"/>
-        <LaunchAssets Model="AP_WreckingCrewFighterAttackLaunch"/>
-        <Missile value="AP_WreckingCrewFighterAttackMissile"/>
-        <ImpactMap index="None" Model="AP_WreckingCrewFighterAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_WreckingCrewFighterAttackMissile">
         <Aliases value="_Unit"/>
@@ -4418,7 +4415,6 @@
             <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-Fighter.dds"/>
         </GroupIcon>
         <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-VikingMercenary-Fighter.dds"/>
-        <HighlightTooltip value="Unit/Name/AP_WreckingCrewFighterMorphModel"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
         <SoundArray index="Ready" value="Viking_Ready"/>
         <SoundArray index="Help" value="Viking_Help"/>
@@ -4433,7 +4429,64 @@
     </CActorUnit>
     <CActorAction id="AP_WreckingCrewFighterUpgradedAttack" parent="AP_WreckingCrewFighterAttackBase" effectImpact="AP_WreckingCrewFighterU" effectLaunch="AP_WreckingCrewFighterLM">
         <On Terms="Effect.AP_WreckingCrewFighterLM.Start; At Caster; ValidateEffect AP_HALORocketsResearched" Send="Create"/>
-        <Missile value="AP_WreckingCrewFighterAttackMissile"/>
         <ImpactMap index="None" Model="VikingFighterRipWaveAttackImpact" Sound="Viking_RipwaveMissileImpact"/>
     </CActorAction>
+    <CActorUnit id="AP_DuskWingBanshee" parent="GenericUnitStandard" unitName="AP_DuskWing">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="Behavior.AP_MercAirDropB.Create" Send="Create AP_BansheeMercenaryReentry"/>
+        <HostSiteOps Ops="SOpBanker"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <DeathArray index="Normal" ModelLink="AP_DuskWingBansheeDeath" SoundLink="Banshee_Explode"/>
+        <PortraitModel value="AP_BansheeMercenaryPortrait"/>
+        <AbilSoundArray AbilCmd="AP_DuskWingBansheeCloakingField,0" Sound="Banshee_CloakOnVO"/>
+        <BarOffset value="60"/>
+        <BarWidth value="90"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-banshee-mercenary.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="BansheeGroupWhat"/>
+        <GroupSoundArray index="Yes" value="BansheeGroupYes"/>
+        <GroupSoundArray index="Attack" value="BansheeGroupAttack"/>
+        <GroupSoundArray index="Board" value="BansheeGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-BansheeMercenary.dds"/>
+        <HighlightTooltip value="Unit/Name/DuskWing"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="60"/>
+        <SoundArray index="Birth" value="BansheeBirth"/>
+        <SoundArray index="Ready" value="Banshee_Ready"/>
+        <SoundArray index="Help" value="Banshee_Help"/>
+        <SoundArray index="What" value="Banshee_What"/>
+        <SoundArray index="Yes" value="Banshee_Yes"/>
+        <SoundArray index="Attack" value="Banshee_Attack"/>
+        <SoundArray index="Pissed" value="Banshee_Pissed"/>
+        <SoundArray index="Movement" value="Banshee_Movement"/>
+        <SoundArray index="Turning" value="BansheeTurning"/>
+        <SoundArray index="Board" value="BansheeBoard"/>
+        <SoundArray index="Click" value="BansheeClick"/>
+        <SoundArray index="ClickError" value="BansheeClickError"/>
+        <SoundArray index="Highlight" value="BansheeHighlight"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-BansheeMercenary.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-banshee-mercenary.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_DuskWingBansheeAttack" parent="GenericAttack" effectImpact="AP_DuskWingBansheeDamage" effectLaunch="AP_DuskWingBansheeLaunchMissile">
+        <LaunchAttachQuery Methods="AP_AMPatternDuskWingBanshee"/>
+        <LaunchAssets Sound="Banshee_AttackLaunch2"/>
+        <Missile value="AP_DuskWingBansheeAttackMissile"/>
+        <ImpactMap index="None" Model="BansheeAttackImpact" Sound="Banshee_AttackImpact2"/>
+    </CActorAction>
+    <CActorMissile id="AP_DuskWingBansheeAttackMissile" parent="GenericAttackMissile" unitName="AP_DuskWingWeapon"/>
+    <CActorModel id="AP_DuskWingBansheeCarpetBombModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_DuskWingScreecherMissilesCarpetBombSearchArea.Start" Send="Create"/>
+        <Model value="AP_BansheeCarpetBombImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_DuskWingBansheeCarpetBombSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_DuskWingScreecherMissilesCarpetBombSearchArea.Start" Send="Create"/>
+        <Sound value="AP_BansheeCarpetBombImpact"/>
+    </CActorSound>
+    <CActorModel id="AP_BansheeMercenaryReentry" parent="ModelAdditionNoAnims">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSDb Birth Stand Death ContentPlayOnce"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSDb" Send="Destroy"/>
+    </CActorModel>
 </Catalog>

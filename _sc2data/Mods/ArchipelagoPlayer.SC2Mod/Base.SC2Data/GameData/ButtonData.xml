@@ -632,4 +632,14 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_HireDuskWing">
+        <Icon value="Assets\Textures\btn-unit-terran-bansheemercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireDuskWingPH">
+        <Icon value="Assets\Textures\btn-unit-terran-bansheemercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

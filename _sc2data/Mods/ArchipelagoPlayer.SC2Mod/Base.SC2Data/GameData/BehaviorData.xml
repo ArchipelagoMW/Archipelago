@@ -699,4 +699,12 @@
             <StateFlags index="IsKiting" value="1"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DuskWingDistortionBlasters">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_IsCloaked"/>
+        <Modification>
+            <DamageDealtFraction index="Ranged" value="1.1"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

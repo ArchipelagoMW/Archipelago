@@ -2367,4 +2367,64 @@
         <ExcludeArray Value="Target"/>
         <SearchFilters value="Air;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
     </CEffectDamage>
+    <CEffectCreatePersistent id="AP_DuskWingBansheeCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="0.8"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_DuskWingBansheeLaunchMissile"/>
+        <PeriodicEffectArray value="AP_DuskWingBansheeLaunchMissile"/>
+        <PeriodicPeriodArray value="0.15"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_DuskWingBansheeDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="18"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_DuskWingBansheeLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_DuskWingScreecherMissilesSet"/>
+        <AmmoUnit value="AP_DuskWingWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_DuskWingScreecherMissilesCarpetBombDamage">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="1"/>
+        <Visibility value="Visible"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="18"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_DuskWingScreecherMissilesCarpetBombSearchArea">
+        <ValidatorArray value="AP_ClusterWarheadsPurchased"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Air,Missile,Stasis,Dead,Hidden,Invulnerable,Benign,Passive"/>
+        <AreaArray Radius="0.5" Effect="AP_DuskWingScreecherMissilesCarpetBombDamage"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_DuskWingScreecherMissilesCreateCarpetBombPersistent">
+        <EditorCategories value="Race:Terran"/>
+        <OffsetVectorStartLocation Value="TargetPoint"/>
+        <OffsetVectorEndLocation Value="CasterPoint"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="AP_DuskWingScreecherMissilesCarpetBombSearchArea"/>
+        <PeriodicOffsetArray value="0,0.5,0"/>
+        <PeriodicOffsetArray value="0,1,0"/>
+        <PeriodicOffsetArray value="0,1.5,0"/>
+        <PeriodicOffsetArray value="0,2,0"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_DuskWingScreecherMissilesSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_DuskWingBansheeDamage"/>
+        <EffectArray value="AP_DuskWingScreecherMissilesCreateCarpetBombPersistent"/>
+    </CEffectSet>
 </Catalog>

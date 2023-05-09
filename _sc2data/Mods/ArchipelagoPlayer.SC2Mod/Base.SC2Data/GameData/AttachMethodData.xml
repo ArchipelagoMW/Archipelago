@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAttachMethodPattern id="AP_AMPatternDuskWingBanshee">
+        <Keyword value="Weapon"/>
+        <Driver value="AP_DuskWingBansheeLaunchMissile"/>
+    </CAttachMethodPattern>
     <CAttachMethodPattern id="AP_AMPatternWreckingCrew">
         <Keyword value="Weapon"/>
         <Driver value="AP_WreckingCrewFighterLM"/>
