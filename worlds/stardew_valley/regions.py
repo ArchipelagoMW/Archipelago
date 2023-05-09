@@ -381,6 +381,15 @@ def randomize_connections(random: Random, world_options: StardewOptions) -> Tupl
     elif world_options[options.EntranceRandomization] == options.EntranceRandomization.option_buildings:
         connections_to_randomize = [connection for connection in mandatory_connections if
                                     RandomizationFlag.BUILDINGS in connection.flag]
+    elif world_options[options.EntranceRandomization] == options.EntranceRandomization.option_chaos:
+        connections_to_randomize = [connection for connection in mandatory_connections if
+                                    RandomizationFlag.BUILDINGS in connection.flag]
+        # On Chaos, we just add the connections to randomize, unshuffled, and the client does it every day
+        randomized_data = {}
+        for connection in connections_to_randomize:
+            randomized_data[connection.name] = connection.name
+            randomized_data[connection.reverse] = connection.reverse
+        return mandatory_connections, randomized_data
     exclude_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
     if exclude_island:
         connections_to_randomize = [connection for connection in connections_to_randomize if
