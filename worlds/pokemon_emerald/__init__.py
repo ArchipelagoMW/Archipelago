@@ -367,7 +367,8 @@ class PokemonEmeraldWorld(World):
                 type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
 
                 for species in self.modified_data.species:
-                    species.types = (type_map[species.types[0]], type_map[species.types[1]])
+                    if species is not None:
+                        species.types = (type_map[species.types[0]], type_map[species.types[1]])
             elif get_option_value(self.multiworld, self.player, "types") == RandomizeTypes.option_completely_random:
                 for species in self.modified_data.species:
                     new_type_1 = get_random_type(random)
