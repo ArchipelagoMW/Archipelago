@@ -116,7 +116,9 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     #     /* 0x10 */ u8 startingBadges;
     #     /* 0x11 */ u8 receivedItemMessageFilter; // 0 = Show All; 1 = Show Progression Only; 2 = Show None
     #     /* 0x12 */ bool8 reusableTms;
-    #     /* 0x13 */ u16 removedBlockers;
+    #     /* 0x14 */ u16 removedBlockers;
+    #     /* 0x13 */ bool8 addRoute115Boulders;
+    #     /* 0x14 */ u16 removedBlockers;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -179,6 +181,10 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     reusable_tms = 1 if get_option_value(multiworld, player, "reusable_tms") == Toggle.option_true else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x12, 1, reusable_tms)
 
+    # Set route 115 boulders
+    route_115_boulders = 1 if get_option_value(multiworld, player, "extra_boulders") == Toggle.option_true else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x13, 1, route_115_boulders)
+
     # Set removed blockers
     list_of_removed_roadblocks = get_option_value(multiworld, player, "remove_roadblocks")
     removed_roadblocks = 0
@@ -188,7 +194,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     removed_roadblocks |= (1 << 3) if "Aqua Hideout Grunts" in list_of_removed_roadblocks else 0
     removed_roadblocks |= (1 << 4) if "Route 119 Aqua Grunts" in list_of_removed_roadblocks else 0
     removed_roadblocks |= (1 << 5) if "Route 112 Magma Grunts" in list_of_removed_roadblocks else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x13, 2, removed_roadblocks)
+    _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks)
 
     # Write Output
     outfile_player_name = f"_P{player}"

@@ -391,7 +391,7 @@ class BetterShops(Toggle):
 
 class RemoveRoadblocks(OptionSet):
     """
-    Pokemarts sell every item that can be obtained in a pokemart (except mail, which is still unique to the relevant city)
+    Removes specific NPCs that normally stand in your way until certain events are completed. This can open up the world a bit and make your playthrough less linear.
     """
     display_name = "Remove Roadblocks"
     valid_keys = frozenset([
@@ -402,6 +402,13 @@ class RemoveRoadblocks(OptionSet):
         "Lilycove City Wailmer",
         "Aqua Hideout Grunts"
     ])
+
+
+class ExtraBoulders(Toggle):
+    """
+    Places strength boulders on Route 115 which block access to Meteor Falls from the beach. This aims to take some power away from Surf as a tool for access.
+    """
+    display_name = "Extra Boulders"
 
 
 class FlyWithoutBadge(Toggle):
@@ -481,6 +488,7 @@ option_definitions: Dict[str, Option] = {
   "double_battle_chance": DoubleBattleChance,
   "better_shops": BetterShops,
   "remove_roadblocks": RemoveRoadblocks,
+  "extra_boulders": ExtraBoulders,
   "fly_without_badge": FlyWithoutBadge,
   "turbo_a": TurboA,
   "receive_item_messages": ReceiveItemMessages,

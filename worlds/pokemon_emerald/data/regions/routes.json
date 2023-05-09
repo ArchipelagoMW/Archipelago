@@ -742,17 +742,28 @@
     ],
     "warps": []
   },
-  "REGION_ROUTE115/SOUTH_ABOVE_LEDGE": {
+  "REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE": {
     "parent_map": "MAP_ROUTE115",
     "locations": [
-      "ITEM_ROUTE_115_PP_UP",
       "HIDDEN_ITEM_ROUTE_115_HEART_SCALE"
     ],
     "events": [],
     "exits": [
-      "REGION_ROUTE115/SOUTH_BELOW_LEDGE",
-      "REGION_ROUTE115/SOUTH_BEHIND_ROCK",
+      "REGION_ROUTE115/SOUTH_ABOVE_LEDGE",
       "REGION_ROUTE115/SEA"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE115/SOUTH_ABOVE_LEDGE": {
+    "parent_map": "MAP_ROUTE115",
+    "locations": [
+      "ITEM_ROUTE_115_PP_UP"
+    ],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE",
+      "REGION_ROUTE115/SOUTH_BELOW_LEDGE",
+      "REGION_ROUTE115/SOUTH_BEHIND_ROCK"
     ],
     "warps": [
       "MAP_ROUTE115:0/MAP_METEOR_FALLS_1F_1R:1"
@@ -799,7 +810,7 @@
     "events": [],
     "exits": [
       "REGION_ROUTE115/SOUTH_BELOW_LEDGE",
-      "REGION_ROUTE115/SOUTH_ABOVE_LEDGE",
+      "REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE",
       "REGION_ROUTE115/NORTH_BELOW_SLOPE"
     ],
     "warps": []

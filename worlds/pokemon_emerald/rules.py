@@ -5,7 +5,7 @@ from BaseClasses import CollectionState, MultiWorld
 
 from worlds.generic.Rules import add_rule, set_rule
 
-from .options import EliteFourRequirement, NormanRequirement, get_option_value
+from .options import EliteFourRequirement, NormanRequirement, ExtraBoulders, get_option_value
 from .util import location_name_to_label
 
 
@@ -229,7 +229,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         can_surf
     )
     set_rule(
-        multiworld.get_entrance("REGION_ROUTE115/SOUTH_ABOVE_LEDGE -> REGION_ROUTE115/SEA", player),
+        multiworld.get_entrance("REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE -> REGION_ROUTE115/SEA", player),
         can_surf
     )
     set_rule(
@@ -244,6 +244,15 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE", player),
         lambda state: _can_use_mach_bike(state, player)
     )
+    if get_option_value(multiworld, player, "extra_boulders") == ExtraBoulders.option_true:
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE", player),
+            can_strength
+        )
+        set_rule(
+            multiworld.get_entrance("REGION_ROUTE115/SOUTH_ABOVE_LEDGE -> REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE", player),
+            can_strength
+        )
 
     # Route 105
     set_rule(
