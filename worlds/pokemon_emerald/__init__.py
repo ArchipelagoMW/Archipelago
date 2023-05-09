@@ -136,9 +136,9 @@ class PokemonEmeraldWorld(World):
         if bikes_option == Toggle.option_false:
             filter_tags.add("Bike")
 
-        if badges_option in [RandomizeBadges.option_vanilla]:
+        if badges_option in [RandomizeBadges.option_vanilla, RandomizeBadges.option_shuffle]:
             filter_tags.add("Badge")
-        if hms_option in [RandomizeHms.option_vanilla]:
+        if hms_option in [RandomizeHms.option_vanilla, RandomizeHms.option_shuffle]:
             filter_tags.add("HM")
 
         if badges_option == RandomizeBadges.option_shuffle:
@@ -250,29 +250,46 @@ class PokemonEmeraldWorld(World):
             convert_unrandomized_items_to_events("KeyItem")
 
 
+    def get_pre_fill_items(self):
+        pre_fill_items = []
+        if self.badge_shuffle_info is not None:
+            pre_fill_items += [item for _, item in self.badge_shuffle_info]
+
+        if self.hm_shuffle_info is not None:
+            pre_fill_items += [item for _, item in self.hm_shuffle_info]
+
+        return pre_fill_items
+
+
     def pre_fill(self):
         # Items which are shuffled between their own locations
         badges_option = get_option_value(self.multiworld, self.player, "badges")
         if badges_option == RandomizeBadges.option_shuffle:
-            badge_locations = [location for location, item in self.badge_shuffle_info]
-            badge_items = [item for location, item in self.badge_shuffle_info]
+            badge_locations = [location for location, _ in self.badge_shuffle_info]
+            badge_items = [item for _, item in self.badge_shuffle_info]
 
+            collection_state = self.multiworld.get_all_state(False)
             for item in badge_items:
-                self.multiworld.itempool.remove(item)
+                collection_state.remove(item)
 
+            self.multiworld.random.shuffle(badge_locations)
             self.multiworld.random.shuffle(badge_items)
-            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), badge_locations, badge_items, True, True)
+
+            fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items, True, True)
 
         hms_option = get_option_value(self.multiworld, self.player, "hms")
         if hms_option == RandomizeBadges.option_shuffle:
             hm_locations = [location for location, item in self.hm_shuffle_info]
             hm_items = [item for location, item in self.hm_shuffle_info]
 
+            collection_state = self.multiworld.get_all_state(False)
             for item in hm_items:
-                self.multiworld.itempool.remove(item)
+                collection_state.remove(item)
 
+            self.multiworld.random.shuffle(hm_locations)
             self.multiworld.random.shuffle(hm_items)
-            fill_restrictive(self.multiworld, self.multiworld.get_all_state(False), hm_locations, hm_items, True, True)
+
+            fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items, True, True)
 
 
     def post_fill(self):
