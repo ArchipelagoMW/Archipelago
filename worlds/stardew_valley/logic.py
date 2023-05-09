@@ -620,6 +620,8 @@ class StardewLogic:
         return self.has_lived_months(min(8, amount // MONEY_PER_MONTH))
 
     def can_spend_money(self, amount: int) -> StardewRule:
+        if self.options[options.StartingMoney] == -1:
+            return True_()
         return self.has_lived_months(min(8, amount // (MONEY_PER_MONTH // 5)))
 
     def has_tool(self, tool: str, material: str = "Basic") -> StardewRule:

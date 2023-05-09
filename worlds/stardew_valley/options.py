@@ -86,6 +86,25 @@ class StartingMoney(SpecialRange):
     }
 
 
+class ProfitMargin(SpecialRange):
+    """Multiplier over all gold earned in-game by the player."""
+    internal_name = "profit_margin"
+    display_name = "Profit Margin"
+    range_start = 25
+    range_end = 400
+    # step = 25
+    default = 100
+
+    special_range_names = {
+        "quarter": 25,
+        "half": 50,
+        "normal": 100,
+        "double": 200,
+        "triple": 300,
+        "quadruple": 400,
+    }
+
+
 class BundleRandomization(Choice):
     """What items are needed for the community center bundles?
     Vanilla: Standard bundles from the vanilla game
@@ -120,8 +139,8 @@ class EntranceRandomization(Choice):
     Pelican Town: Only buildings in the main town area are randomized among each other
     Non Progression: Only buildings that are always available are randomized with each other
     Buildings: All Entrances that Allow you to enter a building using a door are randomized with each other
+    Chaos: Same as above, but the entrances get reshuffled every single day!
     """
-    # Buildings: All buildings in the world are randomized with each other
     # Everything: All buildings and areas are randomized with each other
     # Chaos, same as everything: but the buildings are shuffled again every in-game day. You can't learn it!
     # Buildings One-way: Entrance pairs are disconnected, they aren't two-way!
@@ -136,10 +155,10 @@ class EntranceRandomization(Choice):
     option_non_progression = 2
     option_buildings = 3
     # option_everything = 4
-    # option_chaos = 4
-    # option_buildings_one_way = 5
-    # option_everything_one_way = 6
-    # option_chaos_one_way = 7
+    option_chaos = 5
+    # option_buildings_one_way = 6
+    # option_everything_one_way = 7
+    # option_chaos_one_way = 8
 
 
 class SeasonRandomization(Choice):
@@ -514,6 +533,7 @@ class GiftTax(SpecialRange):
 stardew_valley_option_classes = [
     Goal,
     StartingMoney,
+    ProfitMargin,
     BundleRandomization,
     BundlePrice,
     EntranceRandomization,
