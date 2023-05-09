@@ -70,22 +70,16 @@ class LingoPlayerLogic:
                     self.add_location(room_name, PlayerLocation(itemloc_name, None, door_data.panels))
                     self.EVENT_LOC_TO_ITEM[itemloc_name] = itemloc_name
                     self.set_door_item(room_name, door_name, itemloc_name)
-        elif get_option_value(world, player, "shuffle_doors") == 1:  # simple doors
+        else:  # door shuffle
             for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
                 for door_name, door_data in room_data.items():
                     # This line is duplicated from StaticLingoItems
                     if door_data.skip_item is False and door_data.event is False:
-                        if door_data.group is not None:
+                        if door_data.group is not None and get_option_value(world, player, "shuffle_doors") == 1:
+                            # Grouped doors are handled differently if shuffle doors is on simple.
                             self.set_door_item(room_name, door_name, door_data.group)
                         else:
                             self.handle_non_grouped_door(room_name, door_data, world, player, static_logic)
-
-        elif get_option_value(world, player, "shuffle_doors") == 2:  # complex doors
-            for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
-                for door_name, door_data in room_data.items():
-                    # This line is duplicated from StaticLingoItems
-                    if door_data.skip_item is False and door_data.event is False:
-                        self.handle_non_grouped_door(room_name, door_data, world, player, static_logic)
 
         for room_name, room_data in StaticLingoLogic.DOORS_BY_ROOM.items():
             for door_name, door_data in room_data.items():

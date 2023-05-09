@@ -72,3 +72,18 @@ class TestRequiredDoorLogic(LingoTestBase):
 
         self.collect_by_name("Hidden Room - Rhyme Room Entrance")
         assert self.multiworld.state.can_reach("Rhyme Room - Circle/Looped Square Wall", "Location", self.player)
+
+
+class TestSimpleDoors(LingoTestBase):
+    options = {
+        "shuffle_doors": "simple"
+    }
+
+    def test_requirement(self):
+        assert not self.multiworld.state.can_reach("Outside The Wanderer", "Region", self.player)
+        assert not self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player)
+
+        self.collect_by_name("Rhyme Room Doors")
+        assert self.multiworld.state.can_reach("Outside The Wanderer", "Region", self.player)
+        assert self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player)
+
