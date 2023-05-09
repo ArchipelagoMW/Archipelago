@@ -1,7 +1,7 @@
 """
 Option definitions for Pokemon Emerald
 """
-from typing import Dict, List, Union
+from typing import Dict, List, Set, Union
 
 from BaseClasses import MultiWorld
 from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle, FreeText
@@ -389,6 +389,21 @@ class BetterShops(Toggle):
     display_name = "Better Shops"
 
 
+class RemoveRoadblocks(OptionSet):
+    """
+    Pokemarts sell every item that can be obtained in a pokemart (except mail, which is still unique to the relevant city)
+    """
+    display_name = "Remove Roadblocks"
+    valid_keys = frozenset([
+        "Route 110 Aqua Grunts",
+        "Route 112 Magma Grunts",
+        "Route 119 Aqua Grunts",
+        "Safari Zone Construction Workers",
+        "Lilycove City Wailmer",
+        "Aqua Hideout Grunts"
+    ])
+
+
 class FlyWithoutBadge(Toggle):
     """
     Fly does not require the Feather Badge to use in the field
@@ -465,6 +480,7 @@ option_definitions: Dict[str, Option] = {
   "blind_trainers": BlindTrainers,
   "double_battle_chance": DoubleBattleChance,
   "better_shops": BetterShops,
+  "remove_roadblocks": RemoveRoadblocks,
   "fly_without_badge": FlyWithoutBadge,
   "turbo_a": TurboA,
   "receive_item_messages": ReceiveItemMessages,
@@ -473,7 +489,7 @@ option_definitions: Dict[str, Option] = {
 }
 
 
-def get_option_value(multiworld: MultiWorld, player: int, option_name: str) -> Union[int, str, Dict, List]:
+def get_option_value(multiworld: MultiWorld, player: int, option_name: str) -> Union[int, str, Dict, List, Set]:
     """
     Returns the option value for a player in a multiworld
     """

@@ -608,7 +608,7 @@ class PokemonEmeraldWorld(World):
         if get_option_value(self.multiworld, self.player, "level_up_moves") != LevelUpMoves.option_vanilla:
             randomize_learnsets()
 
-        randomize_tm_hm_compatibility()
+        randomize_tm_hm_compatibility() # Options are checked within this function
 
         min_catch_rate = min(get_option_value(self.multiworld, self.player, "min_catch_rate"), 255)
         for species in self.modified_data.species:

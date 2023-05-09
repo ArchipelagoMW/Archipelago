@@ -116,6 +116,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     #     /* 0x10 */ u8 startingBadges;
     #     /* 0x11 */ u8 receivedItemMessageFilter; // 0 = Show All; 1 = Show Progression Only; 2 = Show None
     #     /* 0x12 */ bool8 reusableTms;
+    #     /* 0x13 */ u16 removedBlockers;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -174,9 +175,20 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     receive_item_messages_type = get_option_value(multiworld, player, "receive_item_messages")
     _set_bytes_little_endian(patched_rom, options_address + 0x11, 1, receive_item_messages_type)
 
-    # Set better shops
+    # Set reusable TMs
     reusable_tms = 1 if get_option_value(multiworld, player, "reusable_tms") == Toggle.option_true else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x12, 1, reusable_tms)
+
+    # Set removed blockers
+    list_of_removed_roadblocks = get_option_value(multiworld, player, "remove_roadblocks")
+    removed_roadblocks = 0
+    removed_roadblocks |= (1 << 0) if "Safari Zone Construction Workers" in list_of_removed_roadblocks else 0
+    removed_roadblocks |= (1 << 1) if "Lilycove City Wailmer" in list_of_removed_roadblocks else 0
+    removed_roadblocks |= (1 << 2) if "Route 110 Aqua Grunts" in list_of_removed_roadblocks else 0
+    removed_roadblocks |= (1 << 3) if "Aqua Hideout Grunts" in list_of_removed_roadblocks else 0
+    removed_roadblocks |= (1 << 4) if "Route 119 Aqua Grunts" in list_of_removed_roadblocks else 0
+    removed_roadblocks |= (1 << 5) if "Route 112 Magma Grunts" in list_of_removed_roadblocks else 0
+    _set_bytes_little_endian(patched_rom, options_address + 0x13, 2, removed_roadblocks)
 
     # Write Output
     outfile_player_name = f"_P{player}"
