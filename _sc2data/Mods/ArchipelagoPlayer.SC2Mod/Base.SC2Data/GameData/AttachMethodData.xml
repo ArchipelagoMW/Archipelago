@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAttachMethodPattern id="AP_AMPatternWreckingCrew">
+        <Keyword value="Weapon"/>
+        <Driver value="AP_WreckingCrewFighterLM"/>
+    </CAttachMethodPattern>
     <CAttachMethodPattern id="AP_AMPatternSpartanCompany">
         <Keyword value="SetB"/>
         <Base value="::RollingIndex"/>

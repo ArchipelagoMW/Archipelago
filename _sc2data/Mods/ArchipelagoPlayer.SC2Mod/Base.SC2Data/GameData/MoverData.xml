@@ -409,4 +409,41 @@
             <RevolverAccelRange value="337.5"/>
         </MotionOverlays>
     </CMoverMissile>
+    <CMoverMissile id="AP_WreckingCrewFighterMissile">
+        <PathMode value="Flying"/>
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Speed value="2"/>
+            <MaxSpeed value="2"/>
+            <Outro value="0.5,0.6"/>
+            <Timeout value="10"/>
+            <ThrowVector value="0,-1,0"/>
+            <YawPitchRoll value="506.25"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Speed value="2"/>
+            <MaxSpeed value="2"/>
+            <Gravity value="30"/>
+            <Outro value="0.625,0.75"/>
+            <Timeout value="10"/>
+            <ThrowVector value="0,-1,0"/>
+            <YawPitchRoll value="506.25"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="56"/>
+            <Speed value="2"/>
+            <MaxSpeed value="28"/>
+            <Outro value="2,2.5"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <MaxSpeed value="28"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="5568.75"/>
+        </MotionPhases>
+    </CMoverMissile>
 </Catalog>

@@ -1183,6 +1183,113 @@
         <Model value="Assets\Portraits\Terran\SiegeTankMercenaryPortrait\SiegeTankMercenaryPortrait.m3"/>
         <FacialController value="LocalizedData\Facial\SiegeTankPortrait.fxa"/>
         <Image value="Assets\Textures\SiegeTankMercenaryPortrait_Static.dds"/>
-        <Lighting value="AP_SiegeTankMercenaryPortrait"/>
+    </CModel>
+    <CModel id="AP_HelsAngelAssault" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\VikingMercenaryAssault\VikingMercenaryAssault.m3"/>
+        <AttachProps Id="Ref_Weapon Left">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Right">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 02">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 03">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 04">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 05">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 06">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 07">
+            <Keys index="SetA" value="2"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SelectionRadius value="0.764400"/>
+        <ShadowRadius value="0.764400"/>
+        <UnitGlossaryCamera value="Star2CameraMid07"/>
+    </CModel>
+    <CModel id="AP_HelsAngelFighter" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\VikingMercenaryFighter\VikingMercenaryFighter.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow07"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.600000"/>
+        <SelectionRadius value="0.764400"/>
+        <ShadowRadius value="0.764400"/>
+        <TechPurchaseCamera value="Star2CameraLow07"/>
+        <UnitGlossaryCamera value="Star2CameraLow07"/>
+    </CModel>
+    <CModel id="AP_VikingMercenaryAssaultPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\VikingMercenaryAssaultPortrait\VikingMercenaryAssaultPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\VikingAssaultPortrait.fxa"/>
+        <Image value="Assets\Textures\VikingMercenaryAssaultPortrait_Static.dds"/>
+    </CModel>
+    <CModel id="AP_VikingMercenaryFighterPortrait" parent="FXAPortrait" Race="Terran">
+        <Model value="Assets\Portraits\Terran\VikingMercenaryFighterPortrait\VikingMercenaryFighterPortrait.m3"/>
+        <Image value="Assets\Textures\VikingMercenaryFighterPortrait_Static.dds"/>
+        <Lighting value="AP_VikingMercenaryFighterPortrait"/>
+    </CModel>
+    <CModel id="AP_WreckingCrewAssaultAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\VikingAssaultWeaponImpact\VikingAssaultWeaponImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WreckingCrewAssaultAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\VikingAssaultWeaponLaunch\VikingAssaultWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WreckingCrewAssaultDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\VikingMercenaryAssaultDeath\VikingMercenaryAssaultDeath.m3"/>
+        <LowQualityModel value="TerranLargeUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_WreckingCrewFighterAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\VikingFighterMissileImpact\VikingFighterMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WreckingCrewFighterAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\VikingFighterMissileLaunch\VikingFighterMissileLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WreckingCrewFighterDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\VikingMercenaryFighterDeath\VikingMercenaryFighterDeath.m3"/>
+        <LowQualityModel value="TerranLargeUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <VariationCount value="2"/>
+    </CModel>
+    <CModel id="AP_WreckingCrewFighterWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\VikingFighterMissile\VikingFighterMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_WreckingCrewMorph" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\VikingMercenaryMorph\VikingMercenaryMorph.m3"/>
+        <Occlusion value="Show"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.600000"/>
+        <SelectionRadius value="0.764400"/>
+        <ShadowRadius value="0.764400"/>
+    </CModel>
+    <CModel id="AP_VikingMercenaryFighterReentry" parent="FX">
+        <Model value="Assets\Effects\Terran\VikingMercenaryFighterReentry\VikingMercenaryFighterReentry.m3"/>
+        <EditorCategories value="Race:Terran"/>
     </CModel>
 </Catalog>

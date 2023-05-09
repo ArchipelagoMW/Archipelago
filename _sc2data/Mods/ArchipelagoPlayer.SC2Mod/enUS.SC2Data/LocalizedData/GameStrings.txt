@@ -28,6 +28,8 @@ Abil/Name/AP_Obliterate=Obliterate
 Abil/Name/AP_PlacePointDefenseDrone=Place Point Defense Drone
 Abil/Name/AP_RogueGhostCloak=Cloak
 Abil/Name/AP_SeekerMissile=Seeker Missile
+Abil/Name/AP_SiegeBreakerSiege=Siege
+Abil/Name/AP_SiegeBreakerUnsiege=Unsiege
 Abil/Name/AP_SiegeMode=Siege
 Abil/Name/AP_Snipe=Sniper
 Abil/Name/AP_SpectreHoldFire=Hold Fire
@@ -51,9 +53,9 @@ Abil/Name/AP_WraithCloak=Cloaking Field
 Abil/Name/AP_Yamato=Yamato Gun
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_que1=Queue (1)
-Abil/Name/AP_SiegeBreakerSiege=Siege
-Abil/Name/AP_SiegeBreakerUnsiege=Unsiege
 Abil/Name/Stimpack2=Stimpack
+Abil/Name/AP_WreckingCrewAssaultMode=Hel's Angels Assault Mode
+Abil/Name/AP_WreckingCrewFighterMode=Hel's Angels Fighter Mode
 Behavior/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Behavior/Name/AP_330mmBarrageCannons=330mm Barrage Cannon
 Behavior/Name/AP_BansheeCloak=Cloak
@@ -139,6 +141,8 @@ Button/Name/AP_HireHammerSecurities=Hammer Securities
 Button/Name/AP_HireHammerSecuritiesPH=Hammer Securities
 Button/Name/AP_HireKelmorianMiners=War Pigs
 Button/Name/AP_HireKelmorianMinersPH=War Pigs
+Button/Name/AP_HireSiegeBreakers=Siege Breakers
+Button/Name/AP_HireSiegeBreakersPH=Siege Breakers
 Button/Name/AP_HireSpartanCompany=Spartan Company
 Button/Name/AP_HireSpartanCompanyPH=Spartan Company
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
@@ -209,8 +213,8 @@ Button/Name/AP_WidowMineUnburrow=Deactivate Mine
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_HireSiegeBreakers=Siege Breakers
-Button/Name/AP_HireSiegeBreakersPH=Siege Breakers
+Button/Name/AP_HireHelsAngels=Hel's Angels
+Button/Name/AP_HireHelsAngelsPH=Hel's Angels
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
@@ -262,6 +266,8 @@ Button/Tooltip/AP_HireHammerSecurities=Request 2 Hammer Securities Mercenaries.<
 Button/Tooltip/AP_HireHammerSecuritiesPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Button/Tooltip/AP_HireKelmorianMiners=Request 4 War Pig Mercenaries.<n/><n/>Elite Marines with upgraded equipment.
 Button/Tooltip/AP_HireKelmorianMinersPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
+Button/Tooltip/AP_HireSiegeBreakers=Request 2 Siege Breaker Mercenaries.<n/><n/>Elite unit of ex-confederate Siege Tanks.
+Button/Tooltip/AP_HireSiegeBreakersPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Button/Tooltip/AP_HireSpartanCompany=Request 2 Spartan Company Mercenaries.<n/><n/>UED veterans using advanced Goliath prototypes.
 Button/Tooltip/AP_HireSpartanCompanyPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
@@ -309,6 +315,8 @@ Button/Tooltip/AP_ScienceVessel=Aerial support unit. Can use Irradiate and Nano-
 Button/Tooltip/AP_ShapedBlast=Shock Cannon damage to friendly units reduced by 75%.
 Button/Tooltip/AP_ShapedHull=Increases Diamondback life by 50.
 Button/Tooltip/AP_ShockwaveMissilePattern=Banshee attack fires multiple missile bursts in a straight line.
+Button/Tooltip/AP_SiegeBreaker=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_SiegeBreakerSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeProtocol=Concord Cannon can attack structures
 Button/Tooltip/AP_SiegeTank=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeTankSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -348,10 +356,10 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_HireSiegeBreakers=Request 2 Siege Breaker Mercenaries.<n/><n/>Elite unit of ex-confederate Siege Tanks.
-Button/Tooltip/AP_HireSiegeBreakersPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
-Button/Tooltip/AP_SiegeBreaker=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_SiegeBreakerSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HelsAngelAssault=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HelsAngelFighter=Durable support flyer. Loaded with strong anti-capital air missiles. Can switch into Assault Mode to attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
+Button/Tooltip/AP_HireHelsAngels=Request 3 Hel's Angels Mercenaries.<n/><n/>Pirate Vikings with exceptional aerial expertise.
+Button/Tooltip/AP_HireHelsAngelsPH=<c val="ff4040">Contract required. Visit the Cantina on the Hyperion to purchase.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -367,8 +375,13 @@ Effect/Name/AP_ATALaserBatteryLM=ATA Laser Battery
 Effect/Name/AP_ATALaserBatteryU=ATA Laser Battery
 Effect/Name/AP_ATSLaserBatteryLM=ATS Laser Battery
 Effect/Name/AP_ATSLaserBatteryU=ATS Laser Battery
+Effect/Name/AP_ArcliteShockCannonBlast=Arclite Shock Cannon Blast
+Effect/Name/AP_ArcliteShockCannonBlastSet=Arclite Shock Cannon Blast Set
+Effect/Name/AP_ArcliteShockCannonDirected=Arclite Shock Cannon Directed
+Effect/Name/AP_ArcliteShockCannonDummy=Arclite Shock Cannon Dummy
 Effect/Name/AP_ArcliteShockCannonEnemyDamage=Arclite Shock Cannon (Enemy Damage)
 Effect/Name/AP_ArcliteShockCannonFriendlyDamage=Arclite Shock Cannon (Friendly Damage)
+Effect/Name/AP_ArcliteShockCannonSet=Arclite Shock Cannon Set
 Effect/Name/AP_AutoTurretRelease=Auto Turret Release
 Effect/Name/AP_AutoTurretReleaseLM=Auto Turret Release
 Effect/Name/AP_AutoTurretReleaseLaunch=Auto Turret Release Launch
@@ -583,6 +596,7 @@ Effect/Name/AP_ScreecherMissilesCreateCarpetBombPersistent=Screecher Missiles (C
 Effect/Name/AP_ScreecherMissilesSet=Screecher Missiles (Set)
 Effect/Name/AP_SeekerMissileDamage=Seeker (Damage)
 Effect/Name/AP_SeekerMissileLaunchMissile=Seeker (Launch Missile)
+Effect/Name/AP_SiegeBreakerDamage=Arclite Cannon (Damage)
 Effect/Name/AP_SnipeDamage=Snipe (Damage)
 Effect/Name/AP_SpartanCompanyA=Spartan Company A
 Effect/Name/AP_SpartanCompanyALM=Spartan Company ALM
@@ -645,14 +659,10 @@ Effect/Name/AP_WraithGU=Hurricane Laser
 Effect/Name/AP_Yamato=Yamato Cannon (Missile)
 Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
-Effect/Name/AP_ArcliteShockCannonBlast=Arclite Shock Cannon Blast
-Effect/Name/AP_ArcliteShockCannonBlastSet=Arclite Shock Cannon Blast Set
-Effect/Name/AP_ArcliteShockCannonDirected=Arclite Shock Cannon Directed
-Effect/Name/AP_ArcliteShockCannonDummy=Arclite Shock Cannon Dummy
-Effect/Name/AP_ArcliteShockCannonEnemyDamage=Arclite Shock Cannon (Enemy Damage)
-Effect/Name/AP_ArcliteShockCannonFriendlyDamage=Arclite Shock Cannon (Friendly Damage)
-Effect/Name/AP_ArcliteShockCannonSet=Arclite Shock Cannon Set
-Effect/Name/AP_SiegeBreakerDamage=Arclite Cannon (Damage)
+Effect/Name/AP_WreckingCrewAssault=Twin Gatling Cannon (Damage)
+Effect/Name/AP_WreckingCrewFighter=Halo Rockets (Persistent)
+Effect/Name/AP_WreckingCrewFighterLM=Halo Rockets
+Effect/Name/AP_WreckingCrewFighterU=Halo Rockets (Damage)
 UI/AP_SpiderMineBuilding=Constructing
 Unit/Name/AP_ATALaserBatteryLMWeapon=ATA Laser Battery
 Unit/Name/AP_ATSLaserBatteryLMWeapon=ATS Laser Battery
@@ -698,6 +708,8 @@ Unit/Name/AP_PunisherGrenadesLMWeapon=Punisher Grenades
 Unit/Name/AP_Raven=Raven
 Unit/Name/AP_Reaper=Reaper
 Unit/Name/AP_ScienceVessel=Science Vessel
+Unit/Name/AP_SiegeBreaker=Siege Breaker
+Unit/Name/AP_SiegeBreakerSieged=Siege Breaker
 Unit/Name/AP_SiegeTank=Siege Tank
 Unit/Name/AP_SiegeTankSieged=Siege Tank
 Unit/Name/AP_SpartanCompany=Spartan Company
@@ -727,8 +739,9 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_SiegeBreaker=Siege Breaker
-Unit/Name/AP_SiegeBreakerSieged=Siege Breaker
+Unit/Name/AP_HelsAngelAssault=Hel's Angel
+Unit/Name/AP_HelsAngelFighter=Hel's Angel
+Unit/Name/AP_HelsAngelFighterWeapon=Hel's Angels (Fighter Weapon)
 Upgrade/Name/AP_330mmBarrageCannons=330 mm Barrage Cannons
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Upgrade/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
@@ -770,6 +783,7 @@ Upgrade/Name/AP_HighCapacityBarrels=Infernal Pre-igniter
 Upgrade/Name/AP_HireDevilDogsPH=Hire Devil Dogs PH
 Upgrade/Name/AP_HireHammerSecuritiesPH=Hire Hammer Securities PH
 Upgrade/Name/AP_HireKelmorianMinersPH=Hire War Pigs PH
+Upgrade/Name/AP_HireSiegeBreakersPH=Hire Siege Breakers PH
 Upgrade/Name/AP_HireSpartanCompanyPH=Hire Spartan Company PH
 Upgrade/Name/AP_HunterSeeker=Seeker Missile
 Upgrade/Name/AP_HurricaneMissiles=Missile Pods
@@ -825,10 +839,11 @@ Upgrade/Name/AP_VikingJotunBoosters=Jotun Boosters
 Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
-Upgrade/Name/AP_HireSiegeBreakersPH=Hire Siege Breakers PH
+Upgrade/Name/AP_HireHelsAngelsPH=Hire Hels Angels PH
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
+Weapon/Name/AP_ArcliteShockCannon=Arclite Shock Cannon
 Weapon/Name/AP_AutoTurret=12mm Gauss Cannon
 Weapon/Name/AP_BacklashRockets=Backlash Rockets
 Weapon/Name/AP_C10CanisterRifle=C-10 Canister Rifle
@@ -854,6 +869,7 @@ Weapon/Name/AP_LiberatorMissileLaunchers=Lexington Rockets
 Weapon/Name/AP_P38ScytheGuassPistol=P-45 Gauss Pistol
 Weapon/Name/AP_Predator=Titanium Claws
 Weapon/Name/AP_PunisherGrenades=Punisher Grenades
+Weapon/Name/AP_SiegeBreaker=90mm Cannons
 Weapon/Name/AP_SpartanCompanyA=Lanzer Torpedoes
 Weapon/Name/AP_SpartanCompanyAUpgraded=Lanzer Torpedoes
 Weapon/Name/AP_SpartanCompanyG=Gatling Cannon
@@ -869,6 +885,6 @@ Weapon/Name/AP_VultureSpiderMines=Spider Mines
 Weapon/Name/AP_WidowMineDummy=Detonate
 Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
-Weapon/Name/AP_ArcliteShockCannon=Arclite Shock Cannon
-Weapon/Name/AP_SiegeBreaker=90mm Cannons
+Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
+Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
 Weapon/Tip/AP_D8Charge=Only used against structures.

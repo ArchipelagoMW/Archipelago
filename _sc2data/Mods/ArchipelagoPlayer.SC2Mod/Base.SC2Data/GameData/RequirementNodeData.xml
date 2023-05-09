@@ -638,10 +638,6 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HireSiegeBreakersPH" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
-    <CRequirementCountUpgrade id="AP_CountUpgradeSiegeTechCompleteOnlyTechTreeCheat">
-        <Tooltip value="RequirementNode/Tooltip/CountUpgradeSiegeTechCompleteOnly1316718431"/>
-        <Count Link="SiegeTech" State="CompleteOnly"/>
-    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeSiegeTechQueuedOrBetter">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="SiegeTech" State="QueuedOrBetter"/>
@@ -651,5 +647,31 @@
     </CRequirementNot>
     <CRequirementNot id="AP_NotCountUnitSiegeBreakerTotal">
         <OperandArray index="0" value="AP_CountUnitSiegeBreakerTotal"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUpgradeHireHelsAngelsPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+        <OperandArray value="AP_CountUpgradeHireHelsAngelsPHCompleteOnly"/>
+        <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUnitHelsAngelFighterTotalNotCountUnitHelsAngelFighterQueuedOrBetter">
+        <OperandArray value="AP_NotCountUnitHelsAngelFighterTotal"/>
+        <OperandArray value="AP_NotCountUnitHelsAngelFighterQueuedOrBetter"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitHelsAngelFighterQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HelsAngelFighter" State="QueuedOrBetter"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitHelsAngelFighterTotal">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HelsAngelFighter" State="Total"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHireHelsAngelsPHCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HireHelsAngelsPH" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUnitHelsAngelFighterQueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUnitHelsAngelFighterQueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUnitHelsAngelFighterTotal">
+        <OperandArray index="0" value="AP_CountUnitHelsAngelFighterTotal"/>
     </CRequirementNot>
 </Catalog>

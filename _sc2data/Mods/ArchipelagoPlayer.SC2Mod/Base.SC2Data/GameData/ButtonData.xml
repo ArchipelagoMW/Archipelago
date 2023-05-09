@@ -622,4 +622,14 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_HireHelsAngels">
+        <Icon value="Assets\Textures\btn-unit-terran-vikingmercenary-fighter.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireHelsAngelsPH">
+        <Icon value="Assets\Textures\btn-unit-terran-vikingmercenary-fighter.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

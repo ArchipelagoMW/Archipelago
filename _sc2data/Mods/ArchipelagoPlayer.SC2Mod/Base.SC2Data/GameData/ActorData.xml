@@ -37,6 +37,13 @@
         <ImpactMap index="None" Model="MarauderBaseAttackImpact" Sound="Marauder_AttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
     </CActorAction>
+    <CActorAction default="1" id="AP_WreckingCrewFighterAttackBase" parent="GenericAttackNoCreateBase">
+        <Missile value="AP_WreckingCrewFighterAttackMissile"/>
+        <LaunchAssets Sound="VikingFighter_AttackLaunch"/>
+        <LaunchAttachQuery Methods="AMFilterVikingFighter AP_AMPatternWreckingCrew"/>
+        <ImpactMap index="None" Sound="VikingFighter_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
     <CActorModel id="AP_250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
@@ -4124,12 +4131,6 @@
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <NameOffset value="50"/>
         <SoundArray index="Birth" value="SiegeTankBirth"/>
-        <SoundArray index="Ready" value="AP_SiegeBreaker_Ready"/>
-        <SoundArray index="Help" value="AP_SiegeBreaker_Help"/>
-        <SoundArray index="What" value="AP_SiegeBreaker_What"/>
-        <SoundArray index="Yes" value="AP_SiegeBreaker_Yes"/>
-        <SoundArray index="Attack" value="AP_SiegeBreaker_Attack"/>
-        <SoundArray index="Pissed" value="AP_SiegeBreaker_Pissed"/>
         <SoundArray index="Movement" value="SiegeTankMovement"/>
         <SoundArray index="Turning" value="SiegeTankTurning"/>
         <SoundArray index="Board" value="SiegeTankBoard"/>
@@ -4164,7 +4165,6 @@
             <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-siegemode.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-siegetanksiegemode.dds"/>
-        <HighlightTooltip value="Unit/Name/AP_SiegeBreakerSiegeModeMorphModel"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <NameOffset value="50"/>
         <SoundArray index="Ready" value="SiegeTank_Ready"/>
@@ -4219,18 +4219,16 @@
     <CActorAction id="AP_SiegeBreakerSiegedAttack" parent="GenericAttack" effectAttack="AP_ArcliteShockCannonBlast">
         <On Terms="Effect.AP_ArcliteShockCannonFriendlyDamage.Start; At Caster" Send="Create"/>
         <On Terms="Effect.AP_ArcliteShockCannonEnemyDamage.Start; At Caster" Send="Create"/>
-        <LaunchAssets Model="AP_SiegeBreakerSiegedAttackLaunch" Sound="SiegeTank_SiegedAttackLaunch"/>
+        <LaunchAssets Sound="SiegeTank_SiegedAttackLaunch"/>
         <ImpactSiteOps Ops="SOpActionCenter SOpTargetUnitZ" HoldPosition="1"/>
-        <ImpactMap index="None" Model="AP_SiegeBreakerSiegedAttackImpact" Sound="SiegeTank_SiegedAttackImpact"/>
+        <ImpactMap index="None" Sound="SiegeTank_SiegedAttackImpact"/>
         <DamageSiteOps Ops="SOpAttachHarness"/>
-        <DamageMap index="None" Model="AP_SiegeBreakerSiegedAttackDamage"/>
         <ShieldFlashType value="Full"/>
     </CActorAction>
     <CActorAction id="AP_SiegeBreakerSiegedAttackDirected" parent="GenericAttack" effectAttack="AP_ArcliteShockCannonDirected">
-        <LaunchAssets Model="AP_SiegeBreakerSiegedAttackDirectedLaunch" Sound="SiegeTank_SiegedAttackLaunch"/>
+        <LaunchAssets Sound="SiegeTank_SiegedAttackLaunch"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
-        <ImpactMap index="None" Model="AP_SiegeBreakerSiegedAttackDirectedImpact" Sound="SiegeTank_SiegedAttackImpact"/>
-        <DamageMap index="None" Model="AP_SiegeBreakerSiegedAttackDirectedDamage"/>
+        <ImpactMap index="None" Sound="SiegeTank_SiegedAttackImpact"/>
         <ShieldFlashType value="Header"/>
     </CActorAction>
     <CActorRange id="AP_SiegeBreakerSiegedRange">
@@ -4258,7 +4256,6 @@
             <Image value="AP\Assets\Textures\Wireframe-Terran-siegetank-mercenary-tankmode.dds"/>
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
-        <HighlightTooltip value="Unit/Name/AP_SiegeBreakerTankModeMorphModel"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
         <NameOffset value="50"/>
         <SoundArray index="Ready" value="SiegeTank_Ready"/>
@@ -4276,12 +4273,167 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreaker" Send="Create"/>
         <Sound value="AP_SiegeBreaker_MorphToTank"/>
     </CActorSound>
-    <CActorModel id="AP_SiegeTankSiegedTargetImpactFire" parent="ModelAnimationStyleOneShotUNIT">
-        <On Terms="Effect.AP_ArcliteShockCannonSet.Start; At Target" Send="Create"/>
-        <Host Subject="_Unit"/>
-        <HostSiteOps Ops="SOpAttachTarget"/>
-        <Model value="SiegeTankSiegedAttackDamage"/>
-        <Scale value="1.200000"/>
-        <ModelFlags index="AllowHitTest" value="0"/>
+    <CActorUnit id="AP_WreckingCrewAssault" parent="GenericUnitMorph" unitName="AP_HelsAngelAssault">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HelsAngelAssault" Target="FlyerHelperSplat" Send="Destroy"/>
+        <DeathArray index="Normal" ModelLink="AP_WreckingCrewAssaultDeath" SoundLink="Viking_Explode"/>
+        <DeathArray index="Blast" AnimProps="Death,Blast" ModelLink="AP_WreckingCrewAssaultDeath"/>
+        <PortraitModel value="AP_VikingMercenaryFighterPortrait"/>
+        <WalkAnimMoveSpeed value="2.5468"/>
+        <AbilSoundArray AbilCmd="AP_FighterMode,Execute" Sound="Viking_FighterModeVO"/>
+        <BarOffset value="70"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-assault.dds"/>
+        </GroupIcon>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-VikingMercenary-Assault.dds"/>
+        <HighlightTooltip value="Unit/Name/HelsAngelAssault"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-VikingMercenary-Assault.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-assault.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_WreckingCrewAssaultAttack" parent="GenericAttack" effectAttack="AP_WreckingCrewAssault">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
+        <LaunchAssets Model="AP_WreckingCrewAssaultAttackLaunch" Sound="VikingAssault_AttackLaunch"/>
+        <ImpactMap index="None" Model="AP_WreckingCrewAssaultAttackImpact" Sound="Viking_AssaultAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorSound id="AP_WreckingCrewAssaultMode" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelAssault" Send="Create"/>
+        <Sound value="Viking_MorphToAssault"/>
+    </CActorSound>
+    <CActorUnit id="AP_WreckingCrewAssaultMorphModel" parent="GenericUnitBaseMorphTransition" unitName="WreckingCrewAssaultMorphModel">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelAssault" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelAssault" Send="AnimPlay Start Morph,Start PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_HelsAngelAssault" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_HelsAngelFighter" Send="Destroy"/>
+        <Model value="AP_WreckingCrewMorph"/>
+        <DeathArray index="Normal" ModelLink="AP_WreckingCrewFighterDeath"/>
+        <PortraitModel value="AP_VikingMercenaryFighterPortrait"/>
+        <AbilSoundArray AbilCmd="AP_FighterMode,Execute" Sound="Viking_FighterModeVO"/>
+        <BarOffset value="70"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-assault.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_WreckingCrewAssaultMorphModel"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingassault.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-Assault.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_WreckingCrewFighter" parent="GenericUnitMorph" unitName="AP_HelsAngelFighter">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="AssaultModeAnim"/>
+        <AcceptedTransfers index="Status" value="0"/>
+        <On Terms="ActorDestruction; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On Terms="Behavior.MercAirDropB.Create" Send="Create AP_VikingMercenaryFighterReentry"/>
+        <HostSiteOps Ops="SOpBankerViking"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <DeathArray index="Normal" ModelLink="AP_AP_WreckingCrewFighterDeath" SoundLink="Viking_Explode"/>
+        <PortraitModel value="AP_VikingMercenaryFighterPortrait"/>
+        <AbilSoundArray AbilCmd="AssaultMode,Execute" Sound="Viking_AssaultModeVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-fighter.dds"/>
+        </GroupIcon>
+        <HeroIcon value="AP\Assets\Textures\BTN-Unit-Terran-VikingMercenary-Fighter.dds"/>
+        <HighlightTooltip value="Unit/Name/HelsAngelFighter"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <NameOffset value="50"/>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <SoundArray index="Movement" value="Viking_FighterMovement"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-VikingMercenary-Fighter.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-fighter.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_VikingMercenaryFighterReentry" parent="ModelAdditionNoAnims">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSDb Birth Stand Death ContentPlayOnce"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSDb" Send="Destroy"/>
     </CActorModel>
+    <CActorAction id="AP_WreckingCrewFighterAttack" parent="AP_WreckingCrewFighterAttackBase" effectImpact="AP_WreckingCrewFighterU" effectLaunch="AP_WreckingCrewFighterLM">
+        <On Terms="Effect.AP_WreckingCrewFighterLM.Start; At Caster; !ValidateEffect AP_HALORocketsResearched" Send="Create"/>
+        <LaunchAssets Model="AP_WreckingCrewFighterAttackLaunch"/>
+        <Missile value="AP_WreckingCrewFighterAttackMissile"/>
+        <ImpactMap index="None" Model="AP_WreckingCrewFighterAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_WreckingCrewFighterAttackMissile">
+        <Aliases value="_Unit"/>
+        <Aliases value="_Missile"/>
+        <On Terms="UnitBirth.AP_HelsAngelFighterWeapon" Send="Create"/>
+        <On Terms="UnitBirth" Send="$Birth PlayForever,NonLooping"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Birth"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay Turbo Turbo PlayForever"/>
+        <On Terms="MotionPhaseStart; MotionPhase 3" Send="AnimClear Turbo"/>
+        <On Terms="MotionPhaseStart; MotionPhase 3" Send="$Stand PlayForever"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Model value="AP_WreckingCrewFighterWeapon"/>
+        <BarHeight value="1"/>
+        <BarWidth value="1"/>
+        <PreHost value="_ActorAction"/>
+    </CActorMissile>
+    <CActorSound id="AP_WreckingCrewFighterMode" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter" Send="Create"/>
+        <Sound value="Viking_MorphToFighter"/>
+    </CActorSound>
+    <CActorUnit id="AP_WreckingCrewFighterMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_WreckingCrewFighterMorphModel">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter" Send="AnimPlay End Morph,End PlayForever,NonLooping"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_HelsAngelFighter" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_HelsAngelAssault" Send="Destroy"/>
+        <Model value="AP_WreckingCrewMorph"/>
+        <DeathArray index="Normal" ModelLink="AP_WreckingCrewFighterDeath"/>
+        <PortraitModel value="AP_VikingMercenaryFighterPortrait"/>
+        <AbilSoundArray AbilCmd="AssaultMode,Execute" Sound="Viking_AssaultModeVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-Fighter.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_WreckingCrewFighterMorphModel"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Viking_Ready"/>
+        <SoundArray index="Help" value="Viking_Help"/>
+        <SoundArray index="What" value="Viking_What"/>
+        <SoundArray index="Yes" value="Viking_Yes"/>
+        <SoundArray index="Attack" value="Viking_Attack"/>
+        <SoundArray index="Pissed" value="Viking_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Viking-mercenary-Fighter.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_WreckingCrewFighterUpgradedAttack" parent="AP_WreckingCrewFighterAttackBase" effectImpact="AP_WreckingCrewFighterU" effectLaunch="AP_WreckingCrewFighterLM">
+        <On Terms="Effect.AP_WreckingCrewFighterLM.Start; At Caster; ValidateEffect AP_HALORocketsResearched" Send="Create"/>
+        <Missile value="AP_WreckingCrewFighterAttackMissile"/>
+        <ImpactMap index="None" Model="VikingFighterRipWaveAttackImpact" Sound="Viking_RipwaveMissileImpact"/>
+    </CActorAction>
 </Catalog>

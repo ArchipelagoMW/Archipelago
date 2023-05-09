@@ -228,4 +228,38 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
+    <CLight id="AP_VikingMercenaryAssaultPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.113725,0.000000,0.094118">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDRSpecMultiplier" value="1.088000"/>
+            <Param index="HDREmisMultiplier" value="2.540000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.956863,0.827451,0.647059"/>
+                <ColorMultiplier value="0.700000"/>
+                <SpecColorMultiplier value="3.890000"/>
+                <Direction value="0.194905,0.194905,-0.961262"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" ColorMultiplier="0.569000" Direction="-0.314456,0.917928,-0.241922"/>
+            <DirectionalLight index="Back" Color="0.439216,0.070588,0.003922" ColorMultiplier="0.500000" Direction="-0.738852,0.475064,-0.477925"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
+    <CLight id="AP_VikingMercenaryFighterPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.113725,0.000000,0.094118">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDRSpecMultiplier" value="1.088000"/>
+            <Param index="HDREmisMultiplier" value="2.540000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.956863,0.827451,0.647059"/>
+                <ColorMultiplier value="0.700000"/>
+                <SpecColorMultiplier value="3.890000"/>
+                <Direction value="0.194905,0.194905,-0.961262"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" ColorMultiplier="0.569000" Direction="-0.314456,0.917928,-0.241922"/>
+            <DirectionalLight index="Back" Color="0.439216,0.070588,0.003922" ColorMultiplier="0.500000" Direction="-0.738852,0.475064,-0.477925"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
+    </CLight>
 </Catalog>

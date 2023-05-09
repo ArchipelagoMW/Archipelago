@@ -2336,4 +2336,35 @@
         <SearchFlags index="CallForHelp" value="1"/>
         <SearchFlags index="OffsetByUnitRadius" value="1"/>
     </CEffectDamage>
+    <CEffectDamage id="AP_WreckingCrewAssault" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="18"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_WreckingCrewFighter">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_WreckingCrewFighterLM"/>
+        <PeriodicEffectArray value="AP_WreckingCrewFighterLM"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.21"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_WreckingCrewFighterLM">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_WreckingCrewFighterU"/>
+        <AmmoUnit value="AP_HelsAngelFighterWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_WreckingCrewFighterU" parent="DU_WEAP_SPLASH">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Armored" value="6"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="14"/>
+        <AreaArray Radius="0.3" Fraction="1" Validator="AP_HALORocketsResearched"/>
+        <AreaArray Radius="0.6" Fraction="0.5" Validator="AP_HALORocketsResearched"/>
+        <AreaArray Radius="1.2" Fraction="0.25" Validator="AP_HALORocketsResearched"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Air;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
 </Catalog>
