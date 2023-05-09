@@ -88,6 +88,26 @@ item_table = {
     #Filler
     "Empty": ItemData(SHIVERS_ITEM_ID_OFFSET + 90, "filler"),
     "Easier Lyre": ItemData(SHIVERS_ITEM_ID_OFFSET + 91, "filler", ItemClassification.filler),
-    "Filler Item": ItemData(SHIVERS_ITEM_ID_OFFSET + 92, "filler2", ItemClassification.filler)
+    "Water Always Available in Lobby": ItemData(SHIVERS_ITEM_ID_OFFSET + 92, "filler2", ItemClassification.filler),
+    "Wax Always Available in Library": ItemData(SHIVERS_ITEM_ID_OFFSET + 93, "filler2", ItemClassification.filler),
+    "Wax Always Available in Anansi Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 94, "filler2", ItemClassification.filler),
+    "Wax Always Available in Tiki Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 95, "filler2", ItemClassification.filler),
+    "Ash Always Availalbe in Office": ItemData(SHIVERS_ITEM_ID_OFFSET + 96, "filler2", ItemClassification.filler),
+    "Ash Always Available in Burial Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 97, "filler2", ItemClassification.filler),
+    "Oil Always Available in Prehistoric Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 98, "filler2", ItemClassification.filler),
+    "Cloth Always Available in Egypt": ItemData(SHIVERS_ITEM_ID_OFFSET + 99, "filler2", ItemClassification.filler),
+    "Cloth Always Available in Burial Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 100, "filler2", ItemClassification.filler),
+    "Wood Always Available in Workshop": ItemData(SHIVERS_ITEM_ID_OFFSET + 101, "filler2", ItemClassification.filler),
+    "Wood Always Available in Blue Maze": ItemData(SHIVERS_ITEM_ID_OFFSET + 102, "filler2", ItemClassification.filler),
+    "Wood Always Available in Pegasus Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 103, "filler2", ItemClassification.filler),
+    "Wood Always Available in Gods Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 104, "filler2", ItemClassification.filler),
+    "Crystal Always Available in Lobby": ItemData(SHIVERS_ITEM_ID_OFFSET + 105, "filler2", ItemClassification.filler),
+    "Crystal Always Available in Ocean": ItemData(SHIVERS_ITEM_ID_OFFSET + 106, "filler2", ItemClassification.filler),
+    "Sand Always Available in Plants Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 107, "filler2", ItemClassification.filler),
+    "Sand Always Available in Ocean": ItemData(SHIVERS_ITEM_ID_OFFSET + 108, "filler2", ItemClassification.filler),
+    "Metal Always Available in Projector Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 109, "filler2", ItemClassification.filler),
+    "Metal Always Available in Bedroom": ItemData(SHIVERS_ITEM_ID_OFFSET + 110, "filler2", ItemClassification.filler),
+    "Metal Always Available in Prehistoric": ItemData(SHIVERS_ITEM_ID_OFFSET + 111, "filler2", ItemClassification.filler),
+    "Filler Item": ItemData(SHIVERS_ITEM_ID_OFFSET + 112, "filler3", ItemClassification.filler)
 
 }

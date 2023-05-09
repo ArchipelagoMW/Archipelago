@@ -84,8 +84,7 @@ class ShiversWorld(World):
         #Add Filler
         filler = []
         filler += [self.create_item("Easier Lyre") for i in range(9)]
-        filler += [self.create_item("Filler Item") for i in range(5)]
-        filler += [self.create_item("Filler Item") for i in range(15)]
+        filler += [self.create_item(name) for name, data in item_table.items() if data.type == 'filler2']
 
         self.multiworld.itempool += pots
         self.multiworld.itempool += keys
