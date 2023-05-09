@@ -657,7 +657,7 @@ class PokemonEmeraldWorld(World):
         slot_data = self._get_pokemon_emerald_data()
         for option_name in option_definitions:
             option = getattr(self.multiworld, option_name)[self.player]
-            if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
+            if slot_data.get(option_name, None) is None and type(option.value) in {int}:
                 slot_data[option_name] = int(option.value)
         return slot_data
 
