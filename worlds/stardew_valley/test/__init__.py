@@ -73,7 +73,7 @@ def setup_solo_multiworld(test_options=None, seed=None,
     multiworld.game[1] = StardewValleyWorld.game
     multiworld.player_name = {1: "Tester"}
     multiworld.set_seed(seed)
-    print(f"Seed: {multiworld.seed}")
+    # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
     args = Namespace()
     for name, option in StardewValleyWorld.option_definitions.items():
         value = option(test_options[name]) if name in test_options else option.from_any(option.default)
