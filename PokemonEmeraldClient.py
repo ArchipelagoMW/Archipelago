@@ -13,6 +13,7 @@ from Utils import async_start, init_logging, get_options
 
 from worlds.pokemon_emerald.data import data, config
 from worlds.pokemon_emerald.rom import PokemonEmeraldDeltaPatch
+from worlds.pokemon_emerald.options import Goal
 
 
 GBA_SOCKET_PORT = 43053
@@ -24,8 +25,8 @@ CONNECTION_STATUS_TENTATIVE = "Initial connection made"
 CONNECTION_STATUS_CONNECTED = "Connected"
 CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
 
-GAME_CLEAR_FLAG = data.constants["FLAG_IS_CHAMPION"]
-DEFEATED_STEVEN_FLAG = 2084
+IS_CHAMPION_FLAG = data.constants["FLAG_IS_CHAMPION"]
+DEFEATED_STEVEN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_STEVEN"]
 
 
 class GBACommandProcessor(ClientCommandProcessor):
@@ -43,6 +44,7 @@ class GBAContext(CommonContext):
     gba_status: Optional[str]
     gba_push_pull_task: Optional[asyncio.Task]
     local_checked_locations: Set[int]
+    goal_flag: int = IS_CHAMPION_FLAG
 
     def __init__(self, server_address: Optional[str], password: Optional[str]):
         super().__init__(server_address, password)
@@ -66,6 +68,15 @@ class GBAContext(CommonContext):
         self.ui = GBAManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    def on_package(self, cmd, args):
+        if cmd == 'Connected':
+            slot_data = args.get('slot_data', None)
+            if slot_data is not None:
+                if slot_data.goal == Goal.option_champion:
+                    self.goal_flag = IS_CHAMPION_FLAG
+                elif slot_data.goal == Goal.option_steven:
+                    self.goal_flag = DEFEATED_STEVEN_FLAG
+
 
 def create_payload(ctx: GBAContext):
     payload = json.dumps({
@@ -88,7 +99,7 @@ async def handle_read_data(gba_data, ctx: GBAContext):
                     location_id = flag_id + config["ap_offset"]
                     if location_id in ctx.server_locations:
                         local_checked_locations.add(location_id)
-                    if flag_id == GAME_CLEAR_FLAG:
+                    if flag_id == ctx.goal_flag:
                         game_clear = True
 
 

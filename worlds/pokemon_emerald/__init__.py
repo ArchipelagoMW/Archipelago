@@ -256,7 +256,6 @@ class PokemonEmeraldWorld(World):
                 location.place_locked_item(self.create_event(fly_location_name))
                 break
 
-
         # Key items which are considered in access rules but not randomized are converted to events and placed
         # in their vanilla locations so that the player can have them in their inventory for logic.
         def convert_unrandomized_items_to_events(tag: str):
