@@ -81,6 +81,10 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         lambda state: state.has("EVENT_VISITED_OLDALE_TOWN", player)
     )
     set_rule(
+        multiworld.get_entrance("REGION_SKY -> REGION_PETALBURG_CITY/MAIN", player),
+        lambda state: state.has("EVENT_VISITED_PETALBURG_CITY", player)
+    )
+    set_rule(
         multiworld.get_entrance("REGION_SKY -> REGION_RUSTBORO_CITY/MAIN", player),
         lambda state: state.has("EVENT_VISITED_RUSTBORO_CITY", player)
     )

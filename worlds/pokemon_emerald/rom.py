@@ -27,6 +27,28 @@ class PokemonEmeraldDeltaPatch(APDeltaPatch):
         return get_base_rom_as_bytes()
 
 
+_visited_event_to_id_map = {
+    "EVENT_VISITED_LITTLEROOT_TOWN": 0,
+    "EVENT_VISITED_OLDALE_TOWN": 1,
+    "EVENT_VISITED_PETALBURG_CITY": 2,
+    "EVENT_VISITED_RUSTBORO_CITY": 3,
+    "EVENT_VISITED_DEWFORD_TOWN": 4,
+    "EVENT_VISITED_SLATEPORT_CITY": 5,
+    "EVENT_VISITED_MAUVILLE_CITY": 6,
+    "EVENT_VISITED_VERDANTURF_TOWN": 7,
+    "EVENT_VISITED_FALLARBOR_TOWN": 8,
+    "EVENT_VISITED_LAVARIDGE_TOWN": 9,
+    "EVENT_VISITED_FORTREE_CITY": 10,
+    "EVENT_VISITED_LILYCOVE_CITY": 11,
+    "EVENT_VISITED_MOSSDEEP_CITY": 12,
+    "EVENT_VISITED_SOOTOPOLIS_CITY": 13,
+    "EVENT_VISITED_PACIFIDLOG_TOWN": 14,
+    "EVENT_VISITED_EVER_GRANDE_CITY": 15,
+    "EVENT_VISITED_BATTLE_FRONTIER": 16,
+    "EVENT_VISITED_SOUTHERN_ISLAND": 17
+}
+
+
 def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, player: int, output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     with open(os.path.join(os.path.dirname(__file__), "data/base_patch.bsdiff4"), "rb") as stream:
@@ -35,7 +57,15 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
 
     # Set item values
     for location in multiworld.get_locations(player):
+        # Set free fly location
         if location.is_event:
+            if multiworld.free_fly_location[player].value == Toggle.option_true and location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
+                _set_bytes_little_endian(
+                    patched_rom,
+                    data.rom_addresses["gArchipelagoOptions"] + 0x16,
+                    1,
+                    _visited_event_to_id_map[location.item.name]
+                )
             continue
 
         if location.item and location.item.player == player:
@@ -119,6 +149,8 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     #     /* 0x14 */ u16 removedBlockers;
     #     /* 0x13 */ bool8 addRoute115Boulders;
     #     /* 0x14 */ u16 removedBlockers;
+    #     /* 0x14 */ u16 removedBlockers;
+    #     /* 0x16 */ u8 freeFlyLocation;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 

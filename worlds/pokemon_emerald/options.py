@@ -411,6 +411,13 @@ class ExtraBoulders(Toggle):
     display_name = "Extra Boulders"
 
 
+class FreeFlyLocation(Toggle):
+    """
+    Enables flying to one random location from the start of the game (excluding cities reachable with no items)
+    """
+    display_name = "Free Fly Location"
+
+
 class FlyWithoutBadge(Toggle):
     """
     Fly does not require the Feather Badge to use in the field
@@ -489,6 +496,7 @@ option_definitions: Dict[str, Option] = {
   "better_shops": BetterShops,
   "remove_roadblocks": RemoveRoadblocks,
   "extra_boulders": ExtraBoulders,
+  "free_fly_location": FreeFlyLocation,
   "fly_without_badge": FlyWithoutBadge,
   "turbo_a": TurboA,
   "receive_item_messages": ReceiveItemMessages,

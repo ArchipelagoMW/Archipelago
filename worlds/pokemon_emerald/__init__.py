@@ -229,6 +229,30 @@ class PokemonEmeraldWorld(World):
 
         locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
 
+        # If we have free fly location enabled, replace the Littleroot town "visited" event
+        # with our free fly location (Littleroot town will always be accessible from Menu anyway).
+        # Only chooses from locations not accessible in sphere 1
+        if self.multiworld.free_fly_location[self.player].value == Toggle.option_true:
+            fly_locations = [
+                "EVENT_VISITED_SLATEPORT_CITY",
+                "EVENT_VISITED_MAUVILLE_CITY",
+                "EVENT_VISITED_VERDANTURF_TOWN",
+                "EVENT_VISITED_FALLARBOR_TOWN",
+                "EVENT_VISITED_LAVARIDGE_TOWN",
+                "EVENT_VISITED_FORTREE_CITY",
+                "EVENT_VISITED_LILYCOVE_CITY",
+                "EVENT_VISITED_MOSSDEEP_CITY",
+                "EVENT_VISITED_SOOTOPOLIS_CITY",
+                "EVENT_VISITED_EVER_GRANDE_CITY"
+            ]
+            for location in locations:
+                if location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
+                    location.locked = False
+                    location.item = None
+                    location.place_locked_item(self.create_event(self.multiworld.random.choice(fly_locations)))
+                    break
+
+
         # Key items which are considered in access rules but not randomized are converted to events and placed
         # in their vanilla locations so that the player can have them in their inventory for logic.
         def convert_unrandomized_items_to_events(tag: str):
@@ -279,8 +303,8 @@ class PokemonEmeraldWorld(World):
 
         hms_option = get_option_value(self.multiworld, self.player, "hms")
         if hms_option == RandomizeBadges.option_shuffle:
-            hm_locations = [location for location, item in self.hm_shuffle_info]
-            hm_items = [item for location, item in self.hm_shuffle_info]
+            hm_locations = [location for location, _ in self.hm_shuffle_info]
+            hm_items = [item for _, item in self.hm_shuffle_info]
 
             collection_state = self.multiworld.get_all_state(False)
             for item in hm_items:
