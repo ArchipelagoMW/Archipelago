@@ -230,11 +230,11 @@ class PokemonEmeraldWorld(World):
 
         locations: List[PokemonEmeraldLocation] = self.multiworld.get_locations(self.player)
 
-        # If we have free fly location enabled, replace the Littleroot town "visited" event
-        # with our free fly location (Littleroot town will always be accessible from Menu anyway).
-        # Only chooses from locations not accessible in sphere 1
+        # Set our free fly location
+        # If not enabled, set it to Littleroot Town by default
+        fly_location_name = "EVENT_VISITED_LITTLEROOT_TOWN"
         if self.multiworld.free_fly_location[self.player].value == Toggle.option_true:
-            fly_locations = [
+            fly_location_name = self.multiworld.random.choice([
                 "EVENT_VISITED_SLATEPORT_CITY",
                 "EVENT_VISITED_MAUVILLE_CITY",
                 "EVENT_VISITED_VERDANTURF_TOWN",
@@ -245,16 +245,16 @@ class PokemonEmeraldWorld(World):
                 "EVENT_VISITED_MOSSDEEP_CITY",
                 "EVENT_VISITED_SOOTOPOLIS_CITY",
                 "EVENT_VISITED_EVER_GRANDE_CITY"
-            ]
-            for location in locations:
-                if location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
-                    fly_location_name = self.multiworld.random.choice(fly_locations)
-                    self.free_fly_location_id = location_visited_event_to_id_map[fly_location_name]
+            ])
 
-                    location.locked = False
-                    location.item = None
-                    location.place_locked_item(self.create_event(fly_location_name))
-                    break
+        for location in locations:
+            if location.name == "FREE_FLY_LOCATION":
+                self.free_fly_location_id = location_visited_event_to_id_map[fly_location_name]
+
+                location.locked = False
+                location.item = None
+                location.place_locked_item(self.create_event(fly_location_name))
+                break
 
 
         # Key items which are considered in access rules but not randomized are converted to events and placed

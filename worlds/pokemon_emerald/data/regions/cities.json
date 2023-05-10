@@ -27,7 +27,8 @@
     "parent_map": "MAP_LITTLEROOT_TOWN",
     "locations": [],
     "events": [
-      "EVENT_VISITED_LITTLEROOT_TOWN"
+      "EVENT_VISITED_LITTLEROOT_TOWN",
+      "FREE_FLY_LOCATION"
     ],
     "exits": [
       "REGION_ROUTE101/MAIN",
