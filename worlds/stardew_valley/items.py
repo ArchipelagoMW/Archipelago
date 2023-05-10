@@ -68,6 +68,7 @@ class ItemData:
     code_without_offset: Optional[int]
     name: str
     classification: ItemClassification
+    mod_name: Optional[str]
     groups: Set[Group] = field(default_factory=frozenset)
 
     def __post_init__(self):
@@ -101,13 +102,14 @@ def load_item_csv():
             id = int(item["id"]) if item["id"] else None
             classification = ItemClassification[item["classification"]]
             groups = {Group[group] for group in item["groups"].split(",") if group}
-            items.append(ItemData(id, item["name"], classification, groups))
+            mod_name = str(item["mod_name"]) if item["mod_name"] else None
+            items.append(ItemData(id, item["name"], classification, mod_name, groups))
     return items
 
 
 events = [
-    ItemData(None, "Victory", ItemClassification.progression),
-    ItemData(None, "Month End", ItemClassification.progression),
+    ItemData(None, "Victory", ItemClassification.progression, None),
+    ItemData(None, "Month End", ItemClassification.progression, None),
 ]
 
 all_items: List[ItemData] = load_item_csv() + events
@@ -173,7 +175,7 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     items.append(item_factory("Dark Talisman"))
     items.extend(create_tv_channels(item_factory))
     create_special_quest_rewards(item_factory, items)
-    create_stardrops(item_factory, items)
+    create_stardrops(item_factory, items, world_options)
     create_museum_items(item_factory, world_options, items)
     create_arcade_machine_items(item_factory, world_options, items)
     items.append(item_factory(random.choice(items_by_group[Group.GALAXY_WEAPONS])))
@@ -183,7 +185,9 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     items.append(item_factory("Return Scepter"))
     items.extend(create_seasons(item_factory, world_options))
     items.extend(create_seeds(item_factory, world_options))
-    create_friendsanity_items(item_factory, world_options, items)
+    create_friendsanity_items(item_factory, world_options, items, None)
+    for mods in world_options[options.Mods]:
+        create_friendsanity_items(item_factory, world_options, items, mods)
     items.extend(create_festival_rewards(item_factory, world_options))
     items.extend(create_special_order_board_rewards(item_factory, world_options))
     items.extend(create_special_order_qi_rewards(item_factory, world_options))
@@ -196,6 +200,8 @@ def create_backpack_items(item_factory: StardewItemFactory, world_options: Stard
     if (world_options[options.BackpackProgression] == options.BackpackProgression.option_progressive or
             world_options[options.BackpackProgression] == options.BackpackProgression.option_early_progressive):
         items.extend(item_factory(item) for item in ["Progressive Backpack"] * 2)
+        if "Bigger Backpack" in world_options[options.Mods]:
+            items.append(item_factory("Progressive Backpack"))
 
 
 def create_mine_rewards(item_factory: StardewItemFactory, items: List[Item], random: Random):
@@ -228,7 +234,12 @@ def create_tools(item_factory: StardewItemFactory, world_options: StardewOptions
 
 def create_skills(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.SkillProgression] == options.SkillProgression.option_progressive:
-        items.extend([item_factory(item) for item in items_by_group[Group.SKILL_LEVEL_UP] * 10])
+        for item in items_by_group[Group.SKILL_LEVEL_UP]:
+            if item.mod_name is None:
+                items.extend(item_factory(item) for item in [item.name] * 10)
+            for mods in world_options[options.Mods]:
+                if item.mod_name == mods:
+                    items.extend(item_factory(item) for item in [item.name] * 10)
 
 
 def create_wizard_buildings(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
@@ -239,6 +250,8 @@ def create_wizard_buildings(item_factory: StardewItemFactory, world_options: Sta
     items.append(item_factory("Gold Clock"))
     if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false:
         items.append(item_factory("Island Obelisk"))
+    if "DeepWoods" in world_options[options.Mods]:
+        items.append(item_factory("Woods Obelisk"))
 
 
 def create_carpenter_buildings(item_factory: StardewItemFactory, world_options: StardewOptions,
@@ -263,6 +276,8 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, world_options: 
         items.append(item_factory("Progressive House"))
         items.append(item_factory("Progressive House"))
         items.append(item_factory("Progressive House"))
+        if "Tractor Mod" in world_options[options.Mods]:
+            items.append(item_factory("Tractor Garage"))
 
 
 def create_special_quest_rewards(item_factory: StardewItemFactory, items: List[Item]):
@@ -273,9 +288,11 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, items: List[I
     items.append(item_factory("Iridium Snake Milk"))
 
 
-def create_stardrops(item_factory: StardewItemFactory, items: List[Item]):
+def create_stardrops(item_factory: StardewItemFactory, items: List[Item], world_options: StardewOptions):
     items.append(item_factory("Stardrop"))  # The Mines level 100
     items.append(item_factory("Stardrop"))  # Old Master Cannoli
+    if "DeepWoods" in world_options[options.Mods]:
+        items.append(item_factory("Stardrop"))  # Petting the Unicorn
 
 
 def create_museum_items(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
@@ -290,7 +307,8 @@ def create_museum_items(item_factory: StardewItemFactory, world_options: Stardew
     items.append(item_factory("Dwarvish Translation Guide"))
 
 
-def create_friendsanity_items(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
+def create_friendsanity_items(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item],
+                              mod_value: Optional[str]):
     if world_options[options.Friendsanity] == options.Friendsanity.option_none:
         return
     exclude_non_bachelors = world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
@@ -308,9 +326,9 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
         for heart in range(1, 15):
             if villager.bachelor and exclude_post_marriage_hearts and heart > 8:
                 continue
-            if villager.bachelor or heart < 11:
+            if (villager.bachelor or heart < 11) and villager.mod_name == mod_value:
                 items.append(item_factory(f"{villager.name}: 1 <3"))
-    if not exclude_non_bachelors:
+    if not exclude_non_bachelors and mod_value is None:
         for heart in range(1, 6):
             items.append(item_factory(f"Pet: 1 <3"))
 
@@ -336,7 +354,8 @@ def create_arcade_machine_items(item_factory: StardewItemFactory, world_options:
 def create_player_buffs(item_factory: StardewItemFactory, world_options: options.StardewOptions, items: List[Item]):
     number_of_buffs: int = world_options[options.NumberOfPlayerBuffs]
     items.extend(item_factory(item) for item in ["Movement Speed Bonus"] * number_of_buffs)
-    items.extend(item_factory(item) for item in ["Luck Bonus"] * number_of_buffs)
+    if "Luck Skill" not in world_options[options.Mods]:
+        items.extend(item_factory(item) for item in ["Luck Bonus"] * number_of_buffs)
 
 
 def create_traveling_merchant_items(item_factory: StardewItemFactory) -> List[Item]:

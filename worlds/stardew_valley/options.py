@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Union, Protocol, runtime_checkable, ClassVar
 
-from Options import Option, Range, DeathLink, SpecialRange, Toggle, Choice
+from Options import Option, Range, DeathLink, SpecialRange, Toggle, Choice, OptionSet
 
 
 @runtime_checkable
@@ -11,9 +11,9 @@ class StardewOption(Protocol):
 
 @dataclass
 class StardewOptions:
-    options: Dict[str, Union[bool, int]]
+    options: Dict[str, Union[bool, int, str]]
 
-    def __getitem__(self, item: Union[str, StardewOption]) -> Union[bool, int]:
+    def __getitem__(self, item: Union[str, StardewOption]) -> Union[bool, int, str]:
         if isinstance(item, StardewOption):
             item = item.internal_name
 
@@ -530,6 +530,19 @@ class GiftTax(SpecialRange):
     }
 
 
+class Mods(OptionSet):
+    """List of mods that will be considered for shuffling."""
+    internal_name = "mods"
+    display_name = "Mods"
+    valid_keys = {
+        "DeepWoods", "Tractor Mod", "Bigger Backpack", "Item Bags",
+        "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
+        "Cooking Skill", "Binning Skill", "Skull Cavern Elevator", "Juna - Roommate NPC",
+        "Professor Jasper Thomas", "Alec Revisited", "Custom NPC - Yoba", "Custom NPC Eugene",
+        "'Prophet' Wellwick", "Mister Ginger (cat npc)", "Shiko - New Custom NPC", "Delores - Custom NPC",
+        "Ayeisha - The Postal Worker (Custom NPC)"
+    }
+
 stardew_valley_option_classes = [
     Goal,
     StartingMoney,
@@ -562,6 +575,7 @@ stardew_valley_option_classes = [
     QuickStart,
     Gifting,
     GiftTax,
+    Mods,
 ]
 stardew_valley_options: Dict[str, type(Option)] = {option.internal_name: option for option in
                                                    stardew_valley_option_classes}

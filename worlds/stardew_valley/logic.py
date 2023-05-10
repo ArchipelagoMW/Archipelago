@@ -10,6 +10,7 @@ from .data.fish_data import island_fish
 from .data.museum_data import all_museum_items, MuseumItem, all_artifact_items
 from .data.region_data import SVRegion
 from .data.villagers_data import all_villagers_by_name
+from .data.mod_logic import can_earn_mod_skill_level, append_mod_skill_level
 from .items import all_items, Group
 from .options import StardewOptions
 from .regions import stardew_valley_regions
@@ -103,6 +104,7 @@ class StardewLogic:
             "Artichoke Dip": self.can_cook() & self.has_season("Fall") & self.has("Artichoke") & self.has("Cow Milk"),
             "Artifact Trove": self.has("Omni Geode") & self.can_reach_region(SVRegion.desert),
             "Bait": self.has_skill_level("Fishing", 2),
+            "Baked Fish": self.has("Sunfish") & self.has("Bream") & self.has("Wheat Flour"),
             "Bat Wing": self.can_mine_in_the_mines_floor_41_80() | self.can_mine_in_the_skull_cavern(),
             "Battery Pack": self.has("Lightning Rod"),
             "Bean Hotpot": self.can_cook() & self.has_relationship("Clint", 7) & self.has("Green Bean"),
@@ -112,6 +114,7 @@ class StardewLogic:
             "Blackberry Cobbler": self.can_cook() & self.has_season("Fall") & self.has_year_two() &
                                   self.has("Blackberry") & self.has("Sugar") & self.has("Wheat Flour"),
             "Blueberry Tart": self.has("Blueberry") & self.has("Any Egg") & self.has_relationship("Pierre", 3),
+            "Bomb": self.has_skill_level("Mining", 6) & self.has("Coal") & self.has("Iron Ore"),
             "Bone Fragment": self.can_reach_region("Dig Site"),
             "Bouquet": self.has_relationship("Bachelor", 8),
             "Bread": self.can_spend_money(120) | (self.can_spend_money(100) & self.can_cook()),
@@ -128,6 +131,7 @@ class StardewLogic:
                       (self.can_reach_region(SVRegion.desert) & self.has("Emerald")),
             "Cheese Cauliflower": self.has(["Cheese", "Cauliflower"]) & self.has_relationship("Pam", 3) &
                                   self.can_cook(),
+            "Cherry Bomb": self.has_skill_level("Mining", 1) & self.has("Coal") & self.has("Copper Ore"),
             "Chicken": self.has_building("Coop"),
             "Chicken Egg": self.has(["Egg", "Egg (Brown)", "Large Egg", "Large Egg (Brown)"], 1),
             "Chocolate Cake": self.can_cook() & self.has_season("Winter") & self.has("Wheat Flour") & self.has(
@@ -182,6 +186,7 @@ class StardewLogic:
             "Egg (Brown)": self.has_animal("Chicken"),
             "Eggplant Parmesan": self.can_cook() & self.has_relationship("Lewis", 7) & self.has("Eggplant") & self.has(
                 "Tomato"),
+            "Energy Tonic": self.can_reach_region(SVRegion.hospital) & self.can_spend_money(1000),
             "Escargot": self.can_cook() & self.has_relationship("Willy", 5) & self.has("Snail") & self.has("Garlic"),
             "Farmer's Lunch": self.can_cook() & self.has_skill_level("Farming", 3) & self.has("Omelet") & self.has(
                 "Parsnip"),
@@ -206,6 +211,7 @@ class StardewLogic:
             "Geode": self.can_mine_in_the_mines_floor_1_40(),
             "Ginger": self.can_reach_region(SVRegion.island_west),
             "Ginger Ale": self.can_cook() & self.has("Ginger") & self.has("Sugar"),
+            "Glazed Yams": self.can_cook() & self.has_season("Fall") & self.has("Yam") & self.has("Sugar"),
             "Goat Cheese": self.has("Goat Milk") & self.has("Cheese Press"),
             "Goat Milk": self.has("Goat"),
             "Goat": self.has_building("Big Barn"),
@@ -230,6 +236,7 @@ class StardewLogic:
             "Iron Bar": self.can_smelt("Iron Ore"),
             "Iron Ore": self.can_mine_in_the_mines_floor_41_80() | self.can_mine_in_the_skull_cavern(),
             "Jelly": self.has("Preserves Jar"),
+            "Joja Cola": self.can_reach_region(SVRegion.jojamart) & self.can_spend_money(25),
             "JotPK Small Buff": self.has_jotpk_power_level(2),
             "JotPK Medium Buff": self.has_jotpk_power_level(4),
             "JotPK Big Buff": self.has_jotpk_power_level(7),
@@ -261,10 +268,12 @@ class StardewLogic:
             "Mayonnaise Machine": self.has_skill_level("Farming", 2) & self.has("Wood") & self.has("Stone") &
                                   self.has("Earth Crystal") & self.has("Copper Bar"),
             "Mead": self.has("Keg") & self.has("Honey"),
+            "Mega Bomb": self.has_skill_level("Mining", 8) & self.has("Coal") & self.has("Gold Ore"),
             "Milk": self.has_animal("Cow"),
             "Miner's Treat": self.can_cook() & self.has_skill_level("Mining", 3) & self.has("Cow Milk") & self.has(
                 "Cave Carrot"),
             "Morel": self.can_reach_region(SVRegion.secret_woods),
+            "Muscle Remedy": self.can_reach_region(SVRegion.hospital) & self.can_spend_money(1000),
             "Mussel": self.can_reach_region(SVRegion.beach) or self.has("Mussel Node"),
             "Mussel Node": self.can_reach_region(SVRegion.island_west),
             "Nautilus Shell": self.has_season("Winter"),
@@ -316,6 +325,7 @@ class StardewLogic:
                                  self.has("Stone") & self.has("Iron Bar"),
             "Red Mushroom": self.can_reach_region(SVRegion.secret_woods) & (
                     self.has_season("Summer") | self.has_season("Fall")),
+            "Red Plate": self.can_cook() & self.has(["Radish", "Red Cabbage"]) & self.has_relationship("Emily", 7),
             "Refined Quartz": self.can_smelt("Quartz") | self.can_smelt("Fire Quartz") |
                               (self.has("Recycling Machine") & (self.has("Broken CD") | self.has("Broken Glasses"))),
             "Rhubarb Pie": self.can_cook() & self.has_relationship("Marnie", 7) & self.has("Rhubarb") &
@@ -328,7 +338,8 @@ class StardewLogic:
                              self.has("Cave Carrot") & self.has("Winter Root"),
             "Roasted Hazelnuts": self.can_cook() & self.has_season("Summer") & self.has("Hazelnut"),
             "Salad": self.can_spend_money(220),
-            # | (self.can_cook() & self.has_relationship("Emily", 3) & self.has("Leek") & self.has("Dandelion") & self.has("Vinegar")),
+            # | (self.can_cook() & self.has_relationship("Emily", 3) & self.has("Leek") & self.has("Dandelion") &
+            # self.has("Vinegar")),
             "Salmonberry": self.has_season("Spring"),
             "Salmon Dinner": self.can_cook() & self.has_relationship("Gus", 3) & self.has("Salmon") & self.has(
                 "Amaranth") & self.has("Kale"),
@@ -565,6 +576,12 @@ class StardewLogic:
             "Qi's Prismatic Grange": self.has("Bug Meat") & self.can_spend_money(80000), # All colors can be bought except purple
         })
 
+        # Mod Building List (For now smh)
+        if "Tractor Mod" in self.options[options.Mods]:
+            self.building_rules.update({
+                "Tractor Garage": self.can_spend_money(150000) & self.has("Iron Bar") &
+                                  self.has("Iridium Bar") & self.has("Battery Pack")})
+
     def has(self, items: Union[str, (Iterable[str], Sized)], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
             return Has(items, self.item_rules)
@@ -651,6 +668,7 @@ class StardewLogic:
                 tool_rule = self.has_good_weapon()
             else:
                 tool_rule = self.has_any_weapon()
+        tool_rule = can_earn_mod_skill_level(self, skill, level, tool_rule)
 
         months = max(1, level - 1)
         return self.has_lived_months(months) & tool_rule
@@ -671,6 +689,7 @@ class StardewLogic:
         if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
             skills_items = ["Farming Level", "Mining Level", "Foraging Level",
                             "Fishing Level", "Combat Level"]
+            append_mod_skill_level(skills_items, self.options)
             return self.received(skills_items, count=level)
 
         months_5_skills = max(1, (level // 5) - 1)
@@ -1310,3 +1329,53 @@ class StardewLogic:
         rules = self.received(all_progression_items, len(all_progression_items)) &\
                 self.can_reach_all_regions(all_regions)
         return rules
+
+        # Mod Logic definitions until I figure out how to weave this together...
+
+    def can_earn_spell_count(self, spell_count: int):
+        # Player always has an Axe, Pickaxe, and Watering Can, and starts with Magic Missile and Analyze
+        actual_count = 5
+        if self.can_reach_region(SVRegion.volcano_floor_10) | self.has_mine_elevator_to_floor(100):
+            actual_count += 1
+        # Tendrils
+        if self.can_reach_region(SVRegion.farm):
+            actual_count += 1
+        # Luck Steal and Blood Mana
+        if self.can_reach_region(SVRegion.witch_swamp):
+            actual_count += 1
+        # Descend
+        if self.has("Staircase"):
+            actual_count += 1
+        # Haste
+        if self.has("Coffee"):
+            actual_count += 1
+        # Heal
+        if self.has("Life Elixir"):
+            actual_count += 1
+        # Shockwave
+        if self.has("Earth Crystal"):
+            actual_count += 1
+        # Fireball
+        if self.has("Fire Quartz"):
+            actual_count += 1
+        # Frostbolt (Catch an Ice Pip)
+        if self.can_fish(85) & self.has_mine_elevator_to_floor(60) & self.can_reach_region(SVRegion.mines):
+            actual_count += 1
+        # If the player can't even learn magic, you have no spells.
+        if not (self.can_earn_relationship("Wizard", 3) & self.can_reach_region(SVRegion.pierre_store) &
+                self.can_reach_region(SVRegion.wizard_tower)):
+            actual_count = 0
+        if actual_count >= spell_count:
+            return True_()
+        else:
+            return False_()
+
+    def can_reach_woods_depth(self, depth: int) -> StardewRule:
+        rules = []
+        if depth > 10:
+            rules.append(self.has("Cherry Bomb") | self.has_tool("Axe", "Iridium"))
+        if depth > 30:
+            rules.append(self.received("Woods Obelisk"))
+        if depth > 50:
+            rules.append(self.has_great_weapon() & self.can_cook())
+        return And(rules)

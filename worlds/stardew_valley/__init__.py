@@ -38,7 +38,7 @@ class StardewWebWorld(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["KaitoKid", "Jouramie"]
+        ["KaitoKid", "Jouramie", "Witchybun (Mod Support)"]
     )]
 
 
@@ -157,7 +157,7 @@ class StardewValleyWorld(World):
 
     def setup_month_events(self):
         for i in range(0, MAX_MONTHS):
-            month_end = LocationData(None, "Stardew Valley", f"Month End {i + 1}")
+            month_end = LocationData(None, "Stardew Valley", f"Month End {i + 1}", None)
             if i == 0:
                 self.create_event_location(month_end, True_(), "Month End")
                 continue
@@ -269,7 +269,8 @@ class StardewValleyWorld(World):
             key, value = self.modified_bundles[bundle_key].to_pair()
             modified_bundles[key] = value
 
-        excluded_options = [options.BundleRandomization, options.BundlePrice, options.NumberOfPlayerBuffs]
+        excluded_options = [options.BundleRandomization, options.BundlePrice,
+                            options.NumberOfPlayerBuffs]
         slot_data = dict(self.options.options)
         for option in excluded_options:
             slot_data.pop(option.internal_name)

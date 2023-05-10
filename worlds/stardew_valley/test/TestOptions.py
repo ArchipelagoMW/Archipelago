@@ -3,11 +3,11 @@ import unittest
 from typing import Dict
 
 from BaseClasses import ItemClassification, MultiWorld
-from Options import SpecialRange
+from Options import SpecialRange, OptionSet
 from . import setup_solo_multiworld, SVTestBase
 from .. import StardewItem, options, items_by_group, Group
 from ..locations import locations_by_tag, LocationTags
-from ..options import StardewOption, stardew_valley_option_classes
+from ..options import StardewOption, stardew_valley_option_classes, Mods
 
 SEASONS = {"Spring", "Summer", "Fall", "Winter"}
 TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
@@ -88,6 +88,33 @@ class TestGenerateDynamicOptions(SVTestBase):
                             multiworld = setup_solo_multiworld(choices)
                             basic_checks(self, multiworld)
 
+    def test_given_mod_names_when_generate_then_basic_checks(self):
+        mod_list = {"DeepWoods", "Tractor Mod", "Bigger Backpack", "Item Bags",
+                    "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
+                    "Cooking Skill", "Binning Skill", "Juna - Roommate NPC",
+                    "Professor Jasper Thomas", "Alec Revisited", "Custom NPC - Yoba", "Custom NPC Eugene",
+                    "'Prophet' Wellwick", "Mister Ginger (cat npc)", "Shiko - New Custom NPC", "Delores - Custom NPC",
+                    "Ayeisha - The Postal Worker (Custom NPC)"}
+
+        for mod in mod_list:
+            multi_world = setup_solo_multiworld({Mods: mod})
+            basic_checks(self, multi_world)
+
+    def test_given_mod_names_paired_with_others_when_generate_then_basic_checks(self):
+        mod_list = {"DeepWoods", "Tractor Mod", "Bigger Backpack", "Item Bags",
+                    "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
+                    "Cooking Skill", "Binning Skill", "Juna - Roommate NPC",
+                    "Professor Jasper Thomas", "Alec Revisited", "Custom NPC - Yoba", "Custom NPC Eugene",
+                    "'Prophet' Wellwick", "Mister Ginger (cat npc)", "Shiko - New Custom NPC", "Delores - Custom NPC",
+                    "Ayeisha - The Postal Worker (Custom NPC)"}
+        for option in stardew_valley_option_classes:
+            if not option.options:
+                continue
+            with self.subTest(msg=option.internal_name):
+                for value in option.options:
+                    for mod in mod_list:
+                        multi_world = setup_solo_multiworld({option.internal_name: option.options[value], Mods: mod})
+                        basic_checks(self, multi_world)
 
 class TestGoal(SVTestBase):
     def test_given_goal_when_generate_then_victory_is_in_correct_location(self):
