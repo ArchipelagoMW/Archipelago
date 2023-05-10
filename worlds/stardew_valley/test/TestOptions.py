@@ -51,7 +51,7 @@ class TestGenerateDynamicOptions(SVTestBase):
             if not issubclass(option, SpecialRange):
                 continue
             for value in option.special_range_names:
-                with self.subTest(f"{option.internal_name}: {value} [Seed: {seed}]"):
+                with self.subTest(f"{option.internal_name}: {value}"):
                     choices = {option.internal_name: option.special_range_names[value]}
                     multiworld = setup_solo_multiworld(choices)
                     basic_checks(self, multiworld)
@@ -62,7 +62,7 @@ class TestGenerateDynamicOptions(SVTestBase):
             if not option.options:
                 continue
             for value in option.options:
-                with self.subTest(f"{option.internal_name}: {value}"):
+                with self.subTest(f"{option.internal_name}: {value} [Seed: {seed}]"):
                     choices = {option.internal_name: option.options[value]}
                     multiworld = setup_solo_multiworld(choices, seed)
                     basic_checks(self, multiworld)
