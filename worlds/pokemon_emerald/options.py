@@ -1,12 +1,23 @@
 """
 Option definitions for Pokemon Emerald
 """
-from typing import Dict, List, Set, Union
+from typing import Dict
 
-from BaseClasses import MultiWorld
 from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle, FreeText
 
 from .data import data
+
+
+class Goal(Choice):
+    """
+    Determines what your goal is to consider the game beaten
+    Champion: Become the champion and enter the hall of fame
+    Steven: Defeat Steven in Meteor Falls
+    """
+    display_name = "Goal"
+    default = 0
+    option_champion = 0
+    option_steven = 1
 
 
 class RandomizeBadges(Choice):
@@ -453,53 +464,54 @@ class EasterEgg(FreeText):
 
 
 option_definitions: Dict[str, Option] = {
-  "badges": RandomizeBadges,
-  "hms": RandomizeHms,
-  "key_items": RandomizeKeyItems,
-  "bikes": RandomizeBikes,
-  "rods": RandomizeRods,
-  "overworld_items": RandomizeOverworldItems,
-  "hidden_items": RandomizeHiddenItems,
-  "npc_gifts": RandomizeNpcGifts,
+    "goal": Goal,
+    "badges": RandomizeBadges,
+    "hms": RandomizeHms,
+    "key_items": RandomizeKeyItems,
+    "bikes": RandomizeBikes,
+    "rods": RandomizeRods,
+    "overworld_items": RandomizeOverworldItems,
+    "hidden_items": RandomizeHiddenItems,
+    "npc_gifts": RandomizeNpcGifts,
 
-  "item_pool_type": ItemPoolType,
+    "item_pool_type": ItemPoolType,
 
-  "require_itemfinder": HiddenItemsRequireItemfinder,
-  "require_flash": DarkCavesRequireFlash,
-  "enable_ferry": EnableFerry,
-  "elite_four_requirement": EliteFourRequirement,
-  "elite_four_count": EliteFourCount,
-  "norman_requirement": NormanRequirement,
-  "norman_count": NormanCount,
+    "require_itemfinder": HiddenItemsRequireItemfinder,
+    "require_flash": DarkCavesRequireFlash,
+    "enable_ferry": EnableFerry,
+    "elite_four_requirement": EliteFourRequirement,
+    "elite_four_count": EliteFourCount,
+    "norman_requirement": NormanRequirement,
+    "norman_count": NormanCount,
 
-  "wild_pokemon": RandomizeWildPokemon,
-  "allow_wild_legendaries": AllowWildLegendaries,
-  "starters": RandomizeStarters,
-  "allow_starter_legendaries": AllowStarterLegendaries,
-  "trainer_parties": RandomizeTrainerParties,
-  "allow_trainer_legendaries": AllowTrainerLegendaries,
+    "wild_pokemon": RandomizeWildPokemon,
+    "allow_wild_legendaries": AllowWildLegendaries,
+    "starters": RandomizeStarters,
+    "allow_starter_legendaries": AllowStarterLegendaries,
+    "trainer_parties": RandomizeTrainerParties,
+    "allow_trainer_legendaries": AllowTrainerLegendaries,
 
-  "types": RandomizeTypes,
-  "abilities": RandomizeAbilities,
-  "ability_blacklist": AbilityBlacklist,
-  "level_up_moves": LevelUpMoves,
-  "tm_moves": TmMoves,
-  "reusable_tms": ReusableTms,
-  "tm_compatibility": TmCompatibility,
-  "hm_compatibility": HmCompatibility,
+    "types": RandomizeTypes,
+    "abilities": RandomizeAbilities,
+    "ability_blacklist": AbilityBlacklist,
+    "level_up_moves": LevelUpMoves,
+    "tm_moves": TmMoves,
+    "reusable_tms": ReusableTms,
+    "tm_compatibility": TmCompatibility,
+    "hm_compatibility": HmCompatibility,
 
-  "min_catch_rate": MinCatchRate,
-  "guaranteed_catch": GuaranteedCatch,
-  "exp_modifier": ExpModifier,
-  "blind_trainers": BlindTrainers,
-  "double_battle_chance": DoubleBattleChance,
-  "better_shops": BetterShops,
-  "remove_roadblocks": RemoveRoadblocks,
-  "extra_boulders": ExtraBoulders,
-  "free_fly_location": FreeFlyLocation,
-  "fly_without_badge": FlyWithoutBadge,
-  "turbo_a": TurboA,
-  "receive_item_messages": ReceiveItemMessages,
+    "min_catch_rate": MinCatchRate,
+    "guaranteed_catch": GuaranteedCatch,
+    "exp_modifier": ExpModifier,
+    "blind_trainers": BlindTrainers,
+    "double_battle_chance": DoubleBattleChance,
+    "better_shops": BetterShops,
+    "remove_roadblocks": RemoveRoadblocks,
+    "extra_boulders": ExtraBoulders,
+    "free_fly_location": FreeFlyLocation,
+    "fly_without_badge": FlyWithoutBadge,
+    "turbo_a": TurboA,
+    "receive_item_messages": ReceiveItemMessages,
 
-  "easter_egg": EasterEgg
+    "easter_egg": EasterEgg
 }

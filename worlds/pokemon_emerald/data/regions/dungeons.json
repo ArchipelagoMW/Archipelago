@@ -663,7 +663,9 @@
   "REGION_METEOR_FALLS_STEVENS_CAVE/MAIN": {
     "parent_map": "MAP_METEOR_FALLS_STEVENS_CAVE",
     "locations": [],
-    "events": [],
+    "events": [
+      "EVENT_DEFEAT_STEVEN"
+    ],
     "exits": [],
     "warps": [
       "MAP_METEOR_FALLS_STEVENS_CAVE:0/MAP_METEOR_FALLS_1F_1R:5"

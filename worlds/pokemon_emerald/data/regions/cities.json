@@ -2562,9 +2562,7 @@
   "REGION_EVER_GRANDE_CITY_HALL_OF_FAME/MAIN": {
     "parent_map": "MAP_EVER_GRANDE_CITY_HALL_OF_FAME",
     "locations": [],
-    "events": [
-      "Victory"
-    ],
+    "events": [],
     "exits": [],
     "warps": [
       "MAP_EVER_GRANDE_CITY_HALL_OF_FAME:0/MAP_EVER_GRANDE_CITY_CHAMPIONS_ROOM:1"

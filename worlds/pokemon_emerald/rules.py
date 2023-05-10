@@ -437,6 +437,10 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         can_surf
     )
     set_rule(
+        multiworld.get_entrance("MAP_METEOR_FALLS_1F_1R:5/MAP_METEOR_FALLS_STEVENS_CAVE:0", player),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
+    )
+    set_rule(
         multiworld.get_entrance("REGION_METEOR_FALLS_B1F_1R/HIGHEST_LADDER -> REGION_METEOR_FALLS_B1F_1R/WATER", player),
         can_surf
     )
