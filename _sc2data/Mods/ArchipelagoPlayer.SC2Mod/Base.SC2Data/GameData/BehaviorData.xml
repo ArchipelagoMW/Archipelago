@@ -748,4 +748,30 @@
         <Duration value="0.1"/>
         <ExpireEffect value="AP_RefineryMorph"/>
     </CBehaviorBuff>
+    <CBehaviorResource id="AP_HarvestableRichVespeneGeyserGas">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Capacity value="32000"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+        <CarryResourceBehavior value="CarryHarvestableRichVespeneGeyserGas"/>
+    </CBehaviorResource>
+    <CBehaviorResource id="AP_HarvestableVespeneGeyserGas">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\icon-gas.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Capacity value="32000"/>
+        <HarvestTime value="1.981"/>
+        <HarvestAmount value="4"/>
+        <Flags index="HideHarvesters" value="1"/>
+        <RequiredAlliance value="Control"/>
+        <ExhaustedAlert value="ResourceExhausted_Vespene"/>
+        <IdealHarvesterCount value="3"/>
+        <CarryResourceBehavior value="CarryHarvestableVespeneGeyserGas"/>
+    </CBehaviorResource>
 </Catalog>

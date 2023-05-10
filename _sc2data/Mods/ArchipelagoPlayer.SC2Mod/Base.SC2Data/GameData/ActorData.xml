@@ -4690,9 +4690,7 @@
             <Image value="AP\Assets\Textures\Wireframe-Terran-Refinery-automated.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorModel id="AP_AutomatedRefineryBuild" parent="TerranBuildingBuildRefinery">
-        <Model value="AP_AutomatedRefineryBuild"/>
-    </CActorModel>
+    <CActorModel id="AP_AutomatedRefineryBuild" parent="TerranBuildingBuildRefinery"/>
     <CActorText id="AP_AutomatedRefineryTextKicker4">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
         <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
@@ -4729,4 +4727,85 @@
         <Speed value="0.800000"/>
         <SpeedMax value="0.800000"/>
     </CActorSiteMover>
+    <CActorUnit id="AP_Refinery" parent="TerranBuildingEx" unitName="AP_Refinery">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ExtractAnim"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGas.Deplete" Send="SetTintColor 255,170,170"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGas.Deplete" Send="AnimGroupRemove D"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGas.Deplete" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGas.Restore" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGas.Restore" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_HarvestableVespeneGeyserGas.Restore" Send="AnimGroupApply D"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationRefinery"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.AP_Refinery" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Refinery" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Refinery" Send="Destroy"/>
+        <Model value="Refinery"/>
+        <CreepHeightClass value="Medium"/>
+        <BuildModel value="Refinery"/>
+        <DeathArray index="Normal" ModelLink="RefineryDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Refinery_Explode"/>
+        <DeathCustoms ModelLink="RefineryEmptyDeath" Name="Empty"/>
+        <PlacementModel value="RefineryPlacement"/>
+        <PlacementActorModel value="RefineryPlacementModel"/>
+        <PortraitModel value="RefineryPortrait"/>
+        <BarOffset value="160"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Refinery.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-refinery.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="Refinery_Ready"/>
+        <SoundArray index="What" value="Refinery_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-refinery.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Refinery.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_RefineryRich" parent="TerranBuildingEx" unitName="AP_RefineryRich">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ExtractAnim"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGas.Deplete" Send="SetTintColor 255,170,170"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGas.Deplete" Send="AnimGroupRemove D"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGas.Deplete" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGas.Restore" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGas.Restore" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_HarvestableRichVespeneGeyserGas.Restore" Send="AnimGroupApply D"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationRefinery"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
+        <On Terms="UnitBirth.AP_RefineryRich" Send="TimerSet 0.100000 HideGeyser"/>
+        <Model value="RefineryRich"/>
+        <CreepHeightClass value="Medium"/>
+        <BuildModel value="RefineryRich"/>
+        <DeathArray index="Normal" ModelLink="RefineryRichDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Refinery_Explode"/>
+        <DeathCustoms ModelLink="RefineryEmptyDeath" Name="Empty"/>
+        <PlacementModel value="RefineryPlacement"/>
+        <PortraitModel value="RefineryPortrait"/>
+        <BarOffset value="160"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Refinery.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-refinery.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="Refinery_Ready"/>
+        <SoundArray index="What" value="Refinery_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountVespene"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-refinery.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Refinery.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSplat id="AP_RefineryRichSplat" parent="GenericUnitSplat" unitName="AP_RefineryRich">
+        <Model value="RefinerySplat"/>
+    </CActorSplat>
+    <CActorSplat id="AP_RefinerySplat" parent="GenericUnitSplat" unitName="AP_Refinery">
+        <Model value="RefinerySplat"/>
+    </CActorSplat>
 </Catalog>

@@ -2474,4 +2474,20 @@
         <Abil value="AP_RefineryToAutomatedRefinery"/>
         <Player Value="Source"/>
     </CEffectIssueOrder>
+    <CEffectEnumArea id="AP_RefineryRichSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="RawResource;-"/>
+        <AreaArray Radius="0.5" Effect="AP_RefineryRichSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_RefineryRichSet">
+        <ValidatorArray value="RichVespeneGeyser"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_RefineryRichAB"/>
+        <EffectArray value="AP_RefineryRichRB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_RefineryRichAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_HarvestableRichVespeneGeyserGas"/>
+    </CEffectApplyBehavior>
 </Catalog>
