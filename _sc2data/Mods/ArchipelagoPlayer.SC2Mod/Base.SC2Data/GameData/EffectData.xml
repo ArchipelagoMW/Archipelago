@@ -2430,7 +2430,6 @@
     <CEffectLaunchMissile id="AP_DRBattlecruiserALM">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_DRBattlecruiserAU"/>
-        <AmmoUnit value="AP_DRBattlecruiserALMWeapon"/>
     </CEffectLaunchMissile>
     <CEffectDamage id="AP_DRBattlecruiserAU" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
@@ -2440,7 +2439,6 @@
     <CEffectLaunchMissile id="AP_DRBattlecruiserGLM">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_DRBattlecruiserGU"/>
-        <AmmoUnit value="AP_DRBattlecruiserGLMWeapon"/>
     </CEffectLaunchMissile>
     <CEffectDamage id="AP_DRBattlecruiserGU" parent="DU_WEAP_MISSILE">
         <EditorCategories value="Race:Terran"/>
@@ -2458,5 +2456,10 @@
         <Visibility value="Visible"/>
         <Amount value="12"/>
         <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_BurndownDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="NoKillCredit" value="1"/>
+        <Amount value="1"/>
     </CEffectDamage>
 </Catalog>

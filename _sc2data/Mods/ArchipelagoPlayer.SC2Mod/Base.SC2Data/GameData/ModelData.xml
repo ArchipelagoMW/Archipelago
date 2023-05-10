@@ -1464,4 +1464,71 @@
         <Model value="Assets\Effects\Terran\BattlecruiserLokiReentry\BattlecruiserLokiReentry.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_FireSuppressionBots" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\FireSuppressionBots\FireSuppressionBots.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Spray"/>
+            <Type value="Sound"/>
+            <Time value="0.833000"/>
+            <Payload value="FireSuppressionBots_Water"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Spray"/>
+            <Type value="Sound"/>
+            <Time value="1.666000"/>
+            <Payload value="FireSuppressionBots_Water"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Spray"/>
+            <Type value="Sound"/>
+            <Time value="4.000000"/>
+            <Payload value="FireSuppressionBots_Water"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Spray"/>
+            <Type value="Sound"/>
+            <Time value="5.666000"/>
+            <Payload value="FireSuppressionBots_Water"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Spray"/>
+            <Type value="Sound"/>
+            <Time value="7.666000"/>
+            <Payload value="FireSuppressionBots_Water"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Whizzby"/>
+            <Type value="Sound"/>
+            <Time value="0.033000"/>
+            <Payload value="FireSuppressionBots_Whizzby"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Whizzby"/>
+            <Type value="Sound"/>
+            <Time value="2.166000"/>
+            <Payload value="FireSuppressionBots_Whizzby"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Whizzby"/>
+            <Type value="Sound"/>
+            <Time value="5.000000"/>
+            <Payload value="FireSuppressionBots_Whizzby"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Whizzby"/>
+            <Type value="Sound"/>
+            <Time value="8.666000"/>
+            <Payload value="FireSuppressionBots_Whizzby"/>
+        </Events>
+    </CModel>
 </Catalog>

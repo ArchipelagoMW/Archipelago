@@ -726,4 +726,10 @@
     <CRequirementNot id="AP_NotCountUnitDukesRevengeTotal">
         <OperandArray index="0" value="AP_CountUnitDukesRevengeTotal"/>
     </CRequirementNot>
+    <CRequirementCountUnit id="AP_CountUnitFusionCoreCompleteOnlyTechTreeCheat">
+        <Count Link="AP_FusionCore" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_UnitFusionCoreCompleteOnly">
+        <Count Link="AP_FusionCore" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

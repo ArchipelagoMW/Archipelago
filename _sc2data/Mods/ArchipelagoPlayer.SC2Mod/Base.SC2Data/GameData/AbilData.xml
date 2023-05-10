@@ -1184,4 +1184,8 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilResearch id="AP_FusionCoreResearch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <!-- AP uses triggers to grant unit upgrades -->
+    </CAbilResearch>
 </Catalog>

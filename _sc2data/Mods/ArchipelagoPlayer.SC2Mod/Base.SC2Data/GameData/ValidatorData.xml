@@ -504,7 +504,8 @@
         <CombineArray value="AP_LockOnTargetFilters"/>
         <CombineArray value="AP_LockOnCasterFilters"/>
         <CombineArray value="AP_CasterLockingOn"/>
-        <!-- <CombineArray value="CasterDoesNotHaveScramblerMissileBehavior"/> --><!-- Not Applicable to WoL environment -->
+        <!-- <CombineArray value="CasterDoesNotHaveScramblerMissileBehavior"/> -->
+        <!-- Not Applicable to WoL environment -->
     </CValidatorCombine>
     <CValidatorCombine id="AP_LockOnPeriodicValidators">
         <Type value="And"/>
@@ -560,10 +561,13 @@
     <CValidatorCombine id="AP_IsDefensiveStructure">
         <CombineArray value="NotStructure"/>
         <CombineArray value="IsPhotonCannon"/>
-        <CombineArray value="AP_IsVanillaBunker"/> <!-- FIXME: Add AP_Bunker -->
+        <CombineArray value="AP_IsVanillaBunker"/>
+        <!-- FIXME: Add AP_Bunker -->
         <CombineArray value="IsMissileTurret"/>
-        <CombineArray value="AP_IsVanillaSpineCrawler"/> <!-- FIXME: Add AP_SpineCrawler -->
-        <CombineArray value="AP_IsVanillaSporeCrawler"/> <!-- FIXME: Add AP_SporeCrawler -->
+        <CombineArray value="AP_IsVanillaSpineCrawler"/>
+        <!-- FIXME: Add AP_SpineCrawler -->
+        <CombineArray value="AP_IsVanillaSporeCrawler"/>
+        <!-- FIXME: Add AP_SporeCrawler -->
         <CombineArray value="IsPlanetaryFortress"/>
         <CombineArray value="IsAutoTurret"/>
     </CValidatorCombine>
@@ -601,4 +605,15 @@
     <CValidatorUnitFilters id="AP_FriendlyOrNeutralTarget">
         <Filters value="-;Self,Enemy"/>
     </CValidatorUnitFilters>
+    <CValidatorUnitType id="AP_IsAPFusionCore">
+        <Value value="AP_FusionCore"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaFusionCore">
+        <Value value="FusionCore"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsFusionCore" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaFusionCore"/>
+        <CombineArray value="AP_IsAPFusionCore"/>
+    </CValidatorCombine>
 </Catalog>

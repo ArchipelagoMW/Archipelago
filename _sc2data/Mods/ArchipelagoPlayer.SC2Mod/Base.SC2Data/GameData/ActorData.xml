@@ -4491,8 +4491,7 @@
     <CActorAction id="AP_DRBattlecruiserAirAttack" parent="GenericAttack" effectImpact="AP_DRBattlecruiserAU" effectLaunch="AP_DRBattlecruiserALM">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
         <LaunchAssets Sound="Battlecruiser_AirAttackLaunch"/>
-        <Missile value="AP_DRBattlecruiserAirAttackMissile"/>
-        <ImpactMap index="None" Model="AP_DRBattlecruiserAirAttackImpact" Sound="Battlecruiser_AirAttackImpact"/>
+        <ImpactMap index="None" Sound="Battlecruiser_AirAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_DRBattlecruiserAirAttackMissile" parent="GenericAttackMissile" unitName="AP_DRBattlecruiserALMWeapon">
         <BarHeight value="1"/>
@@ -4501,8 +4500,7 @@
     <CActorAction id="AP_DRBattlecruiserGroundAttack" parent="GenericAttack" effectImpact="AP_DRBattlecruiserGU" effectLaunch="AP_DRBattlecruiserGLM">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
         <LaunchAssets Sound="Battlecruiser_GroundAttackLaunch"/>
-        <Missile value="AP_DRBattlecruiserGroundAttackMissile"/>
-        <ImpactMap index="None" Model="AP_DRBattlecruiserGroundAttackImpact" Sound="Battlecruiser_GroundAttackImpact"/>
+        <ImpactMap index="None" Sound="Battlecruiser_GroundAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_DRBattlecruiserGroundAttackMissile" parent="GenericAttackMissile" unitName="AP_DRBattlecruiserGLMWeapon">
         <BarHeight value="1"/>
@@ -4583,4 +4581,66 @@
         <On Terms="ActorCreation" Send="AnimBracketStart BSDb Birth Stand Death ContentPlayOnce"/>
         <On Terms="AnimBracketState.*.AfterClosing; AnimName BSDb" Send="Destroy"/>
     </CActorModel>
+    <CActorModel id="AP_FireSuppressionBots" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_FireSuppressionSystem.On" Send="Create"/>
+        <On Terms="Behavior.AP_FireSuppressionSystem.On" Send="Create AP_FireSuppressionBots_Loop"/>
+        <On Terms="Behavior.AP_FireSuppressionSystem.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorSound id="AP_FireSuppressionBots_Loop" parent="SoundContinuous"/>
+    <CActorUnit id="AP_FusionCore" parent="TerranBuildingEx" unitName="AP_FusionCore">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="QueueAnim"/>
+        <Model value="FusionCore"/>
+        <CreepHeightClass value="Medium"/>
+        <BuildModel value="FusionCore"/>
+        <DeathArray index="Normal" ModelLink="FusionCoreDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="FusionCore_Explode"/>
+        <PlacementModel value="FusionCorePlacement"/>
+        <PortraitModel value="FusionCorePortrait"/>
+        <BarOffset value="115"/>
+        <BarWidth value="135"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-FusionCore.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-fusioncore.dds"/>
+        <NameOffset value="100"/>
+        <SoundArray index="Ready" value="FusionCore_Ready"/>
+        <SoundArray index="What" value="FusionCore_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-fusioncore.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-FusionCore.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_FusionCoreBuild" parent="TerranBuildingBuild">
+        <Model value="FusionCoreBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_FusionCoreSplat" parent="GenericUnitSplat" unitName="AP_FusionCore">
+        <Model value="FusionCoreSplat"/>
+    </CActorSplat>
+    <CActorStateMonitor id="AP_TerranFlamesMediumBuilding" parent="TerranFlames">
+        <On Terms="UnitCreation.AP_SupplyDepot" Send="Create"/>
+        <On Terms="UnitCreation.AP_SupplyDepotLowered" Send="Create"/>
+        <On Terms="UnitCreation.AP_Refinery" Send="Create"/>
+        <On Terms="UnitCreation.AP_Barracks" Send="Create"/>
+        <On Terms="UnitCreation.AP_BarracksFlying" Send="Create"/>
+        <On Terms="UnitCreation.AP_EngineeringBay" Send="Create"/>
+        <On Terms="UnitCreation.AP_Bunker" Send="Create"/>
+        <On Terms="UnitCreation.AP_GhostAcademy" Send="Create"/>
+        <On Terms="UnitCreation.AP_MercCompound" Send="Create"/>
+        <On Terms="UnitCreation.AP_Factory" Send="Create"/>
+        <On Terms="UnitCreation.AP_FactoryFlying" Send="Create"/>
+        <On Terms="UnitCreation.AP_Armory" Send="Create"/>
+        <On Terms="UnitCreation.AP_Starport" Send="Create"/>
+        <On Terms="UnitCreation.AP_StarportFlying" Send="Create"/>
+        <On Terms="UnitCreation.AP_FusionCore" Send="Create"/>
+        <On Terms="StateChange; StateValid Fire" Send="Create TerranFlameLoopMedium"/>
+        <On Terms="StateChange; !StateValid Fire" Target="TerranFlameLoopMedium" Send="Destroy"/>
+        <On Terms="UnitCreation.AP_AutomatedRefinery" Send="Create"/>
+        <On Terms="UnitCreation.AP_HomeLarge" Send="Create"/>
+        <On Terms="UnitCreation.AP_ScienceFacility" Send="Create"/>
+        <On Terms="UnitCreation.AP_FacilityPOwerCore" Send="Create"/>
+    </CActorStateMonitor>
 </Catalog>

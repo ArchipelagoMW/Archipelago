@@ -1923,4 +1923,10 @@
         <DupeMaximumMethod value="Replace"/>
         <Pitch value="-1.000000,1.000000"/>
     </CSound>
+    <CSound id="AP_FireSuppressionBots_Loop" parent="Ambience_Object">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\FireSuppressionBots\FireSupressionBots_Loop0.wav"/>
+        <LoopCount value="-1"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
 </Catalog>

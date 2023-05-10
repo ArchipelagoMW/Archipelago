@@ -442,4 +442,8 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_AndNotCountUnitDukesRevengeTotalNotCountUnitDukesRevengeQueuedOrBetter"/>
     </CRequirement>
+    <CRequirement id="AP_HaveAttachedStarportTechLabAndFusionCore">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUnitFusionCoreCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

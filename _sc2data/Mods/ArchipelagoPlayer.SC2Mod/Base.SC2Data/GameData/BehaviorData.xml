@@ -707,4 +707,22 @@
             <DamageDealtFraction index="Ranged" value="1.1"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_FireSuppressionSystem">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_FireSuppressionSystemsResearched"/>
+        <DisableValidatorArray value="NotDeadOrConstruction"/>
+        <DisableValidatorArray value="LifeLTHalf"/>
+        <Modification>
+            <VitalRegenArray index="Life" value="4"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_TerranBuildingBurnDown">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_FireSuppressionSystemsNotResearched"/>
+        <DisableValidatorArray value="BurnDownFire"/>
+        <Period value="0.3332"/>
+        <PeriodicEffect value="AP_BurndownDamage"/>
+    </CBehaviorBuff>
 </Catalog>
