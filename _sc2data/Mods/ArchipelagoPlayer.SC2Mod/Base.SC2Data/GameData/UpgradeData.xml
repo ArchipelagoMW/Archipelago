@@ -797,7 +797,7 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <EffectArray Operation="Set" Reference="Abil,AP_SCVHarvest,ResourceAmountBonus[Vespene]" Value="1"/>
         <EffectArray Operation="Set" Reference="Effect,AP_AutoHarvestVespeneTerran,Resources" Value="-5"/>
-        <!-- FIXME: Add +2 for Automated Refinery on Rich Vespene -->
+        <EffectArray Operation="Set" Reference="Effect,AP_AutoHarvestVespeneTerranRich,Resources" Value="-10"/>
         <Flags index="UpgradeCheat" value="0"/>
     </CUpgrade>
 </Catalog>

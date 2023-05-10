@@ -237,6 +237,8 @@ Button/Tooltip/AP_AutoTurret=Automated defensive turret. <n/><n/><c val="#ColorA
 Button/Tooltip/AP_AutomatedRefinery=Improved Refinery that sends refined vespene gas straight to the Command Center via short-range warp fields. Eliminates the need for SCVs in vespene gas production.
 Button/Tooltip/AP_AutomatedRefineryTextKicker4=<s val="Kicker_Refinery">+4 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker5=<s val="Kicker_Refinery">+5</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
+Button/Tooltip/AP_AutomatedRefineryTextKicker8=<s val="Kicker_Refinery">+8</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
+Button/Tooltip/AP_AutomatedRefineryTextKicker10=<s val="Kicker_Refinery">+10</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
 Button/Tooltip/AP_Banshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Battlecruiser=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AP_AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
@@ -710,6 +712,7 @@ Unit/Name/AP_ATSLaserBatteryLMWeapon=ATS Laser Battery
 Unit/Name/AP_AutoTurret=Auto-Turret
 Unit/Name/AP_AutoTurretReleaseWeapon=Auto Turret Release Weapon
 Unit/Name/AP_AutomatedRefinery=Automated Refinery
+Unit/Name/AP_AutomatedRefineryRich=Automated Refinery
 Unit/Name/AP_BacklashRocketsLMWeapon=Backlash Rockets
 Unit/Name/AP_Banshee=Banshee
 Unit/Name/AP_Battlecruiser=Battlecruiser

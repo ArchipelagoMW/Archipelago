@@ -2468,6 +2468,12 @@
         <Resources value="-4"/>
         <ResourcesHarvestedFraction value="1"/>
     </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_AutoHarvestVespeneTerranRich">
+        <!-- Need to define for each race so an economy upgrade (for gas harvesting rate) won't affect other races -->
+        <EditorCategories value=""/>
+        <Resources value="-8"/> <!-- TODO: 6 for WoL, 8 for LotV -->
+        <ResourcesHarvestedFraction value="1"/>
+    </CEffectModifyUnit>
     <CEffectIssueOrder id="AP_RefineryMorph">
         <EditorCategories value=""/>
         <WhichUnit Value="Source"/>
@@ -2490,4 +2496,30 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="AP_HarvestableRichVespeneGeyserGas"/>
     </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_RefineryRichRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_HarvestableVespeneGeyserGas"/>
+    </CEffectRemoveBehavior>
+    <CEffectEnumArea id="AP_AutomatedRefineryRichSearch">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="RawResource;-"/>
+        <AreaArray Radius="0.5" Effect="AP_AutomatedRefineryRichSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_AutomatedRefineryRichSet">
+        <ValidatorArray value="RichVespeneGeyser"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_AutomatedRefineryRichAB"/>
+        <EffectArray value="AP_AutomatedRefineryRichRB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_AutomatedRefineryRichAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_AutoHarvestVespeneTerranRich"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_AutomatedRefineryRichRB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_AutoHarvestVespeneTerran"/>
+    </CEffectRemoveBehavior>
 </Catalog>

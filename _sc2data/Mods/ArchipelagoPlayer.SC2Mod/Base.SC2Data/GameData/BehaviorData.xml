@@ -734,6 +734,15 @@
         <Period value="2.1"/>
         <PeriodicEffect value="AP_AutoHarvestVespeneTerran"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AutoHarvestVespeneTerranRich">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_AutoHarvesterHarvest"/>
+        <RemoveValidatorArray value="AP_AutoHarvesterFinish"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Period value="2.1"/>
+        <PeriodicEffect value="AP_AutoHarvestVespeneTerranRich"/>
+    </CBehaviorBuff>
     <CBehaviorResource id="AP_AutomaticHarvestableVespene">
         <InfoFlags index="Hidden" value="1"/>
         <InfoIcon value="Assets\Textures\icon-gas.dds"/>

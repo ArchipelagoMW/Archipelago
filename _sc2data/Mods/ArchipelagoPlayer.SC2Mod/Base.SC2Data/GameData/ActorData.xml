@@ -4646,7 +4646,7 @@
     <CActorUnit id="AP_AutomatedRefinery" parent="TerranBuilding" unitName="AP_AutomatedRefinery">
         <Aliases value="_UnitHuge"/>
         <Macros value="ExtractAnim"/>
-        <On Terms="AbilMorph.*.Finish; MorphFrom Refinery" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Refinery" Send="Create"/>
         <On Terms="ActorCreation" Send="AnimGroupRemove A"/>
         <On Terms="ActorCreation" Send="AnimGroupRemove D"/>
         <On Terms="ActorCreation" Send="AnimGroupApply B"/>
@@ -4666,6 +4666,54 @@
         <On Terms="Effect.AP_AutoHarvestVespeneTerran.Start; !ValidateUnit AP_HasMicroFiltering" Send="Create AP_AutomatedRefineryTextKicker4"/>
         <On Terms="Effect.AP_AutoHarvestVespeneTerran.Start; ValidateUnit AP_HasMicroFiltering" Send="Create AP_AutomatedRefineryTextKicker5"/>
         <On Terms="UnitBirth.AP_AutomatedRefinery" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
+        <On Terms="ActorDestruction" Send="Create GeyserUncovered"/>
+        <DeathArray index="Normal" ModelLink="AP_AutomatedRefineryDeath" SoundLink="AP_AutomatedRefinery_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Refinery_Explode"/>
+        <PlacementModel value="AP_AutomatedRefineryPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="160"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Refinery-automated.dds"/>
+        </GroupIcon>
+        <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-RefineryAutomated.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <NameOffset value="80"/>
+        <SoundArray index="Ready" value="Refinery_What"/>
+        <SoundArray index="What" value="Refinery_What"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Building-Terran-RefineryAutomated.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-Refinery-automated.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_AutomatedRefineryRich" parent="TerranBuilding" unitName="AP_AutomatedRefineryRich">
+        <Model value="AP_AutomatedRefinery" />
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ExtractAnim"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_RefineryRich" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove A"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove D"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply B"/>
+        <On Terms="ActorCreation" Send="StatusSet Mining 0"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneTerranRich.Start" Send="TimerKill Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneTerranRich.Start" Send="TimerSet 5.000000 Stopped"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneTerranRich.Start; IsStatus Mining 0" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneTerranRich.Start; IsStatus Mining 0" Send="AnimGroupRemove B"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneTerranRich.Start; IsStatus Mining 0" Send="AnimGroupApply A"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneTerranRich.Start; IsStatus Mining 0" Send="StatusSet Mining 1"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="AnimGroupRemove A"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="AnimGroupApply B"/>
+        <On Terms="TimerExpired; TimerName Stopped" Send="StatusSet Mining 0"/>
+        <On Terms="AnimDone; AnimName Work; IsStatus Mining 1" Send="AnimPlay Work Stand,Work"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneTerranRich.On" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_AutoHarvestVespeneTerranRich.Off" Send="SetTintColor 255,170,170"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneTerranRich.Start; !ValidateUnit AP_HasMicroFiltering" Send="Create AP_AutomatedRefineryTextKicker8"/>
+        <On Terms="Effect.AP_AutoHarvestVespeneTerranRich.Start; ValidateUnit AP_HasMicroFiltering" Send="Create AP_AutomatedRefineryTextKicker10"/>
+        <On Terms="UnitBirth.AP_AutomatedRefineryRich" Send="TimerSet 0.100000 HideGeyser"/>
         <On Terms="TimerExpired; TimerName HideGeyser" Send="Create GeyserBuildFinishCovered"/>
         <On Terms="ActorDestruction" Send="Create GeyserUncovered"/>
         <DeathArray index="Normal" ModelLink="AP_AutomatedRefineryDeath" SoundLink="AP_AutomatedRefinery_Explode"/>
@@ -4714,6 +4762,30 @@
         <AlignV value="Bottom"/>
         <HeightOffset value="3.500000"/>
         <Text value="Button/Tooltip/AP_AutomatedRefineryTextKicker5"/>
+    </CActorText>
+    <CActorText id="AP_AutomatedRefineryTextKicker8">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AP_AutomatedRefineryTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/AP_AutomatedRefineryTextKicker8"/>
+    </CActorText>
+    <CActorText id="AP_AutomatedRefineryTextKicker10">
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create AP_AutomatedRefineryTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <FixedSize value="28"/>
+        <AlignV value="Bottom"/>
+        <HeightOffset value="3.500000"/>
+        <Text value="Button/Tooltip/AP_AutomatedRefineryTextKicker10"/>
     </CActorText>
     <CActorSiteMover id="AP_AutomatedRefineryTextMover">
         <Terms value="Cap 1"/>
@@ -4778,6 +4850,7 @@
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationRefinery"/>
         <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
         <On Terms="UnitBirth.AP_RefineryRich" Send="TimerSet 0.100000 HideGeyser"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_RefineryRich" Send="Destroy"/>
         <Model value="RefineryRich"/>
         <CreepHeightClass value="Medium"/>
         <BuildModel value="RefineryRich"/>

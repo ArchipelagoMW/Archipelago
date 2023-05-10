@@ -3755,6 +3755,7 @@
         <BehaviorArray Link="AP_AutoHarvestVespeneTerran"/>
         <BehaviorArray Link="AP_FireSuppressionSystem"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <EffectArray index="Create" value="AP_AutomatedRefineryRichSearch"/>
         <CardLayouts>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons>
@@ -3773,8 +3774,70 @@
         <BuiltOn value="VespeneGeyser"/>
         <BuiltOn value="SpacePlatformGeyser"/>
         <BuiltOn value="RichVespeneGeyser"/>
-        <!-- FIXME: Fix the harvest amount on Rich Vespene -->
         <BuiltOn value="TempleGeyser"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <GlossaryPriority value="11"/>
+    </CUnit>
+    <CUnit id="AP_AutomatedRefineryRich">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <ResourceType value="Vespene"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="500"/>
+        <LifeMax value="500"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostResource index="Minerals" value="100"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <BehaviorArray Link="AP_AutomaticHarvestableVespene"/>
+        <BehaviorArray Link="AP_AutoHarvestVespeneTerranRich"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <EffectArray index="Create" value="AP_AutomatedRefineryRichSearch"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons>
+                <Face value="AP_MicroFiltering"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_HaveMicroFiltering"/>
+                <Row value="1"/>
+                <Column value="0"/>
+            </LayoutButtons>
+        </CardLayouts>
+        <Radius value="1.5"/>
+        <SeparationRadius value="1.5"/>
+        <Footprint value="FootprintGeyserRoundedBuilt"/>
+        <PlacementFootprint value="Footprint3x3CappedGeyser"/>
+        <BuiltOn value="RichVespeneGeyser"/>
         <ScoreMake value="50"/>
         <ScoreKill value="150"/>
         <ScoreResult value="BuildOrder"/>
