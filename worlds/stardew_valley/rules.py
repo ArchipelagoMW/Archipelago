@@ -173,6 +173,8 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
                              logic.has_relationship("Harvey", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_maru_room, player),
                              logic.has_relationship("Maru", 2))
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_sebastian_room, player),
+                             logic.has_relationship("Sebastian", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_leah_cottage, player),
                              logic.has_relationship("Leah", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_elliott_house, player),
