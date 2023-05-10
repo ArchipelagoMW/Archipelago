@@ -59,7 +59,7 @@ pre_generated_worlds = {}
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
-def setup_solo_multiworld(test_options=None,
+def setup_solo_multiworld(test_options=None, seed=None,
                           _cache: Dict[FrozenSet[Tuple[str, Any]], MultiWorld] = {}) -> MultiWorld:  # noqa
     if test_options is None:
         test_options = {}
@@ -72,7 +72,7 @@ def setup_solo_multiworld(test_options=None,
     multiworld = MultiWorld(1)
     multiworld.game[1] = StardewValleyWorld.game
     multiworld.player_name = {1: "Tester"}
-    multiworld.set_seed()
+    multiworld.set_seed(seed)
     print(f"Seed: {multiworld.seed}")
     args = Namespace()
     for name, option in StardewValleyWorld.option_definitions.items():

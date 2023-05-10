@@ -1,5 +1,6 @@
 import itertools
 import unittest
+from random import random
 from typing import Dict
 
 from BaseClasses import ItemClassification, MultiWorld
@@ -56,13 +57,14 @@ class TestGenerateDynamicOptions(SVTestBase):
                     basic_checks(self, multiworld)
 
     def test_given_choice_when_generate_then_basic_checks(self):
+        seed = int(random() * pow(10, 18) - 1)
         for option in stardew_valley_option_classes:
             if not option.options:
                 continue
             for value in option.options:
                 with self.subTest(f"{option.internal_name}: {value}"):
                     choices = {option.internal_name: option.options[value]}
-                    multiworld = setup_solo_multiworld(choices)
+                    multiworld = setup_solo_multiworld(choices, seed)
                     basic_checks(self, multiworld)
 
     def test_given_option_pair_when_generate_then_basic_checks(self):
