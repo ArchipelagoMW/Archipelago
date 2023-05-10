@@ -4691,7 +4691,7 @@
         </Wireframe>
     </CActorUnit>
     <CActorUnit id="AP_AutomatedRefineryRich" parent="TerranBuilding" unitName="AP_AutomatedRefineryRich">
-        <Model value="AP_AutomatedRefinery" />
+        <Model value="AP_AutomatedRefinery"/>
         <Aliases value="_UnitHuge"/>
         <Macros value="ExtractAnim"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_RefineryRich" Send="Create"/>
@@ -4881,4 +4881,186 @@
     <CActorSplat id="AP_RefinerySplat" parent="GenericUnitSplat" unitName="AP_Refinery">
         <Model value="RefinerySplat"/>
     </CActorSplat>
+    <CActorUnit id="AP_SupplyDepot" parent="TerranBuildingEx" unitName="AP_SupplyDepot">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepotLowered" Send="AnimGroupRemove Unburrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepotLowered" Send="AnimGroupApply Burrow Burrow Stand,Burrow ClosingFull"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepot" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotLowered" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotLowered" Send="AnimGroupRemove Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotLowered" Send="AnimGroupApply Unburrow Stand,Unburrow Stand,Unburrow Instant"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotDrop" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotDrop" Send="Create BuildingTerrainFlatten"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotDrop" Send="QueryRadius 1.750000 BuildingCrushQueryResponse"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationSupplyDepot"/>
+        <On Terms="Signal.*.Incoming" Send="RefSetFromMsg ::actor.SupplyDropModel ::Sender"/>
+        <On Terms="Signal.*.Incoming" Target="::actor.SupplyDropModel" Send="Signal Raised"/>
+        <On Terms="ActorCreation; PlayerHasReward SupplyDepotSkin" Send="StatusSet CE 1"/>
+        <On Terms="ActorCreation; PlayerHasReward SupplyDepotSkin" Send="AnimBracketStop ::GL_BSD Instant"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotDrop" Send="Create BuildingTerrainFlatten"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotDrop" Send="QueryRadius 1.750000 BuildingCrushQueryResponse"/>
+        <Model value="SupplyDepot"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="SupplyDepot"/>
+        <DeathArray index="Normal" ModelLink="SupplyDepotDeath" SoundLink="SupplyDepot_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="SupplyDepot_Explode"/>
+        <PlacementModel value="SupplyDepotPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PortraitModel value="SupplyDepotPortrait"/>
+        <BarOffset value="70"/>
+        <BarWidth value="80"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-SupplyDepot-Raised.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-supplydepot.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="SupplyDepot_Ready"/>
+        <SoundArray index="What" value="SupplyDepot_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-supplydepot.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-SupplyDepot-Raised.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_SupplyDepotBuild" parent="TerranBuildingBuild">
+        <Model value="SupplyDepotBuild"/>
+    </CActorModel>
+    <CActorUnit id="AP_SupplyDepotDrop" parent="GenericUnitStandard" unitName="AP_SupplyDepotDrop">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotDrop" Target="AP_SupplyDepotDropPod" Send="Signal DropFinished"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotDrop" Send="Destroy"/>
+        <On Terms="UnitConstruction.AP_SupplyDepotDrop" Send="Create AP_SupplyDepotDropPod"/>
+        <On Terms="UnitConstruction.AP_SupplyDepotDrop" Send="$Stand"/>
+        <BuildModel value="AP_SupplyDepotDropLights"/>
+        <DeathArray index="Normal" ModelLink="SupplyDepotDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="SupplyDepot_Explode"/>
+        <PlacementModel value="SupplyDepotPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="70"/>
+        <BarWidth value="80"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-SupplyDepot-Raised.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-supplydepot.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="Ready" value="SupplyDepot_What"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-supplydepot.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-SupplyDepot-Raised.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_SupplyDepotDropPod" parent="ModelAnimationStyleOneShot">
+        <InheritType value="OneShot"/>
+        <On Terms="ActorCreation" Send="Create AP_SupplyDropPodFall"/>
+        <On Terms="ActorCreation" Send="$Spell 0 -1.000000 -1.000000 5.000000 AsDuration"/>
+        <On Terms="AnimDone; AnimName Spell" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="SupplyDepotDropPod"/>
+    </CActorModel>
+    <CActorUnit id="AP_SupplyDepotLowered" parent="TerranBuildingEx" unitName="AP_SupplyDepotLowered">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="UnitBirth.AP_SupplyDepotLowered" Send="AnimGroupApply Burrow Burrow Stand,Burrow ClosingFull"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="AnimGroupRemove Burrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="AnimGroupApply Unburrow Unburrow Stand ClosingFull"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepotLowered" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepot" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepot" Send="AnimGroupRemove Unburrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_SupplyDepot" Send="AnimGroupApply Burrow Stand,Burrow Stand,Burrow Instant"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationSupplyDepot"/>
+        <On Terms="Abil.SupplyDrop.TargetApproachStart" Send="$Spell"/>
+        <On Terms="Signal.*.Incoming" Send="RefSetFromMsg ::actor.AP_SupplyDropModel ::Sender"/>
+        <On Terms="Signal.*.Incoming" Target="::actor.AP_SupplyDropModel" Send="Signal Lowered"/>
+        <On Terms="ActorCreation; PlayerHasReward SupplyDepotSkin" Send="StatusSet CE 1"/>
+        <On Terms="ActorCreation; PlayerHasReward SupplyDepotSkin" Send="AnimBracketStop ::GL_BSD Instant"/>
+        <Model value="SupplyDepotLowered"/>
+        <CreepHeightClass value="Tiny"/>
+        <BuildModel value="SupplyDepotLowered"/>
+        <DeathArray index="Normal" ModelLink="SupplyDepotLoweredDeath" SoundLink="SupplyDepot_Explode"/>
+        <PlacementModel value="SupplyDepotPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PortraitModel value="SupplyDepotPortrait"/>
+        <BarOffset value="70"/>
+        <BarWidth value="80"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Text="e_cmdCantRaise" Sound="UI_GenericError"/>
+        <ErrorArray Error="CantFindPlacementLocation" Text="e_cmdCantRaise" Sound="UI_GenericError"/>
+        <ErrorArray Error="CantBuildOnThat" Text="e_cmdCantRaise" Sound="UI_GenericError"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-SupplyDepot-Lowered.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-supplydepotlowered.dds"/>
+        <SoundArray index="Ready" value="SupplyDepot_Ready"/>
+        <SoundArray index="Help" value="SupplyDepotHelp"/>
+        <SoundArray index="What" value="SupplyDepot_What"/>
+        <SoundArray index="Yes" value="SupplyDepotYes"/>
+        <SoundArray index="Attack" value="SupplyDepotYes"/>
+        <SoundArray index="Pissed" value="SupplyDepotPissed"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-supplydepotlowered.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-SupplyDepot-Lowered.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSplat id="AP_SupplyDepotSplat" parent="GenericUnitSplat" unitName="AP_SupplyDepot">
+        <Model value="SupplyDepotSplat"/>
+    </CActorSplat>
+    <CActorModel id="AP_SupplyDropModel">
+        <Aliases value="_SnapshotExtra"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="CreepEngulfment" value="1"/>
+        <Inherits index="Decal" value="1"/>
+        <Inherits index="LocalTintColor" value="1"/>
+        <Inherits index="ModelMaterials" value="1"/>
+        <Inherits index="Opacity" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TimeScale" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="Effect.AP_SupplyDropApplyTempBehavior.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.300000 DelayDropSupply"/>
+        <On Terms="Effect.AP_SupplyDropApplyTempBehavior.Start; At Target" Send="Create AP_OrbitalCommand_CalldownExtraSuppliesDrop"/>
+        <On Terms="TimerExpired; TimerName DelayDropSupply" Send="Create AP_OrbitalCommand_CalldownExtraSuppliesImpact"/>
+        <On Terms="TimerExpired; TimerName DelayDropSupply" Target="AP_OrbitalCommand_CalldownExtraSuppliesDrop" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Birth" Send="$Stand PlayForever"/>
+        <On Terms="AnimDone; AnimName Birth" Send="AliasAdd _Snapshot"/>
+        <On Terms="AnimDone; AnimName Spell" Send="$Stand PlayForever"/>
+        <On Terms="AnimDone; AnimName Spell" Send="AliasAdd _Snapshot"/>
+        <On Terms="AnimDone; AnimName Spell" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepotLowered; !AnimPlaying Birth" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepotLowered; !AnimPlaying Birth" Send="StatusSet Raised 0"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="AnimGroupRemove Burrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="StatusSet Raised 1"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="Signal Incoming"/>
+        <On Terms="Signal.*.Lowered" Send="$Spell"/>
+        <On Terms="Signal.*.Lowered" Send="StatusSet Raised 0"/>
+        <On Terms="Signal.*.Raised" Send="$Birth"/>
+        <On Terms="Signal.*.Raised" Send="StatusSet Raised 1"/>
+        <On Terms="UnitDeathCustomize; IsStatus Raised 0" Send="Create SupplyPodFallingLoweredDeath"/>
+        <On Terms="UnitDeathCustomize; IsStatus Raised 1" Send="Create SupplyPodFallingDeath"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="UnitDeath; ModelIsLowQuality" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="SupplyDropModel"/>
+    </CActorModel>
+    <CActorSound id="AP_SupplyDropPodFall" parent="SoundOneShot">
+        <Sound value="Barracks_DropPodFall"/>
+    </CActorSound>
+    <CActorSound id="TerranBuildingLiftOff">
+        <!-- Override -->
+        <!-- Add AP buildings -->
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="TerranBuildingLand">
+        <!-- Override -->
+        <!-- Add AP buildings -->
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepotLowered" Send="Create"/>
+        <Sound value="Terran_BuildingLand"/>
+    </CActorSound>
 </Catalog>

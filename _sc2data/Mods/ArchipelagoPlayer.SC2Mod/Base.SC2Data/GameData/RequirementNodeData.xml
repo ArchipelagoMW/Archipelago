@@ -747,4 +747,11 @@
         <Count Link="AP_MicroFiltering" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSupplyDepotDropCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SupplyDepotDrop" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeSupplyDepotDropCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeSupplyDepotDropCompleteOnly"/>
+    </CRequirementNot>
 </Catalog>

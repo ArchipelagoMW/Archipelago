@@ -3984,4 +3984,172 @@
         <GlossaryAlias value="Refinery"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
     </CUnit>
+    <CUnit id="AP_SupplyDepot">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="350"/>
+        <LifeMax value="350"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <Food value="8"/>
+        <CostCategory value="Economy"/>
+        <CostResource index="Minerals" value="100"/>
+        <RepairTime value="30"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_SupplyDepotLower"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress,Halt" Row="2" Column="3"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Lower" Type="AbilCmd" AbilCmd="AP_SupplyDepotLower,0" Row="2" Column="0"/>
+            <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+        </CardLayouts>
+        <Radius value="1.25"/>
+        <SeparationRadius value="1.25"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint2x2"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.25"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="SupplyDepot"/>
+        <LeaderAlias value="SupplyDepot"/>
+        <HotkeyAlias value="SupplyDepot"/>
+        <SelectAlias value="SupplyDepot"/>
+        <TechAliasArray value="Alias_SupplyDepot"/>
+        <GlossaryPriority value="10"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="AP_SupplyDepotDrop">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="350"/>
+        <LifeMax value="350"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostResource index="Minerals" value="100"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="AP_BuildinProgressNonCancellable"/>
+        <AbilArray Link="AP_DropToSupplyDepot"/>
+        <BehaviorArray Link="AP_SupplyDepotDropMorph"/>
+        <CardLayouts/>
+        <Radius value="1.25"/>
+        <SeparationRadius value="1.25"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint2x2"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.25"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TechAliasArray value="Alias_SupplyDepot"/>
+    </CUnit>
+    <CUnit id="AP_SupplyDepotLowered">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="350"/>
+        <LifeMax value="350"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <Food value="8"/>
+        <CostCategory value="Economy"/>
+        <CostResource index="Minerals" value="100"/>
+        <RepairTime value="30"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_SupplyDepotRaise"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="Raise" Type="AbilCmd" AbilCmd="AP_SupplyDepotRaise,0" Row="2" Column="0"/>
+        </CardLayouts>
+        <Radius value="1.25"/>
+        <SeparationRadius value="1.25"/>
+        <Footprint value="Footprint2x2Underground"/>
+        <ScoreKill value="100"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.25"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <LeaderAlias value="SupplyDepot"/>
+        <HotkeyAlias value="SupplyDepot"/>
+        <SelectAlias value="SupplyDepot"/>
+        <TechAliasArray value="Alias_SupplyDepot"/>
+    </CUnit>
 </Catalog>

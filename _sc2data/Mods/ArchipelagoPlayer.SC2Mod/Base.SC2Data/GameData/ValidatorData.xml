@@ -222,6 +222,30 @@
     <CValidatorUnitType id="AP_IsVanillaThor">
         <Value value="Thor"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaSupplyDepotLowered">
+        <Value value="SupplyDepotLowered"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPSupplyDepotLowered">
+        <Value value="AP_SupplyDepotLowered"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsSupplyDepotLowered" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaSupplyDepotLowered"/>
+        <CombineArray value="AP_IsAPSupplyDepotLowered"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsAPSupplyDepotMorphing">
+        <ResultFailed value="MustTargetStructures,Error/CantTargetWhileMorphing"/>
+        <Behavior value="AP_SupplyDepotMorphing"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsVanillaSupplyDepotMorphing">
+        <ResultFailed value="MustTargetStructures,Error/CantTargetWhileMorphing"/>
+        <Behavior value="SupplyDepotMorphing"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="IsSupplyDepotMorphing" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaSupplyDepotMorphing"/>
+        <CombineArray value="AP_IsAPSupplyDepotMorphing"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsThor" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaThor"/>

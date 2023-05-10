@@ -1193,4 +1193,53 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
         <InfoArray Unit="AP_AutomatedRefinery" CollideRange="0"/>
     </CAbilMorph>
+    <CAbilBuildable id="AP_BuildinProgressNonCancellable">
+        <Cancelable value="0"/>
+    </CAbilBuildable>
+    <CAbilMorph id="AP_DropToSupplyDepot">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="AP_SupplyDepot" CollideRange="0"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_SupplyDepotLower">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Lower"/>
+        <InfoArray Unit="AP_SupplyDepotLowered" CollideRange="0">
+            <SectionArray index="Abils">
+                <EffectArray index="Start" value="AP_SupplyDepotMorphingApplyBehavior"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.3"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="1.3"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="1.3"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1.3"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_SupplyDepotRaise">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="MoveBlockers" value="1"/>
+        <InfoArray Unit="AP_SupplyDepot" CollideRange="0">
+            <SectionArray index="Abils">
+                <EffectArray index="Start" value="AP_SupplyDepotMorphingApplyBehavior"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.3"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="1.3"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1.3"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
 </Catalog>

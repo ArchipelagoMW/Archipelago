@@ -2471,7 +2471,8 @@
     <CEffectModifyUnit id="AP_AutoHarvestVespeneTerranRich">
         <!-- Need to define for each race so an economy upgrade (for gas harvesting rate) won't affect other races -->
         <EditorCategories value=""/>
-        <Resources value="-8"/> <!-- TODO: 6 for WoL, 8 for LotV -->
+        <Resources value="-8"/>
+        <!-- TODO: 6 for WoL, 8 for LotV -->
         <ResourcesHarvestedFraction value="1"/>
     </CEffectModifyUnit>
     <CEffectIssueOrder id="AP_RefineryMorph">
@@ -2522,4 +2523,15 @@
         <WhichUnit Value="Caster"/>
         <BehaviorLink value="AP_AutoHarvestVespeneTerran"/>
     </CEffectRemoveBehavior>
+    <CEffectIssueOrder id="AP_SupplyDepotDropMorph">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_DropToSupplyDepot"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_SupplyDepotMorphingApplyBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_SupplyDepotMorphing"/>
+    </CEffectApplyBehavior>
 </Catalog>

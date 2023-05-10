@@ -800,4 +800,8 @@
         <EffectArray Operation="Set" Reference="Effect,AP_AutoHarvestVespeneTerranRich,Resources" Value="-10"/>
         <Flags index="UpgradeCheat" value="0"/>
     </CUpgrade>
+    <CUpgrade id="AP_SupplyDepotDrop">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

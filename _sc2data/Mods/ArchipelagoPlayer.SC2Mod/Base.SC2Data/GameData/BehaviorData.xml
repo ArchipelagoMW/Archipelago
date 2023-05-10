@@ -783,4 +783,16 @@
         <IdealHarvesterCount value="3"/>
         <CarryResourceBehavior value="CarryHarvestableVespeneGeyserGas"/>
     </CBehaviorResource>
+    <CBehaviorBuff id="AP_SupplyDepotDropMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.001"/>
+        <ExpireEffect value="AP_SupplyDepotDropMorph"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SupplyDepotMorphing">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="1.35"/>
+    </CBehaviorBuff>
 </Catalog>

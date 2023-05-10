@@ -1557,4 +1557,18 @@
         <Model value="Assets\Buildings\Terran\RefineryBuild\RefineryBuild.m3"/>
         <SelectionLayer value="2"/>
     </CModel>
+    <CModel id="AP_SupplyDepotDrop" parent="Building" Race="Terran">
+        <Model value="Assets\Buildings\Terran\SupplyDepot\SupplyDepot.m3"/>
+        <Radius value="1.250000"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="2.083000"/>
+        <ShadowRadius value="2.083000"/>
+        <Tipability value="0.250000"/>
+    </CModel>
+    <CModel id="AP_SupplyDepotDropLights" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\OrbitalDepotImpact\OrbitalDepotImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

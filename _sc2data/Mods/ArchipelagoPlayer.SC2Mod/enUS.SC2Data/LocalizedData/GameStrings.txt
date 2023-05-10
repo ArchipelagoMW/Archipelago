@@ -61,7 +61,11 @@ Abil/Name/AP_WreckingCrewFighterMode=Hel's Angels Fighter Mode
 Abil/Name/AP_Yamato=Yamato Gun
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_que1=Queue (1)
+Abil/Name/AP_BuildinProgressNonCancellable=Build in Progress Non Cancellable
+Abil/Name/AP_DropToSupplyDepot=Drop To Supply Depot
 Abil/Name/Stimpack2=Stimpack
+Abil/Name/AP_SupplyDepotLower=Lower
+Abil/Name/AP_SupplyDepotRaise=Raise
 Behavior/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Behavior/Name/AP_330mmBarrageCannons=330mm Barrage Cannon
 Behavior/Name/AP_BansheeCloak=Cloak
@@ -227,6 +231,7 @@ Button/Name/AP_WidowMineUnburrow=Deactivate Mine
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
+Button/Name/AP_SupplyDepotDrop=Calldown: Supply Depot
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
@@ -235,10 +240,10 @@ Button/Tooltip/AP_AresClassWeaponsSystem=Increases missile range by 3 and Autoca
 Button/Tooltip/AP_AresClassWeaponsSystemviking=Increases missile range by 2 and Autocannon range by 1.
 Button/Tooltip/AP_AutoTurret=Automated defensive turret. <n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_AutomatedRefinery=Improved Refinery that sends refined vespene gas straight to the Command Center via short-range warp fields. Eliminates the need for SCVs in vespene gas production.
+Button/Tooltip/AP_AutomatedRefineryTextKicker10=<s val="Kicker_Refinery">+10</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker4=<s val="Kicker_Refinery">+4 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker5=<s val="Kicker_Refinery">+5</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker8=<s val="Kicker_Refinery">+8</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
-Button/Tooltip/AP_AutomatedRefineryTextKicker10=<s val="Kicker_Refinery">+10</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
 Button/Tooltip/AP_Banshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Battlecruiser=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AP_AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
@@ -335,6 +340,8 @@ Button/Tooltip/AP_RapidDeployment=The Hercules deploys loaded troops almost inst
 Button/Tooltip/AP_RapidDeploymentTubes=The Medivac deploys loaded troops almost instantly.
 Button/Tooltip/AP_Raven=Aerial support unit. Can use Auto-Turret, Point Defense Drone and Seeker Missile.<n/><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_Reaper=Raider. Capable of jumping up and down cliffs. Throws explosive mines.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_Refinery=Built over a Vespene Geyser to allow harvesting of vespene gas.
+Button/Tooltip/AP_RefineryRich=Built over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/AP_ResearchCycloneRapidFireLaunchers=Increases the attack speed of the first 12 shots of the <c val="ffff8a">Cyclone's</c> Lock On.
 Button/Tooltip/AP_ResearchMagFieldLaunchers=Increases <c val="ffff8a">Cyclone's</c> attack range by +<d ref="$UpgradeEffectArrayValue:AP_MagFieldLaunchers:Weapon,AP_TyphoonMissilePod,Range$"/>.
 Button/Tooltip/AP_ResearchSpiderMinesSC1=Enables the Vulture to carry Spider Mines. Spider Mines burrow into the ground and become cloaked unless spotted with a detector or effect. When most types of enemy ground units pass nearby, the Spider Mine will unburrow, chase down the units, and detonate.
@@ -385,8 +392,9 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_Refinery=Built over a Vespene Geyser to allow harvesting of vespene gas.
-Button/Tooltip/AP_RefineryRich=Built over a Vespene Geyser to allow harvesting of vespene gas.
+Button/Tooltip/AP_SupplyDepot=Provides supply.<n/>Supply allows you to create more units.<n/>Supply Depots can be lowered to allow units to walk over them.
+Button/Tooltip/AP_SupplyDepotDrop=Improved Supply Depot. Can be instantly deployed from orbit. Eliminates the time required for an SCV to assemble a standard Supply Depot.
+Button/Tooltip/AP_SupplyDepotLowered=Provides supply.<n/>Supply allows you to create more units.<n/>Supply Depots can be lowered to allow units to walk over them.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -706,6 +714,8 @@ Effect/Name/AP_WreckingCrewFighterU=Halo Rockets (Damage)
 Effect/Name/AP_Yamato=Yamato Cannon (Missile)
 Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
+Effect/Name/AP_SupplyDepotDropMorph=Supply Depot Drop Morph
+Effect/Name/AP_SupplyDepotMorphingApplyBehavior=Supply Depot Morphing Apply Behavior
 UI/AP_SpiderMineBuilding=Constructing
 Unit/Name/AP_ATALaserBatteryLMWeapon=ATA Laser Battery
 Unit/Name/AP_ATSLaserBatteryLMWeapon=ATS Laser Battery
@@ -761,6 +771,8 @@ Unit/Name/AP_Predator=Predator
 Unit/Name/AP_PunisherGrenadesLMWeapon=Punisher Grenades
 Unit/Name/AP_Raven=Raven
 Unit/Name/AP_Reaper=Reaper
+Unit/Name/AP_Refinery=Refinery
+Unit/Name/AP_RefineryRich=Refinery
 Unit/Name/AP_ScienceVessel=Science Vessel
 Unit/Name/AP_SiegeBreaker=Siege Breaker
 Unit/Name/AP_SiegeBreakerSieged=Siege Breaker
@@ -793,8 +805,9 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_Refinery=Refinery
-Unit/Name/AP_RefineryRich=Refinery
+Unit/Name/AP_SupplyDepot=Supply Depot
+Unit/Name/AP_SupplyDepotDrop=Supply Depot Calldown Beacon
+Unit/Name/AP_SupplyDepotLowered=Supply Depot
 Upgrade/Name/AP_330mmBarrageCannons=330 mm Barrage Cannons
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Upgrade/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
@@ -896,6 +909,7 @@ Upgrade/Name/AP_VikingJotunBoosters=Jotun Boosters
 Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
+Upgrade/Name/AP_SupplyDepotDrop=Calldown: Supply Depot
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
