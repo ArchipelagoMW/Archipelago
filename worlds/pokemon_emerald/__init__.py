@@ -12,9 +12,12 @@ from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 
 from .data import PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, data as emerald_data
-from .items import PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification, offset_item_value, create_item_groups
+from .items import (PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
+    offset_item_value, create_item_groups)
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
-from .options import Goal, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, ItemPoolType, TmCompatibility, HmCompatibility, option_definitions
+from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
+    RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility, HmCompatibility,
+    option_definitions)
 from .pokemon import get_random_species, get_species_by_name, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path, location_visited_event_to_id_map
