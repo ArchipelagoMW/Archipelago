@@ -503,14 +503,3 @@ option_definitions: Dict[str, Option] = {
 
   "easter_egg": EasterEgg
 }
-
-
-def get_option_value(multiworld: MultiWorld, player: int, option_name: str) -> Union[int, str, Dict, List, Set]:
-    """
-    Returns the option value for a player in a multiworld
-    """
-    option = getattr(multiworld, option_name, None)
-    if option is None:
-        return option_definitions[option_name].default
-
-    return option[player].value

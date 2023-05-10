@@ -5,7 +5,7 @@ from BaseClasses import CollectionState, MultiWorld
 
 from worlds.generic.Rules import add_rule, set_rule
 
-from .options import EliteFourRequirement, NormanRequirement, ExtraBoulders, get_option_value
+from .options import EliteFourRequirement, NormanRequirement, ExtraBoulders
 from .util import location_name_to_label
 
 
@@ -156,23 +156,23 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_location(location_name_to_label("NPC_GIFT_RECEIVED_HM03"), player),
         lambda state: state.has("EVENT_DEFEAT_NORMAN", player)
     )
-    if get_option_value(multiworld, player, "norman_requirement") == NormanRequirement.option_badges:
+    if multiworld.norman_requirement[player].value == NormanRequirement.option_badges:
         set_rule(
             multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
-            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "norman_count"))
+            lambda state: _has_at_least_n_badges(state, player, multiworld.norman_count[player].value)
         )
         set_rule(
             multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
-            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "norman_count"))
+            lambda state: _has_at_least_n_badges(state, player, multiworld.norman_count[player].value)
         )
     else:
         set_rule(
             multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
-            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "norman_count"))
+            lambda state: _defeated_n_gym_leaders(state, player, multiworld.norman_count[player].value)
         )
         set_rule(
             multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
-            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "norman_count"))
+            lambda state: _defeated_n_gym_leaders(state, player, multiworld.norman_count[player].value)
         )
 
     # Route 104
@@ -248,7 +248,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE", player),
         lambda state: _can_use_mach_bike(state, player)
     )
-    if get_option_value(multiworld, player, "extra_boulders") == ExtraBoulders.option_true:
+    if multiworld.extra_boulders[player].value == ExtraBoulders.option_true:
         set_rule(
             multiworld.get_entrance("REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE", player),
             can_strength
@@ -358,7 +358,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/WEST -> REGION_ROUTE110_SEASIDE_CYCLING_ROAD_NORTH_ENTRANCE/EAST", player),
         lambda state: _can_use_acro_bike(state, player) or _can_use_mach_bike(state, player)
     )
-    if "Route 110 Aqua Grunts" not in get_option_value(multiworld, player, "remove_roadblocks"):
+    if "Route 110 Aqua Grunts" not in multiworld.remove_roadblocks[player].value:
         set_rule(
             multiworld.get_entrance("REGION_ROUTE110/SOUTH -> REGION_ROUTE110/MAIN", player),
             lambda state: state.has("EVENT_RESCUE_CAPT_STERN", player)
@@ -397,7 +397,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
 
     # Route 112
-    if "Route 112 Magma Grunts" not in get_option_value(multiworld, player, "remove_roadblocks"):
+    if "Route 112 Magma Grunts" not in multiworld.remove_roadblocks[player].value:
         set_rule(
             multiworld.get_entrance("REGION_ROUTE112/SOUTH_EAST -> REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE", player),
             lambda state: state.has("EVENT_MAGMA_STEALS_METEORITE", player)
@@ -574,7 +574,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_ROUTE119/ABOVE_WATERFALL -> REGION_ROUTE119/ABOVE_WATERFALL_ACROSS_RAILS", player),
         lambda state: _can_use_acro_bike(state, player)
     )
-    if "Route 119 Aqua Grunts" not in get_option_value(multiworld, player, "remove_roadblocks"):
+    if "Route 119 Aqua Grunts" not in multiworld.remove_roadblocks[player].value:
         set_rule(
             multiworld.get_entrance("REGION_ROUTE119/MIDDLE -> REGION_ROUTE119/UPPER", player),
             lambda state: state.has("EVENT_DEFEAT_SHELLY", player)
@@ -627,7 +627,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_NORTHWEST/MAIN", player),
         lambda state: _can_use_mach_bike(state, player)
     )
-    if "Safari Zone Construction Workers" not in get_option_value(multiworld, player, "remove_roadblocks"):
+    if "Safari Zone Construction Workers" not in multiworld.remove_roadblocks[player].value:
         set_rule(
             multiworld.get_entrance("REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_SOUTHEAST/MAIN", player),
             lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
@@ -654,7 +654,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN", player),
         lambda state: state.has("EVENT_DEFEAT_CHAMPION", player)
     )
-    if "Lilycove City Wailmer" not in get_option_value(multiworld, player, "remove_roadblocks"):
+    if "Lilycove City Wailmer" not in multiworld.remove_roadblocks[player].value:
         set_rule(
             multiworld.get_entrance("REGION_LILYCOVE_CITY/SEA -> REGION_ROUTE124/MAIN", player),
             lambda state: state.has("EVENT_CLEAR_AQUA_HIDEOUT", player)
@@ -671,7 +671,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
 
     # Aqua Hideout
-    if "Aqua Hideout Grunts" not in get_option_value(multiworld, player, "remove_roadblocks"):
+    if "Aqua Hideout Grunts" not in multiworld.remove_roadblocks[player].value:
         set_rule(
             multiworld.get_entrance("REGION_AQUA_HIDEOUT_1F/WATER -> REGION_AQUA_HIDEOUT_1F/MAIN", player),
             lambda state: state.has("EVENT_AQUA_STEALS_SUBMARINE", player)
@@ -1074,27 +1074,27 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
 
     # Pokemon League
-    if get_option_value(multiworld, player, "elite_four_requirement") == EliteFourRequirement.option_badges:
+    if multiworld.elite_four_requirement[player].value == EliteFourRequirement.option_badges:
         set_rule(
             multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
-            lambda state: _has_at_least_n_badges(state, player, get_option_value(multiworld, player, "elite_four_count"))
+            lambda state: _has_at_least_n_badges(state, player, multiworld.elite_four_count[player].value)
         )
     else:
         set_rule(
             multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
-            lambda state: _defeated_n_gym_leaders(state, player, get_option_value(multiworld, player, "elite_four_count"))
+            lambda state: _defeated_n_gym_leaders(state, player, multiworld.elite_four_count[player].value)
         )
 
     # Battle Frontier
     # set_rule(
     #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK -> REGION_LILYCOVE_CITY_HARBOR/MAIN", player),
     #     lambda state: state.has("S.S. Ticket", player) and
-    #         (state.has("EVENT_DEFEAT_CHAMPION", player) or get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true)
+    #         (state.has("EVENT_DEFEAT_CHAMPION", player) or multiworld.enable_ferry[player].value == Toggle.option_true)
     # )
     # set_rule(
     #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/DOCK -> REGION_SLATEPORT_CITY_HARBOR/MAIN", player),
     #     lambda state: state.has("S.S. Ticket", player) and
-    #         (state.has("EVENT_DEFEAT_CHAMPION", player) or get_option_value(multiworld, player, "enable_ferry") == Toggle.option_true)
+    #         (state.has("EVENT_DEFEAT_CHAMPION", player) or multiworld.enable_ferry[player].value == Toggle.option_true)
     # )
     # set_rule(
     #     multiworld.get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/CAVE_ENTRANCE -> REGION_BATTLE_FRONTIER_OUTSIDE_WEST/WATER", player),
