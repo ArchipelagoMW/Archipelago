@@ -10,30 +10,26 @@ from asyncio import StreamReader, StreamWriter
 
 import bsdiff4
 
-import Patch
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from NetUtils import ClientStatus
-from worlds import network_data_package
 from worlds.mmbn3.Items import items_by_id
 from worlds.mmbn3.Rom import get_base_rom_path
-from worlds.mmbn3.Locations import location_data_table
+from worlds.mmbn3.Locations import all_locations
 
 SYSTEM_MESSAGE_ID = 0
 
-CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart mmbn3_connector.lua"
+CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart connector_mmbn3.lua"
 CONNECTION_REFUSED_STATUS = \
-    "Connection refused. Please start your emulator and make sure mmbn3_connector.lua is running"
-CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart mmbn3_connector.lua"
+    "Connection refused. Please start your emulator and make sure connector_mmbn3.lua is running"
+CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart connector_mmbn3.lua"
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 CONNECTION_INCORRECT_ROM = "Supplied Base Rom does not match US GBA Blue Version. Please provide the correct ROM version"
 
-mmbn3_loc_name_to_id = network_data_package["games"]["MegaMan Battle Network 3"]["location_name_to_id"]
-
-script_version: int = 1
+script_version: int = 2
 
 debugEnabled = False
 locations_checked = []
@@ -108,8 +104,8 @@ class ItemInfo:
     type = ""
     count = 1
     itemName = "Unknown"
-    itemID = 0x00 #Item ID, Chip ID, etc.
-    subItemID = 0x00 #Code for chips, color for programs
+    itemID = 0x00  # Item ID, Chip ID, etc.
+    subItemID = 0x00  # Code for chips, color for programs
     itemIndex = 1
 
     def __init__(self, id, sender, type):
@@ -164,16 +160,23 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
     # Locations handling
     if ctx.location_table != payload["locations"]:
         ctx.location_table = payload["locations"]
+        locs = [loc.id for loc in all_locations
+                if check_location_packet(loc, ctx.location_table)]
         await ctx.send_msgs([{
             "cmd": "LocationChecks",
-            "locations": [mmbn3_loc_name_to_id[loc] for loc in ctx.location_table
-                          if check_item_packet(loc, ctx.location_table[loc])]
+            "locations": locs
+
         }])
 
 
-def check_item_packet(name, packet):
-    locData = location_data_table[name]
-    return packet & locData.flag_mask
+def check_location_packet(location, memory):
+    if len(memory) == 0:
+        return False
+    # Our keys have to be strings to come through the JSON lua plugin so we have to turn our memory address into a string as well
+    location_key = hex(location.flag_byte)[2:]
+    byte = memory.get(location_key)
+    if byte is not None:
+        return byte & location.flag_mask
 
 
 async def gba_sync_task(ctx: MMBN3Context):
@@ -280,7 +283,7 @@ async def patch_and_run_game(apmmbn3_file):
         try:
             with patch_archive.open("delta.bsdiff4", 'r') as stream:
                 patch_data = stream.read()
-        except KeyError as ex:
+        except KeyError:
             raise FileNotFoundError("Patch file missing from archive.")
     rom_file = get_base_rom_path()
 
@@ -289,7 +292,7 @@ async def patch_and_run_game(apmmbn3_file):
 
     patched_bytes = bsdiff4.patch(rom_bytes, patch_data)
     patched_rom_file = base_name+".gba"
-    with open(patched_rom_file,'wb') as patched_rom:
+    with open(patched_rom_file, 'wb') as patched_rom:
         patched_rom.write(patched_bytes)
 
     asyncio.create_task(run_game(patched_rom_file))
