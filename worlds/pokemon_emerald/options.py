@@ -413,7 +413,7 @@ class ExtraBoulders(Toggle):
 
 class FreeFlyLocation(Toggle):
     """
-    Enables flying to one random location from the start of the game (excluding cities reachable with no items)
+    Enables flying to one random location when Mom gives you the running shoes (excluding cities reachable with no items).
     """
     display_name = "Free Fly Location"
 

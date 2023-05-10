@@ -27,7 +27,7 @@ class PokemonEmeraldDeltaPatch(APDeltaPatch):
         return get_base_rom_as_bytes()
 
 
-_visited_event_to_id_map = {
+location_visited_event_to_id_map = {
     "EVENT_VISITED_LITTLEROOT_TOWN": 0,
     "EVENT_VISITED_OLDALE_TOWN": 1,
     "EVENT_VISITED_PETALBURG_CITY": 2,
@@ -64,7 +64,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
                     patched_rom,
                     data.rom_addresses["gArchipelagoOptions"] + 0x16,
                     1,
-                    _visited_event_to_id_map[location.item.name]
+                    multiworld.worlds[player].free_fly_location_id
                 )
             continue
 

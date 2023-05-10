@@ -17,7 +17,7 @@ from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, 
 from .options import RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms, RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, ItemPoolType, TmCompatibility, HmCompatibility, get_option_value, option_definitions
 from .pokemon import get_random_species, get_species_by_name, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
-from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path
+from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path, location_visited_event_to_id_map
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
     set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import sanity_check
@@ -60,6 +60,7 @@ class PokemonEmeraldWorld(World):
 
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
+    free_fly_location_id: int = 0
     modified_data: PokemonEmeraldData
 
     def _get_pokemon_emerald_data(self):
@@ -247,9 +248,12 @@ class PokemonEmeraldWorld(World):
             ]
             for location in locations:
                 if location.name == "EVENT_VISITED_LITTLEROOT_TOWN":
+                    fly_location_name = self.multiworld.random.choice(fly_locations)
+                    self.free_fly_location_id = location_visited_event_to_id_map[fly_location_name]
+
                     location.locked = False
                     location.item = None
-                    location.place_locked_item(self.create_event(self.multiworld.random.choice(fly_locations)))
+                    location.place_locked_item(self.create_event(fly_location_name))
                     break
 
 
@@ -683,6 +687,9 @@ class PokemonEmeraldWorld(World):
             option = getattr(self.multiworld, option_name)[self.player]
             if slot_data.get(option_name, None) is None and type(option.value) in {int}:
                 slot_data[option_name] = int(option.value)
+
+        slot_data["free_fly_location_id"] = self.free_fly_location_id
+
         return slot_data
 
     def create_item(self, name: str) -> PokemonEmeraldItem:
