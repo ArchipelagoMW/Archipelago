@@ -3,9 +3,8 @@ Looks through data object to double-check it makes sense. Will fail for missing 
 duplicate claims and give warnings for unused and unignored locations or warps.
 """
 import logging
-import os
 
-from .data import load_json, data
+from .data import load_json_data, data
 
 
 def sanity_check():
@@ -28,7 +27,7 @@ def sanity_check():
                     error(f"Region [{region_exit}] referenced by [{name}] was not defined")
 
     def check_warps():
-        ignorable_warps = set(load_json(os.path.join(os.path.dirname(__file__), "data/ignorable_warps.json")))
+        ignorable_warps = set(load_json_data("ignorable_warps.json"))
         for warp_source, warp_dest in data.warp_map.items():
             if warp_source in ignorable_warps:
                 continue
@@ -39,7 +38,7 @@ def sanity_check():
                 error(f"Warp [{warp_source}] appears to be a one-way warp but was not marked as one")
 
     def check_locations():
-        ignorable_locations = load_json(os.path.join(os.path.dirname(__file__), "data/ignorable_locations.json"))
+        ignorable_locations = load_json_data("ignorable_locations.json")
         claimed_locations = [location for region in data.regions.values() for location in region.locations]
         claimed_locations_set = set()
         for location_name in claimed_locations:

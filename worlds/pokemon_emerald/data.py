@@ -7,8 +7,9 @@ and sorting, and Warp methods.
 from dataclasses import dataclass
 from enum import IntEnum
 import json
-import os
-from typing import Dict, List, NamedTuple, Optional, Set, Tuple
+import pkg_resources
+import pkgutil
+from typing import Dict, List, NamedTuple, Optional, Set, Tuple, Any, Union
 
 from BaseClasses import ItemClassification
 
@@ -278,34 +279,25 @@ class PokemonEmeraldData:
         self.trainers = []
 
 
-def load_json(filepath):
-    """
-    Reads a JSON file from `filepath` and returns the parsed object
-    """
-    json_string = ""
-    with open(filepath, "r", encoding="utf-8") as infile:
-        for line in infile.readlines():
-            json_string += line
-    return json.loads(json_string)
+def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
+    return json.loads(pkgutil.get_data(__name__, "data/" + data_name).decode())
 
 
-config: Dict[str, any] = load_json(os.path.join(os.path.dirname(__file__), "data/config.json"))
+config: Dict[str, Any] = load_json_data("config.json")
 data = PokemonEmeraldData()
 
 def _init():
-    extracted_data: Dict[str, any] = load_json(os.path.join(os.path.dirname(__file__), "data/extracted_data.json"))
+    extracted_data: Dict[str, any] = load_json_data("extracted_data.json")
     data.constants = extracted_data["constants"]
     data.rom_addresses = extracted_data["misc_rom_addresses"]
 
-    location_attributes_json = load_json(os.path.join(os.path.dirname(__file__), "data/locations.json"))
+    location_attributes_json = load_json_data("locations.json")
 
     # Load/merge region json files
-    regions_dir = os.path.join(os.path.dirname(__file__), "data/regions")
-
     region_json_list = []
-    for file in os.listdir(regions_dir):
-        if os.path.isfile(os.path.join(regions_dir, file)):
-            region_json_list.append(load_json(os.path.join(regions_dir, file)))
+    for file in pkg_resources.resource_listdir(__name__, "data/regions"):
+        if not pkg_resources.resource_isdir(__name__, "data/regions/" + file):
+            region_json_list.append(load_json_data("regions/" + file))
 
     regions_json = {}
     for region_subset in region_json_list:
@@ -364,7 +356,7 @@ def _init():
         data.regions[region_name] = new_region
 
     # Create item data
-    items_json = load_json(os.path.join(os.path.dirname(__file__), "data/items.json"))
+    items_json = load_json_data("items.json")
 
     data.items = {}
     for item_constant_name, attributes in items_json.items():
@@ -388,7 +380,7 @@ def _init():
         )
 
     # Create species data
-    species_json = load_json(os.path.join(os.path.dirname(__file__), "data/pokemon.json"))
+    species_json = load_json_data("pokemon.json")
     species_list: List[SpeciesData] = []
     max_species_id = 0
     for species_name, species_attributes in species_json.items():
@@ -439,7 +431,7 @@ def _init():
     data.tmhm_moves = extracted_data["tmhm_moves"]
 
     # Create ability data
-    abilities_json = load_json(os.path.join(os.path.dirname(__file__), "data/abilities.json"))
+    abilities_json = load_json_data("abilities.json")
     for ability_name, ability_json in abilities_json.items():
         data.abilities.append(AbilityData(
             data.constants[ability_name],

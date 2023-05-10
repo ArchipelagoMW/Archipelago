@@ -2,6 +2,7 @@
 Classes and functions related to creating a ROM patch
 """
 import os
+import pkgutil
 
 import bsdiff4
 
@@ -51,9 +52,8 @@ location_visited_event_to_id_map = {
 
 def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, player: int, output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
-    with open(os.path.join(os.path.dirname(__file__), "data/base_patch.bsdiff4"), "rb") as stream:
-        base_patch = bytes(stream.read())
-        patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
+    base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
+    patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
 
     # Set item values
     for location in multiworld.get_locations(player):
