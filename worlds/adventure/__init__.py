@@ -32,15 +32,28 @@ components.append(Component('Adventure Client', 'AdventureClient', file_identifi
 
 
 class AdventureWeb(WebWorld):
-    tutorials = [Tutorial(
+    theme = "dirt"
+
+    setup = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up Adventure for MultiWorld.",
         "English",
         "setup_en.md",
         "setup/en",
         ["JusticePS"]
-    )]
-    theme = "dirt"
+    )
+
+    setup_fr = Tutorial(
+        "Guide de configuration Multimonde",
+        "Un guide pour configurer Adventure MultiWorld",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["TheLynk"]
+    )
+
+    tutorials = [setup, setup_fr]
+    
 
 
 def get_item_position_data_start(table_index: int):
