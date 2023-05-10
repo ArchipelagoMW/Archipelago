@@ -45,7 +45,7 @@ local cb2_address = 0x22C0 + 4                     -- gMain + offset
 local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
 
 -- ROM addresses
-local cb2_overworld_func_address = 0x8085FC8 + 1   -- CB2_Overworld + 1
+local cb2_overworld_func_address = 0x8086050 + 1   -- CB2_Overworld + 1
 
 -- Set us as safe if we're in the overworld and player has control
 function check_game_state ()
