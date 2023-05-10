@@ -2922,7 +2922,7 @@
         <MinimapRadius value="0.375"/>
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
         <TacticalAI value="Marine"/>
-        <SelectAlias value="Marine"/>
+        <SelectAlias value="AP_Marine"/>
         <GlossaryPriority value="31"/>
         <GlossaryStrongArray value="Marauder"/>
         <GlossaryStrongArray value="Immortal"/>
@@ -3000,7 +3000,7 @@
         <SubgroupPriority value="5"/>
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
         <TacticalAI value="Firebat"/>
-        <SelectAlias value="Firebat"/>
+        <SelectAlias value="AP_Firebat"/>
         <GlossaryPriority value="61"/>
         <GlossaryStrongArray value="Zealot"/>
         <GlossaryStrongArray value="Zergling"/>
@@ -3078,7 +3078,7 @@
         <SubgroupPriority value="13"/>
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
         <TacticalAI value="Marauder"/>
-        <SelectAlias value="Marauder"/>
+        <SelectAlias value="AP_Marauder"/>
         <GlossaryPriority value="51"/>
         <GlossaryStrongArray value="Thor"/>
         <GlossaryStrongArray value="Stalker"/>
@@ -3161,7 +3161,7 @@
         <SubgroupPriority value="1"/>
         <MinimapRadius value="0.65"/>
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
-        <SelectAlias value="Goliath"/>
+        <SelectAlias value="AP_Goliath"/>
         <GlossaryPriority value="181"/>
         <GlossaryStrongArray value="Battlecruiser"/>
         <GlossaryStrongArray value="Carrier"/>
@@ -3560,7 +3560,7 @@
         <MinimapRadius value="0.75"/>
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
         <TacticalAI value="Banshee"/>
-        <SelectAlias value="Banshee"/>
+        <SelectAlias value="AP_Banshee"/>
         <GlossaryPriority value="221"/>
         <GlossaryStrongArray value="Ghost"/>
         <GlossaryStrongArray value="Stalker"/>
@@ -3647,7 +3647,7 @@
         <TacticalAI value="Battlecruiser"/>
         <TacticalAIThink value="AIThinkBattleCruiser"/>
         <Mass value="0.6"/>
-        <SelectAlias value="Battlecruiser"/>
+        <SelectAlias value="AP_Battlecruiser"/>
         <EquipmentArray Weapon="AP_DRBattlecruiserFakeG"/>
         <EquipmentArray Weapon="AP_DRBattlecruiserFakeA"/>
         <GlossaryPriority value="281"/>
