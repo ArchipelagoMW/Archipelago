@@ -1531,4 +1531,30 @@
             <Payload value="FireSuppressionBots_Whizzby"/>
         </Events>
     </CModel>
+    <CModel id="AP_AutomatedRefinery" parent="Building" Race="Terran">
+        <Model value="Assets\Buildings\Terran\RefineryAutomated\RefineryAutomated.m3"/>
+        <Radius value="1.500000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="2.250000"/>
+        <ShadowRadius value="2.250000"/>
+    </CModel>
+    <CModel id="AP_AutomatedRefineryDeath" parent="BuildingDeath">
+        <Model value="Assets\Buildings\Terran\AutomatedRefineryDeath\AutomatedRefineryDeath.m3"/>
+        <LowQualityModel value="TerranBuildingDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_AutomatedRefineryPlacement" parent="Placement" Race="Terran">
+        <Model value="Assets\Buildings\Terran\RefineryAutomatedPlacement\RefineryAutomatedPlacement.m3"/>
+        <LowQualityModel value="RefineryAutomated"/>
+        <Lighting value="Refinery"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <ShadowRadius value="0.000000"/>
+    </CModel>
+    <CModel id="AP_AutomatedRefineryBuild" parent="Building" Race="Terran">
+        <Model value="Assets\Buildings\Terran\RefineryBuild\RefineryBuild.m3"/>
+        <SelectionLayer value="2"/>
+    </CModel>
 </Catalog>

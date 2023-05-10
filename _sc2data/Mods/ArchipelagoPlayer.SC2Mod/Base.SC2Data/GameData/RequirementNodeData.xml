@@ -732,4 +732,19 @@
     <CRequirementCountUnit id="AP_UnitFusionCoreCompleteOnly">
         <Count Link="AP_FusionCore" State="CompleteOnly"/>
     </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAutoHarvesterCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AutoHarvester" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitAlias_CommandCenterCompleteOnly">
+        <Count Link="Alias_CommandCenter" State="CompleteOnly" Unlock="CommandCenter"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUnit>
+    <CRequirementNot id="AP_NotCountUnitAlias_CommandCenterCompleteOnly">
+        <OperandArray index="0" value="AP_CountUnitAlias_CommandCenterCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMicroFilteringCompleteOnly">
+        <Count Link="AP_MicroFiltering" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

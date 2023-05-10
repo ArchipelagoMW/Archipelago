@@ -446,4 +446,20 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUnitFusionCoreCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HaveMicroFiltering">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMicroFilteringCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HideRefinery">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeAutoHarvesterCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseAutomatedRefinery">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAutoHarvesterCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_DontHaveCommandCenter">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_NotCountUnitAlias_CommandCenterCompleteOnly"/>
+    </CRequirement>
 </Catalog>

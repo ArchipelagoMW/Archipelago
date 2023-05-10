@@ -1188,4 +1188,9 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <!-- AP uses triggers to grant unit upgrades -->
     </CAbilResearch>
+    <CAbilMorph id="AP_RefineryToAutomatedRefinery">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
+        <InfoArray Unit="AP_AutomatedRefinery" CollideRange="0"/>
+    </CAbilMorph>
 </Catalog>

@@ -616,4 +616,17 @@
         <CombineArray value="AP_IsVanillaFusionCore"/>
         <CombineArray value="AP_IsAPFusionCore"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareResourceContents id="AP_AutoHarvesterFinish">
+        <Compare value="GT"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_AutomaticHarvestableVespene"/>
+    </CValidatorUnitCompareResourceContents>
+    <CValidatorPlayerRequirement id="AP_AutoHarvesterHarvest">
+        <Value value="AP_DontHaveCommandCenter"/>
+        <WhichPlayer Value="Caster"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasMicroFiltering">
+        <Find value="1"/>
+        <Value value="AP_HaveMicroFiltering"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

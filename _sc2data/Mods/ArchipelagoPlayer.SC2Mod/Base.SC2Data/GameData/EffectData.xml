@@ -2462,4 +2462,16 @@
         <Flags index="NoKillCredit" value="1"/>
         <Amount value="1"/>
     </CEffectDamage>
+    <CEffectModifyUnit id="AP_AutoHarvestVespeneTerran">
+        <!-- Need to define for each race so an economy upgrade (for gas harvesting rate) won't affect other races -->
+        <EditorCategories value=""/>
+        <Resources value="-4"/>
+        <ResourcesHarvestedFraction value="1"/>
+    </CEffectModifyUnit>
+    <CEffectIssueOrder id="AP_RefineryMorph">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_RefineryToAutomatedRefinery"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
 </Catalog>

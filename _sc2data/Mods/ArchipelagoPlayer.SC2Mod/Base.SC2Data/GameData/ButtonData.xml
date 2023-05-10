@@ -652,4 +652,17 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_AutomatedRefinery">
+        <Icon value="Assets\Textures\btn-building-terran-refineryautomated.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-refinery.dds"/>
+        <Hotkey value="Button/Hotkey/Refinery"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="Refinery"/>
+    </CButton>
+    <CButton id="AP_MicroFiltering">
+        <Icon value="Assets\Textures\btn-ability-terran-microfiltering.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-microfiltering.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>
