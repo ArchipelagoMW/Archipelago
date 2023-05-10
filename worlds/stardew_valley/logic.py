@@ -143,7 +143,7 @@ class StardewLogic:
             "Glazed Yams": self.can_cook() & self.has_season("Fall") & self.has("Yam") & self.has("Sugar"),
             "Cloth": (self.has("Wool") & self.has("Loom")) |
                      (self.can_reach_region(SVRegion.desert) & self.has("Aquamarine")),
-            "Coal": self.can_mine_in_the_mines_floor_41_80() | self.can_pan(),
+            "Coal": self.can_mine_in_the_mines_floor_41_80() | self.can_do_panning(),
             "Cockle": True_(),
             "Coconut": self.can_reach_region(SVRegion.desert),
             "Coffee": (self.has("Keg") & self.has("Coffee Bean")) | self.has("Coffee Maker") |
@@ -155,7 +155,7 @@ class StardewLogic:
                                   self.has("Fried Egg") & self.has("Cow Milk") & self.has("Hashbrowns") | self.has(
                 "Pancakes"),
             "Copper Bar": self.can_smelt("Copper Ore"),
-            "Copper Ore": self.can_mine_in_the_mines_floor_1_40() | self.can_mine_in_the_skull_cavern() | self.can_pan(),
+            "Copper Ore": self.can_mine_in_the_mines_floor_1_40() | self.can_mine_in_the_skull_cavern() | self.can_do_panning(),
             "Coral": self.can_reach_region(SVRegion.tide_pools) | self.has_season("Summer"),
             "Cow": self.has_building("Barn"),
             "Cow Milk": self.has("Milk") | self.has("Large Milk"),
@@ -217,7 +217,7 @@ class StardewLogic:
             "Goat Milk": self.has("Goat"),
             "Goat": self.has_building("Big Barn"),
             "Gold Bar": self.can_smelt("Gold Ore"),
-            "Gold Ore": self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern() | self.can_pan(),
+            "Gold Ore": self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern() | self.can_do_panning(),
             "Golden Pumpkin": self.has_season("Fall") | self.has("Artifact Trove"),
             "Green Algae": self.can_fish(),
             "Green Tea": self.has("Keg") & self.has("Tea Leaves"),
@@ -235,7 +235,7 @@ class StardewLogic:
             "Iridium Bar": self.can_smelt("Iridium Ore"),
             "Iridium Ore": self.can_mine_in_the_skull_cavern(),
             "Iron Bar": self.can_smelt("Iron Ore"),
-            "Iron Ore": self.can_mine_in_the_mines_floor_41_80() | self.can_mine_in_the_skull_cavern() | self.can_pan(),
+            "Iron Ore": self.can_mine_in_the_mines_floor_41_80() | self.can_mine_in_the_skull_cavern() | self.can_do_panning(),
             "Jelly": self.has("Preserves Jar"),
             "Joja Cola": self.can_reach_region(SVRegion.saloon) & self.can_spend_money(75),
             "JotPK Small Buff": self.has_jotpk_power_level(2),
@@ -839,7 +839,7 @@ class StardewLogic:
     def can_smelt(self, item: str) -> StardewRule:
         return self.has("Furnace") & self.has(item)
 
-    def can_pan(self, item: str = "Any") -> StardewRule:
+    def can_do_panning(self, item: str = "Any") -> StardewRule:
         return self.received("Glittering Boulder Removed")
 
     def can_crab_pot(self) -> StardewRule:
@@ -847,9 +847,6 @@ class StardewLogic:
             return self.has("Crab Pot")
 
         return True_()
-
-    def can_do_panning(self) -> StardewRule:
-        return self.received("Glittering Boulder Removed")
 
     # Regions
     def can_mine_in_the_mines_floor_1_40(self) -> StardewRule:
@@ -1136,7 +1133,7 @@ class StardewLogic:
         # extra_rule = True_()
         pan_rule = False_()
         if item.name == "Earth Crystal" or item.name == "Fire Quartz" or item.name == "Frozen Tear":
-            pan_rule = self.can_pan()
+            pan_rule = self.can_do_panning()
         return pan_rule | (region_rule & geodes_rule)  # & monster_rule & extra_rule
 
     def can_find_museum_artifacts(self, number: int) -> StardewRule:
