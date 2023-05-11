@@ -149,7 +149,7 @@ local check_all_locations = function()
     if memory.read_u8(canary_byte) == 0xFF then
         return location_checks
     end
-    for k,v in pairs(memory.read_bytes_as_dict(0x02000000, 0x433)) do
+    for k,v in pairs(memory.read_bytes_as_dict(0x02000000, 0x434)) do
         str_k = string.format("%x", k)
         location_checks[str_k] = v
     end
