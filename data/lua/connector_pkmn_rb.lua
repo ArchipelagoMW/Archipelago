@@ -68,7 +68,7 @@ function generateLocationsChecked()
         table.insert(categories, dexsanity)
     end
     for _, category in ipairs(categories) do
-        for _, v in pairs(category) do 
+        for _, v in ipairs(category) do 
             table.insert(data, v) 
         end
     end
