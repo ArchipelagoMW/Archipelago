@@ -255,8 +255,7 @@ WORLD_PATHS_JSON = [
     },
     {
         "fromId": "verla_mines",
-        "toId": "route_verla_destel",
-        "twoWay": True
+        "toId": "route_verla_destel"
     },
     {
         "fromId": "verla_mines",
