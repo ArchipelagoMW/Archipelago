@@ -189,6 +189,28 @@
         <CombineArray value="AP_IsVanillaBattlecruiser"/>
         <CombineArray value="AP_IsAPBattlecruiser"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaBarracksTechLab">
+        <Value value="BarracksTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBarracksTechLab">
+        <Value value="AP_BarracksTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsBarracksTechLab" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaBarracksTechLab"/>
+        <CombineArray value="AP_IsAPBarracksTechLab"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaFactoryTechLab">
+        <Value value="FactoryTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPFactoryTechLab">
+        <Value value="AP_FactoryTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsFactoryTechLab" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaFactoryTechLab"/>
+        <CombineArray value="AP_IsAPFactoryTechLab"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsHellion" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaHellion"/>
@@ -203,7 +225,7 @@
     <CValidatorCombine id="IsMedivac" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaMedivac"/>
-        <CombineArray value="AP_IsVanillaHellion"/>
+        <CombineArray value="AP_IsAPMedivac"/>
     </CValidatorCombine>
     <CValidatorUnitOrderQueue id="AP_MedivacIsHealing">
         <AbilLink value="AP_MedivacDoubleBeamHeal"/>
@@ -233,6 +255,17 @@
         <CombineArray value="AP_IsVanillaSupplyDepotLowered"/>
         <CombineArray value="AP_IsAPSupplyDepotLowered"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPStarportTechLab">
+        <Value value="AP_StarportTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaStarportTechLab">
+        <Value value="StarportTechLab"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsStarportTechLab" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaStarportTechLab"/>
+        <CombineArray value="AP_IsAPStarportTechLab"/>
+    </CValidatorCombine>
     <CValidatorUnitCompareBehaviorCount id="AP_IsAPSupplyDepotMorphing">
         <ResultFailed value="MustTargetStructures,Error/CantTargetWhileMorphing"/>
         <Behavior value="AP_SupplyDepotMorphing"/>
@@ -246,6 +279,9 @@
         <CombineArray value="AP_IsVanillaSupplyDepotMorphing"/>
         <CombineArray value="AP_IsAPSupplyDepotMorphing"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsTechReactor">
+        <Value value="AP_TechReactor"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="IsThor" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaThor"/>
@@ -653,4 +689,18 @@
         <Find value="1"/>
         <Value value="AP_HaveMicroFiltering"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_ReactorNotBarracks">
+        <Behavior value="AP_BarracksReactor"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_ReactorNotFactory">
+        <Behavior value="AP_FactoryReactor"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_ReactorNotStarport">
+        <Behavior value="AP_StarportReactor"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_TechReactorIsDetached">
+        <Type value="And"/>
+        <CombineArray value="AP_IsTechReactor"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
 </Catalog>

@@ -2534,4 +2534,42 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="AP_SupplyDepotMorphing"/>
     </CEffectApplyBehavior>
+    <CEffectIssueOrder id="AP_MorphToTechReactor">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="AP_MorphToTechReactor"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="AP_DropTrain">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="2.3"/>
+        <FinalEffect value="RemovePrecursor"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_DropTrainSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="AP_DropTrain"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_DropTrainReaper">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="2.3"/>
+        <FinalEffect value="AP_DropTrainSetFinalReaper"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_DropTrainSetReaper">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="AP_DropTrainReaper"/>
+    </CEffectSet>
+    <CEffectSet id="AP_DropTrainSetFinalReaper">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="RemovePrecursor"/>
+        <EffectArray value="AP_ReaperPlacementMorph"/>
+    </CEffectSet>
+    <CAbilMorph id="AP_ReaperPlacementMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray Unit="Reaper"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
+    </CAbilMorph>
 </Catalog>

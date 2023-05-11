@@ -1571,4 +1571,76 @@
         <Model value="Assets\Effects\Terran\OrbitalDepotImpact\OrbitalDepotImpact.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_BarracksTechReactor" parent="TechLabBase">
+        <Model value="Assets\Buildings\Terran\TechReactor\TechReactor.m3"/>
+        <Lighting value="TechLab"/>
+    </CModel>
+    <CModel id="AP_FactoryTechReactor" parent="TechLabBase">
+        <Model value="Assets\Buildings\Terran\TechReactor\TechReactor.m3"/>
+        <Lighting value="TechLab"/>
+    </CModel>
+    <CModel id="AP_StarportTechReactor" parent="TechLabBase">
+        <Model value="Assets\Buildings\Terran\TechReactor\TechReactor.m3"/>
+        <Lighting value="TechLab"/>
+    </CModel>
+    <CModel id="AP_TechReactor" parent="TechLabBase">
+        <Model value="Assets\Buildings\Terran\TechReactor\TechReactor.m3"/>
+        <Lighting value="TechLab"/>
+    </CModel>
+    <CModel id="AP_TechReactorBuild" parent="TerranBuildingBuildSmall"/>
+    <CModel id="AP_TechReactorDeath" parent="BuildingDeath" Race="Terran">
+        <Model value="Assets\Buildings\Terran\TechReactorDeath\TechReactorDeath.m3"/>
+        <LowQualityModel value="TerranBuildingDeathLow"/>
+        <Lighting value="TechLab"/>
+        <Radius value="1.000000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.000000"/>
+        <ShadowRadius value="1.000000"/>
+    </CModel>
+    <CModel id="AP_TechReactorDetachedDeath" parent="BuildingDeath" Race="Terran">
+        <Model value="Assets\Buildings\Terran\TechReactorDetachedDeath\TechReactorDetachedDeath.m3"/>
+        <LowQualityModel value="TerranBuildingDeathLow"/>
+        <Flags index="TeenSafe" value="1"/>
+        <Lighting value="TechLab"/>
+        <Radius value="1.000000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.000000"/>
+        <ShadowRadius value="1.000000"/>
+    </CModel>
+    <CModel id="AP_TechReactorPlacement" parent="Placement" Race="Terran">
+        <Model value="Assets\Buildings\Terran\TechReactorPlacement\TechReactorPlacement.m3"/>
+        <LowQualityModel value="TechLab"/>
+        <Lighting value="TechLab"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.000000"/>
+        <ShadowRadius value="0.000000"/>
+    </CModel>
+    <CModel id="AP_BarracksDropPod" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\DropPodFalling\DropPodFalling.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="BarracksDropPodLand"/>
+            <Type value="Sound"/>
+            <Time value="2.200000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="OrbitalCommandDropPodDeathA"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="OrbitalCommand_DropPodDeathA"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="OrbitalCommandDropPodDeathB"/>
+            <Type value="Sound"/>
+            <Time value="1.600000"/>
+            <Payload value="OrbitalCommand_DropPodDeathB"/>
+        </Events>
+    </CModel>
 </Catalog>

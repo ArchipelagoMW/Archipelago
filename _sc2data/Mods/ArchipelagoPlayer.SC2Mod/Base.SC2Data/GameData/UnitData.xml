@@ -4152,4 +4152,1079 @@
         <SelectAlias value="SupplyDepot"/>
         <TechAliasArray value="Alias_SupplyDepot"/>
     </CUnit>
+    <CUnit id="AP_Barracks">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="1000"/>
+        <LifeMax value="1000"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="150"/>
+        <RepairTime value="65"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5"/>
+        <AbilArray Link="AP_BarracksTrain"/>
+        <AbilArray Link="Rally"/>
+        <AbilArray Link="AP_BarracksAddOns"/>
+        <AbilArray Link="AP_BarracksLiftOff"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_ReactorQueue"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="AP_Marine" Type="AbilCmd" AbilCmd="AP_BarracksTrain,0" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_Marauder" Type="AbilCmd" AbilCmd="AP_BarracksTrain,3" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_Reaper" Type="AbilCmd" AbilCmd="AP_BarracksTrain,1" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_Ghost" Type="AbilCmd" AbilCmd="AP_BarracksTrain,2" Row="0" Column="3"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="Lift" Type="AbilCmd" AbilCmd="AP_BarracksLiftOff,0" Row="2" Column="3"/>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress,Halt" Row="2" Column="3"/>
+            <LayoutButtons Face="Reactor" Type="AbilCmd" AbilCmd="AP_BarracksAddOns,1" Row="2" Column="1"/>
+            <LayoutButtons Face="TechLabBarracks" Type="AbilCmd" AbilCmd="AP_BarracksAddOns,0" Row="2" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_BarracksAddOns,30" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+            <LayoutButtons Face="AP_TechReactor" Type="AbilCmd" AbilCmd="AP_BarracksAddOns,3" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_Medic" Type="AbilCmd" AbilCmd="AP_BarracksTrain,4" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_Firebat" Type="AbilCmd" AbilCmd="AP_BarracksTrain,5" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_Spectre" Type="AbilCmd" AbilCmd="AP_BarracksTrain,6" Row="0" Column="4"/>
+        </CardLayouts>
+        <Radius value="1.75"/>
+        <SeparationRadius value="1.75"/>
+        <Footprint value="Footprint3x3Contour"/>
+        <PlacementFootprint value="Footprint3x3"/>
+        <ScoreMake value="150"/>
+        <ScoreKill value="150"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="Barracks"/>
+        <TechAliasArray value="Alias_Barracks"/>
+        <GlossaryPriority value="31"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <TechTreeProducedUnitArray value="AP_Marine"/>
+        <TechTreeProducedUnitArray value="AP_Marauder"/>
+        <TechTreeProducedUnitArray value="AP_Reaper"/>
+        <TechTreeProducedUnitArray value="AP_Ghost"/>
+        <TechTreeProducedUnitArray value="AP_Spectre"/>
+        <TechTreeProducedUnitArray value="AP_Medic"/>
+        <TechTreeProducedUnitArray value="AP_Firebat"/>
+    </CUnit>
+    <CUnit id="AP_BarracksFlying">
+        <Name value="Unit/Name/Barracks"/>
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="1000"/>
+        <LifeMax value="1000"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <Mover value="Fly"/>
+        <Speed value="0.9375"/>
+        <Acceleration value="1.3125"/>
+        <Sight value="9"/>
+        <Height value="3.25"/>
+        <VisionHeight value="4"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="150"/>
+        <RepairTime value="65"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="AP_BarracksLand"/>
+        <AbilArray Link="AP_BarracksAddOns"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="stop"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="Land" Type="AbilCmd" AbilCmd="AP_BarracksLand,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="Reactor" Type="AbilCmd" AbilCmd="AP_BarracksAddOns,Build2" Row="2" Column="1"/>
+            <LayoutButtons Face="TechLabBarracks" Type="AbilCmd" AbilCmd="AP_BarracksAddOns,Build1" Row="2" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_TechReactor" Type="AbilCmd" AbilCmd="AP_BarracksAddOns,Build4" Row="2" Column="0"/>
+        </CardLayouts>
+        <Radius value="1.75"/>
+        <SeparationRadius value="1.75"/>
+        <ScoreKill value="150"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <LeaderAlias value="Barracks"/>
+        <HotkeyAlias value="Barracks"/>
+        <TechAliasArray value="Alias_Barracks"/>
+        <GlossaryAlias value="Barracks"/>
+    </CUnit>
+    <CUnit id="AP_BarracksReactor">
+        <Name value="Unit/Name/Reactor"/>
+        <Description value="Button/Tooltip/Reactor"/>
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="Reactor"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="50"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_FactoryReactorMorph"/>
+        <AbilArray Link="AP_StarportReactorMorph"/>
+        <AbilArray Link="AP_ReactorMorph"/>
+        <AbilArray Link="AP_MorphToTechReactor"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_MorphToTechReactor"/>
+        <CardLayouts>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="1"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="Reactor"/>
+        <SelectAlias value="Reactor"/>
+        <SubgroupAlias value="Reactor"/>
+        <TechAliasArray value="Alias_Reactor"/>
+        <AIEvaluateAlias value="Reactor"/>
+    </CUnit>
+    <CUnit id="AP_BarracksTechLab">
+        <Name value="Unit/Name/TechLab"/>
+        <Description value="Button/Tooltip/TechLab"/>
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="TechLab"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="25"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5Addon"/>
+        <AbilArray Link="AP_TechLabMorph"/>
+        <AbilArray Link="AP_FactoryTechLabMorph"/>
+        <AbilArray Link="AP_StarportTechLabMorph"/>
+        <AbilArray Link="AP_BarracksTechLabResearch"/>
+        <AbilArray Link="AP_MercCompoundResearch"/>
+        <AbilArray Link="AP_MorphToTechReactor"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_MorphToTechReactor"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5Addon,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechLab"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechLab"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechLab"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="75"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="TechLab"/>
+        <HotkeyAlias value="TechLab"/>
+        <SelectAlias value="TechLab"/>
+        <TechAliasArray value="Alias_TechLab"/>
+        <GlossaryPriority value="26"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <AIEvaluateAlias value="TechLab"/>
+        <ReviveInfoBase>
+            <Charge Link="TechLab/Revive"/>
+            <Cooldown Link="TechLab/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_BarracksTechReactor">
+        <Description value="Button/Tooltip/TechReactor"/>
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="TechLab"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="75"/>
+        <CostResource index="Vespene" value="75"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5Addon"/>
+        <AbilArray Link="AP_TechReactorMorph"/>
+        <AbilArray Link="AP_FactoryTechReactorMorph"/>
+        <AbilArray Link="AP_StarportTechReactorMorph"/>
+        <AbilArray Link="AP_BarracksTechLabResearch"/>
+        <AbilArray Link="AP_MercCompoundResearch"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5Addon,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechReactor"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="75"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
+        <TacticalAI value="TechLab"/>
+        <HotkeyAlias value="TechReactor"/>
+        <SelectAlias value="TechLab"/>
+        <TechAliasArray value="Alias_TechLab"/>
+        <TechAliasArray value="Alias_Reactor"/>
+        <GlossaryPriority value="26"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <AIEvaluateAlias value="TechLab"/>
+        <ReviveInfoBase>
+            <Charge Link="TechLab/Revive"/>
+            <Cooldown Link="TechLab/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_FactoryReactor">
+        <Name value="Unit/Name/Reactor"/>
+        <Description value="Button/Tooltip/Reactor"/>
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="Reactor"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="50"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_BarracksReactorMorph"/>
+        <AbilArray Link="AP_StarportReactorMorph"/>
+        <AbilArray Link="AP_ReactorMorph"/>
+        <AbilArray Link="AP_MorphToTechReactor"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_MorphToTechReactor"/>
+        <CardLayouts>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="1"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="Reactor"/>
+        <SelectAlias value="Reactor"/>
+        <SubgroupAlias value="Reactor"/>
+        <TechAliasArray value="Alias_Reactor"/>
+        <AIEvaluateAlias value="Reactor"/>
+    </CUnit>
+    <CUnit id="AP_FactoryTechLab">
+        <Name value="Unit/Name/TechLab"/>
+        <Description value="Button/Tooltip/TechLab"/>
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="TechLab"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="25"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5Addon"/>
+        <AbilArray Link="AP_BarracksTechLabMorph"/>
+        <AbilArray Link="AP_TechLabMorph"/>
+        <AbilArray Link="AP_StarportTechLabMorph"/>
+        <AbilArray Link="AP_FactoryTechLabResearch"/>
+        <AbilArray Link="AP_MorphToTechReactor"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_MorphToTechReactor"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5Addon,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechLab"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechLab"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechLab"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="75"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="TechLab"/>
+        <HotkeyAlias value="TechLab"/>
+        <SelectAlias value="TechLab"/>
+        <TechAliasArray value="Alias_TechLab"/>
+        <GlossaryPriority value="26"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <AIEvaluateAlias value="TechLab"/>
+        <ReviveInfoBase>
+            <Charge Link="TechLab/Revive"/>
+            <Cooldown Link="TechLab/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_FactoryTechReactor">
+        <Description value="Button/Tooltip/TechReactor"/>
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="TechLab"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="75"/>
+        <CostResource index="Vespene" value="75"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5Addon"/>
+        <AbilArray Link="AP_BarracksTechReactorMorph"/>
+        <AbilArray Link="AP_TechReactorMorph"/>
+        <AbilArray Link="AP_StarportTechReactorMorph"/>
+        <AbilArray Link="AP_FactoryTechLabResearch"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5Addon,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechReactor"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="75"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
+        <TacticalAI value="TechLab"/>
+        <HotkeyAlias value="TechReactor"/>
+        <SelectAlias value="TechLab"/>
+        <TechAliasArray value="Alias_TechLab"/>
+        <TechAliasArray value="Alias_Reactor"/>
+        <GlossaryPriority value="26"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <AIEvaluateAlias value="TechLab"/>
+        <ReviveInfoBase>
+            <Charge Link="TechLab/Revive"/>
+            <Cooldown Link="TechLab/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_StarportReactor">
+        <Name value="Unit/Name/Reactor"/>
+        <Description value="Button/Tooltip/Reactor"/>
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="Reactor"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="50"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_BarracksReactorMorph"/>
+        <AbilArray Link="AP_FactoryReactorMorph"/>
+        <AbilArray Link="AP_ReactorMorph"/>
+        <AbilArray Link="AP_MorphToTechReactor"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_MorphToTechReactor"/>
+        <CardLayouts>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="1"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="Reactor"/>
+        <SelectAlias value="Reactor"/>
+        <SubgroupAlias value="Reactor"/>
+        <TechAliasArray value="Alias_Reactor"/>
+        <GlossaryPriority value="27"/>
+        <AIEvaluateAlias value="Reactor"/>
+    </CUnit>
+    <CUnit id="AP_StarportTechLab">
+        <Name value="Unit/Name/TechLab"/>
+        <Description value="Button/Tooltip/TechLab"/>
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="TechLab"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="25"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5Addon"/>
+        <AbilArray Link="AP_BarracksTechLabMorph"/>
+        <AbilArray Link="AP_FactoryTechLabMorph"/>
+        <AbilArray Link="AP_TechLabMorph"/>
+        <AbilArray Link="AP_StarportTechLabResearch"/>
+        <AbilArray Link="AP_MorphToTechReactor"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_MorphToTechReactor"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5Addon,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechLab"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechLab"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechLab"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="75"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="TechLab"/>
+        <HotkeyAlias value="TechLab"/>
+        <SelectAlias value="TechLab"/>
+        <TechAliasArray value="Alias_TechLab"/>
+        <GlossaryPriority value="26"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <AIEvaluateAlias value="TechLab"/>
+        <ReviveInfoBase>
+            <Charge Link="TechLab/Revive"/>
+            <Cooldown Link="TechLab/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_StarportTechReactor">
+        <Description value="Button/Tooltip/TechReactor"/>
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="TechLab"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="75"/>
+        <CostResource index="Vespene" value="75"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5Addon"/>
+        <AbilArray Link="AP_BarracksTechReactorMorph"/>
+        <AbilArray Link="AP_FactoryTechReactorMorph"/>
+        <AbilArray Link="AP_TechReactorMorph"/>
+        <AbilArray Link="AP_StarportTechLabResearch"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5Addon,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechReactor"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="75"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
+        <TacticalAI value="TechLab"/>
+        <HotkeyAlias value="TechReactor"/>
+        <SelectAlias value="TechLab"/>
+        <TechAliasArray value="Alias_TechLab"/>
+        <TechAliasArray value="Alias_Reactor"/>
+        <GlossaryPriority value="26"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <AIEvaluateAlias value="TechLab"/>
+        <ReviveInfoBase>
+            <Charge Link="TechLab/Revive"/>
+            <Cooldown Link="TechLab/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_TechLab">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="25"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5Addon"/>
+        <AbilArray Link="AP_BarracksTechLabMorph"/>
+        <AbilArray Link="AP_FactoryTechLabMorph"/>
+        <AbilArray Link="AP_StarportTechLabMorph"/>
+        <!-- Addon Steal -->
+        <AbilArray Link="BarracksTechLabMorph"/>
+        <AbilArray Link="FactoryTechLabMorph"/>
+        <AbilArray Link="StarportTechLabMorph"/>
+        <AbilArray Link="AP_MorphToTechReactor"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_MorphToTechReactor"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5LongBlend,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechLab"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechLab"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechLab"/>
+        <!-- Addon Steal -->
+        <AddedOnArray UnitLink="Barracks" BehaviorLink="BarracksTechLab"/>
+        <AddedOnArray UnitLink="Factory" BehaviorLink="FactoryTechLab"/>
+        <AddedOnArray UnitLink="Starport" BehaviorLink="StarportTechLab"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="75"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="TechLab"/>
+        <HotkeyAlias value="TechLab"/>
+        <SelectAlias value="TechLab"/>
+        <TechAliasArray value="Alias_TechLab"/>
+        <GlossaryPriority value="26"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="AP_TechReactor">
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="TechLab"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="75"/>
+        <CostResource index="Vespene" value="75"/>
+        <RepairTime value="25"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5Addon"/>
+        <AbilArray Link="AP_BarracksTechReactorMorph"/>
+        <AbilArray Link="AP_FactoryTechReactorMorph"/>
+        <AbilArray Link="AP_StarportTechReactorMorph"/>
+        <!-- Need to add Addon stealing code with Vanilla buildings -->
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5Addon,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechReactor"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="75"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Campaign"/>
+        <TacticalAI value="TechLab"/>
+        <LeaderAlias value="TechLab"/>
+        <SelectAlias value="TechLab"/>
+        <TechAliasArray value="Alias_TechLab"/>
+        <TechAliasArray value="Alias_Reactor"/>
+        <GlossaryPriority value="26"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <AIEvaluateAlias value="TechLab"/>
+        <ReviveInfoBase>
+            <Charge Link="TechLab/Revive"/>
+            <Cooldown Link="TechLab/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_Reactor">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="50"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_BarracksReactorMorph"/>
+        <AbilArray Link="AP_FactoryReactorMorph"/>
+        <AbilArray Link="AP_StarportReactorMorph"/>
+        <AbilArray Link="AP_MorphToTechReactor"/>
+        <!-- Addon Steal -->
+        <AbilArray Link="BarracksReactorMorph"/>
+        <AbilArray Link="FactoryReactorMorph"/>
+        <AbilArray Link="StarportReactorMorph"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_MorphToTechReactor"/>
+        <CardLayouts>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2Contour"/>
+        <PlacementFootprint value="Footprint3x3AddOn2x2"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+        <!-- Addon Steal -->
+        <AddedOnArray UnitLink="Barracks" BehaviorLink="BarracksReactor"/>
+        <AddedOnArray UnitLink="Factory" BehaviorLink="FactoryReactor"/>
+        <AddedOnArray UnitLink="Starport" BehaviorLink="StarportReactor"/>
+        <AddOnOffsetX value="2.5"/>
+        <AddOnOffsetY value="-0.5"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="1"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TechAliasArray value="Alias_Reactor"/>
+        <GlossaryPriority value="27"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="Reactor">
+        <!-- Override -->
+        <!-- Add-on stealing -->
+        <AbilArray Link="AP_BarracksReactorMorph"/>
+        <AbilArray Link="AP_FactoryReactorMorph"/>
+        <AbilArray Link="AP_StarportReactorMorph"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+    </CUnit>
+    <CUnit id="TechLab">
+        <!-- Override -->
+        <!-- Add-on stealing -->
+        <AbilArray Link="AP_BarracksTechLabMorph"/>
+        <AbilArray Link="AP_FactoryTechLabMorph"/>
+        <AbilArray Link="AP_StarportTechLabMorph"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+    </CUnit>
+    <!-- In Liberty adaptation mod add Tech Lab Code -->
 </Catalog>

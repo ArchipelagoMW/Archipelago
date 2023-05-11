@@ -304,8 +304,8 @@
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_Spectre">
-        <Icon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-spectre.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-spectre.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-spectre.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_SpectreConsumption">
@@ -671,5 +671,42 @@
         <Hotkey value="Button/Hotkey/SupplyDepot"/>
         <EditorCategories value="Race:Terran"/>
         <HotkeyAlias value="SupplyDepot"/>
+    </CButton>
+    <CButton id="AP_Firebat">
+        <Icon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Ghost">
+        <Icon value="Assets\Textures\btn-unit-terran-ghost.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-ghost.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Marauder">
+        <Icon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Marine">
+        <Icon value="Assets\Textures\btn-unit-terran-marine.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Medic">
+        <Icon value="Assets\Textures\btn-unit-terran-medic.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-medic.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Reaper">
+        <Icon value="Assets\Textures\btn-unit-terran-reaper.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-reaper.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_TechReactor">
+        <Icon value="AP\Assets\Textures\btn-building-terran-techreactor.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-building-terran-techreactor.dds"/>
+        <Hotkey value="Button/Hotkey/AP_TechReactorAI"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TechReactorAI"/>
     </CButton>
 </Catalog>

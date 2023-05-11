@@ -44,6 +44,92 @@
         <ImpactMap index="None" Sound="VikingFighter_AttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
     </CActorAction>
+    <CActorUnit default="1" id="AP_TechLabBase" parent="TerranBuildingEx">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerranAttachmentAnims"/>
+        <Macros value="QueueAnimAddon"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit TechLabIsDetached" Send="DeathCustomize Detached"/>
+        <Model value="TechLab"/>
+        <DeathArray index="Normal" ModelLink="TechLabDeath" SoundLink="TechLab_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="TechLab_Explode"/>
+        <DeathCustoms ModelLink="TechLabDeathDetached" Name="Detached"/>
+        <PlacementModel value="TechLabPlacement"/>
+        <AddonIndicator value="Actor/AddonIndicator/TechLab"/>
+        <BarOffset value="80"/>
+        <BarWidth value="75"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-TechLab.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="TechLabGroupWhat"/>
+        <GroupSoundArray index="Yes" value="TechLabGroupYes"/>
+        <GroupSoundArray index="Attack" value="TechLabGroupAttack"/>
+        <GroupSoundArray index="Board" value="TechLabGroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-building-terran-techlab.dds"/>
+        <HighlightTooltip value="Unit/Name/TechLab"/>
+        <SoundArray index="Birth" value="TechLab_Birth"/>
+        <SoundArray index="Ready" value="TechLab_Ready"/>
+        <SoundArray index="Help" value="TechLabHelp"/>
+        <SoundArray index="What" value="TechLab_What"/>
+        <SoundArray index="Yes" value="TechLabYes"/>
+        <SoundArray index="Attack" value="TechLabAttack"/>
+        <SoundArray index="Pissed" value="TechLabPissed"/>
+        <SoundArray index="Movement" value="TechLabMovement"/>
+        <SoundArray index="Turning" value="TechLabTurning"/>
+        <SoundArray index="Board" value="TechLabBoard"/>
+        <SoundArray index="Click" value="TechLabClick"/>
+        <SoundArray index="ClickError" value="TechLabClickError"/>
+        <SoundArray index="Highlight" value="TechLabHighlight"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-techlab.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-TechLab.dds"/>
+        </Wireframe>
+        <CreepHeightClass value="Small"/>
+        <PortraitModel value="ReactorPortrait"/>
+        <GlossaryAnim value="Stand,Attached"/>
+    </CActorUnit>
+    <CActorUnit default="1" id="AP_ReactorBase" parent="TerranBuildingEx">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerranAttachmentAnims"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit ReactorIsDetached" Send="DeathCustomize Detached"/>
+        <DeathArray index="Normal" ModelLink="ReactorDeath" SoundLink="Reactor_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Reactor_Explode"/>
+        <DeathCustoms ModelLink="ReactorDeathDetached" Name="Detached"/>
+        <PlacementModel value="ReactorPlacement"/>
+        <AddonIndicator value="Actor/AddonIndicator/Reactor"/>
+        <BarOffset value="90"/>
+        <BarWidth value="75"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Reactor.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="ReactorGroupWhat"/>
+        <GroupSoundArray index="Yes" value="ReactorGroupYes"/>
+        <GroupSoundArray index="Attack" value="ReactorGroupAttack"/>
+        <GroupSoundArray index="Board" value="ReactorGroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-building-terran-reactor.dds"/>
+        <HighlightTooltip value="Unit/Name/Reactor"/>
+        <CreepHeightClass value="Small"/>
+        <SoundArray index="Birth" value="Reactor_Birth"/>
+        <SoundArray index="Ready" value="Reactor_Ready"/>
+        <SoundArray index="Help" value="ReactorHelp"/>
+        <SoundArray index="What" value="Reactor_What"/>
+        <SoundArray index="Yes" value="ReactorYes"/>
+        <SoundArray index="Attack" value="ReactorAttack"/>
+        <SoundArray index="Pissed" value="ReactorPissed"/>
+        <SoundArray index="Movement" value="ReactorMovement"/>
+        <SoundArray index="Turning" value="ReactorTurning"/>
+        <SoundArray index="Board" value="ReactorBoard"/>
+        <SoundArray index="Click" value="ReactorClick"/>
+        <SoundArray index="ClickError" value="ReactorClickError"/>
+        <SoundArray index="Highlight" value="ReactorHighlight"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-reactor.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Reactor.dds"/>
+        </Wireframe>
+        <PortraitModel value="ReactorPortrait"/>
+        <GlossaryAnim value="Stand,Attached"/>
+    </CActorUnit>
     <CActorModel id="AP_250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
@@ -401,7 +487,7 @@
         <On Terms="WeaponStart.AP_D8Charge.AttackStart" Send="AnimBracketStart Attack Spell"/>
         <On Terms="WeaponStop.AP_D8Charge.AttackStop" Send="AnimBracketStop Attack"/>
         <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
-        <On Terms="UnitBirth.ReaperPlacement" Send="Create"/>
+        <On Terms="UnitBirth.AP_ReaperPlacement" Send="Create"/>
         <Model value="Reaper"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Reaper"/>
@@ -5052,15 +5138,456 @@
     <CActorSound id="AP_SupplyDropPodFall" parent="SoundOneShot">
         <Sound value="Barracks_DropPodFall"/>
     </CActorSound>
+    <CActorUnit id="AP_Barracks" parent="TerranBuildingFlyerEx" unitName="AP_Barracks">
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationBarracks"/>
+        <On Terms="UnitDeathCustomize.BarracksFlying" Send="DeathCustomize Flying"/>
+        <Model value="Barracks"/>
+        <BuildModel value="Barracks"/>
+        <DeathArray index="Normal" ModelLink="BarracksDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranLargeBuildingDeath" SoundLink="Barracks_Explode"/>
+        <DeathCustoms index="5" ModelLink="BarracksFlyDeath" SoundLink="Barracks_Explode" Name="Flying"/>
+        <PlacementModel value="BarracksPlacement"/>
+        <PortraitModel value="BarracksPortrait"/>
+        <BarOffset value="155"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Barracks.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Barracks.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="Barracks_Ready"/>
+        <SoundArray index="What" value="Barracks_What"/>
+        <SoundArray index="Movement" value="Barracks_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Barracks.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Barracks.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_BarracksBuild" parent="TerranBuildingBuild">
+        <Model value="BarracksBuild"/>
+    </CActorModel>
+    <CActorSound id="AP_BarracksLand" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Barracks" Send="Create"/>
+        <Sound value="BarracksLand" />
+    </CActorSound>
+    <CActorSplat id="AP_BarracksSplat" parent="TerranBuildingMorphSplat" unitName="AP_Barracks">
+        <Model value="BarracksSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_BarracksReactor" parent="AP_ReactorBase" unitName="AP_BarracksReactor">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="AP_BarracksReactorSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+        <Model value="BarracksReactor"/>
+        <BuildModel value="Reactor"/>
+    </CActorUnit>
+    <CActorModel id="AP_BarracksReactorBuild" parent="TerranBuildingBuildSmall">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="ReactorBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_BarracksReactorSplat" parent="GenericUnitSplat" unitName="AP_BarracksReactor">
+        <Model value="BarracksReactorSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_BarracksTechLab" parent="AP_TechLabBase" unitName="AP_BarracksTechLab">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="AP_BarracksTechLabSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+        <Model value="BarracksTechLab"/>
+        <BuildModel value="TechLab"/>
+    </CActorUnit>
+    <CActorModel id="AP_BarracksTechLabBuild" parent="TerranBuildingBuildSmall">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="TechLabBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_BarracksTechLabSplat" parent="GenericUnitSplat" unitName="AP_BarracksTechLab">
+        <Model value="BarracksTechLabSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_BarracksTechReactor" parent="TerranBuilding" unitName="AP_BarracksTechReactor">
+        <DeathArray index="Normal" ModelLink="AP_TechReactorDeath" SoundLink="TechLab_Explode"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_TechReactorIsDetached" Send="DeathCustomize Detached"/>
+        <DeathCustoms ModelLink="AP_TechReactorDetachedDeath" Name="Detached"/>
+        <PlacementModel value="AP_TechReactorPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <Macros value="QueueAnim"/>
+        <Macros value="TerranAttachmentAnims"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <BarWidth value="70"/>
+        <BarOffset value="80"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
+        </Wireframe>
+        <SoundArray index="Birth" value="TechLab_Birth"/>
+        <SoundArray index="Ready" value="TechLab_Ready"/>
+        <SoundArray index="Help" value="TechLabHelp"/>
+        <SoundArray index="What" value="TechLab_What"/>
+        <SoundArray index="Yes" value="TechLabYes"/>
+        <SoundArray index="Attack" value="TechLabAttack"/>
+        <SoundArray index="Pissed" value="TechLabPissed"/>
+        <SoundArray index="Movement" value="TechLabMovement"/>
+        <SoundArray index="Turning" value="TechLabTurning"/>
+        <SoundArray index="Board" value="TechLabBoard"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <SoundArray index="Click" value="TechLabClick"/>
+        <SoundArray index="ClickError" value="TechLabClickError"/>
+        <SoundArray index="Highlight" value="TechLabHighlight"/>
+        <GroupSoundArray index="What" value="TechLabGroupWhat"/>
+        <GroupSoundArray index="Yes" value="TechLabGroupYes"/>
+        <GroupSoundArray index="Attack" value="TechLabGroupAttack"/>
+        <GroupSoundArray index="Board" value="TechLabGroupBoard"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <HighlightTooltip value="Unit/Name/TechReactor"/>
+        <AddonIndicator value="Actor/AddonIndicator/AP_TechReactor"/>
+        <Aliases value="_UnitLarge"/>
+    </CActorUnit>
+    <CActorModel id="AP_BarracksTechReactorBuild" parent="TerranBuildingBuildSmall">
+        <Model value="AP_TechReactorBuild"/>
+    </CActorModel>
+    <CActorUnit id="AP_FactoryReactor" parent="AP_ReactorBase" unitName="AP_FactoryReactor">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="AP_FactoryReactorSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+        <Model value="FactoryReactor"/>
+        <BuildModel value="Reactor"/>
+    </CActorUnit>
+    <CActorModel id="AP_FactoryReactorBuild" parent="TerranBuildingBuildSmall">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="ReactorBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_FactoryReactorSplat" parent="GenericUnitSplat" unitName="FactoryReactor">
+        <Model value="FactoryReactorSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_FactoryTechLab" parent="AP_TechLabBase" unitName="AP_FactoryTechLab">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="AP_FactoryTechLabSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+        <Model value="FactoryTechLab"/>
+        <BuildModel value="TechLab"/>
+    </CActorUnit>
+    <CActorModel id="AP_FactoryTechLabBuild" parent="TerranBuildingBuildSmall">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="TechLabBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_FactoryTechLabSplat" parent="GenericUnitSplat" unitName="AP_FactoryTechLab">
+        <Model value="FactoryTechLabSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_FactoryTechReactor" parent="TerranBuilding" unitName="AP_FactoryTechReactor">
+        <Macros value="QueueAnim"/>
+        <Macros value="TerranAttachmentAnims"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_TechReactorIsDetached" Send="DeathCustomize Detached"/>
+        <DeathArray index="Normal" ModelLink="AP_TechReactorDeath" SoundLink="TechLab_Explode"/>
+        <DeathCustoms ModelLink="AP_TechReactorDetachedDeath" Name="Detached"/>
+        <PlacementModel value="AP_TechReactorPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <AddonIndicator value="Actor/AddonIndicator/TechReactor"/>
+        <BarOffset value="80"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="TechLabGroupWhat"/>
+        <GroupSoundArray index="Yes" value="TechLabGroupYes"/>
+        <GroupSoundArray index="Attack" value="TechLabGroupAttack"/>
+        <GroupSoundArray index="Board" value="TechLabGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
+        <HighlightTooltip value="Unit/Name/TechReactor"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="Birth" value="TechLab_Birth"/>
+        <SoundArray index="Ready" value="TechLab_Ready"/>
+        <SoundArray index="Help" value="TechLabHelp"/>
+        <SoundArray index="What" value="TechLab_What"/>
+        <SoundArray index="Yes" value="TechLabYes"/>
+        <SoundArray index="Attack" value="TechLabAttack"/>
+        <SoundArray index="Pissed" value="TechLabPissed"/>
+        <SoundArray index="Movement" value="TechLabMovement"/>
+        <SoundArray index="Turning" value="TechLabTurning"/>
+        <SoundArray index="Board" value="TechLabBoard"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <SoundArray index="Click" value="TechLabClick"/>
+        <SoundArray index="ClickError" value="TechLabClickError"/>
+        <SoundArray index="Highlight" value="TechLabHighlight"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
+        </Wireframe>
+        <AddonIndicator value="Actor/AddonIndicator/AP_TechReactor"/>
+    </CActorUnit>
+    <CActorModel id="AP_FactoryTechReactorBuild" parent="TerranBuildingBuildSmall">
+        <Model value="AP_TechReactorBuild"/>
+    </CActorModel>
+    <CActorUnit id="AP_StarportReactor" parent="AP_ReactorBase" unitName="AP_StarportReactor">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="AP_StarportReactorSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+        <Model value="StarportReactor"/>
+        <BuildModel value="Reactor"/>
+    </CActorUnit>
+    <CActorModel id="AP_StarportReactorBuild" parent="TerranBuildingBuildSmall">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="ReactorBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_StarportReactorSplat" parent="GenericUnitSplat" unitName="AP_StarportReactor">
+        <Model value="StarportReactorSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_StarportTechLab" parent="AP_TechLabBase" unitName="AP_StarportTechLab">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="AP_StarportTechLabSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+        <Model value="StarportTechLab"/>
+        <BuildModel value="TechLab"/>
+    </CActorUnit>
+    <CActorModel id="AP_StarportTechLabBuild" parent="TerranBuildingBuildSmall">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="TechLabBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_StarportTechLabSplat" parent="GenericUnitSplat" unitName="AP_StarportTechLab">
+        <Model value="StarportTechLabSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_StarportTechReactor" parent="TerranBuilding" unitName="AP_StarportTechReactor">
+        <Macros value="QueueAnim"/>
+        <Macros value="TerranAttachmentAnims"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_TechReactorIsDetached" Send="DeathCustomize Detached"/>
+        <DeathArray index="Normal" ModelLink="TechReactorDeath" SoundLink="TechLab_Explode"/>
+        <DeathCustoms ModelLink="TechReactorDetachedDeath" Name="Detached"/>
+        <PlacementModel value="TechReactorPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <AddonIndicator value="Actor/AddonIndicator/TechReactor"/>
+        <BarOffset value="80"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="TechLabGroupWhat"/>
+        <GroupSoundArray index="Yes" value="TechLabGroupYes"/>
+        <GroupSoundArray index="Attack" value="TechLabGroupAttack"/>
+        <GroupSoundArray index="Board" value="TechLabGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
+        <HighlightTooltip value="Unit/Name/TechReactor"/>
+        <LifeArmorIcon value="AP\Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="Birth" value="TechLab_Birth"/>
+        <SoundArray index="Ready" value="TechLab_Ready"/>
+        <SoundArray index="Help" value="TechLabHelp"/>
+        <SoundArray index="What" value="TechLab_What"/>
+        <SoundArray index="Yes" value="TechLabYes"/>
+        <SoundArray index="Attack" value="TechLabAttack"/>
+        <SoundArray index="Pissed" value="TechLabPissed"/>
+        <SoundArray index="Movement" value="TechLabMovement"/>
+        <SoundArray index="Turning" value="TechLabTurning"/>
+        <SoundArray index="Board" value="TechLabBoard"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <SoundArray index="Click" value="TechLabClick"/>
+        <SoundArray index="ClickError" value="TechLabClickError"/>
+        <SoundArray index="Highlight" value="TechLabHighlight"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
+        </Wireframe>
+        <AddonIndicator value="Actor/AddonIndicator/AP_TechReactor"/>
+    </CActorUnit>
+    <CActorModel id="AP_StarportTechReactorBuild" parent="TerranBuildingBuildSmall">
+        <Model value="AP_TechReactorBuild"/>
+    </CActorModel>
+    <CActorUnit id="AP_TechLab" parent="AP_TechLabBase" unitName="AP_TechLab">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="AP_TechLabSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+        <AddonIndicator value="Actor/AddonIndicator/AP_TechLab"/>
+        <HighlightTooltip value="Unit/Name/AP_TechLab"/>
+    </CActorUnit>
+    <CActorModel id="AP_TechLabBuild" parent="TerranBuildingBuildSmall">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="TechLabBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_TechLabSplat" parent="GenericUnitSplat" unitName="AP_TechLab">
+        <Model value="TechLabSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_TechReactor" parent="TerranBuilding" unitName="AP_TechReactor">
+        <Macros value="QueueAnim"/>
+        <Macros value="TerranAttachmentAnims"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <On Terms="AbilMorph.AP_MorphToTechReactor.Finish; MorphTo AP_TechReactor" Send="Create"/>
+        <CreepHeightClass value="Tiny"/>
+        <DeathArray index="Normal" ModelLink="TechReactorDetachedDeath" SoundLink="Terran_ExplosionMedium"/>
+        <EditorModel value="TechLab"/>
+        <PlacementModel value="AP_TechReactorPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <AddonIndicator value="Actor/AddonIndicator/AP_TechReactor"/>
+        <BarOffset value="80"/>
+        <BarWidth value="70"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="TechLabGroupWhat"/>
+        <GroupSoundArray index="Yes" value="TechLabGroupYes"/>
+        <GroupSoundArray index="Attack" value="TechLabGroupAttack"/>
+        <GroupSoundArray index="Board" value="TechLabGroupBoard"/>
+        <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_TechReactor"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="Birth" value="TechLab_Birth"/>
+        <SoundArray index="Ready" value="TechLab_Ready"/>
+        <SoundArray index="Help" value="TechLabHelp"/>
+        <SoundArray index="What" value="TechLab_What"/>
+        <SoundArray index="Yes" value="TechLabYes"/>
+        <SoundArray index="Attack" value="TechLabAttack"/>
+        <SoundArray index="Pissed" value="TechLabPissed"/>
+        <SoundArray index="Movement" value="TechLabMovement"/>
+        <SoundArray index="Turning" value="TechLabTurning"/>
+        <SoundArray index="Board" value="TechLabBoard"/>
+        <SoundArray index="Click" value="TechLabClick"/>
+        <SoundArray index="ClickError" value="TechLabClickError"/>
+        <SoundArray index="Highlight" value="TechLabHighlight"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_TechReactorBuild" parent="TerranBuildingBuildSmall">
+        <Model value="AP_TechReactorBuild"/>
+    </CActorModel>
+    <CActorUnit id="AP_Reactor" parent="AP_ReactorBase" unitName="AP_Reactor">
+        <Model value="Reactor"/>
+    </CActorUnit>
+    <CActorModel id="AP_ReactorBuild" parent="TerranBuildingBuildSmall">
+        <On Terms="ActorCreation" Send="SetScale 1.350000"/>
+        <Model value="ReactorBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_ReactorSplat" parent="GenericUnitSplat" unitName="AP_Reactor">
+        <Model value="ReactorSplat"/>
+    </CActorSplat>
+    <CActorUnit id="BarracksReactor">
+        <!-- Override -->
+        <!-- Morph to AP_TechReactor -->
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="BarracksReactorSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+    </CActorUnit>
+    <CActorUnit id="FactoryReactor">
+        <!-- Override -->
+        <!-- Morph to AP_TechReactor -->
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="FactoryReactorSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+    </CActorUnit>
+    <CActorUnit id="StarportReactor">
+        <!-- Override -->
+        <!-- Morph to AP_TechReactor -->
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="StarportReactorSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+    </CActorUnit>
+    <CActorUnit id="BarracksTechLab">
+        <!-- Override -->
+        <!-- Morph to AP_TechReactor -->
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="BarracksTechLabSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+    </CActorUnit>
+    <CActorUnit id="FactoryTechLab">
+        <!-- Override -->
+        <!-- Morph to AP_TechReactor -->
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="FactoryTechLabSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+    </CActorUnit>
+    <CActorUnit id="StarportTechLab">
+        <!-- Override -->
+        <!-- Morph to AP_TechReactor -->
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Target="StarportTechLabSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
+    </CActorUnit>
+    <CActorModel id="AP_BarracksDropPod">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="Effect.AP_DropTrain.Start" Send="Create"/>
+        <On Terms="Effect.AP_DropTrainReaper.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 3.000000 DropRelase"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart Drop Birth IGNORE Death ContentPlayOnce"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName Drop" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName DropRelease" Send="AnimBracketStop Drop"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <EventDataSound Name="BarracksDropPodLand" Actor="UnitSound" Sound="AP_Barracks_DropPodLand"/>
+    </CActorModel>
+    <CActorSound id="AP_BarracksDropPodFall" parent="SoundOneShot">
+        <Sound value="AP_Barracks_DropPodFall"/>
+        <On Terms="Effect.AP_DropTrain.Start" Send="Create"/>
+        <On Terms="Effect.AP_DropTrainReaper.Start" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_BarracksDropPodUnload" parent="SoundOneShot">
+        <Sound value="AP_Barracks_DropPodUnload"/>
+        <On Terms="Effect.AP_DropTrain.Stop" Send="Create"/>
+        <On Terms="Effect.AP_DropTrainReaper.Stop" Send="Create"/>
+    </CActorSound>
+    <CActorStateMonitor id="TerranFlamesSmallBuilding">
+        <!-- Override -->
+        <!-- Add AP buildings -->
+        <On Terms="UnitCreation.AP_AutoTurret" Send="Create"/>
+        <On Terms="UnitCreation.AP_MissileTurret" Send="Create"/>
+        <On Terms="UnitCreation.AP_SensorTower" Send="Create"/>
+        <On Terms="UnitCreation.AP_TechLab" Send="Create"/>
+        <On Terms="UnitCreation.AP_BarracksTechLab" Send="Create"/>
+        <On Terms="UnitCreation.AP_FactoryTechLab" Send="Create"/>
+        <On Terms="UnitCreation.AP_StarportTechLab" Send="Create"/>
+        <On Terms="UnitCreation.AP_Reactor" Send="Create"/>
+        <On Terms="UnitCreation.AP_BarracksReactor" Send="Create"/>
+        <On Terms="UnitCreation.AP_FactoryReactor" Send="Create"/>
+        <On Terms="UnitCreation.AP_StarportReactor" Send="Create"/>
+        <On Terms="UnitCreation.AP_PerditionTurret" Send="Create"/>
+        <On Terms="UnitCreation.AP_HiveMindEmulator" Send="Create"/>
+        <On Terms="UnitCreation.AP_TechReactor" Send="Create"/>
+        <On Terms="UnitCreation.AP_BarracksTechReactor" Send="Create"/>
+        <On Terms="UnitCreation.AP_FactoryTechReactor" Send="Create"/>
+        <On Terms="UnitCreation.AP_StarportTechReactor" Send="Create"/>
+        <On Terms="UnitCreation.AP_RenegadeMissileTurret" Send="Create"/>
+    </CActorStateMonitor>
+    <CActorStateMonitor id="TerranFlamesMediumBuilding">
+        <!-- Override -->
+        <!-- Add AP buildings -->
+        <On Terms="UnitCreation.AP_SupplyDepot" Send="Create"/>
+        <On Terms="UnitCreation.AP_SupplyDepotLowered" Send="Create"/>
+        <On Terms="UnitCreation.AP_Refinery" Send="Create"/>
+        <On Terms="UnitCreation.AP_RefineryRich" Send="Create"/>
+        <On Terms="UnitCreation.AP_AutomatedRefinery" Send="Create"/>
+        <On Terms="UnitCreation.AP_AutomatedRefineryRich" Send="Create"/>
+        <On Terms="UnitCreation.AP_Barracks" Send="Create"/>
+        <On Terms="UnitCreation.AP_BarracksFlying" Send="Create"/>
+        <On Terms="UnitCreation.AP_EngineeringBay" Send="Create"/>
+        <On Terms="UnitCreation.AP_Bunker" Send="Create"/>
+        <On Terms="UnitCreation.AP_GhostAcademy" Send="Create"/>
+        <On Terms="UnitCreation.AP_MercCompound" Send="Create"/>
+        <On Terms="UnitCreation.AP_Factory" Send="Create"/>
+        <On Terms="UnitCreation.AP_FactoryFlying" Send="Create"/>
+        <On Terms="UnitCreation.AP_Armory" Send="Create"/>
+        <On Terms="UnitCreation.AP_Starport" Send="Create"/>
+        <On Terms="UnitCreation.AP_StarportFlying" Send="Create"/>
+        <On Terms="UnitCreation.AP_FusionCore" Send="Create"/>
+    </CActorStateMonitor>
+    <CActorStateMonitor id="TerranFlamesLargeBuilding">
+        <!-- Override -->
+        <!-- Add AP buildings -->
+        <On Terms="UnitCreation.AP_CommandCenter" Send="Create"/>
+        <On Terms="UnitCreation.AP_CommandCenterFlying" Send="Create"/>
+        <On Terms="UnitCreation.AP_PlanetaryFortress" Send="Create"/>
+        <On Terms="UnitCreation.AP_OrbitalCommand" Send="Create"/>
+        <On Terms="UnitCreation.AP_OrbitalCommandFlying" Send="Create"/>
+    </CActorStateMonitor>
     <CActorSound id="TerranBuildingLiftOff">
         <!-- Override -->
         <!-- Add AP buildings -->
         <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_BarracksFlying" Send="Create"/>
     </CActorSound>
     <CActorSound id="TerranBuildingLand">
         <!-- Override -->
         <!-- Add AP buildings -->
         <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepotLowered" Send="Create"/>
-        <Sound value="Terran_BuildingLand"/>
     </CActorSound>
+    <CActorProgress id="TerranConstruction">
+        <!-- Override -->
+        <!-- Let it be aware of AP build -->
+        <On Terms="Abil.AP_TerranBuild.BuiltStart" Send="Create"/>
+        <On Terms="Abil.AP_BarracksAddOns.BuiltStart" Send="Create"/>
+        <On Terms="Abil.AP_FactoryAddOns.BuiltStart" Send="Create"/>
+        <On Terms="Abil.AP_StarportAddOns.BuiltStart" Send="Create"/>
+    </CActorProgress>
 </Catalog>

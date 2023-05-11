@@ -1242,4 +1242,198 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilBuild id="AP_BarracksAddOns" parent="TerranAddOns">
+        <Name value="Abil/Name/AP_BarracksAddOns"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <BuildMorphAbil value="AP_BarracksLiftOff"/>
+        <InfoArray index="Build1" Unit="AP_BarracksTechLab" Time="25">
+            <Button DefaultButtonFace="BuildTechLabBarracks" Requirements="AP_UseTechReactorHide"/>
+        </InfoArray>
+        <InfoArray index="Build2" Unit="AP_BarracksReactor" Time="50">
+            <Button Requirements="AP_UseTechReactorHide"/>
+        </InfoArray>
+        <InfoArray index="Build4" Unit="AP_BarracksTechReactor" Time="50" AddOnParentCmdPriority="-1">
+            <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
+        </InfoArray>
+    </CAbilBuild>
+    <CAbilMorph id="AP_BarracksLiftOff" parent="TerranBuildingLiftOff" unit="AP_BarracksFlying">
+        <Name value="Abil/Name/AP_BarracksLiftOff"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_BarracksReactorMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="AP_ShowIfHaveAPBarrAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <InfoArray Unit="AP_BarracksReactor"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_BarracksTechLabMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLabBarracks" Requirements="AP_ShowIfHaveAPBarrAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <InfoArray Unit="AP_BarracksTechLab"/>
+    </CAbilMorph>
+    <CAbilResearch id="AP_BarracksTechLabResearch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <!-- Unit upgrades are granted by triggers in AP -->
+    </CAbilResearch>
+    <CAbilMorph id="AP_BarracksTechReactorMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLabBarracks" Requirements="AP_ShowIfHaveAPBarrAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <InfoArray Unit="AP_BarracksTechReactor"/>
+    </CAbilMorph>
+    <CAbilTrain id="AP_BarracksTrain">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Range value="5"/>
+        <InfoArray index="Train1" Time="25">
+            <Button DefaultButtonFace="Marine" State="Restricted"/>
+            <Unit value="AP_Marine"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="40">
+            <Button DefaultButtonFace="Reaper" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Reaper"/>
+        </InfoArray>
+        <InfoArray index="Train3" Time="40">
+            <Button DefaultButtonFace="Ghost" State="Restricted" Requirements="AP_HaveAttachedBarrTechLabOrAttachedTechReactorAndShadowOps"/>
+            <Unit value="AP_Ghost"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="30">
+            <Button DefaultButtonFace="Marauder" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Marauder"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="25">
+            <Button DefaultButtonFace="Medic" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Medic"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="30">
+            <Button DefaultButtonFace="FlameMech" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Firebat"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="50">
+            <Button DefaultButtonFace="Spectre" State="Restricted" Requirements="AP_HaveAttachedBarrTechLabOrAttachedTechReactorAndShadowOps"/>
+            <Unit value="AP_Spectre"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilMorph id="AP_FactoryReactorMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="AP_ShowIfHaveAPFactAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <InfoArray Unit="AP_FactoryReactor"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_FactoryTechLabMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLabFactory" Requirements="AP_ShowIfHaveAPFactAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <InfoArray Unit="AP_FactoryTechLab"/>
+    </CAbilMorph>
+    <CAbilResearch id="AP_FactoryTechLabResearch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <!-- Unit upgrades are granted by triggers in AP -->
+    </CAbilResearch>
+    <CAbilMorph id="AP_FactoryTechReactorMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLabFactory" Requirements="AP_ShowIfHaveAPFactAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <InfoArray Unit="AP_FactoryTechReactor"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_MorphToTechReactor">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <InfoArray Unit="AP_TechReactor"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_ReactorMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="ShowIfHaveNoAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <InfoArray Unit="AP_Reactor">
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.125"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_StarportReactorMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="AP_ShowIfHaveAPStarportAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <InfoArray Unit="AP_StarportReactor"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_StarportTechLabMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLabStarport" Requirements="AP_ShowIfHaveAPStarportAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <InfoArray Unit="AP_StarportTechLab"/>
+    </CAbilMorph>
+    <CAbilResearch id="AP_StarportTechLabResearch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <!-- Unit upgrades are granted by triggers in AP -->
+    </CAbilResearch>
+    <CAbilMorph id="AP_StarportTechReactorMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLabStarport" Requirements="AP_ShowIfHaveAPStarportAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <InfoArray Unit="AP_StarportTechReactor"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_TechLabMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="ShowIfHaveNoAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <InfoArray Unit="AP_TechLab">
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.125"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_TechReactorMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="ShowIfHaveNoAddOnParent"/>
+        <Flags index="Automatic" value="1"/>
+        <InfoArray Unit="AP_TechReactor">
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.125"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorphPlacement id="AP_BarracksLand" parent="TerranBuildingLand" unit="AP_Barracks">
+        <Name value="Abil/Name/AP_BarracksLand"/>
+        <InfoArray index="0" Unit="AP_Barracks" CollideRange="0">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="2"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorphPlacement>
+    <CAbilMorph id="BarracksReactorMorph">
+        <!-- Override -->
+        <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="AP_ShowIfHaveVanillaBarrAddOnParent"/>
+    </CAbilMorph>
+    <CAbilMorph id="FactoryReactorMorph">
+        <!-- Override -->
+        <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="AP_ShowIfHaveVanillaFactAddOnParent"/>
+    </CAbilMorph>
+    <CAbilMorph id="StarportReactorMorph">
+        <!-- Override -->
+        <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="AP_ShowIfHaveVanillaStarportAddOnParent"/>
+    </CAbilMorph>
+    <CAbilMorph id="BarracksTechLabMorph">
+        <!-- Override -->
+        <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaBarrAddOnParent"/>
+    </CAbilMorph>
+    <CAbilMorph id="FactoryTechLabMorph">
+        <!-- Override -->
+        <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaFactAddOnParent"/>
+    </CAbilMorph>
+    <CAbilMorph id="StarportTechLabMorph">
+        <!-- Override -->
+        <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaStarportAddOnParent"/>
+    </CAbilMorph>
 </Catalog>

@@ -462,4 +462,44 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_NotCountUnitAlias_CommandCenterCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveAttachedBarrTechLabOrAttachedTechReactorAndShadowOps">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUnitGhostAcademyCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveAttachedTechLabOrMedicTraining">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_OrCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUpgradeAdvancedMedicTrainingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseTechReactor">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeTechReactorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseTechReactorHide">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeTechReactorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_ShowIfHaveVanillaBarrAddOnParent">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_AndCountUnitAlias_BarracksCompleteOnlyAtUnitNotCountUnitAPBarracksCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_ShowIfHaveAPBarrAddOnParent">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUnitAPBarracksCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_ShowIfHaveVanillaFactAddOnParent">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_AndCountUnitAlias_FactoryCompleteOnlyAtUnitNotCountUnitAPFactoryCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_ShowIfHaveAPFactAddOnParent">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUnitAPFactoryCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_ShowIfHaveVanillaStarportAddOnParent">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_AndCountUnitAlias_StarportCompleteOnlyAtUnitNotCountUnitAPStarportCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_ShowIfHaveAPStarportAddOnParent">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUnitAPStarportCompleteOnlyAtUnit"/>
+    </CRequirement>
 </Catalog>

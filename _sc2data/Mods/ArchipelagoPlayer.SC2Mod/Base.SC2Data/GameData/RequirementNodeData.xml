@@ -257,7 +257,7 @@
         <Link value="AP_Ghost"/>
     </CRequirementAllowUnit>
     <CRequirementAnd id="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheatCountUnitGhostAcademyCompleteOnlyTechTreeCheat">
-        <OperandArray value="AP_CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
+        <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
         <OperandArray value="AP_CountUnitGhostAcademyCompleteOnlyTechTreeCheat"/>
     </CRequirementAnd>
     <CRequirementAnd id="AP_AndCountUnitBarracksTechLabCompleteOnlyAtUnit2589852481TechTreeCheatCountUnitGhostAcademyCompleteOnlyTechTreeCheat">
@@ -754,4 +754,77 @@
     <CRequirementNot id="AP_NotCountUpgradeSupplyDepotDropCompleteOnly">
         <OperandArray index="0" value="AP_CountUpgradeSupplyDepotDropCompleteOnly"/>
     </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAdvancedMedicTrainingCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AdvancedMedicTraining" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTechReactorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TechReactor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <!--    <CRequirementCountUnit id="AP_CountUnitAlias_BarracksCompleteOnlyAtUnit">-->
+    <!--        <Count Link="Alias_Barracks" State="CompleteOnlyAtUnit" Unlock="AP_Barracks"/>-->
+    <!--        <Flags index="TechTreeCheat" value="0"/>-->
+    <!--    </CRequirementCountUnit>-->
+    <!--    <CRequirementCountUnit id="AP_CountUnitAlias_FactoryCompleteOnlyAtUnit">-->
+    <!--        <Count Link="Alias_Factory" State="CompleteOnlyAtUnit" Unlock="AP_Factory"/>-->
+    <!--        <Flags index="TechTreeCheat" value="0"/>-->
+    <!--    </CRequirementCountUnit>-->
+    <!--    <CRequirementCountUnit id="AP_CountUnitAlias_StarportCompleteOnlyAtUnit">-->
+    <!--        <Count Link="Alias_Starport" State="CompleteOnlyAtUnit" Unlock="AP_Starport"/>-->
+    <!--        <Flags index="TechTreeCheat" value="0"/>-->
+    <!--    </CRequirementCountUnit>-->
+    <!--    <CRequirementNot id="AP_NotOrCountUnitAlias_BarracksCompleteOnlyAtUnitCountUnitAlias_FactoryCompleteOnlyAtUnitCountUnitAlias_StarportCompleteOnlyAtUnit">-->
+    <!--        <OperandArray index="0" value="AP_OrCountUnitAlias_BarracksCompleteOnlyAtUnitCountUnitAlias_FactoryCompleteOnlyAtUnitCountUnitAlias_StarportCompleteOnlyAtUnit"/>-->
+    <!--    </CRequirementNot>-->
+    <!--    <CRequirementOr id="AP_OrCountUnitAlias_BarracksCompleteOnlyAtUnitCountUnitAlias_FactoryCompleteOnlyAtUnitCountUnitAlias_StarportCompleteOnlyAtUnit">-->
+    <!--        <OperandArray value="AP_CountUnitAlias_BarracksCompleteOnlyAtUnit"/>-->
+    <!--        <OperandArray value="AP_CountUnitAlias_FactoryCompleteOnlyAtUnit"/>-->
+    <!--        <OperandArray value="AP_CountUnitAlias_StarportCompleteOnlyAtUnit"/>-->
+    <!--    </CRequirementOr>-->
+    <!--    -->
+    <CRequirementCountUnit id="AP_CountUnitAPBarracksCompleteOnlyAtUnit">
+        <Count Link="AP_Barracks" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountUnit>
+    <CRequirementNot id="AP_NotCountUnitAPBarracksCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountUnitAPBarracksCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUnitAlias_BarracksCompleteOnlyAtUnitNotCountUnitAPBarracksCompleteOnlyAtUnit">
+        <!-- Any Barracks-like but not AP_Barracks -->
+        <OperandArray value="AP_NotCountUnitAPBarracksCompleteOnlyAtUnit"/>
+        <OperandArray value="CountUnitAlias_BarracksCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitAPFactoryCompleteOnlyAtUnit">
+        <Count Link="AP_Factory" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountUnit>
+    <CRequirementNot id="AP_NotCountUnitAPFactoryCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountUnitAPFactoryCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUnitAlias_FactoryCompleteOnlyAtUnitNotCountUnitAPFactoryCompleteOnlyAtUnit">
+        <!-- Any Factory-like but not AP_Factory -->
+        <OperandArray value="AP_NotCountUnitAPFactoryCompleteOnlyAtUnit"/>
+        <OperandArray value="CountUnitAlias_FactoryCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitAPStarportCompleteOnlyAtUnit">
+        <Count Link="AP_Starport" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountUnit>
+    <CRequirementNot id="AP_NotCountUnitAPStarportCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountUnitAPStarportCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUnitAlias_StarportCompleteOnlyAtUnitNotCountUnitAPStarportCompleteOnlyAtUnit">
+        <!-- Any Starport-like but not AP_Starport -->
+        <OperandArray value="AP_NotCountUnitAPStarportCompleteOnlyAtUnit"/>
+        <OperandArray value="CountUnitAlias_StarportCompleteOnlyAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementNot id="AP_NotCountUpgradeTechReactorCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeTechReactorCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTechReactorCompleteOnly">
+        <Count Link="AP_TechReactor" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementOr id="AP_OrCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUpgradeAdvancedMedicTrainingCompleteOnly">
+        <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
+        <OperandArray value="AP_CountUpgradeAdvancedMedicTrainingCompleteOnly"/>
+    </CRequirementOr>
 </Catalog>

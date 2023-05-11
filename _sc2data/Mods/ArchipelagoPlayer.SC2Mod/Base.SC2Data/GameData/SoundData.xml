@@ -1945,4 +1945,26 @@
         <DupeMaximumMethod value="Replace"/>
         <DupeMuteCount value="5"/>
     </CSound>
+    <CSound id="AP_Barracks_DropPodFall" parent="Spell">
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_DropPodImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_DropPodImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_DropPodImpact2.wav"/>
+        <DupeDestroyCount value="4"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="500"/>
+        <OffsetFadeOut Volume="-96.000000"/>
+        <OffsetFadeOut Time="500"/>
+    </CSound>
+    <CSound id="AP_Barracks_DropPodLand" parent="Spell">
+        <DupeDestroyCount value="4"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_DropPodDeath0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_DropPodDeath1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Ghost\Ghost_DropPodDeath2.wav"/>
+        <EditorCategories value="Race:Terran"/>
+    </CSound>
+    <CSound id="AP_Barracks_DropPodUnload" parent="Spell">
+        <DupeDestroyCount value="4"/>
+        <AssetArray File="Assets\Sounds\Terran\Medivac\Medivac_Unload0.wav"/>
+        <EditorCategories value="Race:Terran"/>
+    </CSound>
 </Catalog>

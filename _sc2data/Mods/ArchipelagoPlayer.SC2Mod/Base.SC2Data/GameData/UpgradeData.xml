@@ -804,4 +804,39 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_AdvancedMedicTraining">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train5].Button.Requirements"/> <!-- Train AP_Medic -->
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_OrbitalStrike">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train1].Effect" Value="AP_DropTrainSet"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train1].Location" Value="Rally"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_BarracksTrain,InfoArray[Train1].Time" Value="2.300000"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train2].Effect" Value="AP_DropTrainSetReaper"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train2].Location" Value="Rally"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_BarracksTrain,InfoArray[Train2].Time" Value="2.300000"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train2].Unit[0]" Value="AP_ReaperPlacement"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train3].Effect" Value="AP_DropTrainSet"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train3].Location" Value="Rally"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_BarracksTrain,InfoArray[Train3].Time" Value="2.300000"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train4].Effect" Value="AP_DropTrainSet"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train4].Location" Value="Rally"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_BarracksTrain,InfoArray[Train4].Time" Value="2.300000"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train5].Effect" Value="AP_DropTrainSet"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train5].Location" Value="Rally"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_BarracksTrain,InfoArray[Train5].Time" Value="2.300000"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train6].Effect" Value="AP_DropTrainSet"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train6].Location" Value="Rally"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_BarracksTrain,InfoArray[Train6].Time" Value="2.300000"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train7].Effect" Value="AP_DropTrainSet"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train7].Location" Value="Rally"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_BarracksTrain,InfoArray[Train7].Time" Value="2.300000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TechReactor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>
