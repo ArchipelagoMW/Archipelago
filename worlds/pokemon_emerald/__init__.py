@@ -46,8 +46,8 @@ class PokemonEmeraldWebWorld(WebWorld):
 
 class PokemonEmeraldWorld(World):
     """
-    Pokémon Emerald is the definitive gen 3 Pokémon game and one of the most beloved in the franchise.
-    Catch, train, and battle Pokémon, explore the Hoenn region, and thwart the plots
+    Pokémon Emerald is the definitive Gen III Pokémon game and one of the most beloved in the franchise.
+    Catch, train, and battle Pokémon, explore the Hoenn region, thwart the plots
     of Team Magma and Team Aqua, challenge gyms, and become the Pokémon champion!
     """
     game = "Pokemon Emerald"
