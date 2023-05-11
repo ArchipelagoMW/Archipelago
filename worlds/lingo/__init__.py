@@ -13,6 +13,7 @@ from .testing import LingoTestOptions
 from ..generic.Rules import set_rule
 from .rules import LingoLogic, set_rules
 from .player_logic import LingoPlayerLogic
+from .regions import create_regions
 from math import floor
 
 
@@ -75,73 +76,8 @@ class LingoWorld(World):
         self.player_logic = LingoPlayerLogic(self.multiworld, self.player, self.static_logic, self.test_options)
         self.topology_present = get_option_value(self.multiworld, self.player, "shuffle_paintings")
 
-    def create_region(self, room: Room):
-        new_region = Region(room.name, self.player, self.multiworld)
-
-        if room.name in self.player_logic.LOCATIONS_BY_ROOM.keys():
-            for location in self.player_logic.LOCATIONS_BY_ROOM[room.name]:
-                new_loc = LingoLocation(self.player, location.name, location.code, new_region)
-                new_region.locations.append(new_loc)
-
-        self.multiworld.regions += [
-            new_region
-        ]
-
-    def connect(self, target: Room, entrance: RoomEntrance):
-        target_region = self.multiworld.get_region(target.name, self.player)
-        source_region = self.multiworld.get_region(entrance.room, self.player)
-        connection = Entrance(self.player, f"{entrance.room} to {target.name}", source_region)
-        connection.access_rule = lambda state: state.lingo_can_use_entrance(
-            target.name, entrance.door, self.multiworld, self.player, self.player_logic)
-
-        source_region.exits.append(connection)
-        connection.connect(target_region)
-
-    def handle_pilgrim_room(self):
-        target_region = self.multiworld.get_region("Pilgrim Antechamber", self.player)
-        source_region = self.multiworld.get_region("Outside The Agreeable", self.player)
-        connection = Entrance(self.player, f"Pilgrimage", source_region)
-        connection.access_rule = lambda state: state.lingo_can_use_pilgrimage(
-            self.player, self.player_logic)
-
-        source_region.exits.append(connection)
-        connection.connect(target_region)
-
-    def connect_painting(self, warp_enter: str, warp_exit: str):
-        source_painting = StaticLingoLogic.PAINTINGS[warp_enter]
-        target_painting = StaticLingoLogic.PAINTINGS[warp_exit]
-
-        target_region = self.multiworld.get_region(target_painting.room, self.player)
-        source_region = self.multiworld.get_region(source_painting.room, self.player)
-        connection = Entrance(self.player, f"{source_painting.room} to {target_painting.room} (Painting)",
-                              source_region)
-        connection.access_rule = lambda state: state.lingo_can_use_entrance(
-            target_painting.room, source_painting.required_door, self.multiworld, self.player, self.player_logic)
-
-        source_region.exits.append(connection)
-        connection.connect(target_region)
-
     def create_regions(self):
-        self.multiworld.regions += [
-            Region("Menu", self.player, self.multiworld)
-        ]
-
-        for room in StaticLingoLogic.ALL_ROOMS:
-            self.create_region(room)
-
-        for room in StaticLingoLogic.ALL_ROOMS:
-            for entrance in room.entrances:
-                if entrance.painting and get_option_value(self.multiworld, self.player, "shuffle_paintings"):
-                    # Don't use the vanilla painting connections if we are shuffling paintings.
-                    continue
-
-                self.connect(room, entrance)
-
-        self.handle_pilgrim_room()
-
-        if get_option_value(self.multiworld, self.player, "shuffle_paintings"):
-            for warp_enter, warp_exit in self.player_logic.PAINTING_MAPPING.items():
-                self.connect_painting(warp_enter, warp_exit)
+        create_regions(self.multiworld, self.player, self.static_logic, self.player_logic)
 
     def create_items(self):
         pool = []
