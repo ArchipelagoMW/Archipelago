@@ -42,6 +42,7 @@ class GBAContext(CommonContext):
     items_handling = 0b001
     gba_streams: Optional[Tuple[asyncio.StreamReader, asyncio.StreamWriter]]
     gba_status: Optional[str]
+    awaiting_rom = False
     gba_push_pull_task: Optional[asyncio.Task]
     local_checked_locations: Set[int]
     goal_flag: int = IS_CHAMPION_FLAG
@@ -56,7 +57,10 @@ class GBAContext(CommonContext):
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(GBAContext, self).server_auth(password_requested)
-        await self.get_username()
+        if self.auth is None:
+            self.awaiting_rom = True
+            logger.info('Awaiting connection to GBA to get Player information')
+            return
         await self.send_connect()
 
     def run_gui(self):
@@ -90,6 +94,12 @@ async def handle_read_data(gba_data, ctx: GBAContext):
     local_checked_locations = set()
     game_clear = False
 
+    if "slot_name" in gba_data:
+        if ctx.auth is None:
+            ctx.auth = bytes([byte for byte in gba_data["slot_name"] if byte != 0]).decode()
+            if ctx.awaiting_rom:
+                await ctx.server_auth(False)
+
     if "flag_bytes" in gba_data:
         # If flag is set and corresponds to a location, add to local_checked_locations
         for byte_i, byte in enumerate(gba_data["flag_bytes"]):
@@ -101,7 +111,6 @@ async def handle_read_data(gba_data, ctx: GBAContext):
                         local_checked_locations.add(location_id)
                     if flag_id == ctx.goal_flag:
                         game_clear = True
-
 
         if local_checked_locations != ctx.local_checked_locations:
             ctx.local_checked_locations = local_checked_locations

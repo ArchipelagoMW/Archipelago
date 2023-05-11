@@ -45,6 +45,9 @@ local cb2_address = 0x22C0 + 4                     -- gMain + offset
 local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
 
 -- ROM addresses
+local slot_name_address = 0x599FC8                 -- gArchipelagoInfo
+
+-- Bus addresses
 local cb2_overworld_func_address = 0x8086050 + 1   -- CB2_Overworld + 1
 
 -- Set us as safe if we're in the overworld and player has control
@@ -101,6 +104,9 @@ function create_message ()
 
         local flag_bytes = memory.read_bytes_as_array(save_block_address + flags_offset, flags_size, "EWRAM")
         data["flag_bytes"] = flag_bytes
+
+        local slot_name = memory.read_bytes_as_array(slot_name_address, 64, "ROM")
+        data["slot_name"] = slot_name
     end
 
     return json.encode(data).."\n"

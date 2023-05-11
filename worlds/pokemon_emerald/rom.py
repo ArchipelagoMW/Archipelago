@@ -228,6 +228,10 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     removed_roadblocks |= (1 << 5) if "Route 112 Magma Grunts" in list_of_removed_roadblocks else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks)
 
+    # Set slot name
+    for i, byte in enumerate(multiworld.player_name[player].encode()):
+        _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
+
     # Write Output
     outfile_player_name = f"_P{player}"
     outfile_player_name += f"_{multiworld.get_file_safe_player_name(player).replace(' ', '_')}" \
