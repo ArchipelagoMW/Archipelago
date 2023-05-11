@@ -188,26 +188,6 @@ class RandomizeWildPokemon(Choice):
     option_completely_random = 4
 
 
-class RandomizeStaticEncounters(Choice):
-    """
-    Randomizes static encounters (Rayquaza, hidden Kekleons, fake Voltorb pokeballs, etc...)
-    Vanilla: Static encounters are unchanged
-    Shuffle: Static encounters are shuffled between each other
-    Match Base Stats: Static encounters are replaced with species with approximately the same bst
-    Match Type: Static encounters are replaced with species that share a type with the original
-    Match Base Stats and Type: Apply both Match Base Stats and Match Type
-    Completely Random: There are no restrictions
-    """
-    display_name = "Randomize Static Encounters"
-    default = 0
-    option_vanilla = 0
-    option_shuffle = 1
-    option_match_base_stats = 2
-    option_match_type = 3
-    option_match_base_stats_and_type = 4
-    option_completely_random = 5
-
-
 class AllowWildLegendaries(DefaultOnToggle):
     """
     Wild encounters can be replaced by legendaries. Only applied if Randomize Wild Pokemon is not Vanilla.
@@ -265,6 +245,26 @@ class AllowTrainerLegendaries(DefaultOnToggle):
     display_name = "Allow Trainer Legendaries"
 
 
+class RandomizeStaticEncounters(Choice):
+    """
+    Randomizes static encounters (Rayquaza, hidden Kekleons, fake Voltorb pokeballs, etc...)
+    Vanilla: Static encounters are unchanged
+    Shuffle: Static encounters are shuffled between each other
+    Match Base Stats: Static encounters are replaced with species with approximately the same bst
+    Match Type: Static encounters are replaced with species that share a type with the original
+    Match Base Stats and Type: Apply both Match Base Stats and Match Type
+    Completely Random: There are no restrictions
+    """
+    display_name = "Randomize Static Encounters"
+    default = 0
+    option_vanilla = 0
+    option_shuffle = 1
+    option_match_base_stats = 2
+    option_match_type = 3
+    option_match_base_stats_and_type = 4
+    option_completely_random = 5
+
+
 class RandomizeTypes(Choice):
     """
     Randomizes the type(s) of every pokemon. Each species will have the same number of types.
@@ -288,7 +288,7 @@ class RandomizeAbilities(Choice):
     Completely Random: Each species has its abilities randomized
     Follow Evolutions: Abilities are randomized, but if a pokemon would normally retain its ability when evolving, the random ability will also be retained
     """
-    display_name = "Abilities"
+    display_name = "Randomize Abilities"
     default = 0
     option_vanilla = 0
     option_completely_random = 1
@@ -505,12 +505,12 @@ option_definitions: Dict[str, Option] = {
     "norman_count": NormanCount,
 
     "wild_pokemon": RandomizeWildPokemon,
-    "static_encounters": RandomizeStaticEncounters,
     "allow_wild_legendaries": AllowWildLegendaries,
     "starters": RandomizeStarters,
     "allow_starter_legendaries": AllowStarterLegendaries,
     "trainer_parties": RandomizeTrainerParties,
     "allow_trainer_legendaries": AllowTrainerLegendaries,
+    "static_encounters": RandomizeStaticEncounters,
 
     "types": RandomizeTypes,
     "abilities": RandomizeAbilities,
