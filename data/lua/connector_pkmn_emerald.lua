@@ -1,5 +1,6 @@
 local socket = require("socket")
 local json = require("json")
+require("common")
 
 local SOCKET_PORT = 43053
 
@@ -10,9 +11,6 @@ local STATE_OK = 3
 
 local GAME_STATE_UNSAFE = 0
 local GAME_STATE_SAFE = 1
-
-local bizhawk_version = client.getversion()
-local is27To28 = (bizhawk_version:sub(1,3) == "2.7") or (bizhawk_version:sub(1,3) == "2.8")
 
 local ap_socket = nil
 
@@ -49,6 +47,11 @@ local slot_name_address = 0x599FC8                 -- gArchipelagoInfo
 
 -- Bus addresses
 local cb2_overworld_func_address = 0x8086050 + 1   -- CB2_Overworld + 1
+
+local bizhawk_version = client.getversion()
+local bizhawk_major, bizhawk_minor, bizhawk_patch = bizhawk_version:match("(%d+)%.(%d+)%.?(%d*)")
+bizhawk_major = tonumber(bizhawk_major)
+bizhawk_minor = tonumber(bizhawk_minor)
 
 -- Set us as safe if we're in the overworld and player has control
 function check_game_state ()
@@ -150,9 +153,11 @@ function send_receive ()
 end
 
 function main ()
-    if (is27To28 == false) then
+    if (bizhawk_major < 2 or (bizhawk_major == 2 and bizhawk_minor < 7)) then
         print("Must use a version of bizhawk 2.7.0 or higher")
         return
+    elseif (isUntestedBizhawk) then
+        print(untestedBizhawkMessage)
     end
 
     local frame = 0
