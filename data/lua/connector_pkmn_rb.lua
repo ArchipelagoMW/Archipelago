@@ -63,7 +63,7 @@ function generateLocationsChecked()
 
 	data = {}
 
-    categories = {events, missable, hiddenitems, rod}
+    categories = {events, missables, hiddenitems, rod}
     if compat > 1 then
         table.insert(categories, dexsanity)
     end
