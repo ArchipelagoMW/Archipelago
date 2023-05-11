@@ -76,9 +76,9 @@ class GBAContext(CommonContext):
         if cmd == 'Connected':
             slot_data = args.get('slot_data', None)
             if slot_data is not None:
-                if slot_data.goal == Goal.option_champion:
+                if slot_data["goal"] == Goal.option_champion:
                     self.goal_flag = IS_CHAMPION_FLAG
-                elif slot_data.goal == Goal.option_steven:
+                elif slot_data["goal"] == Goal.option_steven:
                     self.goal_flag = DEFEATED_STEVEN_FLAG
 
 

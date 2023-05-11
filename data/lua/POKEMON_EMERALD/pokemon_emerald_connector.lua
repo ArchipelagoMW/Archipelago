@@ -99,14 +99,14 @@ function create_message ()
 
     data["script_version"] = 1
 
+    local slot_name = memory.read_bytes_as_array(slot_name_address, 64, "ROM")
+    data["slot_name"] = slot_name
+
     if (current_game_state == GAME_STATE_SAFE) then
         local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_start
 
         local flag_bytes = memory.read_bytes_as_array(save_block_address + flags_offset, flags_size, "EWRAM")
         data["flag_bytes"] = flag_bytes
-
-        local slot_name = memory.read_bytes_as_array(slot_name_address, 64, "ROM")
-        data["slot_name"] = slot_name
     end
 
     return json.encode(data).."\n"
