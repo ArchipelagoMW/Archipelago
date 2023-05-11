@@ -321,8 +321,8 @@ class PokemonEmeraldWorld(World):
             fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items, True, True)
 
 
-    def post_fill(self):
-        random = self.multiworld.random
+    def generate_output(self, output_directory: str):
+        random = self.multiworld.per_slot_randoms[self.player]
 
         def randomize_abilities():
             # Creating list of potential abilities
@@ -710,8 +710,6 @@ class PokemonEmeraldWorld(World):
         if self.multiworld.starters[self.player].value != RandomizeStarters.option_vanilla:
             randomize_starters()
 
-
-    def generate_output(self, output_directory: str):
         generate_output(self.modified_data, self.multiworld, self.player, output_directory)
 
 
