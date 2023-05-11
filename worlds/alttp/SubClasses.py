@@ -4,6 +4,7 @@ from enum import IntEnum
 
 from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
 
+
 class ALttPLocation(Location):
     game: str = "A Link to the Past"
     crystal: bool

@@ -3,7 +3,6 @@ import os
 import random
 import threading
 import typing
-from collections import OrderedDict
 
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
@@ -122,7 +121,7 @@ class ALTTPWorld(World):
     dungeons on your quest to rescue the descendents of the seven wise men and defeat the evil
     Ganon!
     """
-    game: str = "A Link to the Past"
+    game = "A Link to the Past"
     option_definitions = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
@@ -202,7 +201,7 @@ class ALTTPWorld(World):
     location_name_to_id = lookup_name_to_id
 
     data_version = 8
-    required_client_version = (0, 3, 2)
+    required_client_version = (0, 4, 1)
     web = ALTTPWeb()
 
     pedestal_credit_texts: typing.Dict[int, str] = \

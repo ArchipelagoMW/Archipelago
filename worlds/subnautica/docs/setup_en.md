@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- Subnautica from: [Subnautica Steam Store Page](https://store.steampowered.com/app/264710/Subnautica/)
+- Subnautica from: [Subnautica Steam Store Page](https://store.steampowered.com/app/264710/Subnautica/) | [Subnautica Epic Game Store Page](https://store.epicgames.com/p/subnautica)
 - Archipelago Mod for Subnautica
   from: [Subnautica Archipelago Mod Releases Page](https://github.com/Berserker66/ArchipelagoSubnauticaModSrc/releases)
 
