@@ -390,7 +390,7 @@ class ExpModifier(Range):
     """
     display_name = "Exp Modifier"
     range_start = 0
-    range_end = 10000
+    range_end = 1000
     default = 100
 
 
