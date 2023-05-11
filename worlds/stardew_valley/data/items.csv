@@ -549,21 +549,21 @@ id,name,classification,groups,mod_name
 5262,Slime Incubator,useful,"RESOURCE_PACK",
 5263,Slime Egg-Press,useful,"RESOURCE_PACK",
 5264,Crystalarium,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-2000,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
-2001,Magic Level,progression,SKILL_LEVEL_UP,Magic
-2002,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill
-2003,Archaeology Level,progression,SKILL_LEVEL_UP,Archaeology
-2004,Cooking Level,progression,SKILL_LEVEL_UP,Cooking Skill
-2005,Binning Level,progression,SKILL_LEVEL_UP,Binning Skill
-2007,Tractor Garage,useful,,Tractor Mod
-2008,Woods Obelisk,progression,,DeepWoods
-2100,Juna: 1 <3,progression,FRIENDSANITY,Juna - Roommate NPC
-2101,Jasper: 1 <3,progression,FRIENDSANITY,Professor Jasper Thomas
-2102,Alec: 1 <3,progression,FRIENDSANITY,Alec Revisited
-2103,Yoba: 1 <3,progression,FRIENDSANITY,Custom NPC - Yoba
-2104,Eugene: 1 <3,progression,FRIENDSANITY,Custom NPC Eugene
-2105,Wellwick: 1 <3,progression,FRIENDSANITY,'Prophet' Wellwick
-2106,Mr. Ginger: 1 <3,progression,FRIENDSANITY,Mister Ginger (cat npc)
-2107,Shiko: 1 <3,progression,FRIENDSANITY,Shiko - New Custom NPC
-2108,Delores: 1 <3,progression,FRIENDSANITY,Delores - Custom NPC
-2109,Ayeisha: 1 <3,progression,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+10001,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
+10002,Magic Level,progression,SKILL_LEVEL_UP,Magic
+10003,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill
+10004,Archaeology Level,progression,SKILL_LEVEL_UP,Archaeology
+10005,Cooking Level,progression,SKILL_LEVEL_UP,Cooking Skill
+10006,Binning Level,progression,SKILL_LEVEL_UP,Binning Skill
+10007,Tractor Garage,useful,,Tractor Mod
+10008,Woods Obelisk,progression,,DeepWoods
+10101,Juna: 1 <3,progression,FRIENDSANITY,Juna - Roommate NPC
+10102,Jasper: 1 <3,progression,FRIENDSANITY,Professor Jasper Thomas
+10103,Alec: 1 <3,progression,FRIENDSANITY,Alec Revisited
+10104,Yoba: 1 <3,progression,FRIENDSANITY,Custom NPC - Yoba
+10105,Eugene: 1 <3,progression,FRIENDSANITY,Custom NPC Eugene
+10106,Wellwick: 1 <3,progression,FRIENDSANITY,'Prophet' Wellwick
+10107,Mr. Ginger: 1 <3,progression,FRIENDSANITY,Mister Ginger (cat npc)
+10108,Shiko: 1 <3,progression,FRIENDSANITY,Shiko - New Custom NPC
+10109,Delores: 1 <3,progression,FRIENDSANITY,Delores - Custom NPC
+10110,Ayeisha: 1 <3,progression,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
