@@ -2,7 +2,7 @@ import random
 from dataclasses import dataclass, field
 from enum import IntFlag
 from random import Random
-from typing import Iterable, Dict, Protocol, Optional, List, Tuple
+from typing import Iterable, Dict, Protocol, Optional, List, Tuple, Set
 
 from BaseClasses import Region, Entrance
 from . import options
@@ -480,8 +480,8 @@ def find_reachable_regions(randomized_connections: Dict[ConnectionData, Connecti
     return reachable_regions, unreachable_regions
 
 
-def swap_one_connection(randomized_connections: Dict[ConnectionData, ConnectionData], reachable_regions: set[str],
-                        unreachable_regions: set[str], random: Random):
+def swap_one_connection(randomized_connections: Dict[ConnectionData, ConnectionData], reachable_regions: Set[str],
+                        unreachable_regions: Set[str], random: Random):
     randomized_connections_already_shuffled = {connection: randomized_connections[connection]
                                                for connection in randomized_connections
                                                if connection != randomized_connections[connection]}
