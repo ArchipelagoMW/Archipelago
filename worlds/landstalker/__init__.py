@@ -14,8 +14,8 @@ class LandstalkerWeb(WebWorld):
         "Multiworld Setup Guide",
         "A guide to setting up the Landstalker Randomizer software on your computer.",
         "English",
-        "landstalker_en.md",
-        "landstalker/en",
+        "landstalker_setup_en.md",
+        "landstalker_setup/en",
         ["Dinopony"]
     )]
 

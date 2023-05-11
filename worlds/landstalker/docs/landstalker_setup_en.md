@@ -12,6 +12,13 @@
 - Put your Landstalker ROM (`LandStalker_USA.SGD` on the Steam release) inside this folder
 - To launch the client, launch `randstalker_archipelago.exe` inside that folder
 
+Be aware that you might get antivirus warnings about the client program because one of its main features is to spy
+on another process's memory (your emulator). This is something antiviruses obviously dislike, and sometimes mistake
+for malicious software. 
+
+If you're not trusting the program, you can check its [source code](https://github.com/Dinopony/randstalker-archipelago/)
+or test it on a service like Virustotal.
+
 ## Create a Config (.yaml) File
 
 ### What is a config file and why do I need one?
@@ -31,16 +38,19 @@ and export a config file from them.
 Once the game has been created, you need to connect to the server using the Landstalker Archipelago Client.
 
 To do so, run `randstalker_archipelago.exe` inside the folder you created while installing the software.
+
+![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/client.png)
+
 A window will open with a few settings to enter:
 - **Input ROM file**: This is the path to your original ROM file for the game. If you are using the Steam release ROM 
-  and placed it inside this folder as mentioned above, you don't need to change anything.
-- **Output ROM path**: This is where the randomized ROMs will be put. No need to change this unless you want them to be 
-  created in a very specific folder
+  and placed it inside the client's folder as mentioned above, you don't need to change anything.
+- **Output ROM directory**: This is where the randomized ROMs will be put. No need to change this unless you want them 
+  to be created in a very specific folder
 - **Host**: Put the server address and port in this field (e.g. `archipelago.gg:12345`)
 - **Slot name**: Put the player name you specified in your YAML config file in this field.
 - **Password**: If server has a password, put it there.
 
-Once all those fields were filled appropriately, click on the first "**Connect**" button below to try connecting to the
+Once all those fields were filled appropriately, click on the "**Connect to Archipelago**" button below to try connecting to the
 Archipelago server. 
 
 If it turns green saying "Connected", that's good news! Otherwise, double-check the Host, Slot name and
@@ -62,7 +72,7 @@ Now that you're connected to the Archipelago server and have a randomized ROM, a
 connected to the emulator. This way, the client will be able to see what's happening while you play and give you in-game
 the items you have received from other players.
 
-Once you have opened the randomized ROM inside RetroArch, you can click on the second "**Connect**" button below.
+Once you have opened the randomized ROM inside RetroArch, you can click on the "**Connect to emulator**" button below.
 This will only work if you have already opened the ROM using the Genesis Plus GX core, since the client will try to hook
 on that core's memory.
 
