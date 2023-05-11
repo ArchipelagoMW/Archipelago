@@ -11,13 +11,14 @@ from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 
-from .data import PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, data as emerald_data
+from .data import (PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
+    data as emerald_data)
 from .items import (PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
     offset_item_value, create_item_groups)
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
     RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility, HmCompatibility,
-    option_definitions)
+    RandomizeStaticEncounters, option_definitions)
 from .pokemon import get_random_species, get_species_by_name, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path, location_visited_event_to_id_map
@@ -530,6 +531,37 @@ class PokemonEmeraldWorld(World):
                 map_data.water_encounters = new_encounters[1]
                 map_data.fishing_encounters = new_encounters[2]
 
+        def randomize_static_encounters():
+            if self.multiworld.static_encounters[self.player].value == RandomizeStaticEncounters.option_shuffle:
+                shuffled_species = [encounter.species_id for encounter in emerald_data.static_encounters]
+                random.shuffle(shuffled_species)
+
+                self.modified_data.static_encounters = []
+                for i, encounter in enumerate(emerald_data.static_encounters):
+                    self.modified_data.static_encounters.append(StaticEncounterData(
+                        shuffled_species[i],
+                        encounter.rom_address
+                    ))
+            else:
+                should_match_bst = self.multiworld.static_encounters[self.player].value in {
+                    RandomizeStaticEncounters.option_match_base_stats,
+                    RandomizeStaticEncounters.option_match_base_stats_and_type
+                }
+                should_match_type = self.multiworld.static_encounters[self.player].value in {
+                    RandomizeStaticEncounters.option_match_type,
+                    RandomizeStaticEncounters.option_match_base_stats_and_type
+                }
+
+                for encounter in emerald_data.static_encounters:
+                    original_species = self.modified_data.species[encounter.species_id]
+                    target_bst = sum(original_species.base_stats) if should_match_bst else None
+                    target_type = random.choice(original_species.types) if should_match_type else None
+
+                    self.modified_data.static_encounters.append(StaticEncounterData(
+                        get_random_species(random, self.modified_data.species, target_bst, target_type).species_id,
+                        encounter.rom_address
+                    ))
+
         def randomize_opponent_parties():
             should_match_bst = self.multiworld.trainer_parties[self.player].value in {RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type}
             should_match_type = self.multiworld.trainer_parties[self.player].value in {RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type}
@@ -665,6 +697,10 @@ class PokemonEmeraldWorld(World):
         # Randomize wild encounters
         if self.multiworld.wild_pokemon[self.player].value != RandomizeWildPokemon.option_vanilla:
             randomize_wild_encounters()
+
+        # Randomize static encounters
+        if self.multiworld.static_encounters[self.player].value != RandomizeStaticEncounters.option_vanilla:
+            randomize_static_encounters()
 
         # Randomize opponents
         if self.multiworld.trainer_parties[self.player].value != RandomizeTrainerParties.option_vanilla:

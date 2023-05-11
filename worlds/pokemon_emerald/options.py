@@ -188,6 +188,26 @@ class RandomizeWildPokemon(Choice):
     option_completely_random = 4
 
 
+class RandomizeStaticEncounters(Choice):
+    """
+    Randomizes static encounters (Rayquaza, hidden Kekleons, fake Voltorb pokeballs, etc...)
+    Vanilla: Static encounters are unchanged
+    Shuffle: Static encounters are shuffled between each other
+    Match Base Stats: Static encounters are replaced with species with approximately the same bst
+    Match Type: Static encounters are replaced with species that share a type with the original
+    Match Base Stats and Type: Apply both Match Base Stats and Match Type
+    Completely Random: There are no restrictions
+    """
+    display_name = "Randomize Static Encounters"
+    default = 0
+    option_vanilla = 0
+    option_shuffle = 1
+    option_match_base_stats = 2
+    option_match_type = 3
+    option_match_base_stats_and_type = 4
+    option_completely_random = 5
+
+
 class AllowWildLegendaries(DefaultOnToggle):
     """
     Wild encounters can be replaced by legendaries. Only applied if Randomize Wild Pokemon is not Vanilla.
@@ -485,6 +505,7 @@ option_definitions: Dict[str, Option] = {
     "norman_count": NormanCount,
 
     "wild_pokemon": RandomizeWildPokemon,
+    "static_encounters": RandomizeStaticEncounters,
     "allow_wild_legendaries": AllowWildLegendaries,
     "starters": RandomizeStarters,
     "allow_starter_legendaries": AllowStarterLegendaries,

@@ -172,6 +172,11 @@ class EvolutionData(NamedTuple):
     species_id: int
 
 
+class StaticEncounterData(NamedTuple):
+    species_id: int
+    rom_address: int
+
+
 @dataclass
 class SpeciesData:
     name: str
@@ -256,6 +261,7 @@ class PokemonEmeraldData:
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
     species: List[Optional[SpeciesData]]
+    static_encounters: List[StaticEncounterData]
     tmhm_moves: List[int]
     abilities: List[AbilityData]
     maps: List[MapData]
@@ -271,6 +277,7 @@ class PokemonEmeraldData:
         self.locations = {}
         self.items = {}
         self.species = []
+        self.static_encounters = []
         self.tmhm_moves = []
         self.abilities = []
         self.maps = []
@@ -428,6 +435,14 @@ def _init():
             for evolution in species.evolutions:
                 data.species[evolution.species_id].pre_evolution = species.species_id
 
+    # Create static encounter data
+    for static_encounter_json in extracted_data["static_encounters"]:
+        data.static_encounters.append(StaticEncounterData(
+            static_encounter_json["species"],
+            static_encounter_json["rom_address"]
+        ))
+
+    # TM moves
     data.tmhm_moves = extracted_data["tmhm_moves"]
 
     # Create ability data

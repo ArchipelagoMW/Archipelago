@@ -115,6 +115,9 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     if multiworld.trainer_parties[player].value != RandomizeTrainerParties.option_vanilla:
         _set_opponents(modified_data, patched_rom)
 
+    # Set static pokemon
+    _set_static_encounters(modified_data, patched_rom)
+
     # Set starters
     _set_starters(modified_data, patched_rom)
 
@@ -334,6 +337,11 @@ def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
                 _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, pokemon.moves[1])
                 _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, pokemon.moves[2])
                 _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
+
+
+def _set_static_encounters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
+    for encounter in modified_data.static_encounters:
+        _set_bytes_little_endian(rom, encounter.rom_address, 2, encounter.species_id)
 
 
 def _set_starters(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
