@@ -422,7 +422,13 @@ class BetterShops(Toggle):
 
 class RemoveRoadblocks(OptionSet):
     """
-    Removes specific NPCs that normally stand in your way until certain events are completed. This can open up the world a bit and make your playthrough less linear.
+    Removes specific NPCs that normally stand in your way until certain events are completed. This can open up the world a bit and make your playthrough less linear. Possible values are:
+    "Route 110 Aqua Grunts"
+    "Route 112 Magma Grunts"
+    "Route 119 Aqua Grunts"
+    "Safari Zone Construction Workers"
+    "Lilycove City Wailmer"
+    "Aqua Hideout Grunts"
     """
     display_name = "Remove Roadblocks"
     valid_keys = frozenset([
