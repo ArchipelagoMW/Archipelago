@@ -71,6 +71,9 @@ apworlds: set = {
     "Timespinner",
     "Minecraft",
     "The Messenger",
+    "Links Awakening DX",
+    "Super Metroid",
+    "SMZ3",
     "Pokemon Emerald",
 }
 
@@ -155,11 +158,22 @@ build_arch = build_platform.split('-')[-1] if '-' in build_platform else platfor
 
 
 # see Launcher.py on how to add scripts to setup.py
+def resolve_icon(icon_name: str):
+    base_path = icon_paths[icon_name]
+    if is_windows:
+        path, extension = os.path.splitext(base_path)
+        ico_file = path + ".ico"
+        assert os.path.exists(ico_file), f"ico counterpart of {base_path} should exist."
+        return ico_file
+    else:
+        return base_path
+
+
 exes = [
     cx_Freeze.Executable(
         script=f'{c.script_name}.py',
         target_name=c.frozen_name + (".exe" if is_windows else ""),
-        icon=icon_paths[c.icon],
+        icon=resolve_icon(c.icon),
         base="Win32GUI" if is_windows and not c.cli else None
     ) for c in components if c.script_name and c.frozen_name
 ]
@@ -307,16 +321,12 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                         dirs_exist_ok=True)
 
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
-        from WebHostLib.options import create
-        create()
+        from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
         assert not apworlds - set(AutoWorldRegister.world_types), "Unknown world designated for .apworld"
         folders_to_remove: typing.List[str] = []
+        generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
         for worldname, worldtype in AutoWorldRegister.world_types.items():
-            if not worldtype.hidden:
-                file_name = worldname+".yaml"
-                shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
-                                self.buildfolder / "Players" / "Templates" / file_name)
             if worldname in apworlds:
                 file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
                 world_directory = self.libfolder / "worlds" / file_name

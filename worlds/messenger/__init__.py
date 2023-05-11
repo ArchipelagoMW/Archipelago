@@ -1,10 +1,11 @@
-from typing import Dict, Any, List, Optional
+import logging
+from typing import Dict, Any, Optional, List
 
-from BaseClasses import Tutorial, ItemClassification
+from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS, ALWAYS_LOCATIONS, SEALS, ALL_ITEMS
+from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, SEALS, BOSS_LOCATIONS
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
-from .Regions import REGIONS, REGION_CONNECTIONS
+from .Regions import REGIONS, REGION_CONNECTIONS, MEGA_SHARDS
 from .SubClasses import MessengerRegion, MessengerItem
 from . import Rules
 
@@ -48,21 +49,35 @@ class MessengerWorld(World):
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(ALL_ITEMS, base_offset)}
+    mega_shard_locs = [shard for region in MEGA_SHARDS for shard in MEGA_SHARDS[region]]
     location_name_to_id = {location: location_id
-                           for location_id, location in enumerate([*ALWAYS_LOCATIONS, *SEALS], base_offset)}
+                           for location_id, location in
+                           enumerate([
+                               *ALWAYS_LOCATIONS,
+                               *SEALS,
+                               *mega_shard_locs,
+                               *BOSS_LOCATIONS,
+                           ], base_offset)}
 
-    data_version = 1
+    data_version = 2
+    required_client_version = (0, 3, 9)
 
     web = MessengerWeb()
 
-    total_seals: Optional[int] = None
-    required_seals: Optional[int] = None
+    total_seals: int = 0
+    required_seals: int = 0
+    
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
+        for player in multiworld.get_game_players(cls.game):
+            player_name = multiworld.player_name[player] = multiworld.get_player_name(player).replace("_", " ")
+            if not all(c.isalnum() or c in "- " for c in player_name):
+                raise ValueError(f"Player name {player_name} is not alpha-numeric.")
 
     def generate_early(self) -> None:
         if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
             self.multiworld.shuffle_seals[self.player].value = PowerSeals.option_true
             self.total_seals = self.multiworld.total_seals[self.player].value
-            self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
 
     def create_regions(self) -> None:
         for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
@@ -71,12 +86,7 @@ class MessengerWorld(World):
 
     def create_items(self) -> None:
         itempool: List[MessengerItem] = []
-        if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
-            seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
-            for i in range(self.required_seals):
-                seals[i].classification = ItemClassification.progression_skip_balancing
-            itempool += seals
-        else:
+        if self.multiworld.goal[self.player] == Goal.option_open_music_box:
             notes = self.multiworld.random.sample(NOTES, k=len(NOTES))
             precollected_notes_amount = NotesNeeded.range_end - self.multiworld.notes_needed[self.player]
             if precollected_notes_amount:
@@ -94,6 +104,20 @@ class MessengerWorld(World):
                          # if we get in a position where this can have duplicates of items that aren't Power Seals
                          # or Time shards, this will need to be redone.
                      }]
+
+        if self.multiworld.goal[self.player] == Goal.option_power_seal_hunt:
+            total_seals = min(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool),
+                              self.multiworld.total_seals[self.player].value)
+            if total_seals < self.total_seals:
+                logging.warning(f"Not enough locations for total seals setting. Adjusting to {total_seals}")
+                self.total_seals = total_seals
+            self.required_seals = int(self.multiworld.percent_seals_required[self.player].value / 100 * self.total_seals)
+
+            seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
+            for i in range(self.required_seals):
+                seals[i].classification = ItemClassification.progression_skip_balancing
+            itempool += seals
+
         itempool += [self.create_filler()
                      for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool))]
 
@@ -122,7 +146,10 @@ class MessengerWorld(World):
             "music_box": self.multiworld.music_box[self.player].value,
             "required_seals": self.required_seals,
             "locations": locations,
-            "settings": {"Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced"},
+            "settings": {
+                "Difficulty": "Basic" if not self.multiworld.shuffle_seals[self.player] else "Advanced",
+                "Mega Shards": self.multiworld.shuffle_shards[self.player].value
+            },
             "logic": self.multiworld.logic_level[self.player].current_key,
         }
 

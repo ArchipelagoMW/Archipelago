@@ -19,6 +19,8 @@ The player can choose from a number of goals, using their YAML settings.
 - Reach the bottom of the Pelican Town Mineshaft
 - Complete the "Cryptic Note" quest, by meeting Mr Qi on floor 100 of the Skull Cavern
 - Get the achievement "Master Angler", which requires catching every fish in the game
+- Get the achievement "A Complete Collection", which requires donating all the artifacts and minerals to the museum
+- Get the achievement "Full House", which requires getting married and having two kids.
 
 ## What are location check in Stardew Valley?
 
@@ -38,12 +40,26 @@ There also are a number of location checks that are optional, and individual pla
 - Arcade Machines
 - Help Wanted quests
 - Fishsanity: Catching individual fish
+- Museumsanity: Donating individual items to the museum, or reaching the museum milestones for donations
+- Friendsanity: Reaching specific friendship levels with NPCs
 
 ## Which items can be in another player's world?
 
 Every normal reward from the above locations can be in another player's world.
 For the locations which do not include a normal reward, Resource Packs are instead added to the pool. These can contain ores, seeds, fertilizers, warp totems, etc.
-There are a few extra items, which are added to the pool but do not have a matching location. These include
+
+A player can enable some settings that will add some items to the pool that are relevant to progression
+- Seasons Randomizer:
+  - All 4 seasons will be items, and one of them will be selected randomly and be added to the player's start inventory
+  - At the end of each month, the player can choose the next season, instead of following the vanilla season order. On Seasons Randomizer, they can only choose from the seasons they have received.
+- Seed Shuffle:
+  - Every single seed in the game starts off locked and cannot be purchased from any merchant. Their unlocks are received as multiworld items.
+  - The way merchants sell seeds is considerably changed. Pierre sells fewer seeds at a high price, while Joja sells unlimited seeds but in huge discount packs, not individually.
+- Museumsanity:
+  - The items that are normally obtained from museum donation milestones are added to the item pool. Some items, like the magic rock candy, are duplicated for convenience.
+  - The Traveling Merchant now sells artifacts and minerals, with a bias towards undonated ones, to mitigate randomness. She will sell these items as the player receives "Traveling Merchant Metal Detector" items.
+
+There are a few extra vanilla items, which are added to the pool for convenience, but do not have a matching location. These include
 - Wizard Buildings
 - Return Scepter
 

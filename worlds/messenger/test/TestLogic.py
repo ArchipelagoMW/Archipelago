@@ -16,21 +16,21 @@ class HardLogicTest(MessengerTestBase):
             # ninja village
             "Candle", "Astral Seed", "Ninja Village Seal - Tree House", "Astral Tea Leaves",
             # autumn hills
-            "Climbing Claws", "Key of Hope",
+            "Climbing Claws", "Key of Hope", "Leaf Golem",
             "Autumn Hills Seal - Trip Saws", "Autumn Hills Seal - Double Swing Saws",
             "Autumn Hills Seal - Spike Ball Swing", "Autumn Hills Seal - Spike Ball Darts",
             # forlorn temple
             "Demon King Crown",
             "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
             # catacombs
-            "Necro", "Ruxxtin's Amulet",
+            "Necro", "Ruxxtin's Amulet", "Ruxxtin",
             "Catacombs Seal - Triple Spike Crushers", "Catacombs Seal - Crusher Gauntlet", "Catacombs Seal - Dirty Pond",
             # bamboo creek
             "Claustro",
             "Bamboo Creek Seal - Spike Crushers and Doors", "Bamboo Creek Seal - Spike Ball Pits",
             "Bamboo Creek Seal - Spike Crushers and Doors v2",
             # howling grotto
-            "Howling Grotto Seal - Crushing Pits", "Howling Grotto Seal - Crushing Pits",
+            "Emerald Golem", "Howling Grotto Seal - Crushing Pits", "Howling Grotto Seal - Crushing Pits",
             # glacial peak
             "Glacial Peak Seal - Ice Climbers",
             # cloud ruins
@@ -41,7 +41,7 @@ class HardLogicTest(MessengerTestBase):
             # riviere turquoise
             "Fairy Bottle", "Riviere Turquoise Seal - Flower Power",
             # elemental skylands
-            "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire",
+            "Elemental Skylands Seal - Air",
             # phantom
             "Rescue Phantom",
         ]

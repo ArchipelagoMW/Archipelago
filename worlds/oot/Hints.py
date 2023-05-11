@@ -15,7 +15,7 @@ from .Items import OOTItem
 from .HintList import getHint, getHintGroup, Hint, hintExclusions, \
     misc_item_hint_table, misc_location_hint_table
 from .Messages import COLOR_MAP, update_message_by_id
-from .TextBox import line_wrap
+from .TextBox import line_wrap, character_table, rom_safe_text
 from .Utils import data_path, read_json
 
 
@@ -149,11 +149,11 @@ def isRestrictedDungeonItem(dungeon, item):
 
 # Attach a player name to the item or location text.
 # If the associated player of the item/location and the world are the same, does nothing.
-# Otherwise, attaches the object's player's name to the string.
+# Otherwise, attaches the object's player's name to the string, calling rom_safe_text for foreign items/locations.
 def attach_name(text, hinted_object, world):
     if hinted_object.player == world.player:
         return text
-    return f"{text} for {world.multiworld.get_player_name(hinted_object.player)}"
+    return rom_safe_text(f"{world.multiworld.get_player_name(hinted_object.player)}'s {text}")
 
 
 def add_hint(world, groups, gossip_text, count, location=None, force_reachable=False):
@@ -1144,7 +1144,7 @@ def buildMiscItemHints(world, messages):
                     area = HintArea.at(location, use_alt_hint=data['use_alt_hint']).text(world.clearer_hints, world=None)
                 else:
                     area = location.name
-                text = data['default_item_text'].format(area=(player_text + area))
+                text = data['default_item_text'].format(area=rom_safe_text(player_text + area))
             elif 'default_item_fallback' in data:
                 text = data['default_item_fallback']
             else:
@@ -1167,7 +1167,7 @@ def buildMiscLocationHints(world, messages):
             item_text = getHint(getItemGenericName(item), world.clearer_hints).text
             if item.player != world.player:
                 item_text += f' for {world.multiworld.get_player_name(item.player)}'
-            text = data['location_text'].format(item=item_text)
+            text = data['location_text'].format(item=rom_safe_text(item_text))
 
         update_message_by_id(messages, data['id'], str(GossipText(text, ['Green'], prefix='')), 0x23)
 

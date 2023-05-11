@@ -3,7 +3,6 @@ import os
 import random
 import threading
 import typing
-from collections import OrderedDict
 
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
@@ -103,7 +102,16 @@ class ALTTPWeb(WebWorld):
         ["Berserker"]
     )
 
-    tutorials = [setup_en, setup_de, setup_es, setup_fr, msu, msu_es, msu_fr, plando]
+    oof_sound = Tutorial(
+        "'OOF' Sound Replacement",
+        "A guide to customizing Link's 'oof' sound",
+        "English",
+        "oof_sound_en.md",
+        "oof_sound/en",
+        ["Nyx Edelstein"]
+    )
+
+    tutorials = [setup_en, setup_de, setup_es, setup_fr, msu, msu_es, msu_fr, plando, oof_sound]
 
 
 class ALTTPWorld(World):
@@ -113,7 +121,7 @@ class ALTTPWorld(World):
     dungeons on your quest to rescue the descendents of the seven wise men and defeat the evil
     Ganon!
     """
-    game: str = "A Link to the Past"
+    game = "A Link to the Past"
     option_definitions = alttp_options
     topology_present = True
     item_name_groups = item_name_groups
@@ -138,7 +146,7 @@ class ALTTPWorld(World):
                            "Eastern Palace - Cannonball Chest", "Eastern Palace - Big Key Chest",
                            "Eastern Palace - Map Chest", "Eastern Palace - Boss"},
         "Desert Palace": {"Desert Palace - Big Chest", "Desert Palace - Torch", "Desert Palace - Map Chest",
-                          "Desert Palace - Compass Chest", "Desert Palace Big Key Chest", "Desert Palace - Boss"},
+                          "Desert Palace - Compass Chest", "Desert Palace - Big Key Chest", "Desert Palace - Boss"},
         "Tower of Hera": {"Tower of Hera - Basement Cage", "Tower of Hera - Map Chest", "Tower of Hera - Big Key Chest",
                           "Tower of Hera - Compass Chest", "Tower of Hera - Big Chest", "Tower of Hera - Boss"},
         "Palace of Darkness": {"Palace of Darkness - Shooter Room", "Palace of Darkness - The Arena - Bridge",
@@ -148,10 +156,10 @@ class ALTTPWorld(World):
                                "Palace of Darkness - Dark Basement - Right", "Palace of Darkness - Dark Maze - Top",
                                "Palace of Darkness - Dark Maze - Bottom", "Palace of Darkness - Big Chest",
                                "Palace of Darkness - Harmless Hellway", "Palace of Darkness - Boss"},
-        "Swamp Palace": {"Swamp Palace - Entrance", "Swamp Palace - Swamp Palace - Map Chest",
-                         "Swamp Palace - Big Chest", "Swamp Palace - Compass Chest", "Swamp Palace - Big Key Chest",
-                         "Swamp Palace - West Chest", "Swamp Palace - Flooded Room - Left",
-                         "Swamp Palace - Flooded Room - Right", "Swamp Palace - Waterfall Room", "Swamp Palace - Boss"},
+        "Swamp Palace": {"Swamp Palace - Entrance", "Swamp Palace - Map Chest", "Swamp Palace - Big Chest",
+                         "Swamp Palace - Compass Chest", "Swamp Palace - Big Key Chest", "Swamp Palace - West Chest",
+                         "Swamp Palace - Flooded Room - Left", "Swamp Palace - Flooded Room - Right",
+                         "Swamp Palace - Waterfall Room", "Swamp Palace - Boss"},
         "Thieves' Town": {"Thieves' Town - Big Key Chest", "Thieves' Town - Map Chest", "Thieves' Town - Compass Chest",
                           "Thieves' Town - Ambush Chest", "Thieves' Town - Attic", "Thieves' Town - Big Chest",
                           "Thieves' Town - Blind's Cell", "Thieves' Town - Boss"},
@@ -166,11 +174,12 @@ class ALTTPWorld(World):
                         "Misery Mire - Bridge Chest", "Misery Mire - Spike Chest", "Misery Mire - Compass Chest",
                         "Misery Mire - Big Key Chest", "Misery Mire - Boss"},
         "Turtle Rock": {"Turtle Rock - Compass Chest", "Turtle Rock - Roller Room - Left",
-                        "Turtle Rock - Roller Room - Right", "Turtle Room - Chain Chomps", "Turtle Rock - Big Key Chest",
+                        "Turtle Rock - Roller Room - Right", "Turtle Rock - Chain Chomps", "Turtle Rock - Big Key Chest",
                         "Turtle Rock - Big Chest", "Turtle Rock - Crystaroller Room",
                         "Turtle Rock - Eye Bridge - Bottom Left", "Turtle Rock - Eye Bridge - Bottom Right",
-                        "Turtle Rock - Eye Bridge - Top Left", "Turtle Rock - Eye Bridge - Top Right", "Turtle Rock - Boss"},
-        "Ganons Tower": {"Ganons Tower - Bob's Torch", "Ganon's Tower - Hope Room - Left",
+                        "Turtle Rock - Eye Bridge - Top Left", "Turtle Rock - Eye Bridge - Top Right",
+                        "Turtle Rock - Boss"},
+        "Ganons Tower": {"Ganons Tower - Bob's Torch", "Ganons Tower - Hope Room - Left",
                          "Ganons Tower - Hope Room - Right", "Ganons Tower - Tile Room",
                          "Ganons Tower - Compass Room - Top Left", "Ganons Tower - Compass Room - Top Right",
                          "Ganons Tower - Compass Room - Bottom Left", "Ganons Tower - Compass Room - Bottom Left",
@@ -182,9 +191,9 @@ class ALTTPWorld(World):
                          "Ganons Tower - Bob's Chest", "Ganons Tower - Big Chest", "Ganons Tower - Big Key Room - Left",
                          "Ganons Tower - Big Key Room - Right", "Ganons Tower - Big Key Chest",
                          "Ganons Tower - Mini Helmasaur Room - Left", "Ganons Tower - Mini Helmasaur Room - Right",
-                         "Ganons Tower - Pre-Moldorm Room", "Ganons Tower - Validation Chest"},
+                         "Ganons Tower - Pre-Moldorm Chest", "Ganons Tower - Validation Chest"},
         "Ganons Tower Climb": {"Ganons Tower - Mini Helmasaur Room - Left", "Ganons Tower - Mini Helmasaur Room - Right",
-                               "Ganons Tower - Pre-Moldorm Room", "Ganons Tower - Validation Chest"},
+                               "Ganons Tower - Pre-Moldorm Chest", "Ganons Tower - Validation Chest"},
     }
     hint_blacklist = {"Triforce"}
 
@@ -192,7 +201,7 @@ class ALTTPWorld(World):
     location_name_to_id = lookup_name_to_id
 
     data_version = 8
-    required_client_version = (0, 3, 2)
+    required_client_version = (0, 4, 1)
     web = ALTTPWeb()
 
     pedestal_credit_texts: typing.Dict[int, str] = \
@@ -485,6 +494,7 @@ class ALTTPWorld(World):
                                world.menuspeed[player].current_key,
                                world.music[player],
                                world.sprite[player],
+                               None,
                                palettes_options, world, player, True,
                                reduceflashing=world.reduceflashing[player] or world.is_race,
                                triforcehud=world.triforcehud[player].current_key,
