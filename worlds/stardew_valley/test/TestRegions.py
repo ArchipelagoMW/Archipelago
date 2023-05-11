@@ -30,8 +30,8 @@ class TestEntranceRando(unittest.TestCase):
         for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
                              (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
-            with self.subTest(option=option, flag=flag):
-                seed = random.randrange(sys.maxsize)
+            seed = random.randrange(sys.maxsize)
+            with self.subTest(flag=flag, msg=f"Seed: {seed}"):
                 rand = random.Random(seed)
                 world_options = StardewOptions({options.EntranceRandomization.internal_name: option,
                                                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false})

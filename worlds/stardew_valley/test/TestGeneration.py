@@ -103,7 +103,6 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
                 self.assertTrue(count == 0 or count == 2)
 
 
-
 class TestGivenProgressiveBackpack(SVTestBase):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive}
 

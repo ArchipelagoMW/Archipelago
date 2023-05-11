@@ -403,7 +403,7 @@ def randomize_connections(random: Random, world_options: StardewOptions) -> Tupl
 
     swap_connections_until_valid(randomized_connections, random)
     randomized_connections_for_generation = create_connections_for_generation(randomized_connections)
-    randomized_data_for_mod = create_data_for_mod(randomized_connections)
+    randomized_data_for_mod = create_data_for_mod(randomized_connections, connections_to_randomize)
 
     return randomized_connections_for_generation, randomized_data_for_mod
 
@@ -432,12 +432,12 @@ def create_connections_for_generation(randomized_connections: dict[ConnectionDat
     return connections
 
 
-def create_data_for_mod(randomized_connections: dict[ConnectionData, ConnectionData]) -> dict[str, str]:
+def create_data_for_mod(randomized_connections: dict[ConnectionData, ConnectionData], connections_to_randomize: list[ConnectionData]) -> dict[str, str]:
     randomized_data_for_mod = {}
     for connection in randomized_connections:
-        destination = randomized_connections[connection]
-        if connection == destination:
+        if connection not in connections_to_randomize:
             continue
+        destination = randomized_connections[connection]
         add_to_mod_data(connection, destination, randomized_data_for_mod)
     return randomized_data_for_mod
 
