@@ -1262,3 +1262,47 @@ item_shine_visibility_switcher = [
     0x03E00008,  # JR    RA
     0x958CA908   # LHU   T4, 0xA908 (T4)
 ]
+
+three_hit_item_flags_setter = [
+    # As the function to create items from the 3HB item lists iterates through said item lists, this will pass unique
+    # flag values to each item when calling the "create item instance" function by right-shifting said flag by a number
+    # of bits depending on which item in the list it is. Unlike the vanilla game which always puts flags of 0x00000000
+    # on each of these.
+    0x8DC80008,  # LW    T0, 0x0008 (T6)
+    0x240A0000,  # ADDIU T2, R0, 0x0000
+    0x00084C02,  # SRL   T1, T0, 16
+    0x3108FFFF,  # ANDI  T0, T0, 0xFFFF
+    0x00094842,  # SRL   T1, T1, 1
+    0x15200003,  # BNEZ  T1, [forward 0x03]
+    0x00000000,  # NOP
+    0x34098000,  # ORI   T1, R0, 0x8000
+    0x25080001,  # ADDIU T0, T0, 0x0001
+    0x0154582A,  # SLT   T3, T2, S4
+    0x1560FFF9,  # BNEZ  T3, [backward 0x07]
+    0x254A0001,  # ADDIU T2, T2, 0x0001
+    0x00094C00,  # SLL   T1, T1, 16
+    0x01094025,  # OR    T0, T0, T1
+    0x0805971E,  # J     0x80165C78
+    0xAFA80010   # SW    T0, 0x0010 (SP)
+]
+
+chandelier_item_flags_setter = [
+    # Same as the above, but for the unique function made specifically and ONLY for the Villa foyer chandelier's item
+    # list. KCEK, why the heck did you have to do this!?
+    0x8F280014,  # LW    T0, 0x0014 (T9)
+    0x240A0000,  # ADDIU T2, R0, 0x0000
+    0x00084C02,  # SRL   T1, T0, 16
+    0x3108FFFF,  # ANDI  T0, T0, 0xFFFF
+    0x00094842,  # SRL   T1, T1, 1
+    0x15200003,  # BNEZ  T1, [forward 0x03]
+    0x00000000,  # NOP
+    0x34098000,  # ORI   T1, R0, 0x8000
+    0x25080001,  # ADDIU T0, T0, 0x0001
+    0x0155582A,  # SLT   T3, T2, S5
+    0x1560FFF9,  # BNEZ  T3, [backward 0x07]
+    0x254A0001,  # ADDIU T2, T2, 0x0001
+    0x00094C00,  # SLL   T1, T1, 16
+    0x01094025,  # OR    T0, T0, T1
+    0x0805971E,  # J     0x80165C78
+    0xAFA80010   # SW    T0, 0x0010 (SP)
+]

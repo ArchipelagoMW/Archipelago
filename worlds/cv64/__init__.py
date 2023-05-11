@@ -193,7 +193,7 @@ class CV64World(World):
             add_items(stage_info[stage].stage_tier2_junk_counts, "tier2_junk_counts")
             add_tier1_junk(stage_info[stage].stage_tier1_junk_count)
 
-            # If multi-hit breakables are on, add those items too
+            # If 3HBs are on, add those items too
             if self.multiworld.multi_hit_breakables[self.player]:
                 add_items(stage_info[stage].multihit_tier2_junk_counts, "tier2_junk_counts")
                 add_tier1_junk(stage_info[stage].multihit_tier1_junk_count)
@@ -201,6 +201,11 @@ class CV64World(World):
             # If sub-weapons are shuffled in the main pool, add those in too
             if self.multiworld.sub_weapon_shuffle[self.player].value > 1:
                 add_items(stage_info[stage].sub_weapon_counts, "tier2_junk_counts")
+
+            # If both 3HBs are on AND sub-weapons are shuffled in the main pool...yeah
+            if self.multiworld.multi_hit_breakables[self.player] and \
+                    self.multiworld.sub_weapon_shuffle[self.player].value > 1:
+                add_items(stage_info[stage].multihit_sub_weapon_counts, "tier2_junk_counts")
 
         # Put in the Carrie-only items if applicable
         if self.multiworld.carrie_logic[self.player] and RName.underground_waterway in self.active_stage_list:
@@ -345,6 +350,9 @@ class CV64World(World):
 
             # Handle sub-weapon shuffle here.
             sub_weapon_dict = rom_sub_weapon_offsets.copy()
+
+            if self.multiworld.multi_hit_breakables[self.player]:
+                sub_weapon_dict[0x10CD65] = 0x0D
 
             if self.multiworld.sub_weapon_shuffle[self.player].value == 1:
                 sub_bytes = list(sub_weapon_dict.values())

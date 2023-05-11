@@ -314,6 +314,12 @@ toe_ibridge = "Tower of Execution: Special2 ledge"
 toe_top = "Tower of Execution: Central tower top"
 toe_keygate_l = "Tower of Execution: Execution Key gate - Left"
 
+toe_ledge1 = "Tower of Execution: Pre-mid-savepoint platforms ledge - Item 1"
+toe_ledge2 = "Tower of Execution: Pre-mid-savepoint platforms ledge - Item 2"
+toe_ledge3 = "Tower of Execution: Pre-mid-savepoint platforms ledge - Item 3"
+toe_ledge4 = "Tower of Execution: Pre-mid-savepoint platforms ledge - Item 4"
+toe_ledge5 = "Tower of Execution: Pre-mid-savepoint platforms ledge - Item 5"
+
 toe_keygate_r = "Tower of Execution: Execution Key gate - Right"
 
 # Tower of Science definitions
@@ -375,6 +381,8 @@ ct_finalroom_renon_slab3 = "Clock Tower: Renon's final offers slab - Item 3"
 ct_finalroom_renon_slab4 = "Clock Tower: Renon's final offers slab - Item 4"
 ct_finalroom_renon_slab5 = "Clock Tower: Renon's final offers slab - Item 5"
 ct_finalroom_renon_slab6 = "Clock Tower: Renon's final offers slab - Item 6"
+ct_finalroom_renon_slab7 = "Clock Tower: Renon's final offers slab - Item 7"
+ct_finalroom_renon_slab8 = "Clock Tower: Renon's final offers slab - Item 8"
 
 ct_finalroom_fr = "Clock Tower: Final room floor - front-right"
 ct_finalroom_fl = "Clock Tower: Final room floor - front-left"

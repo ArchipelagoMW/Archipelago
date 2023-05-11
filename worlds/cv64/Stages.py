@@ -30,6 +30,7 @@ class CV64Stage:
     stage_tier1_junk_count: int
     multihit_tier2_junk_counts: typing.Dict[str, int]
     multihit_tier1_junk_count: int
+    multihit_sub_weapon_counts: typing.Dict[str, int]
     sub_weapon_counts: typing.Dict[str, int]
 
     def __init__(self, start_region_name: str, startzone_map_offset: typing.Optional[int], startzone_spawn_offset:
@@ -39,7 +40,8 @@ class CV64Stage:
                  altzone_spawn_offset: typing.Optional[int], end_map_id: typing.Optional[int],
                  end_spawn_id: typing.Optional[int], boss_count: int, stage_number_offset_list: list,
                  stage_key_counts: dict, stage_tier2_item_counts: dict, stage_tier1_junk_count: int,
-                 multihit_tier2_item_counts: dict, multihit_tier1_junk_count: int, sub_weapon_counts: dict):
+                 multihit_tier2_item_counts: dict, multihit_tier1_junk_count: int, multihit_sub_weapon_counts: dict,
+                 sub_weapon_counts: dict):
         self.start_region_name = start_region_name
         self.startzone_map_offset = startzone_map_offset
         self.startzone_spawn_offset = startzone_spawn_offset
@@ -66,6 +68,7 @@ class CV64Stage:
         self.stage_tier1_junk_count = stage_tier1_junk_count
         self.multihit_tier2_junk_counts = multihit_tier2_item_counts
         self.multihit_tier1_junk_count = multihit_tier1_junk_count
+        self.multihit_sub_weapon_counts = multihit_sub_weapon_counts
         self.sub_weapon_counts = sub_weapon_counts
 
 
@@ -81,7 +84,7 @@ stage_info = {
                                        IName.sun_card: 2,
                                        IName.moon_card: 1}, 12,
                                       {IName.roast_chicken: 1,
-                                       IName.powerup: 1}, 7,
+                                       IName.powerup: 1}, 7, {},
                                       {IName.holy_water: 1,
                                        IName.cross: 1,
                                        IName.axe: 1,
@@ -97,7 +100,7 @@ stage_info = {
                                        IName.powerup: 1,
                                        IName.sun_card: 1,
                                        IName.moon_card: 2}, 2,
-                                      {}, 10,
+                                      {}, 10, {},
                                       {IName.holy_water: 1,
                                        IName.cross: 1,
                                        IName.axe: 1,
@@ -119,7 +122,7 @@ stage_info = {
                                        IName.moon_card: 2}, 29,
                                       {IName.roast_chicken: 1,
                                        IName.purifying: 1,
-                                       IName.cure_ampoule: 1}, 2,
+                                       IName.cure_ampoule: 1}, 2, {},
                                       {IName.holy_water: 2,
                                        IName.cross: 1,
                                        IName.axe: 2,
@@ -138,7 +141,7 @@ stage_info = {
                                        IName.moon_card: 1}, 14,
                                       {IName.roast_chicken: 4,
                                        IName.purifying: 2,
-                                       IName.cure_ampoule: 2}, 0,
+                                       IName.cure_ampoule: 2}, 0, {},
                                       {IName.holy_water: 2,
                                        IName.cross: 2,
                                        IName.axe: 1,
@@ -154,7 +157,7 @@ stage_info = {
                                        IName.powerup: 1}, 3,
                                       {IName.roast_chicken: 3,
                                        IName.purifying: 2,
-                                       IName.cure_ampoule: 2}, 2,
+                                       IName.cure_ampoule: 2}, 2, {},
                                       {}),
 
     "Castle Center":        CV64Stage(RName.cc_main, None, None, 0x19, 0x00,
@@ -174,7 +177,7 @@ stage_info = {
                                        IName.moon_card: 1}, 27,
                                       {IName.roast_beef: 3,
                                        IName.purifying: 2,
-                                       IName.cure_ampoule: 2}, 5,
+                                       IName.cure_ampoule: 2}, 5, {},
                                       {IName.holy_water: 1,
                                        IName.cross: 1,
                                        IName.axe: 1}),
@@ -187,7 +190,7 @@ stage_info = {
                                       {IName.roast_chicken: 1,
                                        IName.roast_beef: 2,
                                        IName.powerup: 1}, 0,
-                                      {}, 0,
+                                      {}, 0, {},
                                       {IName.knife: 1}),
 
     "Tower of Execution":   CV64Stage(RName.toe_main, 0x109D17, 0x109D19, 0x10, 0x00,
@@ -197,7 +200,8 @@ stage_info = {
                                       {IName.execution_key: 1},
                                       {IName.roast_chicken: 1,
                                        IName.roast_beef: 1}, 3,
-                                      {}, 0,
+                                      {IName.purifying: 1,
+                                       IName.cure_ampoule: 1}, 2, {IName.holy_water: 1},
                                       {IName.cross: 1}),
 
     "Tower of Science":     CV64Stage(RName.tosci_start, 0x109D77, 0x109D79, 0x12, 0x00,
@@ -208,7 +212,7 @@ stage_info = {
                                        IName.science_key_two: 1,
                                        IName.science_key_three: 1},
                                       {IName.roast_beef: 1}, 5,
-                                      {IName.roast_chicken: 2}, 4,
+                                      {IName.roast_chicken: 2}, 4, {},
                                       {IName.cross: 1}),
 
     "Tower of Sorcery":     CV64Stage(RName.tosor_main, 0x109D47, 0x109D49, 0x11, 0x00,
@@ -217,7 +221,7 @@ stage_info = {
                                       0, [0x104A8D],
                                       {},
                                       {IName.roast_beef: 1}, 6,
-                                      {}, 0,
+                                      {}, 0, {},
                                       {}),
 
     "Room of Clocks":       CV64Stage(RName.roc_main, None, None, 0x1B, 0x00,
@@ -227,7 +231,7 @@ stage_info = {
                                       {},
                                       {IName.roast_beef: 1,
                                        IName.powerup: 2}, 0,
-                                      {}, 0,
+                                      {}, 0, {},
                                       {IName.holy_water: 1,
                                        IName.axe: 1}),
 
@@ -240,7 +244,7 @@ stage_info = {
                                        IName.clocktower_key_three: 1},
                                       {}, 3,
                                       {IName.roast_chicken: 3,
-                                       IName.roast_beef: 3}, 8,
+                                       IName.roast_beef: 3}, 10, {},
                                       {IName.holy_water: 2,
                                        IName.cross: 1,
                                        IName.axe: 1,
@@ -252,7 +256,7 @@ stage_info = {
                                       2, [0x104AAD],
                                       {},
                                       {IName.healing_kit: 3}, 1,
-                                      {}, 0,
+                                      {}, 0, {},
                                       {})
 }
 
