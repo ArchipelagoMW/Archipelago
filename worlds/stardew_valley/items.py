@@ -9,6 +9,7 @@ from typing import Dict, List, Protocol, Union, Set, Optional
 from BaseClasses import Item, ItemClassification
 from . import options, data
 from .data.villagers_data import all_villagers
+from .data.mod_data import ModNames
 from .options import StardewOptions
 
 ITEM_CODE_OFFSET = 717000
@@ -68,7 +69,7 @@ class ItemData:
     code_without_offset: Optional[int]
     name: str
     classification: ItemClassification
-    mod_name: Optional[str]
+    mod_name: Optional[str] = None
     groups: Set[Group] = field(default_factory=frozenset)
 
     def __post_init__(self):
@@ -108,8 +109,8 @@ def load_item_csv():
 
 
 events = [
-    ItemData(None, "Victory", ItemClassification.progression, None),
-    ItemData(None, "Month End", ItemClassification.progression, None),
+    ItemData(None, "Victory", ItemClassification.progression),
+    ItemData(None, "Month End", ItemClassification.progression),
 ]
 
 all_items: List[ItemData] = load_item_csv() + events
@@ -200,7 +201,7 @@ def create_backpack_items(item_factory: StardewItemFactory, world_options: Stard
     if (world_options[options.BackpackProgression] == options.BackpackProgression.option_progressive or
             world_options[options.BackpackProgression] == options.BackpackProgression.option_early_progressive):
         items.extend(item_factory(item) for item in ["Progressive Backpack"] * 2)
-        if "Bigger Backpack" in world_options[options.Mods]:
+        if ModNames.big_backpack in world_options[options.Mods]:
             items.append(item_factory("Progressive Backpack"))
 
 
@@ -250,7 +251,7 @@ def create_wizard_buildings(item_factory: StardewItemFactory, world_options: Sta
     items.append(item_factory("Gold Clock"))
     if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false:
         items.append(item_factory("Island Obelisk"))
-    if "DeepWoods" in world_options[options.Mods]:
+    if ModNames.deepwoods in world_options[options.Mods]:
         items.append(item_factory("Woods Obelisk"))
 
 
@@ -276,7 +277,7 @@ def create_carpenter_buildings(item_factory: StardewItemFactory, world_options: 
         items.append(item_factory("Progressive House"))
         items.append(item_factory("Progressive House"))
         items.append(item_factory("Progressive House"))
-        if "Tractor Mod" in world_options[options.Mods]:
+        if ModNames.tractor in world_options[options.Mods]:
             items.append(item_factory("Tractor Garage"))
 
 
@@ -291,7 +292,7 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, items: List[I
 def create_stardrops(item_factory: StardewItemFactory, items: List[Item], world_options: StardewOptions):
     items.append(item_factory("Stardrop"))  # The Mines level 100
     items.append(item_factory("Stardrop"))  # Old Master Cannoli
-    if "DeepWoods" in world_options[options.Mods]:
+    if ModNames.deepwoods in world_options[options.Mods]:
         items.append(item_factory("Stardrop"))  # Petting the Unicorn
 
 

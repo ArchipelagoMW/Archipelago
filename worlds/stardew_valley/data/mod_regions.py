@@ -3,6 +3,7 @@ from .entrance_data import SVEntrance, DeepWoodsEntrance, EugeneEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance
 from .region_data import SVRegion, DeepWoodsRegion, EugeneRegion, JasperRegion, \
     AlecRegion, YobaRegion, JunaRegion
+from .mod_data import ModNames
 from typing import List, Dict
 
 
@@ -147,10 +148,10 @@ class ConnectionRemoverData:
 
 
 ModDataList = [
-    ModData("DeepWoods", deep_woods_regions, mandatory_deep_woods_entrances, {}, {}, deep_woods_flags),
-    ModData("Custom NPC Eugene", eugene_regions, eugene_entrances, {}, {}, eugene_flags),
-    ModData("Professor Jasper Thomas", jasper_regions, jasper_entrances, {}, {}, jasper_flags),
-    ModData("Alec Revisited", alec_regions, alec_entrances, {}, {}, alec_flags),
-    ModData("Custom NPC - Yoba", yoba_regions, yoba_entrances, {}, {}, yoba_flags),
-    ModData("Juna - Roommate NPC", juna_regions, juna_entrances, {}, {}, juna_flags)
+    ModData(ModNames.deepwoods, deep_woods_regions, mandatory_deep_woods_entrances, {}, {}, deep_woods_flags),
+    ModData(ModNames.eugene, eugene_regions, eugene_entrances, {}, {}, eugene_flags),
+    ModData(ModNames.jasper, jasper_regions, jasper_entrances, {}, {}, jasper_flags),
+    ModData(ModNames.alec, alec_regions, alec_entrances, {}, {}, alec_flags),
+    ModData(ModNames.yoba, yoba_regions, yoba_entrances, {}, {}, yoba_flags),
+    ModData(ModNames.juna, juna_regions, juna_entrances, {}, {}, juna_flags)
 ]

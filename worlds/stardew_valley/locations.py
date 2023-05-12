@@ -70,7 +70,7 @@ class LocationData:
     code_without_offset: Optional[int]
     region: str
     name: str
-    mod_name: Optional[str]
+    mod_name: Optional[str] = None
     tags: FrozenSet[LocationTags] = frozenset()
 
     @property
@@ -101,15 +101,15 @@ def load_location_csv() -> List[LocationData]:
 
 
 events_locations = [
-    LocationData(None, "Stardew Valley", "Succeed Grandpa's Evaluation", None),
-    LocationData(None, "Community Center", "Complete Community Center", None),
-    LocationData(None, "The Mines - Floor 120", "Reach the Bottom of The Mines", None),
-    LocationData(None, "Skull Cavern", "Complete Quest Cryptic Note", None),
-    LocationData(None, "Stardew Valley", "Catch Every Fish", None),
-    LocationData(None, "Stardew Valley", "Complete the Museum Collection", None),
-    LocationData(None, "Stardew Valley", "Full House", None),
-    LocationData(None, "Stardew Valley", "Greatest Walnut Hunter", None),
-    LocationData(None, "Stardew Valley", "Perfection", None),
+    LocationData(None, "Stardew Valley", "Succeed Grandpa's Evaluation"),
+    LocationData(None, "Community Center", "Complete Community Center"),
+    LocationData(None, "The Mines - Floor 120", "Reach the Bottom of The Mines"),
+    LocationData(None, "Skull Cavern", "Complete Quest Cryptic Note"),
+    LocationData(None, "Stardew Valley", "Catch Every Fish"),
+    LocationData(None, "Stardew Valley", "Complete the Museum Collection"),
+    LocationData(None, "Stardew Valley", "Full House"),
+    LocationData(None, "Stardew Valley", "Greatest Walnut Hunter"),
+    LocationData(None, "Stardew Valley", "Perfection"),
 ]
 
 all_locations = load_location_csv() + events_locations

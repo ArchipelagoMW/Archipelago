@@ -12,6 +12,7 @@ from .options import stardew_valley_options, StardewOptions, fetch_options
 from .regions import create_regions
 from .rules import set_rules
 from worlds.generic.Rules import set_rule
+from .data.mod_data import mod_versions
 
 client_version = 0
 
@@ -157,7 +158,7 @@ class StardewValleyWorld(World):
 
     def setup_month_events(self):
         for i in range(0, MAX_MONTHS):
-            month_end = LocationData(None, "Stardew Valley", f"Month End {i + 1}", None)
+            month_end = LocationData(None, "Stardew Valley", f"Month End {i + 1}")
             if i == 0:
                 self.create_event_location(month_end, True_(), "Month End")
                 continue
@@ -279,6 +280,7 @@ class StardewValleyWorld(World):
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": modified_bundles,
             "client_version": "4.0.0",
+            "mod_versions": mod_versions
         })
 
         return slot_data

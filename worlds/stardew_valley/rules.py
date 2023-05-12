@@ -10,6 +10,7 @@ from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_
     dwarf_scrolls, skeleton_front, \
     skeleton_middle, skeleton_back, all_museum_items_by_name
 from .data.region_data import SVRegion
+from .data.mod_data import ModNames
 from .locations import LocationTags
 from .logic import StardewLogic, And, tool_prices, week_days
 from .options import StardewOptions
@@ -56,22 +57,22 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
             MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Combat", player),
                                      logic.can_earn_skill_level("Combat", i).simplify())
             # Modded Skills
-            if "Luck Skill" in world_options[options.Mods]:
+            if ModNames.luck_skill in world_options[options.Mods]:
                 MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Luck", player),
                                          logic.can_earn_skill_level("Luck", i).simplify())
-            if "Magic" in world_options[options.Mods]:
+            if ModNames.magic in world_options[options.Mods]:
                 MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Magic", player),
                                          logic.can_earn_skill_level("Magic", i).simplify())
-            if "Binning Skill" in world_options[options.Mods]:
+            if ModNames.binning_skill in world_options[options.Mods]:
                 MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Binning", player),
                                          logic.can_earn_skill_level("Binning", i).simplify())
-            if "Cooking Skill" in world_options[options.Mods]:
+            if ModNames.cooking_skill in world_options[options.Mods]:
                 MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Cooking", player),
                                          logic.can_earn_skill_level("Cooking", i).simplify())
-            if "Socializing Skill" in world_options[options.Mods]:
+            if ModNames.socializing_skill in world_options[options.Mods]:
                 MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Socializing", player),
                                          logic.can_earn_skill_level("Socializing", i).simplify())
-            if "Archaeology" in world_options[options.Mods]:
+            if ModNames.archaeology in world_options[options.Mods]:
                 MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Archaeology", player),
                                          logic.can_earn_skill_level("Archaeology", i).simplify())
 
@@ -266,6 +267,7 @@ def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
     MultiWorldRules.add_rule(multi_world.get_location("Parrot Express", player),
                              has_10_walnut)
 
+
 def set_story_quests_rules(all_location_names: List[str], logic, multi_world, player, world_options: StardewOptions):
     for quest in locations.locations_by_tag[LocationTags.QUEST]:
         if quest.mod_name is None:
@@ -398,11 +400,10 @@ def set_backpack_rules(logic: StardewLogic, multi_world: MultiWorld, player: int
                                  logic.can_spend_money(2000).simplify())
         MultiWorldRules.set_rule(multi_world.get_location("Deluxe Pack", player),
                                  (logic.can_spend_money(10000) & logic.received("Progressive Backpack")).simplify())
-        if "Bigger Backpack" in world_options[options.Mods]:
+        if ModNames.big_backpack in world_options[options.Mods]:
             MultiWorldRules.set_rule(multi_world.get_location("Premium Pack", player),
                                      (logic.can_spend_money(150000) &
                                       logic.received("Progressive Backpack", 2)).simplify())
-
 
 
 def set_festival_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player):
@@ -457,7 +458,7 @@ def set_friendsanity_rules(all_location_names: List[str], logic: StardewLogic, m
 
 
 def set_deepwoods_rules(logic: StardewLogic, multi_world: MultiWorld, player: int, world_options: StardewOptions):
-    if "DeepWoods" in world_options[options.Mods]:
+    if ModNames.deepwoods in world_options[options.Mods]:
         MultiWorldRules.add_rule(multi_world.get_location("Breaking Up Deep Woods Gingerbread House", player),
                                  logic.has_tool("Axe", "Gold") & logic.can_reach_woods_depth(50).simplify())
         MultiWorldRules.add_rule(multi_world.get_location("Chop Down a Deep Woods Iridium Tree", player),
