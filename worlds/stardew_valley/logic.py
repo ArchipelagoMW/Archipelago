@@ -685,14 +685,15 @@ class StardewLogic:
 
         return self.can_earn_skill_level(skill, level)
 
-    def has_total_skill_level(self, level: int) -> StardewRule:
+    def has_total_skill_level(self, level: int, allow_modded_skills: bool = False) -> StardewRule:
         if level == 0:
             return True_()
 
         if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
             skills_items = ["Farming Level", "Mining Level", "Foraging Level",
                             "Fishing Level", "Combat Level"]
-            append_mod_skill_level(skills_items, self.options)
+            if allow_modded_skills:
+                append_mod_skill_level(skills_items, self.options)
             return self.received(skills_items, count=level)
 
         months_5_skills = max(1, (level // 5) - 1)
@@ -1337,41 +1338,21 @@ class StardewLogic:
 
     def can_earn_spell_count(self, spell_count: int):
         # Player always has an Axe, Pickaxe, and Watering Can, and starts with Magic Missile and Analyze
-        actual_count = 5
-        if self.can_reach_region(SVRegion.volcano_floor_10) | self.has_mine_elevator_to_floor(100):
-            actual_count += 1
-        # Tendrils
-        if self.can_reach_region(SVRegion.farm):
-            actual_count += 1
-        # Luck Steal and Blood Mana
-        if self.can_reach_region(SVRegion.witch_swamp):
-            actual_count += 1
-        # Descend
-        if self.has("Staircase"):
-            actual_count += 1
-        # Haste
-        if self.has("Coffee"):
-            actual_count += 1
-        # Heal
-        if self.has("Life Elixir"):
-            actual_count += 1
-        # Shockwave
-        if self.has("Earth Crystal"):
-            actual_count += 1
-        # Fireball
-        if self.has("Fire Quartz"):
-            actual_count += 1
-        # Frostbolt (Catch an Ice Pip)
-        if self.can_fish(85) & self.has_mine_elevator_to_floor(60) & self.can_reach_region(SVRegion.mines):
-            actual_count += 1
+        spell_rules = [self.can_reach_region(SVRegion.volcano_floor_10) | self.has_mine_elevator_to_floor(100),
+                       self.can_reach_region(SVRegion.farm),
+                       self.can_reach_region(SVRegion.witch_swamp),
+                       self.has("Staircase"),
+                       self.has("Coffee"),
+                       self.has("Life Elixir"),
+                       self.has("Earth Crystal"),
+                       self.has("Fire Quartz"),
+                       self.can_fish(85) & self.has_mine_elevator_to_floor(60) & self.can_reach_region(SVRegion.mines)
+                       ]
         # If the player can't even learn magic, you have no spells.
-        if not (self.can_earn_relationship("Wizard", 3) & self.can_reach_region(SVRegion.pierre_store) &
+        if not (self.has_relationship("Wizard", 3) & self.can_reach_region(SVRegion.pierre_store) &
                 self.can_reach_region(SVRegion.wizard_tower)):
-            actual_count = 0
-        if actual_count >= spell_count:
-            return True_()
-        else:
             return False_()
+        return Count(spell_count, spell_rules)
 
     def can_reach_woods_depth(self, depth: int) -> StardewRule:
         rules = []
