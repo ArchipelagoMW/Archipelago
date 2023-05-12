@@ -16,7 +16,8 @@ class FishItem(GameItem):
     def __repr__(self):
         return f"{self.name} [{self.item_id}] (Locations: {self.locations} |" \
                f" Seasons: {self.seasons} |" \
-               f" Difficulty: {self.difficulty}) "
+               f" Difficulty: {self.difficulty}) |" \
+               f"Mod: {self.mod_name}"
 
 
 fresh_water = (SVRegion.farm, SVRegion.forest, SVRegion.town, SVRegion.mountain)

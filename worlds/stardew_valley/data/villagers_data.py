@@ -18,7 +18,8 @@ class Villager:
         return f"{self.name} [Bachelor: {self.bachelor}] [Available from start: {self.available}]" \
                f"(Locations: {self.locations} |" \
                f" Birthday: {self.birthday} |" \
-               f" Gifts: {self.gifts}) "
+               f" Gifts: {self.gifts}) |" \
+               f" Mod: {self.mod_name}"
 
 
 town = (SVRegion.town,)
