@@ -864,4 +864,20 @@
         <Period value="1"/>
         <PeriodicEffect value="AP_PerditionTurretBurrowOrder"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PsiDisruption">
+        <Alignment value="Negative"/>
+        <InfoIcon value="AP\Assets\Textures\btn-ability-terran-psidisruption.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="0.1875"/>
+        <Modification MoveSpeedMultiplier="0.5" AttackSpeedMultiplier="0.5">
+            <RateMultiplierArray index="Queueable" value="0.5"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PsiDisruptionSearch">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <DisableValidatorArray value="NotDeadOrConstruction"/>
+        <Period value="0.125"/>
+        <PeriodicEffect value="AP_PsiDisruptionSearchArea"/>
+    </CBehaviorBuff>
 </Catalog>

@@ -714,4 +714,9 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-perditionturret.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_PsiDisruption">
+        <Icon value="AP\Assets\Textures\btn-ability-terran-psidisruption.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
 </Catalog>

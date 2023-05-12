@@ -2016,4 +2016,9 @@
         <Pitch value="-4.000000,-4.000000"/>
         <Volume value="-6.000000,-6.000000"/>
     </CSound>
+    <CSound id="AP_PsiDisruptor_What" parent="Voice">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\PsiDisruptor\PsiDisruptor_What0.wav"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
 </Catalog>

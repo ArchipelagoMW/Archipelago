@@ -830,4 +830,8 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_DistortionSensors" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradePsiDisruptorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_PsiDisruptor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

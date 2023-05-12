@@ -2626,11 +2626,22 @@
         <EffectArray value="AP_PerditionTurretFlameThrowerDamage"/>
     </CEffectSet>
     <CEffectApplyBehavior id="AP_RenewBurrowTimer">
-        <ValidatorArray index="0" value="RenewTurretTimerTargetFilters"/> <!-- Looks like this validator doesn't exist at all in vanilla -->
+        <ValidatorArray index="0" value="RenewTurretTimerTargetFilters"/>
+        <!-- Looks like this validator doesn't exist at all in vanilla -->
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Caster"/>
         <Behavior value="AP_TurretBurrow"/>
     </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_PsiDisruptionApplyBehavior">
+        <ValidatorArray index="0" value="IsZerg"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_PsiDisruption"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_PsiDisruptionSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AreaArray Radius="8" Effect="AP_PsiDisruptionApplyBehavior"/>
+    </CEffectEnumArea>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="Reaper"/>

@@ -509,4 +509,8 @@
     <CRequirement id="AP_DistortionSensorsResearched">
         <NodeArray index="Show" Link="AP_CountUpgradeDistortionSensorsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UsePsiDisruptor">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitEngineeringBayCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

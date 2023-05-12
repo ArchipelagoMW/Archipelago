@@ -1671,4 +1671,47 @@
         <Model value="Assets\Buildings\Terran\PerditionTurretPlacement\PerditionTurretPlacement.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_PsiDisruptor" parent="Building">
+        <Model value="Assets\Buildings\Terran\SigmaProjector\SigmaProjector.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value=""/>
+        <PlanetPanelCamera value="Star2CameraHigh06"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="0.800000"/>
+        <ShadowRadius value="0.800000"/>
+        <TechPurchaseCamera value="Star2CameraHigh06"/>
+        <UnitGlossaryCamera value="Star2CameraHigh06"/>
+    </CModel>
+    <CModel id="AP_PsiDisruptorBuild" parent="TerranBuildingBuildSmall"/>
+    <CModel id="AP_PsiDisruptorDeath" parent="BuildingDeath">
+        <Model value="Assets\Buildings\Terran\SigmaProjectorDeath\SigmaProjectorDeath.m3"/>
+        <LowQualityModel value="AP_PsiDisruptorDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_PsiDisruptorDeathLow" parent="BuildingDeath" Race="Terran">
+        <Model value="Assets\Effects\Terran\TerranBuildingDeath\TerranBuildingDeath_Low.m3"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Lighting value="TerranBuildingDeathLow"/>
+        <ScaleMax value="1.200000,1.200000,1.200000"/>
+        <ScaleMin value="1.200000,1.200000,1.200000"/>
+        <SelectionRadius value="0.416500"/>
+        <ShadowRadius value="0.416500"/>
+    </CModel>
+    <CModel id="AP_PsiDisruptorDebuff" parent="BuffFX">
+        <Model value="Assets\Effects\Terran\PsiDisruptorImpact\PsiDisruptorImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value=""/>
+        <SelectionRadius value="0.400000"/>
+        <ShadowRadius value="0.400000"/>
+    </CModel>
+    <CModel id="AP_PsiDisruptorPlacement" parent="Placement">
+        <Model value="Assets\Buildings\Terran\SigmaProjectorPlacement\SigmaProjectorPlacement.m3"/>
+        <LowQualityModel value="AP_PsiDisruptor"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

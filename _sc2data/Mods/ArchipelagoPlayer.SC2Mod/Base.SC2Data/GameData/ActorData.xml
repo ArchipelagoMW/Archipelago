@@ -5561,7 +5561,6 @@
         </GroupIcon>
         <HeroIcon value="Assets\Textures\BTN-Unit-Terran-PerditionTurret.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
-        <SoundArray index="What" value="AP_PerditionTurret_What"/>
         <SoundArray index="Construction" value="AP_Terran_ConstructionWhat"/>
         <UnitIcon value="Assets\Textures\BTN-Unit-Terran-PerditionTurret.dds"/>
         <Wireframe>
@@ -5573,12 +5572,9 @@
         <On Terms="Effect.AP_PerditionTurretFlameThrowerDamage.Start; At Target" Send="ActionImpact"/>
         <On Terms="Effect.AP_PerditionTurretFlameThrowerDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
         <LaunchAttachQuery Methods="Weapon"/>
-        <LaunchAssets Model="AP_PerditionTurretAttackLaunch" Sound="AP_PerditionTurretAttackLaunch"/>
         <ImpactMap index="None" Sound="AP_PerditionTurret_AttackImpact"/>
     </CActorAction>
-    <CActorModel id="AP_PerditionTurretBuild" parent="TerranBuildingBuildSmall">
-        <Model value="AP_PerditionTurretBuild"/>
-    </CActorModel>
+    <CActorModel id="AP_PerditionTurretBuild" parent="TerranBuildingBuildSmall"/>
     <CActorModel id="AP_PerditionTurretImpactModelFlames" parent="ModelAnimationStyleOneShot">
         <Terms value="Cap 1"/>
         <On Terms="Effect.AP_PerditionTurretFlameThrowerDamage.Start; At Target" Send="Create"/>
@@ -5620,6 +5616,88 @@
         <On Terms="UnitDeath.AP_PerditionTurret" Send="Destroy"/>
         <Sound value="AP_PerditionTurret_MorphOpen"/>
     </CActorSound>
+    <CActorUnit id="AP_PsiDisruptor" parent="TerranBuilding" unitName="AP_PsiDisruptor">
+        <Aliases value="_UnitLarge"/>
+        <DeathArray index="Normal" ModelLink="AP_PsiDisruptorDeath" SoundLink="Terran_ExplosionMedium"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="MissileTurret_Explode"/>
+        <PlacementModel value="AP_PsiDisruptorPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PlacementActorModel value="AP_PsiDisruptorPlacementModel"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="125"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-terran-sigmaprojector.dds"/>
+        </GroupIcon>
+        <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-SigmaProjector.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="What" value="AP_PsiDisruptor_What"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Building-Terran-SigmaProjector.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-terran-sigmaprojector.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_PsiDisruptorBuild" parent="TerranBuildingBuildSmall">
+        <Model value="PsiDisruptorBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_PsiDisruptorDebuff" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.AP_PsiDisruptionApplyBehavior.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation; ValidateUnit IsUltralisk" Send="SetScale 0.400000"/>
+        <On Terms="ActorCreation; ValidateUnit IsUltraliskBurrowed" Send="SetScale 0.300000"/>
+        <On Terms="ActorCreation; ValidateUnit IsQueen" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsQueenBurrowed" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsOverseer" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsOverlord" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsBroodLord" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestor" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestorBurrowed" Send="SetScale 0.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHydralisk" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHydraliskBurrowed" Send="SetScale 0.600000"/>
+        <On Terms="ActorCreation; ValidateUnit IsMutalisk" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsCorruptor" Send="SetScale 0.700000"/>
+        <On Terms="ActorCreation; ValidateUnit IsRoach" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsRoachBurrowed" Send="SetScale 0.800000"/>
+        <On Terms="ActorCreation; ValidateUnit IsInfestedTerran" Send="SetScale 0.800000"/>
+        <!-- TODO: These are to be handled in WoL Campaign mod -->
+        <!-- <On Terms="ActorCreation; ValidateUnit IsInfestedTerranCampaign" Send="SetScale 0.800000"/> -->
+        <!-- <On Terms="ActorCreation; ValidateUnit IsInfestedTerranCampaignBurrowed" Send="SetScale 0.800000"/> -->
+        <!-- <On Terms="ActorCreation; ValidateUnit IsInfestedCivilian" Send="SetScale 0.600000"/> -->
+        <!-- <On Terms="ActorCreation; ValidateUnit IsInfestedCivilianBurrowed" Send="SetScale 0.600000"/> -->
+        <Host Subject="_Selectable"/>
+        <AutoScaleFactor value="2.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_PsiDisruptorPlacementModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation; ModelName AP_PsiDisruptorPlacement" Send="Create AP_PsiDisruptorProtectRange"/>
+        <On Terms="ActorCreation; ModelName AP_PsiDisruptor; ModelIsLowQuality" Send="Create AP_PsiDisruptorProtectRange"/>
+        <On Terms="ActorDestruction" Target="AP_PsiDisruptorProtectRange" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+        <Model value="PlacementModel"/>
+    </CActorModel>
+    <CActorRange id="AP_PsiDisruptorProtectRange">
+        <Range value="8.000000"/>
+    </CActorRange>
+    <CActorRange id="AP_PsiDisruptorRange">
+        <On Terms="SelectionLocalUpdate.AP_PsiDisruptor.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_PsiDisruptor.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_PsiDisruptor.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_PsiDisruptor.Stop" Send="Destroy"/>
+        <Range value="8.000000"/>
+    </CActorRange>
     <CActorStateMonitor id="TerranFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
