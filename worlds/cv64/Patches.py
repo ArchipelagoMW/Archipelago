@@ -242,13 +242,16 @@ warp_menu_opener = [
 ]
 
 give_subweapon_stopper = [
-    # Extension to "give subweapon" function to not change the player's weapon if the received item is a Stake or Rose
+    # Extension to "give subweapon" function to not change the player's weapon if the received item is a Stake or Rose.
+    # Can also jump to prev_subweapon_dropper if applicable.
     0x24090011,  # ADDIU T1, R0, 0x0011
-    0x11240004,  # BEQ   T1, A0, [forward 0x04]
+    0x11240006,  # BEQ   T1, A0, [forward 0x06]
     0x24090012,  # ADDIU T1, R0, 0x0012
-    0x11240002,  # BEQ   T1, A0, [forward 0x02]
-    0x00000000,  # NOP
+    0x11240004,  # BEQ   T1, A0, [forward 0x04]
+    0x9465618A,  # LHU   A1, 0x618A (V1)
     0xA46D618A,  # SH    T5, 0x618A (V1)
+    0x0804F0BF,  # J     0x8013C2FC
+    0x00000000,  # NOP
     0x0804F0BF,  # J     0x8013C2FC
 ]
 
@@ -1305,4 +1308,34 @@ chandelier_item_flags_setter = [
     0x01094025,  # OR    T0, T0, T1
     0x0805971E,  # J     0x80165C78
     0xAFA80010   # SW    T0, 0x0010 (SP)
+]
+
+prev_subweapon_dropper = [
+    # When picking up a sub-weapon that's different from the one the player currently has, this will spawn a pickup
+    # actor of the sub-weapon the player had before at their current position like in other CVs. This will enable them
+    # to pick it back up again if they still want it.
+    0x322F3031,  # Sub-weapon drop IDs
+    0x10A00014,  # BEQZ  A1, [forward 0x14]
+    0x3C088040,  # LUI   T0, 0x8040
+    0x01054021,  # ADDU  T0, T0, A1
+    0x9109CFC3,  # LBU   T1, 0xCFC3 (T0)
+    0xA7A90032,  # SH    T1, 0x0032 (SP)
+    0x0C0006B4,  # JAL   0x80001AD0
+    0x2404016C,  # ADDIU A0, R0, 0x016C
+    0x00402025,  # OR    A0, V0, R0
+    0x0C000660,  # JAL   0x80001980
+    0x24050027,  # ADDIU A1, R0, 0x0027
+    0x1040000A,  # BEQZ  V0, [forward 0x0A]
+    0x87A60032,  # LH    A2, 0x0032 (SP)
+    0xA4460038,  # SH    A2, 0x0038 (V0)
+    0x3C088035,  # LUI   T0, 0x8035
+    0x8D0909D0,  # LW    T1, 0x09D0 (T0)
+    0x8D0A09D4,  # LW    T2, 0x09D4 (T0)
+    0x8D0B09D8,  # LW    T3, 0x09D8 (T0)
+    0xAC490064,  # SW    T1, 0x0064 (V0)
+    0xAC4A0068,  # SW    T2, 0x0068 (V0)
+    0xAC4B006C,  # SW    T3, 0x006C (V0)
+    0xAC4A0034,  # SW    T2, 0x0034 (V0)
+    0x0804F0BF,  # J     0x8013C2FC
+    0x24020001   # ADDIU V0, R0, 0x0001
 ]

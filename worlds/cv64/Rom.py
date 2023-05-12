@@ -679,8 +679,12 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     rom.write_int32(0x10CF38, 0x8000FF4D)  # CT final room door slab
     rom.write_int32(0x10CF44, 0x1000FF4D)  # CT Renon slab
     rom.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
+    if multiworld.multi_hit_breakables[player]:
+        rom.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
 
-    rom.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
+    if multiworld.drop_previous_sub_weapon[player]:
+        rom.write_int32(0xBFC18C, 0x080FF3F2)  # J 0x803FCFC8
+        rom.write_int32s(0xBFCFC4, Patches.prev_subweapon_dropper)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():

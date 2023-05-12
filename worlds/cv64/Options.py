@@ -193,6 +193,11 @@ class InvisibleItems(Choice):
     default = 1
 
 
+class DropPreviousSubWeapon(Toggle):
+    """When picking up a sub-weapon, the one you had before will drop behind you, so it can be taken back if desired."""
+    display_name = "Drop Previous Sub-weapon"
+
+
 class DisableTimeRestrictions(Toggle):
     """Disables the time restriction on every event and door that requires the current time to be something specific
      (sun/moon doors, meeting Rosa, and the Villa fountain). The Villa coffin is not affected by this."""
@@ -248,6 +253,7 @@ cv64_options: Dict[str, Option] = {
     "nerf_healing_items": NerfHealingItems,
     "loading_zone_heals": LoadingZoneHeals,
     "invisible_items": InvisibleItems,
+    "drop_previous_sub_weapon": DropPreviousSubWeapon,
     "disable_time_restrictions": DisableTimeRestrictions,
     "skip_waterway_platforms": SkipWaterwayPlatforms,
     "background_music": BackgroundMusic,
