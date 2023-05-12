@@ -2565,6 +2565,72 @@
         <EffectArray value="RemovePrecursor"/>
         <EffectArray value="AP_ReaperPlacementMorph"/>
     </CEffectSet>
+    <CEffectIssueOrder id="AP_PerditionTurretBurrowOrder">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="AP_PerditionTurretBurrow"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="AP_PerditionTurretFlameThrowerCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourcePoint"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireEffect value="AP_RenewBurrowTimer"/>
+        <PeriodCount value="14"/>
+        <PeriodicEffectArray value="AP_PerditionTurretFlameThrowerSearchArea"/>
+        <PeriodicOffsetArray value="0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-0.5,0"/>
+        <PeriodicOffsetArray value="0.5,-1,0"/>
+        <PeriodicOffsetArray value="-0.5,-1,0"/>
+        <PeriodicOffsetArray value="0.5,-1.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-1.5,0"/>
+        <PeriodicOffsetArray value="0.5,-2,0"/>
+        <PeriodicOffsetArray value="-0.5,-2,0"/>
+        <PeriodicOffsetArray value="0.5,-2.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-2.5,0"/>
+        <PeriodicOffsetArray value="0.5,-3,0"/>
+        <PeriodicOffsetArray value="-0.5,-3,0"/>
+        <PeriodicOffsetArray value="0.5,-3.5,0"/>
+        <PeriodicOffsetArray value="-0.5,-3.5,0"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+        <PeriodicPeriodArray value="0.022"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_PerditionTurretFlameThrowerDamage" parent="DU_WEAP_SPLASH">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="4"/>
+        <Amount value="16"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_PerditionTurretFlameThrowerSearchArea" parent="EA_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.6" Effect="AP_PerditionTurretFlameThrowerDamage"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_PerditionTurretFlameThrowerSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_PerditionTurretFlameThrowerCreatePersistent"/>
+        <EffectArray value="AP_PerditionTurretFlameThrowerDamage"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_RenewBurrowTimer">
+        <ValidatorArray index="0" value="RenewTurretTimerTargetFilters"/> <!-- Looks like this validator doesn't exist at all in vanilla -->
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_TurretBurrow"/>
+    </CEffectApplyBehavior>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="Reaper"/>

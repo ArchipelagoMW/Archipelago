@@ -826,4 +826,8 @@
     <CRequirementCountUnit id="AP_CountUnitEngineeringBayCompleteOnlyTechTreeCheat">
         <Count Link="AP_EngineeringBay" State="CompleteOnly"/>
     </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeDistortionSensorsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_DistortionSensors" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

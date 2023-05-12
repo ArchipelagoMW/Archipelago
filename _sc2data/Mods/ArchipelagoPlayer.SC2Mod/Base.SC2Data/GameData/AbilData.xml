@@ -1426,6 +1426,49 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <!-- TODO: Fill with EBay AP Upgrades -->
     </CAbilResearch>
+    <CAbilMorph id="AP_PerditionTurretBurrow">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_PerditionTurretUnderground">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1"/>
+            </SectionArray>
+        </InfoArray>
+        <ValidatorArray value="AP_NotAttacking"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_PerditionTurretUnburrow">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <ActorKey value="BurrowUp"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="MoveBlockers" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_PerditionTurret" CollideRange="0">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="0.6"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="0.6"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="0.6"/>
+            </SectionArray>
+        </InfoArray>
+        <ErrorAlert value=""/>
+        <AutoCastFilters value="Ground,Visible;Self,Player,Ally,Neutral,Hover,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
+        <AutoCastRange value="4"/>
+        <AutoCastCountMin value="1"/>
+    </CAbilMorph>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->

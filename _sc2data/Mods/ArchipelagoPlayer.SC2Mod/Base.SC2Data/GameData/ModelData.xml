@@ -1643,4 +1643,32 @@
             <Payload value="OrbitalCommand_DropPodDeathB"/>
         </Events>
     </CModel>
+    <CModel id="AP_PerditionTurret" parent="Building" Race="Terran">
+        <Model value="Assets\Buildings\Terran\PerditionTurret\PerditionTurret.m3"/>
+        <PlanetPanelCamera value="Star2CameraHigh06"/>
+        <Radius value="1.000000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.250000"/>
+        <ShadowRadius value="1.250000"/>
+        <TechPurchaseCamera value="Star2CameraHigh06"/>
+        <UnitGlossaryCamera value="Star2CameraHigh06"/>
+    </CModel>
+    <CModel id="AP_PerditionTurretAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\FirebatFireSprite\FirebatFireSprite.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.600000,3.500000,0.650000"/>
+        <ScaleMin value="0.600000,3.500000,0.650000"/>
+        <SelectionRadius value="0.833200"/>
+        <ShadowRadius value="0.833200"/>
+    </CModel>
+    <CModel id="AP_PerditionTurretDeath" parent="BuildingDeath" Race="Terran">
+        <Model value="Assets\Buildings\Terran\PerditionTurretDeath\PerditionTurretDeath.m3"/>
+        <LowQualityModel value="TerranBuildingDeathLow"/>
+    </CModel>
+    <CModel id="AP_PerditionTurretPlacement" parent="Placement">
+        <Model value="Assets\Buildings\Terran\PerditionTurretPlacement\PerditionTurretPlacement.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

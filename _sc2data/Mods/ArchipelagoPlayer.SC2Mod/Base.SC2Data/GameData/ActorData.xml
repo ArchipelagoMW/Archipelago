@@ -5540,6 +5540,86 @@
     <CActorSplat id="AP_EngineeringBaySplat" parent="GenericUnitSplat" unitName="AP_EngineeringBay">
         <Model value="EngineeringBaySplat"/>
     </CActorSplat>
+    <CActorUnit id="AP_PerditionTurret" parent="TerranBuilding" unitName="AP_PerditionTurret">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="UnitBirth.AP_PerditionTurretUnderground" Send="Create"/>
+        <On Terms="UnitBirth.AP_PerditionTurretUnderground" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_PerditionTurretUnderground" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_PerditionTurret" Send="AnimGroupRemove Burrow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsBuried" Send="DeathCustomize Burrowed"/>
+        <DeathArray index="Normal" ModelLink="AP_PerditionTurretDeath" SoundLink="PerditionTurret_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="PerditionTurret_Explode"/>
+        <DeathCustoms ModelLink="TerranBuildingDeath" SoundLink="Terran_ExplosionMedium" Name="Burrowed"/>
+        <PlacementModel value="AP_PerditionTurretPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PlacementActorModel value="AP_PerditionTurretPlacementModel"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="75"/>
+        <BarWidth value="85"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-terran-PerditionTurret.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-PerditionTurret.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="What" value="AP_PerditionTurret_What"/>
+        <SoundArray index="Construction" value="AP_Terran_ConstructionWhat"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-PerditionTurret.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-terran-PerditionTurret.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_PerditionTurretAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_PerditionTurretFlameThrowerSet.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_PerditionTurretFlameThrowerDamage.Start; At Target" Send="ActionImpact"/>
+        <On Terms="Effect.AP_PerditionTurretFlameThrowerDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Model="AP_PerditionTurretAttackLaunch" Sound="AP_PerditionTurretAttackLaunch"/>
+        <ImpactMap index="None" Sound="AP_PerditionTurret_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_PerditionTurretBuild" parent="TerranBuildingBuildSmall">
+        <Model value="AP_PerditionTurretBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_PerditionTurretImpactModelFlames" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.AP_PerditionTurretFlameThrowerDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="ImpactModelFlames"/>
+    </CActorModel>
+    <CActorModel id="AP_PerditionTurretPlacementModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation; ModelName AP_PerditionTurretPlacement" Send="Create AP_PerditionTurretProtectRange"/>
+        <On Terms="ActorCreation; ModelName AP_PerditionTurret; ModelIsLowQuality" Send="Create AP_PerditionTurretProtectRange"/>
+        <On Terms="ActorDestruction" Target="AP_PerditionTurretProtectRange" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+        <Model value="PlacementModel"/>
+    </CActorModel>
+    <CActorRange id="AP_PerditionTurretProtectRange" parent="RangeWeapon" weapon="AP_PerditionTurretFlamethrower"/>
+    <CActorTurret id="AP_PerditionTurretTurret">
+        <On Terms="TurretEnable.AP_PerditionTurret" Send="Create"/>
+    </CActorTurret>
+    <CActorSound id="AP_PerditionTurret_MorphCloseSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_PerditionTurretUnderground" Send="Create"/>
+        <On Terms="UnitDeath.AP_PerditionTurret" Send="Destroy"/>
+        <Sound value="AP_PerditionTurret_MorphClose"/>
+    </CActorSound>
+    <CActorSound id="AP_PerditionTurret_MorphOpenSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_PerditionTurret" Send="Create"/>
+        <On Terms="UnitDeath.AP_PerditionTurret" Send="Destroy"/>
+        <Sound value="AP_PerditionTurret_MorphOpen"/>
+    </CActorSound>
     <CActorStateMonitor id="TerranFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->

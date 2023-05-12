@@ -714,4 +714,8 @@
         <CombineArray value="AP_IsTechReactor"/>
         <CombineArray value="IsNotConstructing"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareOrderCount id="AP_NotAttacking">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="attack"/>
+    </CValidatorUnitCompareOrderCount>
 </Catalog>

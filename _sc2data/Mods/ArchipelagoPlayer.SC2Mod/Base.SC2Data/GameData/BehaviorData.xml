@@ -184,7 +184,7 @@
         <Requirements value="AP_DynamicPowerRoutingResearched"/>
         <DisableValidatorArray value="AP_IsCloaked"/>
         <DisableValidatorArray value="NotMoving"/>
-        <DisableValidatorArray value="NotAttacking"/>
+        <DisableValidatorArray value="AP_NotAttacking"/>
         <Modification>
             <VitalRegenArray index="Energy" value="1.4765"/>
         </Modification>
@@ -832,5 +832,36 @@
     <CBehaviorBuff id="AP_StarportTechLab">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DistortionSensors" parent="Detector">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-status-detector.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_DistortionSensorsResearched"/>
+        <Modification Detect="10"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SalvagePerditionTurret">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <DisplayDuration index="Self" value="1"/>
+        <Duration value="5"/>
+        <ExpireEffect value="AP_SalvagePerditionTurret"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
+            <StateFlags index="SuppressRadar" value="1"/>
+            <AbilLinkEnableArray value="AP_SalvagePerditionTurret"/>
+            <AbilLinkEnableArray value="AP_SalvagePerditionTurretRefund"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_TurretBurrow">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Period value="1"/>
+        <PeriodicEffect value="AP_PerditionTurretBurrowOrder"/>
     </CBehaviorBuff>
 </Catalog>

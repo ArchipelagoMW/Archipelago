@@ -1967,4 +1967,53 @@
         <AssetArray File="Assets\Sounds\Terran\Medivac\Medivac_Unload0.wav"/>
         <EditorCategories value="Race:Terran"/>
     </CSound>
+    <CSound id="AP_PerditionTurretAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackLaunch2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackLaunch3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackLaunch4.wav"/>
+        <Flags index="VariationFallback" value="0"/>
+        <DupeDestroyCount value="8"/>
+        <Pitch value="1.640000,3.160000"/>
+        <Volume value="-3.100000,-1.940000"/>
+    </CSound>
+    <CSound id="AP_PerditionTurret_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Hellion\Hellion_AttackImpact4.wav"/>
+        <Flags index="VariationFallback" value="0"/>
+        <Pitch value="1.640000,3.160000"/>
+        <Volume value="-3.100000,-1.940000"/>
+    </CSound>
+    <CSound id="AP_PerditionTurret_MorphClose" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Viking\Viking_MorphToAssault0.wav" Offset="22050,22050"/>
+        <DupeDestroyCount value="4"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="6.000000,6.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_PerditionTurret_MorphOpen" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Viking\Viking_MorphToFighter0.wav" Offset="22050,22050"/>
+        <DupeDestroyCount value="4"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="6.000000,6.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_PerditionTurret_What" parent="Voice">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Raven\Raven_AutoTurretWhat0.wav" FacialGroup=""/>
+        <DupeDestroyCount value="1"/>
+        <DupeMuteCount value="1"/>
+        <Pitch value="-4.000000,-4.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
 </Catalog>

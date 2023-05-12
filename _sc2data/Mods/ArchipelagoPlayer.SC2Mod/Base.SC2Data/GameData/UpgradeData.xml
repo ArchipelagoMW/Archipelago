@@ -806,7 +806,8 @@
     </CUpgrade>
     <CUpgrade id="AP_AdvancedMedicTraining">
         <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train5].Button.Requirements"/> <!-- Train AP_Medic -->
+        <EffectArray Operation="Set" Reference="Abil,AP_BarracksTrain,InfoArray[Train5].Button.Requirements"/>
+        <!-- Train AP_Medic -->
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_OrbitalStrike">
@@ -836,6 +837,10 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_TechReactor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_DistortionSensors">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>

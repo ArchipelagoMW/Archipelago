@@ -709,4 +709,9 @@
         <EditorCategories value="Race:Terran"/>
         <HotkeyAlias value="TechReactorAI"/>
     </CButton>
+    <CButton id="AP_PerditionTurret">
+        <Icon value="Assets\Textures\btn-unit-terran-perditionturret.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-perditionturret.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>
