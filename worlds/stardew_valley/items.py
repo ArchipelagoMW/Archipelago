@@ -352,8 +352,7 @@ def create_arcade_machine_items(item_factory: StardewItemFactory, world_options:
 def create_player_buffs(item_factory: StardewItemFactory, world_options: options.StardewOptions, items: List[Item]):
     number_of_buffs: int = world_options[options.NumberOfPlayerBuffs]
     items.extend(item_factory(item) for item in ["Movement Speed Bonus"] * number_of_buffs)
-    if "Luck Skill" not in world_options[options.Mods]:
-        items.extend(item_factory(item) for item in ["Luck Bonus"] * number_of_buffs)
+    items.extend(item_factory(item) for item in ["Luck Bonus"] * number_of_buffs)
 
 
 def create_traveling_merchant_items(item_factory: StardewItemFactory) -> List[Item]:
