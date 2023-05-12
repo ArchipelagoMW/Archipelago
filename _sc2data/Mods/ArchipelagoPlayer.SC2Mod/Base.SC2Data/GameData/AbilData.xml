@@ -1197,17 +1197,17 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Raise" Requirements="AP_UseAutomatedRefinery"/>
         <Flags index="Automatic" value="1"/>
-        <Flags index="Produce" value="1"/>
         <Flags index="IgnoreUnitCost" value="1"/>
-        <InfoArray Unit="AP_AutomatedRefinery"  CollideRange="0"/>
+        <Flags index="Produce" value="1"/>
+        <InfoArray Unit="AP_AutomatedRefinery" CollideRange="0"/>
     </CAbilMorph>
     <CAbilMorph id="AP_AutomatedRefineryRichMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="Raise" Requirements="AP_UseAutomatedRefinery"/>
         <Flags index="Automatic" value="1"/>
-        <Flags index="Produce" value="1"/>
         <Flags index="IgnoreUnitCost" value="1"/>
-        <InfoArray Unit="AP_AutomatedRefineryRich"  CollideRange="0"/>
+        <Flags index="Produce" value="1"/>
+        <InfoArray Unit="AP_AutomatedRefineryRich" CollideRange="0"/>
     </CAbilMorph>
     <CAbilBuildable id="AP_BuildinProgressNonCancellable">
         <Cancelable value="0"/>
@@ -1422,20 +1422,24 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorphPlacement>
+    <CAbilResearch id="AP_EngineeringBayResearch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <!-- TODO: Fill with EBay AP Upgrades -->
+    </CAbilResearch>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
-        <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="AP_ShowIfHaveVanillaBarrAddOnParent"/>
+        <CmdButtonArray index="Execute" Requirements="AP_ShowIfHaveVanillaBarrAddOnParent"/>
     </CAbilMorph>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
-        <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="AP_ShowIfHaveVanillaFactAddOnParent"/>
+        <CmdButtonArray index="Execute" Requirements="AP_ShowIfHaveVanillaFactAddOnParent"/>
     </CAbilMorph>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
-        <CmdButtonArray index="Execute" DefaultButtonFace="Reactor" Requirements="AP_ShowIfHaveVanillaStarportAddOnParent"/>
+        <CmdButtonArray index="Execute" Requirements="AP_ShowIfHaveVanillaStarportAddOnParent"/>
     </CAbilMorph>
     <CAbilMorph id="BarracksTechLabMorph">
         <!-- Override -->

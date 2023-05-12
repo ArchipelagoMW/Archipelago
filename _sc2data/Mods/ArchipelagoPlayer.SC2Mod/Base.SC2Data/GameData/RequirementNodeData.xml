@@ -823,4 +823,7 @@
         <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
         <OperandArray value="AP_CountUpgradeAdvancedMedicTrainingCompleteOnly"/>
     </CRequirementOr>
+    <CRequirementCountUnit id="AP_CountUnitEngineeringBayCompleteOnlyTechTreeCheat">
+        <Count Link="AP_EngineeringBay" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

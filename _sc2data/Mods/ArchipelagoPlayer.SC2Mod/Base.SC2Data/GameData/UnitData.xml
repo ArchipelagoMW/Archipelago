@@ -5228,5 +5228,66 @@
         <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
         <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
     </CUnit>
-    <!-- In Liberty adaptation mod add Tech Lab Code -->
+    <!-- Tech Reactor Add-on stealing code belongs to Liberty Campaign mod -->
+    <!-- -->
+    <CUnit id="AP_EngineeringBay">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="850"/>
+        <LifeMax value="850"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="125"/>
+        <RepairTime value="35"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5"/>
+        <AbilArray Link="AP_EngineeringBayResearch"/>
+        <BehaviorArray Link="TerranBuildingBurnDown"/>
+        <BehaviorArray Link="FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress,Halt" Row="2" Column="3"/>
+            <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+        </CardLayouts>
+        <!-- TODO: Research upgrade buttons -->
+        <Radius value="1.25"/>
+        <SeparationRadius value="1.25"/>
+        <Footprint value="Footprint3x3Contour"/>
+        <PlacementFootprint value="Footprint3x3"/>
+        <ScoreMake value="125"/>
+        <ScoreKill value="125"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <GlossaryPriority value="20"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
 </Catalog>

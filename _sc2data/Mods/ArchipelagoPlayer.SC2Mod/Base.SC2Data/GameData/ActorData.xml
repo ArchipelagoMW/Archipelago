@@ -5167,7 +5167,7 @@
     </CActorModel>
     <CActorSound id="AP_BarracksLand" parent="SoundOneShot">
         <On Terms="AbilMorph.*.Start; MorphTo AP_Barracks" Send="Create"/>
-        <Sound value="BarracksLand" />
+        <Sound value="BarracksLand"/>
     </CActorSound>
     <CActorSplat id="AP_BarracksSplat" parent="TerranBuildingMorphSplat" unitName="AP_Barracks">
         <Model value="BarracksSplat"/>
@@ -5281,7 +5281,7 @@
         <PlacementModel value="AP_TechReactorPlacement"/>
         <PlacementSound value="Terran_BuildingPlacement"/>
         <PortraitModel value="AdjutantPortrait"/>
-        <AddonIndicator value="Actor/AddonIndicator/TechReactor"/>
+        <AddonIndicator value="Actor/AddonIndicator/AP_TechReactor"/>
         <BarOffset value="80"/>
         <BarWidth value="70"/>
         <GroupIcon>
@@ -5313,7 +5313,6 @@
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
         </Wireframe>
-        <AddonIndicator value="Actor/AddonIndicator/AP_TechReactor"/>
     </CActorUnit>
     <CActorModel id="AP_FactoryTechReactorBuild" parent="TerranBuildingBuildSmall">
         <Model value="AP_TechReactorBuild"/>
@@ -5354,7 +5353,7 @@
         <PlacementModel value="TechReactorPlacement"/>
         <PlacementSound value="Terran_BuildingPlacement"/>
         <PortraitModel value="AdjutantPortrait"/>
-        <AddonIndicator value="Actor/AddonIndicator/TechReactor"/>
+        <AddonIndicator value="Actor/AddonIndicator/AP_TechReactor"/>
         <BarOffset value="80"/>
         <BarWidth value="70"/>
         <GroupIcon>
@@ -5386,7 +5385,6 @@
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
         </Wireframe>
-        <AddonIndicator value="Actor/AddonIndicator/AP_TechReactor"/>
     </CActorUnit>
     <CActorModel id="AP_StarportTechReactorBuild" parent="TerranBuildingBuildSmall">
         <Model value="AP_TechReactorBuild"/>
@@ -5426,7 +5424,6 @@
         <GroupSoundArray index="Attack" value="TechLabGroupAttack"/>
         <GroupSoundArray index="Board" value="TechLabGroupBoard"/>
         <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
-        <HighlightTooltip value="Unit/Name/AP_TechReactor"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
         <SoundArray index="Birth" value="TechLab_Birth"/>
         <SoundArray index="Ready" value="TechLab_Ready"/>
@@ -5447,9 +5444,7 @@
             <Image value="AP\Assets\Textures\Wireframe-Terran-TechReactor.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorModel id="AP_TechReactorBuild" parent="TerranBuildingBuildSmall">
-        <Model value="AP_TechReactorBuild"/>
-    </CActorModel>
+    <CActorModel id="AP_TechReactorBuild" parent="TerranBuildingBuildSmall"/>
     <CActorUnit id="AP_Reactor" parent="AP_ReactorBase" unitName="AP_Reactor">
         <Model value="Reactor"/>
     </CActorUnit>
@@ -5517,6 +5512,34 @@
         <On Terms="Effect.AP_DropTrain.Stop" Send="Create"/>
         <On Terms="Effect.AP_DropTrainReaper.Stop" Send="Create"/>
     </CActorSound>
+    <CActorUnit id="AP_EngineeringBay" parent="TerranBuildingEx" unitName="AP_EngineeringBay">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="QueueAnim"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationEngineeringBay"/>
+        <Model value="EngineeringBay"/>
+        <CreepHeightClass value="Medium"/>
+        <BuildModel value="EngineeringBay"/>
+        <DeathArray index="Normal" ModelLink="EngineeringBayDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="EngineeringBay_Explode"/>
+        <PlacementModel value="EngineeringBayPlacement"/>
+        <PortraitModel value="EngineeringBayPortrait"/>
+        <BarOffset value="110"/>
+        <BarWidth value="135"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-EngineeringBay.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-engineeringbay.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="EngineeringBay_Ready"/>
+        <SoundArray index="What" value="EngineeringBay_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-engineeringbay.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-EngineeringBay.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSplat id="AP_EngineeringBaySplat" parent="GenericUnitSplat" unitName="AP_EngineeringBay">
+        <Model value="EngineeringBaySplat"/>
+    </CActorSplat>
     <CActorStateMonitor id="TerranFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
