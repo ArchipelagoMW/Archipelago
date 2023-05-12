@@ -270,8 +270,13 @@ class StardewValleyWorld(World):
             key, value = self.modified_bundles[bundle_key].to_pair()
             modified_bundles[key] = value
 
+        instance_mod_versions = {}
+        for mod in mod_versions:
+            if mod in self.options[options.Mods]:
+                instance_mod_versions[mod] = mod_versions.get(mod)
+
         excluded_options = [options.BundleRandomization, options.BundlePrice,
-                            options.NumberOfPlayerBuffs]
+                            options.NumberOfPlayerBuffs, options.Mods]
         slot_data = dict(self.options.options)
         for option in excluded_options:
             slot_data.pop(option.internal_name)
@@ -280,7 +285,7 @@ class StardewValleyWorld(World):
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": modified_bundles,
             "client_version": "4.0.0",
-            "mod_versions": mod_versions
+            "mod_versions": instance_mod_versions
         })
 
         return slot_data
