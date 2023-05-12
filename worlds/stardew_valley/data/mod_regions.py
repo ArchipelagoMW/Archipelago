@@ -13,27 +13,27 @@ from typing import List, Dict
 deep_woods_regions = {
     SVRegion.farm: [DeepWoodsEntrance.use_woods_obelisk],
     SVRegion.secret_woods: [DeepWoodsEntrance.secret_woods_to_deep_woods],
-    DeepWoodsRegion.entrance_to_deep_woods: [DeepWoodsEntrance.deep_woods_house,
-                                             DeepWoodsEntrance.deep_woods_depth_10],
-    DeepWoodsRegion.abandoned_home_in_deep_woods: [],
-    DeepWoodsRegion.deep_woods_floor_10: [DeepWoodsEntrance.deep_woods_depth_30],
-    DeepWoodsRegion.deep_woods_floor_30: [DeepWoodsEntrance.deep_woods_depth_50],
-    DeepWoodsRegion.deep_woods_floor_50: [DeepWoodsEntrance.deep_woods_depth_70],
-    DeepWoodsRegion.deep_woods_floor_70: [DeepWoodsEntrance.deep_woods_depth_90],
-    DeepWoodsRegion.deep_woods_floor_90: [DeepWoodsEntrance.deep_woods_depth_100],
-    DeepWoodsRegion.deep_woods_floor_100: []
+    DeepWoodsRegion.main_lichtung: [DeepWoodsEntrance.deep_woods_house,
+                                    DeepWoodsEntrance.deep_woods_depth_10],
+    DeepWoodsRegion.abandoned_home: [],
+    DeepWoodsRegion.floor_10: [DeepWoodsEntrance.deep_woods_depth_30],
+    DeepWoodsRegion.floor_30: [DeepWoodsEntrance.deep_woods_depth_50],
+    DeepWoodsRegion.floor_50: [DeepWoodsEntrance.deep_woods_depth_70],
+    DeepWoodsRegion.floor_70: [DeepWoodsEntrance.deep_woods_depth_90],
+    DeepWoodsRegion.floor_90: [DeepWoodsEntrance.deep_woods_depth_100],
+    DeepWoodsRegion.floor_100: []
 }
 
 mandatory_deep_woods_entrances = {
-    DeepWoodsEntrance.use_woods_obelisk: DeepWoodsRegion.entrance_to_deep_woods,
-    DeepWoodsEntrance.secret_woods_to_deep_woods: DeepWoodsRegion.entrance_to_deep_woods,
-    DeepWoodsEntrance.deep_woods_house: DeepWoodsRegion.abandoned_home_in_deep_woods,
-    DeepWoodsEntrance.deep_woods_depth_10: DeepWoodsRegion.deep_woods_floor_10,
-    DeepWoodsEntrance.deep_woods_depth_30: DeepWoodsRegion.deep_woods_floor_30,
-    DeepWoodsEntrance.deep_woods_depth_50: DeepWoodsRegion.deep_woods_floor_50,
-    DeepWoodsEntrance.deep_woods_depth_70: DeepWoodsRegion.deep_woods_floor_70,
-    DeepWoodsEntrance.deep_woods_depth_90: DeepWoodsRegion.deep_woods_floor_90,
-    DeepWoodsEntrance.deep_woods_depth_100: DeepWoodsRegion.deep_woods_floor_100
+    DeepWoodsEntrance.use_woods_obelisk: DeepWoodsRegion.main_lichtung,
+    DeepWoodsEntrance.secret_woods_to_deep_woods: DeepWoodsRegion.main_lichtung,
+    DeepWoodsEntrance.deep_woods_house: DeepWoodsRegion.abandoned_home,
+    DeepWoodsEntrance.deep_woods_depth_10: DeepWoodsRegion.floor_10,
+    DeepWoodsEntrance.deep_woods_depth_30: DeepWoodsRegion.floor_30,
+    DeepWoodsEntrance.deep_woods_depth_50: DeepWoodsRegion.floor_50,
+    DeepWoodsEntrance.deep_woods_depth_70: DeepWoodsRegion.floor_70,
+    DeepWoodsEntrance.deep_woods_depth_90: DeepWoodsRegion.floor_90,
+    DeepWoodsEntrance.deep_woods_depth_100: DeepWoodsRegion.floor_100
 }
 
 deep_woods_flags = {
@@ -74,7 +74,7 @@ jasper_entrances = {
 }
 
 jasper_flags = {
-    JasperEntrance.museum_to_bedroom: "PELICAN_TOWN"
+    JasperEntrance.museum_to_bedroom: "NON_PROGRESSION"
 }
 
 alec_regions = {

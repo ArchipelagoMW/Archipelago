@@ -19,7 +19,7 @@ class StardewOptions:
 
         return self.options.get(item, None)
 
-    def __setitem__(self, key: Union[str, StardewOption], value: Union[bool, int]):
+    def __setitem__(self, key: Union[str, StardewOption], value: Union[bool, int, str]):
         if isinstance(key, StardewOption):
             key = key.internal_name
         self.options[key] = value

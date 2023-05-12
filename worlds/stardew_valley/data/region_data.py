@@ -121,14 +121,14 @@ class SVRegion:
 
 
 class DeepWoodsRegion:
-    entrance_to_deep_woods = "Entrance to the Deep Woods"
-    abandoned_home_in_deep_woods = "Abandoned Home in Deep Woods"
-    deep_woods_floor_10 = "The Deep Woods Depth 10"
-    deep_woods_floor_30 = "The Deep Woods Depth 30"
-    deep_woods_floor_50 = "The Deep Woods Depth 50"
-    deep_woods_floor_70 = "The Deep Woods Depth 70"
-    deep_woods_floor_90 = "The Deep Woods Depth 90"
-    deep_woods_floor_100 = "The Deep Woods Depth 100"
+    main_lichtung = "Entrance to the Deep Woods"
+    abandoned_home = "Abandoned Home in Deep Woods"
+    floor_10 = "The Deep Woods Depth 10"
+    floor_30 = "The Deep Woods Depth 30"
+    floor_50 = "The Deep Woods Depth 50"
+    floor_70 = "The Deep Woods Depth 70"
+    floor_90 = "The Deep Woods Depth 90"
+    floor_100 = "The Deep Woods Depth 100"
 
 
 class EugeneRegion:
