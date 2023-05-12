@@ -4898,7 +4898,6 @@
         <On Terms="UnitDeathCustomize; ValidateUnit NoVespene" Send="DeathCustomize Empty"/>
         <On Terms="UnitBirth.AP_Refinery" Send="TimerSet 0.100000 HideGeyser"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_Refinery" Send="Destroy"/>
-        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Refinery" Send="Destroy"/>
         <Model value="Refinery"/>
         <CreepHeightClass value="Medium"/>
         <BuildModel value="Refinery"/>

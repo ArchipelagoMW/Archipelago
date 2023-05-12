@@ -3885,6 +3885,7 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
         <AbilArray Link="AP_RefineryToAutomatedRefinery"/>
+        <AbilArray Link="AP_AutomatedRefineryMorph"/>
         <BehaviorArray Link="AP_HarvestableVespeneGeyserGas"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
         <BehaviorArray Link="AP_RefineryMorph"/>
@@ -3958,6 +3959,7 @@
         <RepairTime value="30"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_AutomatedRefineryRichMorph"/>
         <BehaviorArray Link="AP_HarvestableRichVespeneGeyserGas"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
         <EffectArray index="Create" value="AP_RefineryRichSearch"/>

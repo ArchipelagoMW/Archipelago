@@ -819,10 +819,6 @@
     <CRequirementNot id="AP_NotCountUpgradeTechReactorCompleteOnly">
         <OperandArray index="0" value="AP_CountUpgradeTechReactorCompleteOnly"/>
     </CRequirementNot>
-    <CRequirementCountUpgrade id="AP_CountUpgradeTechReactorCompleteOnly">
-        <Count Link="AP_TechReactor" State="CompleteOnly"/>
-        <Flags index="TechTreeCheat" value="0"/>
-    </CRequirementCountUpgrade>
     <CRequirementOr id="AP_OrCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUpgradeAdvancedMedicTrainingCompleteOnly">
         <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
         <OperandArray value="AP_CountUpgradeAdvancedMedicTrainingCompleteOnly"/>

@@ -1193,6 +1193,22 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="Raise"/>
         <InfoArray Unit="AP_AutomatedRefinery" CollideRange="0"/>
     </CAbilMorph>
+    <CAbilMorph id="AP_AutomatedRefineryMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise" Requirements="AP_UseAutomatedRefinery"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <InfoArray Unit="AP_AutomatedRefinery"  CollideRange="0"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_AutomatedRefineryRichMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise" Requirements="AP_UseAutomatedRefinery"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <InfoArray Unit="AP_AutomatedRefineryRich"  CollideRange="0"/>
+    </CAbilMorph>
     <CAbilBuildable id="AP_BuildinProgressNonCancellable">
         <Cancelable value="0"/>
     </CAbilBuildable>
