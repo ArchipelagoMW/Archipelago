@@ -236,7 +236,7 @@ class StardewLogic:
             "Iron Bar": self.can_smelt("Iron Ore"),
             "Iron Ore": self.can_mine_in_the_mines_floor_41_80() | self.can_mine_in_the_skull_cavern(),
             "Jelly": self.has("Preserves Jar"),
-            "Joja Cola": self.can_reach_region(SVRegion.jojamart) & self.can_spend_money(25),
+            "Joja Cola": self.can_reach_region(SVRegion.saloon) & self.can_spend_money(75),
             "JotPK Small Buff": self.has_jotpk_power_level(2),
             "JotPK Medium Buff": self.has_jotpk_power_level(4),
             "JotPK Big Buff": self.has_jotpk_power_level(7),
