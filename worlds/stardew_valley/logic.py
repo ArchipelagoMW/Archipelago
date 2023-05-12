@@ -10,6 +10,7 @@ from .data.fish_data import island_fish
 from .data.museum_data import all_museum_items, MuseumItem, all_artifact_items
 from .data.region_data import SVRegion
 from .data.villagers_data import all_villagers_by_name
+from .data.mod_data import ModNames
 from .data.mod_logic import can_earn_mod_skill_level, append_mod_skill_level
 from .items import all_items, Group
 from .options import StardewOptions
@@ -253,6 +254,8 @@ class StardewLogic:
             "Large Goat Milk": self.has("Goat"),
             "Large Milk": self.has_animal("Cow"),
             "Leek": self.has_season("Spring"),
+            "Life Elixir": self.has_skill_level("Combat", 2) & self.has("Red Mushroom") & self.has("Purple Mushroom")
+                           & self.has("Morel") & self.has("Chanterelle"),
             "Lightning Rod": self.has_skill_level("Foraging", 6),
             "Lobster": self.can_crab_pot(),
             "Loom": self.has_skill_level("Farming", 7) & self.has("Pine Tar"),
@@ -577,7 +580,7 @@ class StardewLogic:
         })
 
         # Mod Building List (For now smh)
-        if "Tractor Mod" in self.options[options.Mods]:
+        if ModNames.tractor in self.options[options.Mods]:
             self.building_rules.update({
                 "Tractor Garage": self.can_spend_money(150000) & self.has("Iron Bar") &
                                   self.has("Iridium Bar") & self.has("Battery Pack")})

@@ -5,7 +5,7 @@ from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from . import options, locations
 from .bundles import Bundle
-from .data.entrance_data import dig_to_mines_floor, SVEntrance, move_to_woods_depth, DeepWoodsEntrance
+from .data.entrance_data import dig_to_mines_floor, SVEntrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance
 from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_items, \
     dwarf_scrolls, skeleton_front, \
     skeleton_middle, skeleton_back, all_museum_items_by_name
@@ -20,7 +20,7 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
               current_bundles: Dict[str, Bundle]):
     all_location_names = list(location.name for location in multi_world.get_locations(player))
 
-    set_entrance_rules(logic, multi_world, player)
+    set_entrance_rules(logic, multi_world, player, world_options)
 
     set_ginger_island_rules(logic, multi_world, player, world_options)
 
@@ -128,7 +128,8 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     set_arcade_machine_rules(logic, multi_world, player, world_options)
     set_deepwoods_rules(logic, multi_world, player, world_options)
 
-def set_entrance_rules(logic, multi_world, player):
+
+def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions):
     for floor in range(5, 120 + 5, 5):
         MultiWorldRules.set_rule(multi_world.get_entrance(dig_to_mines_floor(floor), player),
                                  logic.can_mine_to_floor(floor).simplify())
@@ -180,6 +181,9 @@ def set_entrance_rules(logic, multi_world, player):
                              logic.has_relationship("Caroline", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_wizard_basement, player),
                              logic.has_relationship("Wizard", 4))
+    if ModNames.alec in world_options[options.Mods]:
+        MultiWorldRules.set_rule(multi_world.get_entrance(AlecEntrance.petshop_to_bedroom, player),
+                                 logic.has_relationship("Alec", 2))
 
 
 def set_ginger_island_rules(logic: StardewLogic, multi_world, player, world_options: StardewOptions):
@@ -270,16 +274,14 @@ def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
 
 def set_story_quests_rules(all_location_names: List[str], logic, multi_world, player, world_options: StardewOptions):
     for quest in locations.locations_by_tag[LocationTags.QUEST]:
-        if quest.mod_name is None:
-            if quest.name in all_location_names:
+        if quest.mod_name is None and quest.name in all_location_names:
+            MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
+                                     logic.quest_rules[quest.name].simplify())
+        # Mods: Additional Story Quests
+        for mod in world_options[options.Mods]:
+            if quest.mod_name == mod and quest.name in all_location_names:
                 MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
                                          logic.quest_rules[quest.name].simplify())
-    # Mods: Additional Story Quests
-        for mod in world_options[options.Mods]:
-            if quest.mod_name == mod:
-                if quest.name in all_location_names:
-                    MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
-                                             logic.quest_rules[quest.name].simplify())
 
 
 def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, world_options: StardewOptions):
