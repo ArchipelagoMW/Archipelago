@@ -513,4 +513,53 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountUnitEngineeringBayCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_BunkerAttack">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeShrikeTurretCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_CampaignNeoSteelFramePurchased">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeNeoSteelFrameCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_FortifiedCarapace">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeFortifiedBunkerCarapaceCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HideFortifiedBunker">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="CountUnitAlias_BarracksCompleteOnly789532539TechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeFortifiedBunkerCarapaceCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_JumboBunkerNotResearched">
+        <EditorCategories value="Race:Terran"/>
+        <NodeArray index="Use" Link="AP_NotCountUpgradeFortifiedBunkerCarapaceCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_JumboBunkerResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeFortifiedBunkerCarapaceCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_NotFortifiedCarapace">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_NotCountUpgradeFortifiedBunkerCarapaceCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_ShrikeTurretNotResearched">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_NotCountUpgradeShrikeTurretCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_ShrikeTurretResearched">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeShrikeTurretCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseFortifiedBunker">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="CountUnitAlias_BarracksCompleteOnly789532539TechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeFortifiedBunkerCarapaceCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseNeoSteelFrame">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNeoSteelFrameCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseProjectileAccelerators">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeProjectileAcceleratorsCompleteOnly"/>
+    </CRequirement>
 </Catalog>

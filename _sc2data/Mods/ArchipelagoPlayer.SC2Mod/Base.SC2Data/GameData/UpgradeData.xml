@@ -848,4 +848,64 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_FortifiedBunkerCarapace">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Bunker,LifeMax" Value="150"/>
+        <EffectArray Reference="Unit,AP_Bunker,LifeStart" Value="150"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Bunker,UnitIcon" Value="Assets\Textures\btn-building-terran-bunkerneosteel.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Bunker,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-bunker-neosteelframe.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Bunker,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-bunker-neosteelframe.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Bunker"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NeoSteelAndShrikeTurretIconUpgrade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Actor,Bunker,UnitIcon" Value="Assets\Textures\BTN-Building-Terran-BunkerNeosteelShrikeTurret.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Bunker"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NeoSteelFrame">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="21"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-neosteelframe.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Abil,AP_BunkerTransport,MaxCargoCount" Value="2"/>
+        <EffectArray Reference="Abil,AP_BunkerTransport,TotalCargoSpace" Value="2"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Bunker"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NeosteelFrame">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="21"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-neosteelframe.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Abil,AP_BunkerTransport,MaxCargoCount" Value="2"/>
+        <EffectArray Reference="Abil,AP_BunkerTransport,TotalCargoSpace" Value="2"/>
+        <EffectArray Reference="Abil,AP_CommandCenterTransport,MaxCargoCount" Value="5"/>
+        <EffectArray Reference="Abil,AP_CommandCenterTransport,TotalCargoSpace" Value="5"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Bunker,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-bunker-neosteelframe.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Bunker,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-bunker-neosteelframe.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Bunker"/>
+        <AffectedUnitArray value="AP_CommandCenter"/>
+        <AffectedUnitArray value="AP_CommandCenterFlying"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ProjectileAccelerators">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ShrikeTurret">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ShrikeTurret,Options[0]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ShrikeTurret,Options[1]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Bunker,UnitIcon" Value="Assets\Textures\BTN-Building-Terran-BunkerShrikeTurret.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

@@ -5631,7 +5631,6 @@
         </GroupIcon>
         <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-SigmaProjector.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
-        <SoundArray index="What" value="AP_PsiDisruptor_What"/>
         <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
         <UnitFlags index="ShowBlobShadow" value="0"/>
         <UnitIcon value="AP\Assets\Textures\BTN-Building-Terran-SigmaProjector.dds"/>
@@ -5698,6 +5697,183 @@
         <On Terms="SelectionLocalUpdate.AP_PsiDisruptor.Stop" Send="Destroy"/>
         <Range value="8.000000"/>
     </CActorRange>
+    <CActorEventMacro id="AP_BunkerTransportAnim">
+        <On Terms="Abil.AP_BunkerTransport.TransportOccupy" Send="AnimGroupApply Work Work,Start Work,End"/>
+        <On Terms="Abil.AP_BunkerTransport.TransportEmpty" Send="AnimGroupRemove Work"/>
+    </CActorEventMacro>
+    <CActorUnit id="AP_Bunker" parent="TerranBuildingEx" unitName="AP_Bunker">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="AP_BunkerTransportAnim"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit BunkerIsEmpty" Send="DeathCustomize Empty"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NeosteelFramePurchasedNoConstruction" Send="DeathCustomize Upgrade"/>
+        <On Terms="Upgrade.AP_NeosteelFrame.Add; ValidateUnit HasCargo" Send="AnimGroupApply Stand,Work Stand,Work,Start Stand,Work,End"/>
+        <On Terms="UnitBirth.AP_Bunker; ValidateUnit AP_NeosteelFramePurchased" Send="ModelSwap BunkerUpgrade"/>
+        <On Terms="Upgrade.AP_NeosteelFrame.Add; ValidateUnit NotDeadOrConstruction" Send="ModelSwap BunkerUpgrade"/>
+        <On Terms="UnitBirth.AP_Bunker" Send="StatusSet BunkerBuilt 1"/>
+        <On Terms="Behavior.AP_ShrikeTurret.On" Send="StatusSet ShrikeTurret 1"/>
+        <On Terms="Behavior.AP_ShrikeTurret.On" Send="Create AP_ShrikeTurret"/>
+        <On Terms="Behavior.AP_ShrikeTurret.On; IsStatus BunkerBuilt 0" Send="Create AP_ShrikeTurretPlaceholder"/>
+        <On Terms="Behavior.AP_ShrikeTurret.On; IsStatus BunkerBuilt 0" Target="AP_ShrikeTurret" Send="Signal TurretHide"/>
+        <On Terms="UnitDeathCustomize; IsStatus ShrikeTurret 1" Target="AP_ShrikeTurret" Send="Signal TurretDeath"/>
+        <On Terms="UnitDeathCustomize; IsStatus ShrikeTurret 1" Target="AP_ShrikeTurretPlaceholder" Send="Signal TurretDeath"/>
+        <On Terms="UnitBirth.AP_Bunker" Target="AP_ShrikeTurretPlaceholder" Send="Destroy"/>
+        <On Terms="UnitBirth.AP_Bunker" Target="AP_ShrikeTurret" Send="Signal TurretShow"/>
+        <On Terms="Upgrade.AP_TerranBuildingArmor.Add; ValidateUnit HasCargo" Send="AnimGroupApply Stand,Work Stand,Work,Start Stand,Work,End"/>
+        <On Terms="Upgrade.AP_TerranBuildingArmor.Add; ValidateUnit NotDeadOrConstruction" Send="ModelSwap BunkerUpgrade"/>
+        <On Terms="UnitBirth.AP_Bunker" Send="StatusSet BunkerBuilt 1"/>
+        <On Terms="Behavior.AP_ShrikeTurret.On" Send="StatusSet ShrikeTurret 1"/>
+        <On Terms="Behavior.AP_ShrikeTurret.On" Send="Create AP_ShrikeTurret"/>
+        <On Terms="Behavior.AP_ShrikeTurret.On; IsStatus BunkerBuilt 0" Send="Create AP_ShrikeTurretPlaceholder"/>
+        <On Terms="Behavior.AP_ShrikeTurret.On; IsStatus BunkerBuilt 0" Target="AP_ShrikeTurret" Send="Signal TurretHide"/>
+        <On Terms="UnitDeathCustomize; IsStatus ShrikeTurret 1" Target="AP_ShrikeTurret" Send="Signal TurretDeath"/>
+        <On Terms="UnitDeathCustomize; IsStatus ShrikeTurret 1" Target="AP_ShrikeTurretPlaceholder" Send="Signal TurretDeath"/>
+        <On Terms="UnitBirth.AP_Bunker" Target="AP_ShrikeTurretPlaceholder" Send="Destroy"/>
+        <On Terms="UnitBirth.AP_Bunker" Target="AP_ShrikeTurret" Send="Signal TurretShow"/>
+        <On Terms="UnitBirth.AP_Bunker" Send="StatusSet BunkerBuilt 1"/>
+        <On Terms="Upgrade.AP_FortifiedBunkerCarapace.Add; ValidateUnit NotDeadOrConstruction" Send="ModelSwap AP_JumboBunker"/>
+        <On Terms="UnitBirth.AP_Bunker; ValidatePlayer AP_FortifiedNoShrike" Send="ModelSwap AP_JumboBunker"/>
+        <Model value="Bunker"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="Bunker"/>
+        <DeathArray index="Normal" ModelLink="BunkerDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Bunker_Explode"/>
+        <DeathCustoms ModelLink="BunkerUpgradeDeath" Name="Upgrade"/>
+        <DeathCustoms ModelLink="BunkerDeathEmpty" Name="Empty"/>
+        <PlacementModel value="BunkerPlacement"/>
+        <PlacementActorModel value="AP_BunkerPlacementModelCampaign"/>
+        <PlaceholderActorModel value="AP_BunkerPlaceholderModelCampaign"/>
+        <PortraitModel value="BunkerPortrait"/>
+        <BarOffset value="80"/>
+        <BarWidth value="85"/>
+        <GlossaryAnim value="Stand,Work"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <NameOffset value="70"/>
+        <SoundArray index="Ready" value="Bunker_Ready"/>
+        <SoundArray index="What" value="Bunker_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Bunker.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Bunker.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_BunkerBuild" parent="TerranBuildingBuild">
+        <Model value="BunkerBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_BunkerPlaceholderModelCampaign">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_FortifiedNoShrike; ModelIsLowQuality" Send="ModelSwap AP_JumboBunker"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_FortifiedNoShrike; !ModelIsLowQuality" Send="ModelSwap BunkerUpgradePlacement"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_FortifiedAndShrike; ModelIsLowQuality" Send="ModelSwap AP_JumboBunker"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_FortifiedAndShrike; !ModelIsLowQuality" Send="ModelSwap AP_BunkerShrikeUpgradePlacement"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_ShrikeNoFortified; !ModelIsLowQuality" Send="ModelSwap AP_BunkerShrikePlacement"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+        <Model value="PlacementModel"/>
+    </CActorModel>
+    <CActorModel id="AP_BunkerPlacementModelCampaign">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_FortifiedNoShrike; ModelIsLowQuality" Send="ModelSwap AP_JumboBunker"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_FortifiedNoShrike; !ModelIsLowQuality" Send="ModelSwap BunkerUpgradePlacement"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_FortifiedAndShrike; ModelIsLowQuality" Send="ModelSwap AP_JumboBunker"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_FortifiedAndShrike; !ModelIsLowQuality" Send="ModelSwap AP_BunkerShrikeUpgradePlacement"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_ShrikeNoFortified; !ModelIsLowQuality" Send="ModelSwap AP_BunkerShrikePlacement"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+        <Model value="PlacementModel"/>
+    </CActorModel>
+    <CActorTurret id="AP_BunkerShrikeTurret">
+        <On Terms="TurretEnable.AP_ShrikeTurret" Send="Create"/>
+    </CActorTurret>
+    <CActorSplat id="AP_BunkerSplat" parent="GenericUnitSplat" unitName="AP_Bunker">
+        <Model value="BunkerSplat"/>
+    </CActorSplat>
+    <CActorEventMacro id="AP_BunkerTransportAnim">
+        <On Terms="Abil.AP_BunkerTransport.TransportOccupy" Send="AnimGroupApply Work Work,Start Work,End"/>
+        <On Terms="Abil.AP_BunkerTransport.TransportEmpty" Send="AnimGroupRemove Work"/>
+    </CActorEventMacro>
+    <CActorUnit id="AP_PreviewBunkerUpgraded" parent="GenericUnitMinimal" unitName="AP_PreviewBunkerUpgraded">
+        <Model value="BunkerUpgrade"/>
+        <HighlightTooltip value="Unit/Name/AP_PreviewBunkerUpgraded"/>
+    </CActorUnit>
+    <CActorUnit id="AP_ReinforcedBunker" parent="GenericUnitStandard" unitName="AP_ReinforcedBunker">
+        <Macros value="BunkerTransportAnim"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <DeathArray index="Normal" ModelLink="BunkerDeath" SoundLink="BunkerDeath"/>
+        <HighlightTooltip value="Unit/Name/AP_ReinforcedBunker"/>
+    </CActorUnit>
+    <CActorModel id="AP_ShrikeTurret">
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="LocalTintColor" value="1"/>
+        <Inherits index="Opacity" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Signal.*.TurretDeath" Send="ModelSwap AP_ShrikeTurretDeath"/>
+        <On Terms="Signal.*.TurretDeath" Send="$Death"/>
+        <On Terms="Signal.*.TurretHide" Send="SetVisibility"/>
+        <On Terms="Signal.*.TurretShow" Send="SetVisibility 1"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <!-- Needs to point to ::Main instead of _Unit b/c it can end up in a snapshot. -->
+        <Host Subject="::Main"/>
+        <HostSiteOps Ops="SOpAttachTurret"/>
+    </CActorModel>
+    <CActorSiteOpRotationExplicit id="AP_ShrikeTurretPlaceholderFacing">
+        <Forward value="1.000000,1.000000,0.000000"/>
+    </CActorSiteOpRotationExplicit>
+    <CActorModel id="AP_ShrikeTurretPlaceholder">
+        <Model value="AP_ShrikeTurret"/>
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="LocalTintColor" value="1"/>
+        <Inherits index="Opacity" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Signal.*.TurretDeath" Send="ModelSwap AP_ShrikeTurretDeath"/>
+        <On Terms="Signal.*.TurretDeath" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <!-- Needs to point to ::Main instead of _Unit b/c it can end up in a snapshot. -->
+        <Host Subject="::Main"/>
+        <HostSiteOps Ops="SOpAttachTurret AP_ShrikeTurretPlaceholderFacing"/>
+    </CActorModel>
+    <CActorModel id="AP_ShrikeTurretAttackLaunch" parent="ModelAnimationStyleOneShot">
+        <Host Subject="AP_ShrikeTurret" ReachAcrossEffectTrees="1"/>
+        <HostSiteOps Ops="SOpAttachRollingWeaponStripe"/>
+        <Flags index="SuppressCreationErrors" value="1"/>
+    </CActorModel>
+    <CActorAction id="AP_ShrikeTurretAttack" parent="GenericAttack" effectAttack="AP_ShrikeTurretDamage">
+        <On Terms="ActorCreation" Send="Create AP_ShrikeTurretAttackLaunch"/>
+        <LaunchAssets Model="" Sound="AP_Bunker_ShrikeTurretAttackLaunch"/>
+        <ImpactMap index="None" Model="AP_ShrikeTurretAttackImpact" Sound="AP_Bunker_ShrikeTurretAttackImpact"/>
+    </CActorAction>
     <CActorStateMonitor id="TerranFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->

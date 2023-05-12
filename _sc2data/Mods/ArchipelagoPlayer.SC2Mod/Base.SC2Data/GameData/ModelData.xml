@@ -1714,4 +1714,54 @@
         <LowQualityModel value="AP_PsiDisruptor"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_BunkerShrikePlacement" parent="Placement">
+        <Model value="Assets\Buildings\Terran\BunkerShrikePlacement\BunkerShrikePlacement.m3"/>
+        <LowQualityModel value="Bunker"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value="Bunker"/>
+        <Radius value="-1.000000"/>
+        <SelectionRadius value="0.000000"/>
+        <ShadowRadius value="0.000000"/>
+    </CModel>
+    <CModel id="AP_BunkerShrikeUpgradePlacement" parent="Placement">
+        <Model value="Assets\Buildings\Terran\BunkerShrikeUpgradePlacement\BunkerShrikeUpgradePlacement.m3"/>
+        <LowQualityModel value="Bunker"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value="Bunker"/>
+        <Radius value="-1.000000"/>
+        <SelectionRadius value="0.000000"/>
+        <ShadowRadius value="0.000000"/>
+    </CModel>
+    <CModel id="AP_JumboBunker" parent="Building" Race="Terran">
+        <Model value="Assets\Buildings\Terran\BunkerUpgrade\BunkerUpgrade.m3"/>
+        <Radius value="1.250000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.500000"/>
+        <ShadowRadius value="1.500000"/>
+    </CModel>
+    <CModel id="AP_MercFirebatBunkerAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\FirebatFireSprite\FirebatFireSprite.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="1.000000,3.000000,1.000000"/>
+        <ScaleMin value="1.000000,3.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_ShrikeTurret" parent="PersistentSpellFX">
+        <Model value="Assets\Buildings\Terran\BunkerShrikeTurret\BunkerShrikeTurret.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_ShrikeTurretDeath" parent="PersistentSpellFX">
+        <Model value="Assets\Buildings\Terran\BunkerShrikeTurretDeath\BunkerShrikeTurretDeath.m3"/>
+        <LowQualityModel value="TerranBuildingDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ShrikeTurretAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\AutoTurretWeaponImpact\AutoTurretWeaponImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ShrikeTurretAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\AutoTurretWeaponLaunch\AutoTurretWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

@@ -719,4 +719,51 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_BuildFortifiedBunker">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-neosteelframe.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-bunker.dds"/>
+        <Hotkey value="Button/Hotkey/Bunker"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="Bunker"/>
+    </CButton>
+    <CButton id="AP_Bunker">
+        <Icon value="Assets\Textures\btn-building-terran-bunker.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-bunker.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_BunkerFortified">
+        <Icon value="AP\Assets\Textures\btn-building-terran-bunkerneosteel.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-building-terran-bunkerneosteel.dds"/>
+        <Hotkey value="Button/Hotkey/Bunker"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="Bunker"/>
+    </CButton>
+    <CButton id="AP_FortifiedBunker">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-neosteelframe.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-bunker.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_NeoSteelFrame">
+        <Icon value="AP\Assets\Textures\btn-techupgrade-terran-neosteelbunker.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_ProjectileAccelerators">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-projectileaccelerator.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_ShrikeTurret">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-shriketurret.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_StimRedirect">
+        <Icon value="Assets\Textures\btn-ability-terran-stimpack-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-stimpack-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="Stim"/>
+        <Universal value="1"/>
+    </CButton>
 </Catalog>

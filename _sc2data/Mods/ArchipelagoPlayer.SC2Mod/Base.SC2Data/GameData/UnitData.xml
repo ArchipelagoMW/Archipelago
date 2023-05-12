@@ -5376,6 +5376,119 @@
         <HotkeyCategory value="Unit/Category/TerranStory"/>
         <AIEvaluateAlias value=""/>
     </CUnit>
+    <CUnit id="AP_Bunker">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="AIDefense" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="400"/>
+        <LifeMax value="400"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <Sight value="10"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="100"/>
+        <RepairTime value="40"/>
+        <AttackTargetPriority value="19"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_BunkerTransport"/>
+        <AbilArray Link="AP_SalvageShared"/>
+        <AbilArray Link="AP_SalvageBunkerRefund"/>
+        <AbilArray Link="Rally"/>
+        <AbilArray Link="AP_StimpackRedirect"/>
+        <AbilArray Link="AP_StimpackMarauderRedirect"/>
+        <AbilArray Link="AP_StopRedirect"/>
+        <AbilArray Link="AP_AttackRedirect"/>
+        <AbilArray Link="AP_healRedirect"/>
+        <AbilArray Link="AP_BunkerAttack"/>
+        <AbilArray Link="AP_BunkerStop"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_BunkerNotJumbo"/>
+        <BehaviorArray Link="AP_ShrikeTurret"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <WeaponArray Link="AP_ShrikeTurret" Turret="AP_ShrikeTurret"/>
+        <CardLayouts>
+            <LayoutButtons Face="AttackRedirect" Type="AbilCmd" AbilCmd="AP_AttackRedirect,0" Row="0" Column="4"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="AP_StopRedirect,0" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_StimRedirect" Type="AbilCmd" AbilCmd="AP_StimpackRedirect,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_StimRedirect" Type="AbilCmd" AbilCmd="AP_StimpackMarauderRedirect,0" Row="2" Column="0"/>
+            <LayoutButtons Face="SetBunkerRallyPoint" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="BunkerLoad" Type="AbilCmd" AbilCmd="AP_BunkerTransport,0" Row="2" Column="1"/>
+            <LayoutButtons Face="BunkerUnloadAll" Type="AbilCmd" AbilCmd="AP_BunkerTransport,1" Row="2" Column="2"/>
+            <LayoutButtons Face="Salvage" Type="AbilCmd" AbilCmd="AP_SalvageShared,0" Row="2" Column="3"/>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress,Halt" Row="2" Column="3"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_SalvageShared,1" Row="2" Column="4"/>
+            <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+            <LayoutButtons Face="StopBunker" Type="AbilCmd" AbilCmd="AP_BunkerStop,0" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_ShrikeTurret" Type="Passive" Requirements="AP_ShrikeTurretResearched" Row="1" Column="2"/>
+            <LayoutButtons>
+                <Face value="AP_FortifiedBunker"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_FortifiedCarapace"/>
+                <Row value="1"/>
+                <Column value="3"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="AP_NeoSteelFrame"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_UseNeoSteelFrame"/>
+                <Row value="1"/>
+                <Column value="1"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="AP_ProjectileAccelerators"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_UseProjectileAccelerators"/>
+                <Row value="1"/>
+                <Column value="0"/>
+            </LayoutButtons>
+        </CardLayouts>
+        <Radius value="1.25"/>
+        <SeparationRadius value="1.25"/>
+        <Footprint value="Footprint3x3Contour"/>
+        <PlacementFootprint value="Footprint3x3"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.75"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkBunker"/>
+        <AIEvalFactor value="1.1"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="220"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryWeakArray value="Baneling"/>
+        <GlossaryWeakArray value="Colossus"/>
+        <GlossaryWeakArray value="SiegeTank"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->

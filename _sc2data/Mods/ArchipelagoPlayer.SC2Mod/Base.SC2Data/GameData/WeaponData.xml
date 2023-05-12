@@ -634,4 +634,17 @@
         <Period value="1"/>
         <Effect value="AP_PerditionTurretFlameThrowerSet"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ShrikeTurret">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_ShrikeTurretDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="0.8608"/>
+        <DamagePoint value="0.25"/>
+        <Backswing value="0.75"/>
+        <Effect value="AP_ShrikeTurretDamage"/>
+    </CWeaponLegacy>
 </Catalog>

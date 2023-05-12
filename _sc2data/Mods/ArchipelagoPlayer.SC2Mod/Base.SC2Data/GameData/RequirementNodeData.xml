@@ -834,4 +834,35 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_PsiDisruptor" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeFortifiedBunkerCarapaceCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_FortifiedBunkerCarapace" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNeosteelFrameCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NeosteelFrame" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNeosteelFrameQueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NeosteelFrame" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeProjectileAcceleratorsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ProjectileAccelerators" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="CountUpgradeShrikeTurretCompleteOnly2">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ShrikeTurret" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeFortifiedBunkerCarapaceCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeFortifiedBunkerCarapaceCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeShrikeTurretCompleteOnly">
+        <Count Link="AP_ShrikeTurret" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNeoSteelFrameCompleteOnly">
+        <Count Link="AP_NeoSteelFrame" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

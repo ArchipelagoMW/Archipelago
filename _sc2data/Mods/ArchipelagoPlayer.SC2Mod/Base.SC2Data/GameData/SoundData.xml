@@ -2021,4 +2021,45 @@
         <AssetArray File="Assets\Sounds\Terran\PsiDisruptor\PsiDisruptor_What0.wav"/>
         <Volume value="-5.000000,-5.000000"/>
     </CSound>
+    <CSound id="AP_Bunker_ShrikeTurretAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_MultipleBulletAttackImpact4.wav"/>
+        <Pitch value="-1.500000,1.500000"/>
+        <Volume value="-12.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Bunker_ShrikeTurretAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Raven\Raven_AutoTurretAttack0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Raven\Raven_AutoTurretAttack1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Raven\Raven_AutoTurretAttack2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Raven\Raven_AutoTurretAttack3.wav"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="-1.000000,0.500000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_SiegeBunkerAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall4.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall5.wav"/>
+        <Pitch value="-6.000000,6.000000"/>
+    </CSound>
+    <CSound id="AP_SiegeBunkerAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Viking\Viking_FighterAttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Viking\Viking_FighterAttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Viking\Viking_FighterAttackLaunch2.wav"/>
+        <DupeDestroyCount value="5"/>
+        <OverlapTimeDelta value="100"/>
+        <Pitch value="3.160000,7.010000"/>
+        <Volume value="-10.480000,-7.960000"/>
+    </CSound>
 </Catalog>

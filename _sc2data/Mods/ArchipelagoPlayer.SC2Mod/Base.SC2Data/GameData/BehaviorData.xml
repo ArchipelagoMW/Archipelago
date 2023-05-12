@@ -880,4 +880,48 @@
         <Period value="0.125"/>
         <PeriodicEffect value="AP_PsiDisruptionSearchArea"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BunkerNotJumbo">
+        <InfoFlags index="Hidden" value="1"/>
+        <RemoveValidatorArray value="AP_NeosteelFrameNotPurchased"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BunkerWeaponRangeBonus">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <InitialEffect value="AP_ProjectileAccelerators"/>
+        <FinalEffect value="AP_ProjectileAcceleratorsRemove"/>
+        <Modification WeaponRange="1">
+            <AbilLinkEnableArray value="Stimpack"/>
+            <AbilLinkEnableArray value="AP_Stimpack"/>
+            <AbilLinkEnableArray value="heal"/>
+            <AbilLinkEnableArray value="AP_heal"/>
+            <AbilLinkEnableArray value="stop"/>
+            <AbilLinkEnableArray value="HoldFire"/>
+            <WeaponDisableArray value="FusionCutter"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ProjectileAccelerators">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <DisableValidatorArray value="AP_ProjectileAcceleratorsPurchased"/>
+        <Modification WeaponRange="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SalvageBunker" parent="Salvage">
+        <Name value="Behavior/Name/AP_SalvageBunker"/>
+        <ExpireEffect value="AP_SalvageBunker"/>
+        <Modification>
+            <AbilLinkEnableArray index="0" value="AP_SalvageBunker"/>
+            <AbilLinkEnableArray index="1" value="AP_SalvageBunkerRefund"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ShrikeTurret">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_ShrikeTurretResearched"/>
+        <Modification>
+            <WeaponEnableArray value="AP_ShrikeTurret"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SalvageShared" parent="Salvage">
+        <Name value="Behavior/Name/SalvageShared"/>
+    </CBehaviorBuff>
 </Catalog>

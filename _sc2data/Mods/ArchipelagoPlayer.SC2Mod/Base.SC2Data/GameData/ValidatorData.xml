@@ -168,6 +168,23 @@
         <Find value="1"/>
         <Value value="AP_CycloneLockOnRangeUpgrade"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_CampaignNeoSteelFramePurchased">
+        <Value value="AP_CampaignNeoSteelFramePurchased"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_FortifiedAndShrike">
+        <Type value="And"/>
+        <CombineArray value="AP_HasFortifiedCarapace"/>
+        <CombineArray value="AP_HasShrikeTurret"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_FortifiedNoShrike">
+        <Type value="And"/>
+        <CombineArray value="AP_HasFortifiedCarapace"/>
+        <CombineArray value="AP_NoShrikeTurret"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HasFortifiedCarapace">
+        <Find value="1"/>
+        <Value value="AP_FortifiedCarapace"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaBanshee"/>
@@ -358,6 +375,14 @@
     </CValidatorCombine>
     <CValidatorCombine id="AP_NotHaveWidowMineImprovedConcealmentUpgrade">
         <CombineArray value="AP_HaveWidowMineImprovedConcealmentUpgrade"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NeosteelFrameNotPurchased">
+        <Find value="1"/>
+        <Value value="AP_JumboBunkerNotResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_NeosteelFramePurchased">
+        <CombineArray value="AP_NeosteelFrameNotPurchased"/>
         <Negate value="1"/>
     </CValidatorCombine>
     <CValidatorCombine id="NotPointDefenseDrone" parent="CValidatorCombine">
@@ -718,4 +743,22 @@
         <WhichUnit Value="Target"/>
         <AbilLink value="attack"/>
     </CValidatorUnitCompareOrderCount>
+    <CValidatorCombine id="AP_ShrikeNoFortified">
+        <Type value="And"/>
+        <CombineArray value="AP_NoFortifiedCarapace"/>
+        <CombineArray value="AP_HasShrikeTurret"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HasShrikeTurret">
+        <Find value="1"/>
+        <Value value="AP_ShrikeTurretResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_NoFortifiedCarapace">
+        <Find value="1"/>
+        <Value value="AP_NotFortifiedCarapace"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_NeosteelFramePurchasedNoConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_NeosteelFramePurchased"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
 </Catalog>

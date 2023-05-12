@@ -1499,4 +1499,70 @@
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
         <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaStarportAddOnParent"/>
     </CAbilMorph>
+    <CAbilAttack id="AP_BunkerAttack" parent="attack">
+        <CmdButtonArray index="Execute" DefaultButtonFace="BunkerAttack" Requirements="AP_BunkerAttack"/>
+    </CAbilAttack>
+    <CAbilStop id="AP_BunkerStop">
+        <CmdButtonArray index="Stop" DefaultButtonFace="StopBunker" Requirements="AP_BunkerAttack"/>
+        <CmdButtonArray index="HoldFire" DefaultButtonFace="HoldFireSpecial"/>
+        <CmdButtonArray index="Cheer" DefaultButtonFace=""/>
+        <CmdButtonArray index="Dance" DefaultButtonFace=""/>
+    </CAbilStop>
+    <CAbilTransport id="AP_BunkerTransport">
+        <AbilSetId value="ULdS"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Load" DefaultButtonFace="BunkerLoad"/>
+        <CmdButtonArray index="UnloadAll" DefaultButtonFace="BunkerUnloadAll">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadAt">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadUnit">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="LoadAll">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <Range value="0"/>
+        <MaxCargoCount value="4"/>
+        <MaxCargoSize value="2"/>
+        <TotalCargoSpace value="4"/>
+        <LoadCargoBehavior value="AP_BunkerWeaponRangeBonus"/>
+        <TargetFilters value="Biological,Visible;Ally,Neutral,Enemy,Dead,Hidden"/>
+        <LoadValidatorArray value="RequiresTerran"/>
+    </CAbilTransport>
+    <CAbilRedirectTarget id="AP_AttackRedirect">
+        <Abil value="attack"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AttackRedirect">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilRedirectTarget>
+    <CAbilBehavior id="AP_SalvageBunker" parent="Salvage">
+        <Name value="Abil/Name/AP_SalvageBunker"/>
+    </CAbilBehavior>
+    <CAbilEffectInstant id="AP_SalvageBunkerRefund" parent="Refund">
+        <Name value="Abil/Name/AP_SalvageBunkerRefund"/>
+        <Cost>
+            <Resource index="Minerals" value="-100"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilBehavior id="AP_SalvageShared">
+        <Name value="Abil/Name/Salvage"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="On" DefaultButtonFace="Salvage">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <BehaviorArray value="AP_SalvageShared"/>
+        <ValidatorArray value="HasNoCargo"/>
+    </CAbilBehavior>
+    <CAbilRedirectInstant id="AP_StopRedirect">
+        <Abil value="stop"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="StopRedirect">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilRedirectInstant>
+    <CAbilRedirectTarget id="AP_healRedirect"/>
 </Catalog>

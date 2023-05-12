@@ -2642,6 +2642,40 @@
         <SearchFilters value="Visible;Self,Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable,Benign"/>
         <AreaArray Radius="8" Effect="AP_PsiDisruptionApplyBehavior"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_ProjectileAccelerators">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_ProjectileAcceleratorsRemove">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ProjectileAccelerators"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectIssueOrder id="AP_SalvageBunker" parent="Salvage">
+        <Abil value="AP_SalvageBunkerRefund"/>
+    </CEffectIssueOrder>
+    <CEffectDamage id="AP_ShrikeTurretDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="AP_SalvageShared">
+        <EditorCategories value="Race:Terran"/>
+        <ModifyFlags index="Salvage" value="1"/>
+        <SalvageFactor>
+            <Resource index="Minerals" value="-1"/>
+            <Resource index="Vespene" value="-1"/>
+            <Resource index="Terrazine" value="-1"/>
+            <Resource index="Custom" value="-1"/>
+        </SalvageFactor>
+    </CEffectModifyUnit>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="Reaper"/>
