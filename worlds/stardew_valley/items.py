@@ -186,9 +186,7 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     items.append(item_factory("Return Scepter"))
     items.extend(create_seasons(item_factory, world_options))
     items.extend(create_seeds(item_factory, world_options))
-    create_friendsanity_items(item_factory, world_options, items, None)
-    for mods in world_options[options.Mods]:
-        create_friendsanity_items(item_factory, world_options, items, mods)
+    create_friendsanity_items(item_factory, world_options, items)
     items.extend(create_festival_rewards(item_factory, world_options))
     items.extend(create_special_order_board_rewards(item_factory, world_options))
     items.extend(create_special_order_qi_rewards(item_factory, world_options))
@@ -236,11 +234,9 @@ def create_tools(item_factory: StardewItemFactory, world_options: StardewOptions
 def create_skills(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.SkillProgression] == options.SkillProgression.option_progressive:
         for item in items_by_group[Group.SKILL_LEVEL_UP]:
-            if item.mod_name is None:
-                items.extend(item_factory(item) for item in [item.name] * 10)
-            for mods in world_options[options.Mods]:
-                if item.mod_name == mods:
-                    items.extend(item_factory(item) for item in [item.name] * 10)
+            if item.mod_name not in world_options[options.Mods] and item.mod_name is not None:
+                continue
+            items.extend(item_factory(item) for item in [item.name] * 10)
 
 
 def create_wizard_buildings(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
@@ -308,8 +304,7 @@ def create_museum_items(item_factory: StardewItemFactory, world_options: Stardew
     items.append(item_factory("Dwarvish Translation Guide"))
 
 
-def create_friendsanity_items(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item],
-                              mod_value: Optional[str]):
+def create_friendsanity_items(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.Friendsanity] == options.Friendsanity.option_none:
         return
     exclude_non_bachelors = world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
@@ -318,6 +313,8 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
     exclude_post_marriage_hearts = world_options[options.Friendsanity] != options.Friendsanity.option_all_with_marriage
     exclude_ginger_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
     for villager in all_villagers:
+        if villager.mod_name not in world_options[options.Mods] and villager.mod_name is not None:
+            continue
         if not villager.available and exclude_locked_villagers:
             continue
         if not villager.bachelor and exclude_non_bachelors:
@@ -327,9 +324,9 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
         for heart in range(1, 15):
             if villager.bachelor and exclude_post_marriage_hearts and heart > 8:
                 continue
-            if (villager.bachelor or heart < 11) and villager.mod_name == mod_value:
+            if villager.bachelor or heart < 11:
                 items.append(item_factory(f"{villager.name}: 1 <3"))
-    if not exclude_non_bachelors and mod_value is None:
+    if not exclude_non_bachelors:
         for heart in range(1, 6):
             items.append(item_factory(f"Pet: 1 <3"))
 

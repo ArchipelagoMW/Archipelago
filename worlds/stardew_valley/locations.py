@@ -175,8 +175,7 @@ def extend_museumsanity_locations(randomized_locations: List[LocationData], muse
         randomized_locations.extend(location_table[f"{prefix}{museum_item.name}"] for museum_item in all_museum_items)
 
 
-def extend_friendsanity_locations(randomized_locations: List[LocationData], world_options: options.StardewOptions,
-                                  mod_value: Optional[str]):
+def extend_friendsanity_locations(randomized_locations: List[LocationData], world_options: options.StardewOptions):
     if world_options[options.Friendsanity] == options.Friendsanity.option_none:
         return
 
@@ -186,6 +185,8 @@ def extend_friendsanity_locations(randomized_locations: List[LocationData], worl
                                world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
     exclude_post_marriage_hearts = world_options[options.Friendsanity] != options.Friendsanity.option_all_with_marriage
     for villager in all_villagers:
+        if villager.mod_name not in world_options[options.Mods] and villager.mod_name is not None:
+            continue
         if not villager.available and exclude_locked_villagers:
             continue
         if not villager.bachelor and exclude_non_bachelors:
@@ -193,13 +194,11 @@ def extend_friendsanity_locations(randomized_locations: List[LocationData], worl
         if villager.name == "Leo" and exclude_leo:
             continue
         for heart in range(1, 15):
-            if villager.bachelor | (villager.name == "Wizard" and "Stardew Valley Expanded" in
-                                    world_options[options.Mods]) and exclude_post_marriage_hearts and heart > 8:
+            if villager.bachelor and exclude_post_marriage_hearts and heart > 8:
                 continue
-            if (villager.bachelor | (villager.name == "Wizard" and "Stardew Valley Expanded" in
-                                     world_options[options.Mods]) or heart < 11) and villager.mod_name == mod_value:
+            if villager.bachelor or heart < 11:
                 randomized_locations.append(location_table[f"Friendsanity: {villager.name} {heart} <3"])
-    if not exclude_non_bachelors and mod_value is None:
+    if not exclude_non_bachelors:
         for heart in range(1, 6):
             randomized_locations.append(location_table[f"Friendsanity: Pet {heart} <3"])
 
@@ -273,18 +272,13 @@ def create_locations(location_collector: StardewLocationCollector,
 
     include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
     for mandatory in locations_by_tag[LocationTags.MANDATORY]:
-        if (mandatory.mod_name is None) & (include_island or LocationTags.GINGER_ISLAND\
-                not in mandatory.tags):
+        if (mandatory.mod_name is None or mandatory.mod_name in world_options[options.Mods]) \
+                & (include_island or LocationTags.GINGER_ISLAND not in mandatory.tags):
             randomized_locations.append(location_table[mandatory.name])
-        for mod in world_options[options.Mods]:
-            if mandatory.mod_name == mod:
-                randomized_locations.append(location_table[mandatory.name])
 
     if not world_options[options.BackpackProgression] == options.BackpackProgression.option_vanilla:
         for backpack in locations_by_tag[LocationTags.BACKPACK]:
-            if backpack.mod_name is None:
-                randomized_locations.append(location_table[backpack.name])
-            if backpack.mod_name in world_options[options.Mods]:
+            if backpack.mod_name is None or backpack.mod_name in world_options[options.Mods]:
                 randomized_locations.append(location_table[backpack.name])
 
     if not world_options[options.ToolProgression] == options.ToolProgression.option_vanilla:
@@ -295,11 +289,8 @@ def create_locations(location_collector: StardewLocationCollector,
 
     if not world_options[options.SkillProgression] == options.SkillProgression.option_vanilla:
         for location in locations_by_tag[LocationTags.SKILL_LEVEL]:
-            if location.mod_name is None:
+            if location.mod_name is None or location.mod_name in world_options[options.Mods]:
                 randomized_locations.append(location_table[location.name])
-            for mod in world_options[options.Mods]:
-                if location.mod_name == mod:
-                    randomized_locations.append(location_table[location.name])
 
     if not world_options[options.BuildingProgression] == options.BuildingProgression.option_vanilla:
         randomized_locations.extend(locations_by_tag[LocationTags.BUILDING_BLUEPRINT])
@@ -313,9 +304,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_help_wanted_quests(randomized_locations, world_options[options.HelpWantedLocations])
     extend_fishsanity_locations(randomized_locations, world_options, random)
     extend_museumsanity_locations(randomized_locations, world_options[options.Museumsanity], random)
-    extend_friendsanity_locations(randomized_locations, world_options, None)
-    for mods in world_options[options.Mods]:
-        extend_friendsanity_locations(randomized_locations, world_options, mods)
+    extend_friendsanity_locations(randomized_locations, world_options)
 
     extend_festival_locations(randomized_locations, world_options[options.FestivalLocations])
     extend_special_order_locations(randomized_locations, world_options)
