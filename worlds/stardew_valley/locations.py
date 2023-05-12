@@ -56,7 +56,7 @@ class LocationTags(enum.Enum):
     SPECIAL_ORDER_QI = enum.auto()
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto
-# Skill Mods
+    # Skill Mods
     LUCK_LEVEL = enum.auto()
     BINNING_LEVEL = enum.auto()
     COOKING_LEVEL = enum.auto()
@@ -93,7 +93,8 @@ def load_location_csv() -> List[LocationData]:
         reader = csv.DictReader(file)
         return [LocationData(int(location["id"]) if location["id"] else None,
                              location["region"],
-                             location["name"], str(location["mod_name"]) if location["mod_name"] else None,
+                             location["name"],
+                             str(location["mod_name"]) if location["mod_name"] else None,
                              frozenset(LocationTags[group]
                                        for group in location["tags"].split(",")
                                        if group))
