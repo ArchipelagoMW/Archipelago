@@ -5810,10 +5810,6 @@
     <CActorSplat id="AP_BunkerSplat" parent="GenericUnitSplat" unitName="AP_Bunker">
         <Model value="BunkerSplat"/>
     </CActorSplat>
-    <CActorEventMacro id="AP_BunkerTransportAnim">
-        <On Terms="Abil.AP_BunkerTransport.TransportOccupy" Send="AnimGroupApply Work Work,Start Work,End"/>
-        <On Terms="Abil.AP_BunkerTransport.TransportEmpty" Send="AnimGroupRemove Work"/>
-    </CActorEventMacro>
     <CActorUnit id="AP_PreviewBunkerUpgraded" parent="GenericUnitMinimal" unitName="AP_PreviewBunkerUpgraded">
         <Model value="BunkerUpgrade"/>
         <HighlightTooltip value="Unit/Name/AP_PreviewBunkerUpgraded"/>
