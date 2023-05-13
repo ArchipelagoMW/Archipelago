@@ -47,4 +47,8 @@
         <Base value="::RollingIndex"/>
         <Driver value="DRCannonsA"/>
     </CAttachMethodPattern>
+    <CAttachMethodPattern id="AP_AMPatternDrunkenMissileVolley">
+        <Keyword value="Weapon"/>
+        <Driver value="AP_HailstormMissilePodsLaunchMissile"/>
+    </CAttachMethodPattern>
 </Catalog>

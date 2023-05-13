@@ -2652,9 +2652,7 @@
         <BehaviorLink value="AP_ProjectileAccelerators"/>
         <Count value="1"/>
     </CEffectRemoveBehavior>
-    <CEffectIssueOrder id="AP_SalvageBunker" parent="Salvage">
-        <Abil value="AP_SalvageBunkerRefund"/>
-    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_SalvageBunker" parent="Salvage"/>
     <CEffectDamage id="AP_ShrikeTurretDamage">
         <EditorCategories value="Race:Terran"/>
         <ResponseFlags index="Acquire" value="1"/>
@@ -2676,9 +2674,51 @@
             <Resource index="Custom" value="-1"/>
         </SalvageFactor>
     </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_HailstormMissilePodsCreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="8"/>
+        <PeriodicEffectArray value="AP_HailstormMissilePodsLaunchMissile"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_HailstormMissilePodsDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="1"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <SearchFilters value="Air,Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Invulnerable,Benign,Passive"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_HailstormMissilePodsLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_HailstormMissilePodsDamage"/>
+        <AmmoUnit value="AP_HailstormMissilesWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_LongboltMissile">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_LongboltMissileLM"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_LongboltMissileLM">
+        <ValidatorArray index="0" value="RangeCheckLE15"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_LongboltMissileU"/>
+        <AmmoUnit value="AP_LongboltMissileWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_LongboltMissileU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="12"/>
+    </CEffectDamage>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <InfoArray Unit="Reaper"/>
+        <InfoArray Unit="AP_Reaper"/>
         <Flags index="IgnoreFacing" value="1"/>
         <Flags index="IgnoreUnitCost" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>

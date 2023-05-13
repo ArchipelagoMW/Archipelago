@@ -2062,4 +2062,29 @@
         <Pitch value="3.160000,7.010000"/>
         <Volume value="-10.480000,-7.960000"/>
     </CSound>
+    <CSound id="AP_MissileTurret_HellstormAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall4.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall5.wav"/>
+        <Pitch value="8.000000,14.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_MissileTurret_HellstormAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_MissilePodsLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_MissilePodsLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_MissilePodsLaunch2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_MissilePodsLaunch3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Battlecruiser\Battlecruiser_MissilePodsLaunch4.wav"/>
+        <Category value="Spell"/>
+        <DupeDestroyCount value="10"/>
+        <DupeMaximumMethod value="Replace"/>
+        <OverlapTimeDelta value="500"/>
+        <Pitch value="-2.000000,2.000000"/>
+        <Volume value="-7.500000,-6.000000"/>
+    </CSound>
 </Catalog>

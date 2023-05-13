@@ -5812,13 +5812,11 @@
     </CActorSplat>
     <CActorUnit id="AP_PreviewBunkerUpgraded" parent="GenericUnitMinimal" unitName="AP_PreviewBunkerUpgraded">
         <Model value="BunkerUpgrade"/>
-        <HighlightTooltip value="Unit/Name/AP_PreviewBunkerUpgraded"/>
     </CActorUnit>
     <CActorUnit id="AP_ReinforcedBunker" parent="GenericUnitStandard" unitName="AP_ReinforcedBunker">
         <Macros value="BunkerTransportAnim"/>
         <Macros value="BuildingFlattenTerrainMacro"/>
         <DeathArray index="Normal" ModelLink="BunkerDeath" SoundLink="BunkerDeath"/>
-        <HighlightTooltip value="Unit/Name/AP_ReinforcedBunker"/>
     </CActorUnit>
     <CActorModel id="AP_ShrikeTurret">
         <Aliases value="_Snapshot"/>
@@ -5868,8 +5866,96 @@
     <CActorAction id="AP_ShrikeTurretAttack" parent="GenericAttack" effectAttack="AP_ShrikeTurretDamage">
         <On Terms="ActorCreation" Send="Create AP_ShrikeTurretAttackLaunch"/>
         <LaunchAssets Model="" Sound="AP_Bunker_ShrikeTurretAttackLaunch"/>
-        <ImpactMap index="None" Model="AP_ShrikeTurretAttackImpact" Sound="AP_Bunker_ShrikeTurretAttackImpact"/>
+        <ImpactMap index="None" Sound="AP_Bunker_ShrikeTurretAttackImpact"/>
     </CActorAction>
+    <CActorAction id="AP_HailstormMissileVolley" parent="GenericAttack" effectImpact="AP_HailstormMissilePodsDamage" effectLaunch="AP_HailstormMissilePodsLaunchMissile">
+        <LaunchAttachQuery Methods="AP_AMPatternDrunkenMissileVolley"/>
+        <LaunchAssets Sound="AP_MissileTurret_HellstormAttackLaunch"/>
+        <Missile value="AP_HailstormMissileVolleyMissile"/>
+        <ImpactMap index="None" Sound="AP_MissileTurret_HellstormAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_HailstormMissileVolleyMissile" parent="GenericAttackMissile" unitName="AP_HailstormMissilesWeapon">
+        <On Terms="ActorDestruction" Send="Create AP_HailstormMissileVolleyDeath"/>
+    </CActorMissile>
+    <CActorModel id="AP_HailstormMissileVolleyDeath" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Host Subject="_Missile"/>
+    </CActorModel>
+    <CActorUnit id="AP_MissileTurret" parent="TerranBuildingEx" unitName="AP_MissileTurret">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="ActorCreation; ValidateUnit AP_MissileTurretUpgraded" Send="ModelSwap AP_MissileTurretTitaniumHousing"/>
+        <On Terms="Upgrade.AP_ReinforcedSuperstructure.Add" Send="ModelSwap AP_MissileTurretTitaniumHousing"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_MissileTurretUpgradedNoConstruction" Send="DeathCustomize Upgrade"/>
+        <On Terms="Signal.*.test" Send="Create AP_TurretUnitDeathModel"/>
+        <On Terms="Signal.*.test" Send="SetOpacity"/>
+        <On Terms="ActorCreation; ValidateUnit AP_MissileTurretUpgraded" Send="ModelSwap AP_MissileTurretTitaniumHousing"/>
+        <Model value="MissileTurret"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="MissileTurret"/>
+        <DeathArray index="Normal" ModelLink="MissileTurretDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="MissileTurret_Explode"/>
+        <DeathCustoms ModelLink="AP_MissileTurretTitaniumHousingDeath" Name="Upgrade"/>
+        <PlacementModel value="MissileTurretPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PlacementActorModel value="MissileTurretSkinnablePlacementModel"/>
+        <PortraitModel value="MissileTurretPortrait"/>
+        <BarOffset value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-MissileTurret.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-missileturret.dds"/>
+        <SoundArray index="Ready" value="MissileTurret_Ready"/>
+        <SoundArray index="What" value="MissileTurret_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-missileturret.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-MissileTurret.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_MissileTurretAttack" parent="GenericAttack" effectImpact="AP_LongboltMissileU" effectLaunch="AP_LongboltMissileLM">
+        <LaunchAttachQuery Methods="AMPatternMissileTurret"/>
+        <LaunchAssets Sound="MissileTurret_AttackLaunch"/>
+        <Missile value="AP_MissileTurretAttackMissile"/>
+        <ImpactAttachQuery Methods="AMFilterTarget AMRandomUniform"/>
+        <ImpactMap index="None" Model="MissileTurretAttackImpact" Sound="MissileTurret_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ImpactPhysics Name="LongboltMissileImpact" MatchKeys="BasicAir" Physics="MissileAttackForce"/>
+    </CActorAction>
+    <CActorMissile id="AP_MissileTurretAttackMissile" parent="GenericAttackMissile" unitName="AP_LongboltMissileWeapon">
+        <On Terms="ActorCreation" Send="AnimPlay Phase1 Stand PlayForever"/>
+        <On Terms="MotionPhaseStart; MotionPhase 1" Send="AnimPlay Phase2 Turbo PlayForever"/>
+        <Model value="LongboltMissileWeapon"/>
+    </CActorMissile>
+    <CActorModel id="AP_MissileTurretBuild" parent="TerranBuildingBuildSmall">
+        <Model value="MissileTurretBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_MissileTurretPlacementModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation; ModelName MissileTurretPlacement" Send="Create AP_MissileTurretProtectRange"/>
+        <On Terms="ActorCreation; ModelName MissileTurret; ModelIsLowQuality" Send="Create AP_MissileTurretProtectRange"/>
+        <On Terms="ActorDestruction" Target="AP_MissileTurretProtectRange" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+        <Model value="PlacementModel"/>
+    </CActorModel>
+    <CActorRange id="AP_MissileTurretProtectRange" parent="RangeWeapon" weapon="LongboltMissile"/>
+    <CActorSplat id="AP_MissileTurretSplat" parent="GenericUnitSplat" unitName="AP_MissileTurret">
+        <Model value="MissileTurretSplat"/>
+    </CActorSplat>
+    <CActorTurret id="AP_MissileTurretTurret">
+        <On Terms="TurretEnable.AP_MissileTurret" Send="Create"/>
+    </CActorTurret>
     <CActorStateMonitor id="TerranFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->

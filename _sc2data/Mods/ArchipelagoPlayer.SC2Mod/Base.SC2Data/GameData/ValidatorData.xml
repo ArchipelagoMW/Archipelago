@@ -181,6 +181,10 @@
         <CombineArray value="AP_HasFortifiedCarapace"/>
         <CombineArray value="AP_NoShrikeTurret"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NoShrikeTurret">
+        <Find value="1"/>
+        <Value value="AP_ShrikeTurretNotResearched"/>
+    </CValidatorPlayerRequirement>
     <CValidatorPlayerRequirement id="AP_HasFortifiedCarapace">
         <Find value="1"/>
         <Value value="AP_FortifiedCarapace"/>
@@ -283,6 +287,17 @@
         <CombineArray value="AP_IsVanillaSupplyDepotLowered"/>
         <CombineArray value="AP_IsAPSupplyDepotLowered"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPMissileTurret">
+        <Value value="AP_MissileTurret"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaMissileTurret">
+        <Value value="MissileTurret"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsMissileTurret" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaStarportTechLab"/>
+        <CombineArray value="AP_IsAPStarportTechLab"/>
+    </CValidatorCombine>
     <CValidatorUnitType id="AP_IsAPStarportTechLab">
         <Value value="AP_StarportTechLab"/>
     </CValidatorUnitType>
@@ -384,6 +399,22 @@
     <CValidatorCombine id="AP_NeosteelFramePurchased">
         <CombineArray value="AP_NeosteelFrameNotPurchased"/>
         <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_MissileTurretUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveReinforcedSuperstructure"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_MissileTurretUpgradedNoConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_MissileTurretUpgraded"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotMissileTurret" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Negate value="1"/>
+        <CombineArray value="IsMissileTurret"/>
     </CValidatorCombine>
     <CValidatorCombine id="NotPointDefenseDrone" parent="CValidatorCombine">
         <!-- Override -->
@@ -661,7 +692,7 @@
         <CombineArray value="NotStructure"/>
         <CombineArray value="IsPhotonCannon"/>
         <CombineArray value="AP_IsVanillaBunker"/>
-        <CombineArray value="AP_IsAPBunker"/>>
+        <CombineArray value="AP_IsAPBunker"/>
         <CombineArray value="IsMissileTurret"/>
         <CombineArray value="AP_IsVanillaSpineCrawler"/>
         <!-- FIXME: Add AP_SpineCrawler -->

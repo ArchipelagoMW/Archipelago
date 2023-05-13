@@ -907,11 +907,6 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_SalvageBunker" parent="Salvage">
         <Name value="Behavior/Name/AP_SalvageBunker"/>
-        <ExpireEffect value="AP_SalvageBunker"/>
-        <Modification>
-            <AbilLinkEnableArray index="0" value="AP_SalvageBunker"/>
-            <AbilLinkEnableArray index="1" value="AP_SalvageBunkerRefund"/>
-        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_ShrikeTurret">
         <InfoFlags index="Hidden" value="1"/>
@@ -923,5 +918,24 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_SalvageShared" parent="Salvage">
         <Name value="Behavior/Name/SalvageShared"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HellstormMissiles">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_HellstormMissilesResearched"/>
+        <Modification>
+            <WeaponEnableArray value="AP_MissileTurret"/>
+            <WeaponEnableArray value="AP_HailstormMissilePods"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SwapToHailstormMissiles">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Modification>
+            <WeaponEnableArray value="AP_HailstormMissilePods"/>
+            <WeaponDisableArray value="AP_MissileTurret"/>
+            <WeaponDisableArray value="AP_DevastatorMissiles"/>
+        </Modification>
+        <InitialEffect value="AP_MissileTurretWeaponSwapSwitchToHailstorm"/> <!-- Looks like Unused in Vanilla -->
     </CBehaviorBuff>
 </Catalog>

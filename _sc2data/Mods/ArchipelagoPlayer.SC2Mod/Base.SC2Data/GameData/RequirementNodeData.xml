@@ -865,4 +865,24 @@
         <Count Link="AP_NeoSteelFrame" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHailstormMissilePodsCompleteOnly">
+        <Count Link="AP_HailstormMissilePods" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementAnd id="AP_AndCountUpgradeHailstormMissilePodsCompleteOnlyEqCountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit0">
+        <OperandArray value="AP_CountUpgradeHailstormMissilePodsCompleteOnly"/>
+        <OperandArray value="AP_EqCountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit0"/>
+    </CRequirementAnd>
+    <CRequirementEq id="AP_EqCountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit0">
+        <OperandArray index="0" value="CountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementCountBehavior id="AP_CountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit">
+        <Count Link="AP_SwapToHailstormMissiles" State="CompleteOnlyAtUnit"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeReinforcedSuperstructureCompleteOnly">
+        <Count Link="AP_ReinforcedSuperstructure" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

@@ -1764,4 +1764,38 @@
         <Model value="Assets\Effects\Terran\AutoTurretWeaponLaunch\AutoTurretWeaponLaunch.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_HailstormMissilesWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\MissileTurretMissile\MissileTurretMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.375000,0.375000,0.375000"/>
+        <ScaleMin value="0.375000,0.375000,0.375000"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+    </CModel>
+    <CModel id="AP_HailstormMissileVolleyDeath" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\VikingFighterMissileImpact\VikingFighterMissileImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
+        <SelectionRadius value="0.250000"/>
+        <ShadowRadius value="0.250000"/>
+    </CModel>
+    <CModel id="AP_MissileTurretTitaniumHousing" parent="Building" Race="Terran">
+        <Model value="Assets\Buildings\Terran\MissileTurretTitaniumHousing\MissileTurretTitaniumHousing.m3"/>
+        <AttachProps Id="Ref_Hardpoint">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <PlanetPanelCamera value="Star2CameraHigh05"/>
+        <Radius value="0.750000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="0.750000"/>
+        <ShadowRadius value="0.750000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraHigh05"/>
+        <UnitGlossaryCamera value="Star2CameraHigh05"/>
+    </CModel>
+    <CModel id="AP_MissileTurretTitaniumHousingDeath" parent="BuildingDeath" Race="Terran">
+        <Model value="Assets\Buildings\Terran\MissileTurretTitaniumHousingDeath\MissileTurretTitaniumHousingDeath.m3"/>
+        <LowQualityModel value="MissileTurretDeathLow"/>
+    </CModel>
 </Catalog>

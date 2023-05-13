@@ -468,4 +468,39 @@
         </MotionPhases>
         <MotionPhases YawPitchRoll="MAX"/>
     </CMoverMissile>
+    <CMoverMissile id="AP_DrunkenMissile">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="18"/>
+            <MaxSpeed value="16"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+            <Overlays Scale="1,0.5"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+        <MotionOverlays>
+            <Type value="Revolver"/>
+            <Polarity value="Random"/>
+            <Axis value="0,-1,0"/>
+            <Wavelength value="0,0.8"/>
+            <WavelengthChangeProbability value="0.8"/>
+            <RevolverSpeed value="179.2968"/>
+            <RevolverSpeedRange value="179.2968"/>
+            <RevolverMaxSpeed value="719.2968"/>
+            <RevolverMaxSpeedRange value="0"/>
+            <RevolverAccel value="337.5"/>
+            <RevolverAccelRange value="337.5"/>
+        </MotionOverlays>
+        <MotionOverlays>
+            <Type value="Wave"/>
+            <Wavelength value="0"/>
+            <WavelengthChangeProbability value="0"/>
+            <RevolverSpeed value="0"/>
+            <RevolverSpeedRange value="0"/>
+            <RevolverMaxSpeed value="0"/>
+            <RevolverMaxSpeedRange value="0"/>
+            <RevolverAccel value="0"/>
+            <RevolverAccelRange value="0"/>
+        </MotionOverlays>
+    </CMoverMissile>
 </Catalog>

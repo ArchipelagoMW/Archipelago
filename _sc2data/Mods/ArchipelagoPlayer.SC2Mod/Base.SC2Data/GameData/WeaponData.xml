@@ -647,4 +647,29 @@
         <Backswing value="0.75"/>
         <Effect value="AP_ShrikeTurretDamage"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HailstormMissilePods">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="LinkedCooldown" value="0"/>
+        <Icon value="AP\Assets\Textures\btn-weapon-terran-hailstormmissiles.dds"/>
+        <DisplayEffect value="AP_HailstormMissilePodsDamage"/>
+        <DisplayAttackCount value="8"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="0"/>
+        <Period value="1.78"/>
+        <Backswing value="0.25"/>
+        <Effect value="AP_HailstormMissilePodsCreatePersistent"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_LongboltMissile">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-hisecautotracking.dds"/>
+        <DisplayEffect value="AP_LongboltMissileU"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="0"/>
+        <Period value="0.8608"/>
+    </CWeaponLegacy>
 </Catalog>
