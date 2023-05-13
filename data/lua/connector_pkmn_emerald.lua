@@ -43,7 +43,7 @@ local cb2_address = 0x22C0 + 4                     -- gMain + offset
 local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
 
 -- ROM addresses
-local slot_name_address = 0x599FC8                 -- gArchipelagoInfo
+local slot_name_address = 0x59A004                 -- gArchipelagoInfo
 
 -- Bus addresses
 local cb2_overworld_func_address = 0x8086050 + 1   -- CB2_Overworld + 1
