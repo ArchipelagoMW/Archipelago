@@ -48,10 +48,11 @@ Traps consist of all "Bad" and "Awful" events from Noita's native stream integra
 * `Worm Rain`
 * `Giga Black Holes`
 
-### How many items are there?
+## How many location checks are there?
 
-The number of items is dependent on the settings you choose. Please check the information boxes next to the settings
-when setting up your YAML for more information.
+When using the default settings, there are 109 location checks. The number of checks in the game is dependent on the settings that you choose.
+Please check the information boxes next to the settings when setting up your YAML to see how many checks the individual options add.
+There are always 42 Holy Mountain checks and 4 Secret Shop checks in the pool which are not affected by your YAML settings.
 
 ## What does another world's item look like in Noita?
 
