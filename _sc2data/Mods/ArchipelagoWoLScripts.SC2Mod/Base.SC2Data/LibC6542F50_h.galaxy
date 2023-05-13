@@ -16,7 +16,7 @@ int libC6542F50_gf_APSetDifficulty (string lp_difficultyChar, unitgroup lp_casua
 void libC6542F50_gf_APUnlockUnits (string lp_unitCode, string lp_version);
 void libC6542F50_gf_APUnlockUpgrades (string lp_upgradeCode, string lp_version);
 void libC6542F50_gf_APUnlockArmory1 (string lp_unitUpgradeCode, string lp_version);
-void libC6542F50_gf_APUnlockArmory2 (string lp_unitUpgradeCode, string lp_version);
+void libC6542F50_gf_APUnlockAP_Armory (string lp_unitUpgradeCode, string lp_version);
 void libC6542F50_gf_APUnlockBuildings (string lp_buildingCode, string lp_version);
 void libC6542F50_gf_APUnlockMercenaries (string lp_mercCode, string lp_version);
 void libC6542F50_gf_APUnlockLaboratory (string lp_unitUpgradeCode, string lp_version);

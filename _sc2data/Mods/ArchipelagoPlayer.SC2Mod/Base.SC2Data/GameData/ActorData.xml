@@ -6002,7 +6002,6 @@
         </GroupIcon>
         <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-HiveMindEmulator.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
-        <SoundArray index="What" value="AP_HiveMindEmulator_What"/>
         <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
         <UnitFlags index="ShowBlobShadow" value="0"/>
         <UnitIcon value="AP\Assets\Textures\BTN-Building-Terran-HiveMindEmulator.dds"/>
@@ -6020,9 +6019,7 @@
         <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
         <HostImpactSiteOps Ops="SOpAttachCenter"/>
     </CActorBeamSimple>
-    <CActorModel id="AP_HiveMindEmulatorBuild" parent="TerranBuildingBuildSmall">
-        <Model value="AP_HiveMindEmulatorBuild"/>
-    </CActorModel>
+    <CActorModel id="AP_HiveMindEmulatorBuild" parent="TerranBuildingBuildSmall"/>
     <CActorModel id="AP_HiveMindEmulatorImpactModel" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_MindControl.Start" Send="Create"/>
         <Host Subject="_Selectable"/>
@@ -6060,6 +6057,35 @@
     <CActorTurret id="AP_HiveMindEmulatorRotateTurret">
         <On Terms="TurretEnable.AP_HiveMindEmulatorRotate" Send="Create"/>
     </CActorTurret>
+    <CActorUnit id="AP_Armory" parent="TerranBuildingEx" unitName="AP_Armory">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationArmory"/>
+        <On Terms="Abil.que5.Start" Send="AnimSetTimeScale ::Baseline 5.000000"/>
+        <On Terms="Abil.que5.Stop" Send="AnimSetTimeScale ::Baseline 1.000000"/>
+        <Model value="Armory"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="Armory"/>
+        <DeathArray index="Normal" ModelLink="ArmoryDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranLargeBuildingDeath" SoundLink="Armory_Explode"/>
+        <PlacementModel value="ArmoryPlacement"/>
+        <PortraitModel value="ArmoryPortrait"/>
+        <BarOffset value="115"/>
+        <BarWidth value="135"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Armory.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Armory.dds"/>
+        <NameOffset value="100"/>
+        <SoundArray index="Ready" value="Armory_Ready"/>
+        <SoundArray index="What" value="Armory_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Armory.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Armory.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSplat id="AP_ArmorySplat" parent="GenericUnitSplat" unitName="AP_Armory">
+        <Model value="ArmorySplat"/>
+    </CActorSplat>
     <CActorStateMonitor id="TerranFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->

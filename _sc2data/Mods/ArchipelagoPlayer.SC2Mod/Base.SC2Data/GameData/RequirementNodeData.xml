@@ -854,10 +854,9 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HiveMindEmulator" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
-    <CRequirementCountUpgrade id="CountUpgradeShrikeTurretCompleteOnly2">
-        <Flags index="TechTreeCheat" value="0"/>
-        <Count Link="AP_ShrikeTurret" State="CompleteOnly"/>
-    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitArmoryCompleteOnlyTechTreeCheat">
+        <Count Link="AP_Armory" State="CompleteOnly"/>
+    </CRequirementCountUnit>
     <CRequirementNot id="AP_NotCountUpgradeFortifiedBunkerCarapaceCompleteOnly">
         <OperandArray index="0" value="AP_CountUpgradeFortifiedBunkerCarapaceCompleteOnly"/>
     </CRequirementNot>

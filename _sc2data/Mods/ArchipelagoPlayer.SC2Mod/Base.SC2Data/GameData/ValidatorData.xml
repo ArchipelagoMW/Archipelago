@@ -195,6 +195,17 @@
         <CombineArray value="NotLarva"/>
         <CombineArray value="NotLarvaEgg"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPArmory">
+        <Value value="AP_Armory"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaArmory">
+        <Value value="Armory"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaArmory"/>
+        <CombineArray value="AP_IsAPArmory"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaBanshee"/>

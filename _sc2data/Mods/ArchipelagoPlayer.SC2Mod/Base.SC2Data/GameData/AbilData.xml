@@ -1469,6 +1469,10 @@
         <AutoCastRange value="4"/>
         <AutoCastCountMin value="1"/>
     </CAbilMorph>
+    <CAbilResearch id="AP_ArmoryResearch">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <!-- TODO: Upgrades -->
+    </CAbilResearch>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->

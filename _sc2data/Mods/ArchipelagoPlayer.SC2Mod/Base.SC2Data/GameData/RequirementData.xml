@@ -583,4 +583,12 @@
         <NodeArray index="Use" Link="AP_CountUnitEngineeringBayCompleteOnlyTechTreeCheat"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHiveMindEmulatorCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveArmory">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitArmoryCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveArmoryAndAttachedTechLabOrAttachedTechReactor">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUnitArmoryCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>
