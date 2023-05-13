@@ -538,7 +538,7 @@ void libC6542F50_gf_APUnlockArmory1 (string lp_unitUpgradeCode, string lp_versio
 
 }
 
-void libC6542F50_gf_APUnlockAP_Armory (string lp_unitUpgradeCode, string lp_version) {
+void libC6542F50_gf_APUnlockArmory2 (string lp_unitUpgradeCode, string lp_version) {
     // Variable Declarations
     int lv_unitUpgradeCode;
 
@@ -976,7 +976,7 @@ bool libC6542F50_gt_APArchipelagoTechUpdate_Func (bool testConds, bool runAction
     libC6542F50_gf_APUnlockUnits(StringWord(EventChatMessage(false), 2), "");
     libC6542F50_gf_APUnlockUpgrades(StringWord(EventChatMessage(false), 3), "");
     libC6542F50_gf_APUnlockArmory1(StringWord(EventChatMessage(false), 4), "");
-    libC6542F50_gf_APUnlockAP_Armory(StringWord(EventChatMessage(false), 5), "");
+    libC6542F50_gf_APUnlockArmory2(StringWord(EventChatMessage(false), 5), "");
     libC6542F50_gf_APUnlockBuildings(StringWord(EventChatMessage(false), 6), "");
     libC6542F50_gf_APUnlockMercenaries(StringWord(EventChatMessage(false), 7), "");
     libC6542F50_gf_APUnlockLaboratory(StringWord(EventChatMessage(false), 8), "");
