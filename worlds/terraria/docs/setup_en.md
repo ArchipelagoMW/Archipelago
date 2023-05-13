@@ -34,7 +34,9 @@ on the Archipelago website to generate a YAML using a graphical interface.
     digit number.
     - If you're not hosting your game on the Archipelago website, change "Address" to the server's
     URL or IP address
-3. Create a new character and world as normal (or use an existing one if you prefer).
+3. Create a new character and world as normal (or use an existing one if you prefer). Terraria may
+be significantly more difficult with this mod, so consider choosing a lower difficulty than you
+normally would.
 4. Open the world in single player or multiplayer
 5. When you're ready, open chat, and enter "/apstart" to start the game
    
