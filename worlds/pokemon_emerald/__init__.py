@@ -400,13 +400,14 @@ class PokemonEmeraldWorld(World):
                         species.types = (type_map[species.types[0]], type_map[species.types[1]])
             elif self.multiworld.types[self.player].value == RandomizeTypes.option_completely_random:
                 for species in self.modified_data.species:
-                    new_type_1 = get_random_type(random)
-                    new_type_2 = new_type_1
-                    if species.types[0] != species.types[1]:
-                        while new_type_1 == new_type_2:
-                            new_type_2 = get_random_type(random)
+                    if species is not None:
+                        new_type_1 = get_random_type(random)
+                        new_type_2 = new_type_1
+                        if species.types[0] != species.types[1]:
+                            while new_type_1 == new_type_2:
+                                new_type_2 = get_random_type(random)
 
-                    species.types = (new_type_1, new_type_2)
+                        species.types = (new_type_1, new_type_2)
             elif self.multiworld.types[self.player].value == RandomizeTypes.option_follow_evolutions:
                 already_modified: Set[int] = set()
 
