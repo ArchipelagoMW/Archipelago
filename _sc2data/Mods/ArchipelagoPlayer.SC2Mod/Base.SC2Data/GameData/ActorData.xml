@@ -5871,7 +5871,6 @@
     <CActorAction id="AP_HailstormMissileVolley" parent="GenericAttack" effectImpact="AP_HailstormMissilePodsDamage" effectLaunch="AP_HailstormMissilePodsLaunchMissile">
         <LaunchAttachQuery Methods="AP_AMPatternDrunkenMissileVolley"/>
         <LaunchAssets Sound="AP_MissileTurret_HellstormAttackLaunch"/>
-        <Missile value="AP_HailstormMissileVolleyMissile"/>
         <ImpactMap index="None" Sound="AP_MissileTurret_HellstormAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_HailstormMissileVolleyMissile" parent="GenericAttackMissile" unitName="AP_HailstormMissilesWeapon">
@@ -5916,7 +5915,6 @@
     <CActorAction id="AP_MissileTurretAttack" parent="GenericAttack" effectImpact="AP_LongboltMissileU" effectLaunch="AP_LongboltMissileLM">
         <LaunchAttachQuery Methods="AMPatternMissileTurret"/>
         <LaunchAssets Sound="MissileTurret_AttackLaunch"/>
-        <Missile value="AP_MissileTurretAttackMissile"/>
         <ImpactAttachQuery Methods="AMFilterTarget AMRandomUniform"/>
         <ImpactMap index="None" Model="MissileTurretAttackImpact" Sound="MissileTurret_AttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
@@ -5956,6 +5954,38 @@
     <CActorTurret id="AP_MissileTurretTurret">
         <On Terms="TurretEnable.AP_MissileTurret" Send="Create"/>
     </CActorTurret>
+    <CActorUnit id="AP_SensorTower" parent="TerranBuildingEx" unitName="AP_SensorTower">
+        <Aliases value="_UnitMedium"/>
+        <Model value="SensorTower"/>
+        <BuildModel value="SensorTower"/>
+        <DeathArray index="Normal" ModelLink="SensorTowerDeath" SoundLink="SensorTower_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="SensorTower_Explode"/>
+        <PlacementModel value="SensorTowerPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PlacementActorModel value="SensorTowerPlacement"/>
+        <PortraitModel value="SensorTowerPortrait"/>
+        <BarOffset value="130"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-SensorTower.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-sensordome.dds"/>
+        <SoundArray index="Ready" value="SensorTower_Ready"/>
+        <SoundArray index="What" value="SensorTower_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-sensordome.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-SensorTower.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorRange id="AP_SensorTowerRadar">
+        <Inherits index="Visibility" value="0"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="UnitBirth.AP_SensorTower.EditorPlaced" Send="Create"/>
+        <On Terms="Behavior.AP_SensorTowerRadar.On" Send="Create"/>
+        <On Terms="Behavior.AP_SensorTowerRadar.Off" Send="Destroy"/>
+        <Range value="30.000000"/>
+        <RangeFlags index="Minimap" value="1"/>
+    </CActorRange>
     <CActorStateMonitor id="TerranFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->

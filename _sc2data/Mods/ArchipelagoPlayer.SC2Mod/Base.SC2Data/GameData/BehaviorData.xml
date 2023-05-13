@@ -936,6 +936,15 @@
             <WeaponDisableArray value="AP_MissileTurret"/>
             <WeaponDisableArray value="AP_DevastatorMissiles"/>
         </Modification>
-        <InitialEffect value="AP_MissileTurretWeaponSwapSwitchToHailstorm"/> <!-- Looks like Unused in Vanilla -->
+        <InitialEffect value="AP_MissileTurretWeaponSwapSwitchToHailstorm"/>
+        <!-- Looks like Unused in Vanilla -->
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SensorTowerRadar">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-status-radar.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Modification Radar="30" RadarFilters="-;Neutral,RawResource,HarvestableResource,Missile,Destructible,Buried,Cloaked"/>
     </CBehaviorBuff>
 </Catalog>
