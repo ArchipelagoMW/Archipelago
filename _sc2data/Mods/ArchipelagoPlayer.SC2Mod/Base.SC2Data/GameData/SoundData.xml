@@ -2087,4 +2087,26 @@
         <Pitch value="-2.000000,2.000000"/>
         <Volume value="-7.500000,-6.000000"/>
     </CSound>
+    <CSound id="AP_HiveMindEmulator_MindControlImpact" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationEnd0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationEnd1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationEnd2.wav"/>
+        <Flags index="VariationFallback" value="0"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_HiveMindEmulator_MindControlLaunch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationLaunch2.wav"/>
+        <Flags index="Temporary" value="1"/>
+        <Flags index="VariationFallback" value="0"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_HiveMindEmulator_What" parent="Voice">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\HiveMindEmulator\HiveMindEmulator_What0.ogg"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
 </Catalog>

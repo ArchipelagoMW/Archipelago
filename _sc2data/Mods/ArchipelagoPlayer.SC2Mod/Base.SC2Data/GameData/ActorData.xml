@@ -5986,6 +5986,80 @@
         <Range value="30.000000"/>
         <RangeFlags index="Minimap" value="1"/>
     </CActorRange>
+    <CActorUnit id="AP_HiveMindEmulator" parent="TerranBuilding" unitName="AP_HiveMindEmulator">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="Abil.AP_MindControl.SourceCastStart" Send="AnimPlay Attack Attack"/>
+        <DeathArray index="Normal" ModelLink="AP_HiveMindEmulatorDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Terran_ExplosionMedium"/>
+        <PlacementModel value="AP_HiveMindEmulatorPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacementSmall"/>
+        <PlacementActorModel value="AP_HiveMindEmulatorPlacementModel"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="125"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-hivemindemulator.dds"/>
+        </GroupIcon>
+        <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-HiveMindEmulator.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="What" value="AP_HiveMindEmulator_What"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="AP\Assets\Textures\BTN-Building-Terran-HiveMindEmulator.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-hivemindemulator.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorBeamSimple id="AP_HiveMindEmulatorBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.AP_MindControl.Start" Send="Create"/>
+        <On Terms="Effect.AP_MindControl.Start" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <AutoScaleFactor value="0.500000"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_HiveMindEmulatorBuild" parent="TerranBuildingBuildSmall">
+        <Model value="AP_HiveMindEmulatorBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_HiveMindEmulatorImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_MindControl.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <AutoScaleFactor value="0.500000"/>
+    </CActorModel>
+    <CActorSound id="AP_HiveMindEmulatorMindControlImpactSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_MindControl.On" Send="Create"/>
+        <Sound value="AP_HiveMindEmulator_MindControlImpact"/>
+    </CActorSound>
+    <CActorSound id="AP_HiveMindEmulatorMindControlLaunchSound" parent="SoundOneShot">
+        <On Terms="Abil.AP_MindControl.SourceCastStart" Send="Create"/>
+        <Sound value="AP_HiveMindEmulator_MindControlLaunch"/>
+    </CActorSound>
+    <CActorModel id="AP_HiveMindEmulatorPlacementModel">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation; ModelName AP_HiveMindEmulatorPlacement" Send="Create AP_HiveMindEmulatorProtectRange"/>
+        <On Terms="ActorCreation; ModelName AP_HiveMindEmulator; ModelIsLowQuality" Send="Create AP_HiveMindEmulatorProtectRange"/>
+        <On Terms="ActorDestruction" Target="AP_HiveMindEmulatorProtectRange" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+        <Model value="PlacementModel"/>
+    </CActorModel>
+    <CActorRange id="AP_HiveMindEmulatorProtectRange" parent="RangeAbil" abil="AP_MindControl"/>
+    <CActorTurret id="AP_HiveMindEmulatorRotateTurret">
+        <On Terms="TurretEnable.AP_HiveMindEmulatorRotate" Send="Create"/>
+    </CActorTurret>
     <CActorStateMonitor id="TerranFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->

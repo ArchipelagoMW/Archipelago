@@ -923,4 +923,8 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_MissileTurret"/>
     </CUpgrade>
+    <CUpgrade id="AP_HiveMindEmulator">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

@@ -850,6 +850,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ProjectileAccelerators" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHiveMindEmulatorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HiveMindEmulator" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="CountUpgradeShrikeTurretCompleteOnly2">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ShrikeTurret" State="CompleteOnly"/>

@@ -947,4 +947,14 @@
         <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
         <Modification Radar="30" RadarFilters="-;Neutral,RawResource,HarvestableResource,Missile,Destructible,Buried,Cloaked"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MindControl">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\ui_debuff_hivemindemulator.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InitialEffect value="AP_MindControlKillCargo"/>
+        <Player Value="Caster"/>
+        <Modification>
+            <AbilLinkDisableArray value="NeuralParasite"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

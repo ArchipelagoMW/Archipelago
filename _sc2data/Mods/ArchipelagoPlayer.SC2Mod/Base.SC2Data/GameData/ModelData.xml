@@ -1798,4 +1798,53 @@
         <Model value="Assets\Buildings\Terran\MissileTurretTitaniumHousingDeath\MissileTurretTitaniumHousingDeath.m3"/>
         <LowQualityModel value="MissileTurretDeathLow"/>
     </CModel>
+    <CModel id="AP_HiveMindEmulator" parent="Building">
+        <Model value="Assets\Buildings\Terran\HiveMindEmulator\HiveMindEmulator.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value=""/>
+        <PlanetPanelCamera value="Star2CameraHigher10"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.100000"/>
+        <ShadowRadius value="1.100000"/>
+        <TechPurchaseCamera value="Star2CameraHigher10"/>
+        <UnitGlossaryCamera value="Star2CameraHigher10"/>
+    </CModel>
+    <CModel id="AP_HiveMindEmulatorBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Terran\DominationBeam\DominationBeam.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_HiveMindEmulatorBuild" parent="TerranBuildingBuildSmall"/>
+    <CModel id="AP_HiveMindEmulatorDeath" parent="BuildingDeath">
+        <Model value="Assets\Buildings\Terran\HiveMindEmulatorDeath\HiveMindEmulatorDeath.m3"/>
+        <LowQualityModel value="AP_HiveMindEmulatorDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.300000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionMedium"/>
+            <Type value="Sound"/>
+            <Time value="3.333000"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_HiveMindEmulatorImpactModel" parent="ImpactFX">
+        <Model value="Assets\Effects\Terran\DominationImpact\DominationImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Lighting value=""/>
+    </CModel>
+    <CModel id="AP_HiveMindEmulatorPlacement" parent="Placement" Race="Terran">
+        <Model value="Assets\Buildings\Terran\HiveMindEmulatorPlacement\HiveMindEmulatorPlacement.m3"/>
+        <LowQualityModel value="AP_HiveMindEmulator"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.000000"/>
+        <ShadowRadius value="0.000000"/>
+    </CModel>
 </Catalog>

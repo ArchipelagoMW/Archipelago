@@ -2716,6 +2716,16 @@
         <EditorCategories value="Race:Terran"/>
         <Amount value="12"/>
     </CEffectDamage>
+    <CEffectApplyBehavior id="AP_MindControl">
+        <ValidatorArray index="0" value="IsZerg"/>
+        <ValidatorArray value="NotLarvaEgg"/>
+        <ValidatorArray value="NotLarva"/>
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumTransport id="AP_MindControlKillCargo">
+        <EditorCategories value=""/>
+        <Effect value="Kill"/>
+    </CEffectEnumTransport>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

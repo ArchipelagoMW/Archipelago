@@ -672,4 +672,14 @@
         <RangeSlop value="0"/>
         <Period value="0.8608"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HiveMindEmulator">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Hidden" value="1"/>
+        <TargetFilters value="Visible;Structure,Heroic,Worker,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="-;Player,Ally,Neutral,Enemy"/>
+        <MinScanRange value="0"/>
+        <Range value="9"/>
+        <Period value="0.2"/>
+        <Effect value="AP_MindControlDummyImpact"/> <!-- Unused in vanilla -->
+    </CWeaponLegacy>
 </Catalog>

@@ -578,4 +578,9 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Use" Link="AP_CountUpgradeHailstormMissilePodsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseHiveMindEmulator">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitEngineeringBayCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHiveMindEmulatorCompleteOnly"/>
+    </CRequirement>
 </Catalog>

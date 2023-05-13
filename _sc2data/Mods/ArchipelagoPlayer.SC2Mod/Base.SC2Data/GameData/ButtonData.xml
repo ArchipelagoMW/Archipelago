@@ -776,4 +776,13 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_HiveMindEmulator">
+        <Icon value="Assets\Textures\btn-building-terran-hivemindemulator.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-hivemindemulator.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_MindControl">
+        <Icon value="Assets\Textures\btn-ability-terran-scannersweep-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

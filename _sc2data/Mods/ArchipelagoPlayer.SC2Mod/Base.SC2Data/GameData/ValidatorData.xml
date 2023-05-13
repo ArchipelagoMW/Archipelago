@@ -189,6 +189,12 @@
         <Find value="1"/>
         <Value value="AP_FortifiedCarapace"/>
     </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_HiveMindEmulatorTargetFilters">
+        <ResultFailed value="OKPlaceholder"/>
+        <Type value="And"/>
+        <CombineArray value="NotLarva"/>
+        <CombineArray value="NotLarvaEgg"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsBanshee" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaBanshee"/>
