@@ -229,7 +229,7 @@ Axe of Purity;                      Calamity;                                   
 Soul of Light;                      ;                                           Hallow | (@calamity & #Queen Slime);
 Blessed Apple;                      ;                                           Hallow;
 Rod of Discord;                     ;                                           Hallow;
-Gelatin World Tour;                 Achievement;                                Dungeon & Wall of Flesh & Hallow & #King Slime;
+Gelatin World Tour;                 Achievement | Grindy;                       Dungeon & Wall of Flesh & Hallow & #King Slime;
 Soul of Flight;                     ;                                           Wall of Flesh;
 Head in the Clouds;                 Achievement;                                (Soul of Flight & ((Hardmode Anvil & (Soul of Light | Soul of Night | Pixie Dust | Wall of Flesh | Solar Eclipse | @mech_boss(1) | Plantera | Spectre Bar | #Golem)) | (Shroomite Bar & Autohammer) | #Mourning Wood | #Pumpking)) | Steampunker | (Wall of Flesh & Witch Doctor) | (Solar Eclipse & Plantera) | #Everscream | #Old One's Army Tier 3 | #Empress of Light | #Duke Fishron | (Fragment & Luminite Bar & Ancient Manipulator); // Leaf Wings are Post-Plantera in 1.4.4
 Bunny;                              Npc;                                        Zoologist & Wall of Flesh; // Extremely simplified
