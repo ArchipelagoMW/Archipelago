@@ -654,11 +654,14 @@
     <CValidatorUnitType id="AP_IsVanillaBunker">
         <Value value="Bunker"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBunker">
+        <Value value="AP_Bunker"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="AP_IsDefensiveStructure">
         <CombineArray value="NotStructure"/>
         <CombineArray value="IsPhotonCannon"/>
         <CombineArray value="AP_IsVanillaBunker"/>
-        <!-- FIXME: Add AP_Bunker -->
+        <CombineArray value="AP_IsAPBunker"/>>
         <CombineArray value="IsMissileTurret"/>
         <CombineArray value="AP_IsVanillaSpineCrawler"/>
         <!-- FIXME: Add AP_SpineCrawler -->
