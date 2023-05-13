@@ -918,7 +918,7 @@
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
         <EffectArray Reference="Unit,AP_MissileTurret,LifeMax" Value="75"/>
-        <EffectArray Reference="Unit,AP _MissileTurret,LifeStart" Value="75"/>
+        <EffectArray Reference="Unit,AP_MissileTurret,LifeStart" Value="75"/>
         <EffectArray Operation="Set" Reference="Actor,AP_MissileTurret,UnitIcon" Value="Assets\Textures\BTN-Building-Terran-MissileTurretTitaniumHousing.dds"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_MissileTurret"/>
