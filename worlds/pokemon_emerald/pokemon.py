@@ -80,17 +80,23 @@ def get_random_species(
         allow_legendaries: bool = True) -> SpeciesData:
     candidates = [species for species in candidates if species is not None]
 
-    if nearby_bst is not None:
-        def has_nearby_bst(species: SpeciesData):
-            return abs(sum(species.base_stats) - nearby_bst) < nearby_bst / 10
-
-        candidates = list(filter(has_nearby_bst, candidates))
-
     if species_type is not None:
         candidates = [species for species in candidates if species_type in species.types]
 
     if not allow_legendaries:
         candidates = [species for species in candidates if species.label not in _legendary_pokemon]
+
+    if nearby_bst is not None:
+        def has_nearby_bst(species: SpeciesData, max_percent_different: int):
+            return abs(sum(species.base_stats) - nearby_bst) < nearby_bst * (max_percent_different / 100)
+        
+        max_percent_different = 10
+        bst_filtered_candidates = list(filter(lambda species: has_nearby_bst(species, max_percent_different), candidates))
+        while len(bst_filtered_candidates) == 0:
+            max_percent_different += 10
+            bst_filtered_candidates = list(filter(lambda species: has_nearby_bst(species, max_percent_different), candidates))
+
+        candidates = bst_filtered_candidates
 
     return candidates[rand.randrange(0, len(candidates))]
 
