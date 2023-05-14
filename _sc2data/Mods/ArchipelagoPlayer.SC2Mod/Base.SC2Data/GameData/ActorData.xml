@@ -1924,6 +1924,10 @@
     <CActorMissile id="AP_GhostEMPAttackMissile" parent="GenericAttackMissile" unitName="AP_EMP2Weapon">
         <Model value="EMP2Weapon"/>
     </CActorMissile>
+    <CActorSplat id="AP_nukeCursorSplat" parent="TerranCursorSplat" abil="AP_TacNukeStrike">
+        <Model value="nukeCursorSplat"/>
+    </CActorSplat>
+    <CActorRange id="AP_nukeRange" parent="RangeAbil" abil="AP_TacNukeStrike"/>
     <CActorModel id="AP_GhostNukeCollateralFire">
         <On Terms="Effect.AP_NukeDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow"/>
@@ -2074,6 +2078,12 @@
         <On Terms="Abil.AP_SpectreNuke.SourceChannelStop" Send="AnimClear SpellB"/>
         <On Terms="Abil.AP_SpectreNuke.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
         <On Terms="Abil.AP_SpectreNuke.SourceFinishStop" Send="AnimClear SpellC"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceCastStart" Send="AnimPlay SpellA Spell,A"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceCastStop" Send="AnimClear SpellA"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceChannelStart" Send="AnimPlay SpellB Spell,B PlayForever"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceChannelStop" Send="AnimClear SpellB"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceFinishStart" Send="AnimPlay SpellC Spell,C"/>
+        <On Terms="Abil.AP_TacNukeStrike.SourceFinishStop" Send="AnimClear SpellC"/>
         <On Terms="Abil.AP_Obliterate.SourcePrepStart" Send="AnimPlay Charge Spell"/>
         <On Terms="Abil.AP_Obliterate.SourcePrepStart" Send="AnimSetTimeScale Charge 0.150000"/>
         <On Terms="Abil.AP_Obliterate.SourcePrepStop" Send="AnimClear Charge"/>
@@ -2162,7 +2172,7 @@
         <On Terms="Behavior.AP_SpectreMindSplatter.Off" Send="Create"/>
     </CActorModel>
     <CActorRange id="AP_SpectreMindSplatterRange" parent="RangeAbil" abil="AP_SpectreMindSplatter"/>
-    <CActorUnit id="AP_SpectreNuke" parent="GenericUnitStandard" unitName="SpectreNuke">
+    <CActorUnit id="AP_SpectreNuke" parent="GenericUnitStandard" unitName="AP_SpectreNuke">
         <Model value="Invisible"/>
         <HighlightTooltip value="Unit/Name/AP_SpectreNuke"/>
         <SoundArray index="Ready" value="Alert_TerranNukeReady"/>
@@ -2170,7 +2180,7 @@
     <CActorModel id="AP_SpectreNukeCollateralFire">
         <On Terms="Effect.AP_SpectreNukeDamage.Start; At Target" Send="Create"/>
     </CActorModel>
-    <CActorSplat id="AP_SpectreNukeCursorSplat" parent="TerranCursorSplat" abil="SpectreNuke">
+    <CActorSplat id="AP_SpectreNukeCursorSplat" parent="TerranCursorSplat" abil="AP_SpectreNuke">
         <Model value="AP_SpectreNukeCursorSplat"/>
     </CActorSplat>
     <CActorSquib id="AP_SpectreNukeDrop">
@@ -2508,7 +2518,6 @@
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
         <NameOffset value="150"/>
         <SoundArray index="Ready" value="AP_MercCompound_What"/>
-        <SoundArray index="What" value="AP_MercCompound_What"/>
         <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
         <UnitFlags index="ShowBlobShadow" value="0"/>
         <UnitIcon value="Assets\Textures\btn-building-terran-merccompound.dds"/>
@@ -2518,6 +2527,49 @@
     </CActorUnit>
     <CActorModel id="AP_MercCompoundBuild" parent="TerranBuildingBuild"/>
     <CActorSplat id="AP_MercCompoundSplat" parent="GenericUnitSplat" unitName="AP_MercCompound"/>
+    <CActorUnit id="AP_GhostAcademy" parent="TerranBuildingEx" unitName="AP_GhostAcademy">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="QueueAnim"/>
+        <Model value="GhostAcademy"/>
+        <BuildModel value="GhostAcademy"/>
+        <DeathArray index="Normal" ModelLink="GhostAcademyDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="GhostAcademy_Explode"/>
+        <PlacementModel value="GhostAcademyPlacement"/>
+        <PortraitModel value="GhostAcademyPortrait"/>
+        <BarOffset value="125"/>
+        <BarWidth value="155"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-GhostAcademy.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-ghostacademy.dds"/>
+        <NameOffset value="100"/>
+        <SoundArray index="Ready" value="GhostAcademy_Ready"/>
+        <SoundArray index="What" value="GhostAcademy_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitFlags index="StandAnimBirthVariation" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-ghostacademy.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-GhostAcademy.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_GhostAcademyBuild" parent="TerranBuildingBuild">
+        <Model value="GhostAcademyBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_GhostAcademySplat" parent="GenericUnitSplat" unitName="AP_GhostAcademy">
+        <Model value="GhostAcademySplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_Nuke" parent="GenericUnitStandard" unitName="AP_Nuke">
+        <Model value="Invisible"/>
+        <SoundArray index="Ready" value="Alert_TerranNukeReady"/>
+        <UnitIcon value="Assets\Textures\btn-ability-terran-armnuke.dds"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <StatusBarFlags index="Magazine" value="0"/>
+    </CActorUnit>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->

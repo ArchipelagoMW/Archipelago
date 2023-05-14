@@ -845,44 +845,9 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
-    <CButton id="AP_HireDevilDogs">
-        <Icon value="AP\Assets\Textures\btn-unit-terran-firebatmercenary.dds"/>
-        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-firebat.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="AP_HireDukesRevenge">
-        <Icon value="AP\Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
-        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="AP_HireDuskWing">
-        <Icon value="AP\Assets\Textures\btn-unit-terran-bansheemercenary.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="AP_HireHammerSecurities">
-        <Icon value="AP\Assets\Textures\btn-unit-terran-maraudermercenary.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="AP_HireHelsAngels">
-        <Icon value="AP\Assets\Textures\btn-unit-terran-vikingmercenary-fighter.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="AP_HireKelmorianMiners">
-        <Icon value="AP\Assets\Textures\btn-unit-terran-marinemercenary.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="AP_HireSiegeBreakers">
-        <Icon value="AP\Assets\Textures\btn-unit-terran-siegetankmercenary-tank.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
-        <EditorCategories value="Race:Terran"/>
-    </CButton>
-    <CButton id="AP_HireSpartanCompany">
-        <Icon value="AP\Assets\Textures\btn-unit-terran-goliathmercenary.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
+    <CButton id="AP_NukeArm">
+        <Icon value="Assets\Textures\btn-ability-terran-armnuke.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-armnuke.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
 </Catalog>

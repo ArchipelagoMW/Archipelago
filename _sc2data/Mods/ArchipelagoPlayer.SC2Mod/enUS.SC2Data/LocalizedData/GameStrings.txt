@@ -1,5 +1,6 @@
 ﻿Abil/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Abil/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
+Abil/Name/AP_ArmSiloWithNuke=Arm Magazine (Nuke)
 Abil/Name/AP_ArmoryResearch=Research (Armory)
 Abil/Name/AP_AssaultMode=Assault Mode
 Abil/Name/AP_AttackRedirect=Attack Redirect
@@ -38,6 +39,7 @@ Abil/Name/AP_FusionCoreResearch=Research
 Abil/Name/AP_GhostCloak=Personal Cloaking
 Abil/Name/AP_GhostWeaponsFree=Weapons Free
 Abil/Name/AP_HerculesTransport=Hercules Transport
+Abil/Name/AP_HeroArmNuke=Hero Arm Nuke
 Abil/Name/AP_Irradiate=Irradiate
 Abil/Name/AP_LiberatorAATarget=AA Target
 Abil/Name/AP_LiberatorAGTarget=AG Target
@@ -70,6 +72,7 @@ Abil/Name/AP_SiegeMode=Siege
 Abil/Name/AP_Snipe=Sniper
 Abil/Name/AP_SpectreHoldFire=Hold Fire
 Abil/Name/AP_SpectreNuke=Nuke
+Abil/Name/AP_SpectreNukeSiloArmMagazine=Spectre Nuke Silo Arm Magazine
 Abil/Name/AP_SpiderMineUnburrowRangeDummy=Spider Mine Unburrow Range Dummy
 Abil/Name/AP_StarportLand=Land
 Abil/Name/AP_StarportLiftOff=Lift Off
@@ -107,6 +110,7 @@ Abil/Name/AP_Yamato=Yamato Gun
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
+Abil/Name/MercCompoundResearch2=Research
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
 Actor/AddonIndicator/AP_TechLab=T
@@ -254,6 +258,7 @@ Button/Name/AP_MissilePods=Missile Pods
 Button/Name/AP_MultiLockTargetingSystem=Multi-Lock Weapons System
 Button/Name/AP_NanoRepair=Nano-Repair
 Button/Name/AP_NeoSteelFrame=Neosteel Bunker
+Button/Name/AP_NukeArm=Arm Silo with Nuke
 Button/Name/AP_NukeCalldown=Tac Nuke Strike
 Button/Name/AP_NyxClassCloakingModule=Nyx-Class Cloaking Module
 Button/Name/AP_Obliterate=Psionic Lash
@@ -373,6 +378,7 @@ Button/Tooltip/AP_Firebat=Specialized anti-infantry attacker.<n/><n/><c val="#Co
 Button/Tooltip/AP_FortifiedBunker=Bunkers are fortified and have more life.
 Button/Tooltip/AP_FusionCore=Contains Battlecruiser upgrades. <n/><n/><c val="ffff8a">Enables:</c><n/>- Battlecruisers at the Starport<n/>- Hercules at the Starport
 Button/Tooltip/AP_Ghost=Infiltration unit. Can use Snipe and Cloak abilities. Can also call down Tactical Nukes.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_GhostAcademy=Can build Nukes that Ghosts can use.<n/><n/><c val="ffff8a">Enables:</c><n/>- Ghosts at the Barracks
 Button/Tooltip/AP_GhostHoldFire=Orders selected units to holster their weapons and avoid engaging enemies, unless given a direct command. Units holding fire will flee if attacked.
 Button/Tooltip/AP_Goliath=Heavy-fire support unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_HammerSecurity=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -430,6 +436,7 @@ Button/Tooltip/AP_MissileTurret=Primary anti-air defensive structure. <n/><n/><c
 Button/Tooltip/AP_MultiLockTargetingSystem=The Goliath can target ground and air units simultaneously.
 Button/Tooltip/AP_NanoRepair=Heals a friendly mechanical unit.<n/><n/><c val="f078ff">Heals 3 life per 1 energy.</c>
 Button/Tooltip/AP_NeoSteelFrame=Increases the number of Bunker slots by 2.
+Button/Tooltip/AP_NukeArm=Arms the Silo with a Tactical Nuke.<n/><n/>Nukes take <d time="20"/> to land, but they deal up to 300 (+200 vs. structures) damage in a large radius.<n/><n/>Use a Ghost to designate the target.
 Button/Tooltip/AP_NukeCalldown=Calls down a Nuclear Strike at a target location. Nukes take <d time="20"/> to land, but they deal up to 300 (+200 vs. structures) damage to enemies in a large radius.
 Button/Tooltip/AP_NyxClassCloakingModule=Cloak no longer requires energy.
 Button/Tooltip/AP_Obliterate=Deals 200 damage to a single target.
@@ -902,6 +909,7 @@ Unit/Name/AP_Firebat=Firebat
 Unit/Name/AP_FusionCore=Fusion Core
 Unit/Name/AP_G4ChargeWeapon=G-4 Charge
 Unit/Name/AP_Ghost=Ghost
+Unit/Name/AP_GhostAcademy=Shadow Ops
 Unit/Name/AP_Goliath=Goliath
 Unit/Name/AP_GoliathAWeapon=Goliath Air Weapon
 Unit/Name/AP_HailstormMissilesWeapon=Hellstorm Missiles
@@ -912,6 +920,7 @@ Unit/Name/AP_HelsAngelAssault=Hel's Angel
 Unit/Name/AP_HelsAngelFighter=Hel's Angel
 Unit/Name/AP_HelsAngelFighterWeapon=Hel's Angels (Fighter Weapon)
 Unit/Name/AP_Hercules=Hercules
+Unit/Name/AP_HeroNuke=Available Nuke
 Unit/Name/AP_HiveMindEmulator=Hive Mind Emulator
 Unit/Name/AP_HunterSeekerWeapon=Seeker
 Unit/Name/AP_HurricaneMissileLeft=Hurricane Missile Left
@@ -928,6 +937,7 @@ Unit/Name/AP_Medic=Medic
 Unit/Name/AP_Medivac=Medivac
 Unit/Name/AP_MercCompound=Merc Compound
 Unit/Name/AP_MissileTurret=Missile Turret
+Unit/Name/AP_Nuke=Nuke
 Unit/Name/AP_PerditionTurret=Perdition Turret
 Unit/Name/AP_PerditionTurretUnderground=Perdition Turret
 Unit/Name/AP_PointDefenseDrone=Point Defense Drone
@@ -981,6 +991,7 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
+Unit/Name/SpectreAP_Nuke=Spectre Nuke
 Upgrade/Name/AP_330mmBarrageCannons=330 mm Barrage Cannons
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Upgrade/Name/AP_AdvancedMedicTraining=Advanced Medic Training

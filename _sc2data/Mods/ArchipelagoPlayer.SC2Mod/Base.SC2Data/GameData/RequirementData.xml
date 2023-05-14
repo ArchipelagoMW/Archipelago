@@ -591,4 +591,16 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUnitArmoryCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HaveShadowOps">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitGhostAcademyCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNuke">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitNukeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_TrainNuke">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_AndOrCountUnitFactoryCompleteOnlyTechTreeCheatCountUnitFactoryFlyingCompleteOnlyTechTreeCheatNotCountUnitNukeQueuedOrBetterAtUnit"/>
+    </CRequirement>
 </Catalog>

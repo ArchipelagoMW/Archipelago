@@ -1473,6 +1473,15 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <!-- TODO: Upgrades -->
     </CAbilResearch>
+    <CAbilArmMagazine id="AP_ArmSiloWithNuke">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Launch value="ReleaseAtSource"/>
+        <Flags index="BestUnit" value="1"/>
+        <InfoArray index="Ammo1" Time="60" Unit="AP_Nuke">
+            <Button DefaultButtonFace="NukeArm" Requirements="AP_TrainNuke"/>
+        </InfoArray>
+        <CalldownEffect value="AP_Nuke"/>
+    </CAbilArmMagazine>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
@@ -1588,6 +1597,24 @@
     <CAbilMorph id="AP_StarportLiftOff" parent="TerranBuildingLiftOff" unit="AP_StarportFlying">
         <Name value="Abil/Name/AP_StarportLiftOff"/>
     </CAbilMorph>
+    <CAbilArmMagazine id="AP_HeroArmNuke">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Launch value="ReleaseAtSource"/>
+        <InfoArray index="Ammo1" Time="100" Unit="AP_HeroNuke">
+            <Resource index="Minerals" value="200"/>
+            <Resource index="Vespene" value="200"/>
+            <Button DefaultButtonFace="NukeArm" Requirements="AP_TrainNukeHero"/>
+        </InfoArray>
+        <CalldownEffect value="AP_HeroNukeCalldown"/>
+    </CAbilArmMagazine>
+    <CAbilArmMagazine id="AP_SpectreNukeSiloArmMagazine">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Launch value="ReleaseAtSource"/>
+        <InfoArray index="Ammo2" Time="60" Unit="SpectreAP_Nuke">
+            <Button DefaultButtonFace="AP_SpectreNukeArm" Requirements="AP_SpectreTrainNuke"/>
+        </InfoArray>
+        <CalldownEffect value="AP_SpectreNuke"/>
+    </CAbilArmMagazine>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

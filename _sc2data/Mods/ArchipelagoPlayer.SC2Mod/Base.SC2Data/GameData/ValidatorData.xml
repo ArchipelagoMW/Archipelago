@@ -222,6 +222,17 @@
     <CValidatorUnitType id="AP_IsAPBattlecruiser">
         <Value value="AP_Battlecruiser"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaBarracks">
+        <Value value="Barracks"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPBarracks">
+        <Value value="AP_Barracks"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsBarracks" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaBarracks"/>
+        <CombineArray value="AP_IsAPBarracks"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsBattlecruiser" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaBattlecruiser"/>
@@ -259,6 +270,17 @@
         <!-- Override -->
         <CombineArray value="AP_IsVanillaFactoryTechLab"/>
         <CombineArray value="AP_IsAPFactoryTechLab"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaGhostAcademy">
+        <Value value="GhostAcademy"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPGhostAcademy">
+        <Value value="AP_GhostAcademy"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsGhostAcademy" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaGhostAcademy"/>
+        <CombineArray value="AP_IsAPGhostAcademy"/>
     </CValidatorCombine>
     <CValidatorCombine id="IsHellion" parent="CValidatorCombine">
         <!-- Override -->
@@ -460,6 +482,23 @@
         <CombineArray value="AP_MissileTurretUpgraded"/>
         <CombineArray value="IsNotConstructing"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaFlyingBarracks">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="BarracksFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPFlyingBarracks">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="AP_BarracksFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotFlyingBarracks" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="AP_NotVanillaFlyingBarracks"/>
+        <CombineArray value="AP_NotAPFlyingBarracks"/>
+        <Type value="And"/>
+    </CValidatorCombine>
     <CValidatorUnitType id="AP_NotVanillaFlyingFactory">
         <ResultNoUnit value="CantTargetThatUnit"/>
         <Value value="FactoryFlying"/>
@@ -493,6 +532,12 @@
         <CombineArray value="AP_NotVanillaFlyingStarport"/>
         <CombineArray value="AP_NotAPFlyingStarport"/>
         <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotGhostAcademy" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <Negate value="1"/>
+        <CombineArray value="IsGhostAcademy"/>
     </CValidatorCombine>
     <CValidatorCombine id="NotMissileTurret" parent="CValidatorCombine">
         <!-- Override -->

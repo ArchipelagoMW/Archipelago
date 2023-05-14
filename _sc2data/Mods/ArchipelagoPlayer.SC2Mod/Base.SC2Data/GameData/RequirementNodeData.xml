@@ -266,7 +266,7 @@
     </CRequirementAnd>
     <CRequirementAnd id="AP_AndOr96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheatNot866976074CountUnitNukeQueuedOrBetterAtUnit">
         <OperandArray value="AP_Or96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheat"/>
-        <OperandArray value="AP_Not866976074CountUnitNukeQueuedOrBetterAtUnit"/>
+        <OperandArray value="AP_NotCountUnitNukeQueuedOrBetterAtUnit"/>
     </CRequirementAnd>
     <CRequirementCountBehavior id="AP_CountBehaviorGhostHoldFireBCompleteOnlyAtUnit">
         <Flags index="TechTreeCheat" value="0"/>
@@ -300,10 +300,6 @@
         <Tooltip value="RequirementNode/Tooltip/CountUpgradePersonalCloakingCompleteOnly769360710"/>
         <Count Link="AP_PersonalCloaking" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
-    <CRequirementNot id="AP_Not866976074CountUnitNukeQueuedOrBetterAtUnit">
-        <Tooltip value="RequirementNode/Tooltip/Not2961182459CountUnitNukeQueuedOrBetterAtUnit"/>
-        <OperandArray index="0" value="AP_CountUnitNukeQueuedOrBetterAtUnit"/>
-    </CRequirementNot>
     <CRequirementNot id="AP_NotCountBehaviorGhostHoldFireBCompleteOnlyAtUnit">
         <OperandArray index="0" value="AP_CountBehaviorGhostHoldFireBCompleteOnlyAtUnit"/>
     </CRequirementNot>
@@ -917,5 +913,17 @@
     </CRequirementAnd>
     <CRequirementCountUnit id="AP_CountUnitMercCompoundCompleteOnly">
         <Count Link="AP_MercCompound" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementAnd id="AP_AndOrCountUnitFactoryCompleteOnlyTechTreeCheatCountUnitFactoryFlyingCompleteOnlyTechTreeCheatNotCountUnitNukeQueuedOrBetterAtUnit">
+        <OperandArray value="CountUnitAlias_FactoryCompleteOnly96167438TechTreeCheat"/> <!-- Any Factory-like -->
+        <OperandArray value="AP_NotCountUnitNukeQueuedOrBetterAtUnit"/>
+    </CRequirementAnd>
+    <CRequirementNot id="AP_NotCountUnitNukeQueuedOrBetterAtUnit">
+        <Tooltip value="RequirementNode/Tooltip/Not2961182459CountUnitNukeQueuedOrBetterAtUnit"/>
+        <OperandArray index="0" value="AP_CountUnitNukeQueuedOrBetterAtUnit"/>
+    </CRequirementNot>
+    <CRequirementCountUnit id="AP_CountUnitNukeQueuedOrBetterAtUnit">
+        <Count Link="AP_Nuke" State="QueuedOrBetterAtUnit"/>
+        <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUnit>
 </Catalog>
