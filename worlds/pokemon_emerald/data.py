@@ -7,9 +7,9 @@ and sorting, and Warp methods.
 from dataclasses import dataclass
 from enum import IntEnum
 import json
-import pkg_resources
-import pkgutil
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, Any, Union
+import pkgutil
+import pkg_resources
 
 from BaseClasses import ItemClassification
 

@@ -67,7 +67,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     can_dive = lambda state: _can_dive(state, player)
 
     # Sky
-    # Technically this is redundant, but may be nice for starting with a fly location mapped
     set_rule(
         multiworld.get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY", player),
         can_fly

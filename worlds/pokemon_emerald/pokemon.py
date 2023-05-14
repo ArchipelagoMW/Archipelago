@@ -89,12 +89,12 @@ def get_random_species(
     if nearby_bst is not None:
         def has_nearby_bst(species: SpeciesData, max_percent_different: int):
             return abs(sum(species.base_stats) - nearby_bst) < nearby_bst * (max_percent_different / 100)
-        
+
         max_percent_different = 10
-        bst_filtered_candidates = list(filter(lambda species: has_nearby_bst(species, max_percent_different), candidates))
+        bst_filtered_candidates = [species for species in candidates if has_nearby_bst(species, max_percent_different)]
         while len(bst_filtered_candidates) == 0:
             max_percent_different += 10
-            bst_filtered_candidates = list(filter(lambda species: has_nearby_bst(species, max_percent_different), candidates))
+            bst_filtered_candidates = [species for species in candidates if has_nearby_bst(species, max_percent_different)]
 
         candidates = bst_filtered_candidates
 

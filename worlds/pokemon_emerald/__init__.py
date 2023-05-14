@@ -118,7 +118,7 @@ class PokemonEmeraldWorld(World):
         item_locations: List[PokemonEmeraldLocation] = []
         for region in self.multiworld.regions:
             if region.player == self.player:
-                item_locations += [location for location in region.locations]
+                item_locations += region.locations
 
         # Filter events
         item_locations = [location for location in item_locations if not location.is_event]
@@ -165,7 +165,7 @@ class PokemonEmeraldWorld(World):
             item_category_weights = [weight if weight is not None else 0 for weight in item_category_weights]
 
             # Create lists of item codes that can be used to fill
-            fill_item_candidates = [item for item in emerald_data.items.values()]
+            fill_item_candidates = emerald_data.items.values()
 
             fill_item_candidates = [item for item in fill_item_candidates if "Unique" not in item.tags]
 
@@ -330,13 +330,13 @@ class PokemonEmeraldWorld(World):
             # Creating list of potential abilities
             ability_label_to_value = {ability.label.lower(): ability.ability_id for ability in emerald_data.abilities}
 
-            ability_blacklist_labels = set(["cacophony"])
+            ability_blacklist_labels = {"cacophony"}
             option_ability_blacklist = self.multiworld.ability_blacklist[self.player].value
             if option_ability_blacklist is not None:
-                ability_blacklist_labels |= set([ability_label.lower() for ability_label in option_ability_blacklist])
+                ability_blacklist_labels |= {ability_label.lower() for ability_label in option_ability_blacklist}
 
-            ability_blacklist = set([ability_label_to_value[label] for label in ability_blacklist_labels])
-            ability_whitelist = [ability.ability_id for ability in emerald_data.abilities if ability.ability_id not in ability_blacklist]
+            ability_blacklist = {ability_label_to_value[label] for label in ability_blacklist_labels}
+            ability_whitelist = [a.ability_id for a in emerald_data.abilities if a.ability_id not in ability_blacklist]
 
             if self.multiworld.abilities[self.player].value == RandomizeAbilities.option_follow_evolutions:
                 already_modified: Set[int] = set()
@@ -510,8 +510,14 @@ class PokemonEmeraldWorld(World):
                 self.modified_data.tmhm_moves[i] = new_move
 
         def randomize_wild_encounters():
-            should_match_bst = self.multiworld.wild_pokemon[self.player].value in {RandomizeWildPokemon.option_match_base_stats, RandomizeWildPokemon.option_match_base_stats_and_type}
-            should_match_type = self.multiworld.wild_pokemon[self.player].value in {RandomizeWildPokemon.option_match_type, RandomizeWildPokemon.option_match_base_stats_and_type}
+            should_match_bst = self.multiworld.wild_pokemon[self.player].value in {
+                RandomizeWildPokemon.option_match_base_stats,
+                RandomizeWildPokemon.option_match_base_stats_and_type
+            }
+            should_match_type = self.multiworld.wild_pokemon[self.player].value in {
+                RandomizeWildPokemon.option_match_type,
+                RandomizeWildPokemon.option_match_base_stats_and_type
+            }
             should_allow_legendaries = self.multiworld.allow_wild_legendaries[self.player].value == Toggle.option_true
 
             for map_data in self.modified_data.maps:
@@ -526,7 +532,13 @@ class PokemonEmeraldWorld(World):
                             target_bst = sum(original_species.base_stats) if should_match_bst else None
                             target_type = random.choice(original_species.types) if should_match_type else None
 
-                            new_species.append(get_random_species(random, self.modified_data.species, target_bst, target_type, should_allow_legendaries).species_id)
+                            new_species.append(get_random_species(
+                                random,
+                                self.modified_data.species,
+                                target_bst,
+                                target_type,
+                                should_allow_legendaries).species_id
+                            )
 
                         new_encounters[i] = EncounterTableData(new_species, table.rom_address)
 
@@ -566,9 +578,15 @@ class PokemonEmeraldWorld(World):
                     ))
 
         def randomize_opponent_parties():
-            should_match_bst = self.multiworld.trainer_parties[self.player].value in {RandomizeTrainerParties.option_match_base_stats, RandomizeTrainerParties.option_match_base_stats_and_type}
-            should_match_type = self.multiworld.trainer_parties[self.player].value in {RandomizeTrainerParties.option_match_type, RandomizeTrainerParties.option_match_base_stats_and_type}
-            should_allow_legendaries = self.multiworld.allow_trainer_legendaries[self.player].value == Toggle.option_true
+            should_match_bst = self.multiworld.trainer_parties[self.player].value in {
+                RandomizeTrainerParties.option_match_base_stats,
+                RandomizeTrainerParties.option_match_base_stats_and_type
+            }
+            should_match_type = self.multiworld.trainer_parties[self.player].value in {
+                RandomizeTrainerParties.option_match_type,
+                RandomizeTrainerParties.option_match_base_stats_and_type
+            }
+            allow_legendaries = self.multiworld.allow_trainer_legendaries[self.player].value == Toggle.option_true
 
             for trainer in self.modified_data.trainers:
                 new_party = []
@@ -577,11 +595,25 @@ class PokemonEmeraldWorld(World):
                     target_bst = sum(original_species.base_stats) if should_match_bst else None
                     target_type = random.choice(original_species.types) if should_match_type else None
 
-                    new_species = get_random_species(random, self.modified_data.species, target_bst, target_type, should_allow_legendaries)
+                    new_species = get_random_species(
+                        random,
+                        self.modified_data.species,
+                        target_bst,
+                        target_type,
+                        allow_legendaries
+                    )
 
                     # Could cache this per species
-                    tm_hm_movepool = list(set([self.modified_data.tmhm_moves[i] for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility)) if is_compatible]))
-                    level_up_movepool = list(set([move.move_id for move in new_species.learnset if move.level <= pokemon.level]))
+                    tm_hm_movepool = list({
+                        self.modified_data.tmhm_moves[i]
+                        for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility))
+                        if is_compatible
+                    })
+                    level_up_movepool = list({
+                        move.move_id
+                        for move in new_species.learnset
+                        if move.level <= pokemon.level
+                    })
 
                     new_moves = (
                         random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
@@ -595,21 +627,33 @@ class PokemonEmeraldWorld(World):
                 trainer.party.pokemon = new_party
 
         def randomize_starters():
-            should_match_bst = self.multiworld.starters[self.player].value in {RandomizeStarters.option_match_base_stats, RandomizeStarters.option_match_base_stats_and_type}
-            should_match_type = self.multiworld.starters[self.player].value in {RandomizeStarters.option_match_type, RandomizeStarters.option_match_base_stats_and_type}
-            should_allow_legendaries = self.multiworld.allow_starter_legendaries[self.player].value == Toggle.option_true
+            match_bst = self.multiworld.starters[self.player].value in {
+                RandomizeStarters.option_match_base_stats,
+                RandomizeStarters.option_match_base_stats_and_type
+            }
+            match_type = self.multiworld.starters[self.player].value in {
+                RandomizeStarters.option_match_type,
+                RandomizeStarters.option_match_base_stats_and_type
+            }
+            allow_legendaries = self.multiworld.allow_starter_legendaries[self.player].value == Toggle.option_true
 
-            starter_1_bst = sum(get_species_by_name("Treecko").base_stats) if should_match_bst else None
-            starter_2_bst = sum(get_species_by_name("Torchic").base_stats) if should_match_bst else None
-            starter_3_bst = sum(get_species_by_name("Mudkip").base_stats)  if should_match_bst else None
+            starter_bsts = (
+                sum(get_species_by_name("Treecko").base_stats) if match_bst else None,
+                sum(get_species_by_name("Torchic").base_stats) if match_bst else None,
+                sum(get_species_by_name("Mudkip").base_stats)  if match_bst else None
+            )
 
-            starter_1_type = random.choice(get_species_by_name("Treecko").types) if should_match_type else None
-            starter_2_type = random.choice(get_species_by_name("Torchic").types) if should_match_type else None
-            starter_3_type = random.choice(get_species_by_name("Mudkip").types)  if should_match_type else None
+            starter_types = (
+                random.choice(get_species_by_name("Treecko").types) if match_type else None,
+                random.choice(get_species_by_name("Torchic").types) if match_type else None,
+                random.choice(get_species_by_name("Mudkip").types)  if match_type else None
+            )
 
-            starter_1 = get_random_species(random, self.modified_data.species, starter_1_bst, starter_1_type, should_allow_legendaries)
-            starter_2 = get_random_species(random, self.modified_data.species, starter_2_bst, starter_2_type, should_allow_legendaries)
-            starter_3 = get_random_species(random, self.modified_data.species, starter_3_bst, starter_3_type, should_allow_legendaries)
+            new_starters = (
+                get_random_species(random, self.modified_data.species, starter_bsts[0], starter_types[0], allow_legendaries),
+                get_random_species(random, self.modified_data.species, starter_bsts[1], starter_types[1], allow_legendaries),
+                get_random_species(random, self.modified_data.species, starter_bsts[2], starter_types[2], allow_legendaries)
+            )
 
             egg_code = self.multiworld.easter_egg[self.player].value
             egg_check_1 = 0
@@ -623,7 +667,11 @@ class PokemonEmeraldWorld(World):
                 egg = 96 + egg_check_2 - (egg_check_1 * 0x077C)
                 self.modified_data.starters = (egg, egg, egg)
             else:
-                self.modified_data.starters = (starter_1.species_id, starter_2.species_id, starter_3.species_id)
+                self.modified_data.starters = (
+                    new_starters[0].species_id,
+                    new_starters[1].species_id,
+                    new_starters[2].species_id
+                )
 
             # Putting the unchosen starter onto the rival's team
             rival_teams = [
@@ -665,7 +713,7 @@ class PokemonEmeraldWorld(World):
                 ]
             ]
 
-            for i, starter in enumerate([starter_2, starter_3, starter_1]):
+            for i, starter in enumerate(new_starters):
                 potential_evolutions = [evolution.species_id for evolution in starter.evolutions]
                 picked_evolution = starter.species_id
                 if len(potential_evolutions) > 0:
