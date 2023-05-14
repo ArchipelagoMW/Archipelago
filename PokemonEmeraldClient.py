@@ -27,6 +27,7 @@ CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
 
 IS_CHAMPION_FLAG = data.constants["FLAG_IS_CHAMPION"]
 DEFEATED_STEVEN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_STEVEN"]
+DEFEATED_NORMAN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_NORMAN_1"]
 
 
 class GBACommandProcessor(ClientCommandProcessor):
@@ -80,6 +81,8 @@ class GBAContext(CommonContext):
                     self.goal_flag = IS_CHAMPION_FLAG
                 elif slot_data["goal"] == Goal.option_steven:
                     self.goal_flag = DEFEATED_STEVEN_FLAG
+                elif slot_data["goal"] == Goal.option_norman:
+                    self.goal_flag = DEFEATED_NORMAN_FLAG
 
 
 def create_payload(ctx: GBAContext):

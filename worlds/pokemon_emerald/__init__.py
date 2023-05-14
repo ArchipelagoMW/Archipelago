@@ -229,6 +229,8 @@ class PokemonEmeraldWorld(World):
         victory_event_name = "EVENT_DEFEAT_CHAMPION"
         if self.multiworld.goal[self.player] == Goal.option_steven:
             victory_event_name = "EVENT_DEFEAT_STEVEN"
+        if self.multiworld.goal[self.player] == Goal.option_norman:
+            victory_event_name = "EVENT_DEFEAT_NORMAN"
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(victory_event_name, self.player)
 
