@@ -229,6 +229,7 @@ def generate_output(modified_data: PokemonEmeraldData, multiworld: MultiWorld, p
     removed_roadblocks |= (1 << 3) if "Aqua Hideout Grunts" in list_of_removed_roadblocks else 0
     removed_roadblocks |= (1 << 4) if "Route 119 Aqua Grunts" in list_of_removed_roadblocks else 0
     removed_roadblocks |= (1 << 5) if "Route 112 Magma Grunts" in list_of_removed_roadblocks else 0
+    removed_roadblocks |= (1 << 6) if "Seafloor Cavern Aqua Grunt" in list_of_removed_roadblocks else 0
     _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks)
 
     # Set slot name

@@ -724,6 +724,7 @@ class PokemonEmeraldWorld(World):
                 slot_data[option_name] = int(option.value)
 
         slot_data["free_fly_location_id"] = self.free_fly_location_id
+        slot_data["remove_roadblocks"] = list(self.multiworld.remove_roadblocks[self.player])
 
         return slot_data
 

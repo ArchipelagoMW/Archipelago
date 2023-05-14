@@ -43,10 +43,10 @@ local cb2_address = 0x22C0 + 4                     -- gMain + offset
 local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
 
 -- ROM addresses
-local slot_name_address = 0x59A004                 -- gArchipelagoInfo
+local slot_name_address = 0x59A010                 -- gArchipelagoInfo
 
 -- Bus addresses
-local cb2_overworld_func_address = 0x8086050 + 1   -- CB2_Overworld + 1
+local cb2_overworld_func_address = 0x808605C + 1   -- CB2_Overworld + 1
 
 local bizhawk_version = client.getversion()
 local bizhawk_major, bizhawk_minor, bizhawk_patch = bizhawk_version:match("(%d+)%.(%d+)%.?(%d*)")

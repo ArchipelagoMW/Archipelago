@@ -431,6 +431,7 @@ class RemoveRoadblocks(OptionSet):
     "Safari Zone Construction Workers"
     "Lilycove City Wailmer"
     "Aqua Hideout Grunts"
+    "Seafloor Cavern Aqua Grunt"
     """
     display_name = "Remove Roadblocks"
     valid_keys = frozenset([
@@ -439,7 +440,8 @@ class RemoveRoadblocks(OptionSet):
         "Route 119 Aqua Grunts",
         "Safari Zone Construction Workers",
         "Lilycove City Wailmer",
-        "Aqua Hideout Grunts"
+        "Aqua Hideout Grunts",
+        "Seafloor Cavern Aqua Grunt"
     ])
 
 

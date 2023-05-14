@@ -897,10 +897,6 @@ def set_default_rules(multiworld: MultiWorld, player: int):
 
     # Seafloor Cavern
     set_rule(
-        multiworld.get_entrance("MAP_SEAFLOOR_CAVERN_ENTRANCE:1/MAP_SEAFLOOR_CAVERN_ROOM1:0", player),
-        lambda state: state.has("EVENT_STEVEN_GIVES_DIVE", player)
-    )
-    set_rule(
         multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM1/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM1/NORTH", player),
         lambda state: can_rock_smash(state) and can_strength(state)
     )
@@ -976,6 +972,11 @@ def set_default_rules(multiworld: MultiWorld, player: int):
         multiworld.get_entrance("REGION_SEAFLOOR_CAVERN_ROOM8/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM8/NORTH", player),
         can_strength
     )
+    if "Seafloor Cavern Aqua Grunt" not in multiworld.remove_roadblocks[player].value:
+        set_rule(
+            multiworld.get_entrance("MAP_SEAFLOOR_CAVERN_ENTRANCE:1/MAP_SEAFLOOR_CAVERN_ROOM1:0", player),
+            lambda state: state.has("EVENT_STEVEN_GIVES_DIVE", player)
+        )
 
     # Pacifidlog Town
     set_rule(
