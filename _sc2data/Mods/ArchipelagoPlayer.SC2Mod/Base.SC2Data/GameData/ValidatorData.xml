@@ -321,6 +321,17 @@
         <CombineArray value="AP_IsVanillaStarport"/>
         <CombineArray value="AP_IsAPStarport"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaMercCompound">
+        <Value value="MercCompound"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPMercCompound">
+        <Value value="AP_MercCompound"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsMercCompound" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaMercCompound"/>
+        <CombineArray value="AP_IsAPMercCompound"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsSupplyDepotLowered" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaSupplyDepotLowered"/>

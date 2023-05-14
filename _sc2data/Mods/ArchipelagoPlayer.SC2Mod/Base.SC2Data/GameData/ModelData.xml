@@ -1847,4 +1847,64 @@
         <SelectionRadius value="0.000000"/>
         <ShadowRadius value="0.000000"/>
     </CModel>
+    <CModel id="AP_MercCompound" parent="Building" Race="Terran">
+        <Model value="Assets\Buildings\Terran\MercCompound\MercCompound.m3"/>
+        <Radius value="1.500000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="2.300000"/>
+        <ShadowRadius value="2.300000"/>
+        <SquibTypeDefault value="Metal"/>
+    </CModel>
+    <CModel id="AP_MercCompoundBuild" parent="TerranBuildingBuild">
+        <Radius value="2.000000"/>
+        <SelectionRadius value="2.000000"/>
+        <ShadowRadius value="2.000000"/>
+    </CModel>
+    <CModel id="AP_MercCompoundDeath" parent="BuildingDeath">
+        <Model value="Assets\Buildings\Terran\MercCompoundDeath\MercCompoundDeath.m3"/>
+        <LowQualityModel value="MercCompoundDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranPreExplosionSmall"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="0.633000"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Radius value="-1.000000"/>
+        <SelectionRadius value="0.000000"/>
+        <ShadowRadius value="0.000000"/>
+    </CModel>
+    <CModel id="AP_MercCompoundDeathLow" parent="BuildingDeath" Race="Terran">
+        <Model value="Assets\Effects\Terran\TerranLargeBuildingDeath\TerranLargeBuildingDeath_Low.m3"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="TerranExplosionLarge"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+        </Events>
+        <Lighting value="TerranLargeBuildingDeathLow"/>
+        <SelectionRadius value="0.250000"/>
+        <ShadowRadius value="0.250000"/>
+    </CModel>
+    <CModel id="AP_MercCompoundPlacement" parent="Placement" Race="Terran">
+        <Model value="Assets\Buildings\Terran\MercCompoundPlacement\MercCompoundPlacement.m3"/>
+        <LowQualityModel value="MercCompound"/>
+        <Lighting value="BlackMarket"/>
+    </CModel>
+    <CModel id="AP_MercCompoundSplat" parent="Splat">
+        <Model value="Assets\Splats\Splat_MercCompound\Splat_MercCompound.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

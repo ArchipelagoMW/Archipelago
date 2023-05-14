@@ -2726,6 +2726,56 @@
         <EditorCategories value=""/>
         <Effect value="Kill"/>
     </CEffectEnumTransport>
+    <CEffectApplyBehavior id="AP_MakePrecursorMerc">
+        <Behavior value="AP_PrecursorMerc"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_MercAirDrop">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorMerc"/>
+        <EffectArray value="AP_MercAirDropApplyBehaviorDelay"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MercAirDropApplyBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_MercAirDrop"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_MercAirDropApplyBehaviorB">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_MercAirDropB"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_MercAirDropApplyBehaviorDelay">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_MercAirDropDelay"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_MercAirDropB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorMerc"/>
+        <EffectArray value="AP_MercAirDropApplyBehaviorB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MercAirDropC">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_MercGroundDrop">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorMerc"/>
+        <EffectArray value="AP_MercGroundDropApplyBehaviorDelay"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MercGroundDropApplyBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_MercGroundDrop"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_MercGroundDropApplyBehaviorDelay">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_MercGroundDropDelay"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_RemovePrecursorMerc">
+        <BehaviorLink value="PrecursorMerc"/>
+    </CEffectRemoveBehavior>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

@@ -915,4 +915,7 @@
         <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
         <OperandArray value="AP_CountUnitFusionCoreCompleteOnlyTechTreeCheat"/>
     </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitMercCompoundCompleteOnly">
+        <Count Link="AP_MercCompound" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

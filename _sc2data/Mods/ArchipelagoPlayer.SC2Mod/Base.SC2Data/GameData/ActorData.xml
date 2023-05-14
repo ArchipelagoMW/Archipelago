@@ -2358,7 +2358,7 @@
         <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
         <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
         <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
-        <On Terms="Behavior.MercGroundDrop.Create" Send="Create AP_WarPigDropModel"/>
+        <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_WarPigDropModel"/>
         <On Terms="ActorCreation; ValidateUnit AP_NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
         <On Terms="Upgrade.AP_ShieldWall.Add" Send="AnimClear Cover"/>
         <On Terms="Upgrade.AP_ShieldWall.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
@@ -2448,10 +2448,11 @@
     </CActorUnit>
     <CActorSplat id="AP_FactorySplat" parent="TerranBuildingMorphSplat" unitName="AP_Factory">
         <Model value="FactorySplat"/>
-    </CActorSplat>    <CActorSound id="AP_FactoryLand" parent="SoundOneShot">
-    <On Terms="AbilMorph.*.Start; MorphTo AP_Factory" Send="Create"/>
-    <Sound value="Factory_Land"/>
-</CActorSound>
+    </CActorSplat>
+    <CActorSound id="AP_FactoryLand" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Factory" Send="Create"/>
+        <Sound value="Factory_Land"/>
+    </CActorSound>
     <CActorUnit id="AP_Starport" parent="TerranBuildingFlyerEx" unitName="AP_Starport">
         <On Terms="UnitDeathCustomize.AP_StarportFlying" Send="DeathCustomize Flying"/>
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestedVisual"/>
@@ -2487,6 +2488,36 @@
     <CActorSplat id="AP_StarportSplat" parent="TerranBuildingMorphSplat" unitName="AP_Starport">
         <Model value="StarportSplat"/>
     </CActorSplat>
+    <CActorUnit id="AP_MercCompound" parent="TerranBuilding" unitName="AP_MercCompound">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="QueueAnim"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationMercCompound"/>
+        <CreepHeightClass value="Medium"/>
+        <DeathArray index="Normal" ModelLink="AP_MercCompoundDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="AP_MercCompound_Explode"/>
+        <DeathActorModel value="ColonyInfestationBuildingDeath"/>
+        <PlacementModel value="AP_MercCompoundPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="120"/>
+        <BarWidth value="135"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\wireframe-terran-merccompound.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-merccompound.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <NameOffset value="150"/>
+        <SoundArray index="Ready" value="AP_MercCompound_What"/>
+        <SoundArray index="What" value="AP_MercCompound_What"/>
+        <SoundArray index="Construction" value="Terran_ConstructionWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-merccompound.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\wireframe-terran-merccompound.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_MercCompoundBuild" parent="TerranBuildingBuild"/>
+    <CActorSplat id="AP_MercCompoundSplat" parent="GenericUnitSplat" unitName="AP_MercCompound"/>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -4150,7 +4181,7 @@
         <Aliases value="_UnitMedium"/>
         <Macros value="UnloadDropAnim"/>
         <On Terms="ActorCreation" Send="StatusSet WeaponNext 0"/>
-        <On Terms="Behavior.MercGroundDrop.Create" Send="Create AP_HammerSecurityDropModel"/>
+        <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_HammerSecurityDropModel"/>
         <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster" Send="StatusIncrement WeaponNext"/>
         <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster; IsStatus WeaponNext 2" Send="StatusSet WeaponNext 0"/>
         <On Terms="Effect.AP_HammerSecurityLM.Start; At Caster; IsStatus WeaponNext 0" Send="AnimPlay AttackLeft Attack,Left"/>

@@ -573,83 +573,83 @@
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireKelmorianMiners">
-        <Icon value="Assets\Textures\btn-unit-terran-marinemercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-marinemercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireKelmorianMinersPH">
-        <Icon value="Assets\Textures\btn-unit-terran-marinemercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-marinemercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireDevilDogs">
-        <Icon value="Assets\Textures\btn-unit-terran-firebatmercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-firebatmercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireDevilDogsPH">
-        <Icon value="Assets\Textures\btn-unit-terran-firebatmercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-firebatmercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-firebat.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireHammerSecurities">
-        <Icon value="Assets\Textures\btn-unit-terran-maraudermercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-maraudermercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireHammerSecuritiesPH">
-        <Icon value="Assets\Textures\btn-unit-terran-maraudermercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-maraudermercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireSpartanCompany">
-        <Icon value="Assets\Textures\btn-unit-terran-goliathmercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-goliathmercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireSpartanCompanyPH">
-        <Icon value="Assets\Textures\btn-unit-terran-goliathmercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-goliathmercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireSiegeBreakers">
-        <Icon value="Assets\Textures\btn-unit-terran-siegetankmercenary-tank.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-siegetankmercenary-tank.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireSiegeBreakersPH">
-        <Icon value="Assets\Textures\btn-unit-terran-siegetankmercenary-tank.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-siegetankmercenary-tank.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireHelsAngels">
-        <Icon value="Assets\Textures\btn-unit-terran-vikingmercenary-fighter.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-vikingmercenary-fighter.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireHelsAngelsPH">
-        <Icon value="Assets\Textures\btn-unit-terran-vikingmercenary-fighter.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-vikingmercenary-fighter.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireDuskWing">
-        <Icon value="Assets\Textures\btn-unit-terran-bansheemercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-bansheemercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireDuskWingPH">
-        <Icon value="Assets\Textures\btn-unit-terran-bansheemercenary.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-bansheemercenary.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireDukesRevenge">
-        <Icon value="Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_HireDukesRevengePH">
-        <Icon value="Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_AutomatedRefinery">
@@ -843,6 +843,46 @@
     <CButton id="AP_Wraith">
         <Icon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireDevilDogs">
+        <Icon value="AP\Assets\Textures\btn-unit-terran-firebatmercenary.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-firebat.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireDukesRevenge">
+        <Icon value="AP\Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-battlecruiserloki.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireDuskWing">
+        <Icon value="AP\Assets\Textures\btn-unit-terran-bansheemercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireHammerSecurities">
+        <Icon value="AP\Assets\Textures\btn-unit-terran-maraudermercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-marauder.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireHelsAngels">
+        <Icon value="AP\Assets\Textures\btn-unit-terran-vikingmercenary-fighter.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireKelmorianMiners">
+        <Icon value="AP\Assets\Textures\btn-unit-terran-marinemercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-marine.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireSiegeBreakers">
+        <Icon value="AP\Assets\Textures\btn-unit-terran-siegetankmercenary-tank.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_HireSpartanCompany">
+        <Icon value="AP\Assets\Textures\btn-unit-terran-goliathmercenary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
 </Catalog>

@@ -957,4 +957,69 @@
             <AbilLinkDisableArray value="NeuralParasite"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MercAirDrop">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_MercAirDropB"/>
+        <Modification Height="10" MoveSpeedMultiplier="0.1">
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+            <HeightTime index="Stop" value="3"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MercAirDropB">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="1.1"/>
+        <ExpireEffect value="AP_MercAirDropC"/>
+        <Modification MoveSpeedMultiplier="0.1">
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MercAirDropC">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="0.9"/>
+        <ExpireEffect value="MercAirDropD"/>
+        <Modification MoveSpeedMultiplier="0.25">
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MercAirDropDelay">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.5"/>
+        <DurationRandomMin value="0.5"/>
+        <ExpireEffect value="AP_MercAirDropApplyBehavior"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MercGroundDrop">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="3"/>
+        <DurationRandomMin value="1"/>
+        <ExpireEffect value="AP_RemovePrecursorMerc"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MercGroundDropDelay">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="1"/>
+        <DurationRandomMin value="1"/>
+        <ExpireEffect value="AP_MercGroundDropApplyBehavior"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MercPHBehavior">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PrecursorMerc">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification MoveSpeedMultiplier="0.05">
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="NoDraw" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

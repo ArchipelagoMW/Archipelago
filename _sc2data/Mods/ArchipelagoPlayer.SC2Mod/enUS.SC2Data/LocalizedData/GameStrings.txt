@@ -71,14 +71,18 @@ Abil/Name/AP_Snipe=Sniper
 Abil/Name/AP_SpectreHoldFire=Hold Fire
 Abil/Name/AP_SpectreNuke=Nuke
 Abil/Name/AP_SpiderMineUnburrowRangeDummy=Spider Mine Unburrow Range Dummy
+Abil/Name/AP_StarportLand=Land
+Abil/Name/AP_StarportLiftOff=Lift Off
 Abil/Name/AP_StarportReactorMorph=Nuclear Reactor Morph (Starport)
 Abil/Name/AP_StarportTechLabMorph=Tech Lab Morph (Starport)
 Abil/Name/AP_StarportTechLabResearch=Tech Lab Research (Starport)
 Abil/Name/AP_StarportTechReactorMorph=Starport Tech Reactor Morph
+Abil/Name/AP_StarportTrain=Train (Starport)
 Abil/Name/AP_Stimpack=Stimpack
 Abil/Name/AP_StimpackMarauderRedirect=Stimpack Marauder Redirect
 Abil/Name/AP_StimpackRedirect=Stimpack Redirect
 Abil/Name/AP_StopRedirect=Stop Redirect
+Abil/Name/AP_SummonMercenaries=Summon Mercenaries
 Abil/Name/AP_SupplyDepotLower=Lower
 Abil/Name/AP_SupplyDepotRaise=Raise
 Abil/Name/AP_TacNukeStrike=Nuclear Strike
@@ -86,6 +90,7 @@ Abil/Name/AP_TechLabMorph=Tech Lab Morph (Detached)
 Abil/Name/AP_TechReactorMorph=Tech Reactor Morph
 Abil/Name/AP_ThorReborn=Thor Reborn
 Abil/Name/AP_ThorWreckage=Thor Wreckage
+Abil/Name/AP_TrainStarportAdditionalUnits=Train (Starport) - Additional Units
 Abil/Name/AP_UltrasonicPulse=Ultrasonic Pulse
 Abil/Name/AP_Unsiege=Unsiege
 Abil/Name/AP_VultureQueue3=Make Spider Mine Queue
@@ -102,12 +107,8 @@ Abil/Name/AP_Yamato=Yamato Gun
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
-Abil/Name/AP_StarportLand=Land
-Abil/Name/AP_StarportLiftOff=Lift Off
-Abil/Name/AP_StarportTrain=Train (Starport)
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
-Abil/Name/AP_TrainStarportAdditionalUnits=Train (Starport) - Additional Units
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Behavior/Name/AP_250mmStrikeCannons=250mm Strike Cannons
@@ -124,6 +125,9 @@ Behavior/Name/AP_GhostHoldFireB=Hold Fire
 Behavior/Name/AP_Irradiate=Irradiated
 Behavior/Name/AP_LockOn=Lock On Target
 Behavior/Name/AP_LockdownB=Lockdown
+Behavior/Name/AP_MercAirDropDelay=Merc Air Drop Delay
+Behavior/Name/AP_MercGroundDrop=Merc Ground Drop
+Behavior/Name/AP_MercGroundDropDelay=Merc Ground Drop Delay
 Behavior/Name/AP_MindControl=Mind Control
 Behavior/Name/AP_MineDroneCountdown=Widow Mine Detonating
 Behavior/Name/AP_PersonalCloakingFree=Cloak
@@ -165,9 +169,12 @@ Button/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Button/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
 Button/Name/AP_AresClassWeaponsSystemviking=Phobos-Class Weapons System
 Button/Name/AP_AutomatedRefinery=Build Automated Refinery
+Button/Name/AP_Banshee=Build Banshee
+Button/Name/AP_Battlecruiser=Build Battlecruiser
 Button/Name/AP_BuildAutoTurret=Build Auto-Turret
 Button/Name/AP_BuildCyclone=Build Cyclone
 Button/Name/AP_BuildFortifiedBunker=Build Fortified Bunker
+Button/Name/AP_BuildHercules=Build Hercules
 Button/Name/AP_BuildPointDefenseDrone=Build Point Defense Drone
 Button/Name/AP_BuildScienceVessel=Build Science Vessel
 Button/Name/AP_Bunker=Build Bunker
@@ -240,6 +247,7 @@ Button/Name/AP_Marauder=Train Marauder
 Button/Name/AP_Marine=Train Marine
 Button/Name/AP_Medic=Train Medic
 Button/Name/AP_MedicHeal=Heal
+Button/Name/AP_Medivac=Build Medivac
 Button/Name/AP_MicroFiltering=Micro-Filtering
 Button/Name/AP_MindControl=Mind Control
 Button/Name/AP_MissilePods=Missile Pods
@@ -258,6 +266,8 @@ Button/Name/AP_ProjectileAccelerators=Projectile Accelerators
 Button/Name/AP_PsiDisruption=Psi Disruption
 Button/Name/AP_RapidDeployment=Rapid Deployment
 Button/Name/AP_RapidDeploymentTubes=Rapid Deployment
+Button/Name/AP_Raven=Build Raven
+Button/Name/AP_Reactor=Build Reactor
 Button/Name/AP_Reaper=Train Reaper
 Button/Name/AP_ReinforcedSuperstructure=Titanium Housing
 Button/Name/AP_ResearchCycloneRapidFireLaunchers=Research Rapid Fire Launchers
@@ -294,6 +304,7 @@ Button/Name/AP_TwinLinkedFlameThrowers=Twin-Linked Flame Thrower
 Button/Name/AP_U238Rounds=U-238 Rounds
 Button/Name/AP_UltrasonicPulse=Ultrasonic Pulse
 Button/Name/AP_ValkyrieSCBW=Build Valkyrie
+Button/Name/AP_VikingFighter=Build Viking
 Button/Name/AP_Vulture=Build Vulture
 Button/Name/AP_WeaponsFree=Weapons Free
 Button/Name/AP_WidowMine=Build Widow Mine
@@ -302,20 +313,10 @@ Button/Name/AP_WidowMineBioSplash=Sentinel Missiles
 Button/Name/AP_WidowMineBurrow=Activate Mine
 Button/Name/AP_WidowMineConcealment=Concealment
 Button/Name/AP_WidowMineUnburrow=Deactivate Mine
+Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_Banshee=Build Banshee
-Button/Name/AP_Battlecruiser=Build Battlecruiser
-Button/Name/AP_BuildHercules=Build Hercules
-Button/Name/AP_BuildScienceVessel=Build Science Vessel
-Button/Name/AP_Liberator=Build Liberator
-Button/Name/AP_Medivac=Build Medivac
-Button/Name/AP_Raven=Build Raven
-Button/Name/AP_Reactor=Build Reactor
-Button/Name/AP_ValkyrieSCBW=Build Valkyrie
-Button/Name/AP_VikingFighter=Build Viking
-Button/Name/AP_Wraith=Build Wraith
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
@@ -336,6 +337,7 @@ Button/Tooltip/AP_Battlecruiser=Powerful warship.<n/><n/><c val="#ColorAttackInf
 Button/Tooltip/AP_BuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AP_AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BuildCyclone=Mobile assault vehicle. Can use Lock On to quickly fire while moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BuildFortifiedBunker=Upgrades the Bunker to have 150 additional life. Cannot be garrisoned while the Bunker is upgrading.
+Button/Tooltip/AP_BuildHercules=Massive transport ship. Deploys loaded troops almost instantly.
 Button/Tooltip/AP_BuildPointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,AP_PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
 Button/Tooltip/AP_BuildScienceVessel=Aerial support unit. Can use Irradiate and Nano-Repair abilities.<n/><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_Bunker=Defensive structure. Able to protect up to <d ref="Abil,BunkerTransport,TotalCargoSpace"/> infantry unit slots. Units inside the Bunker have +1 range to their attacks. Bunkers can be salvaged.
@@ -420,6 +422,7 @@ Button/Tooltip/AP_Marine=General-purpose infantry.<n/><n/><c val="#ColorAttackIn
 Button/Tooltip/AP_Medic=Support trooper. Heals nearby biological units.
 Button/Tooltip/AP_MedicHeal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_heal,RechargeVitalRate"/> life per <d ref="Effect,AP_heal,RechargeVitalRate * Effect,AP_heal,DrainVitalCostFactor"/> energy.</c>
 Button/Tooltip/AP_Medivac=Air transport. Heals nearby biological units.
+Button/Tooltip/AP_MercCompound=Trains Mercenary units.
 Button/Tooltip/AP_MicroFiltering=This refinery is producing Vespene gas 25% faster
 Button/Tooltip/AP_MindControl=Permanently converts targeted Zerg unit to player control.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
 Button/Tooltip/AP_MissilePods=Missile Pods deal <d ref="Effect,AP_HurricaneMissileDamage,Amount * Effect,AP_HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,AP_HurricaneMissileDamage,AttributeBonus[0] * Effect,AP_HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
@@ -478,6 +481,8 @@ Button/Tooltip/AP_SpectreWeaponsFree=Orders selected units to fire at will. They
 Button/Tooltip/AP_SpiderMine=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.
 Button/Tooltip/AP_SpiderMineReplenish=Constructs a new Spider Mine to replace those used.<n/><n/>A Vulture can only carry 3 Spider Mines at a time.
 Button/Tooltip/AP_StabilizerMedPacks=Increases Medic heal speed. Reduces the amount of energy required for each heal.
+Button/Tooltip/AP_Starport=Air-unit production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Vikings<n/>- Medivacs
+Button/Tooltip/AP_StarportFlying=Starport must land to start unit production.
 Button/Tooltip/AP_StimRedirect=Orders Marines inside of the Bunker to use Stimpacks. They will take damage and have increased attack speed as normal.
 Button/Tooltip/AP_SupplyDepot=Provides supply.<n/>Supply allows you to create more units.<n/>Supply Depots can be lowered to allow units to walk over them.
 Button/Tooltip/AP_SupplyDepotDrop=Improved Supply Depot. Can be instantly deployed from orbit. Eliminates the time required for an SCV to assemble a standard Supply Depot.
@@ -506,19 +511,6 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_Banshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_Battlecruiser=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
-Button/Tooltip/AP_BuildHercules=Massive transport ship. Deploys loaded troops almost instantly.
-Button/Tooltip/AP_BuildScienceVessel=Aerial support unit. Can use Irradiate and Nano-Repair abilities.<n/><n/><c val="FFE303">Detector</c>
-Button/Tooltip/AP_Liberator=Artillery fighter. Loaded with missiles that deal area damage to enemy air targets. Can switch into Defender Mode to provide siege support.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
-Button/Tooltip/AP_Medivac=Air transport. Heals nearby biological units.
-Button/Tooltip/AP_Raven=Aerial support unit. Can use Auto-Turret, Point Defense Drone and Seeker Missile.<n/><n/><c val="FFE303">Detector</c>
-Button/Tooltip/AP_Reactor=Allows 2 units to be created simultaneously.
-Button/Tooltip/AP_Starport=Air-unit production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Vikings<n/>- Medivacs
-Button/Tooltip/AP_StarportFlying=Starport must land to start unit production.
-Button/Tooltip/AP_ValkyrieSCBW=Advanced anti-aircraft fighter. Able to use cluster missiles that deal area damage to air targets.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
-Button/Tooltip/AP_VikingFighter=Durable support flyer. Loaded with strong anti-capital air missiles. Can switch into Assault Mode to attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
-Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strikes.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -725,6 +717,7 @@ Effect/Name/AP_LongboltMissile=Longbolt Missile
 Effect/Name/AP_LongboltMissileLM=Longbolt Missile
 Effect/Name/AP_LongboltMissileU=Longbolt Missile
 Effect/Name/AP_MaelstromRounds=Maelstrom Rounds
+Effect/Name/AP_MakePrecursorMerc=Make Precursor Merc
 Effect/Name/AP_MarauderSlowAOE=Slow AOE
 Effect/Name/AP_MedivacHeal=Heal
 Effect/Name/AP_MedivacHealApplyBehaviorSet=Heal Apply Behavior Set
@@ -743,6 +736,15 @@ Effect/Name/AP_MedivacHealRemoveBehaviorSet=Heal Remove Behavior Set
 Effect/Name/AP_MedivacHealRemoveCasterBehavior=Heal Remove Caster Behavior
 Effect/Name/AP_MedivacHealSearch=Heal Search
 Effect/Name/AP_MedivacHealTargetPersistent=Heal Target Persistent
+Effect/Name/AP_MercAirDrop=Merc Air Drop
+Effect/Name/AP_MercAirDropApplyBehavior=Merc Air Drop Apply Behavior
+Effect/Name/AP_MercAirDropApplyBehaviorB=Merc Air Drop Apply Behavior B
+Effect/Name/AP_MercAirDropApplyBehaviorDelay=Merc Air Drop Apply Behavior Delay
+Effect/Name/AP_MercAirDropB=Merc Air Drop B
+Effect/Name/AP_MercAirDropC=Merc Air Drop C
+Effect/Name/AP_MercGroundDrop=Merc Ground Drop
+Effect/Name/AP_MercGroundDropApplyBehavior=Merc Ground Drop Apply Behavior
+Effect/Name/AP_MercGroundDropApplyBehaviorDelay=Merc Ground Drop Apply Behavior Delay
 Effect/Name/AP_MindControl=Mind Control
 Effect/Name/AP_MindControlKillCargo=Mind Control Kill Cargo
 Effect/Name/AP_MorphToTechReactor=Morph To Tech Reactor
@@ -775,6 +777,7 @@ Effect/Name/AP_PunisherGrenadesSet=Punisher Grenades
 Effect/Name/AP_PunisherGrenadesSlow=Punisher Grenades
 Effect/Name/AP_PunisherGrenadesU=Punisher Grenades
 Effect/Name/AP_RefineryMorph=Refinery Morph
+Effect/Name/AP_RemovePrecursorMerc=Remove Precursor Merc
 Effect/Name/AP_RenewBurrowTimer=Renew Burrow Timer
 Effect/Name/AP_ReplenishNanoConstructor=Replenish Nano-Constructor
 Effect/Name/AP_RescuePods=Rescue Pods
@@ -923,6 +926,7 @@ Unit/Name/AP_Marauder=Marauder
 Unit/Name/AP_Marine=Marine
 Unit/Name/AP_Medic=Medic
 Unit/Name/AP_Medivac=Medivac
+Unit/Name/AP_MercCompound=Merc Compound
 Unit/Name/AP_MissileTurret=Missile Turret
 Unit/Name/AP_PerditionTurret=Perdition Turret
 Unit/Name/AP_PerditionTurretUnderground=Perdition Turret
@@ -949,6 +953,7 @@ Unit/Name/AP_Spectre=Spectre
 Unit/Name/AP_SpectreNuke=Spectre Nuke
 Unit/Name/AP_SpectreShadowClone=Spectre Shadow
 Unit/Name/AP_SpiderMine=Spider Mine
+Unit/Name/AP_Starport=Starport
 Unit/Name/AP_StarportTechReactor=Tech Reactor
 Unit/Name/AP_SupplyDepot=Supply Depot
 Unit/Name/AP_SupplyDepotDrop=Supply Depot Calldown Beacon
@@ -976,7 +981,6 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_Starport=Starport
 Upgrade/Name/AP_330mmBarrageCannons=330 mm Barrage Cannons
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Upgrade/Name/AP_AdvancedMedicTraining=Advanced Medic Training

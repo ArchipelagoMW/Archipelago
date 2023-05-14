@@ -5858,6 +5858,76 @@
         <TechAliasArray value="Alias_Factory"/>
         <GlossaryAlias value="Factory"/>
     </CUnit>
+    <CUnit id="AP_MercCompound">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="1000"/>
+        <LifeMax value="1000"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <EnergyRegenRate value="1"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostResource index="Minerals" value="100"/>
+        <CostResource index="Vespene" value="50"/>
+        <RepairTime value="75"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que1"/>
+        <AbilArray Link="Rally"/>
+        <AbilArray Link="MercCompoundResearch"/>
+        <AbilArray Link="AP_SummonMercenaries"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="UnderConstruction"/>
+        <CardLayouts>
+            <LayoutButtons Face="AP_HireKelmorianMiners" Type="AbilCmd" AbilCmd="AP_SummonMercenaries,0" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_HireDevilDogs" Type="AbilCmd" AbilCmd="AP_SummonMercenaries,1" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_HireHammerSecurities" Type="AbilCmd" AbilCmd="AP_SummonMercenaries,3" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_HireSpartanCompany" Type="AbilCmd" AbilCmd="AP_SummonMercenaries,2" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_HireSiegeBreakers" Type="AbilCmd" AbilCmd="AP_SummonMercenaries,4" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_HireHelsAngels" Type="AbilCmd" AbilCmd="AP_SummonMercenaries,5" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_HireDuskWing" Type="AbilCmd" AbilCmd="AP_SummonMercenaries,6" Row="1" Column="2"/>
+            <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" AbilCmd="255,3" Row="1" Column="3"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="AP_HireDukesRevenge" Type="AbilCmd" AbilCmd="AP_SummonMercenaries,7" Row="2" Column="0"/>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress,Halt" Row="2" Column="3"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1.5"/>
+        <SeparationRadius value="1.5"/>
+        <Footprint value="Footprint4x4Contour"/>
+        <PlacementFootprint value="Footprint4x4"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="1.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <GlossaryPriority value="31"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <TechTreeUnlockedUnitArray value=""/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->

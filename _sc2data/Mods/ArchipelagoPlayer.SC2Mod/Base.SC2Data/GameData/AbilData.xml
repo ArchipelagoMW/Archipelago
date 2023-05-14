@@ -1718,4 +1718,159 @@
             <Unit value="AP_ValkyrieSCBW"/>
         </InfoArray>
     </CAbilTrain>
+    <CAbilTrain id="AP_SummonMercenaries">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray index="Train1" Effect="AP_MercGroundDrop">
+            <Resource index="Minerals" value="50"/>
+            <Charge>
+                <CountMax value="3"/>
+                <CountStart value="3"/>
+                <CountUse value="1"/>
+                <Link value="AP_KelMorianMercs"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="AP_KelMorianMercs"/>
+                <Location value="Global"/>
+                <TimeStart value="300"/>
+                <TimeUse value="300"/>
+            </Cooldown>
+            <Button DefaultButtonFace="AP_HireKelmorianMiners" State="Restricted"/>
+            <Unit value="AP_WarPig"/>
+            <Unit value="AP_WarPig"/>
+            <Unit value="AP_WarPig"/>
+            <Unit value="AP_WarPig"/>
+        </InfoArray>
+        <InfoArray index="Train2" Effect="AP_MercGroundDrop">
+            <Resource index="Minerals" value="100"/>
+            <Resource index="Vespene" value="75"/>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="AP_DevilDogs"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="AP_DevilDogs"/>
+                <Location value="Global"/>
+                <TimeStart value="300"/>
+                <TimeUse value="300"/>
+            </Cooldown>
+            <Button DefaultButtonFace="AP_HireDevilDogs" State="Restricted"/>
+            <Unit value="AP_DevilDog"/>
+            <Unit value="AP_DevilDog"/>
+        </InfoArray>
+        <InfoArray index="Train3" Effect="AP_MercGroundDrop">
+            <Resource index="Vespene" value="25"/>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="AP_SpartanCompany"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="AP_SpartanCompany"/>
+                <Location value="Global"/>
+                <TimeStart value="360"/>
+                <TimeUse value="360"/>
+            </Cooldown>
+            <Button DefaultButtonFace="AP_HireSpartanCompany" State="Restricted"/>
+            <Unit value="AP_SpartanCompany"/>
+            <Unit value="AP_SpartanCompany"/>
+        </InfoArray>
+        <InfoArray index="Train4" Effect="AP_MercGroundDrop">
+            <Resource index="Vespene" value="25"/>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="AP_HammerSecurities"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="AP_HammerSecurities"/>
+                <Location value="Global"/>
+                <TimeStart value="360"/>
+                <TimeUse value="360"/>
+            </Cooldown>
+            <Button DefaultButtonFace="AP_HireHammerSecurities" State="Restricted"/>
+            <Unit value="AP_HammerSecurity"/>
+            <Unit value="AP_HammerSecurity"/>
+        </InfoArray>
+        <InfoArray index="Train5" Effect="AP_MercGroundDrop">
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="AP_SiegeBreakers"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="AP_SiegeBreakers"/>
+                <Location value="Global"/>
+                <TimeStart value="420"/>
+                <TimeUse value="420"/>
+            </Cooldown>
+            <Button DefaultButtonFace="AP_HireSiegeBreakers" State="Restricted"/>
+            <Unit value="AP_SiegeBreaker"/>
+            <Unit value="AP_SiegeBreaker"/>
+        </InfoArray>
+        <InfoArray index="Train6" Effect="AP_MercAirDrop">
+            <Resource index="Minerals" value="25"/>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="AP_HelsAngels"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="AP_HelsAngels"/>
+                <Location value="Global"/>
+                <TimeStart value="300"/>
+                <TimeUse value="300"/>
+            </Cooldown>
+            <Button DefaultButtonFace="AP_HireHelsAngels" State="Restricted"/>
+            <Unit value="AP_HelsAngelFighter"/>
+            <Unit value="AP_HelsAngelFighter"/>
+            <Unit value="AP_HelsAngelFighter"/>
+        </InfoArray>
+        <InfoArray index="Train7" Effect="AP_MercAirDrop">
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Link value="AP_DuskWing"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="AP_DuskWing"/>
+                <Location value="Global"/>
+                <TimeStart value="420"/>
+                <TimeUse value="420"/>
+            </Cooldown>
+            <Button DefaultButtonFace="AP_HireDuskWing" State="Restricted"/>
+            <Unit value="AP_DuskWing"/>
+            <Unit value="AP_DuskWing"/>
+        </InfoArray>
+        <InfoArray index="Train8" Effect="AP_MercAirDrop">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="AP_DukesRevenge"/>
+                <Location value="Global"/>
+            </Charge>
+            <Cooldown>
+                <Link value="AP_DukesRevenge"/>
+                <Location value="Global"/>
+                <TimeStart value="420"/>
+                <TimeUse value="420"/>
+            </Cooldown>
+            <Button DefaultButtonFace="AP_HireDukesRevenge" State="Restricted"/>
+            <Unit value="AP_DukesRevenge"/>
+        </InfoArray>
+    </CAbilTrain>
 </Catalog>
