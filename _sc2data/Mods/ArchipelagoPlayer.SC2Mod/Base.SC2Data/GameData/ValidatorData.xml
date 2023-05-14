@@ -244,6 +244,17 @@
     <CValidatorUnitType id="AP_IsAPFactoryTechLab">
         <Value value="AP_FactoryTechLab"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPFactory">
+        <Value value="AP_Factory"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaFactory">
+        <Value value="Factory"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsFactory" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaFactory"/>
+        <CombineArray value="AP_IsAPFactory"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsFactoryTechLab" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaFactoryTechLab"/>
@@ -299,6 +310,17 @@
     <CValidatorUnitType id="AP_IsAPSupplyDepotLowered">
         <Value value="AP_SupplyDepotLowered"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPStarport">
+        <Value value="AP_Starport"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaStarport">
+        <Value value="Starport"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsStarport" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaStarport"/>
+        <CombineArray value="AP_IsAPStarport"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsSupplyDepotLowered" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaSupplyDepotLowered"/>
@@ -442,6 +464,23 @@
         <ResultFailed value="CantTargetThatUnit"/>
         <CombineArray value="AP_NotVanillaFlyingFactory"/>
         <CombineArray value="AP_NotAPFlyingFactory"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaFlyingStarport">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="StarportFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPFlyingStarport">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="AP_StarportFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotFlyingStarport" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="AP_NotVanillaFlyingStarport"/>
+        <CombineArray value="AP_NotAPFlyingStarport"/>
         <Type value="And"/>
     </CValidatorCombine>
     <CValidatorCombine id="NotMissileTurret" parent="CValidatorCombine">
@@ -836,8 +875,21 @@
         <Behavior value="FactoryTechLab"/>
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
+        <!-- Override -->
         <Type value="And"/>
         <CombineArray value="AP_TechLabNotVanillaFactory"/>
         <CombineArray value="AP_TechLabNotAPFactory"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_TechLabNotAPStarport">
+        <Behavior value="AP_StarportTechLab"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TechLabNotVanillaStarport">
+        <Behavior value="StarportTechLab"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="TechLabNotStarport" parent="CValidatorCombine">
+        <!-- Override -->
+        <Type value="And"/>
+        <CombineArray value="AP_TechLabNotVanillaStarport"/>
+        <CombineArray value="AP_TechLabNotAPStarport"/>
     </CValidatorCombine>
 </Catalog>

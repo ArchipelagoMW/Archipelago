@@ -2448,6 +2448,44 @@
     </CActorUnit>
     <CActorSplat id="AP_FactorySplat" parent="TerranBuildingMorphSplat" unitName="AP_Factory">
         <Model value="FactorySplat"/>
+    </CActorSplat>    <CActorSound id="AP_FactoryLand" parent="SoundOneShot">
+    <On Terms="AbilMorph.*.Start; MorphTo AP_Factory" Send="Create"/>
+    <Sound value="Factory_Land"/>
+</CActorSound>
+    <CActorUnit id="AP_Starport" parent="TerranBuildingFlyerEx" unitName="AP_Starport">
+        <On Terms="UnitDeathCustomize.AP_StarportFlying" Send="DeathCustomize Flying"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestedVisual"/>
+        <Model value="Starport"/>
+        <BuildModel value="Starport"/>
+        <DeathArray index="Normal" ModelLink="StarportDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Starport_Explode"/>
+        <DeathCustoms index="5" ModelLink="StarportFlyDeath" SoundLink="Starport_Explode" Name="Flying"/>
+        <PlacementModel value="StarportPlacement"/>
+        <PortraitModel value="StarportPortrait"/>
+        <BarOffset value="155"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Starport.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Starport.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="Starport_Ready"/>
+        <SoundArray index="What" value="Starport_What"/>
+        <SoundArray index="Movement" value="Starport_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Starport.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Starport.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_StarportBuild" parent="TerranBuildingBuild">
+        <Model value="StarportBuild"/>
+    </CActorModel>
+    <CActorSound id="AP_StarportLand" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Starport" Send="Create"/>
+        <Sound value="Starport_Land"/>
+    </CActorSound>
+    <CActorSplat id="AP_StarportSplat" parent="TerranBuildingMorphSplat" unitName="AP_Starport">
+        <Model value="StarportSplat"/>
     </CActorSplat>
     <CActorUnit id="Thor">
         <!-- Override -->
@@ -5377,8 +5415,8 @@
         <Macros value="BuildingFlattenTerrainMacro"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_TechReactorIsDetached" Send="DeathCustomize Detached"/>
         <DeathArray index="Normal" ModelLink="TechReactorDeath" SoundLink="TechLab_Explode"/>
-        <DeathCustoms ModelLink="TechReactorDetachedDeath" Name="Detached"/>
-        <PlacementModel value="TechReactorPlacement"/>
+        <DeathCustoms ModelLink="AP_TechReactorDetachedDeath" Name="Detached"/>
+        <PlacementModel value="AP_TechReactorPlacement"/>
         <PlacementSound value="Terran_BuildingPlacement"/>
         <PortraitModel value="AdjutantPortrait"/>
         <AddonIndicator value="Actor/AddonIndicator/AP_TechReactor"/>
@@ -5393,7 +5431,7 @@
         <GroupSoundArray index="Board" value="TechLabGroupBoard"/>
         <HeroIcon value="AP\Assets\Textures\BTN-Building-Terran-TechReactor.dds"/>
         <HighlightTooltip value="Unit/Name/TechReactor"/>
-        <LifeArmorIcon value="AP\Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
         <SoundArray index="Birth" value="TechLab_Birth"/>
         <SoundArray index="Ready" value="TechLab_Ready"/>
         <SoundArray index="Help" value="TechLabHelp"/>
@@ -6172,6 +6210,8 @@
         <!-- Add AP buildings -->
         <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_BarracksFlying" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_FactoryFlying" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_StarportFlying" Send="Create"/>
     </CActorSound>
     <CActorSound id="TerranBuildingLand">
         <!-- Override -->

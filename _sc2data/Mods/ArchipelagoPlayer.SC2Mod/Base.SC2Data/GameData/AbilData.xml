@@ -1492,6 +1492,20 @@
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
         </InfoArray>
     </CAbilBuild>
+    <CAbilBuild id="AP_StarportAddOns" parent="TerranAddOns">
+        <Name value="Abil/Name/AP_StarportAddOns"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <BuildMorphAbil value="AP_StarportLiftOff"/>
+        <InfoArray index="Build1" Unit="AP_StarportTechLab" Time="25">
+            <Button DefaultButtonFace="BuildTechLabStarport" Requirements="AP_UseTechReactorHide"/>
+        </InfoArray>
+        <InfoArray index="Build2" Unit="AP_StarportReactor" Time="50">
+            <Button Requirements="AP_UseTechReactorHide"/>
+        </InfoArray>
+        <InfoArray index="Build4" Unit="AP_StarportTechReactor" Time="50" AddOnParentCmdPriority="-1">
+            <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
+        </InfoArray>
+    </CAbilBuild>
     <CAbilMorphPlacement id="AP_FactoryLand" parent="TerranBuildingLand" unit="AP_Factory">
         <Name value="Abil/Name/AP_FactoryLand"/>
         <InfoArray index="0" Unit="AP_Factory" CollideRange="0">
@@ -1563,6 +1577,17 @@
             <Unit value="AP_Cyclone"/>
         </InfoArray>
     </CAbilTrain>
+    <CAbilMorphPlacement id="AP_StarportLand" parent="TerranBuildingLand" unit="AP_Starport">
+        <Name value="Abil/Name/AP_StarportLand"/>
+        <InfoArray index="0" Unit="AP_Starport" CollideRange="0">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="2"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorphPlacement>
+    <CAbilMorph id="AP_StarportLiftOff" parent="TerranBuildingLiftOff" unit="AP_StarportFlying">
+        <Name value="Abil/Name/AP_StarportLiftOff"/>
+    </CAbilMorph>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -1649,4 +1674,48 @@
         </CmdButtonArray>
     </CAbilRedirectInstant>
     <CAbilRedirectTarget id="AP_healRedirect"/>
+    <CAbilTrain id="AP_StarportTrain">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Building"/>
+        <InfoArray index="Train1" Time="42">
+            <Button DefaultButtonFace="AP_Medivac" State="Restricted"/>
+            <Unit value="AP_Medivac"/>
+        </InfoArray>
+        <InfoArray index="Train2" Time="60">
+            <Button DefaultButtonFace="AP_Banshee" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Banshee"/>
+        </InfoArray>
+        <InfoArray index="Train3" Time="60">
+            <Button DefaultButtonFace="AP_Raven" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Raven"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="110">
+            <Button DefaultButtonFace="AP_Battlecruiser" State="Restricted" Requirements="AP_HaveAttachedStarportTechLabAndFusionCore"/>
+            <Unit value="AP_Battlecruiser"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="42">
+            <Button DefaultButtonFace="AP_VikingFighter" State="Restricted"/>
+            <Unit value="AP_VikingFighter"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="70">
+            <Button DefaultButtonFace="AP_BuildHercules" State="Restricted" Requirements="AP_HaveAttachedStarportTechLabAndFusionCore"/>
+            <Unit value="AP_Hercules"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="60">
+            <Button DefaultButtonFace="AP_BuildScienceVessel" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_ScienceVessel"/>
+        </InfoArray>
+        <InfoArray index="Train8" Time="50">
+            <Button DefaultButtonFace="AP_Wraith" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Wraith"/>
+        </InfoArray>
+        <InfoArray index="Train9" Time="60">
+            <Button DefaultButtonFace="AP_Liberator" State="Restricted"/>
+            <Unit value="AP_Liberator"/>
+        </InfoArray>
+        <InfoArray index="Train10" Time="42">
+            <Button DefaultButtonFace="AP_ValkyrieSCBW" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_ValkyrieSCBW"/>
+        </InfoArray>
+    </CAbilTrain>
 </Catalog>

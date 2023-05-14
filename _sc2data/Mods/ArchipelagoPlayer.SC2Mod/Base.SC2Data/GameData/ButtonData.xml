@@ -375,7 +375,7 @@
     <CButton id="AP_BuildScienceVessel">
         <Icon value="Assets\Textures\btn-unit-terran-sciencevessel.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-sciencevessel.dds"/>
-        <Hotkey value="Button/Hotkey/ScienceVessel"/>
+        <Hotkey value="Button/Hotkey/AP_ScienceVessel"/>
         <EditorCategories value="Race:Terran"/>
         <HotkeyAlias value=""/>
     </CButton>
@@ -803,6 +803,46 @@
     <CButton id="AP_SiegeTank">
         <Icon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
         <AlertIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Banshee">
+        <Icon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-banshee.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Battlecruiser">
+        <Icon value="Assets\Textures\btn-unit-terran-battlecruiser.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-battlecruiser.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_BuildHercules">
+        <Icon value="Assets\Textures\btn-unit-terran-hercules.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-hercules.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Medivac">
+        <Icon value="Assets\Textures\btn-unit-terran-medivac.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-medivac.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Raven">
+        <Icon value="Assets\Textures\btn-unit-terran-raven.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-raven.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Reactor">
+        <Icon value="Assets\Textures\btn-building-terran-reactor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-reactor.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_VikingFighter">
+        <Icon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-vikingfighter.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Wraith">
+        <Icon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-wraith.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
 </Catalog>

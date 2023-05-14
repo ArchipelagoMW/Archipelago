@@ -907,4 +907,12 @@
         <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
         <OperandArray value="AP_CountUnitArmoryCompleteOnlyTechTreeCheat"/>
     </CRequirementAnd>
+    <CRequirementCountUnit id="AP_CountUnitStarportCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_Starport" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementAnd id="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUnitFusionCoreCompleteOnlyTechTreeCheat">
+        <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
+        <OperandArray value="AP_CountUnitFusionCoreCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
 </Catalog>
