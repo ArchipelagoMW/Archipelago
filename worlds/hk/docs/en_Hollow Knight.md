@@ -20,3 +20,9 @@ When the Hollow Knight player picks up an item from a location and it is an item
 player's recent items display as an item being sent to another player. If the item is for another Hollow Knight player
 then the sprite will be that of the item's original sprite. If the item belongs to a player that is not playing Hollow
 Knight then the sprite will be the Archipelago logo.
+
+## What logic does the randomization rely on?
+
+Benchwarping to the start is part of logic, see the readmes from the randomizer mod below
+https://github.com/homothetyhk/RandomizerMod/blob/master/README.md
+https://github.com/homothetyhk/RandomizerMod/blob/master/LOGIC_README.md
