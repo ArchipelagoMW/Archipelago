@@ -283,17 +283,6 @@ class PokemonEmeraldWorld(World):
             convert_unrandomized_items_to_events("KeyItem")
 
 
-    def get_pre_fill_items(self):
-        pre_fill_items = []
-        if self.badge_shuffle_info is not None:
-            pre_fill_items += [item for _, item in self.badge_shuffle_info]
-
-        if self.hm_shuffle_info is not None:
-            pre_fill_items += [item for _, item in self.hm_shuffle_info]
-
-        return pre_fill_items
-
-
     def pre_fill(self):
         # Items which are shuffled between their own locations
         if self.multiworld.badges[self.player].value == RandomizeBadges.option_shuffle:
@@ -301,8 +290,10 @@ class PokemonEmeraldWorld(World):
             badge_items = [item for _, item in self.badge_shuffle_info]
 
             collection_state = self.multiworld.get_all_state(False)
-            for item in badge_items:
-                collection_state.remove(item)
+            if self.hm_shuffle_info is not None:
+                for _, item in self.hm_shuffle_info:
+                    collection_state.collect(item)
+                collection_state.sweep_for_events()
 
             self.multiworld.random.shuffle(badge_locations)
             self.multiworld.random.shuffle(badge_items)
@@ -314,8 +305,6 @@ class PokemonEmeraldWorld(World):
             hm_items = [item for _, item in self.hm_shuffle_info]
 
             collection_state = self.multiworld.get_all_state(False)
-            for item in hm_items:
-                collection_state.remove(item)
 
             self.multiworld.random.shuffle(hm_locations)
             self.multiworld.random.shuffle(hm_items)
