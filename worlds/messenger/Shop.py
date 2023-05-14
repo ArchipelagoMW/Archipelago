@@ -100,4 +100,3 @@ def shuffle_shop_prices(world: MessengerWorld) -> Tuple[Dict[str, int], Dict[str
                 shop_prices[shop_item] = adjusted_price
 
     return shop_prices, figurine_prices
-

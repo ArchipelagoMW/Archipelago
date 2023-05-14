@@ -34,9 +34,13 @@ class MessengerRegion(Region):
             if self.multiworld.shop_shuffle[self.player]:
                 self.locations.append(MessengerLocation("Money Wrench", self, name_to_id.get("Money Wrench")))
         # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
-        if self.multiworld.shuffle_seals[self.player] and self.name not in {"Searing Crags", "Tower HQ", "Cloud Ruins"}:
+        if self.multiworld.shuffle_seals[self.player] and\
+                self.name not in {"Searing Crags", "Tower HQ", "Cloud Ruins", "Riviere Turquoise Entrance"}:
             self.locations += [MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None))
                                for seal_loc in SEALS if seal_loc.startswith(self.name.split(" ")[0])]
+        elif self.multiworld.shuffle_seals[self.player] and self.name == "Riviere Turquoise Entrance":
+            self.locations.append(MessengerLocation("Riviere Turquoise Seal - Bounces and Balls", self,
+                                                    name_to_id.get("Riviere Turquoise Seal - Bounces and Balls", None)))
         if self.multiworld.shuffle_shards[self.player] and self.name in MEGA_SHARDS:
             self.locations += [MessengerLocation(shard, self, name_to_id.get(shard, None))
                                for shard in MEGA_SHARDS[self.name]]

@@ -20,6 +20,7 @@ REGIONS: Dict[str, List[str]] = {
     "Cloud Ruins Right": ["Cloud Ruins - Acro"],
     "Underworld": ["Searing Crags - Pyro", "Underworld - Key of Chaos"],
     "Dark Cave": [],
+    "Riviere Turquoise Entrance": [],
     "Riviere Turquoise": ["Riviere Turquoise - Butterfly Matriarch"],
     "Sunken Shrine": ["Sunken Shrine - Lightfoot Tabi", "Sunken Shrine - Sun Crest", "Sunken Shrine - Moon Crest",
                       "Sunken Shrine - Key of Love"],
@@ -43,15 +44,16 @@ MEGA_SHARDS: Dict[str, List[str]] = {
     "Underworld": ["Under Entrance Mega Shard", "Hot Tub Mega Shard", "Projectile Pit Mega Shard"],
     "Forlorn Temple": ["Sunny Day Mega Shard", "Down Under Mega Shard"],
     "Sunken Shrine": ["Mega Shard of the Moon", "Beginner's Mega Shard", "Mega Shard of the Stars", "Mega Shard of the Sun"],
-    "Riviere Turquoise": ["Waterfall Mega Shard", "Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
+    "RIviere Turquoise Entrance": ["Waterfall Mega Shard"],
+    "Riviere Turquoise": ["Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
     "Elemental Skylands": ["Earth Mega Shard", "Water Mega Shard"],
 }
 
 
 REGION_CONNECTIONS: Dict[str, Set[str]] = {
     "Menu": {"Tower HQ"},
-    "Tower HQ": {"Autumn Hills", "Howling Grotto", "Searing Crags", "Glacial Peak", "Tower of Time", "Riviere Turquoise",
-                 "Sunken Shrine", "Corrupted Future", "The Shop", "Music Box"},
+    "Tower HQ": {"Autumn Hills", "Howling Grotto", "Searing Crags", "Glacial Peak", "Tower of Time",
+                 "Riviere Turquoise Entrance", "Sunken Shrine", "Corrupted Future", "The Shop", "Music Box"},
     "Tower of Time": set(),
     "Ninja Village": set(),
     "Autumn Hills": {"Ninja Village", "Forlorn Temple", "Catacombs"},
@@ -66,7 +68,8 @@ REGION_CONNECTIONS: Dict[str, Set[str]] = {
     "Cloud Ruins": {"Cloud Ruins Right"},
     "Cloud Ruins Right": {"Underworld"},
     "Underworld": set(),
-    "Dark Cave": {"Catacombs", "Riviere Turquoise"},
+    "Dark Cave": {"Catacombs", "Riviere Turquoise Entrance"},
+    "Riviere Turquoise Entrance": {"Riviere Turquoise"},
     "Riviere Turquoise": set(),
     "Sunken Shrine": {"Howling Grotto"},
     "Elemental Skylands": set(),
