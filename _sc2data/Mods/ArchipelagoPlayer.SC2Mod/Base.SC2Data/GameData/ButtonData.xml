@@ -396,8 +396,8 @@
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_Predator">
-        <Icon value="Assets\Textures\btn-unit-terran-predator.dds"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-predator.dds"/>
+        <Icon value="AP\Assets\Textures\btn-unit-terran-predator.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-unit-terran-predator.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_RetributionField">
@@ -783,6 +783,26 @@
     </CButton>
     <CButton id="AP_MindControl">
         <Icon value="Assets\Textures\btn-ability-terran-scannersweep-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Diamondback">
+        <Icon value="Assets\Textures\btn-unit-terran-cobra.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-cobra.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Goliath">
+        <Icon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-goliath.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Hellion">
+        <Icon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SiegeTank">
+        <Icon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-siegetank.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
 </Catalog>

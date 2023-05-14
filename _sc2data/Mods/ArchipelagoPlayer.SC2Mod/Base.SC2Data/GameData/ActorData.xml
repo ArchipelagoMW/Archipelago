@@ -2421,6 +2421,34 @@
     <CActorSound id="AP_MercCalldownImpact" parent="SoundOneShot">
         <Sound value="OrbitalCommand_CalldownMuleImpact"/>
     </CActorSound>
+    <CActorUnit id="AP_Factory" parent="TerranBuildingFlyerEx" unitName="AP_Factory">
+        <On Terms="UnitDeathCustomize.AP_FactoryFlying" Send="DeathCustomize Flying"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestedVisual"/>
+        <Model value="Factory"/>
+        <BuildModel value="Factory"/>
+        <DeathArray index="Normal" ModelLink="FactoryDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Factory_Explode"/>
+        <DeathCustoms index="5" ModelLink="FactoryFlyDeath" SoundLink="Factory_Explode" Name="Flying"/>
+        <PlacementModel value="FactoryPlacement"/>
+        <PortraitModel value="FactoryPortrait"/>
+        <BarOffset value="150"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-Factory.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-Factory.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="Factory_Ready"/>
+        <SoundArray index="What" value="Factory_What"/>
+        <SoundArray index="Movement" value="Factory_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-Factory.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-Factory.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSplat id="AP_FactorySplat" parent="TerranBuildingMorphSplat" unitName="AP_Factory">
+        <Model value="FactorySplat"/>
+    </CActorSplat>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->

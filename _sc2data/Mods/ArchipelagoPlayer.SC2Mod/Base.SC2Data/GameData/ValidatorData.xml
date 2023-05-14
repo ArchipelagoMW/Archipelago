@@ -427,6 +427,23 @@
         <CombineArray value="AP_MissileTurretUpgraded"/>
         <CombineArray value="IsNotConstructing"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaFlyingFactory">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="FactoryFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPFlyingFactory">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="AP_FactoryFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotFlyingFactory" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="AP_NotVanillaFlyingFactory"/>
+        <CombineArray value="AP_NotAPFlyingFactory"/>
+        <Type value="And"/>
+    </CValidatorCombine>
     <CValidatorCombine id="NotMissileTurret" parent="CValidatorCombine">
         <!-- Override -->
         <ResultFailed value="CantTargetThatUnit"/>
@@ -811,5 +828,16 @@
         <Type value="And"/>
         <CombineArray value="AP_NeosteelFramePurchased"/>
         <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_TechLabNotAPFactory">
+        <Behavior value="AP_FactoryTechLab"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TechLabNotVanillaFactory">
+        <Behavior value="FactoryTechLab"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
+        <Type value="And"/>
+        <CombineArray value="AP_TechLabNotVanillaFactory"/>
+        <CombineArray value="AP_TechLabNotAPFactory"/>
     </CValidatorCombine>
 </Catalog>

@@ -888,4 +888,23 @@
         <Count Link="AP_ReinforcedSuperstructure" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitFactoryCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_Factory" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitFactoryCompleteOnlyTechTreeCheat">
+        <Tooltip value="RequirementNode/Tooltip/CountUnitFactoryCompleteOnly96167438"/>
+        <Count Link="AP_Factory" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitFactoryFlyingCompleteOnly">
+        <Count Link="AP_FactoryFlying" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitFactoryFlyingCompleteOnlyTechTreeCheat">
+        <Tooltip value="RequirementNode/Tooltip/CountUnitFactoryFlyingCompleteOnly1718561093"/>
+        <Count Link="AP_FactoryFlying" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementAnd id="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUnitArmoryCompleteOnlyTechTreeCheat">
+        <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
+        <OperandArray value="AP_CountUnitArmoryCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
 </Catalog>

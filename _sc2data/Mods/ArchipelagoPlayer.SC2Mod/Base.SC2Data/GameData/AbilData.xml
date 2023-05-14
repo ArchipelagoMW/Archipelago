@@ -1478,6 +1478,31 @@
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
         <CmdButtonArray index="Execute" Requirements="AP_ShowIfHaveVanillaBarrAddOnParent"/>
     </CAbilMorph>
+    <CAbilBuild id="AP_FactoryAddOns" parent="TerranAddOns">
+        <Name value="Abil/Name/AP_FactoryAddOns"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <BuildMorphAbil value="AP_FactoryLiftOff"/>
+        <InfoArray index="Build1" Unit="AP_FactoryTechLab" Time="25">
+            <Button DefaultButtonFace="BuildTechLabFactory" Requirements="AP_UseTechReactorHide"/>
+        </InfoArray>
+        <InfoArray index="Build2" Unit="AP_FactoryReactor" Time="50">
+            <Button Requirements="AP_UseTechReactorHide"/>
+        </InfoArray>
+        <InfoArray index="Build4" Unit="AP_FactoryTechReactor" Time="50" AddOnParentCmdPriority="-1">
+            <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
+        </InfoArray>
+    </CAbilBuild>
+    <CAbilMorphPlacement id="AP_FactoryLand" parent="TerranBuildingLand" unit="AP_Factory">
+        <Name value="Abil/Name/AP_FactoryLand"/>
+        <InfoArray index="0" Unit="AP_Factory" CollideRange="0">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="2"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorphPlacement>
+    <CAbilMorph id="AP_FactoryLiftOff" parent="TerranBuildingLiftOff" unit="AP_FactoryFlying">
+        <Name value="Abil/Name/AP_FactoryLiftOff"/>
+    </CAbilMorph>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -1498,6 +1523,46 @@
         <SmartValidatorArray value="IsZerg"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_MindControl"/>
     </CAbilEffectTarget>
+    <CAbilTrain id="AP_FactoryTrain">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Building"/>
+        <InfoArray index="Train2" Time="45">
+            <Button DefaultButtonFace="AP_SiegeTank" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_SiegeTank"/>
+        </InfoArray>
+        <InfoArray index="Train5" Time="60">
+            <Button DefaultButtonFace="AP_Thor" State="Restricted" Requirements="AP_HaveArmoryAndAttachedTechLabOrAttachedTechReactor"/>
+            <Unit value="AP_Thor"/>
+        </InfoArray>
+        <InfoArray index="Train6" Time="30">
+            <Button DefaultButtonFace="AP_Hellion" State="Restricted"/>
+            <Unit value="AP_Hellion"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="40">
+            <Button DefaultButtonFace="AP_Goliath" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Goliath"/>
+        </InfoArray>
+        <InfoArray index="Train8" Time="50">
+            <Button DefaultButtonFace="AP_Diamondback" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Diamondback"/>
+        </InfoArray>
+        <InfoArray index="Train9" Time="25">
+            <Button DefaultButtonFace="AP_Vulture" State="Restricted"/>
+            <Unit value="AP_Vulture"/>
+        </InfoArray>
+        <InfoArray index="Train10" Time="40">
+            <Button DefaultButtonFace="AP_Predator" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Predator"/>
+        </InfoArray>
+        <InfoArray index="Train11" Time="40">
+            <Button DefaultButtonFace="AP_WidowMine" State="Restricted"/>
+            <Unit value="AP_WidowMine"/>
+        </InfoArray>
+        <InfoArray index="Train12" Time="45">
+            <Button DefaultButtonFace="AP_BuildCyclone" State="Restricted" Requirements="HaveAttachedTechLab"/>
+            <Unit value="AP_Cyclone"/>
+        </InfoArray>
+    </CAbilTrain>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
