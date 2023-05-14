@@ -24,5 +24,5 @@ Knight then the sprite will be the Archipelago logo.
 ## What logic does the randomization rely on?
 
 Benchwarping to the start is part of logic, see the readmes from the randomizer mod below
-https://github.com/homothetyhk/RandomizerMod/blob/master/README.md
-https://github.com/homothetyhk/RandomizerMod/blob/master/LOGIC_README.md
+[README](https://github.com/homothetyhk/RandomizerMod/blob/master/README.md)
+[LOGIC_README](https://github.com/homothetyhk/RandomizerMod/blob/master/LOGIC_README.md)
