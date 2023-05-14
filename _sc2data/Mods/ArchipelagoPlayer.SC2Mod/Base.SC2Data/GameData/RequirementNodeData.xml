@@ -256,18 +256,6 @@
     <CRequirementAllowUnit id="AP_AllowUnitGhost">
         <Link value="AP_Ghost"/>
     </CRequirementAllowUnit>
-    <CRequirementAnd id="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheatCountUnitGhostAcademyCompleteOnlyTechTreeCheat">
-        <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
-        <OperandArray value="AP_CountUnitGhostAcademyCompleteOnlyTechTreeCheat"/>
-    </CRequirementAnd>
-    <CRequirementAnd id="AP_AndCountUnitBarracksTechLabCompleteOnlyAtUnit2589852481TechTreeCheatCountUnitGhostAcademyCompleteOnlyTechTreeCheat">
-        <OperandArray value="AP_CountUnitBarracksTechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
-        <OperandArray value="AP_CountUnitGhostAcademyCompleteOnlyTechTreeCheat"/>
-    </CRequirementAnd>
-    <CRequirementAnd id="AP_AndOr96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheatNot866976074CountUnitNukeQueuedOrBetterAtUnit">
-        <OperandArray value="AP_Or96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheat"/>
-        <OperandArray value="AP_NotCountUnitNukeQueuedOrBetterAtUnit"/>
-    </CRequirementAnd>
     <CRequirementCountBehavior id="AP_CountBehaviorGhostHoldFireBCompleteOnlyAtUnit">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_GhostHoldFireB" State="CompleteOnlyAtUnit"/>
@@ -316,10 +304,6 @@
     <CRequirementAllowUnit id="AP_AllowUnitSpectre">
         <Link value="AP_Spectre"/>
     </CRequirementAllowUnit>
-    <CRequirementAnd id="AP_AndOr96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheatNot83801426CountUnitSpectreNukeQueuedOrBetterAtUnit">
-        <OperandArray value="AP_Or96167438CountUnitFactoryCompleteOnly96167438TechTreeCheatCountUnitFactoryFlyingCompleteOnly1718561093TechTreeCheat"/>
-        <OperandArray value="AP_Not83801426CountUnitSpectreNukeQueuedOrBetterAtUnit"/>
-    </CRequirementAnd>
     <CRequirementCountBehavior id="AP_CountBehaviorSpectreHoldFireBCompleteOnlyAtUnit">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_SpectreHoldFireB" State="CompleteOnlyAtUnit"/>
@@ -528,7 +512,7 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MagFieldLaunchers" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
-    <CRequirementAnd id="AP_AndCountUpgradeHireKelmorianMinersPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+    <CRequirementAnd id="AP_AndCountUpgradeHireKelmorianMinersPHCompleteOnlyAP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
         <OperandArray value="AP_CountUpgradeHireKelmorianMinersPHCompleteOnly"/>
         <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
     </CRequirementAnd>
@@ -554,7 +538,7 @@
     <CRequirementNot id="AP_NotCountUnitWarPigTotal">
         <OperandArray index="0" value="AP_CountUnitWarPigTotal"/>
     </CRequirementNot>
-    <CRequirementAnd id="AP_AndCountUpgradeHireDevilDogsPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+    <CRequirementAnd id="AP_AndCountUpgradeHireDevilDogsPHCompleteOnlyAP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
         <OperandArray value="AP_CountUpgradeHireDevilDogsPHCompleteOnly"/>
         <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
     </CRequirementAnd>
@@ -580,7 +564,7 @@
     <CRequirementNot id="AP_NotCountUnitDevilDogTotal">
         <OperandArray index="0" value="AP_CountUnitDevilDogTotal"/>
     </CRequirementNot>
-    <CRequirementAnd id="AP_AndCountUpgradeHireHammerSecuritiesPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+    <CRequirementAnd id="AP_AndCountUpgradeHireHammerSecuritiesPHCompleteOnlyAP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
         <OperandArray value="AP_CountUpgradeHireHammerSecuritiesPHCompleteOnly"/>
         <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
     </CRequirementAnd>
@@ -606,7 +590,7 @@
     <CRequirementNot id="AP_NotCountUnitHammerSecurityTotal">
         <OperandArray index="0" value="AP_CountUnitHammerSecurityTotal"/>
     </CRequirementNot>
-    <CRequirementAnd id="AP_AndCountUpgradeHireSpartanCompanyPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+    <CRequirementAnd id="AP_AndCountUpgradeHireSpartanCompanyPHCompleteOnlyAP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
         <OperandArray value="AP_CountUpgradeHireSpartanCompanyPHCompleteOnly"/>
         <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
     </CRequirementAnd>
@@ -614,7 +598,7 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HireSpartanCompanyPH" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
-    <CRequirementAnd id="AP_AndCountUpgradeHireSiegeBreakersPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+    <CRequirementAnd id="AP_AndCountUpgradeHireSiegeBreakersPHCompleteOnlyAP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
         <OperandArray value="AP_CountUpgradeHireSiegeBreakersPHCompleteOnly"/>
         <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
     </CRequirementAnd>
@@ -644,7 +628,7 @@
     <CRequirementNot id="AP_NotCountUnitSiegeBreakerTotal">
         <OperandArray index="0" value="AP_CountUnitSiegeBreakerTotal"/>
     </CRequirementNot>
-    <CRequirementAnd id="AP_AndCountUpgradeHireHelsAngelsPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+    <CRequirementAnd id="AP_AndCountUpgradeHireHelsAngelsPHCompleteOnlyAP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
         <OperandArray value="AP_CountUpgradeHireHelsAngelsPHCompleteOnly"/>
         <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
     </CRequirementAnd>
@@ -670,7 +654,7 @@
     <CRequirementNot id="AP_NotCountUnitHelsAngelFighterTotal">
         <OperandArray index="0" value="AP_CountUnitHelsAngelFighterTotal"/>
     </CRequirementNot>
-    <CRequirementAnd id="AP_AndCountUpgradeHireDuskWingPHCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+    <CRequirementAnd id="AP_AndCountUpgradeHireDuskWingPHCompleteOnlyAP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
         <OperandArray value="AP_CountUpgradeHireDuskWingPHCompleteOnly"/>
         <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
     </CRequirementAnd>
@@ -696,7 +680,7 @@
     <CRequirementNot id="AP_NotCountUnitDuskWingTotal">
         <OperandArray index="0" value="AP_CountUnitDuskWingTotal"/>
     </CRequirementNot>
-    <CRequirementAnd id="AP_AndCountUpgradeHireDukesRevengeCompleteOnlyNotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+    <CRequirementAnd id="AP_AndCountUpgradeHireDukesRevengeCompleteOnlyAP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
         <OperandArray value="AP_CountUpgradeHireDukesRevengeCompleteOnly"/>
         <OperandArray value="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
     </CRequirementAnd>
@@ -873,7 +857,7 @@
         <OperandArray value="AP_EqCountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit0"/>
     </CRequirementAnd>
     <CRequirementEq id="AP_EqCountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit0">
-        <OperandArray index="0" value="CountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit"/>
+        <OperandArray index="0" value="AP_CountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit"/>
         <OperandArray index="1" value="0"/>
     </CRequirementEq>
     <CRequirementCountBehavior id="AP_CountBehaviorSwapToHailstormMissilesCompleteOnlyAtUnit">
@@ -926,4 +910,17 @@
         <Count Link="AP_Nuke" State="QueuedOrBetterAtUnit"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUnit>
+    <CRequirementNot id="AP_NotCountUpgradeAutoHarvesterCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeAutoHarvesterCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUnitAlias_TechLabCompleteOnlyAtUnitTechTreeCheatCountUnitGhostAcademyCompleteOnlyTechTreeCheat">
+        <OperandArray value="CountUnitAlias_TechLabCompleteOnlyAtUnit2589852481TechTreeCheat"/>
+        <OperandArray value="AP_CountUnitGhostAcademyCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
+    <CRequirementNot id="AP_NotCountUpgradeShrikeTurretCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeShrikeTurretCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
+        <OperandArray index="0" value="CountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
+    </CRequirementNot>
 </Catalog>
