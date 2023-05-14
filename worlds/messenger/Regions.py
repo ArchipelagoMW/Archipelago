@@ -30,6 +30,37 @@ REGIONS: Dict[str, List[str]] = {
 }
 """seal locations have the region in their name and may not need to be created so skip them here"""
 
+SEALS: Dict[str, List[str]] = {
+    "Ninja Village": ["Ninja Village Seal - Tree House"],
+    "Autumn Hills": ["Autumn Hills Seal - Trip Saws", "Autumn Hills Seal - Double Swing Saws",
+                     "Autumn Hills Seal - Spike Ball Swing", "Autumn Hills Seal - Spike Ball Darts"],
+    "Catacombs": ["Catacombs Seal - Triple Spike Crushers", "Catacombs Seal - Crusher Gauntlet",
+                  "Catacombs Seal - Dirty Pond"],
+    "Bamboo Creek": ["Bamboo Creek Seal - Spike Crushers and Doors", "Bamboo Creek Seal - Spike Ball Pits",
+                     "Bamboo Creek Seal - Spike Crushers and Doors v2"],
+    "Howling Grotto": ["Howling Grotto Seal - Windy Saws and Balls", "Howling Grotto Seal - Crushing Pits",
+                       "Howling Grotto Seal - Breezy Crushers"],
+    "Quillshroom Marsh": ["Quillshroom Marsh Seal - Spikey Window", "Quillshroom Marsh Seal - Sand Trap",
+                          "Quillshroom Marsh Seal - Do the Spike Wave"],
+    "Searing Crags": ["Searing Crags Seal - Triple Ball Spinner"],
+    "Searing Crags Upper": ["Searing Crags Seal - Raining Rocks", "Searing Crags Seal - Rhythm Rocks"],
+    "Glacial Peak": ["Glacial Peak Seal - Ice Climbers", "Glacial Peak Seal - Projectile Spike Pit",
+                     "Glacial Peak Seal - Glacial Air Swag"],
+    "Tower of Time": ["Tower of Time Seal - Time Waster", "Tower of Time Seal - Lantern Climb",
+                      "Tower of Time Seal - Arcane Orbs"],
+    "Cloud Ruins Right": ["Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley",
+                          "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room"],
+    "Underworld": ["Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Spike Wall",
+                   "Underworld Seal - Fireball Wave", "Underworld Seal - Rising Fanta"],
+    "Forlorn Temple": ["Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset"],
+    "Sunken Shrine": ["Sunken Shrine Seal - Ultra Lifeguard", "Sunken Shrine Seal - Waterfall Paradise",
+                      "Sunken Shrine Seal - Tabi Gauntlet"],
+    "Riviere Turquoise Entrance": ["Riviere Turquoise Seal - Bounces and Balls"],
+    "Riviere Turquoise": ["Riviere Turquoise Seal - Launch of Faith", "Riviere Turquoise Seal - Flower Power"],
+    "Elemental Skylands": ["Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water",
+                           "Elemental Skylands Seal - Fire"]
+}
+
 MEGA_SHARDS: Dict[str, List[str]] = {
     "Autumn Hills": ["Autumn Hills Mega Shard", "Hidden Entrance Mega Shard"],
     "Catacombs": ["Catacombs Mega Shard"],

@@ -11,7 +11,7 @@ class HardLogicTest(MessengerTestBase):
         """Test the locations that still require wingsuit or rope dart."""
         locations = [
             # tower of time
-            "Tower of Time Seal - Time Waster Seal", "Tower of Time Seal - Lantern Climb",
+            "Tower of Time Seal - Time Waster", "Tower of Time Seal - Lantern Climb",
             "Tower of Time Seal - Arcane Orbs",
             # ninja village
             "Ninja Village - Candle", "Ninja Village - Astral Seed", "Ninja Village Seal - Tree House",
@@ -40,8 +40,6 @@ class HardLogicTest(MessengerTestBase):
             "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room",
             # underworld
             "Underworld Seal - Rising Fanta", "Underworld Seal - Sharp and Windy Climb",
-            # riviere turquoise
-            "Riviere Turquoise - Butterfly Matriarch", "Riviere Turquoise Seal - Flower Power",
             # elemental skylands
             "Elemental Skylands Seal - Air",
             # phantom
@@ -84,29 +82,3 @@ class ChallengingLogicTest(MessengerTestBase):
         "shuffle_seals": "false",
         "logic_level": "challenging",
     }
-
-
-class NoLogicTest(MessengerTestBase):
-    options = {
-        "logic_level": "oob",
-    }
-
-    def testAccess(self) -> None:
-        """Test the locations with rules still require things."""
-        all_locations = [
-            "Bamboo Creek - Claustro", "Searing Crags - Key of Strength", "Elemental Skylands - Key of Symbiosis",
-            "Sunken Shrine - Key of Love", "Searing Crags - Pyro", "Underworld - Key of Chaos",
-            "Corrupted Future - Key of Courage", "Autumn Hills Seal - Spike Ball Darts",
-            "Ninja Village Seal - Tree House", "Underworld Seal - Fireball Wave",
-            "Tower of Time Seal - Time Waster Seal", "Rescue Phantom", "Elemental Skylands Seal - Air",
-            "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire",
-        ]
-        for loc in all_locations:
-            with self.subTest("Default unreachables", location=loc):
-                self.assertFalse(self.can_reach_location(loc))
-
-    def testNoLogic(self) -> None:
-        """Test some funny locations to make sure they aren't reachable, but we can still win"""
-        self.assertEqual(self.can_reach_location("Searing Crags - Pyro"), False)
-        self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
-        self.assertBeatable(True)

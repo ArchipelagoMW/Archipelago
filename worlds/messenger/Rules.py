@@ -52,6 +52,7 @@ class MessengerRules:
             "Howling Grotto Seal - Crushing Pits": lambda state: self.has_wingsuit(state) and self.has_dart(state),
             "Howling Grotto - Emerald Golem": self.has_wingsuit,
             # searing crags
+            "Searing Crags Seal - Triple Ball Spinner": self.has_vertical,
             "Searing Crags - Astral Tea Leaves": lambda state: state.can_reach("Ninja Village - Astral Seed", "Location", self.player),
             "Searing Crags - Key of Strength": lambda state: state.has("Power Thistle", self.player),
             # glacial peak
@@ -60,7 +61,7 @@ class MessengerRules:
             # cloud ruins
             "Cloud Ruins Seal - Ghost Pit": self.has_dart,
             # tower of time
-            "Tower of Time Seal - Time Waster Seal": self.has_dart,
+            "Tower of Time Seal - Time Waster": self.has_dart,
             "Tower of Time Seal - Lantern Climb": self.has_wingsuit,
             "Tower of Time Seal - Arcane Orbs": lambda state: self.has_wingsuit(state) and self.has_dart(state),
             # underworld
@@ -168,6 +169,7 @@ class MessengerHardRules(MessengerRules):
             "Autumn Hills": self.has_vertical,
             "Catacombs": self.has_vertical,
             "Bamboo Creek": self.has_vertical,
+            "Riviere Turquoise": self.true,
             "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player),
             "Searing Crags Upper": self.true,
             "Glacial Peak": self.true,
@@ -178,6 +180,7 @@ class MessengerHardRules(MessengerRules):
 
         self.location_rules.update({
             "Howling Grotto Seal - Windy Saws and Balls": self.true,
+            "Searing Crags Seal - Triple Ball Spinner": self.true,
             "Searing Crags Seal - Raining Rocks": lambda state: self.has_vertical(state) or self.destroys_projectiles(state),
             "Searing Crags Seal - Rhythm Rocks": lambda state: self.has_vertical(state) or self.destroys_projectiles(state),
             "Searing Crags - Power Thistle": lambda state: self.has_vertical(state) or self.destroys_projectiles(state),

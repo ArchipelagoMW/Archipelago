@@ -3,9 +3,9 @@ from typing import Dict, Any, Optional, List
 
 from BaseClasses import Tutorial, ItemClassification, CollectionState, Item, MultiWorld
 from worlds.AutoWorld import World, WebWorld
-from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, SEALS, BOSS_LOCATIONS, FILLER
+from .Constants import NOTES, PHOBEKINS, ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER
 from .Options import messenger_options, NotesNeeded, Goal, PowerSeals, Logic
-from .Regions import REGIONS, REGION_CONNECTIONS, MEGA_SHARDS
+from .Regions import REGIONS, REGION_CONNECTIONS, SEALS, MEGA_SHARDS
 from .Shop import SHOP_ITEMS, shuffle_shop_prices, FIGURINES
 from .SubClasses import MessengerRegion, MessengerItem
 from . import Rules
@@ -49,13 +49,14 @@ class MessengerWorld(World):
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(ALL_ITEMS, base_offset)}
+    seal_locs = [seal for region in SEALS for seal in SEALS[region]]
     mega_shard_locs = [shard for region in MEGA_SHARDS for shard in MEGA_SHARDS[region]]
     shop_locs = [f"The Shop - {shop_loc}" for shop_loc in SHOP_ITEMS]
     location_name_to_id = {location: location_id
                            for location_id, location in
                            enumerate([
                                *ALWAYS_LOCATIONS,
-                               *SEALS,
+                               *seal_locs,
                                *mega_shard_locs,
                                *BOSS_LOCATIONS,
                                *shop_locs,

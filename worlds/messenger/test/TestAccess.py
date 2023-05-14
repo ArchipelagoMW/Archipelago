@@ -23,10 +23,10 @@ class AccessTest(MessengerTestBase):
         """locations that hard require the Rope Dart"""
         locations = [
             "Ninja Village Seal - Tree House", "Autumn Hills - Key of Hope", "Howling Grotto Seal - Crushing Pits",
-            "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster Seal",
-            "Tower of Time Seal - Arcane Orbs", "Underworld Seal - Rising Fanta",
+            "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster",
+            "Tower of Time Seal - Arcane Orbs", "Cloud Ruins Seal - Ghost Pit", "Underworld Seal - Rising Fanta",
             "Elemental Skylands - Key of Symbiosis", "Elemental Skylands Seal - Water",
-            "Elemental Skylands Seal - Fire", "Earth Mega Shard", "Water Mega Shard"
+            "Elemental Skylands Seal - Fire", "Earth Mega Shard", "Water Mega Shard", "Rescue Phantom",
         ]
         items = [["Rope Dart"]]
         self.assertAccessDependency(locations, items)
@@ -45,12 +45,14 @@ class AccessTest(MessengerTestBase):
             "Forlorn Temple - Demon King", "Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley",
             "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room", "Tower of Time Seal - Lantern Climb",
             "Tower of Time Seal - Arcane Orbs", "Underworld Seal - Sharp and Windy Climb",
-            "Underworld Seal - Fireball Wave", "Elemental Skylands Seal - Air", "Forlorn Temple Seal - Rocket Maze",
-            "Forlorn Temple Seal - Rocket Sunset", "Ninja Village - Astral Seed", "Searing Crags - Astral Tea Leaves",
-            "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard", "Sunny Day Mega Shard", "Down Under Mega Shard",
-            "Catacombs Mega Shard", "Above Entrance Mega Shard", "Abandoned Mega Shard", "Time Loop Mega Shard",
-            "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2", "Autumn Hills - Leaf Golem",
-            "Catacombs - Ruxxtin", "Howling Grotto - Emerald Golem"
+            "Underworld Seal - Fireball Wave", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water",
+            "Elemental Skylands Seal - Fire", "Elemental Skylands - Key of Symbiosis",
+            "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset", "Ninja Village - Astral Seed",
+            "Searing Crags - Astral Tea Leaves", "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard",
+            "Sunny Day Mega Shard", "Down Under Mega Shard", "Catacombs Mega Shard", "Above Entrance Mega Shard",
+            "Abandoned Mega Shard", "Time Loop Mega Shard", "Earth Mega Shard", "Water Mega Shard",
+            "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
+            "Autumn Hills - Leaf Golem", "Catacombs - Ruxxtin", "Howling Grotto - Emerald Golem"
         ]
         items = [["Wingsuit"]]
         self.assertAccessDependency(locations, items)
@@ -59,7 +61,7 @@ class AccessTest(MessengerTestBase):
         """locations that require either the Rope Dart or the Wingsuit"""
         locations = [
             "Ninja Village Seal - Tree House", "Howling Grotto Seal - Crushing Pits",
-            "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster Seal",
+            "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster",
             "Underworld Seal - Rising Fanta", "Elemental Skylands - Key of Symbiosis",
             "Elemental Skylands Seal - Water", "Elemental Skylands Seal - Fire", "Ninja Village - Candle",
             "Autumn Hills - Climbing Claws", "Autumn Hills - Key of Hope", "Autumn Hills Seal - Trip Saws",
@@ -77,6 +79,7 @@ class AccessTest(MessengerTestBase):
             "Searing Crags - Power Thistle", "Searing Crags - Key of Strength",
             "Glacial Peak Seal - Projectile Spike Pit", "Glacial Peak Seal - Glacial Air Swag",
             "Riviere Turquoise - Butterfly Matriarch", "Riviere Turquoise Seal - Flower Power",
+            "Riviere Turquoise Seal - Launch of Faith",
             "Searing Crags Seal - Triple Ball Spinner", "Searing Crags Seal - Raining Rocks",
             "Searing Crags Seal - Rhythm Rocks", "Ninja Village - Astral Seed", "Searing Crags - Astral Tea Leaves",
             "Rescue Phantom", "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard", "Sunny Day Mega Shard",
