@@ -11,6 +11,7 @@ from .data import data
 class Goal(Choice):
     """
     Determines what your goal is to consider the game beaten
+
     Champion: Become the champion and enter the hall of fame
     Steven: Defeat Steven in Meteor Falls
     Norman: Defeat Norman in Petalburg Gym
@@ -25,6 +26,7 @@ class Goal(Choice):
 class RandomizeBadges(Choice):
     """
     Adds Badges to the pool
+
     Vanilla: Gym leaders give their own badge
     Shuffle: Gym leaders give a random badge
     Completely Random: Badges can be found anywhere
@@ -39,6 +41,7 @@ class RandomizeBadges(Choice):
 class RandomizeHms(Choice):
     """
     Adds HMs to the pool
+
     Vanilla: HMs are at their vanilla locations
     Shuffle: HMs are shuffled among vanilla HM locations
     Completely Random: HMs can be found anywhere
@@ -96,8 +99,10 @@ class RandomizeNpcGifts(Toggle):
 class ItemPoolType(Choice):
     """
     Determines which non-progression items get put into the item pool
+
     Shuffled: Item pool consists of shuffled vanilla items
-    Diverse Balanced: Item pool consists of random items approximately proportioned according to what they're replacing (i.e. more pokeballs, fewer X items, etc...)
+    Diverse Balanced: Item pool consists of random items approximately proportioned
+    according to what they're replacing (i.e. more pokeballs, fewer X items, etc...)
     Diverse: Item pool consists of uniformly random (non-unique) items
     """
     display_name = "Item Pool Type"
@@ -131,6 +136,7 @@ class EnableFerry(Toggle):
 class EliteFourRequirement(Choice):
     """
     Sets the requirements to challenge the elite four
+
     Badges: Obtain some number of badges
     Gyms: Defeat some number of gyms
     """
@@ -153,6 +159,7 @@ class EliteFourCount(Range):
 class NormanRequirement(Choice):
     """
     Sets the requirements to challenge the Petalburg Gym
+
     Badges: Obtain some number of badges
     Gyms: Defeat some number of gyms
     """
@@ -175,6 +182,7 @@ class NormanCount(Range):
 class RandomizeWildPokemon(Choice):
     """
     Randomizes wild pokemon encounters (grass, caves, water, fishing)
+
     Vanilla: Wild encounters are unchanged
     Match Base Stats: Wild pokemon are replaced with species with approximately the same bst
     Match Type: Wild pokemon are replaced with species that share a type with the original
@@ -200,6 +208,7 @@ class AllowWildLegendaries(DefaultOnToggle):
 class RandomizeStarters(Choice):
     """
     Randomizes the starter pokemon in Professor Birch's bag
+
     Vanilla: Starters are unchanged
     Match Base Stats: Starters are replaced with species with approximately the same bst
     Match Type: Starters are replaced with species that share a type with the original
@@ -224,7 +233,8 @@ class AllowStarterLegendaries(DefaultOnToggle):
 
 class RandomizeTrainerParties(Choice):
     """
-    Randomizes the parties of all trainers (this will forcibly randomize the moves of pokemon with custom moves like those of gym leaders).
+    Randomizes the parties of all trainers.
+
     Vanilla: Parties are unchanged
     Match Base Stats: Trainer pokemon are replaced with species with approximately the same bst
     Match Type: Trainer pokemon are replaced with species that share a type with the original
@@ -250,6 +260,7 @@ class AllowTrainerLegendaries(DefaultOnToggle):
 class RandomizeStaticEncounters(Choice):
     """
     Randomizes static encounters (Rayquaza, hidden Kekleons, fake Voltorb pokeballs, etc...)
+
     Vanilla: Static encounters are unchanged
     Shuffle: Static encounters are shuffled between each other
     Match Base Stats: Static encounters are replaced with species with approximately the same bst
@@ -270,6 +281,7 @@ class RandomizeStaticEncounters(Choice):
 class RandomizeTypes(Choice):
     """
     Randomizes the type(s) of every pokemon. Each species will have the same number of types.
+
     Vanilla: Types are unchanged
     Shuffle: Types are shuffled globally for all species (e.g. every Water-type pokemon becomes Fire-type)
     Completely Random: Each species has its type(s) randomized
@@ -286,9 +298,11 @@ class RandomizeTypes(Choice):
 class RandomizeAbilities(Choice):
     """
     Randomizes abilities of every species. Each species will have the same number of abilities.
+
     Vanilla: Abilities are unchanged
     Completely Random: Each species has its abilities randomized
-    Follow Evolutions: Abilities are randomized, but if a pokemon would normally retain its ability when evolving, the random ability will also be retained
+    Follow Evolutions: Abilities are randomized, but if a pokemon would normally retain its ability
+    when evolving, the random ability will also be retained
     """
     display_name = "Randomize Abilities"
     default = 0
@@ -299,8 +313,9 @@ class RandomizeAbilities(Choice):
 
 class AbilityBlacklist(OptionSet):
     """
-    A list of abilities which no pokemon should have if abilities are randomized. For example, you could exclude Wonder Guard and Pressure like this:
-    ["Wonder Guard", "Pressure"]
+    A list of abilities which no pokemon should have if abilities are randomized.
+    For example, you could exclude Wonder Guard and Arena Trap like this:
+    ["Wonder Guard", "Arena Trap"]
     """
     display_name = "Ability Blacklist"
     valid_keys = frozenset([ability.label for ability in data.abilities])
@@ -308,7 +323,9 @@ class AbilityBlacklist(OptionSet):
 
 class LevelUpMoves(Choice):
     """
-    Randomizes the moves a pokemon learns when they reach a level where they would learn a move. Your starter is guaranteed to have a usable damaging move.
+    Randomizes the moves a pokemon learns when they reach a level where they would learn a move.
+    Your starter is guaranteed to have a usable damaging move.
+
     Vanilla: Learnset is unchanged
     Randomized: Moves are randomized
     Start with Four Moves: Moves are randomized and all Pokemon know 4 moves at level 1
@@ -336,7 +353,8 @@ class ReusableTms(Toggle):
 
 class TmCompatibility(Choice):
     """
-    Modifies the compatability of TMs with species
+    Modifies the compatibility of TMs
+
     Vanilla: Compatibility is unchanged
     Fully Compatible: Every species can learn any TM
     Completely Random: Compatibility is 50/50 for every TM (does not remain consistent across evolution)
@@ -350,7 +368,8 @@ class TmCompatibility(Choice):
 
 class HmCompatibility(Choice):
     """
-    Modifies the compatability of HMs with species
+    Modifies the compatibility of HMs
+
     Vanilla: Compatibility is unchanged
     Fully Compatible: Every species can learn any HM
     Completely Random: Compatibility is 50/50 for every HM (does not remain consistent across evolution)
@@ -365,6 +384,7 @@ class HmCompatibility(Choice):
 class MinCatchRate(Range):
     """
     Sets the minimum catch rate a pokemon can have. Any pokemon with a catch rate below this floor will have it raised to this value.
+
     Legendaries are often in the single digits
     Fully evolved pokemon are often double digits
     Pidgey is 255
@@ -385,6 +405,7 @@ class GuaranteedCatch(Toggle):
 class ExpModifier(Range):
     """
     Multiplies gained experience by a percentage
+
     100 is default
     50 is half
     200 is double
@@ -406,8 +427,8 @@ class BlindTrainers(Toggle):
 class DoubleBattleChance(Range):
     """
     The percent chance that a trainer with more than 1 pokemon will be converted into a double battle.
-
-    If these trainers would normally approach you, they will only do so if you have 2 unfainted pokemon. They can be battled by talking to them no matter what.
+    If these trainers would normally approach you, they will only do so if you have 2 unfainted pokemon.
+    They can be battled by talking to them no matter what.
     """
     display_name = "Double Battle Chance"
     range_start = 0
@@ -424,7 +445,11 @@ class BetterShops(Toggle):
 
 class RemoveRoadblocks(OptionSet):
     """
-    Removes specific NPCs that normally stand in your way until certain events are completed. This can open up the world a bit and make your playthrough less linear. Possible values are:
+    Removes specific NPCs that normally stand in your way until certain events are completed.
+    
+    This can open up the world a bit and make your playthrough less linear, but careful how many you remove; it may make too much of your world accessible upon reciving Surf.
+    
+    Possible values are:
     "Route 110 Aqua Grunts"
     "Route 112 Magma Grunts"
     "Route 119 Aqua Grunts"
@@ -447,14 +472,15 @@ class RemoveRoadblocks(OptionSet):
 
 class ExtraBoulders(Toggle):
     """
-    Places strength boulders on Route 115 which block access to Meteor Falls from the beach. This aims to take some power away from Surf as a tool for access.
+    Places strength boulders on Route 115 which block access to Meteor Falls from the beach.
+    This aims to take some power away from Surf as a tool for access.
     """
     display_name = "Extra Boulders"
 
 
 class FreeFlyLocation(Toggle):
     """
-    Enables flying to one random location when Mom gives you the running shoes (excluding cities reachable with no items).
+    Enables flying to one random location when Mom gives you the running shoes (excluding cities reachable with no items)
     """
     display_name = "Free Fly Location"
 
@@ -476,6 +502,7 @@ class TurboA(Toggle):
 class ReceiveItemMessages(Choice):
     """
     Determines whether you receive an in-game notification when receiving an item. Items can still only be received in the overworld.
+
     All: Every item shows a message
     Progression: Only progression items show a message
     None: All items are added to your bag silently (badges will still show)
