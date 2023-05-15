@@ -597,4 +597,8 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Use" Link="AP_AndOrCountUnitFactoryCompleteOnlyTechTreeCheatCountUnitFactoryFlyingCompleteOnlyTechTreeCheatNotCountUnitNukeQueuedOrBetterAtUnit"/>
     </CRequirement>
+    <CRequirement id="AP_HavePlanetaryFortress">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitPlanetaryFortressCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

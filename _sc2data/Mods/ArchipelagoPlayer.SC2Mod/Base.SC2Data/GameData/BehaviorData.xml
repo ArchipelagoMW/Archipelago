@@ -1022,4 +1022,13 @@
             <AbilClassDisableArray index="CAbilAttack" value="1"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CCTransportDummy">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CommandCenterQueue">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_CommandCenterReactorResearched"/>
+        <Modification QueueCount="1" QueueSize="3"/>
+    </CBehaviorBuff>
 </Catalog>

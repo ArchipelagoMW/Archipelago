@@ -899,7 +899,8 @@
         <Count Link="AP_MercCompound" State="CompleteOnly"/>
     </CRequirementCountUnit>
     <CRequirementAnd id="AP_AndOrCountUnitFactoryCompleteOnlyTechTreeCheatCountUnitFactoryFlyingCompleteOnlyTechTreeCheatNotCountUnitNukeQueuedOrBetterAtUnit">
-        <OperandArray value="CountUnitAlias_FactoryCompleteOnly96167438TechTreeCheat"/> <!-- Any Factory-like -->
+        <OperandArray value="CountUnitAlias_FactoryCompleteOnly96167438TechTreeCheat"/>
+        <!-- Any Factory-like -->
         <OperandArray value="AP_NotCountUnitNukeQueuedOrBetterAtUnit"/>
     </CRequirementAnd>
     <CRequirementNot id="AP_NotCountUnitNukeQueuedOrBetterAtUnit">
@@ -923,4 +924,7 @@
     <CRequirementNot id="AP_NotCountBehaviorUnderConstructionCompleteOnlyAtUnit">
         <OperandArray index="0" value="CountBehaviorUnderConstructionCompleteOnlyAtUnit"/>
     </CRequirementNot>
+    <CRequirementCountUnit id="AP_CountUnitPlanetaryFortressCompleteOnlyTechTreeCheat">
+        <Count Link="AP_PlanetaryFortress" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

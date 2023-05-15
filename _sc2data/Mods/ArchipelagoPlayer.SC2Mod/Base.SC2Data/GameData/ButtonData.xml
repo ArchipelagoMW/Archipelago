@@ -850,4 +850,42 @@
         <AlertIcon value="Assets\Textures\btn-ability-terran-armnuke.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_AttackBuildingPFort">
+        <Name value="Button/Name/AttackBuilding"/>
+        <Tooltip value="Button/Tooltip/AttackBuilding"/>
+        <Icon value="Assets\Textures\btn-command-attack.dds"/>
+        <AlertName value="Button/Name/AttackBuilding"/>
+        <AlertTooltip value="Button/Tooltip/AttackBuilding"/>
+        <AlertIcon value="Assets\Textures\btn-command-attack.dds"/>
+        <Hotkey value="Button/Hotkey/AttackBuilding"/>
+        <EditorCategories value="Race:Neutral"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="Attack"/>
+    </CButton>
+    <CButton id="AP_CommandCenterUnloadAll">
+        <Icon value="Assets\Textures\btn-ability-terran-unloadall.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-unloadall.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_PlanetaryFortressLoad">
+        <Icon value="Assets\Textures\btn-ability-terran-load.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-load.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="CommandCenterLoad"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_StopPlanetaryFortress">
+        <Icon value="Assets\Textures\btn-command-stop.dds"/>
+        <AlertIcon value="Assets\Textures\btn-command-stop.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_UpgradeToPlanetaryFortress">
+        <Icon value="Assets\Textures\btn-building-terran-planetaryfortress.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-planetaryfortress.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

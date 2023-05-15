@@ -1526,6 +1526,44 @@
     <CAbilMorph id="AP_FactoryLiftOff" parent="TerranBuildingLiftOff" unit="AP_FactoryFlying">
         <Name value="Abil/Name/AP_FactoryLiftOff"/>
     </CAbilMorph>
+    <CAbilTrain id="AP_CommandCenterTrain">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <InfoArray index="Train1" Time="17">
+            <Button DefaultButtonFace="AP_SCV" State="Restricted">
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Unit value="AP_SCV"/>
+        </InfoArray>
+        <Alert value="TrainWorkerComplete"/>
+    </CAbilTrain>
+    <CAbilTransport id="AP_CommandCenterTransport">
+        <AbilSetId value="ULdS"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Load">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadAll" DefaultButtonFace="AP_CommandCenterUnloadAll">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadAt">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadUnit">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="LoadAll" DefaultButtonFace="AP_CommandCenterLoad"/>
+        <Flags index="AllowPassengerSmartCmd" value="0"/>
+        <Flags index="AllowSmartCmd" value="0"/>
+        <MaxCargoCount value="5"/>
+        <MaxCargoSize value="1"/>
+        <TotalCargoSpace value="5"/>
+        <LoadCargoBehavior value="AP_CCTransportDummy"/>
+        <LoadCargoEffect value="AP_CCLoadDummy"/>
+        <UnloadCargoEffect value="AP_CCUnloadDummy"/>
+        <SearchRadius value="8"/>
+        <LoadValidatorArray value="AP_CommandCenterTransportCombine"/>
+        <DeathUnloadEffect value="AP_RemoveCommandCenterCargo"/>
+    </CAbilTransport>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -1615,6 +1653,15 @@
         </InfoArray>
         <CalldownEffect value="AP_SpectreNuke"/>
     </CAbilArmMagazine>
+    <CAbilRally id="AP_RallyCommand">
+        <OrderArray index="0">
+            <DisplayType value="Rally"/>
+            <Color value="255,245,140,70"/>
+            <Model value="Assets\UI\Feedback\WayPointRally\WayPointRally.m3"/>
+            <LineTexture value="Assets\Textures\WayPointLine.dds"/>
+        </OrderArray>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+    </CAbilRally>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

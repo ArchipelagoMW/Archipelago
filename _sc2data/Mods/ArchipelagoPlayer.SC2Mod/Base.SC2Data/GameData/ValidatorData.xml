@@ -266,6 +266,19 @@
         <CombineArray value="AP_IsVanillaFactory"/>
         <CombineArray value="AP_IsAPFactory"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsCasterVanillaPlanetaryFortress">
+        <WhichUnit Value="Caster"/>
+        <Value value="PlanetaryFortress"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsCasterAPPlanetaryFortress">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_PlanetaryFortress"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsCasterPlanetaryFortress" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsCasterVanillaPlanetaryFortress"/>
+        <CombineArray value="AP_IsCasterAPPlanetaryFortress"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsFactoryTechLab" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaFactoryTechLab"/>
@@ -332,6 +345,22 @@
     <CValidatorUnitType id="AP_IsAPSupplyDepotLowered">
         <Value value="AP_SupplyDepotLowered"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaPlanetaryFortress">
+        <Value value="PlanetaryFortress"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPPlanetaryFortress">
+        <Value value="PlanetaryFortress"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsPlanetaryFortress" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaPlanetaryFortress"/>
+        <CombineArray value="AP_IsAPPlanetaryFortress"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotPlanetaryFortress" parent="CValidatorCombine">
+        <!-- Override -->
+        <Negate value="1" />
+        <CombineArray value="IsPlanetaryFortress"/>
+    </CValidatorCombine>
     <CValidatorUnitType id="AP_IsAPStarport">
         <Value value="AP_Starport"/>
     </CValidatorUnitType>

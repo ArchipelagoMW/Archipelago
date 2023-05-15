@@ -680,6 +680,16 @@
         <MinScanRange value="0"/>
         <Range value="9"/>
         <Period value="0.2"/>
-        <Effect value="AP_MindControlDummyImpact"/> <!-- Unused in vanilla -->
+        <Effect value="AP_MindControlDummyImpact"/>
+        <!-- Unused in vanilla -->
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_TwinIbiksCannon">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-hisecautotracking.dds"/>
+        <TargetFilters value="Ground,Visible;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Arc value="90"/>
+        <Period value="2"/>
     </CWeaponLegacy>
 </Catalog>

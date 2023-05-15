@@ -2174,7 +2174,6 @@
     <CActorRange id="AP_SpectreMindSplatterRange" parent="RangeAbil" abil="AP_SpectreMindSplatter"/>
     <CActorUnit id="AP_SpectreNuke" parent="GenericUnitStandard" unitName="AP_SpectreNuke">
         <Model value="Invisible"/>
-        <HighlightTooltip value="Unit/Name/AP_SpectreNuke"/>
         <SoundArray index="Ready" value="Alert_TerranNukeReady"/>
     </CActorUnit>
     <CActorModel id="AP_SpectreNukeCollateralFire">
@@ -2570,6 +2569,68 @@
         <StatusBarFlags index="Duration" value="0"/>
         <StatusBarFlags index="Magazine" value="0"/>
     </CActorUnit>
+    <CActorUnit id="AP_PlanetaryFortress" parent="TerranBuildingEx" unitName="AP_PlanetaryFortress">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="QueueAnim"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <Macros value="MacroTownhallDeco_Terran"/>
+        <Macros value="TerranPlanetaryFortressPlayerDecalMacro"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply A"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress" Send="Create"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationCommandCenter"/>
+        <On Terms="Abil.*.TransportOccupy" Send="AnimPlay StandC Stand,Work,C PlayForever"/>
+        <On Terms="Abil.*.TransportEmpty" Send="AnimClear StandC"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress; PlayerHasClanDecal" Send="Create TerranClanFlag"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
+        <Model value="CommandCenter"/>
+        <DeathArray index="Normal" ModelLink="PlanetaryFortressDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranLargeBuildingDeath" SoundLink="PlanetaryFortress_Explode"/>
+        <PortraitModel value="CommandCenterPortrait"/>
+        <BarOffset value="180"/>
+        <BarWidth value="200"/>
+        <GlossaryAnim value="Stand,A"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-PlanetaryFortress.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-PlanetaryFortress.dds"/>
+        <NameOffset value="150"/>
+        <SoundArray index="Ready" value="PlanetaryFortress_Ready"/>
+        <SoundArray index="What" value="PlanetaryFortress_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountMinerals" SearchFilters="HarvestableResource;Player,Ally,Enemy" SearchRadius="8"/>
+        <UnitFlags index="StandAnimBirthVariation" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-PlanetaryFortress.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-PlanetaryFortress.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_PlanetaryFortressAttack" parent="GenericAttack" effectAttack="AP_TwinIbiksCannon">
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Model="PlanetaryFortressAttackLaunch" Sound="PlanetaryFortress_AttackLaunch"/>
+        <ImpactMap index="None" Model="PlanetaryFortressAttackImpact" Sound="PlanetaryFortress_AttackImpact"/>
+        <ImpactPhysics Name="IbiksCannonImpact" MatchKeys="Basic" Physics="PlanetaryFortressAttackForce"/>
+    </CActorAction>
+    <CActorForceSphere id="AP_PlanetaryFortressAttackForce">
+        <On Terms="ActorCreation" Send="Create AP_PlanetaryFortressAttackUpForce"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpForwardLaunchGuide SOp2DRotation SOpMoveByDot1 SOp180 SOpRandomPointInCircleDot2"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="40.000000,15.000000"/>
+        <Radius value="1.250000,0.250000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_PlanetaryFortressAttackUpForce">
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpForwardCasterCenter SOp180 SOp2DRotation SOpPointDown1ByDot5 SOpRotVariancerUp25"/>
+        <Field value="Directional"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="25.000000,15.000000"/>
+        <Radius value="1.250000,0.250000"/>
+    </CActorForceSphere>
+    <CActorSplat id="AP_PlanetaryFortressSplat" parent="TerranBuildingMorphSplat" unitName="AP_PlanetaryFortress">
+        <Model value="PlanetaryFortressSplat"/>
+    </CActorSplat>
+    <CActorTurret id="AP_PlanetaryFortressTurret">
+        <On Terms="TurretEnable.AP_PlanetaryFortress" Send="Create"/>
+    </CActorTurret>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -6309,4 +6370,9 @@
         <On Terms="Abil.AP_FactoryAddOns.BuiltStart" Send="Create"/>
         <On Terms="Abil.AP_StarportAddOns.BuiltStart" Send="Create"/>
     </CActorProgress>
+    <CActorSound id="AP_UpgradeToPlanetaryFortress" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo PlanetaryFortress" Send="Create"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo PlanetaryFortress" Send="Destroy"/>
+        <Sound value="CommandCenter_UpgradeToPlanetaryFortress"/>
+    </CActorSound>
 </Catalog>
