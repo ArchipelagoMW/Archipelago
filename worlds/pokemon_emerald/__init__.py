@@ -436,6 +436,9 @@ class PokemonEmeraldWorld(World):
                         evolutions += [self.modified_data.species[evolution.species_id] for evolution in evolution.evolutions]
 
         def randomize_learnsets():
+            type_bias = self.multiworld.move_match_type_bias[self.player].value
+            normal_bias = self.multiworld.move_normal_type_bias[self.player].value
+
             for species in self.modified_data.species:
                 if species is None:
                     continue
@@ -447,7 +450,7 @@ class PokemonEmeraldWorld(World):
                 # Replace filler MOVE_NONEs at start of list
                 while old_learnset[i].move_id == 0:
                     if self.multiworld.level_up_moves[self.player].value == LevelUpMoves.option_start_with_four_moves:
-                        new_move = get_random_move(random, set(new_learnset))
+                        new_move = get_random_move(random, set(new_learnset), type_bias, normal_bias, species.types)
                     else:
                         new_move = 0
                     new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
@@ -458,7 +461,7 @@ class PokemonEmeraldWorld(World):
                     if i == 3:
                         new_move = get_random_damaging_move(random, set(new_learnset))
                     else:
-                        new_move = get_random_move(random, set(new_learnset))
+                        new_move = get_random_move(random, set(new_learnset), type_bias, normal_bias, species.types)
                     new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
                     i += 1
 

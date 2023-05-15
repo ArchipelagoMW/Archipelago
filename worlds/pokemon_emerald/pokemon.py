@@ -2,7 +2,7 @@
 Functions related to pokemon species and moves
 """
 from random import Random
-from typing import List, Set, Optional
+from typing import List, Set, Optional, Tuple
 
 from .data import SpeciesData, data
 
@@ -25,6 +25,34 @@ _damaging_moves = frozenset({
     323, 324, 325, 326, 327, 328, 330, 331, 332, 333, 337, 338,
     340, 341, 342, 343, 344, 345, 348, 350, 351, 352, 353, 354
 })
+
+_move_types = [
+     0,  0,  1,  0,  0,  0,  0, 10, 15, 13,  0,  0,  0,  0,  0,
+     0,  2,  2,  0,  2,  0,  0, 12,  0,  1,  0,  1,  1,  4,  0,
+     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  6,  6,  0, 17,
+     0,  0,  0,  0,  0,  0,  3, 10, 10, 15, 11, 11, 11, 15, 15,
+    14, 11, 15,  0,  2,  2,  1,  1,  1,  1,  0, 12, 12, 12,  0,
+    12, 12,  3, 12, 12, 12,  6, 16, 10, 13, 13, 13, 13,  5,  4,
+     4,  4,  3, 14, 14, 14, 14, 14,  0,  0, 14,  7,  0,  0,  0,
+     0,  0,  0,  0,  7, 11,  0, 14, 14, 15, 14,  0,  0,  0,  2,
+     0,  0,  7,  3,  3,  4, 10, 11, 11,  0,  0,  0,  0, 14, 14,
+     0,  1,  0, 14,  3,  0,  6,  0,  2,  0, 11,  0, 12,  0, 14,
+     0,  3, 11,  0,  0,  4, 14,  5,  0,  0,  0,  0,  0,  0,  0,
+     0,  0,  1, 17,  6,  0,  7, 10,  0,  9,  0,  0,  2, 12,  1,
+     7, 15,  0,  1,  0, 17,  0,  0,  3,  4, 11,  4, 13,  0,  7,
+     0, 15,  1,  4,  0, 16,  5, 12,  0,  0,  5,  0,  0,  0, 13,
+     6,  8,  0,  0,  0,  0,  0,  0,  0,  0,  0, 10,  4,  1,  6,
+    16,  0,  0, 17,  0,  0,  8,  8,  1,  0, 12,  0,  0,  1, 16,
+    11, 10, 17, 14,  0,  0,  5,  7, 14,  1, 11, 17,  0,  0,  0,
+     0,  0, 10, 15, 17, 17, 10, 17,  0,  1,  0,  0,  0, 13, 17,
+     0, 14, 14,  0,  0, 12,  1, 14,  0,  1,  1,  0, 17,  0, 10,
+    14, 14,  0,  7, 17,  0, 11,  1,  0,  6, 14, 14,  2,  0, 10,
+     4, 15, 12,  0,  0,  3,  0, 10, 11,  8,  7,  0, 12, 17,  2,
+    10,  0,  5,  6,  8, 12,  0, 14, 11,  6,  7, 14,  1,  4, 15,
+    11, 12,  2, 15,  8,  0,  0, 16, 12,  1,  2,  4,  3,  0, 13,
+    12, 11, 14, 12, 16,  5, 13, 11,  8, 14
+]
+
 _move_blacklist = frozenset({
     0,   # MOVE_NONE
     165, # Struggle
@@ -37,6 +65,7 @@ _move_blacklist = frozenset({
     291, # Dive
     127  # Waterfall
 })
+
 _legendary_pokemon = frozenset({
     'Mew',
     'Mewtwo',
@@ -99,13 +128,38 @@ def get_random_type(random: Random):
     return picked_type
 
 
-def get_random_move(random: Random, blacklist: Optional[Set[int]] = None) -> int:
+def get_random_move(
+        random: Random,
+        blacklist: Optional[Set[int]] = None,
+        type_bias: int = 0,
+        normal_bias: int = 0,
+        type_target: Optional[Tuple[int, int]] = None) -> int:
     expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
-    num_moves = data.constants["MOVES_COUNT"]
 
-    move = random.randrange(1, num_moves)
-    while move in expanded_blacklist:
-        move = random.randrange(1, num_moves)
+    match_type = False
+    match_normal = False
+    bias = random.random() * 100
+    if bias < type_bias:
+        match_type = True
+    elif bias < type_bias + ((100 - type_bias) * (normal_bias / 100)):
+        match_normal = True
+
+    possible_moves = []
+    for i in range(data.constants["MOVES_COUNT"]):
+        if i not in expanded_blacklist:
+            if match_type:
+                if _move_types[i] in type_target:
+                    possible_moves.append(i)
+            elif match_normal:
+                if _move_types[i] == 0:
+                    possible_moves.append(i)
+            else:
+                possible_moves.append(i)
+
+    if len(possible_moves) == 0:
+        return get_random_move(random, None, type_bias, normal_bias, type_target)
+
+    move = random.choice(possible_moves)
 
     return move
 

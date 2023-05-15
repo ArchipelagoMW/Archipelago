@@ -337,18 +337,44 @@ class LevelUpMoves(Choice):
     option_start_with_four_moves = 2
 
 
-class TmMoves(Toggle):
+class MoveMatchTypeBias(Range):
     """
-    Randomizes the moves taught by TMs
+    Sets the probability that a learned move will be forced match one of the types of a pokemon.
+
+    If a move is not forced to match type, it will roll for Normal type bias.
     """
-    display_name = "TM Moves"
+    display_name = "Move Match Type Bias"
+    range_start = 0
+    range_end = 100
+    default = 0
 
 
-class ReusableTms(Toggle):
+class MoveNormalTypeBias(Range):
     """
-    Sets TMs to not break after use (they remain sellable)
+    After it has been decided that a move will not be forced to match types, sets the probability that a learned move
+    will be forced to be the Normal type.
+
+    If a move is not forced to be Normal, it will be completely random.
     """
-    display_name = "Reusable TMs"
+    display_name = "Move Normal Type Bias"
+    range_start = 0
+    range_end = 100
+    default = 0
+
+
+class HmCompatibility(Choice):
+    """
+    Modifies the compatibility of HMs
+
+    Vanilla: Compatibility is unchanged
+    Fully Compatible: Every species can learn any HM
+    Completely Random: Compatibility is 50/50 for every HM (does not remain consistent across evolution)
+    """
+    display_name = "HM Compatibility"
+    default = 1
+    option_vanilla = 0
+    option_fully_compatible = 1
+    option_completely_random = 2
 
 
 class TmCompatibility(Choice):
@@ -366,19 +392,18 @@ class TmCompatibility(Choice):
     option_completely_random = 2
 
 
-class HmCompatibility(Choice):
+class TmMoves(Toggle):
     """
-    Modifies the compatibility of HMs
+    Randomizes the moves taught by TMs
+    """
+    display_name = "TM Moves"
 
-    Vanilla: Compatibility is unchanged
-    Fully Compatible: Every species can learn any HM
-    Completely Random: Compatibility is 50/50 for every HM (does not remain consistent across evolution)
+
+class ReusableTms(Toggle):
     """
-    display_name = "HM Compatibility"
-    default = 1
-    option_vanilla = 0
-    option_fully_compatible = 1
-    option_completely_random = 2
+    Sets TMs to not break after use (they remain sellable)
+    """
+    display_name = "Reusable TMs"
 
 
 class MinCatchRate(Range):
@@ -553,11 +578,13 @@ option_definitions: Dict[str, Option] = {
     "abilities": RandomizeAbilities,
     "ability_blacklist": AbilityBlacklist,
     "level_up_moves": LevelUpMoves,
-    "tm_moves": TmMoves,
-    "reusable_tms": ReusableTms,
+    "move_match_type_bias": MoveMatchTypeBias,
+    "move_normal_type_bias": MoveNormalTypeBias,
     "tm_compatibility": TmCompatibility,
     "hm_compatibility": HmCompatibility,
 
+    "tm_moves": TmMoves,
+    "reusable_tms": ReusableTms,
     "min_catch_rate": MinCatchRate,
     "guaranteed_catch": GuaranteedCatch,
     "exp_modifier": ExpModifier,
