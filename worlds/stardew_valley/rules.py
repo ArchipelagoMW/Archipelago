@@ -10,7 +10,7 @@ from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_
     dwarf_scrolls, skeleton_front, \
     skeleton_middle, skeleton_back, all_museum_items_by_name
 from .data.region_data import SVRegion
-from .data.mod_data import ModNames
+from .mods.mod_data import ModNames
 from .locations import LocationTags
 from .logic import StardewLogic, And, tool_prices, week_days
 from .options import StardewOptions
@@ -284,7 +284,8 @@ def set_story_quests_rules(all_location_names: List[str], logic, multi_world, pl
                                          logic.quest_rules[quest.name].simplify())
 
 
-def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player, world_options: StardewOptions):
+def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player,
+                            world_options: StardewOptions):
     if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
         return
     board_rule = logic.received("Special Order Board") & logic.has_lived_months(4)
@@ -470,4 +471,3 @@ def set_deepwoods_rules(logic: StardewLogic, multi_world: MultiWorld, player: in
                                      logic.can_reach_woods_depth(depth).simplify())
         MultiWorldRules.set_rule(multi_world.get_entrance(DeepWoodsEntrance.use_woods_obelisk, player),
                                  logic.received("Woods Obelisk").simplify())
-

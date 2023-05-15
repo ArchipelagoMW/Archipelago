@@ -12,7 +12,7 @@ from .options import stardew_valley_options, StardewOptions, fetch_options
 from .regions import create_regions
 from .rules import set_rules
 from worlds.generic.Rules import set_rule
-from .data.mod_data import mod_versions
+from .mods.mod_data import mod_versions
 
 client_version = 0
 

@@ -9,7 +9,7 @@ from typing import Dict, List, Protocol, Union, Set, Optional
 from BaseClasses import Item, ItemClassification
 from . import options, data
 from .data.villagers_data import all_villagers
-from .data.mod_data import ModNames
+from .mods.mod_data import ModNames
 from .options import StardewOptions
 
 ITEM_CODE_OFFSET = 717000

@@ -8,8 +8,7 @@ from . import options
 from .data.entrance_data import SVEntrance
 from .data.region_data import SVRegion
 from .options import StardewOptions
-from .data.mod_regions import ModDataList, RegionRemoverData, ConnectionRemoverData
-import sys
+from .mods.mod_regions import ModDataList, RegionRemoverData, ConnectionRemoverData
 
 connector_keyword = " to "
 

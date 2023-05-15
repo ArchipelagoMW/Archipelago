@@ -10,8 +10,8 @@ from .data.fish_data import island_fish
 from .data.museum_data import all_museum_items, MuseumItem, all_artifact_items
 from .data.region_data import SVRegion
 from .data.villagers_data import all_villagers_by_name
-from .data.mod_data import ModNames
-from .data.mod_logic import can_earn_mod_skill_level, append_mod_skill_level
+from .mods.mod_data import ModNames
+from .mods.mod_logic import can_earn_mod_skill_level, append_mod_skill_level
 from .items import all_items, Group
 from .options import StardewOptions
 from .regions import stardew_valley_regions
@@ -576,7 +576,8 @@ class StardewLogic:
                                self.has("Crimsonfish") & self.has("Mutant Carp") & self.has("Legend"),
             "Danger In The Deep": self.can_mine_perfectly() & self.has_mine_elevator_to_floor(120),
             "Skull Cavern Invasion": self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
-            "Qi's Prismatic Grange": self.has("Bug Meat") & self.can_spend_money(80000), # All colors can be bought except purple
+            "Qi's Prismatic Grange": self.has("Bug Meat") & self.can_spend_money(80000),
+            # All colors can be bought except purple
         })
 
         # Mod Building List (For now smh)
