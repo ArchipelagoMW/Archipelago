@@ -1907,4 +1907,13 @@
         <Model value="Assets\Splats\Splat_MercCompound\Splat_MercCompound.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_CommandCenterReactor" parent="PersistentSpellFX">
+        <Model value="Assets\Buildings\Terran\CommandCenterReactor\CommandCenterReactor.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_CommandCenterReactorDeath" parent="PersistentSpellFX">
+        <Model value="Assets\Buildings\Terran\CommandCenterReactorDeath\CommandCenterReactorDeath.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <LowQualityModel value="TerranLargeBuildingDeathLow"/>
+    </CModel>
 </Catalog>

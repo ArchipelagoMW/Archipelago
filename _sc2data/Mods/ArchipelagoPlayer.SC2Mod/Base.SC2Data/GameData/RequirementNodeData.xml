@@ -942,4 +942,8 @@
         <OperandArray value="AP_CountUpgradeOrbitalRelayCompleteOnly"/>
         <OperandArray value="AP_CountUnitOrbitalCommandCompleteOnlyAtUnit"/>
     </CRequirementOr>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCommandCenterReactorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CommandCenterReactor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

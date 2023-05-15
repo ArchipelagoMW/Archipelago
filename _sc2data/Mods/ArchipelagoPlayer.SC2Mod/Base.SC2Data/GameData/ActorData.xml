@@ -2583,6 +2583,12 @@
         <On Terms="Abil.*.TransportEmpty" Send="AnimClear StandC"/>
         <On Terms="UnitBirth.AP_PlanetaryFortress; PlayerHasClanDecal" Send="Create TerranClanFlag"/>
         <On Terms="UnitBirth.AP_PlanetaryFortress; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
+        <On Terms="Upgrade.AP_CommandCenterReactor.Add" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="Upgrade.AP_CommandCenterReactor.Add" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.Normal; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_CommandCenterReactorPurchasedAndNotUnderConstruction" Send="Create AP_CommandCenterReactorDeath"/>
         <Model value="CommandCenter"/>
         <DeathArray index="Normal" ModelLink="PlanetaryFortressDeath"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranLargeBuildingDeath" SoundLink="PlanetaryFortress_Explode"/>
@@ -2797,12 +2803,171 @@
         <Filter index="Neutral" value="1"/>
         <Filter index="Enemy" value="1"/>
     </CActorSound>
-    <CActorSound id="AP_    ScannerSweepSoundOthers" parent="SoundContinuous">
+    <CActorSound id="AP_ScannerSweepSoundOthers" parent="SoundContinuous">
         <On Terms="Effect.AP_ScannerSweep.Start" Send="Create"/>
         <On Terms="Effect.AP_ScannerSweep.Stop" Send="Destroy"/>
         <Sound value="OrbitalCommand_ScannerSweep_Others"/>
         <HostSiteOps Ops="SOpShadow"/>
         <Filter index="Self" value="1"/>
+    </CActorSound>
+    <CActorUnit id="AP_CommandCenter" parent="TerranBuildingFlyerEx" unitName="AP_CommandCenter">
+        <Macros value="MacroTownhallDeco_Terran"/>
+        <Macros value="TerranCommandCenterPlayerDecalMacro"/>
+        <Macros value="SprayHelperMacro"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove A"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove B"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="AnimGroupApply B"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="AnimPlay Morph Morph 0 0.000000"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="AnimGroupRemove B"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress" Send="AnimGroupApply A"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress" Send="AnimPlay Morph Morph 0 1.500000"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress" Send="AnimGroupRemove A"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress" Send="AnimBaselineStart"/>
+        <On Terms="Abil.*.TransportOccupy" Send="AnimPlay StandC Stand,Work,C PlayForever"/>
+        <On Terms="Abil.*.TransportEmpty" Send="AnimClear StandC"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationCommandCenter"/>
+        <On Terms="Behavior.Corruption.On" Send="AnimSetPaused Morph"/>
+        <On Terms="Behavior.Corruption.Off" Send="AnimSetPaused Morph 0"/>
+        <On Terms="UnitDeathCustomize; AnimPlaying Morph; !ModelIsLowQuality" Send="Create AP_CommandCenterMorphDeath"/>
+        <On Terms="UnitDeathCustomize; AnimPlaying Morph" Send="DeathCustomize Variation2"/>
+        <On Terms="Abil.AP_CommandCenterLiftOff.Start" Send="StatusSet FlyDeathAnim 1"/>
+        <On Terms="Abil.AP_CommandCenterLiftOff.Start" Send="TimerSet 1.100000 FlyDeathAnimChange"/>
+        <On Terms="TimerExpired; TimerName FlyDeathAnimChange" Send="StatusSet FlyDeathAnim 2"/>
+        <On Terms="UnitBirth.AP_CommandCenterFlying" Send="StatusSet FlyDeathAnim 2"/>
+        <On Terms="Abil.AP_CommandCenterLand.Start" Send="TimerSet 0.700000 LandDeathAnimChange"/>
+        <On Terms="Abil.AP_CommandCenterLand.Start" Send="TimerSet 1.100000 LandDeathAnimChangeB"/>
+        <On Terms="TimerExpired; TimerName LandDeathAnimChange" Send="StatusSet FlyDeathAnim 1"/>
+        <On Terms="TimerExpired; TimerName LandDeathAnimChangeB" Send="StatusSet FlyDeathAnim 0"/>
+        <On Terms="UnitDeathCustomize; IsStatus FlyDeathAnim 1" Send="DeathCustomize Variation3"/>
+        <On Terms="UnitDeathCustomize; IsStatus FlyDeathAnim 2" Send="DeathCustomize Flying"/>
+        <On Terms="UnitBirth.AP_CommandCenterFlying" Send="HideWorkerCount 1"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenterFlying; MorphTo AP_CommandCenter" Send="HideWorkerCount"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenter; MorphTo AP_CommandCenterFlying" Send="HideWorkerCount 1"/>
+        <On Terms="UnitBirth.AP_CommandCenter" Send="Create PlayerLogoDoodadList"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_CommandCenterFlying" Target="PlayerLogoDoodadList" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenterFlying; MorphTo AP_CommandCenter" Send="Create PlayerLogoDoodadList"/>
+        <On Terms="Behavior.AP_250mmStrikeCannons.On" Send="AnimSetPaused Morph"/>
+        <On Terms="Behavior.AP_250mmStrikeCannons.Off" Send="AnimSetPaused Morph 0"/>
+        <On Terms="Behavior.250mmStrikeCannons.On" Send="AnimSetPaused Morph"/>
+        <On Terms="Behavior.250mmStrikeCannons.Off" Send="AnimSetPaused Morph 0"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_CommandCenterFlying" Target="TerranClanFlag" Send="Signal DestroyFlag"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenterFlying; MorphTo AP_CommandCenter; PlayerHasClanDecal" Send="Create TerranClanFlag"/>
+        <On Terms="UnitBirth.AP_CommandCenter; PlayerHasClanDecal" Send="Create TerranClanFlag"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_CommandCenterFlying" Target="TerranPlayerTrophy" Send="Signal DestroyFlag"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenterFlying; MorphTo AP_CommandCenter; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
+        <On Terms="UnitBirth.AP_CommandCenter; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
+        <On Terms="UnitBirth.AP_CommandCenter.Normal; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitBirth.AP_CommandCenter.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitBirth.AP_CommandCenter.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
+        <On Terms="UnitBirth.AP_CommandCenterFlying.Normal; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitBirth.AP_CommandCenterFlying.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitBirth.AP_CommandCenterFlying.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
+        <On Terms="ActorCreation; ValidateUnit AP_OrbitalRelayUpgraded" Send="AnimGroupApply B"/>
+        <On Terms="UnitConstruction.*.Start; ValidateUnit AP_OrbitalRelayUpgraded" Send="AnimGroupApply Jump"/>
+        <On Terms="UnitBirth.*.Normal; ValidateUnit AP_OrbitalRelayUpgraded" Send="AnimGroupRemove Jump"/>
+        <On Terms="Upgrade.AP_OrbitalRelay.Add" Send="AnimGroupApply B"/>
+        <On Terms="UnitPlayerChange; ValidateUnit AP_OrbitalRelayUpgraded" Send="AnimGroupApply B"/>
+        <On Terms="UnitPlayerChange; !ValidateUnit AP_OrbitalRelayUpgraded" Send="AnimGroupRemove B"/>
+        <On Terms="Upgrade.AP_CommandCenterReactor.Add" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="Upgrade.AP_CommandCenterReactor.Add" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress; ValidateUnit AP_OrbitalRelayUpgraded" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress; ValidateUnit AP_OrbitalRelayUpgraded" Send="AnimPlay Morph Morph,C 0 1.500000"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress; ValidateUnit AP_OrbitalRelayUpgraded" Send="AnimGroupRemove B"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress; ValidateUnit AP_OrbitalRelayUpgraded" Send="AnimGroupApply B"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_OrbitalRelayUpgradedAndNotUnderConstruction" Send="DeathCustomize Variation6"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_OrbitalRelayUpgradedAndNotUnderConstruction; IsStatus FlyDeathAnim 2" Send="DeathCustomize Variation9"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_CommandCenterReactorPurchasedAndNotUnderConstruction" Send="Create AP_CommandCenterReactorDeath"/>
+        <Model value="CommandCenter"/>
+        <BuildModel value="CommandCenter"/>
+        <DeathArray index="Normal" ModelLink="CommandCenterDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranLargeBuildingDeath" SoundLink="CommandCenter_Explode"/>
+        <DeathCustoms index="5" ModelLink="CommandCenterDeath" SoundLink="CommandCenter_Explode" Name="Variation2"/>
+        <DeathCustoms ModelLink="CommandCenterFlyDeath" SoundLink="CommandCenter_Explode" Name="Flying"/>
+        <DeathCustoms ModelLink="CommandCenterDeathLow" Name="Variation3"/>
+        <DeathCustoms ModelLink="OrbitalCommandDeath" Name="Variation6"/>
+        <DeathCustoms ModelLink="OrbitalCommandFlyDeath" Name="Variation9"/>
+        <PlacementModel value="CommandCenterPlacement"/>
+        <PortraitModel value="CommandCenterPortrait"/>
+        <BarOffset value="165"/>
+        <BarWidth value="200"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-CommandCenter.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-CommandCenter.dds"/>
+        <NameOffset value="150"/>
+        <SoundArray index="Ready" value="CommandCenter_Ready"/>
+        <SoundArray index="What" value="CommandCenter_What"/>
+        <SoundArray index="Movement" value="CommandCenter_Movement2"/>
+        <StatusHarvesterData Text="UI/HarvesterCountMinerals" SearchFilters="HarvestableResource;Player,Ally,Enemy" SearchRadius="8"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-CommandCenter.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-CommandCenter.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="CommandCenter">
+        <!-- Override -->
+        <!-- Add AP_250mmStrikeCannons behavior -->
+        <On Terms="Behavior.AP_250mmStrikeCannons.On" Send="AnimSetPaused Morph"/>
+        <On Terms="Behavior.AP_250mmStrikeCannons.Off" Send="AnimSetPaused Morph 0"/>
+    </CActorUnit>
+    <CActorModel id="AP_CommandCenterBuild" parent="TerranBuildingBuild">
+        <Model value="CommandCenterBuild"/>
+    </CActorModel>
+    <CActorSound id="AP_CommandCenterLand" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_CommandCenter; MorphFrom AP_CommandCenterFlying" Send="Create"/>
+        <Sound value="CommandCenter_Land"/>
+    </CActorSound>
+    <CActorModel id="AP_CommandCenterMorphDeath" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary SOp2DRotation"/>
+        <Model value="CommandCenterMorphDeath"/>
+    </CActorModel>
+    <CActorModel id="AP_CommandCenterReactor" parent="ModelAddition">
+        <Macros value="QueueAnim"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <On Terms="Signal.*.FastBirth" Send="AnimClear BSD"/>
+        <On Terms="Signal.*.FastBirth" Send="AnimBracketStart BSD IGNORE Stand Death"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_CommandCenterReactor"/>
+    </CActorModel>
+    <CActorModel id="AP_CommandCenterReactorDeath" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Aliases value="_Snapshot"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Opacity" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TimeScale" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_OrbitalRelayUpgraded" Send="AnimSetTime Death 1.100000"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_CommandCenterReactorDeath"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+    </CActorModel>
+    <CActorSplat id="AP_CommandCenterSplat" parent="GenericUnitSplat" unitName="AP_CommandCenter">
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenter; MorphTo AP_PlanetaryFortress" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_CommandCenter; MorphFrom AP_CommandCenterFlying" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_CommandCenter; MorphTo AP_CommandCenterFlying" Send="Destroy"/>
+        <Model value="CommandCenterSplat"/>
+    </CActorSplat>
+    <CActorSound id="AP_CommandCenter_UpgradeCancel" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_OrbitalCommand" Send="Create"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_PlanetaryFortress" Send="Create"/>
+        <Sound value="CommandCenter_UpgradeCancel"/>
     </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->
@@ -6542,6 +6707,7 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_FactoryFlying" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_StarportFlying" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_OrbitalCommandFlying" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_CommandCenterFlying" Send="Create"/>
     </CActorSound>
     <CActorSound id="TerranBuildingLand">
         <!-- Override -->
@@ -6557,8 +6723,8 @@
         <On Terms="Abil.AP_StarportAddOns.BuiltStart" Send="Create"/>
     </CActorProgress>
     <CActorSound id="AP_UpgradeToPlanetaryFortress" parent="SoundOneShot">
-        <On Terms="AbilMorph.*.Start; MorphTo PlanetaryFortress" Send="Create"/>
-        <On Terms="AbilMorph.*.Cancel; MorphTo PlanetaryFortress" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_PlanetaryFortress" Send="Create"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_PlanetaryFortress" Send="Destroy"/>
         <Sound value="CommandCenter_UpgradeToPlanetaryFortress"/>
     </CActorSound>
 </Catalog>

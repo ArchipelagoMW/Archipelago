@@ -613,4 +613,7 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradeOrbitalRelayCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_CommandCenterReactorResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeCommandCenterReactorCompleteOnly"/>
+    </CRequirement>
 </Catalog>

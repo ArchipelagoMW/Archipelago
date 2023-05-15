@@ -195,6 +195,31 @@
         <CombineArray value="NotLarva"/>
         <CombineArray value="NotLarvaEgg"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_CasterIsVanillaCommandCenter">
+        <WhichUnit Value="Caster"/>
+        <Value value="CommandCenter"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_CasterIsAPCommandCenter">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_CommandCenter"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="CasterIsCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_CasterIsVanillaCommandCenter"/>
+        <CombineArray value="AP_CasterIsAPCommandCenter"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_CommandCenterReactorPurchased">
+        <Find value="1"/>
+        <Value value="AP_CommandCenterReactorResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_CommandCenterReactorPurchasedAndNotUnderConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_CommandCenterReactorPurchased"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_CommandCenterTransportSCV">
+        <Value value="AP_SCV"/>
+    </CValidatorUnitType>
     <CValidatorUnitType id="AP_IsAPArmory">
         <Value value="AP_Armory"/>
     </CValidatorUnitType>
@@ -265,6 +290,46 @@
         <!-- Override -->
         <CombineArray value="AP_IsVanillaFactory"/>
         <CombineArray value="AP_IsAPFactory"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="IsCasterCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <!-- There are two same validators in Vanilla, we just delegate then -->
+        <CombineArray value="CasterIsCommandCenter"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaCommandCenter">
+        <Value value="CommandCenter"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPCommandCenter">
+        <Value value="AP_CommandCenter"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaCommandCenter"/>
+        <CombineArray value="AP_IsAPCommandCenter"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaCommandCenterFlying">
+        <WhichUnit Value="Outer"/>
+        <Value value="CommandCenterFlying"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPCommandCenterFlying">
+        <WhichUnit Value="Outer"/>
+        <Value value="AP_CommandCenterFlying"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsCommandCenterFlying" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaCommandCenterFlying"/>
+        <CombineArray value="AP_IsAPCommandCenterFlying"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <Negate value="1"/>
+        <CombineArray value="IsCommandCenter"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotFlyingCommandCenter" parent="CValidatorCombine">
+        <!-- Override -->
+        <Negate value="1"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="IsCommandCenterFlying"/>
     </CValidatorCombine>
     <CValidatorUnitType id="AP_IsCasterVanillaPlanetaryFortress">
         <WhichUnit Value="Caster"/>

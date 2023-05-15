@@ -6326,6 +6326,157 @@
         <TechAliasArray value="Alias_CommandCenter"/>
         <GlossaryAlias value="OrbitalCommand"/>
     </CUnit>
+    <CUnit id="AP_CommandCenter">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventReveal" value="1"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="TownCamera" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <ResourceDropOff index="Minerals" value="1"/>
+        <ResourceDropOff index="Vespene" value="1"/>
+        <ResourceDropOff index="Terrazine" value="1"/>
+        <ResourceDropOff index="Custom" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="1500"/>
+        <LifeMax value="1500"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <EnergyStart value="50"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="11"/>
+        <Food value="11"/>
+        <CostCategory value="Economy"/>
+        <CostResource index="Minerals" value="400"/>
+        <RepairTime value="100"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5CancelToSelection"/>
+        <AbilArray Link="AP_CommandCenterTrain"/>
+        <AbilArray Link="AP_RallyCommand"/>
+        <AbilArray Link="AP_CommandCenterTransport"/>
+        <AbilArray Link="AP_CommandCenterLiftOff"/>
+        <AbilArray Link="AP_UpgradeToPlanetaryFortress"/>
+        <AbilArray Link="AP_ScannerSweep"/>
+        <AbilArray Link="AP_CalldownMULE"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_CommandCenterQueue"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <EffectArray index="Create" value="AP_CCCreateSet"/>
+        <EffectArray index="Birth" value="AP_CCBirthSet"/>
+        <CardLayouts>
+            <LayoutButtons Face="SCV" Type="AbilCmd" AbilCmd="AP_CommandCenterTrain,Train1" Row="0" Column="0"/>
+            <LayoutButtons Face="CalldownMULE" Type="AbilCmd" AbilCmd="AP_CalldownMULE,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_UpgradeToPlanetaryFortress" Type="AbilCmd" AbilCmd="AP_UpgradeToPlanetaryFortress,0" Row="0" Column="4"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="AP_RallyCommand,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="CommandCenterLoad" Type="AbilCmd" AbilCmd="AP_CommandCenterTransport,LoadAll" Row="2" Column="0"/>
+            <LayoutButtons Face="CommandCenterUnloadAll" Type="AbilCmd" AbilCmd="AP_CommandCenterTransport,UnloadAll" Row="2" Column="1"/>
+            <LayoutButtons Face="Lift" Type="AbilCmd" AbilCmd="AP_CommandCenterLiftOff,0" Row="2" Column="3"/>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress,Halt" Row="2" Column="3"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5CancelToSelection,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelUpgradeMorph" Type="AbilCmd" AbilCmd="AP_UpgradeToPlanetaryFortress,1" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelUpgradeMorph" Type="AbilCmd" AbilCmd="AP_UpgradeToOrbital,1" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" AbilCmd="AP_CommandCenterTrain,Train1" Row="1" Column="3"/>
+            <LayoutButtons Face="Scan" Type="AbilCmd" AbilCmd="AP_ScannerSweep,Execute" Row="1" Column="1"/>
+        </CardLayouts>
+        <Radius value="2.5"/>
+        <SeparationRadius value="2.5"/>
+        <Footprint value="Footprint5x5Contour"/>
+        <PlacementFootprint value="Footprint5x5DropOff"/>
+        <ScoreMake value="400"/>
+        <ScoreKill value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="2.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="CommandCenter"/>
+        <TacticalAIThink value="AIThinkCommandCenter"/>
+        <TechAliasArray value="Alias_CommandCenter"/>
+        <GlossaryPriority value="30"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <TechTreeProducedUnitArray value="SCV"/>
+        <TechTreeProducedUnitArray value="PlanetaryFortress"/>
+        <TechTreeProducedUnitArray value="OrbitalCommand"/>
+    </CUnit>
+    <CUnit id="AP_CommandCenterFlying">
+        <Name value="Unit/Name/CommandCenter"/>
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventReveal" value="1"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="1500"/>
+        <LifeMax value="1500"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <Mover value="Fly"/>
+        <Speed value="0.9375"/>
+        <Acceleration value="1.3125"/>
+        <Sight value="11"/>
+        <Height value="3.25"/>
+        <VisionHeight value="4"/>
+        <Food value="11"/>
+        <CostCategory value="Economy"/>
+        <CostResource index="Minerals" value="400"/>
+        <RepairTime value="100"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="AP_CommandCenterLand"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="AP_CommandCenterTransport"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_CommandCenterQueue"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <CardLayouts>
+            <LayoutButtons Face="Land" Type="AbilCmd" AbilCmd="AP_CommandCenterLand,0" Row="2" Column="3"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="CommandCenterLoad" Type="AbilCmd" AbilCmd="AP_CommandCenterTransport,LoadAll" Row="2" Column="0"/>
+            <LayoutButtons Face="CommandCenterUnloadAll" Type="AbilCmd" AbilCmd="AP_CommandCenterTransport,UnloadAll" Row="2" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+        </CardLayouts>
+        <Radius value="2.5"/>
+        <SeparationRadius value="2.5"/>
+        <ScoreKill value="400"/>
+        <SubgroupPriority value="3"/>
+        <MinimapRadius value="2.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <LeaderAlias value="CommandCenter"/>
+        <HotkeyAlias value="CommandCenter"/>
+        <TechAliasArray value="Alias_CommandCenter"/>
+        <GlossaryAlias value="CommandCenter"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->

@@ -2856,13 +2856,6 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="AP_SupplyDropEnRoute"/>
     </CEffectApplyBehavior>
-    <CAbilMorph id="AP_ReaperPlacementMorph">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <InfoArray Unit="AP_Reaper"/>
-        <Flags index="IgnoreFacing" value="1"/>
-        <Flags index="IgnoreUnitCost" value="1"/>
-        <Flags index="WaitUntilStopped" value="0"/>
-    </CAbilMorph>
     <CEffectCreatePersistent id="AP_ScannerSweep">
         <EditorCategories value="Race:Terran"/>
         <ExpireDelay value="12.2775"/>
@@ -2870,4 +2863,23 @@
         <RevealFlags index="Unfog" value="1"/>
         <RevealFlags index="Detect" value="1"/>
     </CEffectCreatePersistent>
+    <CEffectDamage id="AP_RemoveCommandCenterCargo">
+        <ValidatorArray value="IsCommandCenterFlying"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CAbilMorph id="AP_ReaperPlacementMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray Unit="AP_Reaper"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
+    </CAbilMorph>
+    <CEffectSet id="AP_CCBirthSet">
+        <EditorCategories value=""/>
+    </CEffectSet>
+    <CEffectSet id="AP_CCCreateSet">
+        <EditorCategories value=""/>
+    </CEffectSet>
 </Catalog>

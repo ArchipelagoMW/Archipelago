@@ -944,4 +944,10 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_CommandCenter"/>
     </CUpgrade>
+    <CUpgrade id="AP_CommandCenterReactor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_CommandCenter"/>
+        <AffectedUnitArray value="AP_CommandCenterFlying"/>
+    </CUpgrade>
 </Catalog>
