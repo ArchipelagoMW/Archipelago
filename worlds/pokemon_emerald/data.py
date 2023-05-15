@@ -13,7 +13,6 @@ import pkg_resources
 
 from BaseClasses import ItemClassification
 
-
 class Warp:
     """
     Represents warp events in the game like doorways or warp pads

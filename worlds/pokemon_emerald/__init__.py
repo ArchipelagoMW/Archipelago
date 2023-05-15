@@ -19,7 +19,7 @@ from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, 
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
     RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility, HmCompatibility,
     RandomizeStaticEncounters, option_definitions)
-from .pokemon import get_random_species, get_species_by_name, get_random_move, get_random_damaging_move, get_random_type
+from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path, location_visited_event_to_id_map
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
@@ -627,15 +627,15 @@ class PokemonEmeraldWorld(World):
             allow_legendaries = self.multiworld.allow_starter_legendaries[self.player].value == Toggle.option_true
 
             starter_bsts = (
-                sum(get_species_by_name("Treecko").base_stats) if match_bst else None,
-                sum(get_species_by_name("Torchic").base_stats) if match_bst else None,
-                sum(get_species_by_name("Mudkip").base_stats)  if match_bst else None
+                sum(emerald_data.species[emerald_data.starters[0]].base_stats) if match_bst else None,
+                sum(emerald_data.species[emerald_data.starters[1]].base_stats) if match_bst else None,
+                sum(emerald_data.species[emerald_data.starters[2]].base_stats) if match_bst else None
             )
 
             starter_types = (
-                random.choice(get_species_by_name("Treecko").types) if match_type else None,
-                random.choice(get_species_by_name("Torchic").types) if match_type else None,
-                random.choice(get_species_by_name("Mudkip").types)  if match_type else None
+                random.choice(emerald_data.species[emerald_data.starters[0]].types) if match_type else None,
+                random.choice(emerald_data.species[emerald_data.starters[1]].types) if match_type else None,
+                random.choice(emerald_data.species[emerald_data.starters[2]].types) if match_type else None
             )
 
             new_starters = (

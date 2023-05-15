@@ -1,13 +1,13 @@
 """
 Functions related to pokemon species and moves
 """
-import random
+from random import Random
 from typing import List, Set, Optional
 
 from .data import SpeciesData, data
 
 
-_damaging_moves = frozenset([
+_damaging_moves = frozenset({
       1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  13,
      16,  17,  20,  21,  22,  23,  24,  25,  26,  27,  29,  30,
      31,  33,  34,  35,  36,  37,  38,  40,  41,  42,  44,  51,
@@ -24,8 +24,8 @@ _damaging_moves = frozenset([
     304, 305, 306, 307, 308, 309, 310, 311, 314, 315, 317, 318,
     323, 324, 325, 326, 327, 328, 330, 331, 332, 333, 337, 338,
     340, 341, 342, 343, 344, 345, 348, 350, 351, 352, 353, 354
-])
-_move_blacklist = frozenset([
+})
+_move_blacklist = frozenset({
     0,   # MOVE_NONE
     165, # Struggle
     15,  # Cut
@@ -36,8 +36,8 @@ _move_blacklist = frozenset([
     19,  # Fly
     291, # Dive
     127  # Waterfall
-])
-_legendary_pokemon = frozenset([
+})
+_legendary_pokemon = frozenset({
     'Mew',
     'Mewtwo',
     'Articuno',
@@ -59,26 +59,16 @@ _legendary_pokemon = frozenset([
     'Regice',
     'Jirachi',
     'Deoxys'
-])
-
-
-def get_species_by_name(name: str, species_list: Optional[List[Optional[SpeciesData]]] = None) -> Optional[SpeciesData]:
-    species_list = data.species if species_list is None else species_list
-    for species in data.species:
-        if species is not None:
-            if species.label == name:
-                return species
-
-    return None
+})
 
 
 def get_random_species(
-        rand: random,
+        random: Random,
         candidates: List[Optional[SpeciesData]],
         nearby_bst: Optional[int] = None,
         species_type: Optional[int] = None,
         allow_legendaries: bool = True) -> SpeciesData:
-    candidates = [species for species in candidates if species is not None]
+    candidates: List[SpeciesData] = [species for species in candidates if species is not None]
 
     if species_type is not None:
         candidates = [species for species in candidates if species_type in species.types]
@@ -98,35 +88,35 @@ def get_random_species(
 
         candidates = bst_filtered_candidates
 
-    return candidates[rand.randrange(0, len(candidates))]
+    return random.choice(candidates)
 
 
-def get_random_type(rand: random):
-    picked_type = rand.randrange(0, 18)
+def get_random_type(random: Random):
+    picked_type = random.randrange(0, 18)
     while picked_type == 9: # Don't pick the ??? type
-        picked_type = rand.randrange(0, 18)
+        picked_type = random.randrange(0, 18)
 
     return picked_type
 
 
-def get_random_move(rand: random, blacklist: Optional[Set[int]] = None) -> int:
+def get_random_move(random: Random, blacklist: Optional[Set[int]] = None) -> int:
     expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
     num_moves = data.constants["MOVES_COUNT"]
 
-    move = rand.randrange(1, num_moves)
+    move = random.randrange(1, num_moves)
     while move in expanded_blacklist:
-        move = rand.randrange(1, num_moves)
+        move = random.randrange(1, num_moves)
 
     return move
 
 
-def get_random_damaging_move(rand: random, blacklist: Optional[Set[int]] = None) -> int:
+def get_random_damaging_move(random: Random, blacklist: Optional[Set[int]] = None) -> int:
     expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
 
     move_options = list(_damaging_moves)
 
-    move = rand.choice(move_options)
+    move = random.choice(move_options)
     while move in expanded_blacklist:
-        move = rand.choice(move_options)
+        move = random.choice(move_options)
 
     return move
