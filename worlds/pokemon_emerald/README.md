@@ -1,6 +1,6 @@
 # Pokemon Emerald
 
-This README contains general info useful for understanding the world. Pretty much all the long lists of locations, regions, and items are stored in `data/` and (mostly) loaded in by `Data.py`. Access rules are in `Rules.py`. Check `data/README.md` for more detailed information on the JSON files holding most of the data.
+This README contains general info useful for understanding the world. Pretty much all the long lists of locations, regions, and items are stored in `data/` and (mostly) loaded in by `data.py`. Access rules are in `rules.py`. Check `data/README.md` for more detailed information on the JSON files holding most of the data.
 
 ## Warps
 
