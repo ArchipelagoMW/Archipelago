@@ -946,4 +946,8 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CommandCenterReactor" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementOr id="AP_OrCountUnitAlias_FactoryCompleteOnlyTechTreeCheatCountUnitAlias_StarportCompleteOnlyTechTreeCheat">
+        <OperandArray value="CountUnitAlias_FactoryCompleteOnly96167438TechTreeCheat"/>
+        <OperandArray value="CountUnitAlias_StarportCompleteOnly4195804750TechTreeCheat"/>
+    </CRequirementOr>
 </Catalog>

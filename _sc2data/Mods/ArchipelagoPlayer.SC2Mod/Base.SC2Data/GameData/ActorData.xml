@@ -2458,6 +2458,9 @@
     <CActorSplat id="AP_FactorySplat" parent="TerranBuildingMorphSplat" unitName="AP_Factory">
         <Model value="FactorySplat"/>
     </CActorSplat>
+    <CActorModel id="AP_FactoryBuild" parent="TerranBuildingBuild">
+        <Model value="FactoryBuild"/>
+    </CActorModel>
     <CActorSound id="AP_FactoryLand" parent="SoundOneShot">
         <On Terms="AbilMorph.*.Start; MorphTo AP_Factory" Send="Create"/>
         <Sound value="Factory_Land"/>
@@ -2585,6 +2588,8 @@
         <On Terms="UnitBirth.AP_PlanetaryFortress; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
         <On Terms="Upgrade.AP_CommandCenterReactor.Add" Send="Create AP_CommandCenterReactor"/>
         <On Terms="Upgrade.AP_CommandCenterReactor.Add" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.EditorPlaced; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.EditorPlaced; ValidateUnit AP_CommandCenterReactorPurchased" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
         <On Terms="UnitBirth.AP_PlanetaryFortress.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
         <On Terms="UnitBirth.AP_PlanetaryFortress.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
         <On Terms="UnitBirth.AP_PlanetaryFortress.Normal; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
@@ -2936,7 +2941,6 @@
         <On Terms="Signal.*.FastBirth" Send="AnimClear BSD"/>
         <On Terms="Signal.*.FastBirth" Send="AnimBracketStart BSD IGNORE Stand Death"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="AP_CommandCenterReactor"/>
     </CActorModel>
     <CActorModel id="AP_CommandCenterReactorDeath" parent="ModelAnimationStyleOneShotNoOrphan">
         <Aliases value="_Snapshot"/>
@@ -2954,7 +2958,6 @@
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="AP_CommandCenterReactorDeath"/>
         <ModelFlags index="UseSyncSeed" value="1"/>
     </CActorModel>
     <CActorSplat id="AP_CommandCenterSplat" parent="GenericUnitSplat" unitName="AP_CommandCenter">
@@ -2968,6 +2971,91 @@
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_OrbitalCommand" Send="Create"/>
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_PlanetaryFortress" Send="Create"/>
         <Sound value="CommandCenter_UpgradeCancel"/>
+    </CActorSound>
+    <CActorUnit id="AP_SCV" parent="GenericUnitStandard" unitName="AP_SCV">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="CarryAnim"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="MacroWorkerHat"/>
+        <Macros value="CarryTerrazineNodeAnim"/>
+        <Macros value="CarryAnimCampaign"/>
+        <Macros value="CarryTerrazineNodeAnim"/>
+        <Macros value="CarryAnimCampaign"/>
+        <On Terms="Abil.AP_SCVHarvest.Start" Send="TimerSet 0.000000,0.300000 Gather"/>
+        <On Terms="Abil.AP_SCVHarvest.Stop" Send="AnimClear Gather"/>
+        <On Terms="Abil.AP_SCVHarvest.Stop" Send="TimerKill Gather"/>
+        <On Terms="AnimDone.*.Complete; AnimName Gather" Send="TimerSet 0.000000,0.300000 Gather"/>
+        <On Terms="TimerExpired; TimerName Gather" Send="AnimPlay Gather Work NonLooping"/>
+        <On Terms="TimerExpired; TimerName Gather" Send="Create AP_SCVGatherSound"/>
+        <On Terms="Abil.AP_Repair.SourceChannelStart" Send="TimerSet 0.000000,0.300000 Repair"/>
+        <On Terms="Abil.AP_Repair.SourceChannelStop" Send="TimerKill Repair"/>
+        <On Terms="Abil.AP_Repair.SourceChannelStop" Send="AnimClear Repair"/>
+        <On Terms="AnimDone.*.Complete; AnimName Repair" Send="TimerSet 0.000000,0.300000 Repair"/>
+        <On Terms="TimerExpired; TimerName Repair" Send="AnimPlay Repair Work NonLooping"/>
+        <On Terms="TimerExpired; TimerName Repair" Send="Create AP_SCVRepairSound"/>
+        <On Terms="Abil.*.WorkerStart" Send="TimerSet 0.000000,0.300000 Build"/>
+        <On Terms="Abil.*.WorkerStop" Send="TimerKill Build"/>
+        <On Terms="Abil.*.WorkerStop" Send="AnimClear Build"/>
+        <On Terms="Abil.*.WorkerCancel" Send="TimerKill Build"/>
+        <On Terms="Abil.*.WorkerCancel" Send="AnimClear Build"/>
+        <On Terms="AnimDone.*.Complete; AnimName Build" Send="TimerSet 0.000000,0.300000 Build"/>
+        <On Terms="TimerExpired; TimerName Build" Send="AnimPlay Build Work NonLooping"/>
+        <On Terms="TimerExpired; TimerName Build" Send="Create SCVBuildSound"/>
+        <On Terms="Abil.AP_SCVHarvest.Start" Send="StatusSet CloakSound 1"/>
+        <On Terms="Behavior.CarryHarvestableVespeneGeyserGas.Create" Send="StatusSet CloakSound 1"/>
+        <On Terms="Confirmation.AP_SCV.Start" Send="StatusSet CloakSound 0"/>
+        <On Terms="Behavior.CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
+        <On Terms="Behavior.CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
+        <On Terms="Abil.AP_GatherSpecialObject.SourcePrepStart" Send="TimerSet 0.000000,0.300000 Gather"/>
+        <On Terms="Abil.AP_GatherSpecialObject.SourceCastStop" Send="AnimClear Gather"/>
+        <On Terms="Abil.AP_GatherSpecialObject.SourceCastStop" Send="TimerKill Gather"/>
+        <On Terms="Behavior.AP_CarryChrysalisEgg.Create" Send="AnimGroupApply Gather"/>
+        <On Terms="Behavior.AP_CarryChrysalisEgg.Destroy" Send="AnimGroupRemove Gather"/>
+        <On Terms="ActorCreation; ValidateUnit AP_SCVUpgraded" Send="ModelSwap AP_SCVFusionWelder"/>
+        <On Terms="Upgrade.AP_FusionWelder.Add" Send="ModelSwap AP_SCVFusionWelder"/>
+        <On Terms="Upgrade.AP_DualFusionWelders.Add" Send="ModelSwap AP_SCVFusionWelder"/>
+        <Model value="SCV"/>
+        <AnimBlendTime value="0.500000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="SCV"/>
+        <DeathArray index="Normal" ModelLink="SCVDeath" SoundLink="SCV_Explode"/>
+        <PlacementModel value="SCV"/>
+        <PortraitModel value="SCVPortrait"/>
+        <WalkAnimMoveSpeed value="2"/>
+        <BarOffset value="40"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-SCV.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-scv.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="SCV_Ready"/>
+        <SoundArray index="Help" value="Alert_TerranEconomyUnderAttack"/>
+        <SoundArray index="What" value="SCV_What"/>
+        <SoundArray index="Yes" value="SCV_Yes"/>
+        <SoundArray index="Attack" value="SCV_Attack"/>
+        <SoundArray index="Pissed" value="SCV_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-scv.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-SCV.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_SCVAttack" parent="GenericAttack" effectAttack="AP_FusionCutter">
+        <LaunchAssets Model="SCVAttackLaunch"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSound id="AP_SCVAttackLaunch" parent="SoundOneShot">
+        <Sound value="SCV_AttackLaunch"/>
+        <On Terms="WeaponStart.AP_FusionCutter.AttackStart" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_SCVGatherSound" parent="SoundOneShot">
+        <Sound value="SCV_Mine"/>
+    </CActorSound>
+    <CActorSound id="AP_SCVRepairSound" parent="SoundOneShot">
+        <Sound value="SCV_Repair"/>
+    </CActorSound>
+    <CActorSound id="AP_SCVBuildSound" parent="SoundOneShot">
+        <Sound value="SCV_Repair"/>
     </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->
@@ -5353,6 +5441,7 @@
         <DeathArray index="Normal" ModelLink="AP_AutomatedRefineryDeath" SoundLink="AP_AutomatedRefinery_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Refinery_Explode"/>
         <PlacementModel value="AP_AutomatedRefineryPlacement"/>
+        <BuildModel value="AP_AutomatedRefinery"/>
         <PlacementSound value="Terran_BuildingPlacement"/>
         <PortraitModel value="AdjutantPortrait"/>
         <BarOffset value="160"/>
@@ -5372,7 +5461,16 @@
             <Image value="AP\Assets\Textures\Wireframe-Terran-Refinery-automated.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_RefineryBuild" parent="TerranBuildingBuildRefinery">
+        <Model value="RefineryBuild"/>
+    </CActorModel>
+    <CActorModel id="AP_RefineryRichBuild" parent="TerranBuildingBuildRefinery">
+        <Model value="RefineryBuild"/>
+    </CActorModel>
     <CActorModel id="AP_AutomatedRefineryBuild" parent="TerranBuildingBuildRefinery"/>
+    <CActorModel id="AP_AutomatedRefineryRichBuild" parent="TerranBuildingBuildRefinery">
+        <Model value="AP_AutomatedRefineryBuild"/>
+    </CActorModel>
     <CActorText id="AP_AutomatedRefineryTextKicker4">
         <On Terms="ActorCreation" Send="TimerSet 0.100000 StartMover"/>
         <On Terms="ActorCreation" Send="TimerSet 2.000000 Die"/>
@@ -5453,7 +5551,7 @@
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Refinery_Explode"/>
         <DeathCustoms ModelLink="RefineryEmptyDeath" Name="Empty"/>
         <PlacementModel value="RefineryPlacement"/>
-        <PlacementActorModel value="RefineryPlacementModel"/>
+        <PlacementActorModel value="AP_RefineryPlacementModel"/>
         <PortraitModel value="RefineryPortrait"/>
         <BarOffset value="160"/>
         <BarWidth value="120"/>
@@ -5508,6 +5606,12 @@
             <Image value="Assets\Textures\Wireframe-Terran-Refinery.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_RefineryPlacementModel" parent="PlacementModel">
+        <On Terms="ActorCreation; ModelName RefineryPlacement; ValidatePlayer AP_HaveAutoHarvester" Send="ModelSwap AP_AutomatedRefineryPlacement"/>
+    </CActorModel>
+    <CActorModel id="AP_BunkerPlacementModel" parent="PlacementModel">
+        <On Terms="ActorCreation; ModelName Bunker; ValidatePlayer AP_HasShrikeTurret" Send="Create AP_ShrikePlacement"/>
+    </CActorModel>
     <CActorSplat id="AP_RefineryRichSplat" parent="GenericUnitSplat" unitName="AP_RefineryRich">
         <Model value="RefinerySplat"/>
     </CActorSplat>
@@ -6097,6 +6201,9 @@
             <Image value="Assets\Textures\Wireframe-Terran-EngineeringBay.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_EngineeringBayBuild" parent="TerranBuildingBuild">
+        <Model value="EngineeringBayBuild"/>
+    </CActorModel>
     <CActorSplat id="AP_EngineeringBaySplat" parent="GenericUnitSplat" unitName="AP_EngineeringBay">
         <Model value="EngineeringBaySplat"/>
     </CActorSplat>
@@ -6199,7 +6306,7 @@
         </Wireframe>
     </CActorUnit>
     <CActorModel id="AP_PsiDisruptorBuild" parent="TerranBuildingBuildSmall">
-        <Model value="PsiDisruptorBuild"/>
+        <Model value="AP_PsiDisruptorBuild"/>
     </CActorModel>
     <CActorModel id="AP_PsiDisruptorDebuff" parent="ModelAnimationStyleOneShot">
         <Terms value="Cap 1"/>
@@ -6537,6 +6644,12 @@
             <Image value="Assets\Textures\Wireframe-Terran-SensorTower.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_SensorTowerBuild" parent="TerranBuildingBuildSmall">
+        <Model value="SensorTowerBuild"/>
+    </CActorModel>
+    <CActorSplat id="AP_SensorTowerSplat" parent="GenericUnitSplat" unitName="AP_SensorTower">
+        <Model value="SensorTowerSplat"/>
+    </CActorSplat>
     <CActorRange id="AP_SensorTowerRadar">
         <Inherits index="Visibility" value="0"/>
         <FogVisibility value="Visible"/>
@@ -6643,6 +6756,9 @@
             <Image value="Assets\Textures\Wireframe-Terran-Armory.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_ArmoryBuild" parent="TerranBuildingBuild">
+        <Model value="ArmoryBuild"/>
+    </CActorModel>
     <CActorSplat id="AP_ArmorySplat" parent="GenericUnitSplat" unitName="AP_Armory">
         <Model value="ArmorySplat"/>
     </CActorSplat>

@@ -3773,8 +3773,9 @@
         <PlacementFootprint value="Footprint3x3CappedGeyser"/>
         <BuiltOn value="VespeneGeyser"/>
         <BuiltOn value="SpacePlatformGeyser"/>
-        <BuiltOn value="RichVespeneGeyser"/>
         <BuiltOn value="TempleGeyser"/>
+        <BuiltOn value="RichVespeneGeyser"/>
+        <BuildOnAs value="AP_AutomatedRefineryRich"/>
         <ScoreMake value="50"/>
         <ScoreKill value="150"/>
         <ScoreResult value="BuildOrder"/>
@@ -3911,7 +3912,7 @@
         <BuiltOn value="VespeneGeyser"/>
         <BuiltOn value="SpacePlatformGeyser"/>
         <BuiltOn value="RichVespeneGeyser"/>
-        <BuildOnAs value="RefineryRich"/>
+        <BuildOnAs value="AP_RefineryRich"/>
         <ScoreMake value="75"/>
         <ScoreKill value="75"/>
         <ScoreResult value="BuildOrder"/>
@@ -6092,7 +6093,7 @@
             <LayoutButtons Face="AP_AttackBuildingPFort" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5PassiveCancelToSelection,CancelLast" Row="2" Column="4"/>
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
-            <LayoutButtons Face="AP_SCV" Type="AbilCmd" AbilCmd="AP_CommandCenterTrain,0" Row="0" Column="0"/>
+            <LayoutButtons Face="SCV" Type="AbilCmd" AbilCmd="AP_CommandCenterTrain,0" Row="0" Column="0"/>
             <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="AP_RallyCommand,0" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="2.5"/>
@@ -6697,6 +6698,111 @@
         <HotkeyAlias value="Starport"/>
         <TechAliasArray value="Alias_Starport"/>
         <GlossaryAlias value="Starport"/>
+    </CUnit>
+    <CUnit id="AP_SCV">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Worker" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <DefaultAcquireLevel value="Defensive"/>
+        <Response value="Flee"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="45"/>
+        <LifeMax value="45"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
+        <Speed value="2.8125"/>
+        <Acceleration value="2.5"/>
+        <LateralAcceleration value="46"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="8"/>
+        <Food value="-1"/>
+        <CostCategory value="Economy"/>
+        <CostResource index="Minerals" value="50"/>
+        <RepairTime value="16.667"/>
+        <AttackTargetPriority value="20"/>
+        <AIOverideTargetPriority value="10"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="10"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_Repair"/>
+        <AbilArray Link="AP_SCVHarvest"/>
+        <AbilArray Link="AP_TerranBuild"/>
+        <AbilArray Link="GatherSpecialObject"/>
+        <AbilArray Link="CancelTerrazineHarvest"/>
+        <AbilArray Link="AP_TerranBuildDrop"/>
+        <WeaponArray Link="AP_FusionCutter"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="AttackWorker" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="Repair" Type="AbilCmd" AbilCmd="AP_Repair,0" Row="2" Column="2"/>
+            <LayoutButtons Face="GatherTerr" Type="AbilCmd" AbilCmd="AP_SCVHarvest,0" Row="1" Column="0"/>
+            <LayoutButtons Face="ReturnCargo" Type="AbilCmd" AbilCmd="AP_SCVHarvest,1" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_TerranBuild" Type="Submenu" SubmenuCardId="TBl1" Row="2" Column="0"/>
+            <LayoutButtons Face="TerranBuildAdvanced" Type="Submenu" SubmenuCardId="TBl2" Row="2" Column="1"/>
+            <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="AP_TerranBuild,30" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="CancelTerrazineHarvest,0" Row="2" Column="4"/>
+        </CardLayouts>
+        <CardLayouts CardId="TBl1">
+            <LayoutButtons Face="AP_CommandCenter" Type="AbilCmd" AbilCmd="AP_TerranBuild,0" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_Refinery" Type="AbilCmd" AbilCmd="AP_TerranBuild,2" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_SupplyDepot" Type="AbilCmd" AbilCmd="AP_TerranBuild,1" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_Barracks" Type="AbilCmd" AbilCmd="AP_TerranBuild,3" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_EngineeringBay" Type="AbilCmd" AbilCmd="AP_TerranBuild,4" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_Bunker" Type="AbilCmd" AbilCmd="AP_TerranBuild,6" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MissileTurret" Type="AbilCmd" AbilCmd="AP_TerranBuild,5" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_SensorTower" Type="AbilCmd" AbilCmd="AP_TerranBuild,8" Row="2" Column="2"/>
+            <LayoutButtons Face="Cancel" Type="CancelSubmenu" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_CommandCenterOrbRelay" Type="AbilCmd" AbilCmd="AP_TerranBuild,20" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_AutomatedRefinery" Type="AbilCmd" AbilCmd="AP_TerranBuild,18" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_SupplyDepotDrop" Type="AbilCmd" AbilCmd="AP_TerranBuildDrop,0" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_BunkerFortified" Type="AbilCmd" AbilCmd="AP_TerranBuild,22" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_PerditionTurret" Type="AbilCmd" AbilCmd="AP_TerranBuild,19" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_HiveMindEmulator" Type="AbilCmd" AbilCmd="AP_TerranBuild,21" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_PsiDisruptor" Type="AbilCmd" AbilCmd="AP_TerranBuild,7" Row="1" Column="3"/>
+        </CardLayouts>
+        <CardLayouts CardId="TBl2">
+            <LayoutButtons Face="AP_GhostAcademy" Type="AbilCmd" AbilCmd="AP_TerranBuild,9" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_Factory" Type="AbilCmd" AbilCmd="AP_TerranBuild,10" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_Armory" Type="AbilCmd" AbilCmd="AP_TerranBuild,13" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_Starport" Type="AbilCmd" AbilCmd="AP_TerranBuild,11" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_FusionCore" Type="AbilCmd" AbilCmd="AP_TerranBuild,15" Row="2" Column="1"/>
+            <LayoutButtons Face="Cancel" Type="CancelSubmenu" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_MercCompound" Type="AbilCmd" AbilCmd="AP_TerranBuild,12" Row="0" Column="1"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="1"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="50"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="6"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkSCV"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="10"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="33"/>
+            <ChanceArray index="Idle" value="33"/>
+            <ChanceArray index="Turn" value="33"/>
+        </Fidget>
     </CUnit>
     <CUnit id="SpectreAP_Nuke">
         <Race value="Terr"/>

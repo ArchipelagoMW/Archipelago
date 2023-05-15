@@ -653,8 +653,8 @@
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_AutomatedRefinery">
-        <Icon value="Assets\Textures\btn-building-terran-refineryautomated.dds"/>
-        <AlertIcon value="Assets\Textures\btn-building-terran-refinery.dds"/>
+        <Icon value="AP\Assets\Textures\btn-building-terran-refineryautomated.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-building-terran-refinery.dds"/>
         <Hotkey value="Button/Hotkey/Refinery"/>
         <EditorCategories value="Race:Terran"/>
         <HotkeyAlias value="Refinery"/>
@@ -777,8 +777,8 @@
         <TintRacially value="1"/>
     </CButton>
     <CButton id="AP_HiveMindEmulator">
-        <Icon value="Assets\Textures\btn-building-terran-hivemindemulator.dds"/>
-        <AlertIcon value="Assets\Textures\btn-building-terran-hivemindemulator.dds"/>
+        <Icon value="AP\Assets\Textures\btn-building-terran-hivemindemulator.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-building-terran-hivemindemulator.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_MindControl">
@@ -916,5 +916,83 @@
         <Icon value="Assets\Textures\BTN-Ability-Terran-CalldownExtraSupplies-color.dds"/>
         <AlertIcon value="Assets\Textures\BTN-Ability-Terran-CalldownExtraSupplies-color.dds"/>
         <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Armory">
+        <Icon value="Assets\Textures\btn-building-terran-armory.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-armory.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Barracks">
+        <Icon value="Assets\Textures\btn-building-terran-barracks.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-barracks.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CommandCenter">
+        <Icon value="Assets\Textures\btn-building-terran-commandcenter.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-commandcenter.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_EngineeringBay">
+        <Icon value="Assets\Textures\btn-building-terran-engineeringbay.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-engineeringbay.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Factory">
+        <Icon value="Assets\Textures\btn-building-terran-factory.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-factory.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_FusionCore">
+        <Icon value="Assets\Textures\btn-building-terran-fusioncore.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-fusioncore.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_GhostAcademy">
+        <Icon value="Assets\Textures\btn-building-terran-ghostacademy.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-ghostacademy.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_MercCompound">
+        <Icon value="Assets\Textures\btn-building-terran-merccompound.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-merccompound.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_MissileTurret">
+        <Icon value="Assets\Textures\btn-building-terran-missileturret.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-missileturret.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_PsiDisruptor">
+        <Icon value="AP\Assets\Textures\btn-building-terran-sigmaprojector.dds"/>
+        <AlertIcon value="AP\Assets\Textures\btn-building-terran-sigmaprojector.dds"/>
+        <Hotkey value="Button/Hotkey/AP_PsiDisrupter"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value=""/>
+    </CButton>
+    <CButton id="AP_Refinery">
+        <Icon value="Assets\Textures\btn-building-terran-refinery.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-refinery.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SensorTower">
+        <Icon value="Assets\Textures\btn-building-terran-sensordome.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-sensordome.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_Starport">
+        <Icon value="Assets\Textures\btn-building-terran-starport.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-starport.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SupplyDepot">
+        <Icon value="Assets\Textures\btn-building-terran-supplydepot.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-supplydepot.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_TerranBuild">
+        <Icon value="Assets\Textures\btn-command-terran-buildstructure.dds"/>
+        <AlertIcon value="Assets\Textures\btn-command-terran-buildstructure.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
     </CButton>
 </Catalog>

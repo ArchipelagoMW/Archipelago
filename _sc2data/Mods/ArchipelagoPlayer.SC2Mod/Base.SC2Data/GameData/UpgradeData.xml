@@ -852,7 +852,7 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,AP_Bunker,LifeMax" Value="150"/>
         <EffectArray Reference="Unit,AP_Bunker,LifeStart" Value="150"/>
-        <EffectArray Operation="Set" Reference="Actor,AP_Bunker,UnitIcon" Value="Assets\Textures\btn-building-terran-bunkerneosteel.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Bunker,UnitIcon" Value="AP\Assets\Textures\btn-building-terran-bunkerneosteel.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Bunker,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-bunker-neosteelframe.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Bunker,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-bunker-neosteelframe.dds"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
@@ -860,7 +860,7 @@
     </CUpgrade>
     <CUpgrade id="AP_NeoSteelAndShrikeTurretIconUpgrade">
         <Flags index="UpgradeCheat" value="0"/>
-        <EffectArray Operation="Set" Reference="Actor,Bunker,UnitIcon" Value="Assets\Textures\BTN-Building-Terran-BunkerNeosteelShrikeTurret.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Bunker,UnitIcon" Value="AP\Assets\Textures\BTN-Building-Terran-BunkerNeosteelShrikeTurret.dds"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Bunker"/>
     </CUpgrade>
@@ -949,5 +949,23 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_CommandCenter"/>
         <AffectedUnitArray value="AP_CommandCenterFlying"/>
+    </CUpgrade>
+    <CUpgrade id="AP_DualFusionWelders">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Divide" Reference="Effect,AP_Repair,TimeFactor" Value="2"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Repair,Tooltip" Value="Button/Tooltip/DualFusionRepair"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Repair,Name" Value="Button/Name/DualFusionRepair"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Repair,AlertTooltip" Value="Button/Tooltip/DualFusionRepair"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Repair,AlertName" Value="Button/Name/DualFusionRepair"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SCV,UnitIcon" Value="Assets\Textures\BTN-Unit-Terran-SCVFusionWelder.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_SCV"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AdvancedConstruction">
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <EffectArray Operation="Set" Reference="Abil,BuildInProgress,MaxBuilders" Value="10"/>
+        <EffectArray Operation="Set" Reference="Abil,BuildInProgress,PowerBuildBonusRate" Value="0.6"/>
+        <EffectArray Operation="Set" Reference="Abil,BuildInProgress,PowerBuildCostFactor" Value="0.0"/>
+        <Flags index="UpgradeCheat" value="0"/>
     </CUpgrade>
 </Catalog>

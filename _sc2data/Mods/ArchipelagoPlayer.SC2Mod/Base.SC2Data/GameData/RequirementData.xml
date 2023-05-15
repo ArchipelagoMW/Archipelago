@@ -616,4 +616,10 @@
     <CRequirement id="AP_CommandCenterReactorResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeCommandCenterReactorCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveFactoryOrStarport">
+        <NodeArray index="Use" Link="AP_OrCountUnitAlias_FactoryCompleteOnlyTechTreeCheatCountUnitAlias_StarportCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_AutoHarvesterResearched">
+        <NodeArray index="Show" Link="AP_CountUpgradeAutoHarvesterCompleteOnly"/>
+    </CRequirement>
 </Catalog>

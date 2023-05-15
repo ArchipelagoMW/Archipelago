@@ -1146,4 +1146,13 @@
         <CombineArray value="AP_NotAPSupplyDropEnRoute"/>
         <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_SCVUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveFusionWelder"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveAutoHarvester">
+        <Find value="1"/>
+        <Value value="AP_AutoHarvesterResearched"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

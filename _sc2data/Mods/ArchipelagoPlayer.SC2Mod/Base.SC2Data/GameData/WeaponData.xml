@@ -692,4 +692,12 @@
         <Arc value="90"/>
         <Period value="2"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_FusionCutter">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Period value="1.5"/>
+    </CWeaponLegacy>
 </Catalog>

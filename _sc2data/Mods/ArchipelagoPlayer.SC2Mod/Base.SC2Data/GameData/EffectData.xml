@@ -2869,6 +2869,45 @@
         <Flags index="Kill" value="1"/>
         <Death value="Remove"/>
     </CEffectDamage>
+    <CEffectSet id="AP_CCBirthSet">
+        <EditorCategories value=""/>
+    </CEffectSet>
+    <CEffectSet id="AP_CCCreateSet">
+        <EditorCategories value=""/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_CancelTerrazineHarvestIssueOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+    <CEffectRemoveBehavior id="AP_CancelTerrazineHarvestRemoveBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="HarvestingTerrazine"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_CancelTerrazineHarvestSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_CancelTerrazineHarvestRemoveBehavior"/>
+        <EffectArray value="AP_CancelTerrazineHarvestIssueOrder"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_FusionCutter" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_GatherSpecialObjectPersistent">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="TargetIsSpecialObject"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <InitialEffect value="AP_GatherSpecialObjectRemoveBehavior"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_GatherSpecialObjectRemoveBehavior"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectRemoveBehavior id="AP_GatherSpecialObjectRemoveBehavior">
+        <ValidatorArray index="0" removed="1"/>
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="SpecialObject"/>
+    </CEffectRemoveBehavior>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>
@@ -2876,10 +2915,4 @@
         <Flags index="IgnoreUnitCost" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
     </CAbilMorph>
-    <CEffectSet id="AP_CCBirthSet">
-        <EditorCategories value=""/>
-    </CEffectSet>
-    <CEffectSet id="AP_CCCreateSet">
-        <EditorCategories value=""/>
-    </CEffectSet>
 </Catalog>

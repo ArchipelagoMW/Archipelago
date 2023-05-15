@@ -1528,12 +1528,12 @@
     </CAbilMorph>
     <CAbilTrain id="AP_CommandCenterTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <!--        <InfoArray index="Train1" Time="17">-->
-        <!--            <Button DefaultButtonFace="AP_SCV" State="Restricted">-->
-        <!--                <Flags index="ToSelection" value="1"/>-->
-        <!--            </Button>-->
-        <!--            <Unit value="AP_SCV"/>-->
-        <!--        </InfoArray>-->
+        <InfoArray index="Train1" Time="17">
+            <Button DefaultButtonFace="AP_SCV" State="Restricted">
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Unit value="AP_SCV"/>
+        </InfoArray>
         <Alert value="TrainWorkerComplete"/>
     </CAbilTrain>
     <CAbilTransport id="AP_CommandCenterTransport">
@@ -1751,6 +1751,36 @@
         <Arc value="360"/>
         <CursorEffect value="AP_ScannerSweep"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_Scan" Requirements="AP_HaveOrbitalRelay"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_Repair">
+        <AbilSetId value="Repair"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOffOwnerLeave" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <TargetFilters value="Mechanical,Visible;Self,Enemy,Missile,UnderConstruction,Dead,Hidden"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Visible;Neutral,Enemy"/>
+        <AutoCastRange value="7"/>
+        <Marker>
+            <MatchFlags index="Link" value="0"/>
+            <MismatchFlags index="Id" value="0"/>
+        </Marker>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <UseMarkerArray index="Cast" value="0"/>
+        <UseMarkerArray index="Channel" value="0"/>
+        <InheritAttackPriorityArray index="Prep" value="1"/>
+        <InheritAttackPriorityArray index="Cast" value="1"/>
+        <InheritAttackPriorityArray index="Channel" value="1"/>
+        <DefaultError value="RequiresRepairTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Repair">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
     </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
@@ -2074,4 +2104,82 @@
         <Alert value="UpgradeComplete"/>
         <ValidatorArray value="HasNoCargo"/>
     </CAbilMorph>
+    <CAbilBuild id="AP_TerranBuild">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <FlagArray index="Interruptible" value="1"/>
+        <FlagArray index="PeonDisableCollision" value="1"/>
+        <InfoArray index="Build1" Unit="AP_CommandCenter" Time="100">
+            <Button DefaultButtonFace="AP_CommandCenter" State="Suppressed" Requirements="AP_HideCommandCenter"/>
+        </InfoArray>
+        <InfoArray index="Build2" Unit="AP_SupplyDepot" Time="30">
+            <Button DefaultButtonFace="AP_SupplyDepot" Requirements="AP_HideSupplyDepot"/>
+        </InfoArray>
+        <InfoArray index="Build3" Unit="AP_Refinery" Time="30">
+            <Button DefaultButtonFace="AP_Refinery" Requirements="AP_HideRefinery"/>
+            <ValidatorArray value="HasVespene"/>
+        </InfoArray>
+        <InfoArray index="Build4" Unit="AP_Barracks" Time="60">
+            <Button DefaultButtonFace="AP_Barracks" State="Suppressed" Requirements="HaveCommandCenter"/>
+        </InfoArray>
+        <InfoArray index="Build5" Unit="AP_EngineeringBay" Time="35">
+            <Button DefaultButtonFace="AP_EngineeringBay" State="Suppressed" Requirements="HaveCommandCenter"/>
+        </InfoArray>
+        <InfoArray index="Build6" Unit="AP_MissileTurret" Time="25">
+            <Button DefaultButtonFace="AP_MissileTurret" State="Restricted" Requirements="AP_HaveEngineeringBay"/>
+        </InfoArray>
+        <InfoArray index="Build7" Unit="AP_Bunker" Time="30">
+            <Button DefaultButtonFace="AP_Bunker" State="Restricted" Requirements="AP_HideFortifiedBunker"/>
+        </InfoArray>
+        <InfoArray index="Build8" Unit="AP_PsiDisruptor" Time="50">
+            <Button DefaultButtonFace="AP_PsiDisruptor"/>
+        </InfoArray>
+        <InfoArray index="Build9" Unit="AP_SensorTower" Time="25">
+            <Button DefaultButtonFace="AP_SensorTower" State="Restricted" Requirements="AP_HaveEngineeringBay"/>
+        </InfoArray>
+        <InfoArray index="Build10" Unit="AP_GhostAcademy" Time="40">
+            <Button DefaultButtonFace="AP_GhostAcademy" State="Suppressed" Requirements="HaveBarracks"/>
+        </InfoArray>
+        <InfoArray index="Build11" Unit="AP_Factory" Time="60">
+            <Button DefaultButtonFace="AP_Factory" State="Suppressed" Requirements="HaveCommandCenter"/>
+        </InfoArray>
+        <InfoArray index="Build12" Unit="AP_Starport" Time="50">
+            <Button DefaultButtonFace="AP_Starport" State="Suppressed" Requirements="HaveCommandCenter"/>
+        </InfoArray>
+        <InfoArray index="Build13" Unit="AP_MercCompound" Time="50">
+            <Button DefaultButtonFace="AP_MercCompound" State="Suppressed" Requirements="HaveCommandCenter"/>
+        </InfoArray>
+        <InfoArray index="Build14" Unit="AP_Armory" Time="65">
+            <Button DefaultButtonFace="AP_Armory" State="Suppressed" Requirements="AP_HaveFactoryOrStarport"/>
+        </InfoArray>
+        <InfoArray index="Build16" Unit="AP_FusionCore" Time="80">
+            <Button DefaultButtonFace="AP_FusionCore" State="Suppressed" Requirements="HaveStarport"/>
+        </InfoArray>
+        <InfoArray index="Build19" Unit="AP_AutomatedRefinery" Time="45">
+            <Button DefaultButtonFace="AP_AutomatedRefinery" Requirements="AP_UseAutomatedRefinery"/>
+        </InfoArray>
+        <InfoArray index="Build20" Unit="AP_PerditionTurret" Time="35">
+            <Button DefaultButtonFace="AP_PerditionTurret" State="Restricted" Requirements="AP_HaveEngineeringBay"/>
+        </InfoArray>
+        <InfoArray index="Build21" Unit="AP_CommandCenter" Time="100">
+            <Button DefaultButtonFace="AP_CommandCenterOrbRelay" State="Suppressed" Requirements="AP_UseOrbitalRelay"/>
+        </InfoArray>
+        <InfoArray index="Build22" Unit="AP_HiveMindEmulator" Time="50">
+            <Button DefaultButtonFace="AP_HiveMindEmulator"/>
+        </InfoArray>
+        <InfoArray index="Build23" Unit="AP_Bunker" Time="30">
+            <Button DefaultButtonFace="AP_BunkerFortified" Requirements="AP_UseFortifiedBunker"/>
+        </InfoArray>
+        <FidgetDelayMin value="5"/>
+        <FidgetDelayMax value="10"/>
+        <ConstructionMover value="Construction"/>
+    </CAbilBuild>
+    <CAbilBuild id="AP_TerranBuildDrop">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <FlagArray index="PeonDisableCollision" value="1"/>
+        <FlagArray index="PeonMaintained" value="0"/>
+        <InfoArray index="Build1" Unit="AP_SupplyDepotDrop" Time="3">
+            <Button DefaultButtonFace="AP_SupplyDepotDrop" Requirements="AP_UseSupplyDepotDrop"/>
+        </InfoArray>
+        <ConstructionMover value="Construction"/>
+    </CAbilBuild>
 </Catalog>
