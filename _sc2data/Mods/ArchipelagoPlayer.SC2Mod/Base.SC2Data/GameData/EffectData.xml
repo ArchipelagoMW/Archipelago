@@ -2790,6 +2790,72 @@
         <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <SearchFlags index="OffsetByUnitRadius" value="0"/>
     </CEffectDamage>
+    <CEffectCreatePersistent id="AP_CalldownMULECreatePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <ExpireDelay value="4"/>
+        <FinalEffect value="AP_CalldownMULEFinalSet"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_CalldownMULECreateSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="AP_CalldownMULECreatePersistent"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_CalldownMULECreateUnit">
+        <ValidatorArray value="AP_MULETargetCheck"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <SpawnEffect value="AP_CalldownMULECreateSet"/>
+        <SpawnUnit value="AP_MULE"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_CalldownMULEFinalSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="RemovePrecursor"/>
+        <EffectArray value="AP_CalldownMULETimedLife"/>
+        <EffectArray value="AP_CalldownMULEIssueOrder"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_CalldownMULEIssueOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="AP_MULEGather"/>
+        <Target Effect="AP_CalldownMULECreateUnit" Value="TargetUnit"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_CalldownMULETimedLife">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_MULETimedLife"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_MULEFate">
+        <EditorCategories value="Race:Terran"/>
+        <Alert value="MULEExpired"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="NoKillCredit" value="1"/>
+    </CEffectDamage>
+    <CEffectCreateHealer id="AP_Repair">
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="NotThorWreckage"/>
+        <ValidatorArray value="NotOdinWreckage"/>
+        <EditorCategories value="Race:Terran"/>
+        <DrainResourceCostFactor index="Minerals" value="0.25"/>
+        <DrainResourceCostFactor index="Vespene" value="0.25"/>
+        <DrainResourceCostFactor index="Terrazine" value="0.25"/>
+        <DrainResourceCostFactor index="Custom" value="0.25"/>
+        <RechargeVitalRate value="1"/>
+        <TimeFactor value="1"/>
+    </CEffectCreateHealer>
+    <CEffectApplyBehavior id="AP_SupplyDropApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_SupplyDrop"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_SupplyDropApplyTempBehavior">
+        <ValidatorArray index="0" value="IsSupplyDepotEitherFlavor"/>
+        <ValidatorArray value="NotSupplyDrop"/>
+        <ValidatorArray value="NotSupplyDropEnRoute"/>
+        <ValidatorArray value="IsSupplyDepotMorphing"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_SupplyDropEnRoute"/>
+    </CEffectApplyBehavior>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>
@@ -2797,4 +2863,11 @@
         <Flags index="IgnoreUnitCost" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
     </CAbilMorph>
+    <CEffectCreatePersistent id="AP_ScannerSweep">
+        <EditorCategories value="Race:Terran"/>
+        <ExpireDelay value="12.2775"/>
+        <RevealRadius value="13"/>
+        <RevealFlags index="Unfog" value="1"/>
+        <RevealFlags index="Detect" value="1"/>
+    </CEffectCreatePersistent>
 </Catalog>

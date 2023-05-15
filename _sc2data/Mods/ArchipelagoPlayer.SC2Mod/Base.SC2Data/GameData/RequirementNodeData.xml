@@ -927,4 +927,19 @@
     <CRequirementCountUnit id="AP_CountUnitPlanetaryFortressCompleteOnlyTechTreeCheat">
         <Count Link="AP_PlanetaryFortress" State="CompleteOnly"/>
     </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitOrbitalCommandCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_OrbitalCommand" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeOrbitalRelayCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_OrbitalRelay" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeOrbitalRelayCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeOrbitalRelayCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementOr id="AP_OrCountUpgradeOrbitalRelayCompleteOnlyCountUnitOrbitalCommandCompleteOnlyAtUnit">
+        <OperandArray value="AP_CountUpgradeOrbitalRelayCompleteOnly"/>
+        <OperandArray value="AP_CountUnitOrbitalCommandCompleteOnlyAtUnit"/>
+    </CRequirementOr>
 </Catalog>

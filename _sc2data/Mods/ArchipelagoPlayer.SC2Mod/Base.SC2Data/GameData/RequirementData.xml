@@ -601,4 +601,16 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountUnitPlanetaryFortressCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HaveOrbitalRelay">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeOrbitalRelayCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HideCommandCenter">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeOrbitalRelayCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseOrbitalRelay">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeOrbitalRelayCompleteOnly"/>
+    </CRequirement>
 </Catalog>

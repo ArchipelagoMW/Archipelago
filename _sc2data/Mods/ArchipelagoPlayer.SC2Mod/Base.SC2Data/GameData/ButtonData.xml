@@ -888,4 +888,33 @@
         <AlertIcon value="Assets\Textures\btn-building-terran-planetaryfortress.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_CalldownMULE">
+        <Icon value="Assets\Textures\BTN-Unit-Terran-mule.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Unit-Terran-mule.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CommandCenterOrbRelay">
+        <Icon value="Assets\Textures\btn-building-terran-surveillancestation.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-surveillancestation.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_GatherMULE">
+        <Icon value="Assets\Textures\btn-ability-terran-gather.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-gather.dds"/>
+        <EditorCategories value="Race:Neutral"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="GatherProt"/>
+        <Universal value="1"/>
+        <SimpleDisplayText value="SimpleDisplay/Gather"/>
+    </CButton>
+    <CButton id="AP_Scan">
+        <Icon value="Assets\Textures\btn-ability-terran-scannersweep-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-scannersweep-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SupplyDrop">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-CalldownExtraSupplies-color.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-CalldownExtraSupplies-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

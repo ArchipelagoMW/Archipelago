@@ -2631,6 +2631,179 @@
     <CActorTurret id="AP_PlanetaryFortressTurret">
         <On Terms="TurretEnable.AP_PlanetaryFortress" Send="Create"/>
     </CActorTurret>
+    <CActorUnit id="AP_MULE" parent="GenericUnitStandard" unitName="AP_MULE">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="CarryAnim"/>
+        <On Terms="Abil.AP_MULEGather.Start" Send="AnimBracketStart Work Work,Start Work Work,End"/>
+        <On Terms="Abil.AP_MULEGather.Stop" Send="AnimBracketStop Work"/>
+        <On Terms="Abil.AP_MULERepair.SourceChannelStart" Send="AnimBracketStart Work Work,Start Work Work,End"/>
+        <On Terms="Abil.AP_MULERepair.SourceChannelStop" Send="AnimBracketStop Work"/>
+        <On Terms="Abil.AP_MULERepair.SourceChannelStart" Send="TimerSet 0.000000,0.300000 Repair"/>
+        <On Terms="Abil.AP_MULERepair.SourceChannelStop" Send="TimerKill Repair"/>
+        <On Terms="Abil.AP_MULERepair.SourceChannelStop" Send="AnimClear Repair"/>
+        <On Terms="AnimDone.*.Complete; AnimName Repair" Send="TimerSet 0.000000,0.300000 Repair"/>
+        <On Terms="TimerExpired; TimerName Repair" Send="AnimPlay Repair Work NonLooping"/>
+        <On Terms="TimerExpired; TimerName Repair" Send="Create MULERepairSound"/>
+        <On Terms="Abil.AP_MULEGather.Start" Send="StatusSet CloakSound 1"/>
+        <On Terms="Behavior.CarryHarvestableVespeneGeyserGas.Create" Send="StatusSet CloakSound 1"/>
+        <On Terms="Confirmation.AP_MULE.Start" Send="StatusSet CloakSound 0"/>
+        <On Terms="Behavior.CloakFieldEffect.Create; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOn"/>
+        <On Terms="Behavior.CloakFieldEffect.Destroy; IsStatus CloakSound 0" Send="Create Worker_CloakFieldOff"/>
+        <On Terms="Behavior.Precursor.Off" Send="Create MULEReadySound"/>
+        <Model value="MULE"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="MULE"/>
+        <DeathArray index="Normal" ModelLink="MULEDeath" SoundLink="Mule_Explode"/>
+        <PlacementModel value="MULE"/>
+        <PortraitModel value="MULEPortrait"/>
+        <BarOffset value="50"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-mule.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="Help" value="Alert_TerranEconomyUnderAttack"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-mule.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Ready" value=""/>
+        <SoundArray index="Help" value="Alert_TerranEconomyUnderAttack"/>
+        <SoundArray index="What" value="Mule_What"/>
+        <SoundArray index="Yes" value="Mule_Yes"/>
+        <SoundArray index="Attack" value="Mule_Yes"/>
+        <SoundArray index="Pissed" value="Mule_Pissed"/>
+        <SoundArray index="Movement" value="SCVMovement"/>
+        <SoundArray index="Turning" value="SCVTurning"/>
+        <SoundArray index="Board" value="SCVBoard"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-mule.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-mule.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="AP_MULEReadySound" parent="SoundOneShot">
+        <Filter index="Ally" value="1"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <Sound value="Mule_Ready"/>
+    </CActorSound>
+    <CActorSound id="AP_MULERepairSound" parent="SoundOneShot">
+        <Supporter Subject="::Creator"/>
+        <Sound value="Mule_Repair"/>
+    </CActorSound>
+    <CActorSound id="AP_MuleGatherMinerals" parent="SoundContinuous">
+        <On Terms="Abil.AP_MULEGather.Start" Send="Create"/>
+        <On Terms="Abil.AP_MULEGather.Stop" Send="Destroy"/>
+        <Sound value="Mule_GatherMinerals"/>
+    </CActorSound>
+    <CActorUnit id="AP_OrbitalCommand" parent="TerranBuildingFlyerEx" unitName="AP_OrbitalCommand">
+        <Macros value="MacroTownhallDeco_Terran"/>
+        <Macros value="TerranOrbitalCommandPlayerDecalMacro"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <On Terms="UnitBirth.AP_OrbitalCommand" Send="AnimGroupApply B {} {} Instant"/>
+        <On Terms="UnitBirth.AP_OrbitalCommandFlying" Send="AnimGroupApply B {} {} Instant"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_CommandCenter; MorphTo AP_OrbitalCommand" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationCommandCenter"/>
+        <On Terms="UnitDeathCustomize.AP_OrbitalCommandFlying" Send="DeathCustomize Flying"/>
+        <On Terms="UnitBirth.AP_OrbitalCommandFlying" Send="HideWorkerCount 1"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_OrbitalCommandFlying; MorphTo AP_OrbitalCommand" Send="HideWorkerCount"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_OrbitalCommand; MorphTo AP_OrbitalCommandFlying" Send="HideWorkerCount 1"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_OrbitalCommand; MorphTo AP_OrbitalCommandFlying" Target="PlayerLogoDoodadList" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_OrbitalCommandFlying; MorphTo AP_OrbitalCommand" Send="Create PlayerLogoDoodadList"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_OrbitalCommand; MorphTo AP_OrbitalCommandFlying" Target="TerranClanFlag" Send="Signal DestroyFlag"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_OrbitalCommandFlying; MorphTo AP_OrbitalCommand; PlayerHasClanDecal" Send="Create TerranClanFlag"/>
+        <On Terms="UnitBirth.AP_OrbitalCommand; PlayerHasClanDecal" Send="Create TerranClanFlag"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_OrbitalCommand; MorphTo AP_OrbitalCommandFlying" Target="TerranPlayerTrophy" Send="Signal DestroyFlag"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_OrbitalCommandFlying; MorphTo AP_OrbitalCommand; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
+        <On Terms="UnitBirth.AP_OrbitalCommand; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
+        <Model value="CommandCenter"/>
+        <DeathArray index="Normal" ModelLink="OrbitalCommandDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranLargeBuildingDeath"/>
+        <DeathCustoms index="5" ModelLink="OrbitalCommandFlyDeath" SoundLink="OrbitalCommand_Explode" Name="Flying"/>
+        <PlacementModel value="OrbitalCommandPlacement"/>
+        <PortraitModel value="CommandCenterPortrait"/>
+        <BarOffset value="170"/>
+        <BarWidth value="200"/>
+        <GlossaryAnim value="Stand,B"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-OrbitalCommand.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-surveillancestation.dds"/>
+        <NameOffset value="150"/>
+        <SoundArray index="Birth" value="CommandCenterBirth"/>
+        <SoundArray index="Ready" value="CommandCenter_Ready"/>
+        <SoundArray index="Help" value="CommandCenterHelp"/>
+        <SoundArray index="What" value="OrbitalCommand"/>
+        <SoundArray index="Yes" value="CommandCenterYes"/>
+        <SoundArray index="Attack" value="CommandCenterYes"/>
+        <SoundArray index="Pissed" value="CommandCenterPissed"/>
+        <SoundArray index="Movement" value="OrbitalCommand_Movement"/>
+        <StatusHarvesterData Text="UI/HarvesterCountMinerals" SearchFilters="HarvestableResource;Player,Ally,Enemy" SearchRadius="8"/>
+        <UnitFlags index="StandAnimBirthVariation" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-surveillancestation.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-OrbitalCommand.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="AP_OrbitalCommandLand" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_OrbitalCommand; MorphFrom AP_OrbitalCommandFlying" Send="Create"/>
+        <Sound value="OrbitalCommand_Land"/>
+    </CActorSound>
+    <CActorSplat id="AP_OrbitalCommandSplat" parent="TerranBuildingMorphSplat" unitName="AP_OrbitalCommand">
+        <Model value="OrbitalCommandSplat"/>
+    </CActorSplat>
+    <CActorSound id="AP_OrbitalCommand_CalldownExtraSuppliesDrop" parent="SoundOneShot">
+        <Sound value="OrbitalCommand_CalldownExtraSuppliesDrop"/>
+    </CActorSound>
+    <CActorSound id="AP_OrbitalCommand_CalldownExtraSuppliesImpact" parent="SoundOneShot">
+        <Sound value="OrbitalCommand_CalldownExtraSuppliesImpact"/>
+    </CActorSound>
+    <CActorSound id="AP_OrbitalCommand_CalldownMuleDrop" parent="SoundOneShot">
+        <On Terms="Effect.AP_CalldownMULECreatePersistent.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 2.100000 DelayDropPod"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Send="Create OrbitalCommand_CalldownMuleImpact"/>
+        <On Terms="TimerExpired; TimerName DelayDropPod" Send="Destroy"/>
+        <Sound value="OrbitalCommand_CalldownMuleDrop"/>
+    </CActorSound>
+    <CActorSound id="AP_OrbitalCommand_CalldownMuleImpact" parent="SoundOneShot">
+        <Sound value="OrbitalCommand_CalldownMuleImpact"/>
+    </CActorSound>
+    <CActorRange id="AP_OrbitalDropMULERange" parent="RangeAbil" abil="CalldownMULE">
+        <Range value="30.000000"/>
+    </CActorRange>
+    <CActorModel id="AP_MercDropModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Model value="DropPodFalling"/>
+        <On Terms="Effect.AP_CalldownMULECreatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_CalldownMULETimedLife.Start" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Send="Create DropPodUnload"/>
+        <HostSiteOps Ops="MercDropSOpShadow"/>
+    </CActorModel>
+    <CActorSplat id="AP_ScannerSweepCursorSplat" parent="CursorSplat" abil="AP_ScannerSweep">
+        <Model value="ScannerSweepCursorSplat"/>
+    </CActorSplat>
+    <CActorModel id="AP_ScannerSweepModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.AP_ScannerSweep.Start" Send="Create"/>
+        <On Terms="Effect.AP_ScannerSweep.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="Create ScannerSweepVisual"/>
+        <On Terms="ActorDestruction" Target="ScannerSweepVisual" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="ScannerSweepModel"/>
+    </CActorModel>
+    <CActorSound id="AP_ScannerSweepSound" parent="SoundContinuous">
+        <On Terms="Effect.AP_ScannerSweep.Start" Send="Create"/>
+        <On Terms="Effect.AP_ScannerSweep.Stop" Send="Destroy"/>
+        <Sound value="OrbitalCommand_ScannerSweep"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Filter index="Ally" value="1"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+    </CActorSound>
+    <CActorSound id="AP_    ScannerSweepSoundOthers" parent="SoundContinuous">
+        <On Terms="Effect.AP_ScannerSweep.Start" Send="Create"/>
+        <On Terms="Effect.AP_ScannerSweep.Stop" Send="Destroy"/>
+        <Sound value="OrbitalCommand_ScannerSweep_Others"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Filter index="Self" value="1"/>
+    </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -5331,6 +5504,10 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepotLowered; !AnimPlaying Birth" Send="StatusSet Raised 0"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="AnimGroupRemove Burrow"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="StatusSet Raised 1"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SupplyDepotLowered; !AnimPlaying Birth" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SupplyDepotLowered; !AnimPlaying Birth" Send="StatusSet Raised 0"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SupplyDepot" Send="AnimGroupRemove Burrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo SupplyDepot" Send="StatusSet Raised 1"/>
         <On Terms="ActorCreation" Target="_Unit" Send="Signal Incoming"/>
         <On Terms="Signal.*.Lowered" Send="$Spell"/>
         <On Terms="Signal.*.Lowered" Send="StatusSet Raised 0"/>
@@ -5343,6 +5520,14 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOrigin"/>
         <Model value="SupplyDropModel"/>
+    </CActorModel>
+    <CActorModel id="SupplyDropModel">
+        <!-- Override -->
+        <!-- Add AP_SupplyDepot code -->
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepotLowered; !AnimPlaying Birth" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepotLowered; !AnimPlaying Birth" Send="StatusSet Raised 0"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="AnimGroupRemove Burrow"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="StatusSet Raised 1"/>
     </CActorModel>
     <CActorSound id="AP_SupplyDropPodFall" parent="SoundOneShot">
         <Sound value="Barracks_DropPodFall"/>
@@ -6356,6 +6541,7 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_BarracksFlying" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_FactoryFlying" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_StarportFlying" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_OrbitalCommandFlying" Send="Create"/>
     </CActorSound>
     <CActorSound id="TerranBuildingLand">
         <!-- Override -->

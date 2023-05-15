@@ -1528,12 +1528,12 @@
     </CAbilMorph>
     <CAbilTrain id="AP_CommandCenterTrain">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
-        <InfoArray index="Train1" Time="17">
-            <Button DefaultButtonFace="AP_SCV" State="Restricted">
-                <Flags index="ToSelection" value="1"/>
-            </Button>
-            <Unit value="AP_SCV"/>
-        </InfoArray>
+<!--        <InfoArray index="Train1" Time="17">-->
+<!--            <Button DefaultButtonFace="AP_SCV" State="Restricted">-->
+<!--                <Flags index="ToSelection" value="1"/>-->
+<!--            </Button>-->
+<!--            <Unit value="AP_SCV"/>-->
+<!--        </InfoArray>-->
         <Alert value="TrainWorkerComplete"/>
     </CAbilTrain>
     <CAbilTransport id="AP_CommandCenterTransport">
@@ -1564,6 +1564,16 @@
         <LoadValidatorArray value="AP_CommandCenterTransportCombine"/>
         <DeathUnloadEffect value="AP_RemoveCommandCenterCargo"/>
     </CAbilTransport>
+    <CAbilEffectTarget id="AP_CalldownMULE">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_CalldownMULECreateUnit"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="CalldownMULE" Requirements="AP_HaveOrbitalRelay"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -1662,6 +1672,77 @@
         </OrderArray>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
     </CAbilRally>
+    <CAbilHarvest id="AP_MULEGather">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Gather" DefaultButtonFace="GatherMULE"/>
+        <FlagArray index="BypassResourceQueue" value="1"/>
+        <Range value="0.5"/>
+        <ReservedMarker Link="Abil/MULEGather"/>
+        <ResourceAllowed index="Vespene" value="0"/>
+        <ResourceAllowed index="Terrazine" value="0"/>
+        <ResourceAllowed index="Custom" value="0"/>
+        <ResourceAmountMultiplier index="Minerals" value="6"/>
+        <ResourceTimeMultiplier index="Minerals" value="2.05"/>
+    </CAbilHarvest>
+    <CAbilEffectTarget id="AP_MULERepair">
+        <AbilSetId value="Repair"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_Repair"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOffOwnerLeave" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <TargetFilters value="Mechanical,Visible;Self,Enemy,Missile,UnderConstruction,Dead,Hidden"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="-;Neutral,Enemy"/>
+        <AutoCastRange value="7"/>
+        <AutoCastValidatorArray value="HackingTRace"/>
+        <Marker Link="Abil/Repair">
+            <MatchFlags index="Link" value="0"/>
+            <MismatchFlags index="Id" value="0"/>
+        </Marker>
+        <UseMarkerArray index="Approach" value="0"/>
+        <UseMarkerArray index="Prep" value="0"/>
+        <UseMarkerArray index="Cast" value="0"/>
+        <UseMarkerArray index="Channel" value="0"/>
+        <InheritAttackPriorityArray index="Prep" value="1"/>
+        <InheritAttackPriorityArray index="Cast" value="1"/>
+        <InheritAttackPriorityArray index="Channel" value="1"/>
+        <AINotifyEffect value="Repair"/>
+        <DefaultError value="RequiresRepairTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Repair">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilMorphPlacement id="AP_OrbitalCommandLand" parent="TerranBuildingLand" unit="AP_OrbitalCommand">
+        <Name value="Abil/Name/AP_OrbitalCommandLand"/>
+        <InfoArray index="0" Unit="AP_OrbitalCommand" CollideRange="0">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="2"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorphPlacement>
+    <CAbilMorph id="AP_OrbitalLiftOff" parent="TerranBuildingLiftOff" unit="AP_OrbitalCommandFlying">
+        <Name value="Abil/Name/AP_OrbitalLiftOff"/>
+    </CAbilMorph>
+    <CAbilHarvest id="AP_SCVHarvest">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CAbilHarvest>
+    <CAbilEffectTarget id="AP_ScannerSweep">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ScannerSweep"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CursorEffect value="AP_ScannerSweep"/>
+        <AINotifyEffect value="AP_ScannerSweep"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Scan" Requirements="AP_HaveOrbitalRelay"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -1947,4 +2028,16 @@
             <Unit value="AP_DukesRevenge"/>
         </InfoArray>
     </CAbilTrain>
+    <CAbilEffectTarget id="AP_SupplyDrop">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_SupplyDropApplyTempBehavior"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown Link="AP_SupplyDrop"/>
+        </Cost>
+        <TargetFilters value="Structure,Visible;Neutral,Enemy,UnderConstruction"/>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="SupplyDrop"/>
+    </CAbilEffectTarget>
 </Catalog>

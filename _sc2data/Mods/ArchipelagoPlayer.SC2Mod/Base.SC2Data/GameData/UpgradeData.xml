@@ -927,4 +927,21 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_OrbitalRelay">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_CommandCenter,EnergyMax" Value="200"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_CommandCenterFlying,EnergyMax" Value="200"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_CommandCenter,EnergyStart" Value="50"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_CommandCenterFlying,EnergyStart" Value="50"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_CommandCenterFlying,EnergyRegenRate" Value="0.562500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_CommandCenter,EnergyRegenRate" Value="0.562500"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CommandCenter,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-orbitalcommand.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CommandCenter,PlacementModel" Value="OrbitalCommandPlacement"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CommandCenter,UnitIcon" Value="Assets\Textures\btn-building-terran-surveillancestation.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_CommandCenter,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-orbitalcommand.dds"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_CommandCenterFlying,Description" Value="Button/Tooltip/CommandCenterOrbRelay"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_CommandCenter,Description" Value="Button/Tooltip/CommandCenterOrbRelay"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_CommandCenter"/>
+    </CUpgrade>
 </Catalog>

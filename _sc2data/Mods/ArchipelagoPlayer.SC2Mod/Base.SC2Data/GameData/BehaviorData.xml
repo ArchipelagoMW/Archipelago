@@ -1031,4 +1031,24 @@
         <Requirements value="AP_CommandCenterReactorResearched"/>
         <Modification QueueCount="1" QueueSize="3"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MULETimedLife" parent="TimedLife">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="90"/>
+        <ExpireEffect value="AP_MULEFate"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SupplyDrop">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\BTN-Building-Terran-SupplyDepot.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Modification Food="8"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SupplyDropEnRoute">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Duration value="4"/>
+        <ExpireEffect value="AP_SupplyDropApplyBehavior"/>
+        <Modification>
+            <AbilClassDisableArray index="CAbilMorph" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

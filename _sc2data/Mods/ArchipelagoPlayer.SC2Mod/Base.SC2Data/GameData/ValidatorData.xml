@@ -322,6 +322,22 @@
         <CombineArray value="AP_IsVanillaMedivac"/>
         <CombineArray value="AP_IsAPMedivac"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaMULE">
+        <Value value="MULE"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPMULE">
+        <Value value="AP_MULE"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsMULE" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaMULE"/>
+        <CombineArray value="AP_IsAPMULE"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotWorkerMULE" parent="CValidatorCombine">
+        <!-- Overrride -->
+        <CombineArray value="IsMULE"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
     <CValidatorUnitOrderQueue id="AP_MedivacIsHealing">
         <AbilLink value="AP_MedivacDoubleBeamHeal"/>
     </CValidatorUnitOrderQueue>
@@ -358,8 +374,56 @@
     </CValidatorCombine>
     <CValidatorCombine id="NotPlanetaryFortress" parent="CValidatorCombine">
         <!-- Override -->
-        <Negate value="1" />
+        <Negate value="1"/>
         <CombineArray value="IsPlanetaryFortress"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaOrbitalCommand">
+        <Value value="OrbitalCommand"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPOrbitalCommand">
+        <Value value="AP_OrbitalCommand"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsOrbitalCommand" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaOrbitalCommand"/>
+        <CombineArray value="AP_IsAPOrbitalCommand"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="NotOrbitalCommand" parent="CValidatorCombine">
+        <!-- Override -->
+        <Negate value="1"/>
+        <CombineArray value="IsOrbitalCommand"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotVanillaFlyingOrbitalCommand">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="OrbitalCommandFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotAPFlyingOrbitalCommand">
+        <ResultNoUnit value="CantTargetThatUnit"/>
+        <Value value="AP_OrbitalCommandFlying"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="NotFlyingOrbitalCommand" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetThatUnit"/>
+        <CombineArray value="AP_NotVanillaFlyingOrbitalCommand"/>
+        <CombineArray value="AP_NotAPFlyingOrbitalCommand"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorLocationPlacement id="AP_MULEPlacementCheck">
+        <Range value="2"/>
+        <Unit value="AP_MULE"/>
+    </CValidatorLocationPlacement>
+    <CValidatorLocationType id="AP_MULETargetCheck">
+        <ResultFailed value="CantFindPlacementLocation"/>
+        <Point value="AP_MULEPlacementCheck"/>
+        <Unit value="AP_MULEUnitCheck"/>
+    </CValidatorLocationType>
+    <CValidatorCombine id="AP_MULEUnitCheck">
+        <ResultFailed value="CantFindPlacementLocation"/>
+        <Type value="And"/>
+        <CombineArray value="Minerals"/>
+        <CombineArray value="AP_MULEPlacementCheck"/>
     </CValidatorCombine>
     <CValidatorUnitType id="AP_IsAPStarport">
         <Value value="AP_Starport"/>
@@ -959,6 +1023,16 @@
     <CValidatorUnitCompareBehaviorCount id="AP_TechLabNotVanillaFactory">
         <Behavior value="FactoryTechLab"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_OrbitalRelayUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveOrbitalRelay"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_OrbitalRelayUpgradedAndNotUnderConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_OrbitalRelayUpgraded"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
         <!-- Override -->
         <Type value="And"/>
@@ -976,5 +1050,35 @@
         <Type value="And"/>
         <CombineArray value="AP_TechLabNotVanillaStarport"/>
         <CombineArray value="AP_TechLabNotAPStarport"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotVanillaSupplyDrop">
+        <Behavior value="SupplyDrop"/>
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotAPSupplyDrop">
+        <Behavior value="AP_SupplyDrop"/>
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="NotSupplyDrop" parent="CValidatorCombine">
+        <!-- Override -->
+        <Type value="And"/>
+        <CombineArray value="AP_NotVanillaSupplyDrop"/>
+        <CombineArray value="AP_NotAPSupplyDrop"/>
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotVanillaSupplyDropEnRoute">
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+        <Behavior value="SupplyDropEnRoute"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotAPSupplyDropEnRoute">
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
+        <Behavior value="AP_SupplyDropEnRoute"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="NotSupplyDropEnRoute" parent="CValidatorCombine">
+        <!-- Override -->
+        <Type value="And"/>
+        <CombineArray value="AP_NotVanillaSupplyDropEnRoute"/>
+        <CombineArray value="AP_NotAPSupplyDropEnRoute"/>
+        <ResultFailed value="MustTargetStructures,Error/AlreadyHasExtraSupplies"/>
     </CValidatorCombine>
 </Catalog>
