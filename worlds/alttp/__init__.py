@@ -247,9 +247,11 @@ class ALTTPWorld(World):
         player = self.player
         world = self.multiworld
 
-        if world.mode[player] == 'standard' and world.smallkey_shuffle[player] \
-                and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal and \
-                world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons:
+        if world.mode[player] == 'standard' \
+                and world.smallkey_shuffle[player] \
+                and world.smallkey_shuffle[player] != smallkey_shuffle.option_universal \
+                and world.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons \
+                and world.smallkey_shuffle[player] != smallkey_shuffle.option_start_with:
             self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
 
         # system for sharing ER layouts
