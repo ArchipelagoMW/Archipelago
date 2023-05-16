@@ -176,6 +176,12 @@ def fill_dungeons_restrictive(world):
                     subworld.collect(all_state_base, item)
             all_state_base.sweep_for_events()
 
+
+            # Remove completion condition so that minimal-accessibility worlds place keys properly
+            for player in {item.player for item in in_dungeon_items}:
+                if all_state_base.has("Triforce", player):
+                    all_state_base.remove(world.worlds[player].create_item("Triforce"))
+
             fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
 
 
