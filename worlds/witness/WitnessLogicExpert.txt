@@ -686,7 +686,7 @@ Swamp Cyan Underwater (Swamp):
 158309 - 0x00005 (Cyan Underwater 3) - 0x00004 - Shapers & Negative Shapers & Triangles & Black/White Squares
 158310 - 0x013E6 (Cyan Underwater 4) - 0x00005 - Shapers & Negative Shapers & Triangles & Black/White Squares
 158311 - 0x00596 (Cyan Underwater 5) - 0x013E6 - Shapers & Negative Shapers & Triangles & Black/White Squares
-158312 - 0x18488 (Cyan Underwater Sliding Bridge Control) - True - Shapers
+158312 - 0x18488 (Cyan Underwater Sliding Bridge Control) - True - Shapers & Black/White Squares
 159340 - 0x03AA6 (Cyan Underwater Sliding Bridge EP) - 0x18488 - True
 
 Swamp Between Bridges Near (Swamp) - Swamp Between Bridges Far - 0x18507:

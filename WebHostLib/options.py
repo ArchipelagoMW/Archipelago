@@ -109,7 +109,7 @@ def create():
                     "defaultValue": list(option.default)
                 }
 
-            elif issubclass(option, Options.VerifyKeys):
+            elif issubclass(option, Options.VerifyKeys) and not issubclass(option, Options.OptionDict):
                 if option.valid_keys:
                     game_options[option_name] = {
                         "type": "custom-list",
