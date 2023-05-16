@@ -950,4 +950,11 @@
         <OperandArray value="CountUnitAlias_FactoryCompleteOnly96167438TechTreeCheat"/>
         <OperandArray value="CountUnitAlias_StarportCompleteOnly4195804750TechTreeCheat"/>
     </CRequirementOr>
+    <CRequirementCountUpgrade id="AP_CountUpgradeFireSuppressionSystemsCompleteOnly">
+        <Count Link="AP_FireSuppressionSystems" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeFireSuppressionSystemsCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeFireSuppressionSystemsCompleteOnly"/>
+    </CRequirementNot>
 </Catalog>

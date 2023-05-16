@@ -622,4 +622,10 @@
     <CRequirement id="AP_AutoHarvesterResearched">
         <NodeArray index="Show" Link="AP_CountUpgradeAutoHarvesterCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_FireSuppressionSystemsResearched">
+        <NodeArray index="Use" Link="AP_CountUpgradeFireSuppressionSystemsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_FireSuppressionSystemsNotResearched">
+        <NodeArray index="Use" Link="AP_NotCountUpgradeFireSuppressionSystemsCompleteOnly"/>
+    </CRequirement>
 </Catalog>

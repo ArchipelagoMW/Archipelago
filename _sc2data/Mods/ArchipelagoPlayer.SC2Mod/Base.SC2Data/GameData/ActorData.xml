@@ -2507,7 +2507,7 @@
         <CreepHeightClass value="Medium"/>
         <DeathArray index="Normal" ModelLink="AP_MercCompoundDeath" SoundLink=""/>
         <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="AP_MercCompound_Explode"/>
-        <DeathActorModel value="ColonyInfestationBuildingDeath"/>
+        <DeathActorModel value="AP_ColonyInfestationBuildingDeath"/>
         <PlacementModel value="AP_MercCompoundPlacement"/>
         <PlacementSound value="Terran_BuildingPlacement"/>
         <PortraitModel value="AdjutantPortrait"/>
@@ -6843,4 +6843,7 @@
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_PlanetaryFortress" Send="Destroy"/>
         <Sound value="CommandCenter_UpgradeToPlanetaryFortress"/>
     </CActorSound>
+    <CActorModel id="AP_ColonyInfestationBuildingDeath" parent="UnitDeathModel">
+        <On Terms="ActorCreation" Send="SetTintColor 200,160,133"/>
+    </CActorModel>
 </Catalog>

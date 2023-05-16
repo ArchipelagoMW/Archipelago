@@ -968,4 +968,10 @@
         <EffectArray Operation="Set" Reference="Abil,BuildInProgress,PowerBuildCostFactor" Value="0.0"/>
         <Flags index="UpgradeCheat" value="0"/>
     </CUpgrade>
+    <CUpgrade id="AP_FireSuppressionSystems">
+        <Alert value="ResearchComplete"/>
+        <Race value="Terran"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
 </Catalog>

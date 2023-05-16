@@ -1863,7 +1863,7 @@
     </CModel>
     <CModel id="AP_MercCompoundDeath" parent="BuildingDeath">
         <Model value="Assets\Buildings\Terran\MercCompoundDeath\MercCompoundDeath.m3"/>
-        <LowQualityModel value="MercCompoundDeathLow"/>
+        <LowQualityModel value="AP_MercCompoundDeathLow"/>
         <EditorCategories value="Race:Terran"/>
         <Events>
             <Anim value="Death,00"/>
