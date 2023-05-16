@@ -1,6 +1,10 @@
 from worlds.stardew_valley.test import setup_solo_multiworld
+from BaseClasses import ItemClassification, MultiWorld
 from worlds.stardew_valley.test.TestOptions import basic_checks, SVTestBase
 from worlds.stardew_valley.options import stardew_valley_option_classes, Mods
+from .. import StardewItem, options, items_by_group, Group
+from ..items import all_items
+from ..locations import all_locations
 
 mod_list = ["DeepWoods", "Tractor Mod", "Bigger Backpack",
             "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
@@ -10,7 +14,23 @@ mod_list = ["DeepWoods", "Tractor Mod", "Bigger Backpack",
             "Ayeisha - The Postal Worker (Custom NPC)"]
 
 
-# Stealing from OptionSet in order to actually use it for tests.
+def check_stray_mod_items(mod: str, tester: SVTestBase, multiworld: MultiWorld):
+    mod_items = []
+    mod_locations = []
+    for items in all_items:
+        if items.mod_name == mod:
+            mod_items.append(items)
+    for locations in all_locations:
+        if locations.mod_name == mod:
+            mod_locations.append(locations)
+    for item in multiworld.get_items():
+        if not mod_items:
+            continue
+        tester.assertNotIn(item.name, mod_items)
+    for location in multiworld.get_locations():
+        if not mod_locations:
+            continue
+        tester.assertNotIn(location.name, mod_locations)
 
 
 class TestGenerateModsOptions(SVTestBase):
@@ -19,6 +39,13 @@ class TestGenerateModsOptions(SVTestBase):
         for mod in mod_list:
             multi_world = setup_solo_multiworld({Mods: mod})
             basic_checks(self, multi_world)
+
+    def test_given_mod_names_then_ensure_no_other_mods(self):
+        for mod in mod_list:
+            multi_world = setup_solo_multiworld({Mods: mod})
+            for not_mod in mod_list:
+                if not_mod != mod:
+                    check_stray_mod_items(not_mod, self,  multi_world)
 
     def test_given_mod_names_when_generate_in_pairs_then_basic_checks(self):
         num_options = len(mod_list)
