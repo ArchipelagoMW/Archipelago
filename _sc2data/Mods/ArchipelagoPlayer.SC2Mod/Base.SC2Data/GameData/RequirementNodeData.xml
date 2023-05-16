@@ -957,4 +957,8 @@
     <CRequirementNot id="AP_NotCountUpgradeFireSuppressionSystemsCompleteOnly">
         <OperandArray index="0" value="AP_CountUpgradeFireSuppressionSystemsCompleteOnly"/>
     </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCellularReactorsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CellularReactors" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

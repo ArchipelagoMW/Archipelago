@@ -323,9 +323,9 @@
         <Alert value="ResearchComplete"/>
         <EffectArray Reference="Abil,AP_MedivacTransport,MaxCargoCount" Value="2"/>
         <EffectArray Reference="Abil,AP_MedivacTransport,TotalCargoSpace" Value="2"/>
-        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="AP\Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_MedivacCaduceusReactor">
@@ -341,9 +341,9 @@
     <CUpgrade id="AP_MedivacRapidDeployment">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Operation="Multiply" Reference="Abil,AP_MedivacTransport,UnloadPeriod" Value="0.100000"/>
-        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
-        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="AP\Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_CloakDistortionField">
@@ -973,5 +973,110 @@
         <Race value="Terran"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RegenerativeBioSteel">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Hellion,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Hellion,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeTank,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeTank,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeTankSieged,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeTankSieged,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Thor,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Thor,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Diamondback,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Diamondback,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Vulture,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Vulture,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Goliath,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Goliath,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Predator,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Predator,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeBreaker,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeBreaker,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeBreakerSieged,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeBreakerSieged,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingAssault,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingAssault,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingFighter,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingFighter,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Banshee,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Banshee,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Medivac,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Medivac,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Battlecruiser,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Battlecruiser,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Raven,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Raven,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ScienceVessel,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ScienceVessel,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Hercules,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Hercules,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SpartanCompany,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SpartanCompany,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HelsAngelAssault,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HelsAngelAssault,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HelsAngelFighter,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HelsAngelFighter,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_DukesRevenge,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_DukesRevenge,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_DuskWing,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_DuskWing,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Wraith,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Wraith,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ValkyrieSCBW,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ValkyrieSCBW,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_WidowMine,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_WidowMine,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_WidowMineBurrowed,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_WidowMineBurrowed,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Cyclone,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Cyclone,LifeRegenRate" Value="0.601500"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CellularReactors">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Raven,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Ghost,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Medic,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Thor,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Medivac,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Wraith,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Banshee,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Battlecruiser,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_ScienceVessel,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Spectre,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_DukesRevenge,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_DuskWing,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Predator,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Raven,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_Ghost,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_Medic,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_Thor,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_Medivac,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_Wraith,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_Banshee,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_Battlecruiser,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_ScienceVessel,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_Spectre,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_DukesRevenge,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_DuskWing,EnergyMax" Value="100"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Raven"/>
+        <AffectedUnitArray value="AP_Ghost"/>
+        <AffectedUnitArray value="AP_Medic"/>
+        <AffectedUnitArray value="AP_Thor"/>
+        <AffectedUnitArray value="AP_Medivac"/>
+        <AffectedUnitArray value="AP_Wraith"/>
+        <AffectedUnitArray value="AP_Banshee"/>
+        <AffectedUnitArray value="AP_Battlecruiser"/>
+        <AffectedUnitArray value="AP_ScienceVessel"/>
+        <AffectedUnitArray value="AP_Spectre"/>
+        <AffectedUnitArray value="AP_DukesRevenge"/>
+        <AffectedUnitArray value="AP_DuskWing"/>
     </CUpgrade>
 </Catalog>

@@ -994,6 +994,7 @@
         <EditorCategories value="Race:Terran"/>
     </CModel>
     <CModel id="AP_MarauderMercenaryDeath" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\MarauderMercenaryDeath\MarauderMercenaryDeath.m3"/>
         <Occlusion value="Show"/>
         <LowQualityModel value="TerranSmallUnitDeathLow"/>
     </CModel>
