@@ -702,7 +702,7 @@ class PokemonEmeraldWorld(World):
                 ]
             ]
 
-            for i, starter in enumerate(new_starters):
+            for i, starter in enumerate([new_starters[1], new_starters[2], new_starters[0]]):
                 potential_evolutions = [evolution.species_id for evolution in starter.evolutions]
                 picked_evolution = starter.species_id
                 if len(potential_evolutions) > 0:
