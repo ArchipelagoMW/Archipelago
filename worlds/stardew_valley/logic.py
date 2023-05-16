@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 from typing import Dict, Union, Optional, Iterable, Sized, List, Set
 
@@ -9,7 +10,7 @@ from .data.bundle_data import BundleItem
 from .data.fish_data import island_fish
 from .data.museum_data import all_museum_items, MuseumItem, all_artifact_items
 from .data.region_data import SVRegion
-from .data.villagers_data import all_villagers_by_name
+from .data.villagers_data import all_villagers_by_name, Villager
 from .mods.mod_data import ModNames
 from .mods.mod_logic import can_earn_mod_skill_level, append_mod_skill_level
 from .items import all_items, Group
@@ -447,7 +448,7 @@ class StardewLogic:
             "Initiation": self.can_mine_in_the_mines_floor_1_40(),
             "Robin's Lost Axe": self.has_season("Spring"),
             "Jodi's Request": self.has_season("Spring") & self.has("Cauliflower"),
-            "Mayor's \"Shorts\"": self.has_season("Summer") & self.has_relationship("Marnie", 4),
+            "Mayor's \"Shorts\"": self.has_season("Summer") & self.has_relationship("Marnie", 2),
             "Blackberry Basket": self.has_season("Fall"),
             "Marnie's Request": self.has_relationship("Marnie", 3) & self.has("Cave Carrot"),
             "Pam Is Thirsty": self.has_season("Summer") & self.has("Pale Ale"),
@@ -973,7 +974,7 @@ class StardewLogic:
             if npc == "Pet":
                 if self.options[options.Friendsanity] == options.Friendsanity.option_bachelors:
                     return self.can_befriend_pet(hearts)
-                return self.received(f"Pet: 1 <3", hearts)
+                return self.received_hearts("Pet", hearts)
             if npc == "Any" or npc == "Bachelor":
                 possible_friends = []
                 for name in all_villagers_by_name:
@@ -999,8 +1000,14 @@ class StardewLogic:
             return self.can_earn_relationship(npc, hearts)
         if self.options[
             options.Friendsanity] != options.Friendsanity.option_all_with_marriage and villager.bachelor and hearts > 8:
-            return self.received(f"{villager.name}: 1 <3", 8) & self.can_earn_relationship(npc, hearts)
-        return self.received(f"{villager.name}: 1 <3", hearts)
+            return self.received_hearts(villager, 8) & self.can_earn_relationship(npc, hearts)
+        return self.received_hearts(villager, hearts)
+
+    def received_hearts(self, npc: Union[str, Villager], hearts: int) -> StardewRule:
+        if isinstance(npc, Villager):
+            return self.received_hearts(npc.name, hearts)
+        heart_size: int = self.options[options.FriendsanityHeartSize]
+        return self.received(self.heart(npc), math.ceil(hearts / heart_size))
 
     def can_meet(self, npc: str) -> StardewRule:
         if npc not in all_villagers_by_name:
@@ -1254,7 +1261,7 @@ class StardewLogic:
             months = 2
         elif quality == "Iridium":
             months = 3
-        if item is str:
+        if isinstance(item, str):
             rule = self.has(item)
         else:
             rule: StardewRule = item
@@ -1336,6 +1343,11 @@ class StardewLogic:
         rules = self.received(all_progression_items, len(all_progression_items)) &\
                 self.can_reach_all_regions(all_regions)
         return rules
+
+    def heart(self, npc: Union[str, Villager]) -> str:
+        if isinstance(npc, str):
+            return f"{npc} <3"
+        return self.heart(npc.name)
 
         # Mod Logic definitions until I figure out how to weave this together...
 

@@ -221,7 +221,7 @@ class TestFriendsanityNone(SVTestBase):
 
     def test_no_friendsanity_items(self):
         for item in self.multiworld.get_items():
-            self.assertFalse(item.name.endswith(": 1 <3"))
+            self.assertFalse(item.name.endswith(" <3"))
 
     def test_no_friendsanity_locations(self):
         for location in self.multiworld.get_locations():
@@ -231,12 +231,13 @@ class TestFriendsanityNone(SVTestBase):
 class TestFriendsanityBachelors(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_bachelors,
+        options.FriendsanityHeartSize.internal_name: 1,
     }
     bachelors = {"Harvey", "Elliott", "Sam", "Alex", "Shane", "Sebastian", "Emily", "Haley", "Leah", "Abigail", "Penny",
                  "Maru"}
 
     def test_friendsanity_only_bachelor_items(self):
-        suffix = ": 1 <3"
+        suffix = " <3"
         for item in self.multiworld.get_items():
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
@@ -259,11 +260,12 @@ class TestFriendsanityBachelors(SVTestBase):
 class TestFriendsanityStartingNpcs(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_starting_npcs,
+        options.FriendsanityHeartSize.internal_name: 1,
     }
     excluded_npcs = {"Leo", "Krobus", "Dwarf", "Sandy", "Kent"}
 
     def test_friendsanity_only_starting_npcs_items(self):
-        suffix = ": 1 <3"
+        suffix = " <3"
         for item in self.multiworld.get_items():
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
@@ -292,10 +294,11 @@ class TestFriendsanityStartingNpcs(SVTestBase):
 class TestFriendsanityAllNpcs(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all,
+        options.FriendsanityHeartSize.internal_name: 1,
     }
 
     def test_friendsanity_all_items(self):
-        suffix = ": 1 <3"
+        suffix = " <3"
         for item in self.multiworld.get_items():
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
@@ -323,11 +326,12 @@ class TestFriendsanityAllNpcs(SVTestBase):
 class TestFriendsanityAllNpcsExcludingGingerIsland(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all,
+        options.FriendsanityHeartSize.internal_name: 1,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
     }
 
     def test_friendsanity_all_items(self):
-        suffix = ": 1 <3"
+        suffix = " <3"
         for item in self.multiworld.get_items():
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
@@ -357,10 +361,11 @@ class TestFriendsanityAllNpcsExcludingGingerIsland(SVTestBase):
 class TestFriendsanityAllNpcsWithMarriage(SVTestBase):
     options = {
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.FriendsanityHeartSize.internal_name: 1,
     }
 
     def test_friendsanity_all_with_marriage_items(self):
-        suffix = ": 1 <3"
+        suffix = " <3"
         for item in self.multiworld.get_items():
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
@@ -383,3 +388,155 @@ class TestFriendsanityAllNpcsWithMarriage(SVTestBase):
                     self.assertLessEqual(int(hearts), 14)
                 else:
                     self.assertLessEqual(int(hearts), 10)
+
+
+class TestFriendsanityAllNpcsWithMarriageHeartSize2(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.FriendsanityHeartSize.internal_name: 2,
+    }
+
+    def test_friendsanity_all_with_marriage_items(self):
+        suffix = " <3"
+        item_names = [item.name for item in self.multiworld.get_items()]
+        for villager_name in all_villagers_by_name:
+            heart_item_name = f"{villager_name}{suffix}"
+            number_heart_items = item_names.count(heart_item_name)
+            if all_villagers_by_name[villager_name].bachelor:
+                self.assertEqual(number_heart_items, 7)
+            else:
+                self.assertEqual(number_heart_items, 5)
+        self.assertEqual(item_names.count("Pet <3"), 3)
+
+    def test_friendsanity_all_with_marriage_locations(self):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for location in self.multiworld.get_locations():
+            if not location.name.startswith(prefix):
+                continue
+            name_no_prefix = location.name[len(prefix):]
+            name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+            parts = name_trimmed.split(" ")
+            name = parts[0]
+            hearts = int(parts[1])
+            self.assertTrue(name in all_villagers_by_name or name == "Pet")
+            if name == "Pet":
+                self.assertTrue(hearts == 2 or hearts == 4 or hearts == 5)
+            elif all_villagers_by_name[name].bachelor:
+                self.assertTrue(hearts == 2 or hearts == 4 or hearts == 6 or hearts == 8 or hearts == 10 or hearts == 12 or hearts == 14)
+            else:
+                self.assertTrue(hearts == 2 or hearts == 4 or hearts == 6 or hearts == 8 or hearts == 10)
+
+
+class TestFriendsanityAllNpcsWithMarriageHeartSize3(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.FriendsanityHeartSize.internal_name: 3,
+    }
+
+    def test_friendsanity_all_with_marriage_items(self):
+        suffix = " <3"
+        item_names = [item.name for item in self.multiworld.get_items()]
+        for villager_name in all_villagers_by_name:
+            heart_item_name = f"{villager_name}{suffix}"
+            number_heart_items = item_names.count(heart_item_name)
+            if all_villagers_by_name[villager_name].bachelor:
+                self.assertEqual(number_heart_items, 5)
+            else:
+                self.assertEqual(number_heart_items, 4)
+        self.assertEqual(item_names.count("Pet <3"), 2)
+
+    def test_friendsanity_all_with_marriage_locations(self):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for location in self.multiworld.get_locations():
+            if not location.name.startswith(prefix):
+                continue
+            name_no_prefix = location.name[len(prefix):]
+            name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+            parts = name_trimmed.split(" ")
+            name = parts[0]
+            hearts = int(parts[1])
+            self.assertTrue(name in all_villagers_by_name or name == "Pet")
+            if name == "Pet":
+                self.assertTrue(hearts == 3 or hearts == 5)
+            elif all_villagers_by_name[name].bachelor:
+                self.assertTrue(hearts == 3 or hearts == 6 or hearts == 9 or hearts == 12 or hearts == 14)
+            else:
+                self.assertTrue(hearts == 3 or hearts == 6 or hearts == 9 or hearts == 10)
+
+
+class TestFriendsanityAllNpcsWithMarriageHeartSize4(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.FriendsanityHeartSize.internal_name: 4,
+    }
+
+    def test_friendsanity_all_with_marriage_items(self):
+        suffix = " <3"
+        item_names = [item.name for item in self.multiworld.get_items()]
+        for villager_name in all_villagers_by_name:
+            heart_item_name = f"{villager_name}{suffix}"
+            number_heart_items = item_names.count(heart_item_name)
+            if all_villagers_by_name[villager_name].bachelor:
+                self.assertEqual(number_heart_items, 4)
+            else:
+                self.assertEqual(number_heart_items, 3)
+        self.assertEqual(item_names.count("Pet <3"), 2)
+
+    def test_friendsanity_all_with_marriage_locations(self):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for location in self.multiworld.get_locations():
+            if not location.name.startswith(prefix):
+                continue
+            name_no_prefix = location.name[len(prefix):]
+            name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+            parts = name_trimmed.split(" ")
+            name = parts[0]
+            hearts = int(parts[1])
+            self.assertTrue(name in all_villagers_by_name or name == "Pet")
+            if name == "Pet":
+                self.assertTrue(hearts == 4 or hearts == 5)
+            elif all_villagers_by_name[name].bachelor:
+                self.assertTrue(hearts == 4 or hearts == 8 or hearts == 12 or hearts == 14)
+            else:
+                self.assertTrue(hearts == 4 or hearts == 8 or hearts == 10)
+
+
+class TestFriendsanityAllNpcsWithMarriageHeartSize5(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.FriendsanityHeartSize.internal_name: 5,
+    }
+
+    def test_friendsanity_all_with_marriage_items(self):
+        suffix = " <3"
+        item_names = [item.name for item in self.multiworld.get_items()]
+        for villager_name in all_villagers_by_name:
+            heart_item_name = f"{villager_name}{suffix}"
+            number_heart_items = item_names.count(heart_item_name)
+            if all_villagers_by_name[villager_name].bachelor:
+                self.assertEqual(number_heart_items, 3)
+            else:
+                self.assertEqual(number_heart_items, 2)
+        self.assertEqual(item_names.count("Pet <3"), 1)
+
+    def test_friendsanity_all_with_marriage_locations(self):
+        prefix = "Friendsanity: "
+        suffix = " <3"
+        for location in self.multiworld.get_locations():
+            if not location.name.startswith(prefix):
+                continue
+            name_no_prefix = location.name[len(prefix):]
+            name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
+            parts = name_trimmed.split(" ")
+            name = parts[0]
+            hearts = int(parts[1])
+            self.assertTrue(name in all_villagers_by_name or name == "Pet")
+            if name == "Pet":
+                self.assertTrue(hearts == 5)
+            elif all_villagers_by_name[name].bachelor:
+                self.assertTrue(hearts == 5 or hearts == 10 or hearts == 14)
+            else:
+                self.assertTrue(hearts == 5 or hearts == 10)

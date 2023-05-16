@@ -379,6 +379,18 @@ class Friendsanity(Choice):
     option_all_with_marriage = 5
 
 
+# Conditional Setting - Friendsanity not None
+class FriendsanityHeartSize(Range):
+    """If using friendsanity, how many hearts are received per item, and how many hearts must be earned to send a check
+    A higher value will lead to fewer heart items in the item pool, reducing bloat"""
+    internal_name = "friendsanity_heart_size"
+    display_name = "Friendsanity Heart Size"
+    range_start = 1
+    range_end = 8
+    default = 4
+    # step = 1
+
+
 class NumberOfPlayerBuffs(Range):
     """Number of buffs to the player of each type that exist as items in the pool.
     Buffs include movement speed (+25% multiplier, stacks additively)
@@ -565,6 +577,7 @@ stardew_valley_option_classes = [
     Fishsanity,
     Museumsanity,
     Friendsanity,
+    FriendsanityHeartSize,
     NumberOfPlayerBuffs,
     ExcludeGingerIsland,
     TrapItems,

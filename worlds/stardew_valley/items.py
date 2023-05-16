@@ -310,8 +310,9 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
     exclude_non_bachelors = world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
     exclude_locked_villagers = world_options[options.Friendsanity] == options.Friendsanity.option_starting_npcs or \
                                world_options[options.Friendsanity] == options.Friendsanity.option_bachelors
-    exclude_post_marriage_hearts = world_options[options.Friendsanity] != options.Friendsanity.option_all_with_marriage
+    include_post_marriage_hearts = world_options[options.Friendsanity] == options.Friendsanity.option_all_with_marriage
     exclude_ginger_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
+    heart_size = world_options[options.FriendsanityHeartSize]
     for villager in all_villagers:
         if villager.mod_name not in world_options[options.Mods] and villager.mod_name is not None:
             continue
@@ -321,14 +322,18 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
             continue
         if villager.name == "Leo" and exclude_ginger_island:
             continue
+        heart_cap = 8 if villager.bachelor else 10
+        if include_post_marriage_hearts and villager.bachelor:
+            heart_cap = 14
         for heart in range(1, 15):
-            if villager.bachelor and exclude_post_marriage_hearts and heart > 8:
-                continue
-            if villager.bachelor or heart < 11:
-                items.append(item_factory(f"{villager.name}: 1 <3"))
+            if heart > heart_cap:
+                break
+            if heart % heart_size == 0 or heart == heart_cap:
+                items.append(item_factory(f"{villager.name} <3"))
     if not exclude_non_bachelors:
         for heart in range(1, 6):
-            items.append(item_factory(f"Pet: 1 <3"))
+            if heart % heart_size == 0 or heart == 5:
+                items.append(item_factory(f"Pet <3"))
 
 
 def create_arcade_machine_items(item_factory: StardewItemFactory, world_options: StardewOptions,
@@ -476,6 +481,9 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, world_o
     chosen_priority_items = [item_factory(resource_pack) for resource_pack in priority_filler_items]
     items.extend(chosen_priority_items)
     required_resource_pack -= number_priority_items
+    all_filler_packs = [filler_pack for filler_pack in all_filler_packs
+                        if Group.MAXIMUM_ONE not in filler_pack.groups or
+                        filler_pack.name not in [priority_item.name for priority_item in priority_filler_items]]
 
     while required_resource_pack > 0:
         resource_pack = random.choice(all_filler_packs)

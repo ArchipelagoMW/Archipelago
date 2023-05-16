@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 from .region_data import SVRegion
 from ..mods.mod_data import ModNames
 
@@ -324,4 +324,4 @@ shiko = villager("Shiko", True, town, "Winter", universal_loves + shiko_loves, T
 wellwick = villager("Wellwick", True, forest, "Winter", universal_loves + wellwick_loves, True, ModNames.shiko)
 yoba = villager("Yoba", False, secret_woods, "Spring", universal_loves + yoba_loves, False, ModNames.yoba)
 
-all_villagers_by_name = {item.name: item for item in all_villagers}
+all_villagers_by_name: Dict[str, Villager] = {villager.name: villager for villager in all_villagers}
