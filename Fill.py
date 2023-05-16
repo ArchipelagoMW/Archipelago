@@ -39,6 +39,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
     """
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
+    cleanup_required = False
 
     swapped_items: typing.Counter[typing.Tuple[int, str, bool]] = Counter()
     reachable_items: typing.Dict[int, typing.Deque[Item]] = {}
@@ -105,8 +106,7 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                         if (not single_player_placement or location.player == item_to_place.player) \
                                 and location.can_fill(swap_state, item_to_place, perform_access_check):
 
-                            # Verify placing this item won't reduce available locations, which could happen with rules
-                            # that want to not have both items. Left in until removal is proven useful.
+                            # Verify placing this item won't reduce available locations, which would be a useless swap.
                             prev_state = swap_state.copy()
                             prev_loc_count = len(
                                 world.get_reachable_locations(prev_state))
@@ -116,6 +116,10 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                                 world.get_reachable_locations(swap_state))
 
                             if new_loc_count >= prev_loc_count:
+                                if unsafe:
+                                    # We may end up with bad placements unless we unroll all dependencies, so we give it
+                                    # a shot and fail with unplaced items in the cleanup instead
+                                    cleanup_required = True
                                 # Add this item to the existing placement, and
                                 # add the old item to the back of the queue
                                 spot_to_fill = placements.pop(i)
@@ -146,6 +150,15 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
             spot_to_fill.event = item_to_place.advancement
             if on_place:
                 on_place(spot_to_fill)
+
+    if cleanup_required:
+        # validate all placements and remove invalid ones to fail faster
+        for placement in placements:
+            if world.accessibility[placement.item.player] != "minimal" and not placement.can_reach(world.state):
+                placement.item.location = None
+                unplaced_items.append(placement.item)
+                placement.item = None
+                locations.append(placement)
 
     if allow_excluded:
         # check if partial fill is the result of excluded locations, in which case retry
