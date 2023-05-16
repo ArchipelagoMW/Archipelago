@@ -576,8 +576,7 @@ class StardewLogic:
                                self.has("Crimsonfish") & self.has("Mutant Carp") & self.has("Legend"),
             "Danger In The Deep": self.can_mine_perfectly() & self.has_mine_elevator_to_floor(120),
             "Skull Cavern Invasion": self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
-            "Qi's Prismatic Grange": self.has("Bug Meat") & self.can_spend_money(80000),
-            # All colors can be bought except purple
+            "Qi's Prismatic Grange": self.has("Bug Meat") & self.can_spend_money(80000), # All colors can be bought except purple
         })
 
         # Mod Building List (For now smh)

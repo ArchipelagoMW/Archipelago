@@ -1,8 +1,7 @@
-from worlds.stardew_valley.test import setup_solo_multiworld
+from . import setup_solo_multiworld
 from BaseClasses import ItemClassification, MultiWorld
-from worlds.stardew_valley.test.TestOptions import basic_checks, SVTestBase
-from worlds.stardew_valley.options import stardew_valley_option_classes, Mods
-from .. import StardewItem, options, items_by_group, Group
+from TestOptions import basic_checks, SVTestBase
+from ..options import stardew_valley_option_classes, Mods
 from ..items import all_items
 from ..locations import all_locations
 

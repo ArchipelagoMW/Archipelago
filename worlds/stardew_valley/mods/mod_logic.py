@@ -1,10 +1,10 @@
 from typing import List
-from worlds.stardew_valley.data.region_data import SVRegion
-from worlds.stardew_valley.mods.mod_data import ModNames
-from worlds.stardew_valley.data.villagers_data import all_villagers
-from worlds.stardew_valley.stardew_rule import Count, StardewRule
-from worlds.stardew_valley import options
-from worlds.stardew_valley.options import StardewOptions
+from ..data.region_data import SVRegion
+from ..mods.mod_data import ModNames
+from ..data.villagers_data import all_villagers
+from ..stardew_rule import Count, StardewRule
+from .. import options
+from ..options import StardewOptions
 
 # Attempt to inject new methods into logic that can be easily commented out.
 

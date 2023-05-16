@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Tuple, Optional
 from .region_data import SVRegion
-from worlds.stardew_valley.mods.mod_data import ModNames
+from ..mods.mod_data import ModNames
 
 
 @dataclass(frozen=True)

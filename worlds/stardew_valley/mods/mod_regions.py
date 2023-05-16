@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
-from worlds.stardew_valley.data.entrance_data import DeepWoodsEntrance, EugeneEntrance, \
+from ..data.entrance_data import DeepWoodsEntrance, EugeneEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance
-from worlds.stardew_valley.data.region_data import SVRegion, DeepWoodsRegion, EugeneRegion, JasperRegion, \
+from ..data.region_data import SVRegion, DeepWoodsRegion, EugeneRegion, JasperRegion, \
     AlecRegion, YobaRegion, JunaRegion
-from worlds.stardew_valley.mods.mod_data import ModNames
+from mod_data import ModNames
 from typing import List, Dict
 
 
