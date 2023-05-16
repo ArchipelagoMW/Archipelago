@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import Dungeon
+from BaseClasses import CollectionState, Dungeon
 from Fill import fill_restrictive
 
 from .Bosses import BossFactory
@@ -154,7 +154,6 @@ def fill_dungeons_restrictive(world):
                         (not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon) and orig_rule(item)
 
             world.random.shuffle(locations)
-            all_state_base = world.get_all_state(use_cache=True)
             # Dungeon-locked items have to be placed first, to not run out of spaces for dungeon-locked items
             # subsort in the order Big Key, Small Key, Other before placing dungeon items
 
@@ -162,13 +161,20 @@ def fill_dungeons_restrictive(world):
             in_dungeon_items.sort(
                 key=lambda item: sort_order.get(item.type, 1) +
                                  (5 if (item.player, item.name) in dungeon_specific else 0))
-            for item in in_dungeon_items:
-                all_state_base.remove(item)
 
-            # Remove completion condition so that minimal-accessibility worlds place keys properly
-            for player in {item.player for item in in_dungeon_items}:
-                if all_state_base.has("Triforce", player):
-                    all_state_base.remove(world.worlds[player].create_item("Triforce"))
+            # Construct a partial all_state which contains only the items from get_pre_fill_items which aren't in_dungeon
+            in_dungeon_player_ids = {item.player for item in in_dungeon_items}
+            all_state_base = CollectionState(world)
+            for item in world.itempool:
+                world.worlds[item.player].collect(all_state_base, item)
+            for player in in_dungeon_player_ids:
+                subworld = world.worlds[item.player]
+                pre_fill_items = subworld.get_pre_fill_items()
+                for item in in_dungeon_items:
+                    pre_fill_items.remove(item)
+                for item in pre_fill_items:
+                    subworld.collect(all_state_base, item)
+            all_state_base.sweep_for_events()
 
             fill_restrictive(world, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True)
 
