@@ -5696,7 +5696,7 @@
         <On Terms="AnimDone; AnimName Spell" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
-        <Model value="SupplyDepotDropPod"/>
+        <Model value="AP_SupplyDepotDropPod"/>
     </CActorModel>
     <CActorUnit id="AP_SupplyDepotLowered" parent="TerranBuildingEx" unitName="AP_SupplyDepotLowered">
         <Aliases value="_UnitLarge"/>
@@ -5799,7 +5799,7 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SupplyDepot" Send="StatusSet Raised 1"/>
     </CActorModel>
     <CActorSound id="AP_SupplyDropPodFall" parent="SoundOneShot">
-        <Sound value="Barracks_DropPodFall"/>
+        <Sound value="AP_Barracks_DropPodFall"/>
     </CActorSound>
     <CActorUnit id="AP_Barracks" parent="TerranBuildingFlyerEx" unitName="AP_Barracks">
         <On Terms="Behavior.ColonyInfestation.On" Send="Create InfestationBarracks"/>

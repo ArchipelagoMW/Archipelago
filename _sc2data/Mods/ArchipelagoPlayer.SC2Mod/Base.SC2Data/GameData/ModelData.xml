@@ -1917,4 +1917,24 @@
         <EditorCategories value="Race:Terran"/>
         <LowQualityModel value="TerranLargeBuildingDeathLow"/>
     </CModel>
+    <CModel id="AP_SupplyDepotDropPod" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\OrbitalDepot\OrbitalDepot.m3"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <EditorCategories value="Race:Terran"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="OrbitalCommandDropPodDeathA"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="OrbitalCommand_DropPodDeathA"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="OrbitalCommandDropPodDeathB"/>
+            <Type value="Sound"/>
+            <Time value="1.600000"/>
+            <Payload value="OrbitalCommand_DropPodDeathB"/>
+        </Events>
+    </CModel>
 </Catalog>

@@ -989,6 +989,13 @@
         <AlertIcon value="Assets\Textures\btn-building-terran-supplydepot.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_SupplyDepotDrop">
+        <Icon value="Assets\Textures\btn-building-terran-supplydepot.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-supplydepot.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <Hotkey value="Button/Hotkey/SupplyDepot"/>
+        <HotkeyAlias value="SupplyDepot"/>
+    </CButton>
     <CButton id="AP_TerranBuild">
         <Icon value="Assets\Textures\btn-command-terran-buildstructure.dds"/>
         <AlertIcon value="Assets\Textures\btn-command-terran-buildstructure.dds"/>

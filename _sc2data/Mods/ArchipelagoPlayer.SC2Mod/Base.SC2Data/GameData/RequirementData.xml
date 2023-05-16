@@ -628,4 +628,12 @@
     <CRequirement id="AP_FireSuppressionSystemsNotResearched">
         <NodeArray index="Use" Link="AP_NotCountUpgradeFireSuppressionSystemsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseSupplyDepotDrop">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSupplyDepotDropCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HideSupplyDepot">
+        <EditorCategories value="Race:Terran,TechType:Unit"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeSupplyDepotDropCompleteOnly"/>
+    </CRequirement>
 </Catalog>
