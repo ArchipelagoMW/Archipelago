@@ -169,8 +169,7 @@ def fill_dungeons_restrictive(world):
                 world.worlds[item.player].collect(all_state_base, item)
             pre_fill_items = []
             for player in in_dungeon_player_ids:
-                subworld = world.worlds[item.player]
-                pre_fill_items += subworld.get_pre_fill_items()
+                pre_fill_items += world.worlds[player].get_pre_fill_items()
             for item in in_dungeon_items:
                 try:
                     pre_fill_items.remove(item)
@@ -178,7 +177,7 @@ def fill_dungeons_restrictive(world):
                     # pre_fill_items should be a subset of in_dungeon_items, but just in case
                     pass
             for item in pre_fill_items:
-                subworld.collect(all_state_base, item)
+                world.worlds[item.player].collect(all_state_base, item)
             all_state_base.sweep_for_events()
 
 
