@@ -3,7 +3,7 @@ from ..data.entrance_data import DeepWoodsEntrance, EugeneEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance
 from ..data.region_data import SVRegion, DeepWoodsRegion, EugeneRegion, JasperRegion, \
     AlecRegion, YobaRegion, JunaRegion
-from mod_data import ModNames
+from .mod_data import ModNames
 from typing import List, Dict
 
 

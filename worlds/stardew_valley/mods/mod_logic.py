@@ -1,6 +1,6 @@
 from typing import List
 from ..data.region_data import SVRegion
-from ..mods.mod_data import ModNames
+from .mod_data import ModNames
 from ..data.villagers_data import all_villagers
 from ..stardew_rule import Count, StardewRule
 from .. import options
