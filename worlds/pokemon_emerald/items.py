@@ -52,18 +52,18 @@ def create_item_label_to_code_map() -> Dict[str, int]:
 
 def create_item_groups() -> Dict[str, Set[str]]:
     return {
-        "Badge": set([
+        "Badge": {
             "Stone Badge", "Knuckle Badge",
             "Dynamo Badge", "Heat Badge",
             "Balance Badge", "Feather Badge",
             "Mind Badge", "Rain Badge"
-        ]),
-        "HM": set([
+        },
+        "HM": {
             "HM01 Cut", "HM02 Fly",
             "HM03 Surf", "HM04 Strength",
             "HM05 Flash", "HM06 Rock Smash",
             "HM07 Waterfall", "HM08 Dive"
-        ])
+        }
     }
 
 
