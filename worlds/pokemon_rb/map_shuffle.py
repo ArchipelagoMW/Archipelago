@@ -255,15 +255,14 @@ map_ids = {
 
 # map_ids = {x: y for y,x in map_ids.items()}
 
-
-warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'map': 'Celadon Pokemart 1F', 'id': (0, 1)}},
+warp_data = {'Anywhere': [], 'Pokedex': [], 'Fossil': [],
+    'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'map': 'Celadon Pokemart 1F', 'id': (0, 1)}},
                               {'address': 'Warps_CeladonCity', 'id': 1, 'to': {'map': 'Celadon Pokemart 1F', 'id': (2, 3)}},
                               {'address': 'Warps_CeladonCity', 'id': 2, 'to': {'map': 'Celadon Mansion 1F', 'id': (0, 1)}},
                               {'address': 'Warps_CeladonCity', 'id': (3, 4),
                                'to': {'map': 'Celadon Mansion 1F', 'id': 2}}, {'address': 'Warps_CeladonCity', 'id': 5,
                                                                                'to': {'map': 'Celadon Pokemon Center',
                                                                                       'id': 0}},
-                              {'address': 'Warps_CeladonCity', 'id': 6, 'to': {'map': 'Celadon Gym', 'id': (0, 1)}},
                               {'address': 'Warps_CeladonCity', 'id': 7, 'to': {'map': 'Celadon Game Corner', 'id': (0, 1)}},
                               # {'address': 'Warps_CeladonCity', 'id': 8, 'to': {'map': 'Celadon Pokemart 5F', 'id': 0}},
                               {'address': 'Warps_CeladonCity', 'id': 9,
@@ -271,6 +270,7 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                               {'address': 'Warps_CeladonCity', 'id': 10, 'to': {'map': 'Celadon Diner', 'id': (0, 1)}},
                               {'address': 'Warps_CeladonCity', 'id': 11, 'to': {'map': 'Celadon Chief House', 'id': (0, 1)}},
                               {'address': 'Warps_CeladonCity', 'id': 12, 'to': {'map': 'Celadon Hotel', 'id': (0, 1)}}],
+             'Celadon City-G': [{'address': 'Warps_CeladonCity', 'id': 6, 'to': {'map': 'Celadon Gym', 'id': (0, 1)}}],
              'Pallet Town': [{'address': 'Warps_PalletTown', 'id': 0, 'to': {'map': "Player's House 1F", 'id': (0, 1)}},
                              {'address': 'Warps_PalletTown', 'id': 1, 'to': {'map': "Rival's House", 'id': (0, 1)}},
                              {'address': 'Warps_PalletTown', 'id': 2, 'to': {'map': "Oak's Lab", 'id': (1, 0)}}],
@@ -279,8 +279,8 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                  {'address': 'Warps_ViridianCity', 'id': 1, 'to': {'map': 'Viridian Pokemart', 'id': (0, 1)}},
                  {'address': 'Warps_ViridianCity', 'id': 2, 'to': {'map': 'Viridian School House', 'id': (0, 1)}},
                  {'address': 'Warps_ViridianCity', 'id': 3, 'to': {'map': 'Viridian Nickname House', 'id': (0, 1)}}],
-             'Viridian City-North': [
-                 {'address': 'Warps_ViridianCity', 'id': 4, 'to': {'map': 'Viridian Gym', 'id': (0, 1)}}],
+             'Viridian City-N': [],
+             'Viridian City-G': [{'address': 'Warps_ViridianCity', 'id': 4, 'to': {'map': 'Viridian Gym', 'id': (0, 1)}}],
              'Pewter City': [{'address': 'Warps_PewterCity', 'id': 0, 'to': {'map': 'Pewter Museum 1F', 'id': (0, 1)}},
                              {'address': 'Warps_PewterCity', 'id': 1, 'to': {'map': 'Pewter Museum 1F', 'id': (2, 3)}},
                              {'address': 'Warps_PewterCity', 'id': 2, 'to': {'map': 'Pewter Gym', 'id': (0, 1)}},
@@ -295,20 +295,21 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                  {'address': 'Warps_CeruleanCity', 'id': 3, 'to': {'map': 'Cerulean Gym', 'id': (0, 1)}},
                  {'address': 'Warps_CeruleanCity', 'id': 4, 'to': {'map': 'Bike Shop', 'id': (0, 1)}},
                  {'address': 'Warps_CeruleanCity', 'id': 5, 'to': {'map': 'Cerulean Pokemart', 'id': (0, 1)}},
-                 {'address': 'Warps_CeruleanCity', 'id': 6, 'to': {'map': 'Cerulean Cave 1F', 'id': (0, 1)}},
                  {'address': 'Warps_CeruleanCity', 'id': 8, 'to': {'map': 'Cerulean Badge House', 'id': (1, 2)}},
                  {'address': 'Warps_CeruleanCity', 'id': 9, 'to': {'map': 'Cerulean Badge House', 'id': 0}}],
+             'Cerulean City-Water': [],
+             'Cerulean City-Cave': [{'address': 'Warps_CeruleanCity', 'id': 6, 'to': {'map': 'Cerulean Cave 1F', 'id': (0, 1)}}],
              'Cerulean City-Outskirts':
                  [{'address': 'Warps_CeruleanCity', 'id': 7, 'to': {'map': 'Cerulean Trashed House', 'id': 2}}],
              'Vermilion City': [
                  {'address': 'Warps_VermilionCity', 'id': 0, 'to': {'map': 'Vermilion Pokemon Center', 'id': (0, 1)}},
                  {'address': 'Warps_VermilionCity', 'id': 1, 'to': {'map': 'Pokemon Fan Club', 'id': (0, 1)}},
                  {'address': 'Warps_VermilionCity', 'id': 2, 'to': {'map': 'Vermilion Pokemart', 'id': (0, 1)}},
-                 {'address': 'Warps_VermilionCity', 'id': 3, 'to': {'map': 'Vermilion Gym', 'id': (0, 1)}},
                  {'address': 'Warps_VermilionCity', 'id': 4, 'to': {'map': 'Vermilion Pidgey House', 'id': 0}},
-                 {'address': 'Warps_VermilionCity', 'id': (5, 6), 'to': {'map': 'Vermilion Dock', 'id': 0}},
                  {'address': 'Warps_VermilionCity', 'id': 7, 'to': {'map': 'Vermilion Trade House', 'id': 0}},
                  {'address': 'Warps_VermilionCity', 'id': 8, 'to': {'map': 'Vermilion Old Rod House', 'id': 0}}],
+             'Vermilion City-G': [{'address': 'Warps_VermilionCity', 'id': 3, 'to': {'map': 'Vermilion Gym', 'id': (0, 1)}}],
+             'Vermilion City-Dock': [{'address': 'Warps_VermilionCity', 'id': (5, 6), 'to': {'map': 'Vermilion Dock', 'id': 0}}],
              'Fuchsia City': [{'address': 'Warps_FuchsiaCity', 'id': 0, 'to': {'map': 'Fuchsia Pokemart', 'id': (0, 1)}},
                               {'address': 'Warps_FuchsiaCity', 'id': 1,
                                'to': {'map': "Fuchsia Bill's Grandpa's House", 'id': 0}},
@@ -350,9 +351,11 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                              {'address': 'Warps_SilphCo6F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 6}},
                              {'address': 'Warps_SilphCo6F', 'id': 3, 'to': {'map': 'Silph Co 4F', 'id': 4}},
                              {'address': 'Warps_SilphCo6F', 'id': 4, 'to': {'map': 'Silph Co 2F', 'id': 6}}],
+             'Cinnabar Island-M': [
+                 {'address': 'Warps_CinnabarIsland', 'id': 0, 'to': {'map': 'Pokemon Mansion 1F', 'id': 1}}],
+             'Cinnabar Island-G': [
+                 {'address': 'Warps_CinnabarIsland', 'id': 1, 'to': {'map': 'Cinnabar Gym', 'id': 0}}],
              'Cinnabar Island': [
-                 {'address': 'Warps_CinnabarIsland', 'id': 0, 'to': {'map': 'Pokemon Mansion 1F', 'id': 1}},
-                 {'address': 'Warps_CinnabarIsland', 'id': 1, 'to': {'map': 'Cinnabar Gym', 'id': 0}},
                  {'address': 'Warps_CinnabarIsland', 'id': 2, 'to': {'map': 'Cinnabar Lab', 'id': 0}},
                  {'address': 'Warps_CinnabarIsland', 'id': 3, 'to': {'map': 'Cinnabar Pokemon Center', 'id': 0}},
                  {'address': 'Warps_CinnabarIsland', 'id': 4, 'to': {'map': 'Cinnabar Pokemart', 'id': (0, 1)}}],
@@ -396,8 +399,8 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                  {'address': 'Warps_DiglettsCaveRoute2', 'id': 2, 'to': {'map': "Diglett's Cave", 'id': 0}}],
              'Route 2 Trade House': [
                  {'address': 'Warps_Route2TradeHouse', 'id': (0, 1), 'to': {'map': 'Route 2', 'id': 2}}],
-             'Route 5 Gate': [{'address': 'Warps_Route5Gate', 'id': (0, 1), 'to': {'map': 'Route 5', 'id': 2}},
-                              {'address': 'Warps_Route5Gate', 'id': (3, 2), 'to': {'map': 'Route 5', 'id': (1, 0)}}],
+             'Route 5 Gate-S': [{'address': 'Warps_Route5Gate', 'id': (0, 1), 'to': {'map': 'Route 5', 'id': 2}}],
+             'Route 5 Gate-N': [{'address': 'Warps_Route5Gate', 'id': (3, 2), 'to': {'map': 'Route 5', 'id': (1, 0)}}],
              'Route 6 Gate': [{'address': 'Warps_Route6Gate', 'id': (0, 1), 'to': {'map': 'Route 6', 'id': 2}},
                               {'address': 'Warps_Route6Gate', 'id': (2, 3), 'to': {'map': 'Route 6', 'id': 1}}],
              'Route 7 Gate': [{'address': 'Warps_Route7Gate', 'id': (0, 1), 'to': {'map': 'Route 7', 'id': 3}},
@@ -415,8 +418,8 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                  {'address': 'Warps_DiglettsCaveRoute11', 'id': 2, 'to': {'map': "Diglett's Cave", 'id': 1}}],
              'Route 16 Fly House': [
                  {'address': 'Warps_Route16FlyHouse', 'id': (0, 1), 'to': {'map': 'Route 16', 'id': 8}}],
-             'Route 22 Gate': [{'address': 'Warps_Route22Gate', 'id': (0, 1), 'to': {'map': 'Route 22', 'id': 0}},
-                               {'address': 'Warps_Route22Gate', 'id': (2, 3), 'to': {'map': 'Route 23', 'id': (0, 1)}}],
+             'Route 22 Gate-S': [{'address': 'Warps_Route22Gate', 'id': (0, 1), 'to': {'map': 'Route 22', 'id': 0}}],
+             'Route 22 Gate-N': [{'address': 'Warps_Route22Gate', 'id': (2, 3), 'to': {'map': 'Route 23', 'id': (0, 1)}}],
              "Bill's House": [{'address': 'Warps_BillsHouse', 'id': (0, 1), 'to': {'map': 'Route 25', 'id': 0}}],
              'Lavender Town': [
                  {'address': 'Warps_LavenderTown', 'id': 0, 'to': {'map': 'Lavender Pokemon Center', 'id': 0}},
@@ -697,8 +700,8 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                  {'address': 'Warps_SafariZoneSecretHouse', 'id': (0, 1), 'to': {'map': 'Safari Zone West', 'id': 6}}],
              'Trade Center': [], 'Colosseum': [],
              'Route 22': [{'address': 'Warps_Route22', 'id': 0, 'to': {'map': 'Route 22 Gate', 'id': 0}}],
-             'Route 20': [{'address': 'Warps_Route20', 'id': 0, 'to': {'map': 'Seafoam Islands 1F', 'id': 0}},
-                          {'address': 'Warps_Route20', 'id': 1, 'to': {'map': 'Seafoam Islands 1F', 'id': 2}}],
+             'Route 20-IW': [{'address': 'Warps_Route20', 'id': 0, 'to': {'map': 'Seafoam Islands 1F', 'id': 0}}],
+             'Route 20-IE': [{'address': 'Warps_Route20', 'id': 1, 'to': {'map': 'Seafoam Islands 1F', 'id': 2}}],
              'Route 23-S': [{'address': 'Warps_Route23', 'id': (0, 1), 'to': {'map': 'Route 22 Gate', 'id': (2, 3)}}],
              'Route 23-C': [
                           {'address': 'Warps_Route23', 'id': 2, 'to': {'map': 'Victory Road 1F', 'id': 0}}],
@@ -708,16 +711,19 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
              'Route 25': [{'address': 'Warps_Route25', 'id': 0, 'to': {'map': "Bill's House", 'id': 0}}],
              'Indigo Plateau': [
                  {'address': 'Warps_IndigoPlateau', 'id': (0, 1), 'to': {'map': 'Indigo Plateau Lobby', 'id': (0, 1)}}],
-             'Saffron City': [{'address': 'Warps_SaffronCity', 'id': 0, 'to': {'map': "Copycat's House 1F", 'id': 0}},
+             'Saffron City': [
                               {'address': 'Warps_SaffronCity', 'id': 1,
                                'to': {'map': 'Saffron Fighting Dojo', 'id': 0}},
-                              {'address': 'Warps_SaffronCity', 'id': 2, 'to': {'map': 'Saffron Gym', 'id': 0}},
                               {'address': 'Warps_SaffronCity', 'id': 3, 'to': {'map': 'Saffron Pidgey House', 'id': 0}},
                               {'address': 'Warps_SaffronCity', 'id': 4, 'to': {'map': 'Saffron Pokemart', 'id': 0}},
-                              {'address': 'Warps_SaffronCity', 'id': 5, 'to': {'map': 'Silph Co 1F', 'id': 0}},
                               {'address': 'Warps_SaffronCity', 'id': 6,
                                'to': {'map': 'Saffron Pokemon Center', 'id': 0}},
                               {'address': 'Warps_SaffronCity', 'id': 7, 'to': {'map': "Mr. Psychic's House", 'id': 0}}],
+             'Saffron City-Copycat': [{'address': 'Warps_SaffronCity', 'id': 0, 'to': {'map': "Copycat's House 1F", 'id': 0}}],
+             'Saffron City-G': [
+                              {'address': 'Warps_SaffronCity', 'id': 2, 'to': {'map': 'Saffron Gym', 'id': 0}}],
+             'Saffron City-Silph': [
+                              {'address': 'Warps_SaffronCity', 'id': 5, 'to': {'map': 'Silph Co 1F', 'id': 0}}],
              'Victory Road 2F': [{'address': 'Warps_VictoryRoad2F', 'id': 0, 'to': {'map': 'Victory Road 1F', 'id': 2}},
                                  {'address': 'Warps_VictoryRoad2F', 'id': (1, 2), 'to': {'map': 'Route 23', 'id': 3}},
                                  {'address': 'Warps_VictoryRoad2F', 'id': 3, 'to': {'map': 'Victory Road 3F', 'id': 0}},
@@ -747,15 +753,16 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                          {'address': 'Warps_Route2', 'id': 2, 'to': {'map': 'Route 2 Trade House', 'id': 0}}],
              'Route 2-E': [{'address': 'Warps_Route2', 'id': 3, 'to': {'map': 'Route 2 Gate', 'id': 1}}],
              'Route 2-SE': [{'address': 'Warps_Route2', 'id': 4, 'to': {'map': 'Route 2 Gate', 'id': 2}}],
+             'Route 2-Grass': [],
              'Route 3': [],
-             'Route 4': [{'address': 'Warps_Route4', 'id': 0, 'to': {'map': 'Route 4 Pokemon Center', 'id': 0}},
-                         {'address': 'Warps_Route4', 'id': 1, 'to': {'map': 'Mt Moon 1F', 'id': 0}},
-                         {'address': 'Warps_Route4', 'id': 2, 'to': {'map': 'Mt Moon B1F', 'id': 7}}],
+             'Route 4-W': [{'address': 'Warps_Route4', 'id': 0, 'to': {'map': 'Route 4 Pokemon Center', 'id': 0}},
+                         {'address': 'Warps_Route4', 'id': 1, 'to': {'map': 'Mt Moon 1F', 'id': 0}}],
+             'Route 4-E': [{'address': 'Warps_Route4', 'id': 2, 'to': {'map': 'Mt Moon B1F', 'id': 7}}],
              'Route 5': [{'address': 'Warps_Route5', 'id': (1, 0), 'to': {'map': 'Route 5 Gate', 'id': (3, 2)}},
                          {'address': 'Warps_Route5', 'id': 2, 'to': {'map': 'Route 5 Gate', 'id': 0}},
                          {'address': 'Warps_Route5', 'id': 3, 'to': {'map': 'Underground Path Route 5', 'id': 0}},
                          {'address': 'Warps_Route5', 'id': 4, 'to': {'map': 'Daycare', 'id': 0}}], 'Route 9': [],
-             'Route 13': [], 'Route 14': [], 'Route 17': [], 'Route 19': [], 'Route 21': [],
+             'Route 13': [], 'Route 13-E': [], 'Route 14': [], 'Route 17': [], 'Route 19': [], 'Route 21': [],
              'Vermilion Old Rod House': [
                  {'address': 'Warps_VermilionOldRodHouse', 'id': (0, 1), 'to': {'map': 'Vermilion City', 'id': 8}}],
              'Celadon Pokemart 2F': [
@@ -781,18 +788,18 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
              'Route 8': [{'address': 'Warps_Route8', 'id': (0, 1), 'to': {'map': 'Route 8 Gate', 'id': (0, 1)}},
                          {'address': 'Warps_Route8', 'id': (2, 3), 'to': {'map': 'Route 8 Gate', 'id': (2, 3)}},
                          {'address': 'Warps_Route8', 'id': 4, 'to': {'map': 'Underground Path Route 8', 'id': 0}}],
-             'Route 10': [{'address': 'Warps_Route10', 'id': 0, 'to': {'map': 'Rock Tunnel Pokemon Center', 'id': 0}},
-                          {'address': 'Warps_Route10', 'id': 1, 'to': {'map': 'Rock Tunnel 1F', 'id': 0}},
-                          {'address': 'Warps_Route10', 'id': 2, 'to': {'map': 'Rock Tunnel 1F', 'id': 2}},
-                          {'address': 'Warps_Route10', 'id': 3, 'to': {'map': 'Power Plant', 'id': 0}}],
+             'Route 10-N': [{'address': 'Warps_Route10', 'id': 0, 'to': {'map': 'Rock Tunnel Pokemon Center', 'id': 0}},
+                          {'address': 'Warps_Route10', 'id': 1, 'to': {'map': 'Rock Tunnel 1F', 'id': 0}}],
+             'Route 10-S': [{'address': 'Warps_Route10', 'id': 2, 'to': {'map': 'Rock Tunnel 1F', 'id': 2}}],
+             'Route 10-P': [{'address': 'Warps_Route10', 'id': 3, 'to': {'map': 'Power Plant', 'id': 0}}],
              'Route 11': [{'address': 'Warps_Route11', 'id': (0, 1), 'to': {'map': 'Route 11 Gate 1F', 'id': (0, 1)}},
                           {'address': 'Warps_Route11', 'id': (2, 3), 'to': {'map': 'Route 11 Gate 1F', 'id': (2, 3)}},
                           {'address': 'Warps_Route11', 'id': 4, 'to': {'map': "Diglett's Cave Route 11", 'id': 0}}],
-             'Route 12': [{'address': 'Warps_Route12', 'id': (0, 1), 'to': {'map': 'Route 12 Gate 1F', 'id': (0, 1)}},
-                          {'address': 'Warps_Route12', 'id': 2, 'to': {'map': 'Route 12 Gate 1F', 'id': 2}},
-                          {'address': 'Warps_Route12', 'id': 3, 'to': {'map': 'Route 12 Super Rod House', 'id': 0}}],
-             'Route 15': [{'address': 'Warps_Route15', 'id': (0, 1), 'to': {'map': 'Route 15 Gate 1F', 'id': (0, 1)}},
-                          {'address': 'Warps_Route15', 'id': (2, 3), 'to': {'map': 'Route 15 Gate 1F', 'id': (2, 3)}}],
+             'Route 12-L': [{'address': 'Warps_Route12', 'id': (0, 1), 'to': {'map': 'Route 12 Gate 1F', 'id': (0, 1)}}],
+             'Route 12-N': [{'address': 'Warps_Route12', 'id': 2, 'to': {'map': 'Route 12 Gate 1F', 'id': 2}}],
+             'Route 12-S': [{'address': 'Warps_Route12', 'id': 3, 'to': {'map': 'Route 12 Super Rod House', 'id': 0}}],
+             'Route 15-W': [{'address': 'Warps_Route15', 'id': (0, 1), 'to': {'map': 'Route 15 Gate 1F', 'id': (0, 1)}}],
+             'Route 15': [{'address': 'Warps_Route15', 'id': (2, 3), 'to': {'map': 'Route 15 Gate 1F', 'id': (2, 3)}}],
              'Route 16-E': [],
              'Route 16-C': [
                           {'address': 'Warps_Route16', 'id': 2, 'to': {'map': 'Route 16 Gate 1F', 'id': (2, 3)}}],
@@ -802,8 +809,8 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                           {'address': 'Warps_Route16', 'id': 8, 'to': {'map': 'Route 16 Fly House', 'id': 0}}],
              'Route 16-NE':
                           [{'address': 'Warps_Route16', 'id': (6, 7), 'to': {'map': 'Route 16 Gate 1F', 'id': (6, 7)}}],
-             'Route 18': [{'address': 'Warps_Route18', 'id': (0, 1), 'to': {'map': 'Route 18 Gate 1F', 'id': (0, 1)}},
-                          {'address': 'Warps_Route18', 'id': (2, 3), 'to': {'map': 'Route 18 Gate 1F', 'id': (2, 3)}}],
+             'Route 18-W': [{'address': 'Warps_Route18', 'id': (0, 1), 'to': {'map': 'Route 18 Gate 1F', 'id': (0, 1)}}],
+             'Route 18-E': [{'address': 'Warps_Route18', 'id': (2, 3), 'to': {'map': 'Route 18 Gate 1F', 'id': (2, 3)}}],
              'Pokemon Fan Club': [
                  {'address': 'Warps_PokemonFanClub', 'id': (0, 1), 'to': {'map': 'Vermilion City', 'id': 1}}],
              'Silph Co 2F-NW': [{'address': 'Warps_SilphCo2F', 'id': 3, 'to': {'map': 'Silph Co 3F', 'id': 6}}],
@@ -1013,10 +1020,10 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
              'Silph Co 11F': [{'address': 'Warps_SilphCo11F', 'id': 0, 'to': {'map': 'Silph Co 10F', 'id': 1}},
                               {'address': 'Warps_SilphCo11F', 'id': 1, 'to': {'map': 'Silph Co Elevator', 'id': 10}}],
              'Silph Co 11F-W': [{'address': 'Warps_SilphCo11F', 'id': 3, 'to': {'map': 'Silph Co 7F', 'id': 3}}],
-             'Viridian Gym': [{'address': 'Warps_ViridianGym', 'id': (0, 1), 'to': {'map': 'Viridian City-North', 'id': 4}}],
+             'Viridian Gym': [{'address': 'Warps_ViridianGym', 'id': (0, 1), 'to': {'map': 'Viridian City-Gym', 'id': 4}}],
              'Pewter Pokemart': [{'address': 'Warps_PewterMart', 'id': (0, 1), 'to': {'map': 'Pewter City', 'id': 4}}],
              'Cerulean Cave 1F': [
-                 {'address': 'Warps_CeruleanCave1F', 'id': (0, 1), 'to': {'map': 'Cerulean City', 'id': 6}},
+                 {'address': 'Warps_CeruleanCave1F', 'id': (0, 1), 'to': {'map': 'Cerulean City-Cave', 'id': 6}},
                  {'address': 'Warps_CeruleanCave1F', 'id': 2, 'to': {'map': 'Cerulean Cave 2F', 'id': 0}},
                  {'address': 'Warps_CeruleanCave1F', 'id': 3, 'to': {'map': 'Cerulean Cave 2F', 'id': 1}},
                  {'address': 'Warps_CeruleanCave1F', 'id': 4, 'to': {'map': 'Cerulean Cave 2F', 'id': 2}},
@@ -1033,9 +1040,9 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                  {'address': 'Warps_FuchsiaPokecenter', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 2}}],
              "Fuchsia Warden's House": [
                  {'address': 'Warps_WardensHouse', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 3}}],
-             'Safari Zone Gate': [
-                 {'address': 'Warps_SafariZoneGate', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 4}},
-                 {'address': 'Warps_SafariZoneGate', 'id': (2, 3), 'to': {'map': 'Safari Zone Center', 'id': (0, 1)}}],
+             'Safari Zone Gate-S': [
+                 {'address': 'Warps_SafariZoneGate', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 4}}],
+             'Safari Zone Gate-N': [{'address': 'Warps_SafariZoneGate', 'id': (2, 3), 'to': {'map': 'Safari Zone Center', 'id': (0, 1)}}],
              'Fuchsia Gym': [{'address': 'Warps_FuchsiaGym', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 5}}],
              'Fuchsia Meeting Room': [
                  {'address': 'Warps_FuchsiaMeetingRoom', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 6}}],
@@ -1074,9 +1081,19 @@ warp_data = {'Celadon City': [{'address': 'Warps_CeladonCity', 'id': 0, 'to': {'
                  {'address': 'Warps_AgathasRoom', 'id': (2, 3), 'to': {'map': "Lance's Room", 'id': 0}}]}
 
 
-print(len([region for region in warp_data if len(warp_data[region]) == 1]))
-print(len([region for region in warp_data if len(warp_data[region]) == 2]))
-print(len([region for region in warp_data if len(warp_data[region]) > 2]))
+for region in warp_data:
+    for entrance in warp_data[region]:
+        m = entrance['to']["map"]
+        i = entrance['to']["id"]
+        for region2 in warp_data:
+            if region2.split("-")[0] == m:
+                for entrance2 in warp_data[region2]:
+                    if entrance2["id"] == i and region2 != m:
+                        print(f"change {entrance} to {region2}")
+
+# print(len([region for region in warp_data if len(warp_data[region]) == 1]))
+# print(len([region for region in warp_data if len(warp_data[region]) == 2]))
+# print(len([region for region in warp_data if len(warp_data[region]) > 2]))
 # for region in warp_data:
 #     for entrance in warp_data[region]:
 #         c = entrance["to"]["map"]
