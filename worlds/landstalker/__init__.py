@@ -7,6 +7,7 @@ from .Items import *
 from .Regions import *
 from .Locations import *
 from .Rules import *
+from .Hints import *
 
 class LandstalkerWeb(WebWorld):
     theme = "grass"
@@ -47,6 +48,7 @@ class LandstalkerWorld(World):
         self.dark_region_ids = []
         self.teleport_tree_pairs = []
         self.can_fill_slot_data = threading.Event()
+        self.hints = {}
 
     def get_setting(self, name: str):
         return getattr(self.multiworld, name)[self.player]
@@ -68,10 +70,7 @@ class LandstalkerWorld(World):
             if location.price > 0:
                 slot_data['locations'][location.name]['price'] = location.price
 
-        slot_data["hints"] = {
-            "Lithograph": self.generate_lithograph_hint(),
-            "Oracle Stone": self.generate_oracle_stone_hint()
-        }
+        slot_data["hints"] = self.hints
 
         slot_data["teleport_tree_pairs"] = []
         for pair in self.teleport_tree_pairs:
@@ -200,25 +199,6 @@ class LandstalkerWorld(World):
                 if location.parent_region.name in EXCLUDED_REGIONS:
                     location.progress_type = LocationProgressType.EXCLUDED
 
-    def generate_lithograph_hint(self):
-        jewels = {}
-        for item in self.multiworld.itempool:
-            if item.player != self.player:
-                continue
-            if " Jewel" in item.name:
-                jewels[item.name] = self.multiworld.get_player_name(item.location.player)
-
-        hint_text = ""
-        for [jewel_name, player_name] in jewels.items():
-            if hint_text != "":
-                hint_text += "\n"
-            hint_text += f"{jewel_name} is in {player_name}'s world."
-
-        return hint_text
-
-    def generate_oracle_stone_hint(self):
-        return f"It shows {self.dark_dungeon_id}\nenshrouded in darkness."
-
     def get_starting_health(self):
         spawn_id = self.get_setting('spawn_region').value
         if spawn_id == "destel":
@@ -231,6 +211,15 @@ class LandstalkerWorld(World):
             return 4
 
     def generate_output(self, output_directory: str) -> None:
+        self.adjust_shop_prices()
+
+        self.hints = Hints.generate_random_hints(self.multiworld, self.player)
+        self.hints["Lithograph"] = Hints.generate_lithograph_hint(self.multiworld, self.player)
+        self.hints["Oracle Stone"] = f"It shows {self.dark_dungeon_id}\nenshrouded in darkness."
+
+        self.can_fill_slot_data.set()
+
+    def adjust_shop_prices(self):
         # Calculate prices for items in shops once all items have their final position
         unknown_items_price = 250
         earlygame_price_factor = 1.0
@@ -256,9 +245,3 @@ class LandstalkerWorld(World):
                         price = 5
                     location.price = int(price)
             sphere_id += 1
-
-        self.can_fill_slot_data.set()
-
-#   def get_filler_item_name(self) -> str:
-#       fillers = get_weighted_filler_item_names()
-#       return self.multiworld.random.choices(fillers)[0]

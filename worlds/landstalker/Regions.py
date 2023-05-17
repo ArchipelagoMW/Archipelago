@@ -29,7 +29,10 @@ def create_regions(multiworld: MultiWorld, player: int):
 
     # Create regions from world_nodes
     for code, region_data in WORLD_NODES_JSON.items():
-        region = LandstalkerRegion(code, region_data["name"], player, multiworld)
+        random_hint_name = None
+        if "hints" in region_data:
+            random_hint_name = multiworld.random.choice(region_data["hints"])
+        region = LandstalkerRegion(code, region_data["name"], player, multiworld, random_hint_name)
         regions_table[code] = region
         multiworld.regions.append(region)
 

@@ -189,6 +189,16 @@ class CombatDifficulty(Choice):
     default = 2
 
 
+class HintCount(Range):
+    """
+    Determines the number of Foxy NPCs that will be scattered across the world, giving various types of hints
+    """
+    display_name = "Hint count"
+    range_start = 0
+    range_end = 40
+    default = 12
+
+
 ls_options: Dict[str, type(Option)] = {
     "goal": LandstalkerGoal,
     "spawn_region": SpawnRegion,
@@ -209,6 +219,8 @@ ls_options: Dict[str, type(Option)] = {
     "handle_damage_boosting_in_logic": DamageBoostingInLogic,
     "handle_enemy_jumping_in_logic": EnemyJumpingInLogic,
     "handle_tree_cutting_glitch_in_logic": TreeCuttingGlitchInLogic,
+
+    "hint_count": HintCount,
 
     "revive_using_ekeeke": ReviveUsingEkeeke,
     "death_link": DeathLink,
