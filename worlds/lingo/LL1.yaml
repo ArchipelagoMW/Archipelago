@@ -886,6 +886,8 @@
         room: The Agreeable
         door: Shortcut to Hedge Maze
       The Perceptive: True
+      The Observant:
+        door: Observant Entrance
       Owl Hallway:
         room: Owl Hallway
         door: Shortcut to Hedge Maze
@@ -983,6 +985,7 @@
       Hedge Maze:
         room: Hedge Maze
         door: Observant Entrance
+      The Incomparable: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_observant_observant
@@ -1018,7 +1021,7 @@
           - STAIRS
   The Incomparable:
     entrances:
-      The Observant: True
+      The Observant: True # Assuming that access to The Observant includes access to the right entrance
       Eight Room: True
       Eight Alcove:
         door: Eight Painting
@@ -2075,6 +2078,9 @@
       Yellow Backside Area: True
       The Bearer:
         room: The Bearer
+        door: Backside Door
+      The Observant:
+        room: The Observant
         door: Backside Door
   Outside The Bold:
     entrances:
