@@ -297,7 +297,9 @@ class DarkSouls3World(World):
             self.multiworld.itempool += [self.create_item(name)]     
 
     def generate_early(self):
-        pass
+        if self.multiworld.enable_weapon_locations[self.player]:
+            DarkSouls3Location.is_weapon_location = self.multiworld.random.sample(DarkSouls3Item.is_weapon_item,
+                                                                                  self.multiworld.?[self.player].value)
 
     def set_rules(self) -> None:
 
