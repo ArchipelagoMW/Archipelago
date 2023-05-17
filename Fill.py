@@ -116,10 +116,6 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                                 world.get_reachable_locations(swap_state))
 
                             if new_loc_count >= prev_loc_count:
-                                if unsafe:
-                                    # We may end up with bad placements unless we unroll all dependencies, so we give it
-                                    # a shot and fail with unplaced items in the cleanup instead
-                                    cleanup_required = True
                                 # Add this item to the existing placement, and
                                 # add the old item to the back of the queue
                                 spot_to_fill = placements.pop(i)
@@ -130,6 +126,9 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                                 reachable_items[placed_item.player].appendleft(
                                     placed_item)
                                 item_pool.append(placed_item)
+
+                                # cleanup at the end to hopefully get better errors
+                                cleanup_required = True
 
                                 break
 
@@ -152,9 +151,10 @@ def fill_restrictive(world: MultiWorld, base_state: CollectionState, locations: 
                 on_place(spot_to_fill)
 
     if cleanup_required:
-        # validate all placements and remove invalid ones to fail faster
+        # validate all placements and remove invalid ones
         for placement in placements:
-            if world.accessibility[placement.item.player] != "minimal" and not placement.can_reach(world.state):
+            state = sweep_from_pool(base_state, [])
+            if world.accessibility[placement.item.player] != "minimal" and not placement.can_reach(state):
                 placement.item.location = None
                 unplaced_items.append(placement.item)
                 placement.item = None
