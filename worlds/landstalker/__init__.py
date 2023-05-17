@@ -90,9 +90,10 @@ class LandstalkerWorld(World):
         Locations.create_locations(self.player, self.regions_table, self.location_name_to_id)
         self.create_teleportation_trees()
 
-    def create_item(self, name: str) -> LandstalkerItem:
+    def create_item(self, name: str, classification_override: Optional[ItemClassification] = None) -> LandstalkerItem:
         data = item_table[name]
-        item = LandstalkerItem(name, data.classification, BASE_ITEM_ID + data.id, self.player)
+        classification = classification_override or data.classification
+        item = LandstalkerItem(name, classification, BASE_ITEM_ID + data.id, self.player)
         item.price_in_shops = data.price_in_shops
         return item
 
@@ -119,11 +120,15 @@ class LandstalkerWorld(World):
             for location_name in SHOPS_TO_FILL:
                 self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item("EkeEke"))
 
-        # Add a variable amount of Life Stock to the pool, depending on the amount of starting Life Stock
+        # Add a fixed amount of "progression" Life Stock for a specific requirement
+        FAHL_LIFESTOCK_REQ = 15
+        item_pool += [self.create_item("Life Stock", ItemClassification.progression) for _ in range(FAHL_LIFESTOCK_REQ)]
+
+        # Add a variable amount of "useful" Life Stock to the pool, depending on the amount of starting Life Stock
         # (i.e. on the starting location)
         starting_lifestocks = self.get_starting_health() - 4
-        lifestock_count = 80 - starting_lifestocks
-        item_pool += [self.create_item("Life Stock") for _ in range(0, lifestock_count)]
+        lifestock_count = 80 - starting_lifestocks - FAHL_LIFESTOCK_REQ
+        item_pool += [self.create_item("Life Stock") for _ in range(lifestock_count)]
 
         # Add jewels to the item pool depending on the number of jewels set in generation settings
         jewel_count = self.get_setting('jewel_count').value
