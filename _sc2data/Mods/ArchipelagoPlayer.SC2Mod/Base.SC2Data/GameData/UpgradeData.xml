@@ -1,5 +1,462 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUpgrade default="1" id="AP_BaseTerranInfantryArmors">
+        <Name value="Upgrade/Name/AP_BaseTerranInfantryArmors"/>
+        <!-- Set the values here -->
+        <EffectArray Reference="Unit,AP_SCV,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SCV,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Marine,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Marine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Reaper,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Reaper,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Marauder,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Marauder,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Ghost,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Ghost,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_MULE,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_MULE,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Firebat,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Firebat,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Medic,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Medic,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Spectre,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Spectre,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_WarPig,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_WarPig,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_HammerSecurity,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HammerSecurity,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDog,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_DevilDog,LifeArmor" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranInfantryArmorsVanadiumPlating" parent="AP_BaseTerranInfantryArmors">
+        <Name value="Upgrade/Name/AP_BaseTerranInfantryArmorsVanadiumPlating"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <!--  SCV -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SCV,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SCV,LifeStart" Value="1.05"/>
+        <!--  Marine -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Marine,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Marine,LifeStart" Value="1.05"/>
+        <!--  Reaper -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Reaper,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Reaper,LifeStart" Value="1.05"/>
+        <!--  Marauder -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Marauder,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Marauder,LifeStart" Value="1.05"/>
+        <!--  Ghost -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Ghost,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Ghost,LifeStart" Value="1.05"/>
+        <!--  MULE -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_MULE,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_MULE,LifeStart" Value="1.05"/>
+        <!--  Firebat -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Firebat,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Firebat,LifeStart" Value="1.05"/>
+        <!--  Medic -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Medic,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Medic,LifeStart" Value="1.05"/>
+        <!--  Spectre -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Spectre,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Spectre,LifeStart" Value="1.05"/>
+        <!--  Merc marine -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_WarPig,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_WarPig,LifeStart" Value="1.05"/>
+        <!--  Merc Marauder -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_HammerSecurity,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_HammerSecurity,LifeStart" Value="1.05"/>
+        <!--  Merc Firebat -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDog,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DevilDog,LifeStart" Value="1.05"/>
+        <!-- Set the HP boost here -->
+        <EditorCategories value="Race:Terran,UpgradeType:ArmorBonus"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranInfantryWeapons">
+        <Name value="Upgrade/Name/AP_BaseTerranInfantryWeapons"/>
+        <!--  Marine -->
+        <EffectArray Reference="Weapon,AP_GaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_GaussRifle,Amount" Value="1"/>
+        <!--  Reaper -->
+        <EffectArray Reference="Weapon,AP_P38ScytheGuassPistol,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_D8Charge,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_P38ScytheGuassPistol,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_D8ChargeDamage,Amount" Value="3"/>
+        <!--  Marauder -->
+        <EffectArray Reference="Weapon,AP_PunisherGrenades,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_PunisherGrenadesU,Amount" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_PunisherGrenadesU,AttributeBonus[Armored]" Value="1.000000"/>
+        <!--  Ghost -->
+        <EffectArray Reference="Weapon,AP_C10CanisterRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_C10CanisterRifle,Amount" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_C10CanisterRifle,AttributeBonus[Light]" Value="1.000000"/>
+        <!-- Firebat -->
+        <EffectArray Reference="Weapon,AP_Firebat,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_FirebatUFull,Amount" Value="1.000000"/>
+        <!-- Spectre -->
+        <EffectArray Reference="Weapon,AP_Specter,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_SpecterU,Amount" Value="1.000000"/>
+        <!-- Merc Marine -->
+        <EffectArray Reference="Weapon,AP_KelmorianMinerGaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_KelmorianMinerDamage,Amount" Value="1"/>
+        <!-- Merc Marauder -->
+        <EffectArray Reference="Weapon,AP_HammerSecurity,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_HammerSecurityDamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_HammerSecurityDamage,AttributeBonus[Armored]" Value="1.000000"/>
+        <!-- Merc Firebat -->
+        <EffectArray Reference="Weapon,AP_DevilDogFlameThrower,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_DevilDogDamage,Amount" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranInfantryWeaponsUltraCapacitors" parent="AP_BaseTerranInfantryWeapons">
+        <Name value="Upgrade/Name/AP_BaseTerranInfantryWeaponsUltraCapacitors"/>
+        <EffectArray Reference="Weapon,AP_GaussRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_P38ScytheGuassPistol,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_D8Charge,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_PunisherGrenades,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_C10CanisterRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_Firebat,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_Specter,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_KelmorianMinerGaussRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_HammerSecurity,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DevilDogFlameThrower,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranShipArmors">
+        <Name value="Upgrade/Name/AP_BaseTerranShipArmors"/>
+        <!--  Banshee -->
+        <EffectArray Reference="Unit,AP_Banshee,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Banshee,LifeArmor" Value="1"/>
+        <!--  Battlecruiser -->
+        <EffectArray Reference="Unit,AP_Battlecruiser,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Battlecruiser,LifeArmor" Value="1"/>
+        <!--  Medivac -->
+        <EffectArray Reference="Unit,AP_Medivac,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Medivac,LifeArmor" Value="1"/>
+        <!--  Raven -->
+        <EffectArray Reference="Unit,AP_Raven,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Raven,LifeArmor" Value="1"/>
+        <!--  Viking -->
+        <EffectArray Reference="Unit,AP_VikingAssault,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_VikingAssault,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_VikingFighter,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_VikingFighter,LifeArmorLevel" Value="1"/>
+        <!-- Hercules -->
+        <EffectArray Reference="Unit,AP_Hercules,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_Hercules,LifeArmorLevel" Value="1"/>
+        <!-- Wraith -->
+        <EffectArray Reference="Unit,AP_Wraith,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_Wraith,LifeArmorLevel" Value="1"/>
+        <!-- Merc BC -->
+        <EffectArray Reference="Unit,AP_DukesRevenge,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_DukesRevenge,LifeArmorLevel" Value="1"/>
+        <!-- Merc Banshee -->
+        <EffectArray Reference="Unit,AP_DuskWing,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_DuskWing,LifeArmorLevel" Value="1"/>
+        <!-- Science Vessel -->
+        <EffectArray Reference="Unit,AP_ScienceVessel,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_ScienceVessel,LifeArmorLevel" Value="1"/>
+        <!-- Merc Viking -->
+        <EffectArray Reference="Unit,AP_HelsAngelAssault,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_HelsAngelAssault,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_HelsAngelFighter,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_HelsAngelFighter,LifeArmorLevel" Value="1"/>
+        <!-- Liberator -->
+        <EffectArray Reference="Unit,AP_Liberator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Liberator,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,LifeArmorLevel" Value="1"/>
+        <!-- Valkyrie -->
+        <EffectArray Reference="Unit,AP_ValkyrieSCBW,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ValkyrieSCBW,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranShipArmorsVanadiumPlating" parent="AP_BaseTerranShipArmors">
+        <Name value="Upgrade/Name/AP_BaseTerranShipArmorsVanadiumPlating"/>
+        <!--  Banshee -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Banshee,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Banshee,LifeStart" Value="1.05"/>
+        <!--  Battlecruiser -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Battlecruiser,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Battlecruiser,LifeStart" Value="1.05"/>
+        <!--  Medivac -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Medivac,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Medivac,LifeStart" Value="1.05"/>
+        <!--  Raven -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Raven,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Raven,LifeStart" Value="1.05"/>
+        <!--  Viking -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_VikingAssault,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_VikingAssault,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_VikingFighter,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_VikingFighter,LifeStart" Value="1.05"/>
+        <!--  Wraith -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Wraith,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Wraith,LifeStart" Value="1.05"/>
+        <!--  Hercules -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Hercules,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Hercules,LifeStart" Value="1.05"/>
+        <!--  Merc Battlecruiser -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DukesRevenge,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DukesRevenge,LifeStart" Value="1.05"/>
+        <!--  Merc Banshee -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DuskWing,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_DuskWing,LifeStart" Value="1.05"/>
+        <!--  Science Vessel -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_ScienceVessel,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_ScienceVessel,LifeStart" Value="1.05"/>
+        <!--  Merc Viking -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_HelsAngelAssault,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_HelsAngelAssault,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_HelsAngelFighter,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_HelsAngelFighter,LifeStart" Value="1.05"/>
+        <!-- Liberator -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Liberator,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Liberator,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_LiberatorAG,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_LiberatorAG,LifeStart" Value="1.05"/>
+        <!-- Valkyrie -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_ValkyrieSCBW,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_ValkyrieSCBW,LifeStart" Value="1.05"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranShipWeapons">
+        <Name value="Upgrade/Name/AP_BaseTerranShipWeapons"/>
+        <!--  Banshee -->
+        <EffectArray Reference="Weapon,AP_BacklashRockets,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_BacklashRocketsU,Amount" Value="1"/>
+        <!--  Battlecruiser (Anti Ground) -->
+        <EffectArray Reference="Weapon,AP_ATSLaserBattery,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ATSLaserBatteryU,Amount" Value="1.000000"/>
+        <!--  Battlecruiser (Anti Air) -->
+        <EffectArray Reference="Weapon,AP_ATALaserBattery,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ATALaserBatteryU,Amount" Value="1.000000"/>
+        <!--  Viking -->
+        <EffectArray Reference="Weapon,AP_LanzerTorpedoes,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_TwinGatlingCannon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_LanzerTorpedoesDamage,Amount" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_TwinGatlingCannons,Amount" Value="1"/>
+        <!-- Wraith -->
+        <EffectArray Reference="Weapon,AP_WraithG,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_WraithGU,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WraithA,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_WraithAU,Amount" Value="1"/>
+        <!-- Merc Banshee -->
+        <EffectArray Reference="Weapon,AP_DuskWingBanshee,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_DuskWingBansheeDamage,Amount" Value="2"/>
+        <!-- Merc Viking -->
+        <EffectArray Reference="Weapon,AP_WreckingCrewAssault,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_WreckingCrewFighter,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_WreckingCrewFighterU,Amount" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_WreckingCrewAssault,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_WreckingCrewFighterU,AttributeBonus[Armored]" Value="1.000000"/>
+        <!-- Merc BC -->
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserA,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRCannonsA,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserFakeA,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserG,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRCannonsG,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserFakeG,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_DRBattlecruiserGU,Amount" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_DRCannonsG,Amount" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_DRBattlecruiserAU,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_DRCannonsA,Amount" Value="1"/>
+        <!-- Liberator -->
+        <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_LiberatorMissileDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_LiberatorAGDamage,Amount" Value="5"/>
+        <!-- Valkyrie -->
+        <EffectArray Reference="Weapon,AP_ValkyrieSCBWWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranShipWeaponsUltraCapacitors" parent="AP_BaseTerranShipWeapons">
+        <Name value="Upgrade/Name/AP_BaseTerranShipWeaponsUltraCapacitors"/>
+        <EffectArray Reference="Weapon,AP_BacklashRockets,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_ATSLaserBattery,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_ATALaserBattery,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_LanzerTorpedoes,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_TwinGatlingCannon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_WraithG,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_WraithA,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DuskWingBanshee,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_WreckingCrewAssault,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_WreckingCrewFighter,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserA,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DRCannonsA,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserFakeA,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserG,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DRCannonsG,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserFakeG,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_ValkyrieSCBWWeapon,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranVehicleArmors">
+        <Name value="Upgrade/Name/AP_BaseTerranVehicleArmors"/>
+        <!--  Thor -->
+        <EffectArray Reference="Unit,AP_Thor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_Thor,LifeArmor" Value="1"/>
+        <!--  Siege Tank -->
+        <EffectArray Reference="Unit,AP_SiegeTank,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SiegeTank,LifeArmor" Value="1"/>
+        <!--  Siege Tank (Sieged) -->
+        <EffectArray Reference="Unit,AP_SiegeTankSieged,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SiegeTankSieged,LifeArmor" Value="1"/>
+        <!--  Hellion -->
+        <EffectArray Reference="Unit,AP_Hellion,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_Hellion,LifeArmorLevel" Value="1"/>
+        <!-- Diamondback -->
+        <EffectArray Reference="Unit,AP_Diamondback,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_Diamondback,LifeArmorLevel" Value="1"/>
+        <!-- Vulture -->
+        <EffectArray Reference="Unit,AP_Vulture,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_Vulture,LifeArmorLevel" Value="1"/>
+        <!-- Goliath -->
+        <EffectArray Reference="Unit,AP_Goliath,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_Goliath,LifeArmorLevel" Value="1"/>
+        <!-- Merc Goliath -->
+        <EffectArray Reference="Unit,AP_SpartanCompany,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_SpartanCompany,LifeArmorLevel" Value="1"/>
+        <!-- Merc Siege Tank -->
+        <EffectArray Reference="Unit,AP_SiegeBreakerSieged,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_SiegeBreakerSieged,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_SiegeBreaker,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_SiegeBreaker,LifeArmorLevel" Value="1"/>
+        <!-- Predator -->
+        <EffectArray Reference="Unit,AP_Predator,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Predator,LifeArmorLevel" Value="1"/>
+        <!-- Widow Mine -->
+        <EffectArray Reference="Unit,AP_WidowMine,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_WidowMine,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_WidowMineBurrowed,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_WidowMineBurrowed,LifeArmorLevel" Value="1"/>
+        <!-- Cyclone -->
+        <EffectArray Reference="Unit,AP_Cyclone,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_Cyclone,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranVehicleArmorsVanadiumPlating" parent="AP_BaseTerranVehicleArmors">
+        <Name value="Upgrade/Name/AP_BaseTerranVehicleArmorsVanadiumPlating"/>
+        <!--  Thor -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Thor,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Thor,LifeStart" Value="1.05"/>
+        <!--  Siege Tank -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeTank,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeTank,LifeStart" Value="1.05"/>
+        <!--  Siege Tank (Sieged) -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeTankSieged,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeTankSieged,LifeStart" Value="1.05"/>
+        <!--  DiamondBack -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Diamondback,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Diamondback,LifeStart" Value="1.05"/>
+        <!--  Hellion -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Hellion,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Hellion,LifeStart" Value="1.05"/>
+        <!--  Vulture -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Vulture,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Vulture,LifeStart" Value="1.05"/>
+        <!--  Goliath -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Goliath,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Goliath,LifeStart" Value="1.05"/>
+        <!--  Merc Goliath -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SpartanCompany,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SpartanCompany,LifeStart" Value="1.05"/>
+        <!--  Merc Siege Tank Sieged -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeBreakerSieged,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeBreakerSieged,LifeStart" Value="1.05"/>
+        <!-- Merc Siege tank  -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeBreaker,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeBreaker,LifeStart" Value="1.05"/>
+        <!-- Predator -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Predator,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Predator,LifeStart" Value="1.05"/>
+        <!-- Widow Mine -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_WidowMine,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_WidowMine,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_WidowMineBurrowed,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_WidowMineBurrowed,LifeStart" Value="1.05"/>
+        <!-- Cyclone -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Cyclone,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Cyclone,LifeStart" Value="1.05"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranVehicleWeapons">
+        <Name value="Upgrade/Name/AP_BaseTerranVehicleWeapons"/>
+        <!--  Thor -->
+        <EffectArray Reference="Weapon,AP_ThorsHammer,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_JavelinMissileLaunchers,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ThorsHammerDamage,Amount" Value="5"/>
+        <EffectArray Reference="Effect,AP_JavelinMissileLaunchersDamage,Amount" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_JavelinMissileLaunchersDamage,AttributeBonus[Light]" Value="1"/>
+        <!--  Siege Tank -->
+        <EffectArray Reference="Weapon,AP_90mmCannons,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_90mmCannons,Amount" Value="2"/>
+        <EffectArray Reference="Effect,AP_90mmCannons,AttributeBonus[Armored]" Value="1.000000"/>
+        <!--  Siege Tank (Sieged) -->
+        <EffectArray Reference="Weapon,AP_CrucioShockCannon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_CrucioShockCannonBlast,Amount" Value="5.000000"/>
+        <EffectArray Reference="Effect,AP_CrucioShockCannonDirected,Amount" Value="5.000000"/>
+        <EffectArray Reference="Effect,AP_CrucioShockCannonDummy,Amount" Value="5.000000"/>
+        <EffectArray Reference="Effect,AP_CrucioShockCannonFriendlyDamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,AP_CrucioShockCannonEnemyDamage,Amount" Value="5"/>
+        <!--  Hellion -->
+        <EffectArray Reference="Weapon,AP_InfernalFlameThrower,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_InfernalFlameThrower,Amount" Value="1.000000"/>
+        <EffectArray Reference="Effect,AP_InfernalFlameThrower,AttributeBonus[Light]" Value="1.000000"/>
+        <!-- Diamondback -->
+        <EffectArray Reference="Weapon,AP_Diamondback,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_DiamondbackBeam,Amount" Value="2"/>
+        <EffectArray Reference="Effect,AP_DiamondbackBeam,AttributeBonus[Armored]" Value="2"/>
+        <!-- Vulture -->
+        <EffectArray Reference="Weapon,AP_Vulture,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_VultureU,Amount" Value="2"/>
+        <!-- Goliath -->
+        <EffectArray Reference="Weapon,AP_GoliathG,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_GoliathGUpgraded,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_GoliathG,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_GoliathA,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_GoliathAUpgraded,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_GoliathAU,Amount" Value="2"/>
+        <!-- Merc Goliath -->
+        <EffectArray Reference="Weapon,AP_SpartanCompanyG,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyGUpgraded,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_SpartanCompanyG,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyA,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyAUpgraded,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_SpartanCompanyAU,Amount" Value="2"/>
+        <!-- Merc Tank -->
+        <EffectArray Reference="Weapon,AP_SiegeBreaker,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_SiegeBreakerDamage,Amount" Value="3"/>
+        <EffectArray Reference="Effect,AP_SiegeBreakerDamage,AttributeBonus[Armored]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_ArcliteShockCannon,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_ArcliteShockCannonBlast,Amount" Value="10"/>
+        <EffectArray Reference="Effect,AP_ArcliteShockCannonDirected,Amount" Value="10"/>
+        <EffectArray Reference="Effect,AP_ArcliteShockCannonDummy,Amount" Value="10"/>
+        <EffectArray Reference="Effect,AP_ArcliteShockCannonFriendlyDamage,Amount" Value="2"/>
+        <EffectArray Reference="Effect,AP_ArcliteShockCannonEnemyDamage,Amount" Value="10"/>
+        <!-- Predator -->
+        <EffectArray Reference="Effect,AP_Predator,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,AP_Predator,Level" Value="1"/>
+        <!-- Cyclone -->
+        <EffectArray Reference="Effect,AP_CycloneAttackWeaponDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,AP_TyphoonMissilePod,Level" Value="1"/>
+    </CUpgrade>
+    <CUpgrade default="1" id="AP_BaseTerranVehicleWeaponsUltraCapacitors" parent="AP_BaseTerranVehicleWeapons">
+        <Name value="Upgrade/Name/AP_BaseTerranVehicleWeaponsUltraCapacitors"/>
+        <EffectArray Reference="Weapon,AP_ThorsHammer,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_JavelinMissileLaunchers,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_90mmCannons,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_CrucioShockCannon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_InfernalFlameThrower,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_Diamondback,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_Vulture,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_GoliathG,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_GoliathA,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_GoliathGUpgraded,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_GoliathAUpgraded,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyG,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyA,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyGUpgraded,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_SpartanCompanyAUpgraded,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_SiegeBreaker,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_ArcliteShockCannon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_Predator,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_TyphoonMissilePod,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
     <CUpgrade id="AP_330mmBarrageCannons">
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
@@ -1078,5 +1535,734 @@
         <AffectedUnitArray value="AP_Spectre"/>
         <AffectedUnitArray value="AP_DukesRevenge"/>
         <AffectedUnitArray value="AP_DuskWing"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsLevel1" parent="AP_BaseTerranInfantryArmors">
+        <!-- Set the icon here -->
+        <Name value="Upgrade/Name/AP_TerranInfantryArmorsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_MULE,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Firebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpecterUnit,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KelmorianMiner,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HammerSecurity,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DevilDog,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <LeaderLevel value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsLevel2" parent="AP_BaseTerranInfantryArmors">
+        <!-- Set the icon here -->
+        <Name value="Upgrade/Name/AP_TerranInfantryArmorsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_MULE,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Firebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpecterUnit,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KelmorianMiner,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HammerSecurity,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DevilDog,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <LeaderLevel value="2"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsLevel3" parent="AP_BaseTerranInfantryArmors">
+        <!-- Set the icon here -->
+        <Name value="Upgrade/Name/AP_TerranInfantryArmorsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_MULE,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Firebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpecterUnit,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KelmorianMiner,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HammerSecurity,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DevilDog,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <LeaderLevel value="3"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsVanadiumPlatingLevel1" parent="AP_BaseTerranInfantryArmorsVanadiumPlating">
+        <Name value="Upgrade/Name/AP_TerranInfantryArmorsVanadiumPlatingLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <!-- Set the icon here -->
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_MULE,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Firebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpecterUnit,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KelmorianMiner,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HammerSecurity,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DevilDog,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <LeaderLevel value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsVanadiumPlatingLevel2" parent="AP_BaseTerranInfantryArmorsVanadiumPlating">
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <Name value="Upgrade/Name/AP_TerranInfantryArmorsVanadiumPlatingLevel2"/>
+        <!-- Set the icon here -->
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_MULE,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Firebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpecterUnit,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KelmorianMiner,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HammerSecurity,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DevilDog,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <LeaderLevel value="2"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsVanadiumPlatingLevel3" parent="AP_BaseTerranInfantryArmorsVanadiumPlating">
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <Name value="Upgrade/Name/AP_TerranInfantryArmorsVanadiumPlatingLevel3"/>
+        <!-- Set the icon here -->
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SCV,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_MULE,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Marauder,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Reaper,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Ghost,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Firebat,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medic,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpecterUnit,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_KelmorianMiner,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HammerSecurity,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DevilDog,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <LeaderLevel value="3"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsLevel1" parent="AP_BaseTerranInfantryWeapons">
+        <Name value="Upgrade/Name/AP_TerranInfantryWeaponsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_D8Charge,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_P38ScytheGuassPistol,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PunisherGrenades,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_C10CanisterRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Firebat,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Specter,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_KelmorianMinerGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HammerSecurity,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DevilDogFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <LeaderLevel value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsLevel2" parent="AP_BaseTerranInfantryWeapons">
+        <Name value="Upgrade/Name/AP_TerranInfantryWeaponsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_D8Charge,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_P38ScytheGuassPistol,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PunisherGrenades,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_C10CanisterRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Firebat,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Specter,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_KelmorianMinerGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HammerSecurity,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DevilDogFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <LeaderLevel value="2"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsLevel3" parent="AP_BaseTerranInfantryWeapons">
+        <Name value="Upgrade/Name/AP_TerranInfantryWeaponsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_D8Charge,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_P38ScytheGuassPistol,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PunisherGrenades,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_C10CanisterRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Firebat,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Specter,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_KelmorianMinerGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HammerSecurity,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DevilDogFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <LeaderLevel value="3"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsUltraCapacitorsLevel1" parent="AP_BaseTerranInfantryWeaponsUltraCapacitors">
+        <Name value="Upgrade/Name/AP_TerranInfantryWeaponsUltraCapacitorsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_D8Charge,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_P38ScytheGuassPistol,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PunisherGrenades,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_C10CanisterRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Firebat,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Specter,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_KelmorianMinerGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HammerSecurity,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DevilDogFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsUltraCapacitorsLevel2" parent="AP_BaseTerranInfantryWeaponsUltraCapacitors">
+        <Name value="Upgrade/Name/AP_TerranInfantryWeaponsUltraCapacitorsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_D8Charge,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_P38ScytheGuassPistol,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PunisherGrenades,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_C10CanisterRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Firebat,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Specter,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_KelmorianMinerGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HammerSecurity,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DevilDogFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsUltraCapacitorsLevel3" parent="AP_BaseTerranInfantryWeaponsUltraCapacitors">
+        <Name value="Upgrade/Name/AP_TerranInfantryWeaponsUltraCapacitorsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_D8Charge,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_P38ScytheGuassPistol,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_PunisherGrenades,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_C10CanisterRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Firebat,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Specter,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_KelmorianMinerGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HammerSecurity,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DevilDogFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipArmorsLevel1" parent="AP_BaseTerranShipArmors">
+        <Name value="Upgrade/Name/AP_TerranShipArmorsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <ScoreAmount value="300"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Banshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Battlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Raven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hercules,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Wraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DukesRevenge,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DuskWingBanshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DuskWingWraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <LeaderLevel value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipArmorsLevel2" parent="AP_BaseTerranShipArmors">
+        <Name value="Upgrade/Name/AP_TerranShipArmorsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <ScoreAmount value="450"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Banshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Battlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Raven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hercules,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Wraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DukesRevenge,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DuskWingBanshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DuskWingWraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <LeaderLevel value="2"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipArmorsLevel3" parent="AP_BaseTerranShipArmors">
+        <Name value="Upgrade/Name/AP_TerranShipArmorsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <ScoreAmount value="600"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Banshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Battlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Raven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hercules,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Wraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DukesRevenge,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DuskWingBanshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DuskWingWraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <LeaderLevel value="3"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipArmorsVanadiumPlatingLevel1" parent="AP_BaseTerranShipArmorsVanadiumPlating">
+        <Name value="Upgrade/Name/AP_TerranShipArmorsVanadiumPlatingLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <ScoreAmount value="300"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Banshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Battlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Raven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hercules,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Wraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DukesRevenge,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DuskWingBanshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipArmorsVanadiumPlatingLevel2" parent="AP_BaseTerranShipArmorsVanadiumPlating">
+        <Name value="Upgrade/Name/AP_TerranShipArmorsVanadiumPlatingLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <ScoreAmount value="450"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Banshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Battlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Raven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hercules,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Wraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DukesRevenge,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DuskWingBanshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipArmorsVanadiumPlatingLevel3" parent="AP_BaseTerranShipArmorsVanadiumPlating">
+        <Name value="Upgrade/Name/AP_TerranShipArmorsVanadiumPlatingLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <ScoreAmount value="600"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Banshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Battlecruiser,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Raven,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Medivac,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_VikingFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hercules,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Wraith,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DukesRevenge,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_DuskWingBanshee,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ScienceVessel,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewFighter,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WreckingCrewAssault,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Liberator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_LiberatorAG,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ValkyrieSCBW,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipWeaponsLevel1" parent="AP_BaseTerranShipWeapons">
+        <Name value="Upgrade/Name/AP_TerranShipWeaponsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <LeaderLevel value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipWeaponsLevel2" parent="AP_BaseTerranShipWeapons">
+        <Name value="Upgrade/Name/AP_TerranShipWeaponsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <LeaderLevel value="2"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipWeaponsLevel3" parent="AP_BaseTerranShipWeapons">
+        <Name value="Upgrade/Name/AP_TerranShipWeaponsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <LeaderLevel value="3"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipWeaponsUltraCapacitorsLevel1" parent="AP_BaseTerranShipWeaponsUltraCapacitors">
+        <Name value="Upgrade/Name/AP_TerranShipWeaponsUltraCapacitorsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipWeaponsUltraCapacitorsLevel2" parent="AP_BaseTerranShipWeaponsUltraCapacitors">
+        <Name value="Upgrade/Name/AP_TerranShipWeaponsUltraCapacitorsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranShipWeaponsUltraCapacitorsLevel3" parent="AP_BaseTerranShipWeaponsUltraCapacitors">
+        <Name value="Upgrade/Name/AP_TerranShipWeaponsUltraCapacitorsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WraithA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DuskWingBanshee,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewAssault,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsLevel1" parent="AP_BaseTerranVehicleArmors">
+        <Name value="Upgrade/Name/AP_TerranVehicleArmorsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Thor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpartanCompany,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreaker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreakerSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Predator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <LeaderLevel value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsLevel2" parent="AP_BaseTerranVehicleArmors">
+        <Name value="Upgrade/Name/AP_TerranVehicleArmorsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Thor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpartanCompany,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreaker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreakerSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Predator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <LeaderLevel value="2"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsLevel3" parent="AP_BaseTerranVehicleArmors">
+        <Name value="Upgrade/Name/AP_TerranVehicleArmorsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Thor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpartanCompany,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreaker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreakerSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Predator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <LeaderLevel value="3"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsVanadiumPlatingLevel1" parent="AP_BaseTerranVehicleArmorsVanadiumPlating">
+        <Name value="Upgrade/Name/AP_TerranVehicleArmorsVanadiumPlatingLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Thor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpartanCompany,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreaker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreakerSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Predator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsVanadiumPlatingLevel2" parent="AP_BaseTerranVehicleArmorsVanadiumPlating">
+        <Name value="Upgrade/Name/AP_TerranVehicleArmorsVanadiumPlatingLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Thor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpartanCompany,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreaker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreakerSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Predator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsVanadiumPlatingLevel3" parent="AP_BaseTerranVehicleArmorsVanadiumPlating">
+        <Name value="Upgrade/Name/AP_TerranVehicleArmorsVanadiumPlatingLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Thor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SpartanCompany,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreaker,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SiegeBreakerSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Odin,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Predator,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_WidowMine,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Cyclone,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsLevel1" parent="AP_BaseTerranVehicleWeapons">
+        <Name value="Upgrade/Name/AP_TerranVehicleWeaponsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SiegeBreaker,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ArcliteShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Predator,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <LeaderLevel value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsLevel2" parent="AP_BaseTerranVehicleWeapons">
+        <Name value="Upgrade/Name/AP_TerranVehicleWeaponsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SiegeBreaker,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ArcliteShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Predator,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <LeaderLevel value="2"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsLevel3" parent="AP_BaseTerranVehicleWeapons">
+        <Name value="Upgrade/Name/AP_TerranVehicleWeaponsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SiegeBreaker,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ArcliteShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Predator,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <LeaderLevel value="3"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsUltraCapacitorsLevel1" parent="AP_BaseTerranVehicleWeaponsUltraCapacitors">
+        <Name value="Upgrade/Name/AP_TerranVehicleWeaponsUltraCapacitorsLevel1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <ScoreAmount value="200"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SiegeBreaker,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ArcliteShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Predator,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsUltraCapacitorsLevel2" parent="AP_BaseTerranVehicleWeaponsUltraCapacitors">
+        <Name value="Upgrade/Name/AP_TerranVehicleWeaponsUltraCapacitorsLevel2"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <ScoreAmount value="350"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SiegeBreaker,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ArcliteShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Predator,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsUltraCapacitorsLevel3" parent="AP_BaseTerranVehicleWeaponsUltraCapacitors">
+        <Name value="Upgrade/Name/AP_TerranVehicleWeaponsUltraCapacitorsLevel3"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <ScoreAmount value="500"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GoliathAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyA,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyGUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SpartanCompanyAUpgraded,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_SiegeBreaker,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_ArcliteShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Predator,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_UltraCapacitors">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VanadiumPlating">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
 </Catalog>

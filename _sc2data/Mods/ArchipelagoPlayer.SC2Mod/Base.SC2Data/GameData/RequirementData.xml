@@ -636,4 +636,172 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_NotCountUpgradeSupplyDepotDropCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryArmor1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryArmorsLevel1QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryArmor2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranInfantryArmorsLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryArmorsLevel2QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryArmor3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranInfantryArmorsLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryArmorsLevel3QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryArmorVanadiumPlating1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel1QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryArmorVanadiumPlating2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel2QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryArmorVanadiumPlating3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel3QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryWeapon1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryWeapon2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranInfantryWeaponsLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryWeapon3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranInfantryWeaponsLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryWeaponUltraCapacitors1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnlyAllowUpgradeTerranInfantryWeaponsLevel1"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryWeaponUltraCapacitors2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel2QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranInfantryWeaponUltraCapacitors3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel3QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipArmor1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipArmorsLevel1QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipArmor2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranShipArmorsLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipArmorsLevel2QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipArmor3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranShipArmorsLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipArmorsLevel3QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipArmorVanadiumPlating1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipArmorsVanadiumPlatingLevel1QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipArmorVanadiumPlating2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipArmorsVanadiumPlatingLevel2QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipArmorVanadiumPlating3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipArmorsVanadiumPlatingLevel3QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipWeapon1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipWeaponsLevel1QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipWeapon2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranShipWeaponsLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipWeaponsLevel2QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipWeapon3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranShipWeaponsLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipWeaponsLevel3QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipWeaponUltraCapacitors1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel1QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipWeaponUltraCapacitors2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel2QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranShipWeaponUltraCapacitors3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel3QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleArmor1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleArmorsLevel1QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleArmor2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranVehicleArmorsLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleArmorsLevel2QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleArmor3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranVehicleArmorsLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleArmorsLevel3QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleArmorVanadiumPlating1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel1QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleArmorVanadiumPlating2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel2QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleArmorVanadiumPlating3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel3QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleWeapon1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleWeapon2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranVehicleWeaponsLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleWeapon3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranVehicleWeaponsLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleWeaponUltraCapacitors1">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel1QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleWeaponUltraCapacitors2">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel1CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel2QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_LearnTerranVehicleWeaponUltraCapacitors3">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel2CompleteOnly"/>
+        <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel3QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirement>
 </Catalog>

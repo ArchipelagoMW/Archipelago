@@ -961,4 +961,764 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CellularReactors" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementAllowUpgrade id="AP_AllowUpgradeTerranInfantryWeaponsLevel1">
+        <Link value="AP_TerranInfantryWeaponsLevel1"/>
+    </CRequirementAllowUpgrade>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipWeaponsLevel2CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranShipWeaponsLevel2CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleArmorsLevel1CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleArmorsLevel1CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryWeaponsLevel1CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryWeaponsLevel1CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryWeaponsLevel1CompleteOnly1CountUnitArmoryCompleteOnlyTechTreeCheat">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryWeaponsLevel1CompleteOnly1"/>
+        <OperandArray value="AP_CountUnitArmoryCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleWeaponsLevel1CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleWeaponsLevel1CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipArmorsLevel2CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranShipArmorsLevel2CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryArmorsLevel1CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryArmorsLevel1CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleArmorsLevel2CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleArmorsLevel2CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipWeaponsLevel1CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranShipWeaponsLevel1CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipArmorsLevel1CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranShipArmorsLevel1CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryWeaponsLevel2CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryWeaponsLevel2CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryWeaponsLevel2CompleteOnly1CountUnitArmoryCompleteOnlyTechTreeCheat">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryWeaponsLevel2CompleteOnly1"/>
+        <OperandArray value="AP_CountUnitArmoryCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryArmorsLevel1CompleteOnly1CountUnitArmoryCompleteOnlyTechTreeCheat">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryArmorsLevel1CompleteOnly1"/>
+        <OperandArray value="AP_CountUnitArmoryCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryArmorsLevel2CompleteOnly1CountUnitArmoryCompleteOnlyTechTreeCheat">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryArmorsLevel2CompleteOnly1"/>
+        <OperandArray value="AP_CountUnitArmoryCompleteOnlyTechTreeCheat"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryArmorsLevel2CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryArmorsLevel2CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleWeaponsLevel2CompleteOnly1">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleWeaponsLevel2CompleteOnly1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryArmorsLevel1QueuedOrBetter0NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryArmorsLevel1QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryArmorsLevel2QueuedOrBetter0NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryArmorsLevel2QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryArmorsLevel3QueuedOrBetter0NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryArmorsLevel3QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetter0NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetter0NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetter0NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipArmorsLevel1QueuedOrBetter0NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranShipArmorsLevel1QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipArmorsLevel2QueuedOrBetter0NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranShipArmorsLevel2QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipArmorsLevel3QueuedOrBetter0NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranShipArmorsLevel3QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipWeaponsLevel1QueuedOrBetter0NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranShipWeaponsLevel1QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipWeaponsLevel2QueuedOrBetter0NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranShipWeaponsLevel2QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranShipWeaponsLevel3QueuedOrBetter0NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranShipWeaponsLevel3QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleArmorsLevel1QueuedOrBetter0NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleArmorsLevel1QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleArmorsLevel2QueuedOrBetter0NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleArmorsLevel2QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleArmorsLevel3QueuedOrBetter0NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleArmorsLevel3QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetter0NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetter0NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndEqCountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetter0NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_EqCountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetter0"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryArmorsLevel1QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryArmorsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryArmorsLevel2QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryArmorsLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryArmorsLevel3QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryArmorsLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel1QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel2QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel3QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnlyAllowUpgradeTerranInfantryWeaponsLevel1">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+        <OperandArray value="AP_AllowUpgradeTerranInfantryWeaponsLevel1"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel2QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel3QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipArmorsLevel1QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipArmorsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipArmorsLevel2QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipArmorsLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipArmorsLevel3QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipArmorsLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipArmorsVanadiumPlatingLevel1QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipArmorsVanadiumPlatingLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipArmorsVanadiumPlatingLevel2QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipArmorsVanadiumPlatingLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipArmorsVanadiumPlatingLevel3QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipArmorsVanadiumPlatingLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipWeaponsLevel1QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipWeaponsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipWeaponsLevel2QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipWeaponsLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipWeaponsLevel3QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipWeaponsLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel1QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel2QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel3QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleArmorsLevel1QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleArmorsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleArmorsLevel2QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleArmorsLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleArmorsLevel3QueuedOrBetterNotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleArmorsLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel1QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel2QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel3QueuedOrBetterCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetterNotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_NotCountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel1QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel1QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel2QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel2QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementAnd id="AP_AndNotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel3QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray value="AP_NotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel3QueuedOrBetter"/>
+        <OperandArray value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryArmorsLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryArmorsLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryArmorsLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryArmorsLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryArmorsLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value="RequirementNode/Tooltip/CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel1CompleteOnly2459994998"/>
+        <Count Link="AP_TerranInfantryArmorsVanadiumPlatingLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryArmorsVanadiumPlatingLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value="RequirementNode/Tooltip/CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel2CompleteOnly732362011"/>
+        <Count Link="AP_TerranInfantryArmorsVanadiumPlatingLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryArmorsVanadiumPlatingLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryArmorsVanadiumPlatingLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsUltraCapacitorsLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsUltraCapacitorsLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsUltraCapacitorsLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsUltraCapacitorsLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranInfantryWeaponsUltraCapacitorsLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsVanadiumPlatingLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsVanadiumPlatingLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsVanadiumPlatingLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsVanadiumPlatingLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipArmorsVanadiumPlatingLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsUltraCapacitorsLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsUltraCapacitorsLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsUltraCapacitorsLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsUltraCapacitorsLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranShipWeaponsUltraCapacitorsLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsVanadiumPlatingLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsVanadiumPlatingLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsVanadiumPlatingLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsVanadiumPlatingLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleArmorsVanadiumPlatingLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsUltraCapacitorsLevel1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel1QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsUltraCapacitorsLevel1" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsUltraCapacitorsLevel2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel2QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsUltraCapacitorsLevel2" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel3QueuedOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TerranVehicleWeaponsUltraCapacitorsLevel3" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeUltraCapacitorsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_UltraCapacitors" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVanadiumPlatingCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_VanadiumPlating" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipWeaponsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleArmorsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryWeaponsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleWeaponsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipArmorsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryArmorsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleArmorsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipWeaponsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipArmorsLevel1CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsLevel1CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryWeaponsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryArmorsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleWeaponsLevel2CompleteOnly1">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsLevel2CompleteOnly"/>
+        <OperandArray index="1" value="1"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryArmorsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryArmorsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryArmorsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipArmorsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipArmorsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipArmorsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipWeaponsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipWeaponsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranShipWeaponsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleArmorsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleArmorsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleArmorsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementEq id="AP_EqCountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetter0">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetter"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryArmorsLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryArmorsLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryArmorsLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryArmorsVanadiumPlatingLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryArmorsVanadiumPlatingLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipArmorsLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipArmorsLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipArmorsLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipArmorsVanadiumPlatingLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipArmorsVanadiumPlatingLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipArmorsVanadiumPlatingLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipWeaponsLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipWeaponsLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipWeaponsLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranShipWeaponsUltraCapacitorsLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranShipWeaponsUltraCapacitorsLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleArmorsLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleArmorsLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleArmorsLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleArmorsVanadiumPlatingLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleArmorsVanadiumPlatingLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel1QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel1QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel2QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel2QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel3QueuedOrBetter">
+        <OperandArray index="0" value="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel3QueuedOrBetter"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeUltraCapacitorsCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeUltraCapacitorsCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementNot id="AP_NotCountUpgradeVanadiumPlatingCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
+    </CRequirementNot>
 </Catalog>

@@ -5696,6 +5696,30 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress,Halt" Row="2" Column="3"/>
             <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+            <LayoutButtons Face="TerranVehicleWeaponsLevel1" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research6" Row="0" Column="0"/>
+            <LayoutButtons Face="TerranVehicleWeaponsLevel2" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research7" Row="0" Column="0"/>
+            <LayoutButtons Face="TerranVehicleWeaponsLevel3" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research8" Row="0" Column="0"/>
+            <LayoutButtons Face="TerranVehiclePlatingLevel1" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research3" Row="0" Column="1"/>
+            <LayoutButtons Face="TerranVehiclePlatingLevel2" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research4" Row="0" Column="1"/>
+            <LayoutButtons Face="TerranVehiclePlatingLevel3" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research5" Row="0" Column="1"/>
+            <LayoutButtons Face="TerranShipWeaponsLevel1" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research12" Row="1" Column="0"/>
+            <LayoutButtons Face="TerranShipWeaponsLevel2" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research13" Row="1" Column="0"/>
+            <LayoutButtons Face="TerranShipWeaponsLevel3" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research14" Row="1" Column="0"/>
+            <LayoutButtons Face="TerranShipPlatingLevel1" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research9" Row="1" Column="1"/>
+            <LayoutButtons Face="TerranShipPlatingLevel2" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research10" Row="1" Column="1"/>
+            <LayoutButtons Face="TerranShipPlatingLevel3" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research11" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_TerranVehicleWeaponsUltraCapacitorsLevel1" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research16" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_TerranVehicleWeaponsUltraCapacitorsLevel2" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research17" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_TerranVehicleWeaponsUltraCapacitorsLevel3" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research18" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_TerranVehiclePlatingVanadiumPlatingLevel1" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research22" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_TerranVehiclePlatingVanadiumPlatingLevel2" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research23" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_TerranVehiclePlatingVanadiumPlatingLevel3" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research24" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_TerranShipWeaponsUltraCapacitorsLevel1" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research19" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_TerranShipWeaponsUltraCapacitorsLevel2" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research20" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_TerranShipWeaponsUltraCapacitorsLevel3" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research21" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_TerranShipPlatingVanadiumPlatingLevel1" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research25" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_TerranShipPlatingVanadiumPlatingLevel2" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research26" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_TerranShipPlatingVanadiumPlatingLevel3" Type="AbilCmd" AbilCmd="AP_ArmoryResearch,Research27" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -6881,8 +6905,19 @@
             <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
             <LayoutButtons Face="Halt" Type="AbilCmd" AbilCmd="BuildInProgress,Halt" Row="2" Column="3"/>
             <LayoutButtons Face="SelectBuilder" Type="SelectBuilder" Row="1" Column="3"/>
+            <LayoutButtons Face="TerranInfantryWeaponsLevel1" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research3" Row="0" Column="0"/>
+            <LayoutButtons Face="TerranInfantryWeaponsLevel2" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research4" Row="0" Column="0"/>
+            <LayoutButtons Face="TerranInfantryWeaponsLevel3" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research5" Row="0" Column="0"/>
+            <LayoutButtons Face="TerranInfantryArmorLevel1" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research7" Row="0" Column="1"/>
+            <LayoutButtons Face="TerranInfantryArmorLevel2" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research8" Row="0" Column="1"/>
+            <LayoutButtons Face="TerranInfantryArmorLevel3" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research9" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_TerranInfantryWeaponsUltraCapacitorsLevel1" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research11" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_TerranInfantryWeaponsUltraCapacitorsLevel2" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research12" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_TerranInfantryWeaponsUltraCapacitorsLevel3" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research13" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_TerranInfantryArmorVanadiumPlatingLevel1" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research14" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_TerranInfantryArmorVanadiumPlatingLevel2" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research15" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_TerranInfantryArmorVanadiumPlatingLevel3" Type="AbilCmd" AbilCmd="AP_EngineeringBayResearch,Research16" Row="0" Column="1"/>
         </CardLayouts>
-        <!-- TODO: Research upgrade buttons -->
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
         <Footprint value="Footprint3x3Contour"/>

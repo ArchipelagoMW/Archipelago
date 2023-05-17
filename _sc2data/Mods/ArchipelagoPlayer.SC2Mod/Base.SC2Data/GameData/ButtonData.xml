@@ -995,4 +995,130 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_TerranInfantryArmorVanadiumPlatingLevel1">
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <Hotkey value="Button/Hotkey/TerranInfantryArmorLevel1"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranInfantryArmorLevel1"/>
+    </CButton>
+    <CButton id="AP_TerranInfantryArmorVanadiumPlatingLevel2">
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <Hotkey value="Button/Hotkey/TerranInfantryArmorLevel2"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranInfantryArmorLevel2"/>
+    </CButton>
+    <CButton id="AP_TerranInfantryArmorVanadiumPlatingLevel3">
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <Hotkey value="Button/Hotkey/TerranInfantryArmorLevel3"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranInfantryArmorLevel3"/>
+    </CButton>
+    <CButton id="AP_TerranInfantryWeaponsUltraCapacitorsLevel1">
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <Hotkey value="Button/Hotkey/TerranInfantryWeaponsLevel1"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranInfantryWeaponsLevel1"/>
+    </CButton>
+    <CButton id="AP_TerranInfantryWeaponsUltraCapacitorsLevel2">
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <Hotkey value="Button/Hotkey/TerranInfantryWeaponsLevel2"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranInfantryWeaponsLevel2"/>
+    </CButton>
+    <CButton id="AP_TerranInfantryWeaponsUltraCapacitorsLevel3">
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <Hotkey value="Button/Hotkey/TerranInfantryWeaponsLevel3"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranInfantryWeaponsLevel3"/>
+    </CButton>
+    <CButton id="AP_TerranShipPlatingVanadiumPlatingLevel1">
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel1.dds"/>
+        <Hotkey value="Button/Hotkey/TerranShipPlatingLevel1"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranShipPlatingLevel1"/>
+    </CButton>
+    <CButton id="AP_TerranShipPlatingVanadiumPlatingLevel2">
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel2.dds"/>
+        <Hotkey value="Button/Hotkey/TerranShipPlatingLevel2"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranShipPlatingLevel2"/>
+    </CButton>
+    <CButton id="AP_TerranShipPlatingVanadiumPlatingLevel3">
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-shipplatinglevel3.dds"/>
+        <Hotkey value="Button/Hotkey/TerranShipPlatingLevel3"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranShipPlatingLevel3"/>
+    </CButton>
+    <CButton id="AP_TerranShipWeaponsUltraCapacitorsLevel1">
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <Hotkey value="Button/Hotkey/TerranShipWeaponsLevel1"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranShipWeaponsLevel1"/>
+    </CButton>
+    <CButton id="AP_TerranShipWeaponsUltraCapacitorsLevel2">
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <Hotkey value="Button/Hotkey/TerranShipWeaponsLevel2"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranShipWeaponsLevel2"/>
+    </CButton>
+    <CButton id="AP_TerranShipWeaponsUltraCapacitorsLevel3">
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <Hotkey value="Button/Hotkey/TerranShipWeaponsLevel3"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranShipWeaponsLevel3"/>
+    </CButton>
+    <CButton id="AP_TerranVehiclePlatingVanadiumPlatingLevel1">
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <Hotkey value="Button/Hotkey/TerranVehiclePlatingLevel1"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranVehiclePlatingLevel1"/>
+    </CButton>
+    <CButton id="AP_TerranVehiclePlatingVanadiumPlatingLevel2">
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <Hotkey value="Button/Hotkey/TerranVehiclePlatingLevel2"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranVehiclePlatingLevel2"/>
+    </CButton>
+    <CButton id="AP_TerranVehiclePlatingVanadiumPlatingLevel3">
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <Hotkey value="Button/Hotkey/TerranVehiclePlatingLevel3"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranVehiclePlatingLevel3"/>
+    </CButton>
+    <CButton id="AP_TerranVehicleWeaponsUltraCapacitorsLevel1">
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <Hotkey value="Button/Hotkey/TerranVehicleWeaponsLevel1"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranVehicleWeaponsLevel1"/>
+    </CButton>
+    <CButton id="AP_TerranVehicleWeaponsUltraCapacitorsLevel2">
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <Hotkey value="Button/Hotkey/TerranVehicleWeaponsLevel2"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranVehicleWeaponsLevel2"/>
+    </CButton>
+    <CButton id="AP_TerranVehicleWeaponsUltraCapacitorsLevel3">
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <Hotkey value="Button/Hotkey/TerranVehicleWeaponsLevel3"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="TerranVehicleWeaponsLevel3"/>
+    </CButton>
 </Catalog>
