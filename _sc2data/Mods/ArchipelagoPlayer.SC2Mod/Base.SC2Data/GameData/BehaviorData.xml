@@ -791,7 +791,7 @@
         <ExpireEffect value="AP_SupplyDepotDropMorph"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_SupplyDepotMorphing">
-        <InfoFlags index="Hidden" value="1"/>
+<!--        <InfoFlags index="Hidden" value="1"/>-->
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Duration value="1.35"/>
     </CBehaviorBuff>
@@ -803,11 +803,19 @@
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BarracksTechReactor">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_FactoryReactor">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_FactoryTechLab">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_FactoryTechReactor">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
     </CBehaviorBuff>
@@ -830,6 +838,10 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_StarportTechLab">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_StarportTechReactor">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
     </CBehaviorBuff>

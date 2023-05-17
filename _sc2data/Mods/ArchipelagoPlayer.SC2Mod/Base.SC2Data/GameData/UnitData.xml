@@ -4337,8 +4337,6 @@
         <RepairTime value="50"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
-        <AbilArray Link="AP_FactoryReactorMorph"/>
-        <AbilArray Link="AP_StarportReactorMorph"/>
         <AbilArray Link="AP_ReactorMorph"/>
         <AbilArray Link="AP_MorphToTechReactor"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
@@ -4354,6 +4352,10 @@
         <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
         <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
         <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+        <!-- Addon Steal -->
+        <AddedOnArray UnitLink="Barracks" BehaviorLink="BarracksReactor"/>
+        <AddedOnArray UnitLink="Factory" BehaviorLink="FactoryReactor"/>
+        <AddedOnArray UnitLink="Starport" BehaviorLink="StarportReactor"/>
         <AddOnOffsetX value="2.5"/>
         <AddOnOffsetY value="-0.5"/>
         <ScoreMake value="100"/>
@@ -4409,8 +4411,6 @@
         <AbilArray Link="BuildInProgress"/>
         <AbilArray Link="que5Addon"/>
         <AbilArray Link="AP_TechLabMorph"/>
-        <AbilArray Link="AP_FactoryTechLabMorph"/>
-        <AbilArray Link="AP_StarportTechLabMorph"/>
         <AbilArray Link="AP_BarracksTechLabResearch"/>
         <AbilArray Link="AP_MercCompoundResearch"/>
         <AbilArray Link="AP_MorphToTechReactor"/>
@@ -4428,6 +4428,10 @@
         <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechLab"/>
         <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechLab"/>
         <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechLab"/>
+        <!-- Addon Steal -->
+        <AddedOnArray UnitLink="Barracks" BehaviorLink="BarracksTechLab"/>
+        <AddedOnArray UnitLink="Factory" BehaviorLink="FactoryTechLab"/>
+        <AddedOnArray UnitLink="Starport" BehaviorLink="StarportTechLab"/>
         <AddOnOffsetX value="2.5"/>
         <AddOnOffsetY value="-0.5"/>
         <ScoreMake value="75"/>
@@ -4489,8 +4493,6 @@
         <AbilArray Link="BuildInProgress"/>
         <AbilArray Link="que5Addon"/>
         <AbilArray Link="AP_TechReactorMorph"/>
-        <AbilArray Link="AP_FactoryTechReactorMorph"/>
-        <AbilArray Link="AP_StarportTechReactorMorph"/>
         <AbilArray Link="AP_BarracksTechLabResearch"/>
         <AbilArray Link="AP_MercCompoundResearch"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
@@ -4565,8 +4567,6 @@
         <RepairTime value="50"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
-        <AbilArray Link="AP_BarracksReactorMorph"/>
-        <AbilArray Link="AP_StarportReactorMorph"/>
         <AbilArray Link="AP_ReactorMorph"/>
         <AbilArray Link="AP_MorphToTechReactor"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
@@ -4582,6 +4582,10 @@
         <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
         <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
         <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+        <!-- Addon Steal -->
+        <AddedOnArray UnitLink="Barracks" BehaviorLink="BarracksReactor"/>
+        <AddedOnArray UnitLink="Factory" BehaviorLink="FactoryReactor"/>
+        <AddedOnArray UnitLink="Starport" BehaviorLink="StarportReactor"/>
         <AddOnOffsetX value="2.5"/>
         <AddOnOffsetY value="-0.5"/>
         <ScoreMake value="100"/>
@@ -4636,9 +4640,7 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
         <AbilArray Link="que5Addon"/>
-        <AbilArray Link="AP_BarracksTechLabMorph"/>
         <AbilArray Link="AP_TechLabMorph"/>
-        <AbilArray Link="AP_StarportTechLabMorph"/>
         <AbilArray Link="AP_FactoryTechLabResearch"/>
         <AbilArray Link="AP_MorphToTechReactor"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
@@ -4655,6 +4657,10 @@
         <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechLab"/>
         <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechLab"/>
         <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechLab"/>
+        <!-- Addon Steal -->
+        <AddedOnArray UnitLink="Barracks" BehaviorLink="BarracksTechLab"/>
+        <AddedOnArray UnitLink="Factory" BehaviorLink="FactoryTechLab"/>
+        <AddedOnArray UnitLink="Starport" BehaviorLink="StarportTechLab"/>
         <AddOnOffsetX value="2.5"/>
         <AddOnOffsetY value="-0.5"/>
         <ScoreMake value="75"/>
@@ -4715,9 +4721,7 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
         <AbilArray Link="que5Addon"/>
-        <AbilArray Link="AP_BarracksTechReactorMorph"/>
         <AbilArray Link="AP_TechReactorMorph"/>
-        <AbilArray Link="AP_StarportTechReactorMorph"/>
         <AbilArray Link="AP_FactoryTechLabResearch"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
         <BehaviorArray Link="AP_FireSuppressionSystem"/>
@@ -4790,8 +4794,6 @@
         <RepairTime value="50"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
-        <AbilArray Link="AP_BarracksReactorMorph"/>
-        <AbilArray Link="AP_FactoryReactorMorph"/>
         <AbilArray Link="AP_ReactorMorph"/>
         <AbilArray Link="AP_MorphToTechReactor"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
@@ -4807,6 +4809,10 @@
         <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
         <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
         <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+        <!-- Addon Steal -->
+        <AddedOnArray UnitLink="Barracks" BehaviorLink="BarracksReactor"/>
+        <AddedOnArray UnitLink="Factory" BehaviorLink="FactoryReactor"/>
+        <AddedOnArray UnitLink="Starport" BehaviorLink="StarportReactor"/>
         <AddOnOffsetX value="2.5"/>
         <AddOnOffsetY value="-0.5"/>
         <ScoreMake value="100"/>
@@ -4862,8 +4868,6 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
         <AbilArray Link="que5Addon"/>
-        <AbilArray Link="AP_BarracksTechLabMorph"/>
-        <AbilArray Link="AP_FactoryTechLabMorph"/>
         <AbilArray Link="AP_TechLabMorph"/>
         <AbilArray Link="AP_StarportTechLabResearch"/>
         <AbilArray Link="AP_MorphToTechReactor"/>
@@ -4881,6 +4885,10 @@
         <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechLab"/>
         <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechLab"/>
         <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechLab"/>
+        <!-- Addon Steal -->
+        <AddedOnArray UnitLink="Barracks" BehaviorLink="BarracksTechLab"/>
+        <AddedOnArray UnitLink="Factory" BehaviorLink="FactoryTechLab"/>
+        <AddedOnArray UnitLink="Starport" BehaviorLink="StarportTechLab"/>
         <AddOnOffsetX value="2.5"/>
         <AddOnOffsetY value="-0.5"/>
         <ScoreMake value="75"/>
@@ -4941,8 +4949,6 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
         <AbilArray Link="que5Addon"/>
-        <AbilArray Link="AP_BarracksTechReactorMorph"/>
-        <AbilArray Link="AP_FactoryTechReactorMorph"/>
         <AbilArray Link="AP_TechReactorMorph"/>
         <AbilArray Link="AP_StarportTechLabResearch"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
@@ -5017,13 +5023,6 @@
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
         <AbilArray Link="que5Addon"/>
-        <AbilArray Link="AP_BarracksTechLabMorph"/>
-        <AbilArray Link="AP_FactoryTechLabMorph"/>
-        <AbilArray Link="AP_StarportTechLabMorph"/>
-        <!-- Addon Steal -->
-        <AbilArray Link="BarracksTechLabMorph"/>
-        <AbilArray Link="FactoryTechLabMorph"/>
-        <AbilArray Link="StarportTechLabMorph"/>
         <AbilArray Link="AP_MorphToTechReactor"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
         <BehaviorArray Link="AP_FireSuppressionSystem"/>
@@ -5176,10 +5175,6 @@
         <AbilArray Link="AP_FactoryReactorMorph"/>
         <AbilArray Link="AP_StarportReactorMorph"/>
         <AbilArray Link="AP_MorphToTechReactor"/>
-        <!-- Addon Steal -->
-        <AbilArray Link="BarracksReactorMorph"/>
-        <AbilArray Link="FactoryReactorMorph"/>
-        <AbilArray Link="StarportReactorMorph"/>
         <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
         <BehaviorArray Link="AP_FireSuppressionSystem"/>
         <BehaviorArray Link="AP_MorphToTechReactor"/>
@@ -6505,9 +6500,6 @@
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->
-        <AbilArray Link="AP_BarracksReactorMorph"/>
-        <AbilArray Link="AP_FactoryReactorMorph"/>
-        <AbilArray Link="AP_StarportReactorMorph"/>
         <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
         <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
         <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
@@ -6851,12 +6843,9 @@
     <CUnit id="TechLab">
         <!-- Override -->
         <!-- Add-on stealing -->
-        <AbilArray Link="AP_BarracksTechLabMorph"/>
-        <AbilArray Link="AP_FactoryTechLabMorph"/>
-        <AbilArray Link="AP_StarportTechLabMorph"/>
-        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksReactor"/>
-        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryReactor"/>
-        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportReactor"/>
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechLab"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechLab"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechLab"/>
     </CUnit>
     <!-- Tech Reactor Add-on stealing code belongs to Liberty Campaign mod -->
     <!-- -->
