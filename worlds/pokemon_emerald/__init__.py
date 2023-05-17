@@ -600,10 +600,10 @@ class PokemonEmeraldWorld(World):
                     })
 
                     new_moves = (
-                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
-                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
-                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
-                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool)
+                        random.choice(tm_hm_movepool if random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
+                        random.choice(tm_hm_movepool if random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
+                        random.choice(tm_hm_movepool if random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
+                        random.choice(tm_hm_movepool if random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool)
                     )
 
                     new_party.append(TrainerPokemonData(new_species.species_id, pokemon.level, new_moves))
