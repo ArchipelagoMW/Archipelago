@@ -134,10 +134,10 @@ class KH2Context(CommonContext):
         self.AbilityQuantityDict = {item: self.item_name_to_data[item].quantity for item in self.all_abilities}
         #  Growth:[level 1,level 4,slot]
         self.growth_values_dict = {"High Jump":    [0x05E, 0x061, 0x25DA],
-                                   "Quick Run":    [0x62, 0x65,   0x25DC],
+                                   "Quick Run":    [0x62, 0x65, 0x25DC],
                                    "Dodge Roll":   [0x234, 0x237, 0x25DE],
                                    "Aerial Dodge": [0x066, 0x069, 0x25E0],
-                                   "Glide":        [0x6A, 0x6D,   0x25E2]}
+                                   "Glide":        [0x6A, 0x6D, 0x25E2]}
         self.boost_to_anchor_dict = {
             "Power Boost":   0x24F9,
             "Magic Boost":   0x24FA,
@@ -271,6 +271,25 @@ class KH2Context(CommonContext):
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
+            if start_index == 0:
+                # resetting everything that were sent from the server
+                self.kh2seedsave["SoraInvo"][0] = 0x25D8
+                self.kh2seedsave["DonaldInvo"][0] = 0x26F4
+                self.kh2seedsave["GoofyInvo"][0] = 0x280A
+                self.kh2seedsave["itemIndex"] = - 1
+                self.kh2seedsave["AmountInvo"]["ServerItems"] = {
+                    "Ability":      {},
+                    "Amount":       {},
+                    "Growth":       {"High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
+                                     "Aerial Dodge": 0,
+                                     "Glide":        0},
+                    "Bitmask":      [],
+                    "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
+                    "Equipment":    [],
+                    "Magic":        {},
+                    "StatIncrease": {},
+                    "Boost":        {},
+                }
             if start_index > self.kh2seedsave["itemIndex"]:
                 self.kh2seedsave["itemIndex"] = start_index
                 for item in args['items']:
@@ -295,7 +314,6 @@ class KH2Context(CommonContext):
                             and (int.from_bytes(
                             self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
                             "big") & 0x1 << data.bitIndex) > 0:
-
                         self.sending = self.sending + [(int(locationId))]
         except Exception as e:
             logger.info("Line 285")
@@ -342,7 +360,6 @@ class KH2Context(CommonContext):
                 if locationId not in self.locations_checked:
                     if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
                                       "big") > 0:
-
                         self.sending = self.sending + [(int(locationId))]
 
             for location, data in formSlots.items():
@@ -350,7 +367,7 @@ class KH2Context(CommonContext):
                 if locationId not in self.locations_checked:
                     if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + data.addrObtained, 1),
                                       "big") & 0x1 << data.bitIndex > 0:
-                        #self.locations_checked
+                        # self.locations_checked
                         self.sending = self.sending + [(int(locationId))]
 
         except Exception as e:
@@ -416,8 +433,7 @@ class KH2Context(CommonContext):
                 if len(self.kh2seedsave["AmountInvo"][ItemType]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
                     if itemname in self.sora_ability_set:
-                        self.kh2seedsave["AmountInvo"][ItemType]["Ability"][itemname].append(
-                                self.kh2seedsave["SoraInvo"][abilityInvoType])
+                        self.kh2seedsave["AmountInvo"][ItemType]["Ability"][itemname].append(self.kh2seedsave["SoraInvo"][abilityInvoType])
                         self.kh2seedsave["SoraInvo"][abilityInvoType] -= TwilightZone
                     elif itemname in self.donald_ability_set:
                         self.kh2seedsave["AmountInvo"][ItemType]["Ability"][itemname].append(
@@ -628,11 +644,14 @@ class KH2Context(CommonContext):
                     current = self.kh2.read_short(self.kh2.base_address + self.Save + slot)
                     ability = current & 0x0FFF
                     if ability | 0x8000 != (0x8000 + itemData.memaddr):
-                        self.kh2.write_short(self.kh2.base_address + self.Save + slot, itemData.memaddr)
+                        if current - 0x8000 > 0:
+                            self.kh2.write_short(self.kh2.base_address + self.Save + slot, (0x8000 + itemData.memaddr))
+                        else:
+                            self.kh2.write_short(self.kh2.base_address + self.Save + slot, itemData.memaddr)
             # removes the duped ability if client gave faster than the game.
             for charInvo in {"SoraInvo", "DonaldInvo", "GoofyInvo"}:
-                if self.kh2.read_short(self.kh2.base_address + self.Save + self.kh2seedsave[charInvo][1]) != 0 and\
-                        self.kh2seedsave[charInvo][1]+2 < self.kh2seedsave[charInvo][0]:
+                if self.kh2.read_short(self.kh2.base_address + self.Save + self.kh2seedsave[charInvo][1]) != 0 and \
+                        self.kh2seedsave[charInvo][1] + 2 < self.kh2seedsave[charInvo][0]:
                     self.kh2.write_short(self.kh2.base_address + self.Save + self.kh2seedsave[charInvo][1], 0)
             # remove the dummy level 1 growths if they are in these invo slots.
             for inventorySlot in {0x25CE, 0x25D0, 0x25D2, 0x25D4, 0x25D6, 0x25D8}:
@@ -717,7 +736,9 @@ class KH2Context(CommonContext):
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                   "big") != amountOfItems \
                         and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Slot1 + 0x1B2, 1),
-                                           "big") >= 5 and 0x130293 in self.locations_checked:
+                                           "big") >= 5 and int.from_bytes(
+                        self.kh2.read_bytes(self.kh2.base_address + self.Save + 0x23DF, 1),
+                        "big") > 0:
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                          amountOfItems.to_bytes(1, 'big'), 1)
 
@@ -738,7 +759,8 @@ class KH2Context(CommonContext):
                 if itemName == "AP Boost":
                     amountOfUsedBoosts -= 50
                 totalBoosts = (amountOfBoostsInInvo + amountOfUsedBoosts)
-                if totalBoosts <= amountOfItems - self.kh2seedsave["SoldBoosts"][itemName] and amountOfBoostsInInvo < 255:
+                if totalBoosts <= amountOfItems - self.kh2seedsave["SoldBoosts"][
+                    itemName] and amountOfBoostsInInvo < 255:
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                          (amountOfBoostsInInvo + 1).to_bytes(1, 'big'), 1)
 
