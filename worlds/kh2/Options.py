@@ -107,9 +107,40 @@ class Visitlocking(Choice):
     First and Second Visit Locking: One item for First Visit Two For Second Visit"""
     display_name = "Visit locking"
     option_no_visit_locking = 0  # starts with 25 visit locking
-    option_second_visit_locking = 1  # starts with 13 (no icecream/picture)
+    option_second_visit_locking = 1  # starts with 12 visit locking
     option_first_and_second_visit_locking = 2  # starts with nothing
     default = 2
+
+
+class FightLogic(Choice):
+    """Placeholder text"""
+    display_name = "Fight Logic"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_none = 3
+    default = 1
+
+
+class FinalFormLogic(Choice):
+    """Determines form logic
+
+    No Light and Darkness: Light and Darkness is not in logic.
+    Light And Darkness: Final Forcing with light and darkness is in logic.
+    Just a Form: All that requires final forcing is another form.
+    """
+    display_name = "Final Form Logic"
+    option_no_light_and_darkness = 0
+    option_light_and_darkness = 1
+    option_just_a_form = 2
+    default = 2
+
+
+class AutoFormLogic(Toggle):
+    """ Have Auto Forms levels in logic.
+    """
+    display_name = "Auto Form Logic"
+    default = False
 
 
 class RandomVisitLockingItem(Range):
@@ -264,6 +295,9 @@ KH2_Options: typing.Dict[str, type(Option)] = {
     "BountyRequired":         BountyRequired,
     "Keyblade_Minimum":       KeybladeMin,
     "Keyblade_Maximum":       KeybladeMax,
+    "FightLogic":             FightLogic,
+    "FinalFormLogic":         FinalFormLogic,
+    "AutoFormLogic":          AutoFormLogic,
     "Visitlocking":           Visitlocking,
     "RandomVisitLockingItem": RandomVisitLockingItem,
     "SuperBosses":            SuperBosses,

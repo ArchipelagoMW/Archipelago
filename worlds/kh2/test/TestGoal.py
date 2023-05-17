@@ -28,3 +28,12 @@ class TestHitList(KH2TestBase):
     def testEverything(self):
         self.collect_all_but([ItemName.Bounty])
         self.assertBeatable(True)
+
+
+#class TestLuckyEmblemHitlist(KH2TestBase):
+#    options = {
+#        "Goal": 3,
+#    }
+#    def testEverything(self):
+#        self.collect_all_but([ItemName.Bounty,ItemName.LuckyEmblem])
+#        self.assertBeatable(True)

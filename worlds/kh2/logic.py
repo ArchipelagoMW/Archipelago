@@ -3,57 +3,9 @@ from ..AutoWorld import LogicMixin
 
 
 class KH2Logic(LogicMixin):
-    def kh_lod_unlocked(self, player, amount):
-        return self.has(ItemName.SwordoftheAncestor, player, amount)
 
-    def kh_oc_unlocked(self, player, amount):
-        return self.has(ItemName.BattlefieldsofWar, player, amount)
 
-    def kh_twtnw_unlocked(self, player, amount):
-        return self.has(ItemName.WaytotheDawn, player, amount)
 
-    def kh_ht_unlocked(self, player, amount):
-        return self.has(ItemName.BoneFist, player, amount)
-
-    def kh_tt_unlocked(self, player, amount):
-        return self.has(ItemName.IceCream, player, amount)
-
-    def kh_pr_unlocked(self, player, amount):
-        return self.has(ItemName.SkillandCrossbones, player, amount)
-
-    def kh_sp_unlocked(self, player, amount):
-        return self.has(ItemName.IdentityDisk, player, amount)
-
-    def kh_stt_unlocked(self, player: int, amount):
-        return self.has(ItemName.NamineSketches, player, amount)
-
-    # Using Dummy 13 for this
-    def kh_dc_unlocked(self, player: int, amount):
-        return self.has(ItemName.CastleKey, player, amount)
-
-    def kh_hb_unlocked(self, player, amount):
-        return self.has(ItemName.MembershipCard, player, amount)
-
-    def kh_pl_unlocked(self, player, amount):
-        return self.has(ItemName.ProudFang, player, amount)
-
-    def kh_ag_unlocked(self, player, amount):
-        return self.has(ItemName.Scimitar, player, amount)
-
-    def kh_bc_unlocked(self, player, amount):
-        return self.has(ItemName.BeastsClaw, player, amount)
-
-    def kh_amount_of_forms(self, player, amount, requiredform="None"):
-        level = 0
-        formList = [ItemName.ValorForm, ItemName.WisdomForm, ItemName.LimitForm, ItemName.MasterForm,
-                    ItemName.FinalForm]
-        #  required form is in the logic for region connections
-        if requiredform != "None":
-            formList.remove(requiredform)
-        for form in formList:
-            if self.has(form, player):
-                level += 1
-        return level >= amount
 
     def kh_visit_locking_amount(self, player, amount):
         visit = 0

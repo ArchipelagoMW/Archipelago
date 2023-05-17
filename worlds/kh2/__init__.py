@@ -11,7 +11,6 @@ from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
 from .logic import KH2Logic
 
-
 class KingdomHearts2Web(WebWorld):
     tutorials = [Tutorial(
             "Multiworld Setup Guide",
@@ -155,7 +154,6 @@ class KH2World(World):
         # Dictionary to mark locations with their plandoed item
         # Example. Final Xemnas: Victory
         self.plando_locations = dict()
-        self.hitlist = []
         self.starting_invo_verify()
         # Option to turn off Promise Charm Item
         if not self.multiworld.Promise_Charm[self.player]:
@@ -170,6 +168,7 @@ class KH2World(World):
 
         # hitlist
         elif self.multiworld.Goal[self.player] == "hitlist":
+            self.hitlist = []
             self.RandomSuperBoss.extend(exclusion_table["Hitlist"])
             self.BountiesAmount = self.multiworld.BountyAmount[self.player].value
             self.BountiesRequired = self.multiworld.BountyRequired[self.player].value
@@ -192,14 +191,13 @@ class KH2World(World):
         else:
             self.plando_locations[LocationName.FinalXemnas] = self.create_filler().name
 
-        # same item placed because you can only get one of these 2 locations
-        # they are both under the same flag so the player gets both locations just one of the two items
-        random_stt_item = self.create_filler().name
-        for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
-            self.plando_locations[location] = random_stt_item
+        # By imitating remote this doesn't have to be plandoded filler anymore
+        #  random_stt_item = self.create_filler().name
+        #  for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
+        #    self.plando_locations[location] = random_stt_item
         self.level_subtraction()
-        # subtraction from final xemnas and stt
-        self.totalLocations -= 3
+        # subtraction from final xemnas
+        self.totalLocations -= 2
 
     def pre_fill(self):
         for location, item in self.plando_locations.items():
@@ -212,7 +210,20 @@ class KH2World(World):
         connect_regions(self.multiworld, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        logic = Rules.KH2Rules(self)
+        formLogic=Rules.KH2FormRules(self)
+        logic.set_kh2_rules()
+        formLogic.set_kh2_form_rules()
+        #logic = self.multiworld.logic_level[self.player]
+        # if logic == Logic.option_normal:
+        #    Rules.MessengerRules(self).set_messenger_rules()
+        # elif logic == Logic.option_hard:
+        #    Rules.MessengerHardRules(self).set_messenger_rules()
+        # elif logic == Logic.option_challenging:
+        #    Rules.MessengerChallengeRules(self).set_messenger_rules()
+        # else:
+        #    Rules.MessengerOOBRules(self).set_messenger_rules()
+        #set_rules(self.multiworld, self.player)
 
     def generate_output(self, output_directory: str):
         patch_kh2(self, output_directory)

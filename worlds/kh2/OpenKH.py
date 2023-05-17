@@ -82,7 +82,7 @@ def patch_kh2(self, output_directory):
     elif self.multiworld.LevelDepth[self.player] == "level_99":
         levelsetting.extend(exclusion_table["Level99"])
 
-    elif self.multiworld.LevelDepth[self.player] != "level_1":
+    elif self.multiworld.LevelDepth[self.player]!= "level_1":
         levelsetting.extend(exclusion_table["Level50Sanity"])
 
         if self.multiworld.LevelDepth[self.player] == "level_99_sanity":
