@@ -273,7 +273,7 @@ class StardewValleyWorld(World):
         instance_mod_versions = {}
         for mod in mod_versions:
             if mod in self.options[options.Mods]:
-                instance_mod_versions[mod] = mod_versions.get(mod)
+                instance_mod_versions[mod] = mod_versions[mod]
 
         excluded_options = [options.BundleRandomization, options.BundlePrice,
                             options.NumberOfPlayerBuffs, options.Mods]
