@@ -971,9 +971,88 @@
     paintings:
       - id: garden_painting_tower
         orientation: north
-  The Fearless:
+  The Fearless (First Floor):
     entrances:
       The Perceptive: True
+    panels:
+      NAPS:
+        id: Naps Room/Panel_naps_span
+        colors: black
+      TEAM:
+        id: Naps Room/Panel_team_meet
+        colors: black
+      TEEM:
+        id: Naps Room/Panel_teem_meat
+        colors: black
+      IMPATIENT:
+        id: Naps Room/Panel_impatient_doctor
+        colors: black
+      EAT:
+        id: Naps Room/Panel_eat_tea
+        colors: black
+    doors:
+      Second Floor:
+        id: Naps Room Doors/Door_hider_5
+        location_name: The Fearless - First Floor Puzzles
+        group: Fearless Doors
+        panels:
+          - NAPS
+          - TEAM
+          - TEEM
+          - IMPATIENT
+          - EAT
+    progression:
+      Progressive Fearless:
+        - Second Floor
+        - room: The Fearless (Second Floor)
+          door: Third Floor
+  The Fearless (Second Floor):
+    entrances:
+      The Fearless (First Floor):
+        room: The Fearless (First Floor)
+        door: Second Floor
+    panels:
+      NONE:
+        id: Naps Room/Panel_one_many
+        colors: black
+      SUM:
+        id: Naps Room/Panel_one_none
+        colors: black
+      FUNNY:
+        id: Naps Room/Panel_funny_enough
+        colors: black
+      MIGHT:
+        id: Naps Room/Panel_might_time
+        colors: black
+      SAFE:
+        id: Naps Room/Panel_safe_face
+        colors: black
+      SAME:
+        id: Naps Room/Panel_same_mace
+        colors: black
+      CAME:
+        id: Naps Room/Panel_came_make
+        colors: black
+    doors:
+      Third Floor:
+        id:
+          - Naps Room Doors/Door_hider_1b2
+          - Naps Room Doors/Door_hider_new1
+        location_name: The Fearless - Second Floor Puzzles
+        group: Fearless Doors
+        panels:
+          - NONE
+          - SUM
+          - FUNNY
+          - MIGHT
+          - SAFE
+          - SAME
+          - CAME
+  The Fearless:
+    entrances:
+      The Fearless (First Floor):
+        room: The Fearless (Second Floor)
+        door: Third Floor
     panels:
       Achievement:
         id: Countdown Panels/Panel_fearless_fearless
