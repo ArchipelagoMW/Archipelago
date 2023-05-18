@@ -37,7 +37,7 @@ def set_rules(world, player):
         "Vermilion Gym - Lt. Surge 2": lambda state: state.pokemon_rb_can_cut(player or state.pokemon_rb_can_surf(player)),
         "Route 11 - Oak's Aide": lambda state: state.pokemon_rb_oaks_aide(state.multiworld.oaks_aide_rt_11[player].value + 5, player),
         "Celadon City - Stranded Man": lambda state: state.pokemon_rb_can_surf(player),
-        "Silph Co 11F - Silph Co President (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 11F - Silph Co President (Card Key)": lambda state: state.has("Card Key", player),
         "Fuchsia City - Safari Zone Warden": lambda state: state.has("Gold Teeth", player)
             or location_item_name(state, "Fuchsia City - Safari Zone Warden", player) == ("Gold Teeth", player),
         "Route 12 - Island Item": lambda state: state.pokemon_rb_can_surf(player),
@@ -48,14 +48,14 @@ def set_rules(world, player):
         "Fuchsia City - Warden's House Item": lambda state: state.pokemon_rb_can_strength(player),
         "Rocket Hideout B4F - Southwest Item (Lift Key)": lambda state: state.has("Lift Key", player),
         "Rocket Hideout B4F - Giovanni Item (Lift Key)": lambda state: state.has("Lift Key", player),
-        "Silph Co 3F - Item (Card Key)": lambda state: state.has("Card Key", player),
-        "Silph Co 4F - Left Item (Card Key)": lambda state: state.has("Card Key", player),
-        "Silph Co 4F - Middle Item (Card Key)": lambda state: state.has("Card Key", player),
-        "Silph Co 4F - Right Item (Card Key)": lambda state: state.has("Card Key", player),
-        "Silph Co 5F - Northwest Item (Card Key)": lambda state: state.has("Card Key", player),
-        "Silph Co 6F - West Item (Card Key)": lambda state: state.has("Card Key", player),
-        "Silph Co 6F - Southwest Item (Card Key)": lambda state: state.has("Card Key", player),
-        "Silph Co 7F - East Item (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 3F - Item (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 4F - Left Item (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 4F - Middle Item (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 4F - Right Item (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 5F - Northwest Item (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 6F - West Item (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 6F - Southwest Item (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 7F - East Item (Card Key)": lambda state: state.has("Card Key", player),
         "Safari Zone Center - Island Item": lambda state: state.pokemon_rb_can_surf(player),
         "Celadon Prize Corner - Item Prize 1": lambda state: state.has("Coin Case", player),
         "Celadon Prize Corner - Item Prize 2": lambda state: state.has("Coin Case", player),
@@ -75,7 +75,7 @@ def set_rules(world, player):
         "Celadon Game Corner - Hidden Item at End of Horizontal Machine Row (Coin Case)": lambda state: state.has("Coin Case", player) and state.pokemon_rb_can_get_hidden_items(player),
         "Celadon Game Corner - Hidden Item in Front of Horizontal Machine Row (Coin Case)": lambda state: state.has("Coin Case", player) and state.pokemon_rb_can_get_hidden_items(player),
 
-        "Silph Co 11F - Silph Co Liberated": lambda state: state.has("Card Key", player),
+        # "Silph Co 11F - Silph Co Liberated": lambda state: state.has("Card Key", player),
 
         "Pallet Town - Super Rod Pokemon - 1": lambda state: state.has("Super Rod", player),
         "Pallet Town - Super Rod Pokemon - 2": lambda state: state.has("Super Rod", player),
@@ -142,9 +142,9 @@ def set_rules(world, player):
 
         # trainers
         "Route 15 - Jr. Trainer F 1": lambda state: state.pokemon_rb_can_cut(player),
-        "Silph Co 11F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
-        "Silph Co 9F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
-        "Silph Co 3F - Scientist (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 11F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 9F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
+        # "Silph Co 3F - Scientist (Card Key)": lambda state: state.has("Card Key", player),
         "Route 10 North - Pokemaniac": lambda state: state.pokemon_rb_can_surf(player),
         "Rocket Hideout B1F - Rocket 5 (Lift Key)": lambda state: state.has("Lift Key", player),
         "Rocket Hideout B4F - Rocket 2 (Lift Key)": lambda state: state.has("Lift Key", player),
@@ -177,8 +177,8 @@ def set_rules(world, player):
         "Safari Zone West - Hidden Item Secret House Statue": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Silph Co 5F - Hidden Item Pot Plant": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Silph Co 9F - Hidden Item Nurse Bed (Card Key)": lambda state: state.pokemon_rb_can_get_hidden_items(
-            player) and state.has("Card Key", player),
+        # "Silph Co 9F - Hidden Item Nurse Bed (Card Key)": lambda state: state.pokemon_rb_can_get_hidden_items(
+        #     player) and state.has("Card Key", player),
         "Copycat's House - Hidden Item Desk": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Cerulean Cave 1F - Hidden Item Center Rocks": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Cerulean Cave B1F - Hidden Item Northeast Rocks": lambda state: state.pokemon_rb_can_get_hidden_items(player),

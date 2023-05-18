@@ -699,49 +699,49 @@ def generate_output(self, output_directory: str):
     #                 data[address] = entrance["to"]["id"]
     #             data[address + 1] = map_ids[entrance["to"]["map"]]
 
-    entrances = []
-    interior_ent = 0
-    exterior_ent = 0
-    for region in warp_data:
-        if (not (region.startswith("Route") or region.endswith("City") or region.endswith("Town") or region.endswith("Island") or "City-" in region)) or "Gate" in region or "Center" in region or "House" in region:
-            interior_ent += len(warp_data[region])
-            continue
-        exterior_ent += len(warp_data[region])
-        for entrance in warp_data[region]:
-            entrance["region"] = region
-        entrances += warp_data[region]
-    print(exterior_ent)
-    print(interior_ent)
-    random.shuffle(entrances)
-    for i in range(0, len(entrances), 1):
-        # if i+1 > len(entrances) - 1:
-        #     break
-        if i+1 == len(entrances):
-            pair = [entrances[i], entrances[0]]
-        else:
-            pair = [entrances[i], entrances[i+1]]
-        for entrance in pair:
-            if isinstance(entrance["id"], int):
-                entrance["id"] = (entrance["id"],)
-            if isinstance(entrance["to"]["id"], int):
-                entrance["to"]["id"] = (entrance["to"]["id"],)
-        # pairs = [pair, [pair[1], pair[0]]]
-        # for pair in pairs:
-        for i, id in enumerate(pair[0]["id"]):
-            if "Elevator" in pair[1]["address"]:
-                id2 = 0
-            else:
-                i_2 = i
-                while i_2 > len(pair[1]["id"]) - 1:
-                    i_2 -= len(pair[1]["id"])
-                id2 = pair[1]["id"][i_2]
-            address = rom_addresses[pair[0]["address"]]
-            if "Elevator" in pair[0]["address"]:
-                address += (2 * id)
-            else:
-                address += (4 * id)
-            data[address] = id2
-            data[address + 1] = map_ids[pair[1]["region"].split("-")[0]]
+    # entrances = []
+    # interior_ent = 0
+    # exterior_ent = 0
+    # for region in warp_data:
+    #     if (not (region.startswith("Route") or region.endswith("City") or region.endswith("Town") or region.endswith("Island") or "City-" in region)) or "Gate" in region or "Center" in region or "House" in region:
+    #         interior_ent += len(warp_data[region])
+    #         continue
+    #     exterior_ent += len(warp_data[region])
+    #     for entrance in warp_data[region]:
+    #         entrance["region"] = region
+    #     entrances += warp_data[region]
+    # print(exterior_ent)
+    # print(interior_ent)
+    # random.shuffle(entrances)
+    # for i in range(0, len(entrances), 1):
+    #     # if i+1 > len(entrances) - 1:
+    #     #     break
+    #     if i+1 == len(entrances):
+    #         pair = [entrances[i], entrances[0]]
+    #     else:
+    #         pair = [entrances[i], entrances[i+1]]
+    #     for entrance in pair:
+    #         if isinstance(entrance["id"], int):
+    #             entrance["id"] = (entrance["id"],)
+    #         if isinstance(entrance["to"]["id"], int):
+    #             entrance["to"]["id"] = (entrance["to"]["id"],)
+    #     # pairs = [pair, [pair[1], pair[0]]]
+    #     # for pair in pairs:
+    #     for i, id in enumerate(pair[0]["id"]):
+    #         if "Elevator" in pair[1]["address"]:
+    #             id2 = 0
+    #         else:
+    #             i_2 = i
+    #             while i_2 > len(pair[1]["id"]) - 1:
+    #                 i_2 -= len(pair[1]["id"])
+    #             id2 = pair[1]["id"][i_2]
+    #         address = rom_addresses[pair[0]["address"]]
+    #         if "Elevator" in pair[0]["address"]:
+    #             address += (2 * id)
+    #         else:
+    #             address += (4 * id)
+    #         data[address] = id2
+    #         data[address + 1] = map_ids[pair[1]["region"].split("-")[0]]
 
 
     self.finished_level_scaling.wait()
@@ -961,19 +961,6 @@ def generate_output(self, output_directory: str):
 
     TM_IDs = bytearray([poke_data.moves[move]["id"] for move in self.local_tms])
     write_bytes(data, TM_IDs, rom_addresses["TM_Moves"])
-
-
-    # REMOVE WHEN DONE WITH ENTRANCE SHUFFLE
-    existing_warps = []
-    from .regions import connecting_interior_warps
-    for c in connecting_interior_warps:
-        for i in range(2, 4):
-            for w in c[i]:
-                existing_warps.append(w)
-    for a in rom_addresses:
-        if a.startswith("Warp_"):
-            if a not in existing_warps:
-                print(f"{a}: {data[rom_addresses[a] + 2:rom_addresses[a] + 4]}")
 
 
     if self.multiworld.randomize_rock_tunnel[self.player]:
