@@ -84,3 +84,6 @@ class PokemonLogic(LogicMixin):
         # ensures higher level Pokémon are obtainable before Fighting Dojo is in logic
         return (self.pokemon_rb_can_pass_guards(player) or self.has("Oak's Parcel", player) or
                 self.pokemon_rb_can_surf(player))
+
+    def pokemon_rb_card_key(self, floor, player):
+        return self.has(f"Card Key {floor}F", player) or self.has("Card Key", player)
