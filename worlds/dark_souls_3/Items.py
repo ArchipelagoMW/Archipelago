@@ -1,381 +1,605 @@
-import sys
+from enum import Enum
+from typing import NamedTuple
 
 from BaseClasses import Item
-from worlds.dark_souls_3.data.items_data import item_tables, dlc_shields_table, dlc_weapons_upgrade_10_table, \
-    dlc_weapons_upgrade_5_table, dlc_goods_table, dlc_spells_table, dlc_armor_table, dlc_ring_table, dlc_misc_table, dlc_goods_2_table, \
-    weapons_upgrade_5_table, weapons_upgrade_10_table, shields_table, armor_table, rings_table, spells_table, items_for_misc_location_list, \
-    items_for_dlc_misc_location_list, items_for_npc_location_list
+
+
+class DS3ItemCategory(Enum):
+    WEAPON_UPGRADE_5 = 0
+    WEAPON_UPGRADE_10 = 1
+    SHIELD = 2
+    ARMOR = 3
+    RING = 4
+    SPELL = 5
+    MISC = 6
+    KEY = 7
+    SKIP = 8
+
+
+class DS3ItemData(NamedTuple):
+    name: str
+    ds3_code: int
+    is_dlc: bool
+    category: DS3ItemCategory
 
 
 class DarkSouls3Item(Item):
     game: str = "Dark Souls III"
 
-    dlc_set = {**dlc_shields_table, **dlc_weapons_upgrade_10_table, **dlc_weapons_upgrade_5_table,
-               **dlc_goods_table, **dlc_spells_table, **dlc_armor_table, **dlc_ring_table, **dlc_misc_table}
-
-    dlc_progressive = {**dlc_goods_2_table}
-
-    weapon_item = ("Irithyll Straight Sword", 
-                   "Chaos Blade", 
-                   "Dragonrider Bow", 
-                   "White Hair Talisman", 
-                   "Izalith Staff", 
-                   "Fume Ultra Greatsword", 
-                   "Black Knight Sword", 
-                   "Yorshka's Spear", 
-                   "Smough's Great Hammer", 
-                   "Dragonslayer Greatbow", 
-                   "Golden Ritual Spear", 
-                   "Eleonora", 
-                   "Witch's Locks", 
-                   "Crystal Chime", 
-                   "Black Knight Glaive", 
-                   "Dragonslayer Spear", 
-                   "Caitha's Chime", 
-                   "Sunlight Straight Sword", 
-                   "Firelink Greatsword",
-                   "Hollowslayer Greatsword",
-                   "Arstor's Spear",
-                   "Vordt's Great Hammer",
-                   "Crystal Sage's Rapier",
-                   "Farron Greatsword",
-                   "Wolf Knight's Greatsword",
-                   "Dancer's Enchanted Swords",
-                   "Wolnir's Holy Sword",
-                   "Demon's Greataxe",
-                   "Demon's Fist",
-                   "Old King's Great Hammer",
-                   "Greatsword of Judgment",
-                   "Profaned Greatsword",
-                   "Yhorm's Great Machete",
-                   "Cleric's Candlestick",
-                   "Dragonslayer Greataxe",
-                   "Moonlight Greatsword",
-                   "Gundyr's Halberd", 
-                   "Lothric's Holy Sword", 
-                   "Lorian's Greatsword", 
-                   "Twin Princes' Greatsword", 
-                   "Storm Curved Sword", 
-                   "Dragonslayer Swordspear", 
-                   "Sage's Crystal Staff", 
-                   "Irithyll Rapier", 
-                   "Dragon Tooth",  #NEW
-                   "Deep Battle Axe", 
-                   "Club", 
-                   "Astora's Straight Sword", 
-                   "Lucerne", 
-                   "Reinforced Club", 
-                   "Caestus", 
-                   "Partizan", 
-                   "Red Hilted Halberd", 
-                   "Saint's Talisman", 
-                   "Large Club", 
-                   "Brigand Twindaggers", 
-                   "Butcher Knife", 
-                   "Brigand Axe", 
-                   "Heretic's Staff", 
-                   "Great Club", 
-                   "Exile Greatsword", 
-                   "Sellsword Twinblades", 
-                   "Notched Whip", 
-                   "Astora Greatsword", 
-                   "Executioner's Greatsword", 
-                   "Saint-tree Bellvine", 
-                   "Saint Bident", 
-                   "Drang Hammers", 
-                   "Arbalest", 
-                   "Sunlight Talisman", 
-                   "Greatsword", 
-                   "Black Bow of Pharis", 
-                   "Great Axe", 
-                   "Black Blade", 
-                   "Blacksmith Hammer", 
-                   "Witchtree Branch", 
-                   "Painting Guardian's Curved Sword", 
-                   "Court Sorcerer's Staff", 
-                   "Avelyn", 
-                   "Onikiri and Ubadachi", 
-                   "Ricard's Rapier", 
-                   "Drakeblood Greatsword", 
-                   "Greatlance", 
-                   "Claw", 
-                   "Drang Twinspears", 
-                   "Gotthard Twinswords"  # On Black Hand Gotthard corpse | NEW
-                   )
-    
-    dlc_weapon_item = {**dlc_weapons_upgrade_10_table, **dlc_weapons_upgrade_5_table}
-
-    shield_item = {**shields_table}
-
-    dlc_shield_item = {**dlc_shields_table}
-
-    armor_item = ("Fire Keeper Robe", 
-                  "Fire Keeper Gloves", 
-                  "Fire Keeper Skirt", 
-                  "Deserter Trousers",
-                  "Cleric Hat", 
-                  "Cleric Blue Robe", 
-                  "Cleric Gloves", 
-                  "Cleric Trousers", 
-                  "Northern Helm", 
-                  "Northern Armor", 
-                  "Northern Gloves", 
-                  "Northern Trousers", 
-                  "Loincloth", 
-                  "Brigand Hood", 
-                  "Brigand Armor", 
-                  "Brigand Gauntlets", 
-                  "Brigand Trousers", 
-                  "Sorcerer Hood", 
-                  "Sorcerer Robe", 
-                  "Sorcerer Gloves", 
-                  "Sorcerer Trousers", 
-                  "Fallen Knight Helm", 
-                  "Fallen Knight Armor", 
-                  "Fallen Knight Gauntlets", 
-                  "Fallen Knight Trousers", 
-                  "Conjurator Hood", 
-                  "Conjurator Robe", 
-                  "Conjurator Manchettes", 
-                  "Conjurator Boots", 
-                  "Sellsword Helm", 
-                  "Sellsword Armor", 
-                  "Sellsword Gauntlet", 
-                  "Sellsword Trousers", 
-                  "Herald Helm", 
-                  "Herald Armor", 
-                  "Herald Gloves", 
-                  "Herald Trousers", 
-                  "Maiden Hood", 
-                  "Maiden Robe", 
-                  "Maiden Gloves", 
-                  "Maiden Skirt", 
-                  "Drang Armor", 
-                  "Drang Gauntlets", 
-                  "Drang Shoes", 
-                  "Archdeacon White Crown", 
-                  "Archdeacon Holy Garb", 
-                  "Archdeacon Skirt", 
-                  "Antiquated Dress", 
-                  "Antiquated Gloves", 
-                  "Antiquated Skirt", 
-                  "Ragged Mask", 
-                  "Crown of Dusk", 
-                  "Pharis's Hat", 
-                  "Old Sage's Blindfold", 
-                  "Painting Guardian Hood", 
-                  "Painting Guardian Gown", 
-                  "Painting Guardian Gloves", 
-                  "Painting Guardian Waistcloth", 
-                  "Brass Helm", 
-                  "Brass Armor", 
-                  "Brass Gauntlets", 
-                  "Brass Leggings", 
-                  "Old Sorcerer Hat", 
-                  "Old Sorcerer Coat", 
-                  "Old Sorcerer Gauntlets", 
-                  "Old Sorcerer Boots", 
-                  "Court Sorcerer Hood", 
-                  "Court Sorcerer Robe", 
-                  "Court Sorcerer Gloves", 
-                  "Court Sorcerer Trousers", 
-                  "Dragonslayer Helm", 
-                  "Dragonslayer Armor", 
-                  "Dragonslayer Gauntlets", 
-                  "Dragonslayer Leggings", 
-                  "Hood of Prayer", 
-                  "Robe of Prayer", 
-                  "Skirt of Prayer", 
-                  "Winged Knight Helm", 
-                  "Winged Knight Armor", 
-                  "Winged Knight Gauntlets", 
-                  "Winged Knight Leggings", 
-                  "Shadow Mask", 
-                  "Shadow Garb", 
-                  "Shadow Gauntlets", 
-                  "Shadow Leggings", 
-                  "Outrider Knight Helm", 
-                  "Outrider Knight Armor", 
-                  "Outrider Knight Gauntlets", 
-                  "Outrider Knight Leggings", 
-                  "Nameless Knight Helm",  #NEW
-                  "Nameless Knight Armor",  #NEW
-                  "Nameless Knight Gauntlets",
-                  "Nameless Knight Leggings"
-                  )
-
-    dlc_armor_item = {**dlc_armor_table}
-
-    ring_item = ("Estus Ring",  # !
-                 "Covetous Silver Serpent Ring",  # !
-                 "Fire Clutch Ring",  # !
-                 "Flame Stoneplate Ring",  # !
-                 "Flynn's Ring",  # !
-                 "Chloranthy Ring",  # !
-                 "Morne's Ring",  # !
-                 "Sage Ring",  # !
-                 "Aldrich's Sapphire",  # !
-                 "Lloyd's Sword Ring",  # !
-                 "Poisonbite Ring",  # !
-                 "Deep Ring",  # !
-                 "Lingering Dragoncrest Ring",  # !
-                 "Carthus Milkring",  # !
-                 "Witch's Ring",  # !
-                 "Carthus Bloodring",  # !
-                 "Speckled Stoneplate Ring",  # !
-                 "Magic Clutch Ring",  # !
-                 "Ring of the Sun's First Born",  # !
-                 "Pontiff's Right Eye",  # !
-                 "Leo Ring",  # !
-                 "Dark Stoneplate Ring",  # !
-                 "Reversal Ring",  # !
-                 "Ring of Favor",  # !
-                 "Bellowing Dragoncrest Ring",  # !
-                 "Covetous Gold Serpent Ring",  # !
-                 "Dusk Crown Ring",  # !
-                 "Dark Clutch Ring",  # !
-                 "Cursebite Ring",  # !
-                 "Sun Princess Ring",  # !
-                 "Aldrich's Ruby",  # !
-                 "Scholar Ring",  # !
-                 "Fleshbite Ring",  # !
-                 "Hunter's Ring",  # !
-                 "Ashen Estus Ring",  # !
-                 "Hornet Ring",  # !
-                 "Lightning Clutch Ring",  # !
-                 "Ring of Steel Protection",  # !
-                 "Calamity Ring",  # !
-                 "Thunder Stoneplate Ring",  # !
-                 "Knight's Ring",  # !
-                 "Red Tearstone Ring",  # !
-                 "Dragonscale Ring",  # !
-                 "Knight Slayer's Ring",  # !
-                 "Magic Stoneplate Ring",  # !
-                 "Bloodbite Ring",  # ! NEW
-                 "Hawk Ring",  # ! NEW
-                 "Great Swamp Ring"  # ! NEW
-                 )
-
-    dlc_ring_item = {**dlc_ring_table}
-
-    spell_item = {**spells_table}
-
-    dlc_spell_item = {**dlc_spells_table}
-
-    misc_item = ("Braille Divine Tome of Carim",
-                 "Great Swamp Pyromancy Tome",
-                 "Farron Coal",
-                 "Paladin's Ashes",
-                 "Deep Braille Divine Tome",
-                 "Golden Scroll",
-                 "Sage's Coal",
-                 "Sage's Scroll",
-                 "Dreamchaser's Ashes",
-                 "Carthus Pyromancy Tome",
-                 "Grave Warden's Ashes",
-                 "Grave Warden Pyromancy Tome",
-                 "Quelana Pyromancy Tome",
-                 "Izalith Pyromancy Tome",
-                 "Excrement-covered Ashes",
-                 "Easterner's Ashes",
-                 "Dragon Torso Stone",
-                 "Profaned Coal",
-                 "Xanthous Ashes",
-                 "Logan's Scroll",
-                 "Giant's Coal",
-                 "Coiled Sword Fragment",
-                 "Dragon Chaser's Ashes",
-                 "Twinkling Dragon Torso Stone",
-                 "Braille Divine Tome of Lothric",
-                 "Fire Gem"
-                 )
-
-    dlc_misc_item = ("Captains Ashes")
-
-    npc_item = ("Greirat's Ashes",
-                "Blue Tearstone Ring",
-                "Irina's Ashes",
-                "Karla's Ashes",
-                "Karla's Pointed Hat",
-                "Karla's Coat",
-                "Karla's Gloves",
-                "Karla's Trousers",
-                "Cornyx's Ashes",
-                "Pyromancy Flame",
-                "Cornyx's Wrap",
-                "Cornyx's Garb",
-                "Cornyx's Skirt",
-                "Orbeck's Ashes")
-
     @staticmethod
     def get_name_to_id() -> dict:
         base_id = 100000
-        table_offset = 100
+        return {item_data.name: id for id, item_data in enumerate(_all_items, base_id)}
 
-        output = {}
-        for i, table in enumerate(item_tables):
-            if len(table) > table_offset:
-                raise Exception("An item table has {} entries, that is more than {} entries (table #{})".format(len(table), table_offset, i))
-            output.update({name: id for id, name in enumerate(table, base_id + (table_offset * i))})
 
-        return output
-    
-    @staticmethod
-    def is_dlc_item(name) -> bool:
-        return name in DarkSouls3Item.dlc_set
+key_item_names = {
+    "Small Lothric Banner",
+    "Basin of Vows",
+    "Small Doll",
+    "Storm Ruler",
+    "Grand Archives Key",
+    "Cinders of a Lord - Abyss Watcher",
+    "Cinders of a Lord - Yhorm the Giant",
+    "Cinders of a Lord - Aldrich",
+    "Cinders of a Lord - Lothric Prince",
+    "Mortician's Ashes",
+    "Cell Key",
+    "Tower Key",
+    "Jailbreaker's Key",
+    "Prisoner Chief's Ashes",
+    "Old Cell Key",
+    "Jailer's Key Ring",
+    "Contraption Key",
+    "Small Envoy Banner"
+}
 
-    @staticmethod
-    def is_dlc_progressive(name) -> bool:
-        return name in DarkSouls3Item.dlc_progressive
 
-    @staticmethod
-    def is_weapon_item(name) -> bool:
-        return name in DarkSouls3Item.weapon_item
-    
-    @staticmethod
-    def is_dlc_weapon_item(name) -> bool:
-        return name in DarkSouls3Item.dlc_weapon_item
-   
-    @staticmethod
-    def is_shield_item(name) -> bool:
-        return name in DarkSouls3Item.shield_item
-    
-    @staticmethod
-    def is_dlc_shield_item(name) -> bool:
-        return name in DarkSouls3Item.dlc_shield_item
-    
-    @staticmethod
-    def is_armor_item(name) -> bool:
-        return name in DarkSouls3Item.armor_item
-    
-    @staticmethod
-    def is_dlc_armor_item(name) -> bool:
-        return name in DarkSouls3Item.dlc_armor_item
-    
-    @staticmethod
-    def is_ring_item(name) -> bool:
-        return name in DarkSouls3Item.ring_item
-    
-    @staticmethod
-    def is_dlc_ring_item(name) -> bool:
-        return name in DarkSouls3Item.dlc_ring_item
-    
-    @staticmethod
-    def is_spell_item(name) -> bool:
-        return name in DarkSouls3Item.spell_item
-    
-    @staticmethod
-    def is_dlc_spell_item(name) -> bool:
-        return name in DarkSouls3Item.dlc_spell_item
-    
-    @staticmethod
-    def is_misc_item(name) -> bool:
-        return name in DarkSouls3Item.misc_item
-    
-    @staticmethod
-    def is_dlc_misc_item(name) -> bool:
-        return name in DarkSouls3Item.dlc_misc_item
-    
-    @staticmethod
-    def is_npc_item(name) -> bool:
-        return name in DarkSouls3Item.npc_item
+_vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
+    ("Broadsword",                          0x001ED2A0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Broken Straight Sword",               0x001EF9B0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Sunlight Straight Sword",             0x00203230, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Irithyll Straight Sword",             0x0020A760, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Cleric's Candlestick",                0x0020F580, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Astora's Straight Sword",             0x002191C0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Executioner's Greatsword",            0x0021DFE0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Mail Breaker",                        0x002DEDD0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Rapier",                              0x002E14E0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Ricard's Rapier",                     0x002E3BF0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Crystal Sage's Rapier",               0x002E6300, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Irithyll Rapier",                     0x002E8A10, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Storm Curved Sword",                  0x003E4180, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Painting Guardian's Curved Sword",    0x003E6890, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Uchigatana",                          0x004C4B40, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Chaos Blade",                         0x004C9960, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Black Blade",                         0x004CC070, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Claymore",                            0x005BDBA0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Greatsword",                          0x005C50D0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Astora Greatsword",                   0x005C9EF0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Exile Greatsword",                    0x005DD770, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Greatsword of Judgment",              0x005E2590, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Profaned Greatsword",                 0x005E4CA0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Farron Greatsword",                   0x005E9AC0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Yhorm's Great Machete",               0x005F0FF0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Black Knight Sword",                  0x005F5E10, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Lorian's Greatsword",                 0x005F8520, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Twin Princes' Greatsword",            0x005FAC30, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Lothric's Holy Sword",                0x005FD340, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Wolnir's Holy Sword",                 0x005FFA50, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Wolf Knight's Greatsword",            0x00602160, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Hollowslayer Greatsword",             0x00604870, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Moonlight Greatsword",                0x00606F80, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Drakeblood Greatsword",               0x00609690, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Firelink Greatsword",                 0x0060BDA0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Fume Ultra Greatsword",               0x0060E4B0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Storm Ruler",                         0x006132D0, DS3ItemCategory.KEY),
+    ("Deep Battle Axe",                     0x006AFA54, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Hand Axe",                            0x006ACFC0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Brigand Axe",                         0x006B1DE0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Great Axe",                           0x006B9310, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Butcher Knife",                       0x006BE130, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Dragonslayer Greataxe",               0x006C7D70, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Demon's Greataxe",                    0x006CA480, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Eleonora",                            0x006CCB90, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Club",                                0x007A1200, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Reinforced Club",                     0x007A8730, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Large Club",                          0x007AFC60, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Great Club",                          0x007B4A80, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Vordt's Great Hammer",                0x007CD120, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Old King's Great Hammer",             0x007CF830, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Pickaxe",                             0x007DE290, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Dragon Tooth",                        0x007E09A0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Smough's Great Hammer",               0x007E30B0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Blacksmith Hammer",                   0x007E57C0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Partizan",                            0x0089C970, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Greatlance",                          0x008A8CC0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Dragonslayer Swordspear",             0x008BC540, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Arstor's Spear",                      0x008BEC50, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Saint Bident",                        0x008C1360, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Yorshka's Spear",                     0x008C3A70, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Dragonslayer Spear",                  0x008CAFA0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Great Scythe",                        0x00989680, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Lucerne",                             0x0098BD90, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Gundyr's Halberd",                    0x009A1D20, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Red Hilted Halberd",                  0x009AB960, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Black Knight Glaive",                 0x009AE070, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Claw",                                0x00A7D8C0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Caestus",                             0x00A7FFD0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Demon's Fist",                        0x00A84DF0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Whip",                                0x00B71B00, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Witch's Locks",                       0x00B7B740, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Notched Whip",                        0x00B7DE50, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Golden Ritual Spear",                 0x00C83200, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Sage's Crystal Staff",                0x00C8CE40, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Heretic's Staff",                     0x00C8F550, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Court Sorcerer's Staff",              0x00C91C60, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Witchtree Branch",                    0x00C94370, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Izalith Staff",                       0x00C96A80, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Saint-tree Bellvine",                 0x00C9DFB0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Caitha's Chime",                      0x00CA06C0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Crystal Chime",                       0x00CA2DD0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Sunlight Talisman",                   0x00CA54E0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Saint's Talisman",                    0x00CACA10, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("White Hair Talisman",                 0x00CAF120, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Pyromancy Flame",                     0x00CC77C0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Dragonslayer Greatbow",               0x00CF8500, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Arbalest",                            0x00D662D0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Longbow",                             0x00D689E0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Dragonrider Bow",                     0x00D6B0F0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Avelyn",                              0x00D6FF10, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Black Bow of Pharis",                 0x00D7E970, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Sniper Crossbow",                     0x00D83790, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Sellsword Twinblades",                0x00F42400, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Dancer's Enchanted Swords",           0x00F4C040, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Brigand Twindaggers",                 0x00F50E60, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Gotthard Twinswords",                 0x00F53570, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Onikiri and Ubadachi",                0x00F58390, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Drang Twinspears",                    0x00F5AAA0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Drang Hammers",                       0x00F61FD0, DS3ItemCategory.WEAPON_UPGRADE_10),
+
+    ("Small Leather Shield",                0x01315410, DS3ItemCategory.SHIELD),
+    ("Havel's Greatshield",                 0x013376F0, DS3ItemCategory.SHIELD),
+    ("Caduceus Round Shield",               0x01341330, DS3ItemCategory.SHIELD),
+    ("Blessed Red and White Shield",        0x01343FB9, DS3ItemCategory.SHIELD),
+    ("Plank Shield",                        0x01346150, DS3ItemCategory.SHIELD),
+    ("Golden Falcon Shield",                0x01354BB0, DS3ItemCategory.SHIELD),
+    ("Sacred Bloom Shield",                 0x013572C0, DS3ItemCategory.SHIELD),
+    ("Ancient Dragon Greatshield",          0x013599D0, DS3ItemCategory.SHIELD),
+    ("East-West Shield",                    0x0142B930, DS3ItemCategory.SHIELD),
+    ("Crest Shield",                        0x01430750, DS3ItemCategory.SHIELD),
+    ("Dragon Crest Shield",                 0x01432E60, DS3ItemCategory.SHIELD),
+    ("Spider Shield",                       0x01435570, DS3ItemCategory.SHIELD),
+    ("Grass Crest Shield",                  0x01437C80, DS3ItemCategory.SHIELD),
+    ("Golden Wing Crest Shield",            0x0143CAA0, DS3ItemCategory.SHIELD),
+    ("Blue Wooden Shield",                  0x0143F1B0, DS3ItemCategory.SHIELD),
+    ("Silver Eagle Kite Shield",            0x014418C0, DS3ItemCategory.SHIELD),
+    ("Stone Parma",                         0x01443FD0, DS3ItemCategory.SHIELD),
+    ("Spirit Tree Crest Shield",            0x014466E0, DS3ItemCategory.SHIELD),
+    ("Shield of Want",                      0x0144B500, DS3ItemCategory.SHIELD),
+    ("Wargod Wooden Shield",                0x0144DC10, DS3ItemCategory.SHIELD),
+    ("Black Iron Greatshield",              0x0150EA00, DS3ItemCategory.SHIELD),
+    ("Twin Dragon Greatshield",             0x01513820, DS3ItemCategory.SHIELD),
+    ("Greatshield of Glory",                0x01515F30, DS3ItemCategory.SHIELD),
+    ("Curse Ward Greatshield",              0x01518640, DS3ItemCategory.SHIELD),
+
+    ("Fallen Knight Helm",                  0x1121EAC0, DS3ItemCategory.ARMOR),
+    ("Fallen Knight Armor",                 0x1121EEA8, DS3ItemCategory.ARMOR),
+    ("Fallen Knight Gauntlets",             0x1121F290, DS3ItemCategory.ARMOR),
+    ("Fallen Knight Trousers",              0x1121F678, DS3ItemCategory.ARMOR),
+    ("Sellsword Helm",                      0x11481060, DS3ItemCategory.ARMOR),
+    ("Sellsword Armor",                     0x11481448, DS3ItemCategory.ARMOR),
+    ("Sellsword Gauntlet",                  0x11481830, DS3ItemCategory.ARMOR),
+    ("Sellsword Trousers",                  0x11481C18, DS3ItemCategory.ARMOR),
+    ("Herald Helm",                         0x114FB180, DS3ItemCategory.ARMOR),
+    ("Herald Armor",                        0x114FB568, DS3ItemCategory.ARMOR),
+    ("Herald Gloves",                       0x114FB950, DS3ItemCategory.ARMOR),
+    ("Herald Trousers",                     0x114FBD38, DS3ItemCategory.ARMOR),
+    ("Northern Helm",                       0x116E3600, DS3ItemCategory.ARMOR),
+    ("Northern Armor",                      0x116E39E8, DS3ItemCategory.ARMOR),
+    ("Northern Gloves",                     0x116E3DD0, DS3ItemCategory.ARMOR),
+    ("Northern Trousers",                   0x116E41B8, DS3ItemCategory.ARMOR),
+    ("Old Sage's Blindfold",                0x11945BA0, DS3ItemCategory.ARMOR),
+    ("Cornyx's Garb",                       0x11945F88, DS3ItemCategory.ARMOR),
+    ("Cornyx's Wrap",                       0x11946370, DS3ItemCategory.ARMOR),
+    ("Cornyx's Skirt",                      0x11946758, DS3ItemCategory.ARMOR),
+    ("Court Sorcerer Hood",                 0x11BA8140, DS3ItemCategory.ARMOR),
+    ("Court Sorcerer Robe",                 0x11BA8528, DS3ItemCategory.ARMOR),
+    ("Court Sorcerer Gloves",               0x11BA8910, DS3ItemCategory.ARMOR),
+    ("Court Sorcerer Trousers",             0x11BA8CF8, DS3ItemCategory.ARMOR),
+    ("Sorcerer Hood",                       0x11C9C380, DS3ItemCategory.ARMOR),
+    ("Sorcerer Robe",                       0x11C9C768, DS3ItemCategory.ARMOR),
+    ("Sorcerer Gloves",                     0x11C9CB50, DS3ItemCategory.ARMOR),
+    ("Sorcerer Trousers",                   0x11C9CF38, DS3ItemCategory.ARMOR),
+    ("Cleric Hat",                          0x11D905C0, DS3ItemCategory.ARMOR),
+    ("Cleric Blue Robe",                    0x11D909A8, DS3ItemCategory.ARMOR),
+    ("Cleric Gloves",                       0x11D90D90, DS3ItemCategory.ARMOR),
+    ("Cleric Trousers",                     0x11D91178, DS3ItemCategory.ARMOR),
+    ("Deserter Trousers",                   0x126265B8, DS3ItemCategory.ARMOR),
+    ("Winged Knight Helm",                  0x12EBAE40, DS3ItemCategory.ARMOR),
+    ("Winged Knight Armor",                 0x12EBB228, DS3ItemCategory.ARMOR),
+    ("Winged Knight Gauntlets",             0x12EBB610, DS3ItemCategory.ARMOR),
+    ("Winged Knight Leggings",              0x12EBB9F8, DS3ItemCategory.ARMOR),
+    ("Outrider Knight Helm",                0x1328B740, DS3ItemCategory.ARMOR),
+    ("Outrider Knight Armor",               0x1328BB28, DS3ItemCategory.ARMOR),
+    ("Outrider Knight Gauntlets",           0x1328BF10, DS3ItemCategory.ARMOR),
+    ("Outrider Knight Leggings",            0x1328C2F8, DS3ItemCategory.ARMOR),
+    ("Hood of Prayer",                      0x13AA6A60, DS3ItemCategory.ARMOR),
+    ("Robe of Prayer",                      0x13AA6E48, DS3ItemCategory.ARMOR),
+    ("Skirt of Prayer",                     0x13AA7618, DS3ItemCategory.ARMOR),
+    ("Archdeacon White Crown",              0x13EF1480, DS3ItemCategory.ARMOR),
+    ("Archdeacon Holy Garb",                0x13EF1868, DS3ItemCategory.ARMOR),
+    ("Archdeacon Skirt",                    0x13EF2038, DS3ItemCategory.ARMOR),
+    ("Fire Keeper Robe",                    0x140D9CE8, DS3ItemCategory.ARMOR),
+    ("Fire Keeper Gloves",                  0x140DA0D0, DS3ItemCategory.ARMOR),
+    ("Fire Keeper Skirt",                   0x140DA4B8, DS3ItemCategory.ARMOR),
+    ("Nameless Knight Helm",                0x143B5FC0, DS3ItemCategory.ARMOR),
+    ("Nameless Knight Armor",               0x143B63A8, DS3ItemCategory.ARMOR),
+    ("Nameless Knight Gauntlets",           0x143B6790, DS3ItemCategory.ARMOR),
+    ("Nameless Knight Leggings",            0x143B6B78, DS3ItemCategory.ARMOR),
+    ("Brigand Hood",                        0x148009E0, DS3ItemCategory.ARMOR),
+    ("Brigand Armor",                       0x14800DC8, DS3ItemCategory.ARMOR),
+    ("Brigand Gauntlets",                   0x148011B0, DS3ItemCategory.ARMOR),
+    ("Brigand Trousers",                    0x14801598, DS3ItemCategory.ARMOR),
+    ("Pharis's Hat",                        0x1487AB00, DS3ItemCategory.ARMOR),
+    ("Ragged Mask",                         0x148F4C20, DS3ItemCategory.ARMOR),
+    ("Master's Attire",                     0x148F5008, DS3ItemCategory.ARMOR),
+    ("Master's Gloves",                     0x148F53F0, DS3ItemCategory.ARMOR),
+    ("Loincloth",                           0x148F57D8, DS3ItemCategory.ARMOR),
+    ("Old Sorcerer Hat",                    0x1496ED40, DS3ItemCategory.ARMOR),
+    ("Old Sorcerer Coat",                   0x1496F128, DS3ItemCategory.ARMOR),
+    ("Old Sorcerer Gauntlets",              0x1496F510, DS3ItemCategory.ARMOR),
+    ("Old Sorcerer Boots",                  0x1496F8F8, DS3ItemCategory.ARMOR),
+    ("Conjurator Hood",                     0x149E8E60, DS3ItemCategory.ARMOR),
+    ("Conjurator Robe",                     0x149E9248, DS3ItemCategory.ARMOR),
+    ("Conjurator Manchettes",               0x149E9630, DS3ItemCategory.ARMOR),
+    ("Conjurator Boots",                    0x149E9A18, DS3ItemCategory.ARMOR),
+    ("Maiden Hood",                         0x14BD12E0, DS3ItemCategory.ARMOR),
+    ("Maiden Robe",                         0x14BD16C8, DS3ItemCategory.ARMOR),
+    ("Maiden Gloves",                       0x14BD1AB0, DS3ItemCategory.ARMOR),
+    ("Maiden Skirt",                        0x14BD1E98, DS3ItemCategory.ARMOR),
+    ("Shadow Mask",                         0x14D3F640, DS3ItemCategory.ARMOR),
+    ("Shadow Garb",                         0x14D3FA28, DS3ItemCategory.ARMOR),
+    ("Shadow Gauntlets",                    0x14D3FE10, DS3ItemCategory.ARMOR),
+    ("Shadow Leggings",                     0x14D401F8, DS3ItemCategory.ARMOR),
+    ("Brass Helm",                          0x1501BD00, DS3ItemCategory.ARMOR),
+    ("Brass Armor",                         0x1501C0E8, DS3ItemCategory.ARMOR),
+    ("Brass Gauntlets",                     0x1501C4D0, DS3ItemCategory.ARMOR),
+    ("Brass Leggings",                      0x1501C8B8, DS3ItemCategory.ARMOR),
+    ("Mirrah Vest",                         0x15204568, DS3ItemCategory.ARMOR),
+    ("Mirrah Gloves",                       0x15204950, DS3ItemCategory.ARMOR),
+    ("Mirrah Trousers",                     0x15204D38, DS3ItemCategory.ARMOR),
+    ("Drang Armor",                         0x154E0C28, DS3ItemCategory.ARMOR),
+    ("Drang Gauntlets",                     0x154E1010, DS3ItemCategory.ARMOR),
+    ("Drang Shoes",                         0x154E13F8, DS3ItemCategory.ARMOR),
+    ("Painting Guardian Hood",              0x156C8CC0, DS3ItemCategory.ARMOR),
+    ("Painting Guardian Gown",              0x156C90A8, DS3ItemCategory.ARMOR),
+    ("Painting Guardian Gloves",            0x156C9490, DS3ItemCategory.ARMOR),
+    ("Painting Guardian Waistcloth",        0x156C9878, DS3ItemCategory.ARMOR),
+    ("Dragonslayer Helm",                   0x158B1140, DS3ItemCategory.ARMOR),
+    ("Dragonslayer Armor",                  0x158B1528, DS3ItemCategory.ARMOR),
+    ("Dragonslayer Gauntlets",              0x158B1910, DS3ItemCategory.ARMOR),
+    ("Dragonslayer Leggings",               0x158B1CF8, DS3ItemCategory.ARMOR),
+    ("Crown of Dusk",                       0x15D75C80, DS3ItemCategory.ARMOR),
+    ("Antiquated Dress",                    0x15D76068, DS3ItemCategory.ARMOR),
+    ("Antiquated Gloves",                   0x15D76450, DS3ItemCategory.ARMOR),
+    ("Antiquated Skirt",                    0x15D76838, DS3ItemCategory.ARMOR),
+
+    ("Blade of the Darkmoon",               0x20002710, DS3ItemCategory.SKIP),
+    ("Watchdogs of Farron",                 0x20002724, DS3ItemCategory.SKIP),
+    ("Aldrich Faithful",                    0x2000272E, DS3ItemCategory.SKIP),
+    ("Warrior of Sunlight",                 0x20002738, DS3ItemCategory.SKIP),
+    ("Mound-makers",                        0x20002742, DS3ItemCategory.SKIP),
+    ("Way of Blue",                         0x2000274C, DS3ItemCategory.SKIP),
+    ("Blue Sentinels",                      0x20002756, DS3ItemCategory.SKIP),
+    ("Rosaria's Fingers",                   0x20002760, DS3ItemCategory.SKIP),
+
+    ("Chloranthy Ring",                     0x20004E2A, DS3ItemCategory.RING),
+    ("Havel's Ring",                        0x20004E34, DS3ItemCategory.RING),
+    ("Ring of Favor",                       0x20004E3E, DS3ItemCategory.RING),
+    ("Ring of Steel Protection",            0x20004E48, DS3ItemCategory.RING),
+    ("Flame Stoneplate Ring",               0x20004E52, DS3ItemCategory.RING),
+    ("Thunder Stoneplate Ring",             0x20004E5C, DS3ItemCategory.RING),
+    ("Magic Stoneplate Ring",               0x20004E66, DS3ItemCategory.RING),
+    ("Dark Stoneplate Ring",                0x20004E70, DS3ItemCategory.RING),
+    ("Speckled Stoneplate Ring",            0x20004E7A, DS3ItemCategory.RING),
+    ("Bloodbite Ring",                      0x20004E84, DS3ItemCategory.RING),
+    ("Poisonbite Ring",                     0x20004E8E, DS3ItemCategory.RING),
+    ("Cursebite Ring",                      0x20004E98, DS3ItemCategory.RING),
+    ("Fleshbite Ring",                      0x20004EA2, DS3ItemCategory.RING),
+    ("Scholar Ring",                        0x20004EB6, DS3ItemCategory.RING),
+    ("Red Tearstone Ring",                  0x20004ECA, DS3ItemCategory.RING),
+    ("Blue Tearstone Ring",                 0x20004ED4, DS3ItemCategory.RING),
+    ("Leo Ring",                            0x20004EE8, DS3ItemCategory.RING),
+    ("Ring of Sacrifice",                   0x20004EF2, DS3ItemCategory.RING),
+    ("Bellowing Dragoncrest Ring",          0x20004F07, DS3ItemCategory.RING),
+    ("Great Swamp Ring",                    0x20004F10, DS3ItemCategory.RING),
+    ("Witch's Ring",                        0x20004F11, DS3ItemCategory.RING),
+    ("Morne's Ring",                        0x20004F1A, DS3ItemCategory.RING),
+    ("Ring of the Sun's First Born",        0x20004F1B, DS3ItemCategory.RING),
+    ("Lingering Dragoncrest Ring",          0x20004F2E, DS3ItemCategory.RING),
+    ("Sage Ring",                           0x20004F38, DS3ItemCategory.RING),
+    ("Dusk Crown Ring",                     0x20004F4C, DS3ItemCategory.RING),
+    ("Deep Ring",                           0x20004F60, DS3ItemCategory.RING),
+    ("Hawk Ring",                           0x20004F92, DS3ItemCategory.RING),
+    ("Hornet Ring",                         0x20004F9C, DS3ItemCategory.RING),
+    ("Covetous Gold Serpent Ring",          0x20004FA6, DS3ItemCategory.RING),
+    ("Covetous Silver Serpent Ring",        0x20004FB0, DS3ItemCategory.RING),
+    ("Sun Princess Ring",                   0x20004FBA, DS3ItemCategory.RING),
+    ("Carthus Milkring",                    0x20004FE2, DS3ItemCategory.RING),
+    ("Knight's Ring",                       0x20004FEC, DS3ItemCategory.RING),
+    ("Hunter's Ring",                       0x20004FF6, DS3ItemCategory.RING),
+    ("Knight Slayer's Ring",                0x20005000, DS3ItemCategory.RING),
+    ("Magic Clutch Ring",                   0x2000500A, DS3ItemCategory.RING),
+    ("Lightning Clutch Ring",               0x20005014, DS3ItemCategory.RING),
+    ("Fire Clutch Ring",                    0x2000501E, DS3ItemCategory.RING),
+    ("Dark Clutch Ring",                    0x20005028, DS3ItemCategory.RING),
+    ("Flynn's Ring",                        0x2000503C, DS3ItemCategory.RING),
+    ("Calamity Ring",                       0x20005078, DS3ItemCategory.RING),
+    ("Aldrich's Ruby",                      0x2000508C, DS3ItemCategory.RING),
+    ("Aldrich's Sapphire",                  0x20005096, DS3ItemCategory.RING),
+    ("Lloyd's Sword Ring",                  0x200050B4, DS3ItemCategory.RING),
+    ("Estus Ring",                          0x200050DC, DS3ItemCategory.RING),
+    ("Ashen Estus Ring",                    0x200050E6, DS3ItemCategory.RING),
+    ("Carthus Bloodring",                   0x200050FA, DS3ItemCategory.RING),
+    ("Reversal Ring",                       0x20005104, DS3ItemCategory.RING),
+    ("Pontiff's Right Eye",                 0x2000510E, DS3ItemCategory.RING),
+    ("Dragonscale Ring",                    0x2000515E, DS3ItemCategory.RING),
+
+    ("Roster of Knights",                   0x4000006C, DS3ItemCategory.SKIP),
+    ("Green Blossom",                       0x40000104, DS3ItemCategory.MISC),
+    ("Firebomb",                            0x40000124, DS3ItemCategory.MISC),
+    ("Alluring Skull",                      0x40000126, DS3ItemCategory.MISC),
+    ("Undead Hunter Charm",                 0x40000128, DS3ItemCategory.MISC),
+    ("Duel Charm",                          0x40000130, DS3ItemCategory.MISC),
+    ("Throwing Knife",                      0x40000136, DS3ItemCategory.MISC),
+    ("Charcoal Pine Resin",                 0x4000014A, DS3ItemCategory.MISC),
+    ("Gold Pine Resin",                     0x4000014B, DS3ItemCategory.MISC),
+    ("Human Pine Resin",                    0x4000014E, DS3ItemCategory.MISC),
+    ("Carthus Rouge",                       0x4000014F, DS3ItemCategory.MISC),
+    ("Pale Pine Resin",                     0x40000150, DS3ItemCategory.MISC),
+    ("Charcoal Pine Bundle",                0x40000154, DS3ItemCategory.MISC),
+    ("Rotten Pine Resin",                   0x40000157, DS3ItemCategory.MISC),
+    ("Homeward Bone",                       0x4000015E, DS3ItemCategory.MISC),
+    ("Coiled Sword Fragment",               0x4000015F, DS3ItemCategory.MISC),
+    ("Wolf's Blood Swordgrass",             0x4000016E, DS3ItemCategory.MISC),
+    ("Binoculars",                          0x40000173, DS3ItemCategory.MISC),
+    ("Pale Tongue",                         0x40000175, DS3ItemCategory.MISC),
+    ("Dragon Torso Stone",                  0x4000017A, DS3ItemCategory.MISC),
+    ("Twinkling Dragon Torso Stone",        0x40000184, DS3ItemCategory.MISC),
+    ("Fire Keeper Soul",                    0x40000186, DS3ItemCategory.MISC),
+    ("Fading Soul",                         0x40000190, DS3ItemCategory.MISC),
+    ("Soul of a Deserted Corpse",           0x40000191, DS3ItemCategory.MISC),
+    ("Large Soul of a Deserted Corpse",     0x40000192, DS3ItemCategory.MISC),
+    ("Soul of an Unknown Traveler",         0x40000193, DS3ItemCategory.MISC),
+    ("Large Soul of an Unknown Traveler",   0x40000194, DS3ItemCategory.MISC),
+    ("Soul of a Weary Warrior",             0x40000197, DS3ItemCategory.MISC),
+    ("Large Soul of a Weary Warrior",       0x40000198, DS3ItemCategory.MISC),
+    ("Soul of a Crestfallen Knight",        0x40000199, DS3ItemCategory.MISC),
+    ("Large Soul of a Crestfallen Knight",  0x4000019A, DS3ItemCategory.MISC),
+    ("Soul of an Intrepid Hero",            0x4000019D, DS3ItemCategory.MISC),
+    ("Soul of a Venerable Old Hand",        0x400001A2, DS3ItemCategory.MISC),
+    ("Soul of a Champion",                  0x400001A3, DS3ItemCategory.MISC),
+    ("Soul of a Great Champion",            0x400001A4, DS3ItemCategory.MISC),
+    ("Rusted Coin",                         0x400001C7, DS3ItemCategory.MISC),
+    ("Rusted Gold Coin",                    0x400001C9, DS3ItemCategory.MISC),
+    ("Ember",                               0x400001F4, DS3ItemCategory.MISC),
+    ("Soul of Champion Gundyr",             0x400002C8, DS3ItemCategory.MISC),
+    ("Soul of the Dancer",                  0x400002CA, DS3ItemCategory.MISC),
+    ("Soul of a Crystal Sage",              0x400002CB, DS3ItemCategory.MISC),
+    ("Soul of the Blood of the Wolf",       0x400002CD, DS3ItemCategory.MISC),
+    ("Soul of Consumed Oceiros",            0x400002CE, DS3ItemCategory.MISC),
+    ("Soul of Boreal Valley Vordt",         0x400002CF, DS3ItemCategory.MISC),
+    ("Soul of the Old Demon King",          0x400002D0, DS3ItemCategory.MISC),
+    ("Soul of Dragonslayer Armour",         0x400002D1, DS3ItemCategory.MISC),
+    ("Soul of the Nameless King",           0x400002D2, DS3ItemCategory.MISC),
+    ("Soul of Pontiff Sulyvahn",            0x400002D4, DS3ItemCategory.MISC),
+    ("Soul of Aldrich",                     0x400002D5, DS3ItemCategory.MISC),
+    ("Soul of High Lord Wolnir",            0x400002D6, DS3ItemCategory.MISC),
+    ("Soul of the Rotted Greatwood",        0x400002D7, DS3ItemCategory.MISC),
+    ("Soul of the Deacons of the Deep",     0x400002D9, DS3ItemCategory.MISC),
+    ("Soul of the Twin Princes",            0x400002DB, DS3ItemCategory.MISC),
+    ("Soul of Yhorm the Giant",             0x400002DC, DS3ItemCategory.MISC),
+    ("Soul of a Demon",                     0x400002E3, DS3ItemCategory.MISC),
+    ("Soul of a Stray Demon",               0x400002E7, DS3ItemCategory.MISC),
+    ("Titanite Shard",                      0x400003E8, DS3ItemCategory.MISC),
+    ("Large Titanite Shard",                0x400003E9, DS3ItemCategory.MISC),
+    ("Titanite Chunk",                      0x400003EA, DS3ItemCategory.MISC),
+    ("Titanite Slab",                       0x400003EB, DS3ItemCategory.MISC),
+    ("Titanite Scale",                      0x400003FC, DS3ItemCategory.MISC),
+    ("Twinkling Titanite",                  0x40000406, DS3ItemCategory.MISC),
+    ("Small Doll",                          0x400007D5, DS3ItemCategory.KEY),
+    ("Jailbreaker's Key",                   0x400007D7, DS3ItemCategory.KEY),
+    ("Jailer's Key Ring",                   0x400007D8, DS3ItemCategory.KEY),
+    ("Grave Key",                           0x400007D9, DS3ItemCategory.KEY),
+    ("Cell Key",                            0x400007DA, DS3ItemCategory.KEY),
+    ("Old Cell Key",                        0x400007DC, DS3ItemCategory.KEY),
+    ("Grand Archives Key",                  0x400007DE, DS3ItemCategory.KEY),
+    ("Tower Key",                           0x400007DF, DS3ItemCategory.KEY),
+    ("Small Lothric Banner",                0x40000836, DS3ItemCategory.KEY),
+    ("Farron Coal",                         0x40000837, DS3ItemCategory.MISC),
+    ("Sage's Coal",                         0x40000838, DS3ItemCategory.MISC),
+    ("Giant's Coal",                        0x40000839, DS3ItemCategory.MISC),
+    ("Profaned Coal",                       0x4000083A, DS3ItemCategory.MISC),
+    ("Mortician's Ashes",                   0x4000083B, DS3ItemCategory.MISC),
+    ("Dreamchaser's Ashes",                 0x4000083C, DS3ItemCategory.MISC),
+    ("Paladin's Ashes",                     0x4000083D, DS3ItemCategory.MISC),
+    ("Grave Warden's Ashes",                0x4000083E, DS3ItemCategory.MISC),
+    ("Greirat's Ashes",                     0x4000083F, DS3ItemCategory.MISC),
+    ("Orbeck's Ashes",                      0x40000840, DS3ItemCategory.MISC),
+    ("Cornyx's Ashes",                      0x40000841, DS3ItemCategory.MISC),
+    ("Karla's Ashes",                       0x40000842, DS3ItemCategory.MISC),
+    ("Irina's Ashes",                       0x40000843, DS3ItemCategory.MISC),
+    ("Basin of Vows",                       0x40000845, DS3ItemCategory.KEY),
+    ("Loretta's Bone",                      0x40000846, DS3ItemCategory.KEY),
+    ("Braille Divine Tome of Carim",        0x40000847, DS3ItemCategory.MISC),
+    ("Braille Divine Tome of Lothric",      0x40000848, DS3ItemCategory.MISC),
+    ("Cinders of a Lord - Abyss Watcher",   0x4000084B, DS3ItemCategory.KEY),
+    ("Cinders of a Lord - Aldrich",         0x4000084C, DS3ItemCategory.KEY),
+    ("Cinders of a Lord - Yhorm the Giant", 0x4000084D, DS3ItemCategory.KEY),
+    ("Cinders of a Lord - Lothric Prince",  0x4000084E, DS3ItemCategory.KEY),
+    ("Great Swamp Pyromancy Tome",          0x4000084F, DS3ItemCategory.MISC),
+    ("Carthus Pyromancy Tome",              0x40000850, DS3ItemCategory.MISC),
+    ("Izalith Pyromancy Tome",              0x40000851, DS3ItemCategory.MISC),
+    ("Quelana Pyromancy Tome",              0x40000852, DS3ItemCategory.MISC),
+    ("Grave Warden Pyromancy Tome",         0x40000853, DS3ItemCategory.MISC),
+    ("Sage's Scroll",                       0x40000854, DS3ItemCategory.MISC),
+    ("Logan's Scroll",                      0x40000855, DS3ItemCategory.MISC),
+    ("Crystal Scroll",                      0x40000856, DS3ItemCategory.MISC),
+    ("Eyes of a Fire Keeper",               0x4000085A, DS3ItemCategory.KEY),
+    ("Golden Scroll",                       0x4000085C, DS3ItemCategory.MISC),
+    ("Estus Shard",                         0x4000085D, DS3ItemCategory.MISC),
+    ("Undead Bone Shard",                   0x4000085F, DS3ItemCategory.MISC),
+    ("Deep Braille Divine Tome",            0x40000860, DS3ItemCategory.MISC),
+    ("Excrement-covered Ashes",             0x40000862, DS3ItemCategory.MISC),
+    ("Prisoner Chief's Ashes",              0x40000863, DS3ItemCategory.MISC),
+    ("Xanthous Ashes",                      0x40000864, DS3ItemCategory.MISC),
+    ("Dragon Chaser's Ashes",               0x40000867, DS3ItemCategory.MISC),
+    ("Easterner's Ashes",                   0x40000868, DS3ItemCategory.MISC),
+
+    ("Great Magic Weapon",                  0x40140118, DS3ItemCategory.SPELL),
+    ("Great Magic Shield",                  0x40144F38, DS3ItemCategory.SPELL),
+    ("Soul Stream",                         0x4018B820, DS3ItemCategory.SPELL),
+    ("Toxic Mist",                          0x4024F108, DS3ItemCategory.SPELL),
+    ("Iron Flesh",                          0x40251430, DS3ItemCategory.SPELL),
+    ("Power Within",                        0x40253B40, DS3ItemCategory.SPELL),
+    ("Profaned Flame",                      0x402575D8, DS3ItemCategory.SPELL),
+    ("Sacred Flame",                        0x40284880, DS3ItemCategory.SPELL),
+    ("Great Heal",                          0x40356FB0, DS3ItemCategory.SPELL),
+    ("Wrath of the Gods",                   0x4035E0F8, DS3ItemCategory.SPELL),
+    ("Seek Guidance",                       0x40360420, DS3ItemCategory.SPELL),
+    ("Lightning Spear",                     0x40362B30, DS3ItemCategory.SPELL),
+    ("Dorhys' Gnawing",                     0x40363EB8, DS3ItemCategory.SPELL),
+    ("Great Magic Barrier",                 0x40365628, DS3ItemCategory.SPELL),
+    ("Lightning Blade",                     0x4036C770, DS3ItemCategory.SPELL),
+    ("Lightning Stake",                     0x40389C30, DS3ItemCategory.SPELL),
+    ("Divine Pillars of Light",             0x4038C340, DS3ItemCategory.SPELL),
+    ("Atonement",                           0x4039ADA0, DS3ItemCategory.SPELL),
+]]
+
+
+_dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
+    ("Aquamarine Dagger",                0x00116520, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Murky Hand Scythe",                0x00118C30, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Onyx Blade",                       0x00222E00, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Ringed Knight Straight Sword",     0x00225510, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Gael's Greatsword",                0x00227C20, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Follower Sabre",                   0x003EDDC0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Demon's Scar",                     0x003F04D0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Frayed Blade",                     0x004D35A0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Herald Curved Greatsword",         0x006159E0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Millwood Battle Axe",              0x006D67D0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Earth Seeker",                     0x006D8EE0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Quakestone Hammer",                0x007ECCF0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Ledo's Great Hammer",              0x007EF400, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Follower Javelin",                 0x008CD6B0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Ringed Knight Spear",              0x008CFDC0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Lothric War Banner",               0x008D24D0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Crucifix of the Mad King",         0x008D4BE0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Splitleaf Greatsword",             0x009B2E90, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Friede's Great Scythe",            0x009B55A0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Crow Talons",                      0x00A89C10, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Rose of Ariandel",                 0x00B82C70, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Pyromancer's Parting Flame",       0x00CC9ED0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Murky Longstaff",                  0x00CCC5E0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Sacred Chime of Filianore",        0x00CCECF0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Preacher's Right Arm",             0x00CD1400, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("White Birch Bow",                  0x00D77440, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Millwood Greatbow",                0x00D85EA0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Repeating Crossbow",               0x00D885B0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Giant Door Shield",                0x00F5F8C0, DS3ItemCategory.SHIELD),
+    ("Valorheart",                       0x00F646E0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Crow Quills",                      0x00F66DF0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Ringed Knight Paired Greatswords", 0x00F69500, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Follower Shield",                  0x0135C0E0, DS3ItemCategory.SHIELD),
+    ("Dragonhead Shield",                0x0135E7F0, DS3ItemCategory.SHIELD),
+    ("Ethereal Oak Shield",              0x01450320, DS3ItemCategory.SHIELD),
+    ("Dragonhead Greatshield",           0x01452A30, DS3ItemCategory.SHIELD),
+    ("Follower Torch",                   0x015F1AD0, DS3ItemCategory.WEAPON_UPGRADE_10),
+
+    ("Vilhelm's Helm",                   0x11312D00, DS3ItemCategory.ARMOR),
+    ("Vilhelm's Armor",                  0x113130E8, DS3ItemCategory.ARMOR),
+    ("Vilhelm's Gauntlets",              0x113134D0, DS3ItemCategory.ARMOR),
+    ("Vilhelm's Leggings",               0x113138B8, DS3ItemCategory.ARMOR),
+    ("Antiquated Plain Garb",            0x11B2E408, DS3ItemCategory.ARMOR),
+    ("Shira's Crown",                    0x11C22260, DS3ItemCategory.ARMOR),
+    ("Shira's Armor",                    0x11C22648, DS3ItemCategory.ARMOR),
+    ("Shira's Gloves",                   0x11C22A30, DS3ItemCategory.ARMOR),
+    ("Shira's Trousers",                 0x11C22E18, DS3ItemCategory.ARMOR),
+    ("Lapp's Helm",                      0x11E84800, DS3ItemCategory.ARMOR),
+    ("Lapp's Armor",                     0x11E84BE8, DS3ItemCategory.ARMOR),
+    ("Lapp's Gauntlets",                 0x11E84FD0, DS3ItemCategory.ARMOR),
+    ("Lapp's Leggings",                  0x11E853B8, DS3ItemCategory.ARMOR),
+    ("Violet Wrappings",                 0x11B2E7F0, DS3ItemCategory.ARMOR),
+    ("Slave Knight Hood",                0x134EDCE0, DS3ItemCategory.ARMOR),
+    ("Slave Knight Armor",               0x134EE0C8, DS3ItemCategory.ARMOR),
+    ("Slave Knight Gauntlets",           0x134EE4B0, DS3ItemCategory.ARMOR),
+    ("Slave Knight Leggings",            0x134EE898, DS3ItemCategory.ARMOR),
+    ("Ordained Hood",                    0x135E1F20, DS3ItemCategory.ARMOR),
+    ("Ordained Dress",                   0x135E2308, DS3ItemCategory.ARMOR),
+    ("Ordained Trousers",                0x135E2AD8, DS3ItemCategory.ARMOR),
+    ("Follower Helm",                    0x137CA3A0, DS3ItemCategory.ARMOR),
+    ("Follower Armor",                   0x137CA788, DS3ItemCategory.ARMOR),
+    ("Follower Gloves",                  0x137CAB70, DS3ItemCategory.ARMOR),
+    ("Follower Boots",                   0x137CAF58, DS3ItemCategory.ARMOR),
+    ("Millwood Knight Helm",             0x139B2820, DS3ItemCategory.ARMOR),
+    ("Millwood Knight Armor",            0x139B2C08, DS3ItemCategory.ARMOR),
+    ("Millwood Knight Gauntlets",        0x139B2FF0, DS3ItemCategory.ARMOR),
+    ("Millwood Knight Leggings",         0x139B33D8, DS3ItemCategory.ARMOR),
+    ("Ringed Knight Hood",               0x13C8EEE0, DS3ItemCategory.ARMOR),
+    ("Ringed Knight Armor",              0x13C8F2C8, DS3ItemCategory.ARMOR),
+    ("Ringed Knight Gauntlets",          0x13C8F6B0, DS3ItemCategory.ARMOR),
+    ("Ringed Knight Leggings",           0x13C8FA98, DS3ItemCategory.ARMOR),
+    ("Harald Legion Armor",              0x13D83508, DS3ItemCategory.ARMOR),
+    ("Harald Legion Gauntlets",          0x13D838F0, DS3ItemCategory.ARMOR),
+    ("Harald Legion Leggings",           0x13D83CD8, DS3ItemCategory.ARMOR),
+    ("Iron Dragonslayer Helm",           0x1405F7E0, DS3ItemCategory.ARMOR),
+    ("Iron Dragonslayer Armor",          0x1405FBC8, DS3ItemCategory.ARMOR),
+    ("Iron Dragonslayer Gauntlets",      0x1405FFB0, DS3ItemCategory.ARMOR),
+    ("Iron Dragonslayer Leggings",       0x14060398, DS3ItemCategory.ARMOR),
+    ("White Preacher Head",              0x14153A20, DS3ItemCategory.ARMOR),
+    ("Ruin Sentinel Helm",               0x14CC5520, DS3ItemCategory.ARMOR),
+    ("Ruin Sentinel Armor",              0x14CC5908, DS3ItemCategory.ARMOR),
+    ("Ruin Sentinel Gauntlets",          0x14CC5CF0, DS3ItemCategory.ARMOR),
+    ("Ruin Sentinel Leggings",           0x14CC60D8, DS3ItemCategory.ARMOR),
+    ("Desert Pyromancer Hood",           0x14DB9760, DS3ItemCategory.ARMOR),
+    ("Desert Pyromancer Garb",           0x14DB9B48, DS3ItemCategory.ARMOR),
+    ("Desert Pyromancer Gloves",         0x14DB9F30, DS3ItemCategory.ARMOR),
+    ("Desert Pyromancer Skirt",          0x14DBA318, DS3ItemCategory.ARMOR),
+    ("Black Witch Hat",                  0x14EAD9A0, DS3ItemCategory.ARMOR),
+    ("Black Witch Garb",                 0x14EADD88, DS3ItemCategory.ARMOR),
+    ("Black Witch Wrappings",            0x14EAE170, DS3ItemCategory.ARMOR),
+    ("Black Witch Trousers",             0x14EAE558, DS3ItemCategory.ARMOR),
+    ("Black Witch Veil",                 0x14FA1BE0, DS3ItemCategory.ARMOR),
+
+    ("Spear of the Church",              0x2000276A, DS3ItemCategory.SKIP),
+
+    ("Chillbite Ring",                   0x20005208, DS3ItemCategory.RING),
+
+    ("Church Guardian Shiv",             0x4000013B, DS3ItemCategory.MISC),
+    ("Ritual Spear Fragment",            0x4000028A, DS3ItemCategory.MISC),
+
+    ("Soul of Sister Friede",            0x400002E8, DS3ItemCategory.MISC),
+    ("Soul of Slave Knight Gael",        0x400002E9, DS3ItemCategory.MISC),
+    ("Soul of the Demon Prince",         0x400002EA, DS3ItemCategory.MISC),
+    ("Soul of Darkeater Midir",          0x400002EB, DS3ItemCategory.MISC),
+
+    ("Champion's Bones",                 0x40000869, DS3ItemCategory.SKIP),
+    ("Captain's Ashes",                  0x4000086A, DS3ItemCategory.MISC),
+    ("Contraption Key",                  0x4000086B, DS3ItemCategory.KEY),
+    ("Small Envoy Banner",               0x4000086C, DS3ItemCategory.KEY),
+    ("Blood of the Dark Soul",           0x4000086E, DS3ItemCategory.SKIP),
+
+    ("Frozen Weapon",                    0x401408E8, DS3ItemCategory.SPELL),
+    ("Old Moonlight",                    0x4014FF00, DS3ItemCategory.SPELL),
+    ("Great Soul Dregs",                 0x401879A0, DS3ItemCategory.SPELL),
+    ("Snap Freeze",                      0x401A90C8, DS3ItemCategory.SPELL),
+    ("Floating Chaos",                   0x40257DA8, DS3ItemCategory.SPELL),
+    ("Flame Fan",                        0x40258190, DS3ItemCategory.SPELL),
+    ("Seething Chaos",                   0x402896A0, DS3ItemCategory.SPELL),
+    ("Lightning Arrow",                  0x40358B08, DS3ItemCategory.SPELL),
+    ("Way of White Corona",              0x403642A0, DS3ItemCategory.SPELL),
+    ("Projected Heal",                   0x40364688, DS3ItemCategory.SPELL),
+]]
+
+_all_items = _vanilla_items + _dlc_items
+
+item_dictionary = {item_data.name: item_data for item_data in _all_items}

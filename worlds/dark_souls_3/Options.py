@@ -1,6 +1,7 @@
 import typing
 from Options import Toggle, Option, Range, Choice, DeathLink
 
+
 class RandomizeWeaponLocations(Toggle):
     """Adds Weapons & their locations to the pool. (+86 checks/items)"""
     display_name ="Randomize Weapon Locations"
@@ -171,4 +172,3 @@ dark_souls_options: typing.Dict[str, type(Option)] = {
     "enable_progressive_locations": EnableProgressiveLocationsOption,
     "enable_dlc": EnableDLCOption,
 }
-
