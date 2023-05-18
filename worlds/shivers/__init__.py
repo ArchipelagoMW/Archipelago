@@ -1,11 +1,10 @@
 from .Items import item_table, ShiversItem, get_full_item_list
-# from .Options import Shivers_options
 from .Rules import set_rules
-from BaseClasses import Item, Tutorial, Region, Entrance, Location, ItemClassification
+from BaseClasses import Item, Tutorial, Region, Entrance, Location
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from . import Constants
-from .Options import Shivers_options
+from .Options import Shivers_options, get_option_value
 
 client_version = 0
 
@@ -96,15 +95,15 @@ class ShiversWorld(World):
             librarylocation = self.multiworld.random.choice(self.multiworld.get_region("Library", self.player).locations)
         librarylocation.place_locked_item(self.create_item("Crawling"))
 
-        
-
-        self.multiworld.local_early_items[self.player]["Key for Underground Lake Room"] = 1
-
-        # Set Key for Office Elevator to Sphere 1
-        self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
-
-        #Set Key for lobby to sphere 1
-        self.multiworld.early_items[self.player]["Key for Lobby"] = 1
+        #Lobby acess:
+        if get_option_value(self.multiworld, self.player, "lobby_access") == 1:
+            self.multiworld.early_items[self.player]["Key for Underground Lake Room"] = 1
+            self.multiworld.early_items[self.player]["Key for Office Elevator"] = 1
+            self.multiworld.early_items[self.player]["Key for Lobby"] = 1
+        if get_option_value(self.multiworld, self.player, "lobby_access") == 2:
+            self.multiworld.local_early_items[self.player]["Key for Underground Lake Room"] = 1
+            self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
+            self.multiworld.local_early_items[self.player]["Key for Lobby"] = 1
 
         
 
@@ -167,13 +166,13 @@ class ShiversWorld(World):
 
     def _get_slot_data(self):
         return {
-            'storageplacements': self.storage_placements
+            'storageplacements': self.storage_placements,
+            'excludedlocations': {str(excluded_location).replace('ExcludeLocations(', '').replace(')', '') for excluded_location in self.multiworld.exclude_locations.values()}
         }
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
         return slot_data
-
 
 class ShiversLocation(Location):
     game = "Shivers"
