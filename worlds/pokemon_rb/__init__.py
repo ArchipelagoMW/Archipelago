@@ -246,6 +246,15 @@ class PokemonRedBlueWorld(World):
                     item_pool.append(self.create_item(stones.pop()))
                     break
 
+        card_keys = [self.create_item(f"Card Key {i}F") for i in range(3, 12)]
+
+        for item in item_pool:
+            if item.name in self.item_name_groups["Consumables"]:
+                item_pool.remove(item)
+                item_pool.append(card_keys.pop())
+                if not card_keys:
+                    break
+
         self.multiworld.itempool += item_pool
 
     def pre_fill(self) -> None:
