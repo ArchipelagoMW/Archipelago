@@ -4181,6 +4181,167 @@
           - purple
         check: True
         achievement: True
+      HYDROGEN (1):
+        id: Chemistry Room/Panel_blue_bot_3
+        colors: blue
+      OXYGEN:
+        id: Chemistry Room/Panel_blue_bot_2
+        colors: blue
+      HYDROGEN (2):
+        id: Chemistry Room/Panel_blue_bot_4
+        colors: blue
+      SUGAR (1):
+        id: Chemistry Room/Panel_sugar_1
+        colors: red
+      SUGAR (2):
+        id: Chemistry Room/Panel_sugar_2
+        colors: red
+      SUGAR (3):
+        id: Chemistry Room/Panel_sugar_3
+        colors: red
+      CHLORINE:
+        id: Chemistry Room/Panel_blue_bot_5
+        colors: blue
+      SODIUM:
+        id: Chemistry Room/Panel_blue_bot_6
+        colors: blue
+      FOREST:
+        id: Chemistry Room/Panel_long_bot_1
+        colors:
+          - red
+          - blue
+      POUND:
+        id: Chemistry Room/Panel_long_top_1
+        colors:
+          - red
+          - blue
+      ICE:
+        id: Chemistry Room/Panel_brown_bot_1
+        colors: brown
+      FISSION:
+        id: Chemistry Room/Panel_black_bot_1
+        colors: black
+      FUSION:
+        id: Chemistry Room/Panel_black_bot_2
+        colors: black
+      MISS:
+        id: Chemistry Room/Panel_blue_top_1
+        colors: blue
+      TREE (1):
+        id: Chemistry Room/Panel_blue_top_2
+        colors: blue
+      BIOGRAPHY:
+        id: Chemistry Room/Panel_biology_9
+        colors: purple
+      CACTUS:
+        id: Chemistry Room/Panel_biology_4
+        colors: red
+      VERTEBRATE:
+        id: Chemistry Room/Panel_biology_8
+        colors: red
+      ROSE:
+        id: Chemistry Room/Panel_biology_2
+        colors: red
+      TREE (2):
+        id: Chemistry Room/Panel_biology_3
+        colors: red
+      FRUIT:
+        id: Chemistry Room/Panel_biology_1
+        colors: red
+      MAMMAL:
+        id: Chemistry Room/Panel_biology_5
+        colors: red
+      BIRD:
+        id: Chemistry Room/Panel_biology_6
+        colors: red
+      FISH:
+        id: Chemistry Room/Panel_biology_7
+        colors: red
+      GRAVELY:
+        id: Chemistry Room/Panel_physics_9
+        colors: purple
+      BREVITY:
+        id: Chemistry Room/Panel_biology_10
+        colors: purple
+      PART:
+        id: Chemistry Room/Panel_physics_2
+        colors: blue
+      MATTER:
+        id: Chemistry Room/Panel_physics_1
+        colors: red
+      ELECTRIC:
+        id: Chemistry Room/Panel_physics_6
+        colors: purple
+      ATOM (1):
+        id: Chemistry Room/Panel_physics_3
+        colors: red
+      NEUTRAL:
+        id: Chemistry Room/Panel_physics_7
+        colors: purple
+      ATOM (2):
+        id: Chemistry Room/Panel_physics_4
+        colors: red
+      PROPEL:
+        id: Chemistry Room/Panel_physics_8
+        colors: purple
+      ATOM (3):
+        id: Chemistry Room/Panel_physics_5
+        colors: red
+      ORDER:
+        id: Chemistry Room/Panel_physics_11
+        colors: brown
+      OPTICS:
+        id: Chemistry Room/Panel_physics_10
+        colors: yellow
+    doors:
+      Chemistry Puzzles:
+        skip_item: True
+        location_name: The Scientific - Chemistry Puzzles
+        panels:
+          - HYDROGEN (1)
+          - OXYGEN
+          - HYDROGEN (2)
+          - SUGAR (1)
+          - SUGAR (2)
+          - SUGAR (3)
+          - CHLORINE
+          - SODIUM
+          - FOREST
+          - POUND
+          - ICE
+          - FISSION
+          - FUSION
+          - MISS
+          - TREE (1)
+      Biology Puzzles:
+        skip_item: True
+        location_name: The Scientific - Biology Puzzles
+        panels:
+          - BIOGRAPHY
+          - CACTUS
+          - VERTEBRATE
+          - ROSE
+          - TREE (2)
+          - FRUIT
+          - MAMMAL
+          - BIRD
+          - FISH
+      Physics Puzzles:
+        skip_item: True
+        location_name: The Scientific - Physics Puzzles
+        panels:
+          - GRAVELY
+          - BREVITY
+          - PART
+          - MATTER
+          - ELECTRIC
+          - ATOM (1)
+          - NEUTRAL
+          - ATOM (2)
+          - PROPEL
+          - ATOM (3)
+          - ORDER
+          - OPTICS
     paintings:
       - id: hi_solved_painting4
         orientation: south
