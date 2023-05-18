@@ -147,6 +147,16 @@ class ZillionWorld(World):
         self.my_locations = []
 
         self.zz_system.randomizer.place_canister_gun_reqs()
+        # low probability that place_canister_gun_reqs() results in empty 1st sphere
+        # testing code to force low probability event:
+        # for zz_room_name in ["r01c2", "r02c0", "r02c7", "r03c5"]:
+        #     for zz_loc in self.zz_system.randomizer.regions[zz_room_name].locations:
+        #         zz_loc.req.gun = 2
+        if len(self.zz_system.randomizer.get_locations(Req(gun=1, jump=1))) == 0:
+            self.logger.info("Zillion avoided rare empty 1st sphere.")
+            for zz_loc in self.zz_system.randomizer.regions["r03c5"].locations:
+                zz_loc.req.gun = 1
+            assert len(self.zz_system.randomizer.get_locations(Req(gun=1, jump=1))) != 0
 
         start = self.zz_system.randomizer.regions['start']
 

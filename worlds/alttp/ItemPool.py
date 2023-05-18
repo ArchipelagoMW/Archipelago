@@ -2,14 +2,15 @@ from collections import namedtuple
 import logging
 
 from BaseClasses import ItemClassification
-from worlds.alttp.SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
-from worlds.alttp.Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, create_dynamic_shop_locations
-from worlds.alttp.Bosses import place_bosses
-from worlds.alttp.Dungeons import get_dungeon_item_pool_player
-from worlds.alttp.EntranceShuffle import connect_entrance
 from Fill import FillError
-from worlds.alttp.Items import ItemFactory, GetBeemizerItem
-from worlds.alttp.Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, LTTPBosses
+
+from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
+from .Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, create_dynamic_shop_locations
+from .Bosses import place_bosses
+from .Dungeons import get_dungeon_item_pool_player
+from .EntranceShuffle import connect_entrance
+from .Items import ItemFactory, GetBeemizerItem
+from .Options import smallkey_shuffle, compass_shuffle, bigkey_shuffle, map_shuffle, LTTPBosses
 from .StateHelpers import has_triforce_pieces, has_melee_weapon
 
 # This file sets the item pools for various modes. Timed modes and triforce hunt are enforced first, and then extra items are specified per mode to fill in the remaining space.

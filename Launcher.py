@@ -11,6 +11,7 @@ Scroll down to components= to add components to the launcher as well as setup.py
 
 import argparse
 import itertools
+import multiprocessing
 import shlex
 import subprocess
 import sys
@@ -146,7 +147,7 @@ def launch(exe, in_terminal=False):
 
 def run_gui():
     from kvui import App, ContainerLayout, GridLayout, Button, Label
-    from kivy.uix.image import Image
+    from kivy.uix.image import AsyncImage
     from kivy.uix.relativelayout import RelativeLayout
 
     class Launcher(App):
@@ -188,7 +189,8 @@ def run_gui():
                 button.component = component
                 button.bind(on_release=self.component_action)
                 if component.icon != "icon":
-                    image = Image(source=icon_paths[component.icon], size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    image = AsyncImage(source=icon_paths[component.icon],
+                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
                     box_layout = RelativeLayout()
                     box_layout.add_widget(button)
                     box_layout.add_widget(image)
@@ -244,6 +246,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
 if __name__ == '__main__':
     init_logging('Launcher')
+    multiprocessing.freeze_support()
     parser = argparse.ArgumentParser(description='Archipelago Launcher')
     parser.add_argument('Patch|Game|Component', type=str, nargs='?',
                         help="Pass either a patch file, a generated game or the name of a component to run.")

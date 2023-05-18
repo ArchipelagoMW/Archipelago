@@ -98,9 +98,7 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
                         f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
                         f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
-    # TODO: investigate: Iterating through a set is not a deterministic order.
-    # If any random is used, this could make unreproducible seed.
-    for world_type in world_types:
+    for world_type in sorted(world_types, key=lambda world: world.__name__):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
             stage_callable(multiworld, *args)
