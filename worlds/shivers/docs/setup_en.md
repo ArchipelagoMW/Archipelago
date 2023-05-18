@@ -12,14 +12,42 @@
 
 ## Setup ScummVM for Shivers
 
-1. Launch ScummVM 
+### GOG version of Shivers
+
+1. Launch ScummVM
 2. Click Add Game...
 3. Locate the folder for Shivers (typically in GOG Galaxy\Games\Shivers)
+4. Click OK
+
+### Disc copy of Shivers
+
+1. Copy contents of Shivers disc to a desired location on your computer
+2. Launch ScummVM
+3. Click Add Game...
+4. Locate the folder for Shivers and click Choose
+5. Click OK
+
+## Create a Config (.yaml) File
+
+### What is a config file and why do I need one?
+
+See the guide on setting up a basic YAML at the Archipelago setup
+guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
+
+### Where do I get a config file?
+
+The Player Settings page on the website allows you to configure your personal settings and export a config file from
+them. Player settings page: [Shivers Player Settings Page](/games/Shivers/player-settings)
+
+### Verifying your config file
+
+If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
+validator page: [YAML Validation page](/mysterycheck)
 
 ## Joining a MultiWorld Game
 
 1. Launch ScummVM
-2. Highlight Shivers and click start
+2. Highlight Shivers and click Start
 3. Launch the Archipelago Randomizer
 4. Click "Attach"
 5. Click Archipelago
