@@ -6,6 +6,8 @@ from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
 
 if TYPE_CHECKING:
     from .Dungeons import Dungeon
+    from .Regions import LTTPRegion
+
 
 class ALttPLocation(Location):
     game: str = "A Link to the Past"
@@ -15,6 +17,7 @@ class ALttPLocation(Location):
     shop_slot: Optional[int] = None
     """If given as integer, shop_slot is the shop's inventory index."""
     shop_slot_disabled: bool = False
+    parent_region: "LTTPRegion"
 
     def __init__(self, player: int, name: str, address: Optional[int] = None, crystal: bool = False,
                  hint_text: Optional[str] = None, parent=None, player_address: Optional[int] = None):
