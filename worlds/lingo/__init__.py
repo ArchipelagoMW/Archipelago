@@ -38,6 +38,7 @@ class LingoWorld(World):
     web = LingoWebWorld()
 
     base_id = 444400
+    topology_present = True
 
     static_logic = StaticLingoLogic()
     static_items = StaticLingoItems(base_id)
@@ -74,7 +75,6 @@ class LingoWorld(World):
 
     def generate_early(self):
         self.player_logic = LingoPlayerLogic(self.multiworld, self.player, self.static_logic, self.test_options)
-        self.topology_present = get_option_value(self.multiworld, self.player, "shuffle_paintings")
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.static_logic, self.player_logic)
