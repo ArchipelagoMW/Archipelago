@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 from typing import List, Optional
 
-from BaseClasses import Region, MultiWorld
+from BaseClasses import CollectionState, Region, MultiWorld
 from Fill import fill_restrictive
 
 from .Bosses import BossFactory, Boss
@@ -216,8 +216,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                     location.item_rule = lambda item, dungeon=dungeon, orig_rule=orig_rule: \
                         (not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon) and orig_rule(item)
 
-            multiworld.random.shuffle(locations)
-            all_state_base = multiworld.get_all_state(use_cache=True)
+            world.random.shuffle(locations)
             # Dungeon-locked items have to be placed first, to not run out of spaces for dungeon-locked items
             # subsort in the order Big Key, Small Key, Other before placing dungeon items
 
@@ -225,8 +224,25 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
             in_dungeon_items.sort(
                 key=lambda item: sort_order.get(item.type, 1) +
                                  (5 if (item.player, item.name) in dungeon_specific else 0))
+
+            # Construct a partial all_state which contains only the items from get_pre_fill_items which aren't in_dungeon
+            in_dungeon_player_ids = {item.player for item in in_dungeon_items}
+            all_state_base = CollectionState(world)
+            for item in world.itempool:
+                world.worlds[item.player].collect(all_state_base, item)
+            pre_fill_items = []
+            for player in in_dungeon_player_ids:
+                pre_fill_items += world.worlds[player].get_pre_fill_items()
             for item in in_dungeon_items:
-                all_state_base.remove(item)
+                try:
+                    pre_fill_items.remove(item)
+                except ValueError:
+                    # pre_fill_items should be a subset of in_dungeon_items, but just in case
+                    pass
+            for item in pre_fill_items:
+                world.worlds[item.player].collect(all_state_base, item)
+            all_state_base.sweep_for_events()
+
 
             # Remove completion condition so that minimal-accessibility worlds place keys properly
             for player in {item.player for item in in_dungeon_items}:
