@@ -95,19 +95,14 @@ class PokemonEmeraldWorld(World):
 
 
     def create_regions(self):
-        overworld_items_option = self.multiworld.overworld_items[self.player].value
-        hidden_items_option = self.multiworld.hidden_items[self.player].value
-        npc_gifts_option = self.multiworld.npc_gifts[self.player].value
-        enable_ferry_option = self.multiworld.enable_ferry[self.player].value
-
-        tags = set(["Badge", "HM", "KeyItem", "Rod", "Bike"])
-        if overworld_items_option == Toggle.option_true:
+        tags = {"Badge", "HM", "KeyItem", "Rod", "Bike"}
+        if self.multiworld.overworld_items[self.player].value == Toggle.option_true:
             tags.add("OverworldItem")
-        if hidden_items_option == Toggle.option_true:
+        if self.multiworld.hidden_items[self.player].value == Toggle.option_true:
             tags.add("HiddenItem")
-        if npc_gifts_option == Toggle.option_true:
+        if self.multiworld.npc_gifts[self.player].value == Toggle.option_true:
             tags.add("NpcGift")
-        if enable_ferry_option == Toggle.option_true:
+        if self.multiworld.enable_ferry[self.player].value == Toggle.option_true:
             tags.add("Ferry")
 
         create_regions(self.multiworld, self.player)
@@ -300,7 +295,7 @@ class PokemonEmeraldWorld(World):
 
             fill_restrictive(self.multiworld, collection_state, badge_locations, badge_items, True, True)
 
-        if self.multiworld.hms[self.player].value == RandomizeBadges.option_shuffle:
+        if self.multiworld.hms[self.player].value == RandomizeHms.option_shuffle:
             hm_locations = [location for location, _ in self.hm_shuffle_info]
             hm_items = [item for _, item in self.hm_shuffle_info]
 
@@ -529,8 +524,8 @@ class PokemonEmeraldWorld(World):
                                 self.modified_data.species,
                                 target_bst,
                                 target_type,
-                                should_allow_legendaries).species_id
-                            )
+                                should_allow_legendaries
+                            ).species_id)
 
                         new_encounters[i] = EncounterTableData(new_species, table.rom_address)
 
@@ -608,10 +603,10 @@ class PokemonEmeraldWorld(World):
                     })
 
                     new_moves = (
-                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
-                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
-                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool),
-                        random.choice(tm_hm_movepool if random.random() < 0.25 else level_up_movepool)
+                        random.choice(tm_hm_movepool if random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
+                        random.choice(tm_hm_movepool if random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
+                        random.choice(tm_hm_movepool if random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
+                        random.choice(tm_hm_movepool if random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool)
                     )
 
                     new_party.append(TrainerPokemonData(new_species.species_id, pokemon.level, new_moves))
@@ -705,7 +700,7 @@ class PokemonEmeraldWorld(World):
                 ]
             ]
 
-            for i, starter in enumerate(new_starters):
+            for i, starter in enumerate([new_starters[1], new_starters[2], new_starters[0]]):
                 potential_evolutions = [evolution.species_id for evolution in starter.evolutions]
                 picked_evolution = starter.species_id
                 if len(potential_evolutions) > 0:

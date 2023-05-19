@@ -24,7 +24,7 @@ def sanity_check():
         for name, region in data.regions.items():
             for region_exit in region.exits:
                 if region_exit not in data.regions:
-                    error(f"Region [{region_exit}] referenced by [{name}] was not defined")
+                    error(f"Pokemon Emerald: Region [{region_exit}] referenced by [{name}] was not defined")
 
     def check_warps():
         ignorable_warps = set(load_json_data("ignorable_warps.json"))
@@ -33,9 +33,9 @@ def sanity_check():
                 continue
 
             if warp_dest is None:
-                error(f"Warp [{warp_source}] has no destination")
+                error(f"Pokemon Emerald: Warp [{warp_source}] has no destination")
             elif not data.warps[warp_dest].connects_to(data.warps[warp_source]) and not data.warps[warp_source].is_one_way:
-                error(f"Warp [{warp_source}] appears to be a one-way warp but was not marked as one")
+                error(f"Pokemon Emerald: Warp [{warp_source}] appears to be a one-way warp but was not marked as one")
 
     def check_locations():
         ignorable_locations = load_json_data("ignorable_locations.json")
@@ -43,12 +43,12 @@ def sanity_check():
         claimed_locations_set = set()
         for location_name in claimed_locations:
             if location_name in claimed_locations_set:
-                error(f"Location [{location_name}] was claimed by multiple regions")
+                error(f"Pokemon Emerald: Location [{location_name}] was claimed by multiple regions")
             claimed_locations_set.add(location_name)
 
         for location_name in data.locations:
             if location_name not in claimed_locations and location_name not in ignorable_locations:
-                warn(f"Location [{location_name}] was not claimed by any region")
+                warn(f"Pokemon Emerald: Location [{location_name}] was not claimed by any region")
 
     def finish():
         warn_messages.sort()
@@ -57,7 +57,7 @@ def sanity_check():
             logging.warning(message)
         for message in error_messages:
             logging.error(message)
-        logging.debug("Sanity check done. Found %s errors and %s warnings.", len(error_messages), len(warn_messages))
+        logging.debug("Pokemon Emerald sanity check done. Found %s errors and %s warnings.", len(error_messages), len(warn_messages))
         return not failed
 
     check_exits()

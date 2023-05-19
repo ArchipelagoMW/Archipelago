@@ -18,9 +18,9 @@ from worlds.pokemon_emerald.options import Goal
 
 GBA_SOCKET_PORT = 43053
 
-CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart pokemon_emerald_connector.lua"
-CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure pokemon_emerald_connector.lua is running"
-CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart pokemon_emerald_connector.lua"
+CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart connector_pkmn_emerald.lua"
+CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure connector_pkmn_emerald.lua is running"
+CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart connector_pkmn_emerald.lua"
 CONNECTION_STATUS_TENTATIVE = "Initial connection made"
 CONNECTION_STATUS_CONNECTED = "Connected"
 CONNECTION_STATUS_INITIAL = "Connection has not been initiated"

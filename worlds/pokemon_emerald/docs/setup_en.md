@@ -11,7 +11,7 @@
 
 Once you have installed BizHawk, open `EmuHawk.exe` and change the following settings:
 
-- Go to `Config > Customize`. Switch to the Advanced tab, then switch the Lua Core from `NLua+KopiLua` to `Lua+LuaInterface`. Then restart EmuHawk. This is required for the Lua script to function correctly.
+- If you're using BizHawk 2.8, go to `Config > Customize`. Switch to the Advanced tab, then switch the Lua Core from `NLua+KopiLua` to `Lua+LuaInterface`. Then restart EmuHawk. This is required for the Lua script to function correctly. (BizHawk 2.9 you can skip this step.)
 - Under Config > Customize, check the "Run in background" box. This will prevent disconnecting from the client while EmuHawk is running in the background.
 - Open a `.gba` file in EmuHawk and go to `Config > Controllers…` to configure your inputs. If you can't click `Controllers…` it's because you need to have any `.gba` ROM loaded first.
 - Consider clearing keybinds in `Config > Hotkeys…` if you don't intend to use them. Select the keybind and press Esc to clear it.
