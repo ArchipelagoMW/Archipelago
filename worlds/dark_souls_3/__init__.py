@@ -354,13 +354,13 @@ class DarkSouls3World(World):
 
         # Depending on the specified option, modify items hexadecimal value to add an upgrade level
         name_to_ds3_code = {item.name: item.ds3_code for item in item_dictionary.values()}
-        if self.multiworld.randomize_weapons_level[self.player] > 0:
+        if self.multiworld.randomize_weapon_level[self.player] > 0:
             # if the user made an error and set a min higher than the max we default to the max
             max_5 = self.multiworld.max_levels_in_5[self.player]
             min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
             max_10 = self.multiworld.max_levels_in_10[self.player]
             min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
-            weapons_percentage = self.multiworld.randomize_weapons_percentage[self.player]
+            weapons_percentage = self.multiworld.randomize_weapon_percentage[self.player]
 
             # Randomize some weapons upgrades
             if self.multiworld.randomize_weapons_level[self.player] in [1, 3]:  # Options are either all or +5
