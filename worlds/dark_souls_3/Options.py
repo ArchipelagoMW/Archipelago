@@ -1,45 +1,59 @@
 import typing
-from Options import Toggle, Option, Range, Choice, DeathLink
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice, DeathLink
 
 
-class RandomizeWeaponLocations(Toggle):
-    """Adds Weapons & their locations to the pool. (+86 checks/items)"""
-    display_name ="Randomize Weapon Locations"
+class RandomizeWeaponLocations(DefaultOnToggle):
+    """Randomizes weapons (+86 locations)"""
+    display_name = "Randomize Weapon Locations"
 
 
-class RandomizeShieldLocations(Toggle):
-    """Adds Shields & their locations to the pool. (+24 checks/items)"""
-    display_name ="Randomize Shield Locations"
+class RandomizeShieldLocations(DefaultOnToggle):
+    """Randomizes shields (+24 locations)"""
+    display_name = "Randomize Shield Locations"
 
 
-class RandomizeArmorLocations(Toggle):
-    """Adds Armors & their locations to the pool. (+93 checks/items)"""
-    display_name ="Randomize Armor Locations"
+class RandomizeArmorLocations(DefaultOnToggle):
+    """Randomizes armor pieces (+93 locations)"""
+    display_name = "Randomize Armor Locations"
 
 
-class RandomizeRingLocations(Toggle):
-    """Adds Rings & their locations to the pool. (+48 checks/items)"""
-    display_name ="Randomize Ring Locations"
+class RandomizeRingLocations(DefaultOnToggle):
+    """Randomizes rings (+48 locations)"""
+    display_name = "Randomize Ring Locations"
 
 
-class RandomizeSpellLocations(Toggle):
-    """Adds Spells & their locations to the pool. (+19 checks/items)"""
-    display_name ="Randomize Spell Locations"
+class RandomizeSpellLocations(DefaultOnToggle):
+    """Randomizes spells (+19 locations)"""
+    display_name = "Randomize Spell Locations"
 
 
-class RandomizeMiscLocations(Toggle):
-    """Adds Miscellaneous items & their locations (Ashes, Tomes, Scrolls, etc.) to the pool. (+27 checks/items)"""
-    display_name ="Randomize Miscellaneous Locations"
-
-
-class RandomizeHealthLocations(Toggle):
-    """Adds Health Upgrade Locations to the pool. (+20 checks/items)"""
-    display_name ="Randomize Health Upgrade Locations"
+class RandomizeKeyLocations(DefaultOnToggle):
+    """Randomizes items which unlock doors or bypass barriers"""
+    display_name = "Randomize NPC Locations"
 
 
 class RandomizeNPCLocations(Toggle):
-    """Adds Friendly NPC items & their locations to the pool. (Irina, Cornyx, Karla, Orbeck) (+14 checks/items)"""
-    display_name ="Randomize NPC Locations"
+    """Randomizes friendly NPC drops (meaning you will probably have to kill them) (+14 locations)"""
+    display_name = "Randomize NPC Locations"
+
+
+class RandomizeMiscLocations(Toggle):
+    """Randomizes miscellaneous items (ashes, tomes, scrolls, etc.) to the pool. (+27 locations)"""
+    display_name = "Randomize Miscellaneous Locations"
+
+
+class RandomizeHealthLocations(Toggle):
+    """Randomizes health upgrade items. (+20 locations)"""
+    display_name = "Randomize Health Upgrade Locations"
+
+
+class RandomizeProgressiveLocationsOption(Toggle):
+    """Randomizes upgrade materials and consumables such as the titanite shards, firebombs, resin, etc...
+
+    Instead of specific locations, these are progressive, so Titanite Shard #1 is the first titanite shard
+    you pick up, regardless of whether it's from an enemy drop late in the game or an item on the ground in the
+    first 5 minutes."""
+    display_name = "Randomize Progressive Locations"
 
 
 class AutoEquipOption(Toggle):
@@ -136,14 +150,9 @@ class LateDLCOption(Toggle):
     display_name = "Late DLC"
 
 
-class EnableProgressiveLocationsOption(Toggle):
-    """Randomize upgrade materials such as the titanite shards, titanite scales, and the consumables"""
-    display_name = "Randomize materials, weapon upgrade shards, and consumables (+176 checks/items)"
-
-
 class EnableDLCOption(Toggle):
     """To use this option, you must own both the ASHES OF ARIANDEL and the RINGED CITY DLC"""
-    display_name = "Add the DLC Items and Locations to the pool (+92 checks/items)"
+    display_name = "Add the DLC Items and Locations to the pool (+92 locations)"
 
 
 dark_souls_options: typing.Dict[str, type(Option)] = {
@@ -152,9 +161,11 @@ dark_souls_options: typing.Dict[str, type(Option)] = {
     "enable_armor_locations": RandomizeArmorLocations,
     "enable_ring_locations": RandomizeRingLocations,
     "enable_spell_locations": RandomizeSpellLocations,
+    "enable_key_locations": RandomizeKeyLocations,
+    "enable_npc_locations": RandomizeNPCLocations,
     "enable_misc_locations": RandomizeMiscLocations,
     "enable_health_upgrade_locations": RandomizeHealthLocations,
-    "enable_npc_locations": RandomizeNPCLocations,
+    "enable_progressive_locations": RandomizeProgressiveLocationsOption,
     "auto_equip": AutoEquipOption,
     "lock_equip": LockEquipOption,
     "no_weapon_requirements": NoWeaponRequirementsOption,
@@ -169,6 +180,5 @@ dark_souls_options: typing.Dict[str, type(Option)] = {
     "no_spell_requirements": NoSpellRequirementsOption,
     "no_equip_load": NoEquipLoadOption,
     "death_link": DeathLink,
-    "enable_progressive_locations": EnableProgressiveLocationsOption,
     "enable_dlc": EnableDLCOption,
 }
