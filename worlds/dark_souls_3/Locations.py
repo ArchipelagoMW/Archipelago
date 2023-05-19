@@ -487,7 +487,7 @@ location_tables = {
         DS3LocationData("PW: Follower Sabre",                      "Follower Sabre",                          DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Snap Freeze",                         "Snap Freeze",                             DS3LocationCategory.SPELL),
         DS3LocationData("PW: Floating Chaos",                      "Floating Chaos",                          DS3LocationCategory.SPELL),
-        DS3LocationData("PW: Pyromancer's Parting Flame",          "Pyromancer's Parting Flame",              DS3LocationCategory.SPELL),
+        DS3LocationData("PW: Pyromancer's Parting Flame",          "Pyromancer's Parting Flame",              DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Vilhelm's Helm",                      "Vilhelm's Helm",                          DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Vilhelm's Armor",                     "Vilhelm's Armor",                         DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Vilhelm's Gauntlets",                 "Vilhelm's Gauntlets",                     DS3LocationCategory.ARMOR),
