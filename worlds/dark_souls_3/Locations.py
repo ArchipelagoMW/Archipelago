@@ -528,7 +528,7 @@ location_tables = {
         DS3LocationData("RC: Black Witch Wrappings",               "Black Witch Wrappings",                   DS3LocationCategory.ARMOR),
         DS3LocationData("RC: Black Witch Trousers",                "Black Witch Trousers",                    DS3LocationCategory.ARMOR),
         DS3LocationData("RC: White Preacher Head",                 "White Preacher Head",                     DS3LocationCategory.ARMOR),
-        DS3LocationData("RC: Havel's Ring",                        "Havel's Ring",                            DS3LocationCategory.RING),
+        DS3LocationData("RC: Havel's Ring +3",                     "Havel's Ring +3",                         DS3LocationCategory.RING),
         DS3LocationData("RC: Ringed Knight Spear",                 "Ringed Knight Spear",                     DS3LocationCategory.WEAPON),
         DS3LocationData("RC: Dragonhead Shield",                   "Dragonhead Shield",                       DS3LocationCategory.SHIELD),
         DS3LocationData("RC: Ringed Knight Straight Sword",        "Ringed Knight Straight Sword",            DS3LocationCategory.WEAPON),

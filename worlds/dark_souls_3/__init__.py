@@ -7,7 +7,7 @@ from .Options import dark_souls_options
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
 from Options import Toggle
-from ..generic.Rules import set_rule, add_item_rule
+from ..generic.Rules import set_rule, add_rule, add_item_rule
 
 
 class DarkSouls3Web(WebWorld):
@@ -224,11 +224,6 @@ class DarkSouls3World(World):
                 else:
                     itempool_by_category[location.category].append(location.default_item_name)
 
-        # Remove Basin of Vows from itempool if late_basin_of_vows enabled
-        # We will place it on Pontiff Sulyvahn in generate_basic
-        if self.multiworld.late_basin_of_vows[self.player]:
-            itempool_by_category[DS3LocationCategory.KEY].remove("Basin of Vows")
-
         # Replace weapons with a random sample of all_weapons
         if DS3LocationCategory.WEAPON in enabled_categories:
             all_weapons = [
@@ -277,12 +272,20 @@ class DarkSouls3World(World):
                                state.has("Cinders of a Lord - Aldrich", self.player) and
                                state.has("Cinders of a Lord - Lothric Prince", self.player))
 
+        if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
+            add_rule(self.multiworld.get_entrance("Go To Lothric Castle", self.player),
+                     lambda state: state.has("Small Lothric Banner", self.player))
+
         # DLC Access Rules Below
         if self.multiworld.enable_dlc[self.player]:
             set_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel", self.player),
                      lambda state: state.has("Contraption Key", self.player))
             set_rule(self.multiworld.get_entrance("Go To Ringed City", self.player),
                      lambda state: state.has("Small Envoy Banner", self.player))
+
+            if self.multiworld.late_dlc[self.player] == Toggle.option_true:
+                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel", self.player),
+                        lambda state: state.has("Small Doll", self.player))
 
         # Define the access rules to some specific locations
         set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
@@ -311,11 +314,6 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Yhorm the Giant", self.player) and \
             state.has("Cinders of a Lord - Aldrich", self.player) and \
             state.has("Cinders of a Lord - Lothric Prince", self.player)
-
-
-    def generate_basic(self):
-        if self.multiworld.late_basin_of_vows[self.player]:
-            self.multiworld.get_location("IBV: Soul of Pontiff Sulyvahn", self.player).place_locked_item(self.create_item("Basin of Vows"))
 
 
     def fill_slot_data(self) -> Dict[str, object]:
