@@ -571,6 +571,13 @@ class RingLoss(Choice):
             return cls.name_lookup[value]
 
 
+class RingLink(Toggle):
+    """
+    Whether your in-level ring gain/loss is linked to other players
+    """
+    display_name = "Ring Link"
+
+
 class SADXMusic(Choice):
     """
     Whether the randomizer will include Sonic Adventure DX Music in the music pool
@@ -691,6 +698,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "pong_trap_weight": PongTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
     "ring_loss": RingLoss,
+    "ring_link": RingLink,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "voice_shuffle": VoiceShuffle,

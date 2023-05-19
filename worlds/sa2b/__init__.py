@@ -83,6 +83,7 @@ class SA2BWorld(World):
             "Narrator": self.multiworld.narrator[self.player].value,
             "MinigameTrapDifficulty": self.multiworld.minigame_trap_difficulty[self.player].value,
             "RingLoss": self.multiworld.ring_loss[self.player].value,
+            "RingLink": self.multiworld.ring_link[self.player].value,
             "RequiredRank": self.multiworld.required_rank[self.player].value,
             "ChaoKeys": self.multiworld.keysanity[self.player].value,
             "Whistlesanity": self.multiworld.whistlesanity[self.player].value,
