@@ -146,7 +146,7 @@ def set_rules(world, player):
         "Silph Co 11F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
         "Silph Co 9F - Rocket 2 (Card Key)": lambda state: state.has("Card Key", player),
         "Silph Co 3F - Scientist (Card Key)": lambda state: state.has("Card Key", player),
-        "Route 10 North - Pokemaniac": lambda state: state.pokemon_rb_can_surf(player),
+        "Route 10 - Pokemaniac": lambda state: state.pokemon_rb_can_surf(player),
         "Rocket Hideout B1F - Rocket 5 (Lift Key)": lambda state: state.has("Lift Key", player),
         "Rocket Hideout B4F - Rocket 2 (Lift Key)": lambda state: state.has("Lift Key", player),
         "Rocket Hideout B4F - Rocket 3 (Lift Key)": lambda state: state.has("Lift Key", player),

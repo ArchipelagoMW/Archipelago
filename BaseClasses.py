@@ -135,7 +135,6 @@ class MultiWorld():
             def set_player_attr(attr, val):
                 self.__dict__.setdefault(attr, {})[player] = val
 
-            set_player_attr('tech_tree_layout_prerequisites', {})
             set_player_attr('_region_cache', {})
             set_player_attr('shuffle', "vanilla")
             set_player_attr('logic', "noglitches")
