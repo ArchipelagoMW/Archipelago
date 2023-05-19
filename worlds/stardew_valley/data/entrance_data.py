@@ -153,7 +153,7 @@ class SVEntrance:
 
 
 class DeepWoodsEntrance:
-    secret_woods_to_deep_woods = "Secret Woods to Deep Woods"
+    secret_woods_to_deep_woods = "Woods to Deep Woods"
     use_woods_obelisk = "Use Woods Obelisk"
     deep_woods_house = "Deep Woods to Deep Woods House"
     deep_woods_depth_10 = move_to_woods_depth(10)
@@ -166,7 +166,7 @@ class DeepWoodsEntrance:
 
 class EugeneEntrance:
     forest_to_garden = "Forest to Eugene's Garden"
-    garden_to_bedroom = "Garden to Eugene's Bedroom"
+    garden_to_bedroom = "Eugene's Garden to Eugene's Bedroom"
 
 
 class JasperEntrance:

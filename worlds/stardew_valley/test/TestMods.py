@@ -23,9 +23,8 @@ def check_stray_mod_items(mod: str, tester: SVTestBase, multiworld: MultiWorld):
         if locations.mod_name == mod:
             mod_locations.append(locations)
     for item in multiworld.get_items():
-        if not mod_items:
-            continue
-        tester.assertNotIn(item.name, mod_items)
+        if item.mod_name is not None:
+            tester.assertNotIn(item.name, mod_items)
     for location in multiworld.get_locations():
         if not mod_locations:
             continue

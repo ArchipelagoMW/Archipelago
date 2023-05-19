@@ -181,9 +181,6 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
                              logic.has_relationship("Caroline", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_wizard_basement, player),
                              logic.has_relationship("Wizard", 4))
-    if ModNames.alec in world_options[options.Mods]:
-        MultiWorldRules.set_rule(multi_world.get_entrance(AlecEntrance.petshop_to_bedroom, player),
-                                 logic.has_relationship("Alec", 2))
 
 
 def set_ginger_island_rules(logic: StardewLogic, multi_world, player, world_options: StardewOptions):
