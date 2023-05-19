@@ -81,19 +81,6 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.PROGRESSIVE_ITEM)
 
 
-    def create_item(self, name: str) -> Item:
-        data = self.item_name_to_id[name]
-
-        if name in key_item_names:
-            item_classification = ItemClassification.progression
-        elif item_dictionary[name].category in {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10}:
-            item_classification = ItemClassification.useful
-        else:
-            item_classification = ItemClassification.filler
-
-        return DarkSouls3Item(name, item_classification, data, self.player)
-
-
     def create_regions(self):
         progressive_location_table = []
         if self.multiworld.enable_progressive_locations[self.player].value:
@@ -233,18 +220,40 @@ class DarkSouls3World(World):
                 else:
                     itempool_by_category[location.category].append(location.default_item_name)
 
-        # Replace weapons with a random sample of all_weapons
-        if DS3LocationCategory.WEAPON in self.enabled_location_categories:
-            all_weapons = [
+        # Replace each item category with a random sample of items of those types
+        def create_random_replacement_list(item_categories: Set[DS3ItemCategory], num_items: int):
+            candidates = [
                 item.name for item
                 in item_dictionary.values()
-                if (item.category in {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10} and
+                if (item.category in item_categories and
                     (not item.is_dlc or dlc_enabled))
             ]
+            return self.multiworld.random.sample(candidates, num_items)
 
-            itempool_by_category[DS3LocationCategory.WEAPON] = self.multiworld.random.sample(
-                all_weapons,
+        if DS3LocationCategory.WEAPON in self.enabled_location_categories:
+            itempool_by_category[DS3LocationCategory.WEAPON] = create_random_replacement_list(
+                {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10},
                 len(itempool_by_category[DS3LocationCategory.WEAPON])
+            )
+        if DS3LocationCategory.SHIELD in self.enabled_location_categories:
+            itempool_by_category[DS3LocationCategory.SHIELD] = create_random_replacement_list(
+                {DS3ItemCategory.SHIELD},
+                len(itempool_by_category[DS3LocationCategory.SHIELD])
+            )
+        if DS3LocationCategory.ARMOR in self.enabled_location_categories:
+            itempool_by_category[DS3LocationCategory.ARMOR] = create_random_replacement_list(
+                {DS3ItemCategory.ARMOR},
+                len(itempool_by_category[DS3LocationCategory.ARMOR])
+            )
+        if DS3LocationCategory.RING in self.enabled_location_categories:
+            itempool_by_category[DS3LocationCategory.RING] = create_random_replacement_list(
+                {DS3ItemCategory.RING},
+                len(itempool_by_category[DS3LocationCategory.RING])
+            )
+        if DS3LocationCategory.SPELL in self.enabled_location_categories:
+            itempool_by_category[DS3LocationCategory.SPELL] = create_random_replacement_list(
+                {DS3ItemCategory.SPELL},
+                len(itempool_by_category[DS3LocationCategory.SPELL])
             )
 
         # Add items to itempool
@@ -253,6 +262,19 @@ class DarkSouls3World(World):
 
         # Extra filler items for locations without default items specified
         self.multiworld.itempool += [self.create_item("Soul of an Intrepid Hero") for i in range(num_required_extra_items)]
+
+
+    def create_item(self, name: str) -> Item:
+        data = self.item_name_to_id[name]
+
+        if name in key_item_names:
+            item_classification = ItemClassification.progression
+        elif item_dictionary[name].category in {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10}:
+            item_classification = ItemClassification.useful
+        else:
+            item_classification = ItemClassification.filler
+
+        return DarkSouls3Item(name, item_classification, data, self.player)
 
 
     def generate_early(self):
