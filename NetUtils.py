@@ -301,6 +301,7 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
+    details: typing.Optional[str] = None
 
     def re_check(self, ctx, team) -> Hint:
         if self.found:
@@ -308,11 +309,11 @@ class Hint(typing.NamedTuple):
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
             return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance,
-                        self.item_flags)
+                        self.item_flags, self.details)
         return self
 
     def __hash__(self):
-        return hash((self.receiving_player, self.finding_player, self.location, self.item, self.entrance))
+        return hash((self.receiving_player, self.finding_player, self.location, self.item, self.entrance, self.details))
 
     def as_network_message(self) -> dict:
         parts = []
@@ -329,6 +330,9 @@ class Hint(typing.NamedTuple):
             add_json_text(parts, self.entrance, type="entrance_name")
         else:
             add_json_text(parts, "'s World")
+        if self.details:
+            add_json_text(parts, " " + self.details, type="entrance_name")  # This could have a different type.
+
         add_json_text(parts, ". ")
         if self.found:
             add_json_text(parts, "(found)", type="color", color="green")

@@ -1179,6 +1179,16 @@ class OOTWorld(World):
         return super().remove(state, item)
 
 
+        # Add shop cost hint data
+        extra_hint_data = {}
+        for location, cost in self.shop_prices.items():
+            extra_hint_data[self.get_location(location).address] = f"for {cost} rupees"
+        for name in ("Wasteland Bombchu Salesman", "GC Medigoron"):
+            location = self.get_location(name)
+            if location and location.address:
+                extra_hint_data[location.address] = "for 200 rupees"
+        multidata['extra_hint_data'][self.player] = extra_hint_data
+
     # Helper functions
     def region_has_shortcuts(self, regionname):
         region = self.get_region(regionname)

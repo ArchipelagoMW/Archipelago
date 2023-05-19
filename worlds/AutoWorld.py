@@ -282,7 +282,11 @@ class World(metaclass=AutoWorldRegister):
         `threading.Event` can be used if you need to wait for something from `generate_output`."""
         return {}
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+    def extend_hint_information(
+            self,
+            entrance_hint_data: Dict[int, Dict[int, str]],
+            extra_hint_data: Dict[int, Dict[int, str]]
+    ):
         """Fill in additional entrance information text into locations, which is displayed when hinted.
         structure is {player_id: {location_id: text}} You will need to insert your own player_id."""
         pass
