@@ -310,6 +310,8 @@ class DarkSouls3World(World):
             set_rule(self.multiworld.get_entrance("Go To Ringed City", self.player),
                      lambda state: state.has("Small Envoy Banner", self.player))
 
+            # TODO: Part of the Ariandel world is blocked by Contraption Key
+
             if self.multiworld.late_dlc[self.player] == Toggle.option_true:
                 add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel", self.player),
                          lambda state: state.has("Small Doll", self.player))
