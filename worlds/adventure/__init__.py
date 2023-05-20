@@ -57,7 +57,7 @@ class AdventureWeb(WebWorld):
 
 
 def get_item_position_data_start(table_index: int):
-    item_ram_address = item_ram_addresses[table_index];
+    item_ram_address = item_ram_addresses[table_index]
     return item_position_table + item_ram_address - items_ram_start
 
 
