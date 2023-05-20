@@ -24,7 +24,7 @@ You Can Do It!;                     Achievement;
 
 // Surface exploration
 Aglet;
-Heliophobia;                        Achievement | Grindy;
+Heliophobia;                        Achievement;
 Blighted Gel;                       Calamity;
 Archaeologist;                      Achievement | Grindy;
 Zoologist;                          Npc;
@@ -70,7 +70,7 @@ Jeepers Creepers;                   Achievement;
 Stylist;                            Npc;
 Funkytown;                          Achievement;
 Deceiver of Fools;                  Achievement | Grindy;
-Dead Men Tell No Tales;             Achievement | Grindy;
+Dead Men Tell No Tales;             Achievement;
 Bulldozer;                          Achievement | Grindy;
 
 // Cavern
@@ -124,8 +124,8 @@ Giant Clam;                         Calamity | Location | Item;                 
 Amidias;                            Calamity;                                   Desert Scourge & #Giant Clam;
 
 // Blood Moon
-Bloodbath;                          Achievement;
-Til Death...;                       Achievement;
+Bloodbath;                          Achievement | Grindy;
+Til Death...;                       Achievement | Grindy;
 Quiet Neighborhood;                 Achievement;
 
 // Eye of Cthulhu
