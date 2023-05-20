@@ -9,12 +9,12 @@
 - Windows 8 or Newer.
 - Muse Dash: [Available on Steam](https://store.steampowered.com/app/774171/Muse_Dash/)
   - \[Optional\] Just As Planned DLC: [Also Available on Steam](https://store.steampowered.com/app/1055810/Muse_Dash__Just_as_planned/)
-- Melon Loader v0.6.1: [GitHub](https://github.com/LavaGang/MelonLoader/releases/tag/v0.6.1) (Note: v0.5.7 or older is not compatible with this mod.)
+- Melon Loader: [GitHub](https://github.com/LavaGang/MelonLoader/releases/latest)
 - Muse Dash Archipelago Mod: [GitHub](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest)
 
 ## Installing the Archipelago mod to Muse Dash
 
-1. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/tag/v0.6.1) and run it.
+1. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest) and run it.
 2. Choose the automated tab, click the select button and browse to `MuseDash.exe`. Then click install.
   - You can find the folder in steam by finding the game in your library, right clicking it and choosing *Manage→Browse Local Files*.
   - If you click the bar at the top telling you your current folder, this will give you a path you can copy. If you paste that into the window popped up by **MelonLoader**, it will automatically go to the same folder.
