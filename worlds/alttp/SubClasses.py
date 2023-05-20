@@ -1,8 +1,12 @@
 """Module extending BaseClasses.py for aLttP"""
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from enum import IntEnum
 
 from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
+
+if TYPE_CHECKING:
+    from .Dungeons import Dungeon
+    from .Regions import LTTPRegion
 
 
 class ALttPLocation(Location):
@@ -13,6 +17,7 @@ class ALttPLocation(Location):
     shop_slot: Optional[int] = None
     """If given as integer, shop_slot is the shop's inventory index."""
     shop_slot_disabled: bool = False
+    parent_region: "LTTPRegion"
 
     def __init__(self, player: int, name: str, address: Optional[int] = None, crystal: bool = False,
                  hint_text: Optional[str] = None, parent=None, player_address: Optional[int] = None):
@@ -86,6 +91,7 @@ class LTTPRegion(Region):
     is_dark_world: bool = False
 
     shop: Optional = None
+    dungeon: Optional["Dungeon"] = None
 
     def __init__(self, name: str, type_: LTTPRegionType, hint: str, player: int, multiworld: MultiWorld):
         super().__init__(name, player, multiworld, hint)

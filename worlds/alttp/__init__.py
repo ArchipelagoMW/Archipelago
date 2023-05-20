@@ -6,7 +6,7 @@ import typing
 
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
-from .Dungeons import create_dungeons
+from .Dungeons import create_dungeons, Dungeon
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
     indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -223,11 +223,19 @@ class ALTTPWorld(World):
         if os.path.isabs(Utils.get_options()["generator"]["enemizer_path"]) \
         else Utils.local_path(Utils.get_options()["generator"]["enemizer_path"])
 
+    # custom instance vars
+    dungeon_local_item_names: typing.Set[str]
+    dungeon_specific_item_names: typing.Set[str]
+    rom_name_available_event: threading.Event
+    has_progressive_bows: bool
+    dungeons: typing.Dict[str, Dungeon]
+
     def __init__(self, *args, **kwargs):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
         self.rom_name_available_event = threading.Event()
         self.has_progressive_bows = False
+        self.dungeons = {}
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
@@ -290,6 +298,8 @@ class ALTTPWorld(World):
         world.non_local_items[player].value -= item_name_groups['Pendants']
         world.non_local_items[player].value -= item_name_groups['Crystals']
 
+    create_dungeons = create_dungeons
+
     def create_regions(self):
         player = self.player
         world = self.multiworld
@@ -302,7 +312,7 @@ class ALTTPWorld(World):
         else:
             create_inverted_regions(world, player)
         create_shops(world, player)
-        create_dungeons(world, player)
+        self.create_dungeons()
 
         if world.logic[player] not in ["noglitches", "minorglitches"] and world.shuffle[player] in \
                 {"vanilla", "dungeonssimple", "dungeonsfull", "simple", "restricted", "full"}:
@@ -468,50 +478,50 @@ class ALTTPWorld(World):
                     or world.killable_thieves[player])
 
     def generate_output(self, output_directory: str):
-        world = self.multiworld
+        multiworld = self.multiworld
         player = self.player
         try:
             use_enemizer = self.use_enemizer
 
             rom = LocalRom(get_base_rom_path())
 
-            patch_rom(world, rom, player, use_enemizer)
+            patch_rom(multiworld, rom, player, use_enemizer)
 
             if use_enemizer:
-                patch_enemizer(world, player, rom, self.enemizer_path, output_directory)
+                patch_enemizer(self, rom, self.enemizer_path, output_directory)
 
-            if world.is_race:
-                patch_race_rom(rom, world, player)
+            if multiworld.is_race:
+                patch_race_rom(rom, multiworld, player)
 
-            world.spoiler.hashes[player] = get_hash_string(rom.hash)
+            multiworld.spoiler.hashes[player] = get_hash_string(rom.hash)
 
             palettes_options = {
-                'dungeon': world.uw_palettes[player],
-                'overworld': world.ow_palettes[player],
-                'hud': world.hud_palettes[player],
-                'sword': world.sword_palettes[player],
-                'shield': world.shield_palettes[player],
+                'dungeon': multiworld.uw_palettes[player],
+                'overworld': multiworld.ow_palettes[player],
+                'hud': multiworld.hud_palettes[player],
+                'sword': multiworld.sword_palettes[player],
+                'shield': multiworld.shield_palettes[player],
                 # 'link': world.link_palettes[player]
             }
             palettes_options = {key: option.current_key for key, option in palettes_options.items()}
 
-            apply_rom_settings(rom, world.heartbeep[player].current_key,
-                               world.heartcolor[player].current_key,
-                               world.quickswap[player],
-                               world.menuspeed[player].current_key,
-                               world.music[player],
-                               world.sprite[player],
+            apply_rom_settings(rom, multiworld.heartbeep[player].current_key,
+                               multiworld.heartcolor[player].current_key,
+                               multiworld.quickswap[player],
+                               multiworld.menuspeed[player].current_key,
+                               multiworld.music[player],
+                               multiworld.sprite[player],
                                None,
-                               palettes_options, world, player, True,
-                               reduceflashing=world.reduceflashing[player] or world.is_race,
-                               triforcehud=world.triforcehud[player].current_key,
-                               deathlink=world.death_link[player],
-                               allowcollect=world.allow_collect[player])
+                               palettes_options, multiworld, player, True,
+                               reduceflashing=multiworld.reduceflashing[player] or multiworld.is_race,
+                               triforcehud=multiworld.triforcehud[player].current_key,
+                               deathlink=multiworld.death_link[player],
+                               allowcollect=multiworld.allow_collect[player])
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             patch = LttPDeltaPatch(os.path.splitext(rompath)[0]+LttPDeltaPatch.patch_file_ending, player=player,
-                                   player_name=world.player_name[player], patched_path=rompath)
+                                   player_name=multiworld.player_name[player], patched_path=rompath)
             patch.write()
             os.unlink(rompath)
             self.rom_name = rom.name
@@ -629,35 +639,34 @@ class ALTTPWorld(World):
         if self.multiworld.boss_shuffle[self.player] != "none":
             def create_boss_map() -> typing.Dict:
                 boss_map = {
-                    "Eastern Palace": self.multiworld.get_dungeon("Eastern Palace", self.player).boss.name,
-                    "Desert Palace": self.multiworld.get_dungeon("Desert Palace", self.player).boss.name,
-                    "Tower Of Hera": self.multiworld.get_dungeon("Tower of Hera", self.player).boss.name,
+                    "Eastern Palace": self.dungeons["Eastern Palace"].boss.name,
+                    "Desert Palace": self.dungeons["Desert Palace"].boss.name,
+                    "Tower Of Hera": self.dungeons["Tower of Hera"].boss.name,
                     "Hyrule Castle": "Agahnim",
-                    "Palace Of Darkness": self.multiworld.get_dungeon("Palace of Darkness",
-                                                                              self.player).boss.name,
-                    "Swamp Palace": self.multiworld.get_dungeon("Swamp Palace", self.player).boss.name,
-                    "Skull Woods": self.multiworld.get_dungeon("Skull Woods", self.player).boss.name,
-                    "Thieves Town": self.multiworld.get_dungeon("Thieves Town", self.player).boss.name,
-                    "Ice Palace": self.multiworld.get_dungeon("Ice Palace", self.player).boss.name,
-                    "Misery Mire": self.multiworld.get_dungeon("Misery Mire", self.player).boss.name,
-                    "Turtle Rock": self.multiworld.get_dungeon("Turtle Rock", self.player).boss.name,
+                    "Palace Of Darkness": self.dungeons["Palace of Darkness"].boss.name,
+                    "Swamp Palace": self.dungeons["Swamp Palace"].boss.name,
+                    "Skull Woods": self.dungeons["Skull Woods"].boss.name,
+                    "Thieves Town": self.dungeons["Thieves Town"].boss.name,
+                    "Ice Palace": self.dungeons["Ice Palace"].boss.name,
+                    "Misery Mire": self.dungeons["Misery Mire"].boss.name,
+                    "Turtle Rock": self.dungeons["Turtle Rock"].boss.name,
                     "Ganons Tower": "Agahnim 2",
                     "Ganon": "Ganon"
                 }
                 if self.multiworld.mode[self.player] != 'inverted':
                     boss_map.update({
                         "Ganons Tower Basement":
-                            self.multiworld.get_dungeon("Ganons Tower", self.player).bosses["bottom"].name,
-                        "Ganons Tower Middle": self.multiworld.get_dungeon("Ganons Tower", self.player).bosses[
+                            self.dungeons["Ganons Tower"].bosses["bottom"].name,
+                        "Ganons Tower Middle": self.dungeons["Ganons Tower"].bosses[
                             "middle"].name,
-                        "Ganons Tower Top": self.multiworld.get_dungeon("Ganons Tower", self.player).bosses[
+                        "Ganons Tower Top": self.dungeons["Ganons Tower"].bosses[
                             "top"].name
                     })
                 else:
                     boss_map.update({
-                        "Ganons Tower Basement": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["bottom"].name,
-                        "Ganons Tower Middle": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["middle"].name,
-                        "Ganons Tower Top": self.multiworld.get_dungeon("Inverted Ganons Tower", self.player).bosses["top"].name
+                        "Ganons Tower Basement": self.dungeons["Inverted Ganons Tower"].bosses["bottom"].name,
+                        "Ganons Tower Middle": self.dungeons["Inverted Ganons Tower"].bosses["middle"].name,
+                        "Ganons Tower Top": self.dungeons["Inverted Ganons Tower"].bosses["top"].name
                     })
                 return boss_map
 
@@ -709,11 +718,10 @@ class ALTTPWorld(World):
     def get_pre_fill_items(self):
         res = []
         if self.dungeon_local_item_names:
-            for (name, player), dungeon in self.multiworld.dungeons.items():
-                if player == self.player:
-                    for item in dungeon.all_items:
-                        if item.name in self.dungeon_local_item_names:
-                            res.append(item)
+            for dungeon in self.dungeons.values():
+                for item in dungeon.all_items:
+                    if item.name in self.dungeon_local_item_names:
+                        res.append(item)
         return res
 
 
