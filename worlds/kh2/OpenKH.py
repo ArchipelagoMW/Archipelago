@@ -6,8 +6,7 @@ import Utils
 import zipfile
 
 from .Items import item_dictionary_table, CheckDupingItems
-from .Locations import all_locations, SoraLevels, exclusion_table, AllWeaponSlot
-from .Names import LocationName
+from .Locations import all_locations, SoraLevels, exclusion_table
 from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
 
@@ -83,7 +82,7 @@ def patch_kh2(self, output_directory):
     elif self.multiworld.LevelDepth[self.player] == "level_99":
         levelsetting.extend(exclusion_table["Level99"])
 
-    elif self.multiworld.LevelDepth[self.player] in ["level_50_sanity", "level_99_sanity"]:
+    elif self.multiworld.LevelDepth[self.player] != "level_1":
         levelsetting.extend(exclusion_table["Level50Sanity"])
 
         if self.multiworld.LevelDepth[self.player] == "level_99_sanity":
@@ -96,9 +95,6 @@ def patch_kh2(self, output_directory):
         data = all_locations[location.name]
         if location.item.player == self.player:
             itemcode = item_dictionary_table[location.item.name].kh2id
-            if location.item.name in slotDataDuping and \
-                    location.name not in AllWeaponSlot:
-                self.LocalItems[location.address] = item_dictionary_table[location.item.name].code
         else:
             itemcode = 90  # castle map
 

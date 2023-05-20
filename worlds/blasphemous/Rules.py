@@ -760,12 +760,15 @@ def rules(blasphemousworld):
     set_rule(world.get_location("WotHP: Upper west room, center gold cell", player),
         lambda state: state._blasphemous_gold_key(player) and \
             state._blasphemous_bronze_key(player))
-    set_rule(world.get_location("WotHP: Lower west room, bottom gold cell", player),
-        lambda state: state._blasphemous_gold_key(player) and \
-            state._blasphemous_bronze_key(player))
     set_rule(world.get_location("WotHP: Upper west room, top silver cell", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
+    set_rule(world.get_location("WotHP: Lower west room, bottom gold cell", player),
+        lambda state: state._blasphemous_gold_key(player) and \
+            state._blasphemous_bronze_key(player) and \
+                state._blasphemous_root_relic(player) and \
+                    state._blasphemous_blood_relic(player) and \
+                        state._blasphemous_miasma_relic(player))
     set_rule(world.get_location("WotHP: Lower west room, top ledge", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
@@ -777,7 +780,8 @@ def rules(blasphemousworld):
     set_rule(world.get_location("WotHP: Lower east room, top bronze cell", player),
         lambda state: state._blasphemous_bronze_key(player))
     set_rule(world.get_location("WotHP: Lower east room, top silver cell", player),
-        lambda state: state._blasphemous_silver_key(player))
+        lambda state: state._blasphemous_silver_key(player) and \
+            state._blasphemous_bronze_key(player))
     set_rule(world.get_location("WotHP: Outside Child of Moonlight", player),
         lambda state: state._blasphemous_silver_key(player) and \
             state._blasphemous_bronze_key(player))
