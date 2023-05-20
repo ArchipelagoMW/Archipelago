@@ -21,22 +21,22 @@ import bsdiff4
 from typing import Optional, List
 
 from BaseClasses import CollectionState, Region, Location, MultiWorld
-from worlds.alttp.Shops import ShopType, ShopPriceType
-from worlds.alttp.Dungeons import dungeon_music_addresses
-from worlds.alttp.Regions import location_table, old_location_address_to_new_location_address
-from worlds.alttp.Text import MultiByteTextMapper, text_addresses, Credits, TextTable
-from worlds.alttp.Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, \
+from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml, read_snes_rom
+
+from .Shops import ShopType, ShopPriceType
+from .Dungeons import dungeon_music_addresses
+from .Regions import old_location_address_to_new_location_address
+from .Text import MultiByteTextMapper, text_addresses, Credits, TextTable
+from .Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, \
     Blind_texts, \
     BombShop2_texts, junk_texts
-
-from worlds.alttp.Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, \
+from .Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, \
     DeathMountain_texts, \
     LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts, Lumberjacks_texts, \
     SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to_pc, is_frozen, parse_yaml, read_snes_rom
-from worlds.alttp.Items import ItemFactory, item_table, item_name_groups, progression_items
-from worlds.alttp.EntranceShuffle import door_addresses
-from worlds.alttp.Options import smallkey_shuffle
+from .Items import ItemFactory, item_table, item_name_groups, progression_items
+from .EntranceShuffle import door_addresses
+from .Options import smallkey_shuffle
 
 try:
     from maseya import z3pr

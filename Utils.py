@@ -38,8 +38,11 @@ class Version(typing.NamedTuple):
     minor: int
     build: int
 
+    def as_simple_string(self) -> str:
+        return ".".join(str(item) for item in self)
 
-__version__ = "0.4.0"
+
+__version__ = "0.4.1"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -503,6 +506,15 @@ class RestrictedUnpickler(pickle.Unpickler):
 def restricted_loads(s):
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
+
+
+class ByValue:
+    """
+    Mixin for enums to pickle value instead of name (restores pre-3.11 behavior). Use as left-most parent.
+    See https://github.com/python/cpython/pull/26658 for why this exists.
+    """
+    def __reduce_ex__(self, prot):
+        return self.__class__, (self._value_, )
 
 
 class KeyedDefaultDict(collections.defaultdict):
