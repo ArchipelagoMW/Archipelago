@@ -79,15 +79,18 @@ jasper_flags = {
 
 alec_regions = {
     SVRegion.forest: [AlecEntrance.forest_to_petshop],
-    AlecRegion.pet_store: []
+    AlecRegion.pet_store: [AlecEntrance.petshop_to_bedroom],
+    AlecRegion.alec_bedroom: []
 }
 
 alec_entrances = {
-    AlecEntrance.forest_to_petshop: AlecRegion.pet_store
+    AlecEntrance.forest_to_petshop: AlecRegion.pet_store,
+    AlecEntrance.petshop_to_bedroom: AlecRegion.alec_bedroom
 }
 
 alec_flags = {
-    AlecEntrance.forest_to_petshop: "NON_PROGRESSION"
+    AlecEntrance.forest_to_petshop: "NON_PROGRESSION",
+    AlecEntrance.petshop_to_bedroom: "NON_PROGRESSION"
 }
 
 yoba_regions = {

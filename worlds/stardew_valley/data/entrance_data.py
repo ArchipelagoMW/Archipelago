@@ -175,7 +175,7 @@ class JasperEntrance:
 
 class AlecEntrance:
     forest_to_petshop = "Forest to Alec's Pet Shop"
-    petshop_to_bedroom = "Alec's Pet Shop to Bedroom"
+    petshop_to_bedroom = "Alec's Pet Shop to Alec's Bedroom"
 
 
 class YobaEntrance:
