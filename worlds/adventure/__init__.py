@@ -8,7 +8,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
 
 from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial, \
     LocationProgressType
-from Main import __version__
+from Utils import __version__
 from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
