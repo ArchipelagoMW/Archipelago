@@ -1,4 +1,4 @@
-from typing import Dict, Set, Any
+from typing import Dict, List, Set, Any
 from collections import Counter
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
@@ -8,7 +8,7 @@ from .Rooms import room_table, door_table
 from .Rules import rules
 from worlds.generic.Rules import set_rule, add_rule
 from .Options import blasphemous_options
-from . import Vanilla
+from .Vanilla import unrandomized_dict, junk_locations, thorn_set, skill_dict
 
 
 class BlasphemousWeb(WebWorld):
@@ -61,106 +61,77 @@ class BlasphemousWorld(World):
         return self.multiworld.random.choice(tears_set)
 
 
+    def generate_early(self):
+        world = self.multiworld
+        player = self.player
+
+        if not world.dash_shuffle[player]:
+            world.start_inventory[player].value["Dash"] = 1
+
+        if not world.wall_climb_shuffle[player]:
+            world.start_inventory[player].value["Wall Climb"] = 1
+
+        if world.skip_long_quests[player]:
+            for loc in junk_locations:
+                world.exclude_locations[player].value.add(loc)
+
+
     def create_items(self):
+        world = self.multiworld
+        player = self.player
+
+        removed: int = 0
+        to_remove: List[str] = [
+            "Tears of Atonement (250)",
+            "Tears of Atonement (300)",
+            "Tears of Atonement (500)",
+            "Tears of Atonement (500)",
+            "Tears of Atonement (500)"
+        ]
+
         placed_items = []
 
-        placed_items.extend(Vanilla.unrandomized_dict.values())
+        placed_items.extend(unrandomized_dict.values())
 
-        if not self.multiworld.reliquary_shuffle[self.player]:
-            placed_items.extend(reliquary_set)
-        elif self.multiworld.reliquary_shuffle[self.player]:
-            placed_items.append("Tears of Atonement (250)")
-            placed_items.append("Tears of Atonement (300)")
-            placed_items.append("Tears of Atonement (500)")
-
-        if not self.multiworld.cherub_shuffle[self.player]:
-            for i in range(38):
-                placed_items.append("Child of Moonlight")
-
-        if not self.multiworld.life_shuffle[self.player]:
-            for i in range(6):
-                placed_items.append("Life Upgrade")
-
-        if not self.multiworld.fervour_shuffle[self.player]:
-            for i in range(6):
-                placed_items.append("Fervour Upgrade")
-
-        if not self.multiworld.sword_shuffle[self.player]:
-            for i in range(7):
-                placed_items.append("Mea Culpa Upgrade")
-
-        if not self.multiworld.blessing_shuffle[self.player]:
-            placed_items.extend(Vanilla.blessing_dict.values())
-
-        if not self.multiworld.dungeon_shuffle[self.player]:
-            placed_items.extend(Vanilla.dungeon_dict.values())
-
-        if not self.multiworld.tirso_shuffle[self.player]:
-            placed_items.extend(Vanilla.tirso_dict.values())
-
-        if not self.multiworld.miriam_shuffle[self.player]:
-            placed_items.append("Cantina of the Blue Rose")
-
-        if not self.multiworld.redento_shuffle[self.player]:
-            placed_items.extend(Vanilla.redento_dict.values())
-
-        if not self.multiworld.jocinero_shuffle[self.player]:
-            placed_items.extend(Vanilla.jocinero_dict.values())
-        
-        if not self.multiworld.altasgracias_shuffle[self.player]:
-            placed_items.extend(Vanilla.altasgracias_dict.values())
-
-        if not self.multiworld.tentudia_shuffle[self.player]:
-            placed_items.extend(Vanilla.tentudia_dict.values())
-
-        if not self.multiworld.gemino_shuffle[self.player]:
-            placed_items.extend(Vanilla.gemino_dict.values())
-
-        if not self.multiworld.guilt_shuffle[self.player]:
-            placed_items.append("Weight of True Guilt")
-
-        if not self.multiworld.ossuary_shuffle[self.player]:
-            placed_items.extend(Vanilla.ossuary_dict.values())
-
-        if not self.multiworld.boss_shuffle[self.player]:
-            placed_items.extend(Vanilla.boss_dict.values())
-
-        if not self.multiworld.wound_shuffle[self.player]:
-            placed_items.extend(Vanilla.wound_dict.values())
-
-        if not self.multiworld.mask_shuffle[self.player]:
-            placed_items.extend(Vanilla.mask_dict.values())
-
-        if not self.multiworld.eye_shuffle[self.player]:
-            placed_items.extend(Vanilla.eye_dict.values())
-
-        if not self.multiworld.herb_shuffle[self.player]:
-            placed_items.extend(Vanilla.herb_dict.values())
-
-        if not self.multiworld.church_shuffle[self.player]:
-            placed_items.extend(Vanilla.church_dict.values())
-
-        if not self.multiworld.shop_shuffle[self.player]:
-            placed_items.extend(Vanilla.shop_dict.values())
-
-        if self.multiworld.thorn_shuffle[self.player] == 2:
+        if world.thorn_shuffle[player] == 2:
             for i in range(8):
                 placed_items.append("Thorn Upgrade")
 
-        if not self.multiworld.candle_shuffle[self.player]:
-            placed_items.extend(Vanilla.candle_dict.values())
+        if world.dash_shuffle[player]:
+            placed_items.append(to_remove[removed])
+            removed += 1
 
-        if self.multiworld.start_wheel[self.player]:
+        if world.wall_climb_shuffle[player]:
+            placed_items.append(to_remove[removed])
+            removed += 1
+
+        if not world.reliquary_shuffle[player]:
+            placed_items.extend(reliquary_set)
+        elif world.reliquary_shuffle[player]:
+            for i in range(3):
+                placed_items.append(to_remove[removed])
+                removed += 1
+
+        if world.start_wheel[player]:
             placed_items.append("The Young Mason's Wheel")
 
-        if not self.multiworld.skill_randomizer[self.player]:
-            placed_items.extend(Vanilla.skill_dict.values())
+        if not world.skill_randomizer[player]:
+            placed_items.extend(skill_dict.values())
 
         counter = Counter(placed_items)
 
         pool = []
 
         for item in item_table:
+            if not world.dash_shuffle[player] and item["name"] == "Dash":
+                continue
+            if not world.wall_climb_shuffle[player] and item["name"] == "Wall Climb":
+                continue
+            if not world.boots_of_pleading[player] and item["name"] == "Boots of Pleading":
+                continue
+            if not world.purified_hand[player] and item["name"] == "Purified Hand of the Nun":
+                continue
+
             count = item["count"] - counter[item["name"]]
             
             if count <= 0:
@@ -169,92 +140,21 @@ class BlasphemousWorld(World):
                 for i in range(count):
                     pool.append(self.create_item(item["name"]))
 
-        self.multiworld.itempool += pool
+        world.itempool += pool
 
 
     def pre_fill(self):
-        self.place_items_from_dict(Vanilla.unrandomized_dict)
-
-        if not self.multiworld.cherub_shuffle[self.player]:
-            self.place_items_from_set(Vanilla.cherub_set, "Child of Moonlight")
-
-        if not self.multiworld.life_shuffle[self.player]:
-            self.place_items_from_set(Vanilla.life_set, "Life Upgrade")
-
-        if not self.multiworld.fervour_shuffle[self.player]:
-            self.place_items_from_set(Vanilla.fervour_set, "Fervour Upgrade")
-
-        if not self.multiworld.sword_shuffle[self.player]:
-            self.place_items_from_set(Vanilla.sword_set, "Mea Culpa Upgrade")
-
-        if not self.multiworld.blessing_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.blessing_dict)
-
-        if not self.multiworld.dungeon_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.dungeon_dict)
-
-        if not self.multiworld.tirso_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.tirso_dict)
-
-        if not self.multiworld.miriam_shuffle[self.player]:
-            self.multiworld.get_location("AtTotS: Miriam's gift", self.player)\
-                .place_locked_item(self.create_item("Cantina of the Blue Rose"))
-
-        if not self.multiworld.redento_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.redento_dict)
-
-        if not self.multiworld.jocinero_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.jocinero_dict)
-
-        if not self.multiworld.altasgracias_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.altasgracias_dict)
-
-        if not self.multiworld.tentudia_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.tentudia_dict)
-
-        if not self.multiworld.gemino_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.gemino_dict)
-
-        if not self.multiworld.guilt_shuffle[self.player]:
-            self.multiworld.get_location("GotP: Confessor Dungeon room", self.player)\
-                .place_locked_item(self.create_item("Weight of True Guilt"))
-
-        if not self.multiworld.ossuary_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.ossuary_dict)
-
-        if not self.multiworld.boss_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.boss_dict)
-
-        if not self.multiworld.wound_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.wound_dict)
-
-        if not self.multiworld.mask_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.mask_dict)
-
-        if not self.multiworld.eye_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.eye_dict)
-
-        if not self.multiworld.herb_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.herb_dict)
-
-        if not self.multiworld.church_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.church_dict)
-
-        if not self.multiworld.shop_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.shop_dict)
+        self.place_items_from_dict(unrandomized_dict)
 
         if self.multiworld.thorn_shuffle[self.player] == 2:
-            self.place_items_from_set(Vanilla.thorn_set, "Thorn Upgrade")
-
-        if not self.multiworld.candle_shuffle[self.player]:
-            self.place_items_from_dict(Vanilla.candle_dict)
+            self.place_items_from_set(thorn_set, "Thorn Upgrade")
 
         if self.multiworld.start_wheel[self.player]:
             self.multiworld.get_location("BotSS: Beginning gift", self.player)\
                 .place_locked_item(self.create_item("The Young Mason's Wheel"))
 
         if not self.multiworld.skill_randomizer[self.player]:
-            self.place_items_from_dict(Vanilla.skill_dict)
+            self.place_items_from_dict(skill_dict)
 
         if self.multiworld.thorn_shuffle[self.player] == 1:
             self.multiworld.local_items[self.player].value.add("Thorn Upgrade")
@@ -315,12 +215,12 @@ class BlasphemousWorld(World):
                 add_rule(world.get_entrance(door["Id"], player), lambda state: state.can_reach(self.get_connected_door(door["Id"])), "or")
 
         for loc in location_table:
-            reg: Region
+            if not world.boots_of_pleading[player] and loc["name"] == "BotSS: 2nd meeting with Redento":
+                continue
+            if not world.purified_hand[player] and loc["name"] == "MoM: Western room ledge":
+                continue
 
-            if loc["room"] == "misc":
-                reg = world.get_region("Misc", player)
-            else:
-                reg = world.get_region(loc["room"], player)
+            reg: Region = world.get_region(loc["room"], player)
 
             id = base_id + location_table.index(loc)
             reg.locations.append(BlasphemousLocation(player, loc["name"], id, reg))
@@ -391,7 +291,7 @@ class BlasphemousWorld(World):
 
         config = {
             "LogicDifficulty": world.difficulty[player].value,
-            "StartingLocation": "",
+            "StartingLocation": 0,
             "VersionCreated": "AP",
             
             "UnlockTeleportation": bool(world.prie_dieu_warp[player].value),
@@ -399,14 +299,14 @@ class BlasphemousWorld(World):
             "AllowPenitence": bool(world.penitence[player].value),
             
             "ShuffleReliquaries": bool(world.reliquary_shuffle[player].value),
-            "ShuffleDash": "",
-            "ShuffleWallClimb": "",
-            "ShuffleBootsOfPleading": "",
-            "ShufflePurifiedHand": "",
+            "ShuffleBootsOfPleading": bool(world.boots_of_pleading[player].value),
+            "ShufflePurifiedHand": bool(world.purified_hand[player].value),
+            "ShuffleDash": bool(world.dash_shuffle[player].value),
+            "ShuffleWallClimb": bool(world.wall_climb_shuffle[player].value),
             
             "ShuffleSwordSkills": bool(world.skill_randomizer[player].value),
             "ShuffleThorns": thorns,
-            "JunkLongQuests": "",
+            "JunkLongQuests": bool(world.skip_long_quests[player].value),
             "StartWithWheel": bool(world.start_wheel[player].value),
 
             "EnemyShuffleType": world.enemy_randomizer[player].value,
