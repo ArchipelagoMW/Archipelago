@@ -279,7 +279,7 @@ def ShopSlotFill(multiworld):
                     if 'P' in multiworld.shop_shuffle[location.player]:
                         price_to_funny_price(multiworld, shop.inventory[location.shop_slot], location.player)
 
-    FillDisabledShopSlots(world)
+    FillDisabledShopSlots(multiworld)
 
 
 def create_shops(world, player: int):
