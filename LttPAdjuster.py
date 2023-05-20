@@ -193,7 +193,7 @@ def adjustGUI():
     from tkinter import Tk, LEFT, BOTTOM, TOP, \
         StringVar, Frame, Label, X, Entry, Button, filedialog, messagebox, ttk
     from argparse import Namespace
-    from Main import __version__ as MWVersion
+    from Utils import __version__ as MWVersion
     adjustWindow = Tk()
     adjustWindow.wm_title("Archipelago %s LttP Adjuster" % MWVersion)
     set_icon(adjustWindow)
