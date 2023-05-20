@@ -97,16 +97,18 @@ class MuseDashWorld(World):
         if (total_available_songs < startingSongCount + 2):
             raise Exception("Not enough songs available to satify the starting song count.")
 
-        self.victory_song_name = self.pop_random_item(available_song_keys)
+        self.multiworld.random.shuffle(available_song_keys)
+
+        self.victory_song_name = available_song_keys.pop()
 
         for _ in range(0, startingSongCount):
-            self.starting_songs.append(self.pop_random_item(available_song_keys))
+            self.starting_songs.append(available_song_keys.pop())
 
         for _ in range(0, self.multiworld.additional_song_count[self.player]):
             if (len(available_song_keys) <= 0):
                 break
 
-            self.included_songs.append(self.pop_random_item(available_song_keys))
+            self.included_songs.append(available_song_keys.pop())
 
         self.location_count = len(self.starting_songs) + len(self.included_songs)
         location_multiplier = 1 + (self.get_additional_item_percentage() / 100.0)
@@ -115,13 +117,6 @@ class MuseDashWorld(World):
         minimum_location_count = len(self.included_songs) + self.get_music_sheet_count()
         if (self.location_count < minimum_location_count):
             self.location_count = minimum_location_count
-
-    # Todo: Update this to list[str] when python 3.8 stops being used
-    def pop_random_item(self, list: list) -> str:
-        index = self.multiworld.random.randrange(0, len(list))
-        choice = list[index]
-        list.pop(index)
-        return choice
 
     def create_item(self, name: str) -> Item:
         if (name == self.music_sheet_name):
