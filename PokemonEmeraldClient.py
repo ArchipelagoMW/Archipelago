@@ -2,7 +2,7 @@ import asyncio
 import json
 import os
 import subprocess
-from typing import Optional, Set, Tuple
+from typing import Optional, Dict, Set, Tuple
 import zipfile
 
 import bsdiff4
@@ -18,9 +18,9 @@ from worlds.pokemon_emerald.options import Goal
 
 GBA_SOCKET_PORT = 43053
 
-CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart connector_pkmn_emerald.lua"
-CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure connector_pkmn_emerald.lua is running"
-CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart connector_pkmn_emerald.lua"
+CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart pokemon_emerald_connector.lua"
+CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure pokemon_emerald_connector.lua is running"
+CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart pokemon_emerald_connector.lua"
 CONNECTION_STATUS_TENTATIVE = "Initial connection made"
 CONNECTION_STATUS_CONNECTED = "Connected"
 CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
@@ -28,6 +28,10 @@ CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
 IS_CHAMPION_FLAG = data.constants["FLAG_IS_CHAMPION"]
 DEFEATED_STEVEN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_STEVEN"]
 DEFEATED_NORMAN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_NORMAN_1"]
+
+TRACKER_EVENT_FLAGS = [
+    "FLAG_SET_WALL_CLOCK",
+]
 
 
 class GBACommandProcessor(ClientCommandProcessor):
@@ -46,6 +50,7 @@ class GBAContext(CommonContext):
     awaiting_rom = False
     gba_push_pull_task: Optional[asyncio.Task]
     local_checked_locations: Set[int]
+    local_set_events: Dict[str, int]
     goal_flag: int = IS_CHAMPION_FLAG
 
     def __init__(self, server_address: Optional[str], password: Optional[str]):
@@ -54,6 +59,7 @@ class GBAContext(CommonContext):
         self.gba_status = CONNECTION_STATUS_INITIAL
         self.gba_push_pull_task = None
         self.local_checked_locations = set()
+        self.local_set_events = {event_name: False for event_name in TRACKER_EVENT_FLAGS}
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -104,16 +110,24 @@ async def handle_read_data(gba_data, ctx: GBAContext):
                 await ctx.server_auth(False)
 
     if "flag_bytes" in gba_data:
+        event_flag_map = {data.constants[flag_name]: flag_name for flag_name in TRACKER_EVENT_FLAGS}
+        local_set_events = {flag_name: False for flag_name in TRACKER_EVENT_FLAGS}
+
         # If flag is set and corresponds to a location, add to local_checked_locations
         for byte_i, byte in enumerate(gba_data["flag_bytes"]):
             for i in range(8):
                 if byte & (1 << i) != 0:
                     flag_id = byte_i * 8 + i
+
                     location_id = flag_id + config["ap_offset"]
                     if location_id in ctx.server_locations:
                         local_checked_locations.add(location_id)
+
                     if flag_id == ctx.goal_flag:
                         game_clear = True
+
+                    if flag_id in event_flag_map:
+                        local_set_events[event_flag_map[flag_id]] = True
 
         if local_checked_locations != ctx.local_checked_locations:
             ctx.local_checked_locations = local_checked_locations
@@ -129,6 +143,17 @@ async def handle_read_data(gba_data, ctx: GBAContext):
                 "cmd": "StatusUpdate",
                 "status": ClientStatus.CLIENT_GOAL
             }])
+
+        if local_set_events != ctx.local_set_events:
+            ctx.local_set_events = local_set_events
+
+            await ctx.send_msgs([{
+                "cmd": "Set",
+                "key": event_name,
+                "default": False,
+                "want_reply": False,
+                "operations": [{"operation": "replace", "value": 1 if is_set else 0}]
+            } for event_name, is_set in local_set_events])
 
 
 async def gba_send_receive_task(ctx: GBAContext):
