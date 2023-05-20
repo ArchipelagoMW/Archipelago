@@ -37,13 +37,18 @@ jobs:
           echo "diff=${DIFF//$'\n'/$' '}" >> $GITHUB_ENV
 
       - name: "Determine modified files (push)"
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
         run: |
           git fetch origin $BEFORE $AFTER
           DIFF=$(git diff --diff-filter=d --name-only $BEFORE..$AFTER -- "*.py")
           echo "modified files:"
           echo "$DIFF"
           echo "diff=${DIFF//$'\n'/$' '}" >> $GITHUB_ENV
+
+      - name: "Treat all files as modified (new branch)"
+        if: github.event_name == 'push' && github.event.before == '0000000000000000000000000000000000000000'
+        run: |
+          echo "diff=." >> $GITHUB_ENV
 
       - uses: actions/setup-python@v4
         if: env.diff != ''
