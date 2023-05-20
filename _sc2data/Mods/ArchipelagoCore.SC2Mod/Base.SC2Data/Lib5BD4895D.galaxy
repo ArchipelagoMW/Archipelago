@@ -1,0 +1,559 @@
+include "TriggerLibs/NativeLib"
+
+include "Lib5BD4895D_h"
+
+//--------------------------------------------------------------------------------------------------
+// Library: ArchipelagoCore
+//--------------------------------------------------------------------------------------------------
+// External Library Initialization
+void lib5BD4895D_InitLibraries () {
+    libNtve_InitVariables();
+}
+
+// Variable Initialization
+bool lib5BD4895D_InitVariables_completed = false;
+
+void lib5BD4895D_InitVariables () {
+    int init_i;
+
+    if (lib5BD4895D_InitVariables_completed) {
+        return;
+    }
+
+    lib5BD4895D_InitVariables_completed = true;
+
+    lib5BD4895D_gv_aP_Core_Faction_RaynorsRaiders = "rr";
+    lib5BD4895D_gv_aP_Core_Faction_TerranDominion = "td";
+    lib5BD4895D_gv_aP_Core_Faction_PrimalZerg = "pz";
+    lib5BD4895D_gv_aP_Core_Faction_KerriganSwarm = "ks";
+    lib5BD4895D_gv_aP_Core_Faction_Daelaam = "da";
+    lib5BD4895D_gv_aP_Core_affectedPlayers = PlayerGroupSingle(1);
+    for (init_i = 0; init_i <= 20; init_i += 1) {
+        lib5BD4895D_gv_aP_Core_PlayerFactions[init_i] = "";
+    }
+    lib5BD4895D_gv_chatbox.lv_mainpanel = c_invalidDialogId;
+    lib5BD4895D_gv_chatbox.lv_chatpanel = c_invalidDialogId;
+    lib5BD4895D_gv_chatbox.lv_hiddenpanel = c_invalidDialogId;
+    lib5BD4895D_gv_chatbox.lv_chatlabel = c_invalidDialogControlId;
+    lib5BD4895D_gv_chatbox.lv_scrollupbtn = c_invalidDialogControlId;
+    lib5BD4895D_gv_chatbox.lv_scrolldownbtn = c_invalidDialogControlId;
+    lib5BD4895D_gv_chatbox.lv_scrollbottonbtn = c_invalidDialogControlId;
+    lib5BD4895D_gv_chatbox.lv_maxmessages = 50;
+    lib5BD4895D_gv_chatbox.lv_scrollstrength = 18;
+    lib5BD4895D_gv_chatbox.lv_sizeupbtn = c_invalidDialogControlId;
+    lib5BD4895D_gv_chatbox.lv_sizedownbtn = c_invalidDialogControlId;
+    lib5BD4895D_gv_chatbox.lv_size = 3;
+    lib5BD4895D_gv_chatbox.lv_countlabel = c_invalidDialogControlId;
+    lib5BD4895D_gv_chatbox.lv_hidebtn = c_invalidDialogControlId;
+    lib5BD4895D_gv_chatbox.lv_showbtn = c_invalidDialogControlId;
+}
+
+// Functions
+void lib5BD4895D_gf_AP_Core_sendLocationLocal (int lp_locationIdLocal) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lib5BD4895D_gv_aP_Core_initFinished == true)) {
+        UnitSetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, (UnitGetPropertyInt(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropCurrent) - PowI(2.0, lp_locationIdLocal)));
+        lib5BD4895D_gv_aP_Core_controllerStatus = (lib5BD4895D_gv_aP_Core_controllerStatus + PowI(2.0, lp_locationIdLocal));
+    }
+
+}
+
+text lib5BD4895D_gf_getchatboxcontent () {
+    // Variable Declarations
+    int lv_index;
+    text lv_tmptext;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_index = 1;
+    lv_tmptext = lib5BD4895D_gv_chatbox.lv_chatmessage[0];
+
+    // Implementation
+    while ((lv_index < lib5BD4895D_gv_chatbox.lv_maxmessages)) {
+        lv_tmptext = (lib5BD4895D_gv_chatbox.lv_chatmessage[lv_index] + StringExternal("Param/Value/lib_5BD4895D_C38FCBB5") + lv_tmptext);
+        lv_index += 1;
+    }
+    return lv_tmptext;
+}
+
+void lib5BD4895D_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety) {
+    // Variable Declarations
+    int lv_btnsize;
+    int lv_btnxoffset;
+    int lv_chatlblsizex;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_btnsize = 35;
+    lv_btnxoffset = 35;
+    lv_chatlblsizex = (lp_sizex - 110);
+
+    // Implementation
+    DialogCreate(lp_sizex, lp_sizey, lp_anchor, lp_offsetx, lp_offsety, true);
+    DialogSetTitle(DialogLastCreated(), StringExternal("Param/Value/lib_5BD4895D_DA943ABE"));
+    lib5BD4895D_gv_chatbox.lv_mainpanel = DialogLastCreated();
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 30, StringExternal("Param/Value/lib_5BD4895D_63A08DA4"), StringExternal("Param/Value/lib_5BD4895D_5C0E7029"), "");
+    lib5BD4895D_gv_chatbox.lv_scrollbottonbtn = DialogControlLastCreated();
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 65, StringExternal("Param/Value/lib_5BD4895D_01ECC464"), StringExternal("Param/Value/lib_5BD4895D_F3CCECCC"), "");
+    lib5BD4895D_gv_chatbox.lv_scrolldownbtn = DialogControlLastCreated();
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 90, StringExternal("Param/Value/lib_5BD4895D_4C80D61A"), StringExternal("Param/Value/lib_5BD4895D_D418EF7A"), "");
+    lib5BD4895D_gv_chatbox.lv_scrollupbtn = DialogControlLastCreated();
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorTopRight, (lv_btnxoffset * 2), 65, StringExternal("Param/Value/lib_5BD4895D_1458BA0D"), StringExternal("Param/Value/lib_5BD4895D_6A6F1572"), "");
+    lib5BD4895D_gv_chatbox.lv_sizeupbtn = DialogControlLastCreated();
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorTopRight, (lv_btnxoffset * 3), 65, StringExternal("Param/Value/lib_5BD4895D_4534657D"), StringExternal("Param/Value/lib_5BD4895D_45A8E99F"), "");
+    lib5BD4895D_gv_chatbox.lv_sizedownbtn = DialogControlLastCreated();
+    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), lv_chatlblsizex, 30, c_anchorTopRight, (lv_btnxoffset * 5), 65, StringExternal("Param/Value/lib_5BD4895D_80AC2922"), ColorWithAlpha(0,0,0,0), false, 2.0);
+    libNtve_gf_SetDialogItemStyle(DialogControlLastCreated(), "BottomRight", PlayerGroupAll());
+    lib5BD4895D_gv_chatbox.lv_countlabel = DialogControlLastCreated();
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorTopRight, (lv_btnxoffset / 2), (lv_btnxoffset / 2), StringExternal("Param/Value/lib_5BD4895D_EFEE213D"), StringExternal("Param/Value/lib_5BD4895D_C9546BEE"), "");
+    lib5BD4895D_gv_chatbox.lv_hidebtn = DialogControlLastCreated();
+    DialogCreate(lv_chatlblsizex, (lp_sizey - 136), lp_anchor, lp_offsetx, (lp_offsety - 18), true);
+    lib5BD4895D_gv_chatbox.lv_chatpanel = DialogLastCreated();
+    DialogSetImageVisible(DialogLastCreated(), false);
+    DialogSetPositionRelative(DialogLastCreated(), c_anchorBottomLeft, lib5BD4895D_gv_chatbox.lv_mainpanel, c_anchorBottomLeft, lv_btnxoffset, -36);
+    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), lv_chatlblsizex, 10000, c_anchorBottom, 0, 0, StringToText(""), ColorWithAlpha(0,0,0,0), false, 2.0);
+    libNtve_gf_SetDialogItemStyle(DialogControlLastCreated(), "BottomLeft", PlayerGroupAll());
+    lib5BD4895D_gv_chatbox.lv_chatlabel = DialogControlLastCreated();
+    DialogCreate((lv_btnsize * 3), (lv_btnsize * 3), lp_anchor, lp_offsetx, lp_offsety, true);
+    DialogSetImageVisible(DialogLastCreated(), false);
+    DialogSetVisible(DialogLastCreated(), PlayerGroupAll(), false);
+    lib5BD4895D_gv_chatbox.lv_hiddenpanel = DialogLastCreated();
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorTopRight, (lv_btnxoffset / 2), (lv_btnxoffset / 2), StringExternal("Param/Value/lib_5BD4895D_15729E06"), StringExternal("Param/Value/lib_5BD4895D_D109326B"), "");
+    lib5BD4895D_gv_chatbox.lv_showbtn = DialogControlLastCreated();
+}
+
+void lib5BD4895D_gf_showhidechatbox (int lp_player, bool lp_visible) {
+    // Variable Declarations
+    playergroup lv_pg;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_pg = PlayerGroupSingle(lp_player);
+
+    // Implementation
+    DialogSetVisible(lib5BD4895D_gv_chatbox.lv_mainpanel, lv_pg, lp_visible);
+    DialogSetVisible(lib5BD4895D_gv_chatbox.lv_chatpanel, lv_pg, lp_visible);
+}
+
+void lib5BD4895D_gf_sendchatmessage (int lp_fromplayer, string lp_message) {
+    // Variable Declarations
+    int lv_index;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_index = (lib5BD4895D_gv_chatbox.lv_maxmessages - 1);
+
+    // Implementation
+    while ((lv_index > 0)) {
+        lib5BD4895D_gv_chatbox.lv_chatmessage[lv_index] = lib5BD4895D_gv_chatbox.lv_chatmessage[(lv_index - 1)];
+        lv_index -= 1;
+    }
+    lib5BD4895D_gv_chatbox.lv_messagecount += 1;
+    lib5BD4895D_gv_chatbox.lv_chatmessage[0] = StringToText(((IntToString(lib5BD4895D_gv_chatbox.lv_messagecount) + ": ") + lp_message));
+    libNtve_gf_SetDialogItemText(lib5BD4895D_gv_chatbox.lv_chatlabel, lib5BD4895D_gf_getchatboxcontent(), PlayerGroupAll());
+    libNtve_gf_SetDialogItemText(lib5BD4895D_gv_chatbox.lv_countlabel, StringToText((IntToString(lib5BD4895D_gv_chatbox.lv_messagecount) + " Total")), PlayerGroupAll());
+}
+
+void lib5BD4895D_gf_AP_Core_rainbowController (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    PlayerSetColorIndex(lp_player, 1, true);
+    Wait(lib5BD4895D_gv_aP_Core_rainbowCyclePeriod, c_timeReal);
+    PlayerSetColorIndex(lp_player, 6, true);
+    Wait(lib5BD4895D_gv_aP_Core_rainbowCyclePeriod, c_timeReal);
+    PlayerSetColorIndex(lp_player, 5, true);
+    Wait(lib5BD4895D_gv_aP_Core_rainbowCyclePeriod, c_timeReal);
+    PlayerSetColorIndex(lp_player, 7, true);
+    Wait(lib5BD4895D_gv_aP_Core_rainbowCyclePeriod, c_timeReal);
+    PlayerSetColorIndex(lp_player, 3, true);
+    Wait(lib5BD4895D_gv_aP_Core_rainbowCyclePeriod, c_timeReal);
+    PlayerSetColorIndex(lp_player, 2, true);
+    Wait(lib5BD4895D_gv_aP_Core_rainbowCyclePeriod, c_timeReal);
+    PlayerSetColorIndex(lp_player, 4, true);
+    Wait(lib5BD4895D_gv_aP_Core_rainbowCyclePeriod, c_timeReal);
+    lib5BD4895D_gf_AP_Core_rainbowController(lp_player);
+}
+
+int lib5BD4895D_gf_AP_Core_getPlayerColorByIndex (int lp_colorIndex) {
+    // Automatic Variable Declarations
+    // Implementation
+    return lp_colorIndex;
+}
+
+void lib5BD4895D_gf_AP_Core_giveBonusSupplies (int lp_player, int lp_amount) {
+    // Variable Declarations
+    unit lv_supplyHolder;
+    int lv_upgrade1SupplyCount;
+    int lv_upgrade2SupplyCount;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    if ((TechTreeUnitCount(lp_player, "AP_Core_SupplyHolder", c_techCountQueuedOrBetter) < 1)) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "AP_Core_SupplyHolder", c_unitCreateIgnorePlacement, lp_player, Point(0.0, 0.0));
+    }
+
+    lv_supplyHolder = UnitGroupUnit(UnitGroup("AP_Core_SupplyHolder", lp_player, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
+    lv_upgrade2SupplyCount = ModI(lp_amount, 2);
+    lv_upgrade1SupplyCount = (lp_amount -  (2 * lv_upgrade2SupplyCount));
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_Core_SupplyPerStack", lv_upgrade1SupplyCount);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_Core_SupplyPerStack2", lv_upgrade2SupplyCount);
+}
+
+void lib5BD4895D_gf_AP_Core_setFactionColor (string lp_faction, int lp_colorIndex) {
+    // Variable Declarations
+    int lv_color;
+    int lv_currentPlayer;
+
+    // Automatic Variable Declarations
+    playergroup autoC0E582B5_g;
+    playergroup auto436127A7_g;
+
+    // Variable Initialization
+    lv_color = 1;
+
+    // Implementation
+    if ((lp_colorIndex <= 15)) {
+        lv_color = lib5BD4895D_gf_AP_Core_getPlayerColorByIndex(lp_colorIndex);
+        autoC0E582B5_g = PlayerGroupAll();
+        lv_currentPlayer = -1;
+        while (true) {
+            lv_currentPlayer = PlayerGroupNextPlayer(autoC0E582B5_g, lv_currentPlayer);
+            if (lv_currentPlayer < 0) { break; }
+            if ((lp_faction == (lib5BD4895D_gv_aP_Core_PlayerFactions[lv_currentPlayer]))) {
+                PlayerSetColorIndex(lv_currentPlayer, lv_color, true);
+            }
+
+        }
+    }
+    else if ((lp_colorIndex == 16)) {
+        auto436127A7_g = PlayerGroupAll();
+        lv_currentPlayer = -1;
+        while (true) {
+            lv_currentPlayer = PlayerGroupNextPlayer(auto436127A7_g, lv_currentPlayer);
+            if (lv_currentPlayer < 0) { break; }
+            if ((lp_faction == (lib5BD4895D_gv_aP_Core_PlayerFactions[lv_currentPlayer]))) {
+                lib5BD4895D_gf_AP_Core_rainbowController(lv_currentPlayer);
+            }
+
+        }
+    }
+}
+
+void lib5BD4895D_gf_AP_Core_setObjectiveCompleted (int lp_objective) {
+    // Automatic Variable Declarations
+    // Implementation
+    ObjectiveSetName(lp_objective, (StringExternal("Param/Value/lib_5BD4895D_841DB864") + ObjectiveGetName(lp_objective)));
+}
+
+// Triggers
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Core_controllerInit
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_AP_Core_controllerInit_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((TechTreeUnitCount(1, "AP_Core_Controller", c_techCountQueuedOrBetter) < 1)) {
+        libNtve_gf_CreateUnitsWithDefaultFacing(1, "AP_Core_Controller", c_unitCreateIgnorePlacement, 1, Point(0.0, 0.0));
+    }
+
+    lib5BD4895D_gv_aP_Core_controller = UnitGroupUnit(UnitGroup("AP_Core_Controller", 1, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), 1);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_AP_Core_controllerInit_Init () {
+    lib5BD4895D_gt_AP_Core_controllerInit = TriggerCreate("lib5BD4895D_gt_AP_Core_controllerInit_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Core_dontHideController
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_AP_Core_dontHideController_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((libNtve_gf_UnitIsHidden(lib5BD4895D_gv_aP_Core_controller) == true))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ShowHideUnit(lib5BD4895D_gv_aP_Core_controller, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_AP_Core_dontHideController_Init () {
+    lib5BD4895D_gt_AP_Core_dontHideController = TriggerCreate("lib5BD4895D_gt_AP_Core_dontHideController_Func");
+    TriggerAddEventTimePeriodic(lib5BD4895D_gt_AP_Core_dontHideController, 0.1, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: update chatbox
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_updatechatbox_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_sendchatmessage(EventPlayer(), StringSub(EventChatMessage(false), 13, StringLength(EventChatMessage(false))));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_updatechatbox_Init () {
+    lib5BD4895D_gt_updatechatbox = TriggerCreate("lib5BD4895D_gt_updatechatbox_Func");
+    TriggerAddEventChatMessage(lib5BD4895D_gt_updatechatbox, c_playerAny, "?SendMessage", false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: chatbox buttons
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_chatboxbuttons_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_sizex;
+    int lv_sizey;
+    int lv_chatlblsizex;
+    int lv_chatlblsizey;
+    int lv_currentoffsety;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_sizex = 500;
+    lv_sizey = 350;
+    lv_chatlblsizex = (lv_sizex - 110);
+    lv_chatlblsizey = (lv_sizey - 100);
+
+    // Conditions
+    if (testConds) {
+        if (!((DialogControlGetDialog(EventDialogControl()) == lib5BD4895D_gv_chatbox.lv_mainpanel))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((EventDialogControl() == lib5BD4895D_gv_chatbox.lv_scrollbottonbtn)) {
+        DialogControlSetPosition(lib5BD4895D_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, 0);
+    }
+    else {
+        lv_currentoffsety = DialogControlGetOffsetY(lib5BD4895D_gv_chatbox.lv_chatlabel, EventPlayer());
+        if ((EventDialogControl() == lib5BD4895D_gv_chatbox.lv_scrolldownbtn)) {
+            if ((lv_currentoffsety < 0)) {
+                DialogControlSetPosition(lib5BD4895D_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety + lib5BD4895D_gv_chatbox.lv_scrollstrength));
+            }
+
+        }
+        else {
+            if ((EventDialogControl() == lib5BD4895D_gv_chatbox.lv_scrollupbtn)) {
+                DialogControlSetPosition(lib5BD4895D_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety - lib5BD4895D_gv_chatbox.lv_scrollstrength));
+            }
+            else {
+                if ((EventDialogControl() == lib5BD4895D_gv_chatbox.lv_sizedownbtn)) {
+                    if ((lib5BD4895D_gv_chatbox.lv_size > -1)) {
+                        lib5BD4895D_gv_chatbox.lv_size -= 1;
+                        lv_sizey = (242 + (36 * lib5BD4895D_gv_chatbox.lv_size));
+                        lv_chatlblsizey = (lv_sizey - 136);
+                        DialogSetSize(lib5BD4895D_gv_chatbox.lv_mainpanel, lv_sizex, lv_sizey);
+                        DialogSetSize(lib5BD4895D_gv_chatbox.lv_chatpanel, lv_chatlblsizex, lv_chatlblsizey);
+                    }
+
+                }
+                else {
+                    if ((EventDialogControl() == lib5BD4895D_gv_chatbox.lv_sizeupbtn)) {
+                        if ((lib5BD4895D_gv_chatbox.lv_size < 10)) {
+                            lib5BD4895D_gv_chatbox.lv_size += 1;
+                            lv_sizey = (242 + (36 * lib5BD4895D_gv_chatbox.lv_size));
+                            lv_chatlblsizey = (lv_sizey - 136);
+                            DialogSetSize(lib5BD4895D_gv_chatbox.lv_mainpanel, lv_sizex, lv_sizey);
+                            DialogSetSize(lib5BD4895D_gv_chatbox.lv_chatpanel, lv_chatlblsizex, lv_chatlblsizey);
+                        }
+
+                    }
+                    else {
+                        if ((EventDialogControl() == lib5BD4895D_gv_chatbox.lv_hidebtn)) {
+                            DialogSetVisible(lib5BD4895D_gv_chatbox.lv_mainpanel, PlayerGroupSingle(EventPlayer()), false);
+                            DialogSetVisible(lib5BD4895D_gv_chatbox.lv_chatpanel, PlayerGroupSingle(EventPlayer()), false);
+                            DialogSetVisible(lib5BD4895D_gv_chatbox.lv_hiddenpanel, PlayerGroupSingle(EventPlayer()), true);
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_chatboxbuttons_Init () {
+    lib5BD4895D_gt_chatboxbuttons = TriggerCreate("lib5BD4895D_gt_chatboxbuttons_Func");
+    TriggerAddEventDialogControl(lib5BD4895D_gt_chatboxbuttons, c_playerAny, c_invalidDialogControlId, c_triggerControlEventTypeClick);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: chatbox show
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_chatboxshow_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((DialogControlGetDialog(EventDialogControl()) == lib5BD4895D_gv_chatbox.lv_hiddenpanel))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((EventDialogControl() == lib5BD4895D_gv_chatbox.lv_showbtn)) {
+        DialogSetVisible(lib5BD4895D_gv_chatbox.lv_hiddenpanel, PlayerGroupSingle(EventPlayer()), false);
+        DialogSetVisible(lib5BD4895D_gv_chatbox.lv_mainpanel, PlayerGroupSingle(EventPlayer()), true);
+        DialogSetVisible(lib5BD4895D_gv_chatbox.lv_chatpanel, PlayerGroupSingle(EventPlayer()), true);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_chatboxshow_Init () {
+    lib5BD4895D_gt_chatboxshow = TriggerCreate("lib5BD4895D_gt_chatboxshow_Func");
+    TriggerAddEventDialogControl(lib5BD4895D_gt_chatboxshow, c_playerAny, c_invalidDialogControlId, c_triggerControlEventTypeClick);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Core_giveStartingResources
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_AP_Core_giveStartingResources_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_mineralAmount;
+    int lv_gasAmount;
+    int lv_supplyAmount;
+    int lv_currentPlayer;
+
+    // Automatic Variable Declarations
+    playergroup autoED0BFB0D_g;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_mineralAmount = StringToInt(StringWord(EventChatMessage(false), 2));
+    lv_gasAmount = StringToInt(StringWord(EventChatMessage(false), 3));
+    lv_supplyAmount = StringToInt(StringWord(EventChatMessage(false), 4));
+    autoED0BFB0D_g = lib5BD4895D_gv_aP_Core_affectedPlayers;
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(autoED0BFB0D_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        PlayerModifyPropertyInt(lv_currentPlayer, c_playerPropMinerals, c_playerPropOperAdd, lv_mineralAmount);
+        PlayerModifyPropertyInt(lv_currentPlayer, c_playerPropVespene, c_playerPropOperAdd, lv_gasAmount);
+        lib5BD4895D_gf_AP_Core_giveBonusSupplies(lv_currentPlayer, lv_supplyAmount);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_AP_Core_giveStartingResources_Init () {
+    lib5BD4895D_gt_AP_Core_giveStartingResources = TriggerCreate("lib5BD4895D_gt_AP_Core_giveStartingResources_Func");
+    TriggerAddEventChatMessage(lib5BD4895D_gt_AP_Core_giveStartingResources, c_playerAny, "?GiveResources", false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Core_setFactionColorHandler
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_AP_Core_setFactionColorHandler_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    string lv_faction;
+    int lv_color;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_faction = "";
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_faction = StringWord(EventChatMessage(false), 2);
+    lv_color = StringToInt(StringWord(EventChatMessage(false), 3));
+    lib5BD4895D_gf_AP_Core_setFactionColor(lv_faction, lv_color);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_AP_Core_setFactionColorHandler_Init () {
+    lib5BD4895D_gt_AP_Core_setFactionColorHandler = TriggerCreate("lib5BD4895D_gt_AP_Core_setFactionColorHandler_Func");
+    TriggerAddEventChatMessage(lib5BD4895D_gt_AP_Core_setFactionColorHandler, c_playerAny, "?SetColor", false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Core_clearChat
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_AP_Core_clearChat_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UIClearMessages(PlayerGroupAll(), c_messageAreaChat);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_AP_Core_clearChat_Init () {
+    lib5BD4895D_gt_AP_Core_clearChat = TriggerCreate("lib5BD4895D_gt_AP_Core_clearChat_Func");
+    TriggerAddEventChatMessage(lib5BD4895D_gt_AP_Core_clearChat, c_playerAny, "", false);
+}
+
+void lib5BD4895D_InitTriggers () {
+    lib5BD4895D_gt_AP_Core_controllerInit_Init();
+    lib5BD4895D_gt_AP_Core_dontHideController_Init();
+    lib5BD4895D_gt_updatechatbox_Init();
+    lib5BD4895D_gt_chatboxbuttons_Init();
+    lib5BD4895D_gt_chatboxshow_Init();
+    lib5BD4895D_gt_AP_Core_giveStartingResources_Init();
+    lib5BD4895D_gt_AP_Core_setFactionColorHandler_Init();
+    lib5BD4895D_gt_AP_Core_clearChat_Init();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_InitLib_completed = false;
+
+void lib5BD4895D_InitLib () {
+    if (lib5BD4895D_InitLib_completed) {
+        return;
+    }
+
+    lib5BD4895D_InitLib_completed = true;
+
+    lib5BD4895D_InitLibraries();
+    lib5BD4895D_InitVariables();
+    lib5BD4895D_InitTriggers();
+}
+
