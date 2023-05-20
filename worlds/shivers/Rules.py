@@ -98,7 +98,7 @@ def get_rules_lookup(player: int):
             "To UFO": lambda state: state.has("Key for UFO Room", player),
             "To Torture": lambda state: state.has("Key for Torture Room", player),
             "To Puzzle Room Mastermind": lambda state: state.has("Key for Puzzle Room", player),
-            "To Bedroom": lambda state: state.has("Key for Bedroom Room", player),
+            "To Bedroom": lambda state: state.has("Key for Bedroom", player),
             "To Underground Lake": lambda state: state.has("Key for Underground Lake Room", player),
             "To Maintenance Tunnels From Theater Back Hallways": lambda state: state.has("Crawling", player),
             "To Blue Maze": lambda state: state.has("Crawling", player),
