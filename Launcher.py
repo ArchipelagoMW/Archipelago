@@ -11,6 +11,7 @@ Scroll down to components= to add components to the launcher as well as setup.py
 
 import argparse
 import itertools
+import multiprocessing
 import shlex
 import subprocess
 import sys
@@ -245,6 +246,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
 if __name__ == '__main__':
     init_logging('Launcher')
+    multiprocessing.freeze_support()
     parser = argparse.ArgumentParser(description='Archipelago Launcher')
     parser.add_argument('Patch|Game|Component', type=str, nargs='?',
                         help="Pass either a patch file, a generated game or the name of a component to run.")
