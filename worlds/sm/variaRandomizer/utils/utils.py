@@ -373,6 +373,8 @@ def loadRandoPreset(world, player, args):
     args.gravityBehaviour = defaultMultiValues["gravityBehaviour"][world.gravity_behaviour[player].value]
     args.nerfedCharge = world.nerfed_charge[player].value
     args.area = world.area_randomization[player].current_key
+    if (args.area == "true"):
+        args.area = "full"
     if args.area != "off":
         args.areaLayoutBase = not world.area_layout[player].value
     args.escapeRando = world.escape_rando[player].value

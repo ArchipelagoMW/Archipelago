@@ -1,9 +1,9 @@
 local socket = require("socket")
 local json = require('json')
 local math = require('math')
-require('common.lua')
+require('common')
 
-local last_modified_date = '2022-4-9' -- Should be the last modified date
+local last_modified_date = '2022-4-15' -- Should be the last modified date
 local script_version = 3
 
 --------------------------------------------------

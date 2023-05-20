@@ -25,12 +25,9 @@ class Goal(Choice):
     Community Center: The world will be completed once you complete the Community Center.
     Grandpa's Evaluation: The world will be completed once 4 candles are lit at Grandpa's Shrine.
     Bottom of the Mines: The world will be completed once you reach level 120 in the mineshaft.
-    Cryptic Note: The world will be completed once you complete the quest "Cryptic Note" where Mr Qi asks you to
-        reach floor 100 in the Skull Cavern.
-    Master Angler: The world will be completed once you have caught every fish in the game. Pairs well with
-        Fishsanity.
-    Complete Collection: The world will be completed once you have completed the museum by donating every possible
-        item. Pairs well with Museumsanity.
+    Cryptic Note: The world will be completed once you complete the quest "Cryptic Note" where Mr Qi asks you to reach floor 100 in the Skull Cavern.
+    Master Angler: The world will be completed once you have caught every fish in the game. Pairs well with Fishsanity.
+    Complete Collection: The world will be completed once you have completed the museum by donating every possible item. Pairs well with Museumsanity.
     Full House: The world will be completed once you get married and have two kids. Pairs well with Friendsanity.
     """
     internal_name = "goal"
@@ -163,10 +160,9 @@ class SeasonRandomization(Choice):
 
 class SeedShuffle(Choice):
     """Should seeds be randomized?
-    Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in
-        huge packs.
+    Pierre now sells a random amount of seasonal seeds and Joja sells them without season requirements, but only in huge packs.
     Disabled: All the seeds will be unlocked from the start.
-    Randomized: The seeds will be unlocked as Archipelago items
+    Shuffled: The seeds will be unlocked as Archipelago items
     """
     internal_name = "seed_shuffle"
     display_name = "Seed Shuffle"
@@ -296,6 +292,7 @@ class Fishsanity(Choice):
     option_legendaries = 1
     option_special = 2
     option_randomized = 3
+    alias_random_selection = option_randomized
     option_all = 4
 
 
@@ -462,6 +459,7 @@ class GiftTax(SpecialRange):
 
 
 stardew_valley_option_classes = [
+    Goal,
     StartingMoney,
     ResourcePackMultiplier,
     BundleRandomization,
@@ -480,7 +478,6 @@ stardew_valley_option_classes = [
     Museumsanity,
     Friendsanity,
     NumberOfPlayerBuffs,
-    Goal,
     MultipleDaySleepEnabled,
     MultipleDaySleepCost,
     ExperienceMultiplier,

@@ -1,6 +1,7 @@
 import collections
-from worlds.alttp.Regions import create_lw_region, create_dw_region, create_cave_region, create_dungeon_region
-from worlds.alttp.SubClasses import LTTPRegionType
+
+from .Regions import create_lw_region, create_dw_region, create_cave_region, create_dungeon_region
+from .SubClasses import LTTPRegionType
 
 
 def create_inverted_regions(world, player):
