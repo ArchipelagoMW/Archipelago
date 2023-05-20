@@ -42,14 +42,15 @@ class MuseDashCollections:
             line = line.strip()
             sections = line.split("|")
 
-            if sections[1] not in self.album_items:
-                self.album_items[sections[1]] = AlbumData(item_id_index)
+            if sections[2] not in self.album_items:
+                self.album_items[sections[2]] = AlbumData(item_id_index)
                 item_id_index += 1
 
-            # Data is in the format 'Song|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
+            # Data is in the format 'Song|UID|Album|StreamerMode|EasyDiff|HardDiff|MasterDiff|SecretDiff'
             song_name = sections[0]
-            song_is_free = sections[1] in self.FREE_ALBUMS
-            steamer_mode = sections[2] == "True"
+            # [1] is used in the client copy to make sure item id's match.
+            song_is_free = sections[2] in self.FREE_ALBUMS
+            steamer_mode = sections[3] == "True"
 
             if song_name in self.DIFF_OVERRIDES:
                 # Note: These difficulties may not actually be representative of these songs.
@@ -58,9 +59,9 @@ class MuseDashCollections:
                 diff_of_hard = 7
                 diff_of_master = 10
             else:
-                diff_of_easy = self.parse_song_difficulty(sections[3])
-                diff_of_hard = self.parse_song_difficulty(sections[4])
-                diff_of_master = self.parse_song_difficulty(sections[5])
+                diff_of_easy = self.parse_song_difficulty(sections[4])
+                diff_of_hard = self.parse_song_difficulty(sections[5])
+                diff_of_master = self.parse_song_difficulty(sections[6])
 
             self.song_items[song_name] = SongData(item_id_index, song_is_free, steamer_mode,
                                                   diff_of_easy, diff_of_hard, diff_of_master)
