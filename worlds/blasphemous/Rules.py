@@ -488,8 +488,7 @@ def rules(blasphemousworld):
                 state._blasphemous_fall_relic(player))) or \
                     (state._blasphemous_root_relic(player) and \
                         state._blasphemous_cherub_6(player)) or \
-                            (state._blasphemous_debla(player) or \
-                                state._blasphemous_taranto(player)))
+                            state._blasphemous_taranto(player))
     set_rule(world.get_location("BotSS: Starting room ledge", player),
         lambda state: state._blasphemous_blood_relic(player) and \
             state._blasphemous_fall_relic(player))
