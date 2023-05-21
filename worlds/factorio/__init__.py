@@ -18,7 +18,15 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items, valid_ingredients, progressive_rows
 
-components.append(Component("Factorio Client", "FactorioClient"))
+
+def launch_client():
+    import multiprocessing
+    from .Client import launch
+    process = multiprocessing.Process(target=launch)
+    process.start()
+
+
+components.append(Component("Factorio Client", "FactorioClient", func=launch_client))
 
 
 class FactorioWeb(WebWorld):
