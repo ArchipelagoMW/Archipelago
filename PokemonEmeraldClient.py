@@ -69,7 +69,7 @@ class GBAContext(CommonContext):
     awaiting_rom = False
     gba_push_pull_task: Optional[asyncio.Task]
     local_checked_locations: Set[int]
-    local_set_events: Dict[str, int]
+    local_set_events: Dict[str, bool]
     goal_flag: int = IS_CHAMPION_FLAG
 
     def __init__(self, server_address: Optional[str], password: Optional[str]):
@@ -164,15 +164,14 @@ async def handle_read_data(gba_data, ctx: GBAContext):
             }])
 
         if local_set_events != ctx.local_set_events:
-            ctx.local_set_events = local_set_events
-
             await ctx.send_msgs([{
                 "cmd": "Set",
                 "key": event_name,
                 "default": False,
                 "want_reply": False,
                 "operations": [{"operation": "replace", "value": 1 if is_set else 0}]
-            } for event_name, is_set in local_set_events])
+            } for event_name, is_set in local_set_events.items() if is_set != ctx.local_set_events[event_name]])
+            ctx.local_set_events = local_set_events
 
 
 async def gba_send_receive_task(ctx: GBAContext):
