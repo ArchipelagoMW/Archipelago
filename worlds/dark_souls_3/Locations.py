@@ -566,18 +566,21 @@ location_tables = {
     # Progressive
     "Progressive Items 1": [] +
         # Upgrade materials
-        [DS3LocationData(f"Titanite Shard #{i + 1}",       "Titanite Shard",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(10)] +
-        [DS3LocationData(f"Large Titanite Shard #{i + 1}", "Large Titanite Shard", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(10)] +
-        [DS3LocationData(f"Titanite Chunk #{i + 1}",       "Titanite Chunk",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(16)] +
+        [DS3LocationData(f"Titanite Shard #{i + 1}",       "Titanite Shard",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(26)] +
+        [DS3LocationData(f"Large Titanite Shard #{i + 1}", "Large Titanite Shard", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(28)] +
         [DS3LocationData(f"Titanite Slab #{i + 1}",        "Titanite Slab",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
-        [DS3LocationData(f"Titanite Scale #{i + 1}",       "Titanite Scale",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(26)] +
-        [DS3LocationData(f"Twinkling Titanite #{i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(7)] +
+        [DS3LocationData(f"Twinkling Titanite #{i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)] +
 
         # Healing
         [DS3LocationData(f"Estus Shard #{i + 1}",       "Estus Shard",       DS3LocationCategory.HEALTH) for i in range(15)] +
         [DS3LocationData(f"Undead Bone Shard #{i + 1}", "Undead Bone Shard", DS3LocationCategory.HEALTH) for i in range(5)],
 
     "Progressive Items 2": [] +
+        #Upgrade materials cont.
+        [DS3LocationData(f"Titanite Chunk #{i + 1}",       "Titanite Chunk",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(22)] +
+        [DS3LocationData(f"Titanite Scale #{i + 1}",       "Titanite Scale",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(29)],
+
+    "Progressive Items 3": [] +
         # Items
         [DS3LocationData(f"Green Blossom #{i + 1}",        "Green Blossom",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(6)] +
         [DS3LocationData(f"Firebomb #{i + 1}",             "Firebomb",             DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(4)] +
@@ -601,7 +604,7 @@ location_tables = {
         # Equipment
         [DS3LocationData(f"Ring of Sacrifice #{i + 1}", "Ring of Sacrifice", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(4)],
 
-    "Progressive Items 3": [] +
+    "Progressive Items 4": [] +
         # Souls
         [DS3LocationData(f"Fading Soul #{i + 1}",                       "Fading Soul",                       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
         [DS3LocationData(f"Soul of a Deserted Corpse #{i + 1}",         "Soul of a Deserted Corpse",         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
@@ -615,6 +618,8 @@ location_tables = {
         [DS3LocationData(f"Titanite Chunk ${i + 1}",       "Titanite Chunk",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)] +
         [DS3LocationData(f"Titanite Slab ${i + 1}",        "Titanite Slab",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Twinkling Titanite ${i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
+        [DS3LocationData(f"Titanite Scale #{i + 1}",       "Titanite Scale",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(11)] +
+
 
         # Items
         [DS3LocationData(f"Homeward Bone ${i + 1}", "Homeward Bone", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(6)] +

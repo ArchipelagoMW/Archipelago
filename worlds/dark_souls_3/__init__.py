@@ -87,7 +87,8 @@ class DarkSouls3World(World):
             progressive_location_table = [] + \
                 location_tables["Progressive Items 1"] + \
                 location_tables["Progressive Items 2"] + \
-                location_tables["Progressive Items 3"]
+                location_tables["Progressive Items 3"] + \
+                location_tables["Progressive Items 4"]
 
             if self.multiworld.enable_dlc[self.player].value:
                 progressive_location_table += location_tables["Progressive Items DLC"]
