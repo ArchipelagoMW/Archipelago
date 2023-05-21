@@ -516,6 +516,8 @@ location_tables = {
         DS3LocationData("DH: Flame Fan",                           "Flame Fan",                               DS3LocationCategory.SPELL),
         DS3LocationData("DH: Soul of the Demon Prince",            "Soul of the Demon Prince",                DS3LocationCategory.MISC),
         DS3LocationData("DH: Small Envoy Banner",                  "Small Envoy Banner",                      DS3LocationCategory.KEY),
+        DS3LocationData("DH: Ring of Favor+3",                     "Ring of Favor+3",                         DS3LocationCategory.RING),
+        DS3LocationData("DH: Covetous Silver Serpent Ring+3",      "Covetous Silver Serpent Ring+3",          DS3LocationCategory.RING),
     ],
     "Ringed City": [
         DS3LocationData("RC: Ruin Sentinel Helm",                  "Ruin Sentinel Helm",                      DS3LocationCategory.ARMOR),
@@ -553,18 +555,21 @@ location_tables = {
         DS3LocationData("RC: Violet Wrappings",                    "Violet Wrappings",                        DS3LocationCategory.ARMOR),
         DS3LocationData("RC: Soul of Darkeater Midir",             "Soul of Darkeater Midir",                 DS3LocationCategory.MISC),
         DS3LocationData("RC: Soul of Slave Knight Gael",           "Soul of Slave Knight Gael",               DS3LocationCategory.MISC),
-        DS3LocationData("RC: Blood of the Dark Soul",              "Blood of the Dark Soul",                  DS3LocationCategory.KEY),
+        DS3LocationData("RC: Blood of the Dark Souls",             "Blood of the Dark Soul",                  DS3LocationCategory.KEY),
+        DS3LocationData("RC: Chloranthy Ring+3",                   "Chloranthy Ring+3",                       DS3LocationCategory.RING),
+        DS3LocationData("RC: Ring of Steel Protection+3",          "Ring of Steel Protection+3",              DS3LocationCategory.RING),
+        DS3LocationData("RC: Covetous Gold Serpent Ring+3",        "Covetous Gold Serpent Ring+3",            DS3LocationCategory.RING),
+        DS3LocationData("RC: Ring of the Evil Eye+3",              "Ring of the Evil Eye+3",                  DS3LocationCategory.RING),
+        DS3LocationData("RC: Wolf Ring+3",                         "Wolf Ring+3",                             DS3LocationCategory.RING),
     ],
 
     # Progressive
     "Progressive Items 1": [] +
         # Upgrade materials
-        [DS3LocationData(f"Titanite Shard #{i + 1}",       "Titanite Shard",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(10)] +
-        [DS3LocationData(f"Large Titanite Shard #{i + 1}", "Large Titanite Shard", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(10)] +
-        [DS3LocationData(f"Titanite Chunk #{i + 1}",       "Titanite Chunk",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(16)] +
+        [DS3LocationData(f"Titanite Shard #{i + 1}",       "Titanite Shard",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(26)] +
+        [DS3LocationData(f"Large Titanite Shard #{i + 1}", "Large Titanite Shard", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(28)] +
         [DS3LocationData(f"Titanite Slab #{i + 1}",        "Titanite Slab",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
-        [DS3LocationData(f"Titanite Scale #{i + 1}",       "Titanite Scale",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(26)] +
-        [DS3LocationData(f"Twinkling Titanite #{i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(7)] +
+        [DS3LocationData(f"Twinkling Titanite #{i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)] +
 
         # Healing
         [DS3LocationData(f"Estus Shard #{i + 1}",       "Estus Shard",       DS3LocationCategory.HEALTH) for i in range(15)] +
@@ -595,12 +600,14 @@ location_tables = {
         [DS3LocationData(f"Ring of Sacrifice #{i + 1}", "Ring of Sacrifice", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(4)],
 
     "Progressive Items 3": [] +
-        # Souls
+        # Souls & Bulk Upgrade Materials
         [DS3LocationData(f"Fading Soul #{i + 1}",                       "Fading Soul",                       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
         [DS3LocationData(f"Soul of a Deserted Corpse #{i + 1}",         "Soul of a Deserted Corpse",         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
         [DS3LocationData(f"Large Soul of a Deserted Corpse #{i + 1}",   "Large Soul of a Deserted Corpse",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
         [DS3LocationData(f"Soul of an Unknown Traveler #{i + 1}",       "Soul of an Unknown Traveler",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
-        [DS3LocationData(f"Large Soul of an Unknown Traveler #{i + 1}", "Large Soul of an Unknown Traveler", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)],
+        [DS3LocationData(f"Large Soul of an Unknown Traveler #{i + 1}", "Large Soul of an Unknown Traveler", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
+        [DS3LocationData(f"Titanite Chunk #{i + 1}",                    "Titanite Chunk",                    DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(22)] +
+        [DS3LocationData(f"Titanite Scale #{i + 1}",                    "Titanite Scale",                    DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(29)],
 
     "Progressive Items DLC": [] +
         # Upgrade materials
@@ -608,6 +615,8 @@ location_tables = {
         [DS3LocationData(f"Titanite Chunk ${i + 1}",       "Titanite Chunk",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)] +
         [DS3LocationData(f"Titanite Slab ${i + 1}",        "Titanite Slab",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Twinkling Titanite ${i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
+        [DS3LocationData(f"Titanite Scale #{i + 1}",       "Titanite Scale",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(11)] +
+
 
         # Items
         [DS3LocationData(f"Homeward Bone ${i + 1}", "Homeward Bone", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(6)] +
