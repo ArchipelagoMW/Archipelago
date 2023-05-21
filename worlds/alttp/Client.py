@@ -10,7 +10,7 @@ import Utils
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
 
-from worlds.alttp import Shops, Regions
+from . import Shops, Regions
 from .Rom import ROM_PLAYER_LIMIT
 
 snes_logger = logging.getLogger("SNES")
@@ -270,17 +270,20 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      'Ganons Tower - Pre-Moldorm Chest': (0x3d, 0x40),
                      'Ganons Tower - Validation Chest': (0x4d, 0x10)}
 
-boss_locations = {Regions.lookup_name_to_id[name] for name in {'Eastern Palace - Boss',
-                                                               'Desert Palace - Boss',
-                                                               'Tower of Hera - Boss',
-                                                               'Palace of Darkness - Boss',
-                                                               'Swamp Palace - Boss',
-                                                               'Skull Woods - Boss',
-                                                               "Thieves' Town - Boss",
-                                                               'Ice Palace - Boss',
-                                                               'Misery Mire - Boss',
-                                                               'Turtle Rock - Boss',
-                                                               'Sahasrahla'}}
+collect_ignore_locations = {Regions.lookup_name_to_id[name] for name in {
+    'Eastern Palace - Boss',
+    'Desert Palace - Boss',
+    'Tower of Hera - Boss',
+    'Palace of Darkness - Boss',
+    'Swamp Palace - Boss',
+    'Skull Woods - Boss',
+    "Thieves' Town - Boss",
+    'Ice Palace - Boss',
+    'Misery Mire - Boss',
+    'Turtle Rock - Boss',
+    'Sahasrahla',
+    'Master Sword Pedestal',  # can circumvent ganon pedestal's goal's pendant collection
+}}
 
 location_table_uw_id = {Regions.lookup_name_to_id[name]: data for name, data in location_table_uw.items()}
 
@@ -322,8 +325,15 @@ location_table_misc = {'Bottle Merchant': (0x3c9, 0x2),
 location_table_misc_id = {Regions.lookup_name_to_id[name]: data for name, data in location_table_misc.items()}
 
 
+def should_collect(ctx, location_id: int) -> bool:
+    return ctx.allow_collect and location_id not in collect_ignore_locations and location_id in ctx.checked_locations \
+            and location_id not in ctx.locations_checked and location_id in ctx.locations_info \
+            and ctx.locations_info[location_id].player != ctx.slot
+
+
 async def track_locations(ctx, roomid, roomdata) -> bool:
     from SNIClient import snes_read, snes_buffered_write, snes_flush_writes
+    location_id: int
     new_locations = []
 
     def new_check(location_id):
@@ -331,18 +341,19 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
         ctx.locations_checked.add(location_id)
         location = ctx.location_names[location_id]
         snes_logger.info(
-            f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+            f'New Check: {location} ' +
+            f'({len(ctx.checked_locations) + 1 if ctx.checked_locations else len(ctx.locations_checked)}/' +
+            f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
     try:
         shop_data = await snes_read(ctx, SHOP_ADDR, SHOP_LEN)
         shop_data_changed = False
         shop_data = list(shop_data)
         for cnt, b in enumerate(shop_data):
-            location = Shops.SHOP_ID_START + cnt
-            if int(b) and location not in ctx.locations_checked:
-                new_check(location)
-            if ctx.allow_collect and location in ctx.checked_locations and location not in ctx.locations_checked \
-                    and location in ctx.locations_info and ctx.locations_info[location].player != ctx.slot:
+            location_id = Shops.SHOP_ID_START + cnt
+            if int(b) and location_id not in ctx.locations_checked:
+                new_check(location_id)
+            if should_collect(ctx, location_id):
                 if not int(b):
                     shop_data[cnt] += 1
                     shop_data_changed = True
@@ -369,9 +380,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
             uw_unchecked[location_id] = (roomid, mask)
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
-        if ctx.allow_collect and location_id not in boss_locations and location_id in ctx.checked_locations \
-                and location_id not in ctx.locations_checked and location_id in ctx.locations_info \
-                and ctx.locations_info[location_id].player != ctx.slot:
+        if should_collect(ctx, location_id):
             uw_begin = min(uw_begin, roomid)
             uw_end = max(uw_end, roomid + 1)
             uw_checked[location_id] = (roomid, mask)
@@ -402,8 +411,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
             ow_unchecked[location_id] = screenid
             ow_begin = min(ow_begin, screenid)
             ow_end = max(ow_end, screenid + 1)
-            if ctx.allow_collect and location_id in ctx.checked_locations and location_id in ctx.locations_info \
-                    and ctx.locations_info[location_id].player != ctx.slot:
+            if should_collect(ctx, location_id):
                 ow_checked[location_id] = screenid
 
     if ow_begin < ow_end:
@@ -426,9 +434,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
             for location_id, mask in location_table_npc_id.items():
                 if npc_value & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
-                if ctx.allow_collect and location_id not in boss_locations and location_id in ctx.checked_locations \
-                        and location_id not in ctx.locations_checked and location_id in ctx.locations_info \
-                        and ctx.locations_info[location_id].player != ctx.slot:
+                if should_collect(ctx, location_id):
                     npc_value |= mask
                     npc_value_changed = True
             if npc_value_changed:
@@ -444,8 +450,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
                 assert (0x3c6 <= offset <= 0x3c9)
                 if misc_data[offset - 0x3c6] & mask != 0 and location_id not in ctx.locations_checked:
                     new_check(location_id)
-                if ctx.allow_collect and location_id in ctx.checked_locations and location_id not in ctx.locations_checked \
-                        and location_id in ctx.locations_info and ctx.locations_info[location_id].player != ctx.slot:
+                if should_collect(ctx, location_id):
                     misc_data_changed = True
                     misc_data[offset - 0x3c6] |= mask
             if misc_data_changed:

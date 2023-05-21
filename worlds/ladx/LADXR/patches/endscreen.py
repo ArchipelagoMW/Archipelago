@@ -1,6 +1,6 @@
 from ..assembler import ASM
 import os
-
+import pkgutil
 
 def updateEndScreen(rom):
     # Call our custom data loader in bank 3F
@@ -134,6 +134,6 @@ loadLoop2:
     """))
     
     addr = 0x1000
-    for c in open(os.path.join(os.path.dirname(__file__), "nyan.bin"), "rb").read():
-        rom.banks[0x3F][addr] = c
-        addr += 1
+    data = pkgutil.get_data(__name__, "nyan.bin")    
+    rom.banks[0x3F][addr : addr + len(data)] = data
+

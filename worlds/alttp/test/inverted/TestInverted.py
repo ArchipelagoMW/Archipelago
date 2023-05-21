@@ -16,7 +16,7 @@ class TestInverted(TestBase, LTTPTestBase):
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         self.multiworld.mode[1] = "inverted"
         create_inverted_regions(self.multiworld, 1)
-        create_dungeons(self.multiworld, 1)
+        self.multiworld.worlds[1].create_dungeons()
         create_shops(self.multiworld, 1)
         link_inverted_entrances(self.multiworld, 1)
         self.multiworld.worlds[1].create_items()
