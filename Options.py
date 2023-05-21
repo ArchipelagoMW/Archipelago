@@ -1094,10 +1094,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            all_options: typing.Dict[str, AssembleOptions] = {
-                **per_game_common_options,
-                **world.option_definitions
-            }
+            all_options: typing.Dict[str, AssembleOptions] = world.options_dataclass.type_hints
 
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
