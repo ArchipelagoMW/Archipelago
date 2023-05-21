@@ -599,7 +599,7 @@ _dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
 
     ("Spear of the Church",              0x2000276A, DS3ItemCategory.SKIP),
 
-    ("Havel's Ring +3",                  0x20004E37, DS3ItemCategory.RING),
+    ("Havel's Ring+3",                   0x20004E37, DS3ItemCategory.RING),
     ("Chillbite Ring",                   0x20005208, DS3ItemCategory.RING),
 
     ("Church Guardian Shiv",             0x4000013B, DS3ItemCategory.MISC),
