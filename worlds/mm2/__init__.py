@@ -2,7 +2,7 @@ from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule
 import Names
-
+from .Items import item_table, item_names
 from typing import Dict
 import os
 import math
@@ -31,16 +31,13 @@ class MM2World(World):
     """
 
     game: str = "Mega Man 2"
-    option_definitions = kdl3_options
+    #option_definitions = kdl3_options
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location_table[location]: location for location in location_table}
     item_name_groups = item_names
     data_version = 0
-    web = KDL3WebWorld()
-    required_heart_stars = dict()
+    web = MM2WebWorld()
     boss_requirements = dict()
-    player_levels = dict()
-    topology_present = False
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -54,7 +51,7 @@ class MM2World(World):
 
     create_regions = create_levels
 
-    def create_item(self, name: str, force_non_progression=False) -> KDL3Item:
+    def create_item(self, name: str, force_non_progression=False) -> MM2Item:
         item = item_table[name]
         classification = ItemClassification.filler
         if item.progression and not force_non_progression:
