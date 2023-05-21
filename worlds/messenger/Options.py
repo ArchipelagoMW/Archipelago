@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle, StartInventoryPool
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle, StartInventoryPool,\
+    PerGameCommonOptions
 
 
 class MessengerAccessibility(Accessibility):
