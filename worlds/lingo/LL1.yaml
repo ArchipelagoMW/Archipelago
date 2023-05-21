@@ -2642,7 +2642,6 @@
       Shortcut to The Undeterred:
         id: Count Up Room Area Doors/Door_return_double
         group: Directional Gallery Doors
-        junk_item: True
         panels:
           - TURN
           - LEARN
