@@ -111,8 +111,8 @@ World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 Special locations with ID `None` can hold events.
 
 Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED`.
-The Fill algorithm will fill priority first, giving higher chance of it being
-required, and not place progression or useful items in excluded locations.
+The Fill algorithm will force progression items to be placed at priority locations, giving a higher chance of them being
+required, and will prevent progression and useful items from being placed at excluded locations.
 
 ### Items
 

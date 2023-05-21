@@ -247,5 +247,5 @@ def get_shapes(factorio_world: "Factorio") -> Dict["FactorioScienceLocation", Se
     else:
         raise NotImplementedError(f"Layout {layout} is not implemented.")
 
-    world.tech_tree_layout_prerequisites[player] = prerequisites
+    factorio_world.tech_tree_layout_prerequisites = prerequisites
     return prerequisites
