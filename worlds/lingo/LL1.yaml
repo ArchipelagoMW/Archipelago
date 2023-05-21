@@ -229,7 +229,7 @@
         id: Countdown Panels/Panel_seeker_seeker
         required_room: Hidden Room
         check: True
-        achievement: True
+        achievement: The Seeker
   Second Room:
     entrances:
       Starting Room:
@@ -634,7 +634,7 @@
         check: True
         required_door:
           door: Required Panels
-        achievement: True
+        achievement: The Tenacious
     doors:
       Shortcut to Hub Room:
         id:
@@ -866,7 +866,7 @@
         colors: black
         required_room: Outside The Agreeable
         check: True
-        achievement: True
+        achievement: The Agreeable
       BYE:
         id: Antonym Room/Panel_bye_hi
         colors: black
@@ -963,7 +963,7 @@
         id: Countdown Panels/Panel_perceptive_perceptive
         colors: green
         check: True
-        achievement: True
+        achievement: The Perceptive
       GAZE:
         id: Maze Room/Panel_look_look
         check: True
@@ -1058,7 +1058,7 @@
         id: Countdown Panels/Panel_fearless_fearless
         colors: black
         check: True
-        achievement: True
+        achievement: The Fearless
   The Observant:
     entrances:
       Hedge Maze:
@@ -1072,7 +1072,7 @@
         check: True
         required_door:
           door: Stairs
-        achievement: True
+        achievement: The Observant
       BACK:
         id: Look Room/Panel_four_back
         colors: green
@@ -1113,7 +1113,7 @@
           - Elements Area
           - Courtyard
           - Eight Room
-        achievement: True
+        achievement: The Incomparable
       I (Seven):
         id: Strand Room/Panel_i_strings
         colors: blue
@@ -1909,7 +1909,7 @@
             door: Progress Door
           - room: The Colorful (Gray)
             door: Progress Door
-        achievement: True
+        achievement: The Colorful
     paintings:
       - id: arrows_painting_12
         orientation: north
@@ -2028,7 +2028,7 @@
         check: True
         required_door:
           door: Backsides
-        achievement: True
+        achievement: The Optimistic
     doors:
       Shortcut to Hub Room:
         id: Appendix Room Area Doors/Door_recover_discover
@@ -2116,7 +2116,7 @@
         id: Countdown Panels/Panel_illuminated_initiated
         colors: purple
         check: True
-        achievement: True
+        achievement: The Initiated
   The Traveled:
     entrances:
       Hub Room:
@@ -2129,7 +2129,7 @@
         id: Countdown Panels/Panel_traveled_traveled
         required_room: Hub Room
         check: True
-        achievement: True
+        achievement: The Traveled
       HELLO:
         id: Synonym Room/Panel_hello_hi
       FOUR:
@@ -2229,7 +2229,7 @@
         id: Countdown Panels/Panel_emboldened_bold
         colors: red
         check: True
-        achievement: True
+        achievement: The Bold
   Outside The Undeterred:
     entrances:
       Color Hallways: True
@@ -2390,7 +2390,7 @@
         id: Countdown Panels/Panel_deterred_undeterred
         colors: blue
         check: True
-        achievement: True
+        achievement: The Undeterred
   Number Hunt:
     # This works a little differently than in the base game. The door to the
     # initial number in each set opens at the same time as the rest of the doors
@@ -2750,7 +2750,7 @@
           - red
           - yellow
           - blue
-        achievement: True
+        achievement: The Bearer
       MIDDLE:
         id: Shuffle Room/Panel_middle_middle_2
       SHORTCUT:
@@ -2811,7 +2811,7 @@
           - red
           - blue
         check: True
-        achievement: True
+        achievement: The Steady
       MASTERY:
         id: Master Room/Panel_mastery_mastery2
         colors:
@@ -2929,7 +2929,7 @@
           - The Artistic (Apple)
           - The Artistic (Lattice)
         check: True
-        achievement: True
+        achievement: The Artistic
       FINE:
         id: Ceiling Room/Panel_yellow_top_5
         colors: yellow
@@ -3205,7 +3205,7 @@
         id: Countdown Panels/Panel_discerning_scramble
         colors: yellow
         check: True
-        achievement: True
+        achievement: The Discerning
   The Eyes They See:
     entrances:
       Crossroads:
@@ -3357,7 +3357,7 @@
         id: Countdown Panels/Panel_wondrous_wondrous
         required_door:
           door: Required Panels
-        achievement: True
+        achievement: The Wondrous
     doors:
       Required Panels:
         event: True
@@ -3548,7 +3548,7 @@
         id: Countdown Panels/Panel_1234567890_wanderlust
         colors: orange
         check: True
-        achievement: True
+        achievement: The Wanderer
   Art Gallery:
     entrances:
       Orange Tower Third Floor: True
@@ -4126,7 +4126,7 @@
           - brown
           - black
         check: True
-        achievement: True
+        achievement: The Wise
     paintings:
       - id: clock_painting_3
         orientation: east
@@ -4140,7 +4140,7 @@
           - red
           - black
         check: True
-        achievement: True
+        achievement: The Red
   The Ecstatic:
     entrances:
       Roof: True
@@ -4149,7 +4149,7 @@
         id: Countdown Panels/Panel_ecstatic_ecstatic
         colors: yellow
         check: True
-        achievement: True
+        achievement: The Ecstatic
   Outside The Scientific:
     entrances:
       Roof: True
@@ -4180,7 +4180,7 @@
           - black
           - purple
         check: True
-        achievement: True
+        achievement: The Scientific
       HYDROGEN (1):
         id: Chemistry Room/Panel_blue_bot_3
         colors: blue
@@ -4367,7 +4367,7 @@
           - purple
           - brown
           - orange
-        achievement: True
+        achievement: The Unchallenged
     doors:
       Welcome Door:
         id: Entry Room Area Doors/Door_challenge_challenge

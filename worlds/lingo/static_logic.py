@@ -183,7 +183,7 @@ class StaticLingoLogic:
                             event = False
 
                         if "achievement" in panel_data:
-                            achievement = panel_data["achievement"]
+                            achievement = True
                         else:
                             achievement = False
 
