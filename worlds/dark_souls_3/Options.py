@@ -56,6 +56,16 @@ class RandomizeProgressiveLocationsOption(Toggle):
     display_name = "Randomize Progressive Locations"
 
 
+class PoolTypeOption(Choice):
+    """Changes which non-progression items you add to the pool
+
+    Shuffle: Items are picked from the locations being randomized
+    Various: Items are picked from a list of all items in the game, but are the same type of item they replace"""
+    display_name = "Pool Type"
+    option_shuffle = 0
+    option_various = 1
+
+
 class AutoEquipOption(Toggle):
     """Automatically equips any received armor or left/right weapons."""
     display_name = "Auto-Equip"
@@ -180,6 +190,7 @@ dark_souls_options: typing.Dict[str, type(Option)] = {
     "enable_misc_locations": RandomizeMiscLocations,
     "enable_health_upgrade_locations": RandomizeHealthLocations,
     "enable_progressive_locations": RandomizeProgressiveLocationsOption,
+    "pool_type": PoolTypeOption,
     "auto_equip": AutoEquipOption,
     "lock_equip": LockEquipOption,
     "no_weapon_requirements": NoWeaponRequirementsOption,

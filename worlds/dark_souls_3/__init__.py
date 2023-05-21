@@ -3,7 +3,7 @@ from typing import Dict, Set
 
 from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names
 from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
-from .Options import RandomizeWeaponLevelOption, dark_souls_options
+from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
 from Options import Toggle
@@ -224,40 +224,41 @@ class DarkSouls3World(World):
                     itempool_by_category[location.category].append(location.default_item_name)
 
         # Replace each item category with a random sample of items of those types
-        def create_random_replacement_list(item_categories: Set[DS3ItemCategory], num_items: int):
-            candidates = [
-                item.name for item
-                in item_dictionary.values()
-                if (item.category in item_categories and
-                    (not item.is_dlc or dlc_enabled))
-            ]
-            return self.multiworld.random.sample(candidates, num_items)
+        if self.multiworld.pool_type[self.player] == PoolTypeOption.option_various:
+            def create_random_replacement_list(item_categories: Set[DS3ItemCategory], num_items: int):
+                candidates = [
+                    item.name for item
+                    in item_dictionary.values()
+                    if (item.category in item_categories and
+                        (not item.is_dlc or dlc_enabled))
+                ]
+                return self.multiworld.random.sample(candidates, num_items)
 
-        if DS3LocationCategory.WEAPON in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.WEAPON] = create_random_replacement_list(
-                {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10},
-                len(itempool_by_category[DS3LocationCategory.WEAPON])
-            )
-        if DS3LocationCategory.SHIELD in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.SHIELD] = create_random_replacement_list(
-                {DS3ItemCategory.SHIELD},
-                len(itempool_by_category[DS3LocationCategory.SHIELD])
-            )
-        if DS3LocationCategory.ARMOR in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.ARMOR] = create_random_replacement_list(
-                {DS3ItemCategory.ARMOR},
-                len(itempool_by_category[DS3LocationCategory.ARMOR])
-            )
-        if DS3LocationCategory.RING in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.RING] = create_random_replacement_list(
-                {DS3ItemCategory.RING},
-                len(itempool_by_category[DS3LocationCategory.RING])
-            )
-        if DS3LocationCategory.SPELL in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.SPELL] = create_random_replacement_list(
-                {DS3ItemCategory.SPELL},
-                len(itempool_by_category[DS3LocationCategory.SPELL])
-            )
+            if DS3LocationCategory.WEAPON in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.WEAPON] = create_random_replacement_list(
+                    {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10},
+                    len(itempool_by_category[DS3LocationCategory.WEAPON])
+                )
+            if DS3LocationCategory.SHIELD in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.SHIELD] = create_random_replacement_list(
+                    {DS3ItemCategory.SHIELD},
+                    len(itempool_by_category[DS3LocationCategory.SHIELD])
+                )
+            if DS3LocationCategory.ARMOR in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.ARMOR] = create_random_replacement_list(
+                    {DS3ItemCategory.ARMOR},
+                    len(itempool_by_category[DS3LocationCategory.ARMOR])
+                )
+            if DS3LocationCategory.RING in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.RING] = create_random_replacement_list(
+                    {DS3ItemCategory.RING},
+                    len(itempool_by_category[DS3LocationCategory.RING])
+                )
+            if DS3LocationCategory.SPELL in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.SPELL] = create_random_replacement_list(
+                    {DS3ItemCategory.SPELL},
+                    len(itempool_by_category[DS3LocationCategory.SPELL])
+                )
 
         # Add items to itempool
         for category in self.enabled_location_categories:
