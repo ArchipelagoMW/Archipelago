@@ -1,9 +1,9 @@
 from . import setup_solo_multiworld
 from BaseClasses import ItemClassification, MultiWorld
-from TestOptions import basic_checks, SVTestBase
+from .TestOptions import basic_checks, SVTestBase
 from ..options import stardew_valley_option_classes, Mods
-from ..items import all_items
-from ..locations import all_locations
+from ..items import all_items, load_item_csv
+from ..locations import all_locations, load_location_csv
 
 mod_list = ["DeepWoods", "Tractor Mod", "Bigger Backpack",
             "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
@@ -14,21 +14,18 @@ mod_list = ["DeepWoods", "Tractor Mod", "Bigger Backpack",
 
 
 def check_stray_mod_items(mod: str, tester: SVTestBase, multiworld: MultiWorld):
-    mod_items = []
-    mod_locations = []
-    for items in all_items:
-        if items.mod_name == mod:
-            mod_items.append(items)
-    for locations in all_locations:
-        if locations.mod_name == mod:
-            mod_locations.append(locations)
+    not_mod_items = [item_data.name for item_data in load_item_csv() if item_data.mod_name != mod and
+                     item_data.mod_name is not None]
+    not_mod_locations = [location_data.name for location_data in load_location_csv() if location_data.mod_name != mod
+                         and location_data.mod_name is not None]
     for item in multiworld.get_items():
-        if item.mod_name is not None:
-            tester.assertNotIn(item.name, mod_items)
-    for location in multiworld.get_locations():
-        if not mod_locations:
+        if not not_mod_items:
             continue
-        tester.assertNotIn(location.name, mod_locations)
+        tester.assertNotIn(item.name, not_mod_items)
+    for location in multiworld.get_locations():
+        if not not_mod_locations:
+            continue
+        tester.assertNotIn(location.name, not_mod_locations)
 
 
 class TestGenerateModsOptions(SVTestBase):
