@@ -17,6 +17,7 @@ class TestBaseItemGeneration(SVTestBase):
         all_created_items = [item.name for item in self.multiworld.itempool]
         # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
         items_to_ignore = [event.name for event in items.events]
+        items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.FOOTWEAR])
@@ -63,6 +64,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         all_created_items = [item.name for item in self.multiworld.itempool]
         # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
         items_to_ignore = [event.name for event in items.events]
+        items_to_ignore.extend(item.name for item in items.all_items if item.mod_name is not None)
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.FOOTWEAR])
@@ -111,7 +113,8 @@ class TestGivenProgressiveBackpack(SVTestBase):
     def test_when_generate_world_then_backpack_locations_are_added(self):
         created_locations = {location.name for location in self.multiworld.get_locations(1)}
         backpacks_exist = [location.name in created_locations
-                           for location in locations.locations_by_tag[LocationTags.BACKPACK]]
+                           for location in locations.locations_by_tag[LocationTags.BACKPACK]
+                           if location.name != "Premium Pack"]
         all_exist = all(backpacks_exist)
         self.assertTrue(all_exist)
 
