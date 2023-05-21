@@ -4,7 +4,7 @@ Archipelago World definition for Pokemon Emerald Version
 import copy
 import hashlib
 import os
-from typing import Set, List, Optional, Tuple
+from typing import Set, List, Dict, Optional, Tuple
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial, Counter
 from Fill import fill_restrictive
@@ -513,21 +513,26 @@ class PokemonEmeraldWorld(World):
 
                 for i, table in enumerate(old_encounters):
                     if table is not None:
-                        new_species = []
+                        species_old_to_new_map: Dict[int, int] = {}
                         for species_id in table.slots:
-                            original_species = emerald_data.species[species_id]
-                            target_bst = sum(original_species.base_stats) if should_match_bst else None
-                            target_type = random.choice(original_species.types) if should_match_type else None
+                            if species_id not in species_old_to_new_map:
+                                original_species = emerald_data.species[species_id]
+                                target_bst = sum(original_species.base_stats) if should_match_bst else None
+                                target_type = random.choice(original_species.types) if should_match_type else None
 
-                            new_species.append(get_random_species(
-                                random,
-                                self.modified_data.species,
-                                target_bst,
-                                target_type,
-                                should_allow_legendaries
-                            ).species_id)
+                                species_old_to_new_map[species_id] = get_random_species(
+                                    random,
+                                    self.modified_data.species,
+                                    target_bst,
+                                    target_type,
+                                    should_allow_legendaries
+                                ).species_id
 
-                        new_encounters[i] = EncounterTableData(new_species, table.rom_address)
+                        new_slots: List[int] = []
+                        for species_id in table.slots:
+                            new_slots.append(species_old_to_new_map[species_id])
+
+                        new_encounters[i] = EncounterTableData(new_slots, table.rom_address)
 
                 map_data.land_encounters = new_encounters[0]
                 map_data.water_encounters = new_encounters[1]
