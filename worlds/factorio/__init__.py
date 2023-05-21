@@ -6,7 +6,7 @@ import typing
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components
+from worlds.LauncherComponents import Component, components, Type
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
@@ -26,7 +26,7 @@ def launch_client():
     process.start()
 
 
-components.append(Component("Factorio Client", "FactorioClient", func=launch_client))
+components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
 
 
 class FactorioWeb(WebWorld):
