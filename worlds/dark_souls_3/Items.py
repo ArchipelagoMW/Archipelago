@@ -392,10 +392,10 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Cornyx's Garb",                       0x11945F88, DS3ItemCategory.ARMOR),
     ("Cornyx's Wrap",                       0x11946370, DS3ItemCategory.ARMOR),
     ("Cornyx's Skirt",                      0x11946758, DS3ItemCategory.ARMOR),
-    ("Executioner Helm",                    0x118CBA80, DS3ItemCategory.ARMOR),
-    ("Executioner Armor",                   0x118CBE68, DS3ItemCategory.ARMOR),
-    ("Executioner Gauntlets",               0x118CC250, DS3ItemCategory.ARMOR),
-    ("Executioner Leggings",                0x118CC638, DS3ItemCategory.ARMOR),
+    ("Executioner Helm",                    0x119BFCC0, DS3ItemCategory.ARMOR),
+    ("Executioner Armor",                   0x119C00A8, DS3ItemCategory.ARMOR),
+    ("Executioner Gauntlets",               0x119C0490, DS3ItemCategory.ARMOR),
+    ("Executioner Leggings",                0x119C0878, DS3ItemCategory.ARMOR),
     ("Billed Mask",                         0x11A39DE0, DS3ItemCategory.ARMOR),
     ("Black Dress",                         0x11A3A1C8, DS3ItemCategory.ARMOR),
     ("Black Gauntlets",                     0x11A3A5B0, DS3ItemCategory.ARMOR),
@@ -866,10 +866,10 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Soul of the Rotted Greatwood",        0x400002D7, DS3ItemCategory.MISC),
     ("Soul of Rosaria",                     0x400002D8, DS3ItemCategory.MISC),
     ("Soul of the Deacons of the Deep",     0x400002D9, DS3ItemCategory.MISC),
+    ("Soul of the Twin Princes",            0x400002DB, DS3ItemCategory.MISC),
     ("Soul of Yhorm the Giant",             0x400002DC, DS3ItemCategory.MISC),
     ("Soul of the Lords",                   0x400002DD, DS3ItemCategory.MISC),
     ("Soul of a Demon",                     0x400002E3, DS3ItemCategory.MISC),
-    ("Soul of the Twin Princes",            0x400002DB, DS3ItemCategory.MISC),
     ("Soul of a Stray Demon",               0x400002E7, DS3ItemCategory.MISC),
     ("Titanite Shard",                      0x400003E8, DS3ItemCategory.MISC),
     ("Large Titanite Shard",                0x400003E9, DS3ItemCategory.MISC),
@@ -877,22 +877,22 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Titanite Slab",                       0x400003EB, DS3ItemCategory.MISC),
     ("Titanite Scale",                      0x400003FC, DS3ItemCategory.MISC),
     ("Twinkling Titanite",                  0x40000406, DS3ItemCategory.MISC),
-    ("Heavy Gem",                           0x4000044C, DS3ItemCategory.MISC),# COULD
-    ("Sharp Gem",                           0x40000456, DS3ItemCategory.MISC),# ADD
-    ("Refined Gem",                         0x40000460, DS3ItemCategory.MISC),# THESE
-    ("Crystal Gem",                         0x4000046A, DS3ItemCategory.MISC),# TO
-    ("Simple Gem",                          0x40000474, DS3ItemCategory.MISC),# THE
-    ("Fire Gem",                            0x4000047E, DS3ItemCategory.MISC),# LOCATION
-    ("Chaos Gem",                           0x40000488, DS3ItemCategory.MISC),# POOL
-    ("Lightning Gem",                       0x40000492, DS3ItemCategory.MISC),# IF 
-    ("Deep Gem",                            0x4000049C, DS3ItemCategory.MISC),# WE 
-    ("Dark Gem",                            0x400004A6, DS3ItemCategory.MISC),# WANTED
-    ("Poison Gem",                          0x400004B0, DS3ItemCategory.MISC),# TO
-    ("Blood Gem",                           0x400004BA, DS3ItemCategory.MISC),# ADD
-    ("Raw Gem",                             0x400004C4, DS3ItemCategory.MISC),# A 
-    ("Blessed Gem",                         0x400004CE, DS3ItemCategory.MISC),# COUPLE
-    ("Hollow Gem",                          0x400004D8, DS3ItemCategory.MISC),# OF 
-    ("Shriving Stone",                      0x400004E2, DS3ItemCategory.MISC),# EACH
+    ("Heavy Gem",                           0x4000044C, DS3ItemCategory.MISC),
+    ("Sharp Gem",                           0x40000456, DS3ItemCategory.MISC),
+    ("Refined Gem",                         0x40000460, DS3ItemCategory.MISC),
+    ("Crystal Gem",                         0x4000046A, DS3ItemCategory.MISC),
+    ("Simple Gem",                          0x40000474, DS3ItemCategory.MISC),
+    ("Fire Gem",                            0x4000047E, DS3ItemCategory.MISC),
+    ("Chaos Gem",                           0x40000488, DS3ItemCategory.MISC),
+    ("Lightning Gem",                       0x40000492, DS3ItemCategory.MISC),
+    ("Deep Gem",                            0x4000049C, DS3ItemCategory.MISC),
+    ("Dark Gem",                            0x400004A6, DS3ItemCategory.MISC),
+    ("Poison Gem",                          0x400004B0, DS3ItemCategory.MISC),
+    ("Blood Gem",                           0x400004BA, DS3ItemCategory.MISC),
+    ("Raw Gem",                             0x400004C4, DS3ItemCategory.MISC),
+    ("Blessed Gem",                         0x400004CE, DS3ItemCategory.MISC),
+    ("Hollow Gem",                          0x400004D8, DS3ItemCategory.MISC),
+    ("Shriving Stone",                      0x400004E2, DS3ItemCategory.MISC),
     ("Lift Chamber Key",                    0x400007D1, DS3ItemCategory.KEY),
     ("Small Doll",                          0x400007D5, DS3ItemCategory.KEY),
     ("Jailbreaker's Key",                   0x400007D7, DS3ItemCategory.KEY),
@@ -922,12 +922,10 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Loretta's Bone",                      0x40000846, DS3ItemCategory.KEY),
     ("Braille Divine Tome of Carim",        0x40000847, DS3ItemCategory.MISC),
     ("Braille Divine Tome of Lothric",      0x40000848, DS3ItemCategory.MISC),
-
     ("Cinders of a Lord - Abyss Watcher",   0x4000084B, DS3ItemCategory.KEY),
     ("Cinders of a Lord - Aldrich",         0x4000084C, DS3ItemCategory.KEY),
     ("Cinders of a Lord - Yhorm the Giant", 0x4000084D, DS3ItemCategory.KEY),
     ("Cinders of a Lord - Lothric Prince",  0x4000084E, DS3ItemCategory.KEY),
-
     ("Great Swamp Pyromancy Tome",          0x4000084F, DS3ItemCategory.MISC),
     ("Carthus Pyromancy Tome",              0x40000850, DS3ItemCategory.MISC),
     ("Izalith Pyromancy Tome",              0x40000851, DS3ItemCategory.MISC),
@@ -936,8 +934,8 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Sage's Scroll",                       0x40000854, DS3ItemCategory.MISC),
     ("Logan's Scroll",                      0x40000855, DS3ItemCategory.MISC),
     ("Crystal Scroll",                      0x40000856, DS3ItemCategory.MISC),
-    ("Transposing Kiln",                    0x40000857, DS3ItemCategory.SKIP), # WE COULD ADD THIS, BUT IT WOULD SHIFT ALL LOCATIONS DATA PAST UNDEAD SETTLEMENT
-    ("Coiled Sword	",                      0x40000859, DS3ItemCategory.SKIP), # CAN PUT IN COILED SWORD EVEN WHEN YOU DONT HAVE IT. POINTLESS TO RANDOMIZE ATM
+    ("Transposing Kiln",                    0x40000857, DS3ItemCategory.SKIP),
+    ("Coiled Sword",                        0x40000859, DS3ItemCategory.SKIP), # Useless
     ("Eyes of a Fire Keeper",               0x4000085A, DS3ItemCategory.KEY),
     ("Sword of Avowal",                     0x4000085B, DS3ItemCategory.KEY),
     ("Golden Scroll",                       0x4000085C, DS3ItemCategory.MISC),
@@ -1055,71 +1053,56 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Atonement",                           0x4039ADA0, DS3ItemCategory.SPELL),
 ]]
 
-
 _dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
     # Ammunition
     ("Millwood Greatarrow",              0x000623E0, DS3ItemCategory.SKIP),
 
     # Weapons
-    ("Onyx Blade",                       0x00222E00, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Follower Sabre",                   0x003EDDC0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
-    ("Millwood Battle Axe",              0x006D67D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
-    ("Earth Seeker",                     0x006D8EE0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Quakestone Hammer",                0x007ECCF0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Follower Javelin",                 0x008CD6B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
-    ("Friede's Great Scythe",            0x009B55A0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Crow Talons",                      0x00A89C10, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
-    ("Rose of Ariandel",                 0x00B82C70, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Pyromancer's Parting Flame",       0x00CC9ED0, DS3ItemCategory.WEAPON_UPGRADE_10),
-    ("Millwood Greatbow",                0x00D85EA0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Valorheart",                       0x00F646E0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Crow Quills",                      0x00F66DF0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
-    ("Follower Torch",                   0x015F1AD0, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Aquamarine Dagger",                0x00116520, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Murky Hand Scythe",                0x00118C30, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Onyx Blade",                       0x00222E00, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Ringed Knight Straight Sword",     0x00225510, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Gael's Greatsword",                0x00227C20, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Follower Sabre",                   0x003EDDC0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Demon's Scar",                     0x003F04D0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Frayed Blade",                     0x004D35A0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Herald Curved Greatsword",         0x006159E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Millwood Battle Axe",              0x006D67D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Earth Seeker",                     0x006D8EE0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Quakestone Hammer",                0x007ECCF0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Ledo's Great Hammer",              0x007EF400, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Follower Javelin",                 0x008CD6B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Ringed Knight Spear",              0x008CFDC0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Lothric War Banner",               0x008D24D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Crucifix of the Mad King",         0x008D4BE0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Splitleaf Greatsword",             0x009B2E90, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Friede's Great Scythe",            0x009B55A0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Crow Talons",                      0x00A89C10, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Rose of Ariandel",                 0x00B82C70, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Pyromancer's Parting Flame",       0x00CC9ED0, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Murky Longstaff",                  0x00CCC5E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Sacred Chime of Filianore",        0x00CCECF0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Preacher's Right Arm",             0x00CD1400, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("White Birch Bow",                  0x00D77440, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Millwood Greatbow",                0x00D85EA0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Repeating Crossbow",               0x00D885B0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Giant Door Shield",                0x00F5F8C0, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Valorheart",                       0x00F646E0, DS3ItemCategory.WEAPON_UPGRADE_5),
+    ("Crow Quills",                      0x00F66DF0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Ringed Knight Paired Greatswords", 0x00F69500, DS3ItemCategory.WEAPON_UPGRADE_5),
 
-    ("Followers Shield",                 0x0135C0E0, DS3ItemCategory.SHIELD_INFUSIBLE),
-    ("Ethereal Oak Shield",              0x01450320, DS3ItemCategory.SHIELD),
-    ("Giant Door Shield",                0x00F5F8C0, DS3ItemCategory.SHIELD_INFUSIBLE),
-    ("Follower Shield",                  0x0135C0E0, DS3ItemCategory.SHIELD),
+    # Shields
+    ("Follower Shield",                  0x0135C0E0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Dragonhead Shield",                0x0135E7F0, DS3ItemCategory.SHIELD),
+    ("Ethereal Oak Shield",              0x01450320, DS3ItemCategory.SHIELD),
     ("Dragonhead Greatshield",           0x01452A30, DS3ItemCategory.SHIELD),
+    ("Follower Torch",                   0x015F1AD0, DS3ItemCategory.SHIELD),
 
-    ("Follower Helm",                    0x137CA3A0, DS3ItemCategory.ARMOR),
-    ("Follower Armor",                   0x137CA788, DS3ItemCategory.ARMOR),
-    ("Follower Gloves",                  0x137CAB70, DS3ItemCategory.ARMOR),
-    ("Follower Boots",                   0x137CAF58, DS3ItemCategory.ARMOR),
-    ("Slave Knight Hood",                0x134EDCE0, DS3ItemCategory.ARMOR),
-    ("Slave Knight Armor",               0x134EE0C8, DS3ItemCategory.ARMOR),
-    ("Slave Knight Gauntlets",           0x134EE4B0, DS3ItemCategory.ARMOR),
-    ("Slave Knight Leggings",            0x134EE898, DS3ItemCategory.ARMOR),
+    # Armor
     ("Vilhelm's Helm",                   0x11312D00, DS3ItemCategory.ARMOR),
     ("Vilhelm's Armor",                  0x113130E8, DS3ItemCategory.ARMOR),
     ("Vilhelm's Gauntlets",              0x113134D0, DS3ItemCategory.ARMOR),
     ("Vilhelm's Leggings",               0x113138B8, DS3ItemCategory.ARMOR),
-    ("Millwood Knight Helm",             0x139B2820, DS3ItemCategory.ARMOR),
-    ("Millwood Knight Armor",            0x139B2C08, DS3ItemCategory.ARMOR),
-    ("Millwood Knight Gauntlets",        0x139B2FF0, DS3ItemCategory.ARMOR),
-    ("Millwood Knight Leggings",         0x139B33D8, DS3ItemCategory.ARMOR),
-    ("Ordained Hood",                    0x135E1F20, DS3ItemCategory.ARMOR),
-    ("Ordained Dress",                   0x135E2308, DS3ItemCategory.ARMOR),
-    ("Ordained Trousers",                0x135E2AD8, DS3ItemCategory.ARMOR),
     ("Antiquated Plain Garb",            0x11B2E408, DS3ItemCategory.ARMOR),
     ("Violet Wrappings",                 0x11B2E7F0, DS3ItemCategory.ARMOR),
     ("Loincloth 2",                      0x11B2EBD8, DS3ItemCategory.ARMOR),
@@ -1131,6 +1114,21 @@ _dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
     ("Lapp's Armor",                     0x11E84BE8, DS3ItemCategory.ARMOR),
     ("Lapp's Gauntlets",                 0x11E84FD0, DS3ItemCategory.ARMOR),
     ("Lapp's Leggings",                  0x11E853B8, DS3ItemCategory.ARMOR),
+    ("Slave Knight Hood",                0x134EDCE0, DS3ItemCategory.ARMOR),
+    ("Slave Knight Armor",               0x134EE0C8, DS3ItemCategory.ARMOR),
+    ("Slave Knight Gauntlets",           0x134EE4B0, DS3ItemCategory.ARMOR),
+    ("Slave Knight Leggings",            0x134EE898, DS3ItemCategory.ARMOR),
+    ("Ordained Hood",                    0x135E1F20, DS3ItemCategory.ARMOR),
+    ("Ordained Dress",                   0x135E2308, DS3ItemCategory.ARMOR),
+    ("Ordained Trousers",                0x135E2AD8, DS3ItemCategory.ARMOR),
+    ("Follower Helm",                    0x137CA3A0, DS3ItemCategory.ARMOR),
+    ("Follower Armor",                   0x137CA788, DS3ItemCategory.ARMOR),
+    ("Follower Gloves",                  0x137CAB70, DS3ItemCategory.ARMOR),
+    ("Follower Boots",                   0x137CAF58, DS3ItemCategory.ARMOR),
+    ("Millwood Knight Helm",             0x139B2820, DS3ItemCategory.ARMOR),
+    ("Millwood Knight Armor",            0x139B2C08, DS3ItemCategory.ARMOR),
+    ("Millwood Knight Gauntlets",        0x139B2FF0, DS3ItemCategory.ARMOR),
+    ("Millwood Knight Leggings",         0x139B33D8, DS3ItemCategory.ARMOR),
     ("Ringed Knight Hood",               0x13C8EEE0, DS3ItemCategory.ARMOR),
     ("Ringed Knight Armor",              0x13C8F2C8, DS3ItemCategory.ARMOR),
     ("Ringed Knight Gauntlets",          0x13C8F6B0, DS3ItemCategory.ARMOR),
@@ -1151,16 +1149,17 @@ _dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
     ("Desert Pyromancer Garb",           0x14DB9B48, DS3ItemCategory.ARMOR),
     ("Desert Pyromancer Gloves",         0x14DB9F30, DS3ItemCategory.ARMOR),
     ("Desert Pyromancer Skirt",          0x14DBA318, DS3ItemCategory.ARMOR),
-    ("Black Witch Veil",                 0x14FA1BE0, DS3ItemCategory.ARMOR),
     ("Black Witch Hat",                  0x14EAD9A0, DS3ItemCategory.ARMOR),
     ("Black Witch Garb",                 0x14EADD88, DS3ItemCategory.ARMOR),
     ("Black Witch Wrappings",            0x14EAE170, DS3ItemCategory.ARMOR),
     ("Black Witch Trousers",             0x14EAE558, DS3ItemCategory.ARMOR),
+    ("Black Witch Veil",                 0x14FA1BE0, DS3ItemCategory.ARMOR),
     ("Blindfold Mask",                   0x15095E20, DS3ItemCategory.ARMOR),
 
+    # Covenants
     ("Spear of the Church",              0x2000276A, DS3ItemCategory.SKIP),
 
-    ("Chillbite Ring",                   0x20005208, DS3ItemCategory.RING),
+    # Rings
     ("Chloranthy Ring+3",                0x20004E2D, DS3ItemCategory.RING),
     ("Havel's Ring+3",                   0x20004E37, DS3ItemCategory.RING),
     ("Ring of Favor+3",                  0x20004E41, DS3ItemCategory.RING),
@@ -1169,33 +1168,34 @@ _dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
     ("Covetous Gold Serpent Ring+3",     0x20004FA9, DS3ItemCategory.RING),
     ("Covetous Silver Serpent Ring+3",   0x20004FB3, DS3ItemCategory.RING),
     ("Ring of the Evil Eye+3",           0x20005071, DS3ItemCategory.RING),
+    ("Chillbite Ring",                   0x20005208, DS3ItemCategory.RING),
 
+    # Items
     ("Church Guardian Shiv",             0x4000013B, DS3ItemCategory.MISC),
     ("Filianore's Spear Ornament",       0x4000017B, DS3ItemCategory.SKIP),
     ("Ritual Spear Fragment",            0x4000028A, DS3ItemCategory.MISC),
     ("Divine Spear Fragment",            0x4000028B, DS3ItemCategory.SKIP),
-    ("Old Woman's Ashes",                0x4000086D, DS3ItemCategory.SKIP),
-
     ("Soul of Sister Friede",            0x400002E8, DS3ItemCategory.MISC),
     ("Soul of Slave Knight Gael",        0x400002E9, DS3ItemCategory.MISC),
     ("Soul of the Demon Prince",         0x400002EA, DS3ItemCategory.MISC),
     ("Soul of Darkeater Midir",          0x400002EB, DS3ItemCategory.MISC),
-
     ("Champion's Bones",                 0x40000869, DS3ItemCategory.SKIP),
     ("Captain's Ashes",                  0x4000086A, DS3ItemCategory.MISC),
     ("Contraption Key",                  0x4000086B, DS3ItemCategory.KEY),
     ("Small Envoy Banner",               0x4000086C, DS3ItemCategory.KEY),
+    ("Old Woman's Ashes",                0x4000086D, DS3ItemCategory.SKIP),
     ("Blood of the Dark Soul",           0x4000086E, DS3ItemCategory.SKIP),
 
+    # Spells
     ("Frozen Weapon",                    0x401408E8, DS3ItemCategory.SPELL),
-    ("Snap Freeze",                      0x401A90C8, DS3ItemCategory.SPELL),
-    ("Floating Chaos",                   0x40257DA8, DS3ItemCategory.SPELL),
-    ("Way of White Corona",              0x403642A0, DS3ItemCategory.SPELL),
     ("Old Moonlight",                    0x4014FF00, DS3ItemCategory.SPELL),
     ("Great Soul Dregs",                 0x401879A0, DS3ItemCategory.SPELL),
+    ("Snap Freeze",                      0x401A90C8, DS3ItemCategory.SPELL),
+    ("Floating Chaos",                   0x40257DA8, DS3ItemCategory.SPELL),
     ("Flame Fan",                        0x40258190, DS3ItemCategory.SPELL),
     ("Seething Chaos",                   0x402896A0, DS3ItemCategory.SPELL),
     ("Lightning Arrow",                  0x40358B08, DS3ItemCategory.SPELL),
+    ("Way of White Corona",              0x403642A0, DS3ItemCategory.SPELL),
     ("Projected Heal",                   0x40364688, DS3ItemCategory.SPELL),
 ]]
 

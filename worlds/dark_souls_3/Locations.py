@@ -482,7 +482,7 @@ location_tables = {
         DS3LocationData("PW: Crow Talons",                         "Crow Talons",                             DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Quakestone Hammer",                   "Quakestone Hammer",                       DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Earth Seeker",                        "Earth Seeker",                            DS3LocationCategory.WEAPON),
-        DS3LocationData("PW: Follower Torch",                      "Follower Torch",                          DS3LocationCategory.WEAPON),
+        DS3LocationData("PW: Follower Torch",                      "Follower Torch",                          DS3LocationCategory.SHIELD),
         DS3LocationData("PW: Follower Shield",                     "Follower Shield",                         DS3LocationCategory.SHIELD),
         DS3LocationData("PW: Follower Sabre",                      "Follower Sabre",                          DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Snap Freeze",                         "Snap Freeze",                             DS3LocationCategory.SPELL),
