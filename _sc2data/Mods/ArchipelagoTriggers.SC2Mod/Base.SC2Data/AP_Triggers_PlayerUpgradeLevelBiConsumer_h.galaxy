@@ -1,0 +1,5 @@
+include "TriggerLibs/natives"
+
+void ap_triggers_PlayerUpgradeLevelBiConsumer_sig(int player, int level);
+
+typedef funcref<ap_triggers_PlayerUpgradeLevelBiConsumer_sig> ap_triggers_PlayerUpgradeLevelBiConsumer_t;

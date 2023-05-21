@@ -1,4 +1,5 @@
 include "TriggerLibs/NativeLib"
+include "Lib5BD4895D"
 
 include "LibABFE498B_h"
 
@@ -8,6 +9,7 @@ include "LibABFE498B_h"
 // External Library Initialization
 void libABFE498B_InitLibraries () {
     libNtve_InitVariables();
+    lib5BD4895D_InitVariables();
 }
 
 // Variable Initialization
@@ -21,6 +23,16 @@ void libABFE498B_InitVariables () {
     libABFE498B_InitVariables_completed = true;
 
     libABFE498B_gv_aP_Triggers_isBuild = true;
+}
+
+// Custom Script
+//--------------------------------------------------------------------------------------------------
+// Custom Script: AP_Triggers_GalaxyIncludes
+//--------------------------------------------------------------------------------------------------
+include "AP_Triggers_PlayerConsumer"
+include "AP_Triggers_Util"
+
+void libABFE498B_InitCustomScript () {
 }
 
 // Functions
@@ -58,6 +70,262 @@ int libABFE498B_gf_APSetDifficulty (string lp_difficultyChar) {
         }
     }
     return 1;
+}
+
+void libABFE498B_gf_AP_Triggers_unlockTerranUnits (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processBitsInBitArray(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarine, // 0
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedic, // 1
+        libABFE498B_gf_AP_Triggers_Terran_unlockFirebat, // 2
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarauder, // 3
+        libABFE498B_gf_AP_Triggers_Terran_unlockReaper, // 4
+        libABFE498B_gf_AP_Triggers_Terran_unlockHellion, // 5
+        libABFE498B_gf_AP_Triggers_Terran_unlockVulture, // 6
+        libABFE498B_gf_AP_Triggers_Terran_unlockGoliath, // 7
+        libABFE498B_gf_AP_Triggers_Terran_unlockDiamondback, // 8
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTank, // 9
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedivac, // 10
+        libABFE498B_gf_AP_Triggers_Terran_unlockWraith, // 11
+        libABFE498B_gf_AP_Triggers_Terran_unlockViking, // 12
+        libABFE498B_gf_AP_Triggers_Terran_unlockBanshee, // 13
+        libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiser, // 14
+        libABFE498B_gf_AP_Triggers_Terran_unlockGhost, // 15
+        libABFE498B_gf_AP_Triggers_Terran_unlockSpectre, // 16
+        libABFE498B_gf_AP_Triggers_Terran_unlockThor, // 17
+        libABFE498B_gf_AP_Triggers_Terran_unlockLiberator, // 18
+        libABFE498B_gf_AP_Triggers_Terran_unlockValkyrie, // 19
+        libABFE498B_gf_AP_Triggers_Terran_unlockWidowMine, // 20
+        libABFE498B_gf_AP_Triggers_Terran_unlockCyclone, // 21
+        ap_triggers_PlayerConsumer_sig, //22
+        ap_triggers_PlayerConsumer_sig, //23
+        ap_triggers_PlayerConsumer_sig, //24
+        ap_triggers_PlayerConsumer_sig, //25
+        ap_triggers_PlayerConsumer_sig, //26
+        ap_triggers_PlayerConsumer_sig, //27
+        ap_triggers_PlayerConsumer_sig, //28
+        ap_triggers_PlayerConsumer_sig //29
+    );
+}
+
+void libABFE498B_gf_AP_Triggers_unlockTerranArmory1 (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processBitsInBitArray(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Terran_unlockBunkerProjectileAccelerator, // 0
+        libABFE498B_gf_AP_Triggers_Terran_unlockBunkerNeosteelBunker, // 1
+        libABFE498B_gf_AP_Triggers_Terran_unlockMissileTurretTitaniumHousing, // 2
+        libABFE498B_gf_AP_Triggers_Terran_unlockMissileTurretHellstormBatteries, // 3
+        libABFE498B_gf_AP_Triggers_Terran_unlockSCVAdvancedConstruction, // 4
+        libABFE498B_gf_AP_Triggers_Terran_unlockSCVDualFusionWelders, // 5
+        libABFE498B_gf_AP_Triggers_Terran_unlockFireSuppressionSystem, // 6
+        libABFE498B_gf_AP_Triggers_Terran_unlockCommandCenterOrbitalCommand, // 7
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarineStimpack, // 8
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarineCombatShield, // 9
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities, // 10
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedicStabilizerMedpacks, // 11
+        libABFE498B_gf_AP_Triggers_Terran_unlockFirebatIncineratorGauntlets, // 12
+        libABFE498B_gf_AP_Triggers_Terran_unlockFirebatJuggernautPlating, // 13
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarauderConcussiveShells, // 14
+        libABFE498B_gf_AP_Triggers_Terran_unlockMarauderKineticFoam, // 15
+        libABFE498B_gf_AP_Triggers_Terran_unlockReaperU238Rounds, // 16
+        libABFE498B_gf_AP_Triggers_Terran_unlockReaperG4Clusterbomb, // 17
+        libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldAccelerators, // 18
+        libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldLaunchers, // 19
+        ap_triggers_PlayerConsumer_sig, // 20
+        ap_triggers_PlayerConsumer_sig, // 21
+        ap_triggers_PlayerConsumer_sig, //22
+        ap_triggers_PlayerConsumer_sig, //23
+        ap_triggers_PlayerConsumer_sig, //24
+        ap_triggers_PlayerConsumer_sig, //25
+        ap_triggers_PlayerConsumer_sig, //26
+        ap_triggers_PlayerConsumer_sig, //27
+        ap_triggers_PlayerConsumer_sig, //28
+        ap_triggers_PlayerConsumer_sig //29
+    );
+}
+
+void libABFE498B_gf_AP_Triggers_unlockTerranArmory2 (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processBitsInBitArray(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Terran_unlockHellionTwinLinkedFlamethrower, // 0
+        libABFE498B_gf_AP_Triggers_Terran_unlockHellionThermiteFilaments, // 1
+        libABFE498B_gf_AP_Triggers_Terran_unlockVultureCerberusMine, // 2
+        libABFE498B_gf_AP_Triggers_Terran_unlockVultureReplenishableMagazine, // 3
+        libABFE498B_gf_AP_Triggers_Terran_unlockGoliathMultiLockWeaponsSystem, // 4
+        libABFE498B_gf_AP_Triggers_Terran_unlockGoliathAresClassTargetingSystem, // 5
+        libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackTriLithiumPowerCell, // 6
+        libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackShapedHull, // 7
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankMaelstromRounds, // 8
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankShapedBlast, // 9
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube, // 10
+        libABFE498B_gf_AP_Triggers_Terran_unlockMedivacAdvancedHealingAI, // 11
+        libABFE498B_gf_AP_Triggers_Terran_unlockWraithTomahawkPowerCells, // 12
+        libABFE498B_gf_AP_Triggers_Terran_unlockWraithDisplacementField, // 13
+        libABFE498B_gf_AP_Triggers_Terran_unlockVikingRipwaveMissiles, // 14
+        libABFE498B_gf_AP_Triggers_Terran_unlockVikingPhobosClassWeaponsSystem, // 15
+        libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners, // 16
+        libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery, // 17
+        libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserMissilePods, // 18
+        libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserDefensiveMatrix, // 19
+        libABFE498B_gf_AP_Triggers_Terran_unlockGhostOcularImplants, // 20
+        libABFE498B_gf_AP_Triggers_Terran_unlockGhostCriusSuit, // 21
+        libABFE498B_gf_AP_Triggers_Terran_unlockSpectrePsionicLash, //22
+        libABFE498B_gf_AP_Triggers_Terran_unlockSpectreNyxClassCloakingModule, //23
+        libABFE498B_gf_AP_Triggers_Terran_unlockThor330mmBarrageCannon, //24
+        libABFE498B_gf_AP_Triggers_Terran_unlockThorImmortalityProtocol, //25
+        libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorAdvancedBallistics, //26
+        libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSiegeProtocol, //27
+        libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineDrillingClaws, //28
+        libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineConcealment //29
+    );
+}
+
+void libABFE498B_gf_AP_Triggers_unlockTerranLaboratory (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processBitsInBitArray(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Terran_unlockUltraCapacitors, // 0
+        libABFE498B_gf_AP_Triggers_Terran_unlockVanadiumPlating, // 1
+        libABFE498B_gf_AP_Triggers_Terran_unlockOrbitalDepots, // 2
+        libABFE498B_gf_AP_Triggers_Terran_unlockMicroFiletring, // 3
+        libABFE498B_gf_AP_Triggers_Terran_unlockAutomatedRefinery, // 4
+        libABFE498B_gf_AP_Triggers_Terran_unlockCommandCenterReactor, // 5
+        libABFE498B_gf_AP_Triggers_Terran_unlockRaven, // 6
+        libABFE498B_gf_AP_Triggers_Terran_unlockScienceVessel, // 7
+        libABFE498B_gf_AP_Triggers_Terran_unlockTechReactor, // 8
+        libABFE498B_gf_AP_Triggers_Terran_unlockOrbitalStrike, // 9
+        libABFE498B_gf_AP_Triggers_Terran_unlockBunkerShrikeTurret, // 10
+        libABFE498B_gf_AP_Triggers_Terran_unlockBunkerFortifiedBunker, // 11
+        libABFE498B_gf_AP_Triggers_Terran_unlockCommandCenterPlanetaryFortress, // 12
+        libABFE498B_gf_AP_Triggers_Terran_unlockPerditionTurret, // 13
+        libABFE498B_gf_AP_Triggers_Terran_unlockPredator, // 14
+        libABFE498B_gf_AP_Triggers_Terran_unlockHercules, // 15
+        libABFE498B_gf_AP_Triggers_Terran_unlockCellularReactor, // 16
+        libABFE498B_gf_AP_Triggers_Terran_unlockRegenerativeBioSteel, // 17
+        libABFE498B_gf_AP_Triggers_Terran_unlockHiveMindEmulator, // 18
+        libABFE498B_gf_AP_Triggers_Terran_unlockPsiDisrupter, // 19
+        ap_triggers_PlayerConsumer_sig, // 20
+        ap_triggers_PlayerConsumer_sig, // 21
+        ap_triggers_PlayerConsumer_sig, //22
+        ap_triggers_PlayerConsumer_sig, //23
+        ap_triggers_PlayerConsumer_sig, //24
+        ap_triggers_PlayerConsumer_sig, //25
+        ap_triggers_PlayerConsumer_sig, //26
+        ap_triggers_PlayerConsumer_sig, //27
+        ap_triggers_PlayerConsumer_sig, //28
+        ap_triggers_PlayerConsumer_sig //29
+    );
+}
+
+void libABFE498B_gf_AP_Triggers_unlockTerranMercenaries (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processBitsInBitArray(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Terran_unlockWarPigs, // 0
+        libABFE498B_gf_AP_Triggers_Terran_unlockDevilDogs, // 1
+        libABFE498B_gf_AP_Triggers_Terran_unlockHammerSecurities, // 2
+        libABFE498B_gf_AP_Triggers_Terran_unlockSpartanCompany, // 3
+        libABFE498B_gf_AP_Triggers_Terran_unlockSiegeBreakers, // 4
+        libABFE498B_gf_AP_Triggers_Terran_unlockHelsAngel, // 5
+        libABFE498B_gf_AP_Triggers_Terran_unlockDuskWings, // 6
+        libABFE498B_gf_AP_Triggers_Terran_unlockJacksonsRevenge, // 7
+        ap_triggers_PlayerConsumer_sig, // 8
+        ap_triggers_PlayerConsumer_sig, // 9
+        ap_triggers_PlayerConsumer_sig, // 10
+        ap_triggers_PlayerConsumer_sig, // 11
+        ap_triggers_PlayerConsumer_sig, // 12
+        ap_triggers_PlayerConsumer_sig, // 13
+        ap_triggers_PlayerConsumer_sig, // 14
+        ap_triggers_PlayerConsumer_sig, // 15
+        ap_triggers_PlayerConsumer_sig, // 16
+        ap_triggers_PlayerConsumer_sig, // 17
+        ap_triggers_PlayerConsumer_sig, // 18
+        ap_triggers_PlayerConsumer_sig, // 19
+        ap_triggers_PlayerConsumer_sig, // 20
+        ap_triggers_PlayerConsumer_sig, // 21
+        ap_triggers_PlayerConsumer_sig, //22
+        ap_triggers_PlayerConsumer_sig, //23
+        ap_triggers_PlayerConsumer_sig, //24
+        ap_triggers_PlayerConsumer_sig, //25
+        ap_triggers_PlayerConsumer_sig, //26
+        ap_triggers_PlayerConsumer_sig, //27
+        ap_triggers_PlayerConsumer_sig, //28
+        ap_triggers_PlayerConsumer_sig //29
+    );
+}
+
+void libABFE498B_gf_AP_Triggers_unlockTerranBuildings (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processBitsInBitArray(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Terran_unlockBunker, // 0
+        libABFE498B_gf_AP_Triggers_Terran_unlockMissileTurret, // 1
+        libABFE498B_gf_AP_Triggers_Terran_unlockSensorTower, // 2
+        ap_triggers_PlayerConsumer_sig, // 3
+        ap_triggers_PlayerConsumer_sig, // 4
+        ap_triggers_PlayerConsumer_sig, // 5
+        ap_triggers_PlayerConsumer_sig, // 6
+        ap_triggers_PlayerConsumer_sig, // 7
+        ap_triggers_PlayerConsumer_sig, // 8
+        ap_triggers_PlayerConsumer_sig, // 9
+        ap_triggers_PlayerConsumer_sig, // 10
+        ap_triggers_PlayerConsumer_sig, // 11
+        ap_triggers_PlayerConsumer_sig, // 12
+        ap_triggers_PlayerConsumer_sig, // 13
+        ap_triggers_PlayerConsumer_sig, // 14
+        ap_triggers_PlayerConsumer_sig, // 15
+        ap_triggers_PlayerConsumer_sig, // 16
+        ap_triggers_PlayerConsumer_sig, // 17
+        ap_triggers_PlayerConsumer_sig, // 18
+        ap_triggers_PlayerConsumer_sig, // 19
+        ap_triggers_PlayerConsumer_sig, // 20
+        ap_triggers_PlayerConsumer_sig, // 21
+        ap_triggers_PlayerConsumer_sig, //22
+        ap_triggers_PlayerConsumer_sig, //23
+        ap_triggers_PlayerConsumer_sig, //24
+        ap_triggers_PlayerConsumer_sig, //25
+        ap_triggers_PlayerConsumer_sig, //26
+        ap_triggers_PlayerConsumer_sig, //27
+        ap_triggers_PlayerConsumer_sig, //28
+        ap_triggers_PlayerConsumer_sig //29
+    );
+}
+
+void libABFE498B_gf_AP_Triggers_unlockTerranUpgrades (int lp_player, int lp_bitArrayValue) {
+    // Automatic Variable Declarations
+    // Implementation
+    // Yeah, this must be done in Galaxy
+    ap_triggers_processUpgrades(
+        lp_player,
+        lp_bitArrayValue,
+        libABFE498B_gf_AP_Triggers_Terran_unlockInfantryWeapon, // 0
+        libABFE498B_gf_AP_Triggers_Terran_unlockInfantryArmor, // 1
+        libABFE498B_gf_AP_Triggers_Terran_unlockVehicleWeapon, // 2
+        libABFE498B_gf_AP_Triggers_Terran_unlockVehicleArmor, // 3
+        libABFE498B_gf_AP_Triggers_Terran_unlockShipWeapon, // 4
+        libABFE498B_gf_AP_Triggers_Terran_unlockShipArmor // 5
+    );
 }
 
 bool libABFE498B_gf_AP_Triggers_isGenericUpgradeAutoUnlock () {
@@ -1256,6 +1524,121 @@ void libABFE498B_gf_AP_Triggers_replaceUpgrade (int lp_player, string lp_oldUpgr
 
 }
 
+// Triggers
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Triggers_setOptions
+//--------------------------------------------------------------------------------------------------
+bool libABFE498B_gt_AP_Triggers_setOptions_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    string lv_difficulty;
+    string lv_genericUpgradeResearch;
+    string lv_allInVariant;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_difficulty = "";
+    lv_genericUpgradeResearch = "";
+    lv_allInVariant = "";
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_difficulty = StringWord(EventChatMessage(false), 2);
+    lv_genericUpgradeResearch = StringWord(EventChatMessage(false), 3);
+    lv_allInVariant = StringWord(EventChatMessage(false), 4);
+    libABFE498B_gv_aP_Triggers_Option_genericUpgradeResearch = StringToInt(lv_genericUpgradeResearch);
+    libABFE498B_gv_aP_Triggers_Option_allInMissionVariant = StringToInt(lv_allInVariant);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libABFE498B_gt_AP_Triggers_setOptions_Init () {
+    libABFE498B_gt_AP_Triggers_setOptions = TriggerCreate("libABFE498B_gt_AP_Triggers_setOptions_Func");
+    TriggerAddEventChatMessage(libABFE498B_gt_AP_Triggers_setOptions, c_playerAny, "?SetOptions", false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Triggers_giveTerranTech
+//--------------------------------------------------------------------------------------------------
+bool libABFE498B_gt_AP_Triggers_giveTerranTech_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_currentPlayer;
+    string lv_unitValue;
+    string lv_upgradeValue;
+    string lv_armory1Value;
+    string lv_armory2Value;
+    string lv_buildingValue;
+    string lv_mercenaryValue;
+    string lv_laboratoryValue;
+
+    // Automatic Variable Declarations
+    playergroup auto3377504F_g;
+
+    // Variable Initialization
+    lv_unitValue = "";
+    lv_upgradeValue = "";
+    lv_armory1Value = "";
+    lv_armory2Value = "";
+    lv_buildingValue = "";
+    lv_mercenaryValue = "";
+    lv_laboratoryValue = "";
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_unitValue = StringWord(EventChatMessage(false), 2);
+    lv_upgradeValue = StringWord(EventChatMessage(false), 3);
+    lv_armory1Value = StringWord(EventChatMessage(false), 4);
+    lv_armory2Value = StringWord(EventChatMessage(false), 5);
+    lv_buildingValue = StringWord(EventChatMessage(false), 6);
+    lv_mercenaryValue = StringWord(EventChatMessage(false), 7);
+    lv_laboratoryValue = StringWord(EventChatMessage(false), 8);
+    auto3377504F_g = lib5BD4895D_gv_aP_Core_affectedPlayers;
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(auto3377504F_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        libABFE498B_gf_AP_Triggers_unlockTerranUnits(lv_currentPlayer, StringToInt(lv_unitValue));
+        libABFE498B_gf_AP_Triggers_unlockTerranUpgrades(lv_currentPlayer, StringToInt(lv_upgradeValue));
+        libABFE498B_gf_AP_Triggers_unlockTerranArmory1(lv_currentPlayer, StringToInt(lv_armory1Value));
+        libABFE498B_gf_AP_Triggers_unlockTerranArmory2(lv_currentPlayer, StringToInt(lv_armory2Value));
+        libABFE498B_gf_AP_Triggers_unlockTerranBuildings(lv_currentPlayer, StringToInt(lv_buildingValue));
+        libABFE498B_gf_AP_Triggers_unlockTerranMercenaries(lv_currentPlayer, StringToInt(lv_mercenaryValue));
+        libABFE498B_gf_AP_Triggers_unlockTerranLaboratory(lv_currentPlayer, StringToInt(lv_laboratoryValue));
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libABFE498B_gt_AP_Triggers_giveTerranTech_Init () {
+    libABFE498B_gt_AP_Triggers_giveTerranTech = TriggerCreate("libABFE498B_gt_AP_Triggers_giveTerranTech_Func");
+    TriggerAddEventChatMessage(libABFE498B_gt_AP_Triggers_giveTerranTech, c_playerAny, "?GiveTerranTech", false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Triggers_loadFinished
+//--------------------------------------------------------------------------------------------------
+bool libABFE498B_gt_AP_Triggers_loadFinished_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libABFE498B_gt_AP_Triggers_loadFinished_Init () {
+    libABFE498B_gt_AP_Triggers_loadFinished = TriggerCreate("libABFE498B_gt_AP_Triggers_loadFinished_Func");
+    TriggerAddEventChatMessage(libABFE498B_gt_AP_Triggers_loadFinished, c_playerAny, "?LoadFinished", false);
+}
+
+void libABFE498B_InitTriggers () {
+    libABFE498B_gt_AP_Triggers_setOptions_Init();
+    libABFE498B_gt_AP_Triggers_giveTerranTech_Init();
+    libABFE498B_gt_AP_Triggers_loadFinished_Init();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
 //--------------------------------------------------------------------------------------------------
@@ -1270,5 +1653,7 @@ void libABFE498B_InitLib () {
 
     libABFE498B_InitLibraries();
     libABFE498B_InitVariables();
+    libABFE498B_InitCustomScript();
+    libABFE498B_InitTriggers();
 }
 

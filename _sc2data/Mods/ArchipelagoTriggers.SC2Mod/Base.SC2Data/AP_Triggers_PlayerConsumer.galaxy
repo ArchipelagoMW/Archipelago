@@ -1,0 +1,6 @@
+include "TriggerLibs/natives"
+include "AP_Triggers_PlayerConsumer_h"
+
+void ap_triggers_PlayerConsumer_sig(int player) {
+    
+}
