@@ -294,7 +294,9 @@ def create_locations(location_collector: StardewLocationCollector,
                 randomized_locations.append(location_table[location.name])
 
     if not world_options[options.BuildingProgression] == options.BuildingProgression.option_vanilla:
-        randomized_locations.extend(locations_by_tag[LocationTags.BUILDING_BLUEPRINT])
+        for location in locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
+            if location.mod_name is None or location.mod_name in world_options[options.Mods]:
+                randomized_locations.append(location_table[location.name])
 
     if not world_options[options.ArcadeMachineLocations] == options.ArcadeMachineLocations.option_disabled:
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE_VICTORY])
