@@ -60,7 +60,7 @@ class PokemonEmeraldWorld(World):
     location_name_to_id = create_location_label_to_id_map()
     item_name_groups = create_item_groups()
 
-    data_version = 0
+    data_version = 1
 
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]] = None
