@@ -83,7 +83,7 @@ Name: "client/pkmn";      Description: "Pokemon Client"
 Name: "client/pkmn/red";  Description: "Pokemon Client - Pokemon Red Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/pkmn/blue"; Description: "Pokemon Client - Pokemon Blue Setup"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/pkmn_e";    Description: "Pokemon Emerald Client Setup"; Types: full playing; ExtraDiskSpaceRequired: 16777216; Flags: disablenouninstallwarning
-Name: "client/ladx";      Description: "Link's Awakening Client"; Types: full playing
+Name: "client/ladx";      Description: "Link's Awakening Client"; Types: full playing; ExtraDiskSpaceRequired: 1048576
 Name: "client/cf";        Description: "ChecksFinder"; Types: full playing
 Name: "client/sc2";       Description: "Starcraft 2"; Types: full playing
 Name: "client/wargroove"; Description: "Wargroove"; Types: full playing
