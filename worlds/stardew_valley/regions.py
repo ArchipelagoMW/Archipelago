@@ -404,6 +404,8 @@ def region_extend(mod: str, existing_regions: List[Region], new_regions: List[Re
         existing_region = next(
             (region for region in existing_regions if region.name == new_region.name), None)
         if existing_region:
+            if all(exits in existing_region.exits for exits in new_region.exits):
+                continue
             existing_region.exits.extend(new_region.exits)
             continue
 
