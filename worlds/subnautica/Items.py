@@ -388,16 +388,3 @@ group_items: Dict[int, Set[int]] = {
             35069, 35070, 35073, 35074},
     35101: {35049, 35050, 35051, 35071, 35072, 35074}
 }
-
-if False:  # turn to True to export for Subnautica mod
-    from .Locations import location_table
-    from NetUtils import encode
-    itemcount = sum(item_data["count"] for item_data in item_table.values())
-    assert itemcount == len(location_table), f"{itemcount} != {len(location_table)}"
-    payload = {item_id: item_data["tech_type"] for item_id, item_data in item_table.items()}
-    import json
-
-    with open("items.json", "w") as f:
-        json.dump(payload, f)
-    with open("group_items.json", "w") as f:
-        f.write(encode(group_items))

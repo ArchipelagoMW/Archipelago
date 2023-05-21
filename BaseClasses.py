@@ -96,7 +96,6 @@ class MultiWorld():
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.glitch_triforce = False
         self.algorithm = 'balanced'
-        self.dungeons: Dict[Tuple[str, int], Dungeon] = {}
         self.groups = {}
         self.regions = []
         self.shops = []
@@ -385,12 +384,6 @@ class MultiWorld():
         except KeyError:
             self._recache()
             return self._location_cache[location, player]
-
-    def get_dungeon(self, dungeonname: str, player: int) -> Dungeon:
-        try:
-            return self.dungeons[dungeonname, player]
-        except KeyError as e:
-            raise KeyError('No such dungeon %s for player %d' % (dungeonname, player)) from e
 
     def get_all_state(self, use_cache: bool) -> CollectionState:
         cached = getattr(self, "_all_state", None)
@@ -801,7 +794,6 @@ class Region:
     entrances: List[Entrance]
     exits: List[Entrance]
     locations: List[Location]
-    dungeon: Optional[Dungeon] = None
 
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name
@@ -902,63 +894,6 @@ class Entrance:
     def __str__(self):
         world = self.parent_region.multiworld if self.parent_region else None
         return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
-
-
-class Dungeon(object):
-    def __init__(self, name: str, regions: List[Region], big_key: Item, small_keys: List[Item],
-                 dungeon_items: List[Item], player: int):
-        self.name = name
-        self.regions = regions
-        self.big_key = big_key
-        self.small_keys = small_keys
-        self.dungeon_items = dungeon_items
-        self.bosses = dict()
-        self.player = player
-        self.multiworld = None
-
-    @property
-    def boss(self) -> Optional[Boss]:
-        return self.bosses.get(None, None)
-
-    @boss.setter
-    def boss(self, value: Optional[Boss]):
-        self.bosses[None] = value
-
-    @property
-    def keys(self) -> List[Item]:
-        return self.small_keys + ([self.big_key] if self.big_key else [])
-
-    @property
-    def all_items(self) -> List[Item]:
-        return self.dungeon_items + self.keys
-
-    def is_dungeon_item(self, item: Item) -> bool:
-        return item.player == self.player and item.name in (dungeon_item.name for dungeon_item in self.all_items)
-
-    def __eq__(self, other: Dungeon) -> bool:
-        if not other:
-            return False
-        return self.name == other.name and self.player == other.player
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
-        return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
-
-
-class Boss():
-    def __init__(self, name: str, enemizer_name: str, defeat_rule: Callable, player: int):
-        self.name = name
-        self.enemizer_name = enemizer_name
-        self.defeat_rule = defeat_rule
-        self.player = player
-
-    def can_defeat(self, state) -> bool:
-        return self.defeat_rule(state, self.player)
-
-    def __repr__(self):
-        return f"Boss({self.name})"
 
 
 class LocationProgressType(IntEnum):

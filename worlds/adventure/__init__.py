@@ -8,7 +8,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
 
 from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial, \
     LocationProgressType
-from Main import __version__
+from Utils import __version__
 from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
@@ -57,7 +57,7 @@ class AdventureWeb(WebWorld):
 
 
 def get_item_position_data_start(table_index: int):
-    item_ram_address = item_ram_addresses[table_index];
+    item_ram_address = item_ram_addresses[table_index]
     return item_position_table + item_ram_address - items_ram_start
 
 
