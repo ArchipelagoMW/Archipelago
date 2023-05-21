@@ -24,7 +24,7 @@ deep_woods_regions = {
     DeepWoodsRegion.floor_100: []
 }
 
-mandatory_deep_woods_entrances = {
+deep_woods_entrances = {
     DeepWoodsEntrance.use_woods_obelisk: DeepWoodsRegion.main_lichtung,
     DeepWoodsEntrance.secret_woods_to_deep_woods: DeepWoodsRegion.main_lichtung,
     DeepWoodsEntrance.deep_woods_house: DeepWoodsRegion.abandoned_home,
@@ -148,7 +148,7 @@ class ConnectionRemoverData:
 
 
 ModDataList = [
-    ModData(ModNames.deepwoods, deep_woods_regions, mandatory_deep_woods_entrances, {}, {}, deep_woods_flags),
+    ModData(ModNames.deepwoods, deep_woods_regions, deep_woods_entrances, {}, {}, deep_woods_flags),
     ModData(ModNames.eugene, eugene_regions, eugene_entrances, {}, {}, eugene_flags),
     ModData(ModNames.jasper, jasper_regions, jasper_entrances, {}, {}, jasper_flags),
     ModData(ModNames.alec, alec_regions, alec_entrances, {}, {}, alec_flags),

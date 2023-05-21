@@ -3,8 +3,9 @@ from typing import List, Union
 from BaseClasses import MultiWorld
 from . import setup_solo_multiworld
 from .TestOptions import basic_checks, SVTestBase
+from .. import options, locations, items, Group, ItemClassification
 from ..items import item_table
-from ..locations import location_table
+from ..locations import location_table, LocationTags
 from ..options import stardew_valley_option_classes, Mods
 
 mod_list = ["DeepWoods", "Tractor Mod", "Bigger Backpack",
@@ -61,3 +62,66 @@ class TestGenerateModsOptions(SVTestBase):
                         multiworld = setup_solo_multiworld({option.internal_name: option.options[value], Mods: mod})
                         basic_checks(self, multiworld)
                         check_stray_mod_items(mod, self, multiworld)
+
+
+class TestGivenModdedProgressiveBackpack(SVTestBase):
+    options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_progressive,
+               options.Mods.internal_name: "Bigger Backpack"}
+
+    def test_when_generate_world_then_three_progressive_backpack_are_added(self):
+        self.assertEqual(self.multiworld.itempool.count(self.world.create_item("Progressive Backpack")), 3)
+
+    def test_when_generate_world_then_all_backpack_locations_are_added(self):
+        created_locations = {location.name for location in self.multiworld.get_locations(1)}
+        backpacks_exist = [location.name in created_locations
+                           for location in locations.locations_by_tag[LocationTags.BACKPACK]]
+        all_exist = all(backpacks_exist)
+        self.assertTrue(all_exist)
+
+
+class TestBaseItemGeneration(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
+        options.Mods.internal_name: mod_list
+    }
+
+    def test_all_progression_items_are_added_to_the_pool(self):
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
+        items_to_ignore = [event.name for event in items.events]
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.FOOTWEAR])
+        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
+                             and item.name not in items_to_ignore]
+        for progression_item in progression_items:
+            with self.subTest(f"{progression_item.name}"):
+                self.assertIn(progression_item.name, all_created_items)
+
+
+class TestNoGingerIslandModItemGeneration(SVTestBase):
+    options = {
+        options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_progressive,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        options.Mods.internal_name: mod_list
+    }
+
+    def test_all_progression_items_except_island_are_added_to_the_pool(self):
+        all_created_items = [item.name for item in self.multiworld.itempool]
+        # Ignore all the stuff that the algorithm chooses one of, instead of all, to fulfill logical progression
+        items_to_ignore = [event.name for event in items.events]
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
+        items_to_ignore.extend(season.name for season in items.items_by_group[Group.FOOTWEAR])
+        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
+                             and item.name not in items_to_ignore]
+        for progression_item in progression_items:
+            with self.subTest(f"{progression_item.name}"):
+                if Group.GINGER_ISLAND in progression_item.groups:
+                    self.assertNotIn(progression_item.name, all_created_items)
+                else:
+                    self.assertIn(progression_item.name, all_created_items)
+
