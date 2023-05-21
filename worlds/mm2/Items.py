@@ -37,10 +37,10 @@ filler_item_table = {
 }
 
 filler_item_weights = {
-    Names.one_up: ItemData(0x880020, False),
-    Names.weapon_energy: ItemData(0x880021, False),
-    Names.health_energy: ItemData(0x880022, False),
-    Names.e_tank: ItemData(0x880023, False),
+    Names.one_up: 4,
+    Names.weapon_energy: 1,
+    Names.health_energy: 1,
+    Names.e_tank: 2,
 }
 
 item_table = {
