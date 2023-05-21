@@ -655,8 +655,8 @@ class PokemonEmeraldWorld(World):
                 egg_check_1 += ord(i)
                 egg_check_2 += egg_check_1 * egg_check_1
 
-            if egg_check_2 == 0x14E03A:
-                egg = 96 + egg_check_2 - (egg_check_1 * 0x077C)
+            egg = 96 + egg_check_2 - (egg_check_1 * 0x077C)
+            if egg_check_2 == 0x14E03A and egg < 411 and egg > 0:
                 self.modified_data.starters = (egg, egg, egg)
             else:
                 self.modified_data.starters = (
