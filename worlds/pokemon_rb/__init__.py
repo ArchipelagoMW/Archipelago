@@ -68,6 +68,7 @@ class PokemonRedBlueWorld(World):
         self.type_chart = None
         self.traps = None
         self.trade_mons = {}
+        self.warp_data = None
         self.finished_level_scaling = threading.Event()
 
     @classmethod
@@ -192,7 +193,7 @@ class PokemonRedBlueWorld(World):
             start_inventory["Pokedex"] = 1
             self.multiworld.push_precollected(self.create_item("Pokedex"))
 
-        locations = [location for location in location_data if location.type == "Item"]
+        locations = [location for location in location_data if location.type in ("Item", "Trainer Parties")]
         item_pool = []
         combined_traps = (self.multiworld.poison_trap_weight[self.player].value
                           + self.multiworld.fire_trap_weight[self.player].value
@@ -231,8 +232,8 @@ class PokemonRedBlueWorld(World):
             if event:
                 loc = self.multiworld.get_location(location.name, self.player)
                 loc.place_locked_item(item)
-                if location.type == "Trainer Party":
-                    loc.item.classification = ItemClassification.filler
+                if location.type == "Trainer Parties":
+                    # loc.item.classification = ItemClassification.filler
                     loc.party_data = deepcopy(location.party_data)
             elif "Badge" not in item.name or self.multiworld.badgesanity[self.player].value:
                 item_pool.append(item)
@@ -254,6 +255,7 @@ class PokemonRedBlueWorld(World):
                 item_pool.append(card_keys.pop())
                 if not card_keys:
                     break
+        self.multiworld.random.shuffle(item_pool)
 
         self.multiworld.itempool += item_pool
 
@@ -355,14 +357,14 @@ class PokemonRedBlueWorld(World):
 
         if self.multiworld.dexsanity[self.player]:
             for mon in ([" ".join(self.multiworld.get_location(
-                    f"Pallet Town - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
+                    f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
                     + [" ".join(self.multiworld.get_location(
                     f"Fighting Dojo - Gift {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 3)]):
                 loc = self.multiworld.get_location(f"Pokedex - {mon}", self.player)
                 if loc.item is None:
                     locs.add(loc)
 
-        loc = self.multiworld.get_location("Pallet Town - Player's PC", self.player)
+        loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
         if loc.item is None:
             locs.add(loc)
 
@@ -385,20 +387,19 @@ class PokemonRedBlueWorld(World):
     def create_regions(self):
         if self.multiworld.free_fly_location[self.player].value:
             if self.multiworld.old_man[self.player].value == 0:
-                fly_map_code = self.multiworld.random.randint(1, 9)
+                fly_map_code = self.multiworld.random.randint(2, 10)
             else:
-                fly_map_code = self.multiworld.random.randint(5, 9)
+                fly_map_code = self.multiworld.random.randint(5, 10)
                 if fly_map_code == 5:
                     fly_map_code = 4
-            if fly_map_code == 9:
-                fly_map_code = 10
         else:
             fly_map_code = 0
         self.fly_map = ["Pallet Town", "Viridian City", "Pewter City", "Cerulean City", "Lavender Town",
                         "Vermilion City", "Celadon City", "Fuchsia City", "Cinnabar Island", "Indigo Plateau",
                         "Saffron City"][fly_map_code]
         self.fly_map_code = fly_map_code
-        create_regions(self.multiworld, self.player)
+
+        create_regions(self)
         self.multiworld.completion_condition[self.player] = lambda state, player=self.player: state.has("Become Champion", player=player)
 
     def set_rules(self):

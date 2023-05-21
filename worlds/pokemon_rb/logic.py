@@ -52,7 +52,7 @@ class PokemonLogic(LogicMixin):
         if self.multiworld.tea[player].value:
             return self.has("Tea", player)
         else:
-            return self.can_reach("Celadon City - Counter Man", "Location", player)
+            return self.has("Vending Machine Drinks", player)
 
     def pokemon_rb_has_badges(self, count, player):
         return len([item for item in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",
@@ -71,8 +71,9 @@ class PokemonLogic(LogicMixin):
         return len(obtained_pokemon) >= count
 
     def pokemon_rb_fossil_checks(self, count, player):
-        return (self.can_reach('Mt Moon 1F - Southwest Item', 'Location', player) and
-                self.can_reach('Cinnabar Island - Lab Scientist', 'Location', player) and len(
+        return (self.can_reach('Mt Moon B2F', 'Region', player) and
+                self.can_reach('Cinnabar Lab Fossil Room', 'Region', player) and
+                self.can_reach('Cinnabar Island', 'Region', player) and len(
             [item for item in ["Dome Fossil", "Helix Fossil", "Old Amber"] if self.has(item, player)]) >= count)
 
     def pokemon_rb_cinnabar_gym(self, player):

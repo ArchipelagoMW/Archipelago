@@ -68,7 +68,7 @@ map_ids = {
     "Cerulean Trade House": 0x3F,
     "Cerulean Pokemon Center": 0x40,
     "Cerulean Gym": 0x41,
-    "Bike Shop": 0x42,
+    "Cerulean Bicycle Shop": 0x42,
     "Cerulean Pokemart": 0x43,
     "Route 4 Pokemon Center": 0x44,
     # "Cerulean Trashed House Copy": 0x45,
@@ -92,7 +92,7 @@ map_ids = {
     "Route 12 Gate 1F": 0x57,
     "Bill's House": 0x58,
     "Vermilion Pokemon Center": 0x59,
-    "Pokemon Fan Club": 0x5A,
+    "Vermilion Pokemon Fan Club": 0x5A,
     "Vermilion Pokemart": 0x5B,
     "Vermilion Gym": 0x5C,
     "Vermilion Pidgey House": 0x5D,
@@ -115,12 +115,12 @@ map_ids = {
     # "Unused Map 6E": 0x6E,
     # "Unused Map 6F": 0x6F,
     # "Unused Map 70": 0x70,
-    "Lance's Room": 0x71,
+    "Indigo Plateau Lance's Room": 0x71,
     # "Unused Map 72": 0x72,
     # "Unused Map 73": 0x73,
     # "Unused Map 74": 0x74,
     # "Unused Map 75": 0x75,
-    "Hall Of Fame": 0x76,
+    "Indigo Plateau Hall of Fame": 0x76,
     "Underground Path North South": 0x77,
     "Indigo Plateau Champion's Room": 0x78,
     "Underground Path West East": 0x79,
@@ -151,7 +151,7 @@ map_ids = {
     "Pokemon Tower 5F": 0x92,
     "Pokemon Tower 6F": 0x93,
     "Pokemon Tower 7F": 0x94,
-    "Lavender Mr Fuji's House": 0x95,
+    "Lavender Mr. Fuji's House": 0x95,
     "Lavender Pokemart": 0x96,
     "Lavender Cubone House": 0x97,
     "Fuchsia Pokemart": 0x98,
@@ -185,7 +185,7 @@ map_ids = {
     "Saffron Pokemart": 0xB4,
     "Silph Co 1F": 0xB5,
     "Saffron Pokemon Center": 0xB6,
-    "Mr. Psychic's House": 0xB7,
+    "Saffron Mr. Psychic's House": 0xB7,
     "Route 15 Gate 1F": 0xB8,
     "Route 15 Gate 2F": 0xB9,
     "Route 16 Gate 1F": 0xBA,
@@ -255,9 +255,9 @@ map_ids = {
 
 # map_ids = {x: y for y,x in map_ids.items()}
 
-warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon City': [
-    {'address': 'Warps_CeladonCity', 'id': 0, 'to': {'map': 'Celadon Pokemart 1F', 'id': (0, 1)}},
-    {'address': 'Warps_CeladonCity', 'id': 1, 'to': {'map': 'Celadon Pokemart 1F', 'id': (2, 3)}},
+warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil Level": [], 'Pokedex': [], 'Fossil': [], 'Celadon City': [
+    {'name': 'Celadon City to Celadon Pokemart 1F W', 'address': 'Warps_CeladonCity', 'id': 0, 'to': {'map': 'Celadon Pokemart 1F', 'id': (1, 0)}},
+    {'name': 'Celadon City to Celadon Pokemart 1F E', 'address': 'Warps_CeladonCity', 'id': 1, 'to': {'map': 'Celadon Pokemart 1F', 'id': (3, 2)}},
     {'address': 'Warps_CeladonCity', 'id': 2, 'to': {'map': 'Celadon Mansion 1F', 'id': (0, 1)}},
     {'address': 'Warps_CeladonCity', 'id': (3, 4), 'to': {'map': 'Celadon Mansion 1F', 'id': 2}},
     {'address': 'Warps_CeladonCity', 'id': 5, 'to': {'map': 'Celadon Pokemon Center', 'id': 0}},
@@ -277,6 +277,7 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_ViridianCity', 'id': 3, 'to': {'map': 'Viridian Nickname House', 'id': (0, 1)}}],
              'Viridian City-N': [], 'Viridian City-G': [
         {'address': 'Warps_ViridianCity', 'id': 4, 'to': {'map': 'Viridian Gym', 'id': (0, 1)}}],
+             'Pewter City-E': [],
              'Pewter City': [{'address': 'Warps_PewterCity', 'id': 0, 'to': {'map': 'Pewter Museum 1F', 'id': (0, 1)}},
                              {'address': 'Warps_PewterCity', 'id': 1, 'to': {'map': 'Pewter Museum 1F', 'id': (2, 3)}},
                              {'address': 'Warps_PewterCity', 'id': 2, 'to': {'map': 'Pewter Gym', 'id': (0, 1)}},
@@ -286,12 +287,14 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                              {'address': 'Warps_PewterCity', 'id': 5,
                               'to': {'map': 'Pewter Speech House', 'id': (0, 1)}},
                              {'address': 'Warps_PewterCity', 'id': 6,
-                              'to': {'map': 'Pewter Pokemon Center', 'id': (0, 1)}}], 'Cerulean City': [
-        {'address': 'Warps_CeruleanCity', 'id': 0, 'to': {'map': 'Cerulean Trashed House', 'id': (0, 1)}},
+                              'to': {'map': 'Pewter Pokemon Center', 'id': (0, 1)}}],
+             'Cerulean City-T': [
+        {'address': 'Warps_CeruleanCity', 'id': 0, 'to': {'map': 'Cerulean Trashed House', 'id': (0, 1)}},],
+             'Cerulean City': [
         {'address': 'Warps_CeruleanCity', 'id': 1, 'to': {'map': 'Cerulean Trade House', 'id': (0, 1)}},
         {'address': 'Warps_CeruleanCity', 'id': 2, 'to': {'map': 'Cerulean Pokemon Center', 'id': (0, 1)}},
         {'address': 'Warps_CeruleanCity', 'id': 3, 'to': {'map': 'Cerulean Gym', 'id': (0, 1)}},
-        {'address': 'Warps_CeruleanCity', 'id': 4, 'to': {'map': 'Bike Shop', 'id': (0, 1)}},
+        {'address': 'Warps_CeruleanCity', 'id': 4, 'to': {'map': 'Cerulean Bicycle Shop', 'id': (0, 1)}},
         {'address': 'Warps_CeruleanCity', 'id': 5, 'to': {'map': 'Cerulean Pokemart', 'id': (0, 1)}},
         {'address': 'Warps_CeruleanCity', 'id': 8, 'to': {'map': 'Cerulean Badge House', 'id': (1, 2)}}],
              'Cerulean City-Badge House Backyard': [
@@ -302,7 +305,7 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_CeruleanCity', 'id': 7, 'to': {'map': 'Cerulean Trashed House', 'id': 2}}],
              'Vermilion City': [
                  {'address': 'Warps_VermilionCity', 'id': 0, 'to': {'map': 'Vermilion Pokemon Center', 'id': (0, 1)}},
-                 {'address': 'Warps_VermilionCity', 'id': 1, 'to': {'map': 'Pokemon Fan Club', 'id': (0, 1)}},
+                 {'address': 'Warps_VermilionCity', 'id': 1, 'to': {'map': 'Vermilion Pokemon Fan Club', 'id': (0, 1)}},
                  {'address': 'Warps_VermilionCity', 'id': 2, 'to': {'map': 'Vermilion Pokemart', 'id': (0, 1)}},
                  {'address': 'Warps_VermilionCity', 'id': 4, 'to': {'map': 'Vermilion Pidgey House', 'id': 0}},
                  {'address': 'Warps_VermilionCity', 'id': 7, 'to': {'map': 'Vermilion Trade House', 'id': 0}},
@@ -331,7 +334,7 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                   'to': {'map': "Indigo Plateau Lorelei's Room", 'id': 0}}],
              'Silph Co 4F': [{'address': 'Warps_SilphCo4F', 'id': 0, 'to': {'map': 'Silph Co 3F', 'id': 1}},
                              {'address': 'Warps_SilphCo4F', 'id': 1, 'to': {'map': 'Silph Co 5F', 'id': 1}},
-                             {'address': 'Warps_SilphCo4F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 3}},
+                             {'address': 'Warps_SilphCo4F', 'id': 2, 'to': {'map': 'Silph Co Elevator-4F', 'id': 3}},
                              {'address': 'Warps_SilphCo4F', 'id': 5, 'to': {'map': 'Silph Co 10F-SE', 'id': 4}},
                              {'address': 'Warps_SilphCo4F', 'id': 6, 'to': {'map': 'Silph Co 10F', 'id': 5}}],
              'Silph Co 4F-N': [{'address': 'Warps_SilphCo4F', 'id': 4, 'to': {'map': 'Silph Co 6F', 'id': 3}},
@@ -339,14 +342,14 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
              'Silph Co 4F-W': [], 'Silph Co 5F-NW': [], 'Silph Co 6F-SW': [],
              'Silph Co 5F': [{'address': 'Warps_SilphCo5F', 'id': 0, 'to': {'map': 'Silph Co 6F', 'id': 1}},
                              {'address': 'Warps_SilphCo5F', 'id': 1, 'to': {'map': 'Silph Co 4F', 'id': 1}},
-                             {'address': 'Warps_SilphCo5F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 4}},
+                             {'address': 'Warps_SilphCo5F', 'id': 2, 'to': {'map': 'Silph Co Elevator-5F', 'id': 4}},
                              {'address': 'Warps_SilphCo5F', 'id': 3, 'to': {'map': 'Silph Co 7F-SE', 'id': 5}},
                              {'address': 'Warps_SilphCo5F', 'id': 4, 'to': {'map': 'Silph Co 9F', 'id': 4}},
                              {'address': 'Warps_SilphCo5F', 'id': 5, 'to': {'map': 'Silph Co 3F', 'id': 4}}],
              'Silph Co 5F-SW': [{'address': 'Warps_SilphCo5F', 'id': 6, 'to': {'map': 'Silph Co 3F', 'id': 5}}],
              'Silph Co 6F': [{'address': 'Warps_SilphCo6F', 'id': 0, 'to': {'map': 'Silph Co 7F', 'id': 1}},
                              {'address': 'Warps_SilphCo6F', 'id': 1, 'to': {'map': 'Silph Co 5F', 'id': 0}},
-                             {'address': 'Warps_SilphCo6F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 6}},
+                             {'address': 'Warps_SilphCo6F', 'id': 2, 'to': {'map': 'Silph Co Elevator-6F', 'id': 6}},
                              {'address': 'Warps_SilphCo6F', 'id': 3, 'to': {'map': 'Silph Co 4F-N', 'id': 4}},
                              {'address': 'Warps_SilphCo6F', 'id': 4, 'to': {'map': 'Silph Co 2F-SW', 'id': 6}}],
              'Cinnabar Island-M': [
@@ -370,12 +373,12 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
              'Pewter Speech House': [
                  {'address': 'Warps_PewterSpeechHouse', 'id': (0, 1), 'to': {'map': 'Pewter City', 'id': 5}}],
              'Cerulean Trashed House': [
-                 {'address': 'Warps_CeruleanTrashedHouse', 'id': (0, 1), 'to': {'map': 'Cerulean City', 'id': 0}},
+                 {'address': 'Warps_CeruleanTrashedHouse', 'id': (0, 1), 'to': {'map': 'Cerulean City-T', 'id': 0}},
                  {'address': 'Warps_CeruleanTrashedHouse', 'id': 2, 'to': {'map': 'Cerulean City-Outskirts', 'id': 7}}],
              'Cerulean Trade House': [
                  {'address': 'Warps_CeruleanTradeHouse', 'id': (0, 1), 'to': {'map': 'Cerulean City', 'id': 1}}],
-             'Bike Shop': [{'address': 'Warps_BikeShop', 'id': (0, 1), 'to': {'map': 'Cerulean City', 'id': 4}}],
-             "Lavender Mr Fuji's House": [
+             'Cerulean Bicycle Shop': [{'address': 'Warps_BikeShop', 'id': (0, 1), 'to': {'map': 'Cerulean City', 'id': 4}}],
+             "Lavender Mr. Fuji's House": [
                  {'address': 'Warps_MrFujisHouse', 'id': (0, 1), 'to': {'map': 'Lavender Town', 'id': 2}}],
              'Lavender Cubone House': [
                  {'address': 'Warps_LavenderCuboneHouse', 'id': (0, 1), 'to': {'map': 'Lavender Town', 'id': 4}}],
@@ -390,7 +393,7 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
         {'address': 'Warps_FuchsiaMart', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 0}}],
              'Saffron Pidgey House': [
                  {'address': 'Warps_SaffronPidgeyHouse', 'id': (0, 1), 'to': {'map': 'Saffron City', 'id': 3}}],
-             "Mr. Psychic's House": [
+             "Saffron Mr. Psychic's House": [
                  {'address': 'Warps_MrPsychicsHouse', 'id': (0, 1), 'to': {'map': 'Saffron City', 'id': 7}}],
              "Diglett's Cave Route 2": [
                  {'address': 'Warps_DiglettsCaveRoute2', 'id': (0, 1), 'to': {'map': 'Route 2-NE', 'id': 0}},
@@ -410,7 +413,7 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_UndergroundPathRoute8', 'id': 2,
                   'to': {'map': 'Underground Path West East', 'id': 1}}],
              'Power Plant': [{'address': 'Warps_PowerPlant', 'id': (0, 1), 'to': {'map': 'Route 10-P', 'id': 3}},
-                             {'address': 'Warps_PowerPlant', 'id': 2, 'to': {'map': 'Route 10-P', 'id': 3}}],
+                             {'name': "Power Plant to Route 10-P Back Door", 'address': 'Warps_PowerPlant', 'id': 2, 'to': {'map': 'Route 10-P', 'id': 3}}],
              "Diglett's Cave Route 11": [
                  {'address': 'Warps_DiglettsCaveRoute11', 'id': (0, 1), 'to': {'map': 'Route 11', 'id': 4}},
                  {'address': 'Warps_DiglettsCaveRoute11', 'id': 2, 'to': {'map': "Diglett's Cave", 'id': 1}}],
@@ -423,7 +426,7 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
              'Lavender Town': [
                  {'address': 'Warps_LavenderTown', 'id': 0, 'to': {'map': 'Lavender Pokemon Center', 'id': 0}},
                  {'address': 'Warps_LavenderTown', 'id': 1, 'to': {'map': 'Pokemon Tower 1F', 'id': 0}},
-                 {'address': 'Warps_LavenderTown', 'id': 2, 'to': {'map': "Lavender Mr Fuji's House", 'id': 0}},
+                 {'address': 'Warps_LavenderTown', 'id': 2, 'to': {'map': "Lavender Mr. Fuji's House", 'id': 0}},
                  {'address': 'Warps_LavenderTown', 'id': 3, 'to': {'map': 'Lavender Pokemart', 'id': 0}},
                  {'address': 'Warps_LavenderTown', 'id': 4, 'to': {'map': 'Lavender Cubone House', 'id': 0}},
                  {'address': 'Warps_LavenderTown', 'id': 5, 'to': {'map': "Lavender Name Rater's House", 'id': 0}}],
@@ -449,12 +452,15 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_PokemonMansion3F', 'id': 0, 'to': {'map': 'Pokemon Mansion 2F', 'id': 1}}],
              'Pokemon Mansion B1F': [
                  {'address': 'Warps_PokemonMansionB1F', 'id': 0, 'to': {'map': 'Pokemon Mansion 1F-SE', 'id': 5}}],
-             'Rock Tunnel 1F': [{'address': 'Warps_RockTunnel1F', 'id': (0, 1), 'to': {'map': 'Route 10-N', 'id': 1}},
-                                {'address': 'Warps_RockTunnel1F', 'id': (2, 3), 'to': {'map': 'Route 10-S', 'id': 2}},
-                                {'address': 'Warps_RockTunnel1F', 'id': 4, 'to': {'map': 'Rock Tunnel B1F', 'id': 0}},
-                                {'address': 'Warps_RockTunnel1F', 'id': 5, 'to': {'map': 'Rock Tunnel B1F', 'id': 1}},
-                                {'address': 'Warps_RockTunnel1F', 'id': 6, 'to': {'map': 'Rock Tunnel B1F', 'id': 2}},
+             'Rock Tunnel 1F-NE': [{'address': 'Warps_RockTunnel1F', 'id': 0, 'to': {'map': 'Route 10-N', 'id': 1}},
+                                {'address': 'Warps_RockTunnel1F', 'id': 4, 'to': {'map': 'Rock Tunnel B1F', 'id': 0}}],
+             'Rock Tunnel 1F-NW':
+                                [{'address': 'Warps_RockTunnel1F', 'id': 5, 'to': {'map': 'Rock Tunnel B1F', 'id': 1}},
+                                {'address': 'Warps_RockTunnel1F', 'id': 6, 'to': {'map': 'Rock Tunnel B1F', 'id': 2}},],
+             'Rock Tunnel 1F-S': [
+                                {'address': 'Warps_RockTunnel1F', 'id': 2, 'to': {'map': 'Route 10-S', 'id': 2}},
                                 {'address': 'Warps_RockTunnel1F', 'id': 7, 'to': {'map': 'Rock Tunnel B1F', 'id': 3}}],
+             'Rock Tunnel 1F-Wild': [], 'Rock Tunnel B1F-Wild': [],
              'Seafoam Islands 1F': [
                  {'address': 'Warps_SeafoamIslands1F', 'id': (2, 3), 'to': {'map': 'Route 20-IE', 'id': 1}},
                  {'address': 'Warps_SeafoamIslands1F', 'id': 4, 'to': {'map': 'Seafoam Islands B1F', 'id': 1}},
@@ -466,41 +472,65 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                               {'address': 'Warps_SSAnne3F', 'id': 1, 'to': {'map': 'S.S. Anne 2F', 'id': 7}}],
              'Victory Road 3F': [{'address': 'Warps_VictoryRoad3F', 'id': 0, 'to': {'map': 'Victory Road 2F', 'id': 3}},
                                  {'address': 'Warps_VictoryRoad3F', 'id': 3,
-                                  'to': {'map': 'Victory Road 2F', 'id': 6}}], 'Victory Road 3F-SE': [
+                                  'to': {'map': 'Victory Road 2F', 'id': 6}}],
+             'Victory Road 3F-SE': [
         {'address': 'Warps_VictoryRoad3F', 'id': 1, 'to': {'map': 'Victory Road 2F', 'id': 5}},
         {'address': 'Warps_VictoryRoad3F', 'id': 2, 'to': {'map': 'Victory Road 2F', 'id': 4}}],
-             'Victory Road 3F-S': [], 'Rocket Hideout B1F': [
+             'Victory Road 3F-S': [], 'Victory Road 3F-Wild': [], 'Rocket Hideout B1F': [
         {'address': 'Warps_RocketHideoutB1F', 'id': 0, 'to': {'map': 'Rocket Hideout B2F', 'id': 0}},
         {'address': 'Warps_RocketHideoutB1F', 'id': 1, 'to': {'map': 'Celadon Game Corner', 'id': 2}}],
              'Rocket Hideout B1F-SE': [{'address': 'Warps_RocketHideoutB1F', 'id': (2, 4),
-                                        'to': {'map': 'Rocket Hideout Elevator', 'id': 0}}], 'Rocket Hideout B1F-S': [
+                                        'to': {'map': 'Rocket Hideout Elevator-B1F', 'id': 0}}], 'Rocket Hideout B1F-S': [
         {'address': 'Warps_RocketHideoutB1F', 'id': 3, 'to': {'map': 'Rocket Hideout B2F', 'id': 3}}],
              'Rocket Hideout B2F': [
                  {'address': 'Warps_RocketHideoutB2F', 'id': 0, 'to': {'map': 'Rocket Hideout B1F', 'id': 0}},
                  {'address': 'Warps_RocketHideoutB2F', 'id': 1, 'to': {'map': 'Rocket Hideout B3F', 'id': 0}},
-                 {'address': 'Warps_RocketHideoutB2F', 'id': (2, 4), 'to': {'map': 'Rocket Hideout Elevator', 'id': 1}},
+                 {'address': 'Warps_RocketHideoutB2F', 'id': (2, 4), 'to': {'map': 'Rocket Hideout Elevator-B2F', 'id': 1}},
                  {'address': 'Warps_RocketHideoutB2F', 'id': 3, 'to': {'map': 'Rocket Hideout B1F-S', 'id': 3}}],
              'Rocket Hideout B3F': [
                  {'address': 'Warps_RocketHideoutB3F', 'id': 0, 'to': {'map': 'Rocket Hideout B2F', 'id': 1}},
                  {'address': 'Warps_RocketHideoutB3F', 'id': 1, 'to': {'map': 'Rocket Hideout B4F-NW', 'id': 0}}],
              'Rocket Hideout B4F': [{'address': 'Warps_RocketHideoutB4F', 'id': (1, 2),
-                                     'to': {'map': 'Rocket Hideout Elevator', 'id': 2}}], 'Rocket Hideout B4F-NW': [
+                                     'to': {'map': 'Rocket Hideout Elevator-B4F', 'id': 2}}], 'Rocket Hideout B4F-NW': [
         {'address': 'Warps_RocketHideoutB4F', 'id': 0, 'to': {'map': 'Rocket Hideout B3F', 'id': 1}}],
-             'Rocket Hideout Elevator': [
-                 {'address': 'RocketHideoutElevatorWarpMaps', 'id': 0, 'to': {'map': 'Rocket Hideout B1F', 'id': 4}},
-                 {'address': 'RocketHideoutElevatorWarpMaps', 'id': 1, 'to': {'map': 'Rocket Hideout B2F', 'id': 4}},
+             'Rocket Hideout Elevator': [], 'Silph Co Elevator': [], 'Celadon Pokemart Elevator': [],
+             'Rocket Hideout Elevator-B1F': [
+                 {'address': 'RocketHideoutElevatorWarpMaps', 'id': 0, 'to': {'map': 'Rocket Hideout B1F', 'id': 4}}],
+             'Rocket Hideout Elevator-B2F': [
+                 {'address': 'RocketHideoutElevatorWarpMaps', 'id': 1, 'to': {'map': 'Rocket Hideout B2F', 'id': 4}}],
+             'Rocket Hideout Elevator-B4F': [
                  {'address': 'RocketHideoutElevatorWarpMaps', 'id': 2, 'to': {'map': 'Rocket Hideout B4F', 'id': 2}}],
-             'Silph Co Elevator': [
+             'Silph Co Elevator-1F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 0, 'to': {'map': 'Silph Co 1F', 'id': 3}},
+                 ],
+             'Silph Co Elevator-2F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 1, 'to': {'map': 'Silph Co 2F', 'id': 2}},
+                 ],
+             'Silph Co Elevator-3F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 2, 'to': {'map': 'Silph Co 3F', 'id': 2}},
+                 ],
+             'Silph Co Elevator-4F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 3, 'to': {'map': 'Silph Co 4F', 'id': 2}},
+                 ],
+             'Silph Co Elevator-5F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 4, 'to': {'map': 'Silph Co 5F', 'id': 2}},
+                 ],
+             'Silph Co Elevator-6F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 5, 'to': {'map': 'Silph Co 6F', 'id': 2}},
+                 ],
+             'Silph Co Elevator-7F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 6, 'to': {'map': 'Silph Co 7F', 'id': 2}},
+                 ],
+             'Silph Co Elevator-8F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 7, 'to': {'map': 'Silph Co 8F', 'id': 2}},
+                 ],
+             'Silph Co Elevator-9F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 8, 'to': {'map': 'Silph Co 9F', 'id': 2}},
+                 ],
+             'Silph Co Elevator-10F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 9, 'to': {'map': 'Silph Co 10F', 'id': 2}},
+                 ],
+             'Silph Co Elevator-11F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 10, 'to': {'map': 'Silph Co 11F', 'id': 1}}],
              'Safari Zone East': [
                  {'address': 'Warps_SafariZoneEast', 'id': (0, 1), 'to': {'map': 'Safari Zone North', 'id': (6, 7)}},
@@ -512,10 +542,13 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_SafariZoneNorth', 'id': (4, 5), 'to': {'map': 'Safari Zone Center', 'id': (4, 5)}},
                  {'address': 'Warps_SafariZoneNorth', 'id': (6, 7), 'to': {'map': 'Safari Zone East', 'id': (0, 1)}},
                  {'address': 'Warps_SafariZoneNorth', 'id': 8, 'to': {'map': 'Safari Zone North Rest House', 'id': 0}}],
-             'Safari Zone Center': [
+             'Safari Zone Center-C': [], 'Safari Zone Center-Wild': [],
+             'Safari Zone Center-NW': [
+                 {'address': 'Warps_SafariZoneCenter', 'id': (2, 3), 'to': {'map': 'Safari Zone West', 'id': (4, 5)}}],
+             'Safari Zone Center-NE': [
+                 {'address': 'Warps_SafariZoneCenter', 'id': (4, 5), 'to': {'map': 'Safari Zone North', 'id': (4, 5)}}],
+             'Safari Zone Center-S': [
                  {'address': 'Warps_SafariZoneCenter', 'id': (0, 1), 'to': {'map': 'Safari Zone Gate-N', 'id': (2, 3)}},
-                 {'address': 'Warps_SafariZoneCenter', 'id': (2, 3), 'to': {'map': 'Safari Zone West', 'id': (4, 5)}},
-                 {'address': 'Warps_SafariZoneCenter', 'id': (4, 5), 'to': {'map': 'Safari Zone North', 'id': (4, 5)}},
                  {'address': 'Warps_SafariZoneCenter', 'id': (6, 7), 'to': {'map': 'Safari Zone East', 'id': (2, 3)}},
                  {'address': 'Warps_SafariZoneCenter', 'id': 8,
                   'to': {'map': 'Safari Zone Center Rest House', 'id': 0}}], 'Safari Zone Center Rest House': [
@@ -537,15 +570,17 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_CeruleanCave2F', 'id': 3, 'to': {'map': 'Cerulean Cave 1F', 'id': 5}}],
              'Cerulean Cave B1F': [
                  {'address': 'Warps_CeruleanCaveB1F', 'id': 0, 'to': {'map': 'Cerulean Cave 1F', 'id': 8}}],
-             'Rock Tunnel B1F': [{'address': 'Warps_RockTunnelB1F', 'id': 0, 'to': {'map': 'Rock Tunnel 1F', 'id': 4}},
-                                 {'address': 'Warps_RockTunnelB1F', 'id': 1, 'to': {'map': 'Rock Tunnel 1F', 'id': 5}},
+             'Cerulean Cave B1F-E': [],
+             'Rock Tunnel B1F-E': [{'address': 'Warps_RockTunnelB1F', 'id': 0, 'to': {'map': 'Rock Tunnel 1F', 'id': 4}},
+                                 {'address': 'Warps_RockTunnelB1F', 'id': 1, 'to': {'map': 'Rock Tunnel 1F', 'id': 5}}],
+             'Rock Tunnel B1F-W': [
                                  {'address': 'Warps_RockTunnelB1F', 'id': 2, 'to': {'map': 'Rock Tunnel 1F', 'id': 6}},
                                  {'address': 'Warps_RockTunnelB1F', 'id': 3, 'to': {'map': 'Rock Tunnel 1F', 'id': 7}}],
              'Seafoam Islands B1F': [
                  {'address': 'Warps_SeafoamIslandsB1F', 'id': 0, 'to': {'map': 'Seafoam Islands B2F-NW', 'id': 0}},
                  {'address': 'Warps_SeafoamIslandsB1F', 'id': 1, 'to': {'map': 'Seafoam Islands 1F', 'id': 4}},
-                 {'address': 'Warps_SeafoamIslandsB1F', 'id': 2, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 2}},
-                 {'address': 'Warps_SeafoamIslandsB1F', 'id': 3, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 3}}],
+                 {'name': "Seafoam Islands B1F to Seafoam Islands B2F-SW N",'address': 'Warps_SeafoamIslandsB1F', 'id': 2, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 2}},
+                 {'name': "Seafoam Islands B1F to Seafoam Islands B2F-SW S", 'address': 'Warps_SeafoamIslandsB1F', 'id': 3, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 3}}],
              'Seafoam Islands B1F-SE': [
                  {'address': 'Warps_SeafoamIslandsB1F', 'id': 4, 'to': {'map': 'Seafoam Islands 1F-SE', 'id': 6}},
                  {'address': 'Warps_SeafoamIslandsB1F', 'id': 5, 'to': {'map': 'Seafoam Islands B2F-SE', 'id': 5}}],
@@ -558,24 +593,22 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
              'Seafoam Islands B2F-NE': [
                  {'address': 'Warps_SeafoamIslandsB2F', 'id': 4, 'to': {'map': 'Seafoam Islands B3F-NE', 'id': 3}}],
              'Seafoam Islands B2F-SW': [
-                 {'address': 'Warps_SeafoamIslandsB2F', 'id': 3, 'to': {'map': 'Seafoam Islands B1F', 'id': 3}},
+                 {'name': "Seafoam Islands B2F-SW to Seafoam Islands 1F-SW S", 'address': 'Warps_SeafoamIslandsB2F', 'id': 3, 'to': {'map': 'Seafoam Islands B1F', 'id': 3}},
                  {'address': 'Warps_SeafoamIslandsB2F', 'id': 1, 'to': {'map': 'Seafoam Islands B3F', 'id': 0}},
-                 {'address': 'Warps_SeafoamIslandsB2F', 'id': 2, 'to': {'map': 'Seafoam Islands B1F', 'id': 2}}],
+                 {'name': "Seafoam Islands B2F-SW to Seafoam Islands 1F-SW N", 'address': 'Warps_SeafoamIslandsB2F', 'id': 2, 'to': {'map': 'Seafoam Islands B1F', 'id': 2}}],
              'Seafoam Islands B2F-NW': [
                  {'address': 'Warps_SeafoamIslandsB2F', 'id': 0, 'to': {'map': 'Seafoam Islands B1F', 'id': 0}}],
              'Seafoam Islands B3F': [
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 0, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 1}},
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 1, 'to': {'map': 'Seafoam Islands B4F', 'id': 2}},
-                 {'address': 'Warps_SeafoamIslandsB3F', 'id': 5, 'to': {'map': 'Seafoam Islands B4F', 'id': 0}},
-                 {'address': 'Warps_SeafoamIslandsB3F', 'id': 6, 'to': {'map': 'Seafoam Islands B4F', 'id': 1}}],
+                 {"name": "Seafoam Islands B3F to Seafoam Islands B4F Water Tunnel", 'flags': 'm', 'address': 'Warps_SeafoamIslandsB3F', 'id': (5, 6), 'to': {'map': 'Seafoam Islands B4F', 'id': (0, 1)}}],
              'Seafoam Islands B3F-SE': [
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 4, 'to': {'map': 'Seafoam Islands B2F-SE', 'id': 6}}],
              'Seafoam Islands B3F-NE': [
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 2, 'to': {'map': 'Seafoam Islands B4F', 'id': 3}},
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 3, 'to': {'map': 'Seafoam Islands B2F-NE', 'id': 4}}],
              'Seafoam Islands B4F': [
-                 {'address': 'Warps_SeafoamIslandsB4F', 'id': 0, 'to': {'map': 'Seafoam Islands B3F', 'id': 5}},
-                 {'address': 'Warps_SeafoamIslandsB4F', 'id': 1, 'to': {'map': 'Seafoam Islands B3F', 'id': 6}},
+                 {"name": "Seafoam Islands B4F to Seafoam Islands B3F Water Tunnel", 'flags': 'm', 'address': 'Warps_SeafoamIslandsB4F', 'id': (0, 1), 'to': {'map': 'Seafoam Islands B3F', 'id': (5, 6)}},
                  {'address': 'Warps_SeafoamIslandsB4F', 'id': 2, 'to': {'map': 'Seafoam Islands B3F', 'id': 1}},
                  {'address': 'Warps_SeafoamIslandsB4F', 'id': 3, 'to': {'map': 'Seafoam Islands B3F-NE', 'id': 2}}],
              'Route 7': [{'address': 'Warps_Route7', 'id': 3, 'to': {'map': 'Route 7 Gate', 'id': (0, 1)}},
@@ -583,52 +616,61 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
              'Route 7-E': [{'address': 'Warps_Route7', 'id': (0, 1), 'to': {'map': 'Route 7 Gate', 'id': (2, 3)}}],
              "Player's House 1F": [
                  {'address': 'Warps_RedsHouse1F', 'id': (0, 1), 'to': {'map': 'Pallet Town', 'id': 0}},
-                 {'address': 'Warps_RedsHouse1F', 'id': 2, 'to': {'map': "Player's House 2F", 'id': 0}}],
+                 {'flags': 'm', 'address': 'Warps_RedsHouse1F', 'id': 2, 'to': {'map': "Player's House 2F", 'id': 0}}],
              'Celadon Pokemart 3F': [
                  {'address': 'Warps_CeladonMart3F', 'id': 0, 'to': {'map': 'Celadon Pokemart 4F', 'id': 0}},
                  {'address': 'Warps_CeladonMart3F', 'id': 1, 'to': {'map': 'Celadon Pokemart 2F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart3F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator', 'id': 0}}],
+                 {'address': 'Warps_CeladonMart3F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-3F', 'id': 0}}],
              'Celadon Pokemart 4F': [
                  {'address': 'Warps_CeladonMart4F', 'id': 0, 'to': {'map': 'Celadon Pokemart 3F', 'id': 0}},
                  {'address': 'Warps_CeladonMart4F', 'id': 1, 'to': {'map': 'Celadon Pokemart 5F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart4F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator', 'id': 0}}],
+                 {'address': 'Warps_CeladonMart4F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-4F', 'id': 0}}],
              'Celadon Pokemart Roof': [
                  {'address': 'Warps_CeladonMartRoof', 'id': 0, 'to': {'map': 'Celadon Pokemart 5F', 'id': 0}}],
-             'Celadon Pokemart Elevator': [
-                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 0, 'to': {'map': 'Celadon Pokemart 1F', 'id': 5}},
-                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 1, 'to': {'map': 'Celadon Pokemart 2F', 'id': 2}},
-                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 2, 'to': {'map': 'Celadon Pokemart 3F', 'id': 2}},
-                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 3, 'to': {'map': 'Celadon Pokemart 4F', 'id': 2}},
+             'Celadon Pokemart Elevator-1F': [
+                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 0, 'to': {'map': 'Celadon Pokemart 1F', 'id': 5}}],
+             'Celadon Pokemart Elevator-2F': [
+                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 1, 'to': {'map': 'Celadon Pokemart 2F', 'id': 2}}],
+             'Celadon Pokemart Elevator-3F': [
+                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 2, 'to': {'map': 'Celadon Pokemart 3F', 'id': 2}}],
+             'Celadon Pokemart Elevator-4F': [
+                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 3, 'to': {'map': 'Celadon Pokemart 4F', 'id': 2}}],
+             'Celadon Pokemart Elevator-5F': [
                  {'address': 'CeladonMartElevatorWarpMaps', 'id': 4, 'to': {'map': 'Celadon Pokemart 5F', 'id': 2}}],
              'Celadon Mansion 1F': [
                  {'address': 'Warps_CeladonMansion1F', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 2}},
-                 {'address': 'Warps_CeladonMansion1F', 'id': 2, 'to': {'map': 'Celadon City', 'id': 4}},
-                 {'address': 'Warps_CeladonMansion1F', 'id': 3, 'to': {'map': 'Celadon Mansion 2F', 'id': 1}},
-                 {'address': 'Warps_CeladonMansion1F', 'id': 4, 'to': {'map': 'Celadon Mansion 2F', 'id': 2}}],
+                 {'address': 'Warps_CeladonMansion1F', 'id': 3, 'to': {'map': 'Celadon Mansion 2F', 'id': 1}},],
+             'Celadon Mansion 1F-Back': [
+                 {'address': 'Warps_CeladonMansion1F', 'id': 4, 'to': {'map': 'Celadon Mansion 2F', 'id': 2}},
+                 {'address': 'Warps_CeladonMansion1F', 'id': 2, 'to': {'map': 'Celadon City', 'id': 4}}],
              'Celadon Mansion 2F': [
                  {'address': 'Warps_CeladonMansion2F', 'id': 0, 'to': {'map': 'Celadon Mansion 3F', 'id': 0}},
-                 {'address': 'Warps_CeladonMansion2F', 'id': 1, 'to': {'map': 'Celadon Mansion 1F', 'id': 3}},
+                 {'address': 'Warps_CeladonMansion2F', 'id': 1, 'to': {'map': 'Celadon Mansion 1F', 'id': 3}},],
+             'Celadon Mansion 2F-Back': [
                  {'address': 'Warps_CeladonMansion2F', 'id': 2, 'to': {'map': 'Celadon Mansion 1F', 'id': 4}},
                  {'address': 'Warps_CeladonMansion2F', 'id': 3, 'to': {'map': 'Celadon Mansion 3F', 'id': 3}}],
              'Celadon Mansion 3F': [
                  {'address': 'Warps_CeladonMansion3F', 'id': 0, 'to': {'map': 'Celadon Mansion 2F', 'id': 0}},
-                 {'address': 'Warps_CeladonMansion3F', 'id': 1, 'to': {'map': 'Celadon Mansion Roof', 'id': 0}},
+                 {'address': 'Warps_CeladonMansion3F', 'id': 1, 'to': {'map': 'Celadon Mansion Roof', 'id': 0}}],
+             'Celadon Mansion 3F-Back': [
                  {'address': 'Warps_CeladonMansion3F', 'id': 2, 'to': {'map': 'Celadon Mansion Roof', 'id': 1}},
                  {'address': 'Warps_CeladonMansion3F', 'id': 3, 'to': {'map': 'Celadon Mansion 2F', 'id': 3}}],
              'Celadon Mansion Roof': [
-                 {'address': 'Warps_CeladonMansionRoof', 'id': 0, 'to': {'map': 'Celadon Mansion 3F', 'id': 1}},
+                 {'address': 'Warps_CeladonMansionRoof', 'id': 0, 'to': {'map': 'Celadon Mansion 3F', 'id': 1}}],
+             'Celadon Mansion Roof-Back': [
                  {'address': 'Warps_CeladonMansionRoof', 'id': 1, 'to': {'map': 'Celadon Mansion 3F', 'id': 2}},
                  {'address': 'Warps_CeladonMansionRoof', 'id': 2,
                   'to': {'map': 'Celadon Mansion Roof House', 'id': 0}}], 'Celadon Pokemon Center': [
         {'address': 'Warps_CeladonPokecenter', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 5}}],
              'Celadon Gym': [{'address': 'Warps_CeladonGym', 'id': (0, 1), 'to': {'map': 'Celadon City-G', 'id': 6}}],
+             'Celadon Gym-C': [],
              'Celadon Game Corner': [
                  {'address': 'Warps_GameCorner', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 7}},
                  {'address': 'Warps_GameCorner', 'id': 2, 'to': {'map': 'Rocket Hideout B1F', 'id': 1}}],
              'Celadon Pokemart 5F': [
                  {'address': 'Warps_CeladonMart5F', 'id': 0, 'to': {'map': 'Celadon Pokemart Roof', 'id': 0}},
                  {'address': 'Warps_CeladonMart5F', 'id': 1, 'to': {'map': 'Celadon Pokemart 4F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart5F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator', 'id': 0}}],
+                 {'address': 'Warps_CeladonMart5F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-5F', 'id': 0}}],
              'Celadon Prize Corner': [
                  {'address': 'Warps_GameCornerPrizeRoom', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 9}}],
              'Celadon Diner': [
@@ -659,17 +701,19 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_Route15Gate1F', 'id': 4, 'to': {'map': 'Route 15 Gate 2F', 'id': 0}}],
              'Route 15 Gate 2F': [
                  {'address': 'Warps_Route15Gate2F', 'id': 0, 'to': {'map': 'Route 15 Gate 1F', 'id': 4}}],
-             'Route 16 Gate 1F': [
-                 {'address': 'Warps_Route16Gate1F', 'id': (0, 1), 'to': {'map': 'Route 16-SW', 'id': (0, 1)}},
+             'Route 16 Gate 1F-W': [
+                 {'address': 'Warps_Route16Gate1F', 'id': (0, 1), 'to': {'map': 'Route 16-SW', 'id': (0, 1)}}],
+             'Route 16 Gate 1F-E': [
                  {'address': 'Warps_Route16Gate1F', 'id': (2, 3), 'to': {'map': 'Route 16-C', 'id': 2}},
                  {'address': 'Warps_Route16Gate1F', 'id': 8, 'to': {'map': 'Route 16 Gate 2F', 'id': 0}}],
              'Route 16 Gate 1F-N': [
                  {'address': 'Warps_Route16Gate1F', 'id': (4, 5), 'to': {'map': 'Route 16-NW', 'id': (4, 5)}},
                  {'address': 'Warps_Route16Gate1F', 'id': (6, 7), 'to': {'map': 'Route 16-NE', 'id': (6, 7)}}],
              'Route 16 Gate 2F': [
-                 {'address': 'Warps_Route16Gate2F', 'id': 0, 'to': {'map': 'Route 16 Gate 1F', 'id': 8}}],
-             'Route 18 Gate 1F': [
-                 {'address': 'Warps_Route18Gate1F', 'id': (0, 1), 'to': {'map': 'Route 18-W', 'id': (0, 1)}},
+                 {'address': 'Warps_Route16Gate2F', 'id': 0, 'to': {'map': 'Route 16 Gate 1F-E', 'id': 8}}],
+             'Route 18 Gate 1F-W': [
+                 {'address': 'Warps_Route18Gate1F', 'id': (0, 1), 'to': {'map': 'Route 18-W', 'id': (0, 1)}}],
+             'Route 18 Gate 1F-E': [
                  {'address': 'Warps_Route18Gate1F', 'id': (2, 3), 'to': {'map': 'Route 18-E', 'id': (2, 3)}},
                  {'address': 'Warps_Route18Gate1F', 'id': 4, 'to': {'map': 'Route 18 Gate 2F', 'id': 0}}],
              'Route 18 Gate 2F': [
@@ -682,15 +726,19 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                              {'address': 'Warps_MtMoonB2F', 'id': 3, 'to': {'map': 'Mt Moon B1F', 'id': 6}}],
              'Mt Moon B2F-NE': [{'address': 'Warps_MtMoonB2F', 'id': 0, 'to': {'map': 'Mt Moon B1F', 'id': 1}}],
              'Mt Moon B2F-C': [{'address': 'Warps_MtMoonB2F', 'id': 2, 'to': {'map': 'Mt Moon B1F', 'id': 5}}],
+             'Mt Moon B2F-Wild': [], 'Victory Road 1F-Wild': [],
+             "Pallet/Viridian Fishing": [], "Route 22 Fishing": [], "Route 24/25/Cerulean/Cerulean Gym Fishing": [],
+             "Route 6/11/Vermilion/Dock Fishing": [], "Route 10/Celadon Fishing": [], "Safari Zone Fishing": [],
+             "Route 12/13/17/18 Fishing": [], "Sea Routes/Cinnabar/Seafoam Fishing": [], "Route 23/Cerulean Cave Fishing": [],
+             "Fuchsia Fishing": [],
              'Safari Zone West': [
-                 {'address': 'Warps_SafariZoneWest', 'id': 0, 'to': {'map': 'Safari Zone North', 'id': 0}},
-                 {'address': 'Warps_SafariZoneWest', 'id': 1, 'to': {'map': 'Safari Zone North', 'id': 1}},
-                 {'address': 'Warps_SafariZoneWest', 'id': 2, 'to': {'map': 'Safari Zone North', 'id': 2}},
-                 {'address': 'Warps_SafariZoneWest', 'id': 3, 'to': {'map': 'Safari Zone North', 'id': 3}},
-                 {'address': 'Warps_SafariZoneWest', 'id': 4, 'to': {'map': 'Safari Zone Center', 'id': 2}},
-                 {'address': 'Warps_SafariZoneWest', 'id': 5, 'to': {'map': 'Safari Zone Center', 'id': 3}},
-                 {'address': 'Warps_SafariZoneWest', 'id': 6, 'to': {'map': 'Safari Zone Secret House', 'id': 0}},
+                 {'address': 'Warps_SafariZoneWest', 'id': (2, 3), 'to': {'map': 'Safari Zone North', 'id': (2, 3)}},
+                 {'address': 'Warps_SafariZoneWest', 'id': (4, 5), 'to': {'map': 'Safari Zone Center', 'id': (2, 3)}},
                  {'address': 'Warps_SafariZoneWest', 'id': 7, 'to': {'map': 'Safari Zone West Rest House', 'id': 0}}],
+             'Safari Zone West-NW': [
+                 {'address': 'Warps_SafariZoneWest', 'id': (0, 1), 'to': {'map': 'Safari Zone North', 'id': (0, 1)}},
+                 {'address': 'Warps_SafariZoneWest', 'id': 6, 'to': {'map': 'Safari Zone Secret House', 'id': 0}},],
+             'Safari Zone West-Wild': [],
              'Safari Zone Secret House': [
                  {'address': 'Warps_SafariZoneSecretHouse', 'id': (0, 1), 'to': {'map': 'Safari Zone West', 'id': 6}}],
              'Trade Center': [], 'Colosseum': [],
@@ -707,37 +755,42 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_IndigoPlateau', 'id': (0, 1), 'to': {'map': 'Indigo Plateau Lobby', 'id': (0, 1)}}],
              'Saffron City': [
                  {'address': 'Warps_SaffronCity', 'id': 1, 'to': {'map': 'Saffron Fighting Dojo', 'id': 0}},
-                 {'address': 'Warps_SaffronCity', 'id': 3, 'to': {'map': 'Saffron Pidgey House', 'id': 0}},
                  {'address': 'Warps_SaffronCity', 'id': 4, 'to': {'map': 'Saffron Pokemart', 'id': 0}},
                  {'address': 'Warps_SaffronCity', 'id': 6, 'to': {'map': 'Saffron Pokemon Center', 'id': 0}},
-                 {'address': 'Warps_SaffronCity', 'id': 7, 'to': {'map': "Mr. Psychic's House", 'id': 0}}],
+                 {'address': 'Warps_SaffronCity', 'id': 7, 'to': {'map': "Saffron Mr. Psychic's House", 'id': 0}}],
+             'Saffron City-Pidgey': [
+                 {'address': 'Warps_SaffronCity', 'id': 3, 'to': {'map': 'Saffron Pidgey House', 'id': 0}}],
              'Saffron City-Copycat': [
                  {'address': 'Warps_SaffronCity', 'id': 0, 'to': {'map': "Saffron Copycat's House 1F", 'id': 0}}],
              'Saffron City-G': [{'address': 'Warps_SaffronCity', 'id': 2, 'to': {'map': 'Saffron Gym', 'id': 0}}],
              'Saffron City-Silph': [{'address': 'Warps_SaffronCity', 'id': 5, 'to': {'map': 'Silph Co 1F', 'id': 0}}],
-             'Victory Road 2F': [{'address': 'Warps_VictoryRoad2F', 'id': 0, 'to': {'map': 'Victory Road 1F', 'id': 2}},
+             'Victory Road 2F-E': [
                                  {'address': 'Warps_VictoryRoad2F', 'id': (1, 2), 'to': {'map': 'Route 23-N', 'id': 3}},
-                                 {'address': 'Warps_VictoryRoad2F', 'id': 3, 'to': {'map': 'Victory Road 3F', 'id': 0}},
-                                 {'address': 'Warps_VictoryRoad2F', 'id': 4,
-                                  'to': {'map': 'Victory Road 3F-SE', 'id': 2}},
                                  {'address': 'Warps_VictoryRoad2F', 'id': 5,
-                                  'to': {'map': 'Victory Road 3F-SE', 'id': 1}},
-                                 {'address': 'Warps_VictoryRoad2F', 'id': 6,
+                                  'to': {'map': 'Victory Road 3F-SE', 'id': 1}},],
+             'Victory Road 2F-W': [{'address': 'Warps_VictoryRoad2F', 'id': 0, 'to': {'map': 'Victory Road 1F', 'id': 2}},],
+             'Victory Road 2F-NW': [{'address': 'Warps_VictoryRoad2F', 'id': 6,
                                   'to': {'map': 'Victory Road 3F', 'id': 3}}],
+             'Victory Road 2F-C': [
+                                 {'address': 'Warps_VictoryRoad2F', 'id': 3, 'to': {'map': 'Victory Road 3F', 'id': 0}},],
+             'Victory Road 2F-SE': [
+                                 {'address': 'Warps_VictoryRoad2F', 'id': 4,
+                                  'to': {'map': 'Victory Road 3F-SE', 'id': 2}},],
+             'Victory Road 2F-Wild': [],
              'Mt Moon B1F-W': [{'address': 'Warps_MtMoonB1F', 'id': 0, 'to': {'map': 'Mt Moon 1F', 'id': 2}},
                                {'address': 'Warps_MtMoonB1F', 'id': 4, 'to': {'map': 'Mt Moon B2F', 'id': 1}}],
              'Mt Moon B1F-C': [{'address': 'Warps_MtMoonB1F', 'id': 1, 'to': {'map': 'Mt Moon B2F-NE', 'id': 0}},
                              {'address': 'Warps_MtMoonB1F', 'id': 2, 'to': {'map': 'Mt Moon 1F', 'id': 3}}],
              'Mt Moon B1F-NE': [
                              {'address': 'Warps_MtMoonB1F', 'id': 6, 'to': {'map': 'Mt Moon B2F', 'id': 3}},
-                             {'address': 'Warps_MtMoonB1F', 'id': 7, 'to': {'map': 'Route 4-E', 'id': 2}}],
+                             {'address': 'Warps_MtMoonB1F', 'id': 7, 'to': {'map': 'Route 4-C', 'id': 2}}],
              'Mt Moon B1F-SE': [
                              {'address': 'Warps_MtMoonB1F', 'id': 3, 'to': {'map': 'Mt Moon 1F', 'id': 4}},
                              {'address': 'Warps_MtMoonB1F', 'id': 5, 'to': {'map': 'Mt Moon B2F-C', 'id': 2}}],
              'Mt Moon B1F-Wild': [],
              'Silph Co 7F': [{'address': 'Warps_SilphCo7F', 'id': 0, 'to': {'map': 'Silph Co 8F', 'id': 1}},
                              {'address': 'Warps_SilphCo7F', 'id': 1, 'to': {'map': 'Silph Co 6F', 'id': 0}},
-                             {'address': 'Warps_SilphCo7F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 6}}],
+                             {'address': 'Warps_SilphCo7F', 'id': 2, 'to': {'map': 'Silph Co Elevator-7F', 'id': 6}}],
              'Silph Co 7F-NW': [{'address': 'Warps_SilphCo7F', 'id': 4, 'to': {'map': 'Silph Co 3F-C', 'id': 8}},
                                 {'address': 'Warps_SilphCo7F', 'id': 3, 'to': {'map': 'Silph Co 11F-W', 'id': 3}}],
              'Silph Co 7F-SE': [{'address': 'Warps_SilphCo7F', 'id': 5, 'to': {'map': 'Silph Co 5F', 'id': 3}}],
@@ -752,7 +805,8 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
              'Route 2-Grass': [], 'Route 3': [],
              'Route 4-W': [{'address': 'Warps_Route4', 'id': 0, 'to': {'map': 'Route 4 Pokemon Center', 'id': 0}},
                            {'address': 'Warps_Route4', 'id': 1, 'to': {'map': 'Mt Moon 1F', 'id': 0}}],
-             'Route 4-E': [{'address': 'Warps_Route4', 'id': 2, 'to': {'map': 'Mt Moon B1F', 'id': 7}}],
+             'Route 4-C': [{'address': 'Warps_Route4', 'id': 2, 'to': {'map': 'Mt Moon B1F', 'id': 7}}],
+             'Route 4-E': [],
              'Route 4-Lass': [],
              'Route 5': [{'address': 'Warps_Route5', 'id': (1, 0), 'to': {'map': 'Route 5 Gate-N', 'id': (3, 2)}},
                          {'address': 'Warps_Route5', 'id': 3, 'to': {'map': 'Underground Path Route 5', 'id': 0}},
@@ -766,7 +820,7 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
              'Celadon Pokemart 2F': [
                  {'address': 'Warps_CeladonMart2F', 'id': 0, 'to': {'map': 'Celadon Pokemart 1F', 'id': 4}},
                  {'address': 'Warps_CeladonMart2F', 'id': 1, 'to': {'map': 'Celadon Pokemart 3F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart2F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator', 'id': 0}}],
+                 {'address': 'Warps_CeladonMart2F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-2F', 'id': 0}}],
              'Fuchsia Good Rod House': [{'address': 'Warps_FuchsiaGoodRodHouse', 'id': 0,
                                          'to': {'map': 'Fuchsia City-Good Rod House Backyard', 'id': 8}},
                                         {'address': 'Warps_FuchsiaGoodRodHouse', 'id': (1, 2),
@@ -776,9 +830,9 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_Route12SuperRodHouse', 'id': (0, 1), 'to': {'map': 'Route 12-S', 'id': 3}}],
              'Silph Co 8F': [{'address': 'Warps_SilphCo8F', 'id': 0, 'to': {'map': 'Silph Co 9F', 'id': 1}},
                              {'address': 'Warps_SilphCo8F', 'id': 1, 'to': {'map': 'Silph Co 7F', 'id': 0}},
-                             {'address': 'Warps_SilphCo8F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 7}},
-                             {'address': 'Warps_SilphCo8F', 'id': 4, 'to': {'map': 'Silph Co 2F', 'id': 4}},
-                             {'address': 'Warps_SilphCo8F', 'id': 5, 'to': {'map': 'Silph Co 2F', 'id': 5}},
+                             {'address': 'Warps_SilphCo8F', 'id': 2, 'to': {'map': 'Silph Co Elevator-8F', 'id': 7}},
+                             {'name': 'Silph Co 8F to Silph Co 2F S', 'address': 'Warps_SilphCo8F', 'id': 4, 'to': {'map': 'Silph Co 2F', 'id': 4}},
+                             {'name': 'Silph Co 8F to Silph Co 2F N', 'address': 'Warps_SilphCo8F', 'id': 5, 'to': {'map': 'Silph Co 2F', 'id': 5}},
                              {'address': 'Warps_SilphCo8F', 'id': 6, 'to': {'map': 'Silph Co 8F-W', 'id': 3}}],
              'Silph Co 8F-W': [{'address': 'Warps_SilphCo8F', 'id': 3, 'to': {'map': 'Silph Co 8F', 'id': 6}}],
              'Route 6': [
@@ -810,51 +864,51 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_Route15', 'id': (0, 1), 'to': {'map': 'Route 15 Gate 1F', 'id': (0, 1)}}],
              'Route 15': [{'address': 'Warps_Route15', 'id': (2, 3), 'to': {'map': 'Route 15 Gate 1F', 'id': (2, 3)}}],
              'Route 16-E': [],
-             'Route 16-C': [{'address': 'Warps_Route16', 'id': 2, 'to': {'map': 'Route 16 Gate 1F', 'id': (2, 3)}}],
+             'Route 16-C': [{'address': 'Warps_Route16', 'id': 2, 'to': {'map': 'Route 16 Gate 1F-E', 'id': (2, 3)}}],
              'Route 16-SW': [
-                 {'address': 'Warps_Route16', 'id': (0, 1), 'to': {'map': 'Route 16 Gate 1F', 'id': (0, 1)}}],
+                 {'address': 'Warps_Route16', 'id': (0, 1), 'to': {'map': 'Route 16 Gate 1F-W', 'id': (0, 1)}}],
              'Route 16-NW': [
                  {'address': 'Warps_Route16', 'id': (4, 5), 'to': {'map': 'Route 16 Gate 1F-N', 'id': (4, 5)}},
                  {'address': 'Warps_Route16', 'id': 8, 'to': {'map': 'Route 16 Fly House', 'id': 0}}], 'Route 16-NE': [
         {'address': 'Warps_Route16', 'id': (6, 7), 'to': {'map': 'Route 16 Gate 1F-N', 'id': (6, 7)}}], 'Route 18-W': [
         {'address': 'Warps_Route18', 'id': (0, 1), 'to': {'map': 'Route 18 Gate 1F', 'id': (0, 1)}}], 'Route 18-E': [
         {'address': 'Warps_Route18', 'id': (2, 3), 'to': {'map': 'Route 18 Gate 1F', 'id': (2, 3)}}],
-             'Pokemon Fan Club': [
+             'Vermilion Pokemon Fan Club': [
                  {'address': 'Warps_PokemonFanClub', 'id': (0, 1), 'to': {'map': 'Vermilion City', 'id': 1}}],
              'Silph Co 2F-NW': [{'address': 'Warps_SilphCo2F', 'id': 3, 'to': {'map': 'Silph Co 3F', 'id': 6}}],
              'Silph Co 2F': [{'address': 'Warps_SilphCo2F', 'id': 0, 'to': {'map': 'Silph Co 1F', 'id': 2}},
                              {'address': 'Warps_SilphCo2F', 'id': 1, 'to': {'map': 'Silph Co 3F', 'id': 0}},
-                             {'address': 'Warps_SilphCo2F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 1}},
-                             {'address': 'Warps_SilphCo2F', 'id': 4, 'to': {'map': 'Silph Co 8F', 'id': 4}},
-                             {'address': 'Warps_SilphCo2F', 'id': 5, 'to': {'map': 'Silph Co 8F', 'id': 5}}],
+                             {'address': 'Warps_SilphCo2F', 'id': 2, 'to': {'map': 'Silph Co Elevator-2F', 'id': 1}},
+                             {'name': 'Silph Co 2F to Silph Co 8F N', 'address': 'Warps_SilphCo2F', 'id': 4, 'to': {'map': 'Silph Co 8F', 'id': 4}},
+                             {'name': 'Silph Co 2F to Silph Co 8F S', 'address': 'Warps_SilphCo2F', 'id': 5, 'to': {'map': 'Silph Co 8F', 'id': 5}}],
              'Silph Co 2F-SW': [{'address': 'Warps_SilphCo2F', 'id': 6, 'to': {'map': 'Silph Co 6F', 'id': 4}}],
              'Silph Co 3F': [{'address': 'Warps_SilphCo3F', 'id': 0, 'to': {'map': 'Silph Co 2F', 'id': 1}},
                              {'address': 'Warps_SilphCo3F', 'id': 1, 'to': {'map': 'Silph Co 4F', 'id': 0}},
-                             {'address': 'Warps_SilphCo3F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 2}},
-                             {'address': 'Warps_SilphCo3F', 'id': 3, 'to': {'map': 'Silph Co 3F', 'id': 9}},
+                             {'address': 'Warps_SilphCo3F', 'id': 2, 'to': {'map': 'Silph Co Elevator-3F', 'id': 2}},
+                             {'name': 'Silph Co 3F to Silph Co 3F N', 'address': 'Warps_SilphCo3F', 'id': 3, 'to': {'map': 'Silph Co 3F', 'id': 9}},
                              {'address': 'Warps_SilphCo3F', 'id': 4, 'to': {'map': 'Silph Co 5F', 'id': 5}},
                              {'address': 'Warps_SilphCo3F', 'id': 5, 'to': {'map': 'Silph Co 5F-SW', 'id': 6}},
                              {'address': 'Warps_SilphCo3F', 'id': 6, 'to': {'map': 'Silph Co 2F-NW', 'id': 3}},
-                             {'address': 'Warps_SilphCo3F', 'id': 9, 'to': {'map': 'Silph Co 3F', 'id': 3}}],
+                             {'name': 'Silph Co 3F to Silph Co 3F S', 'address': 'Warps_SilphCo3F', 'id': 9, 'to': {'map': 'Silph Co 3F', 'id': 3}}],
              'Silph Co 3F-C': [{'address': 'Warps_SilphCo3F', 'id': 8, 'to': {'map': 'Silph Co 7F-NW', 'id': 4}}],
              'Silph Co 3F-W': [{'address': 'Warps_SilphCo3F', 'id': 7, 'to': {'map': 'Silph Co 9F-NW', 'id': 3}}],
              'Silph Co 10F': [{'address': 'Warps_SilphCo10F', 'id': 0, 'to': {'map': 'Silph Co 9F', 'id': 0}},
                               {'address': 'Warps_SilphCo10F', 'id': 1, 'to': {'map': 'Silph Co 11F', 'id': 0}},
-                              {'address': 'Warps_SilphCo10F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 9}},
+                              {'address': 'Warps_SilphCo10F', 'id': 2, 'to': {'map': 'Silph Co Elevator-10F', 'id': 9}},
                               {'address': 'Warps_SilphCo10F', 'id': 5, 'to': {'map': 'Silph Co 4F', 'id': 6}}],
              'Silph Co 10F-SE': [{'address': 'Warps_SilphCo10F', 'id': 3, 'to': {'map': 'Silph Co 4F-N', 'id': 3}},
                                  {'address': 'Warps_SilphCo10F', 'id': 4, 'to': {'map': 'Silph Co 4F', 'id': 5}}],
-             "Lance's Room": [
+             "Indigo Plateau Lance's Room": [
                  {'address': 'Warps_LancesRoom', 'id': 0, 'to': {'map': "Indigo Plateau Agatha's Room", 'id': 2}},
                  {'address': 'Warps_LancesRoom', 'id': (1, 2),
-                  'to': {'map': "Indigo Plateau Champion's Room", 'id': 0}}], 'Hall Of Fame': [
-        {'address': 'Warps_HallOfFame', 'id': 0, 'to': {'map': "Indigo Plateau Champion's Room", 'id': 2}},
-        {'address': 'Warps_HallOfFame', 'id': 1, 'to': {'map': "Indigo Plateau Champion's Room", 'id': 3}}],
+                  'to': {'map': "Indigo Plateau Champion's Room", 'id': 0}}], 'Indigo Plateau Hall of Fame': [
+        {'flags': 'm', 'address': 'Warps_HallOfFame', 'id': 0, 'to': {'map': "Indigo Plateau Champion's Room", 'id': (2, 3)}},],
              "Player's House 2F": [
-                 {'address': 'Warps_RedsHouse2F', 'id': 0, 'to': {'map': "Player's House 1F", 'id': 2}}],
+                 {'flags': 'm', 'address': 'Warps_RedsHouse2F', 'id': 0, 'to': {'map': "Player's House 1F", 'id': 2}}],
              'Pewter Museum 1F': [{'address': 'Warps_Museum1F', 'id': (0, 1), 'to': {'map': 'Pewter City', 'id': 0}},
-                                  {'address': 'Warps_Museum1F', 'id': (2, 3), 'to': {'map': 'Pewter City', 'id': 1}},
                                   {'address': 'Warps_Museum1F', 'id': 4, 'to': {'map': 'Pewter Museum 2F', 'id': 0}}],
+             'Pewter Museum 1F-E': [
+                                  {'address': 'Warps_Museum1F', 'id': (2, 3), 'to': {'map': 'Pewter City', 'id': 1}}],
              'Pewter Museum 2F': [{'address': 'Warps_Museum2F', 'id': 0, 'to': {'map': 'Pewter Museum 1F', 'id': 4}}],
              'Pewter Gym': [{'address': 'Warps_PewterGym', 'id': (0, 1), 'to': {'map': 'Pewter City', 'id': 2}}],
              'Pewter Pokemon Center': [
@@ -911,16 +965,15 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                                 {'address': 'Warps_SaffronGym', 'id': 31, 'to': {'map': 'Saffron Gym-S', 'id': 19}}],
              'Saffron Pokemart': [
                  {'address': 'Warps_SaffronMart', 'id': (0, 1), 'to': {'map': 'Saffron City', 'id': 4}}],
-             'Silph Co 1F': [{'address': 'Warps_SilphCo1F', 'id': (0, 1), 'to': {'map': 'Silph Co Elevator', 'id': 5}},
+             'Silph Co 1F': [{'address': 'Warps_SilphCo1F', 'id': (0, 1), 'to': {'map': 'Saffron City-Silph', 'id': 5}},
                              {'address': 'Warps_SilphCo1F', 'id': 2, 'to': {'map': 'Silph Co 2F', 'id': 0}},
-                             {'address': 'Warps_SilphCo1F', 'id': 3, 'to': {'map': 'Silph Co Elevator', 'id': 0}},
-                             {'address': 'Warps_SilphCo1F', 'id': 4, 'to': {'map': 'Silph Co 3F', 'id': 6}}],
+                             {'address': 'Warps_SilphCo1F', 'id': 3, 'to': {'map': 'Silph Co Elevator-10F', 'id': 0}}],
              'Saffron Pokemon Center': [
                  {'address': 'Warps_SaffronPokecenter', 'id': (0, 1), 'to': {'map': 'Saffron City', 'id': 6}}],
              'Viridian Forest North Gate': [
                  {'address': 'Warps_ViridianForestNorthGate', 'id': 1, 'to': {'map': 'Route 2-NW', 'id': 1}},
                  {'address': 'Warps_ViridianForestNorthGate', 'id': (2, 3), 'to': {'map': 'Viridian Forest', 'id': 0}}],
-             'Route 2 Gate': [{'address': 'Warps_Route2Gate', 'id': (0, 1), 'to': {'map': 'Route 2-E', 'id': 3}},
+             'Route 2 Gate': [{'address': 'Warps_Route2Gate', 'id': 1, 'to': {'map': 'Route 2-E', 'id': 3}},
                               {'address': 'Warps_Route2Gate', 'id': (2, 3), 'to': {'map': 'Route 2-SE', 'id': 4}}],
              'Viridian Forest South Gate': [
                  {'address': 'Warps_ViridianForestSouthGate', 'id': 1, 'to': {'map': 'Viridian Forest', 'id': 4}},
@@ -938,10 +991,11 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
              'Silph Co 9F-SW': [],
              'Silph Co 9F': [{'address': 'Warps_SilphCo9F', 'id': 0, 'to': {'map': 'Silph Co 10F', 'id': 0}},
                              {'address': 'Warps_SilphCo9F', 'id': 1, 'to': {'map': 'Silph Co 8F', 'id': 0}},
-                             {'address': 'Warps_SilphCo9F', 'id': 2, 'to': {'map': 'Silph Co Elevator', 'id': 8}},
+                             {'address': 'Warps_SilphCo9F', 'id': 2, 'to': {'map': 'Silph Co Elevator-9F', 'id': 8}},
                              {'address': 'Warps_SilphCo9F', 'id': 4, 'to': {'map': 'Silph Co 5F', 'id': 4}}],
              'Silph Co 9F-NW': [{'address': 'Warps_SilphCo9F', 'id': 3, 'to': {'map': 'Silph Co 3F-W', 'id': 7}}],
-             'Victory Road 1F': [{'address': 'Warps_VictoryRoad1F', 'id': (0, 1), 'to': {'map': 'Route 23-C', 'id': 2}},
+             'Victory Road 1F-S': [{'address': 'Warps_VictoryRoad1F', 'id': (0, 1), 'to': {'map': 'Route 23-C', 'id': 2}}],
+                                   'Victory Road 1F': [
                                  {'address': 'Warps_VictoryRoad1F', 'id': 2,
                                   'to': {'map': 'Victory Road 2F', 'id': 0}}], 'Pokemon Tower 1F': [
         {'address': 'Warps_PokemonTower1F', 'id': (0, 1), 'to': {'map': 'Lavender Town', 'id': 1}},
@@ -958,10 +1012,10 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
         {'address': 'Warps_PokemonTower6F', 'id': 1, 'to': {'map': 'Pokemon Tower 7F', 'id': 0}}], 'Pokemon Tower 7F': [
         {'address': 'Warps_PokemonTower7F', 'id': 0, 'to': {'map': 'Pokemon Tower 6F', 'id': 1}}],
              'Celadon Pokemart 1F': [
-                 {'address': 'Warps_CeladonMart1F', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 0}},
-                 {'address': 'Warps_CeladonMart1F', 'id': (2, 3), 'to': {'map': 'Celadon City', 'id': 1}},
+                 {'name': 'Celadon Pokemart 1F to Celadon City W', 'address': 'Warps_CeladonMart1F', 'id': (1, 0), 'to': {'map': 'Celadon City', 'id': 0}},
+                 {'name': 'Celadon Pokemart 1F to Celadon City E', 'address': 'Warps_CeladonMart1F', 'id': (3, 2), 'to': {'map': 'Celadon City', 'id': 1}},
                  {'address': 'Warps_CeladonMart1F', 'id': 4, 'to': {'map': 'Celadon Pokemart 2F', 'id': 0}},
-                 {'address': 'Warps_CeladonMart1F', 'id': 5, 'to': {'map': 'Celadon Pokemart Elevator', 'id': 0}}],
+                 {'address': 'Warps_CeladonMart1F', 'id': 5, 'to': {'map': 'Celadon Pokemart Elevator-1F', 'id': 0}}],
              'Viridian Forest': [{'address': 'Warps_ViridianForest', 'id': (0, 1),
                                   'to': {'map': 'Viridian Forest North Gate', 'id': (2, 3)}},
                                  {'address': 'Warps_ViridianForest', 'id': (2, 3, 4, 5),
@@ -997,24 +1051,37 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_SSAnneKitchen', 'id': 0, 'to': {'map': 'S.S. Anne 1F', 'id': 10}}],
              "S.S. Anne Captain's Room": [
                  {'address': 'Warps_SSAnneCaptainsRoom', 'id': 0, 'to': {'map': 'S.S. Anne 2F', 'id': 8}}],
-             'S.S. Anne 1F Rooms': [{'address': 'Warps_SSAnne1FRooms', 'id': 0, 'to': {'map': 'S.S. Anne 1F', 'id': 2}},
-                                    {'address': 'Warps_SSAnne1FRooms', 'id': 1, 'to': {'map': 'S.S. Anne 1F', 'id': 3}},
-                                    {'address': 'Warps_SSAnne1FRooms', 'id': 2, 'to': {'map': 'S.S. Anne 1F', 'id': 4}},
-                                    {'address': 'Warps_SSAnne1FRooms', 'id': 3, 'to': {'map': 'S.S. Anne 1F', 'id': 5}},
-                                    {'address': 'Warps_SSAnne1FRooms', 'id': 4, 'to': {'map': 'S.S. Anne 1F', 'id': 6}},
-                                    {'address': 'Warps_SSAnne1FRooms', 'id': 5,
-                                     'to': {'map': 'S.S. Anne 1F', 'id': 7}}], 'S.S. Anne 2F Rooms': [
-        {'address': 'Warps_SSAnne2FRooms', 'id': (0, 1), 'to': {'map': 'S.S. Anne 2F', 'id': 0}},
-        {'address': 'Warps_SSAnne2FRooms', 'id': (2, 3), 'to': {'map': 'S.S. Anne 2F', 'id': 1}},
-        {'address': 'Warps_SSAnne2FRooms', 'id': (4, 5), 'to': {'map': 'S.S. Anne 2F', 'id': 2}},
-        {'address': 'Warps_SSAnne2FRooms', 'id': (6, 7), 'to': {'map': 'S.S. Anne 2F', 'id': 3}},
-        {'address': 'Warps_SSAnne2FRooms', 'id': (8, 9), 'to': {'map': 'S.S. Anne 2F', 'id': 4}},
+             'S.S. Anne 1F Rooms-West Gentleman Room': [{'address': 'Warps_SSAnne1FRooms', 'id': 1, 'to': {'map': 'S.S. Anne 1F', 'id': 3}},],
+             'S.S. Anne 1F Rooms-East Gentleman Room': [{'address': 'Warps_SSAnne1FRooms', 'id': 0, 'to': {'map': 'S.S. Anne 1F', 'id': 2}}],
+             'S.S. Anne 1F Rooms-Police Room': [{'address': 'Warps_SSAnne1FRooms', 'id': 5,
+                                     'to': {'map': 'S.S. Anne 1F', 'id': 7}}],
+             'S.S. Anne 1F Rooms-Youngster and Lass Room': [
+                                    {'address': 'Warps_SSAnne1FRooms', 'id': 4, 'to': {'map': 'S.S. Anne 1F', 'id': 6}},],
+             'S.S. Anne 1F Rooms-Wigglytuff Room': [
+                                    {'address': 'Warps_SSAnne1FRooms', 'id': 3, 'to': {'map': 'S.S. Anne 1F', 'id': 5}},],
+             'S.S. Anne 1F Rooms-Cherry Pie Room': [
+                                    {'address': 'Warps_SSAnne1FRooms', 'id': 2, 'to': {'map': 'S.S. Anne 1F', 'id': 4}},],
+             'S.S. Anne 2F Rooms-Snorlax Room': [
+        {'address': 'Warps_SSAnne2FRooms', 'id': (0, 1), 'to': {'map': 'S.S. Anne 2F', 'id': 0}}],
+             'S.S. Anne 2F Rooms-Fisherman and Gentleman Room': [
+        {'address': 'Warps_SSAnne2FRooms', 'id': (2, 3), 'to': {'map': 'S.S. Anne 2F', 'id': 1}}],
+             'S.S. Anne 2F Rooms-Surf and Cut Room': [
+        {'address': 'Warps_SSAnne2FRooms', 'id': (4, 5), 'to': {'map': 'S.S. Anne 2F', 'id': 2}}],
+             'S.S. Anne 2F Rooms-Gentleman and Lass Room': [
+        {'address': 'Warps_SSAnne2FRooms', 'id': (6, 7), 'to': {'map': 'S.S. Anne 2F', 'id': 3}}],
+             'S.S. Anne 2F Rooms-Safari Zone Room': [
+        {'address': 'Warps_SSAnne2FRooms', 'id': (8, 9), 'to': {'map': 'S.S. Anne 2F', 'id': 4}}],
+             'S.S. Anne 2F Rooms-Seasickness Room': [
         {'address': 'Warps_SSAnne2FRooms', 'id': (10, 11), 'to': {'map': 'S.S. Anne 2F', 'id': 5}}],
-             'S.S. Anne B1F Rooms': [
-                 {'address': 'Warps_SSAnneB1FRooms', 'id': (0, 1), 'to': {'map': 'S.S. Anne B1F', 'id': 4}},
-                 {'address': 'Warps_SSAnneB1FRooms', 'id': (2, 3), 'to': {'map': 'S.S. Anne B1F', 'id': 3}},
-                 {'address': 'Warps_SSAnneB1FRooms', 'id': (4, 5), 'to': {'map': 'S.S. Anne B1F', 'id': 2}},
-                 {'address': 'Warps_SSAnneB1FRooms', 'id': (6, 7), 'to': {'map': 'S.S. Anne B1F', 'id': 1}},
+             'S.S. Anne B1F Rooms-Fisherman Room': [
+                 {'address': 'Warps_SSAnneB1FRooms', 'id': (0, 1), 'to': {'map': 'S.S. Anne B1F', 'id': 4}}],
+             'S.S. Anne B1F Rooms-West Single Sailor Room': [
+                 {'address': 'Warps_SSAnneB1FRooms', 'id': (2, 3), 'to': {'map': 'S.S. Anne B1F', 'id': 3}}],
+             'S.S. Anne B1F Rooms-East Single Sailor Room': [
+                 {'address': 'Warps_SSAnneB1FRooms', 'id': (4, 5), 'to': {'map': 'S.S. Anne B1F', 'id': 2}}],
+             'S.S. Anne B1F Rooms-Two Sailors Room': [
+                 {'address': 'Warps_SSAnneB1FRooms', 'id': (6, 7), 'to': {'map': 'S.S. Anne B1F', 'id': 1}}],
+             'S.S. Anne B1F Rooms-Machoke Room': [
                  {'address': 'Warps_SSAnneB1FRooms', 'id': (8, 9), 'to': {'map': 'S.S. Anne B1F', 'id': 0}}],
              'Underground Path North South': [{'address': 'Warps_UndergroundPathNorthSouth', 'id': 0,
                                                'to': {'map': 'Underground Path Route 5', 'id': 2}},
@@ -1027,20 +1094,26 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
         {'address': 'Warps_DiglettsCave', 'id': 0, 'to': {'map': "Diglett's Cave Route 2", 'id': 2}},
         {'address': 'Warps_DiglettsCave', 'id': 1, 'to': {'map': "Diglett's Cave Route 11", 'id': 2}}],
              'Silph Co 11F': [{'address': 'Warps_SilphCo11F', 'id': 0, 'to': {'map': 'Silph Co 10F', 'id': 1}},
-                              {'address': 'Warps_SilphCo11F', 'id': 1, 'to': {'map': 'Silph Co Elevator', 'id': 10}}],
+                              {'address': 'Warps_SilphCo11F', 'id': 1, 'to': {'map': 'Silph Co Elevator-11F', 'id': 10}}],
              'Silph Co 11F-W': [{'address': 'Warps_SilphCo11F', 'id': 3, 'to': {'map': 'Silph Co 7F-NW', 'id': 3}}],
              'Viridian Gym': [
                  {'address': 'Warps_ViridianGym', 'id': (0, 1), 'to': {'map': 'Viridian City-Gym', 'id': 4}}],
              'Pewter Pokemart': [{'address': 'Warps_PewterMart', 'id': (0, 1), 'to': {'map': 'Pewter City', 'id': 4}}],
-             'Cerulean Cave 1F': [
+             'Cerulean Cave 1F-SE': [
                  {'address': 'Warps_CeruleanCave1F', 'id': (0, 1), 'to': {'map': 'Cerulean City-Cave', 'id': 6}},
-                 {'address': 'Warps_CeruleanCave1F', 'id': 2, 'to': {'map': 'Cerulean Cave 2F-E', 'id': 0}},
-                 {'address': 'Warps_CeruleanCave1F', 'id': 3, 'to': {'map': 'Cerulean Cave 2F-E', 'id': 1}},
+                 {'address': 'Warps_CeruleanCave1F', 'id': 3, 'to': {'map': 'Cerulean Cave 2F-E', 'id': 1}}],
+             'Cerulean Cave 1F-NE': [
+                 {'address': 'Warps_CeruleanCave1F', 'id': 2, 'to': {'map': 'Cerulean Cave 2F-E', 'id': 0}}],
+             'Cerulean Cave 1F-N': [
+                 {'address': 'Warps_CeruleanCave1F', 'id': 5, 'to': {'map': 'Cerulean Cave 2F-N', 'id': 3}}],
+             'Cerulean Cave 1F-SW': [
                  {'address': 'Warps_CeruleanCave1F', 'id': 4, 'to': {'map': 'Cerulean Cave 2F-N', 'id': 2}},
-                 {'address': 'Warps_CeruleanCave1F', 'id': 5, 'to': {'map': 'Cerulean Cave 2F-N', 'id': 3}},
+                 {'address': 'Warps_CeruleanCave1F', 'id': 7, 'to': {'map': 'Cerulean Cave 2F-W', 'id': 5}}],
+             'Cerulean Cave 1F-NW': [
                  {'address': 'Warps_CeruleanCave1F', 'id': 6, 'to': {'map': 'Cerulean Cave 2F-W', 'id': 4}},
-                 {'address': 'Warps_CeruleanCave1F', 'id': 7, 'to': {'map': 'Cerulean Cave 2F-W', 'id': 5}},
                  {'address': 'Warps_CeruleanCave1F', 'id': 8, 'to': {'map': 'Cerulean Cave B1F', 'id': 0}}],
+             'Cerulean Cave 1F-Wild': [],
+             'Cerulean Cave 1F-Water': [],
              'Cerulean Badge House': [
                  {'address': 'Warps_CeruleanBadgeHouse', 'id': 0, 'to': {'map': 'Cerulean City-Badge House Backyard', 'id': 9}},
                  {'address': 'Warps_CeruleanBadgeHouse', 'id': (1, 2), 'to': {'map': 'Cerulean City', 'id': 8}}],
@@ -1065,7 +1138,8 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                               {'address': 'Warps_CinnabarLab', 'id': 3,
                                'to': {'map': 'Cinnabar Lab Metronome Room', 'id': 0}},
                               {'address': 'Warps_CinnabarLab', 'id': 4,
-                               'to': {'map': 'Cinnabar Lab Fossil Room', 'id': 0}}], 'Cinnabar Lab Trade Room': [
+                               'to': {'map': 'Cinnabar Lab Fossil Room', 'id': 0}}],
+             'Cinnabar Lab Trade Room': [
         {'address': 'Warps_CinnabarLabTradeRoom', 'id': (0, 1), 'to': {'map': 'Cinnabar Lab', 'id': 2}}],
              'Cinnabar Lab Metronome Room': [
                  {'address': 'Warps_CinnabarLabMetronomeRoom', 'id': (0, 1), 'to': {'map': 'Cinnabar Lab', 'id': 3}}],
@@ -1079,8 +1153,8 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
                  {'address': 'Warps_CopycatsHouse1F', 'id': (0, 1), 'to': {'map': 'Saffron City-Copycat', 'id': 0}},
                  {'address': 'Warps_CopycatsHouse1F', 'id': 2, 'to': {'map': "Saffron Copycat's House 2F", 'id': 0}}],
              "Indigo Plateau Champion's Room": [
-                 {'address': 'Warps_ChampionsRoom', 'id': (0, 1), 'to': {'map': "Lance's Room", 'id': (1, 2)}},
-                 {'address': 'Warps_ChampionsRoom', 'id': (2, 3), 'to': {'map': 'Hall Of Fame', 'id': 0}}],
+                 {'address': 'Warps_ChampionsRoom', 'id': (0, 1), 'to': {'map': "Indigo Plateau Lance's Room", 'id': (1, 2)}},
+                 {'flags': 'm', 'address': 'Warps_ChampionsRoom', 'id': (2, 3), 'to': {'map': 'Indigo Plateau Hall of Fame', 'id': 0}}],
              "Indigo Plateau Lorelei's Room": [
                  {'address': 'Warps_LoreleisRoom', 'id': (0, 1), 'to': {'map': 'Indigo Plateau Lobby', 'id': 2}},
                  {'address': 'Warps_LoreleisRoom', 'id': (2, 3),
@@ -1090,9 +1164,99 @@ warp_data = {'Menu': [], 'Anywhere': [], 'Pokedex': [], 'Fossil': [], 'Celadon C
              "Indigo Plateau Agatha's Room": [{'address': 'Warps_AgathasRoom', 'id': (0, 1),
                                                'to': {'map': "Indigo Plateau Bruno's Room", 'id': (2, 3)}},
                                               {'address': 'Warps_AgathasRoom', 'id': (2, 3),
-                                               'to': {'map': "Lance's Room", 'id': 0}}]}
+                                               'to': {'map': "Indigo Plateau Lance's Room", 'id': 0}}]}
+
+# These are not just dead ends, but also regions which have only one warp and lead into other regions one-way,
+# because if the regions they lead into are already reachable, then connecting to this warp will provide no new
+# reachable warps, making them dead-ends for this purpose
+dead_ends = ['Cerulean City-Badge House Backyard', 'Fuchsia City-Good Rod House Backyard', "Rival's House",
+             'Vermilion Trade House', 'Viridian Pokemart', 'Viridian School House', 'Viridian Nickname House',
+             'Pewter Nidoran House', 'Pewter Speech House', 'Cerulean Trade House', 'Cerulean Bicycle Shop',
+             "Lavender Mr. Fuji's House", 'Lavender Cubone House', "Lavender Name Rater's House",
+             'Vermilion Pidgey House', 'Celadon Mansion Roof House', 'Fuchsia Pokemart', 'Saffron Pidgey House',
+             "Saffron Mr. Psychic's House", 'Route 2 Trade House', 'Route 16 Fly House', "Bill's House",
+             'Viridian Pokemon Center', 'Pokemon Mansion 2F-NW', 'Rocket Hideout B4F', 'Rocket Hideout B4F-NW',
+             'Safari Zone Center Rest House', 'Safari Zone West Rest House', 'Safari Zone East Rest House',
+             'Safari Zone North Rest House', 'Cerulean Cave B1F', 'Celadon Pokemart Roof', 'Celadon Pokemon Center',
+             'Celadon Gym', 'Celadon Prize Corner', 'Celadon Diner', 'Celadon Chief House', 'Celadon Hotel',
+             'Route 4 Pokemon Center', 'Rock Tunnel Pokemon Center', 'Route 11 Gate 2F', 'Route 12 Gate 2F',
+             'Route 15 Gate 2F', 'Route 16 Gate 2F', 'Route 18 Gate 2F', 'Mt Moon B2F-NE', 'Mt Moon B2F-C',
+             'Safari Zone Secret House', 'Vermilion Old Rod House', 'Daycare', 'Route 12 Super Rod House',
+             'Vermilion Pokemon Fan Club', 'Pewter Museum 2F', 'Pewter Gym', 'Pewter Pokemon Center', 'Cerulean Pokemon Center',
+             'Cerulean Gym', 'Cerulean Pokemart', 'Lavender Pokemon Center', 'Lavender Pokemart',
+             'Vermilion Pokemon Center', 'Vermilion Pokemart', 'Vermilion Gym', "Saffron Copycat's House 2F",
+             'Saffron Fighting Dojo', 'Saffron Gym-C', 'Saffron Pokemart', 'Saffron Pokemon Center', 'Pokemon Tower 7F',
+             'S.S. Anne Bow', 'S.S. Anne Kitchen', "S.S. Anne Captain's Room", 'S.S. Anne 1F Rooms-West Gentleman Room',
+             'S.S. Anne 1F Rooms-East Gentleman Room', 'S.S. Anne 1F Rooms-Police Room',
+             'S.S. Anne 1F Rooms-Youngster and Lass Room', 'S.S. Anne 1F Rooms-Wigglytuff Room',
+             'S.S. Anne 1F Rooms-Cherry Pie Room', 'S.S. Anne 2F Rooms-Snorlax Room',
+             'S.S. Anne 2F Rooms-Fisherman and Gentleman Room', 'S.S. Anne 2F Rooms-Surf and Cut Room',
+             'S.S. Anne 2F Rooms-Gentleman and Lass Room', 'S.S. Anne 2F Rooms-Safari Zone Room',
+             'S.S. Anne 2F Rooms-Seasickness Room', 'S.S. Anne B1F Rooms-Fisherman Room',
+             'S.S. Anne B1F Rooms-West Single Sailor Room', 'S.S. Anne B1F Rooms-East Single Sailor Room',
+             'S.S. Anne B1F Rooms-Two Sailors Room', 'S.S. Anne B1F Rooms-Machoke Room', 'Silph Co 11F-W',
+             'Viridian Gym', 'Pewter Pokemart', "Fuchsia Bill's Grandpa's House", 'Fuchsia Pokemon Center',
+             "Fuchsia Warden's House", 'Fuchsia Gym', 'Fuchsia Meeting Room', 'Cinnabar Gym', 'Cinnabar Lab Trade Room',
+             'Cinnabar Lab Metronome Room', 'Cinnabar Lab Fossil Room', 'Cinnabar Pokemon Center', 'Cinnabar Pokemart',
+             'Route 4-C', "Pokemon Mansion 3F-SE", "Seafoam Islands B1F-NW", "Celadon Mansion 3F",
+             "Pokemon Mansion B1F" "Saffron City-Silph", "Victory Road 2F-C", "Victory Road 2F-SE",
+             "Victory Road 2F-W", "Victory Road 2F-NW", "Rocket Hideout B1F-S", "Indigo Plateau Lobby",
+             "Pokemon Mansion 3F-SW", "Pewter Museum 1F-E", "Safari Zone Gate-S", 'Celadon Mansion Roof']
+
+entrance_only = [
+    "Route 4-W to Mt Moon 1F", "Saffron City-G to Saffron Gym-S", "Saffron City-Copycat to Saffron Copycat's House 1F",
+    "Saffron City-Pidgey to Saffron Pidgey House", "Rocket Hideout B1F-SE to Rocket Hideout Elevator-B1F",
+    "Pokemon Mansion 1F-SE to Cinnabar Island-M", "Mt Moon B2F to Mt Moon B1F-W", "Silph Co 7F-NW to Silph Co 11F-W",
+    "Viridian City-G", "Cerulean City-Cave to Cerulean Cave 1F-SE", "Cerulean City-T to Cerulean Trashed House",
+    "Route 10-P to Power Plant", "S.S. Anne 2F to S.S. Anne Captain's Room"]
+
+# Regions which may be dead ends if badges aren't collected (used when Badgesanity is off)
+badge_dead_ends = [
+    "Cerulean Cave 1F-N", "Cerulean Cave 1F-NE", "Vermilion City-G", "Route 2-SE", "Route 2-E",
+    "Route 20-IW", "Route 20-IE", "Victory Road 1F-S", "Victory Road 1F",
+    "Celadon City-G",  "Route 22 Gate-N", "Route 22 Gate-S", "Route 16-NE", "Route 10-N", "Route 11-C",
+    "Route 15", "Route 23-S", "Route 23-C",
+                   ]
+
+# Regions which may be dead ends if drinks aren't reachable (used when Tea is off)
+drink_dead_ends = ["Route 7 Gate-W", "Route 7 Gate-E", "Route 8 Gate-W", "Route 8 Gate-E",
+                   "Route 5 Gate-N", "Route 5 Gate-S", "Route 6 Gate-N", "Route 6 Gate-S", ]
+
+pokemon_center_entrances = ['Viridian City to Viridian Pokemon Center', 'Celadon City to Celadon Pokemon Center', 'Route 4-W to Route 4 Pokemon Center', 'Route 10-N to Rock Tunnel Pokemon Center', 'Pewter City to Pewter Pokemon Center', 'Cerulean City to Cerulean Pokemon Center', 'Lavender Town to Lavender Pokemon Center', 'Vermilion City to Vermilion Pokemon Center', 'Saffron City to Saffron Pokemon Center', 'Fuchsia City to Fuchsia Pokemon Center', 'Cinnabar Island to Cinnabar Pokemon Center']
+pokemon_centers = ['Celadon Pokemon Center to Celadon City', 'Viridian Pokemon Center to Viridian City', 'Pewter Pokemon Center to Pewter City', 'Cerulean Pokemon Center to Cerulean City', 'Vermilion Pokemon Center to Vermilion City', 'Fuchsia Pokemon Center to Fuchsia City', 'Cinnabar Pokemon Center to Cinnabar Island', 'Lavender Pokemon Center to Lavender Town', 'Saffron Pokemon Center to Saffron City', 'Route 4 Pokemon Center to Route 4-W', 'Rock Tunnel Pokemon Center to Route 10-N']
 
 
+safe_rooms = ['Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House', "Rival's House to Pallet Town", 'Vermilion Trade House to Vermilion City', 'Viridian Pokemart to Viridian City', 'Viridian School House to Viridian City', 'Viridian Nickname House to Viridian City', 'Pewter Nidoran House to Pewter City', 'Pewter Speech House to Pewter City', 'Cerulean Trade House to Cerulean City', 'Cerulean Bicycle Shop to Cerulean City', "Lavender Mr. Fuji's House to Lavender Town", 'Lavender Cubone House to Lavender Town', "Lavender Name Rater's House to Lavender Town", 'Vermilion Pidgey House to Vermilion City', 'Celadon Mansion Roof House to Celadon Mansion Roof-Back', 'Fuchsia Pokemart to Fuchsia City', 'Saffron Pidgey House to Saffron City-Pidgey', "Saffron Mr. Psychic's House to Saffron City", 'Route 2 Trade House to Route 2-NE', 'Route 16 Fly House to Route 16-NW', "Bill's House to Route 25", 'Safari Zone Center Rest House to Safari Zone Center-S', 'Safari Zone West Rest House to Safari Zone West', 'Safari Zone East Rest House to Safari Zone East', 'Safari Zone North Rest House to Safari Zone North', 'Celadon Pokemart Roof to Celadon Pokemart 5F', 'Celadon Prize Corner to Celadon City', 'Celadon Diner to Celadon City', 'Celadon Chief House to Celadon City', 'Celadon Hotel to Celadon City', 'Route 11 Gate 2F to Route 11 Gate 1F', 'Route 12 Gate 2F to Route 12 Gate 1F', 'Route 15 Gate 2F to Route 15 Gate 1F', 'Route 16 Gate 2F to Route 16 Gate 1F-E', 'Route 18 Gate 2F to Route 18 Gate 1F-E', 'Safari Zone Secret House to Safari Zone West-NW', 'Vermilion Old Rod House to Vermilion City', 'Daycare to Route 5', 'Route 12 Super Rod House to Route 12-S', 'Vermilion Pokemon Fan Club to Vermilion City', 'Pewter Museum 2F to Pewter Museum 1F', 'Cerulean Pokemart to Cerulean City', 'Lavender Pokemart to Lavender Town', 'Vermilion Pokemart to Vermilion City', "Saffron Copycat's House 2F to Saffron Copycat's House 1F", 'Saffron Pokemart to Saffron City', 'S.S. Anne Kitchen to S.S. Anne 1F', "S.S. Anne Captain's Room to S.S. Anne 2F", 'S.S. Anne 1F Rooms-Police Room to S.S. Anne 1F', 'S.S. Anne 1F Rooms-Wigglytuff Room to S.S. Anne 1F', 'S.S. Anne 1F Rooms-Cherry Pie Room to S.S. Anne 1F', 'S.S. Anne 2F Rooms-Snorlax Room to S.S. Anne 2F', 'S.S. Anne 2F Rooms-Surf and Cut Room to S.S. Anne 2F', 'S.S. Anne 2F Rooms-Safari Zone Room to S.S. Anne 2F', 'S.S. Anne 2F Rooms-Seasickness Room to S.S. Anne 2F', 'S.S. Anne B1F Rooms-Machoke Room to S.S. Anne B1F', 'Pewter Pokemart to Pewter City', "Fuchsia Bill's Grandpa's House to Fuchsia City", "Fuchsia Warden's House to Fuchsia City", 'Fuchsia Meeting Room to Fuchsia City', 'Cinnabar Lab Trade Room to Cinnabar Lab', 'Cinnabar Lab Metronome Room to Cinnabar Lab', 'Cinnabar Lab Fossil Room to Cinnabar Lab', 'Cinnabar Pokemart to Cinnabar Island']
+
+mandatory_connections = [
+    ("Seafoam Islands B1F-NE to Seafoam Islands 1F", "Seafoam Islands 1F to Seafoam Islands B1F-NE"),
+    ("Seafoam Islands 1F to Seafoam Islands B1F", "Seafoam Islands B1F to Seafoam Islands 1F"),
+    ("Seafoam Islands B2F-NW to Seafoam Islands B1F", "Seafoam Islands B1F to Seafoam Islands B2F-NW"),
+    ("Seafoam Islands B3F-SE to Seafoam Islands B2F-SE", "Seafoam Islands B2F-SE to Seafoam Islands B3F-SE"),
+    ("Seafoam Islands B3F-NE to Seafoam Islands B2F-NE", "Seafoam Islands B2F-NE to Seafoam Islands B3F-NE"),
+    ("Seafoam Islands B4F to Seafoam Islands B3F-NE", "Seafoam Islands B3F-NE to Seafoam Islands B4F"),
+    ("Seafoam Islands B4F to Seafoam Islands B3F", "Seafoam Islands B3F to Seafoam Islands B4F"),
+    ("Safari Zone Center-S to Safari Zone Gate-N", "Safari Zone Gate-N to Safari Zone Center-S"),
+    ("Safari Zone East to Safari Zone North", "Safari Zone North to Safari Zone East"),
+    ("Safari Zone East to Safari Zone Center-S", "Safari Zone Center-S to Safari Zone East"),
+    ("Safari Zone North to Safari Zone Center-NE", "Safari Zone Center-NE to Safari Zone North"),
+    ("Safari Zone North to Safari Zone West", "Safari Zone West to Safari Zone North"),
+    ("Safari Zone North to Safari Zone West-NW", "Safari Zone West-NW to Safari Zone North"),
+    ("Safari Zone West to Safari Zone Center-NW", "Safari Zone Center-NW to Safari Zone West"),
+    ("Seafoam Islands B3F to Seafoam Islands B4F Water Tunnel", "Seafoam Islands B4F to Seafoam Islands B3F Water Tunnel"),
+    ("Player's House 1F to Player's House 2F", "Player's House 2F to Player's House 1F"),
+    ("Indigo Plateau Lorelei's Room to Indigo Plateau Lobby", "Indigo Plateau Lobby to Indigo Plateau Lorelei's Room"),
+    ("Indigo Plateau Bruno's Room to Indigo Plateau Lorelei's Room", "Indigo Plateau Lorelei's Room to Indigo Plateau Bruno's Room"),
+    ("Indigo Plateau Bruno's Room to Indigo Plateau Agatha's Room", "Indigo Plateau Agatha's Room to Indigo Plateau Bruno's Room"),
+    ("Indigo Plateau Agatha's Room to Indigo Plateau Lance's Room", "Indigo Plateau Lance's Room to Indigo Plateau Agatha's Room"),
+    ("Indigo Plateau Champion's Room to Indigo Plateau Lance's Room", "Indigo Plateau Lance's Room to Indigo Plateau Champion's Room"),
+    ("Indigo Plateau Hall of Fame to Indigo Plateau Champion's Room", "Indigo Plateau Champion's Room to Indigo Plateau Hall of Fame")
+]
+
+safari_zone_houses = ["Safari Zone Center-S to Safari Zone Center Rest House",
+                      "Safari Zone West to Safari Zone West Rest House",
+                      "Safari Zone West-NW to Safari Zone Secret House",
+                      "Safari Zone East to Safari Zone East Rest House"]
 
 for region in warp_data:
     for entrance in warp_data[region]:
@@ -1101,10 +1265,35 @@ for region in warp_data:
         for region2 in warp_data:
             if region2.split("-")[0] == m:
                 for entrance2 in warp_data[region2]:
-                    if (entrance2["id"] == i or (isinstance(entrance2["id"], tuple) and i in entrance2["id"])) and region2 != m:
+                    if (entrance2["id"] == i or (isinstance(entrance2["id"], tuple) and i in entrance2["id"])): #and region2 != m:
                         # print(f"change {entrance} to {region2}")
                         entrance["to"]["map"] = region2
+                        break
+                else:
+                    continue
+                break
+        else:
+            breakpoint()
+
+for region in warp_data:
+    for entrance in warp_data[region]:
+        if "flags" in entrance:
+            print(entrance["name"] if "name" in entrance else f"{region} to {entrance['to']['map']}")
+            del entrance["flags"]
+
 print(warp_data)
+# names = set()
+# for region in warp_data:
+#     for entrance in warp_data[region]:
+#         n = f"{region} to {entrance['to']['map']}"
+#         if "name" in entrance:
+#             n = entrance["name"]
+#         if n in names:
+#             print(n)
+#         names.add(n)
+# for region in warp_data:
+#     if len(warp_data[region]) == 1:
+#         print(region)
 # print(len([region for region in warp_data if len(warp_data[region]) == 1]))
 # print(len([region for region in warp_data if len(warp_data[region]) == 2]))
 # print(len([region for region in warp_data if len(warp_data[region]) > 2]))

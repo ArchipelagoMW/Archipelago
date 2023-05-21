@@ -16,7 +16,7 @@ item_table = {
     "Bicycle": ItemData(6, ItemClassification.progression, ["Unique", "Key Items"]),
     # "Flippers": ItemData(7, ItemClassification.progression),
     #"Safari Ball": ItemData(8, ItemClassification.filler),
-    "Pokedex": ItemData(9, ItemClassification.progression, ["Unique", "Key Items"]),
+    "Pokedex": ItemData(9, ItemClassification.progression, []), # ["Unique", "Key Items"]),
     "Moon Stone": ItemData(10, ItemClassification.useful, ["Unique", "Evolution Stones"]),
     "Antidote": ItemData(11, ItemClassification.filler, ["Consumables"]),
     "Burn Heal": ItemData(12, ItemClassification.filler, ["Consumables"]),
@@ -54,7 +54,7 @@ item_table = {
     "Bike Voucher": ItemData(45, ItemClassification.progression, ["Unique", "Key Items"]),
     "X Accuracy": ItemData(46, ItemClassification.filler, ["Consumables", "Battle Items"]),
     "Leaf Stone": ItemData(47, ItemClassification.useful, ["Unique", "Evolution Stones"]),
-    "Card Key": ItemData(48, ItemClassification.progression, ["Unique", "Key Items"]),
+    "Card Key": ItemData(48, ItemClassification.progression, []), #, ["Unique", "Key Items"]),
     "Nugget": ItemData(49, ItemClassification.filler, []),
     #"Laptop": ItemData(50, ItemClassification.useful, ["Unique"]),
     "Poke Doll": ItemData(51, ItemClassification.filler, ["Consumables"]),
@@ -90,7 +90,7 @@ item_table = {
     "Max Ether": ItemData(81, ItemClassification.filler, ["Consumables"]),
     "Elixir": ItemData(82, ItemClassification.filler, ["Consumables"]),
     "Max Elixir": ItemData(83, ItemClassification.filler, ["Consumables"]),
-    "Tea": ItemData(84, ItemClassification.progression, ["Unique", "Key Items"]),
+    "Tea": ItemData(84, ItemClassification.progression, []), #["Unique", "Key Items"]),
     # "Master Sword": ItemData(85, ItemClassification.progression),
     # "Flute": ItemData(86, ItemClassification.progression),
     # "Titan's Mitt": ItemData(87, ItemClassification.progression),
@@ -171,9 +171,15 @@ item_table = {
     "TM49 Tri Attack": ItemData(249, ItemClassification.useful, ["Unique", "TMs"]),
     "TM50 Substitute": ItemData(250, ItemClassification.useful, ["Unique", "TMs"]),
 
+    "Vending Machine Drinks": ItemData(None, ItemClassification.progression, []),
+    "Visit Bill": ItemData(None, ItemClassification.progression, []),
+    "Defeat Brock": ItemData(None, ItemClassification.progression, []),
+    "Victory Road Boulder": ItemData(None, ItemClassification.progression, []),
     "Fuji Saved": ItemData(None, ItemClassification.progression, []),
     "Silph Co Liberated": ItemData(None, ItemClassification.progression, []),
-    "Become Champion": ItemData(None, ItemClassification.progression, [])
+    "Become Champion": ItemData(None, ItemClassification.progression, []),
+
+    "Trainer Parties": ItemData(None, ItemClassification.filler, [])
 }
 
 item_table.update({f"TM{str(i).zfill(2)}": ItemData(i + 456, ItemClassification.filler, ["Unique", "TMs"])

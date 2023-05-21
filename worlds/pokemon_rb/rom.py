@@ -9,6 +9,8 @@ from .rom_addresses import rom_addresses
 from .locations import location_data
 from .items import item_table
 from .rock_tunnel import randomize_rock_tunnel
+from .regions import PokemonRBWarp
+from .map_shuffle import map_ids
 import worlds.pokemon_rb.poke_data as poke_data
 
 
@@ -132,7 +134,7 @@ def process_trainer_data(self, data, random):
             for i in range(1, 4):
                 for l in ["A", "B", "C", "D", "E", "F", "G", "H"]:
                     if rom_addresses[f"Rival_Starter{i}_{l}"] == address:
-                        mon = " ".join(self.multiworld.get_location(f"Pallet Town - Starter {i}",
+                        mon = " ".join(self.multiworld.get_location(f"Oak's Lab - Starter {i}",
                                                                     self.player).item.name.split()[1:])
                         if l in ["D", "E", "F", "G", "H"] and mon in poke_data.evolves_to:
                             mon = poke_data.evolves_to[mon]
@@ -600,7 +602,7 @@ def write_quizzes(self, data, random):
                     return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kuh-mon?<DONE>")
         elif q == 3:
             starters = [" ".join(self.multiworld.get_location(
-                f"Pallet Town - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
+                f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
             mon = random.choice(starters)
             nots = random.choice(range(8, 16, 2))
             if random.randint(0, 1):
@@ -743,13 +745,64 @@ def generate_output(self, output_directory: str):
     #         data[address] = id2
     #         data[address + 1] = map_ids[pair[1]["region"].split("-")[0]]
 
+    lab_loc = self.multiworld.get_entrance("Oak's Lab to Pallet Town", self.player).target
+    paths = None
+    if lab_loc == 0:
+        paths = ((0x00, 4, 0x80, 5, 0x40, 1, 0xE0, 1, 0xFF), (0x40, 2, 0x20, 5, 0x80, 5, 0xFF))
+    elif lab_loc == 1:
+        paths = ((0x00, 4, 0xC0, 3, 0x40, 1, 0xE0, 1, 0xFF), (0x40, 2, 0x10, 3, 0x80, 5, 0xFF))
+    if paths:
+        write_bytes(data, paths[0], rom_addresses["Path_Pallet_Oak"])
+        write_bytes(data, paths[1], rom_addresses["Path_Pallet_Player"])
+
+    for region in self.multiworld.get_regions(self.player):
+        for entrance in region.exits:
+            if isinstance(entrance, PokemonRBWarp):
+                warp_ids = (entrance.warp_id,) if isinstance(entrance.warp_id, int) else entrance.warp_id
+                warp_to_ids = (entrance.target,) if isinstance(entrance.target, int) else entrance.target
+                for i, warp_id in enumerate(warp_ids):
+                    address = rom_addresses[entrance.address]
+                    if "Elevator" in entrance.parent_region.name:
+                        address += (2 * warp_id)
+                    else:
+                        address += (4 * warp_id)
+                    while i > len(warp_to_ids) - 1:
+                        i -= len(warp_to_ids)
+                    connected_map_name = entrance.connected_region.name.split("-")[0]
+                    data[address] = 0 if "Elevator" in connected_map_name else warp_to_ids[i]
+                    data[address + 1] = map_ids[connected_map_name]
 
     self.finished_level_scaling.wait()
 
+
+
+
     for location in self.multiworld.get_locations():
-        if location.player != self.player or location.rom_address is None:
+        if location.player != self.player:
+            continue
+        elif location.party_data:
+            for party in location.party_data:
+                address = rom_addresses[party["party_address"]]
+                levels = party["level"]
+                if isinstance(levels, int):
+                    data[address] = levels
+                    address += 1
+                    for mon in party["party"]:
+                        data[address] = poke_data.pokemon_data[mon]["id"]
+                        address += 1
+                else:
+                    address += 1
+                    for level, mon in zip(levels, party["party"]):
+                        data[address] = level
+                        data[address+1] = poke_data.pokemon_data[mon]["id"]
+                        address += 2
+                assert data[address] == 0 or location.name == "Fossil Level - Trainer Parties"
+            continue
+        elif location.rom_address is None:
             continue
         if location.item and location.item.player == self.player:
+
+
             if location.rom_address:
                 rom_address = location.rom_address
                 if not isinstance(rom_address, list):
@@ -784,8 +837,8 @@ def generate_output(self, output_directory: str):
     set_trade_mon("Trade_Marcel", "Route 24 - Wild Pokemon - 6")
     set_trade_mon("Trade_Sailor", "Pokemon Mansion 1F - Wild Pokemon - 3")
     set_trade_mon("Trade_Dux", "Route 3 - Wild Pokemon - 2")
-    set_trade_mon("Trade_Marc", "Route 23 - Super Rod Pokemon - 1")
-    set_trade_mon("Trade_Lola", "Route 10 - Super Rod Pokemon - 1")
+    set_trade_mon("Trade_Marc", "Route 23/Cerulean Cave Fishing - Super Rod Pokemon - 1")
+    set_trade_mon("Trade_Lola", "Route 10/Celadon Fishing - Super Rod Pokemon - 1")
     set_trade_mon("Trade_Doris", "Cerulean Cave 1F - Wild Pokemon - 9")
     set_trade_mon("Trade_Crinkles", "Route 12 - Wild Pokemon - 4")
 
@@ -962,7 +1015,6 @@ def generate_output(self, output_directory: str):
     TM_IDs = bytearray([poke_data.moves[move]["id"] for move in self.local_tms])
     write_bytes(data, TM_IDs, rom_addresses["TM_Moves"])
 
-
     if self.multiworld.randomize_rock_tunnel[self.player]:
         seed = randomize_rock_tunnel(data, random)
         write_bytes(data, encode_text(f"SEED: <LINE>{seed}"), rom_addresses["Text_Rock_Tunnel_Sign"])
@@ -973,13 +1025,13 @@ def generate_output(self, output_directory: str):
     for mon in range(0, 16):
         data[rom_addresses['Title_Mons'] + mon] = mons.pop()
     if self.multiworld.game_version[self.player].value:
-        mons.sort(key=lambda mon: 0 if mon == self.multiworld.get_location("Pallet Town - Starter 1", self.player).item.name
-                  else 1 if mon == self.multiworld.get_location("Pallet Town - Starter 2", self.player).item.name else
-                  2 if mon == self.multiworld.get_location("Pallet Town - Starter 3", self.player).item.name else 3)
+        mons.sort(key=lambda mon: 0 if mon == self.multiworld.get_location("Oak's Lab - Starter 1", self.player).item.name
+                  else 1 if mon == self.multiworld.get_location("Oak's Lab - Starter 2", self.player).item.name else
+                  2 if mon == self.multiworld.get_location("Oak's Lab - Starter 3", self.player).item.name else 3)
     else:
-        mons.sort(key=lambda mon: 0 if mon == self.multiworld.get_location("Pallet Town - Starter 2", self.player).item.name
-                  else 1 if mon == self.multiworld.get_location("Pallet Town - Starter 1", self.player).item.name else
-                  2 if mon == self.multiworld.get_location("Pallet Town - Starter 3", self.player).item.name else 3)
+        mons.sort(key=lambda mon: 0 if mon == self.multiworld.get_location("Oak's Lab - Starter 2", self.player).item.name
+                  else 1 if mon == self.multiworld.get_location("Oak's Lab - Starter 1", self.player).item.name else
+                  2 if mon == self.multiworld.get_location("Oak's Lab - Starter 3", self.player).item.name else 3)
     write_bytes(data, encode_text(self.multiworld.seed_name[-20:], 20, True), rom_addresses['Title_Seed'])
 
     slot_name = self.multiworld.player_name[self.player]

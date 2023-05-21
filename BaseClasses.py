@@ -679,6 +679,8 @@ class CollectionState():
             if new_region in rrp:
                 bc.remove(connection)
             elif connection.can_reach(self):
+                if not new_region:
+                    continue
                 assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
                 rrp.add(new_region)
                 bc.remove(connection)
