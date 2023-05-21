@@ -1229,252 +1229,252 @@
 
 
   "ITEM_TM01_FOCUS_PUNCH": {
-    "label": "TM01 Focus Punch",
+    "label": "TM01",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM02_DRAGON_CLAW": {
-    "label": "TM02 Dragon Claw",
+    "label": "TM02",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM03_WATER_PULSE": {
-    "label": "TM03 Water Pulse",
+    "label": "TM03",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM04_CALM_MIND": {
-    "label": "TM04 Calm Mind",
+    "label": "TM04",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM05_ROAR": {
-    "label": "TM05 Roar",
+    "label": "TM05",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM06_TOXIC": {
-    "label": "TM06 Toxic",
+    "label": "TM06",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM07_HAIL": {
-    "label": "TM07 Hail",
+    "label": "TM07",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM08_BULK_UP": {
-    "label": "TM08 Bulk Up",
+    "label": "TM08",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM09_BULLET_SEED": {
-    "label": "TM09 Bullet Seed",
+    "label": "TM09",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM10_HIDDEN_POWER": {
-    "label": "TM10 Hidden Power",
+    "label": "TM10",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM11_SUNNY_DAY": {
-    "label": "TM11 Sunny Day",
+    "label": "TM11",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM12_TAUNT": {
-    "label": "TM12 Taunt",
+    "label": "TM12",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM13_ICE_BEAM": {
-    "label": "TM13 Ice Beam",
+    "label": "TM13",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM14_BLIZZARD": {
-    "label": "TM14 Blizzard",
+    "label": "TM14",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM15_HYPER_BEAM": {
-    "label": "TM15 Hyper Beam",
+    "label": "TM15",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM16_LIGHT_SCREEN": {
-    "label": "TM16 Light Screen",
+    "label": "TM16",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM17_PROTECT": {
-    "label": "TM17 Protect",
+    "label": "TM17",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM18_RAIN_DANCE": {
-    "label": "TM18 Rain Dance",
+    "label": "TM18",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM19_GIGA_DRAIN": {
-    "label": "TM19 Giga Drain",
+    "label": "TM19",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM20_SAFEGUARD": {
-    "label": "TM20 Safeguard",
+    "label": "TM20",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM21_FRUSTRATION": {
-    "label": "TM21 Frustration",
+    "label": "TM21",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM22_SOLAR_BEAM": {
-    "label": "TM22 Solar Beam",
+    "label": "TM22",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM23_IRON_TAIL": {
-    "label": "TM23 Iron Tail",
+    "label": "TM23",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM24_THUNDERBOLT": {
-    "label": "TM24 Thunderbolt",
+    "label": "TM24",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM25_THUNDER": {
-    "label": "TM25 Thunder",
+    "label": "TM25",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM26_EARTHQUAKE": {
-    "label": "TM26 Earthquake",
+    "label": "TM26",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM27_RETURN": {
-    "label": "TM27 Return",
+    "label": "TM27",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM28_DIG": {
-    "label": "TM28 Dig",
+    "label": "TM28",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM29_PSYCHIC": {
-    "label": "TM29 Psychic",
+    "label": "TM29",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM30_SHADOW_BALL": {
-    "label": "TM30 Shadow Ball",
+    "label": "TM30",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM31_BRICK_BREAK": {
-    "label": "TM31 Brick Break",
+    "label": "TM31",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM32_DOUBLE_TEAM": {
-    "label": "TM32 Double Team",
+    "label": "TM32",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM33_REFLECT": {
-    "label": "TM33 Reflect",
+    "label": "TM33",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM34_SHOCK_WAVE": {
-    "label": "TM34 Shock Wave",
+    "label": "TM34",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM35_FLAMETHROWER": {
-    "label": "TM35 Flamethrower",
+    "label": "TM35",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM36_SLUDGE_BOMB": {
-    "label": "TM36 Sludge Bomb",
+    "label": "TM36",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM37_SANDSTORM": {
-    "label": "TM37 Sandstorm",
+    "label": "TM37",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM38_FIRE_BLAST": {
-    "label": "TM38 Fire Blast",
+    "label": "TM38",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM39_ROCK_TOMB": {
-    "label": "TM39 Rock Tomb",
+    "label": "TM39",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM40_AERIAL_ACE": {
-    "label": "TM40 Aerial Ace",
+    "label": "TM40",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM41_TORMENT": {
-    "label": "TM41 Torment",
+    "label": "TM41",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM42_FACADE": {
-    "label": "TM42 Facade",
+    "label": "TM42",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM43_SECRET_POWER": {
-    "label": "TM43 Secret Power",
+    "label": "TM43",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM44_REST": {
-    "label": "TM44 Rest",
+    "label": "TM44",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM45_ATTRACT": {
-    "label": "TM45 Attract",
+    "label": "TM45",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM46_THIEF": {
-    "label": "TM46 Thief",
+    "label": "TM46",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM47_STEEL_WING": {
-    "label": "TM47 Steel Wing",
+    "label": "TM47",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM48_SKILL_SWAP": {
-    "label": "TM48 Skill Swap",
+    "label": "TM48",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM49_SNATCH": {
-    "label": "TM49 Snatch",
+    "label": "TM49",
     "classification": "USEFUL",
     "tags": ["TM"]
   },
   "ITEM_TM50_OVERHEAT": {
-    "label": "TM50 Overheat",
+    "label": "TM50",
     "classification": "USEFUL",
     "tags": ["TM"]
   }
