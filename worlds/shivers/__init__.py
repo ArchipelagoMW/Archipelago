@@ -129,7 +129,7 @@ class ShiversWorld(World):
         self.multiworld.random.shuffle(storagelocs)
         self.multiworld.random.shuffle(storageitems)
         
-        fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True)
+        fill_restrictive(self.multiworld, state, storagelocs.copy(), storageitems, True, True)
 
         self.storage_placements = {location.name: location.item.name for location in storagelocs}
 
