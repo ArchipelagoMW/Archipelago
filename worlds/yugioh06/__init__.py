@@ -9,10 +9,14 @@ import bsdiff4
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from worlds.AutoWorld import World, WebWorld
-from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items
-from .Locations import location_to_id
+from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, core_booster
+from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
+    get_beat_challenge_events, special
+from .Opponents import get_opponents, get_opponent_locations
 from .Options import ygo06_options
 from .Rom import YGO06DeltaPatch, get_base_rom_path
+from .Rules import set_rules
+from .logic import YuGiOh06Logic
 from worlds.generic.Rules import add_rule
 from .RomValues import structure_deck_selection, banlist_ids
 
@@ -48,8 +52,29 @@ class Yugioh06World(World):
 
     location_name_to_id = {}
     start_id = 5730000
-    for k, v in location_to_id.items():
+    for k, v in Bonuses.items():
         location_name_to_id[k] = v + start_id
+
+    for k, v in Limited_Duels.items():
+        location_name_to_id[k] = v + start_id
+
+    for k, v in Theme_Duels.items():
+        location_name_to_id[k] = v + start_id
+
+    for k, v in Campaign_Opponents.items():
+        location_name_to_id[k] = v + start_id
+
+    for k, v in Required_Cards.items():
+        location_name_to_id[k] = v + start_id
+
+    for k, v in special.items():
+        location_name_to_id[k] = v + start_id
+
+    set_rules = set_rules
+
+    item_name_groups = {
+        "Core Booster": core_booster
+    }
 
     def create_item(self, name: str) -> Item:
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
@@ -68,7 +93,7 @@ class Yugioh06World(World):
             )
             item_pool.append(item)
 
-        while len(item_pool) < len(location_to_id):
+        while len(item_pool) < len(self.location_name_to_id):
             item = Yugioh2006Item(
                 "Money",
                 ItemClassification.filler,
@@ -76,16 +101,78 @@ class Yugioh06World(World):
                 self.player
             )
             item_pool.append(item)
+
+        for challenge in get_beat_challenge_events().keys():
+            item = Yugioh2006Item(
+                "Challenge Beaten",
+                ItemClassification.progression,
+                None,
+                self.player
+            )
+            location = self.multiworld.get_location(challenge, self.player)
+            location.place_locked_item(item)
+            location.event = True
+
+        for opponent in get_opponents(self.multiworld, self.player):
+            for location_name, event in get_opponent_locations(opponent).items():
+                if event is not None:
+                    item = Yugioh2006Item(
+                        event,
+                        ItemClassification.progression,
+                        None,
+                        self.player
+                    )
+                    location = self.multiworld.get_location(location_name, self.player)
+                    location.place_locked_item(item)
+                    location.event = True
+
         self.multiworld.itempool += item_pool
 
     def create_regions(self):
         self.multiworld.regions += [
-            create_region(self.multiworld, self.player, 'Menu', None, ['to Campaign']),
-            create_region(self.multiworld, self.player, 'Campaign', self.location_name_to_id)
+            create_region(self.multiworld, self.player, 'Menu', None, ['to Campaign', 'to Challenges', 'to Card Shop']),
+            create_region(self.multiworld, self.player, 'Campaign', Bonuses | Campaign_Opponents),
+            create_region(self.multiworld, self.player, 'Challenges',
+                          Limited_Duels | Theme_Duels | get_beat_challenge_events()),
+            create_region(self.multiworld, self.player, 'Card Shop', Required_Cards)
         ]
 
-        self.multiworld.get_entrance('to Campaign', self.player)\
+        self.multiworld.get_entrance('to Campaign', self.player) \
             .connect(self.multiworld.get_region('Campaign', self.player))
+        self.multiworld.get_entrance('to Challenges', self.player) \
+            .connect(self.multiworld.get_region('Challenges', self.player))
+        self.multiworld.get_entrance('to Card Shop', self.player) \
+            .connect(self.multiworld.get_region('Card Shop', self.player))
+
+        campaign = self.multiworld.get_region('Campaign', self.player)
+        # Campaign Opponents
+        for opponent in get_opponents(self.multiworld, self.player):
+            unlock_item = "Campaign Tier " + str(opponent.tier) + " Column " + str(opponent.column)
+            region = create_region(self.multiworld, self.player,
+                                   opponent.name, get_opponent_locations(opponent))
+            entrance = Entrance(self.player, unlock_item, campaign)
+            if opponent.tier == 5 and opponent.column == 3:
+                entrance.access_rule =\
+                    (lambda opp: lambda state:
+                     state.has("Challenge Beaten", self.player,
+                               self.multiworld.ThirdTier5CampaignBossChallenges[self.player].value) and
+                               opp.rule(state))(opponent)
+            elif opponent.tier == 5 and opponent.column == 4:
+                entrance.access_rule =\
+                    (lambda opp: lambda state:
+                     state.has("Challenge Beaten", self.player,
+                               self.multiworld.FourthTier5CampaignBossChallenges[self.player].value) and
+                               opp.rule(state))(opponent)
+            elif opponent.tier == 5 and opponent.column == 5:
+                entrance.access_rule =\
+                    (lambda opp: lambda state: state.has("Challenge Beaten", self.player,
+                     self.multiworld.FinalCampaignBossChallenges[self.player].value) and opp.rule(state))(opponent)
+            else:
+                entrance.access_rule = (lambda unlock, opp: lambda state:
+                                        state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
+            campaign.exits.append(entrance)
+            entrance.connect(region)
+            self.multiworld.regions.append(region)
 
     def generate_early(self):
         starting_opponent = self.multiworld.random.choice(tier_1_opponents)
@@ -113,12 +200,14 @@ class Yugioh06World(World):
         banlist_data_location = 0xf4496
         rom_data[banlist_data_location] = banlist_ids.get(banlist.value)
         randomizer_data_start = 0x0000f310
-        for location in self.multiworld.get_filled_locations(self.player):
+        for location in self.multiworld.get_locations():
             item = location.item.name
             if location.item.player != self.player:
                 item = "Remote"
-            item_id = item_to_index[item]
-            location_id = location_to_id[location.name]
+            item_id = item_to_index.get(item)
+            if item_id is None:
+                continue
+            location_id = self.location_name_to_id[location.name] - 5730000
             rom_data[randomizer_data_start + location_id] = item_id
         return rom_data
 
@@ -152,12 +241,13 @@ def create_region(world: MultiWorld, player: int, name: str, locations=None, exi
     if locations:
         for location_name in locations.keys():
             location = Yugioh2006Location(player, location_name, locations[location_name], region)
+            if locations[location_name] is None:
+                location.event = True
             region.locations.append(location)
 
     if exits:
         for _exit in exits:
             region.exits.append(Entrance(player, _exit, region))
-
     return region
 
 

@@ -190,6 +190,27 @@ Banlist_Items = {
     5: "Banlist September 2005"
 }
 
+core_booster = (
+    "LEGEND OF B.E.W.D.",
+    "METAL RAIDERS",
+    "PHARAOH'S SERVANT",
+    "PHARAONIC GUARDIAN",
+    "SPELL RULER",
+    "LABYRINTH OF NIGHTMARE",
+    "LEGACY OF DARKNESS",
+    "MAGICIAN'S FORCE",
+    "DARK CRISIS",
+    "INVASION OF CHAOS",
+    "ANCIENT SANCTUARY",
+    "SOUL OF THE DUELIST",
+    "RISE OF DESTINY",
+    "FLAMING ETERNITY",
+    "THE LOST MILLENIUM",
+    "CYBERNETIC REVOLUTION",
+    "ELEMENTAL ENERGY",
+    "SHADOW OF INFINITY",
+)
+
 booster_packs = (
     "LEGEND OF B.E.W.D.",
     "METAL RAIDERS",
@@ -240,6 +261,11 @@ booster_packs = (
 
 
 excluded_items = {
+    "All Normal Monsters",
+    "All Effect Monsters",
+    "All Fusion Monsters",
+    "All Traps",
+    "All Spells",
     "All at Random",
     "Money",
     "Remote"

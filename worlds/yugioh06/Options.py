@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Choice
+from Options import Option, DefaultOnToggle, Choice, Range
 
 
 class StructureDeck(Choice):
@@ -11,6 +11,7 @@ class StructureDeck(Choice):
     option_warriors_triumph = 4
     option_spellcasters_judgement = 5
 
+
 class Banlist(Choice):
     display_name = "Banlist"
     option_no_banlist = 0
@@ -21,7 +22,28 @@ class Banlist(Choice):
     option_September_2005 = 5
 
 
+class FinalCampaignBossChallenges(Range):
+    """Number of required Limited/Theme Duels completed for the Final Campaign Boss to appear"""
+    display_name = "Final Campaign Boss unlock amount"
+    range_start = 0
+    range_end = 91
+
+
+class FourthTier5CampaignBossChallenges(Range):
+    display_name = "Fourth Tier 5 Campaign Boss unlock amount"
+    range_start = 0
+    range_end = 91
+
+
+class ThirdTier5CampaignBossChallenges(Range):
+    display_name = "Third Tier 5 Campaign Boss unlock amount"
+    range_start = 0
+    range_end = 91
+
 ygo06_options: typing.Dict[str, type(Option)] = {
     "StructureDeck": StructureDeck,
-    "Banlist": Banlist
+    "Banlist": Banlist,
+    "FinalCampaignBossChallenges": FinalCampaignBossChallenges,
+    "FourthTier5CampaignBossChallenges": FourthTier5CampaignBossChallenges,
+    "ThirdTier5CampaignBossChallenges": ThirdTier5CampaignBossChallenges
 }

@@ -1,4 +1,4 @@
-location_to_id = {
+Bonuses = {
     "Duelist Bonus Level 1": 1,
     "Duelist Bonus Level 2": 2,
     "Duelist Bonus Level 3": 3,
@@ -36,6 +36,9 @@ location_to_id = {
     "Yata-Garasu Finish Bonus": 35,
     "Skull Servant Finish Bonus": 36,
     "Konami Bonus": 37,
+}
+
+Limited_Duels = {
     "LD01: All except Level 4 forbidden": 38,
     "LD02: Medium/high Level forbidden": 39,
     "LDO3: ATK 1500 or more forbidden": 40,
@@ -77,6 +80,9 @@ location_to_id = {
     "LD39: Monsters forbidden": 76,
     "LD40: Refer to Sept 05 Banlist": 77,
     "LD41: Refer to Sept 03 Banlist": 78,
+}
+
+Theme_Duels = {
     "TD01: Battle Damage": 79,
     "TD02: Deflected Damage": 80,
     "TD03: Normal Summon": 81,
@@ -127,6 +133,9 @@ location_to_id = {
     "TD48: Destroy Monsters with Effects": 126,
     "TD49: Plunder": 127,
     "TD50: Dark Scorpion Combination": 128,
+}
+
+Campaign_Opponents = {
     "Campaign Tier 1: 1 Win": 129,
     "Campaign Tier 1: 3 Wins A": 130,
     "Campaign Tier 1: 3 Wins B": 131,
@@ -144,11 +153,17 @@ location_to_id = {
     "Campaign Tier 3: 5 Wins B": 143,
     "Campaign Tier 4: 5 Wins A": 144,
     "Campaign Tier 4: 5 Wins B": 145,
+}
+
+special = {
     "Campaign Tier 5: Column 1 Win": 146,
     "Campaign Tier 5: Column 2 Win": 147,
     "Campaign Tier 5: Column 3 Win": 148,
     "Campaign Tier 5: Column 4 Win": 149,
-    "Campaign Final Boss Win": 150,
+    # "Campaign Final Boss Win": 150,
+}
+
+Required_Cards = {
     "Obtain all pieces of Exodia": 154,
     "Obtain Final Countdown": 155,
     "Obtain Victory Dragon": 156,
@@ -167,3 +182,11 @@ location_to_id = {
     "Dark Scorpion Combination and its required cards": 169
 }
 
+
+def get_beat_challenge_events():
+    beat_events = {}
+    for limited in Limited_Duels.keys():
+        beat_events[limited + ' Complete'] = None
+    for theme in Theme_Duels.keys():
+        beat_events[theme + ' Complete'] = None
+    return beat_events
