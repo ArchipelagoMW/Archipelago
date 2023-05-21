@@ -120,7 +120,7 @@ def generate_mod(world: "Factorio", output_directory: str):
         "mod_name": mod_name,
         "allowed_science_packs": multiworld.max_science_pack[player].get_allowed_packs(),
         "custom_technologies": multiworld.worlds[player].custom_technologies,
-        "tech_tree_layout_prerequisites": multiworld.tech_tree_layout_prerequisites[player],
+        "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites,
         "slot_name": multiworld.player_name[player], "seed_name": multiworld.seed_name,
         "slot_player": player,
         "starting_items": multiworld.starting_items[player], "recipes": recipes,
