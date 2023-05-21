@@ -20,6 +20,8 @@ from worlds.alttp.Shops import FillDisabledShopSlots
 from worlds.alttp.SubClasses import LTTPRegionType
 from worlds.generic.Rules import exclusion_rules, locality_rules
 
+__all__ = ["main"]
+
 ordered_areas = (
     'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
     'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
