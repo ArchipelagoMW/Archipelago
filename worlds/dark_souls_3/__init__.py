@@ -236,12 +236,16 @@ class DarkSouls3World(World):
 
             if DS3LocationCategory.WEAPON in self.enabled_location_categories:
                 itempool_by_category[DS3LocationCategory.WEAPON] = create_random_replacement_list(
-                    {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10},
+                    {
+                        DS3ItemCategory.WEAPON_UPGRADE_5,
+                        DS3ItemCategory.WEAPON_UPGRADE_10,
+                        DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE
+                    },
                     len(itempool_by_category[DS3LocationCategory.WEAPON])
                 )
             if DS3LocationCategory.SHIELD in self.enabled_location_categories:
                 itempool_by_category[DS3LocationCategory.SHIELD] = create_random_replacement_list(
-                    {DS3ItemCategory.SHIELD},
+                    {DS3ItemCategory.SHIELD, DS3ItemCategory.SHIELD_INFUSIBLE},
                     len(itempool_by_category[DS3LocationCategory.SHIELD])
                 )
             if DS3LocationCategory.ARMOR in self.enabled_location_categories:
@@ -273,7 +277,8 @@ class DarkSouls3World(World):
 
         if name in key_item_names:
             item_classification = ItemClassification.progression
-        elif item_dictionary[name].category in {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10}:
+        elif item_dictionary[name].category in \
+                {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE}:
             item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
@@ -386,13 +391,13 @@ class DarkSouls3World(World):
                     if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < weapon_level_percentage:
                         if item.category == DS3ItemCategory.WEAPON_UPGRADE_5:
                             name_to_ds3_code[item.name] += self.multiworld.per_slot_randoms[self.player].randint(min_5, max_5)
-                        elif item.category == DS3ItemCategory.WEAPON_UPGRADE_10:
+                        elif item.category in {DS3ItemCategory.WEAPON_UPGRADE_10, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE}:
                             name_to_ds3_code[item.name] += self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
 
             # Randomize some weapon infusions
             if self.multiworld.randomize_infusion[self.player] == Toggle.option_true:
                 for item in item_dictionary.values():
-                    if item.name == "Broadsword": # TODO: Detect if a weapon can be infused here
+                    if item.category in {DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE, DS3ItemCategory.SHIELD_INFUSIBLE}:
                         if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < infusion_percentage:
                             name_to_ds3_code[item.name] += 100 * self.multiworld.per_slot_randoms[self.player].randint(0, 15)
 

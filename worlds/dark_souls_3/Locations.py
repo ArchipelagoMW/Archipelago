@@ -555,7 +555,7 @@ location_tables = {
         DS3LocationData("RC: Violet Wrappings",                    "Violet Wrappings",                        DS3LocationCategory.ARMOR),
         DS3LocationData("RC: Soul of Darkeater Midir",             "Soul of Darkeater Midir",                 DS3LocationCategory.MISC),
         DS3LocationData("RC: Soul of Slave Knight Gael",           "Soul of Slave Knight Gael",               DS3LocationCategory.MISC),
-        DS3LocationData("RC: Blood of the Dark Souls",             "Blood of the Dark Soul",                  DS3LocationCategory.KEY),
+        DS3LocationData("RC: Blood of the Dark Soul",              "Blood of the Dark Soul",                  DS3LocationCategory.KEY),
         DS3LocationData("RC: Chloranthy Ring+3",                   "Chloranthy Ring+3",                       DS3LocationCategory.RING),
         DS3LocationData("RC: Ring of Steel Protection+3",          "Ring of Steel Protection+3",              DS3LocationCategory.RING),
         DS3LocationData("RC: Covetous Gold Serpent Ring+3",        "Covetous Gold Serpent Ring+3",            DS3LocationCategory.RING),

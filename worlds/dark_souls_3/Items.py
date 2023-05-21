@@ -7,13 +7,15 @@ from BaseClasses import Item
 class DS3ItemCategory(Enum):
     WEAPON_UPGRADE_5 = 0
     WEAPON_UPGRADE_10 = 1
-    SHIELD = 2
-    ARMOR = 3
-    RING = 4
-    SPELL = 5
-    MISC = 6
-    KEY = 7
-    SKIP = 8
+    WEAPON_UPGRADE_10_INFUSIBLE = 2
+    SHIELD = 3
+    SHIELD_INFUSIBLE = 4
+    ARMOR = 5
+    RING = 6
+    SPELL = 7
+    MISC = 8
+    KEY = 9
+    SKIP = 10
 
 
 class DS3ItemData(NamedTuple):
@@ -55,66 +57,87 @@ key_item_names = {
 
 
 _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
-    ("Dagger",                              0x000F4240, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Bandit's Knife",                      0x000F6950, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Parrying Dagger",                     0x000F9060, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Rotten Ghru Dagger",                  0x000FDE80, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Harpe",                               0x00102CA0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    # Ammunition
+    ("Standard Arrow",                      0x00061A80, DS3ItemCategory.SKIP),
+    ("Fire Arrow",                          0x00061AE4, DS3ItemCategory.SKIP),
+    ("Poison Arrow",                        0x00061B48, DS3ItemCategory.SKIP),
+    ("Large Arrow",                         0x00061BAC, DS3ItemCategory.SKIP),
+    ("Feather Arrow",                       0x00061C10, DS3ItemCategory.SKIP),
+    ("Moonlight Arrow",                     0x00061C74, DS3ItemCategory.SKIP),
+    ("Wood Arrow",                          0x00061CD8, DS3ItemCategory.SKIP),
+    ("Dark Arrow",                          0x00061D3C, DS3ItemCategory.SKIP),
+    ("Dragonslayer Greatarrow",             0x00062250, DS3ItemCategory.SKIP),
+    ("Dragonslayer Lightning Arrow",        0x00062318, DS3ItemCategory.SKIP),
+    ("Onislayer Greatarrow",                0x0006237C, DS3ItemCategory.SKIP),
+    ("Standard Bolt",                       0x00062A20, DS3ItemCategory.SKIP),
+    ("Heavy Bolt",                          0x00062A84, DS3ItemCategory.SKIP),
+    ("Sniper Bolt",                         0x00062AE8, DS3ItemCategory.SKIP),
+    ("Wood Bolt",                           0x00062B4C, DS3ItemCategory.SKIP),
+    ("Lightning Bolt",                      0x00062BB0, DS3ItemCategory.SKIP),
+    ("Splintering Bolt",                    0x00062C14, DS3ItemCategory.SKIP),
+    ("Exploding Bolt",                      0x00062C78, DS3ItemCategory.SKIP),
+
+    # Weapons
+    ("Dagger",                              0x000F4240, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Bandit's Knife",                      0x000F6950, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Parrying Dagger",                     0x000F9060, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Rotten Ghru Dagger",                  0x000FDE80, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Harpe",                               0x00102CA0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Scholar's Candlestick",               0x001053B0, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Tailbone Short Sword",                0x00107AC0, DS3ItemCategory.WEAPON_UPGRADE_10),
-    ("Corvian Greatknife",                  0x0010A1D0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Corvian Greatknife",                  0x0010A1D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Handmaid's Dagger",                   0x00111700, DS3ItemCategory.WEAPON_UPGRADE_10),
-    ("Shortsword",                          0x001E8480, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Longsword",                           0x001EAB90, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Broadsword",                          0x001ED2A0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Broken Straight Sword",               0x001EF9B0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Lothric Knight Sword",                0x001F6EE0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Shortsword",                          0x001E8480, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Longsword",                           0x001EAB90, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Broadsword",                          0x001ED2A0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Broken Straight Sword",               0x001EF9B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Lothric Knight Sword",                0x001F6EE0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Sunlight Straight Sword",             0x00203230, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Rotten Ghru Curved Sword",            0x00205940, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Rotten Ghru Curved Sword",            0x00205940, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Irithyll Straight Sword",             0x0020A760, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Cleric's Candlestick",                0x0020F580, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Morion Blade",                        0x002143A0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Astora's Straight Sword",             0x002191C0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Barbed Straight Sword",               0x0021B8D0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Astora's Straight Sword",             0x002191C0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Barbed Straight Sword",               0x0021B8D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Executioner's Greatsword",            0x0021DFE0, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Anri's Straight Sword",               0x002206F0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Estoc",                               0x002DC6C0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Mail Breaker",                        0x002DEDD0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Rapier",                              0x002E14E0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Ricard's Rapier",                     0x002E3BF0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Estoc",                               0x002DC6C0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Mail Breaker",                        0x002DEDD0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Rapier",                              0x002E14E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Ricard's Rapier",                     0x002E3BF0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Crystal Sage's Rapier",               0x002E6300, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Irithyll Rapier",                     0x002E8A10, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Shotel",                              0x003D3010, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Scimitar",                            0x003D7E30, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Falchion",                            0x003DA540, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Carthus Curved Sword",                0x003DCC50, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Carthus Curved Greatsword",           0x003DF360, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Shotel",                              0x003D3010, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Scimitar",                            0x003D7E30, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Falchion",                            0x003DA540, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Carthus Curved Sword",                0x003DCC50, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Carthus Curved Greatsword",           0x003DF360, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Pontiff Knight Curved Sword",         0x003E1A70, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Storm Curved Sword",                  0x003E4180, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Painting Guardian's Curved Sword",    0x003E6890, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Painting Guardian's Curved Sword",    0x003E6890, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Crescent Moon Sword",                 0x003E8FA0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Carthus Shotel",                      0x003EB6B0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Uchigatana",                          0x004C4B40, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Washing Pole",                        0x004C7250, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Carthus Shotel",                      0x003EB6B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Uchigatana",                          0x004C4B40, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Washing Pole",                        0x004C7250, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Chaos Blade",                         0x004C9960, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Black Blade",                         0x004CC070, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Black Blade",                         0x004CC070, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Bloodlust",                           0x004CE780, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Darkdrift",                           0x004D0E90, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Bastard Sword",                       0x005B8D80, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Claymore",                            0x005BDBA0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Zweihander",                          0x005C29C0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Greatsword",                          0x005C50D0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Astora Greatsword",                   0x005C9EF0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Murakumo",                            0x005CC600, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Lothric Knight Greatsword",           0x005D1420, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Flamberge",                           0x005DB060, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Exile Greatsword",                    0x005DD770, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Bastard Sword",                       0x005B8D80, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Claymore",                            0x005BDBA0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Zweihander",                          0x005C29C0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Greatsword",                          0x005C50D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Astora Greatsword",                   0x005C9EF0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Murakumo",                            0x005CC600, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Lothric Knight Greatsword",           0x005D1420, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Flamberge",                           0x005DB060, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Exile Greatsword",                    0x005DD770, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Greatsword of Judgment",              0x005E2590, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Profaned Greatsword",                 0x005E4CA0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Cathedral Knight Greatsword",         0x005E73B0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Cathedral Knight Greatsword",         0x005E73B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Farron Greatsword",                   0x005E9AC0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Yhorm's Great Machete",               0x005F0FF0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Dark Sword",                          0x005F3700, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Dark Sword",                          0x005F3700, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Black Knight Sword",                  0x005F5E10, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Lorian's Greatsword",                 0x005F8520, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Twin Princes' Greatsword",            0x005FAC30, DS3ItemCategory.WEAPON_UPGRADE_5),
@@ -124,79 +147,80 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Greatsword of Artorias",              0x0060216A, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Hollowslayer Greatsword",             0x00604870, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Moonlight Greatsword",                0x00606F80, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Drakeblood Greatsword",               0x00609690, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Drakeblood Greatsword",               0x00609690, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Firelink Greatsword",                 0x0060BDA0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Fume Ultra Greatsword",               0x0060E4B0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Old Wolf Curved Sword",               0x00610BC0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Storm Ruler",                         0x006132D0, DS3ItemCategory.KEY),
-    ("Hand Axe",                            0x006ACFC0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Deep Battle Axe",                     0x006AFA54, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE?
-    ("Brigand Axe",                         0x006B1DE0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Crescent Axe",                        0x006B6C00, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Great Axe",                           0x006B9310, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Hand Axe",                            0x006ACFC0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Battle Axe",                          0x006AF6D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Deep Battle Axe",                     0x006AFA54, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Brigand Axe",                         0x006B1DE0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Crescent Axe",                        0x006B6C00, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Great Axe",                           0x006B9310, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Butcher Knife",                       0x006BE130, DS3ItemCategory.WEAPON_UPGRADE_10),
-    ("Dragonslayer's Axe",                  0x006C0840, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Thrall Axe",                          0x006C5660, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Dragonslayer's Axe",                  0x006C0840, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Thrall Axe",                          0x006C5660, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Dragonslayer Greataxe",               0x006C7D70, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Demon's Greataxe",                    0x006CA480, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Eleonora",                            0x006CCB90, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Man Serpent Hatchet",                 0x006D19B0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Man Serpent Hatchet",                 0x006D19B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Dragon King Greataxe",                0x006D40C0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Club",                                0x007A1200, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Mace",                                0x007A3910, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Morning Star",                        0x007A6020, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Reinforced Club",                     0x007A8730, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Large Club",                          0x007AFC60, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Great Club",                          0x007B4A80, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Great Mace",                          0x007BBFB0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Great Wooden Hammer",                 0x007C8300, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Club",                                0x007A1200, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Mace",                                0x007A3910, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Morning Star",                        0x007A6020, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Reinforced Club",                     0x007A8730, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Large Club",                          0x007AFC60, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Great Club",                          0x007B4A80, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Great Mace",                          0x007BBFB0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Great Wooden Hammer",                 0x007C8300, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Gargoyle Flame Hammer",               0x007CAA10, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Vordt's Great Hammer",                0x007CD120, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Old King's Great Hammer",             0x007CF830, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Heysel Pick",                         0x007D6D60, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Warpick",                             0x007DBB80, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Pickaxe",                             0x007DE290, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Warpick",                             0x007DBB80, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Pickaxe",                             0x007DE290, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Dragon Tooth",                        0x007E09A0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Smough's Great Hammer",               0x007E30B0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Blacksmith Hammer",                   0x007E57C0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Blacksmith Hammer",                   0x007E57C0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Morne's Great Hammer",                0x007E7ED0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Spiked Mace",                         0x007EA5E0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Spear",                               0x00895440, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Winged Spear",                        0x00897B50, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Partizan",                            0x0089C970, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Greatlance",                          0x008A8CC0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Lothric Knight Long Spear",           0x008AB3D0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Spiked Mace",                         0x007EA5E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Spear",                               0x00895440, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Winged Spear",                        0x00897B50, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Partizan",                            0x0089C970, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Greatlance",                          0x008A8CC0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Lothric Knight Long Spear",           0x008AB3D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Gargoyle Flame Spear",                0x008B01F0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Rotten Ghru Spear",                   0x008B2900, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Rotten Ghru Spear",                   0x008B2900, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Tailbone Spear",                      0x008B5010, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Soldering Iron",                      0x008B7720, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Arstor's Spear",                      0x008BEC50, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Saint Bident",                        0x008C1360, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Yorshka's Spear",                     0x008C3A70, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Pike",                                0x008C6180, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Pike",                                0x008C6180, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Channeler's Trident",                 0x008C8890, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Heavy Four-pronged Plow",             0x008C88F4, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Heavy Four-pronged Plow",             0x008C88F4, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Dragonslayer Spear",                  0x008CAFA0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Great Scythe",                        0x00989680, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Lucerne",                             0x0098BD90, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Glaive",                              0x0098E4A0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Halberd",                             0x00990BB0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Great Scythe",                        0x00989680, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Lucerne",                             0x0098BD90, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Glaive",                              0x0098E4A0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Halberd",                             0x00990BB0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Black Knight Greataxe",               0x009959D0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Pontiff Knight Great Scythe",         0x0099A7F0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Great Corvian Scythe",                0x0099CF00, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Winged Knight Halberd",               0x0099F610, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Great Corvian Scythe",                0x0099CF00, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Winged Knight Halberd",               0x0099F610, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Gundyr's Halberd",                    0x009A1D20, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Red Hilted Halberd",                  0x009AB960, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Red Hilted Halberd",                  0x009AB960, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Black Knight Glaive",                 0x009AE070, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Immolation Tinder",                   0x009B0780, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Claw",                                0x00A7D8C0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Caestus",                             0x00A7FFD0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Manikin Claws",                       0x00A826E0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Claw",                                0x00A7D8C0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Caestus",                             0x00A7FFD0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Manikin Claws",                       0x00A826E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Demon's Fist",                        0x00A84DF0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Dark Hand",                           0x00A87500, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Whip",                                0x00B71B00, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Whip",                                0x00B71B00, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Witch's Locks",                       0x00B7B740, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Notched Whip",                        0x00B7DE50, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Notched Whip",                        0x00B7DE50, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Spotted Whip",                        0x00B80560, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Talisman",                            0x00C72090, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Sorcerer's Staff",                    0x00C747A0, DS3ItemCategory.WEAPON_UPGRADE_10),
@@ -237,76 +261,79 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Black Bow of Pharis",                 0x00D7E970, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Shield Crossbow",                     0x00D81080, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Sniper Crossbow",                     0x00D83790, DS3ItemCategory.WEAPON_UPGRADE_10),
-    ("Sellsword Twinblades",                0x00F42400, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Warden Twinblades",                   0x00F47220, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Winged Knight Twinaxes",              0x00F49930, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Sellsword Twinblades",                0x00F42400, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Warden Twinblades",                   0x00F47220, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Winged Knight Twinaxes",              0x00F49930, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Dancer's Enchanted Swords",           0x00F4C040, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Great Machete",                       0x00F4E750, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Brigand Twindaggers",                 0x00F50E60, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Gotthard Twinswords",                 0x00F53570, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Onikiri and Ubadachi",                0x00F58390, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Drang Twinspears",                    0x00F5AAA0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Drang Hammers",                       0x00F61FD0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Great Machete",                       0x00F4E750, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Brigand Twindaggers",                 0x00F50E60, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Gotthard Twinswords",                 0x00F53570, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Onikiri and Ubadachi",                0x00F58390, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Drang Twinspears",                    0x00F5AAA0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Drang Hammers",                       0x00F61FD0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
 
-    ("Buckler",                             0x01312D00, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Small Leather Shield",                0x01315410, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Round Shield",                        0x0131A230, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Large Leather Shield",                0x0131C940, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Hawkwood's Shield",                   0x01323E70, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Iron Round Shield",                   0x01326580, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Wooden Shield",                       0x0132DAB0, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Kite Shield",                         0x013301C0, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Ghru Rotshield",                      0x013328D0, DS3ItemCategory.SHIELD), #INFUSABLE
+    # Shields
+    ("Buckler",                             0x01312D00, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Small Leather Shield",                0x01315410, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Round Shield",                        0x0131A230, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Large Leather Shield",                0x0131C940, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Hawkwood's Shield",                   0x01323E70, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Iron Round Shield",                   0x01326580, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Wooden Shield",                       0x0132DAB0, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Kite Shield",                         0x013301C0, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Ghru Rotshield",                      0x013328D0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Havel's Greatshield",                 0x013376F0, DS3ItemCategory.SHIELD),
-    ("Target Shield",                       0x01339E00, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Elkhorn Round Shield",                0x0133C510, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Warrior's Round Shield",              0x0133EC20, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Caduceus Round Shield",               0x01341330, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Blessed Red and White Shield",        0x01343FB9, DS3ItemCategory.SHIELD), #INFUSABLE?
-    ("Plank Shield",                        0x01346150, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Leather Shield",                      0x01348860, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Crimson Parma",                       0x0134AF70, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Eastern Iron Shield",                 0x0134D680, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Llewellyn Shield",                    0x0134FD90, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Golden Falcon Shield",                0x01354BB0, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Target Shield",                       0x01339E00, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Elkhorn Round Shield",                0x0133C510, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Warrior's Round Shield",              0x0133EC20, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Caduceus Round Shield",               0x01341330, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Red and White Shield",                0x01343A40, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Blessed Red and White Shield",        0x01343FB9, DS3ItemCategory.SHIELD),
+    ("Plank Shield",                        0x01346150, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Leather Shield",                      0x01348860, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Crimson Parma",                       0x0134AF70, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Eastern Iron Shield",                 0x0134D680, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Llewellyn Shield",                    0x0134FD90, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Golden Falcon Shield",                0x01354BB0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Sacred Bloom Shield",                 0x013572C0, DS3ItemCategory.SHIELD),
-    ("Lothric Knight Shield",               0x01409650, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Knight Shield",                       0x01410B80, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Ancient Dragon Greatshield",          0x013599D0, DS3ItemCategory.SKIP), # Cut Content
+    ("Lothric Knight Shield",               0x01409650, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Knight Shield",                       0x01410B80, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Pontiff Knight Shield",               0x014159A0, DS3ItemCategory.SHIELD),
-    ("Carthus Shield",                      0x014180B0, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Carthus Shield",                      0x014180B0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Black Knight Shield",                 0x0141F5E0, DS3ItemCategory.SHIELD),
     ("Silver Knight Shield",                0x01424400, DS3ItemCategory.SHIELD),
-    ("Spiked Shield",                       0x01426B10, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Pierce Shield",                       0x01429220, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("East-West Shield",                    0x0142B930, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Sunlight Shield",                     0x0142E040, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Spiked Shield",                       0x01426B10, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Pierce Shield",                       0x01429220, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("East-West Shield",                    0x0142B930, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Sunlight Shield",                     0x0142E040, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Crest Shield",                        0x01430750, DS3ItemCategory.SHIELD),
     ("Dragon Crest Shield",                 0x01432E60, DS3ItemCategory.SHIELD),
-    ("Spider Shield",                       0x01435570, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Spider Shield",                       0x01435570, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Grass Crest Shield",                  0x01437C80, DS3ItemCategory.SHIELD),
-    ("Sunset Shield",                       0x0143A390, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Sunset Shield",                       0x0143A390, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Golden Wing Crest Shield",            0x0143CAA0, DS3ItemCategory.SHIELD),
-    ("Blue Wooden Shield",                  0x0143F1B0, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Silver Eagle Kite Shield",            0x014418C0, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Stone Parma",                         0x01443FD0, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Blue Wooden Shield",                  0x0143F1B0, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Silver Eagle Kite Shield",            0x014418C0, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Stone Parma",                         0x01443FD0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Spirit Tree Crest Shield",            0x014466E0, DS3ItemCategory.SHIELD),
-    ("Porcine Shield",                      0x01448DF0, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Porcine Shield",                      0x01448DF0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Shield of Want",                      0x0144B500, DS3ItemCategory.SHIELD),
-    ("Wargod Wooden Shield",                0x0144DC10, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Lothric Knight Greatshield",          0x014FD890, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Cathedral Knight Greatshield",        0x014FFFA0, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Wargod Wooden Shield",                0x0144DC10, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Lothric Knight Greatshield",          0x014FD890, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Cathedral Knight Greatshield",        0x014FFFA0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Dragonslayer Greatshield",            0x01504DC0, DS3ItemCategory.SHIELD),
     ("Moaning Shield",                      0x015074D0, DS3ItemCategory.SHIELD),
     ("Yhorm's Greatshield",                 0x0150C2F0, DS3ItemCategory.SHIELD),
-    ("Black Iron Greatshield",              0x0150EA00, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Black Iron Greatshield",              0x0150EA00, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Wolf Knight's Greatshield",           0x01511110, DS3ItemCategory.SHIELD),
-    ("Twin Dragon Greatshield",             0x01513820, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Twin Dragon Greatshield",             0x01513820, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Greatshield of Glory",                0x01515F30, DS3ItemCategory.SHIELD),
     ("Curse Ward Greatshield",              0x01518640, DS3ItemCategory.SHIELD),
-    ("Bonewheel Shield",                    0x0151AD50, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Stone Greatshield",                   0x0151D460, DS3ItemCategory.SHIELD), #INFUSABLE
-    ("Ancient Dragon Greatshield",          0x013599D0, DS3ItemCategory.SHIELD),
+    ("Bonewheel Shield",                    0x0151AD50, DS3ItemCategory.SHIELD_INFUSIBLE),
+    ("Stone Greatshield",                   0x0151D460, DS3ItemCategory.SHIELD_INFUSIBLE),
 
+    # Armor
     ("Fallen Knight Helm",                  0x1121EAC0, DS3ItemCategory.ARMOR),
     ("Fallen Knight Armor",                 0x1121EEA8, DS3ItemCategory.ARMOR),
     ("Fallen Knight Gauntlets",             0x1121F290, DS3ItemCategory.ARMOR),
@@ -348,7 +375,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Morne's Helm",                        0x1175D720, DS3ItemCategory.ARMOR),
     ("Morne's Armor",                       0x1175DB08, DS3ItemCategory.ARMOR),
     ("Morne's Gauntlets",                   0x1175DEF0, DS3ItemCategory.ARMOR),
-    ("Morne's Leggings",                    0x1175E2D8, DS3ItemCategory.ARMOR), #STOPPED HERE
+    ("Morne's Leggings",                    0x1175E2D8, DS3ItemCategory.ARMOR),
     ("Silver Mask",                         0x117D7840, DS3ItemCategory.ARMOR),
     ("Leonhard's Garb",                     0x117D7C28, DS3ItemCategory.ARMOR),
     ("Leonhard's Gauntlets",                0x117D8010, DS3ItemCategory.ARMOR),
@@ -412,7 +439,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Evangelist Robe",                     0x12DC6FE8, DS3ItemCategory.ARMOR),
     ("Evangelist Gloves",                   0x12DC73D0, DS3ItemCategory.ARMOR),
     ("Evangelist Trousers",                 0x12DC77B8, DS3ItemCategory.ARMOR),
-    ("Scholar's Shed Skin",                 0x12E40D20, DS3ItemCategory.ARMOR),
+    ("Scholar's Shed Skin",                 0x12E40D20, DS3ItemCategory.SKIP), # Cut Content
     ("Scholar's Robe",                      0x12E41108, DS3ItemCategory.ARMOR),
     ("Winged Knight Helm",                  0x12EBAE40, DS3ItemCategory.ARMOR),
     ("Winged Knight Armor",                 0x12EBB228, DS3ItemCategory.ARMOR),
@@ -615,6 +642,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Karla's Gloves",                      0x15E6A690, DS3ItemCategory.ARMOR),
     ("Karla's Trousers",                    0x15E6AA78, DS3ItemCategory.ARMOR),
 
+    # Covenants
     ("Blade of the Darkmoon",               0x20002710, DS3ItemCategory.SKIP),
     ("Watchdogs of Farron",                 0x20002724, DS3ItemCategory.SKIP),
     ("Aldrich Faithful",                    0x2000272E, DS3ItemCategory.SKIP),
@@ -624,6 +652,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Blue Sentinels",                      0x20002756, DS3ItemCategory.SKIP),
     ("Rosaria's Fingers",                   0x20002760, DS3ItemCategory.SKIP),
 
+    # Rings
     ("Life Ring",                           0x20004E20, DS3ItemCategory.RING),
     ("Life Ring+1",                         0x20004E21, DS3ItemCategory.RING),
     ("Life Ring+2",                         0x20004E22, DS3ItemCategory.RING),
@@ -734,6 +763,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Pontiff's Left Eye",                  0x20005136, DS3ItemCategory.RING),
     ("Dragonscale Ring",                    0x2000515E, DS3ItemCategory.RING),
 
+    # Items
     ("Roster of Knights",                   0x4000006C, DS3ItemCategory.SKIP),
     ("Cracked Red Eye Orb",                 0x4000006F, DS3ItemCategory.SKIP),
     ("Divine Blessing",                     0x400000F0, DS3ItemCategory.MISC),
@@ -821,7 +851,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Dark Sigil",                          0x400001EA, DS3ItemCategory.SKIP),
     ("Ember",                               0x400001F4, DS3ItemCategory.MISC),
     ("Soul of Champion Gundyr",             0x400002C8, DS3ItemCategory.MISC),
-    ("Soul of a Wicked Spirit",             0x400002C9, DS3ItemCategory.MISC),
+    ("Soul of a Wicked Spirit",             0x400002C9, DS3ItemCategory.SKIP), # Cut Content
     ("Soul of the Dancer",                  0x400002CA, DS3ItemCategory.MISC),
     ("Soul of a Crystal Sage",              0x400002CB, DS3ItemCategory.MISC),
     ("Soul of the Blood of the Wolf",       0x400002CD, DS3ItemCategory.MISC),
@@ -892,10 +922,12 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Loretta's Bone",                      0x40000846, DS3ItemCategory.KEY),
     ("Braille Divine Tome of Carim",        0x40000847, DS3ItemCategory.MISC),
     ("Braille Divine Tome of Lothric",      0x40000848, DS3ItemCategory.MISC),
+
     ("Cinders of a Lord - Abyss Watcher",   0x4000084B, DS3ItemCategory.KEY),
     ("Cinders of a Lord - Aldrich",         0x4000084C, DS3ItemCategory.KEY),
     ("Cinders of a Lord - Yhorm the Giant", 0x4000084D, DS3ItemCategory.KEY),
     ("Cinders of a Lord - Lothric Prince",  0x4000084E, DS3ItemCategory.KEY),
+
     ("Great Swamp Pyromancy Tome",          0x4000084F, DS3ItemCategory.MISC),
     ("Carthus Pyromancy Tome",              0x40000850, DS3ItemCategory.MISC),
     ("Izalith Pyromancy Tome",              0x40000851, DS3ItemCategory.MISC),
@@ -922,26 +954,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Dragon Chaser's Ashes",               0x40000867, DS3ItemCategory.MISC),
     ("Easterner's Ashes",                   0x40000868, DS3ItemCategory.MISC),
 
-    # AMMUNITION IN THIS SECTION, NOT SURE IF WE WANT TO INCLUDE THIS, BUT WE HAVE IT
-    ("Standard Arrow",                      0x00061A80, DS3ItemCategory.SKIP),
-    ("Fire Arrow",                          0x00061AE4, DS3ItemCategory.SKIP),
-    ("Poison Arrow",                        0x00061B48, DS3ItemCategory.SKIP),
-    ("Large Arrow",                         0x00061BAC, DS3ItemCategory.SKIP),
-    ("Feather Arrow",                       0x00061C10, DS3ItemCategory.SKIP),
-    ("Moonlight Arrow",                     0x00061C74, DS3ItemCategory.SKIP),
-    ("Wood Arrow",                          0x00061CD8, DS3ItemCategory.SKIP),
-    ("Dark Arrow",                          0x00061D3C, DS3ItemCategory.SKIP),
-    ("Dragonslayer Greatarrow",             0x00062250, DS3ItemCategory.SKIP),
-    ("Dragonslayer Lightning Arrow",        0x00062318, DS3ItemCategory.SKIP),
-    ("Onislayer Greatarrow",                0x0006237C, DS3ItemCategory.SKIP),
-    ("Standard Bolt",                       0x00062A20, DS3ItemCategory.SKIP),
-    ("Heavy Bolt",                          0x00062A84, DS3ItemCategory.SKIP),
-    ("Sniper Bolt",                         0x00062AE8, DS3ItemCategory.SKIP),
-    ("Wood Bolt",                           0x00062B4C, DS3ItemCategory.SKIP),
-    ("Lightning Bolt",                      0x00062BB0, DS3ItemCategory.SKIP),
-    ("Splintering Bolt",                    0x00062C14, DS3ItemCategory.SKIP),
-    ("Exploding Bolt",                      0x00062C78, DS3ItemCategory.SKIP),
-
+    # Spells
     ("Farron Dart",                         0x40124F80, DS3ItemCategory.SPELL),
     ("Great Farron Dart",                   0x40127690, DS3ItemCategory.SPELL),
     ("Soul Arrow",                          0x4013D620, DS3ItemCategory.SPELL),
@@ -1044,42 +1057,46 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
 
 
 _dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
+    # Ammunition
+    ("Millwood Greatarrow",              0x000623E0, DS3ItemCategory.SKIP),
+
+    # Weapons
     ("Onyx Blade",                       0x00222E00, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Follower Sabre",                   0x003EDDC0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Millwood Battle Axe",              0x006D67D0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Follower Sabre",                   0x003EDDC0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Millwood Battle Axe",              0x006D67D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Earth Seeker",                     0x006D8EE0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Quakestone Hammer",                0x007ECCF0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Follower Javelin",                 0x008CD6B0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Follower Javelin",                 0x008CD6B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Friede's Great Scythe",            0x009B55A0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Crow Talons",                      0x00A89C10, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Crow Talons",                      0x00A89C10, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Rose of Ariandel",                 0x00B82C70, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Pyromancer's Parting Flame",       0x00CC9ED0, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Millwood Greatbow",                0x00D85EA0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Valorheart",                       0x00F646E0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Crow Quills",                      0x00F66DF0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Crow Quills",                      0x00F66DF0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Follower Torch",                   0x015F1AD0, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Aquamarine Dagger",                0x00116520, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Murky Hand Scythe",                0x00118C30, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Murky Hand Scythe",                0x00118C30, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Ringed Knight Straight Sword",     0x00225510, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Gael's Greatsword",                0x00227C20, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Demon's Scar",                     0x003F04D0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Frayed Blade",                     0x004D35A0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Herald Curved Greatsword",         0x006159E0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Herald Curved Greatsword",         0x006159E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Ledo's Great Hammer",              0x007EF400, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Ringed Knight Spear",              0x008CFDC0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Lothric War Banner",               0x008D24D0, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
+    ("Lothric War Banner",               0x008D24D0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Crucifix of the Mad King",         0x008D4BE0, DS3ItemCategory.WEAPON_UPGRADE_5),
-    ("Splitleaf Greatsword",             0x009B2E90, DS3ItemCategory.WEAPON_UPGRADE_10), #INFUSABLE
-    ("Murky Longstaff",                  0x00CCC5E0, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Splitleaf Greatsword",             0x009B2E90, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
+    ("Murky Longstaff",                  0x00CCC5E0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Sacred Chime of Filianore",        0x00CCECF0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Preacher's Right Arm",             0x00CD1400, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("White Birch Bow",                  0x00D77440, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Repeating Crossbow",               0x00D885B0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Ringed Knight Paired Greatswords", 0x00F69500, DS3ItemCategory.WEAPON_UPGRADE_5),
 
-    ("Followers Shield",                 0x0135C0E0, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Followers Shield",                 0x0135C0E0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Ethereal Oak Shield",              0x01450320, DS3ItemCategory.SHIELD),
-    ("Giant Door Shield",                0x00F5F8C0, DS3ItemCategory.SHIELD), #INFUSABLE
+    ("Giant Door Shield",                0x00F5F8C0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Follower Shield",                  0x0135C0E0, DS3ItemCategory.SHIELD),
     ("Dragonhead Shield",                0x0135E7F0, DS3ItemCategory.SHIELD),
     ("Dragonhead Greatshield",           0x01452A30, DS3ItemCategory.SHIELD),
@@ -1105,6 +1122,7 @@ _dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
     ("Ordained Trousers",                0x135E2AD8, DS3ItemCategory.ARMOR),
     ("Antiquated Plain Garb",            0x11B2E408, DS3ItemCategory.ARMOR),
     ("Violet Wrappings",                 0x11B2E7F0, DS3ItemCategory.ARMOR),
+    ("Loincloth 2",                      0x11B2EBD8, DS3ItemCategory.ARMOR),
     ("Shira's Crown",                    0x11C22260, DS3ItemCategory.ARMOR),
     ("Shira's Armor",                    0x11C22648, DS3ItemCategory.ARMOR),
     ("Shira's Gloves",                   0x11C22A30, DS3ItemCategory.ARMOR),
