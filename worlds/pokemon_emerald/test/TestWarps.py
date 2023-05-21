@@ -1,9 +1,5 @@
-from argparse import Namespace
-
-from BaseClasses import MultiWorld
 from worlds.pokemon_emerald.data import Warp
 from test.TestBase import TestBase
-from worlds import AutoWorld
 
 class TestWarps(TestBase):
     def test_warps_connect_ltr(self):
