@@ -392,13 +392,14 @@ def loaded_mod_region_data(mod: str, data_type: str, world_options: StardewOptio
 
 
 def region_extend(mod: str, existing_regions: List[Region], new_regions: List[Region], world_options: StardewOptions):
-    if mod in world_options[options.Mods]:
-        to_remove = loaded_mod_region_data(mod, "Region Remover", world_options)
+    if mod not in world_options[options.Mods]:
+        return
+    to_remove = loaded_mod_region_data(mod, "Region Remover", world_options)
+    for regions_to_remove in to_remove:
         for region in existing_regions:
-            for regions_to_remove in to_remove:
-                if regions_to_remove.name == region.name:
-                    for exits_to_remove in regions_to_remove.exits:
-                        region.exits.remove(exits_to_remove)
+            if regions_to_remove.name == region.name:
+                for exits_to_remove in regions_to_remove.exits:
+                    region.exits.remove(exits_to_remove)
     for new_region in new_regions:
         existing_region = next(
             (region for region in existing_regions if region.name == new_region.name), None)
