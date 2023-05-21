@@ -3,7 +3,7 @@ from typing import Dict, Set
 
 from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names
 from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
-from .Options import dark_souls_options
+from .Options import RandomizeWeaponLevelOption, dark_souls_options
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
 from Options import Toggle
@@ -376,18 +376,24 @@ class DarkSouls3World(World):
             min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
             max_10 = self.multiworld.max_levels_in_10[self.player]
             min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
-            weapon_percentage = self.multiworld.randomize_weapon_percentage[self.player]
+            weapon_level_percentage = self.multiworld.randomize_weapon_level_percentage[self.player]
+            infusion_percentage = self.multiworld.randomize_infusion_percentage[self.player]
 
-            # Randomize some weapons upgrades
-            if self.multiworld.randomize_weapon_level[self.player] in [1, 3]:  # Options are either all or +5
-                for name in [item.name for item in item_dictionary.values() if item.category == DS3ItemCategory.WEAPON_UPGRADE_5]:
-                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapon_percentage:
-                        name_to_ds3_code[name] += self.multiworld.per_slot_randoms[self.player].randint(min_5, max_5)
+            # Randomize some weapon upgrades
+            if self.multiworld.randomize_weapon_level[self.player] != RandomizeWeaponLevelOption.option_none:
+                for item in item_dictionary.values():
+                    if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < weapon_level_percentage:
+                        if item.category == DS3ItemCategory.WEAPON_UPGRADE_5:
+                            name_to_ds3_code[item.name] += self.multiworld.per_slot_randoms[self.player].randint(min_5, max_5)
+                        elif item.category == DS3ItemCategory.WEAPON_UPGRADE_10:
+                            name_to_ds3_code[item.name] += self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
 
-            if self.multiworld.randomize_weapon_level[self.player] in [1, 2]:  # Options are either all or +10
-                for name in [item.name for item in item_dictionary.values() if item.category == DS3ItemCategory.WEAPON_UPGRADE_10]:
-                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapon_percentage:
-                        name_to_ds3_code[name] += self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
+            # Randomize some weapon infusions
+            if self.multiworld.randomize_infusion[self.player] == Toggle.option_true:
+                for item in item_dictionary.values():
+                    if item.name == "Broadsword": # TODO: Detect if a weapon can be infused here
+                        if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < infusion_percentage:
+                            name_to_ds3_code[item.name] += 100 * self.multiworld.per_slot_randoms[self.player].randint(0, 15)
 
         # Create the mandatory lists to generate the player's output file
         items_id = []
