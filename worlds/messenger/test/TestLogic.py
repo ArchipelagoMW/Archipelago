@@ -33,8 +33,6 @@ class HardLogicTest(MessengerTestBase):
             "Howling Grotto - Emerald Golem", "Howling Grotto Seal - Crushing Pits", "Howling Grotto Seal - Crushing Pits",
             # searing crags
             "Searing Crags - Astral Tea Leaves",
-            # glacial peak
-            "Glacial Peak Seal - Ice Climbers",
             # cloud ruins
             "Cloud Ruins - Acro", "Cloud Ruins Seal - Ghost Pit",
             "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room",
