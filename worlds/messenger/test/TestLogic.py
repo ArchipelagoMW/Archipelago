@@ -77,8 +77,27 @@ class HardLogicTest(MessengerTestBase):
         self.assertTrue(self.can_reach_location(special_loc))
 
 
-class ChallengingLogicTest(MessengerTestBase):
+class NoLogicTest(MessengerTestBase):
     options = {
-        "shuffle_seals": "false",
-        "logic_level": "challenging",
+        "logic_level": "oob"
     }
+
+    def testAccess(self) -> None:
+        """Test the locations with rules still require things."""
+        all_locations = [
+            "Bamboo Creek - Claustro", "Searing Crags - Key of Strength", "Elemental Skylands - Key of Symbiosis",
+            "Sunken Shrine - Key of Love", "Searing Crags - Pyro", "Underworld - Key of Chaos",
+            "Corrupted Future - Key of Courage", "Autumn Hills Seal - Spike Ball Darts",
+            "Ninja Village Seal - Tree House", "Underworld Seal - Fireball Wave", "Tower of Time Seal - Time Waster",
+            "Rescue Phantom", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water",
+            "Elemental Skylands Seal - Fire",
+        ]
+        for loc in all_locations:
+            with self.subTest("Default unreachables", location=loc):
+                self.assertFalse(self.can_reach_location(loc))
+
+    def testNoLogic(self) -> None:
+        """Test some funny locations to make sure they aren't reachable, but we can still win"""
+        self.assertEqual(self.can_reach_location("Searing Crags - Pyro"), False)
+        self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
+        self.assertBeatable(True)
