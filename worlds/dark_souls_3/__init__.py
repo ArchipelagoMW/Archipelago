@@ -184,7 +184,11 @@ class DarkSouls3World(World):
                     new_region
                 )
             else:
-                # Replace non-randomized items with events
+                # Replace non-randomized progression items with events
+                event_item = self.create_item(location.default_item)
+                if event_item.classification != ItemClassification.progression:
+                    continue
+
                 new_location = DarkSouls3Location(
                     self.player,
                     location.name,
@@ -193,7 +197,6 @@ class DarkSouls3World(World):
                     None,
                     new_region
                 )
-                event_item = self.create_item(location.default_item)
                 event_item.code = None
                 new_location.place_locked_item(event_item)
 
@@ -292,7 +295,7 @@ class DarkSouls3World(World):
         set_rule(self.multiworld.get_entrance("Go To Irithyll of the Boreal Valley", self.player),
                  lambda state: state.has("Small Doll", self.player))
         set_rule(self.multiworld.get_entrance("Go To Archdragon Peak", self.player),
-                 lambda state: state.can_reach("CKG: Soul of Consumed Oceiros", "Location", self.player))
+                 lambda state: state.can_reach("Go To Untended Graves", "Entrance", self.player))
         set_rule(self.multiworld.get_entrance("Go To Grand Archives", self.player),
                  lambda state: state.has("Grand Archives Key", self.player))
         set_rule(self.multiworld.get_entrance("Go To Kiln of the First Flame", self.player),
@@ -321,30 +324,39 @@ class DarkSouls3World(World):
                          lambda state: state.has("Small Doll", self.player))
 
         # Define the access rules to some specific locations
-        set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
-                 lambda state: state.has("Basin of Vows", self.player))
-        set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
-                 lambda state: state.has("Cell Key", self.player))
-        set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
-                 lambda state: state.has("Cell Key", self.player))
-        set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
-                 lambda state: state.has("Jailbreaker's Key", self.player))
-        set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
-                 lambda state: state.has("Jailer's Key Ring", self.player))
-        set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
-                 lambda state: state.has("Old Cell Key", self.player))
-        set_rule(self.multiworld.get_location("ID: Karla's Ashes", self.player),
-                 lambda state: state.has("Jailer's Key Ring", self.player))
         set_rule(self.multiworld.get_location("PC: Cinders of a Lord - Yhorm the Giant", self.player),
                  lambda state: state.has("Storm Ruler", self.player))
-        set_rule(self.multiworld.get_location("PC: Soul of Yhorm the Giant", self.player),
-                 lambda state: state.has("Storm Ruler", self.player))
 
-        black_hand_gotthard_corpse_rule = lambda state: \
+        if self.multiworld.enable_ring_locations[self.player] == Toggle.option_true:
+            set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
+                     lambda state: state.has("Cell Key", self.player))
+            set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
+                     lambda state: state.has("Jailbreaker's Key", self.player))
+            set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
+                     lambda state: state.has("Old Cell Key", self.player))
+
+        if self.multiworld.enable_npc_locations[self.player] == Toggle.option_true:
+            set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
+                     lambda state: state.has("Cell Key", self.player))
+            set_rule(self.multiworld.get_location("ID: Karla's Ashes", self.player),
+                     lambda state: state.has("Jailer's Key Ring", self.player))
+
+        if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
+            set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
+                     lambda state: state.has("Jailer's Key Ring", self.player))
+            set_rule(self.multiworld.get_location("PC: Soul of Yhorm the Giant", self.player),
+                     lambda state: state.has("Storm Ruler", self.player))
+            set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
+                     lambda state: state.has("Basin of Vows", self.player))
+
+        gotthard_corpse_rule = lambda state: \
             (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
              state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player))
-        set_rule(self.multiworld.get_location("LC: Grand Archives Key", self.player), black_hand_gotthard_corpse_rule)
-        set_rule(self.multiworld.get_location("LC: Gotthard Twinswords", self.player), black_hand_gotthard_corpse_rule)
+
+        set_rule(self.multiworld.get_location("LC: Grand Archives Key", self.player), gotthard_corpse_rule)
+
+        if self.multiworld.enable_weapon_locations[self.player] == Toggle.option_true:
+            set_rule(self.multiworld.get_location("LC: Gotthard Twinswords", self.player), gotthard_corpse_rule)
 
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
@@ -364,17 +376,17 @@ class DarkSouls3World(World):
             min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
             max_10 = self.multiworld.max_levels_in_10[self.player]
             min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
-            weapons_percentage = self.multiworld.randomize_weapon_percentage[self.player]
+            weapon_percentage = self.multiworld.randomize_weapon_percentage[self.player]
 
             # Randomize some weapons upgrades
-            if self.multiworld.randomize_weapons_level[self.player] in [1, 3]:  # Options are either all or +5
+            if self.multiworld.randomize_weapon_level[self.player] in [1, 3]:  # Options are either all or +5
                 for name in [item.name for item in item_dictionary.values() if item.category == DS3ItemCategory.WEAPON_UPGRADE_5]:
-                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapons_percentage:
+                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapon_percentage:
                         name_to_ds3_code[name] += self.multiworld.per_slot_randoms[self.player].randint(min_5, max_5)
 
-            if self.multiworld.randomize_weapons_level[self.player] in [1, 2]:  # Options are either all or +10
+            if self.multiworld.randomize_weapon_level[self.player] in [1, 2]:  # Options are either all or +10
                 for name in [item.name for item in item_dictionary.values() if item.category == DS3ItemCategory.WEAPON_UPGRADE_10]:
-                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapons_percentage:
+                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapon_percentage:
                         name_to_ds3_code[name] += self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
 
         # Create the mandatory lists to generate the player's output file
@@ -384,6 +396,10 @@ class DarkSouls3World(World):
         locations_address = []
         locations_target = []
         for location in self.multiworld.get_filled_locations():
+            # Skip events
+            if location.item.code is None:
+                continue
+
             if location.item.player == self.player:
                 items_id.append(location.item.code)
                 items_address.append(name_to_ds3_code[location.item.name])
