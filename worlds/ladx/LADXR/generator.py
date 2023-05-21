@@ -54,8 +54,10 @@ from .patches import multiworld as _
 from .patches import tradeSequence as _
 from . import hints
 
-from .locations.keyLocation import KeyLocation
 from .patches import bank34
+from .patches.aesthetics import rgb_to_bin, bin_to_rgb
+
+from .locations.keyLocation import KeyLocation
 
 from ..Options import TrendyGame, Palette, MusicChangeCondition
 
@@ -63,9 +65,6 @@ from ..Options import TrendyGame, Palette, MusicChangeCondition
 # Function to generate a final rom, this patches the rom with all required patches
 def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
     rom_patches = []
-
-    if ap_settings["ap_title_screen"]:
-        rom_patches.append(pkgutil.get_data(__name__, "patches/title_screen.bdiff4"))
 
     rom = ROMWithTables(args.input_filename, rom_patches)
     rom.player_names = player_names
@@ -371,7 +370,6 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
                 if x > max:
                     return max
                 return x
-            from patches.aesthetics import rgb_to_bin, bin_to_rgb
 
             for address in range(start, end, 2):
                 packed = (rom.banks[bank][address + 1] << 8) | rom.banks[bank][address]
@@ -416,9 +414,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     assert(len(auth) == 12)
     rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(auth))
 
-
     for pymod in pymods:
         pymod.postPatch(rom)
-
 
     return rom

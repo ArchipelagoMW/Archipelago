@@ -127,6 +127,7 @@ class AreaRandomization(Choice):
     option_off = 0
     option_light = 1
     option_full = 2
+    alias_true = 2
     default = 0
 
 class AreaLayout(Toggle):
@@ -135,7 +136,7 @@ class AreaLayout(Toggle):
 
 class DoorsColorsRando(Toggle):
     """Randomize the color of Red/Green/Yellow doors. Add four new type of doors which require Ice/Wave/Spazer/Plasma
-    beams to open them."""
+    beams to open them. When enabled, will force those beams as local items."""
     display_name = "Doors Colors Rando"
 
 class AllowGreyDoors(Toggle):

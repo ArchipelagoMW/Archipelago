@@ -1,7 +1,7 @@
 local socket = require("socket")
 local json = require('json')
 local math = require('math')
-
+require("common")
 local STATE_OK = "Ok"
 local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
 local STATE_INITIAL_CONNECTION_MADE = "Initial Connection Made"
@@ -32,9 +32,6 @@ local curstate =  STATE_UNINITIALIZED
 local gbSocket = nil
 local frame = 0
 
-local u8 = nil
-local wU8 = nil
-local u16
 local compat = nil
 
 local function defineMemoryFunctions()
@@ -55,68 +52,42 @@ function uRange(address, bytes)
 	return data
 end
 
-
-function table.empty (self)
-    for _, _ in pairs(self) do
-        return false
-    end
-    return true
-end
-
-function slice (tbl, s, e)
-    local pos, new = 1, {}
-    for i = s + 1, e do
-        new[pos] = tbl[i]
-        pos = pos + 1
-    end
-    return new
-end
-
-function difference(a, b)
-    local aa = {}
-    for k,v in pairs(a) do aa[v]=true end
-    for k,v in pairs(b) do aa[v]=nil end
-    local ret = {}
-    local n = 0
-    for k,v in pairs(a) do
-        if aa[v] then n=n+1 ret[n]=v end
-    end
-    return ret
-end
-
 function generateLocationsChecked()
 	memDomain.wram()
 	events = uRange(EventFlagAddress, 0x140)
 	missables = uRange(MissableAddress, 0x20)
 	hiddenitems = uRange(HiddenItemsAddress, 0x0E)
+	rod = {u8(RodAddress)}
 	dexsanity = uRange(DexSanityAddress, 19)
-	rod = u8(RodAddress)
+	
 
 	data = {}
 
-	table.foreach(events, function(k, v) table.insert(data, v) end)
-	table.foreach(missables, function(k, v) table.insert(data, v) end)
-	table.foreach(hiddenitems, function(k, v) table.insert(data, v) end)
-	table.insert(data, rod)
+    categories = {events, missables, hiddenitems, rod}
+    if compat > 1 then
+        table.insert(categories, dexsanity)
+    end
+    for _, category in ipairs(categories) do
+        for _, v in ipairs(category) do 
+            table.insert(data, v) 
+        end
+    end
 
- 	if compat > 1 then
-	    table.foreach(dexsanity, function(k, v) table.insert(data, v) end)
-     end
     return data
 end
 
 local function arrayEqual(a1, a2)
-  if #a1 ~= #a2 then
-    return false
-  end
-
-  for i, v in ipairs(a1) do
-    if v ~= a2[i] then
+    if #a1 ~= #a2 then
       return false
     end
-  end
-
-  return true
+  
+    for i, v in ipairs(a1) do
+      if v ~= a2[i] then
+        return false
+      end
+    end
+  
+    return true
 end
 
 function receive()
@@ -196,8 +167,7 @@ function receive()
 end
 
 function main()
-    if (is23Or24Or25 or is26To28) == false then
-        print("Must use a version of bizhawk 2.3.1 or higher")
+    if not checkBizhawkVersion() then
         return
     end
     server, error = socket.bind('localhost', 17242)
