@@ -1,5 +1,4 @@
-from dataclasses import dataclass, field
-from enum import IntFlag
+
 from random import Random
 from typing import Iterable, Dict, Protocol, Optional, List, Tuple
 
@@ -7,53 +6,14 @@ from BaseClasses import Region, Entrance
 from . import options
 from .data.entrance_data import SVEntrance
 from .data.region_data import SVRegion
+from .general_classes import RegionData, ConnectionData, RandomizationFlag
 from .options import StardewOptions
-from .mods.mod_regions import ModDataList, RegionRemoverData, ConnectionRemoverData
+from .mods.mod_regions import ModDataList
 
-connector_keyword = " to "
 
 class RegionFactory(Protocol):
     def __call__(self, name: str, regions: Iterable[str]) -> Region:
         raise NotImplementedError
-
-
-class RandomizationFlag(IntFlag):
-    NOT_RANDOMIZED = 0b0
-    PELICAN_TOWN = 0b11111
-    NON_PROGRESSION = 0b11110
-    BUILDINGS = 0b11100
-    EVERYTHING = 0b11000
-    CHAOS = 0b10000
-    GINGER_ISLAND = 0b0100000
-    LEAD_TO_OPEN_AREA = 0b1000000
-
-
-@dataclass(frozen=True)
-class RegionData:
-    name: str
-    exits: List[str] = field(default_factory=list)
-
-
-@dataclass(frozen=True)
-class ConnectionData:
-    name: str
-    destination: str
-    origin: Optional[str] = None
-    reverse: Optional[str] = None
-    flag: RandomizationFlag = RandomizationFlag.NOT_RANDOMIZED
-
-    def __post_init__(self):
-        for region in stardew_valley_regions:
-            if self.name in region.exits:
-                super().__setattr__("origin", region.name)
-                break
-        if connector_keyword in self.name:
-            origin, destination = self.name.split(connector_keyword)
-            if self.reverse is None:
-                super().__setattr__("reverse", f"{destination}{connector_keyword}{origin}")
-
-    def inverted(self):
-        return ConnectionData(self.reverse, self.origin, self.destination, self.name, self.flag)
 
 
 stardew_valley_regions = [
@@ -354,83 +314,32 @@ mandatory_connections = [
 ]
 
 
-# Attempt to implement remote loading of modded data if relevant (to avoid circular references and clutter)
-def loaded_mod_region_data(mod: str, data_type: str, world_options: StardewOptions):
-    loaded_mod_data = []
-    if mod in world_options[options.Mods]:
-        for mod_data in ModDataList:
-            if (mod_data.mod_name == mod) & (data_type == "Regions"):
-                for region in mod_data.regions:
-                    if not mod_data.regions[region]:
-                        loaded_mod_data.append(RegionData(region))
-                        continue
-                    loaded_mod_data.append(RegionData(region, mod_data.regions[region]))
-            if (mod_data.mod_name == mod) & (data_type == "Connections"):
-                for entrance in mod_data.connections:
-                    if mod_data.flags[entrance] == "NON_RANDOMIZED":
-                        loaded_mod_data.append(ConnectionData(entrance, mod_data.connections[entrance],
-                                                              flag=RandomizationFlag.NOT_RANDOMIZED))
-                    if mod_data.flags[entrance] == "NON_PROGRESSION":
-                        loaded_mod_data.append(ConnectionData(entrance, mod_data.connections[entrance],
-                                                              flag=RandomizationFlag.NON_PROGRESSION))
-                    if mod_data.flags[entrance] == "PELICAN_TOWN":
-                        loaded_mod_data.append(ConnectionData(entrance, mod_data.connections[entrance],
-                                                              flag=RandomizationFlag.PELICAN_TOWN))
-                    if mod_data.flags[entrance] == "BUILDINGS":
-                        loaded_mod_data.append(ConnectionData(entrance, mod_data.connections[entrance],
-                                                              flag=RandomizationFlag.BUILDINGS))
-                    if mod_data.flags[entrance] == "EVERYTHING":
-                        loaded_mod_data.append(ConnectionData(entrance, mod_data.connections[entrance],
-                                                              flag=RandomizationFlag.EVERYTHING))
-            if (mod_data.mod_name == mod) & (data_type == "Region Remover"):
-                for name in mod_data.region_remover:
-                    loaded_mod_data.append(RegionRemoverData(name, mod_data.region_remover[name]))
-            if (mod_data.mod_name == mod) & (data_type == "Connection Remover"):
-                for name in mod_data.connection_remover:
-                    loaded_mod_data.append(ConnectionRemoverData(name, mod_data.region_remover[name]))
-    return loaded_mod_data
-
-
-def region_extend(mod: str, existing_regions: List[Region], new_regions: List[Region], world_options: StardewOptions):
-    if mod not in world_options[options.Mods]:
-        return
-    to_remove = loaded_mod_region_data(mod, "Region Remover", world_options)
-    for regions_to_remove in to_remove:
-        for region in existing_regions:
-            if regions_to_remove.name == region.name:
-                for exits_to_remove in regions_to_remove.exits:
-                    region.exits.remove(exits_to_remove)
-    for new_region in new_regions:
-        existing_region = next(
-            (region for region in existing_regions if region.name == new_region.name), None)
-        if existing_region:
-            if all(exits in existing_region.exits for exits in new_region.exits):
-                continue
-            existing_region.exits.extend(new_region.exits)
+def create_final_regions(world_options: StardewOptions) -> List[RegionData]:
+    vanilla_regions = stardew_valley_regions
+    if world_options[options.Mods] is None:
+        return vanilla_regions
+    for mod in world_options[options.Mods]:
+        if mod not in ModDataList:
             continue
+        for mod_region in ModDataList[mod].regions:
+            existing_region = next(
+                (region for region in vanilla_regions if region.name == mod_region.name), None)
+            if existing_region:
+                if all(exits in existing_region.exits for exits in mod_region.exits):
+                    continue
+                existing_region.exits.extend(mod_region.exits)
+                continue
 
-        existing_regions.append(new_region)
-
-
-def connection_patcher(mod: str, old_connections: List[ConnectionData], world_options: StardewOptions):
-    if mod in world_options[options.Mods]:
-        to_remove = loaded_mod_region_data(mod, "Connection Remover", world_options)
-        for connection in old_connections:
-            for connections_to_remove in to_remove:
-                if connections_to_remove.name == connection.name:
-                    old_connections.remove(connection)
-        old_connections += loaded_mod_region_data(mod, "Connections", world_options)
+            vanilla_regions.append(mod_region)
+    final_regions = vanilla_regions
+    return final_regions
 
 
 def create_regions(region_factory: RegionFactory, random: Random, world_options: StardewOptions) -> Tuple[
     Iterable[Region], Dict[str, str]]:
-    for mods in world_options[options.Mods]:
-        if not loaded_mod_region_data(mods, "Regions", world_options):
-            continue
-        loaded_region = loaded_mod_region_data(mods, "Regions", world_options)
-        region_extend(mods, stardew_valley_regions, loaded_region, world_options)
+    final_regions = create_final_regions(world_options)
     regions: Dict[str: Region] = {region.name: region_factory(region.name, region.exits) for region in
-                                  stardew_valley_regions}
+                                  final_regions}
     entrances: Dict[str: Entrance] = {entrance.name: entrance
                                       for region in regions.values()
                                       for entrance in region.exits}
@@ -446,27 +355,30 @@ def create_regions(region_factory: RegionFactory, random: Random, world_options:
 
 def randomize_connections(random: Random, world_options: StardewOptions) -> Tuple[List[ConnectionData], Dict[str, str]]:
     connections_to_randomize = []
+    final_connections = mandatory_connections
     if world_options[options.Mods] is not None:
-        for mods in world_options[options.Mods]:
-            connection_patcher(mods, mandatory_connections, world_options)
+        for mod in world_options[options.Mods]:
+            if mod not in ModDataList:
+                continue
+            final_connections.extend(ModDataList[mod].connections)
     if world_options[options.EntranceRandomization] == options.EntranceRandomization.option_pelican_town:
-        connections_to_randomize = [connection for connection in mandatory_connections if
+        connections_to_randomize = [connection for connection in final_connections if
                                     RandomizationFlag.PELICAN_TOWN in connection.flag]
     elif world_options[options.EntranceRandomization] == options.EntranceRandomization.option_non_progression:
-        connections_to_randomize = [connection for connection in mandatory_connections if
+        connections_to_randomize = [connection for connection in final_connections if
                                     RandomizationFlag.NON_PROGRESSION in connection.flag]
     elif world_options[options.EntranceRandomization] == options.EntranceRandomization.option_buildings:
-        connections_to_randomize = [connection for connection in mandatory_connections if
+        connections_to_randomize = [connection for connection in final_connections if
                                     RandomizationFlag.BUILDINGS in connection.flag]
     elif world_options[options.EntranceRandomization] == options.EntranceRandomization.option_chaos:
-        connections_to_randomize = [connection for connection in mandatory_connections if
+        connections_to_randomize = [connection for connection in final_connections if
                                     RandomizationFlag.BUILDINGS in connection.flag]
         # On Chaos, we just add the connections to randomize, unshuffled, and the client does it every day
         randomized_data = {}
         for connection in connections_to_randomize:
             randomized_data[connection.name] = connection.name
             randomized_data[connection.reverse] = connection.reverse
-        return mandatory_connections, randomized_data
+        return final_connections, randomized_data
     exclude_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true
     if exclude_island:
         connections_to_randomize = [connection for connection in connections_to_randomize if
@@ -480,7 +392,7 @@ def randomize_connections(random: Random, world_options: StardewOptions) -> Tupl
     randomized_data = {}
 
     randomize_chosen_connections(connections_to_randomize, destination_pool, randomized_connections, randomized_data)
-    add_non_randomized_connections(connections_to_randomize, randomized_connections)
+    add_non_randomized_connections(final_connections, connections_to_randomize, randomized_connections)
 
     return randomized_connections, randomized_data
 
@@ -502,8 +414,8 @@ def create_randomized_data(connection, destination, randomized_data):
     randomized_data[destination.reverse] = connection.reverse
 
 
-def add_non_randomized_connections(connections_to_randomize, randomized_connections):
-    for connection in mandatory_connections:
+def add_non_randomized_connections(connections, connections_to_randomize, randomized_connections):
+    for connection in connections:
         if connection in connections_to_randomize:
             continue
         randomized_connections.append(connection)
