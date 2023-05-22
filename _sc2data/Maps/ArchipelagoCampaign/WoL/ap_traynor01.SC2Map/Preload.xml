@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Asset path="assets\textures\btn-command-move.dds" Type="Image"/>
+<Asset path="assets\textures\btn-command-attack.dds" Type="Image"/>
+<Asset path="assets\textures\ui_tutorial_cameraicon.dds" Type="Image"/>
+<Asset path="assets\textures\btn-tips-tutorial.dds" Type="Image"/>
+<Achievement id="Anniversary_TRaynor01"/>
+<Achievement id="TRaynor01_1"/>
+<Achievement id="TRaynor01_2"/>
+<Achievement id="TRaynor01_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="PathingBlocker1x1Doodad"/>
+<Actor id="Checkpoint"/>
+<Actor id="BillboardTall" Variations="1"/>
+<Actor id="BirdsTarsonis"/>
+<Actor id="BloodSplats" Variations="0,1,2,3,4,5"/>
+<Actor id="BraxisAlphaBarrels" Variations="0,1,2"/>
+<Actor id="BubbasFuelStop"/>
+<Actor id="BullhornLights" Variations="1"/>
+<Actor id="Bush" Variations="4,6"/>
+<Actor id="ChainLinkFenceDiagonal" Variations="0,1,2,3"/>
+<Actor id="ChainLinkFencePost"/>
+<Actor id="ChainLinkFenceStraight" Variations="1"/>
+<Actor id="Crate" Variations="0,1,2,3,5"/>
+<Actor id="Decal" Variations="1,3,21,23,24,28"/>
+<Actor id="Dumpster" Variations="0,2"/>
+<Actor id="FireMedium"/>
+<Actor id="Garage" Variations="0,1"/>
+<Actor id="GasStationAngled"/>
+<Actor id="MarSaraBones" Variations="1,2,3,4"/>
+<Actor id="MarSaraBridgeDestroyed"/>
+<Actor id="MarSaraCactus" Variations="0,1,2,3,4"/>
+<Actor id="MarSaraCliffDoodadLarge" Variations="2"/>
+<Actor id="MarSaraCurtain" Variations="0,1,2,3"/>
+<Actor id="MarSaraGroundProps" Variations="0,1,2"/>
+<Actor id="MarSaraMineCart"/>
+<Actor id="MarSaraSkeletonLarge" Variations="0,1"/>
+<Actor id="MarSaraSkeletonSmall" Variations="0,1"/>
+<Actor id="MarSaraTree" Variations="0,1,2,3,4,5"/>
+<Actor id="MarSaraTreeDead" Variations="0,1,2,4,5"/>
+<Actor id="MarSaraTunnel"/>
+<Actor id="NewFolsomSandbags" Variations="0,4,5"/>
+<Actor id="Outhouse" Variations="0,2"/>
+<Actor id="PipesCap" Variations="0,1"/>
+<Actor id="PipesCorner" Variations="3"/>
+<Actor id="PipesCorner45" Variations="1"/>
+<Actor id="PipesLong" Variations="0,1,2"/>
+<Actor id="PipesLong45" Variations="0"/>
+<Actor id="PipesShort45" Variations="0"/>
+<Actor id="PipesStack" Variations="0,1"/>
+<Actor id="PowerLine" Variations="1,2"/>
+<Actor id="Rock" Variations="0,1,2,3,4,5,6,7,8,9,10"/>
+<Actor id="RockFormationLarge" Variations="0,1,2,3,4,5"/>
+<Actor id="RockLarge" Variations="0,1,2,3,4,5,7,9,17"/>
+<Actor id="RockSmall" Variations="0,1,2,3,4,5,6,7,8,9,10"/>
+<Actor id="Searchlight" Variations="1"/>
+<Actor id="SignsConstruction" Variations="12"/>
+<Actor id="SignsDirectional" Variations="11"/>
+<Actor id="SignsIcons" Variations="8"/>
+<Actor id="SignsWarning" Variations="0,19,21"/>
+<Actor id="SmokePillarsTall"/>
+<Actor id="SpacePlatformBarrier" Variations="0,1"/>
+<Actor id="SpacePlatformBillboard" Variations="1"/>
+<Actor id="SpacePlatformCautionLights" Variations="1"/>
+<Actor id="SpacePlatformRadar" Variations="0,1"/>
+<Actor id="SpacePlatformSignLarge" Variations="12"/>
+<Actor id="StoreFrontCityProps" Variations="2"/>
+<Actor id="Streetlight" Variations="0,2"/>
+<Actor id="TrafficSignalBroken" Variations="2"/>
+<Actor id="TRaynor02Crane" Variations="0,2"/>
+<Actor id="TRaynor02CranePart2x2" Variations="2,3,4"/>
+<Actor id="TRaynor02CranePart3x3" Variations="1,2"/>
+<Actor id="Vines" Variations="0,1,2,3"/>
+<Actor id="WaterTank" Variations="0,1,2"/>
+<Actor id="WaterTankTall" Variations="0,1"/>
+<Actor id="WindRough"/>
+<Actor id="WindEmitterBrownMedium"/>
+<Actor id="WreckedSandbags" Variations="0,1,2"/>
+<Actor id="ColonistVehicleAbandoned" Variations="0,3"/>
+<Actor id="MarSaraFoliage" Variations="2"/>
+<Actor id="AnimalCorpse" Variations="1,2,3,4,5,6,7,8"/>
+<Actor id="Bodybag" Variations="0,1,2,3"/>
+<Actor id="KillwallLarge"/>
+<Actor id="CivilianCars" Variations="0,1,3,4"/>
+<Actor id="KorhalFlag" Variations="2"/>
+<Actor id="ColonistHutDoodad" Variations="0,1,4,5,7"/>
+<Actor id="ColonistHutBurntOut" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="TalkIcon"/>
+<Actor id="ColonistSandbagsCarried" Variations="0,2"/>
+<Actor id="BillboardPropaganda" Variations="1,2,3,4,6,7,8,9,10"/>
+<Actor id="ColonistCorpse" Variations="0,2,7,8,9,12,16,17"/>
+<Actor id="DeadVandals" Variations="2"/>
+<Actor id="KorhalPodium"/>
+<Actor id="TRaynor01RadarDish"/>
+<Actor id="TruckTanker"/>
+<Actor id="TRaynorDumpTruck"/>
+<Actor id="TruckFlatbed"/>
+<Actor id="TruckSemi"/>
+<Behavior id="CritterWanderLeashShort"/>
+<Behavior id="CivilianEnableWeapon"/>
+<Behavior id="Run"/>
+<Model id="PingObjective"/>
+<Model id="MarineAttackLaunch"/>
+<Model id="TalkIcon"/>
+<Model id="BriefingUnitSelectLargeRed"/>
+<Model id="BriefingUnitSelectRed"/>
+<Model id="BriefingUnitSelectRedSmall"/>
+<Model id="BraxisAlphaSkyBox"/>
+<Model id="MarSaraSkyBox"/>
+<Sound id="Marine_AttackLaunch" Variations="6"/>
+<Sound id="Dog_Bark"/>
+<Sound id="Dog_Howl"/>
+<Sound id="UI_TerranKlaxonAlert" Variations="0"/>
+<Sound id="TUIWarningPing" Variations="0"/>
+<Sound id="Emitter_CrowdGasp"/>
+<Sound id="Emitter_CrowdSmallCheering"/>
+<Sound id="Emitter_CrowdSmallDiscussion"/>
+<Sound id="Emitter_Raynor01Shutters"/>
+<Sound id="TRaynor01BriefingRaynor00006"/>
+<Sound id="TRaynor01BriefingAdjutant00010"/>
+<Sound id="TRaynor01BriefingAdjutant00011"/>
+<Sound id="TRaynor01BriefingRaynor00012"/>
+<Sound id="TRaynor01BriefingAdjutant00013"/>
+<Sound id="TRaynor01BriefingRaynor00014"/>
+<Sound id="TRaynor01BriefingRaynor00015"/>
+<Sound id="TRaynor03Marine500016" Variations="0"/>
+<Sound id="TRaynor01Civilian4WhitewGoggles00005"/>
+<Sound id="TRaynor01Arcturus00007" Variations="0"/>
+<Sound id="TRaynor01Adjutant00010"/>
+<Sound id="TRaynor01Raynor00011"/>
+<Sound id="TRaynor01Arcturus00012" Variations="0"/>
+<Sound id="TRaynor01Arcturus00013" Variations="0"/>
+<Sound id="TRaynor01Arcturus00018" Variations="0"/>
+<Sound id="TRaynor01Adjutant00019" Variations="0"/>
+<Sound id="TRaynor01DominionMarine100020" Variations="0"/>
+<Sound id="TRaynor01Arcturus00022" Variations="0"/>
+<Sound id="TRaynor01Adjutant00023" Variations="0"/>
+<Sound id="TRaynor01Arcturus00025"/>
+<Sound id="TRaynor01Civilian600026" Variations="0"/>
+<Sound id="TRaynor01DominionMarine7Generic00027" Variations="0"/>
+<Sound id="TRaynor01Raynor00028" Variations="0"/>
+<Sound id="TRaynor01Raynor00029"/>
+<Sound id="TRaynor01Raynor00030" Variations="0"/>
+<Sound id="TRaynor01Arcturus00031" Variations="0"/>
+<Sound id="TRaynor01CivilianFemale500033" Variations="0"/>
+<Sound id="TRaynor01DominionMarine700036" Variations="0"/>
+<Sound id="TRaynor01Raynor00037"/>
+<Sound id="TRaynor01Raynor00038"/>
+<Sound id="TRaynor01Raynor00042" Variations="0"/>
+<Sound id="TRaynor01Raynor00043" Variations="0"/>
+<Sound id="TRaynor01Raynor00044"/>
+<Sound id="TRaynor01DominionMarine900046" Variations="0"/>
+<Sound id="TRaynor01Civilian200048"/>
+<Sound id="TRaynor01Civilian200049" Variations="0"/>
+<Sound id="TRaynor01CivilianFemale200050"/>
+<Sound id="TRaynor01Raynor00051"/>
+<Sound id="TRaynor01Raynor00052" Variations="0"/>
+<Sound id="TRaynor01CivilianFemale100053" Variations="0"/>
+<Sound id="TRaynor01DominionOfficer100054"/>
+<Sound id="TRaynor01Civilian700056"/>
+<Sound id="TRaynor01Civilian800061"/>
+<Sound id="TRaynor01Raynor00062" Variations="0"/>
+<Soundtrack id="TRaynor01MusicEventB"/>
+<Soundtrack id="TRaynor01MusicEventA"/>
+<Soundtrack id="TRaynor01MusicIntro"/>
+<Soundtrack id="TRaynor01MusicMain"/>
+<Soundtrack id="TRaynor01MusicOutro"/>
+<Terrain id="MarSara"/>
+<Unit id="VikingAssault"/>
+<Unit id="VikingFighter"/>
+<Unit id="Marine"/>
+<Unit id="Raven"/>
+<Unit id="Dog" Variations="0"/>
+<Unit id="Cow"/>
+<Unit id="MengskStatueAlone"/>
+<Unit id="MengskStatue"/>
+<Unit id="Firebat"/>
+<Unit id="Raynor01"/>
+<Unit id="SpecialOpsDropship"/>
+<Unit id="TransportTruck"/>
+<Unit id="Civilian" Variations="0,1,2,3"/>
+<Unit id="CivilianFemale" Variations="1,2"/>
+<Unit id="LogisticsHeadquarters"/>
+<Unit id="MengskHologramBillboard"/>
+<Unit id="ColonistTransport"/>
+</Preload>
