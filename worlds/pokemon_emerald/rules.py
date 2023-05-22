@@ -43,18 +43,6 @@ def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
     num_gym_leaders_defeated += 1 if state.has("EVENT_DEFEAT_JUAN", player) else 0
     return num_gym_leaders_defeated >= n
 
-def _has_at_least_n_badges(state: CollectionState, player: int, n: int):
-    num_badges = 0
-    num_badges += 1 if state.has("Stone Badge", player) else 0
-    num_badges += 1 if state.has("Knuckle Badge", player) else 0
-    num_badges += 1 if state.has("Dynamo Badge", player) else 0
-    num_badges += 1 if state.has("Heat Badge", player) else 0
-    num_badges += 1 if state.has("Balance Badge", player) else 0
-    num_badges += 1 if state.has("Feather Badge", player) else 0
-    num_badges += 1 if state.has("Mind Badge", player) else 0
-    num_badges += 1 if state.has("Rain Badge", player) else 0
-    return num_badges >= n
-
 # Rules are organized by town/route/dungeon and ordered approximately
 # by when you would first reach that place in a vanilla playthrough.
 def set_default_rules(multiworld: MultiWorld, player: int):
@@ -158,11 +146,11 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     if multiworld.norman_requirement[player].value == NormanRequirement.option_badges:
         set_rule(
             multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3", player),
-            lambda state: _has_at_least_n_badges(state, player, multiworld.norman_count[player].value)
+            lambda state: state.has_group("Badge", player, multiworld.norman_count[player].value)
         )
         set_rule(
             multiworld.get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6", player),
-            lambda state: _has_at_least_n_badges(state, player, multiworld.norman_count[player].value)
+            lambda state: state.has_group("Badge", player, multiworld.norman_count[player].value)
         )
     else:
         set_rule(
@@ -1081,7 +1069,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     if multiworld.elite_four_requirement[player].value == EliteFourRequirement.option_badges:
         set_rule(
             multiworld.get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS", player),
-            lambda state: _has_at_least_n_badges(state, player, multiworld.elite_four_count[player].value)
+            lambda state: state.has_group("Badge", player, multiworld.elite_four_count[player].value)
         )
     else:
         set_rule(
