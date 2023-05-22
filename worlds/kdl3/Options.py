@@ -1,4 +1,4 @@
-from Options import Option, DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses
+from Options import Option, DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle
 import typing
 from .Names import LocationName
 
@@ -88,9 +88,16 @@ class BossShuffle(PlandoBosses):
     option_singularity = 3
 
 
+class StrictBosses(DefaultOnToggle):
+    """
+    If enabled, one will not be able to move onto the next world until the previous world's boss has been purified.
+    """
+    display_name = "Strict Bosses"
+
+
 class BossRequirementRandom(Toggle):
     """
-    If enabled, boss purification will unlock in any order, not sequentially.
+    If enabled, boss purification will unlock in any order, requiring a random amount of Heart Stars.
     """
     display_name = "Randomize Purification Order"
 
@@ -203,6 +210,7 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "jumping_target": JumpingTarget,
     "stage_shuffle": LevelShuffle,
     "boss_shuffle": BossShuffle,
+    "strict_bosses": StrictBosses,
     "boss_requirement_random": BossRequirementRandom,
     "consumables": ConsumableChecks,
     "kirby_flavor_preset": KirbyFlavorPreset,

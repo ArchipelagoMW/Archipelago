@@ -256,7 +256,7 @@ class KDL3SNIClient(SNIClient):
         # consumable status
         consumables = await snes_read(ctx, KDL3_CONSUMABLES, 1920)
         for consumable in consumable_addrs:
-            # TODO see if this can be sped up in any way
+            # TODO: see if this can be sped up in any way
             if consumables[consumable_addrs[consumable]] == 0x01:
                 loc_id = 0x770300 + consumable
                 if loc_id not in ctx.checked_locations:

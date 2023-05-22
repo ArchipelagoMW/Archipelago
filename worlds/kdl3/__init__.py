@@ -88,13 +88,15 @@ class KDL3World(World):
         self.required_heart_stars[self.player] = required_heart_stars
         # handle boss requirements here
         requirements = [required_heart_stars]
-        for i in range(4):
-            requirements.append(self.multiworld.per_slot_randoms[self.player].randint(
-                min(3, required_heart_stars), required_heart_stars))
         if self.multiworld.boss_requirement_random[self.player].value:
+            for i in range(4):
+                requirements.append(self.multiworld.per_slot_randoms[self.player].randint(
+                    min(3, required_heart_stars), required_heart_stars))
             self.multiworld.per_slot_randoms[self.player].shuffle(requirements)
         else:
-            requirements.sort()
+            quotient = required_heart_stars // 5  # since we set the last manually, we can afford imperfect rounding
+            for i in range(1, 5):
+                requirements.insert(i - 1, quotient * i)
         self.boss_requirements[self.player] = requirements
         itempool.extend([self.create_item("Heart Star") for _ in range(required_heart_stars)])
         itempool.extend([self.create_item(self.get_filler_item_name())
@@ -310,8 +312,19 @@ class KDL3World(World):
                                and state.can_reach(location_table[self.player_levels[self.player][5][5]], "Location",
                                                    self.player))
 
+        if self.multiworld.strict_bosses[self.player]:
+            add_rule(self.multiworld.get_entrance("To Level 2", self.player),
+                     lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][0]))
+            add_rule(self.multiworld.get_entrance("To Level 3", self.player),
+                     lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][1]))
+            add_rule(self.multiworld.get_entrance("To Level 4", self.player),
+                     lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][2]))
+            add_rule(self.multiworld.get_entrance("To Level 5", self.player),
+                     lambda state: state.has("Heart Star", self.player, self.boss_requirements[self.player][3]))
+
         set_rule(self.multiworld.get_entrance("To Level 6", self.player),
                  lambda state: state.has("Heart Star", self.player, self.required_heart_stars[self.player]))
+
         if self.multiworld.goal_speed[self.player] == 0:
             add_rule(self.multiworld.get_entrance("To Level 6", self.player),
                      lambda state: state.has("Level 1 Boss Purified", self.player)
