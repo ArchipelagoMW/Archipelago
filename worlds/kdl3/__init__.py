@@ -1,3 +1,5 @@
+import logging
+
 from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule
@@ -15,6 +17,7 @@ import math
 import threading
 import base64
 
+logger = logging.getLogger("Kirby's Dream Land 3")
 
 class KDL3WebWorld(WebWorld):
     theme = "partyTime"
@@ -72,6 +75,13 @@ class KDL3World(World):
         return self.multiworld.random.choices(list(filler_item_weights.keys()),
                                               weights=list(filler_item_weights.values()))[0]
 
+    def generate_early(self) -> None:
+        # just check for invalid option combos here
+        if self.multiworld.strict_bosses[self.player] and self.multiworld.boss_requirement_random[self.player]:
+            logger.warning(f"boss_requirement_random forced to false for player {self.player}" +
+                           f" because of strict_bosses set to true")
+            self.multiworld.boss_requirement_random[self.player].value = False
+
     def create_items(self) -> None:
         itempool = []
         itempool.extend([self.create_item(name) for name in copy_ability_table])
@@ -92,7 +102,10 @@ class KDL3World(World):
             for i in range(4):
                 requirements.append(self.multiworld.per_slot_randoms[self.player].randint(
                     min(3, required_heart_stars), required_heart_stars))
-            self.multiworld.per_slot_randoms[self.player].shuffle(requirements)
+            if self.multiworld.strict_bosses[self.player]:
+                requirements.sort()
+            else:
+                self.multiworld.per_slot_randoms[self.player].shuffle(requirements)
         else:
             quotient = required_heart_stars // 5  # since we set the last manually, we can afford imperfect rounding
             for i in range(1, 5):

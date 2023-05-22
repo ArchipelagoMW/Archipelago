@@ -33,7 +33,7 @@ class TotalHeartStars(Range):
     Total number of heart stars to include in the pool of items.
     """
     display_name = "Total Heart Stars"
-    range_start = 1
+    range_start = 5  # set to 5 so strict bosses does not degrade
     range_end = 50  # 30 default locations + 30 stage clears + 5 bosses - 14 progression items = 51, so round down
     default = 30
 
