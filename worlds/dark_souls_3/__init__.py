@@ -229,8 +229,7 @@ class DarkSouls3World(World):
                 candidates = [
                     item.name for item
                     in item_dictionary.values()
-                    if (item.category in item_categories and
-                        (not item.is_dlc or dlc_enabled))
+                    if (item.category in item_categories and (not item.is_dlc or dlc_enabled))
                 ]
                 return self.multiworld.random.sample(candidates, num_items)
 
@@ -272,7 +271,6 @@ class DarkSouls3World(World):
         removable_items = [item for item in itempool if item.classification != ItemClassification.progression]
 
         guaranteed_items = self.multiworld.guaranteed_items[self.player].value
-        print(guaranteed_items)
         for item_name in guaranteed_items:
             for i in range(guaranteed_items[item_name]):
                 if num_required_extra_items > 0:
