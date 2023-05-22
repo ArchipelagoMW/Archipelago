@@ -56,6 +56,16 @@ class RandomizeProgressiveLocationsOption(Toggle):
     display_name = "Randomize Progressive Locations"
 
 
+class PoolTypeOption(Choice):
+    """Changes which non-progression items you add to the pool
+
+    Shuffle: Items are picked from the locations being randomized
+    Various: Items are picked from a list of all items in the game, but are the same type of item they replace"""
+    display_name = "Pool Type"
+    option_shuffle = 0
+    option_various = 1
+
+
 class AutoEquipOption(Toggle):
     """Automatically equips any received armor or left/right weapons."""
     display_name = "Auto-Equip"
@@ -83,10 +93,23 @@ class NoEquipLoadOption(Toggle):
     display_name = "No Equip Load"
 
 
+class RandomizeInfusionOption(Toggle):
+    """Enable this option to infuse a percentage of the pool of weapons and shields."""
+    display_name = "Randomize Infusion"
+
+
+class RandomizeInfusionPercentageOption(Range):
+    """The percentage of weapons/shields in the pool to be infused if Randomize Infusion is toggled"""
+    display_name = "Percentage of Infused Weapons"
+    range_start = 0
+    range_end = 100
+    default = 33
+
+
 class RandomizeWeaponLevelOption(Choice):
     """Enable this option to upgrade a percentage of the pool of weapons to a random value between the minimum and 
     maximum levels defined.
- 
+
     All: All weapons are eligible, both basic and epic
     Basic: Only weapons that can be upgraded to +10
     Epic: Only weapons that can be upgraded to +5"""
@@ -100,7 +123,7 @@ class RandomizeWeaponLevelOption(Choice):
 class RandomizeWeaponLevelPercentageOption(Range):
     """The percentage of weapons in the pool to be upgraded if randomize weapons level is toggled"""
     display_name = "Percentage of Randomized Weapons"
-    range_start = 1
+    range_start = 0
     range_end = 100
     default = 33
 
@@ -167,11 +190,14 @@ dark_souls_options: typing.Dict[str, type(Option)] = {
     "enable_misc_locations": RandomizeMiscLocations,
     "enable_health_upgrade_locations": RandomizeHealthLocations,
     "enable_progressive_locations": RandomizeProgressiveLocationsOption,
+    "pool_type": PoolTypeOption,
     "auto_equip": AutoEquipOption,
     "lock_equip": LockEquipOption,
     "no_weapon_requirements": NoWeaponRequirementsOption,
+    "randomize_infusion": RandomizeInfusionOption,
+    "randomize_infusion_percentage": RandomizeInfusionPercentageOption,
     "randomize_weapon_level": RandomizeWeaponLevelOption,
-    "randomize_weapon_percentage": RandomizeWeaponLevelPercentageOption,
+    "randomize_weapon_level_percentage": RandomizeWeaponLevelPercentageOption,
     "min_levels_in_5": MinLevelsIn5WeaponPoolOption,
     "max_levels_in_5": MaxLevelsIn5WeaponPoolOption,
     "min_levels_in_10": MinLevelsIn10WeaponPoolOption,

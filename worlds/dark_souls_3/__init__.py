@@ -3,7 +3,7 @@ from typing import Dict, Set
 
 from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names
 from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
-from .Options import dark_souls_options
+from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
 from ..AutoWorld import World, WebWorld
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
 from Options import Toggle
@@ -224,40 +224,45 @@ class DarkSouls3World(World):
                     itempool_by_category[location.category].append(location.default_item_name)
 
         # Replace each item category with a random sample of items of those types
-        def create_random_replacement_list(item_categories: Set[DS3ItemCategory], num_items: int):
-            candidates = [
-                item.name for item
-                in item_dictionary.values()
-                if (item.category in item_categories and
-                    (not item.is_dlc or dlc_enabled))
-            ]
-            return self.multiworld.random.sample(candidates, num_items)
+        if self.multiworld.pool_type[self.player] == PoolTypeOption.option_various:
+            def create_random_replacement_list(item_categories: Set[DS3ItemCategory], num_items: int):
+                candidates = [
+                    item.name for item
+                    in item_dictionary.values()
+                    if (item.category in item_categories and
+                        (not item.is_dlc or dlc_enabled))
+                ]
+                return self.multiworld.random.sample(candidates, num_items)
 
-        if DS3LocationCategory.WEAPON in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.WEAPON] = create_random_replacement_list(
-                {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10},
-                len(itempool_by_category[DS3LocationCategory.WEAPON])
-            )
-        if DS3LocationCategory.SHIELD in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.SHIELD] = create_random_replacement_list(
-                {DS3ItemCategory.SHIELD},
-                len(itempool_by_category[DS3LocationCategory.SHIELD])
-            )
-        if DS3LocationCategory.ARMOR in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.ARMOR] = create_random_replacement_list(
-                {DS3ItemCategory.ARMOR},
-                len(itempool_by_category[DS3LocationCategory.ARMOR])
-            )
-        if DS3LocationCategory.RING in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.RING] = create_random_replacement_list(
-                {DS3ItemCategory.RING},
-                len(itempool_by_category[DS3LocationCategory.RING])
-            )
-        if DS3LocationCategory.SPELL in self.enabled_location_categories:
-            itempool_by_category[DS3LocationCategory.SPELL] = create_random_replacement_list(
-                {DS3ItemCategory.SPELL},
-                len(itempool_by_category[DS3LocationCategory.SPELL])
-            )
+            if DS3LocationCategory.WEAPON in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.WEAPON] = create_random_replacement_list(
+                    {
+                        DS3ItemCategory.WEAPON_UPGRADE_5,
+                        DS3ItemCategory.WEAPON_UPGRADE_10,
+                        DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE
+                    },
+                    len(itempool_by_category[DS3LocationCategory.WEAPON])
+                )
+            if DS3LocationCategory.SHIELD in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.SHIELD] = create_random_replacement_list(
+                    {DS3ItemCategory.SHIELD, DS3ItemCategory.SHIELD_INFUSIBLE},
+                    len(itempool_by_category[DS3LocationCategory.SHIELD])
+                )
+            if DS3LocationCategory.ARMOR in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.ARMOR] = create_random_replacement_list(
+                    {DS3ItemCategory.ARMOR},
+                    len(itempool_by_category[DS3LocationCategory.ARMOR])
+                )
+            if DS3LocationCategory.RING in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.RING] = create_random_replacement_list(
+                    {DS3ItemCategory.RING},
+                    len(itempool_by_category[DS3LocationCategory.RING])
+                )
+            if DS3LocationCategory.SPELL in self.enabled_location_categories:
+                itempool_by_category[DS3LocationCategory.SPELL] = create_random_replacement_list(
+                    {DS3ItemCategory.SPELL},
+                    len(itempool_by_category[DS3LocationCategory.SPELL])
+                )
 
         # Add items to itempool
         for category in self.enabled_location_categories:
@@ -272,7 +277,8 @@ class DarkSouls3World(World):
 
         if name in key_item_names:
             item_classification = ItemClassification.progression
-        elif item_dictionary[name].category in {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10}:
+        elif item_dictionary[name].category in \
+                {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE}:
             item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
@@ -368,26 +374,32 @@ class DarkSouls3World(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
-        # Depending on the specified option, modify items hexadecimal value to add an upgrade level
+        # Depending on the specified option, modify items hexadecimal value to add an upgrade level or infusion
         name_to_ds3_code = {item.name: item.ds3_code for item in item_dictionary.values()}
-        if self.multiworld.randomize_weapon_level[self.player] > 0:
+
+        # Randomize some weapon upgrades
+        if self.multiworld.randomize_weapon_level[self.player] != RandomizeWeaponLevelOption.option_none:
             # if the user made an error and set a min higher than the max we default to the max
             max_5 = self.multiworld.max_levels_in_5[self.player]
             min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
             max_10 = self.multiworld.max_levels_in_10[self.player]
             min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
-            weapon_percentage = self.multiworld.randomize_weapon_percentage[self.player]
+            weapon_level_percentage = self.multiworld.randomize_weapon_level_percentage[self.player]
 
-            # Randomize some weapons upgrades
-            if self.multiworld.randomize_weapon_level[self.player] in [1, 3]:  # Options are either all or +5
-                for name in [item.name for item in item_dictionary.values() if item.category == DS3ItemCategory.WEAPON_UPGRADE_5]:
-                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapon_percentage:
-                        name_to_ds3_code[name] += self.multiworld.per_slot_randoms[self.player].randint(min_5, max_5)
+            for item in item_dictionary.values():
+                if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < weapon_level_percentage:
+                    if item.category == DS3ItemCategory.WEAPON_UPGRADE_5:
+                        name_to_ds3_code[item.name] += self.multiworld.per_slot_randoms[self.player].randint(min_5, max_5)
+                    elif item.category in {DS3ItemCategory.WEAPON_UPGRADE_10, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE}:
+                        name_to_ds3_code[item.name] += self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
 
-            if self.multiworld.randomize_weapon_level[self.player] in [1, 2]:  # Options are either all or +10
-                for name in [item.name for item in item_dictionary.values() if item.category == DS3ItemCategory.WEAPON_UPGRADE_10]:
-                    if self.multiworld.per_slot_randoms[self.player].randint(1, 100) < weapon_percentage:
-                        name_to_ds3_code[name] += self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
+        # Randomize some weapon infusions
+        if self.multiworld.randomize_infusion[self.player] == Toggle.option_true:
+            infusion_percentage = self.multiworld.randomize_infusion_percentage[self.player]
+            for item in item_dictionary.values():
+                if item.category in {DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE, DS3ItemCategory.SHIELD_INFUSIBLE}:
+                    if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < infusion_percentage:
+                        name_to_ds3_code[item.name] += 100 * self.multiworld.per_slot_randoms[self.player].randint(0, 15)
 
         # Create the mandatory lists to generate the player's output file
         items_id = []
