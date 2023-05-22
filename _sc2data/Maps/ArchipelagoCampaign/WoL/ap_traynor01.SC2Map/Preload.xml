@@ -183,4 +183,5 @@
 <Unit id="LogisticsHeadquarters"/>
 <Unit id="MengskHologramBillboard"/>
 <Unit id="ColonistTransport"/>
+<Unit id="AP_Marine"/>
 </Preload>

@@ -29,8 +29,12 @@ void lib5BD4895D_InitVariables () {
     lib5BD4895D_gv_aP_Core_Faction_Daelaam = "da";
     lib5BD4895D_gv_aP_Core_affectedPlayers = PlayerGroupSingle(1);
     for (init_i = 0; init_i <= 20; init_i += 1) {
-        lib5BD4895D_gv_aP_Core_PlayerFactions[init_i] = "";
+        lib5BD4895D_gv_aP_Core_playerFactions[init_i] = "";
     }
+    lib5BD4895D_gv_aP_Core_chatboxAnchor = c_anchorTopRight;
+    lib5BD4895D_gv_aP_Core_chatbox_x = 500;
+    lib5BD4895D_gv_aP_Core_chatbox_y = 350;
+    lib5BD4895D_gv_aP_Core_chatbox_offsetY = 40;
     lib5BD4895D_gv_chatbox.lv_mainpanel = c_invalidDialogId;
     lib5BD4895D_gv_chatbox.lv_chatpanel = c_invalidDialogId;
     lib5BD4895D_gv_chatbox.lv_hiddenpanel = c_invalidDialogId;
@@ -50,11 +54,17 @@ void lib5BD4895D_InitVariables () {
 
 // Functions
 void lib5BD4895D_gf_AP_Core_sendLocationLocal (int lp_locationIdLocal) {
+    // Variable Declarations
+    int lv_value;
+
     // Automatic Variable Declarations
+    // Variable Initialization
+
     // Implementation
+    lv_value = lp_locationIdLocal + 1;;
     if ((lib5BD4895D_gv_aP_Core_initFinished == true)) {
-        UnitSetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, (UnitGetPropertyInt(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropCurrent) - PowI(2.0, lp_locationIdLocal)));
-        lib5BD4895D_gv_aP_Core_controllerStatus = (lib5BD4895D_gv_aP_Core_controllerStatus + PowI(2.0, lp_locationIdLocal));
+        UnitSetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, (UnitGetPropertyInt(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropCurrent) - PowI(2.0, lv_value)));
+        lib5BD4895D_gv_aP_Core_controllerStatus = (lib5BD4895D_gv_aP_Core_controllerStatus + PowI(2.0, lv_value));
     }
 
 }
@@ -222,7 +232,7 @@ void lib5BD4895D_gf_AP_Core_setFactionColor (string lp_faction, int lp_colorInde
         while (true) {
             lv_currentPlayer = PlayerGroupNextPlayer(autoC0E582B5_g, lv_currentPlayer);
             if (lv_currentPlayer < 0) { break; }
-            if ((lp_faction == (lib5BD4895D_gv_aP_Core_PlayerFactions[lv_currentPlayer]))) {
+            if ((lp_faction == (lib5BD4895D_gv_aP_Core_playerFactions[lv_currentPlayer]))) {
                 PlayerSetColorIndex(lv_currentPlayer, lv_color, true);
             }
 
@@ -234,7 +244,7 @@ void lib5BD4895D_gf_AP_Core_setFactionColor (string lp_faction, int lp_colorInde
         while (true) {
             lv_currentPlayer = PlayerGroupNextPlayer(auto436127A7_g, lv_currentPlayer);
             if (lv_currentPlayer < 0) { break; }
-            if ((lp_faction == (lib5BD4895D_gv_aP_Core_PlayerFactions[lv_currentPlayer]))) {
+            if ((lp_faction == (lib5BD4895D_gv_aP_Core_playerFactions[lv_currentPlayer]))) {
                 lib5BD4895D_gf_AP_Core_rainbowController(lv_currentPlayer);
             }
 
@@ -242,10 +252,40 @@ void lib5BD4895D_gf_AP_Core_setFactionColor (string lp_faction, int lp_colorInde
     }
 }
 
+void lib5BD4895D_gf_AP_Core_onLoadFinished () {
+    // Variable Declarations
+    int lv_currentPlayer;
+
+    // Automatic Variable Declarations
+    playergroup auto78288737_g;
+
+    // Variable Initialization
+
+    // Implementation
+    lib5BD4895D_gf_initchatbox(c_anchorTopRight, lib5BD4895D_gv_aP_Core_chatbox_x, lib5BD4895D_gv_aP_Core_chatbox_y, lib5BD4895D_gv_aP_Core_chatbox_offsetX, lib5BD4895D_gv_aP_Core_chatbox_offsetY);
+    auto78288737_g = lib5BD4895D_gv_aP_Core_affectedPlayers;
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(auto78288737_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        lib5BD4895D_gf_showhidechatbox(lv_currentPlayer, true);
+        TechTreeRestrictionsEnable(lv_currentPlayer, true);
+    }
+    TriggerExecute(lib5BD4895D_gv_aP_Core_mapInit, true, false);
+    lib5BD4895D_gv_aP_Core_initFinished = true;
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationInit);
+}
+
 void lib5BD4895D_gf_AP_Core_setObjectiveCompleted (int lp_objective) {
     // Automatic Variable Declarations
     // Implementation
     ObjectiveSetName(lp_objective, (StringExternal("Param/Value/lib_5BD4895D_841DB864") + ObjectiveGetName(lp_objective)));
+}
+
+void lib5BD4895D_gf_AP_Core_setObjectiveFailed (int lp_objective) {
+    // Automatic Variable Declarations
+    // Implementation
+    ObjectiveSetName(lp_objective, (StringExternal("Param/Value/lib_5BD4895D_EAB7997A") + ObjectiveGetName(lp_objective)));
 }
 
 // Triggers
@@ -270,6 +310,7 @@ bool lib5BD4895D_gt_AP_Core_controllerInit_Func (bool testConds, bool runActions
 //--------------------------------------------------------------------------------------------------
 void lib5BD4895D_gt_AP_Core_controllerInit_Init () {
     lib5BD4895D_gt_AP_Core_controllerInit = TriggerCreate("lib5BD4895D_gt_AP_Core_controllerInit_Func");
+    TriggerAddEventMapInit(lib5BD4895D_gt_AP_Core_controllerInit);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -510,6 +551,26 @@ void lib5BD4895D_gt_AP_Core_setFactionColorHandler_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: AP_Triggers_loadFinished
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_AP_Triggers_loadFinished_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_onLoadFinished();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_AP_Triggers_loadFinished_Init () {
+    lib5BD4895D_gt_AP_Triggers_loadFinished = TriggerCreate("lib5BD4895D_gt_AP_Triggers_loadFinished_Func");
+    TriggerAddEventChatMessage(lib5BD4895D_gt_AP_Triggers_loadFinished, c_playerAny, "?LoadFinished", false);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: AP_Core_clearChat
 //--------------------------------------------------------------------------------------------------
 bool lib5BD4895D_gt_AP_Core_clearChat_Func (bool testConds, bool runActions) {
@@ -537,6 +598,7 @@ void lib5BD4895D_InitTriggers () {
     lib5BD4895D_gt_chatboxshow_Init();
     lib5BD4895D_gt_AP_Core_giveStartingResources_Init();
     lib5BD4895D_gt_AP_Core_setFactionColorHandler_Init();
+    lib5BD4895D_gt_AP_Triggers_loadFinished_Init();
     lib5BD4895D_gt_AP_Core_clearChat_Init();
 }
 

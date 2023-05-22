@@ -36,40 +36,54 @@ void libABFE498B_InitCustomScript () {
 }
 
 // Functions
-int libABFE498B_gf_APSetDifficulty (string lp_difficultyChar) {
+void libABFE498B_gf_AP_Triggers_setDifficulty (string lp_difficultyChar) {
+    // Variable Declarations
+    int lv_currentPlayer;
+    int lv_difficulty;
+
     // Automatic Variable Declarations
+    playergroup auto7AEE654A_g;
+
+    // Variable Initialization
+    lv_difficulty = 1;
+
     // Implementation
     if ((lp_difficultyChar == "C")) {
         GameSetSpeedValue(c_gameSpeedNormal);
         TriggerExecute(libABFE498B_gv_aP_Triggers_onDifficultyCasual, true, false);
-        return 1;
+        lv_difficulty = 1;
     }
     else {
         if ((lp_difficultyChar == "N")) {
             GameSetSpeedValue(c_gameSpeedNormal);
             TriggerExecute(libABFE498B_gv_aP_Triggers_onDifficultyNormal, true, false);
-            return 2;
+            lv_difficulty = 2;
         }
         else {
             if ((lp_difficultyChar == "H")) {
                 GameSetSpeedValue(c_gameSpeedFast);
                 TriggerExecute(libABFE498B_gv_aP_Triggers_onDifficultyHard, true, false);
-                return 3;
+                lv_difficulty = 3;
             }
             else {
                 if ((lp_difficultyChar == "B")) {
                     GameSetSpeedValue(c_gameSpeedFaster);
                     TriggerExecute(libABFE498B_gv_aP_Triggers_onDifficultyBrutal, true, false);
-                    return 4;
+                    lv_difficulty = 4;
                 }
                 else {
                     UIDisplayMessage(PlayerGroupAll(), c_messageAreaChat, (StringExternal("Param/Value/lib_ABFE498B_43BB9F5E") + StringToText(lp_difficultyChar)));
-                    return 1;
                 }
             }
         }
     }
-    return 1;
+    auto7AEE654A_g = PlayerGroupAll();
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(auto7AEE654A_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        PlayerSetDifficulty(lv_currentPlayer, lv_difficulty);
+    }
 }
 
 void libABFE498B_gf_AP_Triggers_unlockTerranUnits (int lp_player, int lp_bitArrayValue) {
@@ -1548,6 +1562,7 @@ bool libABFE498B_gt_AP_Triggers_setOptions_Func (bool testConds, bool runActions
     lv_difficulty = StringWord(EventChatMessage(false), 2);
     lv_genericUpgradeResearch = StringWord(EventChatMessage(false), 3);
     lv_allInVariant = StringWord(EventChatMessage(false), 4);
+    libABFE498B_gf_AP_Triggers_setDifficulty(lv_difficulty);
     libABFE498B_gv_aP_Triggers_Option_genericUpgradeResearch = StringToInt(lv_genericUpgradeResearch);
     libABFE498B_gv_aP_Triggers_Option_allInMissionVariant = StringToInt(lv_allInVariant);
     return true;
@@ -1620,23 +1635,29 @@ void libABFE498B_gt_AP_Triggers_giveTerranTech_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: AP_Triggers_loadFinished
+// Trigger: AP_Triggers_techTreeInit
 //--------------------------------------------------------------------------------------------------
-bool libABFE498B_gt_AP_Triggers_loadFinished_Func (bool testConds, bool runActions) {
+bool libABFE498B_gt_AP_Triggers_techTreeInit_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libABFE498B_gf_AP_Triggers_clearTerranTech(0);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void libABFE498B_gt_AP_Triggers_loadFinished_Init () {
-    libABFE498B_gt_AP_Triggers_loadFinished = TriggerCreate("libABFE498B_gt_AP_Triggers_loadFinished_Func");
-    TriggerAddEventChatMessage(libABFE498B_gt_AP_Triggers_loadFinished, c_playerAny, "?LoadFinished", false);
+void libABFE498B_gt_AP_Triggers_techTreeInit_Init () {
+    libABFE498B_gt_AP_Triggers_techTreeInit = TriggerCreate("libABFE498B_gt_AP_Triggers_techTreeInit_Func");
+    TriggerAddEventMapInit(libABFE498B_gt_AP_Triggers_techTreeInit);
 }
 
 void libABFE498B_InitTriggers () {
     libABFE498B_gt_AP_Triggers_setOptions_Init();
     libABFE498B_gt_AP_Triggers_giveTerranTech_Init();
-    libABFE498B_gt_AP_Triggers_loadFinished_Init();
+    libABFE498B_gt_AP_Triggers_techTreeInit_Init();
 }
 
 //--------------------------------------------------------------------------------------------------

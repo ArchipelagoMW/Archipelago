@@ -5,6 +5,7 @@ include "TriggerLibs/natives"
 //--------------------------------------------------------------------------------------------------
 // Constants
 const int lib5BD4895D_gv_aP_Core_locationVictory = 0;
+const int lib5BD4895D_gv_aP_Core_locationInit = -1;
 const fixed lib5BD4895D_gv_aP_Core_rainbowCyclePeriod = 0.5;
 
 // Structures
@@ -36,7 +37,13 @@ string lib5BD4895D_gv_aP_Core_Faction_PrimalZerg;
 string lib5BD4895D_gv_aP_Core_Faction_KerriganSwarm;
 string lib5BD4895D_gv_aP_Core_Faction_Daelaam;
 playergroup lib5BD4895D_gv_aP_Core_affectedPlayers;
-string[21] lib5BD4895D_gv_aP_Core_PlayerFactions;
+string[21] lib5BD4895D_gv_aP_Core_playerFactions;
+int lib5BD4895D_gv_aP_Core_chatboxAnchor;
+int lib5BD4895D_gv_aP_Core_chatbox_x;
+int lib5BD4895D_gv_aP_Core_chatbox_y;
+int lib5BD4895D_gv_aP_Core_chatbox_offsetX;
+int lib5BD4895D_gv_aP_Core_chatbox_offsetY;
+trigger lib5BD4895D_gv_aP_Core_mapInit;
 unit lib5BD4895D_gv_aP_Core_controller;
 int lib5BD4895D_gv_aP_Core_controllerStatus;
 lib5BD4895D_gs_chatbox lib5BD4895D_gv_chatbox;
@@ -51,7 +58,9 @@ void lib5BD4895D_gf_AP_Core_rainbowController (int lp_player);
 int lib5BD4895D_gf_AP_Core_getPlayerColorByIndex (int lp_colorIndex);
 void lib5BD4895D_gf_AP_Core_giveBonusSupplies (int lp_player, int lp_amount);
 void lib5BD4895D_gf_AP_Core_setFactionColor (string lp_faction, int lp_colorIndex);
+void lib5BD4895D_gf_AP_Core_onLoadFinished ();
 void lib5BD4895D_gf_AP_Core_setObjectiveCompleted (int lp_objective);
+void lib5BD4895D_gf_AP_Core_setObjectiveFailed (int lp_objective);
 
 // Trigger Declarations
 trigger lib5BD4895D_gt_AP_Core_controllerInit;
@@ -61,6 +70,7 @@ trigger lib5BD4895D_gt_chatboxbuttons;
 trigger lib5BD4895D_gt_chatboxshow;
 trigger lib5BD4895D_gt_AP_Core_giveStartingResources;
 trigger lib5BD4895D_gt_AP_Core_setFactionColorHandler;
+trigger lib5BD4895D_gt_AP_Triggers_loadFinished;
 trigger lib5BD4895D_gt_AP_Core_clearChat;
 
 // Library Initialization

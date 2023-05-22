@@ -25,7 +25,7 @@ int[21] libABFE498B_gv_aP_Triggers_Terran_terranShipArmorLevel;
 int[21] libABFE498B_gv_aP_Triggers_Terran_terranShipWeaponLevel;
 
 // Function Declarations
-int libABFE498B_gf_APSetDifficulty (string lp_difficultyChar);
+void libABFE498B_gf_AP_Triggers_setDifficulty (string lp_difficultyChar);
 void libABFE498B_gf_AP_Triggers_unlockTerranUnits (int lp_player, int lp_bitArrayValue);
 void libABFE498B_gf_AP_Triggers_unlockTerranArmory1 (int lp_player, int lp_bitArrayValue);
 void libABFE498B_gf_AP_Triggers_unlockTerranArmory2 (int lp_player, int lp_bitArrayValue);
@@ -150,7 +150,7 @@ void libABFE498B_gf_AP_Triggers_replaceUpgrade (int lp_player, string lp_oldUpgr
 // Trigger Declarations
 trigger libABFE498B_gt_AP_Triggers_setOptions;
 trigger libABFE498B_gt_AP_Triggers_giveTerranTech;
-trigger libABFE498B_gt_AP_Triggers_loadFinished;
+trigger libABFE498B_gt_AP_Triggers_techTreeInit;
 
 // Library Initialization
 void libABFE498B_InitVariables ();

@@ -17,6 +17,7 @@ Param/Value/lib_5BD4895D_C9546BEE=X
 Param/Value/lib_5BD4895D_D109326B=O
 Param/Value/lib_5BD4895D_D418EF7A=^
 Param/Value/lib_5BD4895D_DA943ABE=Archipelago Messages
+Param/Value/lib_5BD4895D_EAB7997A=[Failed] 
 Param/Value/lib_5BD4895D_EFEE213D=Hide messages
 Param/Value/lib_5BD4895D_F3CCECCC=v
 Unit/Name/AP_Core_Controller=Archipelago Controller
