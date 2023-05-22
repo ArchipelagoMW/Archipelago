@@ -510,7 +510,7 @@ class FreeFlyLocation(Toggle):
     display_name = "Free Fly Location"
 
 
-class FlyWithoutBadge(Toggle):
+class FlyWithoutBadge(DefaultOnToggle):
     """
     Fly does not require the Feather Badge to use in the field
     """
