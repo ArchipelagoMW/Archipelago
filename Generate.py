@@ -473,7 +473,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
                 handle_option(ret, game_weights, option_key, option, plando_options)
         if PlandoOptions.items in plando_options:
             ret.plando_items = game_weights.get("plando_items", [])
-        if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
+        if ret.game == "Minecraft" or ret.game == "Ocarina of Time" or ret.game == "Kirby's Dream Land 3":
             # bad hardcoded behavior to make this work for now
             ret.plando_connections = []
             if PlandoOptions.connections in plando_options:

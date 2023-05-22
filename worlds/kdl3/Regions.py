@@ -45,16 +45,16 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
             possible_stages.append(default_levels[level][stage])
 
     if world.multiworld.plando_connections[world.player]:
-        for entrance, stage in world.multiworld.plando_connections[world.player]:
+        for connection in world.multiworld.plando_connections[world.player]:
             try:
-                entrance_world, entrance_stage = entrance.split("-")
-                stage_world, stage_stage = stage.split("-")
-                new_stage = default_levels[LocationName.level_names[stage_world.trim()]][int(stage_stage)]
-                levels[LocationName.level_names[entrance_world.trim()]][int(entrance_stage)] = new_stage
+                entrance_world, entrance_stage = connection.entrance.rsplit(" ", 1)
+                stage_world, stage_stage = connection.exit.rsplit(" ", 1)
+                new_stage = default_levels[LocationName.level_names[stage_world.strip()]][int(stage_stage) - 1]
+                levels[LocationName.level_names[entrance_world.strip()]][int(entrance_stage) - 1] = new_stage
                 possible_stages.remove(new_stage)
 
             except Exception:
-                raise Exception(f"Invalid connection: {entrance} => {stage} for player {world.player} ({world.multiworld.player_name[world.player]}")
+                raise Exception(f"Invalid connection: {connection.entrance} => {connection.exit} for player {world.player} ({world.multiworld.player_name[world.player]})")
 
     for level in range(1, 6):
         for stage in range(6):
