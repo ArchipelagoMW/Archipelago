@@ -39,32 +39,37 @@ Once the game has been created, you need to connect to the server using the Land
 
 To do so, run `randstalker_archipelago.exe` inside the folder you created while installing the software.
 
-![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/client.png)
-
 A window will open with a few settings to enter:
-- **Input ROM file**: This is the path to your original ROM file for the game. If you are using the Steam release ROM 
-  and placed it inside the client's folder as mentioned above, you don't need to change anything.
-- **Output ROM directory**: This is where the randomized ROMs will be put. No need to change this unless you want them 
-  to be created in a very specific folder
 - **Host**: Put the server address and port in this field (e.g. `archipelago.gg:12345`)
 - **Slot name**: Put the player name you specified in your YAML config file in this field.
 - **Password**: If server has a password, put it there.
 
-Once all those fields were filled appropriately, click on the "**Connect to Archipelago**" button below to try connecting to the
-Archipelago server. 
+![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_ap.png)
 
-If it turns green saying "Connected", that's good news! Otherwise, double-check the Host, Slot name and
-Password provided above.
+Once all those fields were filled appropriately, click on the `Connect to Archipelago` button below to try connecting to the
+Archipelago server.
+
+If this didn't work, double-check your credentials. An error message should be displayed on the console log to the 
+right that might help you finding the cause of the issue.
 
 ### ROM Generation
 
-When you connected to the Archipelago server, the client automatically tried to build a randomized ROM. The console log 
-on the right half of the window should have notified you if it succeeded or not. 
+When you connected to the Archipelago server, the client fetched all the required data from the server to be able to
+build a randomized ROM.
 
-If it did, locate the randomized ROM file and open it using Retroarch. 
+You should see a window with settings to fill:
+- **Input ROM file**: This is the path to your original ROM file for the game. If you are using the Steam release ROM 
+  and placed it inside the client's folder as mentioned above, you don't need to change anything.
+- **Output ROM directory**: This is where the randomized ROMs will be put. No need to change this unless you want them 
+  to be created in a very specific folder.
 
-If it didn't, double-check your **Input ROM file** and **Output ROM path**, then retry building a ROM by clicking on 
-the **Rebuild ROM** button.
+![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_rom.png)
+
+There also a few cosmetic options you can fill before clicking the `Build ROM` button which should create your 
+randomized seed if everything went right.
+
+If it didn't, double-check your `Input ROM file` and `Output ROM path`, then retry  building the ROM by clicking 
+the same button again.
 
 ### Connecting to Retroarch
 
@@ -72,17 +77,37 @@ Now that you're connected to the Archipelago server and have a randomized ROM, a
 connected to the emulator. This way, the client will be able to see what's happening while you play and give you in-game
 the items you have received from other players.
 
-Once you have opened the randomized ROM inside RetroArch, you can click on the "**Connect to emulator**" button below.
-This will only work if you have already opened the ROM using the Genesis Plus GX core, since the client will try to hook
-on that core's memory.
+You should see the following window:
+
+![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_emu.png)
+
+As written, you have to open the newly generated ROM inside Retroarch using the Genesis Plus GX core. Be careful to
+select that core, because any other core (e.g. BlastEm) won't work.
+
+The easiest way to do so is to:
+- open Retroarch
+- if it's your first time, download the Genesis Plus GX core through Retroarch user interface
+- click the `Show ROM file in explorer` button
+- drag-and-drop the shown ROM file on Retroarch window
+
+The game should instantly launch. Then, you can click on the `Connect to emulator` button below.
 
 If this didn't work, try the following:
 - ensure you have loaded your ROM inside Retroarch
-- ensure you are using the Genesis Plus GX and not another core (e.g. BlastEm will not work)
+- ensure you are using Genesis Plus GX and not another core (e.g. BlastEm will not work)
 - try launching the client in Administrator Mode (right click on `randstalker_archipelago.exe`, then `Run as administrator`)
 - if all else fails, try using RetroArch 1.9.0 and Genesis Plus GX 1.7.4 (it works on all versions tested so far, but you never know...)
 
 ### Play the game
 
-If both indicators are green and show "Connected", you're good to go! Just play the game and enjoy the wonders of 
+If all indicators are green and show "Connected", you're good to go! Just play the game and enjoy the wonders of 
 isometric perspective. 
+
+The client is packaged with both an **automatic item tracker** and an **automatic map tracker** for your comfort. 
+
+If you don't know all checks in the game, don't be afraid: you can click the `Where is it?` button that will show 
+you a screenshot of where the location actually is.
+
+![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_client.png)
+
+Have fun!
