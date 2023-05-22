@@ -248,14 +248,12 @@ class PokemonEmeraldWorld(World):
                 "EVENT_VISITED_EVER_GRANDE_CITY"
             ])
 
-        for location in locations:
-            if location.name == "FREE_FLY_LOCATION":
-                self.free_fly_location_id = location_visited_event_to_id_map[fly_location_name]
+        self.free_fly_location_id = location_visited_event_to_id_map[fly_location_name]
 
-                location.locked = False
-                location.item = None
-                location.place_locked_item(self.create_event(fly_location_name))
-                break
+        free_fly_location_location = self.multiworld.get_location("FREE_FLY_LOCATION", self.player)
+        free_fly_location_location.locked = False
+        free_fly_location_location.item = None
+        free_fly_location_location.place_locked_item(self.create_event(fly_location_name))
 
         # Key items which are considered in access rules but not randomized are converted to events and placed
         # in their vanilla locations so that the player can have them in their inventory for logic.
