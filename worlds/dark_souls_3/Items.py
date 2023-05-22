@@ -259,7 +259,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Darkmoon Longbow",                    0x00D79B50, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Onislayer Greatbow",                  0x00D7C260, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Black Bow of Pharis",                 0x00D7E970, DS3ItemCategory.WEAPON_UPGRADE_10),
-    ("Shield Crossbow",                     0x00D81080, DS3ItemCategory.WEAPON_UPGRADE_10),
+    ("Shield Crossbow",                     0x00D81080, DS3ItemCategory.SKIP), # Cut Content?
     ("Sniper Crossbow",                     0x00D83790, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Sellsword Twinblades",                0x00F42400, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Warden Twinblades",                   0x00F47220, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
@@ -720,7 +720,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Deep Ring",                           0x20004F60, DS3ItemCategory.RING),
     ("Darkmoon Ring",                       0x20004F6A, DS3ItemCategory.RING),
     ("Ring of the Sun's Firstborn",         0x20004F74, DS3ItemCategory.RING),
-    ("Darkmoon Blade Covenant Ring",        0x20004F7E, DS3ItemCategory.RING),
+    ("Darkmoon Blade Covenant Ring",        0x20004F7E, DS3ItemCategory.SKIP), # Cut Content?
     ("Hawk Ring",                           0x20004F92, DS3ItemCategory.RING),
     ("Hornet Ring",                         0x20004F9C, DS3ItemCategory.RING),
     ("Covetous Gold Serpent Ring",          0x20004FA6, DS3ItemCategory.RING),
@@ -1010,7 +1010,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Chaos Bed Vestiges",                  0x402579C0, DS3ItemCategory.SPELL),
     ("Warmth",                              0x4025B070, DS3ItemCategory.SPELL),
     ("Profuse Sweat",                       0x402717D0, DS3ItemCategory.SPELL),
-    ("Dark Orb",                            0x4027AC40, DS3ItemCategory.SPELL),
+    ("Dark Orb",                            0x4027AC40, DS3ItemCategory.SKIP), # Cut Content?
     ("Black Fire Orb",                      0x4027D350, DS3ItemCategory.SPELL),
     ("Bursting Fireball",                   0x4027FA60, DS3ItemCategory.SPELL),
     ("Boulder Heave",                       0x40282170, DS3ItemCategory.SPELL),
