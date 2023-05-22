@@ -272,15 +272,20 @@ class DarkSouls3World(World):
 
         guaranteed_items = self.multiworld.guaranteed_items[self.player].value
         for item_name in guaranteed_items:
-            for i in range(guaranteed_items[item_name]):
+            # Break early just in case nothing is removable (if user is trying to guarantee more
+            # items than the pool can hold, for example)
+            if len(removable_items) == 0:
+                break
+
+            for _ in range(guaranteed_items[item_name]):
                 if num_required_extra_items > 0:
                     # We can just add them instead of using "Soul of an Intrepid Hero" later
                     num_required_extra_items -= 1
+
                 else:
-                    # Break early just in case nothing is removable (if user is trying to guarantee more
-                    # items than the pool can hold, for example)
                     if len(removable_items) == 0:
                         break
+
                     # Try to construct a list of items with the same category that can be removed
                     # If none exist, just remove something at random
                     removable_shortlist = [
@@ -298,7 +303,7 @@ class DarkSouls3World(World):
                 itempool.append(self.create_item(item_name))
 
         # Extra filler items for locations containing SKIP items
-        itempool += [self.create_item("Soul of an Intrepid Hero") for i in range(num_required_extra_items)]
+        itempool += [self.create_item("Soul of an Intrepid Hero") for _ in range(num_required_extra_items)]
 
         # Add items to itempool
         self.multiworld.itempool += itempool
