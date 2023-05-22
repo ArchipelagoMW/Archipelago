@@ -352,7 +352,11 @@ class PokemonEmeraldWorld(World):
                             if evolution.abilities == old_abilities:
                                 evolution.abilities = new_abilities
                                 already_modified.add(evolution.species_id)
-                                evolutions += [self.modified_data.species[evolution.species_id] for evolution in evolution.evolutions]
+                                evolutions += [
+                                    self.modified_data.species[evolution.species_id]
+                                    for evolution in evolution.evolutions
+                                    if evolution.species_id not in already_modified
+                                ]
 
                     if had_clean_pass:
                         break
