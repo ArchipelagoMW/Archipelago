@@ -1,4 +1,4 @@
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle, StartInventoryPool
 
 
 class MessengerAccessibility(Accessibility):
@@ -70,6 +70,7 @@ class RequiredSeals(Range):
 
 messenger_options = {
     "accessibility": MessengerAccessibility,
+    "start_inventory": StartInventoryPool,
     "logic_level": Logic,
     "shuffle_seals": PowerSeals,
     "shuffle_shards": MegaShards,
