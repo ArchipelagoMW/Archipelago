@@ -47,4 +47,3 @@ def create_regions(multiworld, player) -> None:
     regions["Menu"] = menu
 
     multiworld.regions += regions.values()
-    multiworld.initialize_regions()
