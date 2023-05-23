@@ -38,7 +38,7 @@ from worlds.sc2wol.MissionTables import lookup_id_to_mission
 from worlds.sc2wol.Regions import MissionInfo
 
 import colorama
-from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser
+from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser, JSONtoTextParser, JSONMessagePart
 from MultiServer import mark_raw
 
 loop = asyncio.get_event_loop_policy().new_event_loop()
@@ -86,7 +86,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             "Purple", "Yellow", "Orange", "Green",
             "LightPink", "Violet", "LightGrey", "DarkGreen",
             "Brown", "LightGreen", "DarkGrey", "Pink",
-            "Rainbow", "Random"
+            "Rainbow", "Random", "Default"
         ]
         match_colors = [player_color.lower() for player_color in player_colors]
         if color:
@@ -179,6 +179,24 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         return True
 
 
+class SC2JSONtoTextParser(JSONtoTextParser):
+    def __init__(self, ctx):
+        self.handlers = {
+            "ItemSend": self._handle_color,
+            "ItemCheat": self._handle_color,
+            "Hint": self._handle_color,
+        }
+        super().__init__(ctx)
+
+    def _handle_color(self, node: JSONMessagePart):
+        codes = node["color"].split(";")
+        buffer = "".join(self.color_code(code) for code in codes if code in self.color_codes)
+        return buffer + self._handle_text(node) + '</c>'
+
+    def color_code(self, code: str):
+        return '<c val="' + self.color_codes[code] + '">'
+
+
 class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = "Starcraft 2 Wings of Liberty"
@@ -193,6 +211,7 @@ class SC2Context(CommonContext):
     sc2_run_task: typing.Optional[asyncio.Task] = None
     missions_unlocked: bool = False  # allow launching missions ignoring requirements
     generic_upgrade_missions = 0
+    generic_upgrade_research = 0
     generic_upgrade_items = 0
     current_tooltip = None
     last_loc_list = None
@@ -202,7 +221,7 @@ class SC2Context(CommonContext):
 
     def __init__(self, *args, **kwargs):
         super(SC2Context, self).__init__(*args, **kwargs)
-        self.raw_text_parser = RawJSONtoTextParser(self)
+        self.raw_text_parser = SC2JSONtoTextParser(self)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -227,6 +246,7 @@ class SC2Context(CommonContext):
             self.player_color = args["slot_data"].get("player_color", 2)
             self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", 0)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", 0)
+            self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", 0)
 
             self.build_location_to_mission_mapping()
 
@@ -514,7 +534,7 @@ async def main():
 
 
 maps_table = [
-    "ap_traynor01", "ap_traynor02", "ap_traynor03",
+    "ap_liberation_day", "ap_the_outlaws", "ap_traynor03",
     "ap_thanson01", "ap_thanson02", "ap_thanson03a", "ap_thanson03b",
     "ap_ttychus01", "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05",
     "ap_ttosh01", "ap_ttosh02", "ap_ttosh03a", "ap_ttosh03b",
@@ -635,18 +655,27 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                 difficulty = calc_difficulty(self.ctx.difficulty_override)
             else:
                 difficulty = calc_difficulty(self.ctx.difficulty)
-            await self.chat_send("ArchipelagoLoad {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {}".format(
                 difficulty,
+                self.ctx.generic_upgrade_research,
+                self.ctx.all_in_choice
+            ))
+            await self.chat_send("?GiveResources {} {} {}".format(
+                start_items[8],
+                start_items[9],
+                start_items[10]
+            ))
+            await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {}".format(
                 start_items[0], start_items[1], start_items[2], start_items[3], start_items[4],
-                start_items[5], start_items[6], start_items[7], start_items[8], start_items[9],
-                self.ctx.all_in_choice, start_items[10]))
-            await self.chat_send("SetColor " + str(self.ctx.player_color))
+                start_items[5], start_items[6]))
+            await self.chat_send("?SetColor rr " + str(self.ctx.player_color))  # TODO: Add faction color options
+            await self.chat_send("?LoadFinished")
             self.last_received_update = len(self.ctx.items_received)
 
         else:
             if not self.ctx.announcements.empty():
                 message = self.ctx.announcements.get(timeout=1)
-                await self.chat_send("SendMessage " + message)
+                await self.chat_send("?SendMessage " + message)
                 self.ctx.announcements.task_done()
 
             # Archipelago reads the health
@@ -661,9 +690,9 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
 
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
-                await self.chat_send("UpdateTech {} {} {} {} {} {} {} {}".format(
+                await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {}".format(
                     current_items[0], current_items[1], current_items[2], current_items[3], current_items[4],
-                    current_items[5], current_items[6], current_items[7]))
+                    current_items[5], current_items[6]))
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -963,15 +992,15 @@ def is_mod_installed_correctly() -> bool:
         check_game_install_path()
 
     mapdir = os.environ['SC2PATH'] / Path('Maps/ArchipelagoCampaign')
-    modfile = os.environ["SC2PATH"] / Path("Mods/Archipelago.SC2Mod")
+    modfile = os.environ["SC2PATH"] / Path("Mods/ArchipelagoPlayer.SC2Mod")
     wol_required_maps = [
-        "ap_thanson01.SC2Map", "ap_thanson02.SC2Map", "ap_thanson03a.SC2Map", "ap_thanson03b.SC2Map",
-        "ap_thorner01.SC2Map", "ap_thorner02.SC2Map", "ap_thorner03.SC2Map", "ap_thorner04.SC2Map", "ap_thorner05s.SC2Map",
-        "ap_traynor01.SC2Map", "ap_traynor02.SC2Map", "ap_traynor03.SC2Map",
-        "ap_ttosh01.SC2Map", "ap_ttosh02.SC2Map", "ap_ttosh03a.SC2Map", "ap_ttosh03b.SC2Map",
-        "ap_ttychus01.SC2Map", "ap_ttychus02.SC2Map", "ap_ttychus03.SC2Map", "ap_ttychus04.SC2Map", "ap_ttychus05.SC2Map",
-        "ap_tvalerian01.SC2Map", "ap_tvalerian02a.SC2Map", "ap_tvalerian02b.SC2Map", "ap_tvalerian03.SC2Map",
-        "ap_tzeratul01.SC2Map", "ap_tzeratul02.SC2Map", "ap_tzeratul03.SC2Map", "ap_tzeratul04.SC2Map"
+        "WoL/ap_thanson01.SC2Map", "WoL/ap_thanson02.SC2Map", "WoL/ap_thanson03a.SC2Map", "WoL/ap_thanson03b.SC2Map",
+        "WoL/ap_thorner01.SC2Map", "WoL/ap_thorner02.SC2Map", "WoL/ap_thorner03.SC2Map", "WoL/ap_thorner04.SC2Map", "WoL/ap_thorner05s.SC2Map",
+        "WoL/liberation_day.SC2Map", "WoL/the_outlaws.SC2Map", "WoL/ap_traynor03.SC2Map",
+        "WoL/ap_ttosh01.SC2Map", "WoL/ap_ttosh02.SC2Map", "WoL/ap_ttosh03a.SC2Map", "WoL/ap_ttosh03b.SC2Map",
+        "WoL/ap_ttychus01.SC2Map", "WoL/ap_ttychus02.SC2Map", "WoL/ap_ttychus03.SC2Map", "WoL/ap_ttychus04.SC2Map", "WoL/ap_ttychus05.SC2Map",
+        "WoL/ap_tvalerian01.SC2Map", "WoL/ap_tvalerian02a.SC2Map", "WoL/ap_tvalerian02b.SC2Map", "WoL/ap_tvalerian03.SC2Map",
+        "WoL/ap_tzeratul01.SC2Map", "WoL/ap_tzeratul02.SC2Map", "WoL/ap_tzeratul03.SC2Map", "WoL/ap_tzeratul04.SC2Map"
     ]
     needs_files = False
 

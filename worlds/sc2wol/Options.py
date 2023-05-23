@@ -13,22 +13,6 @@ class GameDifficulty(Choice):
     option_brutal = 3
 
 
-class UpgradeBonus(Choice):
-    """Determines what lab upgrade to use, whether it is Ultra-Capacitors which boost attack speed with every weapon
-    upgrade or Vanadium Plating which boosts life with every armor upgrade."""
-    display_name = "Upgrade Bonus"
-    option_ultra_capacitors = 0
-    option_vanadium_plating = 1
-
-
-class BunkerUpgrade(Choice):
-    """Determines what bunker lab upgrade to use, whether it is Shrike Turret which outfits bunkers with an automated
-    turret or Fortified Bunker which boosts the life of bunkers."""
-    display_name = "Bunker Upgrade"
-    option_shrike_turret = 0
-    option_fortified_bunker = 1
-
-
 class AllInMap(Choice):
     """Determines what version of All-In (final map) that will be generated for the campaign."""
     display_name = "All In Map"
@@ -75,7 +59,8 @@ class PlayerColor(Choice):
     option_dark_grey = 14
     option_pink = 15
     option_rainbow = 16
-    default = option_blue
+    option_default = 17
+    default = option_default
 
 
 class ShuffleProtoss(DefaultOnToggle):
@@ -129,6 +114,20 @@ class GenericUpgradeMissions(Range):
     range_end = 100
     default = 0
 
+class GenericUpgradeResearch(Choice):
+    """Determines how weapon and armor upgrades affect missions once unlocked.
+
+    Vanilla:  Upgrades must be researched as normal.
+    Auto In No-Build:  In No-Build missions, upgrades are automatically researched.
+    In all other missions, upgrades must be researched as normal.
+    Auto In Build:  In No-Build missions, upgrades are unavailable as normal.
+    In all other missions, upgrades are automatically researched.
+    Always Auto:  Upgrades are automatically researched in all missions."""
+    display_name = "Generic Upgrade Research"
+    option_vanilla = 0
+    option_auto_in_no_build = 1
+    option_auto_in_build = 2
+    option_always_auto = 3
 
 class GenericUpgradeItems(Choice):
     """Determines how weapon and armor upgrades are split into items.  All options produce 3 levels of each item.
@@ -181,8 +180,6 @@ class SC2ItemSet(Choice):
 # noinspection PyTypeChecker
 sc2wol_options: Dict[str, Option] = {
     "game_difficulty": GameDifficulty,
-    "upgrade_bonus": UpgradeBonus,
-    "bunker_upgrade": BunkerUpgrade,
     "all_in_map": AllInMap,
     "mission_order": MissionOrder,
     "player_color": PlayerColor,
@@ -192,6 +189,7 @@ sc2wol_options: Dict[str, Option] = {
     "required_tactics": RequiredTactics,
     "units_always_have_upgrades": UnitsAlwaysHaveUpgrades,
     "generic_upgrade_missions": GenericUpgradeMissions,
+    "generic_upgrade_research": GenericUpgradeResearch,
     "generic_upgrade_items": GenericUpgradeItems,
     "locked_items": LockedItems,
     "excluded_items": ExcludedItems,

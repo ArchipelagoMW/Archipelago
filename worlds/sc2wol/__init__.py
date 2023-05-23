@@ -108,16 +108,6 @@ def setup_events(player: int, locked_locations: typing.List[str], location_cache
 def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     excluded_items: Set[str] = set()
 
-    if get_option_value(multiworld, player, "upgrade_bonus") == 1:
-        excluded_items.add("Ultra-Capacitors")
-    else:
-        excluded_items.add("Vanadium Plating")
-
-    if get_option_value(multiworld, player, "bunker_upgrade") == 1:
-        excluded_items.add("Shrike Turret")
-    else:
-        excluded_items.add("Fortified Bunker")
-
     for item in multiworld.precollected_items[player]:
         excluded_items.add(item.name)
 
