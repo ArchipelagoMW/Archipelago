@@ -17,6 +17,7 @@ from .Options import ygo06_options
 from .Rom import YGO06DeltaPatch, get_base_rom_path
 from .Rules import set_rules
 from .logic import YuGiOh06Logic
+from .BoosterPacks import booster_contents, get_booster_locations
 from worlds.generic.Rules import add_rule
 from .RomValues import structure_deck_selection, banlist_ids
 
@@ -102,6 +103,8 @@ class Yugioh06World(World):
             )
             item_pool.append(item)
 
+        self.multiworld.itempool += item_pool
+
         for challenge in get_beat_challenge_events().keys():
             item = Yugioh2006Item(
                 "Challenge Beaten",
@@ -126,7 +129,17 @@ class Yugioh06World(World):
                     location.place_locked_item(item)
                     location.event = True
 
-        self.multiworld.itempool += item_pool
+        for booster in booster_packs:
+            for location_name, content in get_booster_locations(booster).items():
+                item = Yugioh2006Item(
+                    content,
+                    ItemClassification.progression,
+                    None,
+                    self.player
+                )
+                location = self.multiworld.get_location(location_name, self.player)
+                location.place_locked_item(item)
+                location.event = True
 
     def create_regions(self):
         self.multiworld.regions += [
@@ -170,6 +183,17 @@ class Yugioh06World(World):
             else:
                 entrance.access_rule = (lambda unlock, opp: lambda state:
                                         state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
+            campaign.exits.append(entrance)
+            entrance.connect(region)
+            self.multiworld.regions.append(region)
+
+        card_shop = self.multiworld.get_region('Card Shop', self.player)
+        # Booster Contents
+        for booster in booster_packs:
+            region = create_region(self.multiworld, self.player,
+                                   booster, get_booster_locations(booster))
+            entrance = Entrance(self.player, booster, card_shop)
+            entrance.access_rule = (lambda unlock: lambda state: state.has(unlock, self.player))(booster)
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
