@@ -8,6 +8,10 @@
 <Asset path="assets\textures\ui_icon_attention.dds" Type="Image"/>
 <Asset path="assets\textures\btn-command-attack.dds" Type="Image"/>
 <Asset path="assets\textures\btn-unit-terran-marine.dds" Type="Image"/>
+<Achievement id="Anniversary_TRaynor02"/>
+<Achievement id="TRaynor02_1"/>
+<Achievement id="TRaynor02_2"/>
+<Achievement id="TRaynor02_3"/>
 <Actor id="SYSTEM_ActorConfig"/>
 <Actor id="LightOmniCyan"/>
 <Actor id="PathingBlocker1x1Doodad"/>
@@ -79,6 +83,11 @@
 <Actor id="WindEmitterMedium"/>
 <Actor id="WindTurbine"/>
 <Actor id="AnimalCorpse" Variations="1"/>
+<Actor id="PipesSmallCorner" Variations="0"/>
+<Actor id="PipesSmallShort"/>
+<Actor id="TRaynor02MineLift"/>
+<Actor id="TRaynorDumpTruck"/>
+<Behavior id="Run"/>
 <Model id="PingObjective"/>
 <Model id="TalkIcon"/>
 <Model id="BriefingUnitSelect"/>
@@ -87,9 +96,42 @@
 <Sound id="TutorialAdjutant00028" Variations="0"/>
 <Sound id="UI_Starmap_Popup" Variations="2"/>
 <Sound id="TUIWarningPing" Variations="0"/>
+<Sound id="Doodad_TRaynor02DigSiteCraneRaise" Variations="0"/>
+<Sound id="Emitter_MarSaraMining"/>
+<Sound id="Emitter_MarSaraMiningSmallAoE"/>
+<Sound id="TRaynor02BriefingRaynor00001" Variations="0"/>
+<Sound id="TRaynor02BriefingTychus00002" Variations="0"/>
+<Sound id="TRaynor02BriefingTychus00003" Variations="0"/>
+<Sound id="TRaynor02BriefingRaynor00004" Variations="0"/>
+<Sound id="TRaynor02BriefingTychus00005" Variations="0"/>
+<Sound id="TRaynor02BriefingRaynor00006" Variations="0"/>
+<Sound id="THanson02Raynor00029" Variations="0"/>
+<Sound id="TTosh01Raynor00017" Variations="0"/>
+<Sound id="TRaynor02Adjutant00001" Variations="0"/>
+<Sound id="TRaynor02Raynor00003" Variations="0"/>
+<Sound id="TRaynor02Adjutant00006" Variations="0"/>
+<Sound id="TRaynor02Tychus00007" Variations="0"/>
+<Sound id="TRaynor02Tychus00009" Variations="0"/>
+<Sound id="TRaynor02Civilian200012" Variations="0"/>
+<Sound id="TRaynor02Civilian300013" Variations="0"/>
+<Sound id="TRaynor02DominionMarine500014" Variations="0"/>
+<Sound id="TRaynor02Civilian500023" Variations="0"/>
+<Sound id="TRaynor02Civilian600024" Variations="0"/>
+<Sound id="TRaynor02Adjutant00031" Variations="0"/>
+<Sound id="TRaynor02Rebel00034" Variations="0"/>
+<Sound id="TRaynor02Raynor00035" Variations="0"/>
+<Sound id="TRaynor02Raynor00037" Variations="0"/>
+<Sound id="TRaynor02Civilian400043" Variations="0"/>
+<Sound id="TRaynor02Civilian200044" Variations="0"/>
+<Sound id="TRaynor02Civilian400045" Variations="0"/>
+<Sound id="TRaynor02Tychus00052" Variations="0"/>
+<Sound id="TRaynor02Raynor00065" Variations="0"/>
+<Sound id="TRaynor02Adjutant00066" Variations="0"/>
+<Sound id="TRaynor02Tychus00067" Variations="0"/>
 <Soundtrack id="TRaynor02MusicMain"/>
 <Soundtrack id="TRaynor02MusicOutro"/>
 <Terrain id="MarSara"/>
+<TerrainObject id="TRaynor02DigSite"/>
 <Unit id="TechLab"/>
 <Unit id="Reactor"/>
 <Unit id="CommandCenter"/>
@@ -105,6 +147,17 @@
 <Unit id="Lyote"/>
 <Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
 <Unit id="VespeneGeyser"/>
+<Unit id="WarPig"/>
+<Unit id="DevilDog"/>
+<Unit id="SpecialOpsDropship"/>
+<Unit id="MinerMale"/>
+<Unit id="Civilian" Variations="0,1,2"/>
+<Unit id="Hut" Variations="2,3,4,5"/>
+<Unit id="PalletGas"/>
+<Unit id="PalletMinerals"/>
+<Unit id="TerranBuggy"/>
+<Unit id="Food1000"/>
+<Unit id="Medic"/>
 <Unit id="AP_SupplyDepot"/>
 <Unit id="AP_Marine"/>
 <Unit id="AP_Medic"/>
