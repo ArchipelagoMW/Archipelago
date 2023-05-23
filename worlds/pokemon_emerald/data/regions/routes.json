@@ -515,7 +515,7 @@
     "events": [],
     "exits": [
       "REGION_ROUTE112/CABLE_CAR_STATION_ENTRANCE",
-      "REGION_ROUTE111/SOUTH"
+      "REGION_ROUTE111/MIDDLE"
     ],
     "warps": [
       "MAP_ROUTE112:4/MAP_FIERY_PATH:0"
