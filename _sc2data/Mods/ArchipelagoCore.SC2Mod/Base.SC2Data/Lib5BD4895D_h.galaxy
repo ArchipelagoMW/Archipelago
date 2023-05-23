@@ -31,11 +31,6 @@ struct lib5BD4895D_gs_chatbox {
 
 // Variable Declarations
 bool lib5BD4895D_gv_aP_Core_initFinished;
-string lib5BD4895D_gv_aP_Core_Faction_RaynorsRaiders;
-string lib5BD4895D_gv_aP_Core_Faction_TerranDominion;
-string lib5BD4895D_gv_aP_Core_Faction_PrimalZerg;
-string lib5BD4895D_gv_aP_Core_Faction_KerriganSwarm;
-string lib5BD4895D_gv_aP_Core_Faction_Daelaam;
 playergroup lib5BD4895D_gv_aP_Core_affectedPlayers;
 string[21] lib5BD4895D_gv_aP_Core_playerFactions;
 int lib5BD4895D_gv_aP_Core_chatboxAnchor;
@@ -44,11 +39,20 @@ int lib5BD4895D_gv_aP_Core_chatbox_y;
 int lib5BD4895D_gv_aP_Core_chatbox_offsetX;
 int lib5BD4895D_gv_aP_Core_chatbox_offsetY;
 trigger lib5BD4895D_gv_aP_Core_mapInit;
+string lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS;
+string lib5BD4895D_gv_aP_Core_Faction_TERRAN_DOMINION;
+string lib5BD4895D_gv_aP_Core_Faction_PRIMAL_ZERG;
+string lib5BD4895D_gv_aP_Core_Faction_KERRIGAN_SWARM;
+string lib5BD4895D_gv_aP_Core_Faction_DAELAAM;
 unit lib5BD4895D_gv_aP_Core_controller;
 int lib5BD4895D_gv_aP_Core_controllerStatus;
 lib5BD4895D_gs_chatbox lib5BD4895D_gv_chatbox;
 
 // Function Declarations
+void lib5BD4895D_gf_AP_Core_MapConfig_setAffectedPlayers (playergroup lp_players);
+void lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction (int lp_player, string lp_faction);
+void lib5BD4895D_gf_AP_Core_MapConfig_setChatboxPosition (int lp_anchor, int lp_x, int lp_y, int lp_offsetX, int lp_offsetY);
+void lib5BD4895D_gf_AP_Core_MapConfig_setMapInit (trigger lp_initTrigger);
 void lib5BD4895D_gf_AP_Core_sendLocationLocal (int lp_locationIdLocal);
 text lib5BD4895D_gf_getchatboxcontent ();
 void lib5BD4895D_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety);

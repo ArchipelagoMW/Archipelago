@@ -328,15 +328,12 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
     }
 
     TriggerExecute(gt_Init02Players, true, false);
-    libABFE498B_gv_aP_Triggers_isBuild = false;
-    lib5BD4895D_gv_aP_Core_playerFactions[gv_p1_USER] = lib5BD4895D_gv_aP_Core_Faction_RaynorsRaiders;
-    lib5BD4895D_gv_aP_Core_playerFactions[gv_p2_DOMINION_RED] = lib5BD4895D_gv_aP_Core_Faction_TerranDominion;
-    lib5BD4895D_gv_aP_Core_playerFactions[gv_p4_ACTORS_BLUE] = lib5BD4895D_gv_aP_Core_Faction_RaynorsRaiders;
-    lib5BD4895D_gv_aP_Core_mapInit = gt_Initialization;
-    libABFE498B_gv_aP_Triggers_onDifficultyCasual = gt_onDifficultyCasual;
-    libABFE498B_gv_aP_Triggers_onDifficultyNormal = gt_onDifficultyNormal;
-    libABFE498B_gv_aP_Triggers_onDifficultyHard = gt_onDifficultyHard;
-    libABFE498B_gv_aP_Triggers_onDifficultyBrutal = gt_onDifficultyBrutal;
+    libABFE498B_gf_AP_Triggers_MapConfig_setMissionBuild(false);
+    lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction(gv_p1_USER, lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS);
+    lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction(gv_p2_DOMINION_RED, lib5BD4895D_gv_aP_Core_Faction_TERRAN_DOMINION);
+    lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction(gv_p4_ACTORS_BLUE, lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS);
+    lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
+    libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup(gt_onDifficultyCasual, gt_onDifficultyNormal, gt_onDifficultyHard, gt_onDifficultyBrutal);
     return true;
 }
 

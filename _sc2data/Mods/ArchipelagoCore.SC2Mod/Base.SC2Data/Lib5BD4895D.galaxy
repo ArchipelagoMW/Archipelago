@@ -22,11 +22,6 @@ void lib5BD4895D_InitVariables () {
 
     lib5BD4895D_InitVariables_completed = true;
 
-    lib5BD4895D_gv_aP_Core_Faction_RaynorsRaiders = "rr";
-    lib5BD4895D_gv_aP_Core_Faction_TerranDominion = "td";
-    lib5BD4895D_gv_aP_Core_Faction_PrimalZerg = "pz";
-    lib5BD4895D_gv_aP_Core_Faction_KerriganSwarm = "ks";
-    lib5BD4895D_gv_aP_Core_Faction_Daelaam = "da";
     lib5BD4895D_gv_aP_Core_affectedPlayers = PlayerGroupSingle(1);
     for (init_i = 0; init_i <= 20; init_i += 1) {
         lib5BD4895D_gv_aP_Core_playerFactions[init_i] = "";
@@ -35,6 +30,11 @@ void lib5BD4895D_InitVariables () {
     lib5BD4895D_gv_aP_Core_chatbox_x = 500;
     lib5BD4895D_gv_aP_Core_chatbox_y = 350;
     lib5BD4895D_gv_aP_Core_chatbox_offsetY = 40;
+    lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS = "rr";
+    lib5BD4895D_gv_aP_Core_Faction_TERRAN_DOMINION = "td";
+    lib5BD4895D_gv_aP_Core_Faction_PRIMAL_ZERG = "pz";
+    lib5BD4895D_gv_aP_Core_Faction_KERRIGAN_SWARM = "ks";
+    lib5BD4895D_gv_aP_Core_Faction_DAELAAM = "da";
     lib5BD4895D_gv_chatbox.lv_mainpanel = c_invalidDialogId;
     lib5BD4895D_gv_chatbox.lv_chatpanel = c_invalidDialogId;
     lib5BD4895D_gv_chatbox.lv_hiddenpanel = c_invalidDialogId;
@@ -53,6 +53,34 @@ void lib5BD4895D_InitVariables () {
 }
 
 // Functions
+void lib5BD4895D_gf_AP_Core_MapConfig_setAffectedPlayers (playergroup lp_players) {
+    // Automatic Variable Declarations
+    // Implementation
+    lib5BD4895D_gv_aP_Core_affectedPlayers = lp_players;
+}
+
+void lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction (int lp_player, string lp_faction) {
+    // Automatic Variable Declarations
+    // Implementation
+    lib5BD4895D_gv_aP_Core_playerFactions[lp_player] = lp_faction;
+}
+
+void lib5BD4895D_gf_AP_Core_MapConfig_setChatboxPosition (int lp_anchor, int lp_x, int lp_y, int lp_offsetX, int lp_offsetY) {
+    // Automatic Variable Declarations
+    // Implementation
+    lib5BD4895D_gv_aP_Core_chatboxAnchor = lp_anchor;
+    lib5BD4895D_gv_aP_Core_chatbox_x = lp_x;
+    lib5BD4895D_gv_aP_Core_chatbox_y = lp_y;
+    lib5BD4895D_gv_aP_Core_chatbox_offsetX = lp_offsetX;
+    lib5BD4895D_gv_aP_Core_chatbox_offsetY = lib5BD4895D_gv_aP_Core_chatbox_offsetY;
+}
+
+void lib5BD4895D_gf_AP_Core_MapConfig_setMapInit (trigger lp_initTrigger) {
+    // Automatic Variable Declarations
+    // Implementation
+    lib5BD4895D_gv_aP_Core_mapInit = lp_initTrigger;
+}
+
 void lib5BD4895D_gf_AP_Core_sendLocationLocal (int lp_locationIdLocal) {
     // Variable Declarations
     int lv_value;

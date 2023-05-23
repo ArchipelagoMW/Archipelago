@@ -36,6 +36,21 @@ void libABFE498B_InitCustomScript () {
 }
 
 // Functions
+void libABFE498B_gf_AP_Triggers_MapConfig_setMissionBuild (bool lp_build) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gv_aP_Triggers_isBuild = lp_build;
+}
+
+void libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup (trigger lp_onCasual, trigger lp_onNormal, trigger lp_onHard, trigger lp_onBrutal) {
+    // Automatic Variable Declarations
+    // Implementation
+    libABFE498B_gv_aP_Triggers_onDifficultyCasual = lp_onCasual;
+    libABFE498B_gv_aP_Triggers_onDifficultyNormal = lp_onNormal;
+    libABFE498B_gv_aP_Triggers_onDifficultyHard = lp_onHard;
+    libABFE498B_gv_aP_Triggers_onDifficultyBrutal = lp_onBrutal;
+}
+
 void libABFE498B_gf_AP_Triggers_setDifficulty (string lp_difficultyChar) {
     // Variable Declarations
     int lv_currentPlayer;
