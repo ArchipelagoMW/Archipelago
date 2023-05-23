@@ -1,0 +1,103 @@
+Button/Name/Drop Item=Soltar item /// Drop Item
+Button/Name/PickUpItem=Coletar item /// Pick Up Item
+Button/Name/YamatoCannonEngine=Canhão Yamato Motor /// Yamato Cannon Engine
+Button/Tooltip/YamatoCannonEngine=Canhão Yamato Motor /// Yamato Cannon Engine
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TRaynor02 /// TRaynor02
+DocInfo/Name=Os fora-da-lei /// The Outlaws
+MapInfo/Player00/Name=Neutro /// Neutral
+MapInfo/Player01/Name=Saqueadores do Raynor /// Raynor's Raiders
+MapInfo/Player02/Name=A Supremacia /// The Dominion
+MapInfo/Player03/Name=Colonos de Mar Sara /// Mar Sara Colonists
+MapInfo/Player04/Name=Rebeldes de Mar Sara /// Mar Sara Rebels
+MapInfo/Player05/Name=A Supremacia /// The Dominion
+MapInfo/Player06/Name=Lvl80 ETC /// Lvl80 ETC
+Param/Value/0298E5C5=
+Param/Value/082D660C=Treina unidades de infantaria. /// Trains infantry units.
+Param/Value/09D741B1=Construindo estruturas /// Building Structures
+Param/Value/0B80F9CB=
+Param/Value/0C325DA5=<c val="00FF00">Fonte de gás vespeno</c> /// <c val="00FF00">Vespene Geyser</c>
+Param/Value/0DC99D36=Mova qualquer unidade terrestre para ativar a câmera de segurança. /// Move any ground unit here to rescue the rebels.
+Param/Value/1489A356=Para treinar unidades e construir estruturas, você deve ter os minérios e gás vespeno necessários. Para extrair esses recursos, selecione um VCE e clique com o botão direito em uma jazida de minérios ou Refinaria. /// In order to train units and build structures, you must have the necessary minerals and vespene gas. To gather these resources, select an SCV and right-click on a Mineral Field or Refinery.
+Param/Value/1834D61B=A Supremacia estava enviando à força residentes de Fim do mundo para trabalharem na base Pedra Branca e desencavar um valioso artefato alienígena. Destrua a base e garanta a posse do artefato. /// The Dominion was forcibly shipping citizens from Backwater to work at the White Rock Base and dig up a valuable alien artifact. Destroy the base and secure the artifact.
+Param/Value/1DA9A544=<c val="00FF00">Depósito de suprimentos</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/2192741C=Resgatar os rebeldes /// Rescue the Rebels
+Param/Value/25E4FBE5=
+Param/Value/29D14701=
+Param/Value/29F1550E=Use um VCE para construir uma Refinaria aqui. /// Use an SCV to build a Refinery here.
+Param/Value/29FB49B3=Use qualquer unidade terrestre para coletar 100 minérios. /// Use any ground unit to collect 100 minerals.
+Param/Value/2C1A7BF3=Resgatar os rebeldes /// Rescue the Rebels
+Param/Value/30C0C1F4=Todas as suas estruturas foram destruídas. /// All of your structures have been destroyed.
+Param/Value/315FAFA9=Treina Soldados adicionais. /// Trains additional Marines.
+Param/Value/369CE5DF=
+Param/Value/3874BE18=
+Param/Value/3DED6760=<c val="00FF00">Quartel</c> /// <c val="00FF00">Barracks</c>
+Param/Value/436ADBC9=Aumenta os suprimentos máximos. /// Increases maximum supply.
+Param/Value/459758FC=Você só pode treinar as unidades se tiver suprimentos suficientes. Construa mais Depósitos de suprimentos para aumentar seus suprimentos. /// You can only train units if you have enough supply. Build more Supply Depots to increase your supply.
+Param/Value/4CD2C215=
+Param/Value/4E851134=Use esse VCE para construir um Depósito de suprimentos. /// Use this SCV to build a Supply Depot.
+Param/Value/4FEBF75F=Possibilita o treinamento de mais unidades.<n/>Construído por VCEs. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/553C5320=
+Param/Value/5D83C509=Use qualquer unidade terrestre para coletar 100 minérios. /// Use any ground unit to collect 100 minerals.
+Param/Value/5DF05CC8=
+Param/Value/5E553DF6=O ataque à Base Fim do Mundo inspirou a revolta generalizada em Mar Sara e um pequeno foco de resistência de combatentes rebeldes está cercado pelas tropas da Supremacia. Ajude os rebeldes em sua luta contra os opressores da Supremacia. /// The attack on Backwater Station inspired a general revolt on Mar Sara and a small pocket of rebel resistance fighters is under siege by Dominion forces. Help the rebels in their fight against the Dominion oppressors.
+Param/Value/5F57FEAF=<c val="00FF00">Central de comando</c> /// <c val="00FF00">Command Center</c>
+Param/Value/67C1B22E=<c val="00FF00">Depósito de suprimentos</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/6AFBD4E8=
+Param/Value/6C1DC930=Mova qualquer unidade terrestre para resgatar os rebeldes. /// Move any ground unit here to rescue the rebels.
+Param/Value/700B4B10=
+Param/Value/7A6D409B=
+Param/Value/7AD4780A=Possibilita o treinamento de mais unidades.<n/>Construído por VCEs. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/7BE218AF=
+Param/Value/7CBDAD7D=Coletando recursos /// Gathering Resources
+Param/Value/7EC9B6E6=Use qualquer unidade terrestre para coletar 100 de gás vespeno. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/7EFFD911=
+Param/Value/8042104E=Não! Não matem a gente! /// No! Don't kill us!
+Param/Value/829A73B4=
+Param/Value/8A2F86ED=Médicos treinados /// Medics Trained
+Param/Value/8BA552E2=Rebeldes resgatados. /// Rebels rescued.
+Param/Value/8BC6DA5C=Treina VCEs adicionais. /// Trains additional SCVs.
+Param/Value/8EDE287C=
+Param/Value/97842D38=Tutoriais /// Tutorials
+Param/Value/A0322401=Reforços de VCE. /// SCV reinforcements.
+Param/Value/A087C9B6=Reforços /// Reinforcements
+Param/Value/A089141C=Use qualquer unidade terrestre para coletar 100 de gás vespeno. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/A3A30B03=VCE /// SCV
+Param/Value/A47B85AE=
+Param/Value/A4B6BC33=
+Param/Value/A4D579C0=<c val="00FF00">Palete de minérios</c> /// <c val="00FF00">Mineral Pallet</c>
+Param/Value/A5344D12=
+Param/Value/A9228879=Clique na guia <c val="FFFF00">Tutoriais</c> no menu <c val="FFFF00">Ajuda (F12)</c> para visualizar os vídeos tutoriais disponíveis. /// Click on the <c val="FFFF00">Tutorials</c> tab from the <c val="FFFF00">Help (F12)</c> menu to view the available tutorial videos.
+Param/Value/A9CFF182=Você pode treinar Soldados e outras unidades do Quartel. Para treinar um Soldado, selecione seu Quartel e clique no botão Treinar Soldado. /// You can train Marines and other units from the Barracks. To train a Marine, select your Barracks and click on the Train Marine button.
+Param/Value/AA5B6118=Treinando unidades /// Training Units
+Param/Value/AA758DDC=
+Param/Value/AC22A39E=Tutoriais /// Tutorials
+Param/Value/B32015BB=Estruturas possibilitam treinar unidades e aprimorar suas tropas. Para construir uma estrutura, selecione um VCE e use a habilidade de construir estrutura. /// Structures give you the ability to train units and upgrade your forces. To build a structure, select an SCV and use its Build Structure ability.
+Param/Value/B469D2B4=<c val="00FF00">Depósito de suprimentos</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/B796C5DF=Use qualquer unidade terrestre para coletar 100 minérios. /// Use any ground unit to collect 100 minerals.
+Param/Value/BAFF2804=
+Param/Value/BE45965F=
+Param/Value/C2FBFDD1=Base da Supremacia /// Dominion Base
+Param/Value/C84857DE=
+Param/Value/C9C6EF31=<c val="00FF00">Palete de gás</c> /// <c val="00FF00">Gas Pallet</c>
+Param/Value/C9F1F8E6=Aumenta os suprimentos máximos. /// Increases maximum supply.
+Param/Value/CBC05FCF=
+Param/Value/CF60F8FD=Resgatar os rebeldes /// Rescue the Rebels
+Param/Value/D2CA8D27=<c val="00FF00">Jazida de minérios</c> /// <c val="00FF00">Mineral Field</c>
+Param/Value/D2FCCA4E=Médico /// Medic
+Param/Value/D35CB257=Possibilita o treinamento de mais unidades.<n/>Construído por VCEs. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/DE2A16B2=
+Param/Value/DE4A6E49=Destruir a base da Supremacia /// Destroy the Dominion Base
+Param/Value/E0ECCB59=A base rebelde está sendo atacada /// Rebel base under attack
+Param/Value/E1E7A872=/ /// /
+Param/Value/E20B6E76=Use qualquer unidade terrestre para coletar 100 de gás vespeno. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/E355EE50=Mova qualquer unidade terrestre <n/>para ativar a câmera de segurança. /// Move any ground unit here<n/>to rescue the rebels.
+Param/Value/E64A5DCD=Treine VCEs para extrair recursos e construir estruturas. /// Trains SCVs to collect resources and build structures.
+Param/Value/EBDA9E89=Use um VCE para extrair desta jazida de minérios. /// Use an SCV to gather from this Mineral Field.
+Param/Value/F014BD9E=Destruir a base da Supremacia /// Destroy the Dominion Base
+Param/Value/F5878C5F=Suprimentos /// Supply
+Param/Value/F60E71B0=Paletes de recursos encontrados /// Resource Pallets Found
+Param/Value/F6A2B90D=Aumenta os suprimentos máximos. /// Increases maximum supply.
+Param/Value/FA29FBD9=
+Sound/Name/RebelRescue=Resgatar Rebelde /// RebelRescue

@@ -1,0 +1,103 @@
+Button/Name/Drop Item=Gegenstand fallen lassen /// Drop Item
+Button/Name/PickUpItem=Gegenstand aufheben /// Pick Up Item
+Button/Name/YamatoCannonEngine=Yamato-Kanonentriebwerk /// Yamato Cannon Engine
+Button/Tooltip/YamatoCannonEngine=Yamato-Kanonentriebwerk /// Yamato Cannon Engine
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TRaynor02 /// TRaynor02
+DocInfo/Name=Die Gesetzlosen /// The Outlaws
+MapInfo/Player00/Name=Neutral /// Neutral
+MapInfo/Player01/Name=Raynor's Raiders /// Raynor's Raiders
+MapInfo/Player02/Name=Die Liga /// The Dominion
+MapInfo/Player03/Name=Kolonisten von Mar Sara /// Mar Sara Colonists
+MapInfo/Player04/Name=Rebellen von Mar Sara /// Mar Sara Rebels
+MapInfo/Player05/Name=Die Liga /// The Dominion
+MapInfo/Player06/Name=Level 80 Elite Tauren Chieftain /// Lvl80 ETC
+Param/Value/0298E5C5=
+Param/Value/082D660C=Bildet zusätzliche Infanterie-Einheiten aus. /// Trains infantry units.
+Param/Value/09D741B1=Gebäude bauen /// Building Structures
+Param/Value/0B80F9CB=
+Param/Value/0C325DA5=<c val="00FF00">Vespingeysir</c> /// <c val="00FF00">Vespene Geyser</c>
+Param/Value/0DC99D36=Bewegen Sie eine Bodeneinheit hierher, um die Rebellen zu retten. /// Move any ground unit here to rescue the rebels.
+Param/Value/1489A356=Um Einheiten auszubilden und Gebäude zu bauen, müssen Sie über die nötigen Mineralien und das nötige Vespingas verfügen. Um diese Ressourcen abzubauen, wählen Sie ein WBF aus und führen Sie einen Rechtsklick auf ein Mineralienfeld oder eine Raffinerie aus. /// In order to train units and build structures, you must have the necessary minerals and vespene gas. To gather these resources, select an SCV and right-click on a Mineral Field or Refinery.
+Param/Value/1834D61B=Die Liga hat die Bewohner von Backwater zur White-Rock-Basis deportiert, um ein kostbares Alien-Artefakt freizulegen. Vernichten Sie die Basis und holen Sie das Artefakt. /// The Dominion was forcibly shipping citizens from Backwater to work at the White Rock Base and dig up a valuable alien artifact. Destroy the base and secure the artifact.
+Param/Value/1DA9A544=<c val="00FF00">Versorgungsdepot</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/2192741C=Retten Sie die Rebellen /// Rescue the Rebels
+Param/Value/25E4FBE5=
+Param/Value/29D14701=
+Param/Value/29F1550E=WBF einsetzen um hier eine Raffinerie zu errichten. /// Use an SCV to build a Refinery here.
+Param/Value/29FB49B3=Setzen Sie eine beliebige Bodeneinheit ein, um 100 Mineralien aufzusammeln. /// Use any ground unit to collect 100 minerals.
+Param/Value/2C1A7BF3=Retten Sie die Rebellen /// Rescue the Rebels
+Param/Value/30C0C1F4=All Ihre Gebäude wurden zerstört. /// All of your structures have been destroyed.
+Param/Value/315FAFA9=Bildet zusätzliche Space-Marines aus. /// Trains additional Marines.
+Param/Value/369CE5DF=
+Param/Value/3874BE18=
+Param/Value/3DED6760=<c val="00FF00">Kaserne</c> /// <c val="00FF00">Barracks</c>
+Param/Value/436ADBC9=Erhöht die maximale Versorgung. /// Increases maximum supply.
+Param/Value/459758FC=Sie können Einheiten nur mit genug zur Verfügung stehender Versorgung ausbilden. Bauen Sie weitere Versorgungsdepots, um Ihre Versorgung zu erhöhen. /// You can only train units if you have enough supply. Build more Supply Depots to increase your supply.
+Param/Value/4CD2C215=
+Param/Value/4E851134=Benutzen Sie dieses WBF, um ein Versorgungsdepot zu bauen. /// Use this SCV to build a Supply Depot.
+Param/Value/4FEBF75F=Ermögicht den Bau weiterer Einheiten.<n/>Von WBFs gebaut. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/553C5320=
+Param/Value/5D83C509=Setzen Sie eine beliebige Bodeneinheit ein, um 100 Mineralien aufzusammeln. /// Use any ground unit to collect 100 minerals.
+Param/Value/5DF05CC8=
+Param/Value/5E553DF6=Der Angriff auf Backwater Station hat eine große Revolte auf Mar Sara ausgelöst. Eine kleine Gruppe von Widerstandskämpfern wird von den Streitkräften der Liga belagert. Helfen Sie den Rebellen gegen die Unterdrücker. /// The attack on Backwater Station inspired a general revolt on Mar Sara and a small pocket of rebel resistance fighters is under siege by Dominion forces. Help the rebels in their fight against the Dominion oppressors.
+Param/Value/5F57FEAF=<c val="00FF00">Kommandozentrale</c> /// <c val="00FF00">Command Center</c>
+Param/Value/67C1B22E=<c val="00FF00">Versorgungsdepot</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/6AFBD4E8=
+Param/Value/6C1DC930=Bewegen Sie eine Bodeneinheit hierher, um die Rebellen zu retten. /// Move any ground unit here to rescue the rebels.
+Param/Value/700B4B10=
+Param/Value/7A6D409B=
+Param/Value/7AD4780A=Ermögicht den Bau weiterer Einheiten.<n/>Von WBFs gebaut. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/7BE218AF=
+Param/Value/7CBDAD7D=Ressourcenabbau /// Gathering Resources
+Param/Value/7EC9B6E6=Setzen Sie eine beliebige Bodeneinheit ein, um 100 Vespingas aufzusammeln. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/7EFFD911=
+Param/Value/8042104E=Nein! Tötet uns nicht! /// No! Don't kill us!
+Param/Value/829A73B4=
+Param/Value/8A2F86ED=Ausgebildete Sanitäter /// Medics Trained
+Param/Value/8BA552E2=Rebellen gerettet. /// Rebels rescued.
+Param/Value/8BC6DA5C=Bietet zusätzliche WBFs aus. /// Trains additional SCVs.
+Param/Value/8EDE287C=
+Param/Value/97842D38=Tutorials /// Tutorials
+Param/Value/A0322401=WBFs als Verstärkung. /// SCV reinforcements.
+Param/Value/A087C9B6=Verstärkung /// Reinforcements
+Param/Value/A089141C=Setzen Sie eine beliebige Bodeneinheit ein, um 100 Vespingas aufzusammeln. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/A3A30B03=WBF /// SCV
+Param/Value/A47B85AE=
+Param/Value/A4B6BC33=
+Param/Value/A4D579C0=<c val="00FF00">Mineraliencontainer</c> /// <c val="00FF00">Mineral Pallet</c>
+Param/Value/A5344D12=
+Param/Value/A9228879=Klicken Sie auf den Reiter <c val="FFFF00">Tutorials</c> im <c val="FFFF00">Hilfemenü (F12)</c>, um verfügbare Tutorial-Videos einzusehen. /// Click on the <c val="FFFF00">Tutorials</c> tab from the <c val="FFFF00">Help (F12)</c> menu to view the available tutorial videos.
+Param/Value/A9CFF182=In der Kaserne können Sie Space-Marines und andere Einheiten ausbilden. Um einen Space-Marine auszubilden, wählen Sie eine Kaserne aus und klicken Sie auf die Schaltfläche "Space-Marine ausbilden". /// You can train Marines and other units from the Barracks. To train a Marine, select your Barracks and click on the Train Marine button.
+Param/Value/AA5B6118=Einheiten ausbilden /// Training Units
+Param/Value/AA758DDC=
+Param/Value/AC22A39E=Tutorials /// Tutorials
+Param/Value/B32015BB=Mit Gebäuden können Sie Einheiten ausbilden und verbessern. Um ein Gebäude zu bauen, wählen Sie ein WBF aus und setzen Sie die Fähigkeit "Gebäude bauen" ein. /// Structures give you the ability to train units and upgrade your forces. To build a structure, select an SCV and use its Build Structure ability.
+Param/Value/B469D2B4=<c val="00FF00">Versorgungsdepot</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/B796C5DF=Setzen Sie eine beliebige Bodeneinheit ein, um 100 Mineralien aufzusammeln. /// Use any ground unit to collect 100 minerals.
+Param/Value/BAFF2804=
+Param/Value/BE45965F=
+Param/Value/C2FBFDD1=Basis der Liga /// Dominion Base
+Param/Value/C84857DE=
+Param/Value/C9C6EF31=<c val="00FF00">Gascontainer</c> /// <c val="00FF00">Gas Pallet</c>
+Param/Value/C9F1F8E6=Erhöht die maximale Versorgung. /// Increases maximum supply.
+Param/Value/CBC05FCF=
+Param/Value/CF60F8FD=Retten Sie die Rebellen /// Rescue the Rebels
+Param/Value/D2CA8D27=<c val="00FF00">Mineralienfeld</c> /// <c val="00FF00">Mineral Field</c>
+Param/Value/D2FCCA4E=Sanitäter /// Medic
+Param/Value/D35CB257=Ermögicht den Bau weiterer Einheiten.<n/>Von WBFs gebaut. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/DE2A16B2=
+Param/Value/DE4A6E49=Zerstören Sie die Basis der Liga /// Destroy the Dominion Base
+Param/Value/E0ECCB59=Die Rebellenbasis wird angegriffen /// Rebel base under attack
+Param/Value/E1E7A872=/ /// /
+Param/Value/E20B6E76=Setzen Sie eine beliebige Bodeneinheit ein, um 100 Vespingas aufzusammeln. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/E355EE50=Bewegen Sie eine Bodeneinheit hieher,<n/>um die Rebellen zu retten. /// Move any ground unit here<n/>to rescue the rebels.
+Param/Value/E64A5DCD=Bildet WBFs aus, um Ressourcen abzubauen und Gebäude zu errichten. /// Trains SCVs to collect resources and build structures.
+Param/Value/EBDA9E89=WBF einsetzen, um diese Mineralien abzubauen. /// Use an SCV to gather from this Mineral Field.
+Param/Value/F014BD9E=Zerstören Sie die Basis der Liga /// Destroy the Dominion Base
+Param/Value/F5878C5F=Versorgung /// Supply
+Param/Value/F60E71B0=Ressourcenlager gefunden /// Resource Pallets Found
+Param/Value/F6A2B90D=Erhöht die maximale Versorgung. /// Increases maximum supply.
+Param/Value/FA29FBD9=
+Sound/Name/RebelRescue=RebelRescue /// RebelRescue

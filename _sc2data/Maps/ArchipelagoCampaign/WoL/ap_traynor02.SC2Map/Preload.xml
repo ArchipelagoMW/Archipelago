@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Asset path="assets\textures\icon-supply-terran.dds" Type="Image"/>
+<Asset path="assets\textures\btn-building-terran-commandcenter.dds" Type="Image"/>
+<Asset path="assets\textures\icon-mineral-terran.dds" Type="Image"/>
+<Asset path="assets\textures\ui_mission_frame_massege.dds" Type="Image"/>
+<Asset path="assets\textures\btn-unit-terran-scv.dds" Type="Image"/>
+<Asset path="assets\textures\ui_icon_attention.dds" Type="Image"/>
+<Asset path="assets\textures\btn-command-attack.dds" Type="Image"/>
+<Asset path="assets\textures\btn-unit-terran-marine.dds" Type="Image"/>
+<Achievement id="Anniversary_TRaynor02"/>
+<Achievement id="TRaynor02_1"/>
+<Achievement id="TRaynor02_2"/>
+<Achievement id="TRaynor02_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="LightOmniCyan"/>
+<Actor id="PathingBlocker1x1Doodad"/>
+<Actor id="AvernusBarrier" Variations="3,4,5"/>
+<Actor id="BirdsTarsonis"/>
+<Actor id="Brambles" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="BraxisAlphaBarrels" Variations="0,1,2"/>
+<Actor id="BunkerWrecked"/>
+<Actor id="ChainLinkFenceDiagonal" Variations="1,2,3"/>
+<Actor id="ChainLinkFencePost"/>
+<Actor id="ChainLinkFenceStraight" Variations="0,2,3,4,5,6,7"/>
+<Actor id="CommandCenterWrecked"/>
+<Actor id="Crate" Variations="0,1,4,5"/>
+<Actor id="Decal" Variations="0,1,3,17"/>
+<Actor id="Dumpster" Variations="2"/>
+<Actor id="FireMedium"/>
+<Actor id="Floodlight" Variations="0"/>
+<Actor id="Garage" Variations="1"/>
+<Actor id="GarageLarge" Variations="1"/>
+<Actor id="GasStationAngled"/>
+<Actor id="MammothFossils" Variations="0"/>
+<Actor id="MarSaraBones" Variations="0,2,4"/>
+<Actor id="MarSaraBridgeDestroyed"/>
+<Actor id="MarSaraBridgeLong" Variations="0"/>
+<Actor id="MarSaraCactus" Variations="0,1,2,3,4"/>
+<Actor id="MarSaraCliffDoodadLarge" Variations="0"/>
+<Actor id="MarSaraCliffDoodadLargeLow" Variations="0"/>
+<Actor id="MarSaraConveyorBelt" Variations="0"/>
+<Actor id="MarSaraCrack" Variations="0,1,3,4,5,6"/>
+<Actor id="MarSaraDirtPileLarge" Variations="0"/>
+<Actor id="MarSaraGroundProps" Variations="0,1,2,3,4"/>
+<Actor id="MarSaraMineCart"/>
+<Actor id="MarSaraSkeletonLarge" Variations="0,1"/>
+<Actor id="MarSaraSkeletonSmall" Variations="0,1"/>
+<Actor id="MarSaraTree" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="MarSaraTreeDead" Variations="1,2,3,4,5"/>
+<Actor id="MarSaraTunnel"/>
+<Actor id="MineralCart" Variations="3"/>
+<Actor id="MiningBot"/>
+<Actor id="MiningBotWrecked" Variations="0"/>
+<Actor id="Outhouse" Variations="1"/>
+<Actor id="PipesCap" Variations="0"/>
+<Actor id="PipesCorner" Variations="3"/>
+<Actor id="PipesCorner45" Variations="0,1"/>
+<Actor id="PipesLong" Variations="0,1,2,3"/>
+<Actor id="PipesLong45" Variations="2"/>
+<Actor id="PipesShort" Variations="1"/>
+<Actor id="PipesShort45" Variations="0,1"/>
+<Actor id="PipesStack" Variations="0,1"/>
+<Actor id="PortZionGroundMix" Variations="0,1,3,4,5,6,7,9"/>
+<Actor id="PortZionTires" Variations="0,1,2"/>
+<Actor id="PortZionTower" Variations="2,9"/>
+<Actor id="PowerLine" Variations="0,1,2,4"/>
+<Actor id="Rock" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Actor id="RockFormationLarge" Variations="5"/>
+<Actor id="RockLarge" Variations="0,1,2,3,5"/>
+<Actor id="Searchlight" Variations="1"/>
+<Actor id="SignsWarning" Variations="1,10"/>
+<Actor id="SpacePlatformBarrier" Variations="0,1"/>
+<Actor id="SpacePlatformBillboard" Variations="1"/>
+<Actor id="SpacePlatformCautionLights" Variations="1"/>
+<Actor id="SpacePlatformSignDestructible" Variations="1"/>
+<Actor id="SpacePlatformSignTowerLarge" Variations="0,1"/>
+<Actor id="TRaynor02Crane" Variations="0,2"/>
+<Actor id="TRaynor02CranePart2x2" Variations="0,2,3,4"/>
+<Actor id="TRaynor02CranePart3x3" Variations="1,4,6,7,8,9"/>
+<Actor id="WaterTank" Variations="0,1,2"/>
+<Actor id="WaterTankTall" Variations="0,1"/>
+<Actor id="WindEmitterMedium"/>
+<Actor id="WindTurbine"/>
+<Actor id="AnimalCorpse" Variations="1"/>
+<Actor id="PipesSmallCorner" Variations="0"/>
+<Actor id="PipesSmallShort"/>
+<Actor id="TRaynor02MineLift"/>
+<Actor id="TRaynorDumpTruck"/>
+<Behavior id="Run"/>
+<Model id="PingObjective"/>
+<Model id="TalkIcon"/>
+<Model id="BriefingUnitSelect"/>
+<Model id="BriefingUnitSelectLarge"/>
+<Model id="MarSaraSkyBox"/>
+<Sound id="TutorialAdjutant00028" Variations="0"/>
+<Sound id="UI_Starmap_Popup" Variations="2"/>
+<Sound id="TUIWarningPing" Variations="0"/>
+<Sound id="Doodad_TRaynor02DigSiteCraneRaise" Variations="0"/>
+<Sound id="Emitter_MarSaraMining"/>
+<Sound id="Emitter_MarSaraMiningSmallAoE"/>
+<Sound id="TRaynor02BriefingRaynor00001" Variations="0"/>
+<Sound id="TRaynor02BriefingTychus00002" Variations="0"/>
+<Sound id="TRaynor02BriefingTychus00003" Variations="0"/>
+<Sound id="TRaynor02BriefingRaynor00004" Variations="0"/>
+<Sound id="TRaynor02BriefingTychus00005" Variations="0"/>
+<Sound id="TRaynor02BriefingRaynor00006" Variations="0"/>
+<Sound id="THanson02Raynor00029" Variations="0"/>
+<Sound id="TTosh01Raynor00017" Variations="0"/>
+<Sound id="TRaynor02Adjutant00001" Variations="0"/>
+<Sound id="TRaynor02Raynor00003" Variations="0"/>
+<Sound id="TRaynor02Adjutant00006" Variations="0"/>
+<Sound id="TRaynor02Tychus00007" Variations="0"/>
+<Sound id="TRaynor02Tychus00009" Variations="0"/>
+<Sound id="TRaynor02Civilian200012" Variations="0"/>
+<Sound id="TRaynor02Civilian300013" Variations="0"/>
+<Sound id="TRaynor02DominionMarine500014" Variations="0"/>
+<Sound id="TRaynor02Civilian500023" Variations="0"/>
+<Sound id="TRaynor02Civilian600024" Variations="0"/>
+<Sound id="TRaynor02Adjutant00031" Variations="0"/>
+<Sound id="TRaynor02Rebel00034" Variations="0"/>
+<Sound id="TRaynor02Raynor00035" Variations="0"/>
+<Sound id="TRaynor02Raynor00037" Variations="0"/>
+<Sound id="TRaynor02Civilian400043" Variations="0"/>
+<Sound id="TRaynor02Civilian200044" Variations="0"/>
+<Sound id="TRaynor02Civilian400045" Variations="0"/>
+<Sound id="TRaynor02Tychus00052" Variations="0"/>
+<Sound id="TRaynor02Raynor00065" Variations="0"/>
+<Sound id="TRaynor02Adjutant00066" Variations="0"/>
+<Sound id="TRaynor02Tychus00067" Variations="0"/>
+<Soundtrack id="TRaynor02MusicMain"/>
+<Soundtrack id="TRaynor02MusicOutro"/>
+<Terrain id="MarSara"/>
+<TerrainObject id="TRaynor02DigSite"/>
+<Unit id="TechLab"/>
+<Unit id="Reactor"/>
+<Unit id="CommandCenter"/>
+<Unit id="SupplyDepot"/>
+<Unit id="Barracks"/>
+<Unit id="Bunker"/>
+<Unit id="Factory"/>
+<Unit id="SiegeTankSieged"/>
+<Unit id="SCV"/>
+<Unit id="Marine"/>
+<Unit id="Hellion"/>
+<Unit id="Beacon_Terran"/>
+<Unit id="Lyote"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="WarPig"/>
+<Unit id="DevilDog"/>
+<Unit id="SpecialOpsDropship"/>
+<Unit id="MinerMale"/>
+<Unit id="Civilian" Variations="0,1,2"/>
+<Unit id="Hut" Variations="2,3,4,5"/>
+<Unit id="PalletGas"/>
+<Unit id="PalletMinerals"/>
+<Unit id="TerranBuggy"/>
+<Unit id="Food1000"/>
+<Unit id="Medic"/>
+</Preload>

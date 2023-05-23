@@ -1,0 +1,103 @@
+Button/Name/Drop Item=Soltar elemento /// Drop Item
+Button/Name/PickUpItem=Recoger elemento /// Pick Up Item
+Button/Name/YamatoCannonEngine=Motor del Cañón Yamato /// Yamato Cannon Engine
+Button/Tooltip/YamatoCannonEngine=Motor del Cañón Yamato /// Yamato Cannon Engine
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TRaynor02 /// TRaynor02
+DocInfo/Name=Los forajidos /// The Outlaws
+MapInfo/Player00/Name=Neutral /// Neutral
+MapInfo/Player01/Name=Los Rebeldes de Raynor /// Raynor's Raiders
+MapInfo/Player02/Name=El Dominio /// The Dominion
+MapInfo/Player03/Name=Colonos de Mar Sara /// Mar Sara Colonists
+MapInfo/Player04/Name=Sublevados de Mar Sara /// Mar Sara Rebels
+MapInfo/Player05/Name=El Dominio /// The Dominion
+MapInfo/Player06/Name=Nvl80 ETC /// Lvl80 ETC
+Param/Value/0298E5C5=
+Param/Value/082D660C=Entrena a unidades de infantería. /// Trains infantry units.
+Param/Value/09D741B1=Construcción de estructuras /// Building Structures
+Param/Value/0B80F9CB=
+Param/Value/0C325DA5=<c val="00FF00">Géiser de vespeno</c> /// <c val="00FF00">Vespene Geyser</c>
+Param/Value/0DC99D36=Mueve a cualquier unidad terrestre hasta aquí para rescatar a los rebeldes. /// Move any ground unit here to rescue the rebels.
+Param/Value/1489A356=Para poder entrenar unidades y construir estructuras, debes tener los minerales y el gas vespeno necesarios. Para recolectar estos recursos, selecciona un VCE y haz clic derecho en un campo de minerales o Refinería. /// In order to train units and build structures, you must have the necessary minerals and vespene gas. To gather these resources, select an SCV and right-click on a Mineral Field or Refinery.
+Param/Value/1834D61B=El Dominio ha estado transportando ciudadanos de Lejana por la fuerza para hacerlos trabajar en la base de Roca Blanca y desenterrar un valioso Artefacto alienígena. Destruye la base y apodérate del Artefacto. /// The Dominion was forcibly shipping citizens from Backwater to work at the White Rock Base and dig up a valuable alien artifact. Destroy the base and secure the artifact.
+Param/Value/1DA9A544=<c val="00FF00">Depósito de suministros</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/2192741C=Rescatar a los Sublevados /// Rescue the Rebels
+Param/Value/25E4FBE5=
+Param/Value/29D14701=
+Param/Value/29F1550E=Usa un VCE para construir una Refinería aquí. /// Use an SCV to build a Refinery here.
+Param/Value/29FB49B3=Usa cualquier unidad terrestre para recolectar 100 de minerales. /// Use any ground unit to collect 100 minerals.
+Param/Value/2C1A7BF3=Ayudar a los Sublevados /// Rescue the Rebels
+Param/Value/30C0C1F4=Han destruido todas tus estructuras. /// All of your structures have been destroyed.
+Param/Value/315FAFA9=Entrena Marines adicionales. /// Trains additional Marines.
+Param/Value/369CE5DF=
+Param/Value/3874BE18=
+Param/Value/3DED6760=<c val="00FF00">Cuartel</c> /// <c val="00FF00">Barracks</c>
+Param/Value/436ADBC9=Aumenta el máximo de suministros. /// Increases maximum supply.
+Param/Value/459758FC=Sólo puedes entrenar unidades si tienes suficientes suministros. Construye más Depósitos de suministros para aumentar tus suministros. /// You can only train units if you have enough supply. Build more Supply Depots to increase your supply.
+Param/Value/4CD2C215=
+Param/Value/4E851134=Usa este VCE para construir un Depósito de suministros. /// Use this SCV to build a Supply Depot.
+Param/Value/4FEBF75F=Permite entrenar más unidades.<n/>Se construye con VCE. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/553C5320=
+Param/Value/5D83C509=Usa cualquier unidad terrestre para recolectar 100 de minerales. /// Use any ground unit to collect 100 minerals.
+Param/Value/5DF05CC8=
+Param/Value/5E553DF6=El ataque a la Estación Lejana inspiró una revuelta general en Mar Sara y un pequeño foco de sublevados de la resistencia está bajo el asedio de las fuerzas del Dominio. Ayuda a los rebeldes en la lucha contra los opresores del Dominio. /// The attack on Backwater Station inspired a general revolt on Mar Sara and a small pocket of rebel resistance fighters is under siege by Dominion forces. Help the rebels in their fight against the Dominion oppressors.
+Param/Value/5F57FEAF=<c val="00FF00">Centro de mando</c> /// <c val="00FF00">Command Center</c>
+Param/Value/67C1B22E=<c val="00FF00">Depósito de suministros</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/6AFBD4E8=
+Param/Value/6C1DC930=Mueve a cualquier unidad terrestre hasta aquí para rescatar a los rebeldes. /// Move any ground unit here to rescue the rebels.
+Param/Value/700B4B10=
+Param/Value/7A6D409B=
+Param/Value/7AD4780A=Permite entrenar más unidades.<n/>Se construye con VCE. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/7BE218AF=
+Param/Value/7CBDAD7D=Recolección de recursos /// Gathering Resources
+Param/Value/7EC9B6E6=Usa cualquier unidad terrestre para recolectar 100 de gas vespeno. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/7EFFD911=
+Param/Value/8042104E=¡No! ¡No nos maten! /// No! Don't kill us!
+Param/Value/829A73B4=
+Param/Value/8A2F86ED=Médicas entrenadas /// Medics Trained
+Param/Value/8BA552E2=Sublevados rescatados. /// Rebels rescued.
+Param/Value/8BC6DA5C=Entrena VCE adicionales. /// Trains additional SCVs.
+Param/Value/8EDE287C=
+Param/Value/97842D38=Tutoriales /// Tutorials
+Param/Value/A0322401=Refuerzos de VCE. /// SCV reinforcements.
+Param/Value/A087C9B6=Refuerzos /// Reinforcements
+Param/Value/A089141C=Usa cualquier unidad terrestre para recolectar 100 de gas vespeno. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/A3A30B03=VCE /// SCV
+Param/Value/A47B85AE=
+Param/Value/A4B6BC33=
+Param/Value/A4D579C0=<c val="00FF00">Palé de minerales</c> /// <c val="00FF00">Mineral Pallet</c>
+Param/Value/A5344D12=
+Param/Value/A9228879=Haz clic en la pestaña <c val="FFFF00">Tutoriales</c> del menú <c val="FFFF00">Ayuda (F12)</c> para ver los videos tutoriales disponibles. /// Click on the <c val="FFFF00">Tutorials</c> tab from the <c val="FFFF00">Help (F12)</c> menu to view the available tutorial videos.
+Param/Value/A9CFF182=Puedes entrenar Marines y otras unidades desde el Cuartel. Para entrenar a un Marine, elige tu Cuartel y haz clic en el botón "Entrenar Marine". /// You can train Marines and other units from the Barracks. To train a Marine, select your Barracks and click on the Train Marine button.
+Param/Value/AA5B6118=Entrenamiento de unidades /// Training Units
+Param/Value/AA758DDC=
+Param/Value/AC22A39E=Tutoriales /// Tutorials
+Param/Value/B32015BB=Las estructuras te permiten entrenar unidades y mejorar tus fuerzas. Para construir una estructura, selecciona un VCE y usa la habilidad "Construir estructura". /// Structures give you the ability to train units and upgrade your forces. To build a structure, select an SCV and use its Build Structure ability.
+Param/Value/B469D2B4=<c val="00FF00">Depósito de suministros</c> /// <c val="00FF00">Supply Depot</c>
+Param/Value/B796C5DF=Usa cualquier unidad terrestre para recolectar 100 de minerales. /// Use any ground unit to collect 100 minerals.
+Param/Value/BAFF2804=
+Param/Value/BE45965F=
+Param/Value/C2FBFDD1=Base del Dominio /// Dominion Base
+Param/Value/C84857DE=
+Param/Value/C9C6EF31=<c val="00FF00">Palé de gas</c> /// <c val="00FF00">Gas Pallet</c>
+Param/Value/C9F1F8E6=Aumenta el máximo de suministros. /// Increases maximum supply.
+Param/Value/CBC05FCF=
+Param/Value/CF60F8FD=Rescatar a los Sublevados /// Rescue the Rebels
+Param/Value/D2CA8D27=<c val="00FF00">Campo de minerales</c> /// <c val="00FF00">Mineral Field</c>
+Param/Value/D2FCCA4E=Médica /// Medic
+Param/Value/D35CB257=Permite entrenar más unidades.<n/>Se construye con VCE. /// Allows more units to be trained.<n/>Built by SCVs.
+Param/Value/DE2A16B2=
+Param/Value/DE4A6E49=Destruir la base del Dominio /// Destroy the Dominion Base
+Param/Value/E0ECCB59=Están atacando la base rebelde /// Rebel base under attack
+Param/Value/E1E7A872=/ /// /
+Param/Value/E20B6E76=Usa cualquier unidad terrestre para recolectar 100 de gas vespeno. /// Use any ground unit to collect 100 vespene gas.
+Param/Value/E355EE50=Mueve a cualquier unidad terrestre hasta aquí<n/>para rescatar a los rebeldes. /// Move any ground unit here<n/>to rescue the rebels.
+Param/Value/E64A5DCD=Entrena VCE que recolectan recursos y construyen estructuras. /// Trains SCVs to collect resources and build structures.
+Param/Value/EBDA9E89=Usa VCE para recolectar de este campo de minerales. /// Use an SCV to gather from this Mineral Field.
+Param/Value/F014BD9E=Destruir la base del Dominio /// Destroy the Dominion Base
+Param/Value/F5878C5F=Suministros /// Supply
+Param/Value/F60E71B0=Palés de recursos encontrados /// Resource Pallets Found
+Param/Value/F6A2B90D=Aumenta el máximo de suministros. /// Increases maximum supply.
+Param/Value/FA29FBD9=
+Sound/Name/RebelRescue=SublevadoRescate /// RebelRescue

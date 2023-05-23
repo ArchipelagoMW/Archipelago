@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CButton id="Drop Item">
+        <EditorCategories value="Race:Neutral"/>
+    </CButton>
+    <CButton id="PickUpItem">
+        <EditorCategories value="Race:Neutral"/>
+    </CButton>
+    <CButton id="YamatoCannonEngine">
+        <Icon value="Button/Texture/PlasmaGunsSpecialization"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+</Catalog>
