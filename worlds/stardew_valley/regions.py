@@ -315,23 +315,21 @@ mandatory_connections = [
 
 
 def create_final_regions(world_options: StardewOptions) -> List[RegionData]:
-    vanilla_regions = stardew_valley_regions
+    final_regions = []
+    final_regions.extend(stardew_valley_regions)
     if world_options[options.Mods] is None:
-        return vanilla_regions
+        return final_regions
     for mod in world_options[options.Mods]:
         if mod not in ModDataList:
             continue
         for mod_region in ModDataList[mod].regions:
             existing_region = next(
-                (region for region in vanilla_regions if region.name == mod_region.name), None)
+                (region for region in final_regions if region.name == mod_region.name), None)
             if existing_region:
-                if all(exits in existing_region.exits for exits in mod_region.exits):
-                    continue
-                existing_region.exits.extend(mod_region.exits)
+                final_regions.append(existing_region.get_merged_with(mod_region))
                 continue
 
-            vanilla_regions.append(mod_region)
-    final_regions = vanilla_regions
+            final_regions.append(mod_region.get_merged_with(None))
     return final_regions
 
 

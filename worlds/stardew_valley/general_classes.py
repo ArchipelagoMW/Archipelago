@@ -21,6 +21,14 @@ class RegionData:
     name: str
     exits: List[str] = field(default_factory=list)
 
+    def get_merged_with(self, other_region):
+        merged_exits = []
+        merged_exits.extend(self.exits)
+        if other_region is not None:
+            merged_exits.extend(other_region.exits)
+        merged_exits = list(set(merged_exits))
+        return RegionData(self.name, merged_exits)
+
 
 @dataclass(frozen=True)
 class ConnectionData:
@@ -42,4 +50,6 @@ class ModData:
     mod_name: str
     regions: List[RegionData]
     connections: List[ConnectionData]
+
+
 

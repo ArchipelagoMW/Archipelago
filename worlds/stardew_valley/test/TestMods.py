@@ -6,7 +6,7 @@ from .TestOptions import basic_checks, SVTestBase
 from .. import options, locations, items, Group, ItemClassification
 from ..items import item_table
 from ..locations import location_table, LocationTags
-from ..options import stardew_valley_option_classes, Mods
+from ..options import stardew_valley_option_classes, Mods, EntranceRandomization
 
 mod_list = ["DeepWoods", "Tractor Mod", "Bigger Backpack",
             "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
@@ -49,6 +49,13 @@ class TestGenerateModsOptions(SVTestBase):
                     multiworld = setup_solo_multiworld({Mods: mods})
                     basic_checks(self, multiworld)
                     check_stray_mod_items(list(mods), self, multiworld)
+
+    def test_given_mod_names_when_generate_paired_with_entrance_randomizer_then_basic_checks(self):
+        for mod in mod_list:
+            with self.subTest(f"entrance_randomization: 3, Mod: {mod}"):
+                multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: 3, Mods: mod})
+                basic_checks(self, multiworld)
+                check_stray_mod_items(mod, self, multiworld)
 
     def test_given_mod_names_when_generate_paired_with_other_options_then_basic_checks(self):
         if self.skip_long_tests:
