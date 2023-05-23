@@ -461,7 +461,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTank (int lp_player) {
     // Implementation
     TechTreeUnitAllow(lp_player, "AP_Factory", true);
     TechTreeUnitAllow(lp_player, "AP_FactoryTechLab", true);
-    TechTreeUnitAllow(lp_player, "AP_SiegeTankSieged", true);
+    TechTreeUnitAllow(lp_player, "AP_SiegeTank", true);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivac (int lp_player) {
@@ -1542,6 +1542,15 @@ void libABFE498B_gf_AP_Triggers_clearTerranTech (int lp_player) {
     TechTreeAbilityAllow(lp_player, AbilityCommand("AP_UpgradeToPlanetaryFortress", 0), false);
 }
 
+void libABFE498B_gf_AP_Triggers_giveTerranDefaultTech (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(1, "AP_SiegeTech", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(1, "AP_WraithCloak", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(1, "AP_BansheeCloak", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(1, "AP_YamatoCannon", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_replaceUpgrade (int lp_player, string lp_oldUpgrade, string lp_newUpgrade) {
     // Automatic Variable Declarations
     // Implementation
@@ -1574,6 +1583,7 @@ bool libABFE498B_gt_AP_Triggers_setOptions_Func (bool testConds, bool runActions
         return true;
     }
 
+    TriggerExecute(libABFE498B_gt_AP_Triggers_techTreeInit, true, false);
     lv_difficulty = StringWord(EventChatMessage(false), 2);
     lv_genericUpgradeResearch = StringWord(EventChatMessage(false), 3);
     lv_allInVariant = StringWord(EventChatMessage(false), 4);
@@ -1653,20 +1663,33 @@ void libABFE498B_gt_AP_Triggers_giveTerranTech_Init () {
 // Trigger: AP_Triggers_techTreeInit
 //--------------------------------------------------------------------------------------------------
 bool libABFE498B_gt_AP_Triggers_techTreeInit_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_currentPlayer;
+
     // Automatic Variable Declarations
+    playergroup auto469AFECB_g;
+
+    // Variable Initialization
+
     // Actions
     if (!runActions) {
         return true;
     }
 
-    libABFE498B_gf_AP_Triggers_clearTerranTech(0);
+    auto469AFECB_g = lib5BD4895D_gv_aP_Core_affectedPlayers;
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(auto469AFECB_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        libABFE498B_gf_AP_Triggers_clearTerranTech(lv_currentPlayer);
+        libABFE498B_gf_AP_Triggers_giveTerranDefaultTech(lv_currentPlayer);
+    }
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void libABFE498B_gt_AP_Triggers_techTreeInit_Init () {
     libABFE498B_gt_AP_Triggers_techTreeInit = TriggerCreate("libABFE498B_gt_AP_Triggers_techTreeInit_Func");
-    TriggerAddEventMapInit(libABFE498B_gt_AP_Triggers_techTreeInit);
 }
 
 void libABFE498B_InitTriggers () {

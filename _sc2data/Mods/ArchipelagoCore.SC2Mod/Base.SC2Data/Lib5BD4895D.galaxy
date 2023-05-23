@@ -297,7 +297,6 @@ void lib5BD4895D_gf_AP_Core_onLoadFinished () {
         lv_currentPlayer = PlayerGroupNextPlayer(auto78288737_g, lv_currentPlayer);
         if (lv_currentPlayer < 0) { break; }
         lib5BD4895D_gf_showhidechatbox(lv_currentPlayer, true);
-        TechTreeRestrictionsEnable(lv_currentPlayer, true);
     }
     TriggerExecute(lib5BD4895D_gv_aP_Core_mapInit, true, false);
     lib5BD4895D_gv_aP_Core_initFinished = true;

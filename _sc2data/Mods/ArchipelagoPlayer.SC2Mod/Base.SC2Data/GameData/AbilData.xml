@@ -1263,9 +1263,9 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <BuildMorphAbil value="AP_BarracksLiftOff"/>
         <InfoArray index="Build1" Unit="AP_BarracksTechLab" Time="25">
-            <Button DefaultButtonFace="BuildTechLabBarracks" Requirements="AP_UseTechReactorHide"/>
+            <Button DefaultButtonFace="BuildTechLabBarracks" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
-        <InfoArray index="Build2" Unit="AP_BarracksReactor" Time="50">
+        <InfoArray index="Build2" Unit="AP_BarracksReactor" State="Restricted" Time="50">
             <Button Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_BarracksTechReactor" Time="50" AddOnParentCmdPriority="-1">
@@ -1670,10 +1670,10 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <BuildMorphAbil value="AP_FactoryLiftOff"/>
         <InfoArray index="Build1" Unit="AP_FactoryTechLab" Time="25">
-            <Button DefaultButtonFace="BuildTechLabFactory" Requirements="AP_UseTechReactorHide"/>
+            <Button DefaultButtonFace="BuildTechLabFactory" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build2" Unit="AP_FactoryReactor" Time="50">
-            <Button Requirements="AP_UseTechReactorHide"/>
+            <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_FactoryTechReactor" Time="50" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
@@ -1684,9 +1684,9 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <BuildMorphAbil value="AP_StarportLiftOff"/>
         <InfoArray index="Build1" Unit="AP_StarportTechLab" Time="25">
-            <Button DefaultButtonFace="BuildTechLabStarport" Requirements="AP_UseTechReactorHide"/>
+            <Button DefaultButtonFace="BuildTechLabStarport" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
-        <InfoArray index="Build2" Unit="AP_StarportReactor" Time="50">
+        <InfoArray index="Build2" Unit="AP_StarportReactor" State="Restricted" Time="50">
             <Button Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_StarportTechReactor" Time="50" AddOnParentCmdPriority="-1">
@@ -2297,10 +2297,10 @@
             <ValidatorArray value="HasVespene"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_Barracks" Time="60">
-            <Button DefaultButtonFace="AP_Barracks" State="Suppressed" Requirements="HaveCommandCenter"/>
+            <Button DefaultButtonFace="AP_Barracks" State="Restricted" Requirements="HaveCommandCenter"/>
         </InfoArray>
         <InfoArray index="Build5" Unit="AP_EngineeringBay" Time="35">
-            <Button DefaultButtonFace="AP_EngineeringBay" State="Suppressed" Requirements="HaveCommandCenter"/>
+            <Button DefaultButtonFace="AP_EngineeringBay" State="Restricted" Requirements="HaveCommandCenter"/>
         </InfoArray>
         <InfoArray index="Build6" Unit="AP_MissileTurret" Time="25">
             <Button DefaultButtonFace="AP_MissileTurret" State="Restricted" Requirements="AP_HaveEngineeringBay"/>
@@ -2309,28 +2309,28 @@
             <Button DefaultButtonFace="AP_Bunker" State="Restricted" Requirements="AP_HideFortifiedBunker"/>
         </InfoArray>
         <InfoArray index="Build8" Unit="AP_PsiDisruptor" Time="50">
-            <Button DefaultButtonFace="AP_PsiDisruptor"/>
+            <Button DefaultButtonFace="AP_PsiDisruptor" State="Restricted"/>
         </InfoArray>
-        <InfoArray index="Build9" Unit="AP_SensorTower" Time="25">
+        <InfoArray index="Build9" Unit="AP_SensorTower"  Time="25">
             <Button DefaultButtonFace="AP_SensorTower" State="Restricted" Requirements="AP_HaveEngineeringBay"/>
         </InfoArray>
         <InfoArray index="Build10" Unit="AP_GhostAcademy" Time="40">
-            <Button DefaultButtonFace="AP_GhostAcademy" State="Suppressed" Requirements="HaveBarracks"/>
+            <Button DefaultButtonFace="AP_GhostAcademy" State="Restricted" Requirements="HaveBarracks"/>
         </InfoArray>
         <InfoArray index="Build11" Unit="AP_Factory" Time="60">
-            <Button DefaultButtonFace="AP_Factory" State="Suppressed" Requirements="HaveCommandCenter"/>
+            <Button DefaultButtonFace="AP_Factory" State="Restricted" Requirements="HaveCommandCenter"/>
         </InfoArray>
         <InfoArray index="Build12" Unit="AP_Starport" Time="50">
-            <Button DefaultButtonFace="AP_Starport" State="Suppressed" Requirements="HaveCommandCenter"/>
+            <Button DefaultButtonFace="AP_Starport" State="Restricted" Requirements="HaveCommandCenter"/>
         </InfoArray>
         <InfoArray index="Build13" Unit="AP_MercCompound" Time="50">
-            <Button DefaultButtonFace="AP_MercCompound" State="Suppressed" Requirements="HaveCommandCenter"/>
+            <Button DefaultButtonFace="AP_MercCompound" State="Restricted" Requirements="HaveCommandCenter"/>
         </InfoArray>
         <InfoArray index="Build14" Unit="AP_Armory" Time="65">
-            <Button DefaultButtonFace="AP_Armory" State="Suppressed" Requirements="AP_HaveFactoryOrStarport"/>
+            <Button DefaultButtonFace="AP_Armory" State="Restricted" Requirements="AP_HaveFactoryOrStarport"/>
         </InfoArray>
         <InfoArray index="Build16" Unit="AP_FusionCore" Time="80">
-            <Button DefaultButtonFace="AP_FusionCore" State="Suppressed" Requirements="HaveStarport"/>
+            <Button DefaultButtonFace="AP_FusionCore" State="Restricted" Requirements="HaveStarport"/>
         </InfoArray>
         <InfoArray index="Build19" Unit="AP_AutomatedRefinery" Time="45">
             <Button DefaultButtonFace="AP_AutomatedRefinery" Requirements="AP_UseAutomatedRefinery"/>
@@ -2339,13 +2339,13 @@
             <Button DefaultButtonFace="AP_PerditionTurret" State="Restricted" Requirements="AP_HaveEngineeringBay"/>
         </InfoArray>
         <InfoArray index="Build21" Unit="AP_CommandCenter" Time="100">
-            <Button DefaultButtonFace="AP_CommandCenterOrbRelay" State="Suppressed" Requirements="AP_UseOrbitalRelay"/>
+            <Button DefaultButtonFace="AP_CommandCenterOrbRelay" State="Restricted" Requirements="AP_UseOrbitalRelay"/>
         </InfoArray>
         <InfoArray index="Build22" Unit="AP_HiveMindEmulator" Time="50">
-            <Button DefaultButtonFace="AP_HiveMindEmulator"/>
+            <Button DefaultButtonFace="AP_HiveMindEmulator" State="Restricted"/>
         </InfoArray>
         <InfoArray index="Build23" Unit="AP_Bunker" Time="30">
-            <Button DefaultButtonFace="AP_BunkerFortified" Requirements="AP_UseFortifiedBunker"/>
+            <Button DefaultButtonFace="AP_BunkerFortified" State="Restricted" Requirements="AP_UseFortifiedBunker"/>
         </InfoArray>
         <FidgetDelayMin value="5"/>
         <FidgetDelayMax value="10"/>

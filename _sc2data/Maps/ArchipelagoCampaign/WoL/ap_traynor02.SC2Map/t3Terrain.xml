@@ -11,7 +11,7 @@
         <cliffDoodadList num="1">
             <cliffDoodad name="TRaynor02DigSite" pos="48.000000 78.000000 0.000000 " rot="0"/>
         </cliffDoodadList>
-        <vertData quantizeBias="9.020861e+00" quantizeScale="3.151101e-04" standardHeight="4.849531e+00" name="t3HeightMap"/>
+        <vertData quantizeBias="9.021327e+00" quantizeScale="3.151101e-04" standardHeight="4.849531e+00" name="t3HeightMap"/>
         <masks name="t3TextureMasks"/>
         <textureSetList num="8">
             <textureSet i="0" name="MarSara"/>

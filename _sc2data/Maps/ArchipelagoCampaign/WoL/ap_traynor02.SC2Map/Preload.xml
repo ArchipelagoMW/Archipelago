@@ -158,4 +158,11 @@
 <Unit id="TerranBuggy"/>
 <Unit id="Food1000"/>
 <Unit id="Medic"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_TechLab"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
 </Preload>

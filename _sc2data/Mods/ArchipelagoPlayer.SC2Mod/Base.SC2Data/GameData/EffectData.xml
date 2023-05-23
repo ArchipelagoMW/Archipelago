@@ -2774,7 +2774,7 @@
         <Behavior value="AP_MercGroundDropDelay"/>
     </CEffectApplyBehavior>
     <CEffectRemoveBehavior id="AP_RemovePrecursorMerc">
-        <BehaviorLink value="PrecursorMerc"/>
+        <BehaviorLink value="AP_PrecursorMerc"/>
     </CEffectRemoveBehavior>
     <CEffectDamage id="AP_TwinIbiksCannon" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
