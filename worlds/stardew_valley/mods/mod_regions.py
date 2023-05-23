@@ -28,7 +28,7 @@ deep_woods_entrances = [
     ConnectionData(DeepWoodsEntrance.use_woods_obelisk, DeepWoodsRegion.main_lichtung),
     ConnectionData(DeepWoodsEntrance.secret_woods_to_deep_woods, DeepWoodsRegion.main_lichtung),
     ConnectionData(DeepWoodsEntrance.deep_woods_house, DeepWoodsRegion.abandoned_home,
-                   flag=RandomizationFlag.NON_PROGRESSION),
+                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(DeepWoodsEntrance.deep_woods_depth_10, DeepWoodsRegion.floor_10),
     ConnectionData(DeepWoodsEntrance.deep_woods_depth_30, DeepWoodsRegion.floor_30),
     ConnectionData(DeepWoodsEntrance.deep_woods_depth_50, DeepWoodsRegion.floor_50),
@@ -44,8 +44,8 @@ eugene_regions = [
 ]
 
 eugene_entrances = [
-    ConnectionData(EugeneEntrance.forest_to_garden, EugeneRegion.eugene_garden, flag=RandomizationFlag.NON_PROGRESSION),
-    ConnectionData(EugeneEntrance.garden_to_bedroom, EugeneRegion.eugene_bedroom, flag=RandomizationFlag.NON_PROGRESSION)
+    ConnectionData(EugeneEntrance.forest_to_garden, EugeneRegion.eugene_garden, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(EugeneEntrance.garden_to_bedroom, EugeneRegion.eugene_bedroom, flag=RandomizationFlag.BUILDINGS)
 ]
 
 jasper_regions = [
@@ -54,7 +54,7 @@ jasper_regions = [
 ]
 
 jasper_entrances = [
-    ConnectionData(JasperEntrance.museum_to_bedroom, JasperRegion.jasper_bedroom)
+    ConnectionData(JasperEntrance.museum_to_bedroom, JasperRegion.jasper_bedroom, flag=RandomizationFlag.BUILDINGS)
 ]
 alec_regions = [
     RegionData(SVRegion.forest, [AlecEntrance.forest_to_petshop]),
@@ -63,8 +63,8 @@ alec_regions = [
 ]
 
 alec_entrances = [
-    ConnectionData(AlecEntrance.forest_to_petshop, AlecRegion.pet_store, flag=RandomizationFlag.NON_PROGRESSION),
-    ConnectionData(AlecEntrance.petshop_to_bedroom, AlecRegion.alec_bedroom, flag=RandomizationFlag.NON_PROGRESSION)
+    ConnectionData(AlecEntrance.forest_to_petshop, AlecRegion.pet_store, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
+    ConnectionData(AlecEntrance.petshop_to_bedroom, AlecRegion.alec_bedroom, flag=RandomizationFlag.BUILDINGS)
 ]
 
 yoba_regions = [
@@ -82,7 +82,7 @@ juna_regions = [
 ]
 
 juna_entrances = [
-    ConnectionData(JunaEntrance.forest_to_juna_cave, JunaRegion.juna_cave, flag=RandomizationFlag.NON_PROGRESSION)
+    ConnectionData(JunaEntrance.forest_to_juna_cave, JunaRegion.juna_cave, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA)
 ]
 
 
