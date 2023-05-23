@@ -333,6 +333,18 @@ def create_final_regions(world_options: StardewOptions) -> List[RegionData]:
     return final_regions
 
 
+def create_final_connections(world_options: StardewOptions) -> List[ConnectionData]:
+    final_connections = []
+    final_connections.extend(mandatory_connections)
+    if world_options[options.Mods] is None:
+        return final_connections
+    for mod in world_options[options.Mods]:
+        if mod not in ModDataList:
+            continue
+        final_connections.extend(ModDataList[mod].connections)
+    return final_connections
+
+
 def create_regions(region_factory: RegionFactory, random: Random, world_options: StardewOptions) -> Tuple[
     Iterable[Region], Dict[str, str]]:
     final_regions = create_final_regions(world_options)
@@ -353,12 +365,7 @@ def create_regions(region_factory: RegionFactory, random: Random, world_options:
 
 def randomize_connections(random: Random, world_options: StardewOptions) -> Tuple[List[ConnectionData], Dict[str, str]]:
     connections_to_randomize = []
-    final_connections = mandatory_connections
-    if world_options[options.Mods] is not None:
-        for mod in world_options[options.Mods]:
-            if mod not in ModDataList:
-                continue
-            final_connections.extend(ModDataList[mod].connections)
+    final_connections = create_final_connections(world_options)
     if world_options[options.EntranceRandomization] == options.EntranceRandomization.option_pelican_town:
         connections_to_randomize = [connection for connection in final_connections if
                                     RandomizationFlag.PELICAN_TOWN in connection.flag]

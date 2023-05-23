@@ -1,9 +1,13 @@
 from typing import List, Union
+import unittest
+import random
+import sys
 
 from BaseClasses import MultiWorld
 from . import setup_solo_multiworld
 from .TestOptions import basic_checks, SVTestBase
-from .. import options, locations, items, Group, ItemClassification
+from .. import options, locations, items, Group, ItemClassification, StardewOptions
+from ..regions import RandomizationFlag, create_final_connections, randomize_connections
 from ..items import item_table
 from ..locations import location_table, LocationTags
 from ..options import stardew_valley_option_classes, Mods, EntranceRandomization
@@ -132,4 +136,32 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
                     self.assertNotIn(progression_item.name, all_created_items)
                 else:
                     self.assertIn(progression_item.name, all_created_items)
+
+
+class TestModEntranceRando(unittest.TestCase):
+
+    def test_mod_entrance_randomization(self):
+
+        for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
+                             (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
+                             (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
+            with self.subTest(option=option, flag=flag):
+                seed = random.randrange(sys.maxsize)
+                rand = random.Random(seed)
+                world_options = StardewOptions({options.EntranceRandomization.internal_name: option,
+                                                options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
+                                                options.Mods.internal_name: mod_list})
+                final_connections = create_final_connections(world_options)
+
+                _, randomized_connections = randomize_connections(rand, world_options)
+
+                for connection in final_connections:
+                    if flag in connection.flag:
+                        self.assertIn(connection.name, randomized_connections,
+                                      f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
+                        self.assertIn(connection.reverse, randomized_connections,
+                                      f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
+
+                self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
+                                 f"Connections are duplicated in randomization. Seed = {seed}")
 
