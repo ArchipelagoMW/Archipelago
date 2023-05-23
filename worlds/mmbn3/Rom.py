@@ -57,9 +57,14 @@ class ArchiveScript:
                 message_box = []
 
             else:
-                # We can hit a command that might contain an E9 or an E7. If we do, skip checking the next 6 bytes
-                if byte == 0xF6:
-                    command_index = 7
+                if command_index <- 0:
+                    # We can hit a command that might contain an E9 or an E7. If we do, skip checking the next few bytes
+                    if byte == 0xF6:  # CheckItem
+                        command_index = 6
+                    if byte == 0xF3:  # CheckFlag
+                        command_index = 6
+                    if byte == 0xF2:  # FlagSet
+                        command_index = 4
                 command_index -= 1
                 message_box.append(byte)
         # If there's still bytes left over, add them even if we didn't hit an end
@@ -132,6 +137,7 @@ class TextArchive:
         # First step, if the old message had any flag sets or flag clears, we need to keep them.
         # Mystery data has a flag set to actually remove the mystery data, and jobs often have a completion flag
         for message_index in message_indices:
+            # print(hex(self.startOffset) + ": " + str(script_index) + " " + str(message_indices))
             oldbytes = self.scripts[script_index].messageBoxes[message_index]
             for i in range(len(oldbytes)-3):
                 # F2 00 is the code for "flagSet", with the two bytes after it being the flag to set.

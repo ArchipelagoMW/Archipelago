@@ -57,8 +57,16 @@ def int16_to_byte_list_le(x) -> bytearray:
 
 
 def generate_text_bytes(message) -> bytearray:
-    return bytearray(charDict[c] for c in message)
+    return bytearray(char_to_hex(c) for c in message)
 
+
+def char_to_hex(c) -> int:
+    if c in charDict:
+        return charDict[c]
+    else:
+        # If the character doesn't exist, return one of the mod tools error characters
+        # Yes, it _is_ a coincidence this happens to be 69
+        return 0x69
 
 def generate_chip_get(chip, code, amt) -> bytearray:
     chip_bytes = int16_to_byte_list_le(chip)
