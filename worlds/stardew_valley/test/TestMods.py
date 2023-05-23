@@ -51,11 +51,12 @@ class TestGenerateModsOptions(SVTestBase):
                     check_stray_mod_items(list(mods), self, multiworld)
 
     def test_given_mod_names_when_generate_paired_with_entrance_randomizer_then_basic_checks(self):
-        for mod in mod_list:
-            with self.subTest(f"entrance_randomization: 3, Mod: {mod}"):
-                multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: 3, Mods: mod})
-                basic_checks(self, multiworld)
-                check_stray_mod_items(mod, self, multiworld)
+        for values in range(0, 4):
+            for mod in mod_list:
+                with self.subTest(f"entrance_randomization: {values}, Mod: {mod}"):
+                    multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: values, Mods: mod})
+                    basic_checks(self, multiworld)
+                    check_stray_mod_items(mod, self, multiworld)
 
     def test_given_mod_names_when_generate_paired_with_other_options_then_basic_checks(self):
         if self.skip_long_tests:
