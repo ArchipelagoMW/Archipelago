@@ -160,7 +160,7 @@ location_tables = {
         DS3LocationData("US: Soul of the Rotted Greatwood",        "Soul of the Rotted Greatwood",      DS3LocationCategory.MISC),
         DS3LocationData("US: Hawk Ring",                           "Hawk Ring",                         DS3LocationCategory.RING),
         DS3LocationData("US: Warrior of Sunlight",                 "Warrior of Sunlight",               DS3LocationCategory.MISC),
-        DS3LocationData("US: Blessed Red and White Shield",        "Blessed Red and White Shield",      DS3LocationCategory.SHIELD),
+        DS3LocationData("US: Blessed Red and White Shield+1",      "Blessed Red and White Shield+1",    DS3LocationCategory.SHIELD),
         DS3LocationData("US: Irina's Ashes",                       "Irina's Ashes",                     DS3LocationCategory.NPC),
         DS3LocationData("US: Cornyx's Ashes",                      "Cornyx's Ashes",                    DS3LocationCategory.NPC),
         DS3LocationData("US: Cornyx's Wrap",                       "Cornyx's Wrap",                     DS3LocationCategory.NPC),

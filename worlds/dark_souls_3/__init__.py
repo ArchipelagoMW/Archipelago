@@ -1,5 +1,5 @@
 # world/dark_souls_3/__init__.py
-from typing import Dict, Set
+from typing import Dict, Set, List
 
 from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names
 from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
@@ -229,8 +229,7 @@ class DarkSouls3World(World):
                 candidates = [
                     item.name for item
                     in item_dictionary.values()
-                    if (item.category in item_categories and
-                        (not item.is_dlc or dlc_enabled))
+                    if (item.category in item_categories and (not item.is_dlc or dlc_enabled))
                 ]
                 return self.multiworld.random.sample(candidates, num_items)
 
@@ -264,12 +263,50 @@ class DarkSouls3World(World):
                     len(itempool_by_category[DS3LocationCategory.SPELL])
                 )
 
-        # Add items to itempool
+        itempool: List[DarkSouls3Item] = []
         for category in self.enabled_location_categories:
-            self.multiworld.itempool += [self.create_item(name) for name in itempool_by_category[category]]
+            itempool += [self.create_item(name) for name in itempool_by_category[category]]
 
-        # Extra filler items for locations without default items specified
-        self.multiworld.itempool += [self.create_item("Soul of an Intrepid Hero") for i in range(num_required_extra_items)]
+        # A list of items we can replace
+        removable_items = [item for item in itempool if item.classification != ItemClassification.progression]
+
+        guaranteed_items = self.multiworld.guaranteed_items[self.player].value
+        for item_name in guaranteed_items:
+            # Break early just in case nothing is removable (if user is trying to guarantee more
+            # items than the pool can hold, for example)
+            if len(removable_items) == 0:
+                break
+
+            for _ in range(guaranteed_items[item_name]):
+                if num_required_extra_items > 0:
+                    # We can just add them instead of using "Soul of an Intrepid Hero" later
+                    num_required_extra_items -= 1
+
+                else:
+                    if len(removable_items) == 0:
+                        break
+
+                    # Try to construct a list of items with the same category that can be removed
+                    # If none exist, just remove something at random
+                    removable_shortlist = [
+                        item for item
+                        in removable_items
+                        if item_dictionary[item.name].category == item_dictionary[item_name].category
+                    ]
+                    if len(removable_shortlist) == 0:
+                        removable_shortlist = removable_items
+
+                    removed_item = self.multiworld.random.choice(removable_shortlist)
+                    removable_items.remove(removed_item) # To avoid trying to replace the same item twice
+                    itempool.remove(removed_item)
+
+                itempool.append(self.create_item(item_name))
+
+        # Extra filler items for locations containing SKIP items
+        itempool += [self.create_item("Soul of an Intrepid Hero") for _ in range(num_required_extra_items)]
+
+        # Add items to itempool
+        self.multiworld.itempool += itempool
 
 
     def create_item(self, name: str) -> Item:

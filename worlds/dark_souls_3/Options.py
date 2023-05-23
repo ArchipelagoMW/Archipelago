@@ -1,5 +1,5 @@
 import typing
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice, DeathLink
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, DeathLink
 
 
 class RandomizeWeaponLocations(DefaultOnToggle):
@@ -64,6 +64,11 @@ class PoolTypeOption(Choice):
     display_name = "Pool Type"
     option_shuffle = 0
     option_various = 1
+
+
+class GuaranteedItemsOption(ItemDict):
+    """Guarantees that the specified items will be in the item pool"""
+    display_name = "Guaranteed Items"
 
 
 class AutoEquipOption(Toggle):
@@ -191,6 +196,7 @@ dark_souls_options: typing.Dict[str, type(Option)] = {
     "enable_health_upgrade_locations": RandomizeHealthLocations,
     "enable_progressive_locations": RandomizeProgressiveLocationsOption,
     "pool_type": PoolTypeOption,
+    "guaranteed_items": GuaranteedItemsOption,
     "auto_equip": AutoEquipOption,
     "lock_equip": LockEquipOption,
     "no_weapon_requirements": NoWeaponRequirementsOption,
