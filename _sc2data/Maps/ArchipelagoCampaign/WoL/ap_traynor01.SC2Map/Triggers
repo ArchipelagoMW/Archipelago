@@ -885,6 +885,7 @@
         <ValueElement Type="Trigger" Id="C1A219B6"/>
     </Element>
     <Element Type="FunctionCall" Id="1B52A377">
+        <Disabled/>
         <FunctionDef Type="FunctionDef" Library="Camp" Id="C97BDE3B"/>
     </Element>
     <Element Type="Comment" Id="4B547854">

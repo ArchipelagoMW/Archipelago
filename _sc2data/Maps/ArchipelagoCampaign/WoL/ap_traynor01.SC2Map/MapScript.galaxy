@@ -617,7 +617,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
     TriggerExecute(gt_IntroQ, true, false);
     TriggerEnable(TriggerGetCurrent(), false);
     return true;
