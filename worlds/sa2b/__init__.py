@@ -376,7 +376,7 @@ class SA2BWorld(World):
             self.multiworld.random.shuffle(voicelist_s)
 
             for i in range(len(voicelist_s)):
-                if self.multiworld.random.randint(1,100) > 70:
+                if self.multiworld.random.randint(1,100) > 80:
                     voicelist_s[i] = 17
 
             self.voice_map = dict(zip(voicelist_o, voicelist_s))
