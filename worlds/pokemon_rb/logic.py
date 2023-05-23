@@ -87,4 +87,9 @@ class PokemonLogic(LogicMixin):
                 self.pokemon_rb_can_surf(player))
 
     def pokemon_rb_card_key(self, floor, player):
-        return self.has(f"Card Key {floor}F", player) or self.has("Card Key", player)
+        return self.has(f"Card Key {floor}F", player) or self.has("Card Key", player) or \
+               self.has("Progressive Card Key", player, 1)
+
+    def pokemon_rb_rock_tunnel(self, player):
+        # todo: option
+        return self.pokemon_rb_can_flash(player)

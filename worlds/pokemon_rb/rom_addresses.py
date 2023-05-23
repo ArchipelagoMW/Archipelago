@@ -1639,6 +1639,7 @@ rom_addresses = {
     "Text_Quiz_E": 0x88cd6,
     "Text_Quiz_F": 0x88e0a,
     "Text_Magikarp_Salesman": 0x8ae3f,
+    "Text_Saffron_Gate": 0x8aef5,
     "Text_Rock_Tunnel_Sign": 0x8e82a,
     "Text_Badges_Needed": 0x92304,
     "Badge_Text_Boulder_Badge": 0x99010,

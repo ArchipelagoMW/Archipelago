@@ -2,8 +2,8 @@
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType, ItemClassification
 from .items import item_table
 from .locations import location_data, PokemonRBLocation
-from .map_shuffle import warp_data, dead_ends, mandatory_connections, safe_rooms, safari_zone_houses, pokemon_centers,\
-    pokemon_center_entrances, badge_dead_ends, drink_dead_ends, entrance_only
+from .map_shuffle import warp_data, mandatory_connections, safe_rooms, safari_zone_houses, pokemon_centers,\
+    pokemon_center_entrances, entrance_only, map_ids, insanity_safe_rooms, connecting_interiors
 import worlds.pokemon_rb.poke_data as poke_data
 from copy import deepcopy
 
@@ -20,6 +20,12 @@ def create_region(world: MultiWorld, player: int, name: str, locations_per_regio
     locations_per_region[name] = []
     return ret
 
+
+def outdoor_map(name):
+    i = map_ids[name.split("-")[0]]
+    if i <= 0x24 or 0xD9 <= i <= 0xDC:
+        return True
+    return False
 
 def create_regions(self):
     multiworld = self.multiworld
@@ -63,6 +69,8 @@ def create_regions(self):
     connect(multiworld, player, "Route 2-NW", "Pewter City")
     # connect(multiworld, player, "Pewter City", "Pewter Gym", one_way=True)
     connect(multiworld, player, "Pewter City", "Pewter City-E")
+    connect(multiworld, player, "Pewter City-M", "Pewter City", one_way=True)
+    connect(multiworld, player, "Pewter City", "Pewter City-M", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Pewter City-E", "Route 3", lambda state: state.has("Defeat Brock", player), one_way=True)
     connect(multiworld, player, "Route 3", "Pewter City-E", one_way=True)
     connect(multiworld, player, "Route 4-W", "Route 3")
@@ -75,8 +83,10 @@ def create_regions(self):
     connect(multiworld, player, "Mt Moon B2F", "Mt Moon B2F-Wild")
     connect(multiworld, player, "Mt Moon B2F-NE", "Mt Moon B2F-Wild")
     connect(multiworld, player, "Mt Moon B2F-C", "Mt Moon B2F-Wild")
+    connect(multiworld, player, "Route 4-Lass", "Route 4-E", one_way=True)
     connect(multiworld, player, "Route 4-C", "Route 4-E", one_way=True)
-    connect(multiworld, player, "Route 4-E", "Cerulean City")
+    connect(multiworld, player, "Route 4-E", "Route 4-Grass", one_way=True)
+    connect(multiworld, player, "Route 4-Grass", "Cerulean City", one_way=True)
     # connect(multiworld, player, "Cerulean City", "Cerulean Gym", one_way=True)
     connect(multiworld, player, "Cerulean City", "Route 24", one_way=True)
     connect(multiworld, player, "Cerulean City", "Cerulean City-T", lambda state: state.has("Visit Bill", player))
@@ -145,6 +155,7 @@ def create_regions(self):
     connect(multiworld, player, "Saffron City", "Route 7-E")
     connect(multiworld, player, "Saffron City", "Route 8-W")
     connect(multiworld, player, "Saffron City", "Saffron City-Copycat", lambda state: state.has("Silph Co Liberated", player))
+    connect(multiworld, player, "Saffron City", "Saffron City-Pidgey", lambda state: state.has("Silph Co Liberated", player))
     connect(multiworld, player, "Saffron City", "Saffron City-G", lambda state: state.has("Silph Co Liberated", player))
     connect(multiworld, player, "Saffron City", "Saffron City-Silph", lambda state: state.has("Fuji Saved", player))
     connect(multiworld, player, "Route 6", "Vermilion City")
@@ -182,6 +193,7 @@ def create_regions(self):
     # connect(multiworld, player, "Safari Zone Center", "Safari Zone North", one_way=True)
     connect(multiworld, player, "Fuchsia City", "Route 15-W")
     connect(multiworld, player, "Route 15", "Route 14")
+    connect(multiworld, player, "Route 14", "Route 15-N", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Route 14", "Route 14-Grass", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Route 14", "Route 13")
     connect(multiworld, player, "Route 13", "Route 13-E", lambda state: state.pokemon_rb_can_strength(player) or state.pokemon_rb_can_surf(player) or not state.multiworld.extra_strength_boulders[player].value)
@@ -230,11 +242,9 @@ def create_regions(self):
     connect(multiworld, player, "Seafoam Islands B2F-SW", "Seafoam Islands B2F-Wild", one_way=True)
     connect(multiworld, player, "Seafoam Islands B2F-SE", "Seafoam Islands B2F-Wild", one_way=True)
     connect(multiworld, player, "Seafoam Islands B3F-SE", "Seafoam Islands B3F", lambda state: state.pokemon_rb_can_surf(player) and state.pokemon_rb_can_strength(player), one_way=True)
-    # connect(multiworld, player, "Route 20 West", "Seafoam Islands 1F")
-    # connect(multiworld, player, "Route 20 East", "Seafoam Islands 1F", one_way=True)
-    # connect(multiworld, player, "Seafoam Islands 1F", "Route 20-East", lambda state: state.pokemon_rb_can_strength(player), one_way=True)
+
     connect(multiworld, player, "Viridian City", "Viridian City-N", lambda state: state.has("Oak's Parcel", player) or state.multiworld.old_man[player].value == 2 or state.pokemon_rb_can_cut(player))
-    # connect(multiworld, player, "Route 3", "Mt Moon 1F", one_way=True)
+
     connect(multiworld, player, "Route 11", "Route 11-C", lambda state: state.pokemon_rb_can_strength(player) or not state.multiworld.extra_strength_boulders[player])
     connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-G", lambda state: state.has("Secret Key", player) and state.pokemon_rb_cinnabar_gym(player))
     connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-M", lambda state: state.has("Mansion Key", player) or not state.multiworld.extra_key_items[player].value)
@@ -245,11 +255,13 @@ def create_regions(self):
     connect(multiworld, player, "Celadon Gym", "Celadon Gym-C", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Rocket Hideout B1F-SE", "Rocket Hideout B1F", one_way=True)
 
-    connect(multiworld, player, "Rock Tunnel 1F-S", "Rock Tunnel 1F-Wild", one_way=True)
-    connect(multiworld, player, "Rock Tunnel 1F-NW", "Rock Tunnel 1F-Wild", one_way=True)
-    connect(multiworld, player, "Rock Tunnel 1F-NE", "Rock Tunnel 1F-Wild", one_way=True)
-    connect(multiworld, player, "Rock Tunnel B1F-W", "Rock Tunnel B1F-Wild", one_way=True)
-    connect(multiworld, player, "Rock Tunnel B1F-E", "Rock Tunnel B1F-Wild", one_way=True)
+    connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N", lambda state: state.pokemon_rb_has_badges(state.multiworld.elite_four_condition[player], player))
+
+    connect(multiworld, player, "Rock Tunnel 1F-S", "Rock Tunnel 1F-Wild", lambda state: state.pokemon_rb_rock_tunnel(player), one_way=True)
+    connect(multiworld, player, "Rock Tunnel 1F-NW", "Rock Tunnel 1F-Wild", lambda state: state.pokemon_rb_rock_tunnel(player), one_way=True)
+    connect(multiworld, player, "Rock Tunnel 1F-NE", "Rock Tunnel 1F-Wild", lambda state: state.pokemon_rb_rock_tunnel(player), one_way=True)
+    connect(multiworld, player, "Rock Tunnel B1F-W", "Rock Tunnel B1F-Wild", lambda state: state.pokemon_rb_rock_tunnel(player), one_way=True)
+    connect(multiworld, player, "Rock Tunnel B1F-E", "Rock Tunnel B1F-Wild", lambda state: state.pokemon_rb_rock_tunnel(player), one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-SE", "Cerulean Cave 1F-Wild", one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-SW", "Cerulean Cave 1F-Wild", one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-NE", "Cerulean Cave 1F-Wild", one_way=True)
@@ -301,6 +313,19 @@ def create_regions(self):
             state.pokemon_rb_cerulean_cave(state.multiworld.cerulean_cave_condition[player].value + (state.multiworld.extra_key_items[player].value * 4), player) and
             state.pokemon_rb_can_surf(player), one_way=True)
 
+    # access to any part of a city will enable flying to the Pokemon Center!
+    connect(multiworld, player, "Cerulean City-Cave", "Cerulean City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+    connect(multiworld, player, "Cerulean City-Badge House Backyard", "Cerulean City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+    connect(multiworld, player, "Fuchsia City-Good Rod House Backyard", "Fuchsia City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+    connect(multiworld, player, "Saffron City-G", "Saffron City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+    connect(multiworld, player, "Saffron City-Pidgey", "Saffron City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+    connect(multiworld, player, "Saffron City-Silph", "Saffron City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+    connect(multiworld, player, "Saffron City-Copycat", "Saffron City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+    connect(multiworld, player, "Celadon City-G", "Celadon City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+    connect(multiworld, player, "Vermilion City-G", "Vermilion City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+    connect(multiworld, player, "Vermilion City-Dock", "Vermilion City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
+
+
     # Drops
     connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F", one_way=True)
     connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F-NE", one_way=True)
@@ -327,43 +352,109 @@ def create_regions(self):
     for region_name, region_entrances in warp_data.items():
         for entrance_data in region_entrances:
             region = self.multiworld.get_region(region_name, player)
-            entrance = PokemonRBWarp(player, f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else entrance_data["name"], region, entrance_data["id"], entrance_data["address"], entrance_data["flags"] if "flags" in entrance_data else "")
-            region.exits.append(entrance)
-            entrances.append(entrance)
+            if not outdoor_map(region.name) and not outdoor_map(entrance_data['to']['map']) and True:
+                connect(multiworld, player, region.name, entrance_data['to']['map'], one_way=True)
+            else:
+                entrance = PokemonRBWarp(player, f"{region.name} to {entrance_data['to']['map']}" if "name" not in
+                                         entrance_data else entrance_data["name"], region, entrance_data["id"],
+                                         entrance_data["address"], entrance_data["flags"] if "flags" in entrance_data
+                                         else "")
+                if "Rock Tunnel" in region:
+                    entrance.access_rule = lambda state: state.pokemon_rb_rock_tunnel(player)
+                entrances.append(entrance)
+                region.exits.append(entrance)
+
+    def dead_end(e):
+        region = e.parent_region
+        check_warps = set()
+        checked_regions = {region}
+        check_warps.update(region.exits)
+        check_warps.remove(e)
+        while check_warps:
+            warp = list(check_warps)[0]
+            check_warps.remove(warp)
+            if warp.connected_region is None and warp.access_rule(state):
+                if warp.connected_region is None:
+                    return False
+            elif not isinstance(warp, PokemonRBWarp) and warp.access_rule(state):
+                if warp.connected_region not in checked_regions:
+                    checked_regions.add(warp.connected_region)
+                    check_warps.update(warp.connected_region.exits)
+        return True
+
     # for entrance in entrances:
     #     if "m" in entrance.flags:
     #         entrance.connected_region = self.multiworld.get_region()
     if False:
-        for region, entrances in warp_data.items():
-            for entrance in entrances:
-                connect(multiworld, player, region, entrance["to"]["map"])
+        for region, region_entrances in warp_data.items():
+            for entrance in region_entrances:
+                if "Rock Tunnel" in region:
+                    connect(multiworld, player, region, entrance["to"]["map"], lambda state: state.pokemon_rb_rock_tunnel(player))
+                else:
+                    connect(multiworld, player, region, entrance["to"]["map"])
     else:
-        badges = []
-        badgelocs = []
-        for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
-                      "Marsh Badge", "Volcano Badge", "Earth Badge"]:
-            badges.append(self.create_item(badge))
-        for loc in ["Pewter Gym - Brock 1", "Cerulean Gym - Misty 1", "Vermilion Gym - Lt. Surge 1",
-                    "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
-                    "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
-            badgelocs.append(self.multiworld.get_location(loc, self.player))
-        multiworld.random.shuffle(badges)
-        for badge, loc in zip(badges, badgelocs):
-            loc.item = badges
+        if True:
+            loop_out_interiors = [[multiworld.get_entrance(e[0], player), multiworld.get_entrance(e[1], player)] for e
+                                  in multiworld.random.sample(connecting_interiors, 2)]
+            entrances.remove(loop_out_interiors[0][1])
+            entrances.remove(loop_out_interiors[1][1])
+        if not multiworld.badgesanity[player]:
+            badges = []
+            placed_locs = []
+            for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
+                          "Marsh Badge", "Volcano Badge", "Earth Badge"]:
+                badges.append(self.create_item(badge))
+            for loc in ["Pewter Gym - Brock 1", "Cerulean Gym - Misty 1", "Vermilion Gym - Lt. Surge 1",
+                        "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
+                        "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
+                placed_locs.append(self.multiworld.get_location(loc, self.player))
+            multiworld.random.shuffle(badges)
+            for badge, loc in zip(badges, placed_locs):
+                loc.item = badge
+                loc.event = True
+        else:
+            placed_locs = []
+
+        for location in location_data:
+            if location.event and location.type == "Item":
+                loc = self.multiworld.get_location(location.name, player)
+                loc.item = self.create_item(location.original_item)
+                loc.event = True
+                placed_locs.append(loc)
+
         state = multiworld.state.copy()
         for item, data in item_table.items():
-            if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression and "Badge" not in item:
+            if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression \
+                    and ("Badge" not in item or multiworld.badgesanity[player]):
                 state.collect(self.create_item(item))
+
         forced_connections = mandatory_connections.copy()
-        safe_rooms_sample = multiworld.random.sample(safe_rooms, 5)
+        if False: #insanity
+            forced_connections.extend(insanity_mandatory_connections)
+        # # if True:
+        # #     for region, region_entrances in warp_data.items():
+        # #         if region in map_ids and map_ids[region.split("-")[0]] > 0x25:
+        # #             for entrance in region_entrances:
+        # #                 if map_ids[entrance["to"]["map"].split("-")[0]] > 0x25:
+        # #                     l = [region + " to " + entrance["to"]["map"], entrance["to"]["map"] + " to " + region]
+        # #                     l.sort()
+        # #                     forced_connections.add(tuple(l))
+        # for entrance in entrances:
+        #     if map_ids[entrance.parent_region.name.split("-")[0]] >= 0x25:
+        #
+
+        usable_safe_rooms = safe_rooms.copy()
+        if False:
+            usable_safe_rooms += insanity_safe_rooms
+        safe_rooms_sample = multiworld.random.sample(usable_safe_rooms, 6)
         for a, b in zip(multiworld.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
-                                                   "Pallet Town to Rival's House"], 3), ["Oak's Lab to Pallet Town",
-                                                   "Player's House 1F to Pallet Town", safe_rooms_sample.pop()]):
-            forced_connections.append([a, b])
+                                                  "Pallet Town to Rival's House"], 3), ["Oak's Lab to Pallet Town",
+                                                  "Player's House 1F to Pallet Town", safe_rooms_sample.pop()]):
+            forced_connections.add((a, b))
         for a, b in zip(safari_zone_houses, safe_rooms_sample):
-            forced_connections.append([a, b])
+            forced_connections.add((a, b))
         for a, b in zip(multiworld.random.sample(pokemon_center_entrances, 11), pokemon_centers):
-            forced_connections.append([a, b])
+            forced_connections.add((a, b))
         for pair in forced_connections:
             entrance_a = multiworld.get_entrance(pair[0], player)
             entrance_b = multiworld.get_entrance(pair[1], player)
@@ -375,35 +466,46 @@ def create_regions(self):
         multiworld.random.shuffle(entrances)
         reachable_entrances = []
         while True:
+            state.sweep_for_events()
             state.update_reachable_regions(player)
-            reachable_entrances = [entrance for entrance in entrances if entrance.can_reach(state)] + reachable_entrances
+            reachable_entrances += [entrance for entrance in entrances if entrance.can_reach(state)]
             if not reachable_entrances:
                 assert not entrances
                 break
-            reachable_entrances.sort(key=lambda e: e.parent_region.name not in entrance_only)
+            reachable_entrances.sort(key=lambda e: e.name in entrance_only)
             entrances = [entrance for entrance in entrances if entrance not in reachable_entrances]
-            #entrances.sort(key=lambda e: -len([entrance for entrance in e.parent_region.exits if entrance.connected_region is None]))
-            entrance_a = reachable_entrances.pop(0)
+            entrance_a = reachable_entrances.pop()
             multiworld.random.shuffle(entrances)
             print(len(reachable_entrances))
             if entrances:
-                # if len(reachable_entrances) > 3:
-                #     entrance_b = reachable_entrances.pop(0)
-                # else:
-                if len(reachable_entrances) < 2:
-                    entrances.sort(key=lambda e: e.parent_region.name in dead_ends + badge_dead_ends + drink_dead_ends)
+                entrances.sort(key=lambda e: e.name not in entrance_only)
+                if len(reachable_entrances) < 2:  # this number seemed to create the best sphere distribution
+                    entrances.sort(key=lambda e: not dead_end(e))
                 else:
-                    entrances.sort(key=lambda e: e.parent_region.name not in dead_ends + badge_dead_ends + drink_dead_ends)
-                entrances.sort(key=lambda e: e.parent_region.name in entrance_only)
-                entrance_b = entrances.pop(0)
+                    entrances.sort(key=lambda e: dead_end(e))
+                if True:
+                    if outdoor_map(entrance_a.parent_region.name):
+                        entrances.sort(key=lambda e: not outdoor_map(e.parent_region.name))
+                    else:
+                        entrances.sort(key=lambda e: outdoor_map(e.parent_region.name))
+
+                entrance_b = entrances.pop()
             else:
-                entrance_b = reachable_entrances.pop(0)
+                entrance_b = multiworld.random.choice(reachable_entrances)
+                reachable_entrances.remove(entrance_b)
+
             entrance_a.connect(entrance_b)
             entrance_b.connect(entrance_a)
+            print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
 
-            # print(f"Connected {entrance_a.name} to {entrance_b.name}")
-        for loc in badgelocs:
+        for loc in placed_locs:
             loc.item = None
+            loc.event = False
+
+        for pair in loop_out_interiors:
+            pair[1].connected_region = pair[0].connected_region
+            pair[1].parent_region.entrances.append(pair[0])
+            pair[1].target = pair[0].target
 
 
 

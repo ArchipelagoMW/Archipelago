@@ -359,7 +359,7 @@ class PokemonRedBlueWorld(World):
             for mon in ([" ".join(self.multiworld.get_location(
                     f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
                     + [" ".join(self.multiworld.get_location(
-                    f"Fighting Dojo - Gift {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 3)]):
+                    f"Saffron Fighting Dojo - Gift {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 3)]):
                 loc = self.multiworld.get_location(f"Pokedex - {mon}", self.player)
                 if loc.item is None:
                     locs.add(loc)
@@ -439,7 +439,7 @@ class PokemonRedBlueWorld(World):
         if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0:
             return self.select_trap()
 
-        return self.multiworld.random.choice([item for item in item_table if item_table[
+        return self.multiworld.random.choice([item for item in item_table if item_table[item].id and item_table[
             item].classification == ItemClassification.filler and item not in item_groups["Vending Machine Drinks"] +
                                               item_groups["Unique"]])
 

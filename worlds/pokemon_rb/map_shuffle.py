@@ -1,6 +1,3 @@
-#from .rom_addresses import rom_addresses
-
-
 map_ids = {
     "Pallet Town": 0x00,
     "Viridian City": 0x01,
@@ -278,8 +275,9 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
              'Viridian City-N': [], 'Viridian City-G': [
         {'address': 'Warps_ViridianCity', 'id': 4, 'to': {'map': 'Viridian Gym', 'id': (0, 1)}}],
              'Pewter City-E': [],
+             'Pewter City-M': [
+                             {'address': 'Warps_PewterCity', 'id': 1, 'to': {'map': 'Pewter Museum 1F', 'id': (2, 3)}}],
              'Pewter City': [{'address': 'Warps_PewterCity', 'id': 0, 'to': {'map': 'Pewter Museum 1F', 'id': (0, 1)}},
-                             {'address': 'Warps_PewterCity', 'id': 1, 'to': {'map': 'Pewter Museum 1F', 'id': (2, 3)}},
                              {'address': 'Warps_PewterCity', 'id': 2, 'to': {'map': 'Pewter Gym', 'id': (0, 1)}},
                              {'address': 'Warps_PewterCity', 'id': 3,
                               'to': {'map': 'Pewter Nidoran House', 'id': (0, 1)}},
@@ -329,7 +327,8 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
              'Vermilion Trade House': [
                  {'address': 'Warps_VermilionTradeHouse', 'id': (0, 1), 'to': {'map': 'Vermilion City', 'id': 7}}],
              'Indigo Plateau Lobby': [
-                 {'address': 'Warps_IndigoPlateauLobby', 'id': (0, 1), 'to': {'map': 'Indigo Plateau', 'id': (0, 1)}},
+                 {'address': 'Warps_IndigoPlateauLobby', 'id': (0, 1), 'to': {'map': 'Indigo Plateau', 'id': (0, 1)}}],
+             'Indigo Plateau Lobby-N': [
                  {'address': 'Warps_IndigoPlateauLobby', 'id': 2,
                   'to': {'map': "Indigo Plateau Lorelei's Room", 'id': 0}}],
              'Silph Co 4F': [{'address': 'Warps_SilphCo4F', 'id': 0, 'to': {'map': 'Silph Co 3F', 'id': 1}},
@@ -462,11 +461,11 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
                                 {'address': 'Warps_RockTunnel1F', 'id': 7, 'to': {'map': 'Rock Tunnel B1F', 'id': 3}}],
              'Rock Tunnel 1F-Wild': [], 'Rock Tunnel B1F-Wild': [],
              'Seafoam Islands 1F': [
-                 {'address': 'Warps_SeafoamIslands1F', 'id': (2, 3), 'to': {'map': 'Route 20-IE', 'id': 1}},
+                 {'address': 'Warps_SeafoamIslands1F', 'id': (0, 1), 'to': {'map': 'Route 20-IW', 'id': 0}},
                  {'address': 'Warps_SeafoamIslands1F', 'id': 4, 'to': {'map': 'Seafoam Islands B1F', 'id': 1}},
                  {'address': 'Warps_SeafoamIslands1F', 'id': 5, 'to': {'map': 'Seafoam Islands B1F-NE', 'id': 6}}],
              'Seafoam Islands 1F-SE': [
-                 {'address': 'Warps_SeafoamIslands1F', 'id': (0, 1), 'to': {'map': 'Route 20-IW', 'id': 0}},
+                 {'address': 'Warps_SeafoamIslands1F', 'id': (2, 3), 'to': {'map': 'Route 20-IE', 'id': 1}},
                  {'address': 'Warps_SeafoamIslands1F', 'id': 6, 'to': {'map': 'Seafoam Islands B1F-SE', 'id': 4}}],
              'S.S. Anne 3F': [{'address': 'Warps_SSAnne3F', 'id': 0, 'to': {'map': 'S.S. Anne Bow', 'id': 0}},
                               {'address': 'Warps_SSAnne3F', 'id': 1, 'to': {'map': 'S.S. Anne 2F', 'id': 7}}],
@@ -620,11 +619,11 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
              'Celadon Pokemart 3F': [
                  {'address': 'Warps_CeladonMart3F', 'id': 0, 'to': {'map': 'Celadon Pokemart 4F', 'id': 0}},
                  {'address': 'Warps_CeladonMart3F', 'id': 1, 'to': {'map': 'Celadon Pokemart 2F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart3F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-3F', 'id': 0}}],
+                 {'address': 'Warps_CeladonMart3F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-3F', 'id': 2}}],
              'Celadon Pokemart 4F': [
                  {'address': 'Warps_CeladonMart4F', 'id': 0, 'to': {'map': 'Celadon Pokemart 3F', 'id': 0}},
                  {'address': 'Warps_CeladonMart4F', 'id': 1, 'to': {'map': 'Celadon Pokemart 5F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart4F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-4F', 'id': 0}}],
+                 {'address': 'Warps_CeladonMart4F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-4F', 'id': 3}}],
              'Celadon Pokemart Roof': [
                  {'address': 'Warps_CeladonMartRoof', 'id': 0, 'to': {'map': 'Celadon Pokemart 5F', 'id': 0}}],
              'Celadon Pokemart Elevator-1F': [
@@ -653,12 +652,12 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
                  {'address': 'Warps_CeladonMansion3F', 'id': 0, 'to': {'map': 'Celadon Mansion 2F', 'id': 0}},
                  {'address': 'Warps_CeladonMansion3F', 'id': 1, 'to': {'map': 'Celadon Mansion Roof', 'id': 0}}],
              'Celadon Mansion 3F-Back': [
-                 {'address': 'Warps_CeladonMansion3F', 'id': 2, 'to': {'map': 'Celadon Mansion Roof', 'id': 1}},
+                 {'address': 'Warps_CeladonMansion3F', 'id': 2, 'to': {'map': 'Celadon Mansion Roof-Back', 'id': 1}},
                  {'address': 'Warps_CeladonMansion3F', 'id': 3, 'to': {'map': 'Celadon Mansion 2F', 'id': 3}}],
              'Celadon Mansion Roof': [
                  {'address': 'Warps_CeladonMansionRoof', 'id': 0, 'to': {'map': 'Celadon Mansion 3F', 'id': 1}}],
              'Celadon Mansion Roof-Back': [
-                 {'address': 'Warps_CeladonMansionRoof', 'id': 1, 'to': {'map': 'Celadon Mansion 3F', 'id': 2}},
+                 {'address': 'Warps_CeladonMansionRoof', 'id': 1, 'to': {'map': 'Celadon Mansion 3F-Back', 'id': 2}},
                  {'address': 'Warps_CeladonMansionRoof', 'id': 2,
                   'to': {'map': 'Celadon Mansion Roof House', 'id': 0}}], 'Celadon Pokemon Center': [
         {'address': 'Warps_CeladonPokecenter', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 5}}],
@@ -670,7 +669,7 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
              'Celadon Pokemart 5F': [
                  {'address': 'Warps_CeladonMart5F', 'id': 0, 'to': {'map': 'Celadon Pokemart Roof', 'id': 0}},
                  {'address': 'Warps_CeladonMart5F', 'id': 1, 'to': {'map': 'Celadon Pokemart 4F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart5F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-5F', 'id': 0}}],
+                 {'address': 'Warps_CeladonMart5F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-5F', 'id': 4}}],
              'Celadon Prize Corner': [
                  {'address': 'Warps_GameCornerPrizeRoom', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 9}}],
              'Celadon Diner': [
@@ -820,7 +819,7 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
              'Celadon Pokemart 2F': [
                  {'address': 'Warps_CeladonMart2F', 'id': 0, 'to': {'map': 'Celadon Pokemart 1F', 'id': 4}},
                  {'address': 'Warps_CeladonMart2F', 'id': 1, 'to': {'map': 'Celadon Pokemart 3F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart2F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-2F', 'id': 0}}],
+                 {'address': 'Warps_CeladonMart2F', 'id': 2, 'to': {'map': 'Celadon Pokemart Elevator-2F', 'id': 1}}],
              'Fuchsia Good Rod House': [{'address': 'Warps_FuchsiaGoodRodHouse', 'id': 0,
                                          'to': {'map': 'Fuchsia City-Good Rod House Backyard', 'id': 8}},
                                         {'address': 'Warps_FuchsiaGoodRodHouse', 'id': (1, 2),
@@ -860,6 +859,7 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
              'Route 12-S': [{'address': 'Warps_Route12', 'id': 3, 'to': {'map': 'Route 12 Super Rod House', 'id': 0}}],
              'Route 12-W': [],
              'Route 12-Grass': [],
+             'Route 15-N': [],
              'Route 15-W': [
                  {'address': 'Warps_Route15', 'id': (0, 1), 'to': {'map': 'Route 15 Gate 1F', 'id': (0, 1)}}],
              'Route 15': [{'address': 'Warps_Route15', 'id': (2, 3), 'to': {'map': 'Route 15 Gate 1F', 'id': (2, 3)}}],
@@ -1206,57 +1206,127 @@ dead_ends = ['Cerulean City-Badge House Backyard', 'Fuchsia City-Good Rod House 
 entrance_only = [
     "Route 4-W to Mt Moon 1F", "Saffron City-G to Saffron Gym-S", "Saffron City-Copycat to Saffron Copycat's House 1F",
     "Saffron City-Pidgey to Saffron Pidgey House", "Rocket Hideout B1F-SE to Rocket Hideout Elevator-B1F",
-    "Pokemon Mansion 1F-SE to Cinnabar Island-M", "Mt Moon B2F to Mt Moon B1F-W", "Silph Co 7F-NW to Silph Co 11F-W",
+    "Cinnabar Island-M to Pokemon Mansion 1F", "Mt Moon B2F to Mt Moon B1F-W", "Silph Co 7F-NW to Silph Co 11F-W",
     "Viridian City-G", "Cerulean City-Cave to Cerulean Cave 1F-SE", "Cerulean City-T to Cerulean Trashed House",
-    "Route 10-P to Power Plant", "S.S. Anne 2F to S.S. Anne Captain's Room"]
-
-# Regions which may be dead ends if badges aren't collected (used when Badgesanity is off)
-badge_dead_ends = [
-    "Cerulean Cave 1F-N", "Cerulean Cave 1F-NE", "Vermilion City-G", "Route 2-SE", "Route 2-E",
-    "Route 20-IW", "Route 20-IE", "Victory Road 1F-S", "Victory Road 1F",
-    "Celadon City-G",  "Route 22 Gate-N", "Route 22 Gate-S", "Route 16-NE", "Route 10-N", "Route 11-C",
-    "Route 15", "Route 23-S", "Route 23-C",
-                   ]
-
-# Regions which may be dead ends if drinks aren't reachable (used when Tea is off)
-drink_dead_ends = ["Route 7 Gate-W", "Route 7 Gate-E", "Route 8 Gate-W", "Route 8 Gate-E",
-                   "Route 5 Gate-N", "Route 5 Gate-S", "Route 6 Gate-N", "Route 6 Gate-S", ]
+    "Route 10-P to Power Plant", "S.S. Anne 2F to S.S. Anne Captain's Room", "Pewter City-M to Pewter Museum 1F-E",
+    "Pokemon Mansion 1F-SE to Cinnabar Island-M"
+]
 
 pokemon_center_entrances = ['Viridian City to Viridian Pokemon Center', 'Celadon City to Celadon Pokemon Center', 'Route 4-W to Route 4 Pokemon Center', 'Route 10-N to Rock Tunnel Pokemon Center', 'Pewter City to Pewter Pokemon Center', 'Cerulean City to Cerulean Pokemon Center', 'Lavender Town to Lavender Pokemon Center', 'Vermilion City to Vermilion Pokemon Center', 'Saffron City to Saffron Pokemon Center', 'Fuchsia City to Fuchsia Pokemon Center', 'Cinnabar Island to Cinnabar Pokemon Center']
 pokemon_centers = ['Celadon Pokemon Center to Celadon City', 'Viridian Pokemon Center to Viridian City', 'Pewter Pokemon Center to Pewter City', 'Cerulean Pokemon Center to Cerulean City', 'Vermilion Pokemon Center to Vermilion City', 'Fuchsia Pokemon Center to Fuchsia City', 'Cinnabar Pokemon Center to Cinnabar Island', 'Lavender Pokemon Center to Lavender Town', 'Saffron Pokemon Center to Saffron City', 'Route 4 Pokemon Center to Route 4-W', 'Rock Tunnel Pokemon Center to Route 10-N']
 
+safe_rooms = ["Rival's House to Pallet Town",
+              'Vermilion Trade House to Vermilion City', 'Viridian Pokemart to Viridian City',
+              'Viridian School House to Viridian City', 'Viridian Nickname House to Viridian City',
+              'Pewter Nidoran House to Pewter City', 'Pewter Speech House to Pewter City',
+              'Cerulean Trade House to Cerulean City', 'Cerulean Bicycle Shop to Cerulean City',
+              "Lavender Mr. Fuji's House to Lavender Town", 'Lavender Cubone House to Lavender Town',
+              "Lavender Name Rater's House to Lavender Town", 'Vermilion Pidgey House to Vermilion City',
+              'Fuchsia Pokemart to Fuchsia City',
+              'Saffron Pidgey House to Saffron City-Pidgey', "Saffron Mr. Psychic's House to Saffron City",
+              'Route 2 Trade House to Route 2-NE', 'Route 16 Fly House to Route 16-NW', "Bill's House to Route 25",
+              'Safari Zone Center Rest House to Safari Zone Center-S',
+              'Safari Zone West Rest House to Safari Zone West', 'Safari Zone East Rest House to Safari Zone East',
+              'Safari Zone North Rest House to Safari Zone North',
+              'Celadon Prize Corner to Celadon City', 'Celadon Diner to Celadon City',
+              'Celadon Chief House to Celadon City', 'Celadon Hotel to Celadon City',
+              'Safari Zone Secret House to Safari Zone West-NW',
+              'Vermilion Old Rod House to Vermilion City', 'Daycare to Route 5',
+              'Route 12 Super Rod House to Route 12-S', 'Vermilion Pokemon Fan Club to Vermilion City',
+              'Cerulean Pokemart to Cerulean City',
+              'Lavender Pokemart to Lavender Town', 'Vermilion Pokemart to Vermilion City',
+              'Saffron Pokemart to Saffron City',
+              'Pewter Pokemart to Pewter City',
+              "Fuchsia Bill's Grandpa's House to Fuchsia City", "Fuchsia Warden's House to Fuchsia City",
+              'Fuchsia Meeting Room to Fuchsia City',
+              'Cinnabar Pokemart to Cinnabar Island']
 
-safe_rooms = ['Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House', "Rival's House to Pallet Town", 'Vermilion Trade House to Vermilion City', 'Viridian Pokemart to Viridian City', 'Viridian School House to Viridian City', 'Viridian Nickname House to Viridian City', 'Pewter Nidoran House to Pewter City', 'Pewter Speech House to Pewter City', 'Cerulean Trade House to Cerulean City', 'Cerulean Bicycle Shop to Cerulean City', "Lavender Mr. Fuji's House to Lavender Town", 'Lavender Cubone House to Lavender Town', "Lavender Name Rater's House to Lavender Town", 'Vermilion Pidgey House to Vermilion City', 'Celadon Mansion Roof House to Celadon Mansion Roof-Back', 'Fuchsia Pokemart to Fuchsia City', 'Saffron Pidgey House to Saffron City-Pidgey', "Saffron Mr. Psychic's House to Saffron City", 'Route 2 Trade House to Route 2-NE', 'Route 16 Fly House to Route 16-NW', "Bill's House to Route 25", 'Safari Zone Center Rest House to Safari Zone Center-S', 'Safari Zone West Rest House to Safari Zone West', 'Safari Zone East Rest House to Safari Zone East', 'Safari Zone North Rest House to Safari Zone North', 'Celadon Pokemart Roof to Celadon Pokemart 5F', 'Celadon Prize Corner to Celadon City', 'Celadon Diner to Celadon City', 'Celadon Chief House to Celadon City', 'Celadon Hotel to Celadon City', 'Route 11 Gate 2F to Route 11 Gate 1F', 'Route 12 Gate 2F to Route 12 Gate 1F', 'Route 15 Gate 2F to Route 15 Gate 1F', 'Route 16 Gate 2F to Route 16 Gate 1F-E', 'Route 18 Gate 2F to Route 18 Gate 1F-E', 'Safari Zone Secret House to Safari Zone West-NW', 'Vermilion Old Rod House to Vermilion City', 'Daycare to Route 5', 'Route 12 Super Rod House to Route 12-S', 'Vermilion Pokemon Fan Club to Vermilion City', 'Pewter Museum 2F to Pewter Museum 1F', 'Cerulean Pokemart to Cerulean City', 'Lavender Pokemart to Lavender Town', 'Vermilion Pokemart to Vermilion City', "Saffron Copycat's House 2F to Saffron Copycat's House 1F", 'Saffron Pokemart to Saffron City', 'S.S. Anne Kitchen to S.S. Anne 1F', "S.S. Anne Captain's Room to S.S. Anne 2F", 'S.S. Anne 1F Rooms-Police Room to S.S. Anne 1F', 'S.S. Anne 1F Rooms-Wigglytuff Room to S.S. Anne 1F', 'S.S. Anne 1F Rooms-Cherry Pie Room to S.S. Anne 1F', 'S.S. Anne 2F Rooms-Snorlax Room to S.S. Anne 2F', 'S.S. Anne 2F Rooms-Surf and Cut Room to S.S. Anne 2F', 'S.S. Anne 2F Rooms-Safari Zone Room to S.S. Anne 2F', 'S.S. Anne 2F Rooms-Seasickness Room to S.S. Anne 2F', 'S.S. Anne B1F Rooms-Machoke Room to S.S. Anne B1F', 'Pewter Pokemart to Pewter City', "Fuchsia Bill's Grandpa's House to Fuchsia City", "Fuchsia Warden's House to Fuchsia City", 'Fuchsia Meeting Room to Fuchsia City', 'Cinnabar Lab Trade Room to Cinnabar Lab', 'Cinnabar Lab Metronome Room to Cinnabar Lab', 'Cinnabar Lab Fossil Room to Cinnabar Lab', 'Cinnabar Pokemart to Cinnabar Island']
-
-mandatory_connections = [
-    ("Seafoam Islands B1F-NE to Seafoam Islands 1F", "Seafoam Islands 1F to Seafoam Islands B1F-NE"),
-    ("Seafoam Islands 1F to Seafoam Islands B1F", "Seafoam Islands B1F to Seafoam Islands 1F"),
-    ("Seafoam Islands B2F-NW to Seafoam Islands B1F", "Seafoam Islands B1F to Seafoam Islands B2F-NW"),
-    ("Seafoam Islands B3F-SE to Seafoam Islands B2F-SE", "Seafoam Islands B2F-SE to Seafoam Islands B3F-SE"),
-    ("Seafoam Islands B3F-NE to Seafoam Islands B2F-NE", "Seafoam Islands B2F-NE to Seafoam Islands B3F-NE"),
-    ("Seafoam Islands B4F to Seafoam Islands B3F-NE", "Seafoam Islands B3F-NE to Seafoam Islands B4F"),
-    ("Seafoam Islands B4F to Seafoam Islands B3F", "Seafoam Islands B3F to Seafoam Islands B4F"),
-    ("Safari Zone Center-S to Safari Zone Gate-N", "Safari Zone Gate-N to Safari Zone Center-S"),
-    ("Safari Zone East to Safari Zone North", "Safari Zone North to Safari Zone East"),
-    ("Safari Zone East to Safari Zone Center-S", "Safari Zone Center-S to Safari Zone East"),
-    ("Safari Zone North to Safari Zone Center-NE", "Safari Zone Center-NE to Safari Zone North"),
-    ("Safari Zone North to Safari Zone West", "Safari Zone West to Safari Zone North"),
-    ("Safari Zone North to Safari Zone West-NW", "Safari Zone West-NW to Safari Zone North"),
-    ("Safari Zone West to Safari Zone Center-NW", "Safari Zone Center-NW to Safari Zone West"),
-    ("Seafoam Islands B3F to Seafoam Islands B4F Water Tunnel", "Seafoam Islands B4F to Seafoam Islands B3F Water Tunnel"),
-    ("Player's House 1F to Player's House 2F", "Player's House 2F to Player's House 1F"),
-    ("Indigo Plateau Lorelei's Room to Indigo Plateau Lobby", "Indigo Plateau Lobby to Indigo Plateau Lorelei's Room"),
-    ("Indigo Plateau Bruno's Room to Indigo Plateau Lorelei's Room", "Indigo Plateau Lorelei's Room to Indigo Plateau Bruno's Room"),
-    ("Indigo Plateau Bruno's Room to Indigo Plateau Agatha's Room", "Indigo Plateau Agatha's Room to Indigo Plateau Bruno's Room"),
-    ("Indigo Plateau Agatha's Room to Indigo Plateau Lance's Room", "Indigo Plateau Lance's Room to Indigo Plateau Agatha's Room"),
-    ("Indigo Plateau Champion's Room to Indigo Plateau Lance's Room", "Indigo Plateau Lance's Room to Indigo Plateau Champion's Room"),
-    ("Indigo Plateau Hall of Fame to Indigo Plateau Champion's Room", "Indigo Plateau Champion's Room to Indigo Plateau Hall of Fame")
+insanity_safe_rooms = ['Cinnabar Lab Trade Room to Cinnabar Lab',
+              'Cinnabar Lab Metronome Room to Cinnabar Lab', 'Cinnabar Lab Fossil Room to Cinnabar Lab',
+    'Celadon Mansion Roof House to Celadon Mansion Roof-Back',
+    "Saffron Copycat's House 2F to Saffron Copycat's House 1F",
+    'Route 11 Gate 2F to Route 11 Gate 1F', 'Route 12 Gate 2F to Route 12 Gate 1F',
+    'Route 15 Gate 2F to Route 15 Gate 1F', 'Route 16 Gate 2F to Route 16 Gate 1F-E',
+    'Route 18 Gate 2F to Route 18 Gate 1F-E',
+    'Celadon Pokemart Roof to Celadon Pokemart 5F',
+    'Pewter Museum 2F to Pewter Museum 1F',
+    "Cerulean City-Badge House Backyard to Cerulean Badge House",
+    'Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House',
+    'S.S. Anne Kitchen to S.S. Anne 1F', "S.S. Anne Captain's Room to S.S. Anne 2F",
+    'S.S. Anne 1F Rooms-Police Room to S.S. Anne 1F', 'S.S. Anne 1F Rooms-Wigglytuff Room to S.S. Anne 1F',
+    'S.S. Anne 1F Rooms-Cherry Pie Room to S.S. Anne 1F', 'S.S. Anne 2F Rooms-Snorlax Room to S.S. Anne 2F',
+    'S.S. Anne 2F Rooms-Surf and Cut Room to S.S. Anne 2F',
+    'S.S. Anne 2F Rooms-Safari Zone Room to S.S. Anne 2F',
+    'S.S. Anne 2F Rooms-Seasickness Room to S.S. Anne 2F',
+    'S.S. Anne B1F Rooms-Machoke Room to S.S. Anne B1F',
 ]
+
+
+def pair(a, b):
+    return [f"{a} to {b}", f"{b} to {a}"]
+
+
+mandatory_connections = {
+    *pair("Safari Zone Center-S", "Safari Zone Gate-N"),
+    *pair("Safari Zone East", "Safari Zone North"),
+    *pair("Safari Zone East", "Safari Zone Center-S"),
+    *pair("Safari Zone North", "Safari Zone Center-NE"),
+    *pair("Safari Zone North", "Safari Zone West"),
+    *pair("Safari Zone North", "Safari Zone West-NW"),
+    *pair("Safari Zone West", "Safari Zone Center-NW"),
+}
+insanity_mandatory_connections = {
+    *pair("Seafoam Islands B1F-NE", "Seafoam Islands 1F"),
+    *pair("Seafoam Islands 1F", "Seafoam Islands B1F"),
+    *pair("Seafoam Islands B2F-NW", "Seafoam Islands B1F"),
+    *pair("Seafoam Islands B3F-SE", "Seafoam Islands B2F-SE"),
+    *pair("Seafoam Islands B3F-NE", "Seafoam Islands B2F-NE"),
+    *pair("Seafoam Islands B4F", "Seafoam Islands B3F-NE"),
+    *pair("Seafoam Islands B4F", "Seafoam Islands B3F"),
+
+    ["Seafoam Islands B3F to Seafoam Islands B4F Water Tunnel", "Seafoam Islands B4F to Seafoam Islands B3F Water Tunnel"],
+    *pair("Player's House 1F", "Player's House 2F"),
+    *pair("Indigo Plateau Lorelei's Room", "Indigo Plateau Lobby"),
+    *pair("Indigo Plateau Bruno's Room", "Indigo Plateau Lorelei's Room"),
+    *pair("Indigo Plateau Bruno's Room", "Indigo Plateau Agatha's Room"),
+    *pair("Indigo Plateau Agatha's Room", "Indigo Plateau Lance's Room"),
+    *pair("Indigo Plateau Champion's Room", "Indigo Plateau Lance's Room "),
+    *pair("Indigo Plateau Hall of Fame", "Indigo Plateau Champion's Room")
+}
 
 safari_zone_houses = ["Safari Zone Center-S to Safari Zone Center Rest House",
                       "Safari Zone West to Safari Zone West Rest House",
                       "Safari Zone West-NW to Safari Zone Secret House",
-                      "Safari Zone East to Safari Zone East Rest House"]
+                      "Safari Zone East to Safari Zone East Rest House",
+                      "Safari Zone North to Safari Zone North Rest House"]
+
+connecting_interiors = [
+    ["Viridian Forest South Gate to Route 2-SW", "Viridian Forest North Gate to Route 2-NW"],
+    ["Underground Path Route 5 to Route 5", "Underground Path Route 6 to Route 6"],
+    ["Underground Path Route 7 to Route 7", "Underground Path Route 8 to Route 8"],
+    ["Diglett's Cave Route 11 to Route 11", "Diglett's Cave Route 2 to Route 2-NE"],
+    ["Route 2 Gate to Route 2-E", "Route 2 Gate to Route 2-SE"],
+    ["Cerulean Badge House to Cerulean City-Badge House Backyard", "Cerulean Badge House to Cerulean City"],
+    ["Fuchsia Good Rod House to Fuchsia City-Good Rod House Backyard"],
+    ["Route 11 Gate 1F to Route 11-E", "Route 11 Gate 1F to Route 11-C"],
+    ["Route 12 Gate 1F to Route 12-N", "Route 12 Gate 1F to Route 12-L"],
+    ["Route 15 Gate 1F to Route 15", "Route 15 Gate 1F to Route 15-W"],
+    ["Route 16 Gate 1F-N to Route 16-NE", "Route 16 Gate 1F-N to Route 16-NW"],
+    ["Route 16 Gate 1F-W to Route 16-SW", "Route 16 Gate 1F-E to Route 16-C"],
+    ["Route 18 Gate 1F-W to Route 18-W", "Route 18 Gate 1F-E to Route 18-E"],
+    ["Mt Moon 1F to Route 4-W", "Mt Moon B1F-NE to Route 4-C"],
+    ["Seafoam Islands 1F to Route 20-IW", "Seafoam Islands 1F-SE to Route 20-IE"],
+    ["Rock Tunnel 1F-NE to Route 10-N", "Rock Tunnel 1F-S to Route 10-S"],
+    ["Route 5 Gate-N to Route 5", "Route 5 Gate-S to Route 5-S"],
+    ["Route 6 Gate-S to Route 6", "Route 6 Gate-N to Route 6-N"],
+    ["Route 7 Gate-W to Route 7", "Route 7 Gate-E to Route 7-E"],
+    ["Route 8 Gate-E to Route 8", "Route 8 Gate-W to Route 8-W"],
+    ["Victory Road 1F-S to Route 23-C", "Victory Road 2F to Route 23-N"],
+    ["Route 22 Gate-S to Route 22", "Route 22 Gate-N to Route 23"],
+    ["Pokemon Mansion 1F to Cinnabar Island-M", "Pokemon Mansion 1F-SE to Cinnabar Island-M"],
+    ["Power Plant to Route 10-P", "Power Plant to Route 10-P Back Door"],
+
+]
 
 for region in warp_data:
     for entrance in warp_data[region]:
@@ -1267,6 +1337,8 @@ for region in warp_data:
                 for entrance2 in warp_data[region2]:
                     if (entrance2["id"] == i or (isinstance(entrance2["id"], tuple) and i in entrance2["id"])): #and region2 != m:
                         # print(f"change {entrance} to {region2}")
+                        if entrance["to"]["map"] != region2:
+                            print(region + " changing " + entrance["to"]["map"] + " to " + region2)
                         entrance["to"]["map"] = region2
                         break
                 else:
@@ -1278,84 +1350,6 @@ for region in warp_data:
 for region in warp_data:
     for entrance in warp_data[region]:
         if "flags" in entrance:
-            print(entrance["name"] if "name" in entrance else f"{region} to {entrance['to']['map']}")
             del entrance["flags"]
 
 print(warp_data)
-# names = set()
-# for region in warp_data:
-#     for entrance in warp_data[region]:
-#         n = f"{region} to {entrance['to']['map']}"
-#         if "name" in entrance:
-#             n = entrance["name"]
-#         if n in names:
-#             print(n)
-#         names.add(n)
-# for region in warp_data:
-#     if len(warp_data[region]) == 1:
-#         print(region)
-# print(len([region for region in warp_data if len(warp_data[region]) == 1]))
-# print(len([region for region in warp_data if len(warp_data[region]) == 2]))
-# print(len([region for region in warp_data if len(warp_data[region]) > 2]))
-# for region in warp_data:
-#     for entrance in warp_data[region]:
-#         c = entrance["to"]["map"]
-#         i = entrance["to"]["id"]
-#         for e in warp_data[c]:
-#             if e["id"] == i:
-#                 break
-#             if isinstance(e["id"], tuple):
-#                 if i in e["id"]:
-#                     # print(f"{region} connecting to {c} {i} - should be {e['id']}")
-#                     break
-#         else:
-#             print(f"{region} connecting to {c} {i}")
-
-
-
-# for region in warp_data:
-#     if region not in map_ids:
-#         print(region)
-
-# for region in warp_data:
-#     for entrance in warp_data[region]:
-#         entrance["address"] = "".join(entrance["address"].split(" "))
-#         if entrance["to"]["map"] == 255:
-#             for region_2 in warp_data:
-#                 for entrance_2 in warp_data[region_2]:
-#                     if entrance_2["to"]["map"] == region and (entrance_2["to"]["id"] == entrance["id"] or (isinstance(entrance["id"], tuple) and entrance_2["to"]["id"] in entrance["id"])):
-#                         entrance["to"]["map"] = region_2
-#                         break
-#                 else:
-#                     continue
-#                 break
-#             else:
-#                 print("failed")
-#                 print(entrance)
-#
-# print(warp_data)
-#
-# def process(word):
-#     result = ""
-#     last_letter = ""
-#     for i in word:
-#         if (i.isupper() and not last_letter.isnumeric()) or (i.isnumeric() and last_letter != "B"):
-#             if last_letter == "s":
-#                 result = result[:-1] + "'" + result[-1:]
-#             result=result+" "+i.upper()
-#
-#         else:
-#             result=result+i
-#         last_letter = i
-#     return result[1:]
-#
-# new_warp_data = {}
-# for region in warp_data:
-#     warps = []
-#     new_warp_data[process(region)] = warps
-#     for i, warp in enumerate(warp_data[region]):
-#         id = warp["id"]
-#         # warps.append({"address": f"*rom_addresses[\"Warps_{region}\"] + {id * 4}*", "map": map_ids[warp["map"]] if warp["map"] in map_ids else warp["map"], "id": warp["to"]})
-#         warps.append({"address": "Warps_" + region, "id": id, "to": {"map": map_ids[warp["map"]] if warp["map"] in map_ids else warp["map"], "id": warp["to"]}})
-#     #new_warp_data[f"Warps_{region}"] = warps
-# print(new_warp_data)
