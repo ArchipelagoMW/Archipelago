@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Dict, Union, Protocol, runtime_checkable, ClassVar
 
 from Options import Option, Range, DeathLink, SpecialRange, Toggle, Choice, OptionSet
-
+from .mods.mod_data import ModNames
 
 @runtime_checkable
 class StardewOption(Protocol):
@@ -535,13 +535,14 @@ class Mods(OptionSet):
     internal_name = "mods"
     display_name = "Mods"
     valid_keys = {
-        "DeepWoods", "Tractor Mod", "Bigger Backpack", "Item Bags",
-        "Luck Skill", "Magic", "Socializing Skill", "Archaeology",
-        "Cooking Skill", "Binning Skill", "Skull Cavern Elevator", "Juna - Roommate NPC",
-        "Professor Jasper Thomas", "Alec Revisited", "Custom NPC - Yoba", "Custom NPC Eugene",
-        "'Prophet' Wellwick", "Mister Ginger (cat npc)", "Shiko - New Custom NPC", "Delores - Custom NPC",
-        "Ayeisha - The Postal Worker (Custom NPC)"
+        ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+        ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+        ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+        ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+        ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+        ModNames.ayeisha
     }
+
 
 stardew_valley_option_classes = [
     Goal,
