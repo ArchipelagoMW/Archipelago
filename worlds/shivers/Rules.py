@@ -1,7 +1,6 @@
 import typing
 from collections.abc import Callable
 from BaseClasses import CollectionState
-
 from worlds.AutoWorld import World
 from worlds.generic.Rules import forbid_item
 

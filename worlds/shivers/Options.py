@@ -1,5 +1,5 @@
 from typing import Dict, FrozenSet, Union
-from Options import Toggle, Range, Choice, Option
+from Options import Choice, Option
 from BaseClasses import MultiWorld
 
 
