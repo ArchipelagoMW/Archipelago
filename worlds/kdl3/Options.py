@@ -68,6 +68,7 @@ class BossShuffle(PlandoBosses):
     """
     None: Bosses will remain in their vanilla locations
     Shuffled: Bosses will be shuffled amongst each other
+    Full: Bosses will be randomized
     Singularity: All (non-Zero) bosses will be replaced with a single boss
     Supports plando placement.
     """
