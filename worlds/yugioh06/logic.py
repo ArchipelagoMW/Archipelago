@@ -56,8 +56,7 @@ class YuGiOh06Logic(LogicMixin):
                                   , "Banlist March 2005"], player)
 
     def yugioh06_can_get_konami_bonus(self, player):
-        # TODO: Detail out the life pay cards
-        return (self.has_all(["Continuous Spell/Trap A", "Castle of Dark Illusions", "Mystik Wok"], player) or
+        return (self.has_all(["Messenger of Peace", "Castle of Dark Illusions", "Mystik Wok"], player) or
                 self.has_all(["Mystik Wok", "Barox", "Cyber-Stein", "Poison of the Old Man"], player)) and\
                 self.yugioh06_difficulty(player, 8)
 

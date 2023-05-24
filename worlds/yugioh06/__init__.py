@@ -145,8 +145,7 @@ class Yugioh06World(World):
         self.multiworld.regions += [
             create_region(self.multiworld, self.player, 'Menu', None, ['to Campaign', 'to Challenges', 'to Card Shop']),
             create_region(self.multiworld, self.player, 'Campaign', Bonuses | Campaign_Opponents),
-            create_region(self.multiworld, self.player, 'Challenges',
-                          Limited_Duels | Theme_Duels | get_beat_challenge_events()),
+            create_region(self.multiworld, self.player, 'Challenges'),
             create_region(self.multiworld, self.player, 'Card Shop', Required_Cards)
         ]
 
@@ -175,7 +174,7 @@ class Yugioh06World(World):
                     (lambda opp: lambda state:
                      state.has("Challenge Beaten", self.player,
                                self.multiworld.FourthTier5CampaignBossChallenges[self.player].value) and
-                               opp.rule(state))(opponent)
+                     opp.rule(state))(opponent)
             elif opponent.tier == 5 and opponent.column == 5:
                 entrance.access_rule =\
                     (lambda opp: lambda state: state.has("Challenge Beaten", self.player,
@@ -195,6 +194,18 @@ class Yugioh06World(World):
             entrance = Entrance(self.player, booster, card_shop)
             entrance.access_rule = (lambda unlock: lambda state: state.has(unlock, self.player))(booster)
             campaign.exits.append(entrance)
+            entrance.connect(region)
+            self.multiworld.regions.append(region)
+
+        challenges = self.multiworld.get_region('Challenges', self.player)
+        # Challenges
+        for challenge, lid in (Limited_Duels | Theme_Duels).items():
+            region = create_region(self.multiworld, self.player,
+                                   challenge, {challenge: lid, challenge + " Complete": None})
+            entrance = Entrance(self.player, challenge, card_shop)
+            entrance.access_rule = (lambda unlock: lambda state:
+                                    state.has(unlock + " Unlock", self.player))(challenge)
+            challenges.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
 
@@ -263,8 +274,8 @@ class Yugioh06World(World):
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     region = Region(name, player, world)
     if locations:
-        for location_name in locations.keys():
-            location = Yugioh2006Location(player, location_name, locations[location_name], region)
+        for location_name, lid in locations.items():
+            location = Yugioh2006Location(player, location_name, lid, region)
             if locations[location_name] is None:
                 location.event = True
             region.locations.append(location)

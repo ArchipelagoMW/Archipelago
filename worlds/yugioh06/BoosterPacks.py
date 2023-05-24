@@ -13,15 +13,21 @@ booster_contents = {
         "Suijin",
         "Sanga of the Thunder",
         "Sangan",
-        "Castle of Dark Illusions"
+        "Castle of Dark Illusions",
+        "Soul Release",
+        "Magician of Faith"
     },
     "PHARAOH'S SERVANT": {},
     "PHARAONIC GUARDIAN": {
         "Don Zaloog",
-        "Reasoning"
+        "Reasoning",
+        "Dark Snake Syndrome",
+        "Helpoemer"
     },
     "SPELL RULER": {
-        "Ritual"
+        "Ritual",
+        "Messenger of Peace",
+        "Megamorph"
     },
     "LABYRINTH OF NIGHTMARE": {
         "Destiny Board",
@@ -30,7 +36,8 @@ booster_contents = {
         "Spirit Message 'A'",
         "Spirit Message 'L'",
         "Fusion Gate",
-        "Jowgen the Spiritualist"
+        "Jowgen the Spiritualist",
+        "Fairy Box"
     },
     "LEGACY OF DARKNESS": {
         "Last Turn",
@@ -65,14 +72,19 @@ booster_contents = {
         "Dark Scorpion - Chick the Yellow",
         "Dark Scorpion - Meanae the Thorn",
         "Dark Scorpion - Gorg the Strong",
-        "Ritual"
+        "Ritual",
+        "Tsukuyomi",
+        "Ojama Trio"
     },
     "INVASION OF CHAOS": {
         "Ojama Delta Hurricane",
         "Ojama Yellow",
         "Ojama Black",
         "Heart of the Underdog",
-        "Chaos Emperor Dragon - Envoy of the End"
+        "Chaos Emperor Dragon - Envoy of the End",
+        "Self-Destruct Button",
+        "Manticore of Darkness",
+        "Dimension Fusion"
     },
     "ANCIENT SANCTUARY": {
         "Monster Gate",
@@ -86,23 +98,27 @@ booster_contents = {
         "Ritual"
     },
     "CYBERNETIC REVOLUTION": {
-        "Power Bond"
+        "Power Bond",
+        "Cyber Twin Dragon"
     },
     "ELEMENTAL ENERGY": {},
     "SHADOW OF INFINITY": {
         "Hamon, Lord of Striking Thunder",
         "Raviel, Lord of Phantasms",
         "Uria, Lord of Searing Flames",
-        "Ritual"
+        "Ritual",
+        "Treeborn Frog"
     },
     "GAME GIFT COLLECTION": {
         "Valkyrion the Magna Warrior",
         "Alpha the Magnet Warrior",
         "Beta the Magnet Warrior",
-        "Gamma the Magnet Warrior"
+        "Gamma the Magnet Warrior",
+        "Magical Blast"
     },
     "Special Gift Collection": {
-        "Gate Guardian"
+        "Gate Guardian",
+        "Scapegoat"
     },
     "Fairy Collection": {},
     "Dragon Collection": {
@@ -126,7 +142,8 @@ booster_contents = {
     },
     "Fiend Collection B": {
         "Raviel, Lord of Phantasms",
-        "Yata-Garasu"
+        "Yata-Garasu",
+        "Helpoemer"
     },
     "Machine Collection A": {
         "Cyber-Stein"
@@ -142,17 +159,21 @@ booster_contents = {
         "V-Tiger Jet",
         "W-Wing Catapult",
         "VW-Tiger Catapult",
-        "VWXYZ-Dragon Catapult Cannon"
+        "VWXYZ-Dragon Catapult Cannon",
+        "Cyber Twin Dragon"
     },
     "Spellcaster Collection A": {
         "Exodia",
         "Dark Sage",
         "Dark Magician",
         "Time Wizard",
-        "Kazejin"
+        "Kazejin",
+        "Magician of Faith"
     },
     "Spellcaster Collection B": {
-        "Jowgen the Spiritualist"
+        "Jowgen the Spiritualist",
+        "Tsukuyomi",
+        "Manticore of Darkness"
     },
     "Zombie Collection": {},
     "Special Monsters A": {
@@ -161,14 +182,17 @@ booster_contents = {
         "Z-Metal Tank",
         "V-Tiger Jet",
         "W-Wing Catapult",
-        "Yata-Garasu"
+        "Yata-Garasu",
+        "Tsukuyomi"
     },
     "Special Monsters B": {
         "Polymerization"
     },
     "Reverse Collection": {
         "Magical Merchant",
-        "Castle of Dark Illusions"
+        "Castle of Dark Illusions",
+        "Magician of Faith",
+        "Penguin Soldier"
     },
     "LP Recovery Collection": {
         "Mystik Wok",
@@ -179,39 +203,52 @@ booster_contents = {
         "Dark Sage",
         "Polymerization",
         "Ritual",
-        "Cyber-Stein"
+        "Cyber-Stein",
+        "Scapegoat"
     },
     "Special Summon Collection B": {
         "Monster Gate",
-        "Chaos Emperor Dragon - Envoy of the End"
+        "Chaos Emperor Dragon - Envoy of the End",
+        "Ojama Trio",
+        "Dimension Fusion",
+        "Return from the Different Dimension"
     },
     "Special Summon Collection C": {
         "Hamon, Lord of Striking Thunder",
         "Raviel, Lord of Phantasms",
-        "Uria, Lord of Searing Flames"
+        "Uria, Lord of Searing Flames",
+        "Treeborn Frog"
     },
-    "Equipment Collection": {},
+    "Equipment Collection": {
+        "Megamorph"
+    },
     "Continuous Spell/Trap A": {
         "Destiny Board",
         "Spirit Message 'I'",
         "Spirit Message 'N'",
         "Spirit Message 'A'",
         "Spirit Message 'L'",
+        "Messenger of Peace",
+        "Fairy Box",
+        "Ultimate Offering"
     },
     "Continuous Spell/Trap B": {
         "Hamon, Lord of Striking Thunder",
         "Uria, Lord of Searing Flames",
         "Wave-Motion Cannon",
         "Heart of the Underdog",
-        "Wall of Revealing Light"
+        "Wall of Revealing Light",
+        "Dark Snake Syndrome"
     },
     "Quick/Counter Collection": {
         "Mystik Wok",
-        "Poison of the Old Man"
+        "Poison of the Old Man",
+        "Scapegoat"
     },
     "Direct Damage Collection": {
         "Hamon, Lord of Striking Thunder",
-        "Chaos Emperor Dragon - Envoy of the End"
+        "Chaos Emperor Dragon - Envoy of the End",
+        "Dark Snake Syndrome"
     },
     "Direct Attack Collection": {
         "Victory D",
