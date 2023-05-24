@@ -143,10 +143,10 @@ class Yugioh06World(World):
 
     def create_regions(self):
         self.multiworld.regions += [
-            create_region(self.multiworld, self.player, 'Menu', None, ['to Campaign', 'to Challenges', 'to Card Shop']),
-            create_region(self.multiworld, self.player, 'Campaign', Bonuses | Campaign_Opponents),
-            create_region(self.multiworld, self.player, 'Challenges'),
-            create_region(self.multiworld, self.player, 'Card Shop', Required_Cards)
+            create_region(self, 'Menu', None, ['to Campaign', 'to Challenges', 'to Card Shop']),
+            create_region(self, 'Campaign', Bonuses | Campaign_Opponents),
+            create_region(self, 'Challenges'),
+            create_region(self, 'Card Shop', Required_Cards)
         ]
 
         self.multiworld.get_entrance('to Campaign', self.player) \
@@ -160,7 +160,7 @@ class Yugioh06World(World):
         # Campaign Opponents
         for opponent in get_opponents(self.multiworld, self.player):
             unlock_item = "Campaign Tier " + str(opponent.tier) + " Column " + str(opponent.column)
-            region = create_region(self.multiworld, self.player,
+            region = create_region(self,
                                    opponent.name, get_opponent_locations(opponent))
             entrance = Entrance(self.player, unlock_item, campaign)
             if opponent.tier == 5 and opponent.column == 3:
@@ -189,7 +189,7 @@ class Yugioh06World(World):
         card_shop = self.multiworld.get_region('Card Shop', self.player)
         # Booster Contents
         for booster in booster_packs:
-            region = create_region(self.multiworld, self.player,
+            region = create_region(self,
                                    booster, get_booster_locations(booster))
             entrance = Entrance(self.player, booster, card_shop)
             entrance.access_rule = (lambda unlock: lambda state: state.has(unlock, self.player))(booster)
@@ -200,7 +200,7 @@ class Yugioh06World(World):
         challenges = self.multiworld.get_region('Challenges', self.player)
         # Challenges
         for challenge, lid in (Limited_Duels | Theme_Duels).items():
-            region = create_region(self.multiworld, self.player,
+            region = create_region(self,
                                    challenge, {challenge: lid, challenge + " Complete": None})
             entrance = Entrance(self.player, challenge, card_shop)
             entrance.access_rule = (lambda unlock: lambda state:
@@ -271,18 +271,22 @@ class Yugioh06World(World):
         os.unlink(patched_filename)
 
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
-    region = Region(name, player, world)
+def create_region(self, name: str, locations=None, exits=None):
+    region = Region(name, self.player, self.multiworld)
     if locations:
         for location_name, lid in locations.items():
-            location = Yugioh2006Location(player, location_name, lid, region)
-            if locations[location_name] is None:
+            if lid is not None and isinstance(lid, int):
+                lid = self.location_name_to_id[location_name]
+            else:
+                lid = None
+            location = Yugioh2006Location(self.player, location_name, lid, region)
+            if lid is None:
                 location.event = True
             region.locations.append(location)
 
     if exits:
         for _exit in exits:
-            region.exits.append(Entrance(player, _exit, region))
+            region.exits.append(Entrance(self.player, _exit, region))
     return region
 
 

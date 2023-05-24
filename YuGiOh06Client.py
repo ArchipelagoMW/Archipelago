@@ -140,8 +140,7 @@ async def parse_locations(locations_array: List[int], ctx: GBAContext):
         ctx.locations_array = locations_array
         locations_checked = []
         for location in ctx.missing_locations:
-            # index will be - 0x100 or 0x200
-            lId = location - 5730001
+            lId = (location % 5730000) - 1
             index = math.floor(lId / 8)
             bit = lId % 8
             if locations_array[index] & (1 << bit) != 0:
@@ -173,7 +172,7 @@ async def gba_sync_task(ctx: GBAContext):
                     data_decoded = json.loads(data.decode())
                     if 'scriptVersion' not in data_decoded or data_decoded['scriptVersion'] != SCRIPT_VERSION:
                         msg = "You are connecting with an incompatible Lua script version. Ensure your connector Lua " \
-                            "and PokemonClient are from the same Archipelago installation."
+                            "and YuGiOh06Client are from the same Archipelago installation."
                         logger.info(msg, extra={'compact_gui': True})
                         ctx.gui_error('Error', msg)
                         error_status = CONNECTION_RESET_STATUS
@@ -301,7 +300,7 @@ if __name__ == '__main__':
         if args.patch_file:
             ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
             if ext == "apygo06":
-                logger.info("APRED file supplied, beginning patching process...")
+                logger.info("APYGO06 file supplied, beginning patching process...")
                 async_start(patch_and_run_game(args.patch_file, ctx))
             else:
                 logger.warning(f"Unknown patch file extension {ext}")
