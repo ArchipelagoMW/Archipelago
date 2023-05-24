@@ -170,8 +170,8 @@ class BlasphemousLogic(LogicMixin):
     def _blasphemous_cherub_38(self, player):
         return self.has_any({"Ranged Skill", "Lorquiana", "Cante Jondo of the Three Sisters", \
             "Cantina of the Blue Rose", "Cloistered Ruby"}, player) or \
-                (self.has("The Young Mason's Wheel", player) and \
-                    self.has("Brilliant Heart of Dawn", player)) or \
+                self.has("The Young Mason's Wheel", player) or \
+                    self.has("Brilliant Heart of Dawn", player) or \
                         (self.has("Aubade of the Nameless Guardian", player) and \
                             self.has("Fervour Upgrade", player, 2))
 
@@ -994,6 +994,11 @@ def rules(blasphemousworld):
         set_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
             lambda state: state._blasphemous_ex_bridge_access(player) and \
                 state._blasphemous_laudes_gate(player))
+        set_rule(world.get_location("Jondo: Upper west tree root", player),
+            lambda state: state._blasphemous_root_relic(player) or \
+                state._blasphemous_dawn_heart(player) or \
+                    (state._blasphemous_wheel(player) and \
+                        state._blasphemous_ranged(player)))
         set_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
             lambda state: state._blasphemous_blood_relic(player) and \
                 (state._blasphemous_cherub_22_23_31_32(player) and \
