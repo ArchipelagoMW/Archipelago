@@ -1721,4 +1721,8 @@
     <CRequirementNot id="AP_NotCountUpgradeVanadiumPlatingCompleteOnly">
         <OperandArray index="0" value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
     </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCinematicModeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CinematicMode" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

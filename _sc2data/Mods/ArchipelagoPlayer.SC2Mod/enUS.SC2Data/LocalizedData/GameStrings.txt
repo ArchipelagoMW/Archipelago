@@ -1373,3 +1373,31 @@ Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
 Weapon/Tip/AP_D8Charge=Only used against structures.
+Abil/Name/AP_VoidZealotWhirlwind=Whirlwind
+Behavior/Name/AP_SOAHeroicShieldImmunity=Guardian Shell
+Behavior/Name/AP_SOAHeroicShieldWeakness=Recently Protected
+Behavior/Tooltip/AP_SOAHeroicShieldImmunity=This unit is immune to damage.
+Behavior/Tooltip/AP_SOAHeroicShieldWeakness=This unit cannot be affected by Guardian Shell.
+Button/Name/AP_VoidZealotWhirlwind=Whirlwind
+Button/Tooltip/AP_VoidZealotWhirlwind=Deals <d ref="Effect,VoidZealotWhirlwindDamage,Amount/Behavior,VoidZealotWhirlwind,Period"/> damage per second to all nearby enemy units. Lasts <d ref="Behavior,VoidZealotWhirlwind,Duration"/> seconds.
+Button/Tooltip/AP_ZealotAiur=Aiur Faction<n/>Powerful melee warrior. Has Charge and Whirlwind abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+DocInfo/DescShort=Any
+DocInfo/Name=Just Another StarCraft II Mod
+Effect/Name/AP_SOAHeroicShieldInvulnerableApply=SOAHeroic Shield Invulnerable Apply
+Effect/Name/AP_SOAHeroicShieldWeaknessApply=SOAHeroic Shield Weakness Apply
+Effect/Name/AP_VoidZealotWhirlwindAB=Void Zealot Whirlwind 
+Effect/Name/AP_VoidZealotWhirlwindBehaviorSet=Void Zealot Whirlwind Behavior Set
+Effect/Name/AP_VoidZealotWhirlwindCancelMove=Void Zealot Whirlwind Cancel Move
+Effect/Name/AP_VoidZealotWhirlwindDamage=Void Zealot Whirlwind Damage
+Effect/Name/AP_VoidZealotWhirlwindMoveCP=Void Zealot Whirlwind Move CP
+Effect/Name/AP_VoidZealotWhirlwindMoveOrder=Void Zealot Whirlwind Move Order
+Effect/Name/AP_VoidZealotWhirlwindMoveSearch=Void Zealot Whirlwind Move Search
+Effect/Name/AP_VoidZealotWhirlwindSearch=Void Zealot Whirlwind Search
+Effect/Name/AP_VoidZealotWhirlwindSet=Void Zealot Whirlwind Set
+Effect/Name/AP_ZealotAiurWeapon=Zealot Aiur Weapon
+Effect/Name/AP_ZealotAiurWeaponBurst=Zealot Aiur Weapon Burst
+Effect/Name/AP_ZealotAiurWeaponCleaveSet=Zealot Aiur Weapon Cleave Set
+Unit/Name/AP_ZealotAiur=Zealot
+Upgrade/Name/AP_CinematicMode=Cinematic Mode
+Weapon/Name/AP_SolariteReaper=Solarite Reaper
+

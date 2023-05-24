@@ -2360,4 +2360,19 @@
         </InfoArray>
         <ConstructionMover value="Construction"/>
     </CAbilBuild>
+    <CAbilEffectInstant id="AP_VoidZealotWhirlwind">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_VoidZealotWhirlwindSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <AutoCastRange value="1.5"/>
+        <AutoCastValidatorArray value="AP_VoidZealotWhirlwindCheck"/>
+        <CastOutroTime value="1.2"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidZealotWhirlwind"/>
+    </CAbilEffectInstant>
 </Catalog>

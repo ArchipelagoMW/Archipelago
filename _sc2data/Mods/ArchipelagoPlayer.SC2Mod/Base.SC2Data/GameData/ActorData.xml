@@ -6846,4 +6846,154 @@
     <CActorModel id="AP_ColonyInfestationBuildingDeath" parent="UnitDeathModel">
         <On Terms="ActorCreation" Send="SetTintColor 200,160,133"/>
     </CActorModel>
+    <CActorSound id="AP_SOAHeroicShieldDeathSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.Off" Send="Create"/>
+        <Sound value="AP_SOA_GuardianShell_End"/>
+    </CActorSound>
+    <CActorModel id="AP_SOAHeroicShieldLongModel" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsCarrier" Send="Create"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsVoidRay" Send="Create"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsBattlecruiser" Send="Create"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsHerculesCombine" Send="Create"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidateUnit IsBattlecruiser" Send="SetScale 1.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsHerculesCombine" Send="SetScale 1.500000"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <AutoScaleFactor value="0.800000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_SOAHeroicShieldModel" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On" Send="Create"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidateUnit IsColossus" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit IsCarrier" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit IsVoidRay" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit IsBattlecruiser" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit IsHerculesCombine" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit IsThor" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit IsGoliath" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit IsCyclone" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit IsImmortal" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit IsPhoenix" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit IsTempest" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit IsScienceVessel" Send="SetScale 0.700000"/>
+        <On Terms="ActorCreation; ValidateUnit IsCorsairMP" Send="SetScale 0.900000"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth"/>
+        <AutoScaleFactor value="0.800000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_SOAHeroicShieldSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On" Send="Create"/>
+        <Sound value="AP_SOA_GuardianShell_Start"/>
+    </CActorSound>
+    <CActorSound id="AP_SOAHeroicShieldSoundLoop" parent="SoundContinuous">
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On" Send="Create"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.Off" Send="Destroy"/>
+        <Sound value="AP_SOA_GuardianShell_Loop"/>
+    </CActorSound>
+    <CActorModel id="AP_SOAHeroicShieldTallModel" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsColossus" Send="Create"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth"/>
+        <AutoScaleFactor value="0.800000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorAction id="AP_VoidZealotWhirlwindAttack" parent="GenericAttack" effectAttack="AP_VoidZealotWhirlwindDamage">
+        <ImpactMap index="None" Model="AP_VoidZealotWhirlwindImpact" Sound="Zealot_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_VoidZealotWhirlwindSearchModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_VoidZealotWhirlwindSearch.Start" Send="Create"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_VoidZealotWhirlwindLaunchSound"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth"/>
+    </CActorModel>
+    <CActorUnit id="AP_ZealotAiur" parent="GenericUnitStandard" unitName="AP_ZealotAiur">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="ChargingAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="Behavior.Charging.On" Send="ModelSuddenMotionStart"/>
+        <On Terms="Behavior.Charging.Off" Send="ModelSuddenMotionStop"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Behavior.AP_VoidZealotWhirlwind.On" Send="HostSiteOpsSet ::Host AP_ZealotWhirlwindRotator"/>
+        <On Terms="Effect.AP_VoidZealotWhirlwindSearch.Start" Send="AnimPlay Attack Attack,03"/>
+        <On Terms="Behavior.AP_VoidZealotWhirlwind.Off" Send="HostSiteOpsSet ::Host"/>
+        <On Terms="Behavior.AP_VoidZealotWhirlwind.Off" Send="AnimClear Attack"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Zealot_Land"/>
+        <On Terms="Upgrade.AP_CinematicMode.Add; ValidateUnit AP_CasterHasVoidZealotWhirlwind" Send="HostSiteOpsSet ::Host"/>
+        <On Terms="Upgrade.AP_CinematicMode.Remove; ValidateUnit AP_CasterHasVoidZealotWhirlwind" Send="HostSiteOpsSet ::Host AP_ZealotWhirlwindRotator"/>
+        <On Terms="Signal.*.SOATargetingOn; ValidateUnit AP_CasterHasVoidZealotWhirlwind" Send="HostSiteOpsSet ::Host"/>
+        <On Terms="Signal.*.SOATargetingOff; ValidateUnit AP_CasterHasVoidZealotWhirlwind" Send="HostSiteOpsSet ::Host AP_ZealotWhirlwindRotator"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_ZealotAiurWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ZealotAiurDeath" SoundLink="Zealot_DeathFX"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <PlacementModel value="AP_ZealotAiurPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_ZealotAiurPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="45"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-zealotelite.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-zealot-aiur.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="Zealot_Birth"/>
+        <SoundArray index="Ready" value="Zealot_Ready"/>
+        <SoundArray index="Help" value="Zealot_Help"/>
+        <SoundArray index="What" value="AP_ZealotVoid_What"/>
+        <SoundArray index="Yes" value="Zealot_Yes"/>
+        <SoundArray index="Attack" value="Zealot_Attack"/>
+        <SoundArray index="Pissed" value="Zealot_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-zealot-aiur.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-aiur.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-aiur-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-aiur-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-aiur-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="AP_ZealotAiurAttack" parent="GenericAttack" effectAttack="AP_ZealotAiurWeapon">
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="AP_ZealotAiur_AttackLaunch"/>
+        <ImpactMap index="None" Sound="AP_ZealotAiur_AttackImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSound id="AP_ZealotAiur_Death" parent="SoundOneShot">
+        <On Terms="UnitDeathCustomize.AP_ZealotAiur; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <Sound value="Zealot_Death"/>
+    </CActorSound>
+    <CActorSiteOpRotator id="AP_ZealotWhirlwindRotator">
+        <LocalAxis value="0.000000,0.000000,1.000000"/>
+        <Rate value="1000.000000"/>
+    </CActorSiteOpRotator>
+    <CActorSound id="AP_Zealot_Land" parent="SoundOneShot">
+        <Sound value="Zealot_Land"/>
+    </CActorSound>
+    <CActorSound id="AP_VoidZealotWhirlwindLaunchSound" parent="SoundOneShot">
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_VoidZealot_WhirlWind_AttackLaunch"/>
+    </CActorSound>
 </Catalog>

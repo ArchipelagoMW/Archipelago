@@ -6920,4 +6920,91 @@
         <GlossaryPriority value="20"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
     </CUnit>
+    <CUnit id="AP_ZealotAiur">
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="Zealot"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="100"/>
+        <LifeMax value="100"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossArmor"/>
+        <ShieldsStart value="50"/>
+        <ShieldsMax value="50"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Speed value="2.75"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="9"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="100"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="ProgressRally"/>
+        <AbilArray Link="Charge"/>
+        <AbilArray Link="AP_VoidZealotWhirlwind"/>
+        <BehaviorArray Link="ZealotRespawnDeath2"/>
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <WeaponArray Link="AP_SolariteReaper"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="ProgressRally,Rally1" Row="2" Column="4"/>
+            <LayoutButtons Face="Charge" Type="AbilCmd" AbilCmd="Charge,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_VoidZealotWhirlwind" Type="AbilCmd" AbilCmd="AP_VoidZealotWhirlwind,Execute" Row="2" Column="1"/>
+        </CardLayouts>
+        <SeparationRadius value="0.375"/>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="5"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="Zealot"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="20"/>
+        <GlossaryStrongArray value="Marauder"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Immortal"/>
+        <GlossaryWeakArray value="Hellion"/>
+        <GlossaryWeakArray value="Roach"/>
+        <GlossaryWeakArray value="Colossus"/>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
+        <AIEvaluateAlias value="Zealot"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="20"/>
+            <ChanceArray index="Idle" value="70"/>
+            <ChanceArray index="Turn" value="10"/>
+        </Fidget>
+        <ReviveInfoBase>
+            <Charge Link="Zealot/Revive"/>
+            <Cooldown Link="Zealot/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
 </Catalog>

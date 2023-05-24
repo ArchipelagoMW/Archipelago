@@ -2915,4 +2915,87 @@
         <Flags index="IgnoreUnitCost" value="1"/>
         <Flags index="WaitUntilStopped" value="0"/>
     </CAbilMorph>
+    <CEffectApplyBehavior id="AP_SOAHeroicShieldInvulnerableApply">
+        <ValidatorArray index="0" value="DoesNotHaveHeroicShieldWeakness"/>
+        <ValidatorArray value="NotHallucination"/>
+        <EditorCategories value=""/>
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_SOAHeroicShieldImmunity"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_SOAHeroicShieldWeaknessApply">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_SOAHeroicShieldWeakness"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_VoidZealotWhirlwindAB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidZealotWhirlwind"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_VoidZealotWhirlwindBehaviorSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidZealotWhirlwindMoveSearch"/>
+        <EffectArray value="AP_VoidZealotWhirlwindSearch"/>
+    </CEffectSet>
+    <CEffectCancelOrder id="AP_VoidZealotWhirlwindCancelMove">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+    </CEffectCancelOrder>
+    <CEffectDamage id="AP_VoidZealotWhirlwindDamage" parent="DU_WEAP">
+        <ArmorReduction value="0"/>
+        <Amount value="5"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_VoidZealotWhirlwindMoveCP">
+        <EditorCategories value="Race:Protoss"/>
+        <InitialEffect value="AP_VoidZealotWhirlwindMoveOrder"/>
+        <InitialOffset value="0,-1,0"/>
+    </CEffectCreatePersistent>
+    <CEffectIssueOrder id="AP_VoidZealotWhirlwindMoveOrder">
+        <ValidatorArray value="CasterIsStationary"/>
+        <ValidatorArray value="CasterNotHoldingPosition"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="move"/>
+        <CmdFlags index="Preempt" value="1"/>
+        <Player Value="Source"/>
+        <Target Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectEnumArea id="AP_VoidZealotWhirlwindMoveSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSRandom"/>
+        </TargetSorts>
+        <AreaArray MaxCount="1" Radius="3" Effect="AP_VoidZealotWhirlwindMoveCP"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_VoidZealotWhirlwindSearch">
+        <EditorCategories value=""/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Structure,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_VoidZealotWhirlwindDamage"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_VoidZealotWhirlwindSet">
+        <EffectArray value="AP_VoidZealotWhirlwindSearch"/>
+        <EffectArray value="AP_VoidZealotWhirlwindAB"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_ZealotAiurWeapon" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Amount value="16"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_ZealotAiurWeaponBurst">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_ZealotAiurWeapon"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.28"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_ZealotAiurWeaponCleaveSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_ZealotAiurWeaponBurst"/>
+    </CEffectSet>
 </Catalog>

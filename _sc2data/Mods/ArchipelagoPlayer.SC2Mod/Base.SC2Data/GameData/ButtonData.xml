@@ -1121,4 +1121,7 @@
         <EditorCategories value="Race:Terran"/>
         <HotkeyAlias value="TerranVehicleWeaponsLevel3"/>
     </CButton>
+    <CButton id="AP_VoidZealotWhirlwind">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-Whirlwind.dds"/>
+    </CButton>
 </Catalog>

@@ -1155,4 +1155,25 @@
         <Find value="1"/>
         <Value value="AP_AutoHarvesterResearched"/>
     </CValidatorPlayerRequirement>
+    <CValidatorLocationEnumArea id="AP_VoidZealotWhirlwindCheck">
+        <WhichLocation Value="CasterUnit"/>
+        <AreaArray Compare="GE" Count="2" Radius="1.5"/>
+        <Compare value="GE"/>
+        <Count value="2"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasVoidZealotWhirlwind">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidZealotWhirlwind"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_CasterNotDeadAndCasterNotStunned">
+        <Type value="And"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="AP_CasterNotStunned"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_CasterNotStunned">
+        <WhichUnit Value="Caster"/>
+        <Filters value="-;Stunned"/>
+    </CValidatorUnitFilters>
 </Catalog>
