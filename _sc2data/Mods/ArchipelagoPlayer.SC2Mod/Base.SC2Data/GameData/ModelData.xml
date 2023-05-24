@@ -1938,4 +1938,42 @@
             <Payload value="OrbitalCommand_DropPodDeathB"/>
         </Events>
     </CModel>
+    <CModel id="AP_ZealotAiur">
+        <Model value="Assets\Units\Protoss\Zealot_Aiur\Zealot_Aiur.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Zealot_SwarmAnims\Zealot_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionRadius value="0.416500"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="0.375000"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <ShadowRadius value="0.416500"/>
+        <TextureDeclares Prefix="zealot_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+        </TextureDeclares>
+        <Events>
+            <Anim value="Attack,00"/>
+            <Name value="ZealotAiur_AttackSweetener"/>
+            <Type value="Sound"/>
+            <Time value="0.018000"/>
+            <Payload value="ZealotAiur_AttackSweetener"/>
+        </Events>
+        <Events>
+            <Anim value="Attack,03"/>
+            <Name value="ZealotAiur_AttackSweetener"/>
+            <Type value="Sound"/>
+            <Time value="0.012000"/>
+            <Payload value="ZealotAiur_AttackSweetener"/>
+        </Events>
+        <Events>
+            <Anim value="Attack,04"/>
+            <Name value="ZealotAiur_AttackSweetener"/>
+            <Type value="Sound"/>
+            <Time value="0.012000"/>
+            <Payload value="ZealotAiur_AttackSweetener"/>
+        </Events>
+    </CModel>
 </Catalog>

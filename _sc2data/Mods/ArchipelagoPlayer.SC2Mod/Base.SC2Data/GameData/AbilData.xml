@@ -1265,8 +1265,8 @@
         <InfoArray index="Build1" Unit="AP_BarracksTechLab" Time="25">
             <Button DefaultButtonFace="BuildTechLabBarracks" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
-        <InfoArray index="Build2" Unit="AP_BarracksReactor" State="Restricted" Time="50">
-            <Button Requirements="AP_UseTechReactorHide"/>
+        <InfoArray index="Build2" Unit="AP_BarracksReactor" Time="50">
+            <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_BarracksTechReactor" Time="50" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
@@ -1457,32 +1457,32 @@
         <InfoArray index="Research11" Time="170" Upgrade="AP_TerranInfantryWeaponsUltraCapacitorsLevel1">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="AP_TerranInfantryWeaponsUltraCapacitorsLevel1" Requirements="AP_LearnTerranInfantryWeaponUltraCapacitors1"/>
+            <Button DefaultButtonFace="AP_TerranInfantryWeaponsUltraCapacitorsLevel1" State="Restricted" Requirements="AP_LearnTerranInfantryWeaponUltraCapacitors1"/>
         </InfoArray>
         <InfoArray index="Research12" Time="200" Upgrade="AP_TerranInfantryWeaponsUltraCapacitorsLevel2">
             <Resource index="Minerals" value="175"/>
             <Resource index="Vespene" value="175"/>
-            <Button DefaultButtonFace="AP_TerranInfantryWeaponsUltraCapacitorsLevel2" Requirements="AP_LearnTerranInfantryWeaponUltraCapacitors2"/>
+            <Button DefaultButtonFace="AP_TerranInfantryWeaponsUltraCapacitorsLevel2" State="Restricted" Requirements="AP_LearnTerranInfantryWeaponUltraCapacitors2"/>
         </InfoArray>
         <InfoArray index="Research13" Time="230" Upgrade="AP_TerranInfantryWeaponsUltraCapacitorsLevel3">
             <Resource index="Minerals" value="250"/>
             <Resource index="Vespene" value="250"/>
-            <Button DefaultButtonFace="AP_TerranInfantryWeaponsUltraCapacitorsLevel3" Requirements="AP_LearnTerranInfantryWeaponUltraCapacitors3"/>
+            <Button DefaultButtonFace="AP_TerranInfantryWeaponsUltraCapacitorsLevel3" State="Restricted" Requirements="AP_LearnTerranInfantryWeaponUltraCapacitors3"/>
         </InfoArray>
         <InfoArray index="Research14" Time="170" Upgrade="AP_TerranInfantryArmorsVanadiumPlatingLevel1">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="AP_TerranInfantryArmorVanadiumPlatingLevel1" Requirements="AP_LearnTerranInfantryArmorVanadiumPlating1"/>
+            <Button DefaultButtonFace="AP_TerranInfantryArmorVanadiumPlatingLevel1" State="Restricted" Requirements="AP_LearnTerranInfantryArmorVanadiumPlating1"/>
         </InfoArray>
         <InfoArray index="Research15" Time="200" Upgrade="AP_TerranInfantryArmorsVanadiumPlatingLevel2">
             <Resource index="Minerals" value="175"/>
             <Resource index="Vespene" value="175"/>
-            <Button DefaultButtonFace="AP_TerranInfantryArmorVanadiumPlatingLevel2" Requirements="AP_LearnTerranInfantryArmorVanadiumPlating2"/>
+            <Button DefaultButtonFace="AP_TerranInfantryArmorVanadiumPlatingLevel2" State="Restricted" Requirements="AP_LearnTerranInfantryArmorVanadiumPlating2"/>
         </InfoArray>
         <InfoArray index="Research16" Time="230" Upgrade="AP_TerranInfantryArmorsVanadiumPlatingLevel3">
             <Resource index="Minerals" value="250"/>
             <Resource index="Vespene" value="250"/>
-            <Button DefaultButtonFace="AP_TerranInfantryArmorVanadiumPlatingLevel3" Requirements="AP_LearnTerranInfantryArmorVanadiumPlating3"/>
+            <Button DefaultButtonFace="AP_TerranInfantryArmorVanadiumPlatingLevel3" State="Restricted" Requirements="AP_LearnTerranInfantryArmorVanadiumPlating3"/>
         </InfoArray>
     </CAbilResearch>
     <CAbilMorph id="AP_PerditionTurretBurrow">
@@ -1593,62 +1593,62 @@
         <InfoArray index="Research16" Time="170" Upgrade="AP_TerranVehicleWeaponsUltraCapacitorsLevel1">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="AP_TerranVehicleWeaponsUltraCapacitorsLevel1" Requirements="AP_LearnTerranVehicleWeaponUltraCapacitors1"/>
+            <Button DefaultButtonFace="AP_TerranVehicleWeaponsUltraCapacitorsLevel1" State="Restricted" Requirements="AP_LearnTerranVehicleWeaponUltraCapacitors1"/>
         </InfoArray>
         <InfoArray index="Research17" Time="200" Upgrade="AP_TerranVehicleWeaponsUltraCapacitorsLevel2">
             <Resource index="Minerals" value="175"/>
             <Resource index="Vespene" value="175"/>
-            <Button DefaultButtonFace="AP_TerranVehicleWeaponsUltraCapacitorsLevel2" Requirements="AP_LearnTerranVehicleWeaponUltraCapacitors2"/>
+            <Button DefaultButtonFace="AP_TerranVehicleWeaponsUltraCapacitorsLevel2" State="Restricted" Requirements="AP_LearnTerranVehicleWeaponUltraCapacitors2"/>
         </InfoArray>
         <InfoArray index="Research18" Time="230" Upgrade="AP_TerranVehicleWeaponsUltraCapacitorsLevel3">
             <Resource index="Minerals" value="250"/>
             <Resource index="Vespene" value="250"/>
-            <Button DefaultButtonFace="AP_TerranVehicleWeaponsUltraCapacitorsLevel3" Requirements="AP_LearnTerranVehicleWeaponUltraCapacitors3"/>
+            <Button DefaultButtonFace="AP_TerranVehicleWeaponsUltraCapacitorsLevel3" State="Restricted" Requirements="AP_LearnTerranVehicleWeaponUltraCapacitors3"/>
         </InfoArray>
         <InfoArray index="Research19" Time="170" Upgrade="AP_TerranShipWeaponsUltraCapacitorsLevel1">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="AP_TerranShipWeaponsUltraCapacitorsLevel1" Requirements="AP_LearnTerranShipWeaponUltraCapacitors1"/>
+            <Button DefaultButtonFace="AP_TerranShipWeaponsUltraCapacitorsLevel1" State="Restricted" Requirements="AP_LearnTerranShipWeaponUltraCapacitors1"/>
         </InfoArray>
         <InfoArray index="Research20" Time="200" Upgrade="AP_TerranShipWeaponsUltraCapacitorsLevel2">
             <Resource index="Minerals" value="175"/>
             <Resource index="Vespene" value="175"/>
-            <Button DefaultButtonFace="AP_TerranShipWeaponsUltraCapacitorsLevel2" Requirements="AP_LearnTerranShipWeaponUltraCapacitors2"/>
+            <Button DefaultButtonFace="AP_TerranShipWeaponsUltraCapacitorsLevel2" State="Restricted" Requirements="AP_LearnTerranShipWeaponUltraCapacitors2"/>
         </InfoArray>
         <InfoArray index="Research21" Time="230" Upgrade="AP_TerranShipWeaponsUltraCapacitorsLevel3">
             <Resource index="Minerals" value="250"/>
             <Resource index="Vespene" value="250"/>
-            <Button DefaultButtonFace="AP_TerranShipWeaponsUltraCapacitorsLevel3" Requirements="AP_LearnTerranShipWeaponUltraCapacitors3"/>
+            <Button DefaultButtonFace="AP_TerranShipWeaponsUltraCapacitorsLevel3" State="Restricted" Requirements="AP_LearnTerranShipWeaponUltraCapacitors3"/>
         </InfoArray>
         <InfoArray index="Research22" Time="170" Upgrade="AP_TerranVehicleArmorsVanadiumPlatingLevel1">
             <Resource index="Minerals" value="100"/>
             <Resource index="Vespene" value="100"/>
-            <Button DefaultButtonFace="AP_TerranVehiclePlatingVanadiumPlatingLevel1" Requirements="AP_LearnTerranVehicleArmorVanadiumPlating1"/>
+            <Button DefaultButtonFace="AP_TerranVehiclePlatingVanadiumPlatingLevel1" State="Restricted" Requirements="AP_LearnTerranVehicleArmorVanadiumPlating1"/>
         </InfoArray>
         <InfoArray index="Research23" Time="200" Upgrade="AP_TerranVehicleArmorsVanadiumPlatingLevel2">
             <Resource index="Minerals" value="175"/>
             <Resource index="Vespene" value="175"/>
-            <Button DefaultButtonFace="AP_TerranVehiclePlatingVanadiumPlatingLevel2" Requirements="AP_LearnTerranVehicleArmorVanadiumPlating2"/>
+            <Button DefaultButtonFace="AP_TerranVehiclePlatingVanadiumPlatingLevel2" State="Restricted" Requirements="AP_LearnTerranVehicleArmorVanadiumPlating2"/>
         </InfoArray>
         <InfoArray index="Research24" Time="230" Upgrade="AP_TerranVehicleArmorsVanadiumPlatingLevel3">
             <Resource index="Minerals" value="250"/>
             <Resource index="Vespene" value="250"/>
-            <Button DefaultButtonFace="AP_TerranVehiclePlatingVanadiumPlatingLevel3" Requirements="AP_LearnTerranVehicleArmorVanadiumPlating3"/>
+            <Button DefaultButtonFace="AP_TerranVehiclePlatingVanadiumPlatingLevel3" State="Restricted" Requirements="AP_LearnTerranVehicleArmorVanadiumPlating3"/>
         </InfoArray>
         <InfoArray index="Research25" Time="170" Upgrade="AP_TerranShipArmorsVanadiumPlatingLevel1">
             <Resource index="Minerals" value="150"/>
             <Resource index="Vespene" value="150"/>
-            <Button DefaultButtonFace="AP_TerranShipPlatingVanadiumPlatingLevel1" Requirements="AP_LearnTerranShipArmorVanadiumPlating1"/>
+            <Button DefaultButtonFace="AP_TerranShipPlatingVanadiumPlatingLevel1" State="Restricted" Requirements="AP_LearnTerranShipArmorVanadiumPlating1"/>
         </InfoArray>
         <InfoArray index="Research26" Time="200" Upgrade="AP_TerranShipArmorsVanadiumPlatingLevel2">
             <Resource index="Minerals" value="225"/>
             <Resource index="Vespene" value="225"/>
-            <Button DefaultButtonFace="AP_TerranShipPlatingVanadiumPlatingLevel2" Requirements="AP_LearnTerranShipArmorVanadiumPlating2"/>
+            <Button DefaultButtonFace="AP_TerranShipPlatingVanadiumPlatingLevel2" State="Restricted" Requirements="AP_LearnTerranShipArmorVanadiumPlating2"/>
         </InfoArray>
         <InfoArray index="Research27" Time="230" Upgrade="AP_TerranShipArmorsVanadiumPlatingLevel3">
             <Resource index="Minerals" value="300"/>
             <Resource index="Vespene" value="300"/>
-            <Button DefaultButtonFace="AP_TerranShipPlatingVanadiumPlatingLevel3" Requirements="AP_LearnTerranShipArmorVanadiumPlating3"/>
+            <Button DefaultButtonFace="AP_TerranShipPlatingVanadiumPlatingLevel3" State="Restricted" Requirements="AP_LearnTerranShipArmorVanadiumPlating3"/>
         </InfoArray>
     </CAbilResearch>
     <CAbilArmMagazine id="AP_ArmSiloWithNuke">
@@ -1686,8 +1686,8 @@
         <InfoArray index="Build1" Unit="AP_StarportTechLab" Time="25">
             <Button DefaultButtonFace="BuildTechLabStarport" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
-        <InfoArray index="Build2" Unit="AP_StarportReactor" State="Restricted" Time="50">
-            <Button Requirements="AP_UseTechReactorHide"/>
+        <InfoArray index="Build2" Unit="AP_StarportReactor" Time="50">
+            <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_StarportTechReactor" Time="50" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
