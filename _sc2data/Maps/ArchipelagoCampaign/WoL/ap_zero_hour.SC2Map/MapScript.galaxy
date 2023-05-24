@@ -1663,7 +1663,7 @@ bool gt_RemoveBunkerTextTags_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "Bunker"))) {
+        if (!((UnitGetType(EventUnit()) == "AP_Bunker"))) {
             return false;
         }
     }
@@ -1721,7 +1721,7 @@ bool gt_RemoveBunkerTextTagSalvagedorDead_Func (bool testConds, bool runActions)
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "Bunker"))) {
+        if (!((UnitGetType(EventUnit()) == "AP_Bunker"))) {
             return false;
         }
     }
@@ -1758,7 +1758,7 @@ bool gt_RemoveBunkerTextTagSalvagedorDead_Func (bool testConds, bool runActions)
 void gt_RemoveBunkerTextTagSalvagedorDead_Init () {
     gt_RemoveBunkerTextTagSalvagedorDead = TriggerCreate("gt_RemoveBunkerTextTagSalvagedorDead_Func");
     TriggerAddEventUnitDied(gt_RemoveBunkerTextTagSalvagedorDead, null);
-    TriggerAddEventUnitAbility(gt_RemoveBunkerTextTagSalvagedorDead, null, AbilityCommand("SalvageBunker", 0), c_unitAbilStageComplete, false);
+    TriggerAddEventUnitAbility(gt_RemoveBunkerTextTagSalvagedorDead, null, AbilityCommand("AP_SalvageBunker", 0), c_unitAbilStageComplete, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -3417,7 +3417,7 @@ bool gt_TransmissionCallForRetreatQ_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "Bunker"))) {
+        if (!((UnitGetType(EventUnit()) == "AP_Bunker"))) {
             return false;
         }
 
@@ -3425,7 +3425,7 @@ bool gt_TransmissionCallForRetreatQ_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGroupCount(UnitGroup("Bunker", gv_pLAYER01_USER, RegionFromId(56), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
+        if (!((UnitGroupCount(UnitGroup("AP_Bunker", gv_pLAYER01_USER, RegionFromId(56), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) == 0))) {
             return false;
         }
     }
@@ -4129,7 +4129,7 @@ bool gt_TipRepairQ_Func (bool testConds, bool runActions) {
             return true;
         }
 
-        auto78D96694_g = UnitGroup("Bunker", gv_pLAYER01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+        auto78D96694_g = UnitGroup("AP_Bunker", gv_pLAYER01_USER, RegionEntireMap(), UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
         auto78D96694_u = UnitGroupCount(auto78D96694_g, c_unitCountAll);
         for (;; auto78D96694_u -= 1) {
             auto78D96694_var = UnitGroupUnitFromEnd(auto78D96694_g, auto78D96694_u);
@@ -5857,6 +5857,7 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
     }
 
     TriggerExecute(gt_Init02Players, true, false);
+    lib5BD4895D_gf_AP_Core_MapConfig_setChatboxPosition(c_anchorTopRight, 500, 350, 0, 120);
     lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
     lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction(gv_pLAYER01_USER, lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS);
     libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup(gt_onDifficultyCasual, gt_onDifficultyNormal, gt_onDifficultyHard, gt_onDifficultyBrutal);

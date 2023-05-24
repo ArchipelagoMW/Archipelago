@@ -14033,7 +14033,7 @@
     </Element>
     <Element Type="Param" Id="B84600D0">
         <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
-        <Value>Bunker</Value>
+        <Value>AP_Bunker</Value>
         <ValueType Type="gamelink"/>
         <ValueGameType Type="Unit"/>
     </Element>
@@ -14561,7 +14561,7 @@
     </Element>
     <Element Type="Param" Id="0F931EBA">
         <ParameterDef Type="ParamDef" Library="Ntve" Id="3F2584C8"/>
-        <Value>SalvageBunker</Value>
+        <Value>AP_SalvageBunker</Value>
         <ValueType Type="abilcmd"/>
     </Element>
     <Element Type="FunctionCall" Id="BEEDF68B">
@@ -14629,7 +14629,7 @@
     </Element>
     <Element Type="Param" Id="816DE64D">
         <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
-        <Value>Bunker</Value>
+        <Value>AP_Bunker</Value>
         <ValueType Type="gamelink"/>
         <ValueGameType Type="Unit"/>
     </Element>
@@ -36240,7 +36240,7 @@
     </Element>
     <Element Type="Param" Id="A2801320">
         <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
-        <Value>Bunker</Value>
+        <Value>AP_Bunker</Value>
         <ValueType Type="gamelink"/>
         <ValueGameType Type="Unit"/>
     </Element>
@@ -36310,7 +36310,7 @@
     </Element>
     <Element Type="Param" Id="80A34278">
         <ParameterDef Type="ParamDef" Library="Ntve" Id="00000691"/>
-        <Value>Bunker</Value>
+        <Value>AP_Bunker</Value>
         <ValueType Type="gamelink"/>
         <ValueGameType Type="Unit"/>
     </Element>
@@ -39488,7 +39488,7 @@
     </Element>
     <Element Type="Param" Id="F3E8E01F">
         <ParameterDef Type="ParamDef" Library="Ntve" Id="00000691"/>
-        <Value>Bunker</Value>
+        <Value>AP_Bunker</Value>
         <ValueType Type="gamelink"/>
         <ValueGameType Type="Unit"/>
     </Element>
@@ -58902,6 +58902,7 @@
     <Element Type="Trigger" Id="6EBEAE62">
         <Event Type="FunctionCall" Id="E2D6B31F"/>
         <Action Type="FunctionCall" Id="6D7DDBEE"/>
+        <Action Type="FunctionCall" Id="693DA7C7"/>
         <Action Type="FunctionCall" Id="DC0E4A8B"/>
         <Action Type="FunctionCall" Id="F55302F0"/>
         <Action Type="FunctionCall" Id="1A0254B4"/>
@@ -58927,6 +58928,38 @@
         <ParameterDef Type="ParamDef" Library="Ntve" Id="00000182"/>
         <ValueType Type="trigger"/>
         <ValueElement Type="Trigger" Id="0EDD8550"/>
+    </Element>
+    <Element Type="FunctionCall" Id="693DA7C7">
+        <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="48B9EAD0"/>
+        <Parameter Type="Param" Id="0640C803"/>
+        <Parameter Type="Param" Id="16833117"/>
+        <Parameter Type="Param" Id="292DE936"/>
+        <Parameter Type="Param" Id="67659ED5"/>
+        <Parameter Type="Param" Id="BBF5C4E0"/>
+    </Element>
+    <Element Type="Param" Id="0640C803">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="0D9D7C44"/>
+        <Preset Type="PresetValue" Library="Ntve" Id="A216FAB4"/>
+    </Element>
+    <Element Type="Param" Id="16833117">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="AB3CC53D"/>
+        <Value>500</Value>
+        <ValueType Type="int"/>
+    </Element>
+    <Element Type="Param" Id="292DE936">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="BC1D771A"/>
+        <Value>350</Value>
+        <ValueType Type="int"/>
+    </Element>
+    <Element Type="Param" Id="67659ED5">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="E61C71FD"/>
+        <Value>0</Value>
+        <ValueType Type="int"/>
+    </Element>
+    <Element Type="Param" Id="BBF5C4E0">
+        <ParameterDef Type="ParamDef" Library="5BD4895D" Id="86396C8D"/>
+        <Value>120</Value>
+        <ValueType Type="int"/>
     </Element>
     <Element Type="FunctionCall" Id="DC0E4A8B">
         <FunctionDef Type="FunctionDef" Library="5BD4895D" Id="09DD21C1"/>
