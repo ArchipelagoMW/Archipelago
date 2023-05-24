@@ -21,13 +21,16 @@ class RegionData:
     name: str
     exits: List[str] = field(default_factory=list)
 
-    def get_merged_with(self, other_region):
+    def get_merged_with(self, exits: List[str]):
         merged_exits = []
         merged_exits.extend(self.exits)
-        if other_region is not None:
-            merged_exits.extend(other_region.exits)
+        if exits is not None:
+            merged_exits.extend(exits)
         merged_exits = list(set(merged_exits))
         return RegionData(self.name, merged_exits)
+
+    def get_clone(self):
+        return self.get_merged_with(None)
 
 
 @dataclass(frozen=True)

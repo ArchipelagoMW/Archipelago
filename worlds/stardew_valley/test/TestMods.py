@@ -7,7 +7,7 @@ from BaseClasses import MultiWorld
 from . import setup_solo_multiworld
 from .TestOptions import basic_checks, SVTestBase
 from .. import options, locations, items, Group, ItemClassification, StardewOptions
-from ..regions import RandomizationFlag, create_final_connections, randomize_connections
+from ..regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
 from ..items import item_table
 from ..locations import location_table, LocationTags
 from ..options import stardew_valley_option_classes, Mods, EntranceRandomization
@@ -151,9 +151,11 @@ class TestModEntranceRando(unittest.TestCase):
                 world_options = StardewOptions({options.EntranceRandomization.internal_name: option,
                                                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
                                                 options.Mods.internal_name: mod_list})
+                final_regions = create_final_regions(world_options)
                 final_connections = create_final_connections(world_options)
 
-                _, randomized_connections = randomize_connections(rand, world_options)
+                regions_by_name = {region.name: region for region in final_regions}
+                _, randomized_connections = randomize_connections(rand, world_options, regions_by_name)
 
                 for connection in final_connections:
                     if flag in connection.flag:

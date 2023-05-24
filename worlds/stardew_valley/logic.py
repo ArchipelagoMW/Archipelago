@@ -14,7 +14,7 @@ from .mods.mod_data import ModNames
 from .mods.mod_logic import can_earn_mod_skill_level, append_mod_skill_level
 from .items import all_items, Group
 from .options import StardewOptions
-from .regions import stardew_valley_regions
+from .regions import vanilla_regions
 from .stardew_rule import False_, Reach, Or, True_, Received, Count, And, Has, TotalReceived, StardewRule
 
 MAX_MONTHS = 12
@@ -1332,7 +1332,7 @@ class StardewLogic:
                self.can_fish_perfectly() & self.has("Flute Block")
 
     def has_everything(self, all_progression_items: Set[str]) -> StardewRule:
-        all_regions = [region.name for region in stardew_valley_regions]
+        all_regions = [region.name for region in vanilla_regions]
         rules = self.received(all_progression_items, len(all_progression_items)) &\
                 self.can_reach_all_regions(all_regions)
         return rules

@@ -276,14 +276,9 @@ def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
 
 def set_story_quests_rules(all_location_names: List[str], logic, multi_world, player, world_options: StardewOptions):
     for quest in locations.locations_by_tag[LocationTags.QUEST]:
-        if quest.mod_name is None and quest.name in all_location_names:
+        if quest.name in all_location_names and (quest.mod_name is None or quest.mod_name in world_options[options.Mods]):
             MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
                                      logic.quest_rules[quest.name].simplify())
-        # Mods: Additional Story Quests
-        for mod in world_options[options.Mods]:
-            if quest.mod_name == mod and quest.name in all_location_names:
-                MultiWorldRules.set_rule(multi_world.get_location(quest.name, player),
-                                         logic.quest_rules[quest.name].simplify())
 
 
 def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, multi_world, player,

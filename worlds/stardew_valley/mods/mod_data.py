@@ -1,5 +1,5 @@
 class ModNames:
-    Vanilla = None
+    vanilla = None
     deepwoods = "DeepWoods"
     tractor = "Tractor Mod"
     big_backpack = "Bigger Backpack"

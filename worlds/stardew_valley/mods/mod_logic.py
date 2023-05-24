@@ -10,17 +10,17 @@ from ..options import StardewOptions
 
 
 def append_mod_skill_level(skills_items: List[str], world_options: StardewOptions):
-    if "Luck Skill" in world_options[options.Mods]:
+    if ModNames.luck_skill in world_options[options.Mods]:
         skills_items.append("Luck Level")
-    if "Socializing Skill" in world_options[options.Mods]:
+    if ModNames.socializing_skill in world_options[options.Mods]:
         skills_items.append("Socializing Level")
-    if "Magic" in world_options[options.Mods]:
+    if ModNames.magic in world_options[options.Mods]:
         skills_items.append("Magic Level")
-    if "Archaeology" in world_options[options.Mods]:
+    if ModNames.archaeology in world_options[options.Mods]:
         skills_items.append("Archaeology Level")
-    if "Binning Skill" in world_options[options.Mods]:
+    if ModNames.binning_skill in world_options[options.Mods]:
         skills_items.append("Binning Level")
-    if "Cooking Skill" in world_options[options.Mods]:
+    if ModNames.cooking_skill in world_options[options.Mods]:
         skills_items.append("Cooking Level")
 
 
