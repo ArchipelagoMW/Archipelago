@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CAbilTransport id="ColonistHutTransport">
+        <Flags index="CargoDeath" value="1"/>
+    </CAbilTransport>
+    <CAbilTransport id="ColonyShipTransport">
+        <Range value="1.5"/>
+    </CAbilTransport>
+</Catalog>
