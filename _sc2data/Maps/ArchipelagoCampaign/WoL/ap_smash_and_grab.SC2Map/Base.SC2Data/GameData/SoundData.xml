@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CSound id="ExtractionBegins" parent="Voice">
+        <AssetArray File="LocalizedData\Sounds\Misc\ZRescue.wav"/>
+    </CSound>
+    <CSound id="ExtractionInterrupted" parent="Voice">
+        <AssetArray File="LocalizedData\Sounds\Misc\PPwrDown.wav"/>
+    </CSound>
+    <CSound id="ExtractionComplete" parent="Voice">
+        <AssetArray File="LocalizedData\Sounds\Misc\PRescue.wav"/>
+    </CSound>
+    <CSound id="MarauderRescue" parent="Voice">
+        <AssetArray File="LocalizedData\Sounds\Misc\TRescue.wav"/>
+    </CSound>
+</Catalog>

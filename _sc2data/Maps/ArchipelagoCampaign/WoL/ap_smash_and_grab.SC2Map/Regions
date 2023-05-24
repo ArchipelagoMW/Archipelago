@@ -1,0 +1,1043 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="2">
+        <name value="Minerals - Zerg"/>
+        <shape type="rect">
+            <quad value="27.7143,77.8618,33.65,89.6057"/>
+        </shape>
+        <shape type="rect">
+            <quad value="31.4516,86.3674,37.8166,92.6743"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="First Guard Activation"/>
+        <shape type="rect">
+            <quad value="86.9707,31.9807,90.9704,46.9804"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Forcefield Area"/>
+        <shape type="rect">
+            <quad value="114.0241,36.1408,118.024,42.1406"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Zerg Artifact Attack Initiation"/>
+        <shape type="circle">
+            <center value="162.2124,63.7673"/>
+            <radius value="4.2282"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Pylon Tip"/>
+        <shape type="rect">
+            <quad value="90.4445,30.066,102.4443,46.7656"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Zerg Creep 1"/>
+        <shape type="rect">
+            <quad value="52.2746,58.5947,65.2187,75.4401"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Zerg Creep 2"/>
+        <shape type="rect">
+            <quad value="62.4743,58.6237,75.4184,75.4692"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Zerg Creep 3"/>
+        <shape type="rect">
+            <quad value="72.5871,58.021,85.5312,75.5207"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Zerg Creep 4"/>
+        <shape type="rect">
+            <quad value="82.8574,58.2424,95.8015,75.7421"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Zerg Creep 5"/>
+        <shape type="rect">
+            <quad value="93.0971,58.5134,106.0412,75.359"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Zerg Creep 6"/>
+        <shape type="rect">
+            <quad value="116.4562,59.9348,132.456,79.9345"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Drop Pod Spawn"/>
+        <shape type="circle">
+            <center value="56.0354,97.59"/>
+            <radius value="1.5998"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Spine Spawn 1"/>
+        <shape type="circle">
+            <center value="40.965,77.8747"/>
+            <radius value="1.75"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Spine Spawn 2"/>
+        <shape type="circle">
+            <center value="43.228,81.3364"/>
+            <radius value="1.75"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Final Reveal"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="134.4511,81.9665"/>
+            <radius value="9"/>
+        </shape>
+        <shape type="circle">
+            <center value="124.5,79.6042"/>
+            <radius value="4"/>
+        </shape>
+        <shape type="circle">
+            <center value="120,76"/>
+            <radius value="4.5"/>
+        </shape>
+        <shape type="circle">
+            <center value="132.1486,72"/>
+            <radius value="3.734"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.1206,65.488"/>
+            <radius value="7.081"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.937,70.285"/>
+            <radius value="7.0632"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Initial Reveal"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="56.022,67.4584"/>
+            <radius value="8.8781"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.7397,58.1386"/>
+            <radius value="4.0334"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.3447,59.7875"/>
+            <radius value="2.3344"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Initial Visibility"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="73.0234,29.452,93.0231,48.02"/>
+        </shape>
+        <shape type="circle">
+            <center value="64,16.3132"/>
+            <radius value="8.2204"/>
+        </shape>
+        <shape type="circle">
+            <center value="90,38.7578"/>
+            <radius value="9.284"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.6557,38.7331"/>
+            <radius value="9.284"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.5,33.2551"/>
+            <radius value="4.2517"/>
+        </shape>
+        <shape type="circle">
+            <center value="65,26"/>
+            <radius value="4.2517"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.1416,30.5603"/>
+            <radius value="3.963"/>
+        </shape>
+        <shape type="circle">
+            <center value="92.2363,25.566"/>
+            <radius value="5"/>
+        </shape>
+        <shape type="circle">
+            <center value="90,15"/>
+            <radius value="6.301"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.5444,15.286"/>
+            <radius value="7.789"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.9575,22.2893"/>
+            <radius value="4.9543"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.5441,24.3723"/>
+            <radius value="6.3864"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.1096,27.9841"/>
+            <radius value="7.789"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.0786,37.776"/>
+            <radius value="7.2734"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.767,18.8684"/>
+            <radius value="8.6286"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Initial Zerg Region"/>
+        <shape type="circle">
+            <center value="49.4587,45.0268"/>
+            <radius value="1.3076"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Victory Mutalisks 1"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="174.249,99.6052"/>
+            <radius value="2.5871"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Victory Mutalisks 2"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="165.947,100.8293"/>
+            <radius value="2.5871"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Victory Mutalisks 3"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="170.7143,10.0422"/>
+            <radius value="2.5871"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Victory Mutalisks 4"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="186.5737,9.7392"/>
+            <radius value="2.5871"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Victory Mutalisks 5"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="158.0937,10.4265"/>
+            <radius value="2.5871"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Victory Mutalisks 6"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="150.6208,31.344"/>
+            <radius value="2.5871"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Victory Mutalisks 7"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="136.5656,40.2382"/>
+            <radius value="2.5871"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Victory Mutalisks 8"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="131.5397,53.013"/>
+            <radius value="2.5871"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="Victory Mutalisks 9"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="182.6452,99.49"/>
+            <radius value="2.5871"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Player Base Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="71.2277,21.362"/>
+            <radius value="10.672"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.5278,19.9055"/>
+            <radius value="10.672"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.6442,34.9384"/>
+            <radius value="10.672"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Defense Transmission"/>
+        <shape type="rect">
+            <quad value="96.5092,29.4624,97.3298,46.9135"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Artifact Forcefield Region"/>
+        <shape type="circle">
+            <center value="157.4128,39.9482"/>
+            <radius value="2.3737"/>
+        </shape>
+        <shape type="circle">
+            <center value="159.936,37.4284"/>
+            <radius value="2.3737"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Zerg Base Q"/>
+        <shape type="circle">
+            <center value="50.7751,72.21"/>
+            <radius value="5.0256"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Guardian Activation North"/>
+        <shape type="circle">
+            <center value="167.8952,57.443"/>
+            <radius value="2.805"/>
+        </shape>
+        <shape type="circle">
+            <center value="172.2053,57.3823"/>
+            <radius value="2.805"/>
+        </shape>
+        <shape type="circle">
+            <center value="175.1674,54.9287"/>
+            <radius value="2.2143"/>
+        </shape>
+        <shape type="circle">
+            <center value="164.836,55.205"/>
+            <radius value="2.0605"/>
+        </shape>
+        <shape type="circle">
+            <center value="169.9453,58.6464"/>
+            <radius value="1.6823"/>
+        </shape>
+        <shape type="rect">
+            <quad value="163.006,52.984,176.9667,55.2243"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Bridge Reveal"/>
+        <shape type="rect">
+            <quad value="105.9438,58.3466,117.9438,75.3466"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="Crazy Region"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="55.109,61.1091"/>
+            <radius value="8.445"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.6552,61.5632"/>
+            <radius value="13.1945"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.7778,62.2634"/>
+            <radius value="7.9233"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.1774,89.5808"/>
+            <radius value="13.4963"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.8825,75.3247"/>
+            <radius value="9.7851"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.3388,81.991"/>
+            <radius value="13.198"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Upper Reveal 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="67.5087,73.45,78.3981,85.2202"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.9697,78.6494"/>
+            <radius value="6.697"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Upper Reveal 2"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="76.2001,68.1127,90.187,89.1733"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.5898,82.4443"/>
+            <radius value="6.697"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Upper Reveal 4"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="100.298,73.659,111.1875,85.4291"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.9733,78.7741"/>
+            <radius value="6.697"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Upper Reveal 3"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="88.9211,68.1945,102.908,89.2551"/>
+        </shape>
+        <shape type="circle">
+            <center value="102.161,82.5446"/>
+            <radius value="6.697"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="Visibility 5"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="115.7573,17.9394"/>
+            <radius value="9.716"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.0012,24.6904"/>
+            <radius value="5.3015"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.6787,28.8967"/>
+            <radius value="3.1208"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.4301,21.8923"/>
+            <radius value="3.55"/>
+        </shape>
+        <shape type="circle">
+            <center value="129.2387,27.6428"/>
+            <radius value="5.1437"/>
+        </shape>
+        <shape type="circle">
+            <center value="131.6767,29.8286"/>
+            <radius value="5.1437"/>
+        </shape>
+        <shape type="circle">
+            <center value="136.6184,24.5664"/>
+            <radius value="5.1437"/>
+        </shape>
+        <shape type="circle">
+            <center value="132.6867,22.3125"/>
+            <radius value="5.1437"/>
+        </shape>
+        <shape type="circle">
+            <center value="136.153,20.815"/>
+            <radius value="5.1437"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="Visibility 10"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="35.0275,36"/>
+            <radius value="8.6816"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.3371,39.8237"/>
+            <radius value="8.6816"/>
+        </shape>
+        <shape type="circle">
+            <center value="48.3217,38.7512"/>
+            <radius value="2.4462"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.4133,34.5012"/>
+            <radius value="5.0588"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.3486,32.7395"/>
+            <radius value="3.7968"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.9902,48.6682"/>
+            <radius value="3.776"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.8596,39.6906"/>
+            <radius value="3.875"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.998,32.608"/>
+            <radius value="6.8232"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.9897,30.0805"/>
+            <radius value="6.9201"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.3693,36.3334"/>
+            <radius value="3.2265"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.0473,31.7692"/>
+            <radius value="3.9328"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="Briefing Burrow 1"/>
+        <shape type="circle">
+            <center value="42.6896,65.0485"/>
+            <radius value="4.0178"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="Briefing Burrow 2"/>
+        <shape type="circle">
+            <center value="51.1328,81.6723"/>
+            <radius value="4.0178"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="Briefing Burrow 3"/>
+        <shape type="circle">
+            <center value="45.0402,75.2573"/>
+            <radius value="4.0178"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Victory Zergling Spawn"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="147.3857,74.7204"/>
+            <radius value="3.5104"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Savepoint 1 Units"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="113.7602,28.6208,134.5368,49.2094"/>
+        </shape>
+    </region>
+    <region id="50">
+        <name value="Savepoint 2 Units"/>
+        <shape type="circle">
+            <center value="162.103,42.2565"/>
+            <radius value="5.5957"/>
+        </shape>
+    </region>
+    <region id="51">
+        <name value="Victory Bridge Zerglings"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="100.7004,39.1281"/>
+            <radius value="6"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.7841,38.9436"/>
+            <radius value="6"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="Visibility 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="62.7333,34.5,82.7331,59.5"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.815,35.5393"/>
+            <radius value="5.1662"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.7844,33.2004"/>
+            <radius value="3.4921"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.8051,35.3383"/>
+            <radius value="2.6853"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.6325,32.3483"/>
+            <radius value="4.008"/>
+        </shape>
+    </region>
+    <region id="53">
+        <name value="Visibility 2"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="78.9011,32.0554,101.0688,58.1726"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.5292,30.831"/>
+            <radius value="5.7104"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="Visibility 4"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="119.6738,45.4873,146.6738,60.4873"/>
+        </shape>
+        <shape type="circle">
+            <center value="133.4355,56.6481"/>
+            <radius value="10.241"/>
+        </shape>
+        <shape type="circle">
+            <center value="133.4348,49.978"/>
+            <radius value="10.2143"/>
+        </shape>
+        <shape type="rect">
+            <quad value="119.874,26.2387,136.0437,46.1928"/>
+        </shape>
+        <shape type="circle">
+            <center value="119.2124,31.6848"/>
+            <radius value="5.4875"/>
+        </shape>
+        <shape type="circle">
+            <center value="118.2814,44.4094"/>
+            <radius value="4.2856"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.0637,38.3315"/>
+            <radius value="3.575"/>
+        </shape>
+        <shape type="circle">
+            <center value="135.2,29.2675"/>
+            <radius value="3.072"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="Visibility 6"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="126.0227,7.1772,138.1557,22.7922"/>
+        </shape>
+        <shape type="circle">
+            <center value="131.8625,8.1123"/>
+            <radius value="3.236"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.5124,11.0107"/>
+            <radius value="5.709"/>
+        </shape>
+        <shape type="circle">
+            <center value="141.5446,8.5537"/>
+            <radius value="4.3112"/>
+        </shape>
+        <shape type="circle">
+            <center value="140.9042,4.356"/>
+            <radius value="1.415"/>
+        </shape>
+        <shape type="circle">
+            <center value="138.551,23.558"/>
+            <radius value="5.7314"/>
+        </shape>
+        <shape type="circle">
+            <center value="138.3486,17.0043"/>
+            <radius value="2.0717"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.8928,29.166"/>
+            <radius value="2.0744"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.3908,18.6667"/>
+            <radius value="4.464"/>
+        </shape>
+        <shape type="circle">
+            <center value="129.212,22.3586"/>
+            <radius value="3.4184"/>
+        </shape>
+        <shape type="circle">
+            <center value="132.2016,24.7783"/>
+            <radius value="3.4184"/>
+        </shape>
+        <shape type="circle">
+            <center value="135.0012,26.8828"/>
+            <radius value="3.4184"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.4465,12.269"/>
+            <radius value="3.619"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="Visibility 7"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="159.8991,25.8078,183.0021,40.5466"/>
+        </shape>
+        <shape type="circle">
+            <center value="183.815,29.184"/>
+            <radius value="3.5234"/>
+        </shape>
+        <shape type="circle">
+            <center value="183.3261,38.7687"/>
+            <radius value="1.7797"/>
+        </shape>
+        <shape type="circle">
+            <center value="186.3205,28.8264"/>
+            <radius value="2.073"/>
+        </shape>
+        <shape type="circle">
+            <center value="161.7026,25.8522"/>
+            <radius value="1.8186"/>
+        </shape>
+        <shape type="circle">
+            <center value="173.4655,25.185"/>
+            <radius value="6.7402"/>
+        </shape>
+        <shape type="circle">
+            <center value="182.3215,24.2336"/>
+            <radius value="6.7402"/>
+        </shape>
+    </region>
+    <region id="57">
+        <name value="Visibility 8"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="59.6367,37.0515"/>
+            <radius value="6.741"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.7336,44.135"/>
+            <radius value="4.7116"/>
+        </shape>
+        <shape type="circle">
+            <center value="65.423,39.4934"/>
+            <radius value="5.0104"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.4262,43.4643"/>
+            <radius value="2.4133"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.7861,31.403"/>
+            <radius value="7.0102"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="Visibility 9"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="51.2995,45.624"/>
+            <radius value="8.9614"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.6464,43.4875"/>
+            <radius value="5.3547"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.4853,41.3945"/>
+            <radius value="4.166"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.3164,51.5122"/>
+            <radius value="6.366"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.2392,57.782"/>
+            <radius value="5.4362"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.7683,55.3481"/>
+            <radius value="3.7644"/>
+        </shape>
+        <shape type="circle">
+            <center value="60.7832,52.8107"/>
+            <radius value="6.5275"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="Visibility 11"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="35.5761,20.9631"/>
+            <radius value="12.1936"/>
+        </shape>
+        <shape type="circle">
+            <center value="24.3723,14.9362"/>
+            <radius value="8.9702"/>
+        </shape>
+        <shape type="circle">
+            <center value="24.576,24.7587"/>
+            <radius value="3.154"/>
+        </shape>
+        <shape type="circle">
+            <center value="26.12,28.0021"/>
+            <radius value="2.9978"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.4326,32.2475"/>
+            <radius value="2.258"/>
+        </shape>
+        <shape type="circle">
+            <center value="16.5344,13.901"/>
+            <radius value="4.6232"/>
+        </shape>
+        <shape type="circle">
+            <center value="20.8977,7.3464"/>
+            <radius value="3.9267"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.8815,10.4213"/>
+            <radius value="3.5532"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.6145,16.312"/>
+            <radius value="5.7387"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.7,22.3715"/>
+            <radius value="4.207"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="Visibility 3"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="97.2695,27.992,126.2695,59.9916"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.2075,28.889"/>
+            <radius value="8.004"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.8073,29"/>
+            <radius value="5.1428"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.0332,25.5722"/>
+            <radius value="1.718"/>
+        </shape>
+        <shape type="circle">
+            <center value="122.0327,29.3205"/>
+            <radius value="4.344"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Upper Protoss Base"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="149.758,80.9421"/>
+            <radius value="19.0886"/>
+        </shape>
+        <shape type="circle">
+            <center value="146.7761,98.7734"/>
+            <radius value="3.724"/>
+        </shape>
+        <shape type="circle">
+            <center value="167.6228,80.1533"/>
+            <radius value="5.501"/>
+        </shape>
+        <shape type="circle">
+            <center value="147.8481,68.2377"/>
+            <radius value="9.5344"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="Zerg Close"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="143.9335,76.3195"/>
+            <radius value="4.7001"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="Zerg Speed Bump"/>
+        <shape type="circle">
+            <center value="154.1391,68.1623"/>
+            <radius value="4.225"/>
+        </shape>
+        <shape type="circle">
+            <center value="157.8522,71.595"/>
+            <radius value="4.225"/>
+        </shape>
+        <shape type="circle">
+            <center value="153.2145,61.9284"/>
+            <radius value="4.23"/>
+        </shape>
+        <shape type="circle">
+            <center value="164.9577,73.6511"/>
+            <radius value="4.23"/>
+        </shape>
+    </region>
+    <region id="62">
+        <name value="Zerg Delay Movement Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="147.6276,70.6491"/>
+            <radius value="7.6926"/>
+        </shape>
+        <shape type="circle">
+            <center value="156.9313,78.0368"/>
+            <radius value="7.6926"/>
+        </shape>
+        <shape type="circle">
+            <center value="153.3564,82.4965"/>
+            <radius value="7.3105"/>
+        </shape>
+        <shape type="circle">
+            <center value="148.5666,90.4084"/>
+            <radius value="5.7404"/>
+        </shape>
+        <shape type="circle">
+            <center value="147.4685,77.7355"/>
+            <radius value="3.9184"/>
+        </shape>
+    </region>
+    <region id="60">
+        <name value="Outside Protoss Base Defenders"/>
+        <shape type="circle">
+            <center value="135.1162,21.899"/>
+            <radius value="5.3793"/>
+        </shape>
+    </region>
+    <region id="63">
+        <name value="Artifact Guardians North"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="157.7641,54.8645,183.0534,68.365"/>
+        </shape>
+    </region>
+    <region id="64">
+        <name value="Artifact Guardians South"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="157.6777,37.788,182.967,51.2885"/>
+        </shape>
+    </region>
+    <region id="65">
+        <name value="Guardian Activation South"/>
+        <shape type="circle">
+            <center value="169.9135,47.1706"/>
+            <radius value="1.2"/>
+        </shape>
+    </region>
+    <region id="66">
+        <name value="Artifact Shrine Area"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="170.1613,52.9392"/>
+            <radius value="7.0808"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Protoss Warp Defense"/>
+        <shape type="circle">
+            <center value="144.6933,76.0925"/>
+            <radius value="3.6884"/>
+        </shape>
+    </region>
+    <region id="67">
+        <name value="Victory Zergling Wander North"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="163.6735,58.0383"/>
+            <radius value="3.2482"/>
+        </shape>
+        <shape type="circle">
+            <center value="166.2924,60.3176"/>
+            <radius value="3.2482"/>
+        </shape>
+        <shape type="circle">
+            <center value="169.7551,60.8754"/>
+            <radius value="3.2482"/>
+        </shape>
+        <shape type="circle">
+            <center value="172.881,60.5654"/>
+            <radius value="3.2482"/>
+        </shape>
+        <shape type="circle">
+            <center value="175.8515,57.6286"/>
+            <radius value="2.9868"/>
+        </shape>
+    </region>
+    <region id="68">
+        <name value="Victory Zergling Wander South"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="163.8417,47.9667"/>
+            <radius value="3.0842"/>
+        </shape>
+        <shape type="circle">
+            <center value="166.9057,45.5617"/>
+            <radius value="3.0842"/>
+        </shape>
+        <shape type="circle">
+            <center value="170.2287,44.6787"/>
+            <radius value="3.0842"/>
+        </shape>
+        <shape type="circle">
+            <center value="173.6254,45.6726"/>
+            <radius value="3.0842"/>
+        </shape>
+        <shape type="circle">
+            <center value="176.0478,48.1455"/>
+            <radius value="3.0842"/>
+        </shape>
+    </region>
+    <region id="69">
+        <name value="Creep Tip Tripwire"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="58.6643,42.8127"/>
+            <radius value="3.2595"/>
+        </shape>
+    </region>
+    <region id="71">
+        <name value="Briefing Decimation Removal"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="59.5427,59.4956,82.855,76.283"/>
+        </shape>
+        <shape type="rect">
+            <quad value="78.6533,75.56,82.6491,79.059"/>
+        </shape>
+    </region>
+    <region id="70">
+        <name value="Show Protoss Relic Objective"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="72.6308,40.9943"/>
+            <radius value="6"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.9907,36.4724"/>
+            <radius value="3.119"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.8664,33.395"/>
+            <radius value="3.119"/>
+        </shape>
+    </region>
+</Regions>
