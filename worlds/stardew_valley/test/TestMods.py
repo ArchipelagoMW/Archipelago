@@ -55,9 +55,7 @@ class TestGenerateModsOptions(SVTestBase):
                     check_stray_mod_items(list(mods), self, multiworld)
 
     def test_given_mod_names_when_generate_paired_with_entrance_randomizer_then_basic_checks(self):
-        for option in [options.EntranceRandomization.option_pelican_town,
-                       options.EntranceRandomization.option_non_progression,
-                       options.EntranceRandomization.option_buildings]:
+        for option in EntranceRandomization.options:
             for mod in mod_list:
                 with self.subTest(f"entrance_randomization: {option}, Mod: {mod}"):
                     multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: option, Mods: mod})
