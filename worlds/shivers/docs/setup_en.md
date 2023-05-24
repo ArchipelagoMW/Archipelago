@@ -7,10 +7,6 @@
 - [ScummVM](https://www.scummvm.org/downloads/) version 2.7.0
 - [Shivers Randomizer](https://www.speedrun.com/shivers/resources)
 
-## Optional Software
-
-- [ArchipelagoTextClient](https://github.com/ArchipelagoMW/Archipelago/releases)
-
 ## Setup ScummVM for Shivers
 
 ### GOG version of Shivers
