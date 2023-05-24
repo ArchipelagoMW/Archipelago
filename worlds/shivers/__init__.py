@@ -42,11 +42,6 @@ class ShiversWorld(World):
         loc.place_locked_item(self.create_event_item(event_name))
         region.locations.append(loc)
 
-    #def create_event_item(self, name: str) -> None:
-    #    item = self.create_item(name)
-    #    item.classification = ItemClassification.progression
-    #    return item
-
     option_definitions = Shivers_options
 
     
