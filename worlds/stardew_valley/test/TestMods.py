@@ -43,6 +43,8 @@ class TestGenerateModsOptions(SVTestBase):
                 check_stray_mod_items(mod, self, multi_world)
 
     def test_given_mod_pairs_when_generate_then_basic_checks(self):
+        if self.skip_long_tests:
+            return
         num_mods = len(mod_list)
         for mod1_index in range(0, num_mods):
             for mod2_index in range(mod1_index + 1, num_mods):
