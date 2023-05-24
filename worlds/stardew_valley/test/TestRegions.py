@@ -35,8 +35,9 @@ class TestEntranceRando(unittest.TestCase):
                 rand = random.Random(seed)
                 world_options = StardewOptions({options.EntranceRandomization.internal_name: option,
                                                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false})
+                regions_by_name = {region.name: region for region in vanilla_regions}
 
-                _, randomized_connections = randomize_connections(rand, world_options)
+                _, randomized_connections = randomize_connections(rand, world_options, regions_by_name)
 
                 for connection in vanilla_connections:
                     if flag in connection.flag:
@@ -57,8 +58,9 @@ class TestEntranceRando(unittest.TestCase):
                 rand = random.Random(seed)
                 world_options = StardewOptions({options.EntranceRandomization.internal_name: option,
                                                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true})
+                regions_by_name = {region.name: region for region in vanilla_regions}
 
-                _, randomized_connections = randomize_connections(rand, world_options)
+                _, randomized_connections = randomize_connections(rand, world_options, regions_by_name)
 
                 for connection in vanilla_connections:
                     if flag in connection.flag:
