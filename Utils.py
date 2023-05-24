@@ -549,6 +549,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.removeHandler(handler)
         handler.close()
     root_logger.setLevel(loglevel)
+    logging.getLogger("websockets").setLevel(loglevel)  # make sure level is applied for websockets
     if "a" not in write_mode:
         name += f"_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}"
     file_handler = logging.FileHandler(
