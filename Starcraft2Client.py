@@ -535,7 +535,7 @@ async def main():
 
 maps_table = [
     "ap_liberation_day", "ap_the_outlaws", "ap_zero_hour",
-    "ap_thanson01", "ap_thanson02", "ap_thanson03a", "ap_thanson03b",
+    "ap_evacuation", "ap_thanson02", "ap_thanson03a", "ap_thanson03b",
     "ap_ttychus01", "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05",
     "ap_ttosh01", "ap_ttosh02", "ap_ttosh03a", "ap_ttosh03b",
     "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s",

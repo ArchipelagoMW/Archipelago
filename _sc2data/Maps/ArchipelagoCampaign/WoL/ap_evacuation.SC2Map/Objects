@@ -9012,7 +9012,7 @@
     <ObjectUnit Id="627" Position="120.8447,123.8156,0" Rotation="4.942" Scale="1,1,1" UnitType="Drone" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2751" Position="32.5041,41.5097,0" Rotation="0.0485" Scale="1,1,1" UnitType="SCV" Player="4"/>
+    <ObjectUnit Id="2751" Position="32.5041,41.5097,0" Rotation="0.0485" Scale="1,1,1" UnitType="AP_SCV" Player="4"/>
     <ObjectUnit Id="37" Position="63.5,175.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -9027,7 +9027,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="96" Position="29.5,49.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Barracks" Player="4">
+    <ObjectUnit Id="96" Position="29.5,49.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Barracks" Player="4">
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="3210" Position="109.5,159.5,0" Rotation="5.3354" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
@@ -9143,7 +9143,7 @@
     <ObjectUnit Id="1526" Position="87.5898,115.5913,0" Rotation="3.0095" Scale="1,1,1" UnitType="PalletMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="2749" Position="30.489,43.4191,0" Rotation="6.2143" Scale="1,1,1" UnitType="SCV" Player="4"/>
+    <ObjectUnit Id="2749" Position="30.489,43.4191,0" Rotation="6.2143" Scale="1,1,1" UnitType="AP_SCV" Player="4"/>
     <ObjectUnit Id="2774" Position="82.63,117.3298,0" Rotation="5.009" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -9446,7 +9446,7 @@
     <ObjectUnit Id="768" Position="93.3698,143.94,0" Rotation="4.657" Scale="1,1,1" UnitType="Hydralisk" Player="6">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="2435" Position="32,49,0" Rotation="5.4975" Scale="1,1,1" UnitType="BarracksTechLab" Player="4"/>
+    <ObjectUnit Id="2435" Position="32,49,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_BarracksTechLab" Player="4"/>
     <ObjectUnit Id="875" Position="43.189,133.0981,0" Rotation="1.208" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -9577,13 +9577,13 @@
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2080" Position="36,69,0" Scale="1,1,1" UnitType="AutoTurret" Player="4"/>
-    <ObjectUnit Id="236" Position="33.5,44.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CommandCenter" Player="4">
+    <ObjectUnit Id="236" Position="33.5,44.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CommandCenter" Player="4">
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="322" Position="35.5,148.5,0" Scale="1,1,1" UnitType="Hive" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1185" Position="53.5,95.5,0" Rotation="5.496" Scale="1,1,1" UnitType="Bunker"/>
+    <ObjectUnit Id="1185" Position="53.5,95.5,0" Rotation="5.496" Scale="1,1,1" UnitType="AP_Bunker"/>
     <ObjectUnit Id="739" Position="42,130,0" Scale="1,1,1" UnitType="SpineCrawler" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -9761,7 +9761,7 @@
         <AIRebuild Index="3" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1155" Position="72.5,139.5,0" Rotation="5.496" Scale="1,1,1" UnitType="Bunker"/>
+    <ObjectUnit Id="1155" Position="72.5,139.5,0" Rotation="5.496" Scale="1,1,1" UnitType="AP_Bunker"/>
     <ObjectUnit Id="1256" Position="123,98,0" Scale="1,1,1" UnitType="SpineCrawler" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -10133,8 +10133,8 @@
     </ObjectUnit>
     <ObjectUnit Id="3204" Position="103.5,169.5,0" Rotation="3.63" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="2215" Position="78.8281,39.8051,0" Rotation="2.5776" Scale="1,1,1" UnitType="Zergling" Player="5"/>
-    <ObjectUnit Id="107" Position="26.5,44.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Refinery" Player="4" Resources="2860"/>
-    <ObjectUnit Id="2755" Position="33.4953,41.5168,0" Rotation="0.004" Scale="1,1,1" UnitType="SCV" Player="4"/>
+    <ObjectUnit Id="107" Position="26.5,44.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Refinery" Player="4" Resources="2860"/>
+    <ObjectUnit Id="2755" Position="33.4953,41.5168,0" Rotation="0.004" Scale="1,1,1" UnitType="AP_SCV" Player="4"/>
     <ObjectUnit Id="3201" Position="104.5,169.5,0" Rotation="4.6042" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="612" Position="88.4707,88.0336,0" Rotation="5.5744" Scale="1,1,1" UnitType="ChrysalisEgg" Player="6"/>
     <ObjectUnit Id="2694" Position="75.7224,149.094,0" Rotation="5.3005" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
@@ -10242,7 +10242,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="2750" Position="30.516,42.5024,0" Rotation="0.0424" Scale="1,1,1" UnitType="SCV" Player="4"/>
+    <ObjectUnit Id="2750" Position="30.516,42.5024,0" Rotation="0.0424" Scale="1,1,1" UnitType="AP_SCV" Player="4"/>
     <ObjectUnit Id="988" Position="112.9196,90.4482,0" Rotation="1.3483" Scale="1,1,1" UnitType="Corruptor" Player="3">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
@@ -10322,11 +10322,11 @@
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="3206" Position="103.5,171.5,0" Rotation="0.7282" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="3245" Position="23,52,0" Rotation="5.4975" Scale="1,1,1" UnitType="MercCompound" Player="4"/>
+    <ObjectUnit Id="3245" Position="23,52,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_MercCompound" Player="4"/>
     <ObjectUnit Id="1582" Position="27.366,147.5427,0" Rotation="3.7917" Scale="1,1,1" UnitType="Corruptor" Player="2">
         <AIRebuild Index="2" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="7" Position="24,48,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="4"/>
+    <ObjectUnit Id="7" Position="24,48,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="4"/>
     <ObjectUnit Id="2692" Position="24.8598,93.22,0" Rotation="4.1171" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>

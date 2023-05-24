@@ -8,237 +8,8 @@
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
 include "TriggerLibs/CampaignLib"
-include "LibC6542F50"
-
-//--------------------------------------------------------------------------------------------------
-// Library: Chatbox
-//--------------------------------------------------------------------------------------------------
-// Structures
-struct lib1_gs_chatbox {
-    int lv_mainpanel;
-    int lv_chatpanel;
-    int lv_chatlabel;
-    int lv_scrollupbtn;
-    int lv_scrolldownbtn;
-    int lv_scrollbottonbtn;
-    int lv_maxmessages;
-    int lv_scrollstrength;
-    text[50] lv_chatmessage;
-};
-
-// Variable Declarations
-lib1_gs_chatbox lib1_gv_chatbox;
-
-// Function Declarations
-text lib1_gf_getchatboxcontent ();
-void lib1_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety);
-void lib1_gf_showhidechatbox (int lp_player, bool lp_visible);
-void lib1_gf_sendchatmessage (int lp_fromplayer, string lp_message);
-
-// Trigger Declarations
-trigger lib1_gt_updatechatbox;
-trigger lib1_gt_chatboxscrolling;
-
-// Library Initialization
-void lib1_InitVariables ();
-
-//--------------------------------------------------------------------------------------------------
-// Library: Chatbox
-//--------------------------------------------------------------------------------------------------
-// External Library Initialization
-void lib1_InitLibraries () {
-    libNtve_InitVariables();
-}
-
-// Variable Initialization
-bool lib1_InitVariables_completed = false;
-
-void lib1_InitVariables () {
-    if (lib1_InitVariables_completed) {
-        return;
-    }
-
-    lib1_InitVariables_completed = true;
-
-    lib1_gv_chatbox.lv_mainpanel = c_invalidDialogId;
-    lib1_gv_chatbox.lv_chatpanel = c_invalidDialogId;
-    lib1_gv_chatbox.lv_chatlabel = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrollupbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrolldownbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrollbottonbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_maxmessages = 50;
-    lib1_gv_chatbox.lv_scrollstrength = 20;
-}
-
-// Functions
-text lib1_gf_getchatboxcontent () {
-    // Variable Declarations
-    int lv_index;
-    text lv_tmptext;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-
-    // Implementation
-    while ((lv_index < lib1_gv_chatbox.lv_maxmessages)) {
-        lv_tmptext = (lib1_gv_chatbox.lv_chatmessage[lv_index] + StringExternal("Param/Value/lib_1_1BF9F758") + lv_tmptext);
-        lv_index += 1;
-    }
-    return lv_tmptext;
-}
-
-void lib1_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety) {
-    // Variable Declarations
-    int lv_btnsize;
-    int lv_btnxoffset;
-    int lv_chatlblsizex;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_btnsize = 35;
-    lv_btnxoffset = 35;
-    lv_chatlblsizex = (lp_sizex - 110);
-
-    // Implementation
-    DialogCreate(lp_sizex, lp_sizey, lp_anchor, lp_offsetx, lp_offsety, true);
-    DialogSetTitle(DialogLastCreated(), StringExternal("Param/Value/lib_1_71F92085"));
-    lib1_gv_chatbox.lv_mainpanel = DialogLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 30, StringExternal("Param/Value/lib_1_FB15887C"), StringExternal("Param/Value/lib_1_A52FB36E"), "");
-    lib1_gv_chatbox.lv_scrollbottonbtn = DialogControlLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 65, StringExternal("Param/Value/lib_1_A91983FA"), StringExternal("Param/Value/lib_1_21E8CC9A"), "");
-    lib1_gv_chatbox.lv_scrolldownbtn = DialogControlLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 90, StringExternal("Param/Value/lib_1_8717A4C6"), StringExternal("Param/Value/lib_1_CCCD5CB5"), "");
-    lib1_gv_chatbox.lv_scrollupbtn = DialogControlLastCreated();
-    DialogCreate(lv_chatlblsizex, (lp_sizey - 100), lp_anchor, lp_offsetx, lp_offsety, true);
-    lib1_gv_chatbox.lv_chatpanel = DialogLastCreated();
-    DialogSetImageVisible(DialogLastCreated(), false);
-    DialogSetPositionRelative(DialogLastCreated(), c_anchorBottomLeft, lib1_gv_chatbox.lv_mainpanel, c_anchorBottomLeft, lv_btnxoffset, -30);
-    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), lv_chatlblsizex, 10000, c_anchorBottom, 0, 0, StringToText(""), Color(100,100,100), false, 2.0);
-    lib1_gv_chatbox.lv_chatlabel = DialogControlLastCreated();
-    libNtve_gf_SetDialogItemStyle(DialogControlLastCreated(), "BottomLeft", PlayerGroupAll());
-}
-
-void lib1_gf_showhidechatbox (int lp_player, bool lp_visible) {
-    // Variable Declarations
-    playergroup lv_pg;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_pg = PlayerGroupSingle(lp_player);
-
-    // Implementation
-    DialogSetVisible(lib1_gv_chatbox.lv_mainpanel, lv_pg, true);
-    DialogSetVisible(lib1_gv_chatbox.lv_chatpanel, lv_pg, true);
-}
-
-void lib1_gf_sendchatmessage (int lp_fromplayer, string lp_message) {
-    // Variable Declarations
-    int lv_index;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_index = (lib1_gv_chatbox.lv_maxmessages - 1);
-
-    // Implementation
-    while ((lv_index > 0)) {
-        lib1_gv_chatbox.lv_chatmessage[lv_index] = lib1_gv_chatbox.lv_chatmessage[(lv_index - 1)];
-        lv_index -= 1;
-    }
-    lib1_gv_chatbox.lv_chatmessage[0] = StringToText(lp_message);
-    libNtve_gf_SetDialogItemText(lib1_gv_chatbox.lv_chatlabel, lib1_gf_getchatboxcontent(), PlayerGroupAll());
-}
-
-// Triggers
-//--------------------------------------------------------------------------------------------------
-// Trigger: update chatbox
-//--------------------------------------------------------------------------------------------------
-bool lib1_gt_updatechatbox_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    lib1_gf_sendchatmessage(EventPlayer(), StringSub(EventChatMessage(false), 13, StringLength(EventChatMessage(false))));
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void lib1_gt_updatechatbox_Init () {
-    lib1_gt_updatechatbox = TriggerCreate("lib1_gt_updatechatbox_Func");
-    TriggerAddEventChatMessage(lib1_gt_updatechatbox, c_playerAny, "SendMessage", false);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: chatbox scrolling
-//--------------------------------------------------------------------------------------------------
-bool lib1_gt_chatboxscrolling_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    int lv_currentoffsety;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-
-    // Conditions
-    if (testConds) {
-        if (!((DialogControlGetDialog(EventDialogControl()) == lib1_gv_chatbox.lv_mainpanel))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    if ((EventDialogControl() == lib1_gv_chatbox.lv_scrollbottonbtn)) {
-        DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, 0);
-    }
-    else {
-        lv_currentoffsety = DialogControlGetOffsetY(EventDialogControl(), EventPlayer());
-        if ((EventDialogControl() == lib1_gv_chatbox.lv_scrolldownbtn)) {
-            if ((lv_currentoffsety < 0)) {
-                DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety + lib1_gv_chatbox.lv_scrollstrength));
-            }
-
-        }
-        else {
-            if ((EventDialogControl() == lib1_gv_chatbox.lv_scrollupbtn)) {
-                DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety - lib1_gv_chatbox.lv_scrollstrength));
-            }
-
-        }
-    }
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void lib1_gt_chatboxscrolling_Init () {
-    lib1_gt_chatboxscrolling = TriggerCreate("lib1_gt_chatboxscrolling_Func");
-    TriggerAddEventDialogControl(lib1_gt_chatboxscrolling, c_playerAny, c_invalidDialogControlId, c_triggerControlEventTypeClick);
-}
-
-void lib1_InitTriggers () {
-    lib1_gt_updatechatbox_Init();
-    lib1_gt_chatboxscrolling_Init();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Library Initialization
-//--------------------------------------------------------------------------------------------------
-bool lib1_InitLib_completed = false;
-
-void lib1_InitLib () {
-    if (lib1_InitLib_completed) {
-        return;
-    }
-
-    lib1_InitLib_completed = true;
-
-    lib1_InitLibraries();
-    lib1_InitVariables();
-    lib1_InitTriggers();
-}
+include "Lib5BD4895D"
+include "LibABFE498B"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -247,8 +18,8 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
-    libC6542F50_InitLib();
-    lib1_InitLib();
+    lib5BD4895D_InitLib();
+    libABFE498B_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -383,6 +154,7 @@ void InitGlobals () {
 //--------------------------------------------------------------------------------------------------
 // Global Function Declarations
 //--------------------------------------------------------------------------------------------------
+void gf_HardBrutalresources ();
 void gf_GenerateColonist ();
 bool gf_PlayerIsInCombat (int lp_player);
 void gf_BunkerGet (unit lp_unit);
@@ -399,12 +171,14 @@ void gf_ColonyShipBlastoff (unit lp_unit);
 //--------------------------------------------------------------------------------------------------
 // Trigger Variables
 //--------------------------------------------------------------------------------------------------
+trigger gt_onDifficultyCasual;
+trigger gt_onDifficultyNormal;
+trigger gt_onDifficultyHard;
+trigger gt_onDifficultyBrutal;
 trigger gt_FirstChysalis;
 trigger gt_SecondChysalis;
 trigger gt_ThirdChysalis;
-trigger gt_ArchipelagoInitialization;
 trigger gt_ArchInit;
-trigger gt_SetMineralCount;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -413,11 +187,11 @@ trigger gt_Init04Music;
 trigger gt_Init05Environment;
 trigger gt_Init06Difficulty;
 trigger gt_Init07Help;
-trigger gt_IntroSequence;
 trigger gt_StartGame;
 trigger gt_SwanntalksaboutFirebatQ;
 trigger gt_FirebatDropshipAction;
 trigger gt_FirebatMove;
+trigger gt_IntroSequence;
 trigger gt_RemoveDropships;
 trigger gt_MarineConstantRespawn;
 trigger gt_ZergontheLoose;
@@ -532,6 +306,18 @@ trigger gt_VictoryCleanup;
 //--------------------------------------------------------------------------------------------------
 // Global Functions
 //--------------------------------------------------------------------------------------------------
+void gf_HardBrutalresources () {
+    // Automatic Variable Declarations
+    // Implementation
+    UnitSetPropertyFixed(UnitFromId(28), c_unitPropResources, 1254.0);
+    UnitSetPropertyFixed(UnitFromId(140), c_unitPropResources, 1453.0);
+    UnitSetPropertyFixed(UnitFromId(224), c_unitPropResources, 1403.0);
+    UnitSetPropertyFixed(UnitFromId(131), c_unitPropResources, 1850.0);
+    UnitSetPropertyFixed(UnitFromId(220), c_unitPropResources, 1535.0);
+    UnitSetPropertyFixed(UnitFromId(220), c_unitPropResources, 1230.0);
+    UnitSetPropertyFixed(UnitFromId(129), c_unitPropResources, 2131.0);
+}
+
 void gf_GenerateColonist () {
     // Variable Declarations
     unit lv_randomHut;
@@ -728,6 +514,140 @@ void gf_ColonyShipBlastoff (unit lp_unit) {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyCasual
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyCasual_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup autoED1F1A12_g;
+    int autoED1F1A12_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoED1F1A12_g = UnitGroupFromId(1);
+    autoED1F1A12_u = UnitGroupCount(autoED1F1A12_g, c_unitCountAll);
+    for (;; autoED1F1A12_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(autoED1F1A12_g, autoED1F1A12_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyCasual_Init () {
+    gt_onDifficultyCasual = TriggerCreate("gt_onDifficultyCasual_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyNormal
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyNormal_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup autoD6BF79FF_g;
+    int autoD6BF79FF_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoD6BF79FF_g = UnitGroupFromId(2);
+    autoD6BF79FF_u = UnitGroupCount(autoD6BF79FF_g, c_unitCountAll);
+    for (;; autoD6BF79FF_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(autoD6BF79FF_g, autoD6BF79FF_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyNormal_Init () {
+    gt_onDifficultyNormal = TriggerCreate("gt_onDifficultyNormal_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyHard
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyHard_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup autoFDE3F551_g;
+    int autoFDE3F551_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoFDE3F551_g = UnitGroupFromId(3);
+    autoFDE3F551_u = UnitGroupCount(autoFDE3F551_g, c_unitCountAll);
+    for (;; autoFDE3F551_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(autoFDE3F551_g, autoFDE3F551_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    gf_HardBrutalresources();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyHard_Init () {
+    gt_onDifficultyHard = TriggerCreate("gt_onDifficultyHard_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyBrutal
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyBrutal_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup autoDAB2A599_g;
+    int autoDAB2A599_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoDAB2A599_g = UnitGroupFromId(4);
+    autoDAB2A599_u = UnitGroupCount(autoDAB2A599_g, c_unitCountAll);
+    for (;; autoDAB2A599_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(autoDAB2A599_g, autoDAB2A599_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    gf_HardBrutalresources();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyBrutal_Init () {
+    gt_onDifficultyBrutal = TriggerCreate("gt_onDifficultyBrutal_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: First Chysalis
 //--------------------------------------------------------------------------------------------------
 bool gt_FirstChysalis_Func (bool testConds, bool runActions) {
@@ -744,7 +664,7 @@ bool gt_FirstChysalis_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libC6542F50_gf_APArchipelagoSendData(2);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(1);
     return true;
 }
 
@@ -771,7 +691,7 @@ bool gt_SecondChysalis_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libC6542F50_gf_APArchipelagoSendData(3);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(2);
     return true;
 }
 
@@ -798,7 +718,7 @@ bool gt_ThirdChysalis_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libC6542F50_gf_APArchipelagoSendData(4);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(3);
     return true;
 }
 
@@ -806,62 +726,6 @@ bool gt_ThirdChysalis_Func (bool testConds, bool runActions) {
 void gt_ThirdChysalis_Init () {
     gt_ThirdChysalis = TriggerCreate("gt_ThirdChysalis_Func");
     TriggerAddEventUnitAbility(gt_ThirdChysalis, null, AbilityCommand("Pickup", 0), c_unitAbilStageExecute, false);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Archipelago Initialization
-//--------------------------------------------------------------------------------------------------
-bool gt_ArchipelagoInitialization_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    int lv_difficulty;
-
-    // Automatic Variable Declarations
-    playergroup auto9F2A02C0_g;
-    int auto9F2A02C0_var;
-
-    // Variable Initialization
-    lv_difficulty = 2;
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    lv_difficulty = libC6542F50_gf_APSetDifficulty(StringWord(EventChatMessage(false), 2), UnitGroupFromId(1), UnitGroupFromId(2), UnitGroupFromId(3), UnitGroupFromId(4));
-    auto9F2A02C0_g = PlayerGroupAll();
-    auto9F2A02C0_var = -1;
-    while (true) {
-        auto9F2A02C0_var = PlayerGroupNextPlayer(auto9F2A02C0_g, auto9F2A02C0_var);
-        if (auto9F2A02C0_var < 0) { break; }
-        PlayerSetDifficulty(auto9F2A02C0_var, lv_difficulty);
-    }
-    TriggerExecute(libC6542F50_gt_APPreInitMap, true, true);
-    TriggerExecute(gt_Initialization, true, true);
-    lib1_gf_initchatbox(c_anchorTopRight, 500, 350, 0, 40);
-    lib1_gf_showhidechatbox(1, true);
-    TechTreeRestrictionsEnable(1, true);
-    TriggerExecute(libC6542F50_gt_APClearTech, true, false);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupBaseSCV, 1);
-    libC6542F50_gf_APUnlockUnits(StringWord(EventChatMessage(false), 3), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockUpgrades(StringWord(EventChatMessage(false), 4), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockArmory1(StringWord(EventChatMessage(false), 5), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockArmory2(StringWord(EventChatMessage(false), 6), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockBuildings(StringWord(EventChatMessage(false), 7), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockMercenaries(StringWord(EventChatMessage(false), 8), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockLaboratory(StringWord(EventChatMessage(false), 9), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockProtoss(StringWord(EventChatMessage(false), 10), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_GiveMineralsAndVespene(StringToInt(StringWord(EventChatMessage(false), 11)), StringToInt(StringWord(EventChatMessage(false), 12)), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gv_aPOptions = StringToInt(StringWord(EventChatMessage(false), 13));
-    TriggerExecute(libC6542F50_gt_APSetInitFinished, true, true);
-    libC6542F50_gf_APArchipelagoSendData(0);
-    TriggerEnable(TriggerGetCurrent(), false);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ArchipelagoInitialization_Init () {
-    gt_ArchipelagoInitialization = TriggerCreate("gt_ArchipelagoInitialization_Func");
-    TriggerAddEventChatMessage(gt_ArchipelagoInitialization, c_playerAny, "ArchipelagoLoad", false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -875,6 +739,9 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
     }
 
     TriggerExecute(gt_Init02Players, true, false);
+    lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction(gv_p1_USER, lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS);
+    lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
+    libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup(gt_onDifficultyCasual, gt_onDifficultyNormal, gt_onDifficultyHard, gt_onDifficultyBrutal);
     return true;
 }
 
@@ -882,34 +749,6 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
 void gt_ArchInit_Init () {
     gt_ArchInit = TriggerCreate("gt_ArchInit_Func");
     TriggerAddEventMapInit(gt_ArchInit);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Set Mineral Count
-//--------------------------------------------------------------------------------------------------
-bool gt_SetMineralCount_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-        UnitSetPropertyFixed(UnitFromId(28), c_unitPropResources, 1254.0);
-        UnitSetPropertyFixed(UnitFromId(140), c_unitPropResources, 1453.0);
-        UnitSetPropertyFixed(UnitFromId(224), c_unitPropResources, 1403.0);
-        UnitSetPropertyFixed(UnitFromId(131), c_unitPropResources, 1850.0);
-        UnitSetPropertyFixed(UnitFromId(220), c_unitPropResources, 1535.0);
-        UnitSetPropertyFixed(UnitFromId(220), c_unitPropResources, 1230.0);
-        UnitSetPropertyFixed(UnitFromId(129), c_unitPropResources, 2131.0);
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_SetMineralCount_Init () {
-    gt_SetMineralCount = TriggerCreate("gt_SetMineralCount_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -922,14 +761,12 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTHanson01);
     TriggerExecute(gt_Init01Technology, true, false);
     TriggerExecute(gt_Init03VariablesUnits, true, true);
     TriggerExecute(gt_Init04Music, true, true);
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulty, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -1285,38 +1122,6 @@ void gt_Init07Help_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Intro Sequence
-//--------------------------------------------------------------------------------------------------
-bool gt_IntroSequence_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    CinematicFade(false, 0.0, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, false);
-    libNtve_gf_CinematicMode(true, PlayerGroupAll(), 0.0);
-    libNtve_gf_GlobalCinematicSetting(true);
-    TriggerExecute(gt_StartAI, true, false);
-    libNtve_gf_CinematicMode(false, PlayerGroupAll(), 1.5);
-    libNtve_gf_GlobalCinematicSetting(false);
-    libNtve_gf_SwooshCamera(gv_p1_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), PointFromId(125), 1.5);
-    SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "THanson01MusicIntro", c_soundtrackCueAny, c_soundtrackIndexAny, false);
-    TriggerExecute(gt_FirebatDropshipAction, true, false);
-    PlayerPauseAllCooldowns(gv_p1_USER, true);
-    PlayerPauseAllCharges(gv_p1_USER, true);
-    CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
-    TriggerExecute(gt_StartGame, true, false);
-    TriggerExecute(gt_StartHansonEscortPhase, true, false);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_IntroSequence_Init () {
-    gt_IntroSequence = TriggerCreate("gt_IntroSequence_Func");
-}
-
-//--------------------------------------------------------------------------------------------------
 // Trigger: Start Game
 //--------------------------------------------------------------------------------------------------
 bool gt_StartGame_Func (bool testConds, bool runActions) {
@@ -1403,9 +1208,9 @@ bool gt_FirebatDropshipAction_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    UnitCargoCreate(UnitFromId(290), "Firebat", 2);
+    UnitCargoCreate(UnitFromId(290), "AP_Firebat", 2);
     libNtve_gf_AddUnitGroupToUnitGroup(UnitCargoLastCreatedGroup(), gv_firebatCargoUnits);
-    UnitCargoCreate(UnitFromId(290), "Medic", 2);
+    UnitCargoCreate(UnitFromId(290), "AP_Medic", 2);
     autoA5804961_g = UnitCargoLastCreatedGroup();
     autoA5804961_u = UnitGroupCount(autoA5804961_g, c_unitCountAll);
     for (;; autoA5804961_u -= 1) {
@@ -1450,7 +1255,7 @@ bool gt_FirebatMove_Func (bool testConds, bool runActions) {
 
     // Conditions
     if (testConds) {
-        if (!(((UnitGetType(EventUnitCargo()) == "Firebat") || (UnitGetType(EventUnitCargo()) == "Medic")))) {
+        if (!(((UnitGetType(EventUnitCargo()) == "AP_Firebat") || (UnitGetType(EventUnitCargo()) == "AP_Medic")))) {
             return false;
         }
     }
@@ -1460,7 +1265,7 @@ bool gt_FirebatMove_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((UnitGetType(EventUnitCargo()) == "Firebat")) {
+    if ((UnitGetType(EventUnitCargo()) == "AP_Firebat")) {
         Wait(0.2, c_timeGame);
         auto256F7B23_val = gv_firebatMove;
         if (auto256F7B23_val == 1) {
@@ -1480,7 +1285,7 @@ bool gt_FirebatMove_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    if ((UnitGetType(EventUnitCargo()) == "Medic")) {
+    if ((UnitGetType(EventUnitCargo()) == "AP_Medic")) {
         Wait(0.2, c_timeGame);
         auto0C0AB8E0_val = gv_medicMove;
         if (auto0C0AB8E0_val == 1) {
@@ -1504,6 +1309,38 @@ bool gt_FirebatMove_Func (bool testConds, bool runActions) {
 void gt_FirebatMove_Init () {
     gt_FirebatMove = TriggerCreate("gt_FirebatMove_Func");
     TriggerAddEventUnitCargo(gt_FirebatMove, null, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Intro Sequence
+//--------------------------------------------------------------------------------------------------
+bool gt_IntroSequence_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    CinematicFade(false, 0.0, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, false);
+    libNtve_gf_CinematicMode(true, PlayerGroupAll(), 0.0);
+    libNtve_gf_GlobalCinematicSetting(true);
+    TriggerExecute(gt_StartAI, true, false);
+    libNtve_gf_CinematicMode(false, PlayerGroupAll(), 1.5);
+    libNtve_gf_GlobalCinematicSetting(false);
+    libNtve_gf_SwooshCamera(gv_p1_USER, ((CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance)) + 8.0), CameraInfoGetValue(CameraInfoDefault(), c_cameraValueDistance), PointFromId(125), 1.5);
+    SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "THanson01MusicIntro", c_soundtrackCueAny, c_soundtrackIndexAny, false);
+    TriggerExecute(gt_FirebatDropshipAction, true, false);
+    PlayerPauseAllCooldowns(gv_p1_USER, true);
+    PlayerPauseAllCharges(gv_p1_USER, true);
+    CinematicFade(true, 1.5, c_fadeStyleNormal, ColorWithAlpha(0.00, 0.00, 0.00, 0.00), 0.0, true);
+    TriggerExecute(gt_StartGame, true, false);
+    TriggerExecute(gt_StartHansonEscortPhase, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_IntroSequence_Init () {
+    gt_IntroSequence = TriggerCreate("gt_IntroSequence_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1915,14 +1752,14 @@ bool gt_SwitchtoEscortPhase_Func (bool testConds, bool runActions) {
     for (;; autoEAEE2387_u -= 1) {
         autoEAEE2387_var = UnitGroupUnitFromEnd(autoEAEE2387_g, autoEAEE2387_u);
         if (autoEAEE2387_var == null) { break; }
-        if (((UnitGetType(autoEAEE2387_var) == "SCV") || (UnitGetType(autoEAEE2387_var) == "CommandCenter") || (UnitGetType(autoEAEE2387_var) == "Refinery") || (UnitGetType(autoEAEE2387_var) == "SupplyDepot") || (UnitGetType(autoEAEE2387_var) == "SupplyDepotLowered") || (UnitGetType(autoEAEE2387_var) == "Barracks") || (UnitGetType(autoEAEE2387_var) == "BarracksTechLab") || (UnitGetType(autoEAEE2387_var) == "MercCompound"))) {
+        if (((UnitGetType(autoEAEE2387_var) == "AP_SCV") || (UnitGetType(autoEAEE2387_var) == "AP_CommandCenter") || (UnitGetType(autoEAEE2387_var) == "AP_Refinery") || (UnitGetType(autoEAEE2387_var) == "AP_SupplyDepot") || (UnitGetType(autoEAEE2387_var) == "AP_SupplyDepotLowered") || (UnitGetType(autoEAEE2387_var) == "AP_Barracks") || (UnitGetType(autoEAEE2387_var) == "AP_BarracksTechLab") || (UnitGetType(autoEAEE2387_var) == "AP_MercCompound"))) {
             libNtve_gf_RescueUnit(autoEAEE2387_var, gv_p1_USER, true);
         }
 
     }
     UnitSetPropertyFixed(UnitFromId(236), c_unitPropEnergy, 50.0);
     UnitIssueOrder(UnitFromId(236), OrderTargetingUnit(null, UnitFromId(236)), c_orderQueueReplace);
-    auto338F5CC8_g = UnitGroup("SCV", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, 0, (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+    auto338F5CC8_g = UnitGroup("AP_SCV", gv_p1_USER, RegionEntireMap(), UnitFilter(0, 0, 0, (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
     auto338F5CC8_u = UnitGroupCount(auto338F5CC8_g, c_unitCountAll);
     for (;; auto338F5CC8_u -= 1) {
         auto338F5CC8_var = UnitGroupUnitFromEnd(auto338F5CC8_g, auto338F5CC8_u);
@@ -5363,6 +5200,10 @@ bool gt_DefeatColonistHutsDie_Func (bool testConds, bool runActions) {
     // Automatic Variable Declarations
     // Conditions
     if (testConds) {
+        if (!((lib5BD4895D_gv_aP_Core_initFinished == true))) {
+            return false;
+        }
+
         if (!((libNtve_gf_UnitGroupIsDead(gv_civilianSpawners) == true))) {
             return false;
         }
@@ -5412,7 +5253,7 @@ bool gt_DefeatTooManyColonistsDie_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((libC6542F50_gv_aPInitFinished == true))) {
+        if (!((lib5BD4895D_gv_aP_Core_initFinished == true))) {
             return false;
         }
     }
@@ -5423,7 +5264,7 @@ bool gt_DefeatTooManyColonistsDie_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    ObjectiveSetState(gv_objective_DontLetColonistsDie, c_objectiveStateFailed);
+    lib5BD4895D_gf_AP_Core_setObjectiveFailed(gv_objective_DontLetColonistsDie);
     gv_gameOver = true;
     TriggerQueuePause(true);
     TriggerQueueClear(c_triggerQueueRemove);
@@ -5465,7 +5306,7 @@ bool gt_VictoryPlayerSavesEnoughColonists_Func (bool testConds, bool runActions)
             return false;
         }
 
-        if (!((libC6542F50_gv_aPInitFinished == true))) {
+        if (!((lib5BD4895D_gv_aP_Core_initFinished == true))) {
             return false;
         }
     }
@@ -5476,7 +5317,7 @@ bool gt_VictoryPlayerSavesEnoughColonists_Func (bool testConds, bool runActions)
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    libC6542F50_gf_APArchipelagoSendData(1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
     TimerStart(lv_Timer, 7.0, false, c_timeGame);
     gv_gameOver = true;
     TriggerEnable(gt_DefeatColonyShipDead, false);
@@ -5774,6 +5615,7 @@ bool gt_MainObjectiveReachHansonComplete_Func (bool testConds, bool runActions) 
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_MainObjectiveReachHansonCreate, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objective_ReachHanson);
     PingDestroy(gv_objPing_ReachHanson);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
@@ -5869,7 +5711,9 @@ bool gt_MainObjectiveSaveColonistsComplete_Func (bool testConds, bool runActions
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_MainObjectiveSaveColonistsCreate, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objective_SaveColonists);
     if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
+        lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objective_DontLetColonistsDie);
     }
 
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
@@ -5975,6 +5819,7 @@ bool gt_ResearchObjectiveChrysalisComplete_Func (bool testConds, bool runActions
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ResearchObjectiveChrysalisCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_bonusObjectiveCollectChrysalis);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
@@ -6908,12 +6753,14 @@ void gt_VictoryCleanup_Init () {
 // Trigger Initialization
 //--------------------------------------------------------------------------------------------------
 void InitTriggers () {
+    gt_onDifficultyCasual_Init();
+    gt_onDifficultyNormal_Init();
+    gt_onDifficultyHard_Init();
+    gt_onDifficultyBrutal_Init();
     gt_FirstChysalis_Init();
     gt_SecondChysalis_Init();
     gt_ThirdChysalis_Init();
-    gt_ArchipelagoInitialization_Init();
     gt_ArchInit_Init();
-    gt_SetMineralCount_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();
@@ -6922,11 +6769,11 @@ void InitTriggers () {
     gt_Init05Environment_Init();
     gt_Init06Difficulty_Init();
     gt_Init07Help_Init();
-    gt_IntroSequence_Init();
     gt_StartGame_Init();
     gt_SwanntalksaboutFirebatQ_Init();
     gt_FirebatDropshipAction_Init();
     gt_FirebatMove_Init();
+    gt_IntroSequence_Init();
     gt_RemoveDropships_Init();
     gt_MarineConstantRespawn_Init();
     gt_ZergontheLoose_Init();

@@ -115,15 +115,9 @@
 <Soundtrack id="Ambience_Hanson01Night"/>
 <Terrain id="Agria"/>
 <Unit id="Baneling"/>
-<Unit id="CommandCenter"/>
-<Unit id="SupplyDepot"/>
-<Unit id="Refinery"/>
-<Unit id="Barracks"/>
 <Unit id="Bunker"/>
 <Unit id="MercCompound"/>
 <Unit id="AutoTurret"/>
-<Unit id="BarracksTechLab"/>
-<Unit id="SCV"/>
 <Unit id="Marine"/>
 <Unit id="Hatchery"/>
 <Unit id="CreepTumor"/>
@@ -162,7 +156,6 @@
 <Unit id="PathingBlocker1x1"/>
 <Unit id="PathingBlocker2x2"/>
 <Unit id="ColonistShip"/>
-<Unit id="Firebat"/>
 <Unit id="ChrysalisEgg"/>
 <Unit id="SpecialOpsDropship"/>
 <Unit id="Civilian"/>
@@ -171,7 +164,15 @@
 <Unit id="PalletGas"/>
 <Unit id="PalletMinerals"/>
 <Unit id="Food1000"/>
-<Unit id="Medic"/>
 <Unit id="ColonistTransport"/>
-<Unit id="CampaignRead"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_BarracksTechLab"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Firebat"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_Bunker"/>
+<Unit id="AP_MercCompound"/>
 </Preload>
