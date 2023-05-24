@@ -8,237 +8,8 @@
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
 include "TriggerLibs/CampaignLib"
-include "LibC6542F50"
-
-//--------------------------------------------------------------------------------------------------
-// Library: Chatbox
-//--------------------------------------------------------------------------------------------------
-// Structures
-struct lib1_gs_chatbox {
-    int lv_mainpanel;
-    int lv_chatpanel;
-    int lv_chatlabel;
-    int lv_scrollupbtn;
-    int lv_scrolldownbtn;
-    int lv_scrollbottonbtn;
-    int lv_maxmessages;
-    int lv_scrollstrength;
-    text[50] lv_chatmessage;
-};
-
-// Variable Declarations
-lib1_gs_chatbox lib1_gv_chatbox;
-
-// Function Declarations
-text lib1_gf_getchatboxcontent ();
-void lib1_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety);
-void lib1_gf_showhidechatbox (int lp_player, bool lp_visible);
-void lib1_gf_sendchatmessage (int lp_fromplayer, string lp_message);
-
-// Trigger Declarations
-trigger lib1_gt_updatechatbox;
-trigger lib1_gt_chatboxscrolling;
-
-// Library Initialization
-void lib1_InitVariables ();
-
-//--------------------------------------------------------------------------------------------------
-// Library: Chatbox
-//--------------------------------------------------------------------------------------------------
-// External Library Initialization
-void lib1_InitLibraries () {
-    libNtve_InitVariables();
-}
-
-// Variable Initialization
-bool lib1_InitVariables_completed = false;
-
-void lib1_InitVariables () {
-    if (lib1_InitVariables_completed) {
-        return;
-    }
-
-    lib1_InitVariables_completed = true;
-
-    lib1_gv_chatbox.lv_mainpanel = c_invalidDialogId;
-    lib1_gv_chatbox.lv_chatpanel = c_invalidDialogId;
-    lib1_gv_chatbox.lv_chatlabel = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrollupbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrolldownbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_scrollbottonbtn = c_invalidDialogControlId;
-    lib1_gv_chatbox.lv_maxmessages = 50;
-    lib1_gv_chatbox.lv_scrollstrength = 20;
-}
-
-// Functions
-text lib1_gf_getchatboxcontent () {
-    // Variable Declarations
-    int lv_index;
-    text lv_tmptext;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-
-    // Implementation
-    while ((lv_index < lib1_gv_chatbox.lv_maxmessages)) {
-        lv_tmptext = (lib1_gv_chatbox.lv_chatmessage[lv_index] + StringExternal("Param/Value/lib_1_1BF9F758") + lv_tmptext);
-        lv_index += 1;
-    }
-    return lv_tmptext;
-}
-
-void lib1_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety) {
-    // Variable Declarations
-    int lv_btnsize;
-    int lv_btnxoffset;
-    int lv_chatlblsizex;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_btnsize = 35;
-    lv_btnxoffset = 35;
-    lv_chatlblsizex = (lp_sizex - 110);
-
-    // Implementation
-    DialogCreate(lp_sizex, lp_sizey, lp_anchor, lp_offsetx, lp_offsety, true);
-    DialogSetTitle(DialogLastCreated(), StringExternal("Param/Value/lib_1_71F92085"));
-    lib1_gv_chatbox.lv_mainpanel = DialogLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 30, StringExternal("Param/Value/lib_1_FB15887C"), StringExternal("Param/Value/lib_1_A52FB36E"), "");
-    lib1_gv_chatbox.lv_scrollbottonbtn = DialogControlLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 65, StringExternal("Param/Value/lib_1_A91983FA"), StringExternal("Param/Value/lib_1_21E8CC9A"), "");
-    lib1_gv_chatbox.lv_scrolldownbtn = DialogControlLastCreated();
-    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_btnsize, lv_btnsize, c_anchorBottomRight, lv_btnxoffset, 90, StringExternal("Param/Value/lib_1_8717A4C6"), StringExternal("Param/Value/lib_1_CCCD5CB5"), "");
-    lib1_gv_chatbox.lv_scrollupbtn = DialogControlLastCreated();
-    DialogCreate(lv_chatlblsizex, (lp_sizey - 100), lp_anchor, lp_offsetx, lp_offsety, true);
-    lib1_gv_chatbox.lv_chatpanel = DialogLastCreated();
-    DialogSetImageVisible(DialogLastCreated(), false);
-    DialogSetPositionRelative(DialogLastCreated(), c_anchorBottomLeft, lib1_gv_chatbox.lv_mainpanel, c_anchorBottomLeft, lv_btnxoffset, -30);
-    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), lv_chatlblsizex, 10000, c_anchorBottom, 0, 0, StringToText(""), Color(100,100,100), false, 2.0);
-    lib1_gv_chatbox.lv_chatlabel = DialogControlLastCreated();
-    libNtve_gf_SetDialogItemStyle(DialogControlLastCreated(), "BottomLeft", PlayerGroupAll());
-}
-
-void lib1_gf_showhidechatbox (int lp_player, bool lp_visible) {
-    // Variable Declarations
-    playergroup lv_pg;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_pg = PlayerGroupSingle(lp_player);
-
-    // Implementation
-    DialogSetVisible(lib1_gv_chatbox.lv_mainpanel, lv_pg, true);
-    DialogSetVisible(lib1_gv_chatbox.lv_chatpanel, lv_pg, true);
-}
-
-void lib1_gf_sendchatmessage (int lp_fromplayer, string lp_message) {
-    // Variable Declarations
-    int lv_index;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-    lv_index = (lib1_gv_chatbox.lv_maxmessages - 1);
-
-    // Implementation
-    while ((lv_index > 0)) {
-        lib1_gv_chatbox.lv_chatmessage[lv_index] = lib1_gv_chatbox.lv_chatmessage[(lv_index - 1)];
-        lv_index -= 1;
-    }
-    lib1_gv_chatbox.lv_chatmessage[0] = StringToText(lp_message);
-    libNtve_gf_SetDialogItemText(lib1_gv_chatbox.lv_chatlabel, lib1_gf_getchatboxcontent(), PlayerGroupAll());
-}
-
-// Triggers
-//--------------------------------------------------------------------------------------------------
-// Trigger: update chatbox
-//--------------------------------------------------------------------------------------------------
-bool lib1_gt_updatechatbox_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    lib1_gf_sendchatmessage(EventPlayer(), StringSub(EventChatMessage(false), 13, StringLength(EventChatMessage(false))));
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void lib1_gt_updatechatbox_Init () {
-    lib1_gt_updatechatbox = TriggerCreate("lib1_gt_updatechatbox_Func");
-    TriggerAddEventChatMessage(lib1_gt_updatechatbox, c_playerAny, "SendMessage", false);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: chatbox scrolling
-//--------------------------------------------------------------------------------------------------
-bool lib1_gt_chatboxscrolling_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    int lv_currentoffsety;
-
-    // Automatic Variable Declarations
-    // Variable Initialization
-
-    // Conditions
-    if (testConds) {
-        if (!((DialogControlGetDialog(EventDialogControl()) == lib1_gv_chatbox.lv_mainpanel))) {
-            return false;
-        }
-    }
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    if ((EventDialogControl() == lib1_gv_chatbox.lv_scrollbottonbtn)) {
-        DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, 0);
-    }
-    else {
-        lv_currentoffsety = DialogControlGetOffsetY(EventDialogControl(), EventPlayer());
-        if ((EventDialogControl() == lib1_gv_chatbox.lv_scrolldownbtn)) {
-            if ((lv_currentoffsety < 0)) {
-                DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety + lib1_gv_chatbox.lv_scrollstrength));
-            }
-
-        }
-        else {
-            if ((EventDialogControl() == lib1_gv_chatbox.lv_scrollupbtn)) {
-                DialogControlSetPosition(lib1_gv_chatbox.lv_chatlabel, PlayerGroupSingle(EventPlayer()), c_anchorBottom, 0, (lv_currentoffsety - lib1_gv_chatbox.lv_scrollstrength));
-            }
-
-        }
-    }
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void lib1_gt_chatboxscrolling_Init () {
-    lib1_gt_chatboxscrolling = TriggerCreate("lib1_gt_chatboxscrolling_Func");
-    TriggerAddEventDialogControl(lib1_gt_chatboxscrolling, c_playerAny, c_invalidDialogControlId, c_triggerControlEventTypeClick);
-}
-
-void lib1_InitTriggers () {
-    lib1_gt_updatechatbox_Init();
-    lib1_gt_chatboxscrolling_Init();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Library Initialization
-//--------------------------------------------------------------------------------------------------
-bool lib1_InitLib_completed = false;
-
-void lib1_InitLib () {
-    if (lib1_InitLib_completed) {
-        return;
-    }
-
-    lib1_InitLib_completed = true;
-
-    lib1_InitLibraries();
-    lib1_InitVariables();
-    lib1_InitTriggers();
-}
+include "Lib5BD4895D"
+include "LibABFE498B"
 
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
@@ -247,8 +18,8 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
-    libC6542F50_InitLib();
-    lib1_InitLib();
+    lib5BD4895D_InitLib();
+    libABFE498B_InitLib();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -426,13 +197,15 @@ trigger gt_VictorySetup;
 trigger gt_VictoryCinematic;
 trigger gt_VictoryCinematicEnd;
 trigger gt_VictoryCleanup;
+trigger gt_onDifficultyCasual;
+trigger gt_onDifficultyNormal;
+trigger gt_onDifficultyHard;
+trigger gt_onDifficultyBrutal;
 trigger gt_FirstRelicObtained;
 trigger gt_SecondRelicObtained;
 trigger gt_ThirdRelicObtained;
 trigger gt_FourthRelicObtained;
-trigger gt_ArchipelagoInitialization;
 trigger gt_ArchInit;
-trigger gt_SetMineralCount;
 trigger gt_Initialization;
 trigger gt_Init01Technology;
 trigger gt_Init02Players;
@@ -1356,7 +1129,7 @@ bool gt_MarauderQ_Func (bool testConds, bool runActions) {
     UnitSetState(UnitLastCreated(), c_unitStateTargetable, false);
     libNtve_gf_MakeUnitUncommandable(UnitLastCreated(), true);
     lv_swannDropship = UnitLastCreated();
-    UnitCargoCreate(lv_swannDropship, "Marauder", libNtve_gf_DifficultyValueInt(4, 4, 4, 3));
+    UnitCargoCreate(lv_swannDropship, "AP_Marauder", libNtve_gf_DifficultyValueInt(4, 4, 4, 3));
     UnitIssueOrder(lv_swannDropship, OrderTargetingPoint(AbilityCommand("SpecOpsDropshipTransport", 2), PointFromId(439)), c_orderQueueReplace);
     while (true) {
         Wait(1.0, c_timeGame);
@@ -1897,7 +1670,7 @@ bool gt_ArtifactGuardianDestroyed_Func (bool testConds, bool runActions) {
         libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionFromId(66), "ArtifactShrine", c_animNameDefault, "Stand Work End A", c_animFlagPlayForever | c_animFlagNonLooping, c_animTimeDefault);
         Wait(2.0, c_timeGame);
         libNtve_gf_PlayAnimationOnDoodadsInRegion(RegionFromId(66), "ArtifactShrine", c_animNameDefault, "Stand A", c_animFlagPlayForever, c_animTimeDefault);
-        libC6542F50_gf_APArchipelagoSendData(1);
+        lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
         Wait(1.0, c_timeGame);
         TriggerExecute(gt_ObjectiveGettotheArtifactComplete, true, false);
         TriggerExecute(gt_ObjectiveDestroytheStatuesComplete, true, false);
@@ -4018,6 +3791,7 @@ bool gt_ObjectiveGettotheArtifactComplete_Func (bool testConds, bool runActions)
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveGettotheArtifactCreate, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objective_GetToTheArtifact);
     PingDestroy(gv_artifactObjectivePing);
     return true;
 }
@@ -4111,6 +3885,7 @@ bool gt_ObjectiveDestroytheStatuesComplete_Func (bool testConds, bool runActions
 
     TriggerEnable(TriggerGetCurrent(), false);
     ObjectiveSetName(gv_objective_DestroytheStatues, StringExternal("Param/Value/8A9312C3"));
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objective_DestroytheStatues);
     return true;
 }
 
@@ -4223,7 +3998,7 @@ bool gt_ObjectiveRelicsUpdate_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, false);
     UnitKill(EventUnit());
     gv_relicsFound += 1;
-    ObjectiveSetName(gv_objective_Relics, (StringExternal("Param/Value/1647A2D5") + libCamp_gf_StoryResearchSupplementTextForObjective(libCamp_ge_StoryResearchObject_ResearchObjectFindProtossRelics, libCamp_ge_StoryResearchObjectiveTextStyle_Multipart, gv_relicsNeeded, gv_relicsFound) + StringExternal("Param/Value/88438701")));
+    ObjectiveSetName(gv_objective_Relics, (StringExternal("Param/Value/FFC10A3F") + IntToText((4 - gv_relicsFound)) + StringExternal("Param/Value/E8FB12FC")));
     if ((gv_relicsFound == gv_relicsNeeded)) {
         TriggerExecute(gt_ObjectiveRelicsComplete, true, false);
     }
@@ -4262,6 +4037,7 @@ bool gt_ObjectiveRelicsComplete_Func (bool testConds, bool runActions) {
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveRelicsCreateQ, true, false);
     ObjectiveSetName(gv_objective_Relics, (StringExternal("Param/Value/272EB58E") + IntToText((4 - gv_relicsFound)) + StringExternal("Param/Value/84C0A0E7")));
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objective_Relics);
     return true;
 }
 
@@ -5012,6 +4788,138 @@ void gt_VictoryCleanup_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyCasual
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyCasual_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup autoC97EDC49_g;
+    int autoC97EDC49_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoC97EDC49_g = UnitGroupFromId(1);
+    autoC97EDC49_u = UnitGroupCount(autoC97EDC49_g, c_unitCountAll);
+    for (;; autoC97EDC49_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(autoC97EDC49_g, autoC97EDC49_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyCasual_Init () {
+    gt_onDifficultyCasual = TriggerCreate("gt_onDifficultyCasual_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyNormal
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyNormal_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup auto89396841_g;
+    int auto89396841_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto89396841_g = UnitGroupFromId(2);
+    auto89396841_u = UnitGroupCount(auto89396841_g, c_unitCountAll);
+    for (;; auto89396841_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(auto89396841_g, auto89396841_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyNormal_Init () {
+    gt_onDifficultyNormal = TriggerCreate("gt_onDifficultyNormal_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyHard
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyHard_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup auto50FE31D5_g;
+    int auto50FE31D5_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto50FE31D5_g = UnitGroupFromId(3);
+    auto50FE31D5_u = UnitGroupCount(auto50FE31D5_g, c_unitCountAll);
+    for (;; auto50FE31D5_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(auto50FE31D5_g, auto50FE31D5_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyHard_Init () {
+    gt_onDifficultyHard = TriggerCreate("gt_onDifficultyHard_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyBrutal
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyBrutal_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup auto8F6844D3_g;
+    int auto8F6844D3_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto8F6844D3_g = UnitGroupFromId(4);
+    auto8F6844D3_u = UnitGroupCount(auto8F6844D3_g, c_unitCountAll);
+    for (;; auto8F6844D3_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(auto8F6844D3_g, auto8F6844D3_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyBrutal_Init () {
+    gt_onDifficultyBrutal = TriggerCreate("gt_onDifficultyBrutal_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
 // Trigger: First Relic Obtained
 //--------------------------------------------------------------------------------------------------
 bool gt_FirstRelicObtained_Func (bool testConds, bool runActions) {
@@ -5028,7 +4936,7 @@ bool gt_FirstRelicObtained_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libC6542F50_gf_APArchipelagoSendData(2);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(1);
     return true;
 }
 
@@ -5055,7 +4963,7 @@ bool gt_SecondRelicObtained_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libC6542F50_gf_APArchipelagoSendData(3);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(2);
     return true;
 }
 
@@ -5082,7 +4990,7 @@ bool gt_ThirdRelicObtained_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libC6542F50_gf_APArchipelagoSendData(4);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(3);
     return true;
 }
 
@@ -5109,7 +5017,7 @@ bool gt_FourthRelicObtained_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libC6542F50_gf_APArchipelagoSendData(5);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(4);
     return true;
 }
 
@@ -5120,72 +5028,24 @@ void gt_FourthRelicObtained_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Archipelago Initialization
-//--------------------------------------------------------------------------------------------------
-bool gt_ArchipelagoInitialization_Func (bool testConds, bool runActions) {
-    // Variable Declarations
-    int lv_difficulty;
-
-    // Automatic Variable Declarations
-    playergroup autoA9104324_g;
-    int autoA9104324_var;
-
-    // Variable Initialization
-    lv_difficulty = 2;
-
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    lv_difficulty = libC6542F50_gf_APSetDifficulty(StringWord(EventChatMessage(false), 2), UnitGroupFromId(1), UnitGroupFromId(2), UnitGroupFromId(3), UnitGroupFromId(4));
-    autoA9104324_g = PlayerGroupAll();
-    autoA9104324_var = -1;
-    while (true) {
-        autoA9104324_var = PlayerGroupNextPlayer(autoA9104324_g, autoA9104324_var);
-        if (autoA9104324_var < 0) { break; }
-        PlayerSetDifficulty(autoA9104324_var, lv_difficulty);
-    }
-    TriggerExecute(libC6542F50_gt_APPreInitMap, true, true);
-    TriggerExecute(gt_Initialization, true, true);
-    lib1_gf_initchatbox(c_anchorTopRight, 500, 350, 0, 40);
-    lib1_gf_showhidechatbox(1, true);
-    TechTreeRestrictionsEnable(1, true);
-    TriggerExecute(libC6542F50_gt_APClearTech, true, false);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupBaseSCV, 1);
-    libC6542F50_gf_APUnlockUnits(StringWord(EventChatMessage(false), 3), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockUpgrades(StringWord(EventChatMessage(false), 4), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockArmory1(StringWord(EventChatMessage(false), 5), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockArmory2(StringWord(EventChatMessage(false), 6), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockBuildings(StringWord(EventChatMessage(false), 7), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockMercenaries(StringWord(EventChatMessage(false), 8), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockLaboratory(StringWord(EventChatMessage(false), 9), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockProtoss(StringWord(EventChatMessage(false), 10), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_GiveMineralsAndVespene(StringToInt(StringWord(EventChatMessage(false), 11)), StringToInt(StringWord(EventChatMessage(false), 12)), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gv_aPOptions = StringToInt(StringWord(EventChatMessage(false), 13));
-    TriggerExecute(libC6542F50_gt_APSetInitFinished, true, true);
-    libC6542F50_gf_APArchipelagoSendData(0);
-    TriggerEnable(TriggerGetCurrent(), false);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_ArchipelagoInitialization_Init () {
-    gt_ArchipelagoInitialization = TriggerCreate("gt_ArchipelagoInitialization_Func");
-    TriggerAddEventChatMessage(gt_ArchipelagoInitialization, c_playerAny, "ArchipelagoLoad", false);
-}
-
-//--------------------------------------------------------------------------------------------------
 // Trigger: Arch Init
 //--------------------------------------------------------------------------------------------------
 bool gt_ArchInit_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_currentPlayer;
+
     // Automatic Variable Declarations
+    // Variable Initialization
+
     // Actions
     if (!runActions) {
         return true;
     }
 
     TriggerExecute(gt_Init02Players, true, false);
+    lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction(gv_p1_USER, lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS);
+    lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
+    libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup(gt_onDifficultyCasual, gt_onDifficultyNormal, gt_onDifficultyHard, gt_onDifficultyBrutal);
     return true;
 }
 
@@ -5193,27 +5053,6 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
 void gt_ArchInit_Init () {
     gt_ArchInit = TriggerCreate("gt_ArchInit_Func");
     TriggerAddEventMapInit(gt_ArchInit);
-}
-
-//--------------------------------------------------------------------------------------------------
-// Trigger: Set Mineral Count
-//--------------------------------------------------------------------------------------------------
-bool gt_SetMineralCount_Func (bool testConds, bool runActions) {
-    // Automatic Variable Declarations
-    // Actions
-    if (!runActions) {
-        return true;
-    }
-
-    if ((libNtve_gf_DifficultyValueInt(0, 0, 1, 1) == 1)) {
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void gt_SetMineralCount_Init () {
-    gt_SetMineralCount = TriggerCreate("gt_SetMineralCount_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -5226,7 +5065,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTTychus01);
     TriggerExecute(gt_Init01Technology, true, true);
     TriggerExecute(gt_Init03Units, true, true);
     TriggerExecute(gt_Init04Music, true, true);
@@ -5234,7 +5072,6 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
     libCamp_gf_RegisterFootageRecording(gt_IntroBriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
 }
@@ -5710,13 +5547,15 @@ void InitTriggers () {
     gt_VictoryCinematic_Init();
     gt_VictoryCinematicEnd_Init();
     gt_VictoryCleanup_Init();
+    gt_onDifficultyCasual_Init();
+    gt_onDifficultyNormal_Init();
+    gt_onDifficultyHard_Init();
+    gt_onDifficultyBrutal_Init();
     gt_FirstRelicObtained_Init();
     gt_SecondRelicObtained_Init();
     gt_ThirdRelicObtained_Init();
     gt_FourthRelicObtained_Init();
-    gt_ArchipelagoInitialization_Init();
     gt_ArchInit_Init();
-    gt_SetMineralCount_Init();
     gt_Initialization_Init();
     gt_Init01Technology_Init();
     gt_Init02Players_Init();

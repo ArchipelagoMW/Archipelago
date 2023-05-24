@@ -15,7 +15,6 @@ Param/Value/0539F94F=Zerg invasion
 Param/Value/0CBF253A=
 Param/Value/0EEA773C=
 Param/Value/1091C250=Cleared the bridge.
-Param/Value/1647A2D5=<s val="ObjRewardSummary_Protoss">Find Protoss Relics 
 Param/Value/1BB42988=/
 Param/Value/272EB58E=<s val="ObjRewardSummary_Protoss">Find Protoss Relics (
 Param/Value/3585E38C=
@@ -34,7 +33,6 @@ Param/Value/7B506F18=The Tal'darim protoss of Monlyth guard an ancient artifact,
 Param/Value/7ED37176=Find Protoss Relics
 Param/Value/80E3E97A=
 Param/Value/84C0A0E7= Checks Left)</s>
-Param/Value/88438701=</s>
 Param/Value/88629B8D=Destroy the Statues (0/3)
 Param/Value/8A9312C3=Destroy the Statues (3/3)
 Param/Value/8ED4D537=Enemy Zerg Killed
@@ -54,14 +52,8 @@ Param/Value/E005FE1E= Checks Left)</s>
 Param/Value/E1487EC9=All of your structures have been destroyed.
 Param/Value/E262AB53=Reached the Artifact.
 Param/Value/E7611FA8=Units Lost to Stone Guardians
-Param/Value/lib_1_1BF9F758=<n/>
-Param/Value/lib_1_21E8CC9A=v
-Param/Value/lib_1_71F92085=Archipelago Messages
-Param/Value/lib_1_8717A4C6=Scroll up
-Param/Value/lib_1_A52FB36E=-
-Param/Value/lib_1_A91983FA=Scroll down
-Param/Value/lib_1_CCCD5CB5=^
-Param/Value/lib_1_FB15887C=Scroll to bottom
+Param/Value/E8FB12FC= Checks Left)</s>
+Param/Value/FFC10A3F=<s val="ObjRewardSummary_Protoss">Find Protoss Relics (
 Sound/Name/ExtractionBegins=ExtractionBegins
 Sound/Name/ExtractionComplete=ExtractionComplete
 Sound/Name/ExtractionInterrupted=ExtractionInterrupted

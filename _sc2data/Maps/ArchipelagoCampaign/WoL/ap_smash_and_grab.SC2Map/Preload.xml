@@ -81,15 +81,6 @@
 <Soundtrack id="TTychus01MusicOutro"/>
 <Terrain id="Monlyth"/>
 <TerrainObject id="MonlythLightBridge"/>
-<Unit id="CommandCenter"/>
-<Unit id="SupplyDepot"/>
-<Unit id="Refinery"/>
-<Unit id="Barracks"/>
-<Unit id="MercCompound"/>
-<Unit id="BarracksTechLab"/>
-<Unit id="SCV"/>
-<Unit id="Marine"/>
-<Unit id="Marauder"/>
 <Unit id="Nexus"/>
 <Unit id="Pylon"/>
 <Unit id="Gateway"/>
@@ -135,6 +126,15 @@
 <Unit id="SuperWarpGate"/>
 <Unit id="ProtossRelic" Variations="0,1,2,3"/>
 <Unit id="Food1000"/>
-<Unit id="Medic"/>
 <Unit id="StoneZealot"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_BarracksTechLab"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Marauder"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_MercCompound"/>
 </Preload>
