@@ -978,28 +978,35 @@ class StardewLogic:
             if npc == "Any" or npc == "Bachelor":
                 possible_friends = []
                 for name in all_villagers_by_name:
+                    if not self.npc_is_in_current_slot(name):
+                        continue
                     if npc == "Any" or all_villagers_by_name[name].bachelor:
                         possible_friends.append(self.has_relationship(name, hearts))
                 return Or(possible_friends)
             if npc == "All":
                 mandatory_friends = []
                 for name in all_villagers_by_name:
+                    if not self.npc_is_in_current_slot(name):
+                        continue
                     mandatory_friends.append(self.has_relationship(name, hearts))
                 return And(mandatory_friends)
             if npc.isnumeric():
                 possible_friends = []
                 for name in all_villagers_by_name:
+                    if not self.npc_is_in_current_slot(name):
+                        continue
                     possible_friends.append(self.has_relationship(name, hearts))
                 return Count(int(npc), possible_friends)
             return self.can_earn_relationship(npc, hearts)
 
+        if not self.npc_is_in_current_slot(npc):
+            return True_()
         villager = all_villagers_by_name[npc]
         if self.options[options.Friendsanity] == options.Friendsanity.option_bachelors and not villager.bachelor:
             return self.can_earn_relationship(npc, hearts)
         if self.options[options.Friendsanity] == options.Friendsanity.option_starting_npcs and not villager.available:
             return self.can_earn_relationship(npc, hearts)
-        if self.options[
-            options.Friendsanity] != options.Friendsanity.option_all_with_marriage and villager.bachelor and hearts > 8:
+        if self.options[options.Friendsanity] != options.Friendsanity.option_all_with_marriage and villager.bachelor and hearts > 8:
             return self.received_hearts(villager, 8) & self.can_earn_relationship(npc, hearts)
         return self.received_hearts(villager, hearts)
 
@@ -1010,7 +1017,7 @@ class StardewLogic:
         return self.received(self.heart(npc), math.ceil(hearts / heart_size))
 
     def can_meet(self, npc: str) -> StardewRule:
-        if npc not in all_villagers_by_name:
+        if npc not in all_villagers_by_name or not self.npc_is_in_current_slot(npc):
             return True_()
         villager = all_villagers_by_name[npc]
         rules = [self.can_reach_any_region(villager.locations)]
@@ -1025,6 +1032,8 @@ class StardewLogic:
     def can_give_loved_gifts_to_everyone(self) -> StardewRule:
         rules = []
         for npc in all_villagers_by_name:
+            if not self.npc_is_in_current_slot(npc):
+                continue
             villager = all_villagers_by_name[npc]
             rules.append(self.can_meet(npc) & self.has(villager.gifts))
         return And(rules)
@@ -1033,6 +1042,8 @@ class StardewLogic:
         if npc == "Pet":
             return self.can_befriend_pet(hearts)
         if npc in all_villagers_by_name:
+            if not self.npc_is_in_current_slot(npc):
+                return True_()
             villager = all_villagers_by_name[npc]
             option1 = self.has_season(villager.birthday) & self.has(villager.gifts) & self.has_lived_months(1)
             option2 = self.has_season(villager.birthday) & self.has(villager.gifts, 1) & self.has_lived_months(
@@ -1378,3 +1389,8 @@ class StardewLogic:
         if depth > 50:
             rules.append(self.has_great_weapon() & self.can_cook())
         return And(rules)
+
+    def npc_is_in_current_slot(self, name: str) -> bool:
+        npc = all_villagers_by_name[name]
+        mod = npc.mod_name
+        return mod is None or mod in self.options[options.Mods]

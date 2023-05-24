@@ -1,9 +1,10 @@
 from BaseClasses import ItemClassification
 from . import SVTestBase
 from .. import locations, items, location_table, options
-from ..data.villagers_data import all_villagers_by_name
+from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import items_by_group, Group
 from ..locations import LocationTags
+from ..mods.mod_data import ModNames
 
 
 class TestBaseItemGeneration(SVTestBase):
@@ -282,7 +283,7 @@ class TestFriendsanityStartingNpcs(SVTestBase):
                 name = parts[0]
                 hearts = parts[1]
                 self.assertNotIn(name, self.excluded_npcs)
-                self.assertTrue(name in all_villagers_by_name or name == "Pet")
+                self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
                 if name == "Pet":
                     self.assertLessEqual(int(hearts), 5)
                 elif all_villagers_by_name[name].bachelor:
@@ -302,7 +303,7 @@ class TestFriendsanityAllNpcs(SVTestBase):
         for item in self.multiworld.get_items():
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
-                self.assertTrue(villager_name in all_villagers_by_name or villager_name == "Pet")
+                self.assertTrue(villager_name in all_villagers_by_mod_by_name[ModNames.vanilla] or villager_name == "Pet")
 
     def test_friendsanity_all_locations(self):
         prefix = "Friendsanity: "
@@ -314,7 +315,7 @@ class TestFriendsanityAllNpcs(SVTestBase):
                 parts = name_trimmed.split(" ")
                 name = parts[0]
                 hearts = parts[1]
-                self.assertTrue(name in all_villagers_by_name or name == "Pet")
+                self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
                 if name == "Pet":
                     self.assertLessEqual(int(hearts), 5)
                 elif all_villagers_by_name[name].bachelor:
@@ -336,7 +337,7 @@ class TestFriendsanityAllNpcsExcludingGingerIsland(SVTestBase):
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
                 self.assertNotEqual(villager_name, "Leo")
-                self.assertTrue(villager_name in all_villagers_by_name or villager_name == "Pet")
+                self.assertTrue(villager_name in all_villagers_by_mod_by_name[ModNames.vanilla] or villager_name == "Pet")
 
     def test_friendsanity_all_locations(self):
         prefix = "Friendsanity: "
@@ -349,7 +350,7 @@ class TestFriendsanityAllNpcsExcludingGingerIsland(SVTestBase):
                 name = parts[0]
                 hearts = parts[1]
                 self.assertNotEqual(name, "Leo")
-                self.assertTrue(name in all_villagers_by_name or name == "Pet")
+                self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
                 if name == "Pet":
                     self.assertLessEqual(int(hearts), 5)
                 elif all_villagers_by_name[name].bachelor:
@@ -369,7 +370,7 @@ class TestFriendsanityAllNpcsWithMarriage(SVTestBase):
         for item in self.multiworld.get_items():
             if item.name.endswith(suffix):
                 villager_name = item.name[:item.name.index(suffix)]
-                self.assertTrue(villager_name in all_villagers_by_name or villager_name == "Pet")
+                self.assertTrue(villager_name in all_villagers_by_mod_by_name[ModNames.vanilla] or villager_name == "Pet")
 
     def test_friendsanity_all_with_marriage_locations(self):
         prefix = "Friendsanity: "
@@ -381,7 +382,7 @@ class TestFriendsanityAllNpcsWithMarriage(SVTestBase):
                 parts = name_trimmed.split(" ")
                 name = parts[0]
                 hearts = parts[1]
-                self.assertTrue(name in all_villagers_by_name or name == "Pet")
+                self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
                 if name == "Pet":
                     self.assertLessEqual(int(hearts), 5)
                 elif all_villagers_by_name[name].bachelor:
@@ -399,7 +400,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize2(SVTestBase):
     def test_friendsanity_all_with_marriage_items(self):
         suffix = " <3"
         item_names = [item.name for item in self.multiworld.get_items()]
-        for villager_name in all_villagers_by_name:
+        for villager_name in all_villagers_by_mod_by_name[ModNames.vanilla]:
             heart_item_name = f"{villager_name}{suffix}"
             number_heart_items = item_names.count(heart_item_name)
             if all_villagers_by_name[villager_name].bachelor:
@@ -419,7 +420,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize2(SVTestBase):
             parts = name_trimmed.split(" ")
             name = parts[0]
             hearts = int(parts[1])
-            self.assertTrue(name in all_villagers_by_name or name == "Pet")
+            self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
             if name == "Pet":
                 self.assertTrue(hearts == 2 or hearts == 4 or hearts == 5)
             elif all_villagers_by_name[name].bachelor:
@@ -437,7 +438,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize3(SVTestBase):
     def test_friendsanity_all_with_marriage_items(self):
         suffix = " <3"
         item_names = [item.name for item in self.multiworld.get_items()]
-        for villager_name in all_villagers_by_name:
+        for villager_name in all_villagers_by_mod_by_name[ModNames.vanilla]:
             heart_item_name = f"{villager_name}{suffix}"
             number_heart_items = item_names.count(heart_item_name)
             if all_villagers_by_name[villager_name].bachelor:
@@ -457,7 +458,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize3(SVTestBase):
             parts = name_trimmed.split(" ")
             name = parts[0]
             hearts = int(parts[1])
-            self.assertTrue(name in all_villagers_by_name or name == "Pet")
+            self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
             if name == "Pet":
                 self.assertTrue(hearts == 3 or hearts == 5)
             elif all_villagers_by_name[name].bachelor:
@@ -475,7 +476,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize4(SVTestBase):
     def test_friendsanity_all_with_marriage_items(self):
         suffix = " <3"
         item_names = [item.name for item in self.multiworld.get_items()]
-        for villager_name in all_villagers_by_name:
+        for villager_name in all_villagers_by_mod_by_name[ModNames.vanilla]:
             heart_item_name = f"{villager_name}{suffix}"
             number_heart_items = item_names.count(heart_item_name)
             if all_villagers_by_name[villager_name].bachelor:
@@ -495,7 +496,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize4(SVTestBase):
             parts = name_trimmed.split(" ")
             name = parts[0]
             hearts = int(parts[1])
-            self.assertTrue(name in all_villagers_by_name or name == "Pet")
+            self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
             if name == "Pet":
                 self.assertTrue(hearts == 4 or hearts == 5)
             elif all_villagers_by_name[name].bachelor:
@@ -513,7 +514,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize5(SVTestBase):
     def test_friendsanity_all_with_marriage_items(self):
         suffix = " <3"
         item_names = [item.name for item in self.multiworld.get_items()]
-        for villager_name in all_villagers_by_name:
+        for villager_name in all_villagers_by_mod_by_name[ModNames.vanilla]:
             heart_item_name = f"{villager_name}{suffix}"
             number_heart_items = item_names.count(heart_item_name)
             if all_villagers_by_name[villager_name].bachelor:
@@ -533,7 +534,7 @@ class TestFriendsanityAllNpcsWithMarriageHeartSize5(SVTestBase):
             parts = name_trimmed.split(" ")
             name = parts[0]
             hearts = int(parts[1])
-            self.assertTrue(name in all_villagers_by_name or name == "Pet")
+            self.assertTrue(name in all_villagers_by_mod_by_name[ModNames.vanilla] or name == "Pet")
             if name == "Pet":
                 self.assertTrue(hearts == 5)
             elif all_villagers_by_name[name].bachelor:

@@ -325,3 +325,16 @@ wellwick = villager("Wellwick", True, forest, "Winter", universal_loves + wellwi
 yoba = villager("Yoba", False, secret_woods, "Spring", universal_loves + yoba_loves, False, ModNames.yoba)
 
 all_villagers_by_name: Dict[str, Villager] = {villager.name: villager for villager in all_villagers}
+all_villagers_by_mod: Dict[str, List[Villager]] = {}
+all_villagers_by_mod_by_name: Dict[str, Dict[str, Villager]] = {}
+for npc in all_villagers:
+    mod = npc.mod_name
+    name = npc.name
+    if mod in all_villagers_by_mod:
+        all_villagers_by_mod[mod].append(npc)
+        all_villagers_by_mod_by_name[mod][name] = npc
+    else:
+        all_villagers_by_mod[mod] = [npc]
+        all_villagers_by_mod_by_name[mod] = {}
+        all_villagers_by_mod_by_name[mod][name] = npc
+
