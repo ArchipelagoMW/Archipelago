@@ -94,7 +94,7 @@ Paranormal My Mind|60-3|maimai DX Limited-time Suite|True|5|7|9|
 Flower, snow and Drum'n'bass.|60-4|maimai DX Limited-time Suite|True|5|8|10|?
 Amenohoakari|60-5|maimai DX Limited-time Suite|True|6|8|10|
 Boiling Blood|59-0|MSR Anthology|True|5|8|10|
-ManiFesto:|59-1|MSR Anthology|True|4|6|9|
+ManiFesto|59-1|MSR Anthology|True|4|6|9|
 Operation Blade|59-2|MSR Anthology|True|3|5|7|
 Radiant|59-3|MSR Anthology|True|3|5|8|
 Renegade|59-4|MSR Anthology|True|3|5|8|
@@ -349,7 +349,7 @@ prejudice|17-3|Happy Otaku Pack Vol.7|True|4|6|9|
 The 89's Momentum|17-4|Happy Otaku Pack Vol.7|True|5|7|9|
 energy night|17-5|Happy Otaku Pack Vol.7|True|5|7|10|
 Future Dive|16-0|Give Up TREATMENT Vol.6|True|4|6|9|
-Re:End of a Dream|16-1|Give Up TREATMENT Vol.6|False|5|8|11|
+Re End of a Dream|16-1|Give Up TREATMENT Vol.6|False|5|8|11|
 Etude -Storm-|16-2|Give Up TREATMENT Vol.6|True|6|8|10|
 Unlimited Katharsis|16-3|Give Up TREATMENT Vol.6|False|4|6|10|
 Magic Knight Girl|16-4|Give Up TREATMENT Vol.6|False|4|7|9|
@@ -358,7 +358,7 @@ Magic Spell|15-0|Cute Is Everything Vol.3|True|2|5|7|
 Colorful Star, Colored Drawing, Travel Poem|15-1|Cute Is Everything Vol.3|False|3|4|6|
 Satell Knight|15-2|Cute Is Everything Vol.3|True|3|6|8|
 Black River Feat.Mes|15-3|Cute Is Everything Vol.3|True|1|4|6|
-I am sorry for my existence|15-4|Cute Is Everything Vol.3|False|2|5|8|
+I am sorry|15-4|Cute Is Everything Vol.3|False|2|5|8|
 Ueta Tori Tachi|15-5|Cute Is Everything Vol.3|False|3|6|8|
 Elysion's Old Mans|14-0|Happy Otaku Pack Vol.6|False|3|5|8|
 AXION|14-1|Happy Otaku Pack Vol.6|False|4|5|8|
@@ -377,7 +377,7 @@ Sterelogue|12-1|Give Up TREATMENT Vol.5|True|5|7|10|
 Cheshire's Dance|12-2|Give Up TREATMENT Vol.5|True|4|7|10|
 Skrik|12-3|Give Up TREATMENT Vol.5|True|5|7|11|
 Soda Pop Canva5!|12-4|Give Up TREATMENT Vol.5|False|5|8|10|
-RUBY:LINTe|12-5|Give Up TREATMENT Vol.5|False|5|8|11|
+RUBY LINTe|12-5|Give Up TREATMENT Vol.5|False|5|8|11|
 Brave My Heart|11-0|Happy Otaku Pack Vol.5|True|3|5|7|
 Sakura Fubuki|11-1|Happy Otaku Pack Vol.5|False|4|7|10|
 8bit Adventurer|11-2|Happy Otaku Pack Vol.5|False|6|8|10|

@@ -39,7 +39,7 @@ class MuseDashWorld(World):
     game: str = "Muse Dash"
     option_definitions = musedash_options
     topology_present = False
-    data_version = 3
+    data_version = 4
     web = MuseDashWebWorld()
 
     music_sheet_name: str = "Music Sheet"
