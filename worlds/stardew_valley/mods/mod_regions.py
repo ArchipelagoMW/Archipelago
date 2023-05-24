@@ -3,7 +3,7 @@ from ..data.entrance_data import DeepWoodsEntrance, EugeneEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance
 from ..data.region_data import SVRegion, DeepWoodsRegion, EugeneRegion, JasperRegion, \
     AlecRegion, YobaRegion, JunaRegion
-from ..general_classes import RegionData, ConnectionData, RandomizationFlag, ModData
+from ..region_classes import RegionData, ConnectionData, RandomizationFlag, ModRegionData
 from .mod_data import ModNames
 from typing import List, Dict
 
@@ -87,10 +87,10 @@ juna_entrances = [
 
 
 ModDataList = {
-    ModNames.deepwoods: ModData(ModNames.deepwoods, deep_woods_regions, deep_woods_entrances),
-    ModNames.eugene: ModData(ModNames.eugene, eugene_regions, eugene_entrances),
-    ModNames.jasper: ModData(ModNames.jasper, jasper_regions, jasper_entrances),
-    ModNames.alec: ModData(ModNames.alec, alec_regions, alec_entrances),
-    ModNames.yoba: ModData(ModNames.yoba, yoba_regions, yoba_entrances),
-    ModNames.juna: ModData(ModNames.juna, juna_regions, juna_entrances)
+    ModNames.deepwoods: ModRegionData(ModNames.deepwoods, deep_woods_regions, deep_woods_entrances),
+    ModNames.eugene: ModRegionData(ModNames.eugene, eugene_regions, eugene_entrances),
+    ModNames.jasper: ModRegionData(ModNames.jasper, jasper_regions, jasper_entrances),
+    ModNames.alec: ModRegionData(ModNames.alec, alec_regions, alec_entrances),
+    ModNames.yoba: ModRegionData(ModNames.yoba, yoba_regions, yoba_entrances),
+    ModNames.juna: ModRegionData(ModNames.juna, juna_regions, juna_entrances)
 }

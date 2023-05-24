@@ -8,7 +8,7 @@ from BaseClasses import Region, Entrance
 from . import options
 from .data.entrance_data import SVEntrance
 from .data.region_data import SVRegion
-from .general_classes import RegionData, ConnectionData, RandomizationFlag
+from .region_classes import RegionData, ConnectionData, RandomizationFlag
 from .options import StardewOptions
 from .mods.mod_regions import ModDataList
 

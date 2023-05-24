@@ -49,7 +49,7 @@ class ConnectionData:
 
 
 @dataclass(frozen=True)
-class ModData:
+class ModRegionData:
     mod_name: str
     regions: List[RegionData]
     connections: List[ConnectionData]
