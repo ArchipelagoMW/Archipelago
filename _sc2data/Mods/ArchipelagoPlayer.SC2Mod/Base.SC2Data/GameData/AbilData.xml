@@ -1763,6 +1763,19 @@
     <CAbilMorph id="AP_CommandCenterLiftOff" parent="TerranBuildingLiftOff" unit="AP_CommandCenterFlying">
         <Name value="Abil/Name/AP_CommandCenterLiftOff"/>
     </CAbilMorph>
+    <CAbilAugment id="AP_Charge">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Charge"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown Link="ChargeCharge2ChargeAP_Charge" Location="Unit" TimeUse="10"/>
+        </Cost>
+        <Effect value="Charge"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

@@ -2281,4 +2281,11 @@
         <AffectedUnitArray value="RoboticsFacilityWarp"/>
         <AffectedUnitArray value="AP_ZealotAiur"/>
     </CUpgrade>
+    <CUpgrade id="AP_SOAHeroicShield">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="SoACaster"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HeroicShieldCleanUp">
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
 </Catalog>

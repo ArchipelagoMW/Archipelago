@@ -1725,4 +1725,21 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CinematicMode" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVoidZealotChargeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_Charge" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSOAHeroicShieldCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SOAHeroicShield" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorSOAHeroicShieldCooldownDummyCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_SOAHeroicShieldCooldownDummy" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHeroicShieldCleanUpCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HeroicShieldCleanUp" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

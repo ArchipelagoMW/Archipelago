@@ -2916,7 +2916,7 @@
         <Flags index="WaitUntilStopped" value="0"/>
     </CAbilMorph>
     <CEffectApplyBehavior id="AP_SOAHeroicShieldInvulnerableApply">
-        <ValidatorArray index="0" value="DoesNotHaveHeroicShieldWeakness"/>
+        <ValidatorArray index="0" value="AP_DoesNotHaveHeroicShieldWeakness"/>
         <ValidatorArray value="NotHallucination"/>
         <EditorCategories value=""/>
         <WhichUnit Value="Source"/>
@@ -2998,4 +2998,34 @@
         <EditorCategories value=""/>
         <EffectArray value="AP_ZealotAiurWeaponBurst"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="AP_SOAHeroicShieldApply">
+        <EditorCategories value=""/>
+        <Behavior value="AP_SOAHeroicShieldProcBuff"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_SOAHeroicShieldCooldownDummyAB">
+        <ValidatorArray index="0" value="IsSOACaster"/>
+        <EditorCategories value=""/>
+        <Behavior value="AP_SOAHeroicShieldCooldownDummy"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_SOAHeroicShieldCasterSearch">
+        <EditorCategories value=""/>
+        <AreaArray Radius="500" Effect="AP_SOAHeroicShieldCooldownDummyAB"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_SOAHeroicShieldSearch">
+        <EditorCategories value=""/>
+        <SearchFilters value="-;Neutral,Enemy,Structure,Missile,Item,Stasis,Dead,Hidden"/>
+        <AreaArray Radius="9" Effect="AP_SOAHeroicShieldApply"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_SOAHeroicShieldInvulnerableSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_SOAHeroicShieldInvulnerableApply"/>
+        <EffectArray value="AP_SOAHeroicShieldCasterSearch"/>
+    </CEffectSet>
+    <CAbilMorph id="AP_ReaperPlacementMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray Unit="AP_Reaper"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
+    </CAbilMorph>
 </Catalog>
