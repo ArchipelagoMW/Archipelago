@@ -165,7 +165,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Demon's Greataxe",                    0x006CA480, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Eleonora",                            0x006CCB90, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Man Serpent Hatchet",                 0x006D19B0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
-    ("Dragon King Greataxe",                0x006D40C0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Club",                                0x007A1200, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Mace",                                0x007A3910, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Morning Star",                        0x007A6020, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
@@ -259,7 +258,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Darkmoon Longbow",                    0x00D79B50, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Onislayer Greatbow",                  0x00D7C260, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Black Bow of Pharis",                 0x00D7E970, DS3ItemCategory.WEAPON_UPGRADE_10),
-    ("Shield Crossbow",                     0x00D81080, DS3ItemCategory.SKIP), # Cut Content?
     ("Sniper Crossbow",                     0x00D83790, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Sellsword Twinblades",                0x00F42400, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Warden Twinblades",                   0x00F47220, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
@@ -296,7 +294,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Llewellyn Shield",                    0x0134FD90, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Golden Falcon Shield",                0x01354BB0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Sacred Bloom Shield",                 0x013572C0, DS3ItemCategory.SHIELD),
-    ("Ancient Dragon Greatshield",          0x013599D0, DS3ItemCategory.SKIP), # Cut Content
     ("Lothric Knight Shield",               0x01409650, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Knight Shield",                       0x01410B80, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Pontiff Knight Shield",               0x014159A0, DS3ItemCategory.SHIELD),
@@ -439,7 +436,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Evangelist Robe",                     0x12DC6FE8, DS3ItemCategory.ARMOR),
     ("Evangelist Gloves",                   0x12DC73D0, DS3ItemCategory.ARMOR),
     ("Evangelist Trousers",                 0x12DC77B8, DS3ItemCategory.ARMOR),
-    ("Scholar's Shed Skin",                 0x12E40D20, DS3ItemCategory.SKIP), # Cut Content
     ("Scholar's Robe",                      0x12E41108, DS3ItemCategory.ARMOR),
     ("Winged Knight Helm",                  0x12EBAE40, DS3ItemCategory.ARMOR),
     ("Winged Knight Armor",                 0x12EBB228, DS3ItemCategory.ARMOR),
@@ -720,7 +716,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Deep Ring",                           0x20004F60, DS3ItemCategory.RING),
     ("Darkmoon Ring",                       0x20004F6A, DS3ItemCategory.RING),
     ("Ring of the Sun's Firstborn",         0x20004F74, DS3ItemCategory.RING),
-    ("Darkmoon Blade Covenant Ring",        0x20004F7E, DS3ItemCategory.SKIP), # Cut Content?
     ("Hawk Ring",                           0x20004F92, DS3ItemCategory.RING),
     ("Hornet Ring",                         0x20004F9C, DS3ItemCategory.RING),
     ("Covetous Gold Serpent Ring",          0x20004FA6, DS3ItemCategory.RING),
@@ -851,7 +846,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Dark Sigil",                          0x400001EA, DS3ItemCategory.SKIP),
     ("Ember",                               0x400001F4, DS3ItemCategory.MISC),
     ("Soul of Champion Gundyr",             0x400002C8, DS3ItemCategory.MISC),
-    ("Soul of a Wicked Spirit",             0x400002C9, DS3ItemCategory.SKIP), # Cut Content
     ("Soul of the Dancer",                  0x400002CA, DS3ItemCategory.MISC),
     ("Soul of a Crystal Sage",              0x400002CB, DS3ItemCategory.MISC),
     ("Soul of the Blood of the Wolf",       0x400002CD, DS3ItemCategory.MISC),
@@ -1010,7 +1004,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Chaos Bed Vestiges",                  0x402579C0, DS3ItemCategory.SPELL),
     ("Warmth",                              0x4025B070, DS3ItemCategory.SPELL),
     ("Profuse Sweat",                       0x402717D0, DS3ItemCategory.SPELL),
-    ("Dark Orb",                            0x4027AC40, DS3ItemCategory.SKIP), # Cut Content?
     ("Black Fire Orb",                      0x4027D350, DS3ItemCategory.SPELL),
     ("Bursting Fireball",                   0x4027FA60, DS3ItemCategory.SPELL),
     ("Boulder Heave",                       0x40282170, DS3ItemCategory.SPELL),
@@ -1051,70 +1044,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Blessed Weapon",                      0x40395F80, DS3ItemCategory.SPELL),
     ("Deep Protection",                     0x40398690, DS3ItemCategory.SPELL),
     ("Atonement",                           0x4039ADA0, DS3ItemCategory.SPELL),
-    
-    # Unused/Cut Content
-    ("Blood-stained Short Sword",           0x00100590, DS3ItemCategory.SKIP),
-    ("Missionary's Axe",                    0x006C2F50, DS3ItemCategory.SKIP),
-    ("Dragon King Greataxe",                0x006D40C0, DS3ItemCategory.SKIP),
-    ("Four Knights Hammer",                 0x007D4650, DS3ItemCategory.SKIP),
-    ("Hammer of the Great Tree",            0x007D9470, DS3ItemCategory.SKIP),
-    ("Sacred Beast Catalyst",               0x00C8A730, DS3ItemCategory.SKIP),
-    ("Golden Dual Swords",                  0x00F55C80, DS3ItemCategory.SKIP),
-    ("Lothric's Scythe",                    0x009A4430, DS3ItemCategory.SKIP),
-    ("Ancient Dragon Halberd",              0x009A6B40, DS3ItemCategory.SKIP),
-    ("Scythe of Want",                      0x009A9250, DS3ItemCategory.SKIP),
-    ("Deep Pyromancy Flame",                0x00CC9ED0, DS3ItemCategory.SKIP),
-    ("Flickering Pyromancy Flame",          0x00CD3B10, DS3ItemCategory.SKIP),
-    ("Strong Pyromancy Flame",              0x00CD6220, DS3ItemCategory.SKIP),
-    ("Deep Pyromancy Flame",                0x00CDFE60, DS3ItemCategory.SKIP),
-    ("Pitch-Dark Pyromancy Flame",          0x00CE2570, DS3ItemCategory.SKIP),
-    ("Dancer's Short Bow",                  0x00D77440, DS3ItemCategory.SKIP),
-    ("Golden Dual Swords",                  0x00F55C80, DS3ItemCategory.SKIP),
-    ("Cleric's Parma",                      0x013524A0, DS3ItemCategory.SKIP),
-    ("Prince's Shield",                     0x01421CF0, DS3ItemCategory.SKIP),
-    
-    ("Dingy Maiden's Overcoat",             0x11DA9048, DS3ItemCategory.SKIP),
-    ("Grotto Hat",                          0x11F78A40, DS3ItemCategory.SKIP),
-    ("Grotto Robe",                         0x11F78E28, DS3ItemCategory.SKIP),
-    ("Grotto Wrap",                         0x11F79210, DS3ItemCategory.SKIP),
-    ("Grotto Trousers",                     0x11F795F8, DS3ItemCategory.SKIP),
-    ("Soldier's Gauntlets",                 0x126261D0, DS3ItemCategory.SKIP),
-    ("Soldier's Hood",                      0x1263E0A0, DS3ItemCategory.SKIP),
-    ("Elder's Robe",                        0x129024A8, DS3ItemCategory.SKIP),
-    ("Saint's Veil",                        0x12A70420, DS3ItemCategory.SKIP),
-    ("Saint's Dress",                       0x12A70808, DS3ItemCategory.SKIP),
-    ("Footman's Hood",                      0x12AEA540, DS3ItemCategory.SKIP),
-    ("Footman's Overcoat",                  0x12AEA928, DS3ItemCategory.SKIP),
-    ("Footman's Bracelets",                 0x12AEAD10, DS3ItemCategory.SKIP),
-    ("Footman's Trousers",                  0x12AEB0F8, DS3ItemCategory.SKIP),
-    ("Scholar's Shed Skin",                 0x12E40D20, DS3ItemCategory.SKIP),
-    ("Man Serpent's Mask",                  0x138BE5E0, DS3ItemCategory.SKIP),
-    ("Man Serpent's Robe",                  0x138BE9C8, DS3ItemCategory.SKIP),
-    ("Old Monarch's Crown",                 0x13DFD240, DS3ItemCategory.SKIP),
-    ("Old Monarch's Robe",                  0x13DFD628, DS3ItemCategory.SKIP),
-    ("Frigid Valley Mask",                  0x13FE56C0, DS3ItemCategory.SKIP),
-    ("Dingy Hood",                          0x140D9900, DS3ItemCategory.SKIP),
-    ("Hexer's Hood",                        0x15A995C0, DS3ItemCategory.SKIP),
-    ("Hexer's Robes",                       0x15A999A8, DS3ItemCategory.SKIP),
-    ("Hexer's Gloves",                      0x15A99D90, DS3ItemCategory.SKIP),
-    ("Hexer's Boots",                       0x15A9A178, DS3ItemCategory.SKIP),
-    ("Varangian Helm",                      0x15C81A40, DS3ItemCategory.SKIP),
-    ("Varangian Armor",                     0x15C81E28, DS3ItemCategory.SKIP),
-    ("Varangian Cuffs",                     0x15C82210, DS3ItemCategory.SKIP),
-    ("Varangian Leggings",                  0x15C825F8, DS3ItemCategory.SKIP),
-    
-    ("Rare Ring of Sacrifice",              0x20004EFC, DS3ItemCategory.SKIP),
-    ("Yorgh's Ring",                        0x2000505A, DS3ItemCategory.SKIP),
-    ("Ring of Hiding",                      0x200050D2, DS3ItemCategory.SKIP),
-    ("Ring of Sustained Toughness",         0x20005118, DS3ItemCategory.SKIP),
-    ("Ring of Sustained Energy",            0x20005122, DS3ItemCategory.SKIP),
-    ("Ring of Sustained Magic",             0x2000512C, DS3ItemCategory.SKIP),
-    ("Ring of Sustained Essence",           0x20005140, DS3ItemCategory.SKIP),
-    ("Ring of Sustained Might",             0x2000514A, DS3ItemCategory.SKIP),
-    ("Ring of Sustained Fortune",           0x20005154, DS3ItemCategory.SKIP),
-    
-    ("Morbid Temptation",                   0x40359AA8, DS3ItemCategory.SKIP), #spell
-    ("Dorris Swarm",                        0x40393870, DS3ItemCategory.SKIP), #spell
 ]]
 
 _dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
@@ -1261,6 +1190,86 @@ _dlc_items = [DS3ItemData(row[0], row[1], True, row[2]) for row in [
     ("Lightning Arrow",                  0x40358B08, DS3ItemCategory.SPELL),
     ("Way of White Corona",              0x403642A0, DS3ItemCategory.SPELL),
     ("Projected Heal",                   0x40364688, DS3ItemCategory.SPELL),
+]]
+
+# Unused list for future reference
+# These items exist to some degree in the code, but aren't accessible
+# in-game and can't be picked up without modifications
+_cut_content_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
+    # Weapons
+    ("Blood-stained Short Sword",           0x00100590, DS3ItemCategory.SKIP),
+    ("Missionary's Axe",                    0x006C2F50, DS3ItemCategory.SKIP),
+    ("Dragon King Greataxe",                0x006D40C0, DS3ItemCategory.SKIP),
+    ("Four Knights Hammer",                 0x007D4650, DS3ItemCategory.SKIP),
+    ("Hammer of the Great Tree",            0x007D9470, DS3ItemCategory.SKIP),
+    ("Lothric's Scythe",                    0x009A4430, DS3ItemCategory.SKIP),
+    ("Ancient Dragon Halberd",              0x009A6B40, DS3ItemCategory.SKIP),
+    ("Scythe of Want",                      0x009A9250, DS3ItemCategory.SKIP),
+    ("Sacred Beast Catalyst",               0x00C8A730, DS3ItemCategory.SKIP),
+    ("Deep Pyromancy Flame",                0x00CC9ED0, DS3ItemCategory.SKIP), # Duplicate?
+    ("Flickering Pyromancy Flame",          0x00CD3B10, DS3ItemCategory.SKIP),
+    ("Strong Pyromancy Flame",              0x00CD6220, DS3ItemCategory.SKIP),
+    ("Deep Pyromancy Flame",                0x00CDFE60, DS3ItemCategory.SKIP), # Duplicate?
+    ("Pitch-Dark Pyromancy Flame",          0x00CE2570, DS3ItemCategory.SKIP),
+    ("Dancer's Short Bow",                  0x00D77440, DS3ItemCategory.SKIP),
+    ("Shield Crossbow",                     0x00D81080, DS3ItemCategory.SKIP),
+    ("Golden Dual Swords",                  0x00F55C80, DS3ItemCategory.SKIP),
+
+    # Shields
+    ("Cleric's Parma",                      0x013524A0, DS3ItemCategory.SKIP),
+    ("Ancient Dragon Greatshield",          0x013599D0, DS3ItemCategory.SKIP),
+    ("Prince's Shield",                     0x01421CF0, DS3ItemCategory.SKIP),
+
+    # Armor
+    ("Dingy Maiden's Overcoat",             0x11DA9048, DS3ItemCategory.SKIP),
+    ("Grotto Hat",                          0x11F78A40, DS3ItemCategory.SKIP),
+    ("Grotto Robe",                         0x11F78E28, DS3ItemCategory.SKIP),
+    ("Grotto Wrap",                         0x11F79210, DS3ItemCategory.SKIP),
+    ("Grotto Trousers",                     0x11F795F8, DS3ItemCategory.SKIP),
+    ("Soldier's Gauntlets",                 0x126261D0, DS3ItemCategory.SKIP),
+    ("Soldier's Hood",                      0x1263E0A0, DS3ItemCategory.SKIP),
+    ("Elder's Robe",                        0x129024A8, DS3ItemCategory.SKIP),
+    ("Saint's Veil",                        0x12A70420, DS3ItemCategory.SKIP),
+    ("Saint's Dress",                       0x12A70808, DS3ItemCategory.SKIP),
+    ("Footman's Hood",                      0x12AEA540, DS3ItemCategory.SKIP),
+    ("Footman's Overcoat",                  0x12AEA928, DS3ItemCategory.SKIP),
+    ("Footman's Bracelets",                 0x12AEAD10, DS3ItemCategory.SKIP),
+    ("Footman's Trousers",                  0x12AEB0F8, DS3ItemCategory.SKIP),
+    ("Scholar's Shed Skin",                 0x12E40D20, DS3ItemCategory.SKIP),
+    ("Man Serpent's Mask",                  0x138BE5E0, DS3ItemCategory.SKIP),
+    ("Man Serpent's Robe",                  0x138BE9C8, DS3ItemCategory.SKIP),
+    ("Old Monarch's Crown",                 0x13DFD240, DS3ItemCategory.SKIP),
+    ("Old Monarch's Robe",                  0x13DFD628, DS3ItemCategory.SKIP),
+    ("Frigid Valley Mask",                  0x13FE56C0, DS3ItemCategory.SKIP),
+    ("Dingy Hood",                          0x140D9900, DS3ItemCategory.SKIP),
+    ("Hexer's Hood",                        0x15A995C0, DS3ItemCategory.SKIP),
+    ("Hexer's Robes",                       0x15A999A8, DS3ItemCategory.SKIP),
+    ("Hexer's Gloves",                      0x15A99D90, DS3ItemCategory.SKIP),
+    ("Hexer's Boots",                       0x15A9A178, DS3ItemCategory.SKIP),
+    ("Varangian Helm",                      0x15C81A40, DS3ItemCategory.SKIP),
+    ("Varangian Armor",                     0x15C81E28, DS3ItemCategory.SKIP),
+    ("Varangian Cuffs",                     0x15C82210, DS3ItemCategory.SKIP),
+    ("Varangian Leggings",                  0x15C825F8, DS3ItemCategory.SKIP),
+
+    # Rings
+    ("Rare Ring of Sacrifice",              0x20004EFC, DS3ItemCategory.SKIP),
+    ("Darkmoon Blade Covenant Ring",        0x20004F7E, DS3ItemCategory.SKIP),
+    ("Yorgh's Ring",                        0x2000505A, DS3ItemCategory.SKIP),
+    ("Ring of Hiding",                      0x200050D2, DS3ItemCategory.SKIP),
+    ("Ring of Sustained Toughness",         0x20005118, DS3ItemCategory.SKIP),
+    ("Ring of Sustained Energy",            0x20005122, DS3ItemCategory.SKIP),
+    ("Ring of Sustained Magic",             0x2000512C, DS3ItemCategory.SKIP),
+    ("Ring of Sustained Essence",           0x20005140, DS3ItemCategory.SKIP),
+    ("Ring of Sustained Might",             0x2000514A, DS3ItemCategory.SKIP),
+    ("Ring of Sustained Fortune",           0x20005154, DS3ItemCategory.SKIP),
+
+    # Items
+    ("Soul of a Wicked Spirit",             0x400002C9, DS3ItemCategory.SKIP),
+
+    # Spells
+    ("Dark Orb",                            0x4027AC40, DS3ItemCategory.SKIP),
+    ("Morbid Temptation",                   0x40359AA8, DS3ItemCategory.SKIP),
+    ("Dorris Swarm",                        0x40393870, DS3ItemCategory.SKIP),
 ]]
 
 _all_items = _vanilla_items + _dlc_items
