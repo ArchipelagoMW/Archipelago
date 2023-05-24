@@ -310,12 +310,17 @@ class DarkSouls3World(World):
 
 
     def create_item(self, name: str) -> Item:
+        useful_categories = {
+            DS3ItemCategory.WEAPON_UPGRADE_5,
+            DS3ItemCategory.WEAPON_UPGRADE_10,
+            DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE,
+            DS3ItemCategory.SPELL,
+        }
         data = self.item_name_to_id[name]
 
         if name in key_item_names:
             item_classification = ItemClassification.progression
-        elif item_dictionary[name].category in \
-                {DS3ItemCategory.WEAPON_UPGRADE_5, DS3ItemCategory.WEAPON_UPGRADE_10, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE}:
+        elif item_dictionary[name].category in useful_categories or name in {"Estus Shard", "Undead Bone Shard"}:
             item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
