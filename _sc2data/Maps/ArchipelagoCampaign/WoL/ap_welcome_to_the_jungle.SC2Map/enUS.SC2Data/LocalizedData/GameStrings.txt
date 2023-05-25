@@ -16,6 +16,7 @@ Param/Value/100E53BD=/
 Param/Value/20E5CE1C=Mission Start
 Param/Value/222F31F7=SCV with Terrazine
 Param/Value/24E1C1CC=All of your buildings have been destroyed.
+Param/Value/25ABFCAC=<s val="ObjRewardSummary_Protoss">Find Protoss Relics (
 Param/Value/34420977=
 Param/Value/35F0325E=Protoss Relics Found
 Param/Value/3D598152=The protoss are sealing terrazine altars to prevent you from taking them. If they seal too many, you will be unable to complete the mission.
@@ -25,9 +26,9 @@ Param/Value/4EC474D8=
 Param/Value/4F1E5374=
 Param/Value/505C291C=)
 Param/Value/5087FBB9=Gas Harvest = 
-Param/Value/50C45B65=Find Protoss Relics 
 Param/Value/5146E82B=Anniversary_TTosh_02 granted
 Param/Value/51F25B27= sealed)
+Param/Value/54C37A7C= Checks Left)</s>
 Param/Value/5A4AC463=
 Param/Value/5B573431=
 Param/Value/5E70CBB2=Find Protoss Relics
@@ -44,15 +45,16 @@ Param/Value/833EFEF2=Altar Being Sealed
 Param/Value/8985286D=<c val="00FF00">Protoss Relic</c>
 Param/Value/8CA221DD=<c val="ff0000">The Protoss are sealing an altar!</c>
 Param/Value/8E7DB6C0=Gather Terrazine
+Param/Value/96CC0731=<s val="ObjRewardSummary_Protoss">Find Protoss Relics (
 Param/Value/99147108=Player Score = 
 Param/Value/9A49CF2B=Stetmann asked that you collect ancient protoss relics so he can study them to gain better insight into protoss technology.
+Param/Value/9BE3DB27= Checks Left)</s>
 Param/Value/9F7DE18C=>>SCV Cancel Harvest
 Param/Value/9FDD5B12=/
 Param/Value/A1DD6009=Gather Terrazine (
 Param/Value/A9379847=SCV Lost
 Param/Value/AA8975D0=Protoss Can't Seal 7 Altars
 Param/Value/B283104A=
-Param/Value/BD9FF1D1=Find Protoss Relics 
 Param/Value/C206B757=Sealing Attempts Stopped
 Param/Value/C87BC07E=Protoss Research Earned
 Param/Value/D3D16072=)

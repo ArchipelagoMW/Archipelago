@@ -105,18 +105,7 @@
 <Soundtrack id="TTosh02MusicOutro"/>
 <Terrain id="BelShir"/>
 <Unit id="Colossus"/>
-<Unit id="CommandCenter"/>
-<Unit id="SupplyDepot"/>
-<Unit id="Refinery"/>
-<Unit id="Barracks"/>
-<Unit id="EngineeringBay"/>
-<Unit id="MissileTurret"/>
-<Unit id="Factory"/>
-<Unit id="MercCompound"/>
 <Unit id="CommandCenterFlying"/>
-<Unit id="FactoryTechLab"/>
-<Unit id="SCV"/>
-<Unit id="Marine"/>
 <Unit id="Nexus"/>
 <Unit id="Pylon"/>
 <Unit id="Assimilator"/>
@@ -139,11 +128,22 @@
 <Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
 <Unit id="VespeneGeyser"/>
 <Unit id="Scout"/>
-<Unit id="Goliath"/>
 <Unit id="MurlocMarine"/>
 <Unit id="TerrazineCanister"/>
 <Unit id="TerrazineNode" Variations="0,1,2"/>
 <Unit id="SuperWarpGate"/>
 <Unit id="ProtossRelic" Variations="1,5,6"/>
 <Unit id="Food1000"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_FactoryTechLab"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Goliath"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_EngineeringBay"/>
+<Unit id="AP_MissileTurret"/>
+<Unit id="AP_MercCompound"/>
 </Preload>
