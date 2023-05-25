@@ -151,6 +151,8 @@ async def parse_locations(locations_array: List[int], ctx: GBAContext):
                 {"cmd": "LocationChecks",
                  "locations": locations_checked}
             ])
+        if locations_array[18] & (1 << 5) != 0:
+            ctx.finished_game = True
 
 
 async def gba_sync_task(ctx: GBAContext):
