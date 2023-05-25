@@ -464,7 +464,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_UltrasonicPulseStun">
         <Alignment value="Negative"/>
-        <InfoIcon value="Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
+        <InfoIcon value="AP\Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
         <BehaviorCategories index="Stun" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="4"/>
