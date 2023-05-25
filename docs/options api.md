@@ -28,11 +28,12 @@ Choice, and defining `alias_true = option_full`.
 and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
 
 As an example, suppose we want an option that lets the user start their game with a sword in their inventory. Let's
-create our option class (with a docstring), give it a `display_name`, and add it to a dictionary that keeps track of our
-options:
+create our option class (with a docstring), give it a `display_name`, and add it to our game's options dataclass:
 
 ```python
 # Options.py
+from dataclasses import dataclass
+
 from Options import Toggle, PerGameCommonOptions
 
 
@@ -41,6 +42,7 @@ class StartingSword(Toggle):
     display_name = "Start With Sword"
 
 
+@dataclass
 class ExampleGameOptions(PerGameCommonOptions):
     starting_sword: StartingSword
 ```
