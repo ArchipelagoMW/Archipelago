@@ -2231,7 +2231,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_SiegeBreaker,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ArcliteShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Predator,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
     </CUpgrade>
     <CUpgrade id="AP_TerranVehicleWeaponsUltraCapacitorsLevel3" parent="AP_BaseTerranVehicleWeaponsUltraCapacitors">
         <Name value="Upgrade/Name/AP_TerranVehicleWeaponsUltraCapacitorsLevel3"/>
@@ -2255,7 +2255,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_SiegeBreaker,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ArcliteShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Predator,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
-        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_TyphoonMissilePod,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
     </CUpgrade>
     <CUpgrade id="AP_UltraCapacitors">
         <Flags index="UpgradeCheat" value="0"/>
