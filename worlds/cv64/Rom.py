@@ -476,6 +476,7 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     # Custom remote item rewarding and DeathLink receiving code
     rom.write_int32(0x19B98, 0x080FF000)  # J 0x803FC000
     rom.write_int32s(0xBFC000, Patches.remote_item_giver)
+    rom.write_int32s(0xBFD344, Patches.subweapon_surface_checker)
 
     # DeathLink counter decrementer code
     rom.write_int32(0x1C340, 0x080FF052)  # J 0x803FC148
@@ -684,7 +685,10 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
 
     if multiworld.drop_previous_sub_weapon[player]:
         rom.write_int32(0xBFC18C, 0x080FF3F2)  # J 0x803FCFC8
-        rom.write_int32s(0xBFCFC4, Patches.prev_subweapon_dropper)
+        rom.write_int32s(0xBFCFC4, Patches.prev_subweapon_spawn_checker)
+        rom.write_int32(0x6C848, 0x080FF3FF)  # J 0x803FCFFC
+        rom.write_int32s(0xBFCFFC, Patches.prev_subweapon_fall_checker)
+        rom.write_int32s(0xBFD060, Patches.prev_subweapon_dropper)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():

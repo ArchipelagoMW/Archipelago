@@ -141,7 +141,7 @@ remote_item_giver = [
     0x3C088034,  # LUI 	 T0, 0x8034
     0x91082891,  # LBU	 T0, 0x2891 (T0)
     0x24090002,  # ADDIU T1, R0, 0x0002
-    0x15090016,  # BNE	 T0, T1, [forward 0x16]
+    0x15090012,  # BNE	 T0, T1, [forward 0x12]
     0x00000000,  # NOP
     0x256B9BDF,  # ADDIU T3, T3, 0x9BDF
     0x91640000,  # LBU	 A0, 0x0000 (T3)
@@ -156,14 +156,10 @@ remote_item_giver = [
     0x91640000,  # LBU	 A0, 0x0000 (T3)
     0x14800002,  # BNEZ	 A0, [forward 0x02]
     0x00000000,  # NOP
-    0x10000007,  # BNE	 T0, T1, [forward 0x07]
+    0x10000003,  # B     [forward 0x03]
     0x2409000F,  # ADDIU T1, R0, 0x000F
+    0x080FF4D1,  # J	 0x803FD344
     0xA169FFFF,  # SB	 T1, 0xFFFF (T3)
-    0xA1600000,  # SB	 R0, 0x0000 (T3)
-    0x956C00DD,  # LHU	 T4, 0x00DD (T3)
-    0x258C0001,  # ADDIU T4, T4, 0x0001
-    0x0804EDCE,  # J	 0x8013B738
-    0xA56C00DD,  # SH	 T4, 0x00DD (T3)
     # DeathLink-specific checks
     0x3C0B8039,  # LUI   T3, 0x8039
     0x256B9BE1,  # ADDIU T3, T3, 0x9BE1
@@ -1310,32 +1306,261 @@ chandelier_item_flags_setter = [
     0xAFA80010   # SW    T0, 0x0010 (SP)
 ]
 
-prev_subweapon_dropper = [
-    # When picking up a sub-weapon that's different from the one the player currently has, this will spawn a pickup
-    # actor of the sub-weapon the player had before at their current position like in other CVs. This will enable them
-    # to pick it back up again if they still want it.
-    0x322F3031,  # Sub-weapon drop IDs
-    0x10A00014,  # BEQZ  A1, [forward 0x14]
+prev_subweapon_spawn_checker = [
+    # When picking up a sub-weapon this will check to see if it's different from the one the player already had (if they
+    # did have one) and jump to prev_subweapon_dropper, which will spawn a subweapon actor of what they had before
+    # directly behind them.
+    0x322F3031,  # Previous sub-weapon bytes
+    0x10A00009,  # BEQZ  A1,     [forward 0x09]
+    0x00000000,  # NOP
+    0x10AD0007,  # BEQ   A1, T5, [forward 0x07
     0x3C088040,  # LUI   T0, 0x8040
     0x01054021,  # ADDU  T0, T0, A1
-    0x9109CFC3,  # LBU   T1, 0xCFC3 (T0)
-    0xA7A90032,  # SH    T1, 0x0032 (SP)
-    0x0C0006B4,  # JAL   0x80001AD0
-    0x2404016C,  # ADDIU A0, R0, 0x016C
-    0x00402025,  # OR    A0, V0, R0
-    0x0C000660,  # JAL   0x80001980
-    0x24050027,  # ADDIU A1, R0, 0x0027
-    0x1040000A,  # BEQZ  V0, [forward 0x0A]
-    0x87A60032,  # LH    A2, 0x0032 (SP)
-    0xA4460038,  # SH    A2, 0x0038 (V0)
-    0x3C088035,  # LUI   T0, 0x8035
-    0x8D0909D0,  # LW    T1, 0x09D0 (T0)
-    0x8D0A09D4,  # LW    T2, 0x09D4 (T0)
-    0x8D0B09D8,  # LW    T3, 0x09D8 (T0)
-    0xAC490064,  # SW    T1, 0x0064 (V0)
-    0xAC4A0068,  # SW    T2, 0x0068 (V0)
-    0xAC4B006C,  # SW    T3, 0x006C (V0)
-    0xAC4A0034,  # SW    T2, 0x0034 (V0)
+    0x0C0FF416,  # JAL   0x803FD058
+    0x9104CFC3,  # LBU   A0, 0xCFC3 (T0)
+    0x2484FF9C,  # ADDIU A0, A0, 0xFF9C
+    0x3C088039,  # LUI   T0, 0x8039
+    0xAD049BD4,  # SW    A0, 0x9BD4 (T0)
     0x0804F0BF,  # J     0x8013C2FC
     0x24020001   # ADDIU V0, R0, 0x0001
+]
+
+prev_subweapon_fall_checker = [
+    # Checks to see if a pointer to a previous sub-weapon drop actor spawned by prev_subweapon_dropper is in 80389BD4
+    # and calls the function in prev_subweapon_dropper to lower the weapon closer to the ground on the next frame if a
+    # pointer exists and its actor ID is 0x0027. Once it hits the ground or despawns, the connection to the actor will
+    # be severed by 0-ing out the pointer.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x8D049BD4,  # LW    A0, 0x9BD4 (T0)
+    0x10800008,  # BEQZ  A0,     [forward 0x08]
+    0x00000000,  # NOP
+    0x84890000,  # LH    T1, 0x0000 (A0)
+    0x240A0027,  # ADDIU T2, R0, 0x0027
+    0x152A0004,  # BNE   T1, T2, [forward 0x04]
+    0x00000000,  # NOP
+    0x0C0FF452,  # JAL   0x803FD148
+    0x00000000,  # NOP
+    0x50400001,  # BEQZL V0,     [forward 0x01]
+    0xAD009BD4,  # SW    R0, 0x9BD4 (T0)
+    0x0801AEB5   # J     0x8006BAD4
+]
+
+prev_subweapon_dropper = [
+    # Spawns a pickup actor of the sub-weapon the player had before picking up a new one behind them at their current
+    # position like in other CVs. This will enable them to pick it back up again if they still want it.
+    # Courtesy of B_squo; see derp.c in the src folder for the C source code.
+    0x27BDFFC8,
+    0xAFBF001C,
+    0xAFA40038,
+    0xAFB00018,
+    0x0C0006B4,
+    0x2404016C,
+    0x00402025,
+    0x0C000660,
+    0x24050027,
+    0x1040002B,
+    0x00408025,
+    0x3C048035,
+    0x848409DE,
+    0x00042023,
+    0x0C0230D4,
+    0x3084FFFF,
+    0x44822000,
+    0x3C018040,
+    0xC428D330,
+    0x468021A0,
+    0x3C048035,
+    0x848409DE,
+    0x00042023,
+    0x46083282,
+    0x3084FFFF,
+    0x0C01FFAC,
+    0xE7AA0024,
+    0x44828000,
+    0x3C018040,
+    0xC424D334,
+    0x468084A0,
+    0x27A40024,
+    0x00802825,
+    0x3C064100,
+    0x46049182,
+    0x0C004562,
+    0xE7A6002C,
+    0x3C058035,
+    0x24A509D0,
+    0x26040064,
+    0x0C004530,
+    0x27A60024,
+    0x3C018035,
+    0xC42809D4,
+    0x3C0140A0,
+    0x44815000,
+    0x00000000,
+    0x460A4400,
+    0xE6100068,
+    0xC6120068,
+    0xE6120034,
+    0x8FAE0038,
+    0xA60E0038,
+    0x8FBF001C,
+    0x8FB00018,
+    0x27BD0038,
+    0x03E00008,
+    0x00000000,
+    0x3C038040,
+    0x2463D328,
+    0x906E0000,
+    0x3C058040,
+    0x3C018035,
+    0x15C0001D,
+    0x24A5D324,
+    0xC42409D4,
+    0x3C01800D,
+    0xC4267B98,
+    0x3C013F80,
+    0x44815000,
+    0x46062200,
+    0x3C058040,
+    0x24A5D324,
+    0x2401000F,
+    0x460A4400,
+    0x240F0001,
+    0xE4B00000,
+    0x94820038,
+    0x10410006,
+    0x24010010,
+    0x10410004,
+    0x2401002F,
+    0x10410002,
+    0x24010030,
+    0x14410005,
+    0x3C014040,
+    0x44812000,
+    0xC4B20000,
+    0x46049180,
+    0xE4A60000,
+    0xA06F0000,
+    0x03E00008,
+    0x24020001,
+    0xC4800068,
+    0xC4A80000,
+    0x3C058039,
+    0x24A59BD0,
+    0x4608003E,
+    0x00001025,
+    0x45000005,
+    0x00000000,
+    0x44805000,
+    0xA0600000,
+    0x03E00008,
+    0xE4AA0000,
+    0x3C058039,
+    0x24A59BD0,
+    0x3C018019,
+    0xC430C870,
+    0xC4A20000,
+    0x4610103C,
+    0x00000000,
+    0x45000006,
+    0x3C018019,
+    0xC432C878,
+    0x46121100,
+    0xE4A40000,
+    0xC4A20000,
+    0xC4800068,
+    0x46020181,
+    0x24020001,
+    0xE4860068,
+    0xC4880068,
+    0xE4880034,
+    0x03E00008,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x0000001B,
+    0x060048E0,
+    0x40000000,
+    0x06AEFFD3,
+    0x06004B30,
+    0x40000000,
+    0x00000000,
+    0x06004CB8,
+    0x0000031A,
+    0x002C0000,
+    0x060059B8,
+    0x40000248,
+    0xFFB50186,
+    0x06005B68,
+    0xC00001DF,
+    0x00000000,
+    0x06005C88,
+    0x80000149,
+    0x00000000,
+    0x06005DC0,
+    0xC0000248,
+    0xFFB5FE7B,
+    0x06005F70,
+    0xC00001E0,
+    0x00000000,
+    0x06006090,
+    0x8000014A,
+    0x00000000,
+    0x06007D28,
+    0x4000010E,
+    0xFFF100A5,
+    0x06007F60,
+    0xC0000275,
+    0x00000000,
+    0x06008208,
+    0x800002B2,
+    0x00000000,
+    0x060083B0,
+    0xC000010D,
+    0xFFF2FF5C,
+    0x060085E8,
+    0xC0000275,
+    0x00000000,
+    0x06008890,
+    0x800002B2,
+    0x00000000,
+    0x3D4CCCCD,
+    0x3FC00000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0xB8000100,
+    0xB8000100,
+]
+
+subweapon_surface_checker = [
+    # During the process of remotely giving an item received via multiworld, this will check to see if the item being
+    # received is a subweapon and, if it is, wait until the player is not above an abyss or instant kill surface before
+    # giving it. This is to ensure dropped previous subweapons won't land somewhere inaccessible.
+    0x2408000D,  # ADDIU T0, R0, 0x000D
+    0x11040006,  # BEQ   T0, A0, [forward 0x06]
+    0x2409000E,  # ADDIU T1, R0, 0x000E
+    0x11240004,  # BEQ   T1, A0, [forward 0x04]
+    0x2408000F,  # ADDIU T0, R0, 0x000F
+    0x11040002,  # BEQ   T0, A0, [forward 0x02]
+    0x24090010,  # ADDIU T1, R0, 0x0010
+    0x1524000B,  # BNE   T1, A0, [forward 0x0B]
+    0x3C0A800D,  # LUI   T2, 0x800D
+    0x8D4A7B5C,  # LW    T2, 0x7B5C (T2)
+    0x1140000E,  # BEQZ  T2,     [forward 0x0E]
+    0x00000000,  # NOP
+    0x914A0001,  # LBU   T2, 0x0001 (T2)
+    0x240800A2,  # ADDIU T0, R0, 0x00A2
+    0x110A000A,  # BEQ   T0, T2, [forward 0x0A]
+    0x24090092,  # ADDIU T1, R0, 0x0092
+    0x112A0008,  # BEQ   T1, T2, [forward 0x08]
+    0x24080080,  # ADDIU T0, R0, 0x0080
+    0x110A0006,  # BEQ   T0, T2, [forward 0x06]
+    0x956C00DD,  # LHU   T4, 0x00DD (T3)
+    0xA1600000,  # SB    R0, 0x0000 (T3)
+    0x258C0001,  # ADDIU T4, T4, 0x0001
+    0x0804EDCE,  # J     0x8013B738
+    0xA56C00DD,  # SH    T4, 0x00DD (T3)
+    0x00000000,  # NOP
+    0x03E00008   # JR    RA
 ]
