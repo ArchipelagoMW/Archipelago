@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CModel id="ExplosivesFodder2" parent="Doodad">
+        <Model value="Assets\Doodads\PortZionTires\PortZionTires.m3"/>
+        <Lighting value="Crate"/>
+        <VariationCount value="3"/>
+    </CModel>
+    <CModel id="ExplosivesFodder1" parent="Doodad">
+        <Model value="Assets\Doodads\ColonistSupplies\ColonistSupplies.m3"/>
+        <Lighting value="AvernusBarrier"/>
+        <VariationCount value="10"/>
+    </CModel>
+</Catalog>

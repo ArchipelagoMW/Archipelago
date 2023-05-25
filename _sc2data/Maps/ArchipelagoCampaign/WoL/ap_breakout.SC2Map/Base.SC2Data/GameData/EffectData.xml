@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CEffectDamage id="MindBlast">
+        <AreaArray index="0" Radius="2.5"/>
+    </CEffectDamage>
+    <CEffectDamage id="RogueGhostSnipe">
+        <Amount value="100"/>
+    </CEffectDamage>
+    <CEffectDamage id="SpecterU">
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="nukeP">
+        <InitialDelay value="8"/>
+        <ExpireDelay value="8"/>
+    </CEffectCreatePersistent>
+</Catalog>
