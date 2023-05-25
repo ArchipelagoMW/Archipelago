@@ -3,7 +3,7 @@
 A world maintainer is a person responsible for a world or part of a world in Archipelago.
 
 If a world author does not want to take on the responsibilities of a world maintainer, they can release their world as
-a "private" [APWorld]((/docs/apworld%20specification.md) or maintain their own fork instead.
+a "private" [APWorld](/docs/apworld%20specification.md) or maintain their own fork instead.
 
 
 ## Responsibilites
@@ -14,7 +14,7 @@ Unless those are shared between multiple people, we expect the following from ea
 * Decide if a feature (pull request) should be merged.
 * Review contents of such pull requests or organize peer reviews or post that you did not review the content.
 * Fix or point out issues when core changes break your code.
-* Use the watch function on github, the #github-updates channel in discord or check manually from time to time for new
+* Use the watch function on github, the #github-updates channel on Discord or check manually from time to time for new
   pull requests. Core maintainers may also ping you if a pull request concerns your world,
 * Test (or have tested) the world on the main branch from time to time, especially during RC (release candidate) phases
   of development.
