@@ -1,3 +1,4 @@
+from BaseClasses import ItemClassification
 from Patch import APDeltaPatch
 
 import Utils
@@ -8,7 +9,7 @@ from .lz10 import gba_decompress, gba_compress
 
 from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to_byte_list_le, int32_to_byte_list_le,\
     generate_progressive_undernet, ArchiveToSizeComp, ArchiveToSizeUncomp, generate_item_message, \
-    generate_external_item_message, generate_text_bytes, shorten_item_name
+    generate_external_item_message, generate_text_bytes
 
 from .Items import ItemType
 
@@ -179,8 +180,9 @@ class TextArchive:
             self.progressive_undernet_indices.append(new_script_index)
         self.unused_indices = self.unused_indices[9:]  # Remove the first eight elements
 
-    def inject_item_text(self, item_text):
+    def inject_item_text(self, item_text, next_message=""):
         item_text_bytes = generate_text_bytes(item_text)
+        next_message_bytes = generate_text_bytes(next_message)
         for script_index in self.scripts:
             script = self.scripts[script_index]
             # Loop through the bytes
@@ -190,6 +192,11 @@ class TextArchive:
                     if oldbytes[i] == 0x68 and oldbytes[i+1] == 0x68:
                         oldbytes[i:i+2] = item_text_bytes
                         self.text_changed = True
+
+                        # If there's another text box to display, add it to the message bytes before setting them back
+                        if len(next_message) > 0:
+                            oldbytes.extend(item_text_bytes)
+                            # TODO append end message nextline etc.
                         self.scripts[script_index].messageBoxes[message_index] = oldbytes
 
 
@@ -251,15 +258,25 @@ class LocalRom:
             item_bytes = generate_item_message(item)
         archive.inject_item_message(location.text_script_index, location.text_box_indices,
                                     item_bytes)
+
+
+    def insert_hint_text(self, location, short_text, long_text = ""):
+        """
+        Replaces the placeholder text in this location's archive with short_text,
+        gives another text box for long_text if it's present
+        """
+
         # Replace item name placeholders
         if location.inject_name:
-            item_name_text = shorten_item_name(item.itemName)
-            # Adding in the player name almost definitely overflows the line.
-            # So this variable goes unused, until I can figure out a way to properly wrap it
-            if item.recipient != 'Myself':
-                item_name_text = item.recipient + "'s " + item_name_text
+            offset = location.text_archive_address
+            # If the archive is already loaded, use that
+            if offset in self.changed_archives:
+                archive = self.changed_archives[offset]
+            else:
+                # It should be theoretically impossible to call insert_hint_text before actually injecting the item.
+                raise AssertionError("Inserting a hint at a location that doesn't have an item!")
+            archive.inject_item_text(short_text, long_text)
 
-            archive.inject_item_text(item_name_text)
 
     def inject_name(self, player):
         authname = player
