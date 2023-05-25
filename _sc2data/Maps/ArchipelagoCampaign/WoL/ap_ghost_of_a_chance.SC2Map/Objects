@@ -3169,7 +3169,7 @@
     <ObjectUnit Id="210" Position="20.479,133.7031,0" Rotation="0.7683" Scale="1,1,1" UnitType="Hellion" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="37" Position="33.9445,37.4968,0" Rotation="2.32" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="37" Position="33.9445,37.4968,0" Rotation="2.32" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="78" Position="60.2373,40.7248,0" Scale="1,1,1" UnitType="WarPig" Player="2">
@@ -3257,7 +3257,7 @@
     <ObjectUnit Id="677" Position="135.3398,45.18,0" Rotation="1.6335" Scale="1,1,1" UnitType="Marine" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="42" Position="35.45,37.3098,0" Rotation="2.3198" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="42" Position="35.45,37.3098,0" Rotation="2.3198" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="1063" Variation="1" Position="38.3994,118.7265,0" Rotation="1.5705" Scale="1,1,1" UnitType="DefenseWallN">
@@ -3290,7 +3290,7 @@
     <ObjectUnit Id="435" Position="126.444,43.988,0" Rotation="1.3725" Scale="1,1,1" UnitType="Marine" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="54" Position="37.425,34.0317,0" Rotation="2.321" Scale="1,1,1" UnitType="Medic" Player="1">
+    <ObjectUnit Id="54" Position="37.425,34.0317,0" Rotation="2.321" Scale="1,1,1" UnitType="AP_Medic" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="697" Position="48.0798,161.0397,0" Rotation="6.2346" Scale="1,1,1" UnitType="Goliath" Player="2">
@@ -3324,7 +3324,7 @@
     <ObjectUnit Id="239" Position="129.5,100.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="NukeSiloNova">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="47" Position="37.66,34.95,0" Rotation="2.321" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="47" Position="37.66,34.95,0" Rotation="2.321" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="1058" Position="77.8332,146.8962,0" Rotation="4.924" Scale="1,1,1" UnitType="WarPig" Player="2"/>
@@ -3405,7 +3405,7 @@
     <ObjectUnit Id="710" Position="68.3388,36.8371,0" Rotation="0.8212" Scale="1,1,1" UnitType="Marine" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="34" Position="32.91,37.3698,0" Rotation="2.3198" Scale="1,1,1" UnitType="Medic" Player="1">
+    <ObjectUnit Id="34" Position="32.91,37.3698,0" Rotation="2.3198" Scale="1,1,1" UnitType="AP_Medic" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="685" Position="154.8698,76.5598,0" Rotation="3.96" Scale="1,1,1" UnitType="Medic" Player="2">
@@ -3433,7 +3433,7 @@
     <ObjectUnit Id="341" Position="15.5,134.5,0" Rotation="4.3593" Scale="1,1,1" UnitType="DestructibleSearchlight">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="59" Position="36.63,34.8198,0" Rotation="2.321" Scale="1,1,1" UnitType="Medic" Player="1">
+    <ObjectUnit Id="59" Position="36.63,34.8198,0" Rotation="2.321" Scale="1,1,1" UnitType="AP_Medic" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="405" Position="156.7998,102.92,0" Rotation="5.475" Scale="1,1,1" UnitType="Spectre" Player="2">
@@ -3449,14 +3449,11 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="1061" Position="76.9306,146.3815,0" Rotation="4.88" Scale="1,1,1" UnitType="WarPig" Player="2"/>
-    <ObjectUnit Id="40" Position="34.71,36.72,0" Rotation="2.3198" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="40" Position="34.71,36.72,0" Rotation="2.3198" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="679" Position="131.5693,33.7875,0" Rotation="3.8466" Scale="1,1,1" UnitType="VikingFighter" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
-    </ObjectUnit>
-    <ObjectUnit Id="1285976800" Position="91.2636,105.9924,0" Rotation="4.129" Scale="1,1,1" UnitType="CampaignRead" Player="1">
-        <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="180" Position="38.9975,63.353,0" Rotation="2.491" Scale="1,1,1" UnitType="Spectre" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
@@ -3472,7 +3469,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="1145" Position="80.8208,143.6687,0" Rotation="5.1696" Scale="1,1,1" UnitType="SpartanCompany" Player="2"/>
-    <ObjectUnit Id="49" Position="36.91,35.67,0" Rotation="2.321" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="49" Position="36.91,35.67,0" Rotation="2.321" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="90" Position="44,142,0" Scale="1,1,1" UnitType="MissileTurret" Player="2">
@@ -3505,7 +3502,7 @@
     <ObjectUnit Id="699" Position="26.196,131.175,0" Rotation="2.4663" Scale="1,1,1" UnitType="Goliath" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="52" Position="39.167,34.7558,0" Rotation="2.321" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="52" Position="39.167,34.7558,0" Rotation="2.321" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="720" Position="15.8906,135.969,0" Rotation="3.0498" Scale="1,1,1" UnitType="Marine" Player="2">
@@ -3517,7 +3514,7 @@
     <ObjectUnit Id="3" Position="72.18,40,0" Rotation="1.521" Scale="1,1,1" UnitType="Marauder" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1038" Position="39.3281,35.9506,0" Rotation="2.3176" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="1038" Position="39.3281,35.9506,0" Rotation="2.3176" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="168" Position="79.6606,76.315,0" Rotation="5.5085" Scale="1,1,1" UnitType="Marine" Player="2">
@@ -3610,7 +3607,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="1062" Position="56.6435,119.6176,0" Scale="1,1,1" UnitType="WarPig" Player="2"/>
-    <ObjectUnit Id="43" Position="33.73,36.5798,0" Rotation="2.3198" Scale="1,1,1" UnitType="Medic" Player="1">
+    <ObjectUnit Id="43" Position="33.73,36.5798,0" Rotation="2.3198" Scale="1,1,1" UnitType="AP_Medic" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="235" Position="35,89,0" Rotation="5.4975" Scale="1,1,1" UnitType="JoriumStockpile" Player="2">
@@ -3631,7 +3628,7 @@
     <ObjectUnit Id="701" Position="65,160,0" Scale="1,1,1" UnitType="AutoTurret" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="50" Position="38.4296,34.167,0" Rotation="2.321" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="50" Position="38.4296,34.167,0" Rotation="2.321" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="473" Position="60.2038,42.9482,0" Rotation="3.949" Scale="1,1,1" UnitType="Marine" Player="2">
@@ -3723,10 +3720,10 @@
     <ObjectUnit Id="1065" Variation="1" Position="40.0322,118.2834,0" Rotation="0.7851" Scale="1,1,1" UnitType="DefenseWallNE">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="36" Position="33.9301,38.8105,0" Rotation="2.32" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="36" Position="33.9301,38.8105,0" Rotation="2.32" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="683" Position="34.7597,39.24,0" Rotation="2.3186" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="683" Position="34.7597,39.24,0" Rotation="2.3186" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="10" Position="160,93,0" Scale="1,1,1" UnitType="MissileTurret" Player="2">
@@ -3778,7 +3775,7 @@
     <ObjectUnit Id="675" Position="57.3994,65.1945,0" Rotation="1.8298" Scale="1,1,1" UnitType="Marine" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="44" Position="37.65,36.2597,0" Rotation="2.321" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="44" Position="37.65,36.2597,0" Rotation="2.321" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="712" Position="152.49,77.5097,0" Rotation="3.8088" Scale="1,1,1" UnitType="Marine" Player="2">
@@ -3802,7 +3799,7 @@
     </ObjectUnit>
     <ObjectUnit Id="1060" Position="76.8881,143.5598,0" Rotation="4.4826" Scale="1,1,1" UnitType="WarPig" Player="2"/>
     <ObjectUnit Id="130" Position="41.4672,86.6123,0" Rotation="6.2373" Scale="1,1,1" UnitType="Battlecruiser" Player="2"/>
-    <ObjectUnit Id="30" Position="33.1928,38.2216,0" Rotation="2.32" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="30" Position="33.1928,38.2216,0" Rotation="2.32" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="432" Position="134.4592,45.176,0" Scale="1,1,1" UnitType="Raven" Player="2">
@@ -3825,7 +3822,7 @@
     <ObjectUnit Id="724" Position="78.8244,147.1806,0" Rotation="4.36" Scale="1,1,1" UnitType="Spectre" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="48" Position="38.399,35.536,0" Rotation="2.321" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="48" Position="38.399,35.536,0" Rotation="2.321" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="703" Position="79.394,143.2297,0" Rotation="4.7121" Scale="1,1,1" UnitType="Reaper" Player="2"/>
@@ -3931,7 +3928,7 @@
     <ObjectUnit Id="681" Position="114,41,0" Scale="1,1,1" UnitType="MissileTurret" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="38" Position="34.682,38.0856,0" Rotation="2.32" Scale="1,1,1" UnitType="Marine" Player="1">
+    <ObjectUnit Id="38" Position="34.682,38.0856,0" Rotation="2.32" Scale="1,1,1" UnitType="AP_Marine" Player="1">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="706" Position="108.9116,45.1208,0" Rotation="0.9272" Scale="1,1,1" UnitType="Marine" Player="2">

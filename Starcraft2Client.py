@@ -537,7 +537,7 @@ maps_table = [
     "ap_liberation_day", "ap_the_outlaws", "ap_zero_hour",
     "ap_evacuation", "ap_outbreak", "ap_safe_haven", "ap_havens_fall",
     "ap_smash_and_grab", "ap_ttychus02", "ap_ttychus03", "ap_ttychus04", "ap_ttychus05",
-    "ap_devils_playground", "ap_welcome_to_the_jungle", "ap_breakout", "ap_ttosh03b",
+    "ap_devils_playground", "ap_welcome_to_the_jungle", "ap_breakout", "ap_ghost_of_a_chance",
     "ap_thorner01", "ap_thorner02", "ap_thorner03", "ap_thorner04", "ap_thorner05s",
     "ap_tzeratul01", "ap_tzeratul02", "ap_tzeratul03", "ap_tzeratul04",
     "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"
