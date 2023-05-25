@@ -138,16 +138,7 @@
 <Soundtrack id="THanson02MusicOutro"/>
 <Soundtrack id="Ambience_Hanson02Night"/>
 <Terrain id="Meinhoff"/>
-<Unit id="CommandCenter"/>
-<Unit id="SupplyDepot"/>
-<Unit id="Refinery"/>
-<Unit id="Barracks"/>
-<Unit id="SensorTower"/>
-<Unit id="MercCompound"/>
-<Unit id="FactoryFlying"/>
-<Unit id="SCV"/>
 <Unit id="Marine"/>
-<Unit id="Hellion"/>
 <Unit id="SpineCrawler"/>
 <Unit id="SporeCrawler"/>
 <Unit id="InfestorBurrowed"/>
@@ -187,5 +178,16 @@
 <Unit id="InfestedSupply"/>
 <Unit id="InfestableBiodome" Variations="1,3,4"/>
 <Unit id="Medic"/>
-<Unit id="CampaignRead"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Firebat"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_FactoryFlying"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Hellion"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_SensorTower"/>
+<Unit id="AP_MercCompound"/>
 </Preload>

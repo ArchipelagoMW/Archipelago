@@ -8,7 +8,8 @@
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
 include "TriggerLibs/CampaignLib"
-include "LibC6542F50"
+include "Lib5BD4895D"
+include "LibABFE498B"
 
 //--------------------------------------------------------------------------------------------------
 // Library: Chatbox
@@ -247,7 +248,8 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
-    libC6542F50_InitLib();
+    lib5BD4895D_InitLib();
+    libABFE498B_InitLib();
     lib1_InitLib();
 }
 
@@ -475,7 +477,10 @@ trigger gt_ObjectiveCleansetheInfestationFailed;
 trigger gt_ResearchObjectiveKilltheInfestorsCreateQ;
 trigger gt_ResearchObjectiveKilltheInfestorsUpdate;
 trigger gt_ResearchObjectiveKilltheInfestorsComplete;
-trigger gt_ArchipelagoInitialization;
+trigger gt_onDifficultyCasual;
+trigger gt_onDifficultyNormal;
+trigger gt_onDifficultyHard;
+trigger gt_onDifficultyBrutal;
 trigger gt_ArchInit;
 trigger gt_SpawnGas;
 trigger gt_RightInfestor;
@@ -714,15 +719,12 @@ bool gt_Initialization_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libCamp_gf_LoadCampaignData(libCamp_ge_MapID_MapTHanson02);
     TriggerExecute(gt_Init01Technology, true, false);
     TriggerExecute(gt_Init03Units, true, true);
     TriggerExecute(gt_Init04Music, true, true);
     TriggerExecute(gt_Init05Environment, true, true);
     TriggerExecute(gt_Init06Difficulties, true, true);
     TriggerExecute(gt_Init07Help, true, true);
-    libCamp_gf_RegisterFootageRecording(gt_BriefingQ);
-    libCamp_gf_PurchaseStorymodeTech();
     UIAlertPoint("Trigger", 1, StringToText(""), null, PointFromId(453));
     TriggerExecute(gt_IntroSequence, true, false);
     return true;
@@ -2842,7 +2844,7 @@ bool gt_IntroHellions_Func (bool testConds, bool runActions) {
     while (!((TimerGetRemaining(gv_mainTimer) <= 80.0))) {
         Wait(0.1, c_timeGame);
     }
-    libNtve_gf_CreateUnitsAtPoint2(libNtve_gf_DifficultyValueInt(4, 4, 3, 3), "Hellion", 0, gv_pLAYER_08_SWANN, PointFromId(1385));
+    libNtve_gf_CreateUnitsAtPoint2(libNtve_gf_DifficultyValueInt(4, 4, 3, 3), "AP_Hellion", 0, gv_pLAYER_08_SWANN, PointFromId(1385));
     UnitGroupAddUnitGroup(lv_introHellionGroup, UnitLastCreatedGroup());
     libCamp_gf_CreateDropPod(libCamp_ge_DropPodRace_Terran, PointFromId(930), UnitLastCreatedGroup(), true);
     libNtve_gf_RescueUnit2(lv_introHellionGroup, gv_pLAYER_01_USER, true);
@@ -2865,7 +2867,7 @@ bool gt_IntroHellions_Func (bool testConds, bool runActions) {
 
     }
     if ((lv_pickedRegion == null)) {
-        libNtve_gf_CreateUnitsAtPoint2(1, "FactoryFlying", 0, gv_pLAYER_08_SWANN, RegionGetCenter(RegionFromId(41)));
+        libNtve_gf_CreateUnitsAtPoint2(1, "AP_FactoryFlying", 0, gv_pLAYER_08_SWANN, RegionGetCenter(RegionFromId(41)));
         lv_factory = UnitLastCreated();
         UnitSetPropertyFixed(lv_factory, c_unitPropHeight, 10.0);
         SoundPlay(SoundLink("Ghost_DropPodImpact", -1), PlayerGroupAll(), 100.0, 0.0);
@@ -2873,13 +2875,13 @@ bool gt_IntroHellions_Func (bool testConds, bool runActions) {
         Wait(2.0, c_timeGame);
     }
     else {
-        libNtve_gf_CreateUnitsAtPoint2(1, "FactoryFlying", 0, gv_pLAYER_08_SWANN, RegionGetCenter(lv_pickedRegion));
+        libNtve_gf_CreateUnitsAtPoint2(1, "AP_FactoryFlying", 0, gv_pLAYER_08_SWANN, RegionGetCenter(lv_pickedRegion));
         lv_factory = UnitLastCreated();
         UnitSetPropertyFixed(lv_factory, c_unitPropHeight, 10.0);
         SoundPlay(SoundLink("Ghost_DropPodImpact", -1), PlayerGroupAll(), 100.0, 0.0);
         UnitSetHeight(lv_factory, 3.25, 2.0);
         Wait(2.0, c_timeGame);
-        UnitIssueOrder(lv_factory, OrderTargetingPoint(AbilityCommand("FactoryLand", 0), RegionGetCenter(lv_pickedRegion)), c_orderQueueReplace);
+        UnitIssueOrder(lv_factory, OrderTargetingPoint(AbilityCommand("AP_FactoryLand", 0), RegionGetCenter(lv_pickedRegion)), c_orderQueueReplace);
     }
     libCamp_gf_CreateNewStructureTips();
     libNtve_gf_MakeUnitInvulnerable(lv_factory, false);
@@ -2905,7 +2907,7 @@ bool gt_ChangeOwnerofFactory_Func (bool testConds, bool runActions) {
             return false;
         }
 
-        if (!((UnitGetType(EventUnit()) == "FactoryFlying"))) {
+        if (!((UnitGetType(EventUnit()) == "AP_FactoryFlying"))) {
             return false;
         }
     }
@@ -4508,7 +4510,7 @@ bool gt_VictoryInfestationPurged_Func (bool testConds, bool runActions) {
     }
 
     TriggerEnable(TriggerGetCurrent(), false);
-    libC6542F50_gf_APArchipelagoSendData(1);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
     gv_gameOver = true;
     TimerWindowDestroy(gv_mainTimerWindow);
     TimerPause(gv_mainTimer, true);
@@ -4770,6 +4772,7 @@ bool gt_ObjectiveCleansetheInfestationComplete_Func (bool testConds, bool runAct
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ObjectiveCleansetheInfestationCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_objectiveCleanseInfestation);
     Wait(libCamp_gv_campaignObjectiveDelay, c_timeReal);
     return true;
 }
@@ -4896,6 +4899,7 @@ bool gt_ResearchObjectiveKilltheInfestorsComplete_Func (bool testConds, bool run
 
     TriggerEnable(TriggerGetCurrent(), false);
     TriggerExecute(gt_ResearchObjectiveKilltheInfestorsCreateQ, true, false);
+    lib5BD4895D_gf_AP_Core_setObjectiveCompleted(gv_researchObjectiveKilltheInfestors);
     return true;
 }
 
@@ -4905,59 +4909,135 @@ void gt_ResearchObjectiveKilltheInfestorsComplete_Init () {
 }
 
 //--------------------------------------------------------------------------------------------------
-// Trigger: Archipelago Initialization
+// Trigger: onDifficultyCasual
 //--------------------------------------------------------------------------------------------------
-bool gt_ArchipelagoInitialization_Func (bool testConds, bool runActions) {
+bool gt_onDifficultyCasual_Func (bool testConds, bool runActions) {
     // Variable Declarations
-    int lv_difficulty;
+    unit lv_currentUnit;
 
     // Automatic Variable Declarations
-    playergroup auto527F29A1_g;
-    int auto527F29A1_var;
+    unitgroup auto41D68837_g;
+    int auto41D68837_u;
 
     // Variable Initialization
-    lv_difficulty = 2;
 
     // Actions
     if (!runActions) {
         return true;
     }
 
-    lv_difficulty = libC6542F50_gf_APSetDifficulty(StringWord(EventChatMessage(false), 2), UnitGroupFromId(1), UnitGroupFromId(2), UnitGroupFromId(3), UnitGroupFromId(4));
-    auto527F29A1_g = PlayerGroupAll();
-    auto527F29A1_var = -1;
-    while (true) {
-        auto527F29A1_var = PlayerGroupNextPlayer(auto527F29A1_g, auto527F29A1_var);
-        if (auto527F29A1_var < 0) { break; }
-        PlayerSetDifficulty(auto527F29A1_var, lv_difficulty);
+    auto41D68837_g = UnitGroupFromId(1);
+    auto41D68837_u = UnitGroupCount(auto41D68837_g, c_unitCountAll);
+    for (;; auto41D68837_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(auto41D68837_g, auto41D68837_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
     }
-    TriggerExecute(libC6542F50_gt_APPreInitMap, true, true);
-    TriggerExecute(gt_Initialization, true, true);
-    lib1_gf_initchatbox(c_anchorTopRight, 500, 350, 0, 200);
-    lib1_gf_showhidechatbox(1, true);
-    TechTreeRestrictionsEnable(1, true);
-    TriggerExecute(libC6542F50_gt_APClearTech, true, false);
-    libCamp_gf_EnableCampaignTechUnit(true, libCamp_ge_StoryTechGroup_StoryTechGroupBaseSCV, 1);
-    libC6542F50_gf_APUnlockUnits(StringWord(EventChatMessage(false), 3), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockUpgrades(StringWord(EventChatMessage(false), 4), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockArmory1(StringWord(EventChatMessage(false), 5), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockArmory2(StringWord(EventChatMessage(false), 6), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockBuildings(StringWord(EventChatMessage(false), 7), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockMercenaries(StringWord(EventChatMessage(false), 8), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockLaboratory(StringWord(EventChatMessage(false), 9), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_APUnlockProtoss(StringWord(EventChatMessage(false), 10), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gf_GiveMineralsAndVespene(StringToInt(StringWord(EventChatMessage(false), 11)), StringToInt(StringWord(EventChatMessage(false), 12)), StringWord(EventChatMessage(false), 14));
-    libC6542F50_gv_aPOptions = StringToInt(StringWord(EventChatMessage(false), 13));
-    TriggerExecute(libC6542F50_gt_APSetInitFinished, true, true);
-    libC6542F50_gf_APArchipelagoSendData(0);
-    TriggerEnable(TriggerGetCurrent(), false);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void gt_ArchipelagoInitialization_Init () {
-    gt_ArchipelagoInitialization = TriggerCreate("gt_ArchipelagoInitialization_Func");
-    TriggerAddEventChatMessage(gt_ArchipelagoInitialization, c_playerAny, "ArchipelagoLoad", false);
+void gt_onDifficultyCasual_Init () {
+    gt_onDifficultyCasual = TriggerCreate("gt_onDifficultyCasual_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyNormal
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyNormal_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup auto5154D1CA_g;
+    int auto5154D1CA_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto5154D1CA_g = UnitGroupFromId(2);
+    auto5154D1CA_u = UnitGroupCount(auto5154D1CA_g, c_unitCountAll);
+    for (;; auto5154D1CA_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(auto5154D1CA_g, auto5154D1CA_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyNormal_Init () {
+    gt_onDifficultyNormal = TriggerCreate("gt_onDifficultyNormal_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyHard
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyHard_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup autoA5B1A862_g;
+    int autoA5B1A862_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoA5B1A862_g = UnitGroupFromId(3);
+    autoA5B1A862_u = UnitGroupCount(autoA5B1A862_g, c_unitCountAll);
+    for (;; autoA5B1A862_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(autoA5B1A862_g, autoA5B1A862_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyHard_Init () {
+    gt_onDifficultyHard = TriggerCreate("gt_onDifficultyHard_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: onDifficultyBrutal
+//--------------------------------------------------------------------------------------------------
+bool gt_onDifficultyBrutal_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    unitgroup autoAE3C9B4E_g;
+    int autoAE3C9B4E_u;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoAE3C9B4E_g = UnitGroupFromId(4);
+    autoAE3C9B4E_u = UnitGroupCount(autoAE3C9B4E_g, c_unitCountAll);
+    for (;; autoAE3C9B4E_u -= 1) {
+        lv_currentUnit = UnitGroupUnitFromEnd(autoAE3C9B4E_g, autoAE3C9B4E_u);
+        if (lv_currentUnit == null) { break; }
+        UnitRemove(lv_currentUnit);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_onDifficultyBrutal_Init () {
+    gt_onDifficultyBrutal = TriggerCreate("gt_onDifficultyBrutal_Func");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -4971,6 +5051,10 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
     }
 
     TriggerExecute(gt_Init02Players, true, false);
+    lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction(gv_pLAYER_01_USER, lib5BD4895D_gv_aP_Core_Faction_RAYNORS_RAIDERS);
+    lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);
+    libABFE498B_gf_AP_Triggers_MapConfig_setDifficultySetup(gt_onDifficultyCasual, gt_onDifficultyNormal, gt_onDifficultyHard, gt_onDifficultyBrutal);
+    lib5BD4895D_gf_AP_Core_MapConfig_setChatboxPosition(c_anchorTopRight, 500, 350, 0, 120);
     return true;
 }
 
@@ -5024,7 +5108,7 @@ bool gt_RightInfestor_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libC6542F50_gf_APArchipelagoSendData(3);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(2);
     return true;
 }
 
@@ -5051,7 +5135,7 @@ bool gt_LeftInfestor_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    libC6542F50_gf_APArchipelagoSendData(2);
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(1);
     return true;
 }
 
@@ -5987,7 +6071,10 @@ void InitTriggers () {
     gt_ResearchObjectiveKilltheInfestorsCreateQ_Init();
     gt_ResearchObjectiveKilltheInfestorsUpdate_Init();
     gt_ResearchObjectiveKilltheInfestorsComplete_Init();
-    gt_ArchipelagoInitialization_Init();
+    gt_onDifficultyCasual_Init();
+    gt_onDifficultyNormal_Init();
+    gt_onDifficultyHard_Init();
+    gt_onDifficultyBrutal_Init();
     gt_ArchInit_Init();
     gt_SpawnGas_Init();
     gt_RightInfestor_Init();
