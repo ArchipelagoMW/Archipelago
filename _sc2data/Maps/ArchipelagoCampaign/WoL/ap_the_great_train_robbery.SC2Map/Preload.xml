@@ -119,11 +119,9 @@
 <Unit id="Bunker"/>
 <Unit id="Factory"/>
 <Unit id="Starport"/>
-<Unit id="MercCompound"/>
 <Unit id="Armory"/>
 <Unit id="AutoTurret"/>
 <Unit id="SiegeTankSieged"/>
-<Unit id="FactoryTechLab"/>
 <Unit id="SCV"/>
 <Unit id="Marine"/>
 <Unit id="Marauder"/>
@@ -149,4 +147,14 @@
 <Unit id="Caboose"/>
 <Unit id="Food1000"/>
 <Unit id="Medic"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_FactoryTechLab"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Diamondback"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_MercCompound"/>
 </Preload>
