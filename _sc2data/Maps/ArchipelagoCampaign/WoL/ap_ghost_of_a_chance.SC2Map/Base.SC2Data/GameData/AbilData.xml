@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CAbilEffectTarget id="Domination">
+        <CmdButtonArray index="Execute" State="Restricted"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="NovaSnipe">
+        <CmdButtonArray index="Execute" State="Restricted"/>
+    </CAbilEffectTarget>
+</Catalog>

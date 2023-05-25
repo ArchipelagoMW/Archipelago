@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="6">
+        <name value="P2 Silo Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="131.2844,98.7814"/>
+            <radius value="0.618"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="P3 SiloA Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="49.1054,163.9206"/>
+            <radius value="0.6281"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Player Base Stuff"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="148.9726,8.003,166.0273,20.0107"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="P1 Area"/>
+        <color value="255,128,128,128"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="10.035,8.007,91.035,102.0722"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="P2 Area"/>
+        <color value="255,128,128,128"/>
+        <shape type="rect">
+            <quad value="96.8376,20.77,165.8142,120.0014"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="P3 Area"/>
+        <color value="255,128,128,128"/>
+        <shape type="rect">
+            <quad value="9.8347,100.9096,98.1657,176.091"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="P2 Silo Hint Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="129.833,89.5671"/>
+            <radius value="1.719"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.4887,88.146"/>
+            <radius value="1.719"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="P1 Gate Comment Tripwire"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="57.3696,38.0517,66.3288,50.4284"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="P1 Gate Control Reveal"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="76.7956,49.83"/>
+            <radius value="2.693"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="P2 Nova DropPod Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="156.0693,45.1"/>
+            <radius value="0.8627"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="P3 Nova DropPod Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="17.414,158.4685"/>
+            <radius value="0.8627"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="P1 Snipe Tripwire"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="48.988,26.8847,52.3508,29.3352"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="P1 MiTu Guards"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="70.4785,40.2587"/>
+            <radius value="3.8762"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Intro LZ Reveal"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="24.9396,25.115"/>
+            <radius value="8.3515"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="P1 Snipe Reveal"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="60.6262,28.6752"/>
+            <radius value="2.5534"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="P1 MiTu Reveal"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="61.5532,31.991"/>
+            <radius value="12"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="P1 MiTu Reveal Tripwire"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="58.6645,26.8554,63.2497,31.5356"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="P1 Tank Reveal"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="68.6005,76.9523"/>
+            <radius value="12"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="P2 LZ Units"/>
+        <shape type="circle">
+            <center value="133.0844,33.1313"/>
+            <radius value="4.79"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="P2 Search Crew"/>
+        <shape type="circle">
+            <center value="136.121,45.0297"/>
+            <radius value="3.0954"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="P2 Search Crew Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="147.238,40.3864,151.2092,49.0805"/>
+        </shape>
+    </region>
+    <region id="50">
+        <name value="P2 LZ DropZone"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="133.0966,32.9816"/>
+            <radius value="6.5661"/>
+        </shape>
+    </region>
+    <region id="51">
+        <name value="P2 LZ Dropship Exit"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="135.3808,19.3657"/>
+            <radius value="2.276"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="P1 Tank Reveal Tripwire"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="68.6445,76.4047,74.0004,83.4536"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.3522,79.7285"/>
+            <radius value="3.5444"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.526,77.3913"/>
+            <radius value="2.8603"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="P1 Specter Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="42.1525,64.2851"/>
+            <radius value="9"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.7746,60.39"/>
+            <radius value="7.3635"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="P2 NukeB Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="140.5637,77.4226"/>
+            <radius value="3.6765"/>
+        </shape>
+        <shape type="circle">
+            <center value="142.1074,75.754"/>
+            <radius value="2.5578"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="_Range Guide Nuke Cast (9)"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="89.4804,112.742"/>
+            <radius value="9"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="P2 NukeC Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="131.3383,85.873"/>
+            <radius value="3.1054"/>
+        </shape>
+        <shape type="circle">
+            <center value="131.7465,87.957"/>
+            <radius value="4.0476"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="P2 NukeA Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="131.1223,77.2207"/>
+            <radius value="5.4313"/>
+        </shape>
+        <shape type="circle">
+            <center value="127.1716,80.3732"/>
+            <radius value="3.6704"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="_Range Guide Nuke Blast (8)"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="92.0883,115.8613"/>
+            <radius value="8"/>
+        </shape>
+    </region>
+    <region id="57">
+        <name value="_Range Guide Nova Vision (13)"/>
+        <color value="255,64,128,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="82.9846,110.4367"/>
+            <radius value="13"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="_Range Guide Raven Vision (11+)"/>
+        <color value="255,128,128,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="92.355,119.563"/>
+            <radius value="11"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="_Range Guide MiTu Vision (11)"/>
+        <color value="255,128,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="17.4973,114.101"/>
+            <radius value="11"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="_Range Guide Nova Attack (8+)"/>
+        <color value="255,64,128,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="82.8325,109.299"/>
+            <radius value="8.5"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="P3 NukeA Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="58.9086,150.6975"/>
+            <radius value="7.6057"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="P3 NukeB Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="58.7395,141.1657"/>
+            <radius value="7.1828"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="P3 North Guards"/>
+        <shape type="circle">
+            <center value="45.0197,163.2355"/>
+            <radius value="7.0261"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="P3 South Guards"/>
+        <shape type="circle">
+            <center value="18.2587,135.8024"/>
+            <radius value="4.057"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="P3 NukeA Blast"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="57.2631,152.3474"/>
+            <radius value="8"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="P3 NukeB Blast"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="57.156,140.7541"/>
+            <radius value="8"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="P2 LZ WalkingDistance"/>
+        <shape type="rect">
+            <quad value="125.478,33.0175,137.5627,49.056"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.9941,45.505"/>
+            <radius value="2.8681"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="P2 Raven Skipped"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="134.913,40.7988,138.8842,49.493"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="P3 End Reveal"/>
+        <color value="255,128,128,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="80,146"/>
+            <radius value="11"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="P3 End Reveal Tripwire"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="70.3046,136.6318"/>
+            <radius value="4.4504"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.4467,157.5996"/>
+            <radius value="4.4504"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.168,147.0307"/>
+            <radius value="6.8752"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.945,151.6552"/>
+            <radius value="5.9841"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.1503,142.5415"/>
+            <radius value="5.9841"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="P3 End Reveal Tripwire (Air)"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="77.7412,138.5883"/>
+            <radius value="12.5"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.7568,153.8317"/>
+            <radius value="12.5"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.1765,145.9211"/>
+            <radius value="15.5983"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="Footage Bunker A"/>
+        <color value="255,255,128,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="37.0124,38.016,40.0124,41.016"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="Footage Bunker B"/>
+        <color value="255,255,128,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="32.073,36.9763,35.073,39.9763"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="Footage Bunker C"/>
+        <color value="255,255,128,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="36.013,32.9848,39.013,35.9848"/>
+        </shape>
+    </region>
+    <region id="60">
+        <name value="P1 Medivacs Exit"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="11.4125,10.2534"/>
+            <radius value="2.3132"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="P1 Nova DropPod Tripwire"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="40.2678,29.0781"/>
+            <radius value="0.8627"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="P1 Starting Troops A"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="33.9936,37.5644"/>
+            <radius value="1.9526"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="P1 Starting Troops B"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="37.9406,35.1396"/>
+            <radius value="1.9526"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="P1 Spec2 Reveal"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="38.8564,64.1164"/>
+            <radius value="11.3771"/>
+        </shape>
+    </region>
+    <region id="62">
+        <name value="P1 Spec2 Reveal Tripwire"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="39.2021,62.1977"/>
+            <radius value="3.0905"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.9394,61.3918"/>
+            <radius value="2.01"/>
+        </shape>
+    </region>
+    <region id="64">
+        <name value="Footage Nuke Area"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="37.5756,38.5041"/>
+            <radius value="8.2763"/>
+        </shape>
+    </region>
+    <region id="63">
+        <name value="P2 Gate Control Reveal"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="105.084,44.5095"/>
+            <radius value="2.693"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="_Range Guide Tank Attack (13+)"/>
+        <color value="255,128,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="92.4436,114.3835"/>
+            <radius value="14"/>
+        </shape>
+    </region>
+    <region id="65">
+        <name value="P2 NukeA Blast"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="129.9013,76.5017"/>
+            <radius value="8"/>
+        </shape>
+    </region>
+    <region id="66">
+        <name value="P2 NukeB Blast"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="141.5773,76.4975"/>
+            <radius value="8"/>
+        </shape>
+    </region>
+    <region id="67">
+        <name value="P2 NukeC Blast"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="130.549,87.4921"/>
+            <radius value="8"/>
+        </shape>
+    </region>
+    <region id="68">
+        <name value="P2 End Reveal"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="154.6333,101.499"/>
+            <radius value="10.949"/>
+        </shape>
+    </region>
+    <region id="70">
+        <name value="P2 End Reveal Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="149.296,95.474"/>
+            <radius value="6.1376"/>
+        </shape>
+    </region>
+    <region id="69">
+        <name value="P1 Objective Designator"/>
+        <color value="255,255,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="37.84,88.3615"/>
+            <radius value="13.3945"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.3864,87.414"/>
+            <radius value="3.9648"/>
+        </shape>
+    </region>
+    <region id="71">
+        <name value="Revealer P1_1"/>
+        <color value="255,255,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="19.653,39.767"/>
+            <radius value="9.11"/>
+        </shape>
+        <shape type="rect">
+            <quad value="9.986,7.9006,40.9685,18.719"/>
+        </shape>
+        <shape type="rect">
+            <quad value="9.8513,18.7145,19.8515,41.9782"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.866,25.4721"/>
+            <radius value="4.12"/>
+        </shape>
+        <shape type="rect">
+            <quad value="31.2927,18.567,40.5456,22.077"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Revealer P1_1 Tripwire"/>
+        <color value="255,255,0,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="32.0795,39.0454"/>
+            <radius value="3.5593"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.413,35.6577"/>
+            <radius value="5.4794"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.996,24.6933"/>
+            <radius value="7.711"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.7207,31.0595"/>
+            <radius value="4.283"/>
+        </shape>
+    </region>
+    <region id="78">
+        <name value="Revealer P1_2 Trip"/>
+        <color value="255,255,0,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="45.9257,26.9035,57.8012,28.8967"/>
+        </shape>
+    </region>
+    <region id="79">
+        <name value="Revealer P1_2"/>
+        <color value="255,255,0,128"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="45.5,7.75,65.5,26.25"/>
+        </shape>
+    </region>
+    <region id="73">
+        <name value="Revealer P1_3 trip"/>
+        <color value="255,255,0,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="71.1418,62.0793"/>
+            <radius value="6.6074"/>
+        </shape>
+    </region>
+    <region id="74">
+        <name value="Revealer P1_3"/>
+        <color value="255,255,0,128"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="79.8864,51.4733,95.5273,66.6096"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.1628,54.913"/>
+            <radius value="3.315"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.8376,59.7763"/>
+            <radius value="2.9877"/>
+        </shape>
+    </region>
+    <region id="75">
+        <name value="Revealer P1_4 Trip"/>
+        <color value="255,255,0,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="73.5114,79.418"/>
+            <radius value="4.4831"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.7097,76.4614"/>
+            <radius value="4.4831"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.5336,73.1125"/>
+            <radius value="4.4831"/>
+        </shape>
+    </region>
+    <region id="76">
+        <name value="Revealer P1_4"/>
+        <color value="255,255,0,128"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="85.6142,66.569,95.5524,94.9335"/>
+        </shape>
+        <shape type="rect">
+            <quad value="56.931,85.1342,86.6086,94.9282"/>
+        </shape>
+    </region>
+    <region id="77">
+        <name value="Revealer P2_1 Trip"/>
+        <color value="255,255,0,255"/>
+        <shape type="rect">
+            <quad value="139.8063,40.2546,161.9987,49.2722"/>
+        </shape>
+    </region>
+    <region id="80">
+        <name value="Revealer P2_1"/>
+        <color value="255,255,0,128"/>
+        <shape type="rect">
+            <quad value="139.7368,49.9731,163.0114,58.127"/>
+        </shape>
+        <shape type="rect">
+            <quad value="161.5295,29.3112,165.7734,57.7465"/>
+        </shape>
+        <shape type="rect">
+            <quad value="139.787,29.4775,161.641,40.274"/>
+        </shape>
+    </region>
+    <region id="81">
+        <name value="Revealer P2_2 Trip"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="112.1562,61.5383"/>
+            <radius value="6.7253"/>
+        </shape>
+    </region>
+    <region id="84">
+        <name value="Revealer P2_2"/>
+        <color value="255,255,0,128"/>
+        <shape type="rect">
+            <quad value="96.7495,49.6643,105.2092,78.6547"/>
+        </shape>
+    </region>
+    <region id="83">
+        <name value="Revealer P2_3 Trip"/>
+        <color value="255,255,0,255"/>
+        <shape type="rect">
+            <quad value="103.0454,100.903,114.3642,105.945"/>
+        </shape>
+    </region>
+    <region id="85">
+        <name value="Revealer P2_3"/>
+        <color value="255,255,0,128"/>
+        <shape type="circle">
+            <center value="101.2426,102.999"/>
+            <radius value="3.2663"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.5375,107.1577"/>
+            <radius value="2.0917"/>
+        </shape>
+        <shape type="circle">
+            <center value="106.1687,108.0761"/>
+            <radius value="3.2888"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.277,109.3684"/>
+            <radius value="3.812"/>
+        </shape>
+        <shape type="circle">
+            <center value="114.6845,107.9196"/>
+            <radius value="2.9492"/>
+        </shape>
+    </region>
+    <region id="86">
+        <name value="Revealer P3 trip"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="14.7443,127.4582,43.1958,133.0725"/>
+        </shape>
+    </region>
+    <region id="87">
+        <name value="Revealer P3"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="9.9072,119.935,28.4526,131.7827"/>
+        </shape>
+        <shape type="rect">
+            <quad value="28.3562,120.1083,36.445,126.7207"/>
+        </shape>
+    </region>
+    <region id="88">
+        <name value="P3 South Raven Area"/>
+        <shape type="rect">
+            <quad value="37,122,41,129"/>
+        </shape>
+    </region>
+    <region id="89">
+        <name value="P3 Ultra Tripwire"/>
+        <shape type="rect">
+            <quad value="37.0422,119.9912,43.0275,121.0588"/>
+        </shape>
+    </region>
+    <region id="90">
+        <name value="REVEALER Ultra"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="38.4133,116.1127"/>
+            <radius value="2.343"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.2055,114.8195"/>
+            <radius value="2.343"/>
+        </shape>
+        <shape type="rect">
+            <quad value="24.568,111.023,36.2683,119.0383"/>
+        </shape>
+        <shape type="rect">
+            <quad value="32.6604,105.4716,42.4572,114.257"/>
+        </shape>
+        <shape type="circle">
+            <center value="32.006,109.8164"/>
+            <radius value="2.1503"/>
+        </shape>
+    </region>
+    <region id="91">
+        <name value="Revealer P1_2a trip"/>
+        <color value="255,255,0,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="69.116,26.159"/>
+            <radius value="6.4802"/>
+        </shape>
+    </region>
+    <region id="92">
+        <name value="Revealer P1_2a"/>
+        <color value="255,255,0,128"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="64.5,7.75,95.5,18.25"/>
+        </shape>
+        <shape type="rect">
+            <quad value="72.5002,18.0002,95.5,34"/>
+        </shape>
+    </region>
+    <region id="94">
+        <name value="Revealer P1_2b"/>
+        <color value="255,255,0,128"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="78.6545,33.974,95.5407,51.4755"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="P3 Objective Guards"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="78.7258,144.886"/>
+            <radius value="3.5432"/>
+        </shape>
+    </region>
+</Regions>
