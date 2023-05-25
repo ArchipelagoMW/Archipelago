@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWater id="Template 2" parent="Haven">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="4.000000"/>
+            <Color value="0.098039,0.349020,0.498039,0.165000"/>
+            <ColorFallOff value="0.105000"/>
+            <Specularity value="200.000000"/>
+            <SpecularScaler value="1.000000"/>
+            <UvRate value="-0.000000,-0.001000,0.000000,0.000000"/>
+            <MeshRoughness value="1.000000"/>
+            <TextureRoughness value="1.000000"/>
+            <ReflectionDistortion value="0.012000"/>
+            <RefractionDistortion value="0.002500"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.100000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+    </CWater>
+    <CWater id="Template 3" parent="Haven">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="4.000000"/>
+            <Color value="0.000000,0.235294,0.352941,0.052000"/>
+            <ColorFallOff value="0.038000"/>
+            <Specularity value="1000.000000"/>
+            <SpecularScaler value="2.000000"/>
+            <UvRate value="-0.000000,-0.001000,0.000000,0.000000"/>
+            <MeshRoughness value="0.579000"/>
+            <TextureRoughness value="0.579000"/>
+            <ReflectionDistortion value="0.015000"/>
+            <RefractionDistortion value="0.016700"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.251000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+        <ReceiveShadows value="1"/>
+    </CWater>
+    <CWater id="Template 6" parent="BraxisAlpha">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="4.000000"/>
+            <Color value="0.100000,0.350000,0.500000,0.300000"/>
+            <ColorFallOff value="0.100000"/>
+            <CausticsFallOff value="0.200000"/>
+            <Specularity value="100.000000"/>
+            <SpecularScaler value="2.450000"/>
+            <UvRate value="0.000000,-1.000000,0.000000,0.000000"/>
+            <ReflectionDistortion value="0.012000"/>
+            <RefractionDistortion value="0.025000"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.300000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+    </CWater>
+    <CWater id="Template 8">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="4.000000"/>
+            <Color value="0.100000,0.350000,0.500000,0.165000"/>
+            <ColorFallOff value="0.105000"/>
+            <Specularity value="200.000000"/>
+            <SpecularScaler value="1.000000"/>
+            <UvRate value="0.000000,0.000000,0.000000,0.000000"/>
+            <MeshRoughness value="1.000000"/>
+            <TextureRoughness value="1.000000"/>
+            <ReflectionDistortion value="0.012000"/>
+            <RefractionDistortion value="0.002500"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.100000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+    </CWater>
+</Catalog>
