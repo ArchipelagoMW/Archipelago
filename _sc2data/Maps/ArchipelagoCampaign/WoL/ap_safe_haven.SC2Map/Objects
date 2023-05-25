@@ -10269,7 +10269,7 @@
         <CameraValue Index="FalloffEnd" Value="8"/>
     </ObjectCamera>
     <ObjectUnit Id="3025" Position="27.5,114.5,0" Rotation="0.848" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="3002" Position="49.1013,133.013,0" Rotation="5.6757" Scale="1,1,1" UnitType="Medic" Player="1"/>
+    <ObjectUnit Id="3002" Position="49.1013,133.013,0" Rotation="5.6757" Scale="1,1,1" UnitType="AP_Medic" Player="1"/>
     <ObjectUnit Id="60" Position="43.009,27.7346,0" Rotation="1.3676" Scale="1,1,1" UnitType="Archon" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10344,12 +10344,12 @@
         <Texture TexSlot="main" TexProps="male,helmet,01" TexLink=""/>
     </ObjectUnit>
     <ObjectUnit Id="3338" Position="53.5,153.5,0" Rotation="1.009" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="14" Position="63.5,142.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CommandCenter" Player="1"/>
+    <ObjectUnit Id="14" Position="63.5,142.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CommandCenter" Player="1"/>
     <ObjectUnit Id="3007" Position="29.5,66.5,0" Rotation="5.779" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="2005" Position="25.0505,67.0002,0" Rotation="3.683" Scale="1,1,1" UnitType="PathingBlocker2x2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="2352" Position="51.335,132.4821,0" Rotation="5.7998" Scale="1,1,1" UnitType="VikingFighter" Player="1"/>
+    <ObjectUnit Id="2352" Position="51.335,132.4821,0" Rotation="5.7998" Scale="1,1,1" UnitType="AP_VikingFighter" Player="1"/>
     <ObjectUnit Id="146" Position="52.045,150.294,0" Rotation="0.9472" Scale="1,1,1" UnitType="Marine" Player="3">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10374,7 +10374,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="2623" Position="112.5207,88.0844,0" Rotation="3.8417" Scale="1,1,1" UnitType="Sheep"/>
-    <ObjectUnit Id="188" Position="66.0883,144.0441,0" Rotation="2.235" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="188" Position="66.0883,144.0441,0" Rotation="2.235" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="2988" Position="72.5,83.5,0" Rotation="3.2153" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="324" Position="83.3994,84.41,0" Rotation="4.237" Scale="1,1,1" UnitType="ColonistFemale" Player="3"/>
     <ObjectUnit Id="3015" Position="49.5,158.5,0" Rotation="1.0085" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
@@ -10389,7 +10389,7 @@
     <ObjectUnit Id="805" Variation="2" Position="33.4338,112.208,0" Rotation="5.9865" Scale="1,1,1" UnitType="Colonist" Player="3">
         <Texture TexSlot="main" TexProps="male,helmet,03" TexLink=""/>
     </ObjectUnit>
-    <ObjectUnit Id="4" Position="73,148,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
+    <ObjectUnit Id="4" Position="73,148,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
     <ObjectUnit Id="362" Variation="5" Position="34.5,114.5,0" Rotation="3.7187" Scale="1,1,1" UnitType="Hut" Player="5"/>
     <ObjectUnit Id="2554" Position="21.6237,114.9003,0" Rotation="0.3251" Scale="1,1,1" UnitType="DumpTruck"/>
     <ObjectUnit Id="51" Variation="6" Position="68,148.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1725"/>
@@ -10519,7 +10519,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="482" Position="54.5,135.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Starport" Player="1"/>
+    <ObjectUnit Id="482" Position="54.5,135.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Starport" Player="1"/>
     <ObjectUnit Id="3555" Position="26.5,111.5,0" Rotation="4.594" Scale="1,1,1" UnitType="PalletMinerals" Player="7"/>
     <ObjectUnit Id="2826" Position="106.1955,67.2443,0" Scale="1,1,1" UnitType="Sentry" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -10567,7 +10567,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="73" Position="67.587,142.7534,0" Rotation="1.1193" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="73" Position="67.587,142.7534,0" Rotation="1.1193" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="3023" Position="30.5,112.5,0" Rotation="2.7265" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="1048" Position="34.143,25.979,0" Rotation="1.495" Scale="1,1,1" UnitType="Probe" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -10576,7 +10576,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="144" Position="48.5,140.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Factory" Player="1"/>
+    <ObjectUnit Id="144" Position="48.5,140.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Factory" Player="1"/>
     <ObjectUnit Id="3030" Position="52.5,158.5,0" Rotation="1.0085" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="318" Position="43.5,149.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="BioDomeCommand" Player="3"/>
     <ObjectUnit Id="3005" Position="27.5,64.5,0" Rotation="2.2854" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
@@ -10596,7 +10596,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="40" Position="48.813,131.3493,0" Rotation="5.4372" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="40" Position="48.813,131.3493,0" Rotation="5.4372" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="2926" Position="108.733,66.1418,0" Rotation="1.4958" Scale="1,1,1" UnitType="Probe" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10643,7 +10643,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="3312" Position="56.6796,132.8195,0" Rotation="0.9411" Scale="1,1,1" UnitType="VikingFighter" Player="1"/>
+    <ObjectUnit Id="3312" Position="56.6796,132.8195,0" Rotation="0.9411" Scale="1,1,1" UnitType="AP_VikingFighter" Player="1"/>
     <ObjectUnit Id="372" Position="76.4562,81.9035,0" Rotation="5.3354" Scale="1,1,1" UnitType="Colonist" Player="3">
         <Texture TexSlot="main" TexProps="male,helmet,03" TexLink=""/>
     </ObjectUnit>
@@ -10677,8 +10677,8 @@
         <Texture TexSlot="decal" TexProps="05" TexLink="Decal_Number_05"/>
     </ObjectUnit>
     <ObjectUnit Id="3033" Position="97.7075,115.149,0" Rotation="4.077" Scale="1,1,1" UnitType="Sheep"/>
-    <ObjectUnit Id="3" Position="71,150,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
-    <ObjectUnit Id="3266" Position="54,146,0" Rotation="5.4975" Scale="1,1,1" UnitType="MercCompound" Player="1"/>
+    <ObjectUnit Id="3" Position="71,150,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
+    <ObjectUnit Id="3266" Position="54,146,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_MercCompound" Player="1"/>
     <ObjectUnit Id="168" Position="48.9455,150.9074,0" Rotation="2.1542" Scale="1,1,1" UnitType="Colonist" Player="3">
         <Texture TexSlot="main" TexProps="male,helmet,01" TexLink=""/>
     </ObjectUnit>
@@ -10697,7 +10697,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="70" Variation="1" Position="32,30.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1300"/>
-    <ObjectUnit Id="45" Position="59.1091,131.4338,0" Rotation="0.4143" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="45" Position="59.1091,131.4338,0" Rotation="0.4143" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="2923" Position="108.1701,70.0607,0" Rotation="5.8215" Scale="1,1,1" UnitType="Probe" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10723,7 +10723,7 @@
     <ObjectUnit Id="3549" Position="28.2656,66.1018,0" Rotation="4.0715" Scale="1,1,1" UnitType="PalletMinerals" Player="7">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="284" Position="67.397,145.2312,0" Rotation="3.0822" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="284" Position="67.397,145.2312,0" Rotation="3.0822" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="375" Position="77.753,78.7155,0" Rotation="2.1884" Scale="1,1,1" UnitType="ColonistFemale" Player="3"/>
     <ObjectUnit Id="217" Position="34.8332,29.021,0" Rotation="3.2741" Scale="1,1,1" UnitType="Archon" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -10803,7 +10803,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="2989" Position="73.5,83.5,0" Rotation="1.0625" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="235" Position="66.2165,146.9562,0" Rotation="3.0908" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="235" Position="66.2165,146.9562,0" Rotation="3.0908" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="1187" Position="106.9853,59.6066,0" Scale="1,1,1" UnitType="WarpPrismPhasing" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10818,7 +10818,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="5" Position="69,152,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
+    <ObjectUnit Id="5" Position="69,152,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
     <ObjectUnit Id="2996" Position="28.5,64.5,0" Rotation="2.8288" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="3315" Position="27.9914,64.6887,0" Rotation="4.07" Scale="1,1,1" UnitType="PalletMinerals" Player="7">
         <Flag Index="ForcePlacement" Value="1"/>
@@ -10872,7 +10872,7 @@
     <ObjectUnit Id="3029" Position="50.5,157.5,0" Rotation="1.0085" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="376" Position="23.388,65.4814,0" Rotation="0.4013" Scale="1,1,1" UnitType="ColonistFemale" Player="3"/>
     <ObjectUnit Id="924" Position="51.5,153.5,0" Rotation="1.009" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="189" Position="65.1596,145.9885,0" Rotation="1.5688" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="189" Position="65.1596,145.9885,0" Rotation="1.5688" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="1051" Position="33.6403,28.1774,0" Rotation="1.495" Scale="1,1,1" UnitType="Probe" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10889,9 +10889,9 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="3024" Position="26.5,114.5,0" Rotation="3.0661" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="150" Position="63.7456,146.5732,0" Rotation="3.7116" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="150" Position="63.7456,146.5732,0" Rotation="3.7116" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="253" Position="76.5,89.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Biodome" Player="5"/>
-    <ObjectUnit Id="3003" Position="57.8544,131.5178,0" Rotation="0.6672" Scale="1,1,1" UnitType="Medic" Player="1"/>
+    <ObjectUnit Id="3003" Position="57.8544,131.5178,0" Rotation="0.6672" Scale="1,1,1" UnitType="AP_Medic" Player="1"/>
     <ObjectUnit Id="537" Variation="4" Position="37.5,63.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Biodome" Player="5"/>
     <ObjectUnit Id="1594" Position="28.5,112.5,0" Rotation="1.0502" Scale="1,1,1" UnitType="ColonistShip" Player="3">
         <Texture TexSlot="decal" TexProps="07" TexLink="Decal_Number_07"/>
@@ -10954,9 +10954,9 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="2" Position="58.5,140.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="EngineeringBay" Player="1"/>
+    <ObjectUnit Id="2" Position="58.5,140.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_EngineeringBay" Player="1"/>
     <ObjectUnit Id="71" Variation="9" Position="31,28.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1300"/>
-    <ObjectUnit Id="44" Position="58.105,129.8994,0" Rotation="0.746" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="44" Position="58.105,129.8994,0" Rotation="0.746" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="2922" Position="108.5,60.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Assimilator" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -11012,7 +11012,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="117" Position="47.3825,132.945,0" Rotation="5.9736" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="117" Position="47.3825,132.945,0" Rotation="5.9736" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="3546" Position="25.5795,67.878,0" Rotation="3.411" Scale="1,1,1" UnitType="PalletGas" Player="7">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -11073,7 +11073,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="821" Variation="2" Position="33.5041,110.9638,0" Rotation="3.0944" Scale="1,1,1" UnitType="ColonistFemale" Player="3"/>
-    <ObjectUnit Id="58" Position="59.5,149.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Refinery" Player="1" Resources="2468"/>
+    <ObjectUnit Id="58" Position="59.5,149.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Refinery" Player="1" Resources="2468"/>
     <ObjectUnit Id="511" Variation="6" Position="35.5,111.5,0" Rotation="3.1052" Scale="1,1,1" UnitType="Hut" Player="5"/>
     <ObjectUnit Id="2839" Position="93,122,0" Scale="1,1,1" UnitType="PhotonCannon" Player="2">
         <AIRebuild Index="1" Value="0"/>
@@ -11093,7 +11093,7 @@
     </ObjectUnit>
     <ObjectUnit Id="2617" Position="32.8867,87.93,0" Rotation="5.752" Scale="1,1,1" UnitType="Sheep"/>
     <ObjectUnit Id="17" Variation="6" Position="34,22.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1300"/>
-    <ObjectUnit Id="63" Position="61.5,134.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Barracks" Player="1"/>
+    <ObjectUnit Id="63" Position="61.5,134.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Barracks" Player="1"/>
     <ObjectUnit Id="3001" Position="49.5,157.5,0" Rotation="1.0085" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="3026" Position="25.5,114.5,0" Rotation="3.6684" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="99" Position="31.1464,30.3122,0" Rotation="2.339" Scale="1,1,1" UnitType="Carrier" Player="2">
@@ -11122,7 +11122,7 @@
     <ObjectUnit Id="1994" Position="27.019,69.0002,0" Rotation="2.3908" Scale="1,1,1" UnitType="PathingBlocker2x2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="2351" Position="53.895,130.5764,0" Rotation="6.257" Scale="1,1,1" UnitType="VikingFighter" Player="1"/>
+    <ObjectUnit Id="2351" Position="53.895,130.5764,0" Rotation="6.257" Scale="1,1,1" UnitType="AP_VikingFighter" Player="1"/>
     <ObjectUnit Id="775" Variation="3" Position="32.5,71.5,0" Rotation="4.449" Scale="1,1,1" UnitType="Hut" Player="5"/>
     <ObjectUnit Id="3554" Position="73.9521,85.0397,0" Rotation="1.6384" Scale="1,1,1" UnitType="PalletMinerals" Player="7">
         <Flag Index="ForcePlacement" Value="1"/>
