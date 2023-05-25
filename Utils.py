@@ -325,6 +325,10 @@ def get_default_options() -> OptionsType:
             "blue_rom_file": "Pokemon Blue (UE) [S][!].gb",
             "rom_start": True
         },
+        "yugioh06_options": {
+            "rom_file": "Yu-Gi-Oh06.gba",
+            "rom_start": True
+        },
         "ffr_options": {
             "display_msgs": True,
         },

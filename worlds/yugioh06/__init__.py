@@ -1,15 +1,11 @@
-import logging
 import os
-import threading
-import pkgutil
-from typing import NamedTuple, Union, Dict, Any
 
 import bsdiff4
 import math
 
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
-from worlds.AutoWorld import World, WebWorld
+from ..AutoWorld import World, WebWorld
 from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, core_booster
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special
@@ -19,8 +15,21 @@ from .Rom import YGO06DeltaPatch, get_base_rom_path
 from .Rules import set_rules
 from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
-from worlds.generic.Rules import add_rule
+
+from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier
 from .RomValues import structure_deck_selection, banlist_ids
+from ..sm import openFile
+
+
+def launch_client():
+    import multiprocessing
+    from .Client import launch
+    process = multiprocessing.Process(target=launch)
+    process.start()
+
+
+components.append(Component("Yu-Gi-Oh! 06 Client", "Yugioh06Client", func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.apygo06')))
 
 
 class Yugioh06Web(WebWorld):
@@ -219,8 +228,8 @@ class Yugioh06World(World):
         self.multiworld.start_inventory[self.player].value[Banlist_Items.get(banlist)] = 1
 
     def apply_base_path(self, rom):
-        base_patch_location = os.path.dirname(__file__) + "/patch.bsdiff4"
-        with open(base_patch_location, "rb") as base_patch:
+        base_patch_location = "/".join((os.path.dirname(self.__file__), "patch.bsdiff4"))
+        with openFile(base_patch_location, "rb") as base_patch:
             rom_data = bsdiff4.patch(rom.read(), base_patch.read())
         rom_data = bytearray(rom_data)
         return rom_data

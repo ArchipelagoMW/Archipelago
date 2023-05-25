@@ -1,5 +1,5 @@
 import typing
-from Options import Option, DefaultOnToggle, Choice, Range
+from Options import Option, Choice, Range
 
 
 class StructureDeck(Choice):
@@ -42,6 +42,7 @@ class ThirdTier5CampaignBossChallenges(Range):
     range_start = 0
     range_end = 91
     default = 10
+
 
 ygo06_options: typing.Dict[str, type(Option)] = {
     "StructureDeck": StructureDeck,

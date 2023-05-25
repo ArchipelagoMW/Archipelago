@@ -16,7 +16,6 @@ from Utils import async_start
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 
-from worlds.pokemon_rb.locations import location_data
 from worlds.yugioh06.Rom import YGO06DeltaPatch
 SYSTEM_MESSAGE_ID = 0
 
@@ -284,45 +283,45 @@ async def patch_and_run_game(patch_file, ctx):
     async_start(run_game(comp_path))
 
 
-if __name__ == '__main__':
+async def main(args):
 
-    Utils.init_logging("YuGiOh06Client")
+    ctx = GBAContext(args.connect, args.password)
+    ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+    if gui_enabled:
+        ctx.run_gui()
+    ctx.run_cli()
+    ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name="GBA Sync")
 
-    options = Utils.get_options()
+    if args.patch_file:
+        ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
+        if ext == "apygo06":
+            logger.info("APYGO06 file supplied, beginning patching process...")
+            async_start(patch_and_run_game(args.patch_file, ctx))
+        else:
+            logger.warning(f"Unknown patch file extension {ext}")
 
-    async def main():
-        parser = get_base_parser()
-        parser.add_argument('patch_file', default="Player1.apygo06", type=str, nargs="?",
+    await ctx.exit_event.wait()
+    ctx.server_address = None
+
+    await ctx.shutdown()
+
+    if ctx.gba_sync_task:
+        await ctx.gba_sync_task
+
+parser = get_base_parser()
+parser.add_argument('patch_file', default="", type=str, nargs="?",
                             help='Path to an APYGO06 patch file')
-        args = parser.parse_args()
+args = parser.parse_args()
 
-        ctx = GBAContext(args.connect, args.password)
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-        if gui_enabled:
-            ctx.run_gui()
-        ctx.run_cli()
-        ctx.gba_sync_task = asyncio.create_task(gba_sync_task(ctx), name="GBA Sync")
+Utils.init_logging("YuGiOh06Client")
 
-        if args.patch_file:
-            ext = args.patch_file.split(".")[len(args.patch_file.split(".")) - 1].lower()
-            if ext == "apygo06":
-                logger.info("APYGO06 file supplied, beginning patching process...")
-                async_start(patch_and_run_game(args.patch_file, ctx))
-            else:
-                logger.warning(f"Unknown patch file extension {ext}")
-
-        await ctx.exit_event.wait()
-        ctx.server_address = None
-
-        await ctx.shutdown()
-
-        if ctx.gba_sync_task:
-            await ctx.gba_sync_task
+options = Utils.get_options()
 
 
+def launch():
     import colorama
 
     colorama.init()
 
-    asyncio.run(main())
+    asyncio.run(main(args))
     colorama.deinit()
