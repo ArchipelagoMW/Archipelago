@@ -464,7 +464,7 @@
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_UltrasonicPulseStun">
         <Alignment value="Negative"/>
-        <InfoIcon value="Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
+        <InfoIcon value="AP\Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
         <BehaviorCategories index="Stun" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="4"/>
@@ -791,7 +791,7 @@
         <ExpireEffect value="AP_SupplyDepotDropMorph"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_SupplyDepotMorphing">
-<!--        <InfoFlags index="Hidden" value="1"/>-->
+        <!--        <InfoFlags index="Hidden" value="1"/>-->
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Duration value="1.35"/>
     </CBehaviorBuff>
@@ -1130,6 +1130,35 @@
         <Duration value="30"/>
         <Modification>
             <BehaviorLinkDisableArray value="VoidZealotTerazineFury"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ShadowCharging">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-charge.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="ChargeMinDistance"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <Duration value="3.5"/>
+        <Modification MoveSpeedMultiplier="6.8">
+            <StateFlags index="Cloak" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidZealotShadowChargeSlow">
+        <Alignment value="Negative"/>
+        <InfoIcon value="AP\Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="2.5"/>
+        <Modification MoveSpeedMultiplier="0.5" AttackSpeedMultiplier="0.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidZealotShadowChargeStun">
+        <Alignment value="Negative"/>
+        <InfoIcon value="AP\Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="2.5"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
         </Modification>
     </CBehaviorBuff>
 </Catalog>

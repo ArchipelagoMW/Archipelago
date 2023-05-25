@@ -2908,13 +2908,6 @@
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="SpecialObject"/>
     </CEffectRemoveBehavior>
-    <CAbilMorph id="AP_ReaperPlacementMorph">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <InfoArray Unit="AP_Reaper"/>
-        <Flags index="IgnoreFacing" value="1"/>
-        <Flags index="IgnoreUnitCost" value="1"/>
-        <Flags index="WaitUntilStopped" value="0"/>
-    </CAbilMorph>
     <CEffectApplyBehavior id="AP_SOAHeroicShieldInvulnerableApply">
         <ValidatorArray index="0" value="AP_DoesNotHaveHeroicShieldWeakness"/>
         <ValidatorArray value="NotHallucination"/>
@@ -3020,6 +3013,41 @@
         <EditorCategories value=""/>
         <EffectArray value="AP_SOAHeroicShieldInvulnerableApply"/>
         <EffectArray value="AP_SOAHeroicShieldCasterSearch"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_ShadowCharge">
+        <ValidatorArray index="0" value="ChargeMinTriggerDistance"/>
+        <ValidatorArray value="ChargeMaxDistance"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ShadowCharging"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_VoidZealotShadowChargeSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidZealotShadowChargeStunTarget"/>
+        <EffectArray value="AP_VoidZealotShadowChargeSlowTarget"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_VoidZealotShadowChargeSlowTarget">
+        <EditorCategories value=""/>
+        <Behavior value="AP_VoidZealotShadowChargeSlow"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_VoidZealotShadowChargeStunTarget">
+        <EditorCategories value=""/>
+        <Behavior value="AP_VoidZealotShadowChargeStun"/>
+    </CEffectApplyBehavior>
+    <CEffectSwitch id="AP_VoidZealotShadowChargeSwitch">
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="AP_TargetMassiveOrHeroicOrUnstoppable" Effect="AP_VoidZealotShadowChargeSlowTarget"/>
+        <CaseDefault value="AP_VoidZealotShadowChargeStunTarget"/>
+    </CEffectSwitch>
+    <CEffectEnumArea id="AP_VoidZealotShadowChargeSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <SearchFilters value="Ground;Player,Ally,Structure,Missile,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AreaArray Radius="1.5" Effect="AP_VoidZealotShadowChargeSwitch"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_ZealotPsiBladesCleaveSet">
+        <EditorCategories value=""/>
+        <EffectArray value="PsiBladesBurst"/>
     </CEffectSet>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

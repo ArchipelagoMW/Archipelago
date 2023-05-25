@@ -716,4 +716,21 @@
         <DamagePoint value="0"/>
         <Effect value="AP_ZealotAiurWeaponCleaveSet"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_CenturionWarpBlades">
+        <Name value="Weapon/Name/Centurion"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="PsiBlades"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Marker Link="Weapon/PsiBlades"/>
+        <Cost>
+            <Cooldown Link="Weapon/PsiBlades"/>
+        </Cost>
+        <Period value="1.2"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_ZealotPsiBladesCleaveSet"/>
+    </CWeaponLegacy>
 </Catalog>

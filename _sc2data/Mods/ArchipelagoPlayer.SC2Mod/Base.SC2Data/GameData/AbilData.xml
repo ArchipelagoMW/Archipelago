@@ -1265,7 +1265,7 @@
         <InfoArray index="Build1" Unit="AP_BarracksTechLab" Time="25">
             <Button DefaultButtonFace="BuildTechLabBarracks" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
-        <InfoArray index="Build2" Unit="AP_BarracksReactor" State="Restricted" Time="50">
+        <InfoArray index="Build2" Unit="AP_BarracksReactor" Time="50">
             <Button Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_BarracksTechReactor" Time="50" AddOnParentCmdPriority="-1">
@@ -1673,7 +1673,7 @@
             <Button DefaultButtonFace="BuildTechLabFactory" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build2" Unit="AP_FactoryReactor" Time="50">
-            <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
+            <Button Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_FactoryTechReactor" Time="50" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
@@ -1686,7 +1686,7 @@
         <InfoArray index="Build1" Unit="AP_StarportTechLab" Time="25">
             <Button DefaultButtonFace="BuildTechLabStarport" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
-        <InfoArray index="Build2" Unit="AP_StarportReactor" State="Restricted" Time="50">
+        <InfoArray index="Build2" Unit="AP_StarportReactor" Time="50">
             <Button Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_StarportTechReactor" Time="50" AddOnParentCmdPriority="-1">
@@ -1973,6 +1973,34 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilAugment id="AP_ShadowCharge">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidZealotShadowCharge"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown Link="Charge" Location="Unit" TimeUse="10"/>
+        </Cost>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
+    <CAbilAugment id="AP_ShadowChargeStun">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidZealotShadowChargeStun"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Effect value="AP_VoidZealotShadowChargeSearch"/>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AutoCastValidatorArray value="AP_TargetNotShadowStunnedAndNotShadowSlowed"/>
+        <AutoCastValidatorArray value="AP_VoidZealotShadowStunRange"/>
+        <AutoCastValidatorArray value="AP_VoidZealotNotShadowCharging"/>
+    </CAbilAugment>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -2324,7 +2352,7 @@
         <InfoArray index="Build8" Unit="AP_PsiDisruptor" Time="50">
             <Button DefaultButtonFace="AP_PsiDisruptor" State="Restricted"/>
         </InfoArray>
-        <InfoArray index="Build9" Unit="AP_SensorTower"  Time="25">
+        <InfoArray index="Build9" Unit="AP_SensorTower" Time="25">
             <Button DefaultButtonFace="AP_SensorTower" State="Restricted" Requirements="AP_HaveEngineeringBay"/>
         </InfoArray>
         <InfoArray index="Build10" Unit="AP_GhostAcademy" Time="40">

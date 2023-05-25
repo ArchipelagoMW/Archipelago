@@ -3057,6 +3057,65 @@
     <CActorSound id="AP_SCVBuildSound" parent="SoundOneShot">
         <Sound value="SCV_Repair"/>
     </CActorSound>
+    <CActorModel id="AP_HybridSlowDebuff" parent="ModelAnimationStyleContinuous">
+        <Terms value="Cap 1"/>
+        <On Terms="Behavior.AP_VoidZealotShadowChargeSlow.On" Send="Create"/>
+        <On Terms="Behavior.AP_VoidZealotShadowChargeSlow.Off" Send="Destroy"/>
+        <On Terms="Behavior.SOAGravitonBombHeroicUnit.On" Send="Create"/>
+        <On Terms="Behavior.SOAGravitonBombHeroicUnit.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <AutoScaleFactor value="2.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_GenericStunOverheadModel" parent="ModelAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <EditorCategories value=""/>
+        <On Terms="Behavior.FlyerBeastDiveHeightStun.On" Send="Create"/>
+        <On Terms="Behavior.FlyerBeastDiveHeightStun.Off" Send="Destroy"/>
+        <On Terms="Behavior.GreaterBeastStun.On" Send="Create"/>
+        <On Terms="Behavior.GreaterBeastStun.Off" Send="Destroy"/>
+        <On Terms="Behavior.VoidDarkTemplarStunningBlow.On" Send="Create"/>
+        <On Terms="Behavior.VoidDarkTemplarStunningBlow.Off" Send="Destroy"/>
+        <On Terms="Behavior.AP_VoidZealotShadowChargeStun.On" Send="Create"/>
+        <On Terms="Behavior.AP_VoidZealotShadowChargeStun.Off" Send="Destroy"/>
+        <On Terms="Behavior.Aiur05EMPWaveStun.On" Send="Create"/>
+        <On Terms="Behavior.Aiur05EMPWaveStun.Off" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_Darkcoil_LaunchSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_VoidZealotShadowChargeSearch.Start; At Caster" Send="Create"/>
+        <Sound value="AP_Darkcoil_Launch"/>
+        <Layers>
+            <Sound value="AP_Darkcoil_Launch2"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Darkcoil_Launch3"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorModel id="AP_ProtossFastWarpinMarker" parent="ModelAnimationStyleContinuous">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.PowerUserWarpable.Create; ValidateEffect SuperPower" Send="Create"/>
+        <On Terms="Behavior.PowerUserWarpable.Destroy" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="ProtossFastWarpinMarker"/>
+    </CActorModel>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -5696,7 +5755,6 @@
         <On Terms="AnimDone; AnimName Spell" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
-        <Model value="AP_SupplyDepotDropPod"/>
     </CActorModel>
     <CActorUnit id="AP_SupplyDepotLowered" parent="TerranBuildingEx" unitName="AP_SupplyDepotLowered">
         <Aliases value="_UnitLarge"/>
@@ -6305,9 +6363,7 @@
             <Image value="AP\Assets\Textures\Wireframe-terran-sigmaprojector.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorModel id="AP_PsiDisruptorBuild" parent="TerranBuildingBuildSmall">
-        <Model value="AP_PsiDisruptorBuild"/>
-    </CActorModel>
+    <CActorModel id="AP_PsiDisruptorBuild" parent="TerranBuildingBuildSmall"/>
     <CActorModel id="AP_PsiDisruptorDebuff" parent="ModelAnimationStyleOneShot">
         <Terms value="Cap 1"/>
         <On Terms="Effect.AP_PsiDisruptionApplyBehavior.Start; At Target" Send="Create"/>
@@ -6995,5 +7051,63 @@
     <CActorSound id="AP_VoidZealotWhirlwindLaunchSound" parent="SoundOneShot">
         <Host Subject="_Selectable"/>
         <Sound value="AP_VoidZealot_WhirlWind_AttackLaunch"/>
+    </CActorSound>
+    <CActorModel id="AP_VoidZealotShadowChargeImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_VoidZealotShadowChargeSearch.Start; At Caster" Send="Create"/>
+    </CActorModel>
+    <CActorUnit id="AP_ZealotShakuras" parent="GenericUnitStandard" unitName="AP_ZealotShakuras">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="ChargingAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="Behavior.AP_ShadowCharging.Create" Send="AnimGroupApply Spell"/>
+        <On Terms="Behavior.AP_ShadowCharging.Destroy" Send="AnimGroupRemove Spell"/>
+        <On Terms="Behavior.AP_ShadowCharging.On" Send="ModelSuddenMotionStart"/>
+        <On Terms="Behavior.AP_ShadowCharging.Off" Send="ModelSuddenMotionStop"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Zealot_Land"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_ZealotShakurasWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ZealotShakurasDeath" SoundLink="Zealot_DeathFX"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <PlacementModel value="AP_ZealotShakurasPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_ZealotShakurasPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="45"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-nerazim.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-zealot-nerazim.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="Zealot_Birth"/>
+        <SoundArray index="Ready" value="AP_ZealotNerazim_Ready"/>
+        <SoundArray index="Help" value="AP_ZealotNerazim_Help"/>
+        <SoundArray index="What" value="AP_ZealotNerazim_What"/>
+        <SoundArray index="Yes" value="AP_ZealotNerazim_Yes"/>
+        <SoundArray index="Attack" value="AP_ZealotNerazim_Attack"/>
+        <SoundArray index="Pissed" value="AP_ZealotNerazim_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-zealot-nerazim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-nerazim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-nerazim-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-nerazim-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-zealot-nerazim-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_ZealotShakuras_Death" parent="SoundOneShot">
+        <On Terms="UnitDeathCustomize.AP_ZealotShakuras; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <Sound value="AP_ZealotNerazim_Death"/>
     </CActorSound>
 </Catalog>

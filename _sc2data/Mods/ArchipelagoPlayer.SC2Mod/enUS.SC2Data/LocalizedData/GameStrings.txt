@@ -82,6 +82,8 @@ Abil/Name/AP_SalvageBunker=Bunker
 Abil/Name/AP_SalvageBunkerRefund=Bunker
 Abil/Name/AP_ScannerSweep=Scanner Sweep
 Abil/Name/AP_SeekerMissile=Seeker Missile
+Abil/Name/AP_ShadowCharge=Shadow Charge
+Abil/Name/AP_ShadowChargeStun=Darkcoil
 Abil/Name/AP_SiegeBreakerSiege=Siege
 Abil/Name/AP_SiegeBreakerUnsiege=Unsiege
 Abil/Name/AP_SiegeMode=Siege
@@ -164,6 +166,7 @@ Behavior/Name/AP_SOAHeroicShieldImmunity=Guardian Shell
 Behavior/Name/AP_SOAHeroicShieldWeakness=Recently Protected
 Behavior/Name/AP_ScienceVesselCloakField=Cloaking Field
 Behavior/Name/AP_SeekerMissileTimeout=Seeker Missile timeout
+Behavior/Name/AP_ShadowCharging=Shadow Charging
 Behavior/Name/AP_Slow=Slow
 Behavior/Name/AP_SpectreCloaking=Cloak
 Behavior/Name/AP_SpectreCloakingFree=Cloak
@@ -175,6 +178,8 @@ Behavior/Name/AP_SupplyDepotMorphing=Supply Depot Morphing
 Behavior/Name/AP_SupplyDrop=Supply drop
 Behavior/Name/AP_UltrasonicPulseStun=Ultrasonic Pulse stun
 Behavior/Name/AP_ViralPlasma=Viral Plasma
+Behavior/Name/AP_VoidZealotShadowChargeSlow=Slow
+Behavior/Name/AP_VoidZealotShadowChargeStun=Stunned
 Behavior/Name/AP_VoidZealotTerazineFuryWeakness=Terazine Fury Weakness
 Behavior/Name/AP_WraithCloak=Cloak
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
@@ -196,6 +201,7 @@ Behavior/Tooltip/AP_SpectreCloaking=This unit is cloaked and will only be reveal
 Behavior/Tooltip/AP_SpectreCloakingFree=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_Stimpack=This unit moves and attacks more quickly while under the effects of Stimpack.
 Behavior/Tooltip/AP_SupplyDrop=This Supply Depot is providing an additional 8 supply.
+Behavior/Tooltip/AP_VoidZealotShadowChargeStun=This unit cannot move or attack.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
@@ -383,6 +389,8 @@ Button/Name/AP_UltrasonicPulse=Ultrasonic Pulse
 Button/Name/AP_UpgradeToPlanetaryFortress=Upgrade to Planetary Fortress
 Button/Name/AP_ValkyrieSCBW=Build Valkyrie
 Button/Name/AP_VikingFighter=Build Viking
+Button/Name/AP_VoidZealotShadowCharge=Shadow Charge
+Button/Name/AP_VoidZealotShadowChargeStun=Darkcoil
 Button/Name/AP_VoidZealotWhirlwind=Whirlwind
 Button/Name/AP_Vulture=Build Vulture
 Button/Name/AP_WeaponsFree=Weapons Free
@@ -615,6 +623,8 @@ Button/Tooltip/AP_UpgradeToPlanetaryFortress=Adds a powerful turret, and increas
 Button/Tooltip/AP_ValkyrieSCBW=Advanced anti-aircraft fighter. Able to use cluster missiles that deal area damage to air targets.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
 Button/Tooltip/AP_VikingAssault=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_VikingFighter=Durable support flyer. Loaded with strong anti-capital air missiles. Can switch into Assault Mode to attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
+Button/Tooltip/AP_VoidZealotShadowCharge=Intercepts enemy ground units and increases movement speed. Briefly cloaks the Centurion and allows it to move through other units.
+Button/Tooltip/AP_VoidZealotShadowChargeStun=Stuns target enemy ground unit and all nearby enemy ground units <d ref="Behavior,VoidZealotShadowChargeStun,Duration" precision="1"/> seconds.</n></n><c val="#ColorAttackInfo">Massive units are slowed.</c>
 Button/Tooltip/AP_VoidZealotWhirlwind=Deals <d ref="Effect,VoidZealotWhirlwindDamage,Amount/Behavior,VoidZealotWhirlwind,Period"/> damage per second to all nearby enemy units. Lasts <d ref="Behavior,VoidZealotWhirlwind,Duration"/> seconds.
 Button/Tooltip/AP_Vulture=Fast skirmish unit. Can use the Spider Mine ability.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_WarPig=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
@@ -630,6 +640,7 @@ Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible t
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
 Button/Tooltip/AP_ZealotAiur=Aiur Faction<n/>Powerful melee warrior. Has Charge and Whirlwind abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_ZealotShakuras=Nerazim Faction<n/>Powerful melee warrior. Has Shadow Charge and Darkcoil abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/Rally2=Sends constructed units to the designated point. Workers rallied to resources will begin gathering automatically.
 DocInfo/DescShort=Any
 DocInfo/Name=Just Another StarCraft II Mod
@@ -938,6 +949,7 @@ Effect/Name/AP_ScreecherMissilesCreateCarpetBombPersistent=Screecher Missiles (C
 Effect/Name/AP_ScreecherMissilesSet=Screecher Missiles (Set)
 Effect/Name/AP_SeekerMissileDamage=Seeker (Damage)
 Effect/Name/AP_SeekerMissileLaunchMissile=Seeker (Launch Missile)
+Effect/Name/AP_ShadowCharge=Shadow Charge
 Effect/Name/AP_ShrikeTurretDamage=Shrike Turret (Damage)
 Effect/Name/AP_SiegeBreakerDamage=Arclite Cannon (Damage)
 Effect/Name/AP_SnipeDamage=Snipe (Damage)
@@ -979,6 +991,10 @@ Effect/Name/AP_ValkyrieSCBWWeapon@CP=CP
 Effect/Name/AP_ValkyrieSCBWWeapon@Damage=Damage
 Effect/Name/AP_ValkyrieSCBWWeapon@LM=LM
 Effect/Name/AP_ValkyrieSCBWWeapon@Set=Set
+Effect/Name/AP_VoidZealotShadowChargeSearch=Void Zealot Shadow Charge Search
+Effect/Name/AP_VoidZealotShadowChargeSet=Void Zealot Shadow Charge Set
+Effect/Name/AP_VoidZealotShadowChargeSlowTarget=Void Zealot Shadow Charge Slow Target AB
+Effect/Name/AP_VoidZealotShadowChargeStunTarget=Void Zealot Shadow Charge Stun Target AB
 Effect/Name/AP_VoidZealotWhirlwindAB=Void Zealot Whirlwind 
 Effect/Name/AP_VoidZealotWhirlwindBehaviorSet=Void Zealot Whirlwind Behavior Set
 Effect/Name/AP_VoidZealotWhirlwindCancelMove=Void Zealot Whirlwind Cancel Move
@@ -1022,6 +1038,7 @@ Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_ZealotAiurWeapon=Zealot Aiur Weapon
 Effect/Name/AP_ZealotAiurWeaponBurst=Zealot Aiur Weapon Burst
 Effect/Name/AP_ZealotAiurWeaponCleaveSet=Zealot Aiur Weapon Cleave Set
+Effect/Name/AP_ZealotPsiBladesCleaveSet=Zealot Psi Blades (Cleave Set)
 Effect/Name/AP_heal=Heal
 Effect/Name/Kill2=Kill
 RequirementNode/Tooltip/AP_CountUnitFactoryCompleteOnly=Factory
@@ -1172,6 +1189,7 @@ Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_ZealotAiur=Zealot
+Unit/Name/AP_ZealotShakuras=Centurion
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
 Upgrade/Name/AP_330mmBarrageCannons=330 mm Barrage Cannons
 Upgrade/Name/AP_AdvancedHealingAI=Advanced Healing AI
@@ -1283,6 +1301,7 @@ Upgrade/Name/AP_ReaperU238Rounds=U-238 Rounds
 Upgrade/Name/AP_RegenerativeBioSteel=Regenerative Bio-Steel
 Upgrade/Name/AP_ReinforcedSuperstructure=Titanium Housing
 Upgrade/Name/AP_SOAHeroicShield=SOAHeroic Shield
+Upgrade/Name/AP_SOAShieldRegen=SOAShield Regen
 Upgrade/Name/AP_ScavengingSystems=Scavenging Systems
 Upgrade/Name/AP_ScienceVessel=Science Vessel
 Upgrade/Name/AP_ScienceVesselEnergyManipulation=Science Vessel (Energy Manipulation)

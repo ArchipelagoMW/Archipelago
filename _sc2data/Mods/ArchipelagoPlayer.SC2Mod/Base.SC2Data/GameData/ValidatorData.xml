@@ -483,6 +483,9 @@
     <CValidatorUnitType id="AP_IsVanillaHighTemplar">
         <Value value="HighTemplar"/>
     </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_IsHeroic">
+        <Filters value="Heroic;-"/>
+    </CValidatorUnitFilters>
     <CValidatorCombine id="IsHighTemplar" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaHighTemplar"/>
@@ -505,6 +508,9 @@
     <CValidatorUnitType id="AP_IsVanillaPhoenix">
         <Value value="Phoenix"/>
     </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_IsMassive">
+        <Filters value="Massive;-"/>
+    </CValidatorUnitFilters>
     <CValidatorCombine id="IsPhoenix" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaPhoenix"/>
@@ -670,6 +676,9 @@
     <CValidatorUnitType id="AP_IsVanillaVoidRay">
         <Value value="VoidRay"/>
     </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_IsUnstoppable">
+        <Filters value="Unstoppable;-"/>
+    </CValidatorUnitFilters>
     <CValidatorCombine id="IsVoidRay" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaVoidRay"/>
@@ -1508,6 +1517,26 @@
         <CombineArray value="AP_OrbitalRelayUpgraded"/>
         <CombineArray value="IsNotConstructing"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotShadowChargeSlowed">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidZealotShadowChargeSlow"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotShadowChargeStunned">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidZealotShadowChargeStun"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_TargetNotShadowStunnedAndNotShadowSlowed">
+        <Type value="And"/>
+        <CombineArray value="AP_TargetNotShadowChargeStunned"/>
+        <CombineArray value="AP_TargetNotShadowChargeSlowed"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_TargetMassiveOrHeroicOrUnstoppable">
+        <CombineArray value="AP_IsHeroic"/>
+        <CombineArray value="AP_IsMassive"/>
+        <CombineArray value="AP_IsUnstoppable"/>
+    </CValidatorCombine>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
         <!-- Override -->
         <Type value="And"/>
@@ -1586,4 +1615,16 @@
         <WhichUnit Value="Caster"/>
         <Filters value="-;Stunned"/>
     </CValidatorUnitFilters>
+    <CValidatorUnitCompareOrderTargetRange id="AP_VoidZealotShadowStunRange">
+        <WhichUnit Value="Caster"/>
+        <OtherUnit Value="Target"/>
+        <Compare value="LT"/>
+        <AbilLink value="attack"/>
+        <Value value="0.1"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidZealotNotShadowCharging">
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Behavior value="AP_ShadowCharging"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>
