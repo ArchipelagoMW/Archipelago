@@ -303,7 +303,7 @@ class DarkSouls3World(World):
                 itempool.append(self.create_item(item_name))
 
         # Extra filler items for locations containing SKIP items
-        itempool += [self.create_item("Soul of an Intrepid Hero") for _ in range(num_required_extra_items)]
+        itempool += [self.create_filler() for _ in range(num_required_extra_items)]
 
         # Add items to itempool
         self.multiworld.itempool += itempool
@@ -326,6 +326,10 @@ class DarkSouls3World(World):
             item_classification = ItemClassification.filler
 
         return DarkSouls3Item(name, item_classification, data, self.player)
+
+
+    def get_filler_item_name(self) -> Item:
+        return "Soul of an Intrepid Hero"
 
 
     def generate_early(self):
