@@ -1,0 +1,54 @@
+# World Maintainer
+
+A world maintainer is a person responsible for a world or part of a world in Archipelago.
+
+If a world author does not want to take on the responsibilities of a world maintainer, they can release their world as
+a "private" [APWorld]((/docs/apworld%20specification.md) or maintain their own fork instead.
+
+
+## Responsibilites
+
+Unless those are shared between multiple people, we expect the following from each world maintainer
+
+* Be on our Discord to get updates on problems with and suggestions for the world.
+* Decide if a feature (pull request) should be merged.
+* Review contents of such pull requests or organize peer reviews or post that you did not review the content.
+* Fix or point out issues when core changes break your code.
+* Use the watch function on github, the #github-updates channel in discord or check manually from time to time for new
+  pull requests. Core maintainers may also ping you if a pull request concerns your world,
+* Test (or have tested) the world on the main branch from time to time, especially during RC (release candidate) phases
+  of development.
+* Let us know of long unavailabilites.
+
+
+## Becoming a World Maintainer
+
+### Adding a World
+
+When we merge your world into the core Archipelago repository, you automatically become world maintainer unless you
+nominate someone else (i.e. there are multiple devs).
+
+### Getting Voted
+
+When a world is unmaintained, the core maintainers can vote for a new maintainer if there is a candidate. The majority
+of valid, duly votes has to be in favor. The time limit is 1 week, but can end early if the majority is reached earlier.
+
+
+## Dropping out
+
+### Resigning
+
+A world maintainer can resign. If no new maintainer steps up and gets voted, the world becomes unmaintained.
+
+### Getting Voted out
+
+A world maintainer can be voted out by the core maintainers, for example when they become unreachable. The majority of
+valid, duly votes has to be in favor. The time limit is 2 weeks, but can end early if the majority is reached earlier
+AND the world maintainer was pinged and made their case or was pinged and has been unreachable for more than 2 weeks
+already.
+
+
+## Handling of Unmaintained Worlds
+
+As long as worlds are known to work for the most part, they can stay included. Once a world becomes broken it shall be
+moved from `worlds/` to `staging/`.
