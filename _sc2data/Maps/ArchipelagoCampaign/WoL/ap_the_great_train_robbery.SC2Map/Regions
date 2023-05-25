@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="2">
+        <name value="Escort Peel"/>
+        <shape type="circle">
+            <center value="199,133"/>
+            <radius value="2.9873"/>
+        </shape>
+        <shape type="circle">
+            <center value="200,77.1667"/>
+            <radius value="2.9873"/>
+        </shape>
+        <shape type="circle">
+            <center value="195,20"/>
+            <radius value="2.9873"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Bunkers East"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="185.525,128.2602"/>
+            <radius value="3.9812"/>
+        </shape>
+        <shape type="circle">
+            <center value="175.5356,104.4677"/>
+            <radius value="5.1401"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.6547,125.7922"/>
+            <radius value="5.1401"/>
+        </shape>
+        <shape type="circle">
+            <center value="181.4936,69.997"/>
+            <radius value="5.1401"/>
+        </shape>
+        <shape type="circle">
+            <center value="185.4533,40.4973"/>
+            <radius value="5.1401"/>
+        </shape>
+        <shape type="circle">
+            <center value="158.0168,38.3676"/>
+            <radius value="5.1401"/>
+        </shape>
+        <shape type="circle">
+            <center value="150.467,71.5168"/>
+            <radius value="4.7695"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Bunkers West"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="102.58,120.4645"/>
+            <radius value="5.4086"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.5646,104.4702"/>
+            <radius value="4.6757"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.0971,74.7907"/>
+            <radius value="5.1401"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.6596,57.3312"/>
+            <radius value="5.1401"/>
+        </shape>
+        <shape type="circle">
+            <center value="143.6723,23.6252"/>
+            <radius value="5.1401"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.4458,45.594"/>
+            <radius value="4.5593"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.2695,59.543"/>
+            <radius value="4.5385"/>
+        </shape>
+    </region>
+    <region id="78">
+        <name value="Base Exploration"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="128.403,90.831"/>
+            <radius value="12"/>
+        </shape>
+        <shape type="circle">
+            <center value="140.6562,86.8532"/>
+            <radius value="4.2045"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.4887,82.6362"/>
+            <radius value="2.88"/>
+        </shape>
+        <shape type="circle">
+            <center value="120.6254,77.8034"/>
+            <radius value="5.3566"/>
+        </shape>
+        <shape type="circle">
+            <center value="115.3947,76.7802"/>
+            <radius value="1.9382"/>
+        </shape>
+        <shape type="circle">
+            <center value="117.0615,86.4296"/>
+            <radius value="5.793"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.8142,96.2646"/>
+            <radius value="16"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.91,110.8713"/>
+            <radius value="3.1774"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.9145,107.0078"/>
+            <radius value="5.0395"/>
+        </shape>
+        <shape type="circle">
+            <center value="133.7375,100.9467"/>
+            <radius value="5.7944"/>
+        </shape>
+        <shape type="circle">
+            <center value="144.0424,95.585"/>
+            <radius value="7.2817"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.8303,79.5871"/>
+            <radius value="7.042"/>
+        </shape>
+        <shape type="circle">
+            <center value="129.4916,77.9111"/>
+            <radius value="4.8215"/>
+        </shape>
+        <shape type="circle">
+            <center value="142.0075,104.4414"/>
+            <radius value="4.8698"/>
+        </shape>
+        <shape type="circle">
+            <center value="134.9716,106.2153"/>
+            <radius value="6.6738"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.4716,108.2756"/>
+            <radius value="8.2038"/>
+        </shape>
+        <shape type="circle">
+            <center value="108.4401,85.8505"/>
+            <radius value="6.1215"/>
+        </shape>
+        <shape type="circle">
+            <center value="110.883,108.2106"/>
+            <radius value="6.1215"/>
+        </shape>
+        <shape type="circle">
+            <center value="145.0988,86.6113"/>
+            <radius value="3.675"/>
+        </shape>
+        <shape type="circle">
+            <center value="146.0432,82.5424"/>
+            <radius value="2.775"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.88,88.5961"/>
+            <radius value="4.4711"/>
+        </shape>
+        <shape type="circle">
+            <center value="105.3015,103.659"/>
+            <radius value="4.303"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Crate Victory Zone"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="78.5986,16.7761"/>
+            <radius value="7.5297"/>
+        </shape>
+        <shape type="circle">
+            <center value="193.652,22.1574"/>
+            <radius value="8.5561"/>
+        </shape>
+        <shape type="circle">
+            <center value="198.921,14.4892"/>
+            <radius value="9.588"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.448,10.1914"/>
+            <radius value="8.2424"/>
+        </shape>
+    </region>
+</Regions>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CActorDoodad id="ShowAndTellWall"/>
+    <CActorDoodad id="BraxisAlphaGenerator"/>
+    <CActorDoodad id="SpacePlatformSignDestructible">
+        <Footprint value=""/>
+    </CActorDoodad>
+    <CActorUnit id="WreckedBunker" unitName="Bogus">
+        <Model value="WreckedBarracks"/>
+    </CActorUnit>
+</Catalog>

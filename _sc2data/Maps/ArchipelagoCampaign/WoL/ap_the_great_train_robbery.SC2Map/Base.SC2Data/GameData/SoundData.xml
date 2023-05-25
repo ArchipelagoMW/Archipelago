@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CSound id="Flip">
+        <AssetArray File="LocalizedData\Sounds\Misc\TRescue.wav" FacialGroup=""/>
+    </CSound>
+</Catalog>
