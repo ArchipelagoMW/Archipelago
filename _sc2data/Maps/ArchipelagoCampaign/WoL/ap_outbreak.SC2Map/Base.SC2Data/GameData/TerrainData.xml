@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Meinhoff">
+        <FogColor value="255,52,90,154"/>
+        <FogDensity value="0.140000"/>
+        <FogFalloff value="0.220000"/>
+        <FogStartingHeight value="-3.000000"/>
+    </CTerrain>
+</Catalog>

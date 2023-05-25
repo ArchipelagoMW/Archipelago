@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="3">
+        <name value="Initial Attackers Left"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="55.5263,149.5104"/>
+            <radius value="5.15"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Initial Attackers Right"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="122.5,117.1252"/>
+            <radius value="5.15"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Infested Region 01"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="111.3125,149.7214"/>
+            <radius value="25"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.107,151.557"/>
+            <radius value="11.4653"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.471,150.151"/>
+            <radius value="17.6381"/>
+        </shape>
+        <shape type="rect">
+            <quad value="17.9475,125.1237,39.7385,154.7812"/>
+        </shape>
+        <shape type="circle">
+            <center value="122.1064,114.4765"/>
+            <radius value="18.9934"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Barricade"/>
+        <shape type="circle">
+            <center value="53.7263,94.6064"/>
+            <radius value="5"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Area 01 Revealer"/>
+        <shape type="circle">
+            <center value="28.8046,139.6757"/>
+            <radius value="14.2402"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Area 02 Revealer"/>
+        <shape type="circle">
+            <center value="49.34,154.8515"/>
+            <radius value="15.934"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Area 04 Revealer"/>
+        <shape type="circle">
+            <center value="108.2507,152.123"/>
+            <radius value="14.794"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Area 09 Revealer"/>
+        <shape type="circle">
+            <center value="58.3095,29.4392"/>
+            <radius value="12.182"/>
+        </shape>
+        <shape type="rect">
+            <quad value="66.0712,26.2175,78.3513,37.6047"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.5383,39.5295"/>
+            <radius value="8.0417"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.939,44.1352"/>
+            <radius value="5.062"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Rock Destroyers Spawn"/>
+        <shape type="circle">
+            <center value="44.0766,79.8732"/>
+            <radius value="2.9494"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Area 10 Revealer"/>
+        <shape type="circle">
+            <center value="28.166,47.8078"/>
+            <radius value="10.2106"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.4235,56.4545"/>
+            <radius value="8.0815"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Area 08 Revealer"/>
+        <shape type="circle">
+            <center value="115.5917,35.0065"/>
+            <radius value="14.9328"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Intro Cine - Infested Spawn 1"/>
+        <shape type="circle">
+            <center value="50.4626,148.9653"/>
+            <radius value="1.8242"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Intro Cine - Infested Spawn 2"/>
+        <shape type="circle">
+            <center value="45.227,153.2001"/>
+            <radius value="1.8242"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Intro Cine - Infested Spawn 3"/>
+        <shape type="circle">
+            <center value="47.899,156.689"/>
+            <radius value="1.8242"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Intro Cine - Infested Spawn 4"/>
+        <shape type="circle">
+            <center value="49.3022,152.8947"/>
+            <radius value="1.8242"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Intro Cine - Infested Spawn 5"/>
+        <shape type="circle">
+            <center value="52.9238,151.8476"/>
+            <radius value="1.8242"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Intro Cine - Infested Spawn 6"/>
+        <shape type="circle">
+            <center value="41.5195,152.2551"/>
+            <radius value="1.8242"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Intro Cine - Infested Spawn 7"/>
+        <shape type="circle">
+            <center value="46.8076,149.878"/>
+            <radius value="1.8242"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Intro Cine - Infested Base 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="87.3784,109.5686,89.9304,111.8896"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Intro Cine - Infested Base 2"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="88.4016,111.9213,90.9536,114.2424"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Intro Cine - Infested Base 3"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="90.207,109.307,92.759,111.628"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Intro Cine - Infested Base 4"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="90.925,113.8154,93.477,116.1364"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Intro Cine - Infested Base 5"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="92.7211,111.094,95.2731,113.415"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="Intro Cine - Infested Base 7"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="95.644,110.4016,98.196,112.7226"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Intro Cine - Infested Base 8"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="96.732,112.8964,99.284,115.2175"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Intro Cine - Infested Base 9"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="96.6494,115.932,99.2014,118.253"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Area 05 Revealer"/>
+        <shape type="circle">
+            <center value="124.7287,114.5253"/>
+            <radius value="9.6296"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Hellion Landing Zone"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="74.6672,106.8862"/>
+            <radius value="2.2956"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Area 07 Revealer"/>
+        <shape type="circle">
+            <center value="103.5976,62.9545"/>
+            <radius value="12.7741"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Area 03 Revealer"/>
+        <shape type="rect">
+            <quad value="65.7426,146.018,86.4882,160.6484"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Area 06 Revealer"/>
+        <shape type="circle">
+            <center value="126.7067,83.7294"/>
+            <radius value="10.2734"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="Infested Region 02"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="124.9433,83.3745"/>
+            <radius value="11.3232"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.8564,71.6604"/>
+            <radius value="13.3198"/>
+        </shape>
+        <shape type="circle">
+            <center value="28.4096,91.2612"/>
+            <radius value="9.768"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.4702,93.1005"/>
+            <radius value="9.694"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.9794,56.2236"/>
+            <radius value="9.1242"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.0788,52.0712"/>
+            <radius value="9.1242"/>
+        </shape>
+        <shape type="circle">
+            <center value="104.1975,62.3283"/>
+            <radius value="13.8762"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Factory Landing Zone"/>
+        <color value="255,0,0,0"/>
+        <shape type="rect">
+            <quad value="70.9816,100.0297,74.0266,103.0405"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Infested Region 03"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="94.624,36.4721"/>
+            <radius value="13.7541"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.1823,35.6896"/>
+            <radius value="13.82"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.3452,48.6042"/>
+            <radius value="11.8161"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.0253,32.003"/>
+            <radius value="10.4831"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.5383,24.0866"/>
+            <radius value="10.4831"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.217,34.7512"/>
+            <radius value="13.7541"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="Area 11 Revealer"/>
+        <shape type="circle">
+            <center value="67.8854,52.6767"/>
+            <radius value="9.5761"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Refugee Wander Area"/>
+        <shape type="circle">
+            <center value="52.773,111.4724"/>
+            <radius value="2.5207"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.5625,106.8791"/>
+            <radius value="2.5214"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.8176,102.0715"/>
+            <radius value="2.5632"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="Intro Burrow"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="82.1308,58.2673"/>
+            <radius value="4.5268"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.4196,60.747"/>
+            <radius value="2.1037"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.4311,61.933"/>
+            <radius value="1.6145"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.431,62.3752"/>
+            <radius value="1.6145"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="Intro Burn"/>
+        <shape type="circle">
+            <center value="121.1555,118.267"/>
+            <radius value="3.905"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.8066,113.2111"/>
+            <radius value="3.905"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="Factory Landing Zone Alternate 1"/>
+        <color value="255,0,0,0"/>
+        <shape type="rect">
+            <quad value="66.9631,101.011,70.008,104.0217"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="Factory Landing Zone Alternate 2"/>
+        <color value="255,0,0,0"/>
+        <shape type="rect">
+            <quad value="74.9992,99.9982,78.0441,103.009"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="Factory Landing Zone Alternate 3"/>
+        <color value="255,0,0,0"/>
+        <shape type="rect">
+            <quad value="61.9416,98.014,64.9865,101.0246"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="Expansion Check"/>
+        <shape type="circle">
+            <center value="104.8244,156.2534"/>
+            <radius value="10.7324"/>
+        </shape>
+        <shape type="circle">
+            <center value="113.6096,155.7888"/>
+            <radius value="10.7324"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.0183,150.26"/>
+            <radius value="10.7324"/>
+        </shape>
+    </region>
+</Regions>
