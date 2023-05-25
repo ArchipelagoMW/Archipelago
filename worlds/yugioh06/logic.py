@@ -52,8 +52,7 @@ class YuGiOh06Logic(LogicMixin):
 
     def yugioh06_can_yata_lock(self, player):
         return self.has_all(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], player)\
-                and self.has_any(["No Banlist", "Banlist September 2003", "Banlist March 2004", "Banlist September 2004"
-                                  , "Banlist March 2005"], player)
+                and self.has_any(["No Banlist", "Banlist September 2003"], player)
 
     def yugioh06_can_get_konami_bonus(self, player):
         return (self.has_all(["Messenger of Peace", "Castle of Dark Illusions", "Mystik Wok"], player) or

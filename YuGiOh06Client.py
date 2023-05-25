@@ -32,7 +32,7 @@ DISPLAY_MSGS = True
 SCRIPT_VERSION = 1
 
 
-class GBCommandProcessor(ClientCommandProcessor):
+class GBACommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx: CommonContext):
         super().__init__(ctx)
 
@@ -43,7 +43,7 @@ class GBCommandProcessor(ClientCommandProcessor):
 
 
 class GBAContext(CommonContext):
-    command_processor = GBCommandProcessor
+    command_processor = GBACommandProcessor
     game = 'Yu-Gi-Oh! 2006'
 
     def __init__(self, server_address, password):
@@ -58,7 +58,7 @@ class GBAContext(CommonContext):
         self.deathlink_pending = False
         self.set_deathlink = False
         self.client_compatibility_mode = 0
-        self.items_handling = 0b101
+        self.items_handling = 0b001
         self.sent_release = False
         self.sent_collect = False
 
@@ -152,6 +152,10 @@ async def parse_locations(locations_array: List[int], ctx: GBAContext):
                  "locations": locations_checked}
             ])
         if locations_array[18] & (1 << 5) != 0:
+            await ctx.send_msgs([{
+                "cmd": "StatusUpdate",
+                "status": 30
+            }])
             ctx.finished_game = True
 
 

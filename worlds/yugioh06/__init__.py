@@ -5,6 +5,7 @@ import pkgutil
 from typing import NamedTuple, Union, Dict, Any
 
 import bsdiff4
+import math
 
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
@@ -244,6 +245,16 @@ class Yugioh06World(World):
                 continue
             location_id = self.location_name_to_id[location.name] - 5730000
             rom_data[randomizer_data_start + location_id] = item_id
+        inventory_map = [0 for i in range(32)]
+        for start_inventory in self.multiworld.start_inventory[self.player].value:
+            item_id = self.item_name_to_id[start_inventory] - 5730001
+            index = math.floor(item_id / 8)
+            bit = item_id % 8
+            inventory_map[index] = inventory_map[index] | (1 << bit)
+        rom_data[0xe9dc:0xe9fc] = inventory_map
+        rom_data[0xeefa] = self.multiworld.ThirdTier5CampaignBossChallenges[self.player].value
+        rom_data[0xef10] = self.multiworld.FourthTier5CampaignBossChallenges[self.player].value
+        rom_data[0xef22] = self.multiworld.FinalCampaignBossChallenges[self.player].value
         return rom_data
 
     def generate_output(self, output_directory: str):

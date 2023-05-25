@@ -27,18 +27,21 @@ class FinalCampaignBossChallenges(Range):
     display_name = "Final Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
+    default = 20
 
 
 class FourthTier5CampaignBossChallenges(Range):
     display_name = "Fourth Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
+    default = 15
 
 
 class ThirdTier5CampaignBossChallenges(Range):
     display_name = "Third Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
+    default = 10
 
 ygo06_options: typing.Dict[str, type(Option)] = {
     "StructureDeck": StructureDeck,

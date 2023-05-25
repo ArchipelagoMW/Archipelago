@@ -163,12 +163,12 @@ item_to_index = {
     "Campaign Tier 4 Column 5": 162,
     "Campaign Tier 5 Column 1": 163,
     "Campaign Tier 5 Column 2": 164,
-    "No Banlist": 165,
-    "Banlist September 2003": 166,
-    "Banlist March 2004": 167,
-    "Banlist September 2004": 168,
-    "Banlist March 2005": 169,
-    "Banlist September 2005": 170,
+    "No Banlist": 167,
+    "Banlist September 2003": 168,
+    "Banlist March 2004": 169,
+    "Banlist September 2004": 170,
+    "Banlist March 2005": 171,
+    "Banlist September 2005": 172,
     "Money": 254,
     "Remote": 255
 }
