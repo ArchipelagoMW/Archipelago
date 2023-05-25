@@ -195,7 +195,7 @@ class SA2BWorld(World):
         create_regions(self.multiworld, self.player, self.location_table)
 
         # Not Generate Basic
-        if self.multiworld.goal[self.player].value in [0, 2, 4, 5]:
+        if self.multiworld.goal[self.player].value in [0, 2, 4, 5, 6]:
             self.multiworld.get_location(LocationName.finalhazard, self.player).place_locked_item(self.create_item(ItemName.maria))
         elif self.multiworld.goal[self.player].value == 1:
             self.multiworld.get_location(LocationName.green_hill, self.player).place_locked_item(self.create_item(ItemName.maria))
@@ -213,7 +213,7 @@ class SA2BWorld(World):
             for item in {**upgrades_table}:
                 itempool += [self.create_item(item, False, self.multiworld.goal[self.player].value)]
 
-            if self.multiworld.goal[self.player].value in [1, 2]:
+            if self.multiworld.goal[self.player].value in [1, 2, 6]:
                 # Some flavor of Chaos Emerald Hunt
                 for item in {**emeralds_table}:
                     itempool += self._create_items(item)
@@ -419,7 +419,7 @@ class SA2BWorld(World):
         set_rules(self.multiworld, self.player, self.gate_bosses, self.boss_rush_map, self.mission_map, self.mission_count_map)
 
     def write_spoiler(self, spoiler_handle: typing.TextIO):
-        if self.multiworld.number_of_level_gates[self.player].value > 0 or self.multiworld.goal[self.player].value in [4, 5]:
+        if self.multiworld.number_of_level_gates[self.player].value > 0 or self.multiworld.goal[self.player].value in [4, 5, 6]:
             spoiler_handle.write("\n")
             header_text = "Sonic Adventure 2 Bosses for {}:\n"
             header_text = header_text.format(self.multiworld.player_name[self.player])
@@ -432,7 +432,7 @@ class SA2BWorld(World):
                     spoiler_handle.writelines(text)
                 spoiler_handle.write("\n")
 
-            if self.multiworld.goal[self.player].value in [4, 5]:
+            if self.multiworld.goal[self.player].value in [4, 5, 6]:
                 for x in range(len(self.boss_rush_map.values())):
                     text = "Boss Rush Boss {0}: {1}\n"
                     text = text.format((x + 1), get_boss_name(self.boss_rush_map[x]))

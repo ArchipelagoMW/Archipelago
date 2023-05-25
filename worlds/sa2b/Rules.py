@@ -2210,7 +2210,7 @@ def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]
         elif world.logic_difficulty[player].value == 1:
             set_mission_upgrade_rules_hard(world, player)
 
-    if world.goal[player] in [4, 5]:
+    if world.goal[player] in [4, 5, 6]:
         for i in range(16):
             if boss_rush_map[i] == 10:
                 add_rule(world.get_location("Boss Rush - " + str(i + 1), player),

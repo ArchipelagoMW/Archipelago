@@ -1447,7 +1447,7 @@ def create_regions(world, player: int, active_locations):
                                           grand_prix_region_locations)
         world.regions += [grand_prix_region]
 
-    if world.goal[player] in [0, 2, 4, 5]:
+    if world.goal[player] in [0, 2, 4, 5, 6]:
         biolizard_region_locations = [
             LocationName.finalhazard,
         ]
@@ -1465,7 +1465,7 @@ def create_regions(world, player: int, active_locations):
                                           green_hill_region_locations)
         world.regions += [green_hill_region]
 
-    if world.goal[player] in [4, 5]:
+    if world.goal[player] in [4, 5, 6]:
         for i in range(16):
             boss_region_locations = [
                 "Boss Rush - " + str(i + 1),
@@ -1547,7 +1547,7 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
             connect(world, player, names, LocationName.green_hill_region, LocationName.biolizard_region)
     elif world.goal[player] == 3:
         connect(world, player, names, LocationName.kart_race_expert_region, LocationName.grand_prix_region)
-    elif world.goal[player] in [4, 5]:
+    elif world.goal[player] in [4, 5, 6]:
         if world.goal[player] == 4:
             connect(world, player, names, LocationName.gate_0_region, LocationName.boss_rush_1_region)
         elif world.goal[player] == 5:
@@ -1558,6 +1558,15 @@ def connect_regions(world, player, gates: typing.List[LevelGate], cannon_core_em
 
             connect(world, player, names, LocationName.cannon_core_region, LocationName.boss_rush_1_region,
                     lambda state: (state.can_reach(required_mission_name, "Location", player)))
+        elif world.goal[player] == 6:
+            connect(world, player, names, LocationName.gate_0_region, LocationName.boss_rush_1_region,
+                    lambda state: (state.has(ItemName.white_emerald, player) and
+                                   state.has(ItemName.red_emerald, player) and
+                                   state.has(ItemName.cyan_emerald, player) and
+                                   state.has(ItemName.purple_emerald, player) and
+                                   state.has(ItemName.green_emerald, player) and
+                                   state.has(ItemName.yellow_emerald, player) and
+                                   state.has(ItemName.blue_emerald, player)))
 
         for i in range(15):
             if boss_rush_bosses[i] == all_gate_bosses_table[king_boom_boo]:

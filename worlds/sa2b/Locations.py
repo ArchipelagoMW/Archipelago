@@ -1492,7 +1492,7 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
         elif world.kart_race_checks[player] == 1:
             location_table.update({**kart_race_mini_location_table})
 
-        if world.goal[player].value in [0, 2, 4, 5]:
+        if world.goal[player].value in [0, 2, 4, 5, 6]:
             location_table.update({**final_boss_location_table})
 
         if world.goal[player].value in [1, 2]:
@@ -1504,7 +1504,7 @@ def setup_locations(world: MultiWorld, player: int, mission_map: typing.Dict[int
             if world.animalsanity[player]:
                 location_table.update({**green_hill_animal_location_table})
 
-        if world.goal[player].value in [4, 5]:
+        if world.goal[player].value in [4, 5, 6]:
             location_table.update({**boss_rush_location_table})
 
         if world.chao_garden_difficulty[player].value >= 1:

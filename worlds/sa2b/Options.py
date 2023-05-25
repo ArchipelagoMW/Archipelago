@@ -12,6 +12,7 @@ class Goal(Choice):
     Grand Prix: Win every race in Kart Race Mode (all standard levels are disabled)
     Boss Rush: Beat all of the bosses in the Boss Rush, ending with Finalhazard
     Cannon's Core Boss Rush: Beat Cannon's Core, then beat all of the bosses in the Boss Rush, ending with Finalhazard
+    Boss Rush Chaos Emerald Hunt: Find the Seven Chaos Emeralds, then beat all of the bosses in the Boss Rush, ending with Finalhazard
     """
     display_name = "Goal"
     option_biolizard = 0
@@ -20,6 +21,7 @@ class Goal(Choice):
     option_grand_prix = 3
     option_boss_rush = 4
     option_cannons_core_boss_rush = 5
+    option_boss_rush_chaos_emerald_hunt = 6
     default = 0
 
     @classmethod
