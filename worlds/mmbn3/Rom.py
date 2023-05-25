@@ -197,6 +197,8 @@ class TextArchive:
                         if len(next_message) > 0:
                             oldbytes.extend(item_text_bytes)
                             # TODO append end message nextline etc.
+                            # I think this is "wait for button press" then "clearmessage"
+                            oldbytes.extend([0xEB, 0xE9])
                         self.scripts[script_index].messageBoxes[message_index] = oldbytes
 
 

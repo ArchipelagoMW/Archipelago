@@ -4,7 +4,7 @@ import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Entrance, \
     LocationProgressType
-from .BN3RomUtils import shorten_item_name
+
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
 from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType
