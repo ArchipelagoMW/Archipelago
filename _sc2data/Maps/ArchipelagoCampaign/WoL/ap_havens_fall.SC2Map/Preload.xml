@@ -126,16 +126,6 @@
 <Soundtrack id="Ambience_Hanson03bRain"/>
 <Terrain id="Haven"/>
 <Unit id="Baneling"/>
-<Unit id="CommandCenter"/>
-<Unit id="SupplyDepot"/>
-<Unit id="Refinery"/>
-<Unit id="Barracks"/>
-<Unit id="Factory"/>
-<Unit id="Starport"/>
-<Unit id="MercCompound"/>
-<Unit id="VikingAssault"/>
-<Unit id="VikingFighter"/>
-<Unit id="SCV"/>
 <Unit id="Marine"/>
 <Unit id="Hatchery"/>
 <Unit id="Extractor"/>
@@ -174,7 +164,6 @@
 <Unit id="InfestedTerranCampaign"/>
 <Unit id="InfestedVentBroodLordEgg"/>
 <Unit id="InfestedVentMutaliskEgg"/>
-<Unit id="Firebat"/>
 <Unit id="InfestedCocoon"/>
 <Unit id="Feederling"/>
 <Unit id="InfestedMercHaven"/>
@@ -197,4 +186,16 @@
 <Unit id="Food1000"/>
 <Unit id="InfestableBiodome" Variations="1,2,3,4"/>
 <Unit id="InfestedColonistShip" Variations="2,3"/>
+<Unit id="AP_VikingAssault"/>
+<Unit id="AP_VikingFighter"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Firebat"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Starport"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_MercCompound"/>
 </Preload>
