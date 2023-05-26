@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BankList>
+    <Bank Name="TTychus02" Player="1"/>
+    <Bank Name="TRaynor03" Player="1"/>
+    <Bank Name="TTosh01" Player="1"/>
+    <Bank Name="THorner03" Player="1"/>
+    <Bank Name="TValerian03" Player="1"/>
+    <Bank Name="TTosh02" Player="1"/>
+    <Bank Name="TTychus04" Player="1"/>
+    <Bank Name="THorner01" Player="1"/>
+    <Bank Name="TZeratul03" Player="1"/>
+    <Bank Name="THorner02" Player="1"/>
+    <Bank Name="TZeratul04" Player="1"/>
+    <Bank Name="TZeratul01" Player="1"/>
+    <Bank Name="TZeratul02" Player="1"/>
+    <Bank Name="CampaignPS" Player="1"/>
+    <Bank Name="THorner05S" Player="1"/>
+    <Bank Name="TRaynor01" Player="1"/>
+    <Bank Name="TTychus03" Player="1"/>
+    <Bank Name="THanson03B" Player="1"/>
+    <Bank Name="THanson01" Player="1"/>
+    <Bank Name="TRaynor02" Player="1"/>
+    <Bank Name="THanson03A" Player="1"/>
+    <Bank Name="THorner04" Player="1"/>
+    <Bank Name="TTosh03A" Player="1"/>
+    <Bank Name="TTychus01" Player="1"/>
+    <Bank Name="TValerian01" Player="1"/>
+    <Bank Name="TValerian02A" Player="1"/>
+    <Bank Name="TTychus05" Player="1"/>
+    <Bank Name="TCampaign" Player="1"/>
+    <Bank Name="TDebugProgress" Player="1"/>
+    <Bank Name="TTosh03B" Player="1"/>
+    <Bank Name="TValerian02B" Player="1"/>
+    <Bank Name="THanson02" Player="1"/>
+</BankList>

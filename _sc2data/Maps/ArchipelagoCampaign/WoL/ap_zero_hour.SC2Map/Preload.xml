@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Asset path="assets\textures\ui_mission_frame_massege.dds" Type="Image"/>
+<Achievement id="Anniversary_TRaynor03"/>
+<Achievement id="TRaynor03_1"/>
+<Achievement id="TRaynor03_2"/>
+<Achievement id="TRaynor03_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="LightOmniOrangeLarge"/>
+<Actor id="PathingBlocker45DegreesDoodad"/>
+<Actor id="BarracksWrecked"/>
+<Actor id="BillboardScrollingTextBroken" Variations="1"/>
+<Actor id="BillboardTall" Variations="3"/>
+<Actor id="BraxisAlphaBarrels" Variations="0,2"/>
+<Actor id="BunkerWrecked"/>
+<Actor id="Decal" Variations="1,3,13,17,21,23"/>
+<Actor id="Dumpster" Variations="0,1"/>
+<Actor id="Garage" Variations="0,1"/>
+<Actor id="GasStationAngled"/>
+<Actor id="MarSaraBones" Variations="0,1,3,4"/>
+<Actor id="BridgeOrdinalFootprint"/>
+<Actor id="MarSaraCactus" Variations="0,1,2,3,4"/>
+<Actor id="MarSaraCliffDoodadLarge" Variations="0,2"/>
+<Actor id="MarSaraCrack" Variations="0,1,2,3,4,5"/>
+<Actor id="MarSaraGroundProps" Variations="0,1,2,4"/>
+<Actor id="MarSaraMineCart"/>
+<Actor id="MarSaraSkeletonLarge" Variations="0,1"/>
+<Actor id="MarSaraSkeletonSmall" Variations="0"/>
+<Actor id="MarSaraTree" Variations="0,1,2,3,4,5"/>
+<Actor id="MarSaraTreeDead" Variations="0,1,5"/>
+<Actor id="NewFolsomSandbags" Variations="0,2,3,4,5,6,7"/>
+<Actor id="Outhouse" Variations="0,1"/>
+<Actor id="PipesCap" Variations="3"/>
+<Actor id="PipesCorner45" Variations="0,1"/>
+<Actor id="PipesLong45" Variations="2,3"/>
+<Actor id="PipesShort45" Variations="1"/>
+<Actor id="RainEmitterMedium"/>
+<Actor id="Rock" Variations="0,1,2,3,4,5,6,8,9,10"/>
+<Actor id="RockLarge" Variations="0,1,2,3,4,5,7,8"/>
+<Actor id="SignsConstruction" Variations="12,13"/>
+<Actor id="SignsDirectional" Variations="27"/>
+<Actor id="SignsIcons" Variations="8"/>
+<Actor id="SignsWarning" Variations="1,20"/>
+<Actor id="SpacePlatformBarrier" Variations="0,1"/>
+<Actor id="Streetlight" Variations="0"/>
+<Actor id="TRaynor02CranePart2x2" Variations="0"/>
+<Actor id="TRaynor02CranePart3x3" Variations="8"/>
+<Actor id="Vines" Variations="1,2"/>
+<Actor id="WaterTank" Variations="0,1,2"/>
+<Actor id="WaterTankTall" Variations="1"/>
+<Actor id="WreckedVehicles" Variations="5"/>
+<Actor id="TRaynorDumpTruck"/>
+<Light id="MarSaraCampaignDay"/>
+<Light id="MarSaraCampaignNight"/>
+<Model id="PingObjective"/>
+<Model id="BriefingUnitSelect"/>
+<Model id="ArtifactPiece1"/>
+<Sound id="NydusWorm_Unload"/>
+<Sound id="NydusWorm_Birth"/>
+<Sound id="Medivac_Load" Variations="0"/>
+<Sound id="UI_ChallengeCountdown"/>
+<Sound id="TUISecret"/>
+<Sound id="UI_TerranKlaxonAlert"/>
+<Sound id="TRaynor03BriefingAdjutant00006" Variations="0"/>
+<Sound id="TRaynor03BriefingRaynor00007" Variations="0"/>
+<Sound id="TRaynor03BriefingRaynor00008" Variations="0"/>
+<Sound id="TRaynor03BriefingRaynor00009" Variations="0"/>
+<Sound id="TRaynor03BriefingTychus00010" Variations="0"/>
+<Sound id="TRaynor03BriefingRaynor00011" Variations="0"/>
+<Sound id="TRaynor03Marine800001"/>
+<Sound id="TRaynor03Marine800002"/>
+<Sound id="TRaynor03Marine700003"/>
+<Sound id="TRaynor03Marine700004"/>
+<Sound id="TRaynor03Marine500005"/>
+<Sound id="TRaynor03Horner00006"/>
+<Sound id="TRaynor03Raynor00007"/>
+<Sound id="TRaynor03Marine100008"/>
+<Sound id="TRaynor03Tychus00009"/>
+<Sound id="TRaynor03Raynor00010"/>
+<Sound id="TRaynor03Raynor00011"/>
+<Sound id="TRaynor03Horner00012"/>
+<Sound id="TRaynor03Tychus00013"/>
+<Sound id="TRaynor03Marine500016"/>
+<Sound id="TRaynor03Raynor00017"/>
+<Sound id="TRaynor03Horner00018"/>
+<Sound id="TRaynor03Raynor00019"/>
+<Soundtrack id="Ambience_MarSara"/>
+<Soundtrack id="TRaynor03MusicEventA"/>
+<Soundtrack id="TRaynor03MusicMain"/>
+<Soundtrack id="TRaynor03MusicOutro"/>
+<Soundtrack id="Ambience_TRaynor03Rain"/>
+<Terrain id="MarSara"/>
+<Unit id="Marine"/>
+<Unit id="Hatchery"/>
+<Unit id="CreepTumor"/>
+<Unit id="Extractor"/>
+<Unit id="SpawningPool"/>
+<Unit id="EvolutionChamber"/>
+<Unit id="HydraliskDen"/>
+<Unit id="Spire"/>
+<Unit id="BanelingNest"/>
+<Unit id="RoachWarren"/>
+<Unit id="SpineCrawler"/>
+<Unit id="SporeCrawler"/>
+<Unit id="GreaterSpire"/>
+<Unit id="Drone"/>
+<Unit id="Zergling"/>
+<Unit id="Overlord"/>
+<Unit id="Hydralisk"/>
+<Unit id="Mutalisk"/>
+<Unit id="Roach"/>
+<Unit id="HydraliskBurrowed"/>
+<Unit id="ZerglingBurrowed"/>
+<Unit id="UltraliskBurrowed"/>
+<Unit id="NydusCanal"/>
+<Unit id="Beacon_Terran"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,5,7,8,9"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="DestructibleSearchlight" Variations="2"/>
+<Unit id="DestructibleBullhornLights" Variations="0,1"/>
+<Unit id="DestructibleStreetlight" Variations="0"/>
+<Unit id="DestructibleTrafficSignal" Variations="6"/>
+<Unit id="TaurenOuthouse"/>
+<Unit id="Hut" Variations="0,1,2,3,7"/>
+<Unit id="PalletGas"/>
+<Unit id="PalletMinerals"/>
+<Unit id="CruiserBike"/>
+<Unit id="TerranBuggy"/>
+<Unit id="DumpTruck"/>
+<Unit id="FlatbedTruck"/>
+<Unit id="Hyperion"/>
+<Unit id="Food1000"/>
+<Unit id="TaurenSpaceMarine"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_EngineeringBay"/>
+<Unit id="AP_MissileTurret"/>
+<Unit id="AP_Bunker"/>
+</Preload>

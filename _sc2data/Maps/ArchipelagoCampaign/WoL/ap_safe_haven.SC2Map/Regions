@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="3">
+        <name value="Intro Scene"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="41.6552,29.673"/>
+            <radius value="14.3046"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Colonist Base Alpha"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="87.9936,32.6403"/>
+            <radius value="12.8686"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Colonist Base Beta"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="30.268,64.1162"/>
+            <radius value="15.4763"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Colonist Base Gamma"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="76.4897,82.597"/>
+            <radius value="14.1093"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Protoss P4 Base"/>
+        <shape type="rect">
+            <quad value="0.0644,0.0112,6.333,5.9997"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Purifier Point Alpha"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="86.9973,30.9978,88.9963,32.9975"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Purifier Point Beta"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="29,63,31,65"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Purifier Point Gamma"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="77,81,79,83"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Purifier Point Omega"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="27,111,29,113"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Colonist Base Omega"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="28.454,112.0454"/>
+            <radius value="13.4816"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Protoss P2 Base"/>
+        <shape type="rect">
+            <quad value="122.2927,0.2802,127.8286,11.2292"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Protoss Base - North"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="94.6501,129.3188"/>
+            <radius value="12.7705"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Protoss Base - East"/>
+        <color value="255,0,0,0"/>
+        <shape type="rect">
+            <quad value="94.1347,55.8186,114.0932,82.0241"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Protoss Base - South"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="41.532,29.2507"/>
+            <radius value="12.4687"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Briefing Colonists 1"/>
+        <shape type="circle">
+            <center value="42.477,25.3457"/>
+            <radius value="1.3752"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Briefing Colonists 2"/>
+        <shape type="circle">
+            <center value="46.1464,27.4631"/>
+            <radius value="1.3752"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Briefing Colonists 3"/>
+        <shape type="circle">
+            <center value="36.373,26.8178"/>
+            <radius value="1.3752"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Briefing Colonists 4"/>
+        <shape type="circle">
+            <center value="40.0415,34.0913"/>
+            <radius value="1.3752"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Briefing Colonists 5"/>
+        <shape type="circle">
+            <center value="45.1352,33.7961"/>
+            <radius value="1.3752"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Player Base"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="58.481,142.9658"/>
+            <radius value="19.6767"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.5166,144.5244"/>
+            <radius value="9.307"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Purifier Point Player Base"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="51,149,53,151"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Victory Colonists 01"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="48.4074,151.9682"/>
+            <radius value="3.4484"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Victory Marines 01"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="47.9033,149.2622"/>
+            <radius value="2.164"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.7473,149.6425"/>
+            <radius value="2.164"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.0002,151.0971"/>
+            <radius value="2.164"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Player Mineral Area"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="62.9262,140.8054,72.3896,150.498"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Player Gas Area"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="56.8857,144.8303,62.968,150.896"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Victory Vikings 1"/>
+        <shape type="circle">
+            <center value="86.7868,129.883"/>
+            <radius value="3.6191"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.9394,124.95"/>
+            <radius value="3.6191"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.333,126.1152"/>
+            <radius value="3.4423"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Terror Fleet Beta Outtro"/>
+        <shape type="rect">
+            <quad value="9.9523,55.7431,13.4582,61.9367"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Terror Fleet Gamma Outtro"/>
+        <shape type="circle">
+            <center value="116.5788,105.4982"/>
+            <radius value="3.4316"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Terror Fleet Omega Outtro"/>
+        <shape type="circle">
+            <center value="9.7214,97.8242"/>
+            <radius value="6.705"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Briefing - Marines"/>
+        <shape type="circle">
+            <center value="50.5373,38.9707"/>
+            <radius value="2.9731"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Victory Protoss"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="93.8251,132.6152"/>
+            <radius value="4.2868"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.6394,138.202"/>
+            <radius value="3.9624"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.8125,130.244"/>
+            <radius value="3.9895"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Victory Vikings 2"/>
+        <shape type="circle">
+            <center value="83.3298,135.8706"/>
+            <radius value="4.4765"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Victory Vikings 3"/>
+        <shape type="circle">
+            <center value="98.8583,122.8205"/>
+            <radius value="3.9396"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Tree Destruction - Alpha Base"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="88.02,32.2126"/>
+            <radius value="8.5493"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="Tree Destruction - Gamma Base"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="77.2126,83.2248"/>
+            <radius value="10.6718"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Tree Destruction - Omega Base"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="28.2878,111.9753"/>
+            <radius value="10.6718"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Tree Destruction - Beta Base"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="29.829,64.1423"/>
+            <radius value="10.6718"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Planet Cracker Hole - Alpha Colony"/>
+        <color value="255,0,255,64"/>
+        <shape type="rect">
+            <quad value="84,28,92,36"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Planet Cracker Hole - Beta Colony"/>
+        <color value="255,0,255,64"/>
+        <shape type="rect">
+            <quad value="26,60.0002,34,68.0002"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="Planet Cracker Hole - Gamma Colony"/>
+        <color value="255,0,255,64"/>
+        <shape type="rect">
+            <quad value="74,78,82,86"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Planet Cracker Hole - Omega Colony"/>
+        <color value="255,0,255,64"/>
+        <shape type="rect">
+            <quad value="24,108,32,116"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Planet Cracker Hole - Player Colony"/>
+        <color value="255,0,255,64"/>
+        <shape type="rect">
+            <quad value="48,146.0014,56,154.0014"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="Briefing Air Spawn"/>
+        <shape type="rect">
+            <quad value="24.5036,8.2316,41.91,9.1774"/>
+        </shape>
+        <shape type="rect">
+            <quad value="10.1191,14.3386,10.939,29.5063"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="Briefing Air Move"/>
+        <shape type="circle">
+            <center value="60.7031,47.2104"/>
+            <radius value="3.9597"/>
+        </shape>
+    </region>
+</Regions>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWater id="Template 1">
+        <State index="0">
+            <Height value="2.800000"/>
+            <Color value="0.882353,0.215686,0.098039,0.165000"/>
+            <ColorFallOff value="0.105000"/>
+            <UvRate value="0.000000,-0.001000,0.000000,0.000000"/>
+            <MeshRoughness value="1.000000"/>
+            <TextureRoughness value="1.000000"/>
+            <RefractionDistortion value="0.002500"/>
+            <ShadowDistortion value="1.000000"/>
+        </State>
+        <IsLava value="1"/>
+        <Sound value="Emitter_Lava"/>
+    </CWater>
+</Catalog>

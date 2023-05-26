@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Haven">
+        <WindSpeed value="0.200000"/>
+        <WindTurbulenceSpeed value="0.100000"/>
+    </CTerrain>
+</Catalog>

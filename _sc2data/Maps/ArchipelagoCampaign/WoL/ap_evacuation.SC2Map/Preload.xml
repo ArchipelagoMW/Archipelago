@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Achievement id="Anniversary_THanson01"/>
+<Achievement id="THanson01_1"/>
+<Achievement id="THanson01_2"/>
+<Achievement id="THanson01_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="AgriaCrops" Variations="0,1,2"/>
+<Actor id="AgriaDebris" Variations="0,1"/>
+<Actor id="AgriaDebrisLarge" Variations="0,1"/>
+<Actor id="AgriaFoliage" Variations="0,1,2,3,4,5"/>
+<Actor id="AgriaTree" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="Birds"/>
+<Actor id="BraxisAlphaBarrels" Variations="0,1,2"/>
+<Actor id="BraxisAlphaBioDome" Variations="1"/>
+<Actor id="BunkerWrecked"/>
+<Actor id="Bush" Variations="0,1,2,3,4"/>
+<Actor id="CableLight"/>
+<Actor id="ChainLinkFenceDiagonal" Variations="2"/>
+<Actor id="ChainLinkFencePost"/>
+<Actor id="ChainLinkFenceStraight" Variations="0,3,4,5,7"/>
+<Actor id="Decal" Variations="0,1,21,24"/>
+<Actor id="Dumpster" Variations="3"/>
+<Actor id="FireMedium"/>
+<Actor id="FishBlackFinMako" Variations="1"/>
+<Actor id="Garage" Variations="1"/>
+<Actor id="LandingLights" Variations="0,1,2"/>
+<Actor id="LandingTower"/>
+<Actor id="MarSaraGroundProps" Variations="0"/>
+<Actor id="PipesLong45" Variations="0,3"/>
+<Actor id="PortZionTower" Variations="2,6,7,8"/>
+<Actor id="PowerLine" Variations="0,1,2,3,5"/>
+<Actor id="Rock" Variations="0,1,2,3,4,5,6,7,8,9,10"/>
+<Actor id="RockLarge" Variations="0,1,2,3,4"/>
+<Actor id="SecurityFenceDiagonal" Variations="0"/>
+<Actor id="SpacePlatformBarrier" Variations="0,1"/>
+<Actor id="SpacePlatformFan" Variations="0"/>
+<Actor id="SpacePlatformSignTowerLarge" Variations="0"/>
+<Actor id="Sunrays"/>
+<Actor id="SupplyTanks"/>
+<Actor id="Vines" Variations="0,1,2,3,4,5,6"/>
+<Actor id="WaterTank" Variations="0,1,2"/>
+<Actor id="WaterTankTall" Variations="0,1"/>
+<Actor id="WindTurbine"/>
+<Actor id="WreckedJackal"/>
+<Actor id="WreckedMule" Variations="0"/>
+<Actor id="WreckedVehicles" Variations="5"/>
+<Actor id="WreckedCargoTruck" Variations="1,2,3"/>
+<Actor id="TRaynor01RadarDish"/>
+<Behavior id="BroodlingWander"/>
+<Behavior id="ScanRangeBonus"/>
+<Behavior id="Hustle"/>
+<Light id="AgriaNight"/>
+<Light id="AgriaSunset"/>
+<Model id="PingObjective"/>
+<Model id="PingSimple"/>
+<Model id="BriefingUnitSelect"/>
+<Sound id="Barracks_Movement" Variations="0"/>
+<Sound id="NydusWorm_Birth"/>
+<Sound id="Terran_Veterancy"/>
+<Sound id="UI_TerranPing" Variations="0"/>
+<Sound id="Emitter_StarportAmbience"/>
+<Sound id="THanson01BriefingHanson00003" Variations="0"/>
+<Sound id="THanson01BriefingRaynor00004" Variations="0"/>
+<Sound id="THanson01BriefingHanson00005" Variations="0"/>
+<Sound id="THanson01BriefingHanson00010" Variations="0"/>
+<Sound id="THanson01BriefingHanson00011" Variations="0"/>
+<Sound id="THanson01BriefingHanson00012" Variations="0"/>
+<Sound id="THanson01Hanson00001"/>
+<Sound id="THanson01Horner00002"/>
+<Sound id="THanson01Raynor00003"/>
+<Sound id="THanson01Hanson00004"/>
+<Sound id="THanson01Civilian700005"/>
+<Sound id="THanson01Raynor00006"/>
+<Sound id="THanson01Civilian300007"/>
+<Sound id="THanson01Raynor00008" Variations="0"/>
+<Sound id="THanson01Hanson00009" Variations="0"/>
+<Sound id="THanson01Raynor00010" Variations="0"/>
+<Sound id="THanson01Tychus00011"/>
+<Sound id="THanson01Hanson00012"/>
+<Sound id="THanson01Hanson00014"/>
+<Sound id="THanson01Civilian600016"/>
+<Sound id="THanson01Hanson00017"/>
+<Sound id="THanson01Civilian400018"/>
+<Sound id="THanson01Raynor00019"/>
+<Sound id="THanson01Hanson00023"/>
+<Sound id="THanson01Hanson00024"/>
+<Sound id="THanson01Hanson00025"/>
+<Sound id="THanson01Civilian500026"/>
+<Sound id="THanson01Civilian800027"/>
+<Sound id="THanson01Civilian200028"/>
+<Sound id="THanson01Hanson00029"/>
+<Sound id="THanson01Raynor00030"/>
+<Sound id="THanson01Hanson00031"/>
+<Sound id="THanson01Hanson00032"/>
+<Sound id="THanson01Hanson00033"/>
+<Sound id="THanson01Hanson00034"/>
+<Sound id="THanson01Hanson00035"/>
+<Sound id="THanson01Hanson00036"/>
+<Sound id="THanson01Horner00037"/>
+<Sound id="THanson01Horner00038"/>
+<Sound id="THanson01Raynor00039"/>
+<Sound id="THanson01Marine100040"/>
+<Sound id="THanson01Marine200041"/>
+<Sound id="THanson01Marine300042"/>
+<Sound id="THanson01Marine400043"/>
+<Sound id="THanson01Hanson00044"/>
+<Sound id="THanson01Swann00046"/>
+<Sound id="THanson01Hanson00071"/>
+<Sound id="THanson01Hanson00082"/>
+<Soundtrack id="THanson01MusicIntro"/>
+<Soundtrack id="THanson01MusicAlt"/>
+<Soundtrack id="THanson01MusicMain"/>
+<Soundtrack id="THanson01MusicOutro"/>
+<Soundtrack id="Ambience_Hanson01Night"/>
+<Terrain id="Agria"/>
+<Unit id="Baneling"/>
+<Unit id="Bunker"/>
+<Unit id="MercCompound"/>
+<Unit id="AutoTurret"/>
+<Unit id="Marine"/>
+<Unit id="Hatchery"/>
+<Unit id="CreepTumor"/>
+<Unit id="Extractor"/>
+<Unit id="SpawningPool"/>
+<Unit id="EvolutionChamber"/>
+<Unit id="HydraliskDen"/>
+<Unit id="Spire"/>
+<Unit id="UltraliskCavern"/>
+<Unit id="InfestationPit"/>
+<Unit id="BanelingNest"/>
+<Unit id="RoachWarren"/>
+<Unit id="SpineCrawler"/>
+<Unit id="SporeCrawler"/>
+<Unit id="Hive"/>
+<Unit id="GreaterSpire"/>
+<Unit id="Drone"/>
+<Unit id="Zergling"/>
+<Unit id="Overlord"/>
+<Unit id="Hydralisk"/>
+<Unit id="Mutalisk"/>
+<Unit id="Ultralisk"/>
+<Unit id="Roach"/>
+<Unit id="Infestor"/>
+<Unit id="Corruptor"/>
+<Unit id="BanelingBurrowed"/>
+<Unit id="HydraliskBurrowed"/>
+<Unit id="RoachBurrowed"/>
+<Unit id="ZerglingBurrowed"/>
+<Unit id="Overseer"/>
+<Unit id="CreepTumorBurrowed"/>
+<Unit id="NydusCanal"/>
+<Unit id="Beacon_Terran"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="PathingBlocker1x1"/>
+<Unit id="PathingBlocker2x2"/>
+<Unit id="ColonistShip"/>
+<Unit id="ChrysalisEgg"/>
+<Unit id="SpecialOpsDropship"/>
+<Unit id="Civilian"/>
+<Unit id="CivilianFemale"/>
+<Unit id="Hut" Variations="0,1,2,3,4,5"/>
+<Unit id="PalletGas"/>
+<Unit id="PalletMinerals"/>
+<Unit id="Food1000"/>
+<Unit id="ColonistTransport"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_BarracksTechLab"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Firebat"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_Bunker"/>
+<Unit id="AP_MercCompound"/>
+</Preload>

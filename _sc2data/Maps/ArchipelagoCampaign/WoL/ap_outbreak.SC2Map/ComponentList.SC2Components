@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Components>
+    <DataComponent Type="gada">GameData</DataComponent>
+    <DataComponent Type="info">DocumentInfo</DataComponent>
+    <DataComponent Type="mapi">MapInfo</DataComponent>
+    <DataComponent Type="terr">t3Terrain.xml</DataComponent>
+    <DataComponent Type="trig">Triggers</DataComponent>
+    <DataComponent Type="text" Locale="enUS">GameText</DataComponent>
+    <DataComponent Type="plob">Objects</DataComponent>
+    <DataComponent Type="regi">Regions</DataComponent>
+    <DataComponent Type="text" Locale="koKR">GameText</DataComponent>
+    <DataComponent Type="text" Locale="deDE">GameText</DataComponent>
+    <DataComponent Type="text" Locale="frFR">GameText</DataComponent>
+    <DataComponent Type="text" Locale="esES">GameText</DataComponent>
+    <DataComponent Type="text" Locale="ruRU">GameText</DataComponent>
+    <DataComponent Type="text" Locale="zhCN">GameText</DataComponent>
+    <DataComponent Type="text" Locale="zhTW">GameText</DataComponent>
+    <DataComponent Type="text" Locale="plPL">GameText</DataComponent>
+    <DataComponent Type="text" Locale="esMX">GameText</DataComponent>
+    <DataComponent Type="text" Locale="itIT">GameText</DataComponent>
+    <DataComponent Type="text" Locale="ptBR">GameText</DataComponent>
+    <DataComponent Type="font">UI/FontStyles.SC2Style</DataComponent>
+</Components>

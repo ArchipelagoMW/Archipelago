@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CActorDoodad id="BridgeOrdinalFootprint">
+        <MinimapIcon value="Assets\Textures\ui_minimap_icon_bridge.dds"/>
+    </CActorDoodad>
+</Catalog>

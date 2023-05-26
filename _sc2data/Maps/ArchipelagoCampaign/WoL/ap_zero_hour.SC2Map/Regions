@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="23">
+        <name value="Burrowed Zerg 1"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="98.5827,74.2683"/>
+            <radius value="6.2468"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Burrowed Zerg 2"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="66.964,71.5666"/>
+            <radius value="6.8596"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Burrowed Zerg 3"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="51.088,65.338"/>
+            <radius value="6.4645"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Burrowed Zerg 4"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="58.5021,90.4545"/>
+            <radius value="4.711"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Burrowed Zerg 5"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="74.033,92.2702"/>
+            <radius value="4.5278"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Burrowed Zerg 6"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="42.746,46.4953"/>
+            <radius value="6.4645"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Revealer - East"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="86.6491,62.033"/>
+            <radius value="6.854"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.0808,82.3037"/>
+            <radius value="5.845"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.5087,75.4797"/>
+            <radius value="6.2058"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.0368,70.1914"/>
+            <radius value="8.1762"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.31,81.8747"/>
+            <radius value="6.87"/>
+        </shape>
+        <shape type="circle">
+            <center value="101.4746,77.0515"/>
+            <radius value="8.1083"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.0622,53.9304"/>
+            <radius value="8.2885"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Revealer - West"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="59.8242,51.0456"/>
+            <radius value="6.7875"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.4384,59.4504"/>
+            <radius value="6.9794"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.6174,65.0468"/>
+            <radius value="6.097"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.1938,44.6401"/>
+            <radius value="7.2521"/>
+        </shape>
+        <shape type="circle">
+            <center value="65.0053,37.0522"/>
+            <radius value="8.851"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="P2 Nydus Canal Spawn"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="23.008,43.125"/>
+            <radius value="2.0927"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="P3 Nydus Canal Spawn"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="31.9926,87.0412"/>
+            <radius value="2.4042"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="P4 Nydus Canal Spawn"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="76.1662,100.4687"/>
+            <radius value="1.8864"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Intro Cinematic Marines 2"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="53.3273,58.2543"/>
+            <radius value="2.2233"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Intro Cinematic Marines 1"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="95.7353,71.684"/>
+            <radius value="2.2233"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="Zerg Expansion Area 3-1"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="93.943,69.5507"/>
+            <radius value="3.9367"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Zerg Expansion Area 3-4"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="68.7978,32.7556"/>
+            <radius value="4.4084"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Zerg Expansion Area 3-2"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="56.1552,54.5561"/>
+            <radius value="3.992"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="Zerg Expansion Area 3-3"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="69.4606,42.7263"/>
+            <radius value="4.5046"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="Zerg Expansion Area 1-1"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="36.9916,69.8022"/>
+            <radius value="5.6943"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="Zerg Expansion Area 1-2"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="75.1362,76.657"/>
+            <radius value="4.7922"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="Zerg Expansion Area 1-4"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="106.3732,80.2216"/>
+            <radius value="5.2387"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="Zerg Expansion Area 2-2"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="53.0571,68.0627"/>
+            <radius value="5.574"/>
+        </shape>
+    </region>
+    <region id="50">
+        <name value="Zerg Expansion Area 2-1"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="64.842,71.9697"/>
+            <radius value="5.9802"/>
+        </shape>
+    </region>
+    <region id="51">
+        <name value="Zerg Expansion Area 2-4"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="47.292,58.5937"/>
+            <radius value="5.6777"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="Zerg Expansion Area 3-5"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="76.367,55.122"/>
+            <radius value="4.4575"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="Burrowed Zerg 7"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="38.8605,59.906"/>
+            <radius value="5.5424"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="Zerg Expansion Area 4-3"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="90.3532,38.4223"/>
+            <radius value="4.5341"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="Zerg Expansion Area 4-2"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="83.8903,27.1906"/>
+            <radius value="4.5341"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="Zerg Expansion Area 4-1"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="93.585,47.542"/>
+            <radius value="4.5341"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Zerg Expansion Area 1-3"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="83.9843,82.8276"/>
+            <radius value="4.7922"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Zerg Expansion Area 2-3"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="93.2663,77.7175"/>
+            <radius value="4.7922"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Muta Spawn - Last Wave NW"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="18.0053,104.2614,21.6186,107.9724"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Rescue Rebel Marines 02"/>
+        <shape type="circle">
+            <center value="56.83,76.8212"/>
+            <radius value="4.0788"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Zerg Expansion Area 4-4"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="104.716,39.6184"/>
+            <radius value="4.5341"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Victory Cine - Zerg Approach 1"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="33.7058,74.5007"/>
+            <radius value="4.3237"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Victory Cine - Zerg Approach 2"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="64.262,72.9313"/>
+            <radius value="4.5534"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Victory Cine - Muta Spawn West 1"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="48.2468,25.635"/>
+            <radius value="5.91"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Victory Cine - Muta Spawn West 2"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="40.1242,59.8317"/>
+            <radius value="5.91"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Victory Cine - Muta Spawn East 1"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="111.1384,67.5065"/>
+            <radius value="5.91"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Victory Cine - Muta Spawn East 2"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="92.4755,76.5617"/>
+            <radius value="5.91"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Victory Cine - Muta West Destination"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="76.5207,35.4711"/>
+            <radius value="6.8352"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Victory Cine - Muta East Destination"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="92.8918,52.0087"/>
+            <radius value="6.8352"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Victory Cine - Muta Center Destination"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="90.7927,38.2163"/>
+            <radius value="6.8352"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="End Game P02 Nydus Spawn 1"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="24.7102,26.4833"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="End Game P02 Nydus Spawn 2"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="28.7626,34.17"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="End Game P02 Nydus Spawn 3"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="36.3112,31.5981"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="End Game P03 Nydus Spawn 1"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="43.3872,95.0888"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="End Game P03 Nydus Spawn 2"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="36.953,90.3322"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="End Game P03 Nydus Spawn 3"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="27.9707,91.575"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="End Game P03 Nydus Spawn 4"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="33.9558,78.443"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="End Game P04 Nydus Spawn 1"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="104.8862,92.8786"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="End Game P04 Nydus Spawn 2"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="96.8725,99.086"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="End Game P04 Nydus Spawn 3"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="89.028,91.8364"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="53">
+        <name value="End Game P04 Nydus Spawn 4"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="81.9118,97.5476"/>
+            <radius value="2.384"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="Lower Level Bunkers"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="66.9267,44.7775"/>
+            <radius value="6.661"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.4038,58.0063"/>
+            <radius value="6.9616"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.721,51.8041"/>
+            <radius value="6.661"/>
+        </shape>
+        <shape type="circle">
+            <center value="65.8642,35.0615"/>
+            <radius value="6.661"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Tauren Marine Sighted"/>
+        <shape type="circle">
+            <center value="54.8986,103.357"/>
+            <radius value="8.592"/>
+        </shape>
+    </region>
+    <region id="62">
+        <name value="Muta Spawn - Last Wave NE"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="114.3793,104.3085,117.9926,108.0195"/>
+        </shape>
+    </region>
+    <region id="63">
+        <name value="Muta Spawn - Last Wave SW"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="18.0251,12.019,21.6384,15.73"/>
+        </shape>
+    </region>
+    <region id="64">
+        <name value="Zerg Expansion Area 4-3 (Insane)"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="97.2512,30.0166"/>
+            <radius value="4.5341"/>
+        </shape>
+    </region>
+    <region id="65">
+        <name value="Spine Crawler Bullies 01"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="33.8662,54.2302"/>
+            <radius value="2.1376"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.09,67.9785"/>
+            <radius value="2.1376"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.0095,80.9914"/>
+            <radius value="2.1376"/>
+        </shape>
+    </region>
+    <region id="66">
+        <name value="Spine Crawler Bullies 02"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="95.8908,80.1538"/>
+            <radius value="2.1376"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.0275,76.083"/>
+            <radius value="2.1376"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.0556,68.8"/>
+            <radius value="2.1376"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.1108,60.135"/>
+            <radius value="2.1376"/>
+        </shape>
+        <shape type="circle">
+            <center value="99.9804,70.994"/>
+            <radius value="2.1376"/>
+        </shape>
+    </region>
+    <region id="67">
+        <name value="Spine Crawler Bullies 03"/>
+        <shape type="circle">
+            <center value="91.6511,72.2517"/>
+            <radius value="2.1376"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.9348,57.141"/>
+            <radius value="2.1376"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.0764,48.1086"/>
+            <radius value="2.1376"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.9765,58.0412"/>
+            <radius value="2.1376"/>
+        </shape>
+    </region>
+    <region id="68">
+        <name value="Burrowed Zerg 8"/>
+        <color value="255,255,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="108.0512,81.2001"/>
+            <radius value="5.5424"/>
+        </shape>
+    </region>
+    <region id="69">
+        <name value="Victory Cine - Truck"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="93.9843,44.0356,95.9926,46.0625"/>
+        </shape>
+    </region>
+    <region id="70">
+        <name value="Zerg Expansion Area 1-5"/>
+        <color value="255,128,0,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="37.9611,50.7912"/>
+            <radius value="4.7922"/>
+        </shape>
+    </region>
+    <region id="71">
+        <name value="Rescue Rebel Marines 03"/>
+        <shape type="circle">
+            <center value="27.4282,64.578"/>
+            <radius value="5.2941"/>
+        </shape>
+    </region>
+    <region id="72">
+        <name value="Rescue Rebel Marines 01"/>
+        <shape type="circle">
+            <center value="114.0803,72.255"/>
+            <radius value="3.6247"/>
+        </shape>
+    </region>
+    <region id="73">
+        <name value="Zerg Base P02"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="17.8896,18.6115,48.262,39.469"/>
+        </shape>
+    </region>
+    <region id="74">
+        <name value="Zerg Base P04"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="78.2392,87.2114,114.8488,107.789"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.7807,89.513"/>
+            <radius value="7.6271"/>
+        </shape>
+    </region>
+    <region id="75">
+        <name value="Zerg Base P03"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="41.2497,91.4011"/>
+            <radius value="11.2778"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.619,97.952"/>
+            <radius value="7.1684"/>
+        </shape>
+        <shape type="circle">
+            <center value="32.4062,88.46"/>
+            <radius value="7.633"/>
+        </shape>
+    </region>
+</Regions>

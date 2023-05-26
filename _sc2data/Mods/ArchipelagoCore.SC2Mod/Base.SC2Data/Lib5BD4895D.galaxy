@@ -72,7 +72,7 @@ void lib5BD4895D_gf_AP_Core_MapConfig_setChatboxPosition (int lp_anchor, int lp_
     lib5BD4895D_gv_aP_Core_chatbox_x = lp_x;
     lib5BD4895D_gv_aP_Core_chatbox_y = lp_y;
     lib5BD4895D_gv_aP_Core_chatbox_offsetX = lp_offsetX;
-    lib5BD4895D_gv_aP_Core_chatbox_offsetY = lib5BD4895D_gv_aP_Core_chatbox_offsetY;
+    lib5BD4895D_gv_aP_Core_chatbox_offsetY = lp_offsetY;
 }
 
 void lib5BD4895D_gf_AP_Core_MapConfig_setMapInit (trigger lp_initTrigger) {
@@ -290,7 +290,7 @@ void lib5BD4895D_gf_AP_Core_onLoadFinished () {
     // Variable Initialization
 
     // Implementation
-    lib5BD4895D_gf_initchatbox(c_anchorTopRight, lib5BD4895D_gv_aP_Core_chatbox_x, lib5BD4895D_gv_aP_Core_chatbox_y, lib5BD4895D_gv_aP_Core_chatbox_offsetX, lib5BD4895D_gv_aP_Core_chatbox_offsetY);
+    lib5BD4895D_gf_initchatbox(lib5BD4895D_gv_aP_Core_chatboxAnchor, lib5BD4895D_gv_aP_Core_chatbox_x, lib5BD4895D_gv_aP_Core_chatbox_y, lib5BD4895D_gv_aP_Core_chatbox_offsetX, lib5BD4895D_gv_aP_Core_chatbox_offsetY);
     auto78288737_g = lib5BD4895D_gv_aP_Core_affectedPlayers;
     lv_currentPlayer = -1;
     while (true) {

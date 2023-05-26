@@ -1,0 +1,97 @@
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TRaynor 03 /// TRaynor03
+DocInfo/Name=L'heure H /// Zero Hour
+MapInfo/Player00/Name=Neutre /// Neutral
+MapInfo/Player01/Name=Les Rebelles de Raynor /// Raynor's Raiders
+MapInfo/Player02/Name=Essaim zerg /// Zerg Swarm
+MapInfo/Player03/Name=Essaim zerg /// Zerg Swarm
+MapInfo/Player04/Name=Essaim zerg /// Zerg Swarm
+MapInfo/Player05/Name=Essaim zerg /// Zerg Swarm
+MapInfo/Player06/Name=Rebelles de Mar Sara /// Mar Sara Rebels
+MapInfo/Player07/Name=Hypérion /// Hyperion
+MapInfo/Player08/Name=Lvl80 ETC MS ! /// LVL80TSM!
+MapInfo/Player09/Name=Colon de Mar Sara /// Mar Sara Colonists
+Param/Value/04D269FC=Début de mission /// Mission Start
+Param/Value/14F8338E=Combattants rebelles /// Rebel Fighters
+Param/Value/15C552A2=<c val="00FF00">T moins 3!</c> /// <c val="00FF00">T Minus 3!</c>
+Param/Value/169A91DE=Normal ou facile /// Normal or Easy
+Param/Value/17C611E4=
+Param/Value/1BEEEE4F=Les marines peuvent attaquer sans danger<n/> de l'intérieur du bunker. /// Marines can safely attack<n/>from inside the Bunker
+Param/Value/1E2D895D=Améliorations pour le marine /// Marine Upgrades
+Param/Value/1EDE9CD3=<c val="00FF00">Centre technique</c> /// <c val="00FF00">Engineering Bay</c>
+Param/Value/219771E3=Les marines peuvent attaquer sans danger<n/> de l'intérieur du bunker. /// Marines can safely attack<n/>from inside the Bunker
+Param/Value/2365FCD3=Bunker détruit /// Bunker destroyed
+Param/Value/24851E7E=<c val="00FF00">BUNKER VIDE</c><n/>Sélectionner des marines, puis cliquer-droit<n/>pour charger le bunker. /// <c val="00FF00">EMPTY BUNKER</c><n/>Select Marines, then right-click<n/>to load the Bunker.
+Param/Value/24D71291=Bâtiments recyclés ou perdus /// Structures Salvaged or Lost
+Param/Value/252F3104=Sauver les marines /// Rescued Marines
+Param/Value/28341DB3=Sauver les rebelles ( /// Rescue the Rebels (
+Param/Value/28F3F94C=Sauver les marines /// Rescued Marines
+Param/Value/36A98A35=
+Param/Value/375DF249=Améliorations d'arme et d'armure /// Weapon and Armor Upgrades
+Param/Value/424A3B35=
+Param/Value/43FACC21=<c val="00FF00">BUNKER VIDE</c><n/>Sélectionner des marines, puis cliquer-droit<n/>pour charger le bunker. /// <c val="00FF00">EMPTY BUNKER</c><n/>Select Marines, then right-click<n/>to load the Bunker.
+Param/Value/44A00372=<c val="00FF00">T moins 1!</c> /// <c val="00FF00">T Minus 1!</c>
+Param/Value/44FEB281=
+Param/Value/46206E52=Ne peut attaquer que les unités aériennes /// Attacks air units only
+Param/Value/474B29B5=Combattants rebelles /// Rebel Fighters
+Param/Value/4ACA922A=
+Param/Value/4B8241F4=Évacuation dans :  /// Evacuation In: 
+Param/Value/4FB8BA12=Combattants rebelles /// Rebel Fighters
+Param/Value/51615F10=Combattants rebelles /// Rebel Fighters
+Param/Value/53895D62=Améliorations pour le marine /// Marine Upgrades
+Param/Value/58ACACB4=Tenez bon jusqu'à l'évacuation /// Hold Out For Evacuation
+Param/Value/5A139B4F=/3 /// /3
+Param/Value/5B24E1E1=
+Param/Value/62BDD509=) /// )
+Param/Value/62DF0124=
+Param/Value/6341641B=Transport pour le morceau de l'artéfact. /// Transport for the Artifact piece
+Param/Value/66738ACE=Sauver les rebelles ( /// Rescue the Rebels (
+Param/Value/6C654A08=Cinq minutes avant évacuation… /// Five minutes until evacuation...
+Param/Value/6C722AC4=Réparer le bunker /// Repair Bunker
+Param/Value/6FEBAEC8=Sauver les marines /// Rescued Marines
+Param/Value/71995348=Déplacez vos unités ici<n/>pour secourir les rebelles. /// Move your units here<n/>to rescue the rebels.
+Param/Value/7243E536=Couveuses détruites /// Hatcheries Destroyed
+Param/Value/73E2F5FA=Ne peut attaquer que les unités aériennes /// Attacks air units only
+Param/Value/7B12E251=Sauver les rebelles ( /// Rescue the Rebels (
+Param/Value/85796E57=<c val="00FF00">Tourelle lance-missiles</c> /// <c val="00FF00">Missile Turret</c>
+Param/Value/85B6A1D8=) /// )
+Param/Value/86605294=
+Param/Value/88CFB03A=) /// )
+Param/Value/8B1D16B7=
+Param/Value/9140EFF9=Dément /// Insane
+Param/Value/92440993=/3 /// /3
+Param/Value/92EF22E3=Améliorations d'arme et d'armure /// Weapon and Armor Upgrades
+Param/Value/9C5A9C47=
+Param/Value/9D72E7AD=
+Param/Value/A1EE5B7F=L'avancée rapide des Zergs a coupé certains combattants rebelles de la base. Ils ne tiendront pas longtemps sans aide, allez à leur secours ! /// The rapid advance of the zerg has cut off some rebel fighters outside the base. They can't hold out for long on their own. Rescue them!
+Param/Value/A6ED12DE=
+Param/Value/AA88D3B3=Escadrons rebelles secourus /// Rebel Squads Rescued
+Param/Value/B8ACA28F=<c val="00FF00">Tourelle lance-missiles</c> /// <c val="00FF00">Missile Turret</c>
+Param/Value/B965C69B=Difficile /// Hard
+Param/Value/C27EDDD5=Tous vos bâtiments ont été détruits. /// All of your structures have been destroyed.
+Param/Value/C3011260=
+Param/Value/C5438079=Déplacez vos unités ici<n/>pour secourir les rebelles. /// Move your units here<n/>to rescue the rebels.
+Param/Value/C95BAC98=Dix minutes avant évacuation… /// Ten minutes until evacuation...
+Param/Value/CAB93CB5=Combattants rebelles /// Rebel Fighters
+Param/Value/CAF01B4A=/8 /// /8
+Param/Value/D0B3E765=Déplacez vos unités ici<n/>pour secourir les rebelles. /// Move your units here<n/>to rescue the rebels.
+Param/Value/D4649464=<c val="00FF00">Centre technique</c> /// <c val="00FF00">Engineering Bay</c>
+Param/Value/DBBC8F23=/3 /// /3
+Param/Value/DC706388=<c val="00FF00">BUNKER VIDE</c><n/>Sélectionner des marines, puis cliquer-droit<n/>pour charger le bunker. /// <c val="00FF00">EMPTY BUNKER</c><n/>Select Marines, then right-click<n/>to load the Bunker.
+Param/Value/DC769176=Combattants rebelles /// Rebel Fighters
+Param/Value/DD630F5C=<c val="00FF00">BUNKER VIDE</c><n/>Sélectionner des marines, puis cliquer-droit<n/>pour charger le bunker. /// <c val="00FF00">EMPTY BUNKER</c><n/>Select Marines, then right-click<n/>to load the Bunker.
+Param/Value/DD79C5B5=Sauver les rebelles /// Rescue the Rebels
+Param/Value/DE63FD4D=) /// )
+Param/Value/DEE92A7D=
+Param/Value/E68CA25F=Les Zergs sont de retour ! Défendez la base assez longtemps pour qu'un transport arrive et évacue vos troupes de Mar Sara. /// The zerg have returned! Defend the base long enough for transport to arrive and evacuate your forces from Mar Sara.
+Param/Value/E7BF84D7=<c val="00FF00">T moins 2!</c> /// <c val="00FF00">T Minus 2!</c>
+Param/Value/E7E8684A=/3 /// /3
+Param/Value/E87246E9=
+Param/Value/F29197A1=Zergs en approche /// Incoming Zerg
+Param/Value/F4091673=Tenez bon jusqu'à l'évacuation /// Hold Out For Evacuation
+Param/Value/F6B6EFD6=<c val="00FF00">Secret découvert !</c> /// <c val="00FF00">Secret Found!</c>
+Param/Value/F805BF8E=Sauver les rebelles ( /// Rescue the Rebels (
+Param/Value/F820EA3E=
+Param/Value/F88EB373=/3 /// /3
+Param/Value/FF59296E=

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Redstone">
+        <FogColor value="255,170,21,0"/>
+        <FogDensity value="0.160000"/>
+        <FogFalloff value="0.200000"/>
+        <FogStartingHeight value="2.000000"/>
+    </CTerrain>
+</Catalog>
