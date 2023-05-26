@@ -4,6 +4,7 @@ import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Entrance, \
     LocationProgressType
+
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from worlds.AutoWorld import WebWorld, World
 from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType
@@ -394,6 +395,35 @@ class MMBN3World(World):
                     location_data = location_data_table[location_name]
                     # print("Placing item "+item.itemName+" at location "+location_data.name)
                     rom.replace_item(location_data, item)
+                    if location_data.inject_name:
+                        item_name_text = "Item"
+                        long_item_text = ""
+
+                        # No item hinting
+                        if self.multiworld.trade_quest_hinting[self.player] == 0:
+                            item_name_text = "Check"
+                        # Partial item hinting
+                        elif self.multiworld.trade_quest_hinting[self.player] == 1:
+                            if item.progression == ItemClassification.progression \
+                                    or item.progression == ItemClassification.progression_skip_balancing:
+                                item_name_text = "Progress"
+                            elif item.progression == ItemClassification.useful \
+                                    or item.progression == ItemClassification.trap:
+                                item_name_text = "Item"
+                            else:
+                                item_name_text = "Garbage"
+
+                            if item.recipient == 'Myself':
+                                item_name_text = "Your " + item_name_text
+                            else:
+                                item_name_text = item.recipient + "'s " + item_name_text
+                        # Full item hinting
+                        else:
+                            owners_name = "Your" if item.recipient == 'Myself' else item.recipient + "'s"
+                            long_item_text = f"It's {owners_name} \n\"{item.itemName}\"!!"
+
+                        rom.insert_hint_text(location_data, item_name_text, long_item_text)
+
             rom.inject_name(world.player_name[player])
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gba")
@@ -423,6 +453,10 @@ class MMBN3World(World):
     def create_event(self, event: str):
         # while we are at it, we can also add a helper to create events
         return MMBN3Item(event, ItemClassification.progression, None, self.player)
+
+    def fill_slot_data(self):
+        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+
 
     def explore_score(self, state):
         """

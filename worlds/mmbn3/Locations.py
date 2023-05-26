@@ -15,9 +15,11 @@ class LocationData:
     text_script_index: int = 0
     text_box_indices: typing.List[int] = [0]
     inject_name: bool = False
+    hint_flag: int = None
+    hint_flag_mask: int = None
 
     def __init__(self, name, id, flag, mask, text_archive_address=0x0, text_script_index=0x0,
-                 text_box_indices=None, inject_name=False):
+                 text_box_indices=None, inject_name=False, hint_flag=None, hint_flag_mask=None):
         self.name = name
         self.id = id
         self.flag_byte = flag
@@ -28,6 +30,8 @@ class LocationData:
             text_box_indices = [0]
         self.text_box_indices = text_box_indices
         self.inject_name = inject_name
+        self.hint_flag = hint_flag
+        self.hint_flag_mask = hint_flag_mask
 
 
 class MMBN3Location(Location):
@@ -188,16 +192,16 @@ overworlds = [
     LocationData(LocationName.Yoka_Quiz_Master,                   0xb3108e, 0x200005f, 0x4, 0x748894, 202, [0]),
     LocationData(LocationName.Hospital_Quiz_Queen,                0xb3108f, 0x200005f, 0x2, 0x757724, 202, [0]),
     LocationData(LocationName.Hades_Quiz_King,                    0xb31090, 0x2000164, 0x8, 0x7519B0, 207, [0]),
-    LocationData(LocationName.ACDC_SonicWav_W_Trade,              0xb31091, 0x2000162, 0x10, 0x73A7F8, 192, [0], True),
-    LocationData(LocationName.ACDC_Bubbler_C_Trade,               0xb31092, 0x2000162, 0x8, 0x737634, 192, [0], True),
-    LocationData(LocationName.ACDC_Recov120_S_Trade,              0xb31093, 0x2000163, 0x40, 0x72FA7C, 192, [0], True),
-    LocationData(LocationName.SciLab_Shake1_S_Trade,              0xb31094, 0x2000163, 0x10, 0x73B9C8, 192, [0], True),
-    LocationData(LocationName.Yoka_FireSwrd_P_Trade,              0xb31095, 0x2000162, 0x4, 0x745488, 192, [0], True),
-    LocationData(LocationName.Hospital_DynaWav_V_Trade,           0xb31096, 0x2000163, 0x4, 0x754D00, 202, [0], True),
-    LocationData(LocationName.Beach_DNN_WideSwrd_C_Trade,         0xb31097, 0x2000162, 0x1, 0x750C9C, 192, [0], True),
-    LocationData(LocationName.Beach_DNN_HoleMetr_H_Trade,         0xb31098, 0x2000164, 0x10, 0x751110, 192, [0], True),
-    LocationData(LocationName.Beach_DNN_Shadow_J_Trade,           0xb31099, 0x2000163, 0x2, 0x750248, 192, [0], True),
-    LocationData(LocationName.Hades_GrabBack_K_Trade,             0xb3109a, 0x2000164, 0x80, 0x753A48, 192, [0], True),
+    LocationData(LocationName.ACDC_SonicWav_W_Trade,              0xb31091, 0x2000162, 0x10, 0x73A7F8, 192, [0], True, 0x2000160, 0x80),
+    LocationData(LocationName.ACDC_Bubbler_C_Trade,               0xb31092, 0x2000162, 0x8, 0x737634, 192, [0], True, 0x2000160, 0x40),
+    LocationData(LocationName.ACDC_Recov120_S_Trade,              0xb31093, 0x2000163, 0x40, 0x72FA7C, 192, [0], True, 0x2000160, 0x02),
+    LocationData(LocationName.SciLab_Shake1_S_Trade,              0xb31094, 0x2000163, 0x10, 0x73B9C8, 192, [0], True, 0x2000161, 0x80),
+    LocationData(LocationName.Yoka_FireSwrd_P_Trade,              0xb31095, 0x2000162, 0x4, 0x745488, 192, [0], True, 0x2000160, 0x20),
+    LocationData(LocationName.Hospital_DynaWav_V_Trade,           0xb31096, 0x2000163, 0x4, 0x754D00, 202, [0], True, 0x2000161, 0x20),
+    LocationData(LocationName.Beach_DNN_WideSwrd_C_Trade,         0xb31097, 0x2000162, 0x1, 0x750C9C, 192, [0], True, 0x2000160, 0x08),
+    LocationData(LocationName.Beach_DNN_HoleMetr_H_Trade,         0xb31098, 0x2000164, 0x10, 0x751110, 192, [0], True, 0x2000162, 0x80),
+    LocationData(LocationName.Beach_DNN_Shadow_J_Trade,           0xb31099, 0x2000163, 0x2, 0x750248, 192, [0], True, 0x2000161, 0x10),
+    LocationData(LocationName.Hades_GrabBack_K_Trade,             0xb3109a, 0x2000164, 0x80, 0x753A48, 192, [0], True, 0x2000161, 0x04),
     LocationData(LocationName.Comedian,                           0xb3109b, 0x200024d, 0x20, 0x76DC80, 3, [22]),
     LocationData(LocationName.Villain,                            0xb3109c, 0x200024d, 0x10, 0x77124C, 24, [24]),
     # LocationData(LocationName.ACDC_School_Desk,                   0xb3109d, 0x200024c, 0x1, 0x739580, 236, [4]),
@@ -342,6 +346,7 @@ always_excluded_locations = [
 
 
 all_locations: typing.List[LocationData] = bmds + pmds + overworlds + jobs + number_traders + chocolate_shop
+scoutable_locations: typing.List[LocationData] = [loc for loc in all_locations if loc.hint_flag is not None]
 location_table: typing.Dict[str, int] = {locData.name: locData.id for locData in all_locations}
 location_data_table: typing.Dict[str, LocationData] = {locData.name: locData for locData in all_locations}
 
