@@ -17,7 +17,7 @@ Dohna Dohna no Uta|0-46|Default Music|False|2|4|6|
 Spring Carnival|0-9|Default Music|False|2|4|7|
 DISCO NIGHT|0-30|Default Music|True|2|4|7|
 Koi no Moonlight|0-49|Default Music|False|2|5|8|
-Lian Ai Audio Navigation|0-10|Default Music|True|3|5|7|
+Lian Ai Audio Navigation|0-10|Default Music|False|3|5|7|
 Lights of Muse|0-11|Default Music|True|4|6|8|10
 midstream jam|0-12|Default Music|False|2|5|8|
 Nihao|0-40|Default Music|False|3|5|7|
@@ -340,7 +340,7 @@ SWEETSWEETSWEET|18-0|Cute Is Everything Vol.4|True|2|5|7|
 Deep Blue and the Breaths of the Night|18-1|Cute Is Everything Vol.4|True|2|4|6|
 Joy Connection|18-2|Cute Is Everything Vol.4|False|3|6|8|
 Self Willed Girl Ver.B|18-3|Cute Is Everything Vol.4|True|4|6|8|
-Just Disobedient|18-4|Cute Is Everything Vol.4|True|3|6|8|
+Just Disobedient|18-4|Cute Is Everything Vol.4|False|3|6|8|
 Holy Sh*t Grass Snake|18-5|Cute Is Everything Vol.4|False|2|6|9|
 Cotton Candy Wonderland|17-0|Happy Otaku Pack Vol.7|False|2|5|8|
 Punai Punai Taiso|17-1|Happy Otaku Pack Vol.7|False|2|7|10|
@@ -356,7 +356,7 @@ Magic Knight Girl|16-4|Give Up TREATMENT Vol.6|False|4|7|9|
 Eeliaas|16-5|Give Up TREATMENT Vol.6|True|6|9|11|
 Magic Spell|15-0|Cute Is Everything Vol.3|True|2|5|7|
 Colorful Star, Colored Drawing, Travel Poem|15-1|Cute Is Everything Vol.3|False|3|4|6|
-Satell Knight|15-2|Cute Is Everything Vol.3|True|3|6|8|
+Satell Knight|15-2|Cute Is Everything Vol.3|False|3|6|8|
 Black River Feat.Mes|15-3|Cute Is Everything Vol.3|True|1|4|6|
 I am sorry|15-4|Cute Is Everything Vol.3|False|2|5|8|
 Ueta Tori Tachi|15-5|Cute Is Everything Vol.3|False|3|6|8|
@@ -367,7 +367,7 @@ Onsen Dai Sakusen|14-3|Happy Otaku Pack Vol.6|True|4|6|8|
 Gleam stone|14-4|Happy Otaku Pack Vol.6|False|4|7|9|
 GOODWORLD|14-5|Happy Otaku Pack Vol.6|False|4|7|10|
 Instant Soluble Neon|13-0|Cute Is Everything Vol.2|True|2|4|7|
-Retrospective Poem on the Planet|13-1|Cute Is Everything Vol.2|True|3|5|7|
+Retrospective Poem on the Planet|13-1|Cute Is Everything Vol.2|False|3|5|7|
 I'm Gonna Buy! Buy! Buy!|13-2|Cute Is Everything Vol.2|True|4|6|8|
 Dating Manifesto|13-3|Cute Is Everything Vol.2|True|2|4|6|
 First Snow|13-4|Cute Is Everything Vol.2|True|2|3|6|
@@ -444,3 +444,9 @@ Dreaming Girl|1-2|Cute Is Everything Vol.1|False|2|5|6|
 Daruma-san Fell Over|1-3|Cute Is Everything Vol.1|False|3|4|6|
 Different|1-4|Cute Is Everything Vol.1|False|1|3|6|
 The Future of the Phantom|1-5|Cute Is Everything Vol.1|False|1|3|5|
+Doki Doki Jump!|63-0|MUSE RADIO FM104|True|3|5|7|
+Centennial Streamers High|63-1|MUSE RADIO FM104|False|4|7|9|
+Love Patrol|63-2|MUSE RADIO FM104|True|3|5|7|
+Mahorova|63-3|MUSE RADIO FM104|True|3|5|8|
+Yoru no machi|63-4|MUSE RADIO FM104|True|1|4|7|
+INTERNET YAMERO|63-5|MUSE RADIO FM104|True|6|8|10|
