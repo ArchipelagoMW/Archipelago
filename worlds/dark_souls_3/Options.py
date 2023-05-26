@@ -136,7 +136,7 @@ class RandomizeWeaponLevelPercentageOption(Range):
 class MinLevelsIn5WeaponPoolOption(Range):
     """The minimum upgraded value of a weapon in the pool of weapons that can only reach +5"""
     display_name = "Minimum Level of +5 Weapons"
-    range_start = 1
+    range_start = 0
     range_end = 5
     default = 1
 
@@ -144,7 +144,7 @@ class MinLevelsIn5WeaponPoolOption(Range):
 class MaxLevelsIn5WeaponPoolOption(Range):
     """The maximum upgraded value of a weapon in the pool of weapons that can only reach +5"""
     display_name = "Maximum Level of +5 Weapons"
-    range_start = 1
+    range_start = 0
     range_end = 5
     default = 5
 
@@ -152,7 +152,7 @@ class MaxLevelsIn5WeaponPoolOption(Range):
 class MinLevelsIn10WeaponPoolOption(Range):
     """The minimum upgraded value of a weapon in the pool of weapons that can reach +10"""
     display_name = "Minimum Level of +10 Weapons"
-    range_start = 1
+    range_start = 0
     range_end = 10
     default = 1
 
@@ -160,7 +160,7 @@ class MinLevelsIn10WeaponPoolOption(Range):
 class MaxLevelsIn10WeaponPoolOption(Range):
     """The maximum upgraded value of a weapon in the pool of weapons that can reach +10"""
     display_name = "Maximum Level of +10 Weapons"
-    range_start = 1
+    range_start = 0
     range_end = 10
     default = 10
 
