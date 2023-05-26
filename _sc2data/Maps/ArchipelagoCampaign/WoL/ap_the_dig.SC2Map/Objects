@@ -3683,7 +3683,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="60" Position="58.5,65.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Barracks" Player="7">
+    <ObjectUnit Id="60" Position="58.5,65.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Barracks" Player="7">
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="87" Position="88.8764,111.9243,0" Rotation="0.4997" Scale="1,1,1" UnitType="HighTemplar" Player="2">
@@ -3707,7 +3707,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1140" Position="59.5,54.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="EngineeringBay" Player="7"/>
+    <ObjectUnit Id="1140" Position="59.5,54.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_EngineeringBay" Player="7"/>
     <ObjectUnit Id="78" Position="59.5,119.5,0" Scale="1,1,1" UnitType="RoboticsBay" Player="5">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -3738,7 +3738,7 @@
         <AIRebuild Index="3" Value="2"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1128" Position="76,63,0" Rotation="4.5026" Scale="1,1,1" UnitType="MissileTurret" Player="7"/>
+    <ObjectUnit Id="1128" Position="76,63,0" Rotation="4.5026" Scale="1,1,1" UnitType="AP_MissileTurret" Player="7"/>
     <ObjectUnit Id="101" Position="78,106,0" Scale="1,1,1" UnitType="Pylon" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
@@ -3765,7 +3765,7 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1119" Position="121.1237,29.6691,0" Rotation="0.8112" Scale="1,1,1" UnitType="CarrionBird"/>
-    <ObjectUnit Id="508" Position="53.5,56.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CommandCenter" Player="7"/>
+    <ObjectUnit Id="508" Position="53.5,56.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CommandCenter" Player="7"/>
     <ObjectUnit Id="57" Position="36.5,116.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Assimilator" Player="5">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -3786,7 +3786,7 @@
         <AIActive Index="3" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="42" Position="54,66,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="7"/>
+    <ObjectUnit Id="42" Position="54,66,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="7"/>
     <ObjectUnit Id="388" Position="45.7851,107.5441,0" Rotation="5.4033" Scale="1,1,1" UnitType="Zealot" Player="5">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="2"/>
@@ -3812,14 +3812,14 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="51" Variation="4" Position="77,116.5,0" Scale="1,1,1" UnitType="MineralField" Resources="2150"/>
-    <ObjectUnit Id="636" Position="55.8178,52.9777,0" Rotation="0.444" Scale="1,1,1" UnitType="SCV" Player="7"/>
+    <ObjectUnit Id="636" Position="55.8178,52.9777,0" Rotation="0.444" Scale="1,1,1" UnitType="AP_SCV" Player="7"/>
     <ObjectUnit Id="118" Position="22.0402,147.6152,0" Rotation="4.5502" Scale="1,1,1" UnitType="Food1000" Player="5">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="1493" Position="103.5346,25.4577,0" Rotation="2.8964" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="472" Variation="9" Position="94,36.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1245"/>
     <ObjectUnit Id="29" Position="84,37.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1145"/>
-    <ObjectUnit Id="408" Position="50.649,53.5881,0" Rotation="5.603" Scale="1,1,1" UnitType="SCV" Player="7"/>
+    <ObjectUnit Id="408" Position="50.649,53.5881,0" Rotation="5.603" Scale="1,1,1" UnitType="AP_SCV" Player="7"/>
     <ObjectUnit Id="93" Position="76.7868,103.1596,0" Rotation="0.7993" Scale="1,1,1" UnitType="Scout" Player="2">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="2"/>
@@ -4030,13 +4030,13 @@
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="1490" Position="106.5,29.5,0" Rotation="1.0058" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="113" Position="50,66,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="7"/>
+    <ObjectUnit Id="113" Position="50,66,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="7"/>
     <ObjectUnit Id="26" Position="96.5,37.5,0" Scale="1,1,1" UnitType="VespeneGeyser" Resources="1864"/>
-    <ObjectUnit Id="95" Position="62.5,59.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Factory" Player="7"/>
+    <ObjectUnit Id="95" Position="62.5,59.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Factory" Player="7"/>
     <ObjectUnit Id="52" Variation="6" Position="53,48.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1459">
         <AIRebuild Index="0" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="635" Position="54.2158,52.26,0" Rotation="0.0615" Scale="1,1,1" UnitType="SCV" Player="7"/>
+    <ObjectUnit Id="635" Position="54.2158,52.26,0" Rotation="0.0615" Scale="1,1,1" UnitType="AP_SCV" Player="7"/>
     <ObjectUnit Id="104" Position="81.5,110.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Nexus" Player="2">
         <AIRebuild Index="0" Value="0"/>
         <AIRebuild Index="2" Value="14"/>
@@ -4350,7 +4350,7 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1202" Position="106.5,101.5,0" Rotation="0.1813" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="273" Position="49.475,55.5078,0" Rotation="5.1618" Scale="1,1,1" UnitType="SCV" Player="7"/>
+    <ObjectUnit Id="273" Position="49.475,55.5078,0" Rotation="5.1618" Scale="1,1,1" UnitType="AP_SCV" Player="7"/>
     <ObjectUnit Id="212" Position="85.7617,109.6481,0" Rotation="0.2707" Scale="1,1,1" UnitType="HighTemplar" Player="2">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="2"/>
@@ -4432,7 +4432,7 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="1197" Position="106.5,100.5,0" Rotation="3.6987" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
-    <ObjectUnit Id="270" Position="52,68,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="7"/>
+    <ObjectUnit Id="270" Position="52,68,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="7"/>
     <ObjectUnit Id="160" Position="84.2592,112.847,0" Scale="1,1,1" UnitType="Probe" Player="2">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -4868,7 +4868,7 @@
         <AIRebuild Index="3" Value="2"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1087" Position="68,71,0" Rotation="0.6882" Scale="1,1,1" UnitType="MissileTurret" Player="7"/>
+    <ObjectUnit Id="1087" Position="68,71,0" Rotation="0.6882" Scale="1,1,1" UnitType="AP_MissileTurret" Player="7"/>
     <ObjectUnit Id="1492" Position="102.5346,25.4577,0" Rotation="3.6625" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="119" Position="123,74,0" Scale="1,1,1" UnitType="PhotonCannon" Player="4">
         <AIRebuild Index="2" Value="14"/>
@@ -4927,7 +4927,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="406" Position="50.1965,59.5844,0" Rotation="4.1767" Scale="1,1,1" UnitType="SCV" Player="7"/>
+    <ObjectUnit Id="406" Position="50.1965,59.5844,0" Rotation="4.1767" Scale="1,1,1" UnitType="AP_SCV" Player="7"/>
     <ObjectUnit Id="631" Position="25.5056,104.995,0" Rotation="0.779" Scale="1,1,1" UnitType="Colossus" Player="5">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="2"/>
@@ -5011,8 +5011,8 @@
         <AIRebuild Index="3" Value="2"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="97" Position="65,59,0" Rotation="5.4975" Scale="1,1,1" UnitType="FactoryTechLab" Player="7"/>
-    <ObjectUnit Id="581" Position="62,50,0" Rotation="5.4975" Scale="1,1,1" UnitType="MercCompound" Player="7"/>
+    <ObjectUnit Id="97" Position="65,59,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_FactoryTechLab" Player="7"/>
+    <ObjectUnit Id="581" Position="62,50,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_MercCompound" Player="7"/>
     <ObjectUnit Id="1491" Position="106.5,27.5,0" Rotation="4.4697" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="112" Position="77.1337,98.0124,0" Rotation="0.716" Scale="1,1,1" UnitType="Stalker" Player="2">
         <AIRebuild Index="2" Value="14"/>
@@ -5031,7 +5031,7 @@
         <AIRebuild Index="3" Value="2"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="634" Position="52.2802,52.4426,0" Rotation="5.951" Scale="1,1,1" UnitType="SCV" Player="7"/>
+    <ObjectUnit Id="634" Position="52.2802,52.4426,0" Rotation="5.951" Scale="1,1,1" UnitType="AP_SCV" Player="7"/>
     <ObjectUnit Id="496" Position="76.2741,107.2512,0" Rotation="0.7866" Scale="1,1,1" UnitType="Carrier" Player="2">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="2"/>
@@ -5061,7 +5061,7 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="2" Variation="2" Position="38,120.5,0" Scale="1,1,1" UnitType="MineralField"/>
-    <ObjectUnit Id="44" Position="46.5,58.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Refinery" Player="7"/>
+    <ObjectUnit Id="44" Position="46.5,58.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Refinery" Player="7"/>
     <ObjectUnit Id="386" Position="23.0146,112.964,0" Rotation="0.6413" Scale="1,1,1" UnitType="Zealot" Player="5">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="2"/>
@@ -5074,7 +5074,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="998" Position="49.3986,57.56,0" Rotation="4.7761" Scale="1,1,1" UnitType="SCV" Player="7"/>
+    <ObjectUnit Id="998" Position="49.3986,57.56,0" Rotation="4.7761" Scale="1,1,1" UnitType="AP_SCV" Player="7"/>
     <ObjectUnit Id="1444" Position="34.5,122.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Gateway" Player="5">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
