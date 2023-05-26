@@ -277,11 +277,15 @@ class DarkSouls3World(World):
             if len(removable_items) == 0:
                 break
 
+            num_existing_copies = len([item for item in itempool if item.name == item_name])
             for _ in range(guaranteed_items[item_name]):
+                if num_existing_copies > 0:
+                    num_existing_copies -= 1
+                    continue
+
                 if num_required_extra_items > 0:
                     # We can just add them instead of using "Soul of an Intrepid Hero" later
                     num_required_extra_items -= 1
-
                 else:
                     if len(removable_items) == 0:
                         break
