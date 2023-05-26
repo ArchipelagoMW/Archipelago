@@ -6964,7 +6964,6 @@
         <AbilArray Link="ProgressRally"/>
         <AbilArray Link="AP_Charge"/>
         <AbilArray Link="AP_VoidZealotWhirlwind"/>
-        <BehaviorArray Link="ZealotRespawnDeath2"/>
         <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
         <WeaponArray Link="AP_SolariteReaper"/>
         <CardLayouts>

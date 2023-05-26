@@ -3069,6 +3069,7 @@
     <CActorModel id="AP_GenericStunOverheadModel" parent="ModelAnimationStyleContinuous">
         <Inherits index="Visibility" value="1"/>
         <EditorCategories value=""/>
+        <!--These Behaviors don't seem to exist and/or aren't used anywhere /-->
         <On Terms="Behavior.FlyerBeastDiveHeightStun.On" Send="Create"/>
         <On Terms="Behavior.FlyerBeastDiveHeightStun.Off" Send="Destroy"/>
         <On Terms="Behavior.GreaterBeastStun.On" Send="Create"/>
@@ -6912,10 +6913,10 @@
         <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsCarrier" Send="Create"/>
         <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsVoidRay" Send="Create"/>
         <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsBattlecruiser" Send="Create"/>
-        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsHerculesCombine" Send="Create"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit AP_IsHercules" Send="Create"/>
         <On Terms="Behavior.AP_SOAHeroicShieldImmunity.Off" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation; ValidateUnit IsBattlecruiser" Send="SetScale 1.500000"/>
-        <On Terms="ActorCreation; ValidateUnit IsHerculesCombine" Send="SetScale 1.500000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsHercules" Send="SetScale 1.500000"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <AutoScaleFactor value="0.800000"/>
@@ -6927,19 +6928,19 @@
         <Inherits index="Visibility" value="1"/>
         <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On" Send="Create"/>
         <On Terms="Behavior.AP_SOAHeroicShieldImmunity.Off" Send="AnimBracketStop BSD"/>
-        <On Terms="ActorCreation; ValidateUnit IsColossus" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidateUnit IsCarrier" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidateUnit IsVoidRay" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsColossus" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsCarrier" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsVoidRay" Send="Destroy"/>
         <On Terms="ActorCreation; ValidateUnit IsBattlecruiser" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidateUnit IsHerculesCombine" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsHercules" Send="Destroy"/>
         <On Terms="ActorCreation; ValidateUnit IsThor" Send="SetScale 1.200000"/>
-        <On Terms="ActorCreation; ValidateUnit IsGoliath" Send="SetScale 1.200000"/>
-        <On Terms="ActorCreation; ValidateUnit IsCyclone" Send="SetScale 1.200000"/>
-        <On Terms="ActorCreation; ValidateUnit IsImmortal" Send="SetScale 1.200000"/>
-        <On Terms="ActorCreation; ValidateUnit IsPhoenix" Send="SetScale 1.200000"/>
-        <On Terms="ActorCreation; ValidateUnit IsTempest" Send="SetScale 1.200000"/>
-        <On Terms="ActorCreation; ValidateUnit IsScienceVessel" Send="SetScale 0.700000"/>
-        <On Terms="ActorCreation; ValidateUnit IsCorsairMP" Send="SetScale 0.900000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsGoliath" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsCyclone" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsImmortal" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsPhoenix" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsTempest" Send="SetScale 1.200000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsScienceVessel" Send="SetScale 0.700000"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsCorsairMP" Send="SetScale 0.900000"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth"/>
         <AutoScaleFactor value="0.800000"/>
@@ -6957,7 +6958,7 @@
     <CActorModel id="AP_SOAHeroicShieldTallModel" parent="ModelAnimationStyleContinuous">
         <Inherits index="BaseModelScale" value="1"/>
         <Inherits index="Scale" value="1"/>
-        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit IsColossus" Send="Create"/>
+        <On Terms="Behavior.AP_SOAHeroicShieldImmunity.On; ValidateUnit AP_IsColossus" Send="Create"/>
         <On Terms="Behavior.AP_SOAHeroicShieldImmunity.Off" Send="AnimBracketStop BSD"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth"/>

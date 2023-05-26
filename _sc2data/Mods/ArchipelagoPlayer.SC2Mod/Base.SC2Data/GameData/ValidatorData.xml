@@ -350,56 +350,12 @@
     <CValidatorUnitType id="AP_IsSOACaster">
         <Value value="AP_SoACaster"/>
     </CValidatorUnitType>
-    <CValidatorUnitType id="AP_IsVanillaSOACaster">
-        <Value value="SoACaster"/>
-    </CValidatorUnitType>
     <CValidatorUnitFilters id="AP_IsInvulnerable">
         <Filters value="Invulnerable;-"/>
     </CValidatorUnitFilters>
-    <CValidatorUnitType id="AP_IsAPHerculesCombine"/>
-    <CValidatorCombine id="AP_IsVanillaHerculesCombine">
-        <CombineArray value="AP_IsVanillaHercules"/>
-        <CombineArray value="AP_IsVanillaHerculesLander"/>
-        <CombineArray value="AP_IsVanillaHerculesLanderFlying"/>
-    </CValidatorCombine>
-    <CValidatorCombine id="IsHerculesCombine" parent="CValidatorCombine">
-        <!-- Override -->
-        <CombineArray value="AP_IsVanillaHerculesCombine"/>
-        <CombineArray value="AP_IsAPHerculesCombine"/>
-    </CValidatorCombine>
-    <CValidatorUnitType id="AP_IsAPHercules">
+    <CValidatorUnitType id="AP_IsHercules">
         <Value value="AP_Hercules"/>
     </CValidatorUnitType>
-    <CValidatorUnitType id="AP_IsVanillaHercules">
-        <Value value="Hercules"/>
-    </CValidatorUnitType>
-    <CValidatorCombine id="IsHercules" parent="CValidatorCombine">
-        <!-- Override -->
-        <CombineArray value="AP_IsVanillaHercules"/>
-        <CombineArray value="AP_IsAPHercules"/>
-    </CValidatorCombine>
-    <CValidatorUnitType id="AP_IsAPHerculesLander">
-        <Value value="AP_HerculesLander"/>
-    </CValidatorUnitType>
-    <CValidatorUnitType id="AP_IsVanillaHerculesLander">
-        <Value value="HerculesLander"/>
-    </CValidatorUnitType>
-    <CValidatorCombine id="IsHerculesLander" parent="CValidatorCombine">
-        <!-- Override -->
-        <CombineArray value="AP_IsVanillaHerculesLander"/>
-        <CombineArray value="AP_IsAPHerculesLander"/>
-    </CValidatorCombine>
-    <CValidatorUnitType id="AP_IsAPHerculesLanderFlying">
-        <Value value="AP_HerculesLanderFlying"/>
-    </CValidatorUnitType>
-    <CValidatorUnitType id="AP_IsVanillaHerculesLanderFlying">
-        <Value value="HerculesLanderFlying"/>
-    </CValidatorUnitType>
-    <CValidatorCombine id="IsHerculesLanderFlying" parent="CValidatorCombine">
-        <!-- Override -->
-        <CombineArray value="AP_IsVanillaHerculesLanderFlying"/>
-        <CombineArray value="AP_IsAPHerculesLanderFlying"/>
-    </CValidatorCombine>
     <CValidatorUnitType id="AP_IsAPArchon">
         <Value value="AP_Archon"/>
     </CValidatorUnitType>
@@ -417,7 +373,7 @@
     <CValidatorUnitType id="AP_IsVanillaCarrier">
         <Value value="Carrier"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsCarrier" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsCarrier">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaCarrier"/>
         <CombineArray value="AP_IsAPCarrier"/>
@@ -428,7 +384,7 @@
     <CValidatorUnitType id="AP_IsVanillaColossus">
         <Value value="Colossus"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsColossus" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsColossus">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaColossus"/>
         <CombineArray value="AP_IsAPColossus"/>
@@ -439,7 +395,7 @@
     <CValidatorUnitType id="AP_IsVanillaDarkTemplar">
         <Value value="DarkTemplar"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsDarkTemplar" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsDarkTemplar">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaDarkTemplar"/>
         <CombineArray value="AP_IsAPDarkTemplar"/>
@@ -450,7 +406,7 @@
     <CValidatorUnitType id="AP_IsVanillaDarkTemplarAiur">
         <Value value="DarkTemplarAiur"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsDarkTemplarAiur" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsDarkTemplarAiur">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaDarkTemplarAiur"/>
         <CombineArray value="AP_IsAPDarkTemplarAiur"/>
@@ -461,7 +417,7 @@
     <CValidatorUnitType id="AP_IsVanillaDarkTemplarShakuras">
         <Value value="DarkTemplarShakuras"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsDarkTemplarShakuras" parent="CValidatorCombine">
+    <CValidatorCombine id="IsDarkTemplarShakuras">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaDarkTemplarShakuras"/>
         <CombineArray value="AP_IsAPDarkTemplarShakuras"/>
@@ -472,7 +428,7 @@
     <CValidatorUnitType id="AP_IsVanillaDarkTemplarTaldarim">
         <Value value="DarkTemplarTaldarim"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsDarkTemplarTaldarim" parent="CValidatorCombine">
+    <CValidatorCombine id="IsDarkTemplarTaldarim">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaDarkTemplarTaldarim"/>
         <CombineArray value="AP_IsAPDarkTemplarTaldarim"/>
@@ -486,7 +442,7 @@
     <CValidatorUnitFilters id="AP_IsHeroic">
         <Filters value="Heroic;-"/>
     </CValidatorUnitFilters>
-    <CValidatorCombine id="IsHighTemplar" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsHighTemplar">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaHighTemplar"/>
         <CombineArray value="AP_IsAPHighTemplar"/>
@@ -497,7 +453,7 @@
     <CValidatorUnitType id="AP_IsVanillaImmortal">
         <Value value="Immortal"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsImmortal" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsImmortal">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaImmortal"/>
         <CombineArray value="AP_IsAPImmortal"/>
@@ -511,7 +467,7 @@
     <CValidatorUnitFilters id="AP_IsMassive">
         <Filters value="Massive;-"/>
     </CValidatorUnitFilters>
-    <CValidatorCombine id="IsPhoenix" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsPhoenix">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaPhoenix"/>
         <CombineArray value="AP_IsAPPhoenix"/>
@@ -533,7 +489,7 @@
     <CValidatorUnitType id="AP_IsVanillaSentryAiur">
         <Value value="SentryAiur"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsSentryAiur" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsSentryAiur">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaSentryAiur"/>
         <CombineArray value="AP_IsAPSentryAiur"/>
@@ -544,7 +500,7 @@
     <CValidatorUnitType id="AP_IsVanillaEnergizer">
         <Value value="Energizer"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsEnergizer" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsEnergizer">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaEnergizer"/>
         <CombineArray value="AP_IsAPEnergizer"/>
@@ -555,7 +511,7 @@
     <CValidatorUnitType id="AP_IsVanillaEnergizerPhasing">
         <Value value="EnergizerPhasing"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsEnergizerPhasing" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsEnergizerPhasing">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaEnergizerPhasing"/>
         <CombineArray value="AP_IsAPEnergizerPhasing"/>
@@ -566,7 +522,7 @@
     <CValidatorUnitType id="AP_IsVanillaMonitor">
         <Value value="Monitor"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsMonitor" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsMonitor">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaMonitor"/>
         <CombineArray value="AP_IsAPMonitor"/>
@@ -577,7 +533,7 @@
     <CValidatorUnitType id="AP_IsVanillaImmortalAiur">
         <Value value="ImmortalAiur"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsImmortalAiur" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsImmortalAiur">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaImmortalAiur"/>
         <CombineArray value="AP_IsAPImmortalAiur"/>
@@ -588,7 +544,7 @@
     <CValidatorUnitType id="AP_IsVanillaImmortalShakuras">
         <Value value="ImmortalShakuras"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsImmortalShakuras" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsImmortalShakuras">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaImmortalShakuras"/>
         <CombineArray value="AP_IsAPImmortalShakuras"/>
@@ -599,7 +555,7 @@
     <CValidatorUnitType id="AP_IsVanillaImmortalTaldarim">
         <Value value="ImmortalTaldarim"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsImmortalTaldarim" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsImmortalTaldarim">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaImmortalTaldarim"/>
         <CombineArray value="AP_IsAPImmortalTaldarim"/>
@@ -610,7 +566,7 @@
     <CValidatorUnitType id="AP_IsVanillaColossusPurifier">
         <Value value="ColossusPurifier"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsColossusPurifier" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsColossusPurifier">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaColossusPurifier"/>
         <CombineArray value="AP_IsAPColossusPurifier"/>
@@ -621,7 +577,7 @@
     <CValidatorUnitType id="AP_IsVanillaColossusTaldarim">
         <Value value="ColossusTaldarim"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsColossusTaldarim" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsColossusTaldarim">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaColossusTaldarim"/>
         <CombineArray value="AP_IsAPColossusTaldarim"/>
@@ -632,7 +588,7 @@
     <CValidatorUnitType id="AP_IsVanillaShieldBattery">
         <Value value="ShieldBattery"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsShieldBattery" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsShieldBattery">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaShieldBattery"/>
         <CombineArray value="AP_IsAPShieldBattery"/>
@@ -643,7 +599,7 @@
     <CValidatorUnitType id="AP_IsVanillaStalker">
         <Value value="Stalker"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsStalker" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsStalker">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaStalker"/>
         <CombineArray value="AP_IsAPStalker"/>
@@ -654,7 +610,7 @@
     <CValidatorUnitType id="AP_IsVanillaStalkerPurifier">
         <Value value="StalkerPurifier"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsStalkerPurifier" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsStalkerPurifier">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaStalkerPurifier"/>
         <CombineArray value="AP_IsAPStalkerPurifier"/>
@@ -665,7 +621,7 @@
     <CValidatorUnitType id="AP_IsVanillaStalkerShakuras">
         <Value value="StalkerShakuras"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsStalkerShakuras" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsStalkerShakuras">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaStalkerShakuras"/>
         <CombineArray value="AP_IsAPStalkerShakuras"/>
@@ -679,7 +635,7 @@
     <CValidatorUnitFilters id="AP_IsUnstoppable">
         <Filters value="Unstoppable;-"/>
     </CValidatorUnitFilters>
-    <CValidatorCombine id="IsVoidRay" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsVoidRay">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaVoidRay"/>
         <CombineArray value="AP_IsAPVoidRay"/>
@@ -690,7 +646,7 @@
     <CValidatorUnitType id="AP_IsVanillaTempest">
         <Value value="Tempest"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsTempest" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsTempest">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaTempest"/>
         <CombineArray value="AP_IsAPTempest"/>
@@ -701,7 +657,7 @@
     <CValidatorUnitType id="AP_IsVanillaGoliath">
         <Value value="Goliath"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsGoliath" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsGoliath">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaGoliath"/>
         <CombineArray value="AP_IsAPGoliath"/>
@@ -712,7 +668,7 @@
     <CValidatorUnitType id="AP_IsVanillaCyclone">
         <Value value="Cyclone"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsCyclone" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsCyclone">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaCyclone"/>
         <CombineArray value="AP_IsAPCyclone"/>
@@ -723,7 +679,7 @@
     <CValidatorUnitType id="AP_IsVanillaScienceVessel">
         <Value value="ScienceVessel"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsScienceVessel" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsScienceVessel">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaScienceVessel"/>
         <CombineArray value="AP_IsAPScienceVessel"/>
@@ -734,16 +690,10 @@
     <CValidatorUnitType id="AP_IsVanillaCorsairMP">
         <Value value="CorsairMP"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsCorsairMP" parent="CValidatorCombine">
+    <CValidatorCombine id="AP_IsCorsairMP">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaCorsairMP"/>
         <CombineArray value="AP_IsAPCorsairMP"/>
-    </CValidatorCombine>
-    <!-- Override -->
-    <CValidatorCombine id="IsSOACaster" parent="CValidatorCombine">
-        <!-- Override -->
-        <CombineArray value="AP_IsVanillaSOACaster"/>
-        <CombineArray value="AP_IsSOACaster"/>
     </CValidatorCombine>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->

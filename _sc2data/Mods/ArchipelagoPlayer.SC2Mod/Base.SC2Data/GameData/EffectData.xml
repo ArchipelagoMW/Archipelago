@@ -2996,7 +2996,7 @@
         <Behavior value="AP_SOAHeroicShieldProcBuff"/>
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="AP_SOAHeroicShieldCooldownDummyAB">
-        <ValidatorArray index="0" value="IsSOACaster"/>
+        <ValidatorArray index="0" value="AP_IsSOACaster"/>
         <EditorCategories value=""/>
         <Behavior value="AP_SOAHeroicShieldCooldownDummy"/>
     </CEffectApplyBehavior>
