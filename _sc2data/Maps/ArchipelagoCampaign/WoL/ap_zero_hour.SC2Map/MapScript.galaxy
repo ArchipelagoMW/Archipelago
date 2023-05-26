@@ -8,6 +8,7 @@
 include "TriggerLibs/NativeLib"
 include "TriggerLibs/LibertyLib"
 include "TriggerLibs/CampaignLib"
+include "Lib88187CC2"
 include "Lib5BD4895D"
 include "LibABFE498B"
 
@@ -60,6 +61,7 @@ void InitLibs () {
     libNtve_InitLib();
     libLbty_InitLib();
     libCamp_InitLib();
+    lib88187CC2_InitLib();
     lib5BD4895D_InitLib();
     libABFE498B_InitLib();
     lib1_InitLib();
@@ -5856,6 +5858,7 @@ bool gt_ArchInit_Func (bool testConds, bool runActions) {
         return true;
     }
 
+    TriggerExecute(lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor, true, false);
     TriggerExecute(gt_Init02Players, true, false);
     lib5BD4895D_gf_AP_Core_MapConfig_setChatboxPosition(c_anchorTopRight, 500, 350, 0, 120);
     lib5BD4895D_gf_AP_Core_MapConfig_setMapInit(gt_Initialization);

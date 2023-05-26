@@ -1,0 +1,7 @@
+﻿Category/Name/lib_88187CC2_61EA1F20=Tech Reactor
+Category/Name/lib_88187CC2_B0A0C7A0=Add-on stealing
+Library/Name/88187CC2=Archipelago Player Handlers WoL
+Trigger/Name/lib_88187CC2_47A04D43=ArchipelagoPlayerWoLHandlersConstructor
+Trigger/Name/lib_88187CC2_4F675EE1=Tech Reactor swap to Barracks
+Trigger/Name/lib_88187CC2_8F4A77D0=Tech Reactor swap to Starport
+Trigger/Name/lib_88187CC2_BC821620=Tech Reactor swap to Factory

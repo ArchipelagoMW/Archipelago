@@ -1972,12 +1972,12 @@
     </CAbilMorph>
     <CAbilMorph id="FactoryTechLabMorph">
         <!-- Override -->
-        <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
+        <!-- Exclude AP_Factory from all Factory-like so for AP_Factory AP_FactoryReactorMorph is called instead -->
         <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaFactAddOnParent"/>
     </CAbilMorph>
     <CAbilMorph id="StarportTechLabMorph">
         <!-- Override -->
-        <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
+        <!-- Exclude AP_Starport from all Factory-like so for AP_Starport AP_FactoryReactorMorph is called instead -->
         <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaStarportAddOnParent"/>
     </CAbilMorph>
     <CAbilAttack id="AP_BunkerAttack" parent="attack">

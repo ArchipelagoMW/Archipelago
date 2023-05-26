@@ -6,4 +6,22 @@
             <AbilLinkEnableArray value="AP_SCVHarvest"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="BarracksTechReactor">
+        <!-- Override -->
+        <!-- Declare it so it can be accessed by Triggers -->
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="FactoryTechReactor">
+        <!-- Override -->
+        <!-- Declare it so it can be accessed by Triggers -->
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="StarportTechReactor">
+        <!-- Override -->
+        <!-- Declare it so it can be accessed by Triggers -->
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+    </CBehaviorBuff>
 </Catalog>

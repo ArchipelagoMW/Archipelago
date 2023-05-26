@@ -1,0 +1,11 @@
+include "TriggerLibs/natives"
+
+//--------------------------------------------------------------------------------------------------
+// Library: Archipelago Player Handlers WoL
+//--------------------------------------------------------------------------------------------------
+// Trigger Declarations
+trigger lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor;
+trigger lib88187CC2_gt_TechReactorswaptoBarracks;
+trigger lib88187CC2_gt_TechReactorswaptoFactory;
+trigger lib88187CC2_gt_TechReactorswaptoStarport;
+

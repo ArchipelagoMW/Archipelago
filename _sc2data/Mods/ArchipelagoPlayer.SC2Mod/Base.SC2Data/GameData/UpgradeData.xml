@@ -536,6 +536,12 @@
         <EffectArray Reference="Effect,AP_heal,RechargeVitalRate" Value="1"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_NanobotInjectors">
+        <Alert value="ResearchComplete"/>
+        <EffectArray Operation="Multiply" Reference="Effect,AP_heal,TimeFactor" Value="0.8"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
     <CUpgrade id="AP_JuggernautPlating">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,AP_Marauder,LifeArmor" Value="2.000000"/>

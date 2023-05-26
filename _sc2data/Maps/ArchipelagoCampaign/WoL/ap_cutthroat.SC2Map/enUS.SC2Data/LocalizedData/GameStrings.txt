@@ -17,7 +17,7 @@ Param/Value/018921A4=Orlan Command Center
 Param/Value/024F788C=Buy Merc Contract Before Orlan
 Param/Value/03FAE0EC=Destroy to slow Orlan's mineral-<n/>harvesting rate.
 Param/Value/04B51D63=
-Param/Value/057D9AD4=Find Protoss Relic Contraband 
+Param/Value/057D9AD4=Find Protoss Relic Contraband (
 Param/Value/088E0A54=Destroy Orlan's Mercenary Fortress
 Param/Value/0DF11F79=Destroy to slow Orlan's mineral gathering rate.
 Param/Value/1117E451=
@@ -25,7 +25,7 @@ Param/Value/149F8BF7=Destroy Colonel Orlan's mercenary fortress to retrieve the 
 Param/Value/1589E053=Buy Merc Contract Before Orlan<n/>(
 Param/Value/16EA3C4A=<c val="00FF00">Orlan Command Center</c>
 Param/Value/1B75B417=/
-Param/Value/29858229=Find Protoss Relic Contraband 
+Param/Value/29858229=Find Protoss Relic Contraband (
 Param/Value/2A2F1DEC=
 Param/Value/2A95D303=Orlan Command Center
 Param/Value/306B371C=Mira Han's forces have been destroyed.
@@ -59,6 +59,7 @@ Param/Value/813453E8=New Base
 Param/Value/825A8B19=Relic Contraband Found
 Param/Value/8903569B=<c val="00FF00">Orlan Command Center</c>
 Param/Value/8A9CA656=Orlan Command Center
+Param/Value/8C96C2F4= Checks Left)</s>
 Param/Value/8E76FFC9=<c val="00FF00">Orlan Command Center</c>
 Param/Value/90F3079C=3
 Param/Value/923FBA10=
@@ -85,7 +86,7 @@ Param/Value/C92B9D15=Use any ground unit to pick up.
 Param/Value/D16B38BA=Protoss Contraband found!
 Param/Value/D33401E3=%Minerals% Minerals
 Param/Value/D5C8138A=Destroy to slow Orlan's mineral-<n/>harvesting rate.
-Param/Value/D6816819=
+Param/Value/D6816819= Checks Left)</s>
 Param/Value/D8EEADBA=Destroy to slow Orlan 's mineral gathering rate.
 Param/Value/DB71EC73=Raynor's Minerals: 
 Param/Value/E0A46055=Destroy to slow Orlan's mineral-<n/>harvesting rate.

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Catalog>
+    <CUnit id="TechReactor">
+        <!-- Override -->
+        <!-- Add-on stealing -->
+        <AddedOnArray UnitLink="AP_Barracks" BehaviorLink="AP_BarracksTechReactor"/>
+        <AddedOnArray UnitLink="AP_Factory" BehaviorLink="AP_FactoryTechReactor"/>
+        <AddedOnArray UnitLink="AP_Starport" BehaviorLink="AP_StarportTechReactor"/>
+    </CUnit>
+    <CUnit id="AP_TechReactor">
+        <!-- Override -->
+        <!-- Add-on stealing -->
+        <AddedOnArray UnitLink="Barracks" BehaviorLink="BarracksTechReactor"/>
+        <AddedOnArray UnitLink="Factory" BehaviorLink="FactoryTechReactor"/>
+        <AddedOnArray UnitLink="Starport" BehaviorLink="StarportTechReactor"/>
+    </CUnit>
+</Catalog>

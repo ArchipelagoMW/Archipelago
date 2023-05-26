@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Catalog>
+    <CAbilMorph id="BarracksTechReactorMorph">
+        <!-- Override -->
+        <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaBarrAddOnParent"/>
+    </CAbilMorph>
+    <CAbilMorph id="FactoryTechReactorMorph">
+        <!-- Override -->
+        <!-- Exclude AP_Factory from all Factory-like so for AP_Factory AP_FactoryReactorMorph is called instead -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaFactAddOnParent"/>
+    </CAbilMorph>
+    <CAbilMorph id="StarportTechReactorMorph">
+        <!-- Override -->
+        <!-- Exclude AP_Starport from all Factory-like so for AP_Starport AP_FactoryReactorMorph is called instead -->
+        <CmdButtonArray index="Execute" DefaultButtonFace="TechLab" Requirements="AP_ShowIfHaveVanillaStarportAddOnParent"/>
+    </CAbilMorph>
+</Catalog>

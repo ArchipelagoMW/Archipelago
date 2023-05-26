@@ -33,7 +33,7 @@
             <cliffDoodad name="PortZionScrapElevatorRightTO1" pos="112.000000 116.000000 0.000000 " rot="0"/>
             <cliffDoodad name="PortZionScrapElevatorLeftTO1" pos="108.000000 120.000000 0.000000 " rot="0"/>
         </cliffDoodadList>
-        <vertData quantizeBias="9.012479e+00" quantizeScale="2.775856e-04" standardHeight="7.999928e+00" name="t3HeightMap"/>
+        <vertData quantizeBias="9.012752e+00" quantizeScale="2.775856e-04" standardHeight="7.999928e+00" name="t3HeightMap"/>
         <masks name="t3TextureMasks"/>
         <textureSetList num="8">
             <textureSet i="0" name="PortZion"/>

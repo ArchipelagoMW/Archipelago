@@ -1,0 +1,137 @@
+include "TriggerLibs/NativeLib"
+include "Lib15EF4C78"
+
+include "Lib88187CC2_h"
+
+//--------------------------------------------------------------------------------------------------
+// Library: Archipelago Player Handlers WoL
+//--------------------------------------------------------------------------------------------------
+// External Library Initialization
+void lib88187CC2_InitLibraries () {
+    libNtve_InitVariables();
+}
+
+// Triggers
+//--------------------------------------------------------------------------------------------------
+// Trigger: ArchipelagoPlayerWoLHandlersConstructor
+//--------------------------------------------------------------------------------------------------
+bool lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerExecute(lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor, true, false);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor_Init () {
+    lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor = TriggerCreate("lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor_Func");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Reactor swap to Barracks
+//--------------------------------------------------------------------------------------------------
+bool lib88187CC2_gt_TechReactorswaptoBarracks_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "BarracksTechReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "TechReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib88187CC2_gt_TechReactorswaptoBarracks_Init () {
+    lib88187CC2_gt_TechReactorswaptoBarracks = TriggerCreate("lib88187CC2_gt_TechReactorswaptoBarracks_Func");
+    TriggerAddEventUnitBehaviorChange(lib88187CC2_gt_TechReactorswaptoBarracks, null, "BarracksTechReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Reactor swap to Factory
+//--------------------------------------------------------------------------------------------------
+bool lib88187CC2_gt_TechReactorswaptoFactory_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "FactoryTechReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "TechReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib88187CC2_gt_TechReactorswaptoFactory_Init () {
+    lib88187CC2_gt_TechReactorswaptoFactory = TriggerCreate("lib88187CC2_gt_TechReactorswaptoFactory_Func");
+    TriggerAddEventUnitBehaviorChange(lib88187CC2_gt_TechReactorswaptoFactory, null, "FactoryTechReactor", c_unitBehaviorChangeActivate);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Tech Reactor swap to Starport
+//--------------------------------------------------------------------------------------------------
+bool lib88187CC2_gt_TechReactorswaptoStarport_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(UnitAddOnChild(EventUnit(), 0)) != "StarportTechReactor"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_ReplaceUnit(UnitAddOnChild(EventUnit(), 0), "TechReactor", libNtve_ge_ReplaceUnitOptions_OldUnitsRelative);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib88187CC2_gt_TechReactorswaptoStarport_Init () {
+    lib88187CC2_gt_TechReactorswaptoStarport = TriggerCreate("lib88187CC2_gt_TechReactorswaptoStarport_Func");
+    TriggerAddEventUnitBehaviorChange(lib88187CC2_gt_TechReactorswaptoStarport, null, "StarportTechReactor", c_unitBehaviorChangeActivate);
+}
+
+void lib88187CC2_InitTriggers () {
+    lib88187CC2_gt_ArchipelagoPlayerWoLHandlersConstructor_Init();
+    lib88187CC2_gt_TechReactorswaptoBarracks_Init();
+    lib88187CC2_gt_TechReactorswaptoFactory_Init();
+    lib88187CC2_gt_TechReactorswaptoStarport_Init();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+bool lib88187CC2_InitLib_completed = false;
+
+void lib88187CC2_InitLib () {
+    if (lib88187CC2_InitLib_completed) {
+        return;
+    }
+
+    lib88187CC2_InitLib_completed = true;
+
+    lib88187CC2_InitLibraries();
+    lib88187CC2_InitTriggers();
+}
+

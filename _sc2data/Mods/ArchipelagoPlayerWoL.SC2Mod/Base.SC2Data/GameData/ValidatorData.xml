@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Catalog>
+    <CValidatorUnitType id="AP_IsVanillaVulture">
+        <Value value="Vulture"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsVulture" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaVulture"/>
+        <CombineArray value="AP_IsVulture"/>
+    </CValidatorCombine>
+</Catalog>
