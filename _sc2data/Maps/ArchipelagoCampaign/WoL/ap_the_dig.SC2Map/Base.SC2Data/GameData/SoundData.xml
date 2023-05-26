@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CSound id="ProtossRelicAcquired" parent="UI">
+        <AssetArray File="LocalizedData\Sounds\Misc\TRescue.wav"/>
+        <DupeDestroyCount value="3"/>
+    </CSound>
+</Catalog>

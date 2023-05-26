@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="1">
+        <name value="Dropship Leave"/>
+        <shape type="circle">
+            <center value="17.826,59.715"/>
+            <radius value="2.5151"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Rescue Trigger"/>
+        <shape type="circle">
+            <center value="58.6564,41.1557"/>
+            <radius value="1.3203"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.4006,41.848"/>
+            <radius value="1.3203"/>
+        </shape>
+        <shape type="circle">
+            <center value="60.27,42.8427"/>
+            <radius value="1.3203"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.318,43.702"/>
+            <radius value="1.3203"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Photon Cannon Victims"/>
+        <color value="255,64,0,64"/>
+        <shape type="circle">
+            <center value="40.223,28.1232"/>
+            <radius value="7.0903"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Rescue Search for Buildings"/>
+        <shape type="circle">
+            <center value="54.416,59.8715"/>
+            <radius value="15.6054"/>
+        </shape>
+        <shape type="circle">
+            <center value="69.6345,53.6584"/>
+            <radius value="4.3771"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.6667,70.887"/>
+            <radius value="2.175"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.6323,62.5478"/>
+            <radius value="2.175"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Siege Tank Intro 1"/>
+        <shape type="circle">
+            <center value="26.0783,27.057"/>
+            <radius value="7.9636"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Zealot Aggro"/>
+        <shape type="rect">
+            <quad value="22.3808,47.1582,31.0612,49.2031"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Laser Drill Vision"/>
+        <color value="255,192,192,192"/>
+        <shape type="rect">
+            <quad value="90.3325,83.595,97.5356,91.8933"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.4196,84.2021"/>
+            <radius value="14.937"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.408,56.201"/>
+            <radius value="16.3427"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.3303,93.5153"/>
+            <radius value="6.1252"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.028,88.4448"/>
+            <radius value="6.1252"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.933,74.4414"/>
+            <radius value="7.6591"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.001,43.5141"/>
+            <radius value="10.9404"/>
+        </shape>
+        <shape type="circle">
+            <center value="106.0861,95.724"/>
+            <radius value="12.1997"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.0981,90.5864"/>
+            <radius value="5.7436"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.787,86.1591"/>
+            <radius value="10.7712"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.204,45.2941"/>
+            <radius value="3.8718"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.6105,41.8867"/>
+            <radius value="3.8718"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.661,68.4995"/>
+            <radius value="23.389"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.7165,63.3432"/>
+            <radius value="11.7097"/>
+        </shape>
+        <shape type="circle">
+            <center value="116.356,108.883"/>
+            <radius value="14.2055"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Siege Tank Tutorial"/>
+        <shape type="rect">
+            <quad value="59.1982,15.5283,62.831,31.0168"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Siege Tank Intro 2"/>
+        <shape type="circle">
+            <center value="65.977,36.0014"/>
+            <radius value="5.6472"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Reveal Laser Drill"/>
+        <shape type="circle">
+            <center value="72.2897,66.377"/>
+            <radius value="5.6928"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Protoss Entrance Revealer 1"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="39.3046,101.585"/>
+            <radius value="9.4978"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.3386,93.293"/>
+            <radius value="4.8791"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Protoss Entrance Revealer 2"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="81.4426,96.6115"/>
+            <radius value="6.896"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.5678,98.5627"/>
+            <radius value="6.896"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Protoss Entrance Revealer 3"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="106.6796,75.7355"/>
+            <radius value="6.7155"/>
+        </shape>
+        <shape type="circle">
+            <center value="107.7893,68.9846"/>
+            <radius value="6.7155"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="SouthEast Prism Warp In"/>
+        <shape type="circle">
+            <center value="123.9904,88.8388"/>
+            <radius value="5.5444"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="NorthEast Prism Warp In"/>
+        <shape type="circle">
+            <center value="97.429,117.2924"/>
+            <radius value="5.8386"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="NorthWest Prism Warp In"/>
+        <shape type="circle">
+            <center value="25.481,123.204"/>
+            <radius value="5.0832"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Relic 1"/>
+        <shape type="circle">
+            <center value="113.3073,42.3547"/>
+            <radius value="7.8703"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Relic 2"/>
+        <shape type="circle">
+            <center value="103.1381,29.0756"/>
+            <radius value="7.8703"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Relic 3"/>
+        <shape type="circle">
+            <center value="25.0175,83.3574"/>
+            <radius value="7.8703"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Mid-Game Cinematic Cleanup"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="84.4006,99.3225"/>
+            <radius value="18.914"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Bottom Reveal 1"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="26.741,25.0725"/>
+            <radius value="6.0935"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.526,24.2026"/>
+            <radius value="5.0312"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Bottom Revealer 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="19.6987,18.1894,44.8303,37.2114"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Bottom Reveal 2"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="67.631,31.9304"/>
+            <radius value="4.3537"/>
+        </shape>
+        <shape type="circle">
+            <center value="72.711,29.692"/>
+            <radius value="4.3537"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.0576,28.5656"/>
+            <radius value="4.3537"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.7397,24.2578"/>
+            <radius value="4.3537"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.7026,25.396"/>
+            <radius value="4.3537"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Bottom Revealer 2"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="57.4414,15.7216,78.276,38.359"/>
+        </shape>
+        <shape type="rect">
+            <quad value="53.1472,16.5686,59.6105,31.1491"/>
+        </shape>
+        <shape type="rect">
+            <quad value="60.4377,37.7802,67.601,41.0437"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Bully Ping Removal"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="34.288,104.4511"/>
+            <radius value="5.7187"/>
+        </shape>
+        <shape type="rect">
+            <quad value="66.9536,97.2963,94.3652,104.312"/>
+        </shape>
+        <shape type="rect">
+            <quad value="69.42,95.1938,79.1074,98.006"/>
+        </shape>
+        <shape type="rect">
+            <quad value="23.5734,100.375,30.5734,104.375"/>
+        </shape>
+        <shape type="rect">
+            <quad value="37.5781,102.4721,49.578,108.472"/>
+        </shape>
+        <shape type="circle">
+            <center value="109.4321,70.9304"/>
+            <radius value="2.7375"/>
+        </shape>
+        <shape type="rect">
+            <quad value="105.3,70.9316,111.2998,76.7475"/>
+        </shape>
+        <shape type="circle">
+            <center value="111.6733,68.9104"/>
+            <radius value="2.7375"/>
+        </shape>
+        <shape type="rect">
+            <quad value="107.3,75.8012,113.2998,82.7583"/>
+        </shape>
+    </region>
+</Regions>
