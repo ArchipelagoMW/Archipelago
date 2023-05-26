@@ -3,12 +3,12 @@
 A world maintainer is a person responsible for a world or part of a world in Archipelago.
 
 If a world author does not want to take on the responsibilities of a world maintainer, they can release their world as
-a "private" [APWorld](/docs/apworld%20specification.md) or maintain their own fork instead.
+an unofficial [APWorld](/docs/apworld%20specification.md) or maintain their own fork instead.
 
 
 ## Responsibilites
 
-Unless those are shared between multiple people, we expect the following from each world maintainer
+Unless these are shared between multiple people, we expect the following from each world maintainer
 
 * Be on our Discord to get updates on problems with and suggestions for the world.
 * Decide if a feature (pull request) should be merged.
