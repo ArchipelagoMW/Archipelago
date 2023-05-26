@@ -1,0 +1,112 @@
+﻿Conversation/THorner02Briefing/Line00005=Because I like you and Matthew better than him, of course! Match Orlan's offer and I'll help you take him out instead. He's paying in minerals, so I'll give you the same deal.
+DocInfo/Author=Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=THorner02
+DocInfo/Name=Cutthroat
+MapInfo/Player00/Name=Neutral
+MapInfo/Player01/Name=Raynor's Raiders
+MapInfo/Player02/Name=Orlan's Forces
+MapInfo/Player03/Name=Mira Han's Mercenaries
+MapInfo/Player04/Name=The Dominion
+MapInfo/Player05/Name=Salvageable Scrap
+MapInfo/Player06/Name=Port Junker
+MapInfo/Player07/Name=Derelict Structures
+MapInfo/Player08/Name=Swann's Armory
+MapInfo/Player09/Name=Protoss Relics
+Param/Value/018921A4=Orlan Command Center
+Param/Value/024F788C=Buy Merc Contract Before Orlan
+Param/Value/03FAE0EC=Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/04B51D63=
+Param/Value/057D9AD4=Find Protoss Relic Contraband 
+Param/Value/088E0A54=Destroy Orlan's Mercenary Fortress
+Param/Value/0DF11F79=Destroy to slow Orlan's mineral gathering rate.
+Param/Value/1117E451=
+Param/Value/149F8BF7=Destroy Colonel Orlan's mercenary fortress to retrieve the decrypted Confederate adjutant.
+Param/Value/1589E053=Buy Merc Contract Before Orlan<n/>(
+Param/Value/16EA3C4A=<c val="00FF00">Orlan Command Center</c>
+Param/Value/1B75B417=/
+Param/Value/29858229=Find Protoss Relic Contraband 
+Param/Value/2A2F1DEC=
+Param/Value/2A95D303=Orlan Command Center
+Param/Value/306B371C=Mira Han's forces have been destroyed.
+Param/Value/31A856E3=Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/332D48ED=Shredders will generate more salvage every few minutes.
+Param/Value/359DECC7=All of your structures have been destroyed.
+Param/Value/364128DD=
+Param/Value/39C56F84=Activating additional SCV's
+Param/Value/3D90DF9D=
+Param/Value/42238026=
+Param/Value/46EFAF90=Find Protoss Relic Contraband
+Param/Value/4950C282=Vulture Bikes
+Param/Value/53398AFD=<c val="00FF00">Orlan Command Center</c>
+Param/Value/542503D6=Anniversary_THorner_02 granted
+Param/Value/57034AFD=Use any ground unit to pick up.
+Param/Value/5807D76A=Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/5B13ECF2=Mira Han was bought by Orlan.
+Param/Value/5B8CE1E1=<c val="00FF00">Salvageable Scrap</c>
+Param/Value/5CE95A1D=
+Param/Value/65743651=
+Param/Value/6783E46E= Minerals)
+Param/Value/6AF13D92=Scrap
+Param/Value/6C4C2088=Spider Mine Kills
+Param/Value/6D92663B=<c val="00FF00">Salvageable Scrap</c>
+Param/Value/6DF56EB6=Protoss Research Earned
+Param/Value/72CDDCCB=Minerals Salvaged
+Param/Value/7B4624DB=</c>
+Param/Value/7F6AA35A=
+Param/Value/8072BBF0=<c val="00FF00">Orlan Command Center</c>
+Param/Value/813453E8=New Base
+Param/Value/825A8B19=Relic Contraband Found
+Param/Value/8903569B=<c val="00FF00">Orlan Command Center</c>
+Param/Value/8A9CA656=Orlan Command Center
+Param/Value/8E76FFC9=<c val="00FF00">Orlan Command Center</c>
+Param/Value/90F3079C=3
+Param/Value/923FBA10=
+Param/Value/92B49FB8=Orlan's Minerals: 
+Param/Value/9590FC4A=%Minerals%
+Param/Value/994D0392=Destroy to make Scrap Salvage.
+Param/Value/9D3B121D=
+Param/Value/9FFE53DF=Destroy Orlan's Mercenary Fortress
+Param/Value/A0D4A53F=
+Param/Value/A41B1BD8=
+Param/Value/A79B6B3E=Orlan's Minerals: 
+Param/Value/A8244073=Minerals Harvested by SCVs
+Param/Value/B4F093E9=<c val="00FF00">Contract Price: 
+Param/Value/B8443135=Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/BA28B7AE=
+Param/Value/BB78BE99=<c val="00FF00">Salvageable Scrap</c>
+Param/Value/BBBD9501=Find the protoss relic contraband items buried in the wreckage of derelict ships.
+Param/Value/BC8609EA=Raynor's Minerals: 
+Param/Value/BCDBD54A=
+Param/Value/BD509D57=
+Param/Value/BECFC09F=
+Param/Value/C18BAED4=0'ing Orlan's minerals
+Param/Value/C92B9D15=Use any ground unit to pick up.
+Param/Value/D16B38BA=Protoss Contraband found!
+Param/Value/D33401E3=%Minerals% Minerals
+Param/Value/D5C8138A=Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/D6816819=
+Param/Value/D8EEADBA=Destroy to slow Orlan 's mineral gathering rate.
+Param/Value/DB71EC73=Raynor's Minerals: 
+Param/Value/E0A46055=Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/E1F86B1E=Orlan's Fortress
+Param/Value/E34FDDD9=
+Param/Value/E4147BF2=Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E41F86F3=Scrap
+Param/Value/E4C2663E=Protoss Relic
+Param/Value/E63DF6EC=<c val="00FF00">Orlan Command Center</c>
+Param/Value/E88A79BA=Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E8C55C35=)
+Param/Value/E915DCCD=
+Param/Value/EADB19A4=Gather enough minerals and scrap to buy the contract of mercenary leader Mira Han before Colonel Orlan does.
+Param/Value/FF684E25=After Mira Han's Contract has been purchased.
+Param/Value/lib_1_1BF9F758=<n/>
+Param/Value/lib_1_21E8CC9A=v
+Param/Value/lib_1_71F92085=Archipelago Messages
+Param/Value/lib_1_8717A4C6=Scroll up
+Param/Value/lib_1_A52FB36E=-
+Param/Value/lib_1_A91983FA=Scroll down
+Param/Value/lib_1_CCCD5CB5=^
+Param/Value/lib_1_FB15887C=Scroll to bottom
+Water/Name/Template 1=Template 1
+Water/Name/Template 2=Template 2

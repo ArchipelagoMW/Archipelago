@@ -1,0 +1,103 @@
+Conversation/THorner02Briefing/Line00005=Weil ich dich und Matt besser leiden kann als ihn, natürlich! Wenn ihr mir das Gleiche bietet wie er, dann helfe ich euch, ihn auszuschalten. Er bezahlt in Mineralien, also mache ich euch dasselbe Angebot. /// Because I like you and Matthew better than him, of course! Match Orlan's offer and I'll help you take him out instead. He's paying in minerals, so I'll give you the same deal.
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=THorner02 /// THorner02
+DocInfo/Name=Halsabschneider /// Cutthroat
+MapInfo/Player00/Name=Neutral /// Neutral
+MapInfo/Player01/Name=Raynor's Raiders /// Raynor's Raiders
+MapInfo/Player02/Name=Orlans Streitkräfte /// Orlan's Forces
+MapInfo/Player03/Name=Mira Hans Söldner /// Mira Han's Mercenaries
+MapInfo/Player04/Name=Die Liga /// The Dominion
+MapInfo/Player05/Name=Wiederverwertbarer Schrott /// Salvageable Scrap
+MapInfo/Player06/Name=Schrottsammler /// Port Junker
+MapInfo/Player07/Name=Gebäuderuinen /// Derelict Structures
+MapInfo/Player08/Name=Swanns Arsenal /// Swann's Armory
+MapInfo/Player09/Name=Protoss-Relikte /// Protoss Relics
+Param/Value/018921A4=Orlans Kommandozentrale /// Orlan Command Center
+Param/Value/024F788C=Söldnervertrag vor Orlan abschließen /// Buy Merc Contract Before Orlan
+Param/Value/03FAE0EC=Zerstören, um Orlans Mineralienabbaurate zu verringern. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/04B51D63=
+Param/Value/057D9AD4=Finden Sie geschmuggelte Protoss-Relikte  /// Find Protoss Relic Contraband 
+Param/Value/088E0A54=Zerstören Sie Orlans Söldnerfestung /// Destroy Orlan's Mercenary Fortress
+Param/Value/0DF11F79=Zerstören, um Orlans Mineralienabbaurate zu verringern. /// Destroy to slow Orlan's mineral gathering rate.
+Param/Value/1117E451=
+Param/Value/149F8BF7=Vernichten Sie Colonel Orlans Söldnerfestung, um den entschlüsselten konföderierten Adjutanten zu holen. /// Destroy Colonel Orlan's mercenary fortress to retrieve the decrypted Confederate adjutant.
+Param/Value/1589E053=Söldnervertrag vor Orlan abschließen<n/> ( /// Buy Merc Contract Before Orlan<n/>(
+Param/Value/16EA3C4A=<c val="00FF00">Orlans Kommandozentrale</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/1B75B417=/ /// /
+Param/Value/29858229=Finden Sie geschmuggelte Protoss-Relikte  /// Find Protoss Relic Contraband 
+Param/Value/2A2F1DEC=
+Param/Value/2A95D303=Orlans Kommandozentrale /// Orlan Command Center
+Param/Value/306B371C=Mira Hans Streitkräfte wurden vernichtet. /// Mira Han's forces have been destroyed.
+Param/Value/31A856E3=Zerstören, um Orlans Mineralienabbaurate zu verringern. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/332D48ED=Schredder erzeugen alle paar Minuten mehr Wiederverwertbares. /// Shredders will generate more salvage every few minutes.
+Param/Value/359DECC7=All Ihre Gebäude wurden zerstört. /// All of your structures have been destroyed.
+Param/Value/364128DD=
+Param/Value/39C56F84=Aktiviere zusätzliche WBFs /// Activating additional SCV's
+Param/Value/3D90DF9D=
+Param/Value/42238026=
+Param/Value/46EFAF90=Finden Sie geschmuggelte Protoss-Relikte /// Find Protoss Relic Contraband
+Param/Value/4950C282=Adler /// Vulture Bikes
+Param/Value/53398AFD=<c val="00FF00">Orlans Kommandozentrale</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/57034AFD=Setzen Sie eine beliebige Bodeneinheit ein, um dies aufzusammeln. /// Use any ground unit to pick up.
+Param/Value/5807D76A=Zerstören, um Orlans Mineralienabbaurate zu verringern. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/5B13ECF2=Mira Han wurde von Orlan engagiert. /// Mira Han was bought by Orlan.
+Param/Value/5B8CE1E1=<c val="00FF00">Wiederverwertbarer Schrott</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/5CE95A1D=
+Param/Value/65743651=
+Param/Value/6783E46E= Mineralien) ///  Minerals)
+Param/Value/6AF13D92=Schrott /// Scrap
+Param/Value/6C4C2088=Kills mit Spinnenminen /// Spider Mine Kills
+Param/Value/6D92663B=<c val="00FF00">Wiederverwertbarer Schrott</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/6DF56EB6=Protoss-Forschung erlangt /// Protoss Research Earned
+Param/Value/72CDDCCB=Mineralien wiedergewonnen /// Minerals Salvaged
+Param/Value/7B4624DB=</c> /// </c>
+Param/Value/7F6AA35A=
+Param/Value/8072BBF0=<c val="00FF00">Orlans Kommandozentrale</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/813453E8=Neue Basis /// New Base
+Param/Value/825A8B19=Geschmuggelte Relikte gefunden /// Relic Contraband Found
+Param/Value/8903569B=<c val="00FF00">Orlans Kommandozentrale</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/8A9CA656=Orlans Kommandozentrale /// Orlan Command Center
+Param/Value/8E76FFC9=<c val="00FF00">Orlans Kommandozentrale</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/90F3079C=3 /// 3
+Param/Value/923FBA10=
+Param/Value/92B49FB8=Orlans Mineralien:  /// Orlan's Minerals: 
+Param/Value/9590FC4A=%Minerals% /// %Minerals%
+Param/Value/994D0392=Zerstören, um Schrott wiederzuverwerten. /// Destroy to make Scrap Salvage.
+Param/Value/9D3B121D=
+Param/Value/9FFE53DF=Zerstören Sie Orlans Söldnerfestung /// Destroy Orlan's Mercenary Fortress
+Param/Value/A0D4A53F=
+Param/Value/A41B1BD8=
+Param/Value/A79B6B3E=Orlans Mineralien:  /// Orlan's Minerals: 
+Param/Value/A8244073=Von WBFs abgebaute Mineralien /// Minerals Harvested by SCVs
+Param/Value/B4F093E9=<c val="00FF00">Preis für Vertrag:  /// <c val="00FF00">Contract Price: 
+Param/Value/B8443135=Zerstören, um Orlans Mineralienabbaurate zu verringern. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/BA28B7AE=
+Param/Value/BB78BE99=<c val="00FF00">Wiederverwertbarer Schrott</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/BBBD9501=Finden Sie die geschmuggelten Protoss-Relikte, die in den Trümmern der verlassenen Schiffe begraben sind. /// Find the protoss relic contraband items buried in the wreckage of derelict ships.
+Param/Value/BC8609EA=Raynors Mineralien:  /// Raynor's Minerals: 
+Param/Value/BCDBD54A=
+Param/Value/BD509D57=
+Param/Value/BECFC09F=
+Param/Value/C18BAED4=Bringe Orlans Mineralien auf 0 /// 0'ing Orlan's minerals
+Param/Value/C92B9D15=Setzen Sie eine beliebige Bodeneinheit ein, um dies aufzusammeln. /// Use any ground unit to pick up.
+Param/Value/D16B38BA=Geschmuggeltes Protoss-Relikt gefunden! /// Protoss Contraband found!
+Param/Value/D33401E3=%Minerals% Mineralien /// %Minerals% Minerals
+Param/Value/D5C8138A=Zerstören, um Orlans Mineralienabbaurate zu verringern. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/D6816819=
+Param/Value/D8EEADBA=Zerstören, um Orlans Mineralienabbaurate zu verringern. /// Destroy to slow Orlan 's mineral gathering rate.
+Param/Value/DB71EC73=Raynors Mineralien:  /// Raynor's Minerals: 
+Param/Value/E0A46055=Zerstören, um Orlans Mineralienabbaurate zu verringern. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/E1F86B1E=Orlans Festung /// Orlan's Fortress
+Param/Value/E34FDDD9=
+Param/Value/E4147BF2=Setzen Sie eine beliebige Bodeneinheit ein, um Bonusmineralien aufzusammeln. /// Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E41F86F3=Schrott /// Scrap
+Param/Value/E4C2663E=Protoss-Relikt /// Protoss Relic
+Param/Value/E63DF6EC=<c val="00FF00">Orlans Kommandozentrale</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/E88A79BA=Setzen Sie eine beliebige Bodeneinheit ein, um Bonusmineralien aufzusammeln. /// Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E8C55C35=) /// )
+Param/Value/E915DCCD=
+Param/Value/EADB19A4=Bauen Sie genug Mineralien ab und sammeln Sie Schrott, um den Vertrag mit der Anführerin der Söldner, Mira Han, vor Colonel Orlan zu schließen. /// Gather enough minerals and scrap to buy the contract of mercenary leader Mira Han before Colonel Orlan does.
+Param/Value/FF684E25=Nachdem der Vertrag mit Mira Han geschlossen wurde. /// After Mira Han's Contract has been purchased.
+Water/Name/Template 1=Vorlage 1 /// Template 1
+Water/Name/Template 2=Vorlage 2 /// Template 2

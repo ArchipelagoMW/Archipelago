@@ -1,0 +1,103 @@
+Conversation/THorner02Briefing/Line00005=왜냐하면 난 올란보다 너랑 맷이 더 좋거든! 올란이 부른 보수를 주면 그놈을 버리고 널 도와줄게. 보수는 광물로 받기로 했으니, 똑같은 조건으로 해 주지. /// Because I like you and Matthew better than him, of course! Match Orlan's offer and I'll help you take him out instead. He's paying in minerals, so I'll give you the same deal.
+DocInfo/Author=블리자드 엔터테인먼트 /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=테란 호너 02 /// THorner02
+DocInfo/Name=비열한 항구 /// Cutthroat
+MapInfo/Player00/Name=중립 /// Neutral
+MapInfo/Player01/Name=레이너 특공대 /// Raynor's Raiders
+MapInfo/Player02/Name=올란의 군대 /// Orlan's Forces
+MapInfo/Player03/Name=미라 한 용병대 /// Mira Han's Mercenaries
+MapInfo/Player04/Name=자치령 /// The Dominion
+MapInfo/Player05/Name=회수 가능 고철 /// Salvageable Scrap
+MapInfo/Player06/Name=항구 고물선 /// Port Junker
+MapInfo/Player07/Name=버려진 구조물 /// Derelict Structures
+MapInfo/Player08/Name=스완의 무기고 /// Swann's Armory
+MapInfo/Player09/Name=프로토스 고대 물품 /// Protoss Relics
+Param/Value/018921A4=올란 사령부 /// Orlan Command Center
+Param/Value/024F788C=올란보다 먼저 미라 한과 용병 계약 체결 /// Buy Merc Contract Before Orlan
+Param/Value/03FAE0EC=올란의 광물 채취 속도를 늦추려면<n/>파괴하십시오. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/04B51D63=
+Param/Value/057D9AD4=금지된 프로토스 고대 물품 찾기  /// Find Protoss Relic Contraband 
+Param/Value/088E0A54=올란의 용병 요새 파괴 /// Destroy Orlan's Mercenary Fortress
+Param/Value/0DF11F79=올란의 광물 채취 속도를 늦추려면 파괴하십시오. /// Destroy to slow Orlan's mineral gathering rate.
+Param/Value/1117E451=
+Param/Value/149F8BF7=올란 대령의 용병 요새를 파괴하고 해독한 연합 부관을 회수하십시오. /// Destroy Colonel Orlan's mercenary fortress to retrieve the decrypted Confederate adjutant.
+Param/Value/1589E053=올란보다 먼저 용병 계약 체결 ( /// Buy Merc Contract Before Orlan<n/>(
+Param/Value/16EA3C4A=<c val="00FF00">올란 사령부</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/1B75B417=/ /// /
+Param/Value/29858229=금지된 프로토스 고대 물품 찾기  /// Find Protoss Relic Contraband 
+Param/Value/2A2F1DEC=
+Param/Value/2A95D303=올란 사령부 /// Orlan Command Center
+Param/Value/306B371C=미라 한의 병력이 전멸했습니다. /// Mira Han's forces have been destroyed.
+Param/Value/31A856E3=올란의 광물 채취 속도를 늦추려면<n/>파괴하십시오. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/332D48ED=폐기물 처리 장치에서는 매 몇 분마다 고철을 만들어냅니다. /// Shredders will generate more salvage every few minutes.
+Param/Value/359DECC7=모든 구조물이 파괴되었습니다. /// All of your structures have been destroyed.
+Param/Value/364128DD=
+Param/Value/39C56F84=추가 건설로봇 작동 중 /// Activating additional SCV's
+Param/Value/3D90DF9D=
+Param/Value/42238026=
+Param/Value/46EFAF90=금지된 프로토스 고대 물품 찾기 /// Find Protoss Relic Contraband
+Param/Value/4950C282=시체매 이륜차 /// Vulture Bikes
+Param/Value/53398AFD=<c val="00FF00">올란 사령부</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/57034AFD=지상 유닛으로 획득하십시오. /// Use any ground unit to pick up.
+Param/Value/5807D76A=올란의 광물 채취 속도를 늦추려면<n/>파괴하십시오. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/5B13ECF2=올란이 미라 한을 고용했습니다. /// Mira Han was bought by Orlan.
+Param/Value/5B8CE1E1=<c val="00FF00">회수 가능 고철</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/5CE95A1D=
+Param/Value/65743651=
+Param/Value/6783E46E=광물) ///  Minerals)
+Param/Value/6AF13D92=고철 /// Scrap
+Param/Value/6C4C2088=거미 지뢰로 처치한 적 유닛 /// Spider Mine Kills
+Param/Value/6D92663B=<c val="00FF00">회수 가능 고철</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/6DF56EB6=프로토스 연구 획득 /// Protoss Research Earned
+Param/Value/72CDDCCB=회수한 광물 /// Minerals Salvaged
+Param/Value/7B4624DB=</c> /// </c>
+Param/Value/7F6AA35A=
+Param/Value/8072BBF0=<c val="00FF00">올란 사령부</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/813453E8=새 기지 /// New Base
+Param/Value/825A8B19=금지된 고대 물품 발견 /// Relic Contraband Found
+Param/Value/8903569B=<c val="00FF00">올란 사령부</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/8A9CA656=올란 사령부 /// Orlan Command Center
+Param/Value/8E76FFC9=<c val="00FF00">올란 사령부</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/90F3079C=3 /// 3
+Param/Value/923FBA10=
+Param/Value/92B49FB8=올란의 광물:  /// Orlan's Minerals: 
+Param/Value/9590FC4A=%Minerals% /// %Minerals%
+Param/Value/994D0392=파괴하여 회수 고철을 만드십시오. /// Destroy to make Scrap Salvage.
+Param/Value/9D3B121D=
+Param/Value/9FFE53DF=올란의 용병 요새 파괴 /// Destroy Orlan's Mercenary Fortress
+Param/Value/A0D4A53F=
+Param/Value/A41B1BD8=
+Param/Value/A79B6B3E=올란의 광물:  /// Orlan's Minerals: 
+Param/Value/A8244073=건설로봇이 채취한 광물 /// Minerals Harvested by SCVs
+Param/Value/B4F093E9=<c val="00FF00">계약 분량:  /// <c val="00FF00">Contract Price: 
+Param/Value/B8443135=올란의 광물 채취 속도를 늦추려면<n/>파괴하십시오. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/BA28B7AE=
+Param/Value/BB78BE99=<c val="00FF00">회수 가능 고철</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/BBBD9501=버려진 함선의 잔해에 묻힌 금지된 프로토스 고대 물품을 찾으십시오. /// Find the protoss relic contraband items buried in the wreckage of derelict ships.
+Param/Value/BC8609EA=레이너의 광물:  /// Raynor's Minerals: 
+Param/Value/BCDBD54A=
+Param/Value/BD509D57=
+Param/Value/BECFC09F=
+Param/Value/C18BAED4=올란의 광물을 0으로 만드는 중 /// 0'ing Orlan's minerals
+Param/Value/C92B9D15=지상 유닛으로 획득하십시오. /// Use any ground unit to pick up.
+Param/Value/D16B38BA=프로토스 밀수품을 발견했습니다! /// Protoss Contraband found!
+Param/Value/D33401E3=광물 %Minerals% /// %Minerals% Minerals
+Param/Value/D5C8138A=올란의 광물 채취 속도를 늦추려면<n/>파괴하십시오. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/D6816819=
+Param/Value/D8EEADBA=올란의 광물 채취 속도를 늦추려면 파괴하십시오. /// Destroy to slow Orlan 's mineral gathering rate.
+Param/Value/DB71EC73=레이너의 광물:  /// Raynor's Minerals: 
+Param/Value/E0A46055=올란의 광물 채취 속도를 늦추려면<n/>파괴하십시오. /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/E1F86B1E=올란의 요새 /// Orlan's Fortress
+Param/Value/E34FDDD9=
+Param/Value/E4147BF2=지상 유닛으로<n/>보너스 광물을 획득하십시오. /// Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E41F86F3=고철 /// Scrap
+Param/Value/E4C2663E=프로토스 고대 물품 /// Protoss Relic
+Param/Value/E63DF6EC=<c val="00FF00">올란 사령부</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/E88A79BA=지상 유닛으로<n/>보너스 광물을 획득하십시오. /// Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E8C55C35=) /// )
+Param/Value/E915DCCD=
+Param/Value/EADB19A4=올란 대령이 계약을 맺기 전에 광물과 고철을 충분히 모아 미라 한 용병대를 고용하십시오. /// Gather enough minerals and scrap to buy the contract of mercenary leader Mira Han before Colonel Orlan does.
+Param/Value/FF684E25=미라 한과 계약을 맺은 후. /// After Mira Han's Contract has been purchased.
+Water/Name/Template 1=템플릿 1 /// Template 1
+Water/Name/Template 2=템플릿 2 /// Template 2

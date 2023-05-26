@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="PortZion">
+        <FogColor value="255,115,191,38"/>
+        <FogDensity value="0.080000"/>
+        <FogFalloff value="0.250000"/>
+        <FogStartingHeight value="0.000000"/>
+    </CTerrain>
+</Catalog>

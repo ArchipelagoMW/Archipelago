@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="4">
+        <name value="Dropship Landing"/>
+        <shape type="circle">
+            <center value="100.817,83.5383"/>
+            <radius value="6.4304"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Respawn Salvage 3-1"/>
+        <shape type="circle">
+            <center value="30.0058,77.997"/>
+            <radius value="1.65"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Respawn Salvage 3-2"/>
+        <shape type="circle">
+            <center value="30.0292,72.0163"/>
+            <radius value="1.65"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Respawn Salvage 4-1"/>
+        <shape type="circle">
+            <center value="68.0378,26.0441"/>
+            <radius value="1.65"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Respawn Salvage 4-2"/>
+        <shape type="circle">
+            <center value="71.9753,25.9672"/>
+            <radius value="1.65"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Respawn Salvage 1-1"/>
+        <shape type="circle">
+            <center value="107.9555,120.0573"/>
+            <radius value="1.65"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Respawn Salvage 1-2"/>
+        <shape type="circle">
+            <center value="112.0771,115.9956"/>
+            <radius value="1.65"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Respawn Salvage 2-1"/>
+        <shape type="circle">
+            <center value="61.9726,117.99"/>
+            <radius value="1.65"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Salvage Site 1"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="110.859,118.7988"/>
+            <radius value="12.2421"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Salvage Site 2"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="65.1181,115.7675"/>
+            <radius value="11.2604"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Salvage Site 3"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="28.654,76.5444"/>
+            <radius value="10.033"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Respawn Salvage 2-2"/>
+        <shape type="circle">
+            <center value="67.9685,118.0231"/>
+            <radius value="1.65"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Salvage Site 4"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="70.4367,28.6325"/>
+            <radius value="7.264"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Victory Cine - Back Units Spawn"/>
+        <shape type="circle">
+            <center value="48.4868,129.394"/>
+            <radius value="2.1875"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.957,126.598"/>
+            <radius value="2.1875"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Ramp Vision"/>
+        <shape type="circle">
+            <center value="96.3771,70.0222"/>
+            <radius value="7.9116"/>
+        </shape>
+        <shape type="circle">
+            <center value="103.2543,96.8752"/>
+            <radius value="7.9116"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Remove Salvage Ping"/>
+        <shape type="circle">
+            <center value="97.5976,87.5832"/>
+            <radius value="1.8215"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Super Crane - Site 4"/>
+        <shape type="circle">
+            <center value="73.7714,18.6542"/>
+            <radius value="2.8071"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Super Crane - Site 3"/>
+        <shape type="circle">
+            <center value="21.6447,71.7126"/>
+            <radius value="2.8071"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Super Crane - Site 1"/>
+        <shape type="circle">
+            <center value="117.9523,125.5495"/>
+            <radius value="2.8071"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Raven Despawn NW"/>
+        <shape type="circle">
+            <center value="13.7211,144.408"/>
+            <radius value="2.804"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Raven Despawn SE"/>
+        <shape type="circle">
+            <center value="121.9177,18.5864"/>
+            <radius value="2.804"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Victory Cine - Front Units Spawn"/>
+        <shape type="circle">
+            <center value="49.8127,132.061"/>
+            <radius value="2.1176"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.377,130.019"/>
+            <radius value="2.1176"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.6672,127.405"/>
+            <radius value="2.1176"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Victory Bunker"/>
+        <shape type="circle">
+            <center value="45.371,130.5058"/>
+            <radius value="1.6977"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Junker NE Spawn"/>
+        <shape type="circle">
+            <center value="114.7102,138.3171"/>
+            <radius value="3.1467"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Junker S Spawn"/>
+        <shape type="circle">
+            <center value="90.9152,19.5468"/>
+            <radius value="3.0786"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Junker NE Despawn"/>
+        <shape type="circle">
+            <center value="12.8347,62.1296"/>
+            <radius value="2.9545"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Junker NE Pitstop 1"/>
+        <shape type="circle">
+            <center value="72.3308,119.9904"/>
+            <radius value="2.5756"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Junker NE Pitstop 2"/>
+        <shape type="circle">
+            <center value="75.6616,63.0092"/>
+            <radius value="2.632"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Junker NE Pitstop 3"/>
+        <shape type="circle">
+            <center value="32.627,67.9064"/>
+            <radius value="2.6115"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="Junker S Despawn"/>
+        <shape type="circle">
+            <center value="15.0861,110.4157"/>
+            <radius value="2.9545"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Junker S Pitstop 1"/>
+        <shape type="circle">
+            <center value="111.8952,57.0498"/>
+            <radius value="2.632"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Junker S Pitstop 2"/>
+        <shape type="circle">
+            <center value="55.6604,94.8666"/>
+            <radius value="2.632"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Junker W Pitstop 1"/>
+        <shape type="circle">
+            <center value="26.8964,87.7866"/>
+            <radius value="2.7895"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="Junker W Pitstop 2"/>
+        <shape type="circle">
+            <center value="74.831,47.0837"/>
+            <radius value="2.538"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Huge Scrap Area 1"/>
+        <shape type="circle">
+            <center value="80.375,128.5871"/>
+            <radius value="3.1118"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Huge Scrap Area 2"/>
+        <shape type="circle">
+            <center value="74.3767,49.4912"/>
+            <radius value="3.2158"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Huge Scrap Area 3"/>
+        <shape type="circle">
+            <center value="87.3823,72.9836"/>
+            <radius value="3.7722"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Player Base"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="108.7697,81.437"/>
+            <radius value="17.748"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="Orlan Expansion 01 (SE)"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="102.0883,34.4484"/>
+            <radius value="10.3222"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="Orlan Expansion 03 (NE)"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="101.6091,131.8276"/>
+            <radius value="9.5588"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.8281,125.4577"/>
+            <radius value="5.757"/>
+        </shape>
+        <shape type="circle">
+            <center value="90.0444,132.6008"/>
+            <radius value="3.341"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="Center Ramp Reveal Area"/>
+        <color value="255,255,255,128"/>
+        <shape type="circle">
+            <center value="80.755,97.3395"/>
+            <radius value="4.0261"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.352,100.5385"/>
+            <radius value="2.1342"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.766,99.0024"/>
+            <radius value="2.82"/>
+        </shape>
+    </region>
+    <region id="53">
+        <name value="Center Map Reveal Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="76.682,101.6318"/>
+            <radius value="3.4282"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="Super Crane - Site 2"/>
+        <shape type="circle">
+            <center value="71.0236,124.386"/>
+            <radius value="2.8071"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="Ghost Nuke Area"/>
+        <shape type="circle">
+            <center value="46.157,106.245"/>
+            <radius value="7.199"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="West Map Reveal Tripwire"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="40.3925,79.2973"/>
+            <radius value="3.4282"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="West Ramp Reveal Area"/>
+        <color value="255,255,255,128"/>
+        <shape type="circle">
+            <center value="44.581,75.3645"/>
+            <radius value="4.0261"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.1782,78.5634"/>
+            <radius value="2.1342"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.5922,77.0273"/>
+            <radius value="2.82"/>
+        </shape>
+    </region>
+    <region id="50">
+        <name value="Orlan Expansion Salvagable Resources 03"/>
+        <color value="255,0,128,0"/>
+        <shape type="circle">
+            <center value="96.525,128.7258"/>
+            <radius value="3.7065"/>
+        </shape>
+    </region>
+    <region id="51">
+        <name value="Orlan Expansion Salvagable Resources 01"/>
+        <color value="255,0,128,0"/>
+        <shape type="circle">
+            <center value="98.1994,30.8405"/>
+            <radius value="3.7065"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="Orlan Expansion Salvagable Resources 02"/>
+        <color value="255,0,128,0"/>
+        <shape type="circle">
+            <center value="49.767,50.8654"/>
+            <radius value="3.7065"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="Orlan Expansion 02 (SW)"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="53.365,55.5236"/>
+            <radius value="10.435"/>
+        </shape>
+    </region>
+    <region id="57">
+        <name value="Orlan Expansion Response 2 1"/>
+        <shape type="circle">
+            <center value="38.75,57.1264"/>
+            <radius value="5.6123"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="Orlan Expansion Response 2 2"/>
+        <shape type="circle">
+            <center value="52.3771,40.8708"/>
+            <radius value="5.6123"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="Orlan Expansion Response 1"/>
+        <shape type="circle">
+            <center value="93.4985,26.5498"/>
+            <radius value="5.6123"/>
+        </shape>
+    </region>
+    <region id="60">
+        <name value="Orlan Expansion Response 3"/>
+        <shape type="circle">
+            <center value="86.7678,124.454"/>
+            <radius value="5.6123"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="Mira Han&apos;s SCVs"/>
+        <shape type="circle">
+            <center value="21.061,29.883"/>
+            <radius value="6.58"/>
+        </shape>
+    </region>
+    <region id="62">
+        <name value="Victory Zone"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="52.726,130.2956"/>
+            <radius value="12.4372"/>
+        </shape>
+    </region>
+</Regions>

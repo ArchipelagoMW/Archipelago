@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWater id="Template 1" parent="PortZion">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="7.000000"/>
+            <Color value="0.376471,0.729412,0.000000,0.279000"/>
+            <ColorFallOff value="0.004000"/>
+            <Specularity value="1000.000000"/>
+            <SpecularScaler value="1.500000"/>
+            <UvRate value="0.000640,-0.000768,0.000000,0.000000"/>
+            <UvRotate value="0.596204"/>
+            <MeshRoughness value="0.579000"/>
+            <TextureRoughness value="0.561000"/>
+            <ReflectionDistortion value="0.015000"/>
+            <RefractionDistortion value="0.010000"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.251000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+        <ReceiveShadows value="1"/>
+    </CWater>
+    <CWater id="Template 2" parent="PortZion">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="6.700000"/>
+            <Color value="0.666667,0.992157,0.000000,0.027000"/>
+            <ColorFallOff value="0.027000"/>
+            <CausticsFallOff value="0.021000"/>
+            <Specularity value="1000.000000"/>
+            <SpecularScaler value="0.150000"/>
+            <UvRate value="0.000640,-0.000768,0.000000,0.000000"/>
+            <UvRotate value="0.596204"/>
+            <TextureRoughness value="0.536000"/>
+            <ReflectionDistortion value="0.290000"/>
+            <RefractionDistortion value="0.001300"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.000000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+    </CWater>
+</Catalog>

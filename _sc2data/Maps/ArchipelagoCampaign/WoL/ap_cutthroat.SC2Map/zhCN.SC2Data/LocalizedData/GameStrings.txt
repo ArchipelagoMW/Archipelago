@@ -1,0 +1,103 @@
+Conversation/THorner02Briefing/Line00005=因为我更喜欢你还有小马！只要你的出价和奥尔兰一样，我就替你摆平他。他给我晶体矿，那咱们也就这么算吧。 /// Because I like you and Matthew better than him, of course! Match Orlan's offer and I'll help you take him out instead. He's paying in minerals, so I'll give you the same deal.
+DocInfo/Author=暴雪娱乐 /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=THorner02 /// THorner02
+DocInfo/Name=博弈 /// Cutthroat
+MapInfo/Player00/Name=中立 /// Neutral
+MapInfo/Player01/Name=雷诺的游骑兵 /// Raynor's Raiders
+MapInfo/Player02/Name=奥尔兰的部队 /// Orlan's Forces
+MapInfo/Player03/Name=米拉·汉的雇佣兵 /// Mira Han's Mercenaries
+MapInfo/Player04/Name=帝国 /// The Dominion
+MapInfo/Player05/Name=可回收的废料 /// Salvageable Scrap
+MapInfo/Player06/Name=操作港作业车 /// Port Junker
+MapInfo/Player07/Name=遗弃的建筑 /// Derelict Structures
+MapInfo/Player08/Name=斯旺的军械库 /// Swann's Armory
+MapInfo/Player09/Name=星灵圣物 /// Protoss Relics
+Param/Value/018921A4=奥尔兰的指挥中心 /// Orlan Command Center
+Param/Value/024F788C=赶在奥尔兰之前购买佣兵协议 /// Buy Merc Contract Before Orlan
+Param/Value/03FAE0EC=将其摧毁，拖延奥尔兰的晶体矿<n/>采集进度。 /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/04B51D63=
+Param/Value/057D9AD4=找到被走私的星灵圣物 /// Find Protoss Relic Contraband 
+Param/Value/088E0A54=摧毁奥尔兰的佣兵要塞 /// Destroy Orlan's Mercenary Fortress
+Param/Value/0DF11F79=将其摧毁，拖延奥尔兰的晶体矿采集进度。 /// Destroy to slow Orlan's mineral gathering rate.
+Param/Value/1117E451=
+Param/Value/149F8BF7=摧毁奥尔兰上校的佣兵要塞，取回解密的联邦副官。 /// Destroy Colonel Orlan's mercenary fortress to retrieve the decrypted Confederate adjutant.
+Param/Value/1589E053=赶在奥尔兰之前购买米拉·汉的佣兵协议<n/>（ /// Buy Merc Contract Before Orlan<n/>(
+Param/Value/16EA3C4A=<c val="00FF00">奥尔兰的指挥中心</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/1B75B417=/ /// /
+Param/Value/29858229=找到被走私的星灵圣物 /// Find Protoss Relic Contraband 
+Param/Value/2A2F1DEC=
+Param/Value/2A95D303=奥尔兰的指挥中心 /// Orlan Command Center
+Param/Value/306B371C=已消灭米拉·汉的部队。 /// Mira Han's forces have been destroyed.
+Param/Value/31A856E3=将其摧毁，拖延奥尔兰的晶体矿<n/>采集进度。 /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/332D48ED=粉碎机每分钟会产出一定量的废料。 /// Shredders will generate more salvage every few minutes.
+Param/Value/359DECC7=您的建筑已全部被摧毁。 /// All of your structures have been destroyed.
+Param/Value/364128DD=
+Param/Value/39C56F84=激活更多SCV /// Activating additional SCV's
+Param/Value/3D90DF9D=
+Param/Value/42238026=
+Param/Value/46EFAF90=找到被走私的星灵圣物 /// Find Protoss Relic Contraband
+Param/Value/4950C282=秃鹫机车 /// Vulture Bikes
+Param/Value/53398AFD=<c val="00FF00">奥尔兰的指挥中心</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/57034AFD=可以由任何地面单位拾取。 /// Use any ground unit to pick up.
+Param/Value/5807D76A=将其摧毁，拖延奥尔兰的晶体矿<n/>采集进度。 /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/5B13ECF2=奥尔兰购买了米拉·汉的协议。 /// Mira Han was bought by Orlan.
+Param/Value/5B8CE1E1=<c val="00FF00">可回收的废料</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/5CE95A1D=
+Param/Value/65743651=
+Param/Value/6783E46E=晶体矿） ///  Minerals)
+Param/Value/6AF13D92=废料 /// Scrap
+Param/Value/6C4C2088=蜘蛛雷击杀 /// Spider Mine Kills
+Param/Value/6D92663B=<c val="00FF00">可回收的废料</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/6DF56EB6=获得星灵研究点数 /// Protoss Research Earned
+Param/Value/72CDDCCB=回收晶体矿 /// Minerals Salvaged
+Param/Value/7B4624DB=</c> /// </c>
+Param/Value/7F6AA35A=
+Param/Value/8072BBF0=<c val="00FF00">奥尔兰的指挥中心</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/813453E8=新基地 /// New Base
+Param/Value/825A8B19=已发现被走私的星灵圣物 /// Relic Contraband Found
+Param/Value/8903569B=<c val="00FF00">奥尔兰的指挥中心</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/8A9CA656=奥尔兰的指挥中心 /// Orlan Command Center
+Param/Value/8E76FFC9=<c val="00FF00">奥尔兰的指挥中心</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/90F3079C=3 /// 3
+Param/Value/923FBA10=
+Param/Value/92B49FB8=奥尔兰的晶体矿： /// Orlan's Minerals: 
+Param/Value/9590FC4A=%Minerals% /// %Minerals%
+Param/Value/994D0392=将其摧毁，回收碎片。 /// Destroy to make Scrap Salvage.
+Param/Value/9D3B121D=
+Param/Value/9FFE53DF=摧毁奥尔兰的佣兵要塞 /// Destroy Orlan's Mercenary Fortress
+Param/Value/A0D4A53F=
+Param/Value/A41B1BD8=
+Param/Value/A79B6B3E=奥尔兰的晶体矿： /// Orlan's Minerals: 
+Param/Value/A8244073=SCV采集晶体矿 /// Minerals Harvested by SCVs
+Param/Value/B4F093E9=<c val="00FF00">协议价格： /// <c val="00FF00">Contract Price: 
+Param/Value/B8443135=将其摧毁，拖延奥尔兰的晶体矿<n/>采集进度。 /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/BA28B7AE=
+Param/Value/BB78BE99=<c val="00FF00">可回收的废料</c> /// <c val="00FF00">Salvageable Scrap</c>
+Param/Value/BBBD9501=找到掩埋在弃船残骸下的被走私的星灵圣物 /// Find the protoss relic contraband items buried in the wreckage of derelict ships.
+Param/Value/BC8609EA=雷诺的晶体矿： /// Raynor's Minerals: 
+Param/Value/BCDBD54A=
+Param/Value/BD509D57=
+Param/Value/BECFC09F=
+Param/Value/C18BAED4=0'ing Orlan's minerals /// 0'ing Orlan's minerals
+Param/Value/C92B9D15=可以由任何地面单位拾取。 /// Use any ground unit to pick up.
+Param/Value/D16B38BA=找到被走私的星灵圣物！ /// Protoss Contraband found!
+Param/Value/D33401E3=%Minerals%晶体矿 /// %Minerals% Minerals
+Param/Value/D5C8138A=将其摧毁，拖延奥尔兰的晶体矿<n/>采集进度。 /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/D6816819=
+Param/Value/D8EEADBA=将其摧毁，拖延奥尔兰的晶体矿采集进度。 /// Destroy to slow Orlan 's mineral gathering rate.
+Param/Value/DB71EC73=雷诺的晶体矿： /// Raynor's Minerals: 
+Param/Value/E0A46055=将其摧毁，拖延奥尔兰的晶体矿<n/>采集进度。 /// Destroy to slow Orlan's mineral-<n/>harvesting rate.
+Param/Value/E1F86B1E=奥尔兰的行星要塞 /// Orlan's Fortress
+Param/Value/E34FDDD9=
+Param/Value/E4147BF2=可由任何地面单位拾取，获得奖励晶体矿。 /// Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E41F86F3=废料 /// Scrap
+Param/Value/E4C2663E=星灵圣物 /// Protoss Relic
+Param/Value/E63DF6EC=<c val="00FF00">奥尔兰的指挥中心</c> /// <c val="00FF00">Orlan Command Center</c>
+Param/Value/E88A79BA=可由任何地面单位拾取，获得奖励晶体矿。 /// Use any ground unit to<n/>collect bonus minerals.
+Param/Value/E8C55C35=） /// )
+Param/Value/E915DCCD=
+Param/Value/EADB19A4=采集足够的晶体矿和废料，赶在奥尔兰上校之前购买雇佣兵首领米拉·汉的协议。 /// Gather enough minerals and scrap to buy the contract of mercenary leader Mira Han before Colonel Orlan does.
+Param/Value/FF684E25=米拉·汉的协议被购买后。 /// After Mira Han's Contract has been purchased.
+Water/Name/Template 1=模板1 /// Template 1
+Water/Name/Template 2=模板2 /// Template 2
