@@ -9,9 +9,6 @@ class ItemData(typing.NamedTuple):
     type: str
     classification: ItemClassification = ItemClassification.progression
 
-def get_full_item_list():
-    return item_table
-
 SHIVERS_ITEM_ID_OFFSET = 27000
 
 item_table = {

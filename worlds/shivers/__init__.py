@@ -1,4 +1,4 @@
-from .Items import item_table, ShiversItem, get_full_item_list
+from .Items import item_table, ShiversItem
 from .Rules import set_rules
 from BaseClasses import Item, Tutorial, Region, Entrance, Location
 from Fill import fill_restrictive
@@ -27,13 +27,14 @@ class ShiversWorld(World):
     game: str = "Shivers"
     topology_present = False
     web = ShiversWeb()
+    option_definitions = Shivers_options
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = Constants.location_name_to_id
     data_version = 0
-
+    
     def create_item(self, name: str) -> Item:
-        data = get_full_item_list()[name]
+        data = item_table[name]
         return ShiversItem(name, data.classification, data.code, self.player)
 
     def create_event(self, region_name: str, event_name: str) -> None:
@@ -42,7 +43,7 @@ class ShiversWorld(World):
         loc.place_locked_item(self.create_event_item(event_name))
         region.locations.append(loc)
 
-    option_definitions = Shivers_options
+
 
     
 
@@ -105,7 +106,6 @@ class ShiversWorld(World):
 
     #Prefills event storage locations with duplicate pots
     def pre_fill(self) -> None:
-        global storage_placements
         storagelocs = []
         storageitems = []
         self.storage_placements = []
