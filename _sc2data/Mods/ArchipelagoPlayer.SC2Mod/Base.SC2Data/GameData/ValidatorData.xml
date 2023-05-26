@@ -751,7 +751,17 @@
         <CombineArray value="AP_IsVanillaEngineeringBay"/>
         <CombineArray value="AP_IsAPEngineeringBay"/>
     </CValidatorCombine>
-    <!-- Override -->
+    <CValidatorUnitType id="AP_IsAPMedivac">
+        <Value value="AP_Medivac"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaMedivac">
+        <Value value="Medivac"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsMedivac" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaMedivac"/>
+        <CombineArray value="AP_IsAPMedivac"/>
+    </CValidatorCombine>
     <CValidatorUnitType id="AP_IsVanillaMULE">
         <Value value="MULE"/>
     </CValidatorUnitType>
