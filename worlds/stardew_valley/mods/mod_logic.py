@@ -57,8 +57,13 @@ def can_earn_luck_skill_level(who, level: int) -> StardewRule:
 
  
 def can_earn_magic_skill_level(who, level: int) -> StardewRule:
-    roof_count = min(level, 9)
-    return who.can_earn_spell_count(roof_count)
+    spell_count = [who.received("Spell: Clear Debris"), who.received("Spell: Water"),
+                   who.received("Spell: Blink"), who.received("Spell: Fireball"), who.received("Spell: Frostbite"),
+                   who.received("Spell: Descend"), who.received("Spell: Tendrils"),
+                   who.received("Spell: Shockwave"),
+                   who.received("Spell: Meteor"),
+                   who.received("Spell: Spirit")]
+    return who.can_earn_spells() & Count(level, spell_count)
 
 
 def can_earn_socializing_skill_level(who, level: int) -> StardewRule:

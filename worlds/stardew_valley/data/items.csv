@@ -557,13 +557,34 @@ id,name,classification,groups,mod_name
 10006,Binning Level,progression,SKILL_LEVEL_UP,Binning Skill
 10007,Tractor Garage,useful,,Tractor Mod
 10008,Woods Obelisk,progression,,DeepWoods
-10101,Juna: 1 <3,progression,FRIENDSANITY,Juna - Roommate NPC
-10102,Jasper: 1 <3,progression,FRIENDSANITY,Professor Jasper Thomas
-10103,Alec: 1 <3,progression,FRIENDSANITY,Alec Revisited
-10104,Yoba: 1 <3,progression,FRIENDSANITY,Custom NPC - Yoba
-10105,Eugene: 1 <3,progression,FRIENDSANITY,Custom NPC Eugene
-10106,Wellwick: 1 <3,progression,FRIENDSANITY,'Prophet' Wellwick
-10107,Mr. Ginger: 1 <3,progression,FRIENDSANITY,Mister Ginger (cat npc)
-10108,Shiko: 1 <3,progression,FRIENDSANITY,Shiko - New Custom NPC
-10109,Delores: 1 <3,progression,FRIENDSANITY,Delores - Custom NPC
-10110,Ayeisha: 1 <3,progression,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+10009,Spell: Clear Debris,progression,MAGIC_SPELL,Magic
+10010,Spell: Till,useful,MAGIC_SPELL,Magic
+10011,Spell: Water,progression,MAGIC_SPELL,Magic
+10012,Spell: Blink,progression,MAGIC_SPELL,Magic
+10013,Spell: Evac,useful,MAGIC_SPELL,Magic
+10014,Spell: Haste,filler,MAGIC_SPELL,Magic
+10015,Spell: Heal,progression,MAGIC_SPELL,Magic
+10016,Spell: Buff,useful,MAGIC_SPELL,Magic
+10017,Spell: Shockwave,progression,MAGIC_SPELL,Magic
+10018,Spell: Fireball,progression,MAGIC_SPELL,Magic
+10019,Spell: Frostbite,progression,MAGIC_SPELL,Magic
+10020,Spell: Teleport,progression,MAGIC_SPELL,Magic
+10021,Spell: Lantern,filler,MAGIC_SPELL,Magic
+10022,Spell: Tendrils,progression,MAGIC_SPELL,Magic
+10023,Spell: Photosynthesis,useful,MAGIC_SPELL,Magic
+10024,Spell: Descend,progression,MAGIC_SPELL,Magic
+10025,Spell: Meteor,progression,MAGIC_SPELL,Magic
+10026,Spell: Bloodmana,useful,MAGIC_SPELL,Magic
+10027,Spell: Lucksteal,useful,MAGIC_SPELL,Magic
+10028,Spell: Spirit,progression,MAGIC_SPELL,Magic
+10029,Spell: Rewind,useful,MAGIC_SPELL,Magic
+10101,Juna <3,progression,FRIENDSANITY,Juna - Roommate NPC
+10102,Jasper <3,progression,FRIENDSANITY,Professor Jasper Thomas
+10103,Alec <3,progression,FRIENDSANITY,Alec Revisited
+10104,Yoba <3,progression,FRIENDSANITY,Custom NPC - Yoba
+10105,Eugene <3,progression,FRIENDSANITY,Custom NPC Eugene
+10106,Wellwick <3,progression,FRIENDSANITY,'Prophet' Wellwick
+10107,Mr. Ginger <3,progression,FRIENDSANITY,Mister Ginger (cat npc)
+10108,Shiko <3,progression,FRIENDSANITY,Shiko - New Custom NPC
+10109,Delores <3,progression,FRIENDSANITY,Delores - Custom NPC
+10110,Ayeisha <3,progression,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)

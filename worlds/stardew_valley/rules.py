@@ -134,11 +134,11 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
         MultiWorldRules.set_rule(multi_world.get_entrance(dig_to_mines_floor(floor), player),
                                  logic.can_mine_to_floor(floor).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_tide_pools, player),
-                             logic.received("Beach Bridge").simplify())
+                             logic.received("Beach Bridge").simplify() | (logic.can_blink() & logic.can_earn_spells()))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_quarry, player),
-                             logic.received("Bridge Repair").simplify())
+                             logic.received("Bridge Repair").simplify() | (logic.can_blink() & logic.can_earn_spells()))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_secret_woods, player),
-                             logic.has_tool("Axe", "Iron").simplify())
+                             logic.has_tool("Axe", "Iron").simplify() | (logic.can_blink() & logic.can_earn_spells()))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_sewers, player),
                              logic.has_rusty_key().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.town_to_sewers, player),
@@ -165,16 +165,16 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_railroad, player),
                              logic.has_lived_months(2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_witch_warp_cave, player),
-                             logic.received("Dark Talisman"))
+                             logic.received("Dark Talisman") | (logic.can_blink() & logic.can_earn_spells()))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_witch_hut, player),
-                             logic.has("Void Mayonnaise"))
+                             logic.has("Void Mayonnaise") | logic.can_blink())
 
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_harvey_room, player),
                              logic.has_relationship("Harvey", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_maru_room, player),
                              logic.has_relationship("Maru", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_sebastian_room, player),
-                             logic.has_relationship("Sebastian", 2))
+                             logic.has_relationship("Sebastian", 2) | logic.can_blink())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_leah_cottage, player),
                              logic.has_relationship("Leah", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_elliott_house, player),
@@ -229,7 +229,8 @@ def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_qi_walnut_room, player),
                              logic.received("Qi Walnut Room").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_north_to_volcano, player),
-                             (logic.has_tool("Watering Can") | logic.received("Volcano Bridge")).simplify())
+                             (logic.can_water(0) | logic.received("Volcano Bridge") |
+                              logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_5, player),
                              logic.can_mine_perfectly().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_10, player),
@@ -309,7 +310,7 @@ def set_help_wanted_quests_rules(logic: StardewLogic, multi_world, player, world
         delivery = "Item Delivery"
         rule = logic.received("Month End", i)
         fishing_rule = rule & logic.can_fish()
-        slay_rule = rule & logic.has_any_weapon()
+        slay_rule = rule & logic.can_do_combat_at_level("Basic")
         item_delivery_index = (i * 4) + 1
         for j in range(item_delivery_index, item_delivery_index + 4):
             location_name = f"{prefix} {delivery} {j}"

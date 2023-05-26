@@ -62,6 +62,7 @@ class Group(enum.Enum):
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
     TV_CHANNEL = enum.auto()
+    MAGIC_SPELL = enum.auto()
 
 
 @dataclass(frozen=True)
@@ -191,6 +192,7 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     items.extend(create_special_order_board_rewards(item_factory, world_options))
     items.extend(create_special_order_qi_rewards(item_factory, world_options))
     items.extend(create_walnut_purchase_rewards(item_factory, world_options))
+    items.extend(create_magic_mod_spells(item_factory, world_options))
 
     return items
 
@@ -435,6 +437,12 @@ def create_filler_festival_rewards(item_factory: StardewItemFactory, world_optio
 
     return [item_factory(item) for item in items_by_group[Group.FESTIVAL] if
             item.classification == ItemClassification.filler]
+
+
+def create_magic_mod_spells(item_factory: StardewItemFactory, world_options: StardewOptions):
+    if ModNames.magic in world_options[options.Mods]:
+        return [item_factory(item) for item in items_by_group[Group.MAGIC_SPELL]]
+    return []
 
 
 def create_unique_filler_items(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
