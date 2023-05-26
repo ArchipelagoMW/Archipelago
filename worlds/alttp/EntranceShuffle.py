@@ -1,7 +1,9 @@
 # ToDo: With shuffle_ganon option, prevent gtower from linking to an exit only location through a 2 entrance cave.
 from collections import defaultdict
-from worlds.alttp.OverworldGlitchRules import overworld_glitch_connections
-from worlds.alttp.UnderworldGlitchRules import underworld_glitch_connections
+
+from .OverworldGlitchRules import overworld_glitch_connections
+from .UnderworldGlitchRules import underworld_glitch_connections
+
 
 def link_entrances(world, player):
     connect_two_way(world, 'Links House', 'Links House Exit', player) # unshuffled. For now

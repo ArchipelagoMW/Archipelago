@@ -4,7 +4,7 @@
 
 - Stardew Valley on PC (Recommended: [Steam version](https://store.steampowered.com/app/413150/Stardew_Valley/))
 - SMAPI ([Mod loader for Stardew Valley](https://smapi.io/))
-- [StardewArchipelago Mod Release 2.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
+- [StardewArchipelago Mod Release 3.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
     - It is important to use a mod release of version 3.x.x to play seeds that have been generated here. Later releases can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
 
 ## Optional Software

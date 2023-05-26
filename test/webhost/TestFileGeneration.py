@@ -25,7 +25,7 @@ class TestFileGeneration(unittest.TestCase):
         for file in os.scandir(target):
             if file.is_file() and file.name.endswith(".yaml"):
                 with self.subTest(file=file.name):
-                    with open(file) as f:
+                    with open(file, encoding="utf-8-sig") as f:
                         for value in roll_options({file.name: f.read()})[0].values():
                             self.assertTrue(value is True, f"Default Options for template {file.name} cannot be run.")
 

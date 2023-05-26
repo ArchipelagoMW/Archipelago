@@ -2,6 +2,7 @@ import typing
 
 from BaseClasses import ItemClassification as IC
 
+
 def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
