@@ -16,7 +16,7 @@ import Utils
 from NetUtils import ClientStatus
 from worlds.mmbn3.Items import items_by_id
 from worlds.mmbn3.Rom import get_base_rom_path
-from worlds.mmbn3.Locations import all_locations
+from worlds.mmbn3.Locations import all_locations, scoutable_locations
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -69,6 +69,7 @@ class MMBN3Context(CommonContext):
         self.location_table = {}
         self.version_warning = False
         self.auth_name = None
+        self.slot_data = dict()
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -97,6 +98,10 @@ class MMBN3Context(CommonContext):
         self.ui = MMBN3Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
+    def on_package(self, cmd: str, args: dict):
+        if cmd == 'Connected':
+            self.slot_data = args.get("slot_data", {})
+            print(self.slot_data)
 
 class ItemInfo:
     id = 0x00
@@ -165,7 +170,16 @@ async def parse_payload(payload: dict, ctx: MMBN3Context, force: bool):
         await ctx.send_msgs([{
             "cmd": "LocationChecks",
             "locations": locs
+        }])
 
+    # If trade hinting is enabled, send scout checks
+    if ctx.slot_data.get("trade_quest_hinting", 0) == 2:
+        scouted_locs = [loc.id for loc in scoutable_locations
+                        if check_location_scouted(loc, payload["locations"])]
+        await ctx.send_msgs([{
+            "cmd": "LocationScouts",
+            "locations": scouted_locs,
+            "create_as_hint": 2
         }])
 
 
@@ -177,6 +191,15 @@ def check_location_packet(location, memory):
     byte = memory.get(location_key)
     if byte is not None:
         return byte & location.flag_mask
+
+
+def check_location_scouted(location, memory):
+    if len(memory) == 0:
+        return False
+    location_key = hex(location.hint_flag)[2:]
+    byte = memory.get(location_key)
+    if byte is not None:
+        return byte & location.hint_flag_mask
 
 
 async def gba_sync_task(ctx: MMBN3Context):

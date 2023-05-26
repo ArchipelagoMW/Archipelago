@@ -409,7 +409,7 @@ class MMBN3World(World):
                                 item_name_text = "Progress"
                             elif item.progression == ItemClassification.useful \
                                     or item.progression == ItemClassification.trap:
-                                item_name_text = "Cool Item"
+                                item_name_text = "Item"
                             else:
                                 item_name_text = "Garbage"
 
@@ -453,6 +453,10 @@ class MMBN3World(World):
     def create_event(self, event: str):
         # while we are at it, we can also add a helper to create events
         return MMBN3Item(event, ItemClassification.progression, None, self.player)
+
+    def fill_slot_data(self):
+        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+
 
     def explore_score(self, state):
         """

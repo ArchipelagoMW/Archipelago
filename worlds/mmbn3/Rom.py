@@ -195,7 +195,7 @@ class TextArchive:
 
                         # If there's another text box to display, add it to the message bytes before setting them back
                         if len(next_message) > 0:
-                            oldbytes.extend(item_text_bytes)
+                            oldbytes.extend(next_message_bytes)
                             # TODO append end message nextline etc.
                             # I think this is "wait for button press" then "clearmessage"
                             oldbytes.extend([0xEB, 0xE9])
