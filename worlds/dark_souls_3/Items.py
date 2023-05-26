@@ -294,6 +294,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Llewellyn Shield",                    0x0134FD90, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Golden Falcon Shield",                0x01354BB0, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Sacred Bloom Shield",                 0x013572C0, DS3ItemCategory.SHIELD),
+    ("Ancient Dragon Greatshield",          0x013599D0, DS3ItemCategory.SHIELD),
     ("Lothric Knight Shield",               0x01409650, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Knight Shield",                       0x01410B80, DS3ItemCategory.SHIELD_INFUSIBLE),
     ("Pontiff Knight Shield",               0x014159A0, DS3ItemCategory.SHIELD),
@@ -764,10 +765,10 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Divine Blessing",                     0x400000F0, DS3ItemCategory.MISC),
     ("Hidden Blessing",                     0x400000F1, DS3ItemCategory.MISC),
     ("Silver Pendant",                      0x400000F2, DS3ItemCategory.SKIP),
-    ("Green Blossom",                       0x40000104, DS3ItemCategory.SKIP),
+    ("Green Blossom",                       0x40000104, DS3ItemCategory.MISC),
     ("Budding Green Blossom",               0x40000106, DS3ItemCategory.MISC),
     ("Bloodred Moss Clump",                 0x4000010E, DS3ItemCategory.SKIP),
-    ("Purple Moss Clump",                   0x4000010F, DS3ItemCategory.SKIP),
+    ("Purple Moss Clump",                   0x4000010F, DS3ItemCategory.MISC),
     ("Blooming Purple Moss Clump",          0x40000110, DS3ItemCategory.SKIP),
     ("Purging Stone",                       0x40000112, DS3ItemCategory.SKIP),
     ("Rime-blue Moss Clump",                0x40000114, DS3ItemCategory.SKIP),
@@ -1217,7 +1218,6 @@ _cut_content_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
 
     # Shields
     ("Cleric's Parma",                      0x013524A0, DS3ItemCategory.SKIP),
-    ("Ancient Dragon Greatshield",          0x013599D0, DS3ItemCategory.SKIP),
     ("Prince's Shield",                     0x01421CF0, DS3ItemCategory.SKIP),
 
     # Armor
