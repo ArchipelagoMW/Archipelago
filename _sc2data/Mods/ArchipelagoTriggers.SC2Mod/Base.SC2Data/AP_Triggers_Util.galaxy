@@ -172,18 +172,23 @@ void ap_triggers_processUpgrades(
     level = ModI(bitArrayValue, 4);
     upgrade0handler(player, level);
 
-    level = ModI(bitArrayValue, 16) / 4;
+    bitArrayValue = bitArrayValue / 4;
+    level = ModI(bitArrayValue, 4);
     upgrade1handler(player, level);
 
-    level = ModI(bitArrayValue, 64) / 16;
+    bitArrayValue = bitArrayValue / 4;
+    level = ModI(bitArrayValue, 4);
     upgrade2handler(player, level);
 
-    level = ModI(bitArrayValue, 256) / 64;
+    bitArrayValue = bitArrayValue / 4;
+    level = ModI(bitArrayValue, 4);
     upgrade3handler(player, level);
 
-    level = ModI(bitArrayValue, 1024) / 256;
+    bitArrayValue = bitArrayValue / 4;
+    level = ModI(bitArrayValue, 4);
     upgrade4handler(player, level);
 
-    level = ModI(bitArrayValue, 4096) / 1024;
+    bitArrayValue = bitArrayValue / 4;
+    level = ModI(bitArrayValue, 4);
     upgrade5handler(player, level);
 }

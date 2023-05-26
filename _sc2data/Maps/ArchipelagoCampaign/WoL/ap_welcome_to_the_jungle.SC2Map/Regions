@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="4">
+        <name value="Terrazine Node 03"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="66.4753,98.2685"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Terrazine Node 07"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="54.5021,62.4353"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Terrazine Node 09"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="35.5522,62.5297"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Terrazine Node 10"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="104.2626,99.3693"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Terrazine Node 08"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="19.55,78.6921"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Terrazine Node 01"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="43.6777,21.8576"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Terrazine Node 13"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="21.6381,102.4931"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Terrazine Node 02"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="108.5024,67.9665"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Terrazine Node 11"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="81.8461,117.7905"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Terrazine Node 12"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="51.498,85.4096"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Player Base"/>
+        <shape type="rect">
+            <quad value="33.0834,9.8098,114.91,46.3164"/>
+        </shape>
+        <shape type="circle">
+            <center value="100.3771,53.382"/>
+            <radius value="13.7048"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.029,53.2817"/>
+            <radius value="14.237"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.571,46.7038"/>
+            <radius value="8.372"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.1042,53.7724"/>
+            <radius value="4.4946"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Initial Visibility"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="77.6728,17.263"/>
+            <radius value="14.0664"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.5085,18.0834"/>
+            <radius value="9.95"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.9401,34.1176"/>
+            <radius value="14.0598"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.3981,14.858"/>
+            <radius value="8.417"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.1284,14.203"/>
+            <radius value="2.6635"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.8483,10.7478"/>
+            <radius value="3.8947"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.3037,21.2106"/>
+            <radius value="9.6967"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.3698,26.4377"/>
+            <radius value="10.4411"/>
+        </shape>
+        <shape type="circle">
+            <center value="96.328,17.6982"/>
+            <radius value="6.5156"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.8952,34.5131"/>
+            <radius value="10.501"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.1877,25.9538"/>
+            <radius value="10.3142"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.4282,31.5163"/>
+            <radius value="11.4003"/>
+        </shape>
+        <shape type="circle">
+            <center value="91.6291,31.2033"/>
+            <radius value="8.8728"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Terrazine Node 06"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="104.4343,80.431"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Terrazine Node 05"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="53.137,101.4335"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Harvesting Area 4 Central"/>
+        <color value="255,0,128,0"/>
+        <shape type="circle">
+            <center value="61.007,93.7302"/>
+            <radius value="25.28"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Harvesting Area 5 Western"/>
+        <color value="255,0,0,255"/>
+        <shape type="circle">
+            <center value="26.5183,89.5073"/>
+            <radius value="21.046"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Harvesting Area 6 NorthEast"/>
+        <color value="255,128,255,0"/>
+        <shape type="circle">
+            <center value="95.5222,114.6372"/>
+            <radius value="23.419"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Harvesting Area 3 Eastern"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="91.3427,68.253"/>
+            <radius value="25.2556"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Harvesting Area 1 SouthWestern"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="35.592,32.3967"/>
+            <radius value="18.5104"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Player 2 Probes (North)"/>
+        <shape type="rect">
+            <quad value="46.061,135.7924,65.4238,146.7138"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Player 4 Probes (NorthWest)"/>
+        <shape type="rect">
+            <quad value="15.7216,129.249,32.2497,142.1755"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Harvesting Area 2 SouthWestern"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="48.2863,59.5195"/>
+            <radius value="18.464"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Terrazine Node 04"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="29.433,45.5395"/>
+            <radius value="3"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Briefing Clean Out Units"/>
+        <color value="255,255,0,128"/>
+        <shape type="circle">
+            <center value="27.3762,88.8508"/>
+            <radius value="10.7031"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.899,139.6782"/>
+            <radius value="11.3576"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Briefing Air Rally"/>
+        <shape type="circle">
+            <center value="76.8532,100.9343"/>
+            <radius value="6.581"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Briefing Air Spawn"/>
+        <shape type="rect">
+            <quad value="92.6162,148.8376,105.0622,149.7668"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Briefing Ground Spawn"/>
+        <shape type="rect">
+            <quad value="44.705,114.9165,48.7048,115.4165"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="NEDefenders"/>
+        <shape type="circle">
+            <center value="106.7634,117.6335"/>
+            <radius value="11.9587"/>
+        </shape>
+        <shape type="circle">
+            <center value="104.928,130.0522"/>
+            <radius value="5.6745"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="NEDefenderSpawn"/>
+        <shape type="circle">
+            <center value="104.667,129.9392"/>
+            <radius value="6"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="NE Relic Region"/>
+        <shape type="circle">
+            <center value="97.1972,115.3024"/>
+            <radius value="2.7646"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Forest Revealer 1"/>
+        <shape type="circle">
+            <center value="35.4392,52.8366"/>
+            <radius value="4.561"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Forest Reveal 1"/>
+        <shape type="circle">
+            <center value="24.8464,64.441"/>
+            <radius value="7.0524"/>
+        </shape>
+        <shape type="circle">
+            <center value="18.4206,63.444"/>
+            <radius value="7.0524"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.1333,56.7246"/>
+            <radius value="7.0524"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Waterfall Reveal"/>
+        <shape type="circle">
+            <center value="46.7602,47.2536"/>
+            <radius value="10.756"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Waterfall Revealer"/>
+        <shape type="circle">
+            <center value="46.0737,47.7097"/>
+            <radius value="16"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="First Shrine Revealer"/>
+        <shape type="circle">
+            <center value="47.292,20.4372"/>
+            <radius value="7.6877"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.226,15.497"/>
+            <radius value="3.3793"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="First Shrine Reveal"/>
+        <shape type="circle">
+            <center value="41.558,20.9772"/>
+            <radius value="11.6555"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.5678,8.3833"/>
+            <radius value="5.1042"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.5986,10.1657"/>
+            <radius value="5.1042"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.3623,7.8115"/>
+            <radius value="2.6486"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Statues Revealer"/>
+        <shape type="rect">
+            <quad value="16.2915,75.3447,28.146,96.0361"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Statues Reveal"/>
+        <shape type="circle">
+            <center value="13.9033,94.7304"/>
+            <radius value="5.944"/>
+        </shape>
+        <shape type="circle">
+            <center value="11.447,88.566"/>
+            <radius value="5.944"/>
+        </shape>
+        <shape type="circle">
+            <center value="12.164,80.9235"/>
+            <radius value="5.944"/>
+        </shape>
+        <shape type="circle">
+            <center value="17.2038,90.3063"/>
+            <radius value="5.944"/>
+        </shape>
+        <shape type="circle">
+            <center value="19.0766,79.3244"/>
+            <radius value="5.944"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="Pond Revealer"/>
+        <shape type="circle">
+            <center value="80.517,96.922"/>
+            <radius value="7.2277"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.571,102.0417"/>
+            <radius value="7.2277"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.0378,111.382"/>
+            <radius value="5.4067"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Pond Reveal"/>
+        <shape type="circle">
+            <center value="78.1486,106.407"/>
+            <radius value="7.4326"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.0524,110.6518"/>
+            <radius value="3.0834"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.873,115.7363"/>
+            <radius value="5.4414"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.5683,109.069"/>
+            <radius value="4.7644"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="East Shrine Revealer 2"/>
+        <shape type="circle">
+            <center value="103.9675,79.5866"/>
+            <radius value="5.5637"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="East Shrine Reveal 2"/>
+        <shape type="circle">
+            <center value="107.4184,82.3508"/>
+            <radius value="9.1115"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="East Shrine Revealer 1"/>
+        <shape type="circle">
+            <center value="108.2995,68.2724"/>
+            <radius value="5.5637"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="East Shrine Reveal 1"/>
+        <shape type="circle">
+            <center value="111.9648,67.7077"/>
+            <radius value="9.1115"/>
+        </shape>
+    </region>
+</Regions>

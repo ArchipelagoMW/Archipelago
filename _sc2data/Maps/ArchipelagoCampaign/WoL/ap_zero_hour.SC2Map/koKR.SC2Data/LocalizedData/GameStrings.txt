@@ -1,0 +1,97 @@
+DocInfo/Author=블리자드 엔터테인먼트 /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=테란 레이너 03 /// TRaynor03
+DocInfo/Name=0시를 향하여 /// Zero Hour
+MapInfo/Player00/Name=중립 /// Neutral
+MapInfo/Player01/Name=레이너 특공대 /// Raynor's Raiders
+MapInfo/Player02/Name=저그 군단 /// Zerg Swarm
+MapInfo/Player03/Name=저그 군단 /// Zerg Swarm
+MapInfo/Player04/Name=저그 군단 /// Zerg Swarm
+MapInfo/Player05/Name=저그 군단 /// Zerg Swarm
+MapInfo/Player06/Name=마 사라 반란군 /// Mar Sara Rebels
+MapInfo/Player07/Name=히페리온 /// Hyperion
+MapInfo/Player08/Name=80 레벨 타우렌 우주 해병! /// LVL80TSM!
+MapInfo/Player09/Name=마 사라 거주민 /// Mar Sara Colonists
+Param/Value/04D269FC=임무 시작 /// Mission Start
+Param/Value/14F8338E=반란군 /// Rebel Fighters
+Param/Value/15C552A2=<c val="00FF00">셋!</c> /// <c val="00FF00">T Minus 3!</c>
+Param/Value/169A91DE=보통 또는 쉬움 /// Normal or Easy
+Param/Value/17C611E4=
+Param/Value/1BEEEE4F=해병은 벙커 안에서 안전하게<n/>적을 공격할 수 있습니다. /// Marines can safely attack<n/>from inside the Bunker
+Param/Value/1E2D895D=해병 업그레이드 /// Marine Upgrades
+Param/Value/1EDE9CD3=<c val="00FF00">공학 연구소</c> /// <c val="00FF00">Engineering Bay</c>
+Param/Value/219771E3=해병은 벙커 안에서 안전하게<n/>적을 공격할 수 있습니다. /// Marines can safely attack<n/>from inside the Bunker
+Param/Value/2365FCD3=벙커 파괴됨 /// Bunker destroyed
+Param/Value/24851E7E=<c val="00FF00">빈 벙커</c><n/>해병을 선택하고 마우스 오른쪽 버튼으로 클릭하여<n/>벙커에 들입니다. /// <c val="00FF00">EMPTY BUNKER</c><n/>Select Marines, then right-click<n/>to load the Bunker.
+Param/Value/24D71291=회수하거나 잃은 구조물 /// Structures Salvaged or Lost
+Param/Value/252F3104=해병 구출 /// Rescued Marines
+Param/Value/28341DB3=반란군 구출 ( /// Rescue the Rebels (
+Param/Value/28F3F94C=해병 구출 /// Rescued Marines
+Param/Value/36A98A35=
+Param/Value/375DF249=무기 및 장갑 업그레이드 /// Weapon and Armor Upgrades
+Param/Value/424A3B35=
+Param/Value/43FACC21=<c val="00FF00">빈 벙커</c><n/>해병을 선택하고 마우스 오른쪽 버튼으로 클릭하여<n/>벙커에 들입니다. /// <c val="00FF00">EMPTY BUNKER</c><n/>Select Marines, then right-click<n/>to load the Bunker.
+Param/Value/44A00372=<c val="00FF00">하나!</c> /// <c val="00FF00">T Minus 1!</c>
+Param/Value/44FEB281=
+Param/Value/46206E52=공중 유닛만 공격 /// Attacks air units only
+Param/Value/474B29B5=반란군 /// Rebel Fighters
+Param/Value/4ACA922A=
+Param/Value/4B8241F4=구조될 때까지 남은 시간:  /// Evacuation In: 
+Param/Value/4FB8BA12=반란군 /// Rebel Fighters
+Param/Value/51615F10=반란군 /// Rebel Fighters
+Param/Value/53895D62=해병 업그레이드 /// Marine Upgrades
+Param/Value/58ACACB4=구조될 때까지 버티기 /// Hold Out For Evacuation
+Param/Value/5A139B4F=/3 /// /3
+Param/Value/5B24E1E1=
+Param/Value/62BDD509=) /// )
+Param/Value/62DF0124=
+Param/Value/6341641B=유물 조각을 수송합니다. /// Transport for the Artifact piece
+Param/Value/66738ACE=반란군 구출 ( /// Rescue the Rebels (
+Param/Value/6C654A08=탈출까지 5분 남았습니다. /// Five minutes until evacuation...
+Param/Value/6C722AC4=벙커 수리 /// Repair Bunker
+Param/Value/6FEBAEC8=해병 구출 /// Rescued Marines
+Param/Value/71995348=반란군을 구출하려면<n/>유닛을 이리로 이동시키십시오. /// Move your units here<n/>to rescue the rebels.
+Param/Value/7243E536=파괴한 부화장 /// Hatcheries Destroyed
+Param/Value/73E2F5FA=공중 유닛만 공격 /// Attacks air units only
+Param/Value/7B12E251=반란군 구출 ( /// Rescue the Rebels (
+Param/Value/85796E57=<c val="00FF00">미사일 포탑</c> /// <c val="00FF00">Missile Turret</c>
+Param/Value/85B6A1D8=) /// )
+Param/Value/86605294=
+Param/Value/88CFB03A=) /// )
+Param/Value/8B1D16B7=
+Param/Value/9140EFF9=가장 어려움 /// Insane
+Param/Value/92440993=/3 /// /3
+Param/Value/92EF22E3=무기 및 장갑 업그레이드 /// Weapon and Armor Upgrades
+Param/Value/9C5A9C47=
+Param/Value/9D72E7AD=
+Param/Value/A1EE5B7F=저그가 빠르게 진군하여 기지 외부의 반란군을 고립시켰습니다. 반란군 자체의 힘으로는 오래 버틸 수 없으니 서둘러 구출하십시오! /// The rapid advance of the zerg has cut off some rebel fighters outside the base. They can't hold out for long on their own. Rescue them!
+Param/Value/A6ED12DE=
+Param/Value/AA88D3B3=구조된 반란군 분대 /// Rebel Squads Rescued
+Param/Value/B8ACA28F=<c val="00FF00">미사일 포탑</c> /// <c val="00FF00">Missile Turret</c>
+Param/Value/B965C69B=어려움 /// Hard
+Param/Value/C27EDDD5=모든 구조물이 파괴되었습니다. /// All of your structures have been destroyed.
+Param/Value/C3011260=
+Param/Value/C5438079=반란군을 구출하려면<n/>유닛을 이리로 이동시키십시오. /// Move your units here<n/>to rescue the rebels.
+Param/Value/C95BAC98=탈출까지 10분 남았습니다. /// Ten minutes until evacuation...
+Param/Value/CAB93CB5=반란군 /// Rebel Fighters
+Param/Value/CAF01B4A=/8 /// /8
+Param/Value/D0B3E765=반란군을 구출하려면<n/>유닛을 이리로 이동시키십시오. /// Move your units here<n/>to rescue the rebels.
+Param/Value/D4649464=<c val="00FF00">공학 연구소</c> /// <c val="00FF00">Engineering Bay</c>
+Param/Value/DBBC8F23=/3 /// /3
+Param/Value/DC706388=<c val="00FF00">빈 벙커</c><n/>해병을 선택하고 마우스 오른쪽 버튼으로 클릭하여<n/>벙커에 들입니다. /// <c val="00FF00">EMPTY BUNKER</c><n/>Select Marines, then right-click<n/>to load the Bunker.
+Param/Value/DC769176=반란군 /// Rebel Fighters
+Param/Value/DD630F5C=<c val="00FF00">빈 벙커</c><n/>해병을 선택하고 마우스 오른쪽 버튼으로 클릭하여<n/>벙커에 들입니다. /// <c val="00FF00">EMPTY BUNKER</c><n/>Select Marines, then right-click<n/>to load the Bunker.
+Param/Value/DD79C5B5=반란군 구출 /// Rescue the Rebels
+Param/Value/DE63FD4D=) /// )
+Param/Value/DEE92A7D=
+Param/Value/E68CA25F=저그가 돌아왔습니다! 수송기가 도착하여 병력을 마 사라에서 대피시킬 수 있도록 기지를 방어하십시오. /// The zerg have returned! Defend the base long enough for transport to arrive and evacuate your forces from Mar Sara.
+Param/Value/E7BF84D7=<c val="00FF00">둘!</c> /// <c val="00FF00">T Minus 2!</c>
+Param/Value/E7E8684A=/3 /// /3
+Param/Value/E87246E9=
+Param/Value/F29197A1=저그 접근 중 /// Incoming Zerg
+Param/Value/F4091673=구조될 때까지 버티십시오. /// Hold Out For Evacuation
+Param/Value/F6B6EFD6=<c val="00FF00">비밀 발견!</c> /// <c val="00FF00">Secret Found!</c>
+Param/Value/F805BF8E=반란군 구출 ( /// Rescue the Rebels (
+Param/Value/F820EA3E=
+Param/Value/F88EB373=/3 /// /3
+Param/Value/FF59296E=

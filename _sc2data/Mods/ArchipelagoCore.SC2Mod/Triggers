@@ -361,7 +361,7 @@
         </Element>
         <Element Type="Param" Id="76D6E084">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="00000220"/>
-            <Variable Type="Variable" Library="5BD4895D" Id="4FAF2793"/>
+            <Parameter Type="ParamDef" Library="5BD4895D" Id="86396C8D"/>
         </Element>
         <Element Type="FunctionDef" Id="09DD21C1">
             <FlagAction/>
@@ -5559,7 +5559,7 @@
         </Element>
         <Element Type="Param" Id="AE54F181">
             <ParameterDef Type="ParamDef" Library="5BD4895D" Id="BA886891"/>
-            <Preset Type="PresetValue" Library="Ntve" Id="A216FAB4"/>
+            <Variable Type="Variable" Library="5BD4895D" Id="EDE1A068"/>
         </Element>
         <Element Type="Param" Id="6EB32F86">
             <ParameterDef Type="ParamDef" Library="5BD4895D" Id="EF7DF54F"/>

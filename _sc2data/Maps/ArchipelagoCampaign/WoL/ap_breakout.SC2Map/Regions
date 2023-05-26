@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="8">
+        <name value="Final Area Reveal"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="24.754,106.1657"/>
+            <radius value="9.2038"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.6894,111.9892"/>
+            <radius value="9.2038"/>
+        </shape>
+        <shape type="circle">
+            <center value="28.5661,97.0822"/>
+            <radius value="9.2038"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.3718,106.8005"/>
+            <radius value="9.2038"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.868,85.3732"/>
+            <radius value="7.7375"/>
+        </shape>
+        <shape type="rect">
+            <quad value="16.2697,84.4665,31.4548,103.4882"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.0886,111.8608"/>
+            <radius value="8.2883"/>
+        </shape>
+        <shape type="rect">
+            <quad value="35.9943,103.7531,51.1794,119.6301"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.2951,95.7907"/>
+            <radius value="2.7094"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.4401,99.5517"/>
+            <radius value="2.7094"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.197,97.5666"/>
+            <radius value="2.7094"/>
+        </shape>
+        <shape type="rect">
+            <quad value="14.0693,90.4301,16.2814,99.396"/>
+        </shape>
+        <shape type="rect">
+            <quad value="36.4077,119.4768,45.3735,121.689"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="RaynorBaseBullies"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="156.5654,28.8676"/>
+            <radius value="20.1767"/>
+        </shape>
+        <shape type="circle">
+            <center value="138.062,21.8903"/>
+            <radius value="2.2741"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="TownBullies02"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="132.333,102.6877"/>
+            <radius value="14.6628"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="TownBullies03"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="88.3195,47.2102"/>
+            <radius value="17.3745"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="CellBlock&quot;A&quot;Reveal"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="85.64,116.261"/>
+            <radius value="10"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="CellBlock&quot;B&quot;Reveal"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="39.8203,29.517"/>
+            <radius value="8.5"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Tip: Psi Shield"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="122.721,73.2744"/>
+            <radius value="8"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Tip: Mind Blast"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="132.1401,42.6547"/>
+            <radius value="7"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Cell Block B Rescue"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="44.494,36.4648"/>
+            <radius value="16.545"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="SCV Spawn Area 01"/>
+        <shape type="circle">
+            <center value="133.8154,100.815"/>
+            <radius value="18.0502"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="SCV Spawn Area 02"/>
+        <shape type="circle">
+            <center value="92.4572,47.5903"/>
+            <radius value="15.607"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Cell Block A Rescue"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="70.7893,104.4621"/>
+            <radius value="7.5"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.2658,110.1052"/>
+            <radius value="7.5"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.2,97.9321"/>
+            <radius value="7"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Diamondback Spawner 01"/>
+        <shape type="circle">
+            <center value="77.96,99.167"/>
+            <radius value="2.0454"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Tank Spawner 2"/>
+        <shape type="circle">
+            <center value="33.8481,39.589"/>
+            <radius value="1.7697"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Tank Spawner 1"/>
+        <shape type="circle">
+            <center value="53.2204,28.6704"/>
+            <radius value="1.819"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="SCV Spawn Area 03"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="61.7788,73.916"/>
+            <radius value="11.4133"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.4985,80.8598"/>
+            <radius value="13.6047"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Cell Block A Gate Reveal"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="92.099,92.8198"/>
+            <radius value="8"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.6821,107.8161"/>
+            <radius value="17.882"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.287,91.3288"/>
+            <radius value="4.3698"/>
+        </shape>
+        <shape type="circle">
+            <center value="61.851,104.9384"/>
+            <radius value="3.1418"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.331,117.4257"/>
+            <radius value="8.1281"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Cell Block B Gate Reveal"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="61.7204,47.7194"/>
+            <radius value="4"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.8046,45.0021"/>
+            <radius value="4"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.4204,30.6774"/>
+            <radius value="14.1242"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.624,38.5383"/>
+            <radius value="14.8242"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.8935,51.6511"/>
+            <radius value="4.3493"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.8427,39.9467"/>
+            <radius value="4.1315"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.5661,24.8686"/>
+            <radius value="5.744"/>
+        </shape>
+        <shape type="circle">
+            <center value="48.8564,18.464"/>
+            <radius value="3.8627"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.954,31.1933"/>
+            <radius value="3.5104"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Cell Block A Jerks"/>
+        <color value="255,255,255,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="82.0266,106.58"/>
+            <radius value="9.8493"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.7158,100.2133"/>
+            <radius value="5.809"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Cell Block B Jerks"/>
+        <color value="255,255,255,128"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="47.8044,33.8122"/>
+            <radius value="11.541"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.4291,44.3891"/>
+            <radius value="7.448"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Cell Block A Reminder"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="97.8833,83.8154"/>
+            <radius value="8"/>
+        </shape>
+        <shape type="rect">
+            <quad value="82.3366,80.294,90.8913,84.3996"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Cell Block B Reminder"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="70.1938,47.857"/>
+            <radius value="10"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Nuke Triggered"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="64.331,68.39"/>
+            <radius value="10"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.9353,79.4562"/>
+            <radius value="12.3322"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.6323,73.373"/>
+            <radius value="12.099"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.9833,94.6513"/>
+            <radius value="8.9936"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.3342,96.5026"/>
+            <radius value="14.727"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.379,94.3474"/>
+            <radius value="7.497"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.9658,80.602"/>
+            <radius value="11.145"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.4011,99.4687"/>
+            <radius value="6.3913"/>
+        </shape>
+        <shape type="circle">
+            <center value="53.474,110.1467"/>
+            <radius value="8.6132"/>
+        </shape>
+        <shape type="circle">
+            <center value="22.5151,96.504"/>
+            <radius value="7.986"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.6044,111.0075"/>
+            <radius value="8.723"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.3693,113.2651"/>
+            <radius value="5.1064"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="Initial Marines"/>
+        <shape type="circle">
+            <center value="132.721,48.38"/>
+            <radius value="8"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Initial Visibility"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="119.4245,31.5361"/>
+            <radius value="8"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.0178,42.5456"/>
+            <radius value="10.7653"/>
+        </shape>
+        <shape type="circle">
+            <center value="140.8684,46.2795"/>
+            <radius value="13.8564"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.5097,57.5202"/>
+            <radius value="7.9643"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.6904,53.754"/>
+            <radius value="4.7854"/>
+        </shape>
+        <shape type="circle">
+            <center value="112.0837,26.4023"/>
+            <radius value="5.7453"/>
+        </shape>
+        <shape type="circle">
+            <center value="156.2941,42.239"/>
+            <radius value="13.2326"/>
+        </shape>
+        <shape type="circle">
+            <center value="158.8937,30.355"/>
+            <radius value="20.4326"/>
+        </shape>
+        <shape type="circle">
+            <center value="145.912,24.6496"/>
+            <radius value="10.8991"/>
+        </shape>
+    </region>
+    <region id="50">
+        <name value="Check Region"/>
+        <shape type="circle">
+            <center value="119.3012,32.3732"/>
+            <radius value="1.553"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Cell Block A Maintenance"/>
+        <shape type="circle">
+            <center value="68.821,103.8913"/>
+            <radius value="5.103"/>
+        </shape>
+        <shape type="circle">
+            <center value="73.1804,108.1315"/>
+            <radius value="5.103"/>
+        </shape>
+    </region>
+    <region id="51">
+        <name value="Cell Block B Maintenance"/>
+        <shape type="circle">
+            <center value="31.3503,42.5227"/>
+            <radius value="1.9406"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.0622,44.0397"/>
+            <radius value="1.9406"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.5615,45.2946"/>
+            <radius value="1.9406"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.9355,46.7922"/>
+            <radius value="1.9406"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.7194,45.9714"/>
+            <radius value="4.6281"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.4411,31.4707"/>
+            <radius value="2.042"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.946,22.1555"/>
+            <radius value="4.2326"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Siege Tank Reveal"/>
+        <shape type="circle">
+            <center value="106.5615,89.59"/>
+            <radius value="7.6484"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.6223,86.3706"/>
+            <radius value="10.1435"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.1027,79.4731"/>
+            <radius value="7.6484"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Siege Tank Revealed Region"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="101.3686,86.066"/>
+            <radius value="6.6162"/>
+        </shape>
+        <shape type="circle">
+            <center value="98.317,83.192"/>
+            <radius value="6.6162"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Raven Revealer"/>
+        <shape type="rect">
+            <quad value="74.628,60.5507,85.2038,70.0722"/>
+        </shape>
+        <shape type="rect">
+            <quad value="80.9687,69.738,85.6162,71.4804"/>
+        </shape>
+        <shape type="rect">
+            <quad value="78.7468,53.8083,83.2722,61.093"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.3088,59.9238"/>
+            <radius value="1.872"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.9348,55.0307"/>
+            <radius value="2.5256"/>
+        </shape>
+        <shape type="rect">
+            <quad value="82.7685,57.2202,85.1618,60.952"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.2104,57.0515"/>
+            <radius value="1.0747"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.8791,53.058"/>
+            <radius value="2.6313"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.0363,53.2331"/>
+            <radius value="2.837"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Raven Reveal"/>
+        <shape type="rect">
+            <quad value="78.5256,50.0864,100.0241,67.7404"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Cell Block A Activate"/>
+        <shape type="circle">
+            <center value="95.356,81.0678"/>
+            <radius value="7.801"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.7846,75.5178"/>
+            <radius value="7.801"/>
+        </shape>
+        <shape type="circle">
+            <center value="100.7497,84.6254"/>
+            <radius value="6.8828"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Cell Block B Activate"/>
+        <shape type="circle">
+            <center value="83.6557,41.4206"/>
+            <radius value="9.1037"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.0817,37.8408"/>
+            <radius value="9.1037"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="AOE Marines Revealer"/>
+        <shape type="circle">
+            <center value="124.0097,55.3984"/>
+            <radius value="8.9575"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="AOE Marines"/>
+        <shape type="circle">
+            <center value="117.9565,62.6132"/>
+            <radius value="7.1755"/>
+        </shape>
+        <shape type="circle">
+            <center value="123.1904,57.0817"/>
+            <radius value="2.9821"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="SCV Return"/>
+        <shape type="circle">
+            <center value="74.4643,44.8015"/>
+            <radius value="5.8566"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Final Ramp Reveal"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="36.3466,99.8916"/>
+            <radius value="8"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.7187,91.609"/>
+            <radius value="2.9118"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.7612,101.3713"/>
+            <radius value="2.9118"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.0266,94.5532"/>
+            <radius value="6.0537"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.6013,93.702"/>
+            <radius value="7.8642"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.996,99.5566"/>
+            <radius value="11.71"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.8603,94.7175"/>
+            <radius value="7.2822"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.7514,90.0021"/>
+            <radius value="7.2822"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Raynor Limit"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="11.7114,33.424,141.2236,121.9494"/>
+        </shape>
+        <shape type="rect">
+            <quad value="136.3474,90.736,147.918,112.662"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Dominion Limit"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="54.5256,28.9074,107.044,81.239"/>
+        </shape>
+        <shape type="rect">
+            <quad value="88.2475,36.566,147.3508,110.1193"/>
+        </shape>
+        <shape type="rect">
+            <quad value="126.6423,101.8747,149.7861,116.3293"/>
+        </shape>
+        <shape type="rect">
+            <quad value="137.2915,14.2243,176.851,47.6865"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="First Diamondbacks"/>
+        <shape type="circle">
+            <center value="78.1425,98.5175"/>
+            <radius value="4.0278"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="First Siege Tanks"/>
+        <shape type="circle">
+            <center value="34.597,39.0412"/>
+            <radius value="2.7204"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.5935,28.777"/>
+            <radius value="2.748"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="Cell Block A Wander"/>
+        <shape type="rect">
+            <quad value="80.0417,116.443,89.7788,120.2263"/>
+        </shape>
+        <shape type="rect">
+            <quad value="77.7944,118.9187,79.8684,120.8962"/>
+        </shape>
+        <shape type="rect">
+            <quad value="78.7868,117.812,81.4721,120.006"/>
+        </shape>
+        <shape type="rect">
+            <quad value="88.1022,111.6823,91.2817,118.5507"/>
+        </shape>
+        <shape type="rect">
+            <quad value="90.78,110.6528,91.7797,118.0837"/>
+        </shape>
+        <shape type="rect">
+            <quad value="85.0373,111.6333,89.496,116.3054"/>
+        </shape>
+        <shape type="rect">
+            <quad value="85.9328,111.0292,89.4631,111.9357"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.302,114.7514"/>
+            <radius value="2.3071"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.103,116.9257"/>
+            <radius value="2.3071"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.4704,116.3027"/>
+            <radius value="1.072"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="Cell Block B Wander"/>
+        <shape type="rect">
+            <quad value="35.2995,28.1994,41.405,34.185"/>
+        </shape>
+        <shape type="rect">
+            <quad value="32.5405,31.6257,36.2602,33.2126"/>
+        </shape>
+        <shape type="rect">
+            <quad value="33.3754,31.1875,35.6242,32.3488"/>
+        </shape>
+        <shape type="rect">
+            <quad value="34.6777,33.0202,35.3508,35.6538"/>
+        </shape>
+        <shape type="rect">
+            <quad value="36.7133,34.0014,37.388,35.3544"/>
+        </shape>
+        <shape type="rect">
+            <quad value="38.6225,33.8566,40.0895,35.417"/>
+        </shape>
+        <shape type="rect">
+            <quad value="38.097,26.0527,41.5495,28.1628"/>
+        </shape>
+        <shape type="rect">
+            <quad value="39.418,25.1291,41.5383,26.2812"/>
+        </shape>
+        <shape type="rect">
+            <quad value="40.9511,23.6232,42.948,25.1655"/>
+        </shape>
+        <shape type="rect">
+            <quad value="41.375,22.1738,42.3947,23.9787"/>
+        </shape>
+        <shape type="rect">
+            <quad value="41.2243,24.148,43.8918,25.9338"/>
+        </shape>
+        <shape type="rect">
+            <quad value="41.2663,25.1992,46.6826,28.886"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.8952,30.5117"/>
+            <radius value="2.7082"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.2878,28.2473"/>
+            <radius value="2.7082"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="SCV Spawn Area 04"/>
+        <shape type="circle">
+            <center value="93.3076,79.3583"/>
+            <radius value="16.9174"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="DialogueDetectionArea"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="124.3281,55.3007"/>
+            <radius value="3.9914"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="GhostEMPInitiate"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="111.2023,94.7487"/>
+            <radius value="7.8388"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="RavenInitiate"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="82.7255,58.3261"/>
+            <radius value="8.1486"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="RevealerThorArea"/>
+        <color value="255,0,128,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="56.4758,88.1291"/>
+            <radius value="7.9812"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.0974,79.2473"/>
+            <radius value="7.9812"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.3437,84.23"/>
+            <radius value="7.9812"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.6784,91.8044"/>
+            <radius value="7.9812"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.9836,85.3452"/>
+            <radius value="7.9812"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.4465,80.1784"/>
+            <radius value="4.0771"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.07,98.3222"/>
+            <radius value="4.0771"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.4504,78.6437"/>
+            <radius value="2.0283"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.8796,78.1308"/>
+            <radius value="2.2846"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="Tower Stagger"/>
+        <shape type="circle">
+            <center value="39.9553,53.9226"/>
+            <radius value="1.5622"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.7644,40.0402"/>
+            <radius value="2.0187"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.8371,20.3103"/>
+            <radius value="2.4404"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.9377,35.9716"/>
+            <radius value="1.681"/>
+        </shape>
+        <shape type="circle">
+            <center value="44.8474,70.9833"/>
+            <radius value="1.7004"/>
+        </shape>
+        <shape type="circle">
+            <center value="95.865,117.1206"/>
+            <radius value="1.7797"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.9704,124.0275"/>
+            <radius value="1.6462"/>
+        </shape>
+        <shape type="circle">
+            <center value="66.1164,111.9223"/>
+            <radius value="1.5034"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.022,90.1887"/>
+            <radius value="1.7053"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="AIStartSafety"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="131.8881,91.7736"/>
+            <radius value="11.366"/>
+        </shape>
+    </region>
+    <region id="53">
+        <name value="Raven Bully 2 - Brutal Only"/>
+        <shape type="rect">
+            <quad value="35.7612,114.243,38.7856,116.8464"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="Raven Bully 1 - Brutal Only"/>
+        <shape type="rect">
+            <quad value="19.3666,93.636,22.391,96.2395"/>
+        </shape>
+    </region>
+    <region id="57">
+        <name value="Activate Ravens (Brutal)"/>
+        <color value="255,0,255,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="63.5068,59.048"/>
+            <radius value="5.6887"/>
+        </shape>
+        <shape type="circle">
+            <center value="68.8566,60.7866"/>
+            <radius value="5.6887"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="Nerf Food Usage"/>
+        <shape type="circle">
+            <center value="43.2145,83.77"/>
+            <radius value="8.5947"/>
+        </shape>
+        <shape type="circle">
+            <center value="51.2973,92.4064"/>
+            <radius value="8.5947"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.4831,74.7663"/>
+            <radius value="8.5947"/>
+        </shape>
+        <shape type="circle">
+            <center value="59.5786,82.2084"/>
+            <radius value="8.5947"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="AutoRevealTown01"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="137.1828,106.6821"/>
+            <radius value="18.4018"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="TownBullies01"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="156.4458,30.7231"/>
+            <radius value="18"/>
+        </shape>
+    </region>
+</Regions>

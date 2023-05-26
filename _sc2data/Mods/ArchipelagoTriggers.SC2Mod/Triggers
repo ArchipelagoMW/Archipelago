@@ -14192,8 +14192,7 @@
         </Element>
         <Element Type="Param" Id="C383C483">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
-            <Value>1</Value>
-            <ValueType Type="int"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="D4FD714A"/>
         </Element>
         <Element Type="Param" Id="6E9DE30E">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
@@ -14214,8 +14213,7 @@
         </Element>
         <Element Type="Param" Id="2D61B185">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
-            <Value>1</Value>
-            <ValueType Type="int"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="D4FD714A"/>
         </Element>
         <Element Type="Param" Id="EF5780D2">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
@@ -14236,8 +14234,7 @@
         </Element>
         <Element Type="Param" Id="2F212A05">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
-            <Value>1</Value>
-            <ValueType Type="int"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="D4FD714A"/>
         </Element>
         <Element Type="Param" Id="9C3E7735">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
@@ -14258,8 +14255,7 @@
         </Element>
         <Element Type="Param" Id="AA39D59A">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
-            <Value>1</Value>
-            <ValueType Type="int"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="D4FD714A"/>
         </Element>
         <Element Type="Param" Id="9BF03CE0">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>

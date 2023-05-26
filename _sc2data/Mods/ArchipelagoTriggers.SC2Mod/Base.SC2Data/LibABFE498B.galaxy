@@ -1545,10 +1545,10 @@ void libABFE498B_gf_AP_Triggers_clearTerranTech (int lp_player) {
 void libABFE498B_gf_AP_Triggers_giveTerranDefaultTech (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
-    libNtve_gf_SetUpgradeLevelForPlayer(1, "AP_SiegeTech", 1);
-    libNtve_gf_SetUpgradeLevelForPlayer(1, "AP_WraithCloak", 1);
-    libNtve_gf_SetUpgradeLevelForPlayer(1, "AP_BansheeCloak", 1);
-    libNtve_gf_SetUpgradeLevelForPlayer(1, "AP_YamatoCannon", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SiegeTech", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_WraithCloak", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_BansheeCloak", 1);
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_YamatoCannon", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_replaceUpgrade (int lp_player, string lp_oldUpgrade, string lp_newUpgrade) {

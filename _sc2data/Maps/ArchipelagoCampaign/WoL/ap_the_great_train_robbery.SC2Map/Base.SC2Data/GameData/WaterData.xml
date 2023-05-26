@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWater id="Template 1" parent="Tarsonis">
+        <State index="0">
+            <Name value="[Default]"/>
+            <Height value="6.000000"/>
+            <Color value="0.415686,0.447059,0.490196,0.052000"/>
+            <ColorFallOff value="0.032000"/>
+            <Specularity value="1000.000000"/>
+            <SpecularScaler value="4.000000"/>
+            <UvRate value="-0.000000,-0.001000,0.000000,0.000000"/>
+            <MeshRoughness value="0.579000"/>
+            <TextureRoughness value="0.579000"/>
+            <ReflectionDistortion value="0.015000"/>
+            <RefractionDistortion value="0.016700"/>
+            <ShadowDistortion value="1.000000"/>
+            <MinReflection value="0.251000"/>
+            <ReflectivityPower value="8.000000"/>
+        </State>
+    </CWater>
+</Catalog>

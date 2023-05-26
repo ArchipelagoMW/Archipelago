@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Tarsonis">
+        <FogColor value="255,52,87,105"/>
+        <FogDensity value="0.090000"/>
+        <FogFalloff value="0.120000"/>
+        <FogStartingHeight value="0.000000"/>
+        <WindSpeed value="0.200000"/>
+        <WindTurbulenceSpeed value="0.200000"/>
+    </CTerrain>
+</Catalog>

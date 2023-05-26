@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="7">
+        <name value="Colonist Outpost Yellow - 4"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="128.8608,172.0253"/>
+            <radius value="14.766"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Colonist Outpost Red - 3"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="136.8071,86.2612"/>
+            <radius value="13.4958"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Colonist Outpost Pink - 0"/>
+        <color value="255,255,0,255"/>
+        <shape type="circle">
+            <center value="68.213,146.6262"/>
+            <radius value="9.994"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Colonist Outpost Green - 1"/>
+        <color value="255,0,128,0"/>
+        <shape type="circle">
+            <center value="55.0341,70.3422"/>
+            <radius value="8.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="54.2314,77.4785"/>
+            <radius value="6.7587"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.1643,81.1176"/>
+            <radius value="4.7043"/>
+        </shape>
+        <shape type="circle">
+            <center value="49.885,74.9675"/>
+            <radius value="4.7043"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Colonist Outpost Purple - 2"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="117.3266,136.013"/>
+            <radius value="13.1577"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Zerg Base - East"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="145.4631,111.4082"/>
+            <radius value="10.5925"/>
+        </shape>
+        <shape type="circle">
+            <center value="139.4685,120.2553"/>
+            <radius value="10.5925"/>
+        </shape>
+        <shape type="circle">
+            <center value="148.31,126.9875"/>
+            <radius value="10.5925"/>
+        </shape>
+        <shape type="circle">
+            <center value="147.304,118.5288"/>
+            <radius value="10.5925"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Base Stuff - Hide Me!"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="10.3637,6.712,28.5703,21.0874"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Colonist Outpost White - 5"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="94.8332,101.0178"/>
+            <radius value="13.818"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Player Base"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="31.4235,132.401"/>
+            <radius value="17.6076"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Victory Cine - Marine Spawn 1"/>
+        <color value="255,0,0,255"/>
+        <shape type="circle">
+            <center value="78.3676,173.304"/>
+            <radius value="1.7131"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Victory Cine - Zergling Spawn 1"/>
+        <shape type="circle">
+            <center value="76.3754,177.9707"/>
+            <radius value="2.1423"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Victory Cine - Infested Spawn 1"/>
+        <shape type="circle">
+            <center value="81.208,177.2814"/>
+            <radius value="2.2951"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Victory Cine - Zergling Spawn 2"/>
+        <shape type="circle">
+            <center value="84.748,181.578"/>
+            <radius value="2.3696"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Victory Cine - Marine Spawn 2"/>
+        <color value="255,0,0,255"/>
+        <shape type="circle">
+            <center value="82.1613,172.7424"/>
+            <radius value="1.7131"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Victory Cine - Marine Spawn 3"/>
+        <color value="255,0,0,255"/>
+        <shape type="circle">
+            <center value="85.3784,175.1687"/>
+            <radius value="1.7131"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Zerg Gas"/>
+        <color value="255,255,0,128"/>
+        <shape type="rect">
+            <quad value="80.62,181.2255,84.7348,185.35"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Zerg Minerals"/>
+        <shape type="rect">
+            <quad value="149.6701,116.351,156.9765,130.7075"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Zerg Base - North"/>
+        <color value="255,64,0,64"/>
+        <shape type="circle">
+            <center value="90.4765,177.8513"/>
+            <radius value="14.0117"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.5834,178.7045"/>
+            <radius value="9.3828"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Zerg Base - South"/>
+        <color value="255,64,0,64"/>
+        <shape type="rect">
+            <quad value="78.139,34.3481,122.648,63.757"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Briefing - 00 Triple Team"/>
+        <shape type="circle">
+            <center value="104.0854,21.7395"/>
+            <radius value="1.2773"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Briefing - 00 Random Civ Region"/>
+        <shape type="rect">
+            <quad value="104.0263,15.0393,109.724,22.3698"/>
+        </shape>
+    </region>
+    <region id="71">
+        <name value="Attack Lane - South"/>
+        <shape type="circle">
+            <center value="55.3928,87.9306"/>
+            <radius value="3.299"/>
+        </shape>
+    </region>
+    <region id="72">
+        <name value="Attack Lane - Center"/>
+        <shape type="circle">
+            <center value="75.137,121.1423"/>
+            <radius value="5.7001"/>
+        </shape>
+    </region>
+    <region id="73">
+        <name value="Attack Lane - North"/>
+        <shape type="circle">
+            <center value="66.3571,164.598"/>
+            <radius value="4.3981"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Zerg Base - Revealer North"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="87.5175,179.771"/>
+            <radius value="6.406"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Zerg Base - Revealer East"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="146.1672,124.8295"/>
+            <radius value="6.406"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Zerg Base - Revealer South"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="93.4787,48.008"/>
+            <radius value="7.201"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="Briefing - 00 Infestors"/>
+        <color value="255,128,0,128"/>
+        <shape type="rect">
+            <quad value="78.1152,8.4455,95.9414,26.635"/>
+        </shape>
+    </region>
+    <region id="53">
+        <name value="Briefing - 00 ALL"/>
+        <color value="255,255,255,255"/>
+        <shape type="rect">
+            <quad value="77.9645,7.881,128.3557,27.3342"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="Briefing - Zombie Spawn"/>
+        <color value="255,128,0,128"/>
+        <shape type="circle">
+            <center value="47.6125,115.884"/>
+            <radius value="2.1513"/>
+        </shape>
+        <shape type="circle">
+            <center value="48.1574,111.6813"/>
+            <radius value="1.4626"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.992,113.4504"/>
+            <radius value="1.3652"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="Intro Cine - Egg Spawn"/>
+        <shape type="circle">
+            <center value="67.7978,145.8471"/>
+            <radius value="6.7746"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="Revealer - Player Base North Cliff"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="40.1293,151.5446"/>
+            <radius value="7.501"/>
+        </shape>
+    </region>
+    <region id="60">
+        <name value="Revealer - Player Base South Cliff"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="36.21,104.2814"/>
+            <radius value="1.3466"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.0397,106.532"/>
+            <radius value="1.342"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.5937,113.3056"/>
+            <radius value="3.4736"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.0078,110.5363"/>
+            <radius value="3.4736"/>
+        </shape>
+        <shape type="circle">
+            <center value="32.0678,106.8361"/>
+            <radius value="4.1235"/>
+        </shape>
+        <shape type="circle">
+            <center value="27.9572,108.1657"/>
+            <radius value="2.5017"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.9055,110.9172"/>
+            <radius value="1.3112"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.7905,113.3972"/>
+            <radius value="2.0043"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.0461,115.0212"/>
+            <radius value="1.8044"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="Revealer - Ocean"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="22.6887,160.3171"/>
+            <radius value="11.7817"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.3891,165.999"/>
+            <radius value="11.7817"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.3186,172.6765"/>
+            <radius value="11.7817"/>
+        </shape>
+        <shape type="circle">
+            <center value="20.6674,172.793"/>
+            <radius value="3.5795"/>
+        </shape>
+        <shape type="circle">
+            <center value="25.2727,173.247"/>
+            <radius value="2.3361"/>
+        </shape>
+        <shape type="circle">
+            <center value="29.004,176.1203"/>
+            <radius value="3.2307"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.8732,178.7922"/>
+            <radius value="1.4423"/>
+        </shape>
+        <shape type="circle">
+            <center value="33.332,180.4501"/>
+            <radius value="1.346"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.8288,181.7233"/>
+            <radius value="0.7583"/>
+        </shape>
+        <shape type="circle">
+            <center value="16.696,170.8198"/>
+            <radius value="1.645"/>
+        </shape>
+        <shape type="circle">
+            <center value="14.4438,168.9648"/>
+            <radius value="1.5083"/>
+        </shape>
+        <shape type="circle">
+            <center value="12.496,167.6406"/>
+            <radius value="1.936"/>
+        </shape>
+        <shape type="circle">
+            <center value="36.287,182.7231"/>
+            <radius value="1.0056"/>
+        </shape>
+        <shape type="circle">
+            <center value="39.0017,183.6044"/>
+            <radius value="1.708"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.9343,184.279"/>
+            <radius value="0.9846"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.1591,183.6975"/>
+            <radius value="1.136"/>
+        </shape>
+        <shape type="circle">
+            <center value="48.9072,181.8535"/>
+            <radius value="2.3208"/>
+        </shape>
+        <shape type="circle">
+            <center value="43.9294,184.2568"/>
+            <radius value="0.4392"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="Revealer - South of base waterfalls"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="23.6162,102.5444"/>
+            <radius value="11.9577"/>
+        </shape>
+        <shape type="circle">
+            <center value="20.0085,91.0092"/>
+            <radius value="7.6284"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.6345,89.649"/>
+            <radius value="5.5434"/>
+        </shape>
+        <shape type="circle">
+            <center value="24.4902,86.2766"/>
+            <radius value="3.591"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.224,94.9792"/>
+            <radius value="5.5434"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.5202,93.841"/>
+            <radius value="3.6137"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="Revealer - Southern Exit"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="58.0651,116.386"/>
+            <radius value="6.049"/>
+        </shape>
+        <shape type="circle">
+            <center value="58.0434,108.462"/>
+            <radius value="6.049"/>
+        </shape>
+        <shape type="circle">
+            <center value="57.0434,102.5727"/>
+            <radius value="6.049"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.0661,106.51"/>
+            <radius value="2.9624"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.5734,110.214"/>
+            <radius value="2.9624"/>
+        </shape>
+        <shape type="circle">
+            <center value="63.2626,111.39"/>
+            <radius value="2.9624"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.427,121.305"/>
+            <radius value="2.9624"/>
+        </shape>
+        <shape type="circle">
+            <center value="37.7827,94.5644"/>
+            <radius value="7.4716"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.4916,87.9082"/>
+            <radius value="7.2062"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.121,100.9316"/>
+            <radius value="7.2724"/>
+        </shape>
+    </region>
+    <region id="62">
+        <name value="Revealer - Central waterfall"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="101.159,138.731"/>
+            <radius value="3.6962"/>
+        </shape>
+        <shape type="circle">
+            <center value="97.3144,133.7072"/>
+            <radius value="3.4804"/>
+        </shape>
+        <shape type="circle">
+            <center value="93.6845,130.9392"/>
+            <radius value="2.382"/>
+        </shape>
+    </region>
+    <region id="63">
+        <name value="Revealer - Eastern vista"/>
+        <color value="255,255,255,255"/>
+        <shape type="rect">
+            <quad value="146.8117,77.006,157.272,107.025"/>
+        </shape>
+    </region>
+    <region id="64">
+        <name value="Revealer - South Waterfall"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="118.8596,63.4052"/>
+            <radius value="5.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.6643,58.63"/>
+            <radius value="5.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.3547,53.2331"/>
+            <radius value="5.4501"/>
+        </shape>
+        <shape type="circle">
+            <center value="128.1611,48.6416"/>
+            <radius value="5.4501"/>
+        </shape>
+    </region>
+    <region id="65">
+        <name value="Revealer - Southern Exit tripwire "/>
+        <color value="255,255,255,255"/>
+        <shape type="rect">
+            <quad value="41.2282,95.29,52.186,118.985"/>
+        </shape>
+    </region>
+    <region id="66">
+        <name value="Revealer - South Waterfall Tripwire"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="114.1445,71.479"/>
+            <radius value="8.8461"/>
+        </shape>
+    </region>
+    <region id="67">
+        <name value="Revealer - Central Waterfall tripwire"/>
+        <color value="255,255,255,255"/>
+        <shape type="circle">
+            <center value="90.6948,144.3706"/>
+            <radius value="5.6052"/>
+        </shape>
+        <shape type="circle">
+            <center value="87.0656,139.0976"/>
+            <radius value="5.8354"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.347,133.5075"/>
+            <radius value="7.3828"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Gameplay Area"/>
+        <color value="255,255,255,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="10.0002,34.0002,158,196"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Briefing - Infestation"/>
+        <shape type="rect">
+            <quad value="82.5803,12.3703,99.2314,24.3195"/>
+        </shape>
+    </region>
+</Regions>

@@ -1,0 +1,68 @@
+DocInfo/Author=暴雪娱乐 /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TTosh02 /// TTosh02
+DocInfo/Name=欢迎来到丛林 /// Welcome to the Jungle
+LoadingScreen/TextBody=在抵御星灵攻击的同时，从资源丰富的奥比昂行星上采集地嗪。 /// Harvest terrazine gas from the rich planet of Albion while defending against the protoss.
+MapInfo/Player00/Name=中立 /// Neutral
+MapInfo/Player01/Name=雷诺的游骑兵 /// Raynor's Raiders
+MapInfo/Player02/Name=塔达林守卫 /// Tal'darim Guardians
+MapInfo/Player03/Name=塔达林守卫 /// Tal'darim Guardians
+MapInfo/Player04/Name=塔达林守卫 /// Tal'darim Guardians
+MapInfo/Player05/Name=地嗪 /// Terrazine
+Param/Value/00034CFD=>>SCV被毁 /// >>SCV Died
+Param/Value/02D689D4=无法从这里采集<n/>更多的地嗪 /// Terrazine can no longer<n/>be gathered here
+Param/Value/074D92F4=/ /// /
+Param/Value/100E53BD=/ /// /
+Param/Value/20E5CE1C=任务开始 /// Mission Start
+Param/Value/222F31F7=运送地嗪的SCV /// SCV with Terrazine
+Param/Value/24E1C1CC=您的建筑已全部被摧毁。 /// All of your buildings have been destroyed.
+Param/Value/34420977=
+Param/Value/35F0325E=发现星灵圣物 /// Protoss Relics Found
+Param/Value/3D598152=星灵正在封印地嗪圣坛以阻止您收集地嗪。如果封印继续下去，您将无法完成任务。 /// The protoss are sealing terrazine altars to prevent you from taking them. If they seal too many, you will be unable to complete the mission.
+Param/Value/3EB88A22=不能让星灵封印7个圣坛（ /// Protoss Can't Seal 7 Altars (
+Param/Value/3FE711A5=控制瓦斯 = /// Gas Control = 
+Param/Value/4EC474D8=
+Param/Value/4F1E5374=
+Param/Value/505C291C=） /// )
+Param/Value/5087FBB9=采集瓦斯 = /// Gas Harvest = 
+Param/Value/50C45B65=找到星灵圣物 /// Find Protoss Relics 
+Param/Value/51F25B27=个圣坛已被封印） ///  sealed)
+Param/Value/5A4AC463=
+Param/Value/5B573431=
+Param/Value/5E70CBB2=找到星灵圣物 /// Find Protoss Relics
+Param/Value/6130E297=SCV返回基地 /// SCV returning to base.
+Param/Value/625C8228=星灵已封印了太多的地嗪圣坛。 /// The protoss have sealed off too many terrazine altars.
+Param/Value/6D58251D=已密封） ///  sealed)
+Param/Value/748DDD80=采集点= /// Harvesting node = 
+Param/Value/77033FDB=可以由任何地面单位拾取。 /// Use any ground unit to pickup.
+Param/Value/77DB2CB9=
+Param/Value/7C611772=
+Param/Value/7DAF9358=已采集3批地嗪 /// Third Terrazine Gathered
+Param/Value/81E96079=损失SCV /// SCVs Lost
+Param/Value/833EFEF2=圣坛正在被封印 /// Altar Being Sealed
+Param/Value/8985286D=<c val="00FF00">星灵圣物</c> /// <c val="00FF00">Protoss Relic</c>
+Param/Value/8CA221DD=<c val="ff0000">星灵正在封印一座圣坛！</c> /// <c val="ff0000">The Protoss are sealing an altar!</c>
+Param/Value/8E7DB6C0=采集地嗪 /// Gather Terrazine
+Param/Value/99147108=玩家得分 = /// Player Score = 
+Param/Value/9A49CF2B=斯台特曼要求您搜集远古星灵圣物以便进行研究，了解更多星灵科技。 /// Stetmann asked that you collect ancient protoss relics so he can study them to gain better insight into protoss technology.
+Param/Value/9F7DE18C=>>SCV取消采集 /// >>SCV Cancel Harvest
+Param/Value/9FDD5B12=/ /// /
+Param/Value/A1DD6009=采集地嗪（ /// Gather Terrazine (
+Param/Value/A9379847=损失SCV /// SCV Lost
+Param/Value/AA8975D0=不能让星灵封印7个圣坛 /// Protoss Can't Seal 7 Altars
+Param/Value/B283104A=
+Param/Value/BD9FF1D1=找到星灵圣物 /// Find Protoss Relics 
+Param/Value/C206B757=已阻止封印行动 /// Sealing Attempts Stopped
+Param/Value/C87BC07E=获得星灵研究点数 /// Protoss Research Earned
+Param/Value/D3D16072=） /// )
+Param/Value/DD65E84C=托什已经同您达成了协议，为他采集地嗪。利用SCV采集圣坛的地嗪。 /// Tosh has contracted you to gather terrazine gas for him. Use SCVs to collect the terrazine from the altars.
+Param/Value/E3E743A5=已采集1批地嗪 /// First Terrazine Gathered
+Param/Value/E7F007A7=已采集6批地嗪 /// Sixth Terrazine Gathered
+Param/Value/ECDBCAF7=地嗪圣坛已封印 /// Terrazine Shrines Sealed
+Param/Value/EE6316B3=
+Param/Value/EF426788=采集地嗪（ /// Gather Terrazine (
+Param/Value/F03BE3FA=使用SCV采集<n/>原生地嗪。 /// Use an SCV to gather<n/>Raw Terrazine.
+Param/Value/F14C6CFE=不能让星灵封印7个圣坛（ /// Protoss Can't Seal 7 Altars (
+Water/Name/Template 1=模板1 /// Template 1
+Water/Name/Template 2=模板2 /// Template 2
+Water/Name/Template 3=模板3 /// Template 3

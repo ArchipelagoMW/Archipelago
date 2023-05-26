@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Agria">
+        <FogColor value="255,22,43,47"/>
+        <FogFalloff value="0.170000"/>
+    </CTerrain>
+</Catalog>
