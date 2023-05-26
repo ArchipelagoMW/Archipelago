@@ -6,7 +6,7 @@ If a world author does not want to take on the responsibilities of a world maint
 an unofficial [APWorld](/docs/apworld%20specification.md) or maintain their own fork instead.
 
 
-## Responsibilites
+## Responsibilities
 
 Unless these are shared between multiple people, we expect the following from each world maintainer
 
@@ -14,11 +14,11 @@ Unless these are shared between multiple people, we expect the following from ea
 * Decide if a feature (pull request) should be merged.
 * Review contents of such pull requests or organize peer reviews or post that you did not review the content.
 * Fix or point out issues when core changes break your code.
-* Use the watch function on github, the #github-updates channel on Discord or check manually from time to time for new
+* Use the watch function on GitHub, the #github-updates channel on Discord or check manually from time to time for new
   pull requests. Core maintainers may also ping you if a pull request concerns your world,
 * Test (or have tested) the world on the main branch from time to time, especially during RC (release candidate) phases
   of development.
-* Let us know of long unavailabilites.
+* Let us know of long unavailabilities.
 
 
 ## Becoming a World Maintainer
