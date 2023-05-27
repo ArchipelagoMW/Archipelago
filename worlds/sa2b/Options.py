@@ -624,13 +624,15 @@ class VoiceShuffle(Choice):
     None: No voices are shuffled.
     Shuffled: Voices are shuffled.
     Rude: Voices are shuffled, but some are replaced with rude words.
+    Chao: All voices are replaced with chao sounds.
     Singularity: All voices are replaced with a single random voice.
     """
     display_name = "Voice Shuffle Type"
     option_none = 0
     option_shuffled = 1
     option_rude = 2
-    option_singularity = 3
+    option_chao = 3
+    option_singularity = 4
     default = 0
 
 

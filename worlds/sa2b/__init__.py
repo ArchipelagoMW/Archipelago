@@ -380,6 +380,15 @@ class SA2BWorld(World):
                     voicelist_s[i] = 17
 
             self.voice_map = dict(zip(voicelist_o, voicelist_s))
+        elif self.multiworld.voice_shuffle[self.player] == "chao":
+            voicelist_o = list(range(0, 2623))
+            voicelist_s = voicelist_o.copy()
+            self.multiworld.random.shuffle(voicelist_s)
+
+            for i in range(len(voicelist_s)):
+                voicelist_s[i] = self.multiworld.random.choice(range(2586, 2608))
+
+            self.voice_map = dict(zip(voicelist_o, voicelist_s))
         elif self.multiworld.voice_shuffle[self.player] == "singularity":
             voicelist_o = list(range(0, 2623))
             voicelist_s = [self.multiworld.random.choice(voicelist_o)] * len(voicelist_o)
