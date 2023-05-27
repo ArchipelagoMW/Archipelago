@@ -59,11 +59,3 @@ Param/Value/E2AA62CF=Fire Wall X =
 Param/Value/FA3342A5=Landing Zone
 Param/Value/FDAA6446=Achievement TTychus_04 granted
 Param/Value/FED6E490=Find the Protoss Relics 
-Param/Value/lib_1_1BF9F758=<n/>
-Param/Value/lib_1_21E8CC9A=v
-Param/Value/lib_1_71F92085=Archipelago Messages
-Param/Value/lib_1_8717A4C6=Scroll up
-Param/Value/lib_1_A52FB36E=-
-Param/Value/lib_1_A91983FA=Scroll down
-Param/Value/lib_1_CCCD5CB5=^
-Param/Value/lib_1_FB15887C=Scroll to bottom
