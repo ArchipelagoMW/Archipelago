@@ -146,7 +146,7 @@ class KirbyFlavorPreset(Choice):
     """
     display_name = "Kirby Flavor"
     option_default = 0
-    #option_bubblegum = 1
+    option_bubblegum = 1
     #option_cherry = 2
     option_blueberry = 3
     #option_lemon = 4
@@ -177,7 +177,7 @@ class GooeyFlavorPreset(Choice):
     display_name = "Gooey Flavor"
     option_default = 0
     #option_bubblegum = 1
-    #option_cherry = 2
+    option_cherry = 2
     option_blueberry = 3
     #option_lemon = 4
     #option_lime = 5
