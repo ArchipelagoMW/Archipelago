@@ -3,7 +3,7 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, De
 
 
 class RandomizeWeaponLocations(DefaultOnToggle):
-    """Randomizes weapons (+86 locations)"""
+    """Randomizes weapons (+76 locations)"""
     display_name = "Randomize Weapon Locations"
 
 
@@ -13,17 +13,17 @@ class RandomizeShieldLocations(DefaultOnToggle):
 
 
 class RandomizeArmorLocations(DefaultOnToggle):
-    """Randomizes armor pieces (+93 locations)"""
+    """Randomizes armor pieces (+97 locations)"""
     display_name = "Randomize Armor Locations"
 
 
 class RandomizeRingLocations(DefaultOnToggle):
-    """Randomizes rings (+48 locations)"""
+    """Randomizes rings (+49 locations)"""
     display_name = "Randomize Ring Locations"
 
 
 class RandomizeSpellLocations(DefaultOnToggle):
-    """Randomizes spells (+19 locations)"""
+    """Randomizes spells (+18 locations)"""
     display_name = "Randomize Spell Locations"
 
 
@@ -38,12 +38,12 @@ class RandomizeNPCLocations(Toggle):
 
 
 class RandomizeMiscLocations(Toggle):
-    """Randomizes miscellaneous items (ashes, tomes, scrolls, etc.) to the pool. (+27 locations)"""
+    """Randomizes miscellaneous items (ashes, tomes, scrolls, etc.) to the pool. (+54 locations)"""
     display_name = "Randomize Miscellaneous Locations"
 
 
 class RandomizeHealthLocations(Toggle):
-    """Randomizes health upgrade items. (+20 locations)"""
+    """Randomizes health upgrade items. (+21 locations)"""
     display_name = "Randomize Health Upgrade Locations"
 
 

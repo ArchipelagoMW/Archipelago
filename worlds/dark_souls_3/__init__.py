@@ -87,7 +87,8 @@ class DarkSouls3World(World):
             progressive_location_table = [] + \
                 location_tables["Progressive Items 1"] + \
                 location_tables["Progressive Items 2"] + \
-                location_tables["Progressive Items 3"]
+                location_tables["Progressive Items 3"] + \
+                location_tables["Progressive Items 4"]
 
             if self.multiworld.enable_dlc[self.player].value:
                 progressive_location_table += location_tables["Progressive Items DLC"]
@@ -384,8 +385,6 @@ class DarkSouls3World(World):
                  lambda state: state.has("Storm Ruler", self.player))
 
         if self.multiworld.enable_ring_locations[self.player] == Toggle.option_true:
-            set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
-                     lambda state: state.has("Cell Key", self.player))
             set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
                      lambda state: state.has("Jailbreaker's Key", self.player))
             set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
@@ -394,7 +393,17 @@ class DarkSouls3World(World):
         if self.multiworld.enable_npc_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
                      lambda state: state.has("Cell Key", self.player))
+            set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
+                     lambda state: state.has("Cell Key", self.player))
             set_rule(self.multiworld.get_location("ID: Karla's Ashes", self.player),
+                     lambda state: state.has("Jailer's Key Ring", self.player))
+            set_rule(self.multiworld.get_location("ID: Karla's Pointed Hat", self.player),
+                     lambda state: state.has("Jailer's Key Ring", self.player))
+            set_rule(self.multiworld.get_location("ID: Karla's Coat", self.player),
+                     lambda state: state.has("Jailer's Key Ring", self.player))
+            set_rule(self.multiworld.get_location("ID: Karla's Gloves", self.player),
+                     lambda state: state.has("Jailer's Key Ring", self.player))
+            set_rule(self.multiworld.get_location("ID: Karla's Trousers", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
 
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:

@@ -72,6 +72,7 @@ class DarkSouls3Location(Location):
             "Progressive Items 1",
             "Progressive Items 2",
             "Progressive Items 3",
+            "Progressive Items 4",
             "Progressive Items DLC",
         ]
 
@@ -99,7 +100,7 @@ location_tables = {
         DS3LocationData("FSBT: Fire Keeper Gloves",                "Fire Keeper Gloves",                DS3LocationCategory.ARMOR),
         DS3LocationData("FSBT: Fire Keeper Skirt",                 "Fire Keeper Skirt",                 DS3LocationCategory.ARMOR),
         DS3LocationData("FSBT: Estus Ring",                        "Estus Ring",                        DS3LocationCategory.RING),
-        DS3LocationData("FSBT: Fire Keeper Soul",                  "Fire Keeper Soul",                  DS3LocationCategory.ARMOR),
+        DS3LocationData("FSBT: Fire Keeper Soul",                  "Fire Keeper Soul",                  DS3LocationCategory.MISC),
     ],
     "High Wall of Lothric": [
         DS3LocationData("HWL: Deep Battle Axe",                    "Deep Battle Axe",                   DS3LocationCategory.WEAPON),
@@ -120,7 +121,7 @@ location_tables = {
         DS3LocationData("HWL: Soul of the Dancer",                 "Soul of the Dancer",                DS3LocationCategory.MISC),
         DS3LocationData("HWL: Way of Blue",                        "Way of Blue",                       DS3LocationCategory.MISC),
         DS3LocationData("HWL: Greirat's Ashes",                    "Greirat's Ashes",                   DS3LocationCategory.NPC),
-        DS3LocationData("HWL: Blue Tearstone Ring",                "Blue Tearstone Ring",               DS3LocationCategory.RING),
+        DS3LocationData("HWL: Blue Tearstone Ring",                "Blue Tearstone Ring",               DS3LocationCategory.NPC),
     ],
     "Undead Settlement": [
         DS3LocationData("US: Small Leather Shield",                "Small Leather Shield",              DS3LocationCategory.SHIELD),
@@ -166,7 +167,8 @@ location_tables = {
         DS3LocationData("US: Cornyx's Wrap",                       "Cornyx's Wrap",                     DS3LocationCategory.NPC),
         DS3LocationData("US: Cornyx's Garb",                       "Cornyx's Garb",                     DS3LocationCategory.NPC),
         DS3LocationData("US: Cornyx's Skirt",                      "Cornyx's Skirt",                    DS3LocationCategory.NPC),
-        DS3LocationData("US: Pyromancy Flame",                     "Pyromancy Flame",                   DS3LocationCategory.WEAPON),
+        DS3LocationData("US: Pyromancy Flame",                     "Pyromancy Flame",                   DS3LocationCategory.NPC),
+        DS3LocationData("US: Transposing Kiln",                    "Transposing Kiln",                  DS3LocationCategory.MISC),
     ],
     "Road of Sacrifices": [
         DS3LocationData("RS: Brigand Twindaggers",                 "Brigand Twindaggers",               DS3LocationCategory.WEAPON),
@@ -357,6 +359,10 @@ location_tables = {
         DS3LocationData("ID: Dusk Crown Ring",                     "Dusk Crown Ring",                   DS3LocationCategory.RING),
         DS3LocationData("ID: Dark Clutch Ring",                    "Dark Clutch Ring",                  DS3LocationCategory.RING),
         DS3LocationData("ID: Karla's Ashes",                       "Karla's Ashes",                     DS3LocationCategory.NPC),
+        DS3LocationData("ID: Karla's Pointed Hat",                 "Karla's Pointed Hat",               DS3LocationCategory.NPC),
+        DS3LocationData("ID: Karla's Coat",                        "Karla's Coat",                      DS3LocationCategory.NPC),
+        DS3LocationData("ID: Karla's Gloves",                      "Karla's Gloves",                    DS3LocationCategory.NPC),
+        DS3LocationData("ID: Karla's Trousers",                    "Karla's Trousers",                  DS3LocationCategory.NPC),
     ],
     "Profaned Capital": [
         DS3LocationData("PC: Cursebite Ring",                      "Cursebite Ring",                      DS3LocationCategory.RING),
@@ -572,14 +578,14 @@ location_tables = {
         [DS3LocationData(f"Twinkling Titanite #{i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)] +
 
         # Healing
-        [DS3LocationData(f"Estus Shard #{i + 1}",       "Estus Shard",       DS3LocationCategory.HEALTH) for i in range(15)] +
-        [DS3LocationData(f"Undead Bone Shard #{i + 1}", "Undead Bone Shard", DS3LocationCategory.HEALTH) for i in range(5)],
+        [DS3LocationData(f"Estus Shard #{i + 1}",       "Estus Shard",       DS3LocationCategory.HEALTH) for i in range(11)] +
+        [DS3LocationData(f"Undead Bone Shard #{i + 1}", "Undead Bone Shard", DS3LocationCategory.HEALTH) for i in range(10)],
 
     "Progressive Items 2": [] +
         # Items
         [DS3LocationData(f"Green Blossom #{i + 1}",        "Green Blossom",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(6)] +
         [DS3LocationData(f"Firebomb #{i + 1}",             "Firebomb",             DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(4)] +
-        [DS3LocationData(f"Alluring Skull #{i + 1}",       "Alluring Skull",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Alluring Skull #{i + 1}",       "Alluring Skull",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
         [DS3LocationData(f"Undead Hunter Charm #{i + 1}",  "Undead Hunter Charm",  DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Duel Charm #{i + 1}",           "Duel Charm",           DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Throwing Knife #{i + 1}",       "Throwing Knife",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
@@ -591,13 +597,10 @@ location_tables = {
         [DS3LocationData(f"Charcoal Pine Bundle #{i + 1}", "Charcoal Pine Bundle", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Rotten Pine Resin #{i + 1}",    "Rotten Pine Resin",    DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Homeward Bone #{i + 1}",        "Homeward Bone",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(16)] +
-        [DS3LocationData(f"Pale Tongue #{i + 1}",          "Pale Tongue",          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Pale Tongue #{i + 1}",          "Pale Tongue",          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
         [DS3LocationData(f"Rusted Coin #{i + 1}",          "Rusted Coin",          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Rusted Gold Coin #{i + 1}",     "Rusted Gold Coin",     DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
-        [DS3LocationData(f"Ember #{i + 1}",                "Ember",                DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(45)] +
-
-        # Equipment
-        [DS3LocationData(f"Ring of Sacrifice #{i + 1}", "Ring of Sacrifice", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(4)],
+        [DS3LocationData(f"Ember #{i + 1}",                "Ember",                DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(45)],
 
     "Progressive Items 3": [] +
         # Souls & Bulk Upgrade Materials
@@ -606,8 +609,48 @@ location_tables = {
         [DS3LocationData(f"Large Soul of a Deserted Corpse #{i + 1}",   "Large Soul of a Deserted Corpse",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
         [DS3LocationData(f"Soul of an Unknown Traveler #{i + 1}",       "Soul of an Unknown Traveler",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
         [DS3LocationData(f"Large Soul of an Unknown Traveler #{i + 1}", "Large Soul of an Unknown Traveler", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
+        [DS3LocationData(f"Soul of a Nameless Soldier #{i + 1}",        "Soul of a Nameless Soldier",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(4)] +
+        [DS3LocationData(f"Large Soul of a Nameless Soldier #{i + 1}",  "Large Soul of a Nameless Soldier",  DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(4)] +
+        [DS3LocationData(f"Soul of a Weary Warrior #{i + 1}",           "Soul of a Weary Warrior",           DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(6)] +
+        [DS3LocationData(f"Soul of a Crestfallen Knight #{i + 1}",      "Soul of a Crestfallen Knight",      DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Titanite Chunk #{i + 1}",                    "Titanite Chunk",                    DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(22)] +
         [DS3LocationData(f"Titanite Scale #{i + 1}",                    "Titanite Scale",                    DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(29)],
+
+    "Progressive Items 4": [] +
+        # Gems & Random Consumables
+        [DS3LocationData(f"Ring of Sacrifice #{i + 1}",                 "Ring of Sacrifice",                 DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(4)] +
+        [DS3LocationData(f"Divine Blessing #{i + 1}",                   "Divine Blessing",                   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Hidden Blessing #{i + 1}",                   "Hidden Blessing",                   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
+        [DS3LocationData(f"Budding Green Blossom #{i + 1}",             "Budding Green Blossom",             DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
+        [DS3LocationData(f"Bloodred Moss Clump #{i + 1}",               "Bloodred Moss Clump",               DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
+        [DS3LocationData(f"Purple Moss Clump #{i + 1}",                 "Purple Moss Clump",                 DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Blooming Purple Moss Clump #{i + 1}",        "Blooming Purple Moss Clump",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
+        [DS3LocationData(f"Purging Stone #{i + 1}",                     "Purging Stone",                     DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Rime-blue Moss Clump #{i + 1}",              "Rime-blue Moss Clump",              DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Repair Powder #{i + 1}",                     "Repair Powder",                     DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Kukri #{i + 1}",                             "Kukri",                             DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Lightning Urn #{i + 1}",                     "Lightning Urn",                     DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Rubbish #{i + 1}",                           "Rubbish",                           DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
+        [DS3LocationData(f"Blue Bug Pellet #{i + 1}",                   "Blue Bug Pellet",                   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Red Bug Pellet #{i + 1}",                    "Red Bug Pellet",                    DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Yellow Bug Pellet #{i + 1}",                 "Yellow Bug Pellet",                 DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Black Bug Pellet #{i + 1}",                  "Black Bug Pellet",                  DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Heavy Gem #{i + 1}",                         "Heavy Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Sharp Gem #{i + 1}",                         "Sharp Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Refined Gem #{i + 1}",                       "Refined Gem",                       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Crystal Gem #{i + 1}",                       "Crystal Gem",                       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Simple Gem #{i + 1}",                        "Simple Gem",                        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Fire Gem #{i + 1}",                          "Fire Gem",                          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Chaos Gem #{i + 1}",                         "Chaos Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Lightning Gem #{i + 1}",                     "Lightning Gem",                     DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Deep Gem #{i + 1}",                          "Deep Gem",                          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Dark Gem #{i + 1}",                          "Dark Gem",                          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Poison Gem #{i + 1}",                        "Poison Gem",                        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Blood Gem #{i + 1}",                         "Blood Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
+        [DS3LocationData(f"Raw Gem #{i + 1}",                           "Raw Gem",                           DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Blessed Gem #{i + 1}",                       "Blessed Gem",                       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Hollow Gem #{i + 1}",                        "Hollow Gem",                        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Shriving Stone #{i + 1}",                    "Shriving Stone",                    DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)],
 
     "Progressive Items DLC": [] +
         # Upgrade materials
@@ -628,7 +671,15 @@ location_tables = {
         [DS3LocationData(f"Soul of a Weary Warrior ${i + 1}",            "Soul of a Weary Warrior",            DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
         [DS3LocationData(f"Large Soul of a Weary Warrior ${i + 1}",      "Large Soul of a Weary Warrior",      DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(6)] +
         [DS3LocationData(f"Soul of a Crestfallen Knight ${i + 1}",       "Soul of a Crestfallen Knight",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(6)] +
-        [DS3LocationData(f"Large Soul of a Crestfallen Knight ${i + 1}", "Large Soul of a Crestfallen Knight", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)]
+        [DS3LocationData(f"Large Soul of a Crestfallen Knight ${i + 1}", "Large Soul of a Crestfallen Knight", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+
+        # Gems
+        [DS3LocationData(f"Dark Gem #{i + 1}",                           "Dark Gem",                           DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Blood Gem #{i + 1}",                          "Blood Gem",                          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
+        [DS3LocationData(f"Blessed Gem #{i + 1}",                        "Blessed Gem",                        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Hollow Gem #{i + 1}",                         "Hollow Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)]
+
+
 }
 
 location_dictionary: Dict[str, DS3LocationData] = {}
