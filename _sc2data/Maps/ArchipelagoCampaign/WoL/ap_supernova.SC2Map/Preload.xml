@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Achievement id="Anniversary_TTychus04"/>
+<Achievement id="TTychus04_1"/>
+<Achievement id="TTychus04_2"/>
+<Achievement id="TTychus04_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="AiurProtossBuildingsWrecked" Variations="0,1"/>
+<Actor id="AiurTempleBuildings" Variations="0,1,2,3,4,5"/>
+<Actor id="BelShirCliffGapFiller"/>
+<Actor id="CrystalHuge" Variations="0,1,2"/>
+<Actor id="CrystalLarge" Variations="0,1"/>
+<Actor id="MarSaraTreeDead" Variations="0,1,2,3,4,5"/>
+<Actor id="ShakurasArchonStatue" Variations="0,1,2,5"/>
+<Actor id="Spires" Variations="1,2,3,4,5,6,7,8"/>
+<Actor id="SpiresLarge" Variations="0,1,2,3"/>
+<Actor id="TempleArch" Variations="0,1"/>
+<Actor id="TempleColumn" Variations="9,10,12,13,14,17,18"/>
+<Actor id="TempleColumnSet" Variations="0,1,2,3,4,5,6"/>
+<Actor id="TempleColumnWalls" Variations="0,1,2,3,4,5,6,7"/>
+<Actor id="TempleDebris" Variations="2,3,6,7,8"/>
+<Actor id="TempleGate" Variations="2,6"/>
+<Actor id="TempleStatue" Variations="2,5,6,7"/>
+<Actor id="TempleStoneInlay"/>
+<Actor id="TyphonRock" Variations="0,2,3,4,5,6,8,9,10,11,13,14,15,16,17,18,20,21"/>
+<Actor id="TyphonTree" Variations="0,1,2,3,4,5"/>
+<Actor id="XelNagaDebris" Variations="0,1,2"/>
+<Actor id="WallOfFireRegion"/>
+<Behavior id="WallOfFireBurn"/>
+<Effect id="WallOfFireDummy"/>
+<Light id="Typhon"/>
+<Light id="MeinhoffCampaign"/>
+<Light id="TyphonFirewallLighting"/>
+<Model id="PingArrow"/>
+<Model id="PingObjective"/>
+<Model id="BriefingUnitSelectLargeRed"/>
+<Model id="BriefingUnitSelectRed"/>
+<Model id="AvernusSkybox"/>
+<Sound id="IncomingTransmission"/>
+<Sound id="TTychus04Raynor00001"/>
+<Sound id="TTychus04Horner00003"/>
+<Sound id="TTychus04Raynor00006"/>
+<Sound id="TTychus04TalDarimExecutor00009"/>
+<Sound id="TTychus04Raynor00010"/>
+<Sound id="TTychus04TalDarimExecutor00011"/>
+<Sound id="TTychus04Adjutant00015"/>
+<Sound id="TTychus04Horner00016"/>
+<Sound id="TTychus04Swann00017"/>
+<Sound id="TTychus04Raynor00018"/>
+<Sound id="TTychus04Swann00019"/>
+<Sound id="TTychus04TalDarimExecutor00020"/>
+<Sound id="TTychus04Raynor00021" Variations="0"/>
+<Sound id="TTychus04Swann00022"/>
+<Sound id="TTychus04Horner00023"/>
+<Sound id="TTychus04Adjutant00034"/>
+<Sound id="TTychus04Briefing2Tychus00001"/>
+<Sound id="TTychus04Briefing2Horner00002"/>
+<Sound id="TTychus04Briefing2Raynor00003"/>
+<Sound id="TTychus04Briefing2Tychus00004"/>
+<Sound id="TTychus04Briefing2Horner00005"/>
+<Sound id="TTychus04Briefing2Tychus00006"/>
+<Sound id="TTychus04Briefing2Horner00007"/>
+<Sound id="TTychus04Briefing2Raynor00008"/>
+<Sound id="TTychus04Briefing2Horner00009"/>
+<Sound id="TTychus04Briefing2Raynor00010"/>
+<Sound id="TTychus04Briefing2Raynor00011"/>
+<Sound id="TTychus04Briefing2Horner00012"/>
+<Sound id="TTychus04Briefing2Tychus00013"/>
+<Sound id="TTychus04Briefing2Raynor00014"/>
+<Sound id="TTychus02TalDarimExecutor00066"/>
+<Soundtrack id="TTychus04MusicEventA"/>
+<Soundtrack id="TTychus04MusicIntro"/>
+<Soundtrack id="TTychus04MusicMain"/>
+<Soundtrack id="TTychus04MusicOutro"/>
+<Terrain id="Typhon"/>
+<Unit id="Colossus"/>
+<Unit id="CommandCenter"/>
+<Unit id="Refinery"/>
+<Unit id="Barracks"/>
+<Unit id="Factory"/>
+<Unit id="Starport"/>
+<Unit id="MercCompound"/>
+<Unit id="CommandCenterFlying"/>
+<Unit id="StarportTechLab"/>
+<Unit id="FactoryFlying"/>
+<Unit id="StarportFlying"/>
+<Unit id="SCV"/>
+<Unit id="BarracksFlying"/>
+<Unit id="Marine"/>
+<Unit id="Marauder"/>
+<Unit id="Banshee"/>
+<Unit id="Nexus"/>
+<Unit id="Pylon"/>
+<Unit id="Assimilator"/>
+<Unit id="Gateway"/>
+<Unit id="Forge"/>
+<Unit id="TwilightCouncil"/>
+<Unit id="PhotonCannon"/>
+<Unit id="Stargate"/>
+<Unit id="TemplarArchive"/>
+<Unit id="RoboticsBay"/>
+<Unit id="RoboticsFacility"/>
+<Unit id="CyberneticsCore"/>
+<Unit id="Zealot"/>
+<Unit id="Stalker"/>
+<Unit id="HighTemplar"/>
+<Unit id="Sentry"/>
+<Unit id="Phoenix"/>
+<Unit id="Carrier"/>
+<Unit id="WarpPrism"/>
+<Unit id="Observer"/>
+<Unit id="Immortal"/>
+<Unit id="Probe"/>
+<Unit id="WarpPrismPhasing"/>
+<Unit id="Archon"/>
+<Unit id="Scantipede"/>
+<Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
+<Unit id="VespeneGeyser"/>
+<Unit id="Scout"/>
+<Unit id="ArtifactVault"/>
+<Unit id="ArtifactPiece4"/>
+<Unit id="SpecialOpsDropship"/>
+<Unit id="WallOfFire"/>
+<Unit id="SuperWarpGate"/>
+<Unit id="ProtossRelic" Variations="1,2,3,6"/>
+<Unit id="NaturalGas"/>
+<Unit id="NaturalMinerals"/>
+<Unit id="Food1000"/>
+</Preload>
