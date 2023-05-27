@@ -1182,7 +1182,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="229" Position="208.5,62.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Barracks" Player="1"/>
+    <ObjectUnit Id="229" Position="208.5,62.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Barracks" Player="1"/>
     <ObjectUnit Id="331" Position="44.9755,29.0832,0" Scale="1,1,1" UnitType="GasCanisterProtoss">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -1371,7 +1371,7 @@
     <ObjectUnit Id="569" Position="93.9738,90.051,0" Rotation="6.283" Scale="1,1,1" UnitType="TalDarimPrisonCrystal">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="182" Position="235.8464,66.4787,0" Rotation="4.7102" Scale="1,1,1" UnitType="Battlecruiser" Player="1"/>
+    <ObjectUnit Id="182" Position="235.8464,66.4787,0" Rotation="4.7102" Scale="1,1,1" UnitType="AP_Battlecruiser" Player="1"/>
     <ObjectUnit Id="118" Position="220,65.5,0" Scale="1,1,1" UnitType="MineralField" Resources="499"/>
     <ObjectUnit Id="29" Position="45.4016,70.6425,0" Scale="1,1,1" UnitType="WarpPrismPhasing" Player="2">
         <AIRebuild Index="2" Value="14"/>
@@ -1633,7 +1633,7 @@
     <ObjectUnit Id="351" Position="131.5092,42.5498,0" Scale="1,1,1" UnitType="NaturalGas">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="372" Position="215,61,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
+    <ObjectUnit Id="372" Position="215,61,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
     <ObjectUnit Id="218" Position="127.5598,68.23,0" Rotation="1.5705" Scale="1,1,1" UnitType="Scout" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -1661,7 +1661,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="26" Position="219,61,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
+    <ObjectUnit Id="26" Position="219,61,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
     <ObjectUnit Id="410" Position="45.1384,30.3381,0" Scale="1,1,1" UnitType="GasCanisterProtoss">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -1678,7 +1678,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="635" Position="56.7773,82.049,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
-    <ObjectUnit Id="305" Position="202.5,68.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Starport" Player="1"/>
+    <ObjectUnit Id="305" Position="202.5,68.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Starport" Player="1"/>
     <ObjectUnit Id="104" Variation="3" Position="152,85.5,0" Scale="1,1,1" UnitType="MineralField" Resources="750"/>
     <ObjectUnit Id="3" Position="42,58,0" Scale="1,1,1" UnitType="XelNagaVault" Player="5"/>
     <ObjectUnit Id="195" Position="70,81,0" Scale="1,1,1" UnitType="PhotonCannon" Player="3">
@@ -1694,7 +1694,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="323" Position="208.5,68.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="FusionCore" Player="1">
+    <ObjectUnit Id="323" Position="208.5,68.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_FusionCore" Player="1">
         <Texture TexSlot="decal" TexProps="" TexLink=""/>
     </ObjectUnit>
     <ObjectUnit Id="610" Position="100.5573,44.533,0" Rotation="0.963" Scale="1,1,1" UnitType="Zealot" Player="4">
@@ -1741,7 +1741,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="25" Position="217,63,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
+    <ObjectUnit Id="25" Position="217,63,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
     <ObjectUnit Id="114" Position="68.1716,25.7363,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
     <ObjectUnit Id="178" Variation="5" Position="221,70.5,0" Scale="1,1,1" UnitType="MineralField" Resources="550"/>
     <ObjectUnit Id="375" Position="75.5893,58.9484,0" Rotation="2.4492" Scale="1,1,1" UnitType="VoidRay" Player="4">
@@ -1755,7 +1755,7 @@
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="673" Position="142.686,91.8117,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
-    <ObjectUnit Id="299" Position="208.5,74.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Factory" Player="1"/>
+    <ObjectUnit Id="299" Position="208.5,74.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Factory" Player="1"/>
     <ObjectUnit Id="133" Position="215.3627,63.7297,0" Rotation="1.3" Scale="1,1,1" UnitType="Stalker" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -1819,7 +1819,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="128" Position="233.381,63.9147,0" Rotation="4.7082" Scale="1,1,1" UnitType="Battlecruiser" Player="1"/>
+    <ObjectUnit Id="128" Position="233.381,63.9147,0" Rotation="4.7082" Scale="1,1,1" UnitType="AP_Battlecruiser" Player="1"/>
     <ObjectUnit Id="650" Position="164.3037,86.0397,0" Scale="1,1,1" UnitType="NaturalGas">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -1828,7 +1828,7 @@
         <AIRebuild Index="4" Value="14"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="348" Position="202,75,0" Rotation="5.4975" Scale="1,1,1" UnitType="MercCompound" Player="1"/>
+    <ObjectUnit Id="348" Position="202,75,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_MercCompound" Player="1"/>
     <ObjectUnit Id="153" Position="242.501,102.282,0" Scale="1,1,1" UnitType="Food1000" Player="2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -1868,7 +1868,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="74" Position="217,59,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
+    <ObjectUnit Id="74" Position="217,59,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
     <ObjectUnit Id="399" Position="121.2026,36.7822,0" Rotation="2.3356" Scale="1,1,1" UnitType="Carrier" Player="4">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -1977,7 +1977,7 @@
     </ObjectUnit>
     <ObjectUnit Id="278" Position="142.0895,33.2102,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
     <ObjectUnit Id="604" Position="152.6765,40.388,0" Rotation="1.2304" Scale="1,1,1" UnitType="NaturalMinerals"/>
-    <ObjectUnit Id="184" Position="235.9687,60.9604,0" Rotation="4.7102" Scale="1,1,1" UnitType="Battlecruiser" Player="1"/>
+    <ObjectUnit Id="184" Position="235.9687,60.9604,0" Rotation="4.7102" Scale="1,1,1" UnitType="AP_Battlecruiser" Player="1"/>
     <ObjectUnit Id="381" Position="41.6997,47.1984,0" Rotation="0.9426" Scale="1,1,1" UnitType="Carrier" Player="3">
         <AIRebuild Index="1" Value="1"/>
         <AIRebuild Index="2" Value="14"/>
@@ -1998,7 +1998,7 @@
     <ObjectUnit Id="120" Variation="2" Position="220,74.5,0" Scale="1,1,1" UnitType="MineralField" Resources="650"/>
     <ObjectUnit Id="289" Variation="1" Position="93.945,91.2043,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
     <ObjectUnit Id="330" Position="37,63,0" Scale="1,1,1" UnitType="Monolith" Player="2"/>
-    <ObjectUnit Id="228" Position="213.5,69.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CommandCenter" Player="1"/>
+    <ObjectUnit Id="228" Position="213.5,69.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CommandCenter" Player="1"/>
     <ObjectUnit Id="394" Position="79,68,0" Rotation="2.3376" Scale="1,1,1" UnitType="RipFieldGenerator" Player="5"/>
     <ObjectUnit Id="10" Position="100.2226,72.396,0" Scale="1,1,1" UnitType="NaturalGas"/>
     <ObjectUnit Id="97" Position="115.18,50.0798,0" Rotation="1.9567" Scale="1,1,1" UnitType="HighTemplar" Player="4">

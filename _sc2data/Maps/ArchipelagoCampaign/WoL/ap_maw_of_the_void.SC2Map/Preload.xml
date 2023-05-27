@@ -81,19 +81,6 @@
 <TerrainObject id="TerrainObjectXelNagaWedges8x4_1_1"/>
 <TerrainObject id="TerrainObjectXelNagaWedges8x4_2_2"/>
 <Unit id="Colossus"/>
-<Unit id="CommandCenter"/>
-<Unit id="SupplyDepot"/>
-<Unit id="Refinery"/>
-<Unit id="Barracks"/>
-<Unit id="Factory"/>
-<Unit id="Starport"/>
-<Unit id="MercCompound"/>
-<Unit id="FusionCore"/>
-<Unit id="CommandCenterFlying"/>
-<Unit id="FactoryFlying"/>
-<Unit id="StarportFlying"/>
-<Unit id="SCV"/>
-<Unit id="BarracksFlying"/>
 <Unit id="Battlecruiser"/>
 <Unit id="Nexus"/>
 <Unit id="Pylon"/>
@@ -125,7 +112,6 @@
 <Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
 <Unit id="VespeneGeyser"/>
 <Unit id="Scout"/>
-<Unit id="AutomatedRefinery"/>
 <Unit id="Monolith"/>
 <Unit id="XelNagaPrisonHeight2"/>
 <Unit id="XelNagaPrisonNorthHeight2"/>
@@ -144,4 +130,18 @@
 <Unit id="NaturalGas"/>
 <Unit id="NaturalMinerals"/>
 <Unit id="Food1000"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_BarracksFlying"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_FactoryFlying"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_CommandCenterFlying"/>
+<Unit id="AP_Starport"/>
+<Unit id="AP_StarportFlying"/>
+<Unit id="AP_Battlecruiser"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_MercCompound"/>
+<Unit id="AP_FusionCore"/>
 </Preload>
