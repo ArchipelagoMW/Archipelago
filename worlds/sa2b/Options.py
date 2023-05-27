@@ -176,22 +176,6 @@ class TrapFillPercentage(Range):
     default = 0
 
 
-class IncludeMissions(Range):
-    """
-    Allows logic to place items in a range of Missions for each level
-    Each mission setting includes lower settings
-    1: Base Story Missions
-    2: 100 Ring Missions
-    3: Lost Chao Missions
-    4: Timer Missions
-    5: Hard Mode Missions
-    """
-    display_name = "Include Missions"
-    range_start = 1
-    range_end = 5
-    default = 2
-
-
 class Keysanity(Toggle):
     """
     Determines whether picking up Chao Keys grants checks
