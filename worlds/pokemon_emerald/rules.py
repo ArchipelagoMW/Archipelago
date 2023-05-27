@@ -2,6 +2,7 @@
 Logic rule definitions for Pokemon Emerald
 """
 from BaseClasses import CollectionState, MultiWorld
+from Options import Toggle
 
 from worlds.generic.Rules import add_rule, set_rule
 
@@ -11,8 +12,6 @@ from .util import location_name_to_label
 
 def _can_cut(state: CollectionState, player: int):
     return state.has("HM01 Cut", player) and state.has("Stone Badge", player)
-def _can_fly(state: CollectionState, player: int):
-    return state.has("HM02 Fly", player) and state.has("Feather Badge", player)
 def _can_surf(state: CollectionState, player: int):
     return state.has("HM03 Surf", player) and state.has("Balance Badge", player)
 def _can_strength(state: CollectionState, player: int):
@@ -47,7 +46,6 @@ def _defeated_n_gym_leaders(state: CollectionState, player: int, n: int):
 # by when you would first reach that place in a vanilla playthrough.
 def set_default_rules(multiworld: MultiWorld, player: int):
     can_cut = lambda state: _can_cut(state, player)
-    can_fly = lambda state: _can_fly(state, player)
     can_surf = lambda state: _can_surf(state, player)
     can_strength = lambda state: _can_strength(state, player)
     can_rock_smash = lambda state: _can_rock_smash(state, player)
@@ -55,10 +53,16 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     can_dive = lambda state: _can_dive(state, player)
 
     # Sky
-    set_rule(
-        multiworld.get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY", player),
-        can_fly
-    )
+    if multiworld.fly_without_badge[player] == Toggle.option_true:
+        set_rule(
+            multiworld.get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY", player),
+            lambda state: state.has("HM02 Fly", player)
+        )
+    else:
+        set_rule(
+            multiworld.get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY", player),
+            lambda state: state.has("HM02 Fly", player) and state.has("Feather Badge", player)
+        )
     set_rule(
         multiworld.get_entrance("REGION_SKY -> REGION_LITTLEROOT_TOWN/MAIN", player),
         lambda state: state.has("EVENT_VISITED_LITTLEROOT_TOWN", player)
