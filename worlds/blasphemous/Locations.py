@@ -306,7 +306,7 @@ location_table: List[LocationDict] = [
     # Echoes of Salt
     {'name': "EoS: Lantern jump near MotED",
         'game_id': "RB108",
-        'room': "D20Z01S03"},
+        'room': "D20Z01S02"},
     {'name': "EoS: Lantern jump near elevator",
         'game_id': "RB202",
         'room': "D20Z01S09"},

@@ -637,6 +637,20 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.filler}
 ]
 
+event_table: Dict[str, str] = {
+    "OpenedDCGateW": "D01Z05S24",
+    "OpenedDCGateE": "D01Z05S12",
+    "OpenedDCLadder": "D01Z05S20",
+    "OpenedWOTWCave": "D02Z01S06",
+    "OpenedConventLadder": "D02Z03S11",
+    "OpenedMOMLadder": "D04Z02S06",
+    "OpenedTSCGate": "D05Z02S11",
+    "OpenedARLadder": "D06Z01S23",
+    "OpenedBOTTCStatue": "D08Z01S02",
+    "OpenedWOTHPGate": "D09Z01S05",
+    "OpenedBOTSSLadder": "D17Z01S04"
+}
+
 group_table: Dict[str, Set[str]] = {
     "wounds"  : ["Holy Wound of Attrition",
                  "Holy Wound of Contrition",
@@ -645,6 +659,10 @@ group_table: Dict[str, Set[str]] = {
     "masks"   : ["Deformed Mask of Orestes",
                  "Mirrored Mask of Dolphos",
                  "Embossed Mask of Crescente"],
+
+    "marks"   : ["Mark of the First Refuge",
+                 "Mark of the Second Refuge",
+                 "Mark of the Third Refuge"],
 
     "tirso"   : ["Bouquet of Rosemary",
                  "Incense Garlic",

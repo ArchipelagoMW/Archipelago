@@ -2,7 +2,7 @@ from typing import Dict, List, Set, Any
 from collections import Counter
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
-from .Items import base_id, item_table, group_table, tears_set, reliquary_set
+from .Items import base_id, item_table, group_table, tears_set, reliquary_set, event_table
 from .Locations import location_table
 from .Rooms import room_table, door_table
 from .Rules import rules
@@ -41,9 +41,11 @@ class BlasphemousWorld(World):
     item_name_groups = group_table
     option_definitions = blasphemous_options
 
+    door_connections: Dict[str, str] = {}
 
-    #def set_rules(self):
-        #rules(self)
+
+    def set_rules(self):
+        rules(self)
 
 
     def create_item(self, name: str) -> "BlasphemousItem":
@@ -144,20 +146,23 @@ class BlasphemousWorld(World):
 
 
     def pre_fill(self):
+        world = self.multiworld
+        player = self.player
+
         self.place_items_from_dict(unrandomized_dict)
 
-        if self.multiworld.thorn_shuffle[self.player] == 2:
+        if world.thorn_shuffle[player] == 2:
             self.place_items_from_set(thorn_set, "Thorn Upgrade")
 
-        if self.multiworld.start_wheel[self.player]:
-            self.multiworld.get_location("BotSS: Beginning gift", self.player)\
+        if world.start_wheel[player]:
+            world.get_location("BotSS: Beginning gift", player)\
                 .place_locked_item(self.create_item("The Young Mason's Wheel"))
 
-        if not self.multiworld.skill_randomizer[self.player]:
+        if not world.skill_randomizer[player]:
             self.place_items_from_dict(skill_dict)
 
-        if self.multiworld.thorn_shuffle[self.player] == 1:
-            self.multiworld.local_items[self.player].value.add("Thorn Upgrade")
+        if world.thorn_shuffle[player] == 1:
+            world.local_items[player].value.add("Thorn Upgrade")
         
 
     def place_items_from_set(self, location_set: Set[str], name: str):
@@ -199,6 +204,10 @@ class BlasphemousWorld(World):
                 if door.get("OriginalDoor") is None:
                     continue
                 else:
+                    if not door["Id"] in self.door_connections.keys():
+                        self.door_connections[door["Id"]] = door["OriginalDoor"]
+                        self.door_connections[door["OriginalDoor"]] = door["Id"]
+
                     parent: Region = self.get_room_from_door(door["Id"])
                     target: Region = self.get_room_from_door(door["OriginalDoor"])
                     exit = Entrance(player, door["Id"], parent)
@@ -224,6 +233,13 @@ class BlasphemousWorld(World):
 
             id = base_id + location_table.index(loc)
             reg.locations.append(BlasphemousLocation(player, loc["name"], id, reg))
+
+        for e, r in event_table.items():
+            reg: Region = world.get_region(r, player)
+            event = BlasphemousLocation(player, e, None, reg)
+            event.show_in_spoiler = False
+            event.place_locked_item(self.create_event(e))
+            reg.locations.append(event)
         
         victory = Location(player, "His Holiness Escribar", None, world.get_region("D07Z01S03", player))
         victory.place_locked_item(self.create_event("Victory"))
@@ -243,26 +259,7 @@ class BlasphemousWorld(World):
 
     
     def get_connected_door(self, door: str) -> Entrance:
-        player = self.player
-        world = self.multiworld
-
-        target: str
-
-        try: 
-            world.get_entrance(door, player)
-        except KeyError:
-            parent = self.get_room_from_door(door)
-            for r in world.get_regions(player):
-                for e in r.exits:
-                    if e.connected_region == parent:
-                        target = e.name
-        else:
-            parent = world.get_entrance(door, player)
-            for e in parent.connected_region.exits:
-                if e.connected_region == parent.parent_region:
-                    target = e.name
-
-        return world.get_entrance(target, player)
+        return self.multiworld.get_entrance(self.door_connections[door], self.player)
 
     
     def fill_slot_data(self) -> Dict[str, Any]:
@@ -277,7 +274,7 @@ class BlasphemousWorld(World):
             thorns = False
 
         for loc in world.get_filled_locations(player):
-            if loc.name == "His Holiness Escribar":
+            if loc.name == "His Holiness Escribar" or loc.name in event_table.keys():
                 continue
             else:
                 data = {
