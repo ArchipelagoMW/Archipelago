@@ -196,15 +196,7 @@
 <TerrainObject id="TerrainObjectRooftopBroken1"/>
 <TerrainObject id="TerrainObjectRooftopBroken2"/>
 <TerrainObject id="TerrainObjectRooftopBroken3"/>
-<Unit id="CommandCenter"/>
-<Unit id="SupplyDepot"/>
-<Unit id="Refinery"/>
-<Unit id="Barracks"/>
-<Unit id="Factory"/>
-<Unit id="Starport"/>
-<Unit id="MercCompound"/>
 <Unit id="SCV"/>
-<Unit id="Marine"/>
 <Unit id="Medivac"/>
 <Unit id="Hatchery"/>
 <Unit id="Extractor"/>
@@ -241,9 +233,6 @@
 <Unit id="MineralField" Variations="0,1,2,3,4,5,6,7,8,9"/>
 <Unit id="VespeneGeyser"/>
 <Unit id="WolfStatue" Variations="0,1"/>
-<Unit id="WarPig"/>
-<Unit id="SpartanCompany"/>
-<Unit id="HammerSecurity"/>
 <Unit id="HunterKiller"/>
 <Unit id="InfestedCocoon"/>
 <Unit id="Brutalisk"/>
@@ -251,4 +240,17 @@
 <Unit id="DataCore" Variations="0,1"/>
 <Unit id="AbandonedBuilding" Variations="0,1"/>
 <Unit id="Food1000"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Starport"/>
+<Unit id="AP_Medivac"/>
+<Unit id="AP_WarPig"/>
+<Unit id="AP_SpartanCompany"/>
+<Unit id="AP_HammerSecurity"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_MercCompound"/>
 </Preload>

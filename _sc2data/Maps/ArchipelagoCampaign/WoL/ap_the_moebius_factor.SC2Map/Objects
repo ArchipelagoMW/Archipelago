@@ -10401,7 +10401,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="559" Position="179.5,67.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Factory" Player="1"/>
+    <ObjectUnit Id="559" Position="179.5,67.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Factory" Player="1"/>
     <ObjectUnit Id="2893" Position="57.5,115.5,0" Rotation="4.673" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
     <ObjectUnit Id="2696" Position="20.5,105.5,0" Rotation="3.823" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
     <ObjectUnit Id="462" Position="86.8532,83.5808,0" Rotation="1.4426" Scale="1,1,1" UnitType="Hydralisk" Player="2">
@@ -10423,8 +10423,8 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="14" Position="118.3674,85.0666,0" Rotation="2.4704" Scale="1,1,1" UnitType="HammerSecurity" Player="6"/>
-    <ObjectUnit Id="541" Position="115.584,86.3796,0" Rotation="3.1904" Scale="1,1,1" UnitType="WarPig" Player="6"/>
+    <ObjectUnit Id="14" Position="118.3674,85.0666,0" Rotation="2.4704" Scale="1,1,1" UnitType="AP_HammerSecurity" Player="6"/>
+    <ObjectUnit Id="541" Position="115.584,86.3796,0" Rotation="3.1904" Scale="1,1,1" UnitType="AP_WarPig" Player="6"/>
     <ObjectUnit Id="630" Position="47,36,0" Scale="1,1,1" UnitType="SporeCrawler" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10453,7 +10453,7 @@
     <ObjectUnit Id="495" Position="53.4562,26.612,0" Rotation="0.2734" Scale="1,1,1" UnitType="Zergling" Player="5">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="42" Position="183.53,79.5393,0" Rotation="3.05" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="42" Position="183.53,79.5393,0" Rotation="3.05" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="388" Position="49.5117,73.5393,0" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="449" Variation="9" Position="133,94.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1528"/>
     <ObjectUnit Id="3722" Position="88.5,110.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="5"/>
@@ -10485,7 +10485,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="535" Position="118.329,83.1967,0" Rotation="1.3671" Scale="1,1,1" UnitType="WarPig" Player="6"/>
+    <ObjectUnit Id="535" Position="118.329,83.1967,0" Rotation="1.3671" Scale="1,1,1" UnitType="AP_WarPig" Player="6"/>
     <ObjectUnit Id="636" Position="38.5,35.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10519,7 +10519,7 @@
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="477" Position="38.5927,72.9592,0" Scale="1,1,1" UnitType="Zergling" Player="5"/>
-    <ObjectUnit Id="1150" Position="188,72,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
+    <ObjectUnit Id="1150" Position="188,72,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
     <ObjectUnit Id="47" Position="49.469,29.7282,0" Scale="1,1,1" UnitType="Overlord" Player="5"/>
     <ObjectUnit Id="385" Position="54.8122,74.0974,0" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="431" Position="60,38,0" Scale="1,1,1" UnitType="SporeCrawler" Player="5">
@@ -10544,7 +10544,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="538" Position="150.227,39.4233,0" Rotation="5.393" Scale="1,1,1" UnitType="WarPig" Player="6"/>
+    <ObjectUnit Id="538" Position="150.227,39.4233,0" Rotation="5.393" Scale="1,1,1" UnitType="AP_WarPig" Player="6"/>
     <ObjectUnit Id="625" Position="39,53,0" Scale="1,1,1" UnitType="SporeCrawler" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10580,7 +10580,7 @@
     </ObjectUnit>
     <ObjectUnit Id="460" Position="75.204,62.8581,0" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="2698" Position="50.5,105.5,0" Rotation="2.9343" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
-    <ObjectUnit Id="9" Position="170.5,76.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Starport" Player="1"/>
+    <ObjectUnit Id="9" Position="170.5,76.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Starport" Player="1"/>
     <ObjectUnit Id="482" Position="43.2941,55.807,0" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="76" Position="68.252,17.4365,0" Rotation="0.7846" Scale="1,1,1" UnitType="Zergling" Player="2"/>
     <ObjectUnit Id="515" Position="155.5,71.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="2">
@@ -10647,7 +10647,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="40" Position="183.4396,77.4934,0" Rotation="2.008" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="40" Position="183.4396,77.4934,0" Rotation="2.008" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="3789" Position="31.5,108.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="2"/>
     <ObjectUnit Id="493" Position="52.173,26.4375,0" Rotation="0.711" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="67" Position="39.5,70.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="5">
@@ -10685,7 +10685,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="597" Position="117.2634,86.2651,0" Rotation="2.4206" Scale="1,1,1" UnitType="HammerSecurity" Player="6"/>
+    <ObjectUnit Id="597" Position="117.2634,86.2651,0" Rotation="2.4206" Scale="1,1,1" UnitType="AP_HammerSecurity" Player="6"/>
     <ObjectUnit Id="479" Position="28.5925,61.535,0" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="113" Position="161,107,0" Scale="1,1,1" UnitType="SporeCrawler" Player="5">
         <AIRebuild Index="1" Value="0"/>
@@ -10947,7 +10947,7 @@
     <ObjectUnit Id="1231" Position="82.42,84.88,0" Rotation="1.441" Scale="1,1,1" UnitType="Hydralisk" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="194" Position="151.1542,40.075,0" Rotation="5.606" Scale="1,1,1" UnitType="SpartanCompany" Player="6"/>
+    <ObjectUnit Id="194" Position="151.1542,40.075,0" Rotation="5.606" Scale="1,1,1" UnitType="AP_SpartanCompany" Player="6"/>
     <ObjectUnit Id="803" Position="129.999,98.0273,0" Rotation="5.431" Scale="1,1,1" UnitType="Drone" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -10992,12 +10992,12 @@
     </ObjectUnit>
     <ObjectUnit Id="368" Position="53.5,30.5,0" Scale="1,1,1" UnitType="SpawningPool" Player="5"/>
     <ObjectUnit Id="1277" Position="65.5185,114.4792,0" Rotation="0.8791" Scale="1,1,1" UnitType="Mutalisk" Player="2"/>
-    <ObjectUnit Id="2553" Position="183.4653,76.3752,0" Rotation="1.8525" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="2553" Position="183.4653,76.3752,0" Rotation="1.8525" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="642" Position="82.3298,70.5397,0" Scale="1,1,1" UnitType="Hydralisk" Player="2"/>
     <ObjectUnit Id="166" Variation="1" Position="128,68,0" Rotation="2.356" Scale="1,1,1" UnitType="AbandonedBuilding" Player="8">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="205" Position="74.1062,90.115,0" Rotation="0.82" Scale="1,1,1" UnitType="SpartanCompany" Player="6"/>
+    <ObjectUnit Id="205" Position="74.1062,90.115,0" Rotation="0.82" Scale="1,1,1" UnitType="AP_SpartanCompany" Player="6"/>
     <ObjectUnit Id="3022" Position="70.5,10.5,0" Rotation="3.5351" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
     <ObjectUnit Id="333" Position="153.03,103.0837,0" Rotation="5.605" Scale="1,1,1" UnitType="Zergling" Player="2"/>
     <ObjectUnit Id="1262" Position="62,86,0" Scale="1,1,1" UnitType="SporeCrawler" Player="5">
@@ -11009,7 +11009,7 @@
     <ObjectUnit Id="770" Position="68.6538,111.6767,0" Rotation="0.6892" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="191" Position="138.596,76.3476,0" Rotation="0.427" Scale="1,1,1" UnitType="SpartanCompany" Player="6"/>
+    <ObjectUnit Id="191" Position="138.596,76.3476,0" Rotation="0.427" Scale="1,1,1" UnitType="AP_SpartanCompany" Player="6"/>
     <ObjectUnit Id="273" Position="153,100,0" Scale="1,1,1" UnitType="SporeCrawler" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -11063,7 +11063,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="148" Position="176.5,84.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Refinery" Player="1"/>
+    <ObjectUnit Id="148" Position="176.5,84.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Refinery" Player="1"/>
     <ObjectUnit Id="3026" Position="36.5,16.5,0" Rotation="2.9167" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
     <ObjectUnit Id="358" Position="54.5,68.5,0" Scale="1,1,1" UnitType="SpawningPool" Player="5">
         <AIRebuild Index="1" Value="0"/>
@@ -11075,7 +11075,7 @@
     <ObjectUnit Id="1280" Position="68.9721,113.988,0" Rotation="0.8776" Scale="1,1,1" UnitType="Mutalisk" Player="2"/>
     <ObjectUnit Id="1259" Position="157.1652,104.1418,0" Rotation="5.3872" Scale="1,1,1" UnitType="Mutalisk" Player="2"/>
     <ObjectUnit Id="3019" Position="124.5,123.5,0" Rotation="2.0141" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
-    <ObjectUnit Id="1152" Position="186,69,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
+    <ObjectUnit Id="1152" Position="186,69,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
     <ObjectUnit Id="1178" Position="90.308,49.8112,0" Rotation="5.6166" Scale="1,1,1" UnitType="Brutalisk" Player="2"/>
     <ObjectUnit Id="1332" Position="20.5,107.5,0" Rotation="2.4047" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
     <ObjectUnit Id="1265" Position="49,67,0" Scale="1,1,1" UnitType="SpineCrawler" Player="5">
@@ -11091,7 +11091,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="210" Position="73.9677,87.9042,0" Rotation="1.001" Scale="1,1,1" UnitType="WarPig" Player="6"/>
+    <ObjectUnit Id="210" Position="73.9677,87.9042,0" Rotation="1.001" Scale="1,1,1" UnitType="AP_WarPig" Player="6"/>
     <ObjectUnit Id="380" Position="54.1406,61.9587,0" Scale="1,1,1" UnitType="Zergling" Player="5"/>
     <ObjectUnit Id="1801" Position="19.5,106.5,0" Rotation="4.5954" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
     <ObjectUnit Id="3016" Position="140.5,111.5,0" Rotation="4.7038" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
@@ -11253,7 +11253,7 @@
     <ObjectUnit Id="268" Position="60.43,48.8198,0" Rotation="3.6372" Scale="1,1,1" UnitType="Corruptor" Player="2"/>
     <ObjectUnit Id="1258" Position="155.0097,106.2597,0" Rotation="5.3894" Scale="1,1,1" UnitType="Mutalisk" Player="2"/>
     <ObjectUnit Id="3018" Position="123.5,124.5,0" Rotation="3.3808" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
-    <ObjectUnit Id="354" Position="75.8205,90.042,0" Rotation="0.9924" Scale="1,1,1" UnitType="WarPig" Player="6"/>
+    <ObjectUnit Id="354" Position="75.8205,90.042,0" Rotation="0.9924" Scale="1,1,1" UnitType="AP_WarPig" Player="6"/>
     <ObjectUnit Id="643" Position="84.5598,72.67,0" Rotation="1.4072" Scale="1,1,1" UnitType="Hydralisk" Player="2"/>
     <ObjectUnit Id="771" Position="67.8007,110.7812,0" Rotation="0.8496" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIFlag Index="IsUseable" Value="0"/>
@@ -11439,7 +11439,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="43" Position="183.3842,75.3383,0" Rotation="0.5732" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="43" Position="183.3842,75.3383,0" Rotation="0.5732" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="110" Position="69.5,76.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -11547,7 +11547,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="537" Position="149.9035,41.1303,0" Rotation="5.641" Scale="1,1,1" UnitType="WarPig" Player="6"/>
+    <ObjectUnit Id="537" Position="149.9035,41.1303,0" Rotation="5.641" Scale="1,1,1" UnitType="AP_WarPig" Player="6"/>
     <ObjectUnit Id="567" Position="52.6801,17.483,0" Rotation="5.9045" Scale="1,1,1" UnitType="Roach" Player="5"/>
     <ObjectUnit Id="1054" Position="137.1271,100.4794,0" Rotation="0.189" Scale="1,1,1" UnitType="Drone" Player="5">
         <AIRebuild Index="1" Value="0"/>
@@ -11595,7 +11595,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="10" Position="174.5,71.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Barracks" Player="1"/>
+    <ObjectUnit Id="10" Position="174.5,71.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Barracks" Player="1"/>
     <ObjectUnit Id="581" Position="38.7348,27.813,0" Rotation="4.8803" Scale="1,1,1" UnitType="Corruptor" Player="5"/>
     <ObjectUnit Id="1933" Position="115.5,122.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="5">
         <AIRebuild Index="1" Value="0"/>
@@ -11621,9 +11621,9 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="496" Position="168,82,0" Rotation="5.4975" Scale="1,1,1" UnitType="MercCompound" Player="1"/>
+    <ObjectUnit Id="496" Position="168,82,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_MercCompound" Player="1"/>
     <ObjectUnit Id="3771" Position="135,94,0" Rotation="5.4958" Scale="1,1,1" UnitType="SporeCrawler" Player="5"/>
-    <ObjectUnit Id="550" Position="136.3395,74.8981,0" Rotation="0.909" Scale="1,1,1" UnitType="WarPig" Player="6"/>
+    <ObjectUnit Id="550" Position="136.3395,74.8981,0" Rotation="0.909" Scale="1,1,1" UnitType="AP_WarPig" Player="6"/>
     <ObjectUnit Id="589" Position="74.6005,16.0273,0" Rotation="0.9" Scale="1,1,1" UnitType="Mutalisk" Player="5">
         <Flag Index="UnitNoCreate" Value="1"/>
     </ObjectUnit>
@@ -11634,7 +11634,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="2" Position="180.5,77.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CommandCenter" Player="1"/>
+    <ObjectUnit Id="2" Position="180.5,77.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CommandCenter" Player="1"/>
     <ObjectUnit Id="489" Position="157.4194,51.506,0" Rotation="2.5466" Scale="1,1,1" UnitType="Zergling" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -11651,7 +11651,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="41" Position="183.5034,78.4555,0" Rotation="2.2055" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="41" Position="183.5034,78.4555,0" Rotation="2.2055" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="30" Variation="7" Position="184,84.5,0" Scale="1,1,1" UnitType="MineralField" Resources="912">
         <Resources Index="1" Value="1912"/>
     </ObjectUnit>
@@ -11728,7 +11728,7 @@
     <ObjectUnit Id="2748" Position="59.5,114.5,0" Rotation="2.1596" Scale="1,1,1" UnitType="InfestedCocoon" Player="2"/>
     <ObjectUnit Id="84" Variation="1" Position="36,61,0" Rotation="2.356" Scale="1,1,1" UnitType="DataCore" Player="3"/>
     <ObjectUnit Id="63" Position="70.1381,16.4226,0" Rotation="0.7846" Scale="1,1,1" UnitType="Zergling" Player="2"/>
-    <ObjectUnit Id="539" Position="152.2556,39.3703,0" Rotation="5.6083" Scale="1,1,1" UnitType="WarPig" Player="6"/>
+    <ObjectUnit Id="539" Position="152.2556,39.3703,0" Rotation="5.6083" Scale="1,1,1" UnitType="AP_WarPig" Player="6"/>
     <ObjectUnit Id="624" Position="33,51,0" Scale="1,1,1" UnitType="SporeCrawler" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
