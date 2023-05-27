@@ -413,6 +413,9 @@ class DarkSouls3World(World):
                      lambda state: state.has("Storm Ruler", self.player))
             set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
                      lambda state: state.has("Basin of Vows", self.player))
+            if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
+                add_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
+                         lambda state: state.has("Small Lothric Banner", self.player))
 
         gotthard_corpse_rule = lambda state: \
             (state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
