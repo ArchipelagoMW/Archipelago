@@ -345,6 +345,9 @@ def get_default_options() -> OptionsType:
             "rom_start": True,
             "rom_args": ""
         },
+        "kdl3_options":{
+            "rom_file": "Kirby's Dream Land 3 (USA).sfc"
+        }
     }
     return options
 

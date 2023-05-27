@@ -144,9 +144,6 @@ dkc3_options:
 smw_options:
   # File name of the SMW US rom
   rom_file: "Super Mario World (USA).sfc"
-kdl3_options:
-  # File name of the KDL3 US rom
-  rom_file: "Kirby's Dream Land 3 (USA).sfc"
 pokemon_rb_options:
   # File names of the Pokemon Red and Blue roms
   red_rom_file: "Pokemon Red (UE) [S][!].gb"
@@ -188,7 +185,9 @@ adventure_options:
   rom_args: " "
   # Set this to true to display item received messages in Emuhawk
   display_msgs: true
-
+kdl3_options:
+  # File name of the KDL3 US rom
+  rom_file: "Kirby's Dream Land 3 (USA).sfc"
 
 
 
