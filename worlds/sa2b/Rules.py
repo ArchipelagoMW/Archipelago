@@ -495,8 +495,6 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.hidden_base_pipe_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
-        add_rule(world.get_location(LocationName.eternal_engine_pipe_1, player),
-                 lambda state: state.has(ItemName.tails_booster, player))
 
         add_rule(world.get_location(LocationName.sand_ocean_pipe_1, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
@@ -1622,8 +1620,6 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
     # Pipe Upgrade Requirements
     if world.whistlesanity[player].value == 1 or world.whistlesanity[player].value == 3:
         add_rule(world.get_location(LocationName.hidden_base_pipe_1, player),
-                 lambda state: state.has(ItemName.tails_booster, player))
-        add_rule(world.get_location(LocationName.eternal_engine_pipe_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
         add_rule(world.get_location(LocationName.cosmic_wall_pipe_1, player),
