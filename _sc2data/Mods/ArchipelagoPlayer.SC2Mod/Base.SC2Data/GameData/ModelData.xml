@@ -669,9 +669,9 @@
             <Payload value="AP_ThorWreckageSparks"/>
         </Events>
         <Occlusion value="Show"/>
-        <Radius value="0.800000"/>
-        <ScaleMax value="0.650000,0.650000,0.650000"/>
-        <ScaleMin value="0.650000,0.650000,0.650000"/>
+        <Radius value="0.600000"/>
+        <ScaleMax value="0.50000,0.50000,0.50000"/>
+        <ScaleMin value="0.50000,0.50000,0.50000"/>
         <SelectionRadius value="1.845700"/>
         <ShadowRadius value="1.230700"/>
     </CModel>
