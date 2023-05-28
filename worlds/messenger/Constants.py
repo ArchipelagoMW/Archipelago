@@ -1,5 +1,6 @@
 # items
 # listing individual groups first for easy lookup
+
 NOTES = [
     "Key of Hope",
     "Key of Chaos",
@@ -150,4 +151,11 @@ SEALS = [
     "Elemental Skylands Seal - Air",
     "Elemental Skylands Seal - Water",
     "Elemental Skylands Seal - Fire",
+]
+
+BOSS_LOCATIONS = [
+    "Leaf Golem",
+    "Ruxxtin",
+    "Emerald Golem",
+    "Queen of Quills",
 ]
