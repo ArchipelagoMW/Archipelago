@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CEffectDamage id="SuperMarine">
+        <Amount value="32"/>
+    </CEffectDamage>
+</Catalog>

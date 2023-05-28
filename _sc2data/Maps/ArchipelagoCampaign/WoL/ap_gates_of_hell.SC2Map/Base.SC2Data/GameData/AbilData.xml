@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CAbilTrain id="LarvaTrain">
+        <InfoArray index="Train2">
+            <Button Requirements=""/>
+        </InfoArray>
+        <InfoArray index="Train4">
+            <Button Requirements=""/>
+        </InfoArray>
+        <InfoArray index="Train5">
+            <Button Requirements=""/>
+        </InfoArray>
+        <InfoArray index="Train6">
+            <Button Requirements=""/>
+        </InfoArray>
+        <InfoArray index="Train7">
+            <Button Requirements=""/>
+        </InfoArray>
+        <InfoArray index="Train8">
+            <Button Requirements=""/>
+        </InfoArray>
+        <InfoArray index="Train10">
+            <Button Requirements=""/>
+        </InfoArray>
+        <InfoArray index="Train11">
+            <Button Requirements=""/>
+        </InfoArray>
+        <InfoArray index="Train12">
+            <Button Requirements=""/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilMorph id="MorphToBroodLord">
+        <CmdButtonArray index="Execute" Requirements=""/>
+    </CAbilMorph>
+    <CAbilTrain id="MorphZerglingToBaneling">
+        <InfoArray index="Train1">
+            <Button Requirements=""/>
+        </InfoArray>
+    </CAbilTrain>
+</Catalog>

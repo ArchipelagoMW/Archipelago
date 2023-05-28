@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWeaponLegacy id="SuperMarine">
+        <Range value="6"/>
+    </CWeaponLegacy>
+</Catalog>
