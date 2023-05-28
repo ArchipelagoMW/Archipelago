@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Catalog>
+    <CUpgrade id="AP_RegenerativeBioSteel">
+        <!-- Override -->
+        <EffectArray Operation="Set" Reference="Unit,Odin,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,Odin,LifeRegenRate" Value="0.601500"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseTerranInfantryWeapons">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,CommandoRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,CommandoRifle,Amount" Value="3"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorWeaponU,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorGaussRifleDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusCommandoAttackDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,TychusChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusChaingun,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,Level" Value="1"/>
+        <EffectArray Reference="Weapon,SwannMelee,Level" Value="1"/>
+        <EffectArray Reference="Effect,DutchConcussiveGrenadeDamage,Amount" Value="3"/>
+        <EffectArray Reference="Weapon,Nova,Level" Value="1"/>
+        <EffectArray Reference="Effect,Nova,Amount" Value="3"/>
+        <EffectArray Reference="Weapon,Tosh,Level" Value="1"/>
+        <EffectArray Reference="Effect,ToshU,Amount" Value="4"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseTerranInfantryWeaponsUltraCapacitors">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,CommandoRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,CommandoRifle,Amount" Value="3"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorWeaponU,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorGaussRifleDamage,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusCommandoAttackDamage,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,TychusChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusChaingun,Amount" Value="2"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,Level" Value="1"/>
+        <EffectArray Reference="Weapon,SwannMelee,Level" Value="1"/>
+        <EffectArray Reference="Effect,DutchConcussiveGrenadeDamage,Amount" Value="3"/>
+        <EffectArray Reference="Weapon,Nova,Level" Value="1"/>
+        <EffectArray Reference="Effect,Nova,Amount" Value="3"/>
+        <EffectArray Reference="Weapon,Tosh,Level" Value="1"/>
+        <EffectArray Reference="Effect,ToshU,Amount" Value="4"/>
+        <EffectArray Reference="Weapon,CommandoRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,TychusChaingun,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,SwannMelee,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,Nova,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,Tosh,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseTerranInfantryArmors">
+        <!-- Override -->
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmor" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseTerranInfantryArmorsVanadiumPlating">
+        <!-- Override -->
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,RaynorCommando,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,RaynorCommando,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor01,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor01,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusCommando,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusCommando,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusChaingun,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusChaingun,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Swann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Swann,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Swann,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Stetmann,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Stetmann,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Nova,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Nova,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Nova,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Tosh,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Tosh,LifeStart" Value="1.05"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseTerranVehicleWeapons">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Odin,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinDamage,Amount" Value="4"/>
+        <EffectArray Reference="Effect,OdinDamage,AttributeBonus[Structure]" Value="5"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,AttributeBonus[Armored]" Value="1.000000"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseTerranVehicleWeaponsUltraCapacitors">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Odin,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinDamage,Amount" Value="4"/>
+        <EffectArray Reference="Effect,OdinDamage,AttributeBonus[Structure]" Value="5"/>
+        <EffectArray Reference="Weapon,Odin,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,AttributeBonus[Armored]" Value="1.000000"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseTerranVehicleArmors">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Odin,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Odin,LifeArmorLevel" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_BaseTerranVehicleArmorsVanadiumPlating">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Odin,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Odin,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Odin,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Odin,LifeStart" Value="1.05"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,CommandoRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,CommandoRifle,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,CommandoRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorWeaponU,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorGaussRifleDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusCommandoAttackDamage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusCommandoChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,TychusChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusChaingun,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,Level" Value="1"/>
+        <EffectArray Reference="Weapon,SwannMelee,Level" Value="1"/>
+        <EffectArray Reference="Effect,DutchConcussiveGrenadeDamage,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,DutchConcussiveGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,Nova,Level" Value="1"/>
+        <EffectArray Reference="Effect,Nova,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,Nova,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,Tosh,Level" Value="1"/>
+        <EffectArray Reference="Effect,ToshU,Amount" Value="4"/>
+        <EffectArray Operation="Set" Reference="Weapon,Tosh,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,CommandoRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,CommandoRifle,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,CommandoRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorWeaponU,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorGaussRifleDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusCommandoAttackDamage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusCommandoChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,TychusChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusChaingun,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,Level" Value="1"/>
+        <EffectArray Reference="Weapon,SwannMelee,Level" Value="1"/>
+        <EffectArray Reference="Effect,DutchConcussiveGrenadeDamage,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,DutchConcussiveGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,Nova,Level" Value="1"/>
+        <EffectArray Reference="Effect,Nova,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,Nova,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,Tosh,Level" Value="1"/>
+        <EffectArray Reference="Effect,ToshU,Amount" Value="4"/>
+        <EffectArray Operation="Set" Reference="Weapon,Tosh,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,CommandoRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,CommandoRifle,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,CommandoRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorWeaponU,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorGaussRifleDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusCommandoAttackDamage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusCommandoChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,TychusChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusChaingun,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,Level" Value="1"/>
+        <EffectArray Reference="Weapon,SwannMelee,Level" Value="1"/>
+        <EffectArray Reference="Effect,DutchConcussiveGrenadeDamage,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,DutchConcussiveGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,Nova,Level" Value="1"/>
+        <EffectArray Reference="Effect,Nova,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,Nova,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,Tosh,Level" Value="1"/>
+        <EffectArray Reference="Effect,ToshU,Amount" Value="4"/>
+        <EffectArray Operation="Set" Reference="Weapon,Tosh,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsUltraCapacitorsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,CommandoRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,CommandoRifle,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,CommandoRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorWeaponU,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorGaussRifleDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusCommandoAttackDamage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusCommandoChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,TychusChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusChaingun,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,Level" Value="1"/>
+        <EffectArray Reference="Weapon,SwannMelee,Level" Value="1"/>
+        <EffectArray Reference="Effect,DutchConcussiveGrenadeDamage,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,DutchConcussiveGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,Nova,Level" Value="1"/>
+        <EffectArray Reference="Effect,Nova,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,Nova,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,Tosh,Level" Value="1"/>
+        <EffectArray Reference="Effect,ToshU,Amount" Value="4"/>
+        <EffectArray Operation="Set" Reference="Weapon,Tosh,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel1.dds"/>
+        <EffectArray Reference="Weapon,CommandoRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,TychusChaingun,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,SwannMelee,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,Nova,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,Tosh,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsUltraCapacitorsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,CommandoRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,CommandoRifle,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,CommandoRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorWeaponU,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorGaussRifleDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusCommandoAttackDamage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusCommandoChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,TychusChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusChaingun,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,Level" Value="1"/>
+        <EffectArray Reference="Weapon,SwannMelee,Level" Value="1"/>
+        <EffectArray Reference="Effect,DutchConcussiveGrenadeDamage,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,DutchConcussiveGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,Nova,Level" Value="1"/>
+        <EffectArray Reference="Effect,Nova,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,Nova,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,Tosh,Level" Value="1"/>
+        <EffectArray Reference="Effect,ToshU,Amount" Value="4"/>
+        <EffectArray Operation="Set" Reference="Weapon,Tosh,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel2.dds"/>
+        <EffectArray Reference="Weapon,CommandoRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,TychusChaingun,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,SwannMelee,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,Nova,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,Tosh,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryWeaponsUltraCapacitorsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,CommandoRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,CommandoRifle,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,CommandoRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorWeaponU,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,Level" Value="1"/>
+        <EffectArray Reference="Effect,RaynorGaussRifleDamage,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,RaynorGaussRifle,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusCommandoAttackDamage,Amount" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusCommandoChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,TychusChaingun,Level" Value="1"/>
+        <EffectArray Reference="Effect,TychusChaingun,Amount" Value="2"/>
+        <EffectArray Operation="Set" Reference="Weapon,TychusChaingun,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,Level" Value="1"/>
+        <EffectArray Reference="Weapon,SwannMelee,Level" Value="1"/>
+        <EffectArray Reference="Effect,DutchConcussiveGrenadeDamage,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,DutchConcussiveGrenade,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,Nova,Level" Value="1"/>
+        <EffectArray Reference="Effect,Nova,Amount" Value="3"/>
+        <EffectArray Operation="Set" Reference="Weapon,Nova,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,Tosh,Level" Value="1"/>
+        <EffectArray Reference="Effect,ToshU,Amount" Value="4"/>
+        <EffectArray Operation="Set" Reference="Weapon,Tosh,Icon" Value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel3.dds"/>
+        <EffectArray Reference="Weapon,CommandoRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,RaynorGaussRifle,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,TychusCommandoChaingun,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,TychusChaingun,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,DutchConcussiveGrenade,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,SwannMelee,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,Nova,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,Tosh,RateMultiplier" Value="0.05"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmor" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,RaynorCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor01,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusChaingun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Dutch,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Bones,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Nova,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Tosh,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmor" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,RaynorCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor01,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusChaingun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Dutch,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Bones,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Nova,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Tosh,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmor" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,RaynorCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor01,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusChaingun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Dutch,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Bones,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Nova,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Tosh,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsVanadiumPlatingLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,RaynorCommando,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,RaynorCommando,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor01,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor01,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusCommando,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusCommando,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusChaingun,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusChaingun,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Swann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Swann,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Swann,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Stetmann,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Stetmann,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Nova,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Nova,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Nova,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Tosh,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Tosh,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,RaynorCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor01,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusChaingun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Dutch,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Bones,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Nova,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Tosh,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsVanadiumPlatingLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,RaynorCommando,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,RaynorCommando,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor01,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor01,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusCommando,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusCommando,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusChaingun,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusChaingun,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Swann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Swann,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Swann,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Stetmann,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Stetmann,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Nova,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Nova,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Nova,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Tosh,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Tosh,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,RaynorCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor01,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusChaingun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Dutch,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Bones,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Nova,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Tosh,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranInfantryArmorsVanadiumPlatingLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,RaynorCommando,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,RaynorCommando,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,RaynorCommando,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Raynor01,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor01,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Raynor01,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusCommando,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusCommando,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusCommando,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,TychusChaingun,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusChaingun,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,TychusChaingun,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Swann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Swann,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Swann,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Swann,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Stetmann,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Stetmann,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Stetmann,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Nova,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Nova,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Nova,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Nova,LifeStart" Value="1.05"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,Tosh,LifeArmor" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Tosh,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Tosh,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,RaynorCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Raynor01,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusCommando,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,TychusChaingun,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Dutch,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Bones,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Nova,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,Tosh,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Odin,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinDamage,Amount" Value="4"/>
+        <EffectArray Reference="Effect,OdinDamage,AttributeBonus[Structure]" Value="5"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,AttributeBonus[Armored]" Value="1.000000"/>
+        <EffectArray Operation="Set" Reference="Weapon,Odin,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,OdinAntiAir,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Odin,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinDamage,Amount" Value="4"/>
+        <EffectArray Reference="Effect,OdinDamage,AttributeBonus[Structure]" Value="5"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,AttributeBonus[Armored]" Value="1.000000"/>
+        <EffectArray Operation="Set" Reference="Weapon,Odin,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,OdinAntiAir,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Odin,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinDamage,Amount" Value="4"/>
+        <EffectArray Reference="Effect,OdinDamage,AttributeBonus[Structure]" Value="5"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,AttributeBonus[Armored]" Value="1.000000"/>
+        <EffectArray Operation="Set" Reference="Weapon,Odin,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,OdinAntiAir,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsUltraCapacitorsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Odin,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinDamage,Amount" Value="4"/>
+        <EffectArray Reference="Effect,OdinDamage,AttributeBonus[Structure]" Value="5"/>
+        <EffectArray Reference="Weapon,Odin,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,AttributeBonus[Armored]" Value="1.000000"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,Odin,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,OdinAntiAir,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsUltraCapacitorsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Odin,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinDamage,Amount" Value="4"/>
+        <EffectArray Reference="Effect,OdinDamage,AttributeBonus[Structure]" Value="5"/>
+        <EffectArray Reference="Weapon,Odin,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,AttributeBonus[Armored]" Value="1.000000"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,Odin,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,OdinAntiAir,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleWeaponsUltraCapacitorsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Weapon,Odin,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinDamage,Amount" Value="4"/>
+        <EffectArray Reference="Effect,OdinDamage,AttributeBonus[Structure]" Value="5"/>
+        <EffectArray Reference="Weapon,Odin,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,Level" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,Amount" Value="1"/>
+        <EffectArray Reference="Effect,OdinAADamage,AttributeBonus[Armored]" Value="1.000000"/>
+        <EffectArray Reference="Weapon,OdinAntiAir,RateMultiplier" Value="0.05"/>
+        <EffectArray Operation="Set" Reference="Weapon,Odin,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,OdinAntiAir,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Odin,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Odin,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Odin,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Odin,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Odin,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Odin,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Odin,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Odin,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Set" Reference="Actor,Odin,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsVanadiumPlatingLevel1">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Odin,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Odin,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Odin,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Odin,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,Odin,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsVanadiumPlatingLevel2">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Odin,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Odin,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Odin,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Odin,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,Odin,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TerranVehicleArmorsVanadiumPlatingLevel3">
+        <!-- Override -->
+        <EffectArray Reference="Unit,Odin,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,Odin,LifeArmorLevel" Value="1"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Odin,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,Odin,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Set" Reference="Actor,Odin,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+    </CUpgrade>
+</Catalog>
