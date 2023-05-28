@@ -57,6 +57,8 @@ class PokemonRedBlueWorld(World):
         super().__init__(world, player)
         self.fly_map = None
         self.fly_map_code = None
+        self.town_map_fly_map = None
+        self.town_map_fly_map_code = None
         self.extra_badges = {}
         self.type_chart = None
         self.local_poke_data = None
@@ -68,7 +70,6 @@ class PokemonRedBlueWorld(World):
         self.type_chart = None
         self.traps = None
         self.trade_mons = {}
-        self.warp_data = None
         self.finished_level_scaling = threading.Event()
 
     @classmethod
@@ -248,6 +249,7 @@ class PokemonRedBlueWorld(World):
                     break
 
         card_keys = [self.create_item(f"Card Key {i}F") for i in range(3, 12)]
+        card_keys = [self.create_item("Progressive Card Key") for _ in range(3, 12)]
 
         for item in item_pool:
             if item.name in self.item_name_groups["Consumables"]:
@@ -326,22 +328,23 @@ class PokemonRedBlueWorld(World):
 
         if not self.multiworld.badgesanity[self.player].value:
             self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
-            for i in range(5):
-                try:
-                    badges = []
-                    badgelocs = []
-                    for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
-                                  "Marsh Badge", "Volcano Badge", "Earth Badge"]:
-                        badges.append(self.create_item(badge))
-                    for loc in ["Pewter Gym - Brock 1", "Cerulean Gym - Misty 1", "Vermilion Gym - Lt. Surge 1",
-                                "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
-                                "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
-                        badgelocs.append(self.multiworld.get_location(loc, self.player))
-                    state = self.multiworld.get_all_state(False)
-                    self.multiworld.random.shuffle(badges)
-                    self.multiworld.random.shuffle(badgelocs)
-                    fill_restrictive(self.multiworld, state, badgelocs.copy(), badges, True, True)
-                except FillError:
+            for _ in range(5):
+                badges = []
+                badgelocs = []
+                for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
+                              "Marsh Badge", "Volcano Badge", "Earth Badge"]:
+                    badges.append(self.create_item(badge))
+                for loc in ["Pewter Gym - Brock 1", "Cerulean Gym - Misty 1", "Vermilion Gym - Lt. Surge 1",
+                            "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
+                            "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
+                    badgelocs.append(self.multiworld.get_location(loc, self.player))
+                state = self.multiworld.get_all_state(False)
+                self.multiworld.random.shuffle(badges)
+                self.multiworld.random.shuffle(badgelocs)
+                # allow_partial so that unplaced badges aren't lost, for debugging purposes
+                badgelocs_copy = badgelocs.copy()
+                fill_restrictive(self.multiworld, state, badgelocs_copy, badges, True, True, allow_partial=True)
+                if badges:
                     for location in badgelocs:
                         location.item = None
                     continue
@@ -385,19 +388,28 @@ class PokemonRedBlueWorld(World):
             self.multiworld.itempool += unplaced_items
 
     def create_regions(self):
-        if self.multiworld.free_fly_location[self.player].value:
-            if self.multiworld.old_man[self.player].value == 0:
-                fly_map_code = self.multiworld.random.randint(2, 10)
-            else:
-                fly_map_code = self.multiworld.random.randint(5, 10)
-                if fly_map_code == 5:
-                    fly_map_code = 4
+        #  or self.multiworld.town_map_fly_location[self.player]:
+        if self.multiworld.old_man[self.player].value == 0: # OR ENTRANCE SHUFFLE
+            fly_map_codes = self.multiworld.random.sample(range(2, 11), 2)
+        else:
+            fly_map_codes = self.multiworld.random.sample([4, 6, 7, 8, 9, 10], 2)
+        # else:
+        #     fly_map_code = 0
+        if self.multiworld.free_fly_location[self.player]:
+            fly_map_code = fly_map_codes[0]
         else:
             fly_map_code = 0
-        self.fly_map = ["Pallet Town", "Viridian City", "Pewter City", "Cerulean City", "Lavender Town",
-                        "Vermilion City", "Celadon City", "Fuchsia City", "Cinnabar Island", "Indigo Plateau",
-                        "Saffron City"][fly_map_code]
+        if self.multiworld.town_map_fly_location[self.player]:
+            town_map_fly_map_code = fly_map_codes[1]
+        else:
+            town_map_fly_map_code = 0
+        fly_maps = ["Pallet Town", "Viridian City", "Pewter City", "Cerulean City", "Lavender Town",
+                    "Vermilion City", "Celadon City", "Fuchsia City", "Cinnabar Island", "Indigo Plateau",
+                    "Saffron City"]
+        self.fly_map = fly_maps[fly_map_code]
+        self.town_map_fly_map = fly_maps[town_map_fly_map_code]
         self.fly_map_code = fly_map_code
+        self.town_map_fly_map_code = town_map_fly_map_code
 
         create_regions(self)
         self.multiworld.completion_condition[self.player] = lambda state, player=self.player: state.has("Become Champion", player=player)
@@ -416,8 +428,10 @@ class PokemonRedBlueWorld(World):
         generate_output(self, output_directory)
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
-        if self.multiworld.free_fly_location[self.player].value:
-            spoiler_handle.write('Fly unlocks:                     %s\n' % self.fly_map)
+        if self.multiworld.free_fly_location[self.player]:
+            spoiler_handle.write('Free Fly Location:               %s\n' % self.fly_map)
+        if self.multiworld.town_map_fly_location[self.player]:
+            spoiler_handle.write('Town Map Fly Location:           %s\n' % self.town_map_fly_map)
         if self.extra_badges:
             for hm_move, badge in self.extra_badges.items():
                 spoiler_handle.write(hm_move + " enabled by: " + (" " * 20)[:20 - len(hm_move)] + badge + "\n")
@@ -456,7 +470,7 @@ class PokemonRedBlueWorld(World):
         if self.multiworld.dexsanity[self.player]:
             hint_data[self.player] = {}
             mon_locations = {mon: set() for mon in poke_data.pokemon_data.keys()}
-            for loc in location_data: #self.multiworld.get_locations(self.player):
+            for loc in location_data:
                 if loc.type in ["Wild Encounter", "Static Pokemon", "Legendary Pokemon", "Missable Pokemon"]:
                     mon = self.multiworld.get_location(loc.name, self.player).item.name
                     if mon.startswith("Static ") or mon.startswith("Missable "):
@@ -485,6 +499,7 @@ class PokemonRedBlueWorld(World):
             "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
             "cerulean_cave_condition": self.multiworld.cerulean_cave_condition[self.player].value,
             "free_fly_map": self.fly_map_code,
+            "town_map_fly_map": self.town_map_fly_map_code,
             "extra_badges": self.extra_badges,
             "type_chart": self.type_chart,
             "randomize_pokedex": self.multiworld.randomize_pokedex[self.player].value,

@@ -41,9 +41,12 @@ def set_rules(world, player):
         "Route 25 - Item": lambda state: state.pokemon_rb_can_cut(player),
         "Fuchsia Warden's House - Behind Boulder Item": lambda state: state.pokemon_rb_can_strength(player),
         "Safari Zone Center - Island Item": lambda state: state.pokemon_rb_can_surf(player),
+        "Saffron Copycat's House 2F - Copycat": lambda state: state.has("Buy Poke Doll", player),
+
         "Celadon Prize Corner - Item Prize 1": lambda state: state.has("Coin Case", player),
         "Celadon Prize Corner - Item Prize 2": lambda state: state.has("Coin Case", player),
         "Celadon Prize Corner - Item Prize 3": lambda state: state.has("Coin Case", player),
+
         "Celadon Game Corner - West Gambler's Gift (Coin Case)": lambda state: state.has("Coin Case", player),
         "Celadon Game Corner - Center Gambler's Gift (Coin Case)": lambda state: state.has("Coin Case", player),
         "Celadon Game Corner - East Gambler's Gift (Coin Case)": lambda state: state.has("Coin Case", player),
@@ -70,11 +73,15 @@ def set_rules(world, player):
         "Cinnabar Lab Fossil Room - Dome Fossil Pokemon": lambda state: state.has("Dome Fossil", player),
         "Route 12 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Route 16 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
-        "Seafoam Islands B4F - Legendary Pokemon": lambda state: state.pokemon_rb_can_strength(player),
+        "Seafoam Islands B4F - Legendary Pokemon": lambda state: state.pokemon_rb_can_strength(player) and state.pokemon_rb_can_surf(player),
         "Vermilion Dock - Legendary Pokemon": lambda state: state.pokemon_rb_can_surf(player),
         "Cerulean Cave B1F - Legendary Pokemon": lambda state: state.pokemon_rb_can_surf(player),
 
         **{f"Pokemon Tower {floor}F - Wild Pokemon - {slot}": lambda state: state.has("Silph Scope", player) for floor in range(3, 8) for slot in range(1, 11)},
+
+        "Silph Co 1F - Receptionist": lambda state: state.has("Silph Co Liberated", player),
+        "Silph Co 5F - Hostage": lambda state: state.pokemon_rb_card_key(5, player),
+        "Silph Co 6F - Hostage": lambda state: state.pokemon_rb_card_key(5, player),
 
         "Route 2 Trade House - Marcel Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
         "Underground Path Route 5 - Spot Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
@@ -127,7 +134,7 @@ def set_rules(world, player):
         "Rocket Hideout B1F - Hidden Item Pot Plant": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B3F - Hidden Item Near East Item": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Rocket Hideout B4F - Hidden Item Behind Giovanni (Lift Key)": lambda state:
-            state.pokemon_rb_can_get_hidden_items(player) and state.has("Lift Key", player),
+            state.pokemon_rb_can_get_hidden_items(player),
         "Pokemon Tower 5F - Hidden Item Near West Staircase": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Route 13 - Hidden Item Dead End Bush": lambda state: state.pokemon_rb_can_get_hidden_items(player),
@@ -144,7 +151,8 @@ def set_rules(world, player):
         "Power Plant - Hidden Item Central Dead End": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Power Plant - Hidden Item Before Zapdos": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Seafoam Islands B2F - Hidden Item Rock": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Seafoam Islands B4F - Hidden Item Corner Island": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Seafoam Islands B3F - Hidden Item Rock": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+        "Seafoam Islands B4F - Hidden Item Corner Island": lambda state: state.pokemon_rb_can_get_hidden_items(player) and state.pokemon_rb_can_surf(player),
         "Pokemon Mansion 1F - Hidden Item Block Near Entrance Carpet": lambda
             state: state.pokemon_rb_can_get_hidden_items(player),
         "Pokemon Mansion 3F - Hidden Item Behind Burglar": lambda state: state.pokemon_rb_can_get_hidden_items(player),
@@ -175,7 +183,6 @@ def set_rules(world, player):
             player),
         "Route 25 - Hidden Item Northeast Of Grass": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Mt Moon B2F - Hidden Item Lone Rock": lambda state: state.pokemon_rb_can_get_hidden_items(player),
-        "Seafoam Islands B3F - Hidden Item Rock": lambda state: state.pokemon_rb_can_get_hidden_items(player),
         "Vermilion City - Hidden Item In Water Near Fan Club": lambda state: state.pokemon_rb_can_get_hidden_items(
             player) and state.pokemon_rb_can_surf(player),
         "Cerulean City - Hidden Item Gym Badge Guy's Backyard": lambda state: state.pokemon_rb_can_get_hidden_items(

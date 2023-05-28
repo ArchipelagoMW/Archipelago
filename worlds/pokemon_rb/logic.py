@@ -58,6 +58,10 @@ class PokemonLogic(LogicMixin):
         return len([item for item in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",
                                       "Soul Badge", "Volcano Badge", "Earth Badge"] if self.has(item, player)]) >= count
 
+    def pokemon_rb_tower(self, player):
+        # todo: option
+        return self.has("Silph Scope", player)
+
     def pokemon_rb_oaks_aide(self, count, player):
         return ((not self.multiworld.require_pokedex[player] or self.has("Pokedex", player))
                 and self.pokemon_rb_has_pokemon(count, player))
@@ -88,7 +92,7 @@ class PokemonLogic(LogicMixin):
 
     def pokemon_rb_card_key(self, floor, player):
         return self.has(f"Card Key {floor}F", player) or self.has("Card Key", player) or \
-               self.has("Progressive Card Key", player, 1)
+               self.has("Progressive Card Key", player, floor - 1)
 
     def pokemon_rb_rock_tunnel(self, player):
         # todo: option

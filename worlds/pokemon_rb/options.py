@@ -45,11 +45,19 @@ class EliteFourCondition(Range):
 
 
 class VictoryRoadCondition(Range):
-    """Number of badges required to reach Victory Road."""
+    """Number of badges required to reach the front entrance of Victory Road."""
     display_name = "Victory Road Condition"
     range_start = 0
     range_end = 8
-    default = 8
+    default = 7
+
+
+class Route22GateCondition(Range):
+    """Number of badges required to pass through the Route 22 Gate"""
+    display_name = "Route 22 Gate Condition"
+    range_start = 0
+    range_end = 7
+    default = 7
 
 
 class ViridianGymCondition(Range):
@@ -67,6 +75,22 @@ class CeruleanCaveCondition(Range):
     range_start = 0
     range_end = 26
     default = 20
+
+
+class Route3Condition(Choice):
+    display_name = "Route 3 Condition"
+    option_defeat_brock = 0
+    option_defeat_any_gym = 1
+    option_boulder_badge = 2
+    option_any_badge = 3
+    option_open = 4
+    default = 0
+
+
+class RobbedHouseOfficer(Toggle):
+    """You can disable to remove the requirement to help Bill before you can enter the robbed house in Cerulean City."""
+    display_name = "Robbed House Officer"
+    default = 1
 
 
 class SecondFossilCheckCondition(Range):
@@ -129,6 +153,24 @@ class ExtraKeyItems(Toggle):
     Adds four item pickups to Rock Tunnel B1F."""
     display_name = "Extra Key Items"
     default = 0
+
+
+class SplitCardKey(Choice):
+    """Splits the Card Key item into 10 different Keys, one for each Silph Co floor 2F through 11F.
+    Adds 9 location checks to Silph Co.
+    With Progressive, you will always obtain the keys in order from 2F to 11F."""
+    display_name = "Split Card Key"
+    option_off = 0
+    option_on = 1
+    option_progressive = 2
+    default = 0
+
+
+class AllElevatorsLocked(Toggle):
+    """Adds requirements to the Celadon Department Store elevator and Silph Co elevators to have the Lift Key.
+    No logical implications normally, but may have a significant impact on Insanity Door Shuffle."""
+    display_name = "All Elevators Locked"
+    default = 1
 
 
 class ExtraStrengthBoulders(Toggle):
@@ -194,16 +236,33 @@ class DexSanity(Toggle):
 
 
 class FreeFlyLocation(Toggle):
-    """One random fly destination will be unlocked by default."""
+    """One random Fly destination will be unlocked by default."""
     display_name = "Free Fly Location"
     default = 1
 
 
+class TownMapFlyLocation(Toggle):
+    """One random Fly destination will be unlocked when you obtain the Town Map."""
+    display_name = "Town Map Fly Location"
+    default = 0
+
+
+class DoorShuffle(Choice):
+    """Simple: entrances are randomized together in groups: Pokemarts, Gyms, single exit dungeons, dual exit dungeons,
+    single exit misc interiors, dual exit misc interiors are all shuffled separately.
+    Full: Any outdoor entrance may lead to any interior.
+    Insanity: All warps in the game are shuffled."""
+    display_name = "Door Shuffle"
+    option_off = 0
+    option_simple = 1
+    option_full = 2
+    option_insanity = 3
+    default = 0
+
+
 class RandomizeRockTunnel(Toggle):
-    """Randomize the layout of Rock Tunnel. This is highly experimental, if you encounter any issues (items or trainers
-     unreachable, trainers walking over walls, inability to reach end of tunnel, anything looking strange) to
-     Alchav#8826 in the Archipelago Discord (directly or in #pkmn-red-blue) along with the seed number found on the
-     signs outside the tunnel."""
+    """Randomize the layout of Rock Tunnel.
+    If Insanity Door Shuffle is on, this will cause only the main entrances to Rock Tunnel to be shuffled."""
     display_name = "Randomize Rock Tunnel"
     default = 0
 
@@ -212,7 +271,7 @@ class OaksAidRt2(Range):
     """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 2.
     Vanilla is 10."""
     display_name = "Oak's Aide Route 2"
-    range_start = 0
+    range_start = 1
     range_end = 80
     default = 10
 
@@ -221,7 +280,7 @@ class OaksAidRt11(Range):
     """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 11.
     Vanilla is 30."""
     display_name = "Oak's Aide Route 11"
-    range_start = 0
+    range_start = 1
     range_end = 80
     default = 20
 
@@ -230,7 +289,7 @@ class OaksAidRt15(Range):
     """Number of Pokemon registered in the Pokedex required to receive the item from Oak's Aide on Route 15.
     Vanilla is 50."""
     display_name = "Oak's Aide Route 15"
-    range_start = 0
+    range_start = 1
     range_end = 80
     default = 30
 
@@ -656,29 +715,36 @@ pokemon_rb_options = {
     #"goal": Goal,
     "elite_four_condition": EliteFourCondition,
     "victory_road_condition": VictoryRoadCondition,
+    "route_22_gate_condition": Route22GateCondition,
     "viridian_gym_condition": ViridianGymCondition,
     "cerulean_cave_condition": CeruleanCaveCondition,
+    "route_3_condition": Route3Condition,
+    "robbed_house_officer": RobbedHouseOfficer,
     "second_fossil_check_condition": SecondFossilCheckCondition,
-    "badgesanity": BadgeSanity,
     "old_man": OldMan,
-    "randomize_pokedex": RandomizePokedex,
+    "badgesanity": BadgeSanity,
+    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
     "tea": Tea,
     "extra_key_items": ExtraKeyItems,
+    "split_card_key": SplitCardKey,
+    "all_elevators_locked": AllElevatorsLocked,
     "extra_strength_boulders": ExtraStrengthBoulders,
     "require_item_finder": RequireItemFinder,
     "randomize_hidden_items": RandomizeHiddenItems,
     "prizesanity": PrizeSanity,
     "trainersanity": TrainerSanity,
+    "dexsanity": DexSanity,
+    "randomize_pokedex": RandomizePokedex,
     "require_pokedex": RequirePokedex,
     "all_pokemon_seen": AllPokemonSeen,
-    "dexsanity": DexSanity,
     "oaks_aide_rt_2": OaksAidRt2,
     "oaks_aide_rt_11": OaksAidRt11,
     "oaks_aide_rt_15": OaksAidRt15,
     "stonesanity": Stonesanity,
-    "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
-    "free_fly_location": FreeFlyLocation,
+    "door_shuffle": DoorShuffle,
     "randomize_rock_tunnel": RandomizeRockTunnel,
+    "free_fly_location": FreeFlyLocation,
+    "town_map_fly_location": TownMapFlyLocation,
     "blind_trainers": BlindTrainers,
     "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
     "exp_modifier": ExpModifier,

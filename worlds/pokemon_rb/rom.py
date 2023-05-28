@@ -9,8 +9,7 @@ from .rom_addresses import rom_addresses
 from .locations import location_data
 from .items import item_table
 from .rock_tunnel import randomize_rock_tunnel
-from .regions import PokemonRBWarp
-from .map_shuffle import map_ids
+from .regions import PokemonRBWarp, map_ids
 import worlds.pokemon_rb.poke_data as poke_data
 
 
@@ -676,7 +675,6 @@ def generate_output(self, output_directory: str):
 
             # data[location.rom_address - 1] = location.level
 
-    from .map_shuffle import warp_data, map_ids
     # for region in warp_data:
     #     for entrance in warp_data[region]:
     #         if isinstance(entrance["id"], int):
@@ -747,13 +745,18 @@ def generate_output(self, output_directory: str):
 
     lab_loc = self.multiworld.get_entrance("Oak's Lab to Pallet Town", self.player).target
     paths = None
-    if lab_loc == 0:
+    if lab_loc == 0:  # Player's House
         paths = ((0x00, 4, 0x80, 5, 0x40, 1, 0xE0, 1, 0xFF), (0x40, 2, 0x20, 5, 0x80, 5, 0xFF))
-    elif lab_loc == 1:
+    elif lab_loc == 1:  # Rival's House
         paths = ((0x00, 4, 0xC0, 3, 0x40, 1, 0xE0, 1, 0xFF), (0x40, 2, 0x10, 3, 0x80, 5, 0xFF))
     if paths:
         write_bytes(data, paths[0], rom_addresses["Path_Pallet_Oak"])
         write_bytes(data, paths[1], rom_addresses["Path_Pallet_Player"])
+    home_loc = self.multiworld.get_entrance("Player's House 1F to Pallet Town", self.player).target
+    if home_loc == 1:  # Rival's House
+        write_bytes(data, [0x2F, 0xC7, 0x06, 0x0D, 0x00, 0x01], rom_addresses["Pallet_Fly_Coords"])
+    elif home_loc == 2:  # Oak's Lab
+        write_bytes(data, [0x5F, 0xC7, 0x0C, 0x0C, 0x00, 0x00], rom_addresses["Pallet_Fly_Coords"])
 
     for region in self.multiworld.get_regions(self.player):
         for entrance in region.exits:
@@ -782,21 +785,27 @@ def generate_output(self, output_directory: str):
             continue
         elif location.party_data:
             for party in location.party_data:
-                address = rom_addresses[party["party_address"]]
-                levels = party["level"]
-                if isinstance(levels, int):
-                    data[address] = levels
-                    address += 1
-                    for mon in party["party"]:
-                        data[address] = poke_data.pokemon_data[mon]["id"]
-                        address += 1
+                if not isinstance(party["party_address"], list):
+                    addresses = [rom_addresses[party["party_address"]]]
+                    parties = [party["party"]]
                 else:
-                    address += 1
-                    for level, mon in zip(levels, party["party"]):
-                        data[address] = level
-                        data[address+1] = poke_data.pokemon_data[mon]["id"]
-                        address += 2
-                assert data[address] == 0 or location.name == "Fossil Level - Trainer Parties"
+                    addresses = [rom_addresses[address] for address in party["party_address"]]
+                    parties = party["party"]
+                levels = party["level"]
+                for address, party in zip(addresses, parties):
+                    if isinstance(levels, int):
+                        data[address] = levels
+                        address += 1
+                        for mon in party:
+                            data[address] = poke_data.pokemon_data[mon]["id"]
+                            address += 1
+                    else:
+                        address += 1
+                        for level, mon in zip(levels, party):
+                            data[address] = level
+                            data[address+1] = poke_data.pokemon_data[mon]["id"]
+                            address += 2
+                    assert data[address] == 0 or location.name == "Fossil Level - Trainer Parties"
             continue
         elif location.rom_address is None:
             continue
@@ -843,14 +852,22 @@ def generate_output(self, output_directory: str):
     set_trade_mon("Trade_Crinkles", "Route 12 - Wild Pokemon - 4")
 
     data[rom_addresses['Fly_Location']] = self.fly_map_code
+    data[rom_addresses['Map_Fly_Location']] = self.town_map_fly_map_code
+
+    if self.multiworld.door_shuffle[self.player]:
+        data[rom_addresses["Entrance_Shuffle_Fuji_Warp"]] = 1
+
+    if self.multiworld.all_elevators_locked[self.player]:
+        data[rom_addresses["Option_Locked_Elevator_Celadon"]] = 0x20  # jr nz
+        data[rom_addresses["Option_Locked_Elevator_Silph"]] = 0x20    # jr nz
 
     if self.multiworld.tea[self.player].value:
         data[rom_addresses["Option_Tea"]] = 1
         data[rom_addresses["Guard_Drink_List"]] = 0x54
         data[rom_addresses["Guard_Drink_List"] + 1] = 0
         data[rom_addresses["Guard_Drink_List"] + 2] = 0
-        write_bytes(data,encode_text("<LINE>Gee, I have the<CONT>worst caffeine<CONT>headache though."
-                                     "<PARA>Oh wait there,<LINE>the road's closed.<DONE>"),
+        write_bytes(data, encode_text("<LINE>Gee, I have the<CONT>worst caffeine<CONT>headache though."
+                                      "<PARA>Oh wait there,<LINE>the road's closed.<DONE>"),
                     rom_addresses["Text_Saffron_Gate"])
 
     data[rom_addresses["Fossils_Needed_For_Second_Item"]] = (
@@ -859,7 +876,10 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Option_Lose_Money"]] = int(not self.multiworld.lose_money_on_blackout[self.player].value)
 
     if self.multiworld.extra_key_items[self.player].value:
-        data[rom_addresses['Options']] |= 4
+        data[rom_addresses['Option_Extra_Key_Items_A']] = 1
+        data[rom_addresses['Option_Extra_Key_Items_B']] = 1
+        data[rom_addresses['Option_Extra_Key_Items_C']] = 1
+        data[rom_addresses['Option_Extra_Key_Items_D']] = 1
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.multiworld.blind_trainers[self.player].value * 2.55)
     data[rom_addresses['Option_Cerulean_Cave_Condition']] = self.multiworld.cerulean_cave_condition[self.player].value
     data[rom_addresses['Option_Encounter_Minimum_Steps']] = self.multiworld.minimum_steps_between_encounters[self.player].value
@@ -875,9 +895,15 @@ def generate_output(self, output_directory: str):
     if self.multiworld.extra_key_items[self.player].value:
         for i in range(0, 4):
             data[rom_addresses['Option_Rock_Tunnel_Extra_Items'] + (i * 3)] = 0x15
-    if self.multiworld.old_man[self.player].value == 2:
+    if self.multiworld.old_man[self.player] == "open_viridian_city":
         data[rom_addresses['Option_Old_Man']] = 0x11
         data[rom_addresses['Option_Old_Man_Lying']] = 0x15
+    if self.multiworld.route_3_condition[self.player] == "open":
+        data[rom_addresses['Option_Route3_Guard_A']] = 0x11
+        data[rom_addresses['Option_Route3_Guard_B']] = 0x11
+    if not self.multiworld.robbed_house_officer[self.player]:
+        data[rom_addresses['Option_Trashed_House_Guard_A']] = 0x15
+        data[rom_addresses['Option_Trashed_House_Guard_B']] = 0x11
     if self.multiworld.require_pokedex[self.player]:
         data[rom_addresses["Require_Pokedex_A"]] = 1
         data[rom_addresses["Require_Pokedex_B"]] = 1
@@ -894,10 +920,9 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Text_Badges_Needed_Viridian_Gym"]] = encode_text(
         str(self.multiworld.viridian_gym_condition[self.player].value))[0]
     data[rom_addresses["Text_Badges_Needed"]] = encode_text(
-        str(max(self.multiworld.victory_road_condition[self.player].value,
-                self.multiworld.elite_four_condition[self.player].value)))[0]
+        str(self.multiworld.elite_four_condition[self.player].value))[0]
     write_bytes(data, encode_text(
-        " ".join(self.multiworld.get_location("Route 3 - Pokemon For Sale", self.player).item.name.upper().split()[1:])),
+        " ".join(self.multiworld.get_location("Route 4 Pokemon Center - Pokemon For Sale", self.player).item.name.upper().split()[1:])),
                 rom_addresses["Text_Magikarp_Salesman"])
     write_quizzes(self, data, random)
 
