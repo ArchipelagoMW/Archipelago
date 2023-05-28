@@ -118,19 +118,13 @@
 <Soundtrack id="TValerian01MusicMain"/>
 <Terrain id="Char"/>
 <Unit id="Baneling"/>
-<Unit id="CommandCenter"/>
 <Unit id="Barracks"/>
-<Unit id="EngineeringBay"/>
-<Unit id="MissileTurret"/>
 <Unit id="Bunker"/>
-<Unit id="MercCompound"/>
-<Unit id="SiegeTankSieged"/>
 <Unit id="VikingFighter"/>
 <Unit id="SCV"/>
 <Unit id="Marine"/>
 <Unit id="Marauder"/>
 <Unit id="Medivac"/>
-<Unit id="Raven"/>
 <Unit id="Hatchery"/>
 <Unit id="SpawningPool"/>
 <Unit id="EvolutionChamber"/>
@@ -168,7 +162,6 @@
 <Unit id="InfestedCivilian" Variations="0,1,2"/>
 <Unit id="InfestedTerranCampaign"/>
 <Unit id="BattlecruiserHelios"/>
-<Unit id="Vulture"/>
 <Unit id="Scourge"/>
 <Unit id="ScrapHuge"/>
 <Unit id="DestructibleSandbags" Variations="0,1,2"/>
@@ -183,5 +176,18 @@
 <Unit id="TerranDropPod"/>
 <Unit id="Medic"/>
 <Unit id="WreckedBattlecruiserHeliosFinal"/>
-<Unit id="CampaignRead"/>
+<Unit id="AP_SiegeTankSieged"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Marauder"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Vulture"/>
+<Unit id="AP_Medivac"/>
+<Unit id="AP_Raven"/>
+<Unit id="AP_EngineeringBay"/>
+<Unit id="AP_MissileTurret"/>
+<Unit id="AP_Bunker"/>
+<Unit id="AP_MercCompound"/>
 </Preload>
