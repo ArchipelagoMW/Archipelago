@@ -30,8 +30,9 @@ nominate someone else (i.e. there are multiple devs).
 
 ### Getting Voted
 
-When a world is unmaintained, the core maintainers can vote for a new maintainer if there is a candidate. The majority
-of valid, duly votes has to be in favor. The time limit is 1 week, but can end early if the majority is reached earlier.
+When a world is unmaintained, the [core maintainers](https://github.com/orgs/ArchipelagoMW/people)
+can vote for a new maintainer if there is a candidate. The majority of valid, duly votes has to be in favor.
+The time limit is 1 week, but can end early if the majority is reached earlier.
 
 
 ## Dropping out
@@ -42,10 +43,10 @@ A world maintainer can resign. If no new maintainer steps up and gets voted, the
 
 ### Getting Voted out
 
-A world maintainer can be voted out by the core maintainers, for example when they become unreachable. The majority of
-valid, duly votes has to be in favor. The time limit is 2 weeks, but can end early if the majority is reached earlier
-AND the world maintainer was pinged and made their case or was pinged and has been unreachable for more than 2 weeks
-already.
+A world maintainer can be voted out by the [core maintainers](https://github.com/orgs/ArchipelagoMW/people),
+for example when they become unreachable. The majority of valid, duly votes has to be in favor.
+The time limit is 2 weeks, but can end early if the majority is reached earlier AND the world maintainer was pinged and
+made their case or was pinged and has been unreachable for more than 2 weeks already.
 
 
 ## Handling of Unmaintained Worlds
