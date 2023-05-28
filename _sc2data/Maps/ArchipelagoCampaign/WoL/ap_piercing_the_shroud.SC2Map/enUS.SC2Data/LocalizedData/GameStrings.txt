@@ -72,7 +72,7 @@ Param/Value/38995714=Hold 'em back!
 Param/Value/39F32FF0=+5 Grenades
 Param/Value/3A100204=<s val="THorner05sAllButtons">Release 65 Zerglings</s>
 Param/Value/3AA81C0C=Raynor must not die; it would be bad for his reputation.
-Param/Value/3BF968F3=</s>
+Param/Value/3B7AB0F7=Find Protoss Relics: (
 Param/Value/3C495105=
 Param/Value/41437E4C=<c val="FF0000"><s val="THorner05sAllButtons">Release Brutalisk</s></c>
 Param/Value/44583A89=<s val="THorner05sAllButtons">Brutalisk Security Cam</s>
@@ -142,7 +142,6 @@ Param/Value/88F88025=<s val="THorner05sAllButtons">Release 15 Zealots</s>
 Param/Value/8964CA54=
 Param/Value/89F27F0D=The Escape
 Param/Value/8CC100B0=Hybrid Disappeared
-Param/Value/8E6D4431=<s val="ObjRewardSummary_Protoss">Find Protoss Relics
 Param/Value/9067AA1F=Escape From The Facility
 Param/Value/91EABE95= 
 Param/Value/91F3CB3D=Kill the Brutalisk: 
@@ -166,6 +165,7 @@ Param/Value/A47D0EB0=Yes
 Param/Value/A7331FF6= 
 Param/Value/AA275322= 
 Param/Value/AADB0788= 
+Param/Value/ACCCB6E4= Checks Left)
 Param/Value/AF4A6014=The Dominion is researching a Brutalisk. Destroy it to deal a blow to their efforts.
 Param/Value/B2ACFA86=Brutalisk Killed
 Param/Value/B3153C44=<s val="THorner05sAllButtons">Release 4 Ultralisks</s>
@@ -242,11 +242,3 @@ Param/Value/FCB36CB8=Chrono Rift Ammo
 Param/Value/FD376361= 
 Param/Value/FD7595D3= 
 Param/Value/FF4B30F8=Raynor Must Survive
-Param/Value/lib_1_1BF9F758=<n/>
-Param/Value/lib_1_21E8CC9A=v
-Param/Value/lib_1_71F92085=Archipelago Messages
-Param/Value/lib_1_8717A4C6=Scroll up
-Param/Value/lib_1_A52FB36E=-
-Param/Value/lib_1_A91983FA=Scroll down
-Param/Value/lib_1_CCCD5CB5=^
-Param/Value/lib_1_FB15887C=Scroll to bottom

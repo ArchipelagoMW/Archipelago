@@ -30,7 +30,7 @@
             <cliffDoodad name="AvernusGridFloorTO1" pos="61.000000 185.000000 0.000000 " rot="0"/>
             <cliffDoodad name="PortZionGridFloorTO1" pos="68.000000 200.000000 0.000000 " rot="0"/>
         </cliffDoodadList>
-        <vertData quantizeBias="9.036983e+00" quantizeScale="2.746870e-04" standardHeight="8.000000e+00" name="t3HeightMap"/>
+        <vertData quantizeBias="9.037122e+00" quantizeScale="2.746870e-04" standardHeight="8.000000e+00" name="t3HeightMap"/>
         <masks name="t3TextureMasks"/>
         <textureSetList num="8">
             <textureSet i="0" name="Castanar"/>

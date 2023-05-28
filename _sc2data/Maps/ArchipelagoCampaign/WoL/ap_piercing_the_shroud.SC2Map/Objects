@@ -8230,9 +8230,6 @@
     <ObjectUnit Id="1546" Position="46.5,77.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="5"/>
     <ObjectUnit Id="519" Position="72.48,74.16,0" Rotation="0.0507" Scale="1,1,1" UnitType="Roach" Player="5"/>
     <ObjectUnit Id="72" Position="68.1198,91.66,0" Rotation="6.1477" Scale="1,1,1" UnitType="PrisonZealot" Player="6"/>
-    <ObjectUnit Id="1646122830" Position="130.3041,102.876,0" Rotation="1.2788" Scale="1,1,1" UnitType="CampaignRead" Player="1">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="2898" Position="237.9853,159.796,0" Rotation="5.4975" Scale="1,1,1" UnitType="FusionReactor" Player="2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>

@@ -277,5 +277,8 @@
 <Unit id="Medic"/>
 <Unit id="Swarmling"/>
 <Unit id="CastanarDestructibleDebris" Variations="0,1,2,3,4"/>
-<Unit id="CampaignRead"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Marauder"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Firebat"/>
 </Preload>
