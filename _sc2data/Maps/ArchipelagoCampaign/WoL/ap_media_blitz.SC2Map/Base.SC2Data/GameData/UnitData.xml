@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CUnit id="Civilian">
+        <PushPriority value="10"/>
+    </CUnit>
+    <CUnit id="CivilianFemale">
+        <PushPriority value="10"/>
+    </CUnit>
+    <CUnit id="Odin">
+        <PushPriority value="10"/>
+    </CUnit>
+</Catalog>

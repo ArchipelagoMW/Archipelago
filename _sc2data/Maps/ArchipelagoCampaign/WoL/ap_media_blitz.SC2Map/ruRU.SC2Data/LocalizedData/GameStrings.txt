@@ -1,0 +1,79 @@
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=THorner04 /// THorner04
+DocInfo/Name=Звезда экрана /// Media Blitz
+MapInfo/Player00/Name=Нейтральный /// Neutral
+MapInfo/Player01/Name=Рейдеры Рейнора /// Raynor's Raiders
+MapInfo/Player02/Name=Доминион /// The Dominion
+MapInfo/Player03/Name=Доминион /// The Dominion
+MapInfo/Player04/Name=Доминион /// The Dominion
+MapInfo/Player05/Name=Доминион /// The Dominion
+MapInfo/Player06/Name=Мирные жители Корхала /// Korhal Civilians
+MapInfo/Player07/Name=Рейдеры Рейнора /// Raynor's Raiders
+MapInfo/Player08/Name=Доминион /// The Dominion
+Param/Value/05E3338B=Захватить 1-ю телестанцию /// Access Broadcast Tower 1
+Param/Value/0930E285=Начало задания /// Mission Start
+Param/Value/0A4F3766=Захватить 2-ю телестанцию /// Access Broadcast Tower 2
+Param/Value/10B0314C=Аванпост охраны /// Security Outpost
+Param/Value/10F24A77=
+Param/Value/159C9C00=Постарайтесь уничтожить при помощи «Одина» как можно больше войск Доминиона, прежде чем все сообразят, что к чему. /// Use the Odin to destroy as many Dominion units as possible before they can mobilize.
+Param/Value/16C0437F=
+Param/Value/1B8B3377=Аванпост охраны /// Security Outpost
+Param/Value/1D6989D7=Телестанция 2 /// Broadcast Tower 2
+Param/Value/26108934=Захватить 1-ю телестанцию /// Access Broadcast Tower 1
+Param/Value/2642EE49=База /// Base
+Param/Value/36760F8C=Нет /// No
+Param/Value/37412DFF=Захвачена 1 телестанция /// One Dominion Broadcast Tower accessed
+Param/Value/3A40DEA3=
+Param/Value/3DF4DD57=После неожиданной атаки «Одина». /// After Odin sneak attack
+Param/Value/4111D2AB=<c val="00FF00">Данные отправлены</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/4377BBC3=Найден секрет /// Secret Found
+Param/Value/43AA9BFF=Захватите три телестанции Доминиона и удерживайте их столько времени, сколько потребуется для отправления в эфир материала о предательстве Менгска. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/47D958C6=Телестанция 3 /// Broadcast Tower 3
+Param/Value/4F602271=<c val="00FF00">Состояние отправки</c> /// <c val="00FF00">Upload Progress</c>
+Param/Value/523513A8=Аванпост охраны /// Security Outpost
+Param/Value/574A6351=Аванпост охраны /// Security Outpost
+Param/Value/5F35D842=Убить как можно больше доминионцев во время внезапной атаки /// Destroy Dominion during the Surprise Attack
+Param/Value/60581E90=Захватить 3-ю телестанцию /// Access Broadcast Tower 3
+Param/Value/63E47237=Найден секрет /// Secret Found
+Param/Value/64685A91=
+Param/Value/70C4D678=Телестанция 3 /// Broadcast Tower 3
+Param/Value/719688DC=Да /// Yes
+Param/Value/7B03FE31=Захватить 2-ю телестанцию /// Access Broadcast Tower 2
+Param/Value/7B98881E=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/7C54A1E1=Захватите три телестанции Доминиона и удерживайте их столько времени, сколько потребуется для отправления в эфир материала о предательстве Менгска. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/7F6061D4=Телестанция 1 /// Broadcast Tower 1
+Param/Value/813608F7=
+Param/Value/8F359BA8=Аванпост охраны /// Security Outpost
+Param/Value/8F385175=<c val="00FF00">Данные отправлены</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/9293FAA1=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/9A97EDD4=Захвачены 2 телестанции /// Two Dominion Broadcast Towers accessed
+Param/Value/A5099609=Чтобы начать внезапную атаку, нападите на доминионцев. /// Attack the Dominion to begin the surprise attack.
+Param/Value/A9280EFD=Захватите три телестанции Доминиона и удерживайте их столько времени, сколько потребуется для отправления в эфир материала о предательстве Менгска. /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/AA6A68E5=В этих документах упоминается о секретной <n/>лаборатории Доминиона. /// These documents reference a secret<n/>Dominion lab.
+Param/Value/B35796C7=<s val="Kicker_Minerals"><c val="FF0000">!</c></s> /// <s val="Kicker_Minerals"><c val="FF0000">!</c></s>
+Param/Value/BAA72864=Любая наземная единица, находясь<n/>на маяке, сможет загрузить данные. /// Keep any ground unit on the<n/>Beacon to upload the signal. 
+Param/Value/C2EAFB32=<c val="00FF00"> /// <c val="00FF00">
+Param/Value/C51AE4DC=
+Param/Value/CA64DF53=Нанести Доминиону как можно больший ущерб во время внезапной атаки /// Destroy Dominion during the Surprise Attack
+Param/Value/CB469595=
+Param/Value/CCA9A3B1=Телестанция 2 /// Broadcast Tower 2
+Param/Value/CE0A4A63=Захватить 3-ю телестанцию /// Access Broadcast Tower 3
+Param/Value/CF471179=Войск уничтожено «Одином» /// Units Killed By Odin
+Param/Value/D9C73D1B=Телестанция 1 /// Broadcast Tower 1
+Param/Value/DAF7934D=Получен доступ к секретному заданию! /// Secret Mission Unlocked
+Param/Value/DE6AF8A1=
+Param/Value/E10677B6=
+Param/Value/E2C19B85=Аванпост охраны /// Security Outpost
+Param/Value/E4408F4A=%</c> /// %</c>
+Param/Value/E6030984=<c val="00FF00">Секретные документы</c> /// <c val="00FF00">Secret Documents</c>
+Param/Value/E6304B93=Внезапная атака закончится через: /// Surprise Attack Ends In:
+Param/Value/E9217D45=Все ваши строения уничтожены. /// All of your structures have been destroyed.
+Param/Value/EBD210CF=
+Param/Value/FCB0FE8A=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/FFD0115C=
+Sound/Name/PlaceholderSoundFile2=PlaceholderSoundFile (Mothership) /// PlaceholderSoundFile (Mothership)
+Unit/Name/Civilian=Мирный житель /// Civilian
+Unit/Name/CivilianFemale=Мирный житель /// Civilian
+Unit/Name/Odin=«Один» /// Odin
+Water/Name/Template 2=Шаблон 2 /// Template 2

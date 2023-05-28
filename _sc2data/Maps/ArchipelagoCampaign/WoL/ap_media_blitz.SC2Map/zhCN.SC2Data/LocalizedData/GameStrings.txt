@@ -1,0 +1,79 @@
+DocInfo/Author=暴雪娱乐 /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=THorner04 /// THorner04
+DocInfo/Name=媒体轰炸 /// Media Blitz
+MapInfo/Player00/Name=中立 /// Neutral
+MapInfo/Player01/Name=雷诺的游骑兵 /// Raynor's Raiders
+MapInfo/Player02/Name=帝国 /// The Dominion
+MapInfo/Player03/Name=帝国 /// The Dominion
+MapInfo/Player04/Name=帝国 /// The Dominion
+MapInfo/Player05/Name=帝国 /// The Dominion
+MapInfo/Player06/Name=克哈平民 /// Korhal Civilians
+MapInfo/Player07/Name=雷诺的游骑兵 /// Raynor's Raiders
+MapInfo/Player08/Name=帝国 /// The Dominion
+Param/Value/05E3338B=接入广播塔1 /// Access Broadcast Tower 1
+Param/Value/0930E285=任务开始 /// Mission Start
+Param/Value/0A4F3766=接入广播塔2 /// Access Broadcast Tower 2
+Param/Value/10B0314C=警戒岗哨 /// Security Outpost
+Param/Value/10F24A77=
+Param/Value/159C9C00=在帝国军采取行动前，使用奥丁消灭尽可能多的敌人。 /// Use the Odin to destroy as many Dominion units as possible before they can mobilize.
+Param/Value/16C0437F=
+Param/Value/1B8B3377=警戒岗哨 /// Security Outpost
+Param/Value/1D6989D7=广播塔2 /// Broadcast Tower 2
+Param/Value/26108934=接入广播塔1 /// Access Broadcast Tower 1
+Param/Value/2642EE49=基地 /// Base
+Param/Value/36760F8C=否 /// No
+Param/Value/37412DFF=已接入1座帝国广播塔 /// One Dominion Broadcast Tower accessed
+Param/Value/3A40DEA3=
+Param/Value/3DF4DD57=奥丁偷袭结束后 /// After Odin sneak attack
+Param/Value/4111D2AB=<c val="00FF00">上传完毕</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/4377BBC3=发现隐藏点 /// Secret Found
+Param/Value/43AA9BFF=夺取并占领3座帝国广播塔，直到蒙斯克叛变的罪证上传完毕。 /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/47D958C6=广播塔3 /// Broadcast Tower 3
+Param/Value/4F602271=<c val="00FF00">上传进度</c> /// <c val="00FF00">Upload Progress</c>
+Param/Value/523513A8=警戒岗哨 /// Security Outpost
+Param/Value/574A6351=警戒岗哨 /// Security Outpost
+Param/Value/5F35D842=在突袭行动中消灭帝国 /// Destroy Dominion during the Surprise Attack
+Param/Value/60581E90=接入广播塔3 /// Access Broadcast Tower 3
+Param/Value/63E47237=发现隐藏点 /// Secret Found
+Param/Value/64685A91=
+Param/Value/70C4D678=广播塔3 /// Broadcast Tower 3
+Param/Value/719688DC=是 /// Yes
+Param/Value/7B03FE31=接入广播塔2 /// Access Broadcast Tower 2
+Param/Value/7B98881E=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/7C54A1E1=夺取并占领3座帝国广播塔，直到蒙斯克叛变的罪证上传完毕。 /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/7F6061D4=广播塔1 /// Broadcast Tower 1
+Param/Value/813608F7=
+Param/Value/8F359BA8=警戒岗哨 /// Security Outpost
+Param/Value/8F385175=<c val="00FF00">上传完毕</c> /// <c val="00FF00">Upload Complete</c>
+Param/Value/9293FAA1=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/9A97EDD4=已接入2座帝国广播塔 /// Two Dominion Broadcast Towers accessed
+Param/Value/A5099609=向帝国发起进攻，展开突袭行动。 /// Attack the Dominion to begin the surprise attack.
+Param/Value/A9280EFD=夺取并占领3座帝国广播塔，直到蒙斯克叛变的罪证上传完毕。 /// Capture the three Dominion Broadcast Towers and hold them long enough to upload proof of Mengsk's treachery.
+Param/Value/AA6A68E5=这些文件提到了一处<n/>帝国的秘密实验室。 /// These documents reference a secret<n/>Dominion lab.
+Param/Value/B35796C7=<s val="Kicker_Minerals"><c val="FF0000">！</c></s> /// <s val="Kicker_Minerals"><c val="FF0000">!</c></s>
+Param/Value/BAA72864=将单位停留在<n/>信标位置，上传信号。 /// Keep any ground unit on the<n/>Beacon to upload the signal. 
+Param/Value/C2EAFB32=<c val="00FF00"> /// <c val="00FF00">
+Param/Value/C51AE4DC=
+Param/Value/CA64DF53=在突袭行动中摧毁帝国基地 /// Destroy Dominion during the Surprise Attack
+Param/Value/CB469595=
+Param/Value/CCA9A3B1=广播塔2 /// Broadcast Tower 2
+Param/Value/CE0A4A63=接入广播塔3 /// Access Broadcast Tower 3
+Param/Value/CF471179=奥丁击杀 /// Units Killed By Odin
+Param/Value/D9C73D1B=广播塔1 /// Broadcast Tower 1
+Param/Value/DAF7934D=隐藏任务已解锁 /// Secret Mission Unlocked
+Param/Value/DE6AF8A1=
+Param/Value/E10677B6=
+Param/Value/E2C19B85=警戒岗哨 /// Security Outpost
+Param/Value/E4408F4A=%</c> /// %</c>
+Param/Value/E6030984=<c val="00FF00">机密档案</c> /// <c val="00FF00">Secret Documents</c>
+Param/Value/E6304B93=奇袭结束： /// Surprise Attack Ends In:
+Param/Value/E9217D45=您的建筑已全部被摧毁。 /// All of your structures have been destroyed.
+Param/Value/EBD210CF=
+Param/Value/FCB0FE8A=<c val="00FF00">0%</c> /// <c val="00FF00">0%</c>
+Param/Value/FFD0115C=
+Sound/Name/PlaceholderSoundFile2=PlaceholderSoundFile (Mothership) /// PlaceholderSoundFile (Mothership)
+Unit/Name/Civilian=平民 /// Civilian
+Unit/Name/CivilianFemale=平民 /// Civilian
+Unit/Name/Odin=奥丁 /// Odin
+Water/Name/Template 2=模板2 /// Template 2

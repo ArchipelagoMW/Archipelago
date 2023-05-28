@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="7">
+        <name value="Victory Remove Region"/>
+        <color value="255,0,0,0"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="26.837,72.6972"/>
+            <radius value="15.6166"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.1157,46.6281"/>
+            <radius value="7.519"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Korhal Courtyard Gray Mask"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="75.6828,78.0395"/>
+            <radius value="13.8908"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.0954,86.0625"/>
+            <radius value="12.161"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Player Base"/>
+        <color value="255,64,128,128"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="18.8364,5.6125,60.1015,38.5202"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Statue 3"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="67.479,127.415"/>
+            <radius value="8.847"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Statue 4"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="38.5783,81.5114"/>
+            <radius value="7.3264"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Statue 1"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="86.6933,86.7946"/>
+            <radius value="6.6525"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Statue 2"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="138.4914,94.3342"/>
+            <radius value="9.7045"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Statue 5"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="70.5363,38.4372"/>
+            <radius value="7.1828"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Dominion P02 - East Base"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="76.339,47.7514"/>
+            <radius value="7.8115"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Intro - Dominion Parade"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="77.922,78.8806"/>
+            <radius value="2.464"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.8603,76.521"/>
+            <radius value="2.3535"/>
+        </shape>
+        <shape type="circle">
+            <center value="74.1328,74.9106"/>
+            <radius value="2.4448"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.5925,72.4045"/>
+            <radius value="2.5795"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Statue 6"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="108.3208,74.9592"/>
+            <radius value="6.8574"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Civilian Vehicle North Remove"/>
+        <shape type="circle">
+            <center value="10.476,51.4648"/>
+            <radius value="1.8913"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Civilian Vehicle SE Remove"/>
+        <shape type="circle">
+            <center value="85.48,139.474"/>
+            <radius value="2.1867"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Civilian Vehicle SW Remove"/>
+        <shape type="circle">
+            <center value="141.567,101.7258"/>
+            <radius value="1.6015"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="P1 Base Command Center"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="32,19.0002,37,24"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="P1 Base Factory A"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="36.0163,26.0197,39.0163,29.0195"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="P1 Base Barracks A"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="29.9985,26.0002,32.9985,29"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="P1 Base Armory"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="38.9953,19.0156,41.9953,22.0153"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="P1 Base Refinery"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="26.012,21.1376,29.012,24.1374"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="P1 Base Supply Depot A"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="42,14.0051,44,16.005"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="P1 Base Supply Depot B"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="44,12.0002,46,14"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="P1 Base Supply Depot C"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="46,14.0002,48,16"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="P1 Base Factory A Tech Lab"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="39.0041,25.991,41.0041,27.9907"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="P1 Base Supply Depot D"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="48,12.0002,50,14"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="Victory Civilian Spawn 2"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="24.5334,55.7133"/>
+            <radius value="3.2504"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="P1 Base Merc Compound"/>
+        <color value="255,0,255,255"/>
+        <shape type="rect">
+            <quad value="45.0002,18,49,22"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Civilian Squish Area 1"/>
+        <shape type="circle">
+            <center value="67.1174,61.3178"/>
+            <radius value="4.4941"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Civilian Squish Area 2"/>
+        <shape type="circle">
+            <center value="91.827,59.8142"/>
+            <radius value="5.5532"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Civilian Squish Area 3"/>
+        <shape type="circle">
+            <center value="70.8964,131.8222"/>
+            <radius value="4.5947"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Civilian Squish Area 4"/>
+        <shape type="circle">
+            <center value="40.4191,80.364"/>
+            <radius value="5.6186"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Civilian Squish Area 5"/>
+        <shape type="circle">
+            <center value="129.5312,86.7121"/>
+            <radius value="4.5947"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Blimp West Remove"/>
+        <shape type="circle">
+            <center value="82.9885,8.8515"/>
+            <radius value="1.8913"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Blimp East Remove"/>
+        <shape type="circle">
+            <center value="61.4726,139.2868"/>
+            <radius value="1.8913"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Victory Civilian Spawn 1"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="42.1232,75.6394"/>
+            <radius value="3.2001"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Victory Civilian Spawn 3"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="75.2861,35.811"/>
+            <radius value="3.0434"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="Victory Civilian Spawn 4"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="36.3896,67.1652"/>
+            <radius value="3.2385"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Victory Civilian Spawn 5"/>
+        <color value="255,0,0,0"/>
+        <shape type="circle">
+            <center value="31.6835,61.8454"/>
+            <radius value="2.897"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Science Facility Vision"/>
+        <shape type="circle">
+            <center value="129.741,16.5053"/>
+            <radius value="8.2055"/>
+        </shape>
+        <shape type="circle">
+            <center value="115.147,22.7116"/>
+            <radius value="4.5861"/>
+        </shape>
+        <shape type="circle">
+            <center value="121.3435,17.068"/>
+            <radius value="5.8117"/>
+        </shape>
+    </region>
+</Regions>

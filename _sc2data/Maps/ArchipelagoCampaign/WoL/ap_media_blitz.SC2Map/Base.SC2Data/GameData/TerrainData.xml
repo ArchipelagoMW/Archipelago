@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrain id="Korhal">
+        <FogColor value="255,63,89,105"/>
+        <FogDensity value="0.040000"/>
+        <FogFalloff value="0.110000"/>
+        <WindTurbulencePower value="0.020000"/>
+        <WindTurbulenceSpeed value="1.000000"/>
+    </CTerrain>
+</Catalog>
