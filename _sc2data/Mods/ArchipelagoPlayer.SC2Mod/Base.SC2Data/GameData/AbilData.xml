@@ -1268,7 +1268,7 @@
         <InfoArray index="Build2" Unit="AP_BarracksReactor" Time="50">
             <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
         </InfoArray>
-        <InfoArray index="Build4" Unit="AP_BarracksTechReactor" Time="50" AddOnParentCmdPriority="-1">
+        <InfoArray index="Build4" Unit="AP_BarracksTechReactor" Time="25" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
         </InfoArray>
     </CAbilBuild>
@@ -1675,7 +1675,7 @@
         <InfoArray index="Build2" Unit="AP_FactoryReactor" Time="50">
             <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
         </InfoArray>
-        <InfoArray index="Build4" Unit="AP_FactoryTechReactor" Time="50" AddOnParentCmdPriority="-1">
+        <InfoArray index="Build4" Unit="AP_FactoryTechReactor" Time="25" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
         </InfoArray>
     </CAbilBuild>
@@ -1689,7 +1689,7 @@
         <InfoArray index="Build2" Unit="AP_StarportReactor" Time="50">
             <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
         </InfoArray>
-        <InfoArray index="Build4" Unit="AP_StarportTechReactor" Time="50" AddOnParentCmdPriority="-1">
+        <InfoArray index="Build4" Unit="AP_StarportTechReactor" Time="25" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
         </InfoArray>
     </CAbilBuild>
@@ -2332,7 +2332,7 @@
         <InfoArray index="Build16" Unit="AP_FusionCore" Time="80">
             <Button DefaultButtonFace="AP_FusionCore" State="Restricted" Requirements="HaveStarport"/>
         </InfoArray>
-        <InfoArray index="Build19" Unit="AP_AutomatedRefinery" Time="45">
+        <InfoArray index="Build19" Unit="AP_AutomatedRefinery" Time="30">
             <Button DefaultButtonFace="AP_AutomatedRefinery" Requirements="AP_UseAutomatedRefinery"/>
         </InfoArray>
         <InfoArray index="Build20" Unit="AP_PerditionTurret" Time="35">

@@ -3747,7 +3747,7 @@
         <StationaryTurningRate value="719.4726"/>
         <TurningRate value="719.4726"/>
         <Sight value="9"/>
-        <CostResource index="Minerals" value="100"/>
+        <CostResource index="Minerals" value="75"/>
         <RepairTime value="50"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
@@ -3814,7 +3814,7 @@
         <StationaryTurningRate value="719.4726"/>
         <TurningRate value="719.4726"/>
         <Sight value="9"/>
-        <CostResource index="Minerals" value="100"/>
+        <CostResource index="Minerals" value="75"/>
         <RepairTime value="50"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
@@ -4486,8 +4486,8 @@
         <TurningRate value="719.4726"/>
         <Sight value="9"/>
         <CostCategory value="Technology"/>
-        <CostResource index="Minerals" value="75"/>
-        <CostResource index="Vespene" value="75"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="25"/>
         <RepairTime value="25"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
@@ -4715,8 +4715,8 @@
         <TurningRate value="719.4726"/>
         <Sight value="9"/>
         <CostCategory value="Technology"/>
-        <CostResource index="Minerals" value="75"/>
-        <CostResource index="Vespene" value="75"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="25"/>
         <RepairTime value="25"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
@@ -4943,8 +4943,8 @@
         <TurningRate value="719.4726"/>
         <Sight value="9"/>
         <CostCategory value="Technology"/>
-        <CostResource index="Minerals" value="75"/>
-        <CostResource index="Vespene" value="75"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="25"/>
         <RepairTime value="25"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
@@ -5090,8 +5090,8 @@
         <TurningRate value="719.4726"/>
         <Sight value="9"/>
         <CostCategory value="Technology"/>
-        <CostResource index="Minerals" value="75"/>
-        <CostResource index="Vespene" value="75"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="25"/>
         <RepairTime value="25"/>
         <AttackTargetPriority value="11"/>
         <AbilArray Link="BuildInProgress"/>
