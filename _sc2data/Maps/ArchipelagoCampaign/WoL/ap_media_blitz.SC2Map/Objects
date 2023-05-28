@@ -3978,7 +3978,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1064" Position="33.8244,30.8325,0" Rotation="3.556" Scale="1,1,1" UnitType="Marine" Player="7">
+    <ObjectUnit Id="1064" Position="33.8244,30.8325,0" Rotation="3.556" Scale="1,1,1" UnitType="AP_Marine" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -4286,7 +4286,7 @@
         <AIRebuild Index="4" Value="14"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1150" Position="30.4926,23.3017,0" Rotation="4.9873" Scale="1,1,1" UnitType="SCV" Player="7">
+    <ObjectUnit Id="1150" Position="30.4926,23.3017,0" Rotation="4.9873" Scale="1,1,1" UnitType="AP_SCV" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -4298,7 +4298,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="1542" Position="29.8815,21.7221,0" Rotation="3.6333" Scale="1,1,1" UnitType="SCV" Player="7">
+    <ObjectUnit Id="1542" Position="29.8815,21.7221,0" Rotation="3.6333" Scale="1,1,1" UnitType="AP_SCV" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="68" Variation="1" Position="82.826,75.1733,0" Rotation="3.5197" Scale="1,1,1" UnitType="CivilianFemale" Player="6">
@@ -4430,7 +4430,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1066" Position="32.7944,31.2824,0" Rotation="3.387" Scale="1,1,1" UnitType="Marine" Player="7">
+    <ObjectUnit Id="1066" Position="32.7944,31.2824,0" Rotation="3.387" Scale="1,1,1" UnitType="AP_Marine" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -4720,7 +4720,7 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="905" Variation="6" Position="112,90.5,0" Scale="1,1,1" UnitType="MineralField" Resources="2150"/>
-    <ObjectUnit Id="551" Position="37.5,27.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Factory" Player="7">
+    <ObjectUnit Id="551" Position="37.5,27.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Factory" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -4825,7 +4825,7 @@
     <ObjectUnit Id="1382" Variation="3" Position="118.477,14.7324,0" Rotation="2.1435" Scale="1,1,1" UnitType="DestructibleKorhalFoliage">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="174" Position="28.9345,19.955,0" Rotation="0.9265" Scale="1,1,1" UnitType="SCV" Player="7">
+    <ObjectUnit Id="174" Position="28.9345,19.955,0" Rotation="0.9265" Scale="1,1,1" UnitType="AP_SCV" Player="7">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
@@ -4859,7 +4859,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1407" Position="31.5,27.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Barracks" Player="7">
+    <ObjectUnit Id="1407" Position="31.5,27.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Barracks" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -4993,7 +4993,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="143" Variation="1" Position="16,81.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1603"/>
-    <ObjectUnit Id="228" Position="34.5,21.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CommandCenter" Player="7">
+    <ObjectUnit Id="228" Position="34.5,21.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CommandCenter" Player="7">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
@@ -5333,7 +5333,7 @@
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="163" Position="17.7512,80.2844,0" Rotation="6.1865" Scale="1,1,1" UnitType="SCV" Player="2"/>
-    <ObjectUnit Id="230" Position="33.9804,16.0698,0" Rotation="1.4995" Scale="1,1,1" UnitType="SCV" Player="7">
+    <ObjectUnit Id="230" Position="33.9804,16.0698,0" Rotation="1.4995" Scale="1,1,1" UnitType="AP_SCV" Player="7">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
@@ -5383,7 +5383,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="229" Position="31.447,17.4042,0" Rotation="5.3542" Scale="1,1,1" UnitType="SCV" Player="7">
+    <ObjectUnit Id="229" Position="31.447,17.4042,0" Rotation="5.3542" Scale="1,1,1" UnitType="AP_SCV" Player="7">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
@@ -5496,7 +5496,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="303" Position="40,27,0" Rotation="5.4975" Scale="1,1,1" UnitType="FactoryTechLab" Player="7">
+    <ObjectUnit Id="303" Position="40,27,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_FactoryTechLab" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -5661,9 +5661,6 @@
     <ObjectUnit Id="268" Position="89.5,84.5,0" Rotation="6.1677" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="1675" Position="75.5,66.5,0" Rotation="0.7014" Scale="1,1,1" UnitType="PathingBlocker1x1"/>
     <ObjectUnit Id="808" Position="22.1076,128.5241,0" Scale="1,1,1" UnitType="Beacon_Terran"/>
-    <ObjectUnit Id="2065508317" Position="142.2673,2.1196,0" Rotation="1.5422" Scale="1,1,1" UnitType="CampaignRead" Player="1">
-        <Flag Index="ForcePlacement" Value="1"/>
-    </ObjectUnit>
     <ObjectUnit Id="1829" Position="128.2873,40.3046,0" Rotation="5.0412" Scale="1,1,1" UnitType="SCV" Player="5">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -5791,7 +5788,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="301" Position="40.5,20.5,0" Scale="1,1,1" UnitType="Armory" Player="7">
+    <ObjectUnit Id="301" Position="40.5,20.5,0" Scale="1,1,1" UnitType="AP_Armory" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -5942,7 +5939,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1151" Position="30.1801,18.7363,0" Rotation="5.483" Scale="1,1,1" UnitType="SCV" Player="7">
+    <ObjectUnit Id="1151" Position="30.1801,18.7363,0" Rotation="5.483" Scale="1,1,1" UnitType="AP_SCV" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -5991,7 +5988,7 @@
     </ObjectUnit>
     <ObjectUnit Id="1644" Variation="1" Position="75.5,56.5,0" Rotation="3.9267" Scale="1,1,1" UnitType="DestructibleStreetlight"/>
     <ObjectUnit Id="522" Variation="2" Position="104.5,81.5,0" Rotation="5.488" Scale="1,1,1" UnitType="DestructibleStoreFrontCityProps"/>
-    <ObjectUnit Id="932" Position="47,20,0" Rotation="5.4975" Scale="1,1,1" UnitType="MercCompound" Player="7">
+    <ObjectUnit Id="932" Position="47,20,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_MercCompound" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -6308,7 +6305,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1065" Position="34.494,31.9746,0" Rotation="3.7802" Scale="1,1,1" UnitType="Marine" Player="7">
+    <ObjectUnit Id="1065" Position="34.494,31.9746,0" Rotation="3.7802" Scale="1,1,1" UnitType="AP_Marine" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
@@ -6420,7 +6417,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="550" Position="32.2443,15.9675,0" Rotation="0.287" Scale="1,1,1" UnitType="SCV" Player="7">
+    <ObjectUnit Id="550" Position="32.2443,15.9675,0" Rotation="0.287" Scale="1,1,1" UnitType="AP_SCV" Player="7">
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="3" Value="14"/>
@@ -6612,7 +6609,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="397" Position="27.5,22.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Refinery" Player="7">
+    <ObjectUnit Id="397" Position="27.5,22.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Refinery" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <Resources Index="3" Value="2100"/>
         <Resources Index="4" Value="1800"/>
@@ -6789,7 +6786,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="1067" Position="33.4067,32.5354,0" Rotation="3.625" Scale="1,1,1" UnitType="Marine" Player="7">
+    <ObjectUnit Id="1067" Position="33.4067,32.5354,0" Rotation="3.625" Scale="1,1,1" UnitType="AP_Marine" Player="7">
         <Flag Index="UnitNoCreate" Value="1"/>
         <AIRebuild Index="1" Value="14"/>
         <AIRebuild Index="2" Value="14"/>

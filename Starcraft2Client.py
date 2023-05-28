@@ -538,7 +538,7 @@ maps_table = [
     "ap_evacuation", "ap_outbreak", "ap_safe_haven", "ap_havens_fall",
     "ap_smash_and_grab", "ap_the_dig", "ap_the_moebius_factor", "ap_supernova", "ap_maw_of_the_void",
     "ap_devils_playground", "ap_welcome_to_the_jungle", "ap_breakout", "ap_ghost_of_a_chance",
-    "ap_the_great_train_robbery", "ap_cutthroat", "ap_engine_of_destruction", "ap_thorner04", "ap_thorner05s",
+    "ap_the_great_train_robbery", "ap_cutthroat", "ap_engine_of_destruction", "ap_media_blitz", "ap_thorner05s",
     "ap_tzeratul01", "ap_tzeratul02", "ap_tzeratul03", "ap_tzeratul04",
     "ap_tvalerian01", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"
 ]
