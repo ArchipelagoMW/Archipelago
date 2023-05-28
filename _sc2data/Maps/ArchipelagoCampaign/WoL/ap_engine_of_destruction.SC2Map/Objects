@@ -6517,15 +6517,15 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="536" Position="58.1696,84.132,0" Rotation="2.3395" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="536" Position="58.1696,84.132,0" Rotation="2.3395" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="1979" Position="19.9384,96.487,0" Rotation="0.4602" Scale="1,1,1" UnitType="Medivac" Player="4"/>
     <ObjectUnit Id="1073" Position="26.4826,61.463,0" Rotation="0.1325" Scale="1,1,1" UnitType="PalletGas"/>
     <ObjectUnit Id="60" Position="42.0114,124.2612,0" Rotation="0.458" Scale="1,1,1" UnitType="Marine" Player="8">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="505" Position="67.1828,81.2626,0" Rotation="5.7988" Scale="1,1,1" UnitType="Marine" Player="1"/>
-    <ObjectUnit Id="1114" Position="70.5,83.5,0" Rotation="3.0751" Scale="1,1,1" UnitType="Bunker" Player="1"/>
+    <ObjectUnit Id="505" Position="67.1828,81.2626,0" Rotation="5.7988" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
+    <ObjectUnit Id="1114" Position="70.5,83.5,0" Rotation="3.0751" Scale="1,1,1" UnitType="AP_Bunker" Player="1"/>
     <ObjectUnit Id="18" Position="28.2861,23.7675,0" Rotation="5.464" Scale="1,1,1" UnitType="Marine" Player="3">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -6551,7 +6551,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="513" Position="68.184,80.4111,0" Rotation="5.403" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="513" Position="68.184,80.4111,0" Rotation="5.403" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="2023" Position="27.9196,91.0961,0" Rotation="6.0122" Scale="1,1,1" UnitType="Marauder" Player="4">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
@@ -6631,7 +6631,7 @@
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="4" Position="15.7583,12.1232,0" Rotation="1.0666" Scale="1,1,1" UnitType="TychusChaingun" Player="2"/>
-    <ObjectUnit Id="544" Position="52.5087,81.7946,0" Rotation="5.8198" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="544" Position="52.5087,81.7946,0" Rotation="5.8198" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="1531" Position="116.1425,111.9895,0" Rotation="4.4738" Scale="1,1,1" UnitType="Vulture" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -6745,7 +6745,7 @@
     <ObjectUnit Id="34" Position="15.0246,78.3583,0" Rotation="0.583" Scale="1,1,1" UnitType="Marine" Player="4">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="73" Position="56.5,80.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="CommandCenter" Player="1">
+    <ObjectUnit Id="73" Position="56.5,80.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CommandCenter" Player="1">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
@@ -6760,7 +6760,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="628" Position="103,73,0" Rotation="0.7666" Scale="1,1,1" UnitType="DevourerTissueSampleTube"/>
-    <ObjectUnit Id="543" Position="52.9785,79.9775,0" Rotation="4.496" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="543" Position="52.9785,79.9775,0" Rotation="4.496" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="80" Position="48.5,115.5,0" Rotation="5.4958" Scale="1,1,1" UnitType="Bunker" Player="8">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -6848,14 +6848,14 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="3" Position="63.5,80.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Barracks" Player="1">
+    <ObjectUnit Id="3" Position="63.5,80.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Barracks" Player="1">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="2255" Position="62,71,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
-    <ObjectUnit Id="551" Position="60,73,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1">
+    <ObjectUnit Id="2255" Position="62,71,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
+    <ObjectUnit Id="551" Position="60,73,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
@@ -6900,7 +6900,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="311" Position="14.2717,11.8361,0" Rotation="2.356" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="311" Position="14.2717,11.8361,0" Rotation="2.356" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="726" Position="47,40,0" Rotation="5.5354" Scale="1,1,1" UnitType="PerditionTurret" Player="3">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -6925,7 +6925,7 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="225" Position="135.8364,46.3173,0" Rotation="5.9438" Scale="1,1,1" UnitType="SCV" Player="6"/>
-    <ObjectUnit Id="292" Position="12.8261,50.1076,0" Rotation="2.2687" Scale="1,1,1" UnitType="Wraith" Player="2"/>
+    <ObjectUnit Id="292" Position="12.8261,50.1076,0" Rotation="2.2687" Scale="1,1,1" UnitType="AP_Wraith" Player="2"/>
     <ObjectUnit Id="138" Position="24.5971,35.0192,0" Rotation="1.2805" Scale="1,1,1" UnitType="Marine" Player="3">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -7050,7 +7050,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="373" Position="14.6103,10.501,0" Rotation="2.356" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="373" Position="14.6103,10.501,0" Rotation="2.356" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="176" Position="25,94,0" Rotation="5.5744" Scale="1,1,1" UnitType="PerditionTurret" Player="4">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -7061,7 +7061,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="286" Position="68.3256,81.9504,0" Rotation="5.6464" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="286" Position="68.3256,81.9504,0" Rotation="5.6464" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="245" Position="98,118,0" Scale="1,1,1" UnitType="PerditionTurret" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -7124,7 +7124,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="739" Position="14.8496,49.398,0" Rotation="2.2722" Scale="1,1,1" UnitType="Wraith" Player="2"/>
+    <ObjectUnit Id="739" Position="14.8496,49.398,0" Rotation="2.2722" Scale="1,1,1" UnitType="AP_Wraith" Player="2"/>
     <ObjectUnit Id="717" Position="116.1325,76.2563,0" Rotation="2.791" Scale="1,1,1" UnitType="Marine" Player="6">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -7222,7 +7222,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="148" Position="67.5,75.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Factory" Player="1">
+    <ObjectUnit Id="148" Position="67.5,75.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_Factory" Player="1">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
@@ -7277,7 +7277,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="705" Position="16.4616,9.2656,0" Rotation="2.356" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="705" Position="16.4616,9.2656,0" Rotation="2.356" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="142" Position="48.44,119.8698,0" Rotation="5.7436" Scale="1,1,1" UnitType="Marine" Player="8">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -7302,7 +7302,7 @@
         <AIRebuild Index="3" Value="2"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="293" Position="14.937,8.8281,0" Rotation="2.356" Scale="1,1,1" UnitType="Medic" Player="1"/>
+    <ObjectUnit Id="293" Position="14.937,8.8281,0" Rotation="2.356" Scale="1,1,1" UnitType="AP_Medic" Player="1"/>
     <ObjectUnit Id="1219" Position="96.0722,13.343,0" Rotation="2.2177" Scale="1,1,1" UnitType="Goliath" Player="7">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -7431,7 +7431,7 @@
     </ObjectUnit>
     <ObjectUnit Id="817" Variation="1" Position="90.5,123.5,0" Rotation="2.356" Scale="1,1,1" UnitType="DestructibleBullhornLights"/>
     <ObjectUnit Id="1245" Variation="1" Position="106.2502,87.25,0" Rotation="2.7341" Scale="1,1,1" UnitType="Scientist"/>
-    <ObjectUnit Id="382" Position="12.6176,10.6877,0" Rotation="2.356" Scale="1,1,1" UnitType="Medic" Player="1"/>
+    <ObjectUnit Id="382" Position="12.6176,10.6877,0" Rotation="2.356" Scale="1,1,1" UnitType="AP_Medic" Player="1"/>
     <ObjectUnit Id="1206" Position="137,53,0" Rotation="0.23" Scale="1,1,1" UnitType="MissileTurret" Player="6"/>
     <ObjectUnit Id="1304" Position="75.662,110.081,0" Rotation="1.8254" Scale="1,1,1" UnitType="PalletGas">
         <Flag Index="ForcePlacement" Value="1"/>
@@ -7446,7 +7446,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="730" Position="62,75,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1"/>
+    <ObjectUnit Id="730" Position="62,75,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
     <ObjectUnit Id="1220" Position="107.1923,67.2072,0" Rotation="5.934" Scale="1,1,1" UnitType="Firebat" Player="6">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -7524,7 +7524,7 @@
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="738" Position="16.439,47.6093,0" Rotation="2.3737" Scale="1,1,1" UnitType="Wraith" Player="2"/>
+    <ObjectUnit Id="738" Position="16.439,47.6093,0" Rotation="2.3737" Scale="1,1,1" UnitType="AP_Wraith" Player="2"/>
     <ObjectUnit Id="649" Position="134,56,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -7552,7 +7552,7 @@
     </ObjectUnit>
     <ObjectUnit Id="223" Position="134.8164,48.4916,0" Rotation="4.7822" Scale="1,1,1" UnitType="SCV" Player="6"/>
     <ObjectUnit Id="656" Position="46.8535,132.9262,0" Rotation="3.5085" Scale="1,1,1" UnitType="SCV" Player="8"/>
-    <ObjectUnit Id="2109" Position="59,68,0" Rotation="5.4975" Scale="1,1,1" UnitType="MercCompound" Player="1"/>
+    <ObjectUnit Id="2109" Position="59,68,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_MercCompound" Player="1"/>
     <ObjectUnit Id="725" Position="102.8271,64.0725,0" Rotation="3.171" Scale="1,1,1" UnitType="Marauder" Player="6"/>
     <ObjectUnit Id="702" Position="43.64,25.5397,0" Rotation="4.0083" Scale="1,1,1" UnitType="Medic" Player="3">
         <AIRebuild Index="1" Value="0"/>
@@ -7560,7 +7560,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="372" Position="16.219,10.5632,0" Rotation="2.356" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="372" Position="16.219,10.5632,0" Rotation="2.356" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="218" Position="88.5,108.5,0" Rotation="5.4958" Scale="1,1,1" UnitType="Bunker" Player="5">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -7679,7 +7679,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="952" Position="13.0051,12.2651,0" Rotation="2.356" Scale="1,1,1" UnitType="Marine" Player="1"/>
+    <ObjectUnit Id="952" Position="13.0051,12.2651,0" Rotation="2.356" Scale="1,1,1" UnitType="AP_Marine" Player="1"/>
     <ObjectUnit Id="979" Position="44.8022,131.6875,0" Rotation="3.2993" Scale="1,1,1" UnitType="SCV" Player="8"/>
     <ObjectUnit Id="503" Position="87,77,0" Scale="1.1582,1.1582,1.1582" UnitType="DestructibleRock6x6"/>
     <ObjectUnit Id="50" Position="96.711,120.8696,0" Rotation="5.7043" Scale="1,1,1" UnitType="Reaper" Player="5">
@@ -7701,7 +7701,7 @@
     <ObjectUnit Id="28" Position="18.992,77.3518,0" Rotation="0.4484" Scale="1,1,1" UnitType="Marine" Player="4">
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="568" Position="64,73,0" Rotation="5.4975" Scale="1,1,1" UnitType="SupplyDepot" Player="1">
+    <ObjectUnit Id="568" Position="64,73,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
         <AIRebuild Index="3" Value="0"/>
@@ -7840,7 +7840,7 @@
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="973" Variation="1" Position="111.5,123.5,0" Rotation="2.356" Scale="1,1,1" UnitType="DestructibleBullhornLights"/>
-    <ObjectUnit Id="547" Position="54.9472,84.1347,0" Rotation="3.0617" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="547" Position="54.9472,84.1347,0" Rotation="3.0617" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="1034" Position="24,20,0" Rotation="5.4975" Scale="1,1,1" UnitType="ValhallaDestructibleWall"/>
     <ObjectUnit Id="425" Variation="8" Position="60,88.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1775"/>
     <ObjectUnit Id="7" Position="103.5,120.5,0" Rotation="5.4958" Scale="1,1,1" UnitType="Bunker" Player="5">
@@ -7861,7 +7861,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="525" Position="56.4882,85.516,0" Rotation="3.2707" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="525" Position="56.4882,85.516,0" Rotation="3.2707" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="432" Position="93.7314,110.6484,0" Rotation="5.3547" Scale="1,1,1" UnitType="Marine" Player="5">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -7930,7 +7930,7 @@
         <AIRebuild Index="3" Value="0"/>
         <AIRebuild Index="4" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="542" Position="52.9345,84.1225,0" Rotation="3.862" Scale="1,1,1" UnitType="SCV" Player="1"/>
+    <ObjectUnit Id="542" Position="52.9345,84.1225,0" Rotation="3.862" Scale="1,1,1" UnitType="AP_SCV" Player="1"/>
     <ObjectUnit Id="122" Position="52.5,123.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Barracks" Player="8">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -7963,7 +7963,7 @@
     </ObjectUnit>
     <ObjectUnit Id="1134" Position="114.3776,41.5432,0" Rotation="6.1447" Scale="1,1,1" UnitType="PalletGas"/>
     <ObjectUnit Id="422" Variation="7" Position="54,86.5,0" Scale="1,1,1" UnitType="MineralField" Resources="1650"/>
-    <ObjectUnit Id="8" Position="16.5395,45.5952,0" Rotation="2.3762" Scale="1,1,1" UnitType="Wraith" Player="2"/>
+    <ObjectUnit Id="8" Position="16.5395,45.5952,0" Rotation="2.3762" Scale="1,1,1" UnitType="AP_Wraith" Player="2"/>
     <ObjectUnit Id="514" Position="110.5898,67.5598,0" Rotation="3.101" Scale="1,1,1" UnitType="Battlecruiser" Player="6">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>

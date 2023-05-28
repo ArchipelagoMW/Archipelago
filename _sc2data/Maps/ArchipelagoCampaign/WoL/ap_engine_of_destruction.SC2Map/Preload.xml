@@ -200,14 +200,12 @@
 <Unit id="GhostAcademy"/>
 <Unit id="Factory"/>
 <Unit id="Starport"/>
-<Unit id="MercCompound"/>
 <Unit id="Armory"/>
 <Unit id="FusionCore"/>
 <Unit id="SiegeTankSieged"/>
 <Unit id="VikingFighter"/>
 <Unit id="CommandCenterFlying"/>
 <Unit id="FactoryFlying"/>
-<Unit id="StarportFlying"/>
 <Unit id="SCV"/>
 <Unit id="BarracksFlying"/>
 <Unit id="Marine"/>
@@ -238,7 +236,6 @@
 <Unit id="Odin"/>
 <Unit id="Vulture"/>
 <Unit id="Loki"/>
-<Unit id="Wraith"/>
 <Unit id="Firebat"/>
 <Unit id="Diamondback"/>
 <Unit id="DevourerTissueSampleTube"/>
@@ -255,4 +252,16 @@
 <Unit id="BreachingCharge"/>
 <Unit id="ValhallaDestructibleWall"/>
 <Unit id="OdinBuild"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_StarportFlying"/>
+<Unit id="AP_Wraith"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_Bunker"/>
+<Unit id="AP_MercCompound"/>
 </Preload>
