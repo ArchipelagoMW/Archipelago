@@ -184,7 +184,7 @@ def shuffle_bundles_completely(random: Random, logic: StardewLogic, bundles: Dic
     quality_crops_items_set = set(quality_crops_items)
     all_bundle_items_without_quality_and_money = [item
                                                   for item in all_bundle_items_except_money
-                                                  if item not in quality_crops_items_set and item not in fish_tank_bundle_items] + \
+                                                  if item not in quality_crops_items_set] + \
                                                  random.sample(quality_crops_items, 10)
     choices = random.sample(all_bundle_items_without_quality_and_money, total_required_item_number - 4)
 
