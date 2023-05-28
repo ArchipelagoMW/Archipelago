@@ -35,6 +35,7 @@ class Goal(Choice):
     Complete Collection: The world will be completed once you have completed the museum by donating every possible item. Pairs well with Museumsanity.
     Full House: The world will be completed once you get married and have two kids. Pairs well with Friendsanity.
     Greatest Walnut Hunter: The world will be completed once you find all 130 Golden Walnuts
+    Perfection: The world will be completed once you attain Perfection, based on the vanilla definition.
     """
     internal_name = "goal"
     display_name = "Goal"
