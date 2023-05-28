@@ -15,6 +15,14 @@ class ArchipIDLEWebWorld(WebWorld):
             file_name='guide_en.md',
             link='guide/en',
             authors=['Farrak Kilhn']
+        ),
+        Tutorial(
+            tutorial_name='Guide d installation',
+            description='Un guide pour jouer à Archipidle',
+            language='Français',
+            file_name='guide_fr.md',
+            link='guide/fr',
+            authors=['TheLynk']
         )
     ]
 

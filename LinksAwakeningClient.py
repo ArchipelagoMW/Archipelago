@@ -438,12 +438,16 @@ class LinksAwakeningContext(CommonContext):
     found_checks = []
     last_resend = time.time()
 
-    magpie = MagpieBridge()
+    magpie_enabled = False
+    magpie = None
     magpie_task = None
     won = False
 
-    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str]) -> None:
+    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
+        if magpie:
+            self.magpie_enabled = True
+            self.magpie = MagpieBridge()
         super().__init__(server_address, password)
 
     def run_gui(self) -> None:
@@ -462,16 +466,17 @@ class LinksAwakeningContext(CommonContext):
             def build(self):
                 b = super().build()
 
-                button = Button(text="", size=(30, 30), size_hint_x=None,
-                                on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
-                image = Image(size=(16, 16), texture=magpie_logo())
-                button.add_widget(image)
+                if self.ctx.magpie_enabled:
+                    button = Button(text="", size=(30, 30), size_hint_x=None,
+                                    on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                    image = Image(size=(16, 16), texture=magpie_logo())
+                    button.add_widget(image)
 
-                def set_center(_, center):
-                    image.center = center
-                button.bind(center=set_center)
+                    def set_center(_, center):
+                        image.center = center
+                    button.bind(center=set_center)
 
-                self.connect_layout.add_widget(button)
+                    self.connect_layout.add_widget(button)
                 return b
 
         self.ui = LADXManager(self)
@@ -506,7 +511,8 @@ class LinksAwakeningContext(CommonContext):
     def new_checks(self, item_ids, ladxr_ids):
         self.found_checks += item_ids
         create_task_log_exception(self.send_checks())
-        create_task_log_exception(self.magpie.send_new_checks(ladxr_ids))
+        if self.magpie_enabled:
+            create_task_log_exception(self.magpie.send_new_checks(ladxr_ids))
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -537,7 +543,8 @@ class LinksAwakeningContext(CommonContext):
         async def deathlink():
             await self.send_deathlink()
 
-        self.magpie_task = asyncio.create_task(self.magpie.serve())
+        if self.magpie_enabled:
+            self.magpie_task = asyncio.create_task(self.magpie.serve())
         
         # yield to allow UI to start
         await asyncio.sleep(0)
@@ -558,9 +565,10 @@ class LinksAwakeningContext(CommonContext):
                     if self.last_resend + 5.0 < now:
                         self.last_resend = now
                         await self.send_checks()
-                    self.magpie.set_checks(self.client.tracker.all_checks)
-                    await self.magpie.set_item_tracker(self.client.item_tracker)
-                    await self.magpie.send_gps(self.client.gps_tracker)
+                    if self.magpie_enabled:
+                        self.magpie.set_checks(self.client.tracker.all_checks)
+                        await self.magpie.set_item_tracker(self.client.item_tracker)
+                        await self.magpie.send_gps(self.client.gps_tracker)
 
             except GameboyException:
                 time.sleep(1.0)
@@ -570,9 +578,11 @@ class LinksAwakeningContext(CommonContext):
 async def main():
     parser = get_base_parser(description="Link's Awakening Client.")
     parser.add_argument("--url", help="Archipelago connection url")
+    parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
 
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a .apladx Archipelago Binary Patch file')
+                        
     args = parser.parse_args()
     logger.info(args)
 
@@ -590,7 +600,7 @@ async def main():
         if url.password:
             args.password = urllib.parse.unquote(url.password)
 
-    ctx = LinksAwakeningContext(args.connect, args.password)
+    ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
 
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
