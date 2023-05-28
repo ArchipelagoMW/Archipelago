@@ -100,8 +100,9 @@ def generate_random_hints(multiworld: MultiWorld, this_player: int):
 
     # Hint-type #5: Jokes
     other_player_names = [name for player, name in multiworld.player_name.items() if player != this_player]
-    random_player_name = random.choice(other_player_names)
-    hint_texts.append(f"{random_player_name}'s world is objectively better than yours.")
+    if len(other_player_names) != 0:
+        random_player_name = random.choice(other_player_names)
+        hint_texts.append(f"{random_player_name}'s world is objectively better than yours.")
 
     hint_texts.append(f"Have you found all of the {len(multiworld.itempool)} items in this universe?")
 

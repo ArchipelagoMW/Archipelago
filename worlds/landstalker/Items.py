@@ -17,7 +17,7 @@ class LandstalkerItemData(NamedTuple):
 
 
 item_table: Dict[str, LandstalkerItemData] = {
-    "EkeEke":               LandstalkerItemData(0,  ItemClassification.useful,      20,     0),  # Variable amount
+    "EkeEke":               LandstalkerItemData(0,  ItemClassification.filler,      20,     0),  # Variable amount
     "Magic Sword":          LandstalkerItemData(1,  ItemClassification.useful,      300,    1),
     "Sword of Ice":         LandstalkerItemData(2,  ItemClassification.useful,      300,    1),
     "Thunder Sword":        LandstalkerItemData(3,  ItemClassification.useful,      500,    1),
@@ -62,7 +62,7 @@ item_table: Dict[str, LandstalkerItemData] = {
     "Purple Jewel":         LandstalkerItemData(42, ItemClassification.progression, 500,    0),
     "Gola's Eye":           LandstalkerItemData(43, ItemClassification.progression, 400,    1),
     "Death Statue":         LandstalkerItemData(44, ItemClassification.filler,      150,    1),
-    "Dahl":                 LandstalkerItemData(45, ItemClassification.useful,      100,    18),
+    "Dahl":                 LandstalkerItemData(45, ItemClassification.filler,      100,    18),
     "Restoration":          LandstalkerItemData(46, ItemClassification.filler,      40,     9),
     "Logs":                 LandstalkerItemData(47, ItemClassification.progression, 100,    2),
     "Oracle Stone":         LandstalkerItemData(48, ItemClassification.progression, 250,    1),
@@ -79,12 +79,12 @@ item_table: Dict[str, LandstalkerItemData] = {
     # Leather Breast: 59
     # Leather Boots: 60
     # No Ring: 61
-    "Life Stock":           LandstalkerItemData(62, ItemClassification.useful,      250,    0),  # Variable amount
+    "Life Stock":           LandstalkerItemData(62, ItemClassification.filler,      250,    0),  # Variable amount
     "No Item":              LandstalkerItemData(63, ItemClassification.filler,      0,      0),
     "1 Gold":               LandstalkerItemData(64, ItemClassification.filler,      1,      1),
     "20 Golds":             LandstalkerItemData(65, ItemClassification.filler,      20,     15),
-    "50 Golds":             LandstalkerItemData(66, ItemClassification.useful,      50,     7),
-    "100 Golds":            LandstalkerItemData(67, ItemClassification.useful,      100,    5),
+    "50 Golds":             LandstalkerItemData(66, ItemClassification.filler,      50,     7),
+    "100 Golds":            LandstalkerItemData(67, ItemClassification.filler,      100,    5),
     "200 Golds":            LandstalkerItemData(68, ItemClassification.useful,      200,    2),
 
     "Progressive Armor":    LandstalkerItemData(69, ItemClassification.useful,      250,    0)
