@@ -1,0 +1,1436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="1">
+        <name value="DoorOutside"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="177.422,35.8447"/>
+            <radius value="3.203"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="RemoveStartUnits"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="167.9816,28.2011"/>
+            <radius value="6.153"/>
+        </shape>
+    </region>
+    <region id="3">
+        <name value="OutsideAlertTeam"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="191.1384,44.279"/>
+            <radius value="2.816"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="HackDialogue01"/>
+        <color value="255,64,128,128"/>
+        <shape type="circle">
+            <center value="204.7404,46.9545"/>
+            <radius value="4.4182"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Terminal04"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="172.576,97.0571"/>
+            <radius value="1.1784"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="DoorOutsideDialogue"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="175.4956,33.8583"/>
+            <radius value="4.2463"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="CinTurretsCleanupArea"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="175.8937,54.4538"/>
+            <radius value="5.4313"/>
+        </shape>
+        <shape type="circle">
+            <center value="173.34,52.1057"/>
+            <radius value="5.4313"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="TankBayGroup"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="181.5544,96.2207"/>
+            <radius value="2.8261"/>
+        </shape>
+        <shape type="circle">
+            <center value="174.5925,90.082"/>
+            <radius value="4.0317"/>
+        </shape>
+        <shape type="circle">
+            <center value="178.161,93.0402"/>
+            <radius value="2.6174"/>
+        </shape>
+        <shape type="circle">
+            <center value="184.5781,99.3017"/>
+            <radius value="2.727"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="HybridAreaLastRoom"/>
+        <shape type="circle">
+            <center value="225.0195,173.1401"/>
+            <radius value="12.5056"/>
+        </shape>
+        <shape type="circle">
+            <center value="238.541,160.7658"/>
+            <radius value="6.4458"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="DoorC4Lab03"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="189.6196,135.2724"/>
+            <radius value="4.2568"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="DoorHybridRoom"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="215.9746,162.8034"/>
+            <radius value="3.721"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="EscapeVictory"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="38.7363,37.4423"/>
+            <radius value="7.7841"/>
+        </shape>
+        <shape type="circle">
+            <center value="40.3022,34.2814"/>
+            <radius value="7.7841"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="EscapeZergAttack01"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="69.6606,198.7954"/>
+            <radius value="6.3178"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="EscapeHybridCreatesInitiate"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="74.9448,164.5961"/>
+            <radius value="5.423"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="EscapeFallingApartDialogue"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="54.1364,90.5263"/>
+            <radius value="4.0407"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="EscapeProtossAttack01"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="64.6645,195.3461"/>
+            <radius value="7.4392"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="EscapeRandomMoveRegion02"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="51.1105,149.482"/>
+            <radius value="5.9357"/>
+        </shape>
+    </region>
+    <region id="51">
+        <name value="EscapeZergRandom"/>
+        <shape type="circle">
+            <center value="71.6276,73.9228"/>
+            <radius value="7.5864"/>
+        </shape>
+    </region>
+    <region id="60">
+        <name value="AttackSniperBotInitiate"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="190.398,117.953"/>
+            <radius value="4.8781"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="AttackSniperBotGroup"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="187.7326,119.5937"/>
+            <radius value="3.7812"/>
+        </shape>
+    </region>
+    <region id="63">
+        <name value="DialogueLab01"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="162.6672,71.0612"/>
+            <radius value="7.4482"/>
+        </shape>
+        <shape type="circle">
+            <center value="171.0351,66.7656"/>
+            <radius value="3.4785"/>
+        </shape>
+    </region>
+    <region id="64">
+        <name value="Terminal05"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="176.543,123.8247"/>
+            <radius value="1.2521"/>
+        </shape>
+    </region>
+    <region id="69">
+        <name value="DialogueRaynor01"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="200.9184,40.4233"/>
+            <radius value="5.0717"/>
+        </shape>
+    </region>
+    <region id="71">
+        <name value="LockDoorArea"/>
+        <color value="255,64,128,128"/>
+        <shape type="circle">
+            <center value="179.9997,46.7741"/>
+            <radius value="3.8054"/>
+        </shape>
+        <shape type="circle">
+            <center value="184.5356,45.625"/>
+            <radius value="3.398"/>
+        </shape>
+        <shape type="circle">
+            <center value="189.0852,44.143"/>
+            <radius value="3.398"/>
+        </shape>
+    </region>
+    <region id="74">
+        <name value="RevealAreaLab02"/>
+        <color value="255,64,128,128"/>
+        <shape type="circle">
+            <center value="207.119,85.5415"/>
+            <radius value="8.6677"/>
+        </shape>
+        <shape type="circle">
+            <center value="212.2275,90.2985"/>
+            <radius value="4.2927"/>
+        </shape>
+    </region>
+    <region id="76">
+        <name value="Terminal02"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="221.1894,79.0861"/>
+            <radius value="1.1955"/>
+        </shape>
+    </region>
+    <region id="77">
+        <name value="Lab02PenArea"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="212.1337,90.29"/>
+            <radius value="5.7272"/>
+        </shape>
+    </region>
+    <region id="78">
+        <name value="Hall01MarineRun"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="190.8041,66.6823"/>
+            <radius value="4.1691"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Hall01MarineGotOut"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="182.0344,66.5214"/>
+            <radius value="4.1691"/>
+        </shape>
+    </region>
+    <region id="80">
+        <name value="Lab02HoldPosArea"/>
+        <shape type="circle">
+            <center value="205.861,84.3322"/>
+            <radius value="4.9934"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="Grenades01"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="186.5412,63.8518"/>
+            <radius value="1.0305"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="Lab02SupplyDoorArea"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="199.8276,97.816"/>
+            <radius value="3.321"/>
+        </shape>
+    </region>
+    <region id="70">
+        <name value="PatrolGroup"/>
+        <shape type="circle">
+            <center value="184.8161,99.6538"/>
+            <radius value="2.727"/>
+        </shape>
+    </region>
+    <region id="72">
+        <name value="Grenades02"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="201.7297,116.3203"/>
+            <radius value="1.2626"/>
+        </shape>
+    </region>
+    <region id="83">
+        <name value="RegionX88TbotDestArea"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="180.5932,128.4394"/>
+            <radius value="1.5537"/>
+        </shape>
+    </region>
+    <region id="85">
+        <name value="BrutaliskArea"/>
+        <shape type="circle">
+            <center value="204.0207,150.051"/>
+            <radius value="5.831"/>
+        </shape>
+    </region>
+    <region id="86">
+        <name value="Grenades03"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="210.358,138.8632"/>
+            <radius value="1.4768"/>
+        </shape>
+    </region>
+    <region id="87">
+        <name value="Hint First Computer"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="189.998,46.4062"/>
+            <radius value="5.611"/>
+        </shape>
+    </region>
+    <region id="88">
+        <name value="DialogueReleaseProtolisk"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="204.2592,150.642"/>
+            <radius value="7.7805"/>
+        </shape>
+        <shape type="circle">
+            <center value="195.2163,148.8706"/>
+            <radius value="1.991"/>
+        </shape>
+        <shape type="circle">
+            <center value="203.2678,142.1232"/>
+            <radius value="1.991"/>
+        </shape>
+    </region>
+    <region id="89">
+        <name value="GrenadierAreaInitiate"/>
+        <shape type="circle">
+            <center value="193.8,139.596"/>
+            <radius value="3.6186"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="EsscapeFirstBlockedDialogue"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="62.7878,179.6232"/>
+            <radius value="4.3166"/>
+        </shape>
+    </region>
+    <region id="90">
+        <name value="EscapeRocks01"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="64.0795,177.0573"/>
+            <radius value="3.1896"/>
+        </shape>
+    </region>
+    <region id="92">
+        <name value="EscapeLab03Area02"/>
+        <shape type="circle">
+            <center value="80.9841,151.7294"/>
+            <radius value="7.759"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.7717,144.1044"/>
+            <radius value="2.6718"/>
+        </shape>
+        <shape type="circle">
+            <center value="84.311,157.1723"/>
+            <radius value="3.065"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="EscapeRocks02"/>
+        <color value="255,192,192,192"/>
+        <shape type="circle">
+            <center value="83.157,170.1054"/>
+            <radius value="3.1896"/>
+        </shape>
+    </region>
+    <region id="62">
+        <name value="DoorMaintenance"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="179.861,47.7883"/>
+            <radius value="3.203"/>
+        </shape>
+    </region>
+    <region id="94">
+        <name value="RegionRevealerC4"/>
+        <shape type="circle">
+            <center value="176.699,34.7841"/>
+            <radius value="1.7324"/>
+        </shape>
+    </region>
+    <region id="95">
+        <name value="RevealerBayArea"/>
+        <shape type="circle">
+            <center value="193.432,112.0825"/>
+            <radius value="7.526"/>
+        </shape>
+    </region>
+    <region id="96">
+        <name value="PlasmaGunGiveArea"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="202.9128,101.3605"/>
+            <radius value="1.662"/>
+        </shape>
+    </region>
+    <region id="97">
+        <name value="RevealerLab03Area"/>
+        <shape type="circle">
+            <center value="202.6462,148.988"/>
+            <radius value="15.2592"/>
+        </shape>
+    </region>
+    <region id="98">
+        <name value="PlasmaRounds01"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="170.8654,93.0031"/>
+            <radius value="1.2507"/>
+        </shape>
+    </region>
+    <region id="99">
+        <name value="Grenades04"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="74.493,151.312"/>
+            <radius value="1.2287"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="PlasmaRounds02"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="89.1293,190.0368"/>
+            <radius value="1.2485"/>
+        </shape>
+    </region>
+    <region id="109">
+        <name value="Grenades05"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="61.1906,80.7521"/>
+            <radius value="1.2287"/>
+        </shape>
+    </region>
+    <region id="111">
+        <name value="EscapeTerminal01"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="47.265,134.7602"/>
+            <radius value="1.3037"/>
+        </shape>
+    </region>
+    <region id="93">
+        <name value="EscapeDockingBayDialogue"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="52.5314,139.0964"/>
+            <radius value="4.5051"/>
+        </shape>
+    </region>
+    <region id="112">
+        <name value="EscapeDominionMarinesRandom01"/>
+        <shape type="circle">
+            <center value="65.0554,125.0222"/>
+            <radius value="6.7915"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="EscapeDialogueFlameGun"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="66.6474,125.1857"/>
+            <radius value="3.5183"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="EscapeAreaZergProtossBattle"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="47.8488,105.7761"/>
+            <radius value="7.2106"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="EscapeHybridSurpriseInit"/>
+        <shape type="circle">
+            <center value="50.4172,61.528"/>
+            <radius value="6.9792"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="MorosDevice"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="54.8403,189.1113"/>
+            <radius value="2.1701"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="HybridMoveRemove"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="211.999,177.3383"/>
+            <radius value="2.2163"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="EscapeZealotsStay"/>
+        <shape type="circle">
+            <center value="78.5214,87.5764"/>
+            <radius value="5.027"/>
+        </shape>
+    </region>
+    <region id="58">
+        <name value="EscapeInitiateHybridTunnel"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="57.016,75.41"/>
+            <radius value="5.694"/>
+        </shape>
+    </region>
+    <region id="65">
+        <name value="Lab02EntranceArea"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="211.5004,78.801"/>
+            <radius value="3.3442"/>
+        </shape>
+    </region>
+    <region id="66">
+        <name value="Lab02ShutDoor"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="218.4045,72.1164"/>
+            <radius value="6.1328"/>
+        </shape>
+        <shape type="circle">
+            <center value="213.6782,69.6352"/>
+            <radius value="3.4941"/>
+        </shape>
+    </region>
+    <region id="68">
+        <name value="EscapeLab03Area03"/>
+        <shape type="circle">
+            <center value="67.6972,155.2238"/>
+            <radius value="5.8085"/>
+        </shape>
+    </region>
+    <region id="91">
+        <name value="Auto-SaveHalfOut"/>
+        <color value="255,128,64,64"/>
+        <shape type="circle">
+            <center value="54.334,111.6025"/>
+            <radius value="5.9665"/>
+        </shape>
+    </region>
+    <region id="114">
+        <name value="EscapeAutoSaveMidMission"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="106.6674,172.276"/>
+            <radius value="3.8112"/>
+        </shape>
+    </region>
+    <region id="115">
+        <name value="AttackGuys"/>
+        <shape type="circle">
+            <center value="175.1276,58.341"/>
+            <radius value="2.7565"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Terminal06"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="193.0041,161.182"/>
+            <radius value="1.2521"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="MiniUltra01"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="36.29,80.4816"/>
+            <radius value="5.4255"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="MiniUltra02"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="34.4946,78.8566"/>
+            <radius value="5.4255"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="MiniUltra04"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="34.1354,72.4235"/>
+            <radius value="5.4255"/>
+        </shape>
+    </region>
+    <region id="59">
+        <name value="EscapeMiniUltraCreate"/>
+        <shape type="circle">
+            <center value="48.663,59.8151"/>
+            <radius value="4.1406"/>
+        </shape>
+    </region>
+    <region id="100">
+        <name value="EscapeUltraAttack"/>
+        <color value="255,128,0,64"/>
+        <shape type="circle">
+            <center value="27.1044,69.5842"/>
+            <radius value="7.8723"/>
+        </shape>
+        <shape type="circle">
+            <center value="23.3395,80.1655"/>
+            <radius value="7.4104"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.1862,70.5361"/>
+            <radius value="5.34"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="MiniUltra03"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="33.4558,76.2377"/>
+            <radius value="5.4255"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="PlasmaRounds03"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="196.6481,162.4467"/>
+            <radius value="1.2507"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="MorosCharge04"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="53.5046,88.5742"/>
+            <radius value="1.3713"/>
+        </shape>
+    </region>
+    <region id="67">
+        <name value="EscapeLab03Area01"/>
+        <shape type="circle">
+            <center value="65.363,171.3454"/>
+            <radius value="5.8085"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="MedicCharge01"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="194.8151,97.0852"/>
+            <radius value="1.2507"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Civ01"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="187.8017,38.3281"/>
+            <radius value="2.9306"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Civ02"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="188.009,42.9487"/>
+            <radius value="3.8596"/>
+        </shape>
+        <shape type="circle">
+            <center value="183.5031,40.2155"/>
+            <radius value="2.6923"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Civ03"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="186.2968,65.26"/>
+            <radius value="5.4272"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="Lab02GroupArea"/>
+        <shape type="circle">
+            <center value="197.2927,90.945"/>
+            <radius value="4.3337"/>
+        </shape>
+    </region>
+    <region id="50">
+        <name value="EscapeExplosion01"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="87.605,175.1728"/>
+            <radius value="4.04"/>
+        </shape>
+    </region>
+    <region id="53">
+        <name value="EscapeExplosion02"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="62.6545,165.267"/>
+            <radius value="4.763"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="EscapeExplosion03"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="62.5234,154.0356"/>
+            <radius value="3.8071"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="Move Area Marines01"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="86.2653,187.9621"/>
+            <radius value="2.1948"/>
+        </shape>
+    </region>
+    <region id="56">
+        <name value="Move Area Zerg01"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="89.8083,174.6743"/>
+            <radius value="1.0676"/>
+        </shape>
+    </region>
+    <region id="57">
+        <name value="Move Area Zerg02"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="60.4384,145.5832"/>
+            <radius value="3.694"/>
+        </shape>
+    </region>
+    <region id="73">
+        <name value="Move Area Zerg03"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="68.8981,99.941"/>
+            <radius value="2.0178"/>
+        </shape>
+    </region>
+    <region id="79">
+        <name value="Move Area Protoss01"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="67.1303,92.0488"/>
+            <radius value="2.0178"/>
+        </shape>
+    </region>
+    <region id="81">
+        <name value="HerculesArea"/>
+        <color value="255,128,128,64"/>
+        <shape type="circle">
+            <center value="79.827,26.7814"/>
+            <radius value="3.2111"/>
+        </shape>
+        <shape type="circle">
+            <center value="77.3054,27.965"/>
+            <radius value="1.3308"/>
+        </shape>
+    </region>
+    <region id="101">
+        <name value="EscapeBattleZergMarines"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="64.8366,44.1425"/>
+            <radius value="5.635"/>
+        </shape>
+    </region>
+    <region id="103">
+        <name value="Move Area Zerg04"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="68.157,40.5063"/>
+            <radius value="2.3066"/>
+        </shape>
+    </region>
+    <region id="104">
+        <name value="VictoryCinZergAttackCreate"/>
+        <shape type="circle">
+            <center value="65.8237,42.0773"/>
+            <radius value="3.0683"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.5202,44.7292"/>
+            <radius value="3.0683"/>
+        </shape>
+    </region>
+    <region id="105">
+        <name value="HerculesLoadArea"/>
+        <shape type="circle">
+            <center value="79.8598,26.665"/>
+            <radius value="0.837"/>
+        </shape>
+    </region>
+    <region id="107">
+        <name value="EscapeDialogueGetToTransport"/>
+        <shape type="circle">
+            <center value="65.1374,43.4406"/>
+            <radius value="4.8398"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="RevealerCore"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="238.5644,160.2502"/>
+            <radius value="6.0905"/>
+        </shape>
+    </region>
+    <region id="108">
+        <name value="Move Area Zerg05"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="78.3642,101.2092"/>
+            <radius value="3.8771"/>
+        </shape>
+    </region>
+    <region id="110">
+        <name value="EscapeHerculesDestRemove"/>
+        <shape type="circle">
+            <center value="66.0493,5.7326"/>
+            <radius value="3.0913"/>
+        </shape>
+    </region>
+    <region id="113">
+        <name value="AutosaveTankBayArea"/>
+        <shape type="circle">
+            <center value="183.295,125.637"/>
+            <radius value="8.9868"/>
+        </shape>
+    </region>
+    <region id="116">
+        <name value="MarinesAttackLab03"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="219.1633,177.3327"/>
+            <radius value="2.6052"/>
+        </shape>
+    </region>
+    <region id="117">
+        <name value="EscapeExplosion04"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="63.7954,103.226"/>
+            <radius value="3.8071"/>
+        </shape>
+    </region>
+    <region id="118">
+        <name value="EscapeExplosion05"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="70.2077,69.023"/>
+            <radius value="3.8071"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.3537,74.5292"/>
+            <radius value="3.0954"/>
+        </shape>
+    </region>
+    <region id="119">
+        <name value="EscapeExplosion06"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="84.8833,89.6342"/>
+            <radius value="3.8071"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.1755,85.6994"/>
+            <radius value="2.073"/>
+        </shape>
+    </region>
+    <region id="102">
+        <name value="RegionRemoveUnitsForAtMidGame"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="141.1762,10.1564,245.526,233.1535"/>
+        </shape>
+    </region>
+    <region id="120">
+        <name value="Region 002"/>
+        <shape type="rect">
+            <quad value="156.2536,157.102,156.5036,157.352"/>
+        </shape>
+    </region>
+    <region id="121">
+        <name value="Region 003"/>
+        <shape type="rect">
+            <quad value="156.2712,152.892,156.5212,153.142"/>
+        </shape>
+    </region>
+    <region id="122">
+        <name value="RegionHideUnitsDuringFirstHalfOfGame"/>
+        <color value="255,128,255,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="17.9973,17.1052,133.0937,213.964"/>
+        </shape>
+    </region>
+    <region id="123">
+        <name value="Region 004"/>
+        <shape type="rect">
+            <quad value="118.893,143.933,119.143,144.183"/>
+        </shape>
+    </region>
+    <region id="124">
+        <name value="ScientistMoveLab0301"/>
+        <color value="255,0,0,255"/>
+        <shape type="circle">
+            <center value="228.45,180.408"/>
+            <radius value="0.844"/>
+        </shape>
+    </region>
+    <region id="125">
+        <name value="ScientistMoveLab0302"/>
+        <color value="255,0,0,255"/>
+        <shape type="circle">
+            <center value="231.9213,175.684"/>
+            <radius value="0.844"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="DialogueHalt"/>
+        <color value="255,64,128,128"/>
+        <shape type="circle">
+            <center value="180.691,38.7021"/>
+            <radius value="5.9348"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="OutsideOfLab01"/>
+        <shape type="circle">
+            <center value="173.3571,52.8972"/>
+            <radius value="9.3354"/>
+        </shape>
+        <shape type="circle">
+            <center value="184.541,41.853"/>
+            <radius value="11.1877"/>
+        </shape>
+        <shape type="circle">
+            <center value="174.758,30.3466"/>
+            <radius value="11.1877"/>
+        </shape>
+        <shape type="circle">
+            <center value="162.4304,27.529"/>
+            <radius value="13.5532"/>
+        </shape>
+        <shape type="circle">
+            <center value="169.3017,24.01"/>
+            <radius value="13.5532"/>
+        </shape>
+    </region>
+    <region id="126">
+        <name value="Lab02RandomMoveArea"/>
+        <shape type="circle">
+            <center value="207.1713,82.4948"/>
+            <radius value="4.131"/>
+        </shape>
+    </region>
+    <region id="127">
+        <name value="DialogueScientist01"/>
+        <shape type="circle">
+            <center value="164.9526,61.3972"/>
+            <radius value="3.2827"/>
+        </shape>
+    </region>
+    <region id="128">
+        <name value="GhostMove01"/>
+        <color value="255,128,128,255"/>
+        <shape type="circle">
+            <center value="205.3403,142.2426"/>
+            <radius value="3.6313"/>
+        </shape>
+    </region>
+    <region id="129">
+        <name value="GhostMove02"/>
+        <color value="255,128,128,255"/>
+        <shape type="circle">
+            <center value="195.8186,149.3581"/>
+            <radius value="3.6313"/>
+        </shape>
+    </region>
+    <region id="130">
+        <name value="EscapeExplosion07"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="52.026,92.461"/>
+            <radius value="3.8071"/>
+        </shape>
+    </region>
+    <region id="131">
+        <name value="EscapeExplosion08"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="76.0026,32.504"/>
+            <radius value="3.4104"/>
+        </shape>
+    </region>
+    <region id="132">
+        <name value="Lab03FirebatMove"/>
+        <shape type="circle">
+            <center value="200.9111,142.878"/>
+            <radius value="3.6735"/>
+        </shape>
+    </region>
+    <region id="133">
+        <name value="StasisUp01"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="157.2458,64.412"/>
+            <radius value="1.4345"/>
+        </shape>
+        <shape type="circle">
+            <center value="158.1105,65.2644"/>
+            <radius value="1.4345"/>
+        </shape>
+    </region>
+    <region id="75">
+        <name value="BreachingChargePen01"/>
+        <shape type="circle">
+            <center value="159.158,75.8771"/>
+            <radius value="5.228"/>
+        </shape>
+    </region>
+    <region id="84">
+        <name value="DoorLab01"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="170.655,74.2512"/>
+            <radius value="3.203"/>
+        </shape>
+    </region>
+    <region id="135">
+        <name value="MedicCharge03"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="57.1264,72.3908"/>
+            <radius value="1.2507"/>
+        </shape>
+    </region>
+    <region id="136">
+        <name value="DoorLab01.1"/>
+        <color value="255,255,0,0"/>
+        <shape type="circle">
+            <center value="168.3322,59.429"/>
+            <radius value="3.203"/>
+        </shape>
+    </region>
+    <region id="137">
+        <name value="StasisUp02"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="159.2678,62.4375"/>
+            <radius value="1.5815"/>
+        </shape>
+        <shape type="circle">
+            <center value="160.106,63.2145"/>
+            <radius value="1.5815"/>
+        </shape>
+    </region>
+    <region id="138">
+        <name value="StasisUp03"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="161.2524,60.31"/>
+            <radius value="1.4062"/>
+        </shape>
+        <shape type="circle">
+            <center value="162.3078,61.2756"/>
+            <radius value="1.4516"/>
+        </shape>
+    </region>
+    <region id="134">
+        <name value="StasisUpCin02"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="202.9523,77.0415"/>
+            <radius value="1.4345"/>
+        </shape>
+        <shape type="circle">
+            <center value="203.8171,77.8937"/>
+            <radius value="1.4345"/>
+        </shape>
+        <shape type="circle">
+            <center value="198.928,81.025"/>
+            <radius value="1.4345"/>
+        </shape>
+        <shape type="circle">
+            <center value="199.7927,81.8771"/>
+            <radius value="1.4345"/>
+        </shape>
+        <shape type="circle">
+            <center value="200.7475,78.7346"/>
+            <radius value="1.3833"/>
+        </shape>
+        <shape type="circle">
+            <center value="201.783,79.978"/>
+            <radius value="1.3833"/>
+        </shape>
+    </region>
+    <region id="139">
+        <name value="PsiElement01"/>
+        <color value="255,128,128,255"/>
+        <shape type="circle">
+            <center value="214.6706,93.7404"/>
+            <radius value="1.3295"/>
+        </shape>
+    </region>
+    <region id="140">
+        <name value="PsiElement02"/>
+        <color value="255,128,128,255"/>
+        <shape type="circle">
+            <center value="41.232,104.3457"/>
+            <radius value="1.3295"/>
+        </shape>
+    </region>
+    <region id="141">
+        <name value="PsiElement03"/>
+        <color value="255,128,128,255"/>
+        <shape type="circle">
+            <center value="75.5522,84.02"/>
+            <radius value="1.3295"/>
+        </shape>
+    </region>
+    <region id="143">
+        <name value="VisibilityWarbotArea"/>
+        <shape type="circle">
+            <center value="177.0253,102.5773"/>
+            <radius value="3.343"/>
+        </shape>
+    </region>
+    <region id="144">
+        <name value="StasisUp04"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="215.6113,151.9514"/>
+            <radius value="1.4345"/>
+        </shape>
+        <shape type="circle">
+            <center value="216.476,152.8037"/>
+            <radius value="1.4345"/>
+        </shape>
+        <shape type="circle">
+            <center value="215.3762,153.072"/>
+            <radius value="1.6447"/>
+        </shape>
+    </region>
+    <region id="145">
+        <name value="StasisUp05"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="203.6796,161.8754"/>
+            <radius value="1.4345"/>
+        </shape>
+        <shape type="circle">
+            <center value="204.5444,162.7277"/>
+            <radius value="1.4345"/>
+        </shape>
+        <shape type="circle">
+            <center value="204.776,162.0434"/>
+            <radius value="1.6953"/>
+        </shape>
+    </region>
+    <region id="146">
+        <name value="HybridChamber"/>
+        <shape type="circle">
+            <center value="226.0004,172.181"/>
+            <radius value="3.6845"/>
+        </shape>
+    </region>
+    <region id="147">
+        <name value="Terminal01"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="188.3151,44.6665"/>
+            <radius value="1.0256"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="BabyUltraArea"/>
+        <shape type="circle">
+            <center value="35.7546,78.1735"/>
+            <radius value="9.8281"/>
+        </shape>
+    </region>
+    <region id="148">
+        <name value="RevealerRubble"/>
+        <shape type="circle">
+            <center value="63.5085,178.161"/>
+            <radius value="2.2263"/>
+        </shape>
+    </region>
+    <region id="150">
+        <name value="EscapeHybridForceDestroyRocks"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="65.793,151.4758"/>
+            <radius value="5.423"/>
+        </shape>
+    </region>
+    <region id="106">
+        <name value="EscapeBlockedByUltralisks"/>
+        <color value="255,255,128,255"/>
+        <shape type="circle">
+            <center value="56.0708,52.977"/>
+            <radius value="8.032"/>
+        </shape>
+    </region>
+    <region id="152">
+        <name value="AutoSaveComputer02"/>
+        <shape type="circle">
+            <center value="211.8781,68.1787"/>
+            <radius value="4.1716"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="RevealerTransport"/>
+        <shape type="circle">
+            <center value="79.7055,26.9013"/>
+            <radius value="6.5717"/>
+        </shape>
+    </region>
+    <region id="154">
+        <name value="ScientistsRandomPanicMove01"/>
+        <color value="255,128,128,255"/>
+        <shape type="circle">
+            <center value="226.6926,180.981"/>
+            <radius value="3.835"/>
+        </shape>
+        <shape type="circle">
+            <center value="230.294,178.5461"/>
+            <radius value="3.835"/>
+        </shape>
+        <shape type="circle">
+            <center value="233.6972,175.3154"/>
+            <radius value="3.835"/>
+        </shape>
+    </region>
+    <region id="155">
+        <name value="ScientistsRandomPanicMove02"/>
+        <color value="255,128,128,192"/>
+        <shape type="circle">
+            <center value="226.7976,181.079"/>
+            <radius value="3.835"/>
+        </shape>
+        <shape type="circle">
+            <center value="230.399,178.6442"/>
+            <radius value="3.835"/>
+        </shape>
+        <shape type="circle">
+            <center value="233.8022,175.4135"/>
+            <radius value="3.835"/>
+        </shape>
+    </region>
+    <region id="149">
+        <name value="MedicCharge04"/>
+        <color value="255,255,128,0"/>
+        <shape type="circle">
+            <center value="217.604,146.413"/>
+            <radius value="1.2507"/>
+        </shape>
+    </region>
+    <region id="142">
+        <name value="PsiElement04"/>
+        <color value="255,128,128,255"/>
+        <shape type="circle">
+            <center value="211.348,147.482"/>
+            <radius value="1.3295"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="KillUltraInitiate"/>
+        <shape type="circle">
+            <center value="222.9902,182.1467"/>
+            <radius value="3.72"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="RevealerPlatform01"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="159.545,21.843"/>
+            <radius value="17.7602"/>
+        </shape>
+        <shape type="circle">
+            <center value="149.9748,32.1274"/>
+            <radius value="14.6523"/>
+        </shape>
+        <shape type="circle">
+            <center value="173.5546,15.4902"/>
+            <radius value="12.2316"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="RevealerPlatform02a"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="171.025,137.1567"/>
+            <radius value="10.4333"/>
+        </shape>
+        <shape type="circle">
+            <center value="181.6955,141.8896"/>
+            <radius value="3.0974"/>
+        </shape>
+        <shape type="circle">
+            <center value="181.7062,138.0847"/>
+            <radius value="3.0036"/>
+        </shape>
+        <shape type="circle">
+            <center value="179.2263,144.9362"/>
+            <radius value="2.4301"/>
+        </shape>
+    </region>
+    <region id="82">
+        <name value="RevealerPlatform03"/>
+        <color value="255,255,255,0"/>
+        <shape type="circle">
+            <center value="80.2473,25.9184"/>
+            <radius value="12.2353"/>
+        </shape>
+    </region>
+    <region id="156">
+        <name value="RevealerPlatform02b"/>
+        <color value="255,128,128,0"/>
+        <shape type="circle">
+            <center value="175.1052,148.793"/>
+            <radius value="3.0261"/>
+        </shape>
+        <shape type="circle">
+            <center value="166.2407,157.3937"/>
+            <radius value="10.671"/>
+        </shape>
+        <shape type="circle">
+            <center value="169.1025,162.4953"/>
+            <radius value="9.118"/>
+        </shape>
+    </region>
+    <region id="157">
+        <name value="GroupEnemyMarinesAndFirebats"/>
+        <color value="255,64,128,128"/>
+        <shape type="circle">
+            <center value="172.3666,54.2966"/>
+            <radius value="9.158"/>
+        </shape>
+    </region>
+    <region id="158">
+        <name value="HybridAttack01"/>
+        <shape type="circle">
+            <center value="233.952,175.3127"/>
+            <radius value="0.995"/>
+        </shape>
+    </region>
+    <region id="159">
+        <name value="HybridAttack02"/>
+        <shape type="circle">
+            <center value="230.3281,179.5634"/>
+            <radius value="0.995"/>
+        </shape>
+    </region>
+    <region id="160">
+        <name value="HybridAttack03"/>
+        <shape type="circle">
+            <center value="223.6613,182.8393"/>
+            <radius value="0.995"/>
+        </shape>
+    </region>
+    <region id="161">
+        <name value="EscapeLoad"/>
+        <shape type="circle">
+            <center value="77.2172,29.2233"/>
+            <radius value="1.3562"/>
+        </shape>
+    </region>
+    <region id="162">
+        <name value="ZerglingAttackAreaLab01"/>
+        <shape type="circle">
+            <center value="165.24,69.1921"/>
+            <radius value="3.261"/>
+        </shape>
+    </region>
+    <region id="153">
+        <name value="VisibilityTurretsComputer01"/>
+        <shape type="circle">
+            <center value="173.7443,53.4553"/>
+            <radius value="8.8732"/>
+        </shape>
+        <shape type="circle">
+            <center value="167.2321,59.9487"/>
+            <radius value="3.073"/>
+        </shape>
+    </region>
+</Regions>
