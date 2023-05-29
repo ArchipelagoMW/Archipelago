@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CUnit id="Val03Artifact"/>
+    <CUnit id="Colossus">
+        <PlaneArray index="Ground" value="0"/>
+        <Collide index="Colossus" value="0"/>
+        <Collide index="Structure" value="0"/>
+        <Collide index="Flying" value="0"/>
+        <Mover value="Fly"/>
+    </CUnit>
+</Catalog>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CEffectDamage id="BlastNovaDamage">
+        <Amount value="175"/>
+    </CEffectDamage>
+    <CEffectDamage id="EnergyNovaDamage">
+        <Amount value="750"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="OmegaStormSearchArea">
+        <AreaArray index="0" Radius="2" Effect="OmegaStormDamage"/>
+    </CEffectEnumArea>
+</Catalog>

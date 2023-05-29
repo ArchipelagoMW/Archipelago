@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CRequirementCountUpgrade id="CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <Count Link="TerranInfantryWeaponsUltraCapacitorsLevel1"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="NotCountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOnly">
+        <Tooltip value="RequirementNode/Tooltip/##id##"/>
+        <OperandArray index="0" value="CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1QueuedOnly"/>
+    </CRequirementNot>
+</Catalog>

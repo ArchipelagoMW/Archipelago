@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preload>
+<Asset path="assets\textures\btn-ability-terran-emp.dds" Type="Image"/>
+<Achievement id="Anniversary_TValerian03"/>
+<Achievement id="TValerian03_1"/>
+<Achievement id="TValerian03_2"/>
+<Achievement id="TValerian03_3"/>
+<Actor id="SYSTEM_ActorConfig"/>
+<Actor id="LightOmniPurple"/>
+<Actor id="LightOmniPurpleLarge"/>
+<Actor id="LightOmniYellow"/>
+<Actor id="ZergBuildingLarge" Variations="0"/>
+<Actor id="BarracksWrecked"/>
+<Actor id="BunkerWrecked"/>
+<Actor id="CharClaws" Variations="0,1,2,3,4,5"/>
+<Actor id="CharCrater" Variations="0,1,2"/>
+<Actor id="CharCrystal" Variations="0,1,2"/>
+<Actor id="CharCrystalHuge" Variations="0,1,2,3"/>
+<Actor id="CharCrystalLarge" Variations="0,1"/>
+<Actor id="CharFlower" Variations="0,1,2"/>
+<Actor id="CharFlowerSmall" Variations="2"/>
+<Actor id="CharGlowingPods" Variations="0,1"/>
+<Actor id="CharIntestines" Variations="0,1,2"/>
+<Actor id="CharRibs" Variations="0,1,2,3"/>
+<Actor id="CharRock" Variations="2"/>
+<Actor id="CharTree" Variations="0,1"/>
+<Actor id="CharWeed" Variations="0,1,3"/>
+<Actor id="CharWorm" Variations="0,1,2,4,5,6"/>
+<Actor id="ColonistShipWrecked" Variations="0,3"/>
+<Actor id="FireMedium"/>
+<Actor id="LandingLights" Variations="0"/>
+<Actor id="LavaFlare"/>
+<Actor id="RockVolcanicGiant" Variations="0,1,2"/>
+<Actor id="SmokePillarsTall"/>
+<Actor id="SpacePlatformBarrier" Variations="0,1,2,3"/>
+<Actor id="Spires" Variations="4"/>
+<Actor id="WreckedBattlecruiser"/>
+<Actor id="WreckedJackal"/>
+<Actor id="WreckedNomad"/>
+<Actor id="ZergSpire" Variations="0"/>
+<Actor id="ZergSpireLarge" Variations="0,1,2,3,4"/>
+<Actor id="ZergThornSpire" Variations="0,1,2,3,4,5,6,7,8"/>
+<Actor id="ZergedCombs" Variations="0,1,2,3,4,5"/>
+<Actor id="Lavafall" Variations="0,1,2,3,4,5"/>
+<Actor id="CharCrashingDebrisFire"/>
+<Actor id="DestroyedNydusWorm" Variations="0,1,2"/>
+<Actor id="DestroyedPlatformChunks" Variations="0,1,2"/>
+<Actor id="QueenChamberSpire" Variations="0,1,4"/>
+<Actor id="QueenChamber"/>
+<Actor id="TTosh01Lavafall" Variations="2"/>
+<Actor id="ZergInfestedCliff" Variations="0"/>
+<Behavior id="ArtifactRecharging"/>
+<Behavior id="KerriganWalk"/>
+<Light id="AiurFlashback"/>
+<Model id="PingBoss"/>
+<Model id="PingObjective"/>
+<Model id="PingSimple"/>
+<Model id="PingWarning"/>
+<Model id="CharSkyBox"/>
+<Model id="ArtifactActivated"/>
+<Model id="ArtifactFullyCharged"/>
+<Model id="PowerOverwhelming"/>
+<Sound id="WarpGate_MorphToGateway" Variations="2"/>
+<Sound id="CreepTumor_Explode" Variations="5"/>
+<Sound id="HydraliskDen_Explode" Variations="2"/>
+<Sound id="NydusWorm_Unload"/>
+<Sound id="NydusWorm_Birth" Variations="0"/>
+<Sound id="IncomingTransmission" Variations="0"/>
+<Sound id="UI_ActionButtonSelect"/>
+<Sound id="UI_DropdownListSelect"/>
+<Sound id="UI_TerranReminderPing"/>
+<Sound id="UI_TerranKlaxonAlert"/>
+<Sound id="TUIWarningPing" Variations="0"/>
+<Sound id="Artifact_EnergyNova"/>
+<Sound id="Artifact_EnergyNovaImpact"/>
+<Sound id="XelNagaShrine_StandWork" Variations="0"/>
+<Sound id="ZergMothership_Birth" Variations="0"/>
+<Sound id="TTychus03Horner00033"/>
+<Sound id="TValerian03Adjutant00001" Variations="0"/>
+<Sound id="TValerian03Kerrigan00002"/>
+<Sound id="TValerian03Adjutant00003"/>
+<Sound id="TValerian03Horner00006"/>
+<Sound id="TValerian03Adjutant00008" Variations="0"/>
+<Sound id="TValerian03Adjutant00009" Variations="0"/>
+<Sound id="TValerian03Kerrigan00013"/>
+<Sound id="TValerian03Kerrigan00014"/>
+<Sound id="TValerian03Queen00017"/>
+<Sound id="TValerian03Raynor00020"/>
+<Sound id="TValerian03Warfield00025"/>
+<Sound id="TValerian03Raynor00028"/>
+<Sound id="TValerian03Tychus00032"/>
+<Sound id="TValerian03Queen00033"/>
+<Sound id="TValerian03Sarah00034"/>
+<Sound id="TValerian03Horner00037"/>
+<Sound id="TValerian03Adjutant00039"/>
+<Sound id="TValerian03Horner00040"/>
+<Sound id="TValerian03Horner00041"/>
+<Sound id="TValerian03Horner00042"/>
+<Sound id="TValerian03Horner00043"/>
+<Sound id="TValerian03Horner00044"/>
+<Sound id="TValerian03Kerrigan00046"/>
+<Sound id="TValerian03Horner00047"/>
+<Sound id="TValerian03Kerrigan00048"/>
+<Sound id="TValerian03Kerrigan00049"/>
+<Sound id="TValerian03Kerrigan00053"/>
+<Sound id="TValerian03Kerrigan00054"/>
+<Sound id="TValerian03Kerrigan00058"/>
+<Sound id="TValerian03Adjutant00063"/>
+<Sound id="TValerian03Raynor00064"/>
+<Sound id="TValerian03Horner00065"/>
+<Sound id="TValerian03Adjutant00066"/>
+<Sound id="TValerian03Horner00067"/>
+<Sound id="TValerian03Adjutant00068"/>
+<Sound id="TValerian03Horner00069"/>
+<Sound id="TValerian03Horner00070"/>
+<Sound id="TValerian03Horner00071"/>
+<Sound id="TValerian03Horner00072"/>
+<Sound id="TValerian03Tychus00074"/>
+<Sound id="TValerian03Raynor00075"/>
+<Sound id="TValerian03BriefingWarfield00001"/>
+<Sound id="TValerian03BriefingWarfield00002"/>
+<Sound id="TValerian03BriefingTychus00003"/>
+<Sound id="TValerian03BriefingWarfield00004"/>
+<Sound id="TValerian03BriefingWarfield00005"/>
+<Sound id="TValerian03BriefingWarfield00006"/>
+<Sound id="TValerian03BriefingRaynor00007"/>
+<Sound id="TValerian03BriefingRaynor00008"/>
+<Sound id="TValerian03BriefingRaynor00010"/>
+<Sound id="TValerian03BriefingTychus00011"/>
+<Sound id="TValerian03BriefingWarfield00012"/>
+<Sound id="TValerian03BriefingWarfield00013"/>
+<Sound id="TValerian03BriefingRaynor00014"/>
+<Soundtrack id="TValerian03MusicEventA"/>
+<Soundtrack id="TValerian03MusicEventB"/>
+<Soundtrack id="TValerian03MusicEventC"/>
+<Soundtrack id="TValerian03MusicEventD"/>
+<Soundtrack id="TValerian03MusicEventE"/>
+<Soundtrack id="TValerian03MusicIntro"/>
+<Soundtrack id="TValerian03MusicMain"/>
+<Soundtrack id="TValerian03MusicOutro"/>
+<Terrain id="Char"/>
+<Unit id="Baneling"/>
+<Unit id="CommandCenter"/>
+<Unit id="SupplyDepot"/>
+<Unit id="Refinery"/>
+<Unit id="Barracks"/>
+<Unit id="EngineeringBay"/>
+<Unit id="MissileTurret"/>
+<Unit id="Bunker"/>
+<Unit id="Factory"/>
+<Unit id="Starport"/>
+<Unit id="MercCompound"/>
+<Unit id="Armory"/>
+<Unit id="FusionCore"/>
+<Unit id="SiegeTankSieged"/>
+<Unit id="SiegeTank"/>
+<Unit id="SCV"/>
+<Unit id="Marine"/>
+<Unit id="Marauder"/>
+<Unit id="Banshee"/>
+<Unit id="Battlecruiser"/>
+<Unit id="SpawningPool"/>
+<Unit id="EvolutionChamber"/>
+<Unit id="HydraliskDen"/>
+<Unit id="UltraliskCavern"/>
+<Unit id="InfestationPit"/>
+<Unit id="BanelingNest"/>
+<Unit id="RoachWarren"/>
+<Unit id="SpineCrawler"/>
+<Unit id="SporeCrawler"/>
+<Unit id="Hive"/>
+<Unit id="GreaterSpire"/>
+<Unit id="Drone"/>
+<Unit id="Zergling"/>
+<Unit id="Overlord"/>
+<Unit id="Hydralisk"/>
+<Unit id="Mutalisk"/>
+<Unit id="Ultralisk"/>
+<Unit id="Roach"/>
+<Unit id="Infestor"/>
+<Unit id="BroodLord"/>
+<Unit id="BanelingBurrowed"/>
+<Unit id="HydraliskBurrowed"/>
+<Unit id="RoachBurrowed"/>
+<Unit id="ZerglingBurrowed"/>
+<Unit id="Overseer"/>
+<Unit id="UltraliskBurrowed"/>
+<Unit id="CreepTumorBurrowed"/>
+<Unit id="NydusCanal"/>
+<Unit id="MineralField" Variations="1,2,3,4,5,6,7,8,9"/>
+<Unit id="InfestedCivilian"/>
+<Unit id="KerriganChar"/>
+<Unit id="HunterKillerBurrowed"/>
+<Unit id="InfestedTerranCampaign"/>
+<Unit id="DestructibleSandbags" Variations="0,1,2"/>
+<Unit id="Artifact"/>
+<Unit id="Food1000"/>
+<Unit id="Medic"/>
+<Unit id="DefenseWallE" Variations="1"/>
+<Unit id="DefenseWallW" Variations="3"/>
+<Unit id="DefenseWallN" Variations="0"/>
+<Unit id="DefenseWallNE" Variations="0"/>
+<Unit id="DefenseWallSW" Variations="1"/>
+<Unit id="DefenseWallNW" Variations="0,3,4"/>
+<Unit id="CampaignRead"/>
+</Preload>

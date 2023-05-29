@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CSoundtrack id="Music_VictoryCinematic" parent="Music">
+        <CueArray>
+            <MasterLayer Sound="VictoryCinematic1"/>
+            <SlaveLayers/>
+        </CueArray>
+    </CSoundtrack>
+</Catalog>
