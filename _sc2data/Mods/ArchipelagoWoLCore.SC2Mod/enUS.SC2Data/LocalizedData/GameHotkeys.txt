@@ -1,3 +1,0 @@
-﻿Button/Hotkey/PsiDisrupter=D
-Button/Hotkey/ScienceVessel=S
-Button/Hotkey/Spectre=S

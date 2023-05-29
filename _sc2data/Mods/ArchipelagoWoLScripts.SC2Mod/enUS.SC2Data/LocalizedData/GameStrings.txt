@@ -1,5 +1,0 @@
-﻿DocInfo/DescLong=Completely devoid of any description whatsoever.
-DocInfo/DescShort=Any
-DocInfo/Name=Just Another StarCraft II Mod
-Param/Value/lib_C6542F50_3EC36D28=Unable to read difficulty:
-Unit/Name/CampaignRead=Archipelago
