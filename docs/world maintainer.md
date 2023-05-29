@@ -15,7 +15,7 @@ Unless these are shared between multiple people, we expect the following from ea
 * Review contents of such pull requests or organize peer reviews or post that you did not review the content.
 * Fix or point out issues when core changes break your code.
 * Use the watch function on GitHub, the #github-updates channel on Discord or check manually from time to time for new
-  pull requests. Core maintainers may also ping you if a pull request concerns your world,
+  pull requests. Core maintainers may also ping you if a pull request concerns your world.
 * Test (or have tested) the world on the main branch from time to time, especially during RC (release candidate) phases
   of development.
 * Let us know of long unavailabilities.
@@ -49,9 +49,10 @@ for example when they become unreachable. The majority of valid, duly votes has 
 The time limit is 2 weeks, but can end early if the majority is reached earlier AND the world maintainer was pinged and
 made their case or was pinged and has been unreachable for more than 2 weeks already.
 Voting shall be conducted on Discord in #archipelago-dev.
+Commits that are a direct result of the voting shall include date, voting members and final result in the commit message
 
 
 ## Handling of Unmaintained Worlds
 
 As long as worlds are known to work for the most part, they can stay included. Once a world becomes broken it shall be
-moved from `worlds/` to `disabled/`.
+moved from `worlds/` to `worlds_disabled/`.
