@@ -98,19 +98,7 @@
 <TerrainObject id="TerrainObjectBraxisAlphaZergHoleSmall2"/>
 <TerrainObject id="TerrainObjectBraxisAlphaZergHoleSmall3"/>
 <Unit id="Baneling"/>
-<Unit id="CommandCenter"/>
-<Unit id="SupplyDepot"/>
-<Unit id="Refinery"/>
-<Unit id="Barracks"/>
-<Unit id="EngineeringBay"/>
-<Unit id="MissileTurret"/>
-<Unit id="Factory"/>
-<Unit id="Starport"/>
-<Unit id="MercCompound"/>
-<Unit id="SCV"/>
-<Unit id="Marine"/>
 <Unit id="Banshee"/>
-<Unit id="Battlecruiser"/>
 <Unit id="Hatchery"/>
 <Unit id="Extractor"/>
 <Unit id="SpawningPool"/>
@@ -150,8 +138,20 @@
 <Unit id="MineralCrystal"/>
 <Unit id="NaturalGas"/>
 <Unit id="Food1000"/>
-<Unit id="Medic"/>
 <Unit id="SpacePlatformVentsUnit" Variations="0"/>
 <Unit id="Leviathan"/>
-<Unit id="CampaignRead"/>
+<Unit id="AP_SupplyDepot"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Barracks"/>
+<Unit id="AP_Factory"/>
+<Unit id="AP_SCV"/>
+<Unit id="AP_CommandCenter"/>
+<Unit id="AP_Starport"/>
+<Unit id="AP_Banshee"/>
+<Unit id="AP_Battlecruiser"/>
+<Unit id="AP_Refinery"/>
+<Unit id="AP_EngineeringBay"/>
+<Unit id="AP_MissileTurret"/>
+<Unit id="AP_MercCompound"/>
 </Preload>
