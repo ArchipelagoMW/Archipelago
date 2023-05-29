@@ -84,7 +84,7 @@ void lib5BD4895D_gf_AP_Core_MapConfig_setMapInit (trigger lp_initTrigger) {
 bool lib5BD4895D_gf_AP_Core_IsControllerNotInitialized () {
     // Automatic Variable Declarations
     // Implementation
-    if (((TechTreeUnitCount(1, "AP_Core_Controller", c_techCountQueuedOrBetter) < 1) || (lib5BD4895D_gv_aP_Core_controller == null) || (UnitIsAlive(lib5BD4895D_gv_aP_Core_controller) == false) || ((lib5BD4895D_gv_aP_Core_initFinished == true) && (UnitGetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropCurrent) == UnitGetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropNormal))))) {
+    if (((TechTreeUnitCount(1, "AP_Core_Controller", c_techCountQueuedOrBetter) < 1) || (lib5BD4895D_gv_aP_Core_controller == null) || (UnitIsAlive(lib5BD4895D_gv_aP_Core_controller) == false) || ((lib5BD4895D_gv_aP_Core_initFinished == true) && (UnitGetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropCurrent) == UnitGetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLifeMax, c_unitPropCurrent))))) {
         return true;
     }
     else {
