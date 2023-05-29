@@ -1,8 +1,8 @@
 # Advanced YAML Guide
 
-This guide covers more the more advanced options available in YAML files. This guide is intended for the user who is intent on editing their YAML file manually. This guide should take about 10 minutes to read.
+This guide covers more the more advanced options available in YAML files. This guide is intended for the user who plans to edit their YAML file manually. This guide should take about 10 minutes to read.
 
-If you would like to generate a basic, fully playable, YAML without editing a file then visit the settings page for the game you intend to play. The weighted settings page can also handle most of the advanced settings discussed here.
+If you would like to generate a basic, fully playable YAML without editing a file, then visit the settings page for the game you intend to play. The weighted settings page can also handle most of the advanced settings discussed here.
 
 The settings page can be found on the supported games page, just click the "Settings Page" link under the name of the game you would like. 
 * Supported games page: [Archipelago Games List](/games)
@@ -42,7 +42,7 @@ root_option:
 ```
 
 In Archipelago, YAML options are always written out in full lowercase with underscores separating any words. The numbers
-following the colons here are weights. The generator will read the weight of every option the roll that option that many
+following the colons here are weights. The generator will read the weight of every option, then roll that option that many
 times, the next option as many times as its numbered and so forth.
 
 For the above example `nested_option_one` will have `option_one_setting_one` 1 time and `option_one_setting_two` 0 times
@@ -72,21 +72,19 @@ games you want settings for.
   * `{NUMBER}` will be replaced with the counter value of the name if the counter value is greater than 1, otherwise 
   blank.
 
-* `game` is where either your chosen game goes or if you would like can be filled with multiple games each with
+* `game` is where either your chosen game goes or, if you would like, can be filled with multiple games each with
   different weights.
 
 * `requires` details different requirements from the generator for the YAML to work as you expect it to. Generally this
-  is good for detailing the version of Archipelago this YAML was prepared for as if it is rolled on an older version may
-  be missing settings and as such will not work as expected. If any plando is used in the file then requiring it here to
+  is good for detailing the version of Archipelago this YAML was prepared for as, if it is rolled on an older version,
+  settings may be missing and as such it will not work as expected. If any plando is used in the file then requiring it here to
   ensure it will be used is good practice.
 
 * `accessibility` determines the level of access to the game the generation will expect you to have in order to reach
-  your completion goal. This supports `items`, `locations`, and `none` and is set to `locations` by default.
+  your completion goal. This supports `items`, `locations`, and `minimal` and is set to `locations` by default.
     * `locations` will guarantee all locations are accessible in your world.
-    * `items` will guarantee you can acquire all items in your world but may not be able to access all locations. This
-      mostly comes into play if there is any entrance shuffle in the seed as locations without items in them can be
-      placed in areas that make them unreachable.
-    * `none` will only guarantee that the seed is beatable. You will be guaranteed able to finish the seed logically but
+    * `items` will guarantee you can acquire all logically relevant items in your world. Some items, such as keys, may be self-locking.
+    * `minimal` will only guarantee that the seed is beatable. You will be guaranteed able to finish the seed logically but
       may not be able to access all locations or acquire all items. A good example of this is having a big key in the
       big chest in a dungeon in ALTTP making it impossible to get and finish the dungeon.
 
@@ -105,7 +103,7 @@ games you want settings for.
 ## Game Options
 
 One of your root settings will be the name of the game you would like to populate with settings. Since it is possible to
-give a weight to any option it is possible to have one file that can generate a seed for you where you don't know which
+give a weight to any option, it is possible to have one file that can generate a seed for you where you don't know which
 game you'll play. For these cases you'll want to fill the game options for every game that can be rolled by these
 settings. If a game can be rolled it **must** have a settings section even if it is empty.
 
@@ -113,26 +111,27 @@ settings. If a game can be rolled it **must** have a settings section even if it
 
 Some options in Archipelago can be used by every game but must still be placed within the relevant game's section.
 
-Currently, these options are `start_inventory`, `start_hints`, `local_items`, `non_local_items`,  `start_location_hints`
-, `exclude_locations`, and various plando options.
+Currently, these options are `local_items`, `non_local_items`, `start_inventory`, `start_hints`, `start_location_hints`
+, `exclude_locations`, `priority_locations`, `item_link`, and various plando options.
 
 See the plando guide for more info on plando options. Plando
 guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
+* `local_items` will force any items you want to be in your world instead of being in another world.
+* `non_local_items` is the inverse of `local_items`, forcing any items you want to be in another world instead of
+  your own.
 * `start_inventory` will give any items defined here to you at the beginning of your game. The format for this must be
   the name as it appears in the game files and the amount you would like to start with. For example `Rupees(5): 6` which
   will give you 30 rupees.
-* `start_hints` gives you free server hints for the defined item/s at the beginning of the game allowing you to hint for
+* `start_hints` gives you free server hints for the defined items at the beginning of the game, allowing you to hint for
   the location without using any hint points.
-* `local_items` will force any items you want to be in your world instead of being in another world.
-* `non_local_items` is the inverse of `local_items` forcing any items you want to be in another world and won't be
-  located in your own.
-* `start_location_hints` allows you to define a location which you can then hint for to find out what item is located in
-  it to see how important the location is.
-
+* `start_location_hints` is the same as `start_hints` but for locations, allowing you to hint for the item contained there
+   without using any hint points.
 * `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
   item which isn't necessary for progression to go in these locations.
+* `priority_locations` is the inverse of `exlcude_locations`, forcing a progression item in the defined locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links can also have local and non local items, forcing the items to either be placed within the worlds of the group or in worlds outside the group. If players have a varying amount of a specific item in the link, the lowest amount from the players will be the amount put into the group.
+
 ### Random numbers
 
 Options taking a choice of a number can also use a variety of `random` options to choose a number randomly.
@@ -158,7 +157,7 @@ game:
   Timespinner: 10
 requires: 
   version: 0.3.2
-accessibility: none
+accessibility: minimal
 progression_balancing: on
 A Link to the Past:
   smallkey_shuffle:
@@ -168,23 +167,23 @@ A Link to the Past:
     random-low: 1
   crystals_needed_for_ganon:
     random-range-high-1-7: 1
-  start_inventory:
-    Pegasus Boots: 1
-    Bombs (3): 2
-  start_hints:
-    - Hammer
   local_items:
     - Bombos
     - Ether
     - Quake
   non_local_items:
     - Moon Pearl
+  start_inventory:
+    Pegasus Boots: 1
+    Bombs (3): 2
+  start_hints:
+    - Hammer
   start_location_hints:
     - Spike Cave
-  priority_locations:
-    - Link's House
   exclude_locations:
     - Cave 45
+  priority_locations:
+    - Link's House
   item_links:
     - name: rods
       item_pool:
@@ -220,10 +219,10 @@ Timespinner:
 * `game` has an equal chance of being either `A Link to the Past` or `Timespinner` with a 10/20 chance for each. This is
   because each game has a weight of 10 and the total of all weights is 20.
 * `requires` is set to required release version 0.3.2 or higher.
-* `accessibility` is set to `none` which will set this seed to beatable only, so some locations and items may be
+* `accessibility` is set to `minimal` which will set this seed to beatable only, so some locations and items may be
   completely inaccessible but the seed will still be completable.
 * `progression_balancing` is set on, giving it the default value, meaning we will likely receive important items
-  earlier increasing the chance of having things to do.
+  earlier, increasing the chance of having things to do.
 * `A Link to the Past` defines a location for us to nest all the game options we would like to use for our
   game `A Link to the Past`.
 * `smallkey_shuffle` is an option for A Link to the Past which determines how dungeon small keys are shuffled. In this
@@ -234,19 +233,19 @@ Timespinner:
   towards a lower number.
 * `crystals_needed_for_ganon` determines the number of crystals required to beat Ganon. In this example a number between
   1 and 7 will be chosen at random, weighted towards a high number.
+* `local_items` forces the `Bombos`, `Ether`, and `Quake` medallions to all be placed within our own world, meaning we
+  have to find it ourselves.
+* `non_local_items` forces the `Moon Pearl` to be placed in someone else's world, meaning we won't be able to find it.
 * `start_inventory` defines an area for us to determine what items we would like to start the seed with. For this
   example we have:
   * `Pegasus Boots: 1` which gives us 1 copy of the Pegasus Boots
   * `Bombs (3): 2` gives us 2 packs of 3 bombs or 6 total bombs
 * `start_hints` gives us a starting hint for the hammer available at the beginning of the multiworld which we can use
   with no cost.
-* `local_items` forces the `Bombos`, `Ether`, and `Quake` medallions to all be placed within our own world, meaning we
-  have to find it ourselves.
-* `non_local_items` forces the `Moon Pearl` to be placed in someone else's world, meaning we won't be able to find it.
 * `start_location_hints` gives us a starting hint for the `Spike Cave` location available at the beginning of the
   multiworld that can be used for no cost.
-* `priority_locations` forces a progression item to be placed on the `Link's House` location.
 * `exclude_locations` forces a not important item to be placed on the `Cave 45` location.
+* `priority_locations` forces a progression item to be placed on the `Link's House` location.
 * `item_links` 
   * For `A Link to the Past` all players in the `rods` item link group will share their fire and ice rods and the player
     items will be replaced with single rupees. The rupee will also be shared among those players.
