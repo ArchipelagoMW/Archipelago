@@ -1,0 +1,85 @@
+Conversation/TValerian02BBriefing/Line00001=Os voadores zergs estão usando esta velha plataforma orbital como base de operações. /// The zerg fliers are using this old orbital platform as their base of operations. 
+DocInfo/Author=Blizzard Entertainment /// Blizzard Entertainment
+DocInfo/DescLong=
+DocInfo/DescShort=TValerian02B /// TValerian02B
+DocInfo/Name=Destruição dos Céus /// Shatter the Sky
+MapInfo/Player00/Name=Neutro /// Neutral
+MapInfo/Player01/Name=Saqueadores do Raynor /// Raynor's Raiders
+MapInfo/Player02/Name=Estruturas da plataforma /// Platform Buildings
+MapInfo/Player03/Name=Enxame zerg /// Zerg Swarm
+MapInfo/Player04/Name=Enxame zerg /// Zerg Swarm
+MapInfo/Player05/Name=Enxame zerg /// Zerg Swarm
+MapInfo/Player06/Name=Enxame zerg /// Zerg Swarm
+MapInfo/Player07/Name=Enxame zerg /// Zerg Swarm
+MapInfo/Player08/Name=Plataforma infestada /// Infested Platform
+MapInfo/Player09/Name=Comando Orbital /// Orbital Command
+MapInfo/Player10/Name=Leviatã /// Leviathan
+MapInfo/Player11/Name=Plataforma /// Platform
+Param/Value/054ABB9E=P8 Unidades Muta = /// P8 Muta Units = 
+Param/Value/06F1D37B=Destruir as Torres de resfriamento fará com que a plataforma superaqueça e exploda. /// Destroying the coolant towers will make the platform overheat and explode.
+Param/Value/074A3321=Destruir as Torres de resfriamento ( /// Destroy the Coolant Towers (
+Param/Value/07DB1EB1=Torre infestada /// Infested Tower
+Param/Value/09462CD7=Destruir as Torres de resfriamento /// Destroy the Coolant Towers
+Param/Value/0BCA1AE6=O Leviatã zerg veio da órbita para proteger as últimas Torres de resfriamento. Mate o Leviatã. /// The zerg leviathan has come in from orbit to guard the last of the coolant towers.  Kill the leviathan.
+Param/Value/0C759493=) /// )
+Param/Value/0D402B82=Torres de resfriamento /// Coolant Tower
+Param/Value/0E961019= <n/> ///  <n/>
+Param/Value/110C6836=P3 Unidades BR = /// P3 BR Units = 
+Param/Value/11D44882=P4 Unidades BL = /// P4 BL Units = 
+Param/Value/1504CE50=Uma plataforma destruída. /// One platform destroyed.
+Param/Value/2D444915=Torres de resfriamento /// Coolant Tower
+Param/Value/2F9B939E=Explosão da plataforma /// Platform Explosion
+Param/Value/35D8F648=Defesas terrestres pesadas detectadas /// Heavy ground defenses detected
+Param/Value/36BCAB71=Leviatã /// Leviathan
+Param/Value/37D1D46B=
+Param/Value/3C3FF16F=/ ///  / 
+Param/Value/45CC2087=<c val="00FF00">Entrada de túnel zerg</c> /// <c val="00FF00">Zerg Tunnel Entrance</c>
+Param/Value/4A3AE9EE=Destruir as Torres de resfriamento ( /// Destroy the Coolant Towers (
+Param/Value/4C8584A2=Explosão da plataforma /// Platform Explosion
+Param/Value/546942F9=Duas plataformas destruídas. /// Two platforms destroyed.
+Param/Value/54A6DD26=Unidades perdidas para inimigos /// Units Lost to Enemies
+Param/Value/5F50BFF5=Leviatã /// Leviathan
+Param/Value/646090B4= <n/> ///  <n/>
+Param/Value/6856AC4A=Mortos em explosões de plataformas /// Platform Explosion Kills
+Param/Value/6A242E34=Explosão da plataforma /// Platform Explosion
+Param/Value/6A356103=P2 Unidades de Torres = /// P2 Towers Units = 
+Param/Value/6DA36160= <n/> ///  <n/>
+Param/Value/6F0A8AE0=
+Param/Value/6F4200A1=Três plataformas destruídas. /// Three platforms destroyed.
+Param/Value/70CFAF35=Unidades de plataforma P11 = /// P11 Platforms Units = 
+Param/Value/714F0207=P7 Unidades ESP = /// P7 EXP Units = 
+Param/Value/739C328F=Matar o Leviatã zerg /// Kill the Zerg Leviathan
+Param/Value/75D55A97=Torres de resfriamento /// Coolant Tower
+Param/Value/78CF50B7=Início da missão /// Mission Start
+Param/Value/7D0B2B5E=) /// )
+Param/Value/93348B29=/ ///  / 
+Param/Value/935F9D1F=P6 Unidades TR = /// P6 TR Units = 
+Param/Value/9B53B6F0=<c val="00FF00">Torre de resfriamento</c> /// <c val="00FF00">Coolant Tower</c>
+Param/Value/9F8EB4AB= <n/> ///  <n/>
+Param/Value/A10B0F2F=P9 Unidades Horner = /// P9 Horner Units = 
+Param/Value/A7F03864= <n/> ///  <n/>
+Param/Value/A85A90A1=Torres de resfriamento /// Coolant Tower
+Param/Value/A9E6264B=Torres de resfriamento /// Coolant Tower
+Param/Value/AD56BF00=Explosão da plataforma /// Platform Explosion
+Param/Value/B0492186= <n/> ///  <n/>
+Param/Value/B796C28E= <n/> ///  <n/>
+Param/Value/B8769560=Matar o Leviatã zerg /// Kill the Zerg Leviathan
+Param/Value/B9C43A84=Unidades P1 =  /// P1 Units = 
+Param/Value/BE0DAE7D=Torres de resfriamento /// Coolant Tower
+Param/Value/C048D02E=Perdas por explosões de plataformas /// Platform Explosion Losses
+Param/Value/C4B1EEB0=
+Param/Value/C75FDDE3=Destrua para fazer a plataforma explodir. /// Destroy to cause the platform to explode.
+Param/Value/CD6A4A56= <n/> ///  <n/>
+Param/Value/CDAD72B4=
+Param/Value/D25FAA3E=>> P6 <c val="FF0000">não</c> ataca /// >> P6 <c val="FF0000">cannot</c> attack
+Param/Value/D3234E71=Primeira plataforma já era /// First Platform Gone
+Param/Value/E7BF8BDE=Todas as suas estruturas foram destruídas. /// All of your structures have been destroyed.
+Param/Value/EA5459E5=>> P6 <c val="00FF00">ataca</c> /// >> P6 <c val="00FF00">can</c> attack
+Param/Value/EBA46453=Mutaliscas sairão por esta<n/>entrada de túnel. /// Mutalisks will come out of this<n/>tunnel entrance.
+Param/Value/ED291930=Torres de resfriamento /// Coolant Tower
+Param/Value/F02592E2=Torres de resfriamento /// Coolant Tower
+Param/Value/F2CC1EC9=P5 Unidades TL = /// P5 TL Units = 
+Param/Value/F74232D8=
+Param/Value/FDC2FAE5=
+Param/Value/FEE5CD49=
+Param/Value/FF589C01=Defesas aéreas pesadas detectadas /// Heavy air defenses detected

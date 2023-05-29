@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="3">
+        <name value="Area 03 - Purple - TL"/>
+        <color value="255,128,0,255"/>
+        <shape type="rect">
+            <quad value="50.0112,131.6391,79.262,167.2934"/>
+        </shape>
+        <shape type="rect">
+            <quad value="54.169,135.4501,55.9167,137.4123"/>
+        </shape>
+        <shape type="rect">
+            <quad value="59.4865,166.9357,74.814,173.2385"/>
+        </shape>
+        <shape type="rect">
+            <quad value="42.7272,131.358,50.512,160.3515"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.579,130.7106"/>
+            <radius value="6.7937"/>
+        </shape>
+        <shape type="circle">
+            <center value="64.803,126.3005"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="76.104,126.015"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.6455,134.8315"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.5014,128.9516"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.5822,131.2084"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="81.846,140.1455"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="83.301,144.9167"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.959,149.1936"/>
+            <radius value="2.6437"/>
+        </shape>
+        <shape type="circle">
+            <center value="80.9675,151.077"/>
+            <radius value="2.6437"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.2175,165.0266"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.4731,161.892"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="60.2731,168.819"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="rect">
+            <quad value="74.7197,167.0888,86.1977,172.533"/>
+        </shape>
+        <shape type="circle">
+            <center value="85.457,167.3188"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="rect">
+            <quad value="36.1262,135.0917,42.7832,150.9584"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.4372,150.0122"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.782,126.5383"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="45.1457,130.1567"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.636,132.4611"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.3076,134.6457"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="42.1906,130.2534"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.927,135.4111"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="50.8237,163.095"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.3444,160.0141"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="71.2011,130.2336"/>
+            <radius value="5.876"/>
+        </shape>
+    </region>
+    <region id="4">
+        <name value="Area 04 - White - TR"/>
+        <color value="255,255,255,255"/>
+        <shape type="rect">
+            <quad value="125.2763,101.0625,156.305,136.1796"/>
+        </shape>
+        <shape type="rect">
+            <quad value="118.42,109.5737,126.2768,126.5227"/>
+        </shape>
+        <shape type="rect">
+            <quad value="120.9516,105.7446,125.671,109.6252"/>
+        </shape>
+        <shape type="rect">
+            <quad value="117.1,112.5031,118.472,126.1474"/>
+        </shape>
+        <shape type="rect">
+            <quad value="156.2084,105.8686,157.9387,135.319"/>
+        </shape>
+        <shape type="circle">
+            <center value="156.128,128.064"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="150.0053,134.2304"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.0322,136.1643"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.3015,131.1787"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="122.9155,125.8161"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.728,106.9445"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="122.449,109.9284"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.9714,134.1594"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="132.4226,135.3383"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="135.3645,134.7062"/>
+            <radius value="4.0822"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="Dropzone 02"/>
+        <color value="255,0,255,0"/>
+        <shape type="circle">
+            <center value="176.8337,150.6867"/>
+            <radius value="1.294"/>
+        </shape>
+    </region>
+    <region id="85">
+        <name value="Hide Us"/>
+        <color value="255,255,255,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="16.189,9.2692,111.296,188.916"/>
+        </shape>
+        <shape type="rect">
+            <quad value="111.3161,9.5441,192.0974,96.2475"/>
+        </shape>
+    </region>
+    <region id="91">
+        <name value="Blowup Area 04-01 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="139.0002,121.0002"/>
+            <radius value="5.7788"/>
+        </shape>
+    </region>
+    <region id="92">
+        <name value="Blowup Area 04-02 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="139.212,120.671"/>
+            <radius value="6.6691"/>
+        </shape>
+    </region>
+    <region id="93">
+        <name value="Blowup Area 04-03 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="139.5002,120.5002"/>
+            <radius value="8.1921"/>
+        </shape>
+    </region>
+    <region id="95">
+        <name value="Blowup Area 03-01 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="55.2963,154.21"/>
+            <radius value="5.9858"/>
+        </shape>
+    </region>
+    <region id="96">
+        <name value="Blowup Area 03-02 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="55.5002,154.0002"/>
+            <radius value="7.4667"/>
+        </shape>
+    </region>
+    <region id="98">
+        <name value="Blowup Area 03-03 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="56.0002,153.5002"/>
+            <radius value="9.7084"/>
+        </shape>
+    </region>
+    <region id="101">
+        <name value="Blowup Area 01-02 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="137.0002,60.5002"/>
+            <radius value="8.649"/>
+        </shape>
+    </region>
+    <region id="102">
+        <name value="Blowup Area 01-03 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="138.5002,59.0002"/>
+            <radius value="11.068"/>
+        </shape>
+    </region>
+    <region id="97">
+        <name value="Blowup Area 01-01 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="135.5002,62.0002"/>
+            <radius value="6.5876"/>
+        </shape>
+    </region>
+    <region id="99">
+        <name value="Blowup Area 02-01 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="60.5002,52.5002"/>
+            <radius value="6.5285"/>
+        </shape>
+    </region>
+    <region id="103">
+        <name value="Blowup Area 02-02 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="60.556,52.193"/>
+            <radius value="8.2077"/>
+        </shape>
+    </region>
+    <region id="104">
+        <name value="Leviathan Spawn"/>
+        <color value="255,0,255,255"/>
+        <shape type="circle">
+            <center value="30.7683,27.0852"/>
+            <radius value="3.1647"/>
+        </shape>
+    </region>
+    <region id="106">
+        <name value="Blowup Area 02-03 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="60.0002,52.0002"/>
+            <radius value="10.05"/>
+        </shape>
+    </region>
+    <region id="12">
+        <name value="Remove CINE Units"/>
+        <color value="255,255,0,128"/>
+        <shape type="rect">
+            <quad value="59.2985,79.951,71.835,103.2744"/>
+        </shape>
+    </region>
+    <region id="13">
+        <name value="Leviathan CINE"/>
+        <shape type="rect">
+            <quad value="6.3945,81.4172,75.6198,113.5354"/>
+        </shape>
+    </region>
+    <region id="14">
+        <name value="Move to Area"/>
+        <color value="255,255,0,128"/>
+        <shape type="rect">
+            <quad value="62.3137,86.5676,69.8032,96.7915"/>
+        </shape>
+    </region>
+    <region id="5">
+        <name value="MutaSpawnerRange"/>
+        <shape type="circle">
+            <center value="124.9255,151.9487"/>
+            <radius value="9"/>
+        </shape>
+    </region>
+    <region id="6">
+        <name value="Ground Forces Ahead"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="20.921,100.2211,108.3051,179.457"/>
+        </shape>
+    </region>
+    <region id="7">
+        <name value="Air Forces Ahead"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="113.7368,13.815,191.8227,87.026"/>
+        </shape>
+    </region>
+    <region id="17">
+        <name value="Moveable Region Large"/>
+        <shape type="rect">
+            <quad value="38.0217,142.0634,45.9707,150.024"/>
+        </shape>
+    </region>
+    <region id="18">
+        <name value="Moveable Region Small"/>
+        <shape type="rect">
+            <quad value="40.0397,126.056,43.978,130.0151"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="Moveable Region Medium"/>
+        <shape type="rect">
+            <quad value="73.997,162.0224,79.967,168.0456"/>
+        </shape>
+    </region>
+    <region id="20">
+        <name value="Moveable Region Jumbo"/>
+        <shape type="rect">
+            <quad value="63.9821,128.0742,79.9355,143.9926"/>
+        </shape>
+    </region>
+    <region id="22">
+        <name value="Player 1 Reveal"/>
+        <shape type="circle">
+            <center value="169.9604,176.1496"/>
+            <radius value="12.5256"/>
+        </shape>
+        <shape type="circle">
+            <center value="181.3415,176.1076"/>
+            <radius value="11.4238"/>
+        </shape>
+        <shape type="circle">
+            <center value="191.326,171.921"/>
+            <radius value="10.5126"/>
+        </shape>
+        <shape type="circle">
+            <center value="196.3925,163.5642"/>
+            <radius value="11.2255"/>
+        </shape>
+        <shape type="circle">
+            <center value="195.412,154.0854"/>
+            <radius value="8.9765"/>
+        </shape>
+        <shape type="circle">
+            <center value="191.6801,144.9892"/>
+            <radius value="11.1494"/>
+        </shape>
+        <shape type="circle">
+            <center value="187.2851,137.513"/>
+            <radius value="12.5383"/>
+        </shape>
+        <shape type="circle">
+            <center value="157.6857,171.7741"/>
+            <radius value="11.5107"/>
+        </shape>
+        <shape type="circle">
+            <center value="150.5856,168.7377"/>
+            <radius value="8.9765"/>
+        </shape>
+    </region>
+    <region id="8">
+        <name value="Leviathan Unit Hide"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="18.4624,68.868,86.531,138.3078"/>
+        </shape>
+    </region>
+    <region id="1">
+        <name value="Area 01 - Red - BR"/>
+        <color value="255,255,0,0"/>
+        <shape type="rect">
+            <quad value="124.7355,40.0007,167.5783,62.1042"/>
+        </shape>
+        <shape type="circle">
+            <center value="126.179,59.956"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="125.8503,47.0256"/>
+            <radius value="3.399"/>
+        </shape>
+        <shape type="rect">
+            <quad value="137.4675,22.278,178.2321,43.374"/>
+        </shape>
+        <shape type="circle">
+            <center value="181.9426,34.0231"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="179.6416,29.448"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="180.0795,37.8762"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="176.2985,40.007"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="177.2021,26.7492"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="171.5603,24.7763"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="152.3256,24.828"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="156.9968,24.558"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="168.6828,24.7004"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="136.6596,34.7734"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.8745,42.3666"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="133.6845,39.93"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="139.215,29.7275"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="144.6594,26.6403"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="165.6423,50.9436"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="163.275,44.4155"/>
+            <radius value="6.5192"/>
+        </shape>
+        <shape type="circle">
+            <center value="137.9375,70.4362"/>
+            <radius value="5.2158"/>
+        </shape>
+        <shape type="circle">
+            <center value="134.4777,66.0278"/>
+            <radius value="5.2158"/>
+        </shape>
+        <shape type="circle">
+            <center value="130.9038,62.3532"/>
+            <radius value="5.2158"/>
+        </shape>
+        <shape type="circle">
+            <center value="156.3342,66.3908"/>
+            <radius value="5.2158"/>
+        </shape>
+        <shape type="circle">
+            <center value="162.3566,60.4538"/>
+            <radius value="5.2158"/>
+        </shape>
+        <shape type="circle">
+            <center value="149.6406,68.661"/>
+            <radius value="5.2158"/>
+        </shape>
+        <shape type="circle">
+            <center value="145.242,64.1691"/>
+            <radius value="9.5686"/>
+        </shape>
+    </region>
+    <region id="2">
+        <name value="Area 02 - Green - BL"/>
+        <color value="255,0,255,0"/>
+        <shape type="rect">
+            <quad value="34.642,26.1315,89.9082,56.4226"/>
+        </shape>
+        <shape type="rect">
+            <quad value="52.293,53.6772,54.2268,55.6772"/>
+        </shape>
+        <shape type="rect">
+            <quad value="36.904,56.2258,64.3344,79.4511"/>
+        </shape>
+        <shape type="rect">
+            <quad value="28.5422,56.2482,37.062,75.4553"/>
+        </shape>
+        <shape type="circle">
+            <center value="35.6135,54.3706"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="32.8657,56.9057"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="55.5002,79.5002"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="52.0002,80.0002"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="41.5002,78.0002"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.503,68.6533"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="30.4631,65.6127"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="46.5002,78.0002"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="rect">
+            <quad value="64.1821,56.1887,71.4311,72.246"/>
+        </shape>
+        <shape type="rect">
+            <quad value="71.2888,56.1555,80.279,63.8776"/>
+        </shape>
+        <shape type="circle">
+            <center value="89.5002,41.0002"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.0002,46.5002"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="88.0002,35.5002"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="75.0561,24.5595"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="82.3398,26.09"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="67.0095,26.4685"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="70.466,26.4191"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="79.5075,26.3264"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="86.1872,28.0214"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="47.6833,24.387"/>
+            <radius value="7.9858"/>
+        </shape>
+        <shape type="circle">
+            <center value="34.508,36.953"/>
+            <radius value="7.9858"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.1538,21.8032"/>
+            <radius value="5.5661"/>
+        </shape>
+        <shape type="circle">
+            <center value="31.9038,27.908"/>
+            <radius value="5.5661"/>
+        </shape>
+        <shape type="circle">
+            <center value="56.3952,28.1948"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="78.923,54.328"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="62.8901,70.738"/>
+            <radius value="4.0822"/>
+        </shape>
+        <shape type="circle">
+            <center value="38.5002,74.5002"/>
+            <radius value="4.0822"/>
+        </shape>
+    </region>
+    <region id="9">
+        <name value="Blowup Area 03-04 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="56.5002,153.0002"/>
+            <radius value="11.511"/>
+        </shape>
+    </region>
+    <region id="10">
+        <name value="Blowup Area 03-05 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="57.0002,152.5002"/>
+            <radius value="13.0097"/>
+        </shape>
+    </region>
+    <region id="11">
+        <name value="Blowup Area 03-06 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="57.5002,151.5002"/>
+            <radius value="15.5725"/>
+        </shape>
+    </region>
+    <region id="15">
+        <name value="Blowup Area 03-07 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="59.5002,150.0002"/>
+            <radius value="17.5073"/>
+        </shape>
+    </region>
+    <region id="16">
+        <name value="Blowup Area 03-08 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="62.0002,149.0002"/>
+            <radius value="18.0625"/>
+        </shape>
+    </region>
+    <region id="21">
+        <name value="Blowup Area 03-09 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="70.5002,140.5002"/>
+            <radius value="14.7055"/>
+        </shape>
+    </region>
+    <region id="23">
+        <name value="Blowup Area 03-10 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="67.5002,160.5002"/>
+            <radius value="12.093"/>
+        </shape>
+    </region>
+    <region id="24">
+        <name value="Blowup Area 03-11 - TL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="47.5002,141.0002"/>
+            <radius value="10.5476"/>
+        </shape>
+    </region>
+    <region id="25">
+        <name value="Blowup Area 02-04 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="59.5002,52.0002"/>
+            <radius value="12.104"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Blowup Area 02-05 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="59.0002,52.0002"/>
+            <radius value="13.537"/>
+        </shape>
+    </region>
+    <region id="27">
+        <name value="Blowup Area 02-06 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="59.0002,51.5002"/>
+            <radius value="15.0334"/>
+        </shape>
+    </region>
+    <region id="28">
+        <name value="Blowup Area 02-07 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="59.0002,50.5002"/>
+            <radius value="17.9028"/>
+        </shape>
+    </region>
+    <region id="29">
+        <name value="Blowup Area 02-08 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="58.0002,49.5002"/>
+            <radius value="21.1484"/>
+        </shape>
+    </region>
+    <region id="30">
+        <name value="Blowup Area 02-09 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="47.0002,36.5002"/>
+            <radius value="13.829"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Blowup Area 02-10 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="73.0002,40.0002"/>
+            <radius value="13.829"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="Blowup Area 02-11 - BL"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="46.0002,65.0002"/>
+            <radius value="13.829"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Blowup Area 01-04 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="139.0002,58.0002"/>
+            <radius value="12.8156"/>
+        </shape>
+    </region>
+    <region id="34">
+        <name value="Blowup Area 01-05 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="140.0002,57.0002"/>
+            <radius value="14.3264"/>
+        </shape>
+    </region>
+    <region id="35">
+        <name value="Blowup Area 01-06 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="140.5002,56.5002"/>
+            <radius value="15.572"/>
+        </shape>
+    </region>
+    <region id="36">
+        <name value="Blowup Area 01-07 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="147.0002,55.5002"/>
+            <radius value="16.5297"/>
+        </shape>
+    </region>
+    <region id="37">
+        <name value="Blowup Area 01-08 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="141.5002,48.0002"/>
+            <radius value="16.5297"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="Blowup Area 01-09 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="153.0002,49.0002"/>
+            <radius value="16.5297"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="Blowup Area 01-10 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="147.0002,39.0002"/>
+            <radius value="16.5297"/>
+        </shape>
+    </region>
+    <region id="40">
+        <name value="Blowup Area 01-11 - BR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="164.0002,33.5002"/>
+            <radius value="11.8532"/>
+        </shape>
+    </region>
+    <region id="41">
+        <name value="Blowup Area 04-04 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="139.0002,120.5002"/>
+            <radius value="9.605"/>
+        </shape>
+    </region>
+    <region id="42">
+        <name value="Blowup Area 04-05 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="138.5002,120.0002"/>
+            <radius value="10.966"/>
+        </shape>
+    </region>
+    <region id="43">
+        <name value="Blowup Area 04-06 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="138.0002,120.5002"/>
+            <radius value="12.7478"/>
+        </shape>
+    </region>
+    <region id="44">
+        <name value="Blowup Area 04-07 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="137.5002,120.5002"/>
+            <radius value="14.213"/>
+        </shape>
+    </region>
+    <region id="45">
+        <name value="Blowup Area 04-08 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="137.0002,120.5002"/>
+            <radius value="15.9455"/>
+        </shape>
+    </region>
+    <region id="46">
+        <name value="Blowup Area 04-09 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="136.0002,119.5002"/>
+            <radius value="17.6921"/>
+        </shape>
+    </region>
+    <region id="47">
+        <name value="Blowup Area 04-10 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="147.5002,125.5002"/>
+            <radius value="9.5522"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="Blowup Area 04-11 - TR"/>
+        <color value="255,0,255,255"/>
+        <invisible/>
+        <shape type="circle">
+            <center value="147.0002,113.0002"/>
+            <radius value="9.5522"/>
+        </shape>
+    </region>
+</Regions>
