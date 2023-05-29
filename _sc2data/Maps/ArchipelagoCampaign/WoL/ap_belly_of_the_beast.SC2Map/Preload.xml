@@ -259,7 +259,6 @@
 <Unit id="InfestedAbomination"/>
 <Unit id="InfestedTerranCampaignBurrowed"/>
 <Unit id="InfestedTerranCampaign"/>
-<Unit id="Firebat"/>
 <Unit id="Blocker4x4"/>
 <Unit id="NydusWormLavaDeath"/>
 <Unit id="Feederling"/>
@@ -272,5 +271,7 @@
 <Unit id="Swarmling"/>
 <Unit id="NukePack"/>
 <Unit id="CharDestructibleRockCoverULDR"/>
-<Unit id="CampaignRead"/>
+<Unit id="AP_Marine"/>
+<Unit id="AP_Medic"/>
+<Unit id="AP_Firebat"/>
 </Preload>

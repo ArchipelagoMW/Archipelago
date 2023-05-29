@@ -540,7 +540,7 @@ maps_table = [
     "ap_devils_playground", "ap_welcome_to_the_jungle", "ap_breakout", "ap_ghost_of_a_chance",
     "ap_the_great_train_robbery", "ap_cutthroat", "ap_engine_of_destruction", "ap_media_blitz", "ap_piercing_the_shroud",
     "ap_tzeratul01", "ap_tzeratul02", "ap_tzeratul03", "ap_tzeratul04",
-    "ap_gates_of_hell", "ap_tvalerian02a", "ap_tvalerian02b", "ap_tvalerian03"
+    "ap_gates_of_hell", "ap_belly_of_the_beast", "ap_tvalerian02b", "ap_tvalerian03"
 ]
 
 wol_default_categories = [
@@ -685,7 +685,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                     self.can_read_game = True
 
             if iteration == 160 and not game_state & 1:
-                await self.chat_send("SendMessage Warning: Archipelago unable to connect or has lost connection to " +
+                await self.chat_send("?SendMessage Warning: Archipelago unable to connect or has lost connection to " +
                                      "Starcraft 2 (This is likely a map issue)")
 
             if self.last_received_update < len(self.ctx.items_received):
@@ -721,7 +721,7 @@ class ArchipelagoBot(sc2.bot_ai.BotAI):
                             self.boni[x] = True
 
                 else:
-                    await self.chat_send("LostConnection - Lost connection to game.")
+                    await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
 
 def request_unfinished_missions(ctx: SC2Context):

@@ -6917,7 +6917,7 @@
     <ObjectUnit Id="700" Variation="1" Position="63.2487,61.3264,0" Rotation="3.4135" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="727" Position="35.6823,73.1801,0" Rotation="3.4926" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="1339" Position="73.7412,159.233,0" Rotation="3.9135" Scale="1,1,1" UnitType="Hydralisk" Player="2"/>
-    <ObjectUnit Id="658" Position="101.8403,172.192,0" Rotation="5.5532" Scale="1,1,1" UnitType="Marine" Player="4">
+    <ObjectUnit Id="658" Position="101.8403,172.192,0" Rotation="5.5532" Scale="1,1,1" UnitType="AP_Marine" Player="4">
         <Texture TexSlot="decal" TexProps="" TexLink=""/>
     </ObjectUnit>
     <ObjectUnit Id="761" Position="57.835,164.2426,0" Rotation="4.4804" Scale="1,1,1" UnitType="Zergling" Player="2"/>
@@ -6933,7 +6933,7 @@
     <ObjectUnit Id="663" Position="40.4143,75.9196,0" Rotation="3.8557" Scale="1,1,1" UnitType="InfestedTerranCampaign" Player="2"/>
     <ObjectUnit Id="1319" Variation="2" Position="60.1545,105.3664,0" Rotation="3.1777" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="1356" Position="67.4907,164.584,0" Rotation="1.7714" Scale="1,1,1" UnitType="Zergling" Player="2"/>
-    <ObjectUnit Id="321" Position="147.5881,111.0192,0" Rotation="5.1203" Scale="1,1,1" UnitType="Marine" Player="4"/>
+    <ObjectUnit Id="321" Position="147.5881,111.0192,0" Rotation="5.1203" Scale="1,1,1" UnitType="AP_Marine" Player="4"/>
     <ObjectUnit Id="715" Position="57.734,59.5957,0" Rotation="0.7778" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="672" Position="170.1752,71.4184,0" Scale="1,1,1" UnitType="Egg" Player="2"/>
     <ObjectUnit Id="654" Variation="2" Position="41.3217,75.9326,0" Rotation="4.761" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
@@ -6949,7 +6949,7 @@
     <ObjectUnit Id="1334" Position="169.6108,160.6557,0" Rotation="4.9873" Scale="1,1,1" UnitType="InfestedCivilianBurrowed" Player="2">
         <Texture TexSlot="main" TexProps="06" TexLink=""/>
     </ObjectUnit>
-    <ObjectUnit Id="2551" Position="102.9504,171.5703,0" Rotation="5.4301" Scale="1,1,1" UnitType="Medic" Player="4"/>
+    <ObjectUnit Id="2551" Position="102.9504,171.5703,0" Rotation="5.4301" Scale="1,1,1" UnitType="AP_Medic" Player="4"/>
     <ObjectUnit Id="730" Variation="2" Position="34.2207,76.5385,0" Rotation="6.1145" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="359" Position="193.6293,44.2194,0" Rotation="3.9267" Scale="1,1,1" UnitType="TychusCommando"/>
     <ObjectUnit Id="646" Position="142.479,47.9777,0" Scale="1,1,1" UnitType="Egg" Player="5"/>
@@ -6980,10 +6980,10 @@
     </ObjectUnit>
     <ObjectUnit Id="1309" Position="136.7687,101.8723,0" Scale="1,1,1" UnitType="Egg" Player="5"/>
     <ObjectUnit Id="1331" Position="183.8293,183.9833,0" Rotation="1.8022" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="2"/>
-    <ObjectUnit Id="318" Position="103.5437,170.6186,0" Rotation="5.439" Scale="1,1,1" UnitType="Marine" Player="4">
+    <ObjectUnit Id="318" Position="103.5437,170.6186,0" Rotation="5.439" Scale="1,1,1" UnitType="AP_Marine" Player="4">
         <Texture TexSlot="decal" TexProps="" TexLink=""/>
     </ObjectUnit>
-    <ObjectUnit Id="341" Position="147.117,110.406,0" Rotation="4.9714" Scale="1,1,1" UnitType="Marine" Player="4"/>
+    <ObjectUnit Id="341" Position="147.117,110.406,0" Rotation="4.9714" Scale="1,1,1" UnitType="AP_Marine" Player="4"/>
     <ObjectUnit Id="735" Variation="2" Position="36.0068,81.3554,0" Rotation="1.8134" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="692" Variation="2" Position="63.306,65.398,0" Rotation="0.8762" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="649" Position="81.8515,181.3696,0" Rotation="4.7514" Scale="1,1,1" UnitType="Roach" Player="2"/>
@@ -7004,7 +7004,7 @@
     <ObjectUnit Id="1337" Position="72.8984,160.3867,0" Rotation="4.0808" Scale="1,1,1" UnitType="Zergling" Player="2"/>
     <ObjectUnit Id="308" Position="166.2087,69.6865,0" Scale="1,1,1" UnitType="Egg" Player="2"/>
     <ObjectUnit Id="1401" Position="60.5,164.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="2"/>
-    <ObjectUnit Id="287" Position="147.205,111.7387,0" Rotation="4.7145" Scale="1,1,1" UnitType="Marine" Player="4"/>
+    <ObjectUnit Id="287" Position="147.205,111.7387,0" Rotation="4.7145" Scale="1,1,1" UnitType="AP_Marine" Player="4"/>
     <ObjectUnit Id="661" Position="34.847,74.4863,0" Rotation="5.7055" Scale="1,1,1" UnitType="InfestedTerranCampaign" Player="2"/>
     <ObjectUnit Id="766" Position="79.0446,142.1262,0" Rotation="5.2854" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="2"/>
     <ObjectUnit Id="2488" Variation="1" Position="174.7663,160.9621,0" Rotation="1.6066" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
@@ -7113,7 +7113,7 @@
     <ObjectUnit Id="1408" Position="153,163,0" Rotation="4.6181" Scale="1,1,1" UnitType="InfestationSpire">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="397" Position="101.5541,171.0112,0" Rotation="5.5507" Scale="1,1,1" UnitType="Marine" Player="4">
+    <ObjectUnit Id="397" Position="101.5541,171.0112,0" Rotation="5.5507" Scale="1,1,1" UnitType="AP_Marine" Player="4">
         <Texture TexSlot="decal" TexProps="" TexLink=""/>
     </ObjectUnit>
     <ObjectUnit Id="603" Position="57.4985,60.9797,0" Rotation="2.859" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
@@ -7149,7 +7149,7 @@
     <ObjectUnit Id="1414" Variation="3" Position="148,158,0" Rotation="0.8544" Scale="1,1,1" UnitType="InfestationSpire">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="395" Position="102.6098,169.9836,0" Rotation="5.4213" Scale="1,1,1" UnitType="Marine" Player="4">
+    <ObjectUnit Id="395" Position="102.6098,169.9836,0" Rotation="5.4213" Scale="1,1,1" UnitType="AP_Marine" Player="4">
         <Texture TexSlot="decal" TexProps="" TexLink=""/>
     </ObjectUnit>
     <ObjectUnit Id="618" Variation="2" Position="54.851,62.6992,0" Rotation="1.3435" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
@@ -7218,7 +7218,7 @@
     <ObjectUnit Id="423" Position="165.5,97.5,0" Scale="1,1,1" UnitType="CreepTumorBurrowed" Player="2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="393" Position="106.7136,61.367,0" Rotation="6.0886" Scale="1,1,1" UnitType="Firebat" Player="4"/>
+    <ObjectUnit Id="393" Position="106.7136,61.367,0" Rotation="6.0886" Scale="1,1,1" UnitType="AP_Firebat" Player="4"/>
     <ObjectUnit Id="1412" Variation="4" Position="174,182,0" Rotation="1.5095" Scale="1,1,1" UnitType="InfestationSpire">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -7291,7 +7291,7 @@
     <ObjectUnit Id="302" Position="166.051,98.817,0" Scale="1,1,1" UnitType="Egg" Player="2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="363" Position="108.4824,60.8361,0" Rotation="5.5485" Scale="1,1,1" UnitType="Firebat" Player="4"/>
+    <ObjectUnit Id="363" Position="108.4824,60.8361,0" Rotation="5.5485" Scale="1,1,1" UnitType="AP_Firebat" Player="4"/>
     <ObjectUnit Id="650" Position="81.1223,123.4995,0" Rotation="4.4084" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="2"/>
     <ObjectUnit Id="737" Position="52.8037,62.8088,0" Rotation="0.6743" Scale="1,1,1" UnitType="InfestedTerranCampaign" Player="2"/>
     <ObjectUnit Id="348" Position="43.4777,187.5673,0" Rotation="1.5446" Scale="1,1,1" UnitType="Zergling" Player="2"/>
@@ -7301,14 +7301,14 @@
     <ObjectUnit Id="726" Position="35.6103,74.0068,0" Rotation="0.403" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="760" Position="59.537,162.388,0" Rotation="4.4177" Scale="1,1,1" UnitType="Zergling" Player="2"/>
     <ObjectUnit Id="2494" Position="174.9216,158.855,0" Rotation="4.4836" Scale="1,1,1" UnitType="Hydralisk" Player="2"/>
-    <ObjectUnit Id="370" Position="108.0156,63.2275,0" Rotation="5.9848" Scale="1,1,1" UnitType="Medic" Player="4"/>
+    <ObjectUnit Id="370" Position="108.0156,63.2275,0" Rotation="5.9848" Scale="1,1,1" UnitType="AP_Medic" Player="4"/>
     <ObjectUnit Id="1407" Position="40.0014,181.5485,0" Rotation="1.2626" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="2"/>
     <ObjectUnit Id="281" Position="106,90,0" Rotation="5.7783" Scale="1,1,1" UnitType="InfestationSpire">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
     <ObjectUnit Id="335" Position="146.5476,80.444,0" Scale="1,1,1" UnitType="Egg" Player="2"/>
     <ObjectUnit Id="1346" Position="65.6247,164.8808,0" Rotation="5.6142" Scale="1,1,1" UnitType="Zergling" Player="2"/>
-    <ObjectUnit Id="292" Position="144.771,112.0842,0" Rotation="5.5388" Scale="1,1,1" UnitType="Marine" Player="4"/>
+    <ObjectUnit Id="292" Position="144.771,112.0842,0" Rotation="5.5388" Scale="1,1,1" UnitType="AP_Marine" Player="4"/>
     <ObjectUnit Id="1321" Variation="1" Position="62.9101,102.1437,0" Rotation="4.3037" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="686" Position="63.8933,67.9016,0" Rotation="1.4321" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
     <ObjectUnit Id="709" Variation="1" Position="60.069,61.84,0" Rotation="1.6303" Scale="1,1,1" UnitType="InfestedCivilian" Player="2"/>
@@ -7477,7 +7477,7 @@
     </ObjectUnit>
     <ObjectUnit Id="858" Position="60.7905,165.7202,0" Rotation="1.4028" Scale="1,1,1" UnitType="Zergling" Player="2"/>
     <ObjectUnit Id="187" Position="170.6677,67.9916,0" Scale="1,1,1" UnitType="Egg" Player="2"/>
-    <ObjectUnit Id="254" Position="146.2707,111.2937,0" Rotation="5.417" Scale="1,1,1" UnitType="Marine" Player="4"/>
+    <ObjectUnit Id="254" Position="146.2707,111.2937,0" Rotation="5.417" Scale="1,1,1" UnitType="AP_Marine" Player="4"/>
     <ObjectUnit Id="149" Position="95.1745,129.8107,0" Rotation="4.7624" Scale="1,1,1" UnitType="ZerglingBurrowed" Player="2"/>
     <ObjectUnit Id="1176" Position="57.2697,43.66,0" Rotation="3.6428" Scale="1,1,1" UnitType="BanelingBurrowed" Player="2"/>
     <ObjectUnit Id="1913" Position="170.143,94.8063,0" Scale="1,1,1" UnitType="Egg" Player="2"/>
@@ -7741,7 +7741,7 @@
     <ObjectUnit Id="1079" Position="142.5656,173.9082,0" Scale="1,1,1" UnitType="Egg" Player="5">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="58" Position="145.883,112.4287,0" Rotation="5.3537" Scale="1,1,1" UnitType="Marine" Player="4"/>
+    <ObjectUnit Id="58" Position="145.883,112.4287,0" Rotation="5.3537" Scale="1,1,1" UnitType="AP_Marine" Player="4"/>
     <ObjectUnit Id="1116" Variation="1" Position="162,176,0" Rotation="3.7023" Scale="1,1,1" UnitType="InfestationSpire">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>

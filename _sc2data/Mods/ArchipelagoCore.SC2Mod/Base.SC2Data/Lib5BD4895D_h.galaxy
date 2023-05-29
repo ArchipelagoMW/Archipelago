@@ -53,7 +53,9 @@ void lib5BD4895D_gf_AP_Core_MapConfig_setAffectedPlayers (playergroup lp_players
 void lib5BD4895D_gf_AP_Core_MapConfig_setPlayerFaction (int lp_player, string lp_faction);
 void lib5BD4895D_gf_AP_Core_MapConfig_setChatboxPosition (int lp_anchor, int lp_x, int lp_y, int lp_offsetX, int lp_offsetY);
 void lib5BD4895D_gf_AP_Core_MapConfig_setMapInit (trigger lp_initTrigger);
+bool lib5BD4895D_gf_AP_Core_IsControllerNotInitialized ();
 void lib5BD4895D_gf_AP_Core_sendLocationLocal (int lp_locationIdLocal);
+void lib5BD4895D_gf_AP_Core_refreshController ();
 text lib5BD4895D_gf_getchatboxcontent ();
 void lib5BD4895D_gf_initchatbox (int lp_anchor, int lp_sizex, int lp_sizey, int lp_offsetx, int lp_offsety);
 void lib5BD4895D_gf_showhidechatbox (int lp_player, bool lp_visible);
@@ -69,6 +71,7 @@ void lib5BD4895D_gf_AP_Core_setObjectiveFailed (int lp_objective);
 // Trigger Declarations
 trigger lib5BD4895D_gt_AP_Core_controllerInit;
 trigger lib5BD4895D_gt_AP_Core_dontHideController;
+trigger lib5BD4895D_gt_AP_Core_keepControllerAlive;
 trigger lib5BD4895D_gt_updatechatbox;
 trigger lib5BD4895D_gt_chatboxbuttons;
 trigger lib5BD4895D_gt_chatboxshow;

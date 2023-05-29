@@ -81,6 +81,17 @@ void lib5BD4895D_gf_AP_Core_MapConfig_setMapInit (trigger lp_initTrigger) {
     lib5BD4895D_gv_aP_Core_mapInit = lp_initTrigger;
 }
 
+bool lib5BD4895D_gf_AP_Core_IsControllerNotInitialized () {
+    // Automatic Variable Declarations
+    // Implementation
+    if (((TechTreeUnitCount(1, "AP_Core_Controller", c_techCountQueuedOrBetter) < 1) || (lib5BD4895D_gv_aP_Core_controller == null) || (UnitIsAlive(lib5BD4895D_gv_aP_Core_controller) == false) || ((lib5BD4895D_gv_aP_Core_initFinished == true) && (UnitGetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropCurrent) == UnitGetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropNormal))))) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 void lib5BD4895D_gf_AP_Core_sendLocationLocal (int lp_locationIdLocal) {
     // Variable Declarations
     int lv_value;
@@ -91,10 +102,28 @@ void lib5BD4895D_gf_AP_Core_sendLocationLocal (int lp_locationIdLocal) {
     // Implementation
     lv_value = lp_locationIdLocal + 1;;
     if ((lib5BD4895D_gv_aP_Core_initFinished == true)) {
+        if ((lib5BD4895D_gf_AP_Core_IsControllerNotInitialized())) {
+            lib5BD4895D_gf_AP_Core_refreshController();
+        }
+
         UnitSetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, (UnitGetPropertyInt(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropCurrent) - PowI(2.0, lv_value)));
         lib5BD4895D_gv_aP_Core_controllerStatus = (lib5BD4895D_gv_aP_Core_controllerStatus + PowI(2.0, lv_value));
     }
 
+}
+
+void lib5BD4895D_gf_AP_Core_refreshController () {
+    // Variable Declarations
+    unit lv_currentUnit;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+
+    // Implementation
+    UnitRemove(lib5BD4895D_gv_aP_Core_controller);
+    libNtve_gf_CreateUnitsWithDefaultFacing(1, "AP_Core_Controller", c_unitCreateIgnorePlacement, 1, Point(0.0, 0.0));
+    lib5BD4895D_gv_aP_Core_controller = UnitLastCreated();
+    UnitSetPropertyFixed(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, (UnitGetPropertyInt(lib5BD4895D_gv_aP_Core_controller, c_unitPropLife, c_unitPropCurrent) - lib5BD4895D_gv_aP_Core_controllerStatus));
 }
 
 text lib5BD4895D_gf_getchatboxcontent () {
@@ -326,7 +355,7 @@ bool lib5BD4895D_gt_AP_Core_controllerInit_Func (bool testConds, bool runActions
         return true;
     }
 
-    if ((TechTreeUnitCount(1, "AP_Core_Controller", c_techCountQueuedOrBetter) < 1)) {
+    if (lib5BD4895D_gf_AP_Core_IsControllerNotInitialized()) {
         libNtve_gf_CreateUnitsWithDefaultFacing(1, "AP_Core_Controller", c_unitCreateIgnorePlacement, 1, Point(0.0, 0.0));
     }
 
@@ -365,6 +394,33 @@ bool lib5BD4895D_gt_AP_Core_dontHideController_Func (bool testConds, bool runAct
 void lib5BD4895D_gt_AP_Core_dontHideController_Init () {
     lib5BD4895D_gt_AP_Core_dontHideController = TriggerCreate("lib5BD4895D_gt_AP_Core_dontHideController_Func");
     TriggerAddEventTimePeriodic(lib5BD4895D_gt_AP_Core_dontHideController, 0.1, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Core_keepControllerAlive
+//--------------------------------------------------------------------------------------------------
+bool lib5BD4895D_gt_AP_Core_keepControllerAlive_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!(lib5BD4895D_gf_AP_Core_IsControllerNotInitialized())) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib5BD4895D_gf_AP_Core_refreshController();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib5BD4895D_gt_AP_Core_keepControllerAlive_Init () {
+    lib5BD4895D_gt_AP_Core_keepControllerAlive = TriggerCreate("lib5BD4895D_gt_AP_Core_keepControllerAlive_Func");
+    TriggerAddEventTimePeriodic(lib5BD4895D_gt_AP_Core_keepControllerAlive, 1.0, c_timeGame);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -620,6 +676,7 @@ void lib5BD4895D_gt_AP_Core_clearChat_Init () {
 void lib5BD4895D_InitTriggers () {
     lib5BD4895D_gt_AP_Core_controllerInit_Init();
     lib5BD4895D_gt_AP_Core_dontHideController_Init();
+    lib5BD4895D_gt_AP_Core_keepControllerAlive_Init();
     lib5BD4895D_gt_updatechatbox_Init();
     lib5BD4895D_gt_chatboxbuttons_Init();
     lib5BD4895D_gt_chatboxshow_Init();
