@@ -68,14 +68,6 @@ Param/Value/F90A68D4=
 Param/Value/F9FB1F32=Air
 Param/Value/FC58AB37=<s val="Val03ArtifactText">Activate<n/> Energy Nova!</s>
 Param/Value/FF7A3CFC=3:25
-Param/Value/lib_1_1BF9F758=<n/>
-Param/Value/lib_1_21E8CC9A=v
-Param/Value/lib_1_71F92085=Archipelago Messages
-Param/Value/lib_1_8717A4C6=Scroll up
-Param/Value/lib_1_A52FB36E=-
-Param/Value/lib_1_A91983FA=Scroll down
-Param/Value/lib_1_CCCD5CB5=^
-Param/Value/lib_1_FB15887C=Scroll to bottom
 Sound/Name/GenericRescue=GenericRescue
 Sound/Name/VictoryCinematic1=VictoryCinematic1
 Soundtrack/Name/Music_VictoryCinematic=Music_VictoryCinematic

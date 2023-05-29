@@ -540,7 +540,7 @@ maps_table = [
     "ap_devils_playground", "ap_welcome_to_the_jungle", "ap_breakout", "ap_ghost_of_a_chance",
     "ap_the_great_train_robbery", "ap_cutthroat", "ap_engine_of_destruction", "ap_media_blitz", "ap_piercing_the_shroud",
     "ap_tzeratul01", "ap_tzeratul02", "ap_tzeratul03", "ap_tzeratul04",
-    "ap_gates_of_hell", "ap_belly_of_the_beast", "ap_shatter_the_sky", "ap_tvalerian03"
+    "ap_gates_of_hell", "ap_belly_of_the_beast", "ap_shatter_the_sky", "ap_all_in"
 ]
 
 wol_default_categories = [
