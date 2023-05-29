@@ -538,23 +538,40 @@ class HKWorld(World):
     def collect(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).collect(state, item)
         if change:
+            prog_items = state.prog_items
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
-                state.prog_items[item.player][effect_name] += effect_value
-        if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
-            if state.prog_items[item.player].get('RIGHTDASH', 0) and \
-                    state.prog_items[item.player].get('LEFTDASH', 0):
-                (state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"]) = \
-                    ([max(state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"])] * 2)
+                prog_items[effect_name, self.player] += effect_value
+
+            # a directional overflow in dash grants an upgrade for the other side
+            if item.name == "Right_Mothwing_Cloak" and \
+                    prog_items["RIGHTDASH", self.player] > 2 > prog_items["LEFTDASH", self.player]:
+                prog_items["OVERFLOWLEFTDASH", self.player] += 1
+                prog_items["LEFTDASH", self.player] += 1
+            elif item.name == "Left_Mothwing_Cloak" and \
+                    prog_items["LEFTDASH", self.player] > 2 > prog_items["RIGHTDASH", self.player]:
+                prog_items["OVERFLOWRIGHTDASH", self.player] += 1
+                prog_items["RIGHTDASH", self.player] += 1
+
         return change
 
     def remove(self, state, item: HKItem) -> bool:
         change = super(HKWorld, self).remove(state, item)
 
         if change:
+            prog_items = state.prog_items
+
+            # a directional overflow in dash grants an upgrade for the other side
+            if item.name == "Right_Mothwing_Cloak" and prog_items["OVERFLOWLEFTDASH", self.player]:
+                prog_items["LEFTDASH", self.player] -= 1
+                prog_items["OVERFLOWLEFTDASH", self.player] -= 1
+            elif item.name == "Left_Mothwing_Cloak" and prog_items["OVERFLOWRIGHTDASH", self.player]:
+                prog_items["RIGHTDASH", self.player] -= 1
+                prog_items["OVERFLOWRIGHTDASH", self.player] -= 1
+
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
-                if state.prog_items[item.player][effect_name] == effect_value:
-                    del state.prog_items[item.player][effect_name]
-                state.prog_items[item.player][effect_name] -= effect_value
+                if prog_items[effect_name, item.player] == effect_value:
+                    del prog_items[effect_name, item.player]
+                prog_items[effect_name, item.player] -= effect_value
 
         return change
 
