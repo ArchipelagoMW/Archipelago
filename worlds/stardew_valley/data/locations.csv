@@ -1040,27 +1040,27 @@ id,region,name,tags,mod_name
 5058,Stardew Valley,Level 8 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
 5059,Stardew Valley,Level 9 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
 5060,Stardew Valley,Level 10 Cooking,"COOKING_LEVEL,SKILL_LEVEL",Cooking Skill
-5061,Stardew Valley,Analyze: Clear Debris,MANDATORY,Magic
-5062,Stardew Valley,Analyze: Till,MANDATORY,Magic
-5063,Stardew Valley,Analyze: Water,MANDATORY,Magic
-5064,Stardew Valley,Analyze All Toil School Locations,MANDATORY,Magic
-5065,Stardew Valley,Analyze: Evac,MANDATORY,Magic
-5066,Stardew Valley,Analyze: Haste,MANDATORY,Magic
-5067,Stardew Valley,Analyze: Heal,MANDATORY,Magic
-5068,Stardew Valley,Analyze All Life School Locations,MANDATORY,Magic
-5069,Stardew Valley,Analyze: Descend,MANDATORY,Magic
-5070,Stardew Valley,Analyze: Fireball,MANDATORY,Magic
-5071,Stardew Valley,Analyze: Frostbite,MANDATORY,Magic
-5072,Stardew Valley,Analyze All Elemental School Locations,MANDATORY,Magic
-5073,Stardew Valley,Analyze: Lantern,MANDATORY,Magic
-5074,Stardew Valley,Analyze: Tendrils,MANDATORY,Magic
-5075,Stardew Valley,Analyze: Shockwave,MANDATORY,Magic
-5076,Stardew Valley,Analyze All Nature School Locations,MANDATORY,Magic
-5077,Stardew Valley,Analyze: Meteor,MANDATORY,Magic
-5078,Stardew Valley,Analyze: Lucksteal,MANDATORY,Magic
-5079,Stardew Valley,Analyze: Bloodmana,MANDATORY,Magic
-5080,Stardew Valley,Analyze all Eldritch School Locations,MANDATORY,Magic
-5081,Stardew Valley,Analyze Every Magic School Location,MANDATORY,Magic
+5501,Stardew Valley,Analyze: Clear Debris,MANDATORY,Magic
+5502,Stardew Valley,Analyze: Till,MANDATORY,Magic
+5503,Stardew Valley,Analyze: Water,MANDATORY,Magic
+5504,Stardew Valley,Analyze All Toil School Locations,MANDATORY,Magic
+5505,Stardew Valley,Analyze: Evac,MANDATORY,Magic
+5506,Stardew Valley,Analyze: Haste,MANDATORY,Magic
+5507,Stardew Valley,Analyze: Heal,MANDATORY,Magic
+5508,Stardew Valley,Analyze All Life School Locations,MANDATORY,Magic
+5509,Stardew Valley,Analyze: Descend,MANDATORY,Magic
+5510,Stardew Valley,Analyze: Fireball,MANDATORY,Magic
+5511,Stardew Valley,Analyze: Frostbite,MANDATORY,Magic
+5512,Stardew Valley,Analyze All Elemental School Locations,MANDATORY,Magic
+5513,Stardew Valley,Analyze: Lantern,MANDATORY,Magic
+5514,Stardew Valley,Analyze: Tendrils,MANDATORY,Magic
+5515,Stardew Valley,Analyze: Shockwave,MANDATORY,Magic
+5516,Stardew Valley,Analyze All Nature School Locations,MANDATORY,Magic
+5517,Stardew Valley,Analyze: Meteor,MANDATORY,Magic
+5518,Stardew Valley,Analyze: Lucksteal,MANDATORY,Magic
+5519,Stardew Valley,Analyze: Bloodmana,MANDATORY,Magic
+5520,Stardew Valley,Analyze all Eldritch School Locations,MANDATORY,Magic
+5521,Stardew Valley,Analyze Every Magic School Location,MANDATORY,Magic
 6001,Town,Friendsanity: Jasper 1 <3,FRIENDSANITY,Professor Jasper Thomas
 6002,Town,Friendsanity: Jasper 2 <3,FRIENDSANITY,Professor Jasper Thomas
 6003,Town,Friendsanity: Jasper 3 <3,FRIENDSANITY,Professor Jasper Thomas
