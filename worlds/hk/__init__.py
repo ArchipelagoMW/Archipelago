@@ -519,13 +519,15 @@ class HKWorld(World):
                 prog_items[effect_name, self.player] += effect_value
 
             # a directional overflow in dash grants an upgrade for the other side
-            if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
-                if prog_items["RIGHTDASH", self.player] > 2 > prog_items["LEFTDASH", self.player]:
-                    prog_items["OVERFLOWLEFTDASH", self.player] += 1
-                    prog_items["LEFTDASH", self.player] += 1
-                elif prog_items["LEFTDASH", self.player] > 2 > prog_items["RIGHTDASH", self.player]:
-                    prog_items["OVERFLOWRIGHTDASH", self.player] += 1
-                    prog_items["RIGHTDASH", self.player] += 1
+            if item.name == "Right_Mothwing_Cloak" and \
+                    prog_items["RIGHTDASH", self.player] > 2 > prog_items["LEFTDASH", self.player]:
+                prog_items["OVERFLOWLEFTDASH", self.player] += 1
+                prog_items["LEFTDASH", self.player] += 1
+            elif item.name == "Left_Mothwing_Cloak" and \
+                    prog_items["LEFTDASH", self.player] > 2 > prog_items["RIGHTDASH", self.player]:
+                prog_items["OVERFLOWRIGHTDASH", self.player] += 1
+                prog_items["RIGHTDASH", self.player] += 1
+
         return change
 
     def remove(self, state, item: HKItem) -> bool:
