@@ -1409,40 +1409,47 @@ class StardewLogic:
             return False_()
         return self.can_earn_spells()
 
+    def has_attack_spell_count(self, count: int) -> StardewRule:
+        attack_spell_rule = [self.received("Spell: Fireball"), self.received(
+            "Spell: Frostbite"), self.received("Spell: Shockwave"), self.received("Spell: Spirit"),
+                             self.received("Spell: Meteor")
+        ]
+        return Count(count, attack_spell_rule)
+
+    def has_support_spell_count(self, count: int) -> StardewRule:
+        support_spell_rule = [self.can_earn_spells(), self.received("Magic Level", 2)
+        ]
+        return Count(count, support_spell_rule)
+
     def has_decent_spells(self) -> StardewRule:
         if ModNames.magic not in self.options[options.Mods]:
             return False_()
-        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 3)
-        magic_attack_options_rule = self.received("Spell: Fireball") | self.received(
-            "Spell: Frostbite") | self.received("Spell: Shockwave") | self.received("Spell: Spirit")
-        magic_support_options_rule = self.received("Spell: Heal") | self.received("Spell: Tendrils")
-        return magic_resource_rule | magic_attack_options_rule | magic_support_options_rule
+        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 2)
+        magic_attack_options_rule = self.has_attack_spell_count(1)
+        return magic_resource_rule & magic_attack_options_rule
 
     def has_good_spells(self) -> StardewRule:
         if ModNames.magic not in self.options[options.Mods]:
             return False_()
-        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 3)
-        magic_attack_options_rule = self.received("Spell: Fireball") | self.received(
-            "Spell: Frostbite") | self.received("Spell: Shockwave") | self.received("Spell: Spirit")
-        magic_support_options_rule = self.received("Spell: Heal") | self.received("Spell: Tendrils")
-        return magic_resource_rule | magic_attack_options_rule | magic_support_options_rule
+        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 4)
+        magic_attack_options_rule = self.has_attack_spell_count(2)
+        magic_support_options_rule = self.has_support_spell_count(1)
+        return magic_resource_rule & magic_attack_options_rule & magic_support_options_rule
 
     def has_great_spells(self) -> StardewRule:
         if ModNames.magic not in self.options[options.Mods]:
             return False_()
         magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 6)
-        magic_attack_options_rule = self.received("Spell: Fireball") | self.received(
-            "Spell: Frostbite") | self.received("Spell: Shockwave") | self.received("Spell: Spirit")
-        magic_support_options_rule = self.received("Spell: Heal") | self.received("Spell: Tendrils")
+        magic_attack_options_rule = self.has_attack_spell_count(3)
+        magic_support_options_rule = self.has_support_spell_count(1)
         return magic_resource_rule & magic_attack_options_rule & magic_support_options_rule
 
     def has_amazing_spells(self) -> StardewRule:
         if ModNames.magic not in self.options[options.Mods]:
             return False_()
-        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 9)
-        magic_attack_options_rule = self.received("Spell: Fireball") | self.received(
-            "Spell: Frostbite") | self.received("Spell: Shockwave") | self.received("Spell: Spirit")
-        magic_support_options_rule = self.received("Spell: Heal") | self.received("Spell: Tendrils")
+        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 8)
+        magic_attack_options_rule = self.has_attack_spell_count(4)
+        magic_support_options_rule = self.has_support_spell_count(2)
         return magic_resource_rule & magic_attack_options_rule & magic_support_options_rule
 
     def can_blink(self) -> StardewRule:
@@ -1473,7 +1480,6 @@ class StardewLogic:
         return self.has_tool("Watering Can", watering_can_dict[level]) | \
             (self.received("Spell: Water") & self.can_earn_spells() & self.has_skill_level("Magic", level))
 
-    # Wish I was kidding with this one; you also get experience for these if you use the spell appropriately.
     def can_use_clear_debris_instead_of_tool_level(self, level: int) -> StardewRule:
         if ModNames.magic not in self.options[options.Mods]:
             return False_()
