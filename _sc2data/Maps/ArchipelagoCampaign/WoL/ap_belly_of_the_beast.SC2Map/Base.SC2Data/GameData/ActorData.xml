@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <!--                                                                                         -->
+    <!-- Queen ................................................................................. -->
+    <!--                                                                                         -->
+    <CActorUnit id="Queen">
+        <BarWidth value="200"/>
+        <BarOffset value="100"/>
+    </CActorUnit>
+</Catalog>

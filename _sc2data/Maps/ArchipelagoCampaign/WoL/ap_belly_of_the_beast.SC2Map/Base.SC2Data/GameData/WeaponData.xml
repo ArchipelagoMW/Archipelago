@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWeaponLegacy id="Talons">
+        <Period value="1.5"/>
+        <Range value="6"/>
+    </CWeaponLegacy>
+</Catalog>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CConversation id="TValerian02A">
+        <Lines index="102">
+            <Id value="Line00103"/>
+            <Text value="Conversation/TValerian02A/Line00103"/>
+            <Sound value="TValerian02ARaynor00103"/>
+            <AnimProps value="Talk"/>
+            <Objects index="Speaker" value="CharRaynor"/>
+            <Objects index="Camera" value="Medium"/>
+            <Variations index="Speaker" value=""/>
+        </Lines>
+    </CConversation>
+</Catalog>

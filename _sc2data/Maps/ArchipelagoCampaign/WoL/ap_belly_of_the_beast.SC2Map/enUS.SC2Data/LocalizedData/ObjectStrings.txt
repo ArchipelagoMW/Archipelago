@@ -1,0 +1,4 @@
+Conversation/Name/TValerian02A=TValerian02A
+Effect/Name/InfestedTerransLaunchPersistent=Infested Swarm (Launch Persistent)
+Sound/Name/TValerian02ARaynor00103=TValerian02ARaynor00103
+Water/Name/Char=Char
