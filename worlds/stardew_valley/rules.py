@@ -134,11 +134,11 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
         MultiWorldRules.set_rule(multi_world.get_entrance(dig_to_mines_floor(floor), player),
                                  logic.can_mine_to_floor(floor).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_tide_pools, player),
-                             logic.received("Beach Bridge").simplify() | (logic.can_blink() & logic.can_earn_spells()))
+                             logic.received("Beach Bridge") | (logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_quarry, player),
-                             logic.received("Bridge Repair").simplify() | (logic.can_blink() & logic.can_earn_spells()))
+                             logic.received("Bridge Repair") | (logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_secret_woods, player),
-                             logic.has_tool("Axe", "Iron").simplify() | (logic.can_blink() & logic.can_earn_spells()))
+                             logic.has_tool("Axe", "Iron") | (logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_sewers, player),
                              logic.has_rusty_key().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.town_to_sewers, player),
@@ -165,16 +165,16 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_railroad, player),
                              logic.has_lived_months(2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_witch_warp_cave, player),
-                             logic.received("Dark Talisman") | (logic.can_blink() & logic.can_earn_spells()))
+                             logic.received("Dark Talisman") | (logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_witch_hut, player),
-                             logic.has("Void Mayonnaise") | logic.can_blink())
+                             (logic.has("Void Mayonnaise") | logic.can_blink()).simplify())
 
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_harvey_room, player),
                              logic.has_relationship("Harvey", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_maru_room, player),
                              logic.has_relationship("Maru", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_sebastian_room, player),
-                             logic.has_relationship("Sebastian", 2) | logic.can_blink())
+                             (logic.has_relationship("Sebastian", 2) | logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_leah_cottage, player),
                              logic.has_relationship("Leah", 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_elliott_house, player),
@@ -185,7 +185,7 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
                              logic.has_relationship("Wizard", 4))
     if ModNames.alec in world_options[options.Mods]:
         MultiWorldRules.set_rule(multi_world.get_entrance(AlecEntrance.petshop_to_bedroom, player),
-                                 logic.has_relationship("Alec", 2))
+                                 (logic.has_relationship("Alec", 2) | logic.can_blink()).simplify())
 
 
 def set_ginger_island_rules(logic: StardewLogic, multi_world, player, world_options: StardewOptions):
