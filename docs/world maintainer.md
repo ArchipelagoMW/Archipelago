@@ -54,4 +54,4 @@ Voting shall be conducted on Discord in #archipelago-dev.
 ## Handling of Unmaintained Worlds
 
 As long as worlds are known to work for the most part, they can stay included. Once a world becomes broken it shall be
-moved from `worlds/` to `staging/`.
+moved from `worlds/` to `disabled/`.
