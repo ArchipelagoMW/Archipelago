@@ -272,6 +272,10 @@ class KH2Context(CommonContext):
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index == 0:
+                # resetting everything that were sent from the server
+                self.kh2seedsave["SoraInvo"][0] = 0x25D8
+                self.kh2seedsave["DonaldInvo"][0] = 0x26F4
+                self.kh2seedsave["GoofyInvo"][0] = 0x280A
                 self.kh2seedsave["itemIndex"] = - 1
                 self.kh2seedsave["AmountInvo"]["ServerItems"] = {
                     "Ability":      {},
@@ -641,7 +645,10 @@ class KH2Context(CommonContext):
                     current = self.kh2.read_short(self.kh2.base_address + self.Save + slot)
                     ability = current & 0x0FFF
                     if ability | 0x8000 != (0x8000 + itemData.memaddr):
-                        self.kh2.write_short(self.kh2.base_address + self.Save + slot, itemData.memaddr)
+                        if current - 0x8000 > 0:
+                            self.kh2.write_short(self.kh2.base_address + self.Save + slot, (0x8000 + itemData.memaddr))
+                        else:
+                            self.kh2.write_short(self.kh2.base_address + self.Save + slot, itemData.memaddr)
             # removes the duped ability if client gave faster than the game.
             for charInvo in {"SoraInvo", "DonaldInvo", "GoofyInvo"}:
                 if self.kh2.read_short(self.kh2.base_address + self.Save + self.kh2seedsave[charInvo][1]) != 0 and \
@@ -680,6 +687,10 @@ class KH2Context(CommonContext):
                         self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1), "big")
                 if (int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                    "big") & 0x1 << itemData.bitmask) == 0:
+                    # when getting a form anti points should be reset to 0 but bit-shift doesn't trigger the game.
+                    if itemName in {"Valor Form", "Wisdom Form", "Limit Form", "Master Form", "Final Form"}:
+                        self.kh2.write_bytes(self.kh2.base_address + self.Save + 0x3410,
+                                             (0).to_bytes(1, 'big'), 1)
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                          (itemMemory | 0x01 << itemData.bitmask).to_bytes(1, 'big'), 1)
 
@@ -730,7 +741,9 @@ class KH2Context(CommonContext):
                 if int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                   "big") != amountOfItems \
                         and int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Slot1 + 0x1B2, 1),
-                                           "big") >= 5 and 0x130293 in self.locations_checked:
+                                           "big") >= 5 and int.from_bytes(
+                        self.kh2.read_bytes(self.kh2.base_address + self.Save + 0x23DF, 1),
+                        "big") > 0:
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                          amountOfItems.to_bytes(1, 'big'), 1)
 
