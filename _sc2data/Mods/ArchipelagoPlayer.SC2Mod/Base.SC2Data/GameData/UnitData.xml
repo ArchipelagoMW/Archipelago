@@ -6497,6 +6497,11 @@
         <TechAliasArray value="Alias_CommandCenter"/>
         <GlossaryAlias value="CommandCenter"/>
     </CUnit>
+    <CUnit id="AP_AcidSalivaWeapon" parent="MISSILE">
+        <Race value="Zerg"/>
+        <Mover value="AcidSalivaWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->
@@ -6819,6 +6824,209 @@
             <ChanceArray index="Idle" value="33"/>
             <ChanceArray index="Turn" value="33"/>
         </Fidget>
+    </CUnit>
+    <CUnit id="AP_Roach">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="120"/>
+        <LifeMax value="120"/>
+        <LifeArmor value="1"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <Speed value="2.25"/>
+        <SpeedMultiplierCreep value="1.3"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="9"/>
+        <Food value="-1"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="75"/>
+        <CostResource index="Vespene" value="25"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="15"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_BurrowRoachDown"/>
+        <BehaviorArray Link="AP_RoachShield"/>
+        <BehaviorArray Link="AP_UseRoachCorpserWeapon"/>
+        <BehaviorArray Link="AP_UseRoachVileWeapon"/>
+        <BehaviorArray Link="AP_UseRoachVileCorpserWeapon"/>
+        <WeaponArray Link="AP_RoachMelee"/>
+        <WeaponArray Link="AP_AcidSaliva"/>
+        <WeaponArray Link="AP_RoachCorpserMelee"/>
+        <WeaponArray Link="AP_RoachCorpserAcidSaliva"/>
+        <WeaponArray Link="AP_RoachVileMelee"/>
+        <WeaponArray Link="AP_RoachVileAcidSaliva"/>
+        <WeaponArray Link="AP_RoachVileCorpserMelee"/>
+        <WeaponArray Link="AP_RoachVileCorpserAcidSaliva"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_RapidRegeneration" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons Face="BurrowDown" Type="AbilCmd" AbilCmd="AP_BurrowRoachDown,0" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_CorpserPassive" Type="Passive" Requirements="AP_HaveRoachCorpser" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_TunnelingClaws" Type="Passive" Requirements="AP_HaveHotSTunnelingClaws" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_HotSRoachDamage" Type="Passive" Requirements="AP_HaveHotSRoachDamage" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_HotSRoachShield" Type="Passive" Requirements="AP_HaveHotSRoachShield" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_VilePassive" Type="Passive" Requirements="AP_HaveRoachVile" Row="2" Column="2"/>
+        </CardLayouts>
+        <InnerRadius value="0.625"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="15"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="Roach"/>
+        <GlossaryCategory value="Unit/Category/ZergUnits"/>
+        <GlossaryPriority value="100"/>
+        <GlossaryStrongArray value="Hellion"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <GlossaryWeakArray value="Immortal"/>
+        <GlossaryWeakArray value="Ultralisk"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="33"/>
+            <ChanceArray index="Idle" value="33"/>
+            <ChanceArray index="Turn" value="33"/>
+        </Fidget>
+    </CUnit>
+    <CUnit id="AP_RoachBurrowed">
+        <Name value="Unit/Name/Roach"/>
+        <Description value="Button/Tooltip/Roach"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="Buried" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="120"/>
+        <LifeMax value="120"/>
+        <LifeArmor value="1"/>
+        <LifeRegenRate value="5"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <Mover value="Burrowed"/>
+        <SpeedMultiplierCreep value="1.3"/>
+        <Acceleration value="1000"/>
+        <Sight value="5"/>
+        <Food value="-1"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="75"/>
+        <CostResource index="Vespene" value="25"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="15"/>
+        <AbilArray Link="AP_BurrowRoachUp"/>
+        <AbilArray Link="AP_burrowedStop"/>
+        <AbilArray Link="move"/>
+        <BehaviorArray Link="AP_RoachShield"/>
+        <CardLayouts>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="BurrowUp" Type="AbilCmd" AbilCmd="AP_BurrowRoachUp,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="RapidRegeneration" Type="Passive" Row="2" Column="0"/>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons>
+                <Face value="StopRoachBurrowed"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_burrowedStop,Stop"/>
+                <Requirements value="AP_HaveHotSTunnelingClaws"/>
+                <Row value="0"/>
+                <Column value="1"/>
+            </LayoutButtons>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_CorpserPassive" Type="Passive" Requirements="AP_HaveRoachCorpser" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_TunnelingClaws" Type="Passive" Requirements="AP_HaveHotSTunnelingClaws" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_HotSRoachDamage" Type="Passive" Requirements="AP_HaveHotSRoachDamage" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_HotSRoachShield" Type="Passive" Requirements="AP_HaveHotSRoachShield" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_VilePassive" Type="Passive" Requirements="AP_HaveRoachVile" Row="2" Column="2"/>
+        </CardLayouts>
+        <InnerRadius value="0.625"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <SubgroupPriority value="15"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="RoachBurrowed"/>
+        <LeaderAlias value="Roach"/>
+        <HotkeyAlias value="Roach"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+        <AIEvaluateAlias value="Roach"/>
+    </CUnit>
+    <CUnit id="AP_RoachCorpserAcidSalivaWeapon" parent="MISSILE">
+        <Race value="Zerg"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_RoachVileAcidSalivaWeapon" parent="MISSILE">
+        <Race value="Zerg"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_Roachling" parent="BroodlingDefault">
+        <Name value="Unit/Name/AP_Roachling"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Summoned" value="1"/>
+        <LifeStart value="45"/>
+        <LifeMax value="45"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Speed value="3.836"/>
+        <SpeedMultiplierCreep value="1.3"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Height value="0.2"/>
+        <CostCategory value="Army"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <WeaponArray Link="AP_RoachlingNeedleClaws"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+        </CardLayouts>
+        <HotkeyAlias value="Roachling"/>
+        <GlossaryCategory value="Unit/Category/ZergUnits"/>
+        <GlossaryPriority value="66"/>
+        <HotkeyCategory value="Unit/Category/ZergStory"/>
     </CUnit>
     <CUnit id="SpectreAP_Nuke">
         <Race value="Terr"/>

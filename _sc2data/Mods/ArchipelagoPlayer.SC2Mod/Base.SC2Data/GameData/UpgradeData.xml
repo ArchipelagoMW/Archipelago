@@ -2271,4 +2271,140 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_Burrow">
+        <Icon value="Assets\Textures\btn-ability-zerg-burrow-color.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_GlialReconstitution">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-glialreconstitution.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Roach,Speed" Value="0.750000"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Roach"/>
+        <AffectedUnitArray value="AP_RoachBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSBurstingGlands">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSEnhancedBileDucts">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Roach"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHardenedCarapace">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <EffectArray Reference="Unit,AP_Roach,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_RoachBurrowed,LifeArmor" Value="1"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Roach"/>
+        <AffectedUnitArray value="AP_RoachBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSOrganicCarapace">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-organiccarapace.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Roach,LifeRegenRate" Value="2.000000"/>
+        <EffectArray Reference="Unit,AP_RoachBurrowed,LifeRegenRate" Value="2.000000"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Roach"/>
+        <AffectedUnitArray value="AP_RoachBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSRapidRegenerationRoach">
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSRoachHealth">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Roach,LifeMax" Value="25"/>
+        <EffectArray Reference="Unit,AP_RoachBurrowed,LifeMax" Value="25"/>
+        <EffectArray Reference="Unit,AP_Roach,LifeStart" Value="25"/>
+        <EffectArray Reference="Unit,AP_RoachBurrowed,LifeStart" Value="25"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSRoachSpeed">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-glialreconstitution.dds"/>
+        <Race value="Zerg"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Roach,Speed" Value="0.750000"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSTunnelingClaws">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_RoachBurrowed,Speed" Value="2.250000"/>
+        <EffectArray Reference="Unit,AP_RoachBurrowed,LifeRegenRate" Value="5"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_OrganicCarapace">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-organiccarapace.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_RoachBurrowed,LifeRegenRate" Value="10.000000"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Roach"/>
+        <AffectedUnitArray value="AP_RoachBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RoachCorpser">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_Roach" />
+        <EffectArray Operation="Set" Reference="Weapon,AP_RoachCorpserAcidSaliva,Options[Hidden]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AcidSaliva,Options[Hidden]" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RoachVile">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_Roach" />
+        <EffectArray Operation="Set" Reference="Weapon,AP_RoachVileAcidSaliva,Options[Hidden]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AcidSaliva,Options[Hidden]" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RoachVileCorpser">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_Roach" />
+        <EffectArray Operation="Set" Reference="Weapon,AP_RoachVileCorpserAcidSaliva,Options[Hidden]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_RoachVileAcidSaliva,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_RoachCorpserAcidSaliva,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AcidSaliva,Options[Hidden]" Value="1"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TunnelingClaws">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-tunnelingclaws.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_RoachBurrowed,Speed" Value="1.406200"/>
+        <EffectArray Reference="Unit,AP_RoachBurrowed,LifeRegenRate" Value="5"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Roach"/>
+        <AffectedUnitArray value="RoachBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSRoachDamage">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Effect,AP_RoachCorpserAcidSalivaU,AttributeBonus[Light]" Value="8"/>
+        <EffectArray Reference="Effect,AP_RoachCorpserMelee,AttributeBonus[Light]" Value="8"/>
+        <EffectArray Reference="Effect,AP_RoachVileAcidSalivaU,AttributeBonus[Light]" Value="8"/>
+        <EffectArray Reference="Effect,AP_RoachVileUMelee,AttributeBonus[Light]" Value="8"/>
+        <EffectArray Reference="Effect,AP_AcidSalivaU,AttributeBonus[Light]" Value="8"/>
+        <EffectArray Reference="Effect,AP_RoachUMelee,AttributeBonus[Light]" Value="8"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSRoachShield">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
 </Catalog>

@@ -670,8 +670,8 @@
         </Events>
         <Occlusion value="Show"/>
         <Radius value="0.600000"/>
-        <ScaleMax value="0.50000,0.50000,0.50000"/>
-        <ScaleMin value="0.50000,0.50000,0.50000"/>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
         <SelectionRadius value="1.845700"/>
         <ShadowRadius value="1.230700"/>
     </CModel>
@@ -1975,5 +1975,115 @@
             <Time value="0.012000"/>
             <Payload value="ZealotAiur_AttackSweetener"/>
         </Events>
+    </CModel>
+    <CModel id="AP_RoachCorpserAcidSalivaWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Zerg\RoachMissileEx1\RoachMissileEx1.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_RoachCorpserDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\RoachEx1ADeath\RoachEx1ADeath.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_RoachVileAcidSalivaWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Zerg\RoachMissileEx1B\RoachMissileEx1B.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_RoachVileAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\RoachWeaponImpact\RoachWeaponImpact.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_RoachVileDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\RoachEx1BDeath\RoachEx1BDeath.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_RoachVileDeathAcid" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\RoachDeathAcid\RoachDeathAcid.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Lighting value="RoachDeath"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_RoachVileDeathFire" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\RoachDeathFire\RoachDeathFire.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Lighting value="RoachDeath"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_RoachVileMissileImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\RoachMissileImpactEx1B\RoachMissileImpactEx1B.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_RoachVilePortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\RoachPortrait\RoachPortrait.m3"/>
+        <Image value="Assets\Textures\RoachPortrait_Static.dds"/>
+        <Lighting value="AP_RoachVilePortrait"/>
+    </CModel>
+    <CModel id="AP_RoachVileUpgrade" parent="RoachBase">
+        <Model value="Assets\Units\Zerg\RoachUpgrade\RoachUpgrade.m3"/>
+        <Lighting value="Roach"/>
+        <ScaleMax value="1.200000,1.200000,1.200000"/>
+        <ScaleMin value="1.000000,1.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_Roachling" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\RoachEx1\RoachEx1.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\Roach_SwarmAnims\Roach_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow05"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraLow05"/>
+        <UnitGlossaryCamera value="Star2CameraLow05"/>
+    </CModel>
+    <CModel id="AP_VileRoachDebuff" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\VileRoachDebuff\VileRoachDebuff.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_RoachShield" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\AdaptivePlating\AdaptivePlating.m3"/>
+        <!--ScaleMax value="0.100000,0.100000,0.100000"/>
+        <ScaleMin value="0.100000,0.100000,0.100000"/-->
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_CorpserBirth" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Zerg\CorpserBirth\CorpserBirth.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_RoachCorpser" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\RoachEx1A\RoachEx1A.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\Roach_SwarmAnims\Roach_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.541500"/>
+        <Tipability value="0.750000"/>
+        <TipabilityWidth value="0.800000"/>
+        <TipabilityLength value="0.800000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <Radius value="0.450000"/>
+        <ScaleMax value="1.100000,1.100000,1.100000"/>
+        <ScaleMin value="1.100000,1.100000,1.100000"/>
+        <TechPurchaseCamera value="Star2CameraMid04"/>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+        <PlanetPanelCamera value="Star2CameraMid04"/>
+        <ShadowRadius value="0.541500"/>
+    </CModel>
+    <CModel id="AP_RoachVile" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\RoachEx1B\RoachEx1B.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\Roach_SwarmAnims\Roach_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.541500"/>
+        <Tipability value="0.750000"/>
+        <TipabilityWidth value="0.800000"/>
+        <TipabilityLength value="0.800000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <Radius value="0.450000"/>
+        <ScaleMax value="1.100000,1.100000,1.100000"/>
+        <ScaleMin value="1.100000,1.100000,1.100000"/>
+        <TechPurchaseCamera value="Star2CameraMid04"/>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+        <PlanetPanelCamera value="Star2CameraMid04"/>
+        <ShadowRadius value="0.541500"/>
     </CModel>
 </Catalog>

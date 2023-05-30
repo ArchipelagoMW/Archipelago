@@ -320,6 +320,27 @@
         <CombineArray value="AP_IsVanillaCommandCenterFlying"/>
         <CombineArray value="AP_IsAPCommandCenterFlying"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPRoach">
+        <Value value="AP_Roach"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPRoachBurrowed">
+        <Value value="AP_RoachBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsRoachVileStructureTarget">
+        <CombineArray value="IsPhotonCannon"/>
+        <CombineArray value="AP_IsVanillaBunker"/>
+        <CombineArray value="AP_IsAPBunker"/>
+        <CombineArray value="IsMissileTurret"/>
+        <CombineArray value="AP_IsVanillaSpineCrawler"/>
+        <!-- FIXME: Add AP_SpineCrawler -->
+        <CombineArray value="AP_IsVanillaSporeCrawler"/>
+        <!-- FIXME: Add AP_SporeCrawler -->
+        <CombineArray value="IsPlanetaryFortress"/>
+        <CombineArray value="IsAutoTurret"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsRoachling">
+        <Value value="AP_Roachling"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <Negate value="1"/>
@@ -975,6 +996,10 @@
     <CValidatorUnitType id="AP_IsAPBunker">
         <Value value="AP_Bunker"/>
     </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsAnyBunker">
+        <CombineArray value="AP_IsVanillaBunker"/>
+        <CombineArray value="AP_IsAPBunker"/>
+    </CValidatorCombine>
     <CValidatorCombine id="AP_IsDefensiveStructure">
         <CombineArray value="NotStructure"/>
         <CombineArray value="IsPhotonCannon"/>
@@ -1154,5 +1179,32 @@
     <CValidatorPlayerRequirement id="AP_HaveAutoHarvester">
         <Find value="1"/>
         <Value value="AP_AutoHarvesterResearched"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_RoachCorpserFilters">
+        <Filters value="-;Player,Ally,Summoned"/>
+    </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_RoachUpgraded">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveOrganicCarapace"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSRoachShield">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSRoachShield"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_IsHeroic">
+        <Filters value="Heroic;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_NotHeroic">
+        <Filters value="-;Heroic"/>
+    </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_HaveRoachVile">
+        <Find value="1"/>
+        <Value value="AP_HaveRoachVile"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveRoachCorpser">
+        <Find value="1"/>
+        <Value value="AP_HaveRoachCorpser"/>
     </CValidatorPlayerRequirement>
 </Catalog>

@@ -440,7 +440,7 @@
         <EditorCategories value="Race:Terran"/>
         <AssetArray File="Assets\Sounds\Terran\Vulture\Vulture_SpiderMineBurrow0.wav"/>
         <AssetArray File="Assets\Sounds\Terran\Vulture\Vulture_SpiderMineBurrow1.wav"/>
-        <AssetArray File="Assets\Sounds\Terran\Vulture\Vulture_SpiderMineBurrow2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Vulture\Vulture_SpiderMineAP_Burrow.wav"/>
     </CSound>
     <CSound id="AP_Vulture_SpiderMinePlace" parent="Combat">
         <EditorCategories value="Race:Terran"/>
@@ -2127,5 +2127,230 @@
         <EditorCategories value="Race:Terran"/>
         <AssetArray File="Assets\Sounds\Terran\MercCompound\MercCompound_What.ogg"/>
         <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound default="1" id="AP_HoS_ZergAck" parent="HoS_Voice">
+        <EditorCategories value="Race:Zerg"/>
+    </CSound>
+    <CSound id="AP_RoachVile_Attack" parent="AP_HoS_ZergAck">
+        <AssetArray index="0">
+            <File value="Assets\Sounds\Zerg\Roach\Roach_Attack0.ogg"/>
+            <FacialAnim value=""/>
+            <FacialGroup value="Default"/>
+            <FacialFile value=""/>
+            <Speaker value=""/>
+            <Subtitle value=""/>
+        </AssetArray>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Attack1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Attack2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Attack3.ogg"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_AttackImpactMelee" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactMelee0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactMelee1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactMelee2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactMelee3.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactMelee4.wav"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_AttackImpactRanged" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged3.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged4.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged5.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged6.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged7.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged8.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackImpactRanged9.wav"/>
+        <Volume value="-13.980000,-12.040000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_AttackLaunchMelee" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee3.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee4.wav"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_AttackLaunchRanged" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchRanged0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchRanged1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchRanged2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchRanged3.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchRanged4.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchRanged5.wav"/>
+        <DupeDestroyCount value="4"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-13.980000,-12.040000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_Death" parent="Death">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Death0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Death1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\AP_Roach_Death.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Death3.wav"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_Explode" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium6.wav" Pitch="-3.000000,3.000000"/>
+        <DupeMuteCount value="6"/>
+        <Volume value="-8.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_Pissed" parent="Pissed">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed4.ogg"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_Ready" parent="Ready">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Ready0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Ready1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Ready2.ogg"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_What" parent="AP_HoS_ZergAck">
+        <AssetArray index="0">
+            <File value="Assets\Sounds\Zerg\Roach\Roach_What0.ogg"/>
+            <FacialAnim value=""/>
+            <FacialGroup value="Default"/>
+            <FacialFile value=""/>
+            <Speaker value=""/>
+            <Subtitle value=""/>
+        </AssetArray>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What4.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What5.ogg"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_RoachVile_Yes" parent="AP_HoS_ZergAck">
+        <AssetArray index="0">
+            <File value="Assets\Sounds\Zerg\Roach\Roach_Yes0.ogg"/>
+            <FacialAnim value=""/>
+            <FacialGroup value="Default"/>
+            <FacialFile value=""/>
+            <Speaker value=""/>
+            <Subtitle value=""/>
+        </AssetArray>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Yes1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Yes2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Yes3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Yes4.ogg"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Roachling_Attack" parent="AP_HoS_ZergAck">
+        <AssetArray index="0">
+            <File value="Assets\Sounds\Zerg\Roach\Roach_Attack0.ogg"/>
+            <FacialAnim value=""/>
+            <FacialGroup value="Default"/>
+            <FacialFile value=""/>
+            <Speaker value=""/>
+            <Subtitle value=""/>
+        </AssetArray>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Attack1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Attack2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Attack3.ogg"/>
+        <Pitch value="9.000000,9.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Roachling_Death" parent="DeathVoice">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Death0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Death1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\AP_Roach_Death.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Death3.wav"/>
+        <Flags index="Download" value="1"/>
+        <Pitch value="9.000000,9.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Roachling_Explode" parent="Death">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall0.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall1.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall2.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall3.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall4.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall5.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionSmall6.wav" Pitch="-3.000000,6.000000" Volume="-6.000000,-4.000000"/>
+        <Flags index="Ignorable" value="0"/>
+        <Flags index="Purgable" value="1"/>
+        <Category value="Combat"/>
+    </CSound>
+    <CSound id="AP_Roachling_Pissed" parent="Pissed">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Pissed4.ogg"/>
+        <PanLevel value="1.000000"/>
+        <Pitch value="9.000000,9.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Roachling_Ready" parent="Ready">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Ready0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Ready1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Ready2.ogg"/>
+        <Pitch value="9.000000,9.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Roachling_What" parent="AP_HoS_ZergAck">
+        <AssetArray index="0">
+            <File value="Assets\Sounds\Zerg\Roach\Roach_What0.ogg"/>
+            <FacialAnim value=""/>
+            <FacialGroup value="Default"/>
+            <FacialFile value=""/>
+            <Speaker value=""/>
+            <Subtitle value=""/>
+        </AssetArray>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What4.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_What5.ogg"/>
+        <Pitch value="9.000000,9.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Roachling_Yes" parent="AP_HoS_ZergAck">
+        <AssetArray index="0">
+            <File value="Assets\Sounds\Zerg\Roach\Roach_Yes0.ogg"/>
+            <FacialAnim value=""/>
+            <FacialGroup value="Default"/>
+            <FacialFile value=""/>
+            <Speaker value=""/>
+            <Subtitle value=""/>
+        </AssetArray>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Yes1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Yes2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Yes3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Yes4.ogg"/>
+        <Pitch value="9.000000,9.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
     </CSound>
 </Catalog>

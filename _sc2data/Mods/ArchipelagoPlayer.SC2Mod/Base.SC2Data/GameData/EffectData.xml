@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
     <CEffectApplyBehavior id="AP_250mmStrikeCannonsApplyBehavior">
-        <ValidatorArray index="0" value="NotHeroic"/>
+        <ValidatorArray index="0" value="AP_NotHeroic"/>
         <EditorCategories value="Race:Terran"/>
         <Behavior value="AP_250mmStrikeCannons"/>
     </CEffectApplyBehavior>
@@ -2908,6 +2908,196 @@
         <EditorCategories value="Race:Terran"/>
         <BehaviorLink value="SpecialObject"/>
     </CEffectRemoveBehavior>
+    <CEffectLaunchMissile id="AP_AcidSalivaLM">
+        <ValidatorArray index="0" value="RoachLMTargetFilters"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_AcidSalivaSet"/>
+        <AmmoUnit value="AP_AcidSalivaWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_AcidSalivaSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BileDuctsApplyBehavior"/>
+        <EffectArray value="AP_AcidSalivaU"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_AcidSalivaU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Amount value="16"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_AcidSpinesLM">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AcidSpines"/>
+        <AmmoUnit value="AP_AcidSpinesWeapon"/>
+        <Movers Link="AP_AcidSpinesWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="AP_BileDuctsApplyBehavior">
+        <ValidatorArray index="0" value="UseBileDucts"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_BileDucts"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_BileDuctsDamage">
+        <EditorCategories value="Race:Zerg"/>
+        <Amount value="1"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectRemoveBehavior id="AP_CorpserRemoveBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Source"/>
+        <BehaviorLink value="AP_RoachCorpser"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_CorpserSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_CorpserRemoveBehavior"/>
+        <EffectArray value="AP_SpawnerActive"/>
+        <EffectArray value="AP_RoachCorpserSpawnRoachlings"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_RoachCorpserAcidSalivaLM">
+        <ValidatorArray index="0" value="AP_RoachLMTargetFilters"/> <!-- Validator doesn't exist in Vanilla? -->
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_RoachCorpserAcidSalivaSet"/>
+        <AmmoUnit value="AP_RoachCorpserAcidSalivaWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_RoachCorpserAcidSalivaSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BileDuctsApplyBehavior"/>
+        <EffectArray value="AP_RoachCorpserApplyBehavior"/>
+        <EffectArray value="AP_RoachCorpserAcidSalivaU"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_RoachCorpserAcidSalivaU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Amount value="16"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_RoachCorpserApplyBehavior">
+        <ValidatorArray index="0" value="NotStructure"/>
+        <ValidatorArray value="NotDestructible"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_RoachCorpser"/>
+    </CEffectApplyBehavior>
+    <CEffectCreateUnit id="AP_RoachCorpserSpawnRoachlings">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="SourcePoint"/>
+        <CreateFlags index="Placement" value="0"/>
+        <SpawnEffect value="AP_RoachlingFate"/>
+        <SpawnUnit value="AP_Roachling"/>
+        <SpawnCount value="2"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_RoachMeleeSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BileDuctsApplyBehavior"/>
+        <EffectArray value="AP_RoachUMelee"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_RoachUMelee" parent="DU_WEAP_MISSILE">
+        <Name value="Effect/Name/AcidSalivaU"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="Effect/AcidSalivaU"/>
+        <Kind value="Melee"/>
+        <Amount value="16"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_RoachVileAcidSalivaLM">
+        <ValidatorArray index="0" value="RoachLMTargetFilters"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_RoachVileAcidSalivaSet"/>
+        <AmmoUnit value="AP_RoachVileAcidSalivaWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_RoachVileAcidSalivaSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BileDuctsApplyBehavior"/>
+        <EffectArray value="AP_VileAcidSlowAB"/>
+        <EffectArray value="AP_RoachVileAcidSalivaU"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_RoachVileAcidSalivaU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Amount value="16"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_RoachVileCorpserAcidSalivaLM">
+        <ValidatorArray index="0" value="RoachLMTargetFilters"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_RoachVileCorpserAcidSalivaSet"/>
+        <AmmoUnit value="AP_RoachVileAcidSalivaWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_RoachVileCorpserAcidSalivaSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BileDuctsApplyBehavior"/>
+        <EffectArray value="AP_RoachCorpserApplyBehavior"/>
+        <EffectArray value="AP_VileAcidSlowAB"/>
+        <EffectArray value="AP_RoachCorpserAcidSalivaU"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_RoachlingFate">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_RoachlingFate"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_RoachlingNeedleClawsDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Amount value="2"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_RoachlingNeedleClawsSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RoachlingNeedleClawsDamage"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_SpawnerActive2">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="CasterOuter"/>
+        <Behavior value="AP_SpawnerActive"/>
+        <Count value="2"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_VileAcidSlowAB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_VileAcidSlowABNormal"/>
+        <EffectArray value="AP_VileAcidSlowABHeroic"/>
+        <EffectArray value="AP_VileAcidSlowABStructrue"/>
+        <EffectArray value="AP_VileAcidSlowIterateTransport"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_VileAcidSlowABHeroic">
+        <ValidatorArray index="0" value="AP_IsHeroic"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_VileAcidSlowFlatAmountHeroic"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_VileAcidSlowABNormal">
+        <ValidatorArray index="0" value="NotStructure"/>
+        <ValidatorArray value="AP_NotHeroic"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_VileAcidSlowFlatAmount"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_VileAcidSlowABStructrue">
+        <ValidatorArray index="0" value="AP_IsRoachVileStructureTarget"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_VileAcidSlowFlatAmountStructure"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumTransport id="AP_VileAcidSlowIterateTransport">
+        <ValidatorArray value="AP_IsAnyBunker"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Effect value="AP_VileAcidSlowABNormal"/>
+    </CEffectEnumTransport>
+    <CEffectSet id="AP_RoachVileMeleeSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BileDuctsApplyBehavior"/>
+        <EffectArray value="AP_VileAcidSlowAB"/>
+        <EffectArray value="AP_RoachVileUMelee"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_RoachVileUMelee" parent="AP_RoachVileAcidSalivaU">
+        <Death value="Eviscerate"/>
+        <Kind value="Melee"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_RoachCorpserMeleeSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BileDuctsApplyBehavior"/>
+        <EffectArray value="AP_RoachCorpserApplyBehavior"/>
+        <EffectArray value="AP_RoachCorpserMelee"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_RoachCorpserMelee" parent="AP_RoachCorpserAcidSalivaU">
+        <Death value="Eviscerate"/>
+        <Kind value="Melee"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_RoachVileCorpserMeleeSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BileDuctsApplyBehavior"/>
+        <EffectArray value="AP_RoachCorpserApplyBehavior"/>
+        <EffectArray value="AP_VileAcidSlowAB"/>
+        <EffectArray value="AP_RoachCorpserMelee"/>
+    </CEffectSet>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

@@ -791,7 +791,7 @@
         <ExpireEffect value="AP_SupplyDepotDropMorph"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_SupplyDepotMorphing">
-<!--        <InfoFlags index="Hidden" value="1"/>-->
+        <!--        <InfoFlags index="Hidden" value="1"/>-->
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
         <Duration value="1.35"/>
     </CBehaviorBuff>
@@ -1061,6 +1061,130 @@
         <ExpireEffect value="AP_SupplyDropApplyBehavior"/>
         <Modification>
             <AbilClassDisableArray index="CAbilMorph" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BileDucts">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="1.85"/>
+        <Period value="0.5"/>
+        <InitialEffect value="AP_BileDuctsDamage"/>
+        <PeriodicEffect value="AP_BileDuctsDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RoachCorpser">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-unit-zerg-roachlings.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_RoachCorpserFilters"/>
+        <Duration value="2.1"/>
+        <DamageResponse Fatal="1" Handled="AP_CorpserSet">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RoachCorpserSpray">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_HaveHotSBurstingGlands"/>
+        <Modification>
+            <WeaponEnableArray value="AP_RoachCorpserSpray"/>
+            <WeaponDisableArray value="AP_RoachCorpserAcidSaliva"/>
+            <WeaponDisableArray value="AP_RoachCorpserMelee"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RoachRegenDummy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="LifeNotFull"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RoachShield">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level1.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="LifeLTHalf"/>
+        <DisableValidatorArray value="AP_HaveHotSRoachShield"/>
+        <Modification>
+            <LifeArmorBonus value="3"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RoachSpray">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_HaveHotSBurstingGlands"/>
+        <Modification>
+            <WeaponEnableArray value="AP_RoachSpray"/>
+            <WeaponDisableArray value="AP_AcidSaliva"/>
+            <WeaponDisableArray value="AP_RoachMelee"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RoachVileSpray">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
+        <Requirements value="AP_HaveHotSBurstingGlands"/>
+        <Modification>
+            <WeaponEnableArray value="AP_RoachVileSpray"/>
+            <WeaponDisableArray value="AP_RoachVileAcidSaliva"/>
+            <WeaponDisableArray value="AP_RoachVileMelee"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RoachlingFate" parent="TimedLife">
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="30"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SpawnerActive">
+        <InfoFlags index="Hidden" value="1"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="10"/>
+        <Duration value="60"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VileAcidSlowFlatAmount">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-debilitatingbile.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <Modification MoveSpeedMultiplier="0.25" AttackSpeedMultiplier="0.25"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VileAcidSlowFlatAmountHeroic">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-debilitatingbile.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <Modification MoveSpeedMultiplier="0.8" AttackSpeedMultiplier="0.8"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VileAcidSlowFlatAmountStructure">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-debilitatingbile.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <Modification MoveSpeedMultiplier="0.25" AttackSpeedMultiplier="0.25"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_UseRoachCorpserWeapon">
+        <InfoFlags index="Hidden" value="1"/>
+        <Requirements value="AP_UseRoachCorpserWeapon"/>
+        <Modification>
+            <WeaponEnableArray value="AP_RoachCorpserMelee"/>
+            <WeaponEnableArray value="AP_RoachCorpserAcidSaliva"/>
+            <WeaponDisableArray value="AP_RoachMelee"/>
+            <WeaponDisableArray value="AP_AcidSaliva"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_UseRoachVileWeapon">
+        <InfoFlags index="Hidden" value="1"/>
+        <Requirements value="AP_UseRoachVileWeapon"/>
+        <Modification>
+            <WeaponEnableArray value="AP_RoachVileMelee"/>
+            <WeaponEnableArray value="AP_RoachVileAcidSaliva"/>
+            <WeaponDisableArray value="AP_RoachMelee"/>
+            <WeaponDisableArray value="AP_AcidSaliva"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_UseRoachVileCorpserWeapon">
+        <InfoFlags index="Hidden" value="1"/>
+        <Requirements value="AP_UseRoachVileCorpserWeapon"/>
+        <Modification>
+            <WeaponEnableArray value="AP_RoachVileCorpserMelee"/>
+            <WeaponEnableArray value="AP_RoachVileCorpserAcidSaliva"/>
+            <WeaponDisableArray value="AP_RoachMelee"/>
+            <WeaponDisableArray value="AP_AcidSaliva"/>
         </Modification>
     </CBehaviorBuff>
 </Catalog>

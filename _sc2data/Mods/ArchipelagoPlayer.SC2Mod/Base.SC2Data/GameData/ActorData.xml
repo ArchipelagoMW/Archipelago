@@ -3057,6 +3057,387 @@
     <CActorSound id="AP_SCVBuildSound" parent="SoundOneShot">
         <Sound value="SCV_Repair"/>
     </CActorSound>
+    <CActorUnit default="1" id="AP_RoachBase" parent="GenericUnitBase">
+        <Model value="Roach"/>
+        <Aliases value="_UnitMedium"/>
+        <Macros value="ZergBurrowMobileAnimMacro"/>
+        <Macros value="ZergMediumBurrowEffects"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <On Terms="UnitMovementUpdate.AP_RoachBurrowed.Stand" Send="Create AP_RoachBurrowedSplat"/>
+        <On Terms="UnitMovementUpdate.AP_RoachBurrowed.Walk" Target="AP_RoachBurrowedSplat" Send="Destroy"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.AP_AcidSaliva.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_AcidSaliva.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_RoachMelee.AttackStart" Send="AnimBracketStart AttackCover Attack,Cover"/>
+        <On Terms="WeaponStop.AP_RoachMelee.AttackStop" Send="AnimBracketStop AttackCover"/>
+        <On Terms="WeaponStart.AP_RoachVileAcidSaliva.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_RoachVileAcidSaliva.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_RoachVileMelee.AttackStart" Send="AnimBracketStart AttackCover Attack,Cover"/>
+        <On Terms="WeaponStop.AP_RoachVileMelee.AttackStop" Send="AnimBracketStop AttackCover"/>
+        <On Terms="WeaponStart.AP_RoachCorpserAcidSaliva.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_RoachCorpserAcidSaliva.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_RoachCorpserMelee.AttackStart" Send="AnimBracketStart AttackCover Attack,Cover"/>
+        <On Terms="WeaponStop.AP_RoachCorpserMelee.AttackStop" Send="AnimBracketStop AttackCover"/>
+        <On Terms="WeaponStart.AP_RoachVileCorpserAcidSaliva.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_RoachVileCorpserAcidSaliva.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_RoachVileCorpserMelee.AttackStart" Send="AnimBracketStart AttackCover Attack,Cover"/>
+        <On Terms="WeaponStop.AP_RoachVileCorpserMelee.AttackStop" Send="AnimBracketStop AttackCover"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="UnitBirth.AP_RoachBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_RoachBurrowed" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowDownMedium"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="AnimClear Fidget"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Roach; MorphTo AP_RoachBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Roach; MorphFrom AP_RoachBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="UnitBirth.AP_Roach" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Roach; MorphFrom AP_RoachBurrowed" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_RoachBurrowed; MorphFrom AP_Roach" Send="TerrainSquibDeactivate"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Roach_Land"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Roach"/>
+        <DeathArray index="Normal" ModelLink="RoachDeath" SoundLink="Roach_Explode"/>
+        <DeathArray index="Disintegrate" ModelLink="RoachDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Fire" ModelLink="RoachDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <DeathCustoms ModelLink="RoachDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="FireOnMetal"/>
+            <BodySquibs Name="BloodReduced" IsFallback="1"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
+        <PlacementModel value="Roach"/>
+        <PortraitModel value="RoachPortrait"/>
+        <TerrainSquibs>
+            <GroupName value="RippleStandard"/>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLarge"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="55"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Roach.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-roach.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Roach_Ready"/>
+        <SoundArray index="What" value="Roach_What"/>
+        <SoundArray index="Yes" value="Roach_Yes"/>
+        <SoundArray index="Attack" value="Roach_Attack"/>
+        <SoundArray index="Pissed" value="Roach_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-roach.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Roach.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorUnit id="AP_Roach" parent="AP_RoachBase" unitName="AP_Roach">
+        <On Terms="Upgrade.AP_RoachVile.Add" Send="Create AP_RoachVile"/>
+        <On Terms="Upgrade.AP_RoachVile.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Create AP_RoachVile"/>
+        <On Terms="Upgrade.AP_RoachCorpser.Add" Send="Create AP_RoachCorpser"/>
+        <On Terms="Upgrade.AP_RoachCorpser.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachCorpser" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachCorpser" Send="Create AP_RoachCorpser"/>
+        <On Terms="Upgrade.AP_TunnelingClaws.Add" Send="ModelSwap RoachUpgrade"/>
+        <On Terms="Upgrade.AP_TunnelingClaws.Add; ValidateUnit IsBuried" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
+    </CActorUnit>
+    <CActorUnit id="AP_RoachVile" parent="AP_RoachBase" unitName="AP_RoachVile">
+        <Model value="AP_RoachVile"/>
+        <BuildModel value="AP_RoachVile"/>
+        <DeathArray index="Normal" ModelLink="AP_RoachVileDeath" SoundLink="Roach_Explode"/>
+        <DeathArray index="Disintegrate" ModelLink="AP_RoachVileDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Fire" ModelLink="AP_RoachVileDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <PlacementModel value="AP_RoachVile"/>
+        <PortraitModel value="AP_RoachVilePortrait"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-roach-vile.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-roach-vile.dds"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-roachex1b.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-roachex1b.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_RoachCorpser" parent="AP_RoachBase" unitName="AP_RoachCorpser">
+        <!-- Vile model takes over Corpser -->
+        <On Terms="Upgrade.AP_RoachVile.Add" Send="Create AP_RoachVile"/>
+        <On Terms="Upgrade.AP_RoachVile.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Create AP_RoachVile"/>
+        <Model value="AP_RoachCorpser"/>
+        <BuildModel value="AP_RoachCorpser"/>
+        <DeathArray index="Normal" ModelLink="AP_RoachCorpserDeath" SoundLink="Roach_Explode"/>
+        <PlacementModel value="AP_RoachCorpser"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-roach-corpser.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-roach-corpser.dds"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-unit-zerg-roach-corpser.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-roachex1a.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_RoachAttack" parent="GenericAttack" effectImpact="AP_AcidSalivaU" effectLaunch="AP_AcidSalivaLM">
+        <LaunchAttachQuery Methods="Head"/>
+        <LaunchAssets Sound="Roach_AttackLaunchRanged"/>
+        <Missile value="AP_RoachAttackMissile"/>
+        <ImpactMap index="None" Model="RoachMissileImpact" Sound="Roach_AttackImpactRanged"/>
+        <ImpactPhysics Name="AcidSalivaImpact" MatchKeys="Basic" Physics="RoachAttackDeathForce"/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <AcquisitionPitchHalfArc value="15.000000"/>
+        <AccuracyHalfArc value="15.000000"/>
+    </CActorAction>
+    <CActorForceSphere id="AP_RoachAttackDeathForce">
+        <On Terms="ActorCreation" Send="Create AP_RoachAttackExplosionDeathForce"/>
+        <HostSiteOps Ops="SOpIncomingMissileDot1"/>
+        <Receiver Subject="::Main"/>
+        <Field value="Directional"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="14.000000,5.000000"/>
+        <Radius value="1.000000,0.300000"/>
+        <Direction value="Forward"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_RoachAttackExplosionDeathForce">
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpMoveByDot25 SOpRandomPointInSphereDot15"/>
+        <Receiver Subject="::Main"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="12.000000,7.500000"/>
+        <Radius value="0.500000,0.300000"/>
+    </CActorForceSphere>
+    <CActorMissile id="AP_RoachAttackMissile" parent="GenericAttackMissile" unitName="AP_AcidSalivaWeapon">
+        <Model value="AcidSalivaWeapon"/>
+    </CActorMissile>
+    <CActorSplat id="AP_RoachBurrowedSplat" parent="BurrowedSplatBase">
+        <On Terms="UnitBirth.AP_RoachBurrowed" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_RoachBurrowed" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_RoachBurrowed" Send="TimerSet 5.000000 DelayDestroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_RoachBurrowed" Send="RefClear ::Host"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+    </CActorSplat>
+    <CActorMissile id="AP_RoachCorpserAttackMissile" parent="GenericAttackMissile" unitName="AP_RoachCorpserAcidSalivaWeapon"/>
+    <CActorAction id="AP_RoachCorpserAttack" parent="GenericAttack" effectImpact="AP_RoachCorpserAcidSalivaU" effectLaunch="AP_RoachCorpserAcidSalivaLM">
+        <LaunchAssets Sound="Roach_AttackLaunchRanged"/>
+        <LaunchAttachQuery Methods="Head"/>
+        <ImpactMap index="None" Model="RoachMissileImpact" Sound="Roach_AttackImpactRanged"/>
+        <ImpactPhysics Name="AcidSalivaImpact" MatchKeys="Basic" Physics="RoachAttackDeathForce"/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <AcquisitionPitchHalfArc value="15.000000"/>
+        <AccuracyHalfArc value="15.000000"/>
+    </CActorAction>
+    <CActorAction id="AP_RoachCorpserMeleeAttack" parent="GenericAttack" effectAttack="AP_RoachCorpserMelee">
+        <ImpactMap index="None" Model="RoachAttackImpact" Sound="Roach_AttackImpactMelee"/>
+        <ImpactPhysics>
+            <Name value="Attack00"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,00"/>
+            <Physics value="RoachMeleeAttackRightBladeForce"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="Attack01"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,01"/>
+            <Physics value="RoachMeleeAttackRightBladeForce"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="Attack02"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,02"/>
+            <Physics value="RoachMeleeAttackForce02"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="Attack03"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,03"/>
+            <Physics value="RoachMeleeAttackForce03"/>
+        </ImpactPhysics>
+        <AttackAnimName value="AttackCover"/>
+    </CActorAction>
+    <CActorAction id="AP_RoachMeleeAttack" parent="GenericAttack" effectAttack="AP_RoachUMelee">
+        <ImpactMap index="None" Model="RoachAttackImpact" Sound="Roach_AttackImpactMelee"/>
+        <ImpactPhysics>
+            <Name value="Attack00"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,00"/>
+            <Physics value="RoachMeleeAttackRightBladeForce"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="Attack01"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,01"/>
+            <Physics value="RoachMeleeAttackRightBladeForce"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="Attack02"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,02"/>
+            <Physics value="RoachMeleeAttackForce02"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="Attack03"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,03"/>
+            <Physics value="RoachMeleeAttackForce03"/>
+        </ImpactPhysics>
+        <AttackAnimName value="AttackCover"/>
+    </CActorAction>
+    <CActorAction id="AP_RoachVileAttack" parent="GenericAttack" effectImpact="AP_RoachVileAcidSalivaU" effectLaunch="AP_RoachVileAcidSalivaLM">
+        <LaunchAttachQuery Methods="Head"/>
+        <LaunchAssets Sound="RoachVile_AttackLaunchRanged"/>
+        <Missile value="RoachVileAttackMissile"/>
+        <ImpactMap index="None" Model="AP_RoachVileMissileImpact" Sound="AP_RoachVile_AttackImpactRanged"/>
+        <ImpactPhysics Name="AcidSalivaImpact" MatchKeys="Basic" Physics="RoachAttackDeathForce"/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <AcquisitionPitchHalfArc value="15.000000"/>
+        <AccuracyHalfArc value="15.000000"/>
+    </CActorAction>
+    <CActorMissile id="AP_RoachVileAttackMissile" parent="GenericAttackMissile" unitName="AP_RoachVileAcidSalivaWeapon"/>
+    <CActorAction id="AP_RoachVileCorpserAttack" parent="GenericAttack" effectImpact="AP_RoachVileAcidSalivaU" effectLaunch="AP_RoachVileCorpserAcidSalivaLM">
+        <LaunchAttachQuery Methods="Head"/>
+        <LaunchAssets Sound="RoachVile_AttackLaunchRanged"/>
+        <ImpactMap index="None" Model="AP_RoachVileMissileImpact" Sound="AP_RoachVile_AttackImpactRanged"/>
+        <ImpactPhysics Name="AcidSalivaImpact" MatchKeys="Basic" Physics="RoachAttackDeathForce"/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <AcquisitionPitchHalfArc value="15.000000"/>
+        <AccuracyHalfArc value="15.000000"/>
+    </CActorAction>
+    <CActorAction id="AP_RoachVileMeleeAttack" parent="GenericAttack" effectAttack="AP_RoachVileUMelee">
+        <ImpactMap index="None" Model="AP_RoachVileAttackImpact" Sound="AP_RoachVile_AttackImpactMelee"/>
+        <ImpactPhysics>
+            <Name value="Attack00"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,00"/>
+            <Physics value="RoachMeleeAttackRightBladeForce"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="Attack01"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,01"/>
+            <Physics value="RoachMeleeAttackRightBladeForce"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="Attack02"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,02"/>
+            <Physics value="RoachMeleeAttackForce02"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="Attack03"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover,03"/>
+            <Physics value="RoachMeleeAttackForce03"/>
+        </ImpactPhysics>
+        <AttackAnimName value="AttackCover"/>
+    </CActorAction>
+    <CActorAction id="AP_RoachVileSprayAttack" parent="GenericAttackBase" effectAttack="AP_RoachVileSpray">
+        <On Terms="Effect.AP_RoachVileSpraySet.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_RoachVileSprayDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <LaunchAttachQuery Methods="Weapon 0"/>
+        <LaunchAssets Model="RoachSprayAttackLaunch" Sound="Roach_AttackLaunchRanged"/>
+        <LaunchModel value="RoachVileSprayAttackModel"/>
+        <ContainerAssets Model="AP_FirebatBunkerAttackLaunch" Sound="Roach_AttackLaunchRanged"/>
+        <ImpactMap index="None" Model="AP_FirebatAttackImpact" Sound="Firebat_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_RoachVileSprayAttackModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor 128,255,255"/>
+        <Model value="AP_DevilDogAttackModel"/>
+    </CActorModel>
+    <CActorSound id="AP_Roach_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_Roach; PassChance 25.000000" Send="Create"/>
+        <On Terms="UnitDeath.AP_RoachBurrowed; PassChance 25.000000" Send="Create"/>
+        <On Terms="UnitDeath.AP_PrimalRoach; PassChance 25.000000" Send="Create"/>
+        <Sound value="Roach_Death"/>
+    </CActorSound>
+    <CActorUnit id="AP_Roachling" parent="GenericUnitBase" unitName="AP_Roachling">
+        <Aliases value="_UnitSmall"/>
+        <On Terms="ActorCreation" Send="SetScale 1.000000 0.250000"/>
+        <On Terms="ActorCreation" Send="$Birth,Inferior"/>
+        <On Terms="ActorCreation" Send="Create AP_CorpserBirth"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.AP_RoachlingNeedleClaws.AttackStart" Send="AnimBracketStart AttackCover Attack,Cover"/>
+        <On Terms="WeaponStop.AP_RoachlingNeedleClaws.AttackStop" Send="AnimBracketStop AttackCover"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Broodling_Land"/>
+        <Scale value="0.100000"/>
+        <DeathArray index="Normal" ModelLink="RoachDeath" SoundLink="AP_Roachling_Explode" VoiceLink="AP_Roachling_Death"/>
+        <DeathArray index="Disintegrate" ModelLink="RoachDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Fire" ModelLink="RoachDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <PortraitModel value="RoachPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="25"/>
+        <BarWidth value="40"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Roach.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-roachlings.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="AP_Roachling_Ready"/>
+        <SoundArray index="What" value="AP_Roachling_What"/>
+        <SoundArray index="Yes" value="AP_Roachling_Yes"/>
+        <SoundArray index="Attack" value="AP_Roachling_Attack"/>
+        <SoundArray index="Pissed" value="AP_Roachling_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-roachlings.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Roach.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorAction id="AP_RoachlingAttack" parent="GenericAttack" effectAttack="AP_RoachlingNeedleClaws">
+        <ImpactMap index="None" Model="RoachAttackImpact" Sound="Roach_AttackImpactMelee"/>
+    </CActorAction>
+    <CActorSound id="AP_RoachlingAttackStart" parent="SoundOneShot">
+        <On Terms="WeaponStart.AP_RoachlingNeedleClaws.AttackStart" Send="Create"/>
+        <Sound value="Roach_AttackLaunchMelee"/>
+    </CActorSound>
+    <CActorModel id="AP_RoachShield" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_RoachShield.On" Send="Create"/>
+        <On Terms="Behavior.AP_RoachShield.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon03"/>
+    </CActorModel>
+    <CActorModel id="AP_CorpserBirth" parent="ModelAnimationStyleOneShot">
+        <HostSiteOps HoldPosition="1" HoldRotation="1"/>
+    </CActorModel>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -5696,7 +6077,6 @@
         <On Terms="AnimDone; AnimName Spell" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
-        <Model value="AP_SupplyDepotDropPod"/>
     </CActorModel>
     <CActorUnit id="AP_SupplyDepotLowered" parent="TerranBuildingEx" unitName="AP_SupplyDepotLowered">
         <Aliases value="_UnitLarge"/>
@@ -6305,9 +6685,7 @@
             <Image value="AP\Assets\Textures\Wireframe-terran-sigmaprojector.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorModel id="AP_PsiDisruptorBuild" parent="TerranBuildingBuildSmall">
-        <Model value="AP_PsiDisruptorBuild"/>
-    </CActorModel>
+    <CActorModel id="AP_PsiDisruptorBuild" parent="TerranBuildingBuildSmall"/>
     <CActorModel id="AP_PsiDisruptorDebuff" parent="ModelAnimationStyleOneShot">
         <Terms value="Cap 1"/>
         <On Terms="Effect.AP_PsiDisruptionApplyBehavior.Start; At Target" Send="Create"/>
@@ -6845,5 +7223,31 @@
     </CActorSound>
     <CActorModel id="AP_ColonyInfestationBuildingDeath" parent="UnitDeathModel">
         <On Terms="ActorCreation" Send="SetTintColor 200,160,133"/>
+    </CActorModel>
+    <CActorModel id="AP_VileRoachDebuff" parent="ModelAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_VileAcidSlowFlatAmount.On" Send="Create"/>
+        <On Terms="Behavior.AP_VileAcidSlowFlatAmount.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin" HoldRotation="1"/>
+        <AutoScaleFactor value="0.500000"/>
+    </CActorModel>
+    <CActorModel id="AP_VileRoachDebuffHeroic" parent="ModelAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_VileAcidSlowFlatAmountHeroic.On" Send="Create"/>
+        <On Terms="Behavior.AP_VileAcidSlowFlatAmountHeroic.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin" HoldRotation="1"/>
+        <Model value="AP_VileRoachDebuff"/>
+        <AutoScaleFactor value="0.500000"/>
+    </CActorModel>
+    <CActorModel id="AP_VileRoachDebuffStructure" parent="ModelAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_VileAcidSlowFlatAmountStructure.On" Send="Create"/>
+        <On Terms="Behavior.AP_VileAcidSlowFlatAmountStructure.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin" HoldRotation="1"/>
+        <Model value="AP_VileRoachDebuff"/>
+        <AutoScaleFactor value="0.400000"/>
     </CActorModel>
 </Catalog>

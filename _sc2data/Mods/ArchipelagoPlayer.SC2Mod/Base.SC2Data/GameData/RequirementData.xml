@@ -804,4 +804,55 @@
         <NodeArray index="Use" Link="AP_CountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel2CompleteOnly"/>
         <NodeArray index="Show" Link="AP_AndNotCountUpgradeTerranVehicleWeaponsUltraCapacitorsLevel3QueuedOrBetterCountUpgradeUltraCapacitorsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHotSRapidRegenerationRoach">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSRapidRegenerationRoachCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSRoachDamage">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSRoachDamageCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSRoachHealth">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSRoachHealthCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSRoachShield">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSRoachShieldCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSRoachSpeed">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSRoachSpeedCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSTunnelingClaws">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSTunnelingClawsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveRoachCorpser">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveCorpserCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveRoachVile">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveVileCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_NotHaveHotSRapidRegenerationRoach">
+        <NodeArray index="Show" Link="AP_NotCountUpgradeHotSRapidRegenerationRoachCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_PlayerHasTunnelingClaws">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeTunnelingClawsCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_UseRoachCorpserWeapon">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_UseRoachCorpserWeapon"/>
+    </CRequirement>
+    <CRequirement id="AP_UseRoachVileWeapon">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_UseRoachVileWeapon"/>
+    </CRequirement>
+    <CRequirement id="AP_UseRoachVileCorpserWeapon">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_UseRoachVileCorpserWeapon"/>
+    </CRequirement>
 </Catalog>

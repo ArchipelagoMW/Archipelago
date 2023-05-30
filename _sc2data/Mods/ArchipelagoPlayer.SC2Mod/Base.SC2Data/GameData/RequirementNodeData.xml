@@ -1721,4 +1721,55 @@
     <CRequirementNot id="AP_NotCountUpgradeVanadiumPlatingCompleteOnly">
         <OperandArray index="0" value="AP_CountUpgradeVanadiumPlatingCompleteOnly"/>
     </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSBurstingGlandsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSBurstingGlands" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSRapidRegenerationRoachCompleteOnly">
+        <Count Link="AP_HotSRapidRegenerationRoach" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeHotSRapidRegenerationRoachCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeHotSRapidRegenerationRoachCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSRoachDamageCompleteOnly">
+        <Count Link="AP_HotSRoachDamage" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSRoachHealthCompleteOnly">
+        <Count Link="AP_HotSRoachHealth" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSRoachShieldCompleteOnly">
+        <Count Link="AP_HotSRoachShield" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSRoachSpeedCompleteOnly">
+        <Count Link="AP_HotSRoachSpeed" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSTunnelingClawsCompleteOnly">
+        <Count Link="AP_HotSTunnelingClaws" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveCorpserCompleteOnly">
+        <Count Link="AP_RoachCorpser" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeHotSHaveCorpserCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeHotSHaveCorpserCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_UseRoachCorpserWeapon">
+        <OperandArray value="AP_CountUpgradeHotSHaveCorpserCompleteOnly"/>
+        <OperandArray value="AP_NotCountUpgradeHotSHaveVileCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveVileCompleteOnly">
+        <Count Link="AP_RoachVile" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeHotSHaveVileCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeHotSHaveVileCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_UseRoachVileWeapon">
+        <OperandArray value="AP_CountUpgradeHotSHaveVileCompleteOnly"/>
+        <OperandArray value="AP_NotCountUpgradeHotSHaveCorpserCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_UseRoachVileCorpserWeapon">
+        <Count Link="AP_RoachVileCorpser" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTunnelingClawsCompleteOnlyTechTreeCheat">
+        <Count Link="AP_TunnelingClaws" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

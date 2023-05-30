@@ -700,4 +700,169 @@
         <Range value="0.1"/>
         <Period value="1.5"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_AcidSaliva">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_AcidSalivaU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="4"/>
+        <MinimumRange value="0.6"/>
+        <Period value="2"/>
+        <Effect value="AP_AcidSalivaLM"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachCorpserAcidSaliva">
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_RoachCorpserAcidSalivaU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="4"/>
+        <MinimumRange value="0.6"/>
+        <Period value="2"/>
+        <Effect value="AP_RoachCorpserAcidSalivaLM"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachCorpserMelee">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level0.dds"/>
+        <DisplayEffect value="AP_TrichinellaMelee"/> <!-- Missing in Vanilla -->
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.5"/>
+        <Marker Link="Weapon/RoachCorpser"/>
+        <Cost>
+            <Cooldown Link="Weapon/RoachCorpser"/>
+        </Cost>
+        <Period value="2"/>
+        <Effect value="AP_RoachCorpserMeleeSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachCorpserSpray">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_RoachCorpserSprayDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="2"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <Period value="2"/>
+        <DamagePoint value="0.5"/>
+        <Effect value="AP_RoachCorpserSpraySet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachMelee">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level0.dds"/>
+        <DisplayEffect value="AP_RoachUMelee"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.5"/>
+        <Marker Link="Weapon/AcidSaliva"/>
+        <Cost>
+            <Cooldown Link="Weapon/AcidSaliva"/>
+        </Cost>
+        <Period value="2"/>
+        <Effect value="AP_RoachMeleeSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachSpray">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_RoachSprayDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="2"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <Period value="2"/>
+        <DamagePoint value="0.5"/>
+        <Effect value="AP_RoachSpraySet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachVileAcidSaliva">
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_RoachVileAcidSalivaU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="4"/>
+        <MinimumRange value="0.6"/>
+        <Period value="2"/>
+        <Effect value="AP_RoachVileAcidSalivaLM"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachVileCorpserAcidSaliva">
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_RoachCorpserAcidSalivaU"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="4"/>
+        <MinimumRange value="0.6"/>
+        <Period value="2"/>
+        <Effect value="AP_RoachVileCorpserAcidSalivaLM"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachVileCorpserMelee">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level0.dds"/>
+        <DisplayEffect value="AP_TrichinellaMelee"/> <!-- Missing in Vanilla -->
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.5"/>
+        <Marker Link="Weapon/RoachCorpser"/>
+        <Cost>
+            <Cooldown Link="Weapon/RoachCorpser"/>
+        </Cost>
+        <Period value="2"/>
+        <Effect value="AP_RoachVileCorpserMeleeSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachVileMelee">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level0.dds"/>
+        <DisplayEffect value="AP_RoachVileUMelee"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.5"/>
+        <Marker Link="Weapon/RoachVile"/>
+        <Cost>
+            <Cooldown Link="Weapon/RoachVile"/>
+        </Cost>
+        <Period value="2"/>
+        <Effect value="AP_RoachVileMeleeSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachVileSpray">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_RoachVileSprayDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="2"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <Period value="2"/>
+        <DamagePoint value="0.5"/>
+        <Effect value="AP_RoachVileSpraySet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RoachlingNeedleClaws">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level0.dds"/>
+        <DisplayEffect value="AP_RoachlingNeedleClawsDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="15"/>
+        <Range value="0.1"/>
+        <Period value="0.6455"/>
+        <Effect value="AP_RoachlingNeedleClawsSet"/>
+    </CWeaponLegacy>
 </Catalog>

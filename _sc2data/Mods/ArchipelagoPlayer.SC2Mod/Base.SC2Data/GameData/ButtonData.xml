@@ -1121,4 +1121,31 @@
         <EditorCategories value="Race:Terran"/>
         <HotkeyAlias value="TerranVehicleWeaponsLevel3"/>
     </CButton>
+    <CButton id="AP_RapidRegeneration">
+        <Icon value="Assets\Textures\BTN-ability-zerg-rapidregeneration-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_TunnelingClaws">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-hotstunnelingclaws.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-hotstunnelingclaws.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HotSRoachDamage">
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-HydriaticAcid.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Zerg-HydriaticAcid.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HotSRoachShield">
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-AdaptiveCarapace.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Zerg-AdaptiveCarapace.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_CorpserPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-roachlings.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_VilePassive">
+        <Icon value="Assets\Textures\btn-ability-zerg-debilitatingbile.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>
