@@ -93,9 +93,4 @@ class NoLogicTest(MessengerTestBase):
         for loc in all_locations:
             with self.subTest("Default unreachables", location=loc):
                 self.assertFalse(self.can_reach_location(loc))
-
-    def testNoLogic(self) -> None:
-        """Test some funny locations to make sure they aren't reachable, but we can still win"""
-        self.assertEqual(self.can_reach_location("Searing Crags - Pyro"), False)
-        self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
         self.assertBeatable(True)
