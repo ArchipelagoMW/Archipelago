@@ -1148,4 +1148,9 @@
         <Icon value="Assets\Textures\btn-ability-zerg-debilitatingbile.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_AberrationTowering">
+        <Icon value="Assets\Textures\BTN-Ability-Zerg-Towering.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Zerg-Towering.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

@@ -2952,7 +2952,8 @@
         <EffectArray value="AP_RoachCorpserSpawnRoachlings"/>
     </CEffectSet>
     <CEffectLaunchMissile id="AP_RoachCorpserAcidSalivaLM">
-        <ValidatorArray index="0" value="AP_RoachLMTargetFilters"/> <!-- Validator doesn't exist in Vanilla? -->
+        <ValidatorArray index="0" value="AP_RoachLMTargetFilters"/>
+        <!-- Validator doesn't exist in Vanilla? -->
         <EditorCategories value="Race:Zerg"/>
         <ImpactEffect value="AP_RoachCorpserAcidSalivaSet"/>
         <AmmoUnit value="AP_RoachCorpserAcidSalivaWeapon"/>
@@ -3027,7 +3028,6 @@
     </CEffectSet>
     <CEffectApplyBehavior id="AP_RoachlingFate">
         <EditorCategories value="Race:Zerg"/>
-        <Behavior value="AP_RoachlingFate"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="AP_RoachlingNeedleClawsDamage" parent="DU_WEAP">
         <EditorCategories value="Race:Zerg"/>
@@ -3098,6 +3098,12 @@
         <EffectArray value="AP_VileAcidSlowAB"/>
         <EffectArray value="AP_RoachCorpserMelee"/>
     </CEffectSet>
+    <CEffectDamage id="AP_InfestedAbomination" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <AttributeBonus index="Armored" value="20"/>
+        <Amount value="20"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

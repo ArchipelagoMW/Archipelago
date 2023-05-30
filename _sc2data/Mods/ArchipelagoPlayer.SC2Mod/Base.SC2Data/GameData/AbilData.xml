@@ -1266,7 +1266,7 @@
             <Button DefaultButtonFace="BuildTechLabBarracks" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build2" Unit="AP_BarracksReactor" Time="50">
-            <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
+            <Button Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_BarracksTechReactor" Time="25" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
@@ -1673,7 +1673,7 @@
             <Button DefaultButtonFace="BuildTechLabFactory" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build2" Unit="AP_FactoryReactor" Time="50">
-            <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
+            <Button Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_FactoryTechReactor" Time="25" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
@@ -1686,8 +1686,8 @@
         <InfoArray index="Build1" Unit="AP_StarportTechLab" Time="25">
             <Button DefaultButtonFace="BuildTechLabStarport" State="Restricted" Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
-        <InfoArray index="Build2" Unit="AP_StarportReactor"  Time="50">
-            <Button Requirements="AP_UseTechReactorHide" State="Restricted"/>
+        <InfoArray index="Build2" Unit="AP_StarportReactor" Time="50">
+            <Button Requirements="AP_UseTechReactorHide"/>
         </InfoArray>
         <InfoArray index="Build4" Unit="AP_StarportTechReactor" Time="25" AddOnParentCmdPriority="-1">
             <Button DefaultButtonFace="AP_TechReactor" Requirements="AP_UseTechReactor"/>
@@ -1808,6 +1808,46 @@
         <AutoCastValidatorArray value="TargetNotChangeling"/>
         <AutoCastRange value="2"/>
         <AutoCastCountMin value="1"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_BurrowInfestedAbominationDown">
+        <AbilSetId value="BrwD"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowDown">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_InfestedAbominationBurrowed" RandomDelayMax="0.25">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="2"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="0.5556"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.5556"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_BurrowInfestedAbominationUp">
+        <AbilSetId value="BrwU"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowUp">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <ActorKey value="BurrowUp"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_InfestedAbomination" RandomDelayMax="0.5">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="2"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="0.0556"/>
+            </SectionArray>
+        </InfoArray>
     </CAbilMorph>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
