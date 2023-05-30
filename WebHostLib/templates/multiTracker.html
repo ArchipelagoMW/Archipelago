@@ -31,12 +31,12 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Game</th>
+                                <th>Status</th>
                                 {% block custom_table_headers %}
                                 {# implement this block in game-specific multi trackers #}
                                 {% endblock %}
                                 <th class="center-column">Checks</th>
                                 <th class="center-column">&percnt;</th>
-                                <th>Status</th>
                                 <th class="center-column hours">Last<br>Activity</th>
                             </tr>
                         </thead>
@@ -47,13 +47,13 @@
                                     tracked_team=team, tracked_player=player)}}">{{ loop.index }}</a></td>
                                     <td>{{ player_names[(team, loop.index)]|e }}</td>
                                     <td>{{ games[player] }}</td>
+                                    <td>{{ {0: "Disconnected", 5: "Connected", 10: "Ready", 20: "Playing",
+                                            30: "Goal Completed"}.get(states[team, player], "Unknown State") }}</td>
                                     {% block custom_table_row scoped %}
                                     {# implement this block in game-specific multi trackers #}
                                     {% endblock %}
                                     <td class="center-column">{{ checks["Total"] }}/{{ checks_in_area[player]["Total"] }}</td>
                                     <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
-                                    <td>{{ {0: "Disconnected", 5: "Connected", 10: "Ready", 20: "Playing",
-                                            30: "Goal Completed"}.get(states[team, player], "Unknown State") }}</td>
                                     {%- if activity_timers[team, player] -%}
                                         <td class="center-column">{{ activity_timers[team, player].total_seconds() }}</td>
                                     {%- else -%}
