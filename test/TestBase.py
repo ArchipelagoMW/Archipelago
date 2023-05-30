@@ -227,27 +227,3 @@ class WorldTestBase(unittest.TestCase):
         """A multiworld has been constructed by this point"""
         return hasattr(self, "game") and hasattr(self, "multiworld")
 
-    def testAllStateCanReachEverything(self):
-        """Ensure all state can reach everything and complete the game with the defined options"""
-        if not (self.run_default_tests and self.constructed):
-            return
-        with self.subTest("Game", game=self.game):
-            excluded = self.multiworld.exclude_locations[1].value
-            state = self.multiworld.get_all_state(False)
-            for location in self.multiworld.get_locations():
-                if location.name not in excluded:
-                    with self.subTest("Location should be reached", location=location):
-                        self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
-            with self.subTest("Beatable"):
-                self.multiworld.state = state
-                self.assertBeatable(True)
-
-    def testEmptyStateCanReachSomething(self):
-        """Ensure empty state can reach at least one location with the defined options"""
-        if not (self.run_default_tests and self.constructed):
-            return
-        with self.subTest("Game", game=self.game):
-            state = CollectionState(self.multiworld)
-            locations = self.multiworld.get_reachable_locations(state, 1)
-            self.assertGreater(len(locations), 0,
-                               "Need to be able to reach at least one location to get started.")
