@@ -32,7 +32,7 @@ class SMBoolManager(object):
         Logic.factory('vanilla')
         self.helpers = Logic.HelpersGraph(self)
         self.doorsManager = DoorsManager()
-        self.objectives = Objectives.objDict[player]
+        self.objectives = Objectives.objDict[player] if player in Objectives.objDict.keys() else Objectives(player)
         self.createFacadeFunctions()
         self.createKnowsFunctions(player)
         self.resetItems()
