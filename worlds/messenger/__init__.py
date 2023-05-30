@@ -173,6 +173,7 @@ class MessengerWorld(World):
             "logic": self.multiworld.logic_level[self.player].current_key,
             "shop": shop_prices,
             "figures": figure_prices,
+            "max_price": self.total_shards,
         }
 
     def get_filler_item_name(self) -> str:
