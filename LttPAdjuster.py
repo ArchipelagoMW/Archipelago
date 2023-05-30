@@ -44,7 +44,7 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
         return textwrap.dedent(action.help)
 
 
-def main():
+def get_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('rom', nargs="?", default='AP_LttP.sfc', help='Path to an ALttP rom to adjust.')
@@ -85,9 +85,6 @@ def main():
     parser.add_argument('--ow_palettes', default='default',
                         choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
                                  'sick'])
-    # parser.add_argument('--link_palettes', default='default',
-    #                     choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
-    #                              'sick'])
     parser.add_argument('--shield_palettes', default='default',
                         choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
                                  'sick'])
@@ -115,6 +112,11 @@ def main():
                              ''')
     parser.add_argument('--names', default='', type=str)
     parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
+    return parser
+
+
+def main():
+    parser = get_argparser()
     args = parser.parse_args()
     args.music = not args.disablemusic
     # set up logger
@@ -193,7 +195,7 @@ def adjustGUI():
     from tkinter import Tk, LEFT, BOTTOM, TOP, \
         StringVar, Frame, Label, X, Entry, Button, filedialog, messagebox, ttk
     from argparse import Namespace
-    from Main import __version__ as MWVersion
+    from Utils import __version__ as MWVersion
     adjustWindow = Tk()
     adjustWindow.wm_title("Archipelago %s LttP Adjuster" % MWVersion)
     set_icon(adjustWindow)

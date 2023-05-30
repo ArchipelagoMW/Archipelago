@@ -45,7 +45,7 @@ class SubnauticaWorld(World):
     option_definitions = Options.options
 
     data_version = 9
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 4, 0)
 
     creatures_to_scan: List[str]
 
@@ -129,6 +129,7 @@ class SubnauticaWorld(World):
             "vanilla_tech": vanilla_tech,
             "creatures_to_scan": self.creatures_to_scan,
             "death_link": self.multiworld.death_link[self.player].value,
+            "free_samples": self.multiworld.free_samples[self.player].value,
         }
 
         return slot_data

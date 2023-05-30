@@ -54,8 +54,10 @@ from .patches import multiworld as _
 from .patches import tradeSequence as _
 from . import hints
 
-from .locations.keyLocation import KeyLocation
 from .patches import bank34
+from .patches.aesthetics import rgb_to_bin, bin_to_rgb
+
+from .locations.keyLocation import KeyLocation
 
 from ..Options import TrendyGame, Palette, MusicChangeCondition
 
@@ -368,7 +370,6 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
                 if x > max:
                     return max
                 return x
-            from patches.aesthetics import rgb_to_bin, bin_to_rgb
 
             for address in range(start, end, 2):
                 packed = (rom.banks[bank][address + 1] << 8) | rom.banks[bank][address]

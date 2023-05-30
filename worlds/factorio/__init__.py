@@ -69,6 +69,7 @@ class Factorio(World):
     required_client_version = (0, 4, 0)
 
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
+    tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
     tech_mix: int = 0
     skip_silo: bool = False
     science_locations: typing.List[FactorioScienceLocation]
@@ -78,6 +79,7 @@ class Factorio(World):
         self.advancement_technologies = set()
         self.custom_recipes = {}
         self.science_locations = []
+        self.tech_tree_layout_prerequisites = {}
 
     generate_output = generate_mod
 
