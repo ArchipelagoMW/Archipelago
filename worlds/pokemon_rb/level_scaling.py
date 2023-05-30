@@ -1,6 +1,7 @@
 from BaseClasses import CollectionState, Location
 from .locations import level_name_list, level_list
 
+
 def level_scaling(multiworld):
     try:
         state = CollectionState(multiworld)
@@ -16,7 +17,8 @@ def level_scaling(multiworld):
                 while regions:
                     next_regions = set()
                     for region in regions:
-                        region.distance = distance
+                        if not getattr(region, "distance"):
+                            region.distance = distance
                         next_regions.update({e.connected_region for e in region.exits if e.connected_region not in
                                              checked_regions and e.access_rule(state)})
                     checked_regions.update(regions)
@@ -36,10 +38,15 @@ def level_scaling(multiworld):
                     parent_region = location.parent_region
                     if parent_region.name == "Fossil":
                         parent_region = multiworld.get_region("Mt Moon B2F", location.player)
-                    if parent_region.distance not in distances:
-                        distances[parent_region.distance] = {location}
+                    if getattr(parent_region, "distance", None) is None:
+                        distance = 0
                     else:
-                        distances[parent_region.distance].add(location)
+                        distance = parent_region.distance
+                    if distance not in distances:
+                        distances[distance] = {location}
+                    else:
+                        distances[distance].add(location)
+
 
             if sphere:
                 for distance in sorted(distances.keys()):
@@ -57,7 +64,7 @@ def level_scaling(multiworld):
             level_list_copy = level_list.copy()
             for sphere in spheres:
                 sphere_objects = {loc.name: loc for loc in sphere if loc.player == world.player
-                                  and loc.type == "Wild Encounter" and loc.level is not None}
+                                  and (loc.type == "Wild Encounter" or "Pokemon" in loc.type) and loc.level is not None}
                 party_objects = [loc for loc in sphere if loc.player == world.player and loc.type == "Trainer Parties"]
                 for parties in party_objects:
                     for party in parties.party_data:
@@ -71,24 +78,24 @@ def level_scaling(multiworld):
                 ordered_sphere_objects = list(sphere_objects.keys())
                 ordered_sphere_objects.sort(key=lambda obj: level_name_list.index(obj))
                 for object in ordered_sphere_objects:
-                    if sphere_objects[object].type == "Wild Encounter":
-                        sphere_objects[object].level = level_list_copy.pop(0)
-                        # print(f"{sphere_objects[object]} - {sphere_objects[object].level}")
-
-                    else:
+                    if sphere_objects[object].type == "Trainer Parties":
                         for party in sphere_objects[object].party_data:
                             if (isinstance(party["party_address"], list) and party["party_address"][0] == object[0]) or party["party_address"] == object[0]:
                                 if isinstance(party["level"], int):
                                     party["level"] = level_list_copy.pop(0)
-                                    print(f"{party['party_address']} - {party['level']}")
+                                    #print(f"{party['party_address']} - {party['level']}")
                                 else:
                                     party["level"][object[1]] = level_list_copy.pop(0)
-                                    print(f"{party['party_address']} - {party['level'][object[1]]}")
+                                    #print(f"{party['party_address']} - {party['level'][object[1]]}")
                                 break
-                        else:
-                            breakpoint()
-            print([len([item for item in sphere if item.type == "Item"]) for sphere in multiworld.get_spheres()])
+                    else:
+                        sphere_objects[object].level = level_list_copy.pop(0)
+                        #print(f"{sphere_objects[object]} - {sphere_objects[object].level}")
+
+            #print([len([item for item in sphere if item.type == "Item"]) for sphere in multiworld.get_spheres()])
+
+        for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
+            world.finished_level_scaling.set()
+
     except Exception as e:
         breakpoint()
-
-    world.finished_level_scaling.set()

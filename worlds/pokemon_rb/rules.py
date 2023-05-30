@@ -68,9 +68,9 @@ def set_rules(world, player):
         "Celadon Prize Corner - Pokemon Prize - 4": lambda state: state.has("Coin Case", player),
         "Celadon Prize Corner - Pokemon Prize - 5": lambda state: state.has("Coin Case", player),
         "Celadon Prize Corner - Pokemon Prize - 6": lambda state: state.has("Coin Case", player),
-        "Cinnabar Lab Fossil Room - Old Amber Pokemon": lambda state: state.has("Old Amber", player),
-        "Cinnabar Lab Fossil Room - Helix Fossil Pokemon": lambda state: state.has("Helix Fossil", player),
-        "Cinnabar Lab Fossil Room - Dome Fossil Pokemon": lambda state: state.has("Dome Fossil", player),
+        "Cinnabar Lab Fossil Room - Old Amber Pokemon": lambda state: state.has("Old Amber", player) and state.has("Cinnabar Island", player),
+        "Cinnabar Lab Fossil Room - Helix Fossil Pokemon": lambda state: state.has("Helix Fossil", player) and state.has("Cinnabar Island", player),
+        "Cinnabar Lab Fossil Room - Dome Fossil Pokemon": lambda state: state.has("Dome Fossil", player and state.has("Cinnabar Island", player)),
         "Route 12 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Route 16 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Seafoam Islands B4F - Legendary Pokemon": lambda state: state.pokemon_rb_can_strength(player) and state.pokemon_rb_can_surf(player),
@@ -81,7 +81,12 @@ def set_rules(world, player):
 
         "Silph Co 1F - Receptionist": lambda state: state.has("Silph Co Liberated", player),
         "Silph Co 5F - Hostage": lambda state: state.pokemon_rb_card_key(5, player),
-        "Silph Co 6F - Hostage": lambda state: state.pokemon_rb_card_key(5, player),
+        "Silph Co 7F - Hostage": lambda state: state.pokemon_rb_card_key(7, player),
+
+        "Saffron Fighting Dojo - Blackbelt 1": lambda state: state.pokemon_rb_dojo(player),
+        "Saffron Fighting Dojo - Blackbelt 2": lambda state: state.pokemon_rb_dojo(player),
+        "Saffron Fighting Dojo - Blackbelt 3": lambda state: state.pokemon_rb_dojo(player),
+        "Saffron Fighting Dojo - Blackbelt 4": lambda state: state.pokemon_rb_dojo(player),
 
         "Route 2 Trade House - Marcel Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
         "Underground Path Route 5 - Spot Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),

@@ -759,6 +759,7 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
              'Route 23-S': [{'address': 'Warps_Route23', 'id': (0, 1), 'to': {'map': 'Route 22 Gate-N', 'id': (2, 3)}}],
              'Route 23-C': [{'address': 'Warps_Route23', 'id': 2, 'to': {'map': 'Victory Road 1F-S', 'id': 0}}],
              'Route 23-N': [{'address': 'Warps_Route23', 'id': 3, 'to': {'map': 'Victory Road 2F', 'id': 1}}],
+             'Route 23-Grass': [],
              'Route 24': [],
              'Route 25': [{'address': 'Warps_Route25', 'id': 0, 'to': {'map': "Bill's House", 'id': 0}}],
              'Indigo Plateau': [
@@ -1206,11 +1207,11 @@ pokemon_centers = ['Celadon Pokemon Center to Celadon City', 'Viridian Pokemon C
                    'Saffron Pokemon Center to Saffron City', 'Route 4 Pokemon Center to Route 4-W',
                    'Rock Tunnel Pokemon Center to Route 10-N', 'Indigo Plateau Lobby to Indigo Plateau']
 
-pokemart_entrances = ['Viridian City to Viridian Pokemart', 'Celadon City to Celadon Pokemart',
-                      'Pewter City to Pewter Pokemart', 'Cerulean City to Cerulean Pokemart',
-                      'Lavender Town to Lavender Pokemart', 'Vermilion City to Vermilion Pokemart',
-                      'Saffron City to Saffron Pokemart', 'Fuchsia City to Fuchsia Pokemart',
-                      'Cinnabar Island to Cinnabar Pokemart']
+pokemart_entrances = ['Viridian City to Viridian Pokemart', 'Pewter City to Pewter Pokemart',
+                      'Cerulean City to Cerulean Pokemart', 'Lavender Town to Lavender Pokemart',
+                      'Vermilion City to Vermilion Pokemart', 'Saffron City to Saffron Pokemart',
+                      'Fuchsia City to Fuchsia Pokemart', 'Cinnabar Island to Cinnabar Pokemart']
+
 pokemarts = ['Viridian Pokemart to Viridian City', 'Pewter Pokemart to Pewter City',
              'Cerulean Pokemart to Cerulean City', 'Lavender Pokemart to Lavender Town',
              'Vermilion Pokemart to Vermilion City', 'Saffron Pokemart to Saffron City',
@@ -1408,6 +1409,12 @@ gym_entrances = [
     'Cinnabar Island-G to Cinnabar Gym', 'Viridian City-G to Viridian Gym'
 ]
 
+initial_doors = [
+    "Viridian City to Viridian Pokemart",
+    "Viridian City to Viridian Nickname House",
+    "Viridian City to Viridian School House",
+    "Route 22 to Route 22 Gate-S"
+]
 
 for region in warp_data:
     for entrance in warp_data[region]:
@@ -1418,8 +1425,8 @@ for region in warp_data:
                 for entrance2 in warp_data[region2]:
                     if (entrance2["id"] == i or (isinstance(entrance2["id"], tuple) and i in entrance2["id"])): #and region2 != m:
                         # print(f"change {entrance} to {region2}")
-                        if entrance["to"]["map"] != region2:
-                            print(region + " changing " + entrance["to"]["map"] + " to " + region2)
+                        #if entrance["to"]["map"] != region2:
+                            #print(region + " changing " + entrance["to"]["map"] + " to " + region2)
                         entrance["to"]["map"] = region2
                         break
                 else:
@@ -1466,7 +1473,7 @@ def create_regions(self):
         if location.inclusion(multiworld, player):
             locations_per_region[location.region].append(PokemonRBLocation(player, location.name, location.address,
                                                                            location.rom_address, location.type,
-                                                                           location.level))
+                                                                           location.level, location.level_address))
 
     regions = [create_region(multiworld, player, region, locations_per_region) for region in warp_data]
     multiworld.regions += regions
@@ -1484,9 +1491,9 @@ def create_regions(self):
     connect(multiworld, player, "Route 2-SW", "Route 2-Grass", one_way=True)
     connect(multiworld, player, "Route 2-NW", "Route 2-Grass", one_way=True)
     connect(multiworld, player, "Route 22 Gate-S", "Route 22 Gate-N",
-            lambda state: state.pokemon_rb_has_badges(state.multiworld.victory_road_condition[player].value, player))
-    connect(multiworld, player, "Route 23-S", "Route 23-C",
-            lambda state: state.pokemon_rb_can_surf(player))
+            lambda state: state.pokemon_rb_has_badges(state.multiworld.route_22_gate_condition[player].value, player))
+    connect(multiworld, player, "Route 23-Grass", "Route 23-C", lambda state: state.pokemon_rb_has_badges(state.multiworld.victory_road_condition[player].value, player))
+    connect(multiworld, player, "Route 23-Grass", "Route 23-S", lambda state: state.pokemon_rb_can_surf(player))
     connect(multiworld, player, "Viridian City-N", "Viridian City-G", lambda state:
                      state.pokemon_rb_has_badges(state.multiworld.viridian_gym_condition[player].value, player))
     connect(multiworld, player, "Route 2-SW", "Route 2-SE", lambda state: state.pokemon_rb_can_cut(player))
@@ -1555,7 +1562,7 @@ def create_regions(self):
     connect(multiworld, player, "Seafoam Islands B3F", "Sea Routes/Cinnabar/Seafoam Fishing", lambda state: state.has("Super Rod", player), one_way=True)
     connect(multiworld, player, "Seafoam Islands B4F", "Sea Routes/Cinnabar/Seafoam Fishing", lambda state: state.has("Super Rod", player), one_way=True)
     connect(multiworld, player, "Route 23-S", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 23-C", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 23-Grass", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-SE", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-NE", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-N", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
@@ -1592,13 +1599,13 @@ def create_regions(self):
     connect(multiworld, player, "Route 10-S", "Lavender Town")
     connect(multiworld, player, "Route 8-W", "Saffron City")
     connect(multiworld, player, "Route 8", "Lavender Town")
-    connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 6F-S", lambda state: state.pokemon_rb_tower(player))
+    connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 6F-S", lambda state: state.has("Silph Scope", player) or (state.has("Buy Poke Doll", player) and state.multiworld.poke_doll_skip[self.player]))
     connect(multiworld, player, "Route 8", "Route 8-Grass", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Route 7", "Celadon City")
     connect(multiworld, player, "Celadon City", "Celadon City-G", lambda state: state.pokemon_rb_can_cut(player))
     connect(multiworld, player, "Celadon City", "Route 16-E")
-    connect(multiworld, player, "Route 18 Gate 1F-W", "Route 18 Gate 1F-E", lambda state: state.has("Bicycle", player))
-    connect(multiworld, player, "Route 16 Gate 1F-W", "Route 16 Gate 1F-E", lambda state: state.has("Bicycle", player))
+    connect(multiworld, player, "Route 18 Gate 1F-W", "Route 18 Gate 1F-E", lambda state: state.has("Bicycle", player) or state.multiworld.bicycle_gate_skips[self.player] == "in_logic")
+    connect(multiworld, player, "Route 16 Gate 1F-W", "Route 16 Gate 1F-E", lambda state: state.has("Bicycle", player) or state.multiworld.bicycle_gate_skips[self.player] == "in_logic")
     connect(multiworld, player, "Route 16-E", "Route 16-NE", lambda state: state.pokemon_rb_can_cut(player))
     connect(multiworld, player, "Route 16-E", "Route 16-C", lambda state: state.has("Poke Flute", player))
     connect(multiworld, player, "Route 17", "Route 16-SW")
@@ -1812,9 +1819,10 @@ def create_regions(self):
             usable_safe_rooms += insanity_safe_rooms
 
         safe_rooms_sample = multiworld.random.sample(usable_safe_rooms, 6)
+        pallet_safe_room = safe_rooms_sample.pop()
         for a, b in zip(multiworld.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
                                                   "Pallet Town to Rival's House"], 3), ["Oak's Lab to Pallet Town",
-                                                  "Player's House 1F to Pallet Town", safe_rooms_sample.pop()]):
+                                                  "Player's House 1F to Pallet Town", pallet_safe_room]):
             forced_connections.add((a, b))
         for a, b in zip(safari_zone_houses, safe_rooms_sample):
             forced_connections.add((a, b))
@@ -1823,9 +1831,19 @@ def create_regions(self):
             for a, b in zip(multiworld.random.sample(pokemon_center_entrances[0:-1], 11), pokemon_centers[0:-1]):
                 forced_connections.add((a, b))
             forced_connections.add((pokemon_center_entrances[-1], pokemon_centers[-1]))
+            for a, b in zip(multiworld.random.sample(pokemart_entrances, 8), pokemarts):
+                forced_connections.add((a, b))
         else:
+            # Pokemon Centers must be reached from the Cities and Routes that have programmed coordinates for
+            # fly / blackout warps. Rather than mess with those coordinates (besides in Pallet Town) or have players
+            # warping outside an entrance that isn't the Pokemon Center, just always put Pokemon Centers at Pokemon
+            # Center entrances
             for a, b in zip(multiworld.random.sample(pokemon_center_entrances, 12), pokemon_centers):
                 forced_connections.add((a, b))
+            # Ensure a Pokemart is available at the beginning of the game
+            if "Pokemart" not in pallet_safe_room:
+                forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(pokemarts)))
+
         for pair in forced_connections:
             entrance_a = multiworld.get_entrance(pair[0], player)
             entrance_b = multiworld.get_entrance(pair[1], player)
@@ -1950,7 +1968,8 @@ def create_regions(self):
     elif multiworld.door_shuffle[player]:
         if multiworld.door_shuffle[player] == "full":
             loop_out_interiors = [[multiworld.get_entrance(e[0], player), multiworld.get_entrance(e[1], player)] for e
-                                  in multiworld.random.sample(unsafe_interior_dungeons + safe_interior_dungeons, 2)]
+                                  in multiworld.random.sample(unsafe_connecting_interior_dungeons
+                                                              + safe_connecting_interior_dungeons_dungeons, 2)]
             entrances.remove(loop_out_interiors[0][1])
             entrances.remove(loop_out_interiors[1][1])
         if not multiworld.badgesanity[player]:
@@ -1959,9 +1978,9 @@ def create_regions(self):
             for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
                           "Marsh Badge", "Volcano Badge", "Earth Badge"]:
                 badges.append(self.create_item(badge))
-            for loc in ["Pewter Gym - Brock 1", "Cerulean Gym - Misty 1", "Vermilion Gym - Lt. Surge 1",
-                        "Celadon Gym - Erika 1", "Fuchsia Gym - Koga 1", "Saffron Gym - Sabrina 1",
-                        "Cinnabar Gym - Blaine 1", "Viridian Gym - Giovanni 1"]:
+            for loc in ["Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize", "Vermilion Gym - Lt. Surge Prize",
+                        "Celadon Gym - Erika Prize", "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
+                        "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]:
                 placed_locs.append(self.multiworld.get_location(loc, self.player))
             multiworld.random.shuffle(badges)
             for badge, loc in zip(badges, placed_locs):
@@ -1990,7 +2009,7 @@ def create_regions(self):
             state.sweep_for_events(player=player)
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
                                    entrance.parent_region.can_reach(state)]
-            print(len(reachable_entrances))
+            #print(len(reachable_entrances))
             assert reachable_entrances, \
                 "Ran out of reachable entrances in Pokemon Red and Blue door shuffle"
             multiworld.random.shuffle(entrances)
@@ -2006,7 +2025,7 @@ def create_regions(self):
             assert entrances[0] in reachable_entrances, \
                 "Ran out of reachable entrances in Pokemon Red and Blue door shuffle"
             if multiworld.door_shuffle[player] == "insanity" and len(entrances) == len(reachable_entrances):
-                print("all entrances reachable")
+                #print("all entrances reachable")
                 entrance_a = entrances.pop(0)
                 entrance_b = entrance_a
             else:
@@ -2014,7 +2033,7 @@ def create_regions(self):
                 entrance_b = entrances.pop()
                 entrance_b.connect(entrance_a)
             entrance_a.connect(entrance_b)
-            print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
+            #print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
 
         for loc in placed_locs:
             loc.item = None

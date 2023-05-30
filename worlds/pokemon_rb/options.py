@@ -46,7 +46,7 @@ class EliteFourCondition(Range):
 
 class VictoryRoadCondition(Range):
     """Number of badges required to reach the front entrance of Victory Road."""
-    display_name = "Victory Road Condition"
+    display_name = "Route 23 Condition"
     range_start = 0
     range_end = 8
     default = 7
@@ -157,7 +157,7 @@ class ExtraKeyItems(Toggle):
 
 class SplitCardKey(Choice):
     """Splits the Card Key item into 10 different Keys, one for each Silph Co floor 2F through 11F.
-    Adds 9 location checks to Silph Co.
+    Adds location checks to 9 NPCs in Silph Co.
     With Progressive, you will always obtain the keys in order from 2F to 11F."""
     display_name = "Split Card Key"
     option_off = 0
@@ -260,11 +260,23 @@ class DoorShuffle(Choice):
     default = 0
 
 
+class PitchBlackRockTunnel(Toggle):
+    """Enable absolute darkness in the Rock Tunnel"""
+    display_name = "Pitch Black Rock Tunnel"
+    default = 0
+
+
 class RandomizeRockTunnel(Toggle):
     """Randomize the layout of Rock Tunnel.
     If Insanity Door Shuffle is on, this will cause only the main entrances to Rock Tunnel to be shuffled."""
     display_name = "Randomize Rock Tunnel"
     default = 0
+
+
+class DarkRockTunnelLogic(Toggle):
+    """Logically require Flash to traverse the Rock Tunnel."""
+    display_name = "Dark Rock Tunnel Logic"
+    default = 1
 
 
 class OaksAidRt2(Range):
@@ -448,6 +460,12 @@ class MoveBalancing(Toggle):
     Blizzard, and moves that cause sleep have their accuracy reduced."""
     display_name = "Move Balancing"
     default = 0
+
+
+class FixCombatBugs(Toggle):
+    """Fixes a variety of combat-related bugs."""
+    display_name = "Fix Combat Bugs"
+    default = 1
 
 
 class RandomizePokemonMovesets(Choice):
@@ -697,6 +715,22 @@ class IceTrapWeight(TrapWeight):
     default = 0
 
 
+class PokeDollSkip(Choice):
+    """Patch out the Pokmon Tower Poke Doll skip or have this skip considered in logic."""
+    display_name = "Poke Doll Skip"
+    option_patched = 0
+    option_in_logic = 1
+    default = 0
+
+
+class BicycleGateSkips(Choice):
+    """Patch out the Route 16/18 Bicycle Gate skips or have these skips considered in logic."""
+    display_name = "Bicycle Gate Skips"
+    option_patched = 0
+    option_in_logic = 1
+    default = 0
+
+
 class RandomizePokemonPalettes(Choice):
     """Modify palettes of Pokemon. Primary Type will set Pokemons' palettes based on their primary type, Follow
     Evolutions will randomize palettes but palettes will remain the same through evolutions (except Eeveelutions),
@@ -742,7 +776,9 @@ pokemon_rb_options = {
     "oaks_aide_rt_15": OaksAidRt15,
     "stonesanity": Stonesanity,
     "door_shuffle": DoorShuffle,
+    "pitch_black_rock_tunnel": PitchBlackRockTunnel,
     "randomize_rock_tunnel": RandomizeRockTunnel,
+    "dark_rock_tunnel_logic": DarkRockTunnelLogic,
     "free_fly_location": FreeFlyLocation,
     "town_map_fly_location": TownMapFlyLocation,
     "blind_trainers": BlindTrainers,
@@ -760,6 +796,7 @@ pokemon_rb_options = {
     "randomize_trainer_parties": RandomizeTrainerParties,
     "trainer_legendaries": TrainerLegendaries,
     "move_balancing": MoveBalancing,
+    "fix_combat_bugs": FixCombatBugs,
     "randomize_pokemon_movesets": RandomizePokemonMovesets,
     "confine_transform_to_ditto": ConfineTranstormToDitto,
     "start_with_four_moves": StartWithFourMoves,
@@ -786,6 +823,8 @@ pokemon_rb_options = {
     "master_ball_price": MasterBallPrice,
     "starting_money": StartingMoney,
     "lose_money_on_blackout": LoseMoneyOnBlackout,
+    "poke_doll_skip": PokeDollSkip,
+    "bicycle_gate_skips": BicycleGateSkips,
     "trap_percentage": TrapPercentage,
     "poison_trap_weight": PoisonTrapWeight,
     "fire_trap_weight": FireTrapWeight,

@@ -36,10 +36,10 @@ def prizesanity(multiworld, player):
 def split_card_key(multiworld, player):
     return multiworld.split_card_key[player].value > 0
 
-class LocationData:
 
+class LocationData:
     def __init__(self, region, name, original_item, rom_address=None, ram_address=None, event=False, type="Item",
-                 inclusion=always_on, level=None):
+                 inclusion=always_on, level=None, level_address=None):
         self.region = region
         self.name = region if name == "" else region.split("-")[0] + " - " + name if name != "Trainer Parties" else region + " - Trainer Parties"
         self.original_item = original_item
@@ -50,6 +50,12 @@ class LocationData:
         self.inclusion = inclusion
         self.level = level
         self.address = None
+        if level_address:
+            self.level_address = level_address
+        elif level:
+            self.level_address = rom_address - 1
+        else:
+            self.level_address = None
 
 
 class EventFlag:
@@ -102,13 +108,13 @@ location_data = [
                  EventFlag(41)),
     LocationData("Viridian Pokemart", "Item for Oak", "Oak's Parcel", rom_addresses["Event_Pokemart_Quest"],
                  EventFlag(57)),
-    LocationData("Viridian Gym", "Giovanni 2", "TM27 Fissure", rom_addresses["Event_Viridian_Gym"], EventFlag(80)),
+    LocationData("Viridian Gym", "Giovanni TM", "TM27 Fissure", rom_addresses["Event_Viridian_Gym"], EventFlag(80)),
     LocationData("Route 2 Gate", "Oak's Aide", "HM05 Flash", rom_addresses["Event_Route_2_Oaks_Aide"],
                  EventFlag(984)),
     LocationData("Pewter Museum 1F-E", "Museum", "Old Amber", rom_addresses["Event_Museum"], EventFlag(105)),
-    LocationData("Pewter Gym", "Brock 2", "TM34 Bide", rom_addresses["Event_Pewter_Gym"], EventFlag(118)),
+    LocationData("Pewter Gym", "Brock TM", "TM34 Bide", rom_addresses["Event_Pewter_Gym"], EventFlag(118)),
     LocationData("Cerulean Bicycle Shop", "", "Bicycle", rom_addresses["Event_Bicycle_Shop"], EventFlag(192)),
-    LocationData("Cerulean Gym", "Misty 2", "TM11 Bubble Beam", rom_addresses["Event_Cerulean_Gym"],
+    LocationData("Cerulean Gym", "Misty TM", "TM11 Bubble Beam", rom_addresses["Event_Cerulean_Gym"],
                  EventFlag(190)),
     LocationData("Route 24", "Nugget Bridge", "Nugget", rom_addresses["Event_Nugget_Bridge"], EventFlag(1344)),
     LocationData("Route 25", "Bill", "S.S. Ticket", rom_addresses["Event_Bill"], EventFlag(1372)),
@@ -117,7 +123,7 @@ location_data = [
                  EventFlag(1152)),
     LocationData("Vermilion Pokemon Fan Club", "Fan Club President", "Bike Voucher", rom_addresses["Event_Pokemon_Fan_Club"],
                  EventFlag(337)),
-    LocationData("Vermilion Gym", "Lt. Surge 2", "TM24 Thunderbolt", rom_addresses["Event_Vermillion_Gym"],
+    LocationData("Vermilion Gym", "Lt. Surge TM", "TM24 Thunderbolt", rom_addresses["Event_Vermillion_Gym"],
                  EventFlag(358)),
     LocationData("S.S. Anne Captain's Room", "Captain", "HM01 Cut", rom_addresses["Event_SS_Anne_Captain"], EventFlag(1504)),
     LocationData("Route 11 Gate 2F", "Oak's Aide", "Item Finder", rom_addresses["Event_Rt11_Oaks_Aide"],
@@ -133,7 +139,7 @@ location_data = [
     LocationData("Celadon Department Store 3F", "Counter Man", "TM18 Counter", rom_addresses["Event_Counter"], EventFlag(399)),
     LocationData("Celadon Diner", "Gambling Addict", "Coin Case", rom_addresses["Event_Gambling_Addict"],
                  EventFlag(480)),
-    LocationData("Celadon Gym-C", "Erika 2", "TM21 Mega Drain", rom_addresses["Event_Celadon_Gym"], EventFlag(424)),
+    LocationData("Celadon Gym-C", "Erika TM", "TM21 Mega Drain", rom_addresses["Event_Celadon_Gym"], EventFlag(424)),
     LocationData("Silph Co 11F-C", "Silph Co President (Card Key)", "Master Ball", rom_addresses["Event_Silph_Co_President"],
                  EventFlag(1933)),
     LocationData("Silph Co 2F-NW", "Woman", "TM36 Self-Destruct", rom_addresses["Event_Scared_Woman"],
@@ -141,19 +147,17 @@ location_data = [
     LocationData("Route 16 Fly House", "Woman", "HM02 Fly", rom_addresses["Event_Rt16_House_Woman"], EventFlag(1230)),
     LocationData("Route 15 Gate 2F", "Oak's Aide", "Exp. All", rom_addresses["Event_Rt_15_Oaks_Aide"], EventFlag(1200)),
     LocationData("Fuchsia Warden's House", "Safari Zone Warden", "HM04 Strength", rom_addresses["Event_Warden"], EventFlag(568)),
-    LocationData("Fuchsia Gym", "Koga 2", "TM06 Toxic", rom_addresses["Event_Fuschia_Gym"], EventFlag(600)),
+    LocationData("Fuchsia Gym", "Koga TM", "TM06 Toxic", rom_addresses["Event_Fuschia_Gym"], EventFlag(600)),
     LocationData("Safari Zone Secret House", "", "HM03 Surf", rom_addresses["Event_Safari_Zone_Secret_House"], EventFlag(2176)),
     LocationData("Cinnabar Lab Metronome Room", "Lab Scientist", "TM35 Metronome", rom_addresses["Event_Lab_Scientist"], EventFlag(727)),
-    LocationData("Cinnabar Gym", "Blaine 2", "TM38 Fire Blast", rom_addresses["Event_Cinnabar_Gym"],
+    LocationData("Cinnabar Gym", "Blaine TM", "TM38 Fire Blast", rom_addresses["Event_Cinnabar_Gym"],
                  EventFlag(664)),
     LocationData("Saffron Copycat's House 2F", "Copycat", "TM31 Mimic", rom_addresses["Event_Copycat"], EventFlag(832)),
     LocationData("Saffron Mr. Psychic's House", "Mr. Psychic", "TM29 Psychic", rom_addresses["Event_Mr_Psychic"], EventFlag(944)),
-    LocationData("Saffron Gym-C", "Sabrina 2", "TM46 Psywave", rom_addresses["Event_Saffron_Gym"], EventFlag(864)),
-    LocationData("Fossil", "Choice A", "Dome Fossil",
-                 [rom_addresses["Event_Dome_Fossil"], rom_addresses["Event_Dome_Fossil_B"],
+    LocationData("Saffron Gym-C", "Sabrina TM", "TM46 Psywave", rom_addresses["Event_Saffron_Gym"], EventFlag(864)),
+    LocationData("Fossil", "Choice A", "Dome Fossil", [rom_addresses["Event_Dome_Fossil"], rom_addresses["Event_Dome_Fossil_B"],
                   rom_addresses["Dome_Fossil_Text"]], EventFlag(0x57E)),
-    LocationData("Fossil", "Choice B", "Helix Fossil",
-                 [rom_addresses["Event_Helix_Fossil"], rom_addresses["Event_Helix_Fossil_B"],
+    LocationData("Fossil", "Choice B", "Helix Fossil", [rom_addresses["Event_Helix_Fossil"], rom_addresses["Event_Helix_Fossil_B"],
                   rom_addresses["Helix_Fossil_Text"]], EventFlag(0x57F)),
 
     LocationData("Cerulean City-Outskirts", "Rocket Thief", "TM28 Dig", rom_addresses["Event_Rocket_Thief"],
@@ -279,7 +283,7 @@ location_data = [
     LocationData("Silph Co 5F-SW", "Southwest Item", "TM09 Take Down", rom_addresses["Missable_Silph_Co_5F_Item_1"],
                  Missable(155)),
     LocationData("Silph Co 5F-NW", "Northwest Item (Card Key)", "Protein", rom_addresses["Missable_Silph_Co_5F_Item_2"], Missable(156)),
-    LocationData("Silph Co 5F", "Southeast Item", "Progressive Card Key", rom_addresses["Missable_Silph_Co_5F_Item_3"], Missable(157)),
+    LocationData("Silph Co 5F", "Southeast Item", "Card Key", rom_addresses["Missable_Silph_Co_5F_Item_3"], Missable(157)),
     LocationData("Silph Co 6F-SW", "Southwest Top Item (Card Key)", "HP Up", rom_addresses["Missable_Silph_Co_6F_Item_1"], Missable(161)),
     LocationData("Silph Co 6F-SW", "Southwest Bottom Item (Card Key)", "X Accuracy", rom_addresses["Missable_Silph_Co_6F_Item_2"],
                  Missable(162)),
@@ -352,14 +356,14 @@ location_data = [
     LocationData("Rock Tunnel B1F-W", "North Item", "Safari Pass", rom_addresses["Missable_Rock_Tunnel_B1F_Item_4"],
                  Missable(234), inclusion=extra_key_items),
 
-    LocationData("Pewter Gym", "Brock 1", "Boulder Badge", rom_addresses['Badge_Pewter_Gym'], EventFlag(0x8A0)),
-    LocationData("Cerulean Gym", "Misty 1", "Cascade Badge", rom_addresses['Badge_Cerulean_Gym'], EventFlag(0x8A1)),
-    LocationData("Vermilion Gym", "Lt. Surge 1", "Thunder Badge", rom_addresses['Badge_Vermilion_Gym'], EventFlag(0x8A2)),
-    LocationData("Celadon Gym-C", "Erika 1", "Rainbow Badge", rom_addresses['Badge_Celadon_Gym'], EventFlag(0x8A3)),
-    LocationData("Fuchsia Gym", "Koga 1", "Soul Badge", rom_addresses['Badge_Fuchsia_Gym'], EventFlag(0x8A4)),
-    LocationData("Saffron Gym-C", "Sabrina 1", "Marsh Badge", rom_addresses['Badge_Saffron_Gym'], EventFlag(0x8A5)),
-    LocationData("Cinnabar Gym", "Blaine 1", "Volcano Badge", rom_addresses['Badge_Cinnabar_Gym'], EventFlag(0x8A6)),
-    LocationData("Viridian Gym", "Giovanni 1", "Earth Badge", rom_addresses['Badge_Viridian_Gym'], EventFlag(0x8A7)),
+    LocationData("Pewter Gym", "Brock Prize", "Boulder Badge", rom_addresses['Badge_Pewter_Gym'], EventFlag(0x8A0)),
+    LocationData("Cerulean Gym", "Misty Prize", "Cascade Badge", rom_addresses['Badge_Cerulean_Gym'], EventFlag(0x8A1)),
+    LocationData("Vermilion Gym", "Lt. Surge Prize", "Thunder Badge", rom_addresses['Badge_Vermilion_Gym'], EventFlag(0x8A2)),
+    LocationData("Celadon Gym-C", "Erika Prize", "Rainbow Badge", rom_addresses['Badge_Celadon_Gym'], EventFlag(0x8A3)),
+    LocationData("Fuchsia Gym", "Koga Prize", "Soul Badge", rom_addresses['Badge_Fuchsia_Gym'], EventFlag(0x8A4)),
+    LocationData("Saffron Gym-C", "Sabrina Prize", "Marsh Badge", rom_addresses['Badge_Saffron_Gym'], EventFlag(0x8A5)),
+    LocationData("Cinnabar Gym", "Blaine Prize", "Volcano Badge", rom_addresses['Badge_Cinnabar_Gym'], EventFlag(0x8A6)),
+    LocationData("Viridian Gym", "Giovanni Prize", "Earth Badge", rom_addresses['Badge_Viridian_Gym'], EventFlag(0x8A7)),
 
     LocationData("Viridian Forest", "Hidden Item Northwest by Trainer", "Potion", rom_addresses['Hidden_Item_Viridian_Forest_1'], Hidden(0), inclusion=hidden_items),
     LocationData("Viridian Forest", "Hidden Item Entrance Tree", "Antidote", rom_addresses['Hidden_Item_Viridian_Forest_2'], Hidden(1), inclusion=hidden_items),
@@ -389,8 +393,8 @@ location_data = [
     LocationData("Seafoam Islands B4F", "Hidden Item Corner Island", "Ultra Ball", rom_addresses['Hidden_Item_Seafoam_Islands_B4F'], Hidden(26), inclusion=hidden_items),
     LocationData("Pokemon Mansion 1F", "Hidden Item Block Near Entrance Carpet", "Moon Stone", rom_addresses['Hidden_Item_Pokemon_Mansion_1F'], Hidden(27), inclusion=hidden_items),
     LocationData("Pokemon Mansion 3F-SW", "Hidden Item Behind Burglar", "Max Revive", rom_addresses['Hidden_Item_Pokemon_Mansion_3F'], Hidden(28), inclusion=hidden_items),
-    LocationData("Route 23-C", "Hidden Item Rocks Before Victory Road", "Full Restore", rom_addresses['Hidden_Item_Route_23_1'], Hidden(29), inclusion=hidden_items),
-    LocationData("Route 23-C", "Hidden Item East Bush After Water", "Ultra Ball", rom_addresses['Hidden_Item_Route_23_2'], Hidden(30), inclusion=hidden_items),
+    LocationData("Route 23-Grass", "Hidden Item Rocks Before Victory Road", "Full Restore", rom_addresses['Hidden_Item_Route_23_1'], Hidden(29), inclusion=hidden_items),
+    LocationData("Route 23-Grass", "Hidden Item East Bush After Water", "Ultra Ball", rom_addresses['Hidden_Item_Route_23_2'], Hidden(30), inclusion=hidden_items),
     LocationData("Route 23-S", "Hidden Item On Island", "Max Ether", rom_addresses['Hidden_Item_Route_23_3'], Hidden(31), inclusion=hidden_items),
     LocationData("Victory Road 2F-NW", "Hidden Item Rock Before Moltres", "Ultra Ball", rom_addresses['Hidden_Item_Victory_Road_2F_1'], Hidden(32), inclusion=hidden_items),
     LocationData("Victory Road 2F-E", "Hidden Item Rock In Final Room", "Full Restore", rom_addresses['Hidden_Item_Victory_Road_2F_2'], Hidden(33), inclusion=hidden_items),
@@ -645,8 +649,8 @@ location_data = [
     LocationData("Route 8", "Gambler 2", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_8_TRAINER_1_ITEM"], EventFlag(328), inclusion=trainersanity),
     LocationData("Route 8", "Super Nerd 3", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_8_TRAINER_0_ITEM"], EventFlag(329), inclusion=trainersanity),
     LocationData("Route 6", "Bug Catcher 1", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_6_TRAINER_2_ITEM"], EventFlag(333), inclusion=trainersanity),
-    LocationData("Route 6", "Jr. Trainer M 1", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_6_TRAINER_1_ITEM"], EventFlag(334), inclusion=trainersanity),
-    LocationData("Route 6", "Jr. Trainer F 1", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_6_TRAINER_0_ITEM"], EventFlag(335), inclusion=trainersanity),
+    LocationData("Route 6", "Jr. Trainer F 1", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_6_TRAINER_1_ITEM"], EventFlag(334), inclusion=trainersanity),
+    LocationData("Route 6", "Jr. Trainer M 1", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_6_TRAINER_0_ITEM"], EventFlag(335), inclusion=trainersanity),
     LocationData("Route 6", "Bug Catcher 2", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_6_TRAINER_5_ITEM"], EventFlag(330), inclusion=trainersanity),
     LocationData("Route 6", "Jr. Trainer F 2", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_6_TRAINER_4_ITEM"], EventFlag(331), inclusion=trainersanity),
     LocationData("Route 6", "Jr. Trainer M 2", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_6_TRAINER_3_ITEM"], EventFlag(332), inclusion=trainersanity),
@@ -761,22 +765,21 @@ location_data = [
                                                                   ["Poke Ball", "Great Ball", "Ultra Ball"] * 51)],
 
     LocationData("Silph Co 1F", "Receptionist", "Card Key 2F", rom_addresses["Event_SKC1F"], EventFlag(0x1c0),inclusion=split_card_key),
-    LocationData("Silph Co 3F", "Hostage", "Card Key 3F", rom_addresses["Event_SKC3F"], EventFlag(0x1c1), inclusion=split_card_key),
-    LocationData("Silph Co 4F-W", "Hostage", "Card Key 4F", rom_addresses["Event_SKC4F"], EventFlag(0x1c2), inclusion=split_card_key),
-    LocationData("Silph Co 5F", "Hostage", "Card Key 5F", rom_addresses["Event_SKC5F"], EventFlag(0x1c3), inclusion=split_card_key),
-    LocationData("Silph Co 6F", "Hostage", "Card Key 6F", rom_addresses["Event_SKC6F"], EventFlag(0x1c4), inclusion=split_card_key),
-    LocationData("Silph Co 7F", "Hostage", "Card Key 7F", rom_addresses["Event_SKC7F"], EventFlag(0x1c5), inclusion=split_card_key),
-    LocationData("Silph Co 8F", "Hostage", "Card Key 8F", rom_addresses["Event_SKC8F"], EventFlag(0x1c6), inclusion=split_card_key),
-    LocationData("Silph Co 9F", "Nurse", "Card Key 9F", rom_addresses["Event_SKC9F"], EventFlag(0x1c7), inclusion=split_card_key),
-    LocationData("Silph Co 10F", "Hostage", "Card Key 10F", rom_addresses["Event_SKC10F"], EventFlag(0x1c8), inclusion=split_card_key),
-    LocationData("Silph Co 11F-C", "Secretary", "Card Key 11F", rom_addresses["Event_SKC11F"], EventFlag(0x1c9), inclusion=split_card_key),
+    LocationData("Silph Co 4F-W", "Hostage", "Card Key 4F", rom_addresses["Event_SKC4F"], EventFlag(0x1c1), inclusion=split_card_key),
+    LocationData("Silph Co 5F", "Hostage", "Card Key 5F", rom_addresses["Event_SKC5F"], EventFlag(0x1c2), inclusion=split_card_key),
+    LocationData("Silph Co 6F", "Hostage", "Card Key 6F", rom_addresses["Event_SKC6F"], EventFlag(0x1c3), inclusion=split_card_key),
+    LocationData("Silph Co 7F", "Hostage", "Card Key 7F", rom_addresses["Event_SKC7F"], EventFlag(0x1c4), inclusion=split_card_key),
+    LocationData("Silph Co 8F-W", "Hostage", "Card Key 8F", rom_addresses["Event_SKC8F"], EventFlag(0x1c5), inclusion=split_card_key),
+    LocationData("Silph Co 9F-SW", "Nurse", "Card Key 9F", rom_addresses["Event_SKC9F"], EventFlag(0x1c6), inclusion=split_card_key),
+    LocationData("Silph Co 10F-SE", "Hostage", "Card Key 10F", rom_addresses["Event_SKC10F"], EventFlag(0x1c7), inclusion=split_card_key),
+    LocationData("Silph Co 11F-C", "Secretary", "Card Key 11F", rom_addresses["Event_SKC11F"], EventFlag(0x1c8), inclusion=split_card_key),
 
-
+    LocationData("Cinnabar Island", "", "Cinnabar Island", event=True),
     LocationData("Celadon Department Store 4F", "Buy Poke Doll", "Buy Poke Doll", event=True),
     LocationData("Celadon Department Store Roof", "Vending Machines", "Vending Machine Drinks", event=True),
     LocationData("Pewter Gym", "Defeat Brock", "Defeat Brock", event=True),
     LocationData("Cerulean Gym", "Defeat Misty", "Defeat Misty", event=True),
-    LocationData("Vermilion Gym", "Defeat Lt Surge", "Defeat Lt Surge", event=True),
+    LocationData("Vermilion Gym", "Defeat Lt. Surge", "Defeat Lt. Surge", event=True),
     LocationData("Celadon Gym", "Defeat Erika", "Defeat Erika", event=True),
     LocationData("Fuchsia Gym", "Defeat Koga", "Defeat Koga", event=True),
     LocationData("Cinnabar Gym", "Defeat Blaine", "Defeat Blaine", event=True),
@@ -1893,25 +1896,25 @@ location_data = [
                  None, event=True, type="Wild Encounter", level=33),
     LocationData("Power Plant", "Wild Pokemon - 10", ["Electabuzz", "Raichu"],
                  rom_addresses["Wild_PowerPlant"] + 19, None, event=True, type="Wild Encounter", level=36),
-    LocationData("Route 23-C", "Wild Pokemon - 1", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route23"] + 1,
+    LocationData("Route 23-Grass", "Wild Pokemon - 1", ["Ekans", "Sandshrew"], rom_addresses["Wild_Route23"] + 1,
                  None, event=True, type="Wild Encounter", level=26),
-    LocationData("Route 23-C", "Wild Pokemon - 2", "Ditto", rom_addresses["Wild_Route23"] + 3, None, event=True,
+    LocationData("Route 23-Grass", "Wild Pokemon - 2", "Ditto", rom_addresses["Wild_Route23"] + 3, None, event=True,
                  type="Wild Encounter", level=33),
-    LocationData("Route 23-C", "Wild Pokemon - 3", "Spearow", rom_addresses["Wild_Route23"] + 5, None,
+    LocationData("Route 23-Grass", "Wild Pokemon - 3", "Spearow", rom_addresses["Wild_Route23"] + 5, None,
                  event=True, type="Wild Encounter", level=26),
-    LocationData("Route 23-C", "Wild Pokemon - 4", "Fearow", rom_addresses["Wild_Route23"] + 7, None,
+    LocationData("Route 23-Grass", "Wild Pokemon - 4", "Fearow", rom_addresses["Wild_Route23"] + 7, None,
                  event=True, type="Wild Encounter", level=38),
-    LocationData("Route 23-C", "Wild Pokemon - 5", "Ditto", rom_addresses["Wild_Route23"] + 9, None, event=True,
+    LocationData("Route 23-Grass", "Wild Pokemon - 5", "Ditto", rom_addresses["Wild_Route23"] + 9, None, event=True,
                  type="Wild Encounter", level=38),
-    LocationData("Route 23-C", "Wild Pokemon - 6", "Fearow", rom_addresses["Wild_Route23"] + 11, None,
+    LocationData("Route 23-Grass", "Wild Pokemon - 6", "Fearow", rom_addresses["Wild_Route23"] + 11, None,
                  event=True, type="Wild Encounter", level=38),
-    LocationData("Route 23-C", "Wild Pokemon - 7", ["Arbok", "Sandslash"], rom_addresses["Wild_Route23"] + 13,
+    LocationData("Route 23-Grass", "Wild Pokemon - 7", ["Arbok", "Sandslash"], rom_addresses["Wild_Route23"] + 13,
                  None, event=True, type="Wild Encounter", level=41),
-    LocationData("Route 23-C", "Wild Pokemon - 8", "Ditto", rom_addresses["Wild_Route23"] + 15, None,
+    LocationData("Route 23-Grass", "Wild Pokemon - 8", "Ditto", rom_addresses["Wild_Route23"] + 15, None,
                  event=True, type="Wild Encounter", level=43),
-    LocationData("Route 23-C", "Wild Pokemon - 9", "Fearow", rom_addresses["Wild_Route23"] + 17, None,
+    LocationData("Route 23-Grass", "Wild Pokemon - 9", "Fearow", rom_addresses["Wild_Route23"] + 17, None,
                  event=True, type="Wild Encounter", level=41),
-    LocationData("Route 23-C", "Wild Pokemon - 10", "Fearow", rom_addresses["Wild_Route23"] + 19, None,
+    LocationData("Route 23-Grass", "Wild Pokemon - 10", "Fearow", rom_addresses["Wild_Route23"] + 19, None,
                  event=True, type="Wild Encounter", level=43),
     LocationData("Victory Road 2F-Wild", "Wild Pokemon - 1", "Machop", rom_addresses["Wild_VictoryRoad2F"] + 1, None,
                  event=True, type="Wild Encounter", level=22),
@@ -1998,7 +2001,7 @@ location_data = [
     LocationData("Good Rod Fishing", "Good Rod Pokemon - 2", "Poliwag", rom_addresses["Wild_Good_Rod"] + 3, None,
                  event=True, type="Wild Encounter", level=10),
     LocationData("Old Rod Fishing", "Old Rod Pokemon", "Magikarp", rom_addresses["Wild_Old_Rod"] + 1, None,
-                 event=True, type="Wild Encounter"), #, level=5, level_after=True),
+                 event=True, type="Wild Encounter", level=5, level_address=rom_addresses["Wild_Old_Rod"] + 2), #, level=5, level_after=True),
 
 
     # "Wild encounters" means a Pokemon you cannot miss or release and lose - re-use it for these
@@ -2030,6 +2033,8 @@ location_data = [
                  event=True, type="Static Pokemon", level=15),
     LocationData("Route 4 Pokemon Center", "Pokemon For Sale", "Magikarp", rom_addresses["Gift_Magikarp"], None,
                  event=True, type="Static Pokemon", level=5),
+    # Currently all Fossil Pokemon's levels are set from the same byte in-game, so they are handled in a hacky way
+    # as a Trainer Party
     LocationData("Cinnabar Lab Fossil Room", "Old Amber Pokemon", "Aerodactyl", rom_addresses["Gift_Aerodactyl"], None,
                  event=True, type="Static Pokemon"),
     LocationData("Cinnabar Lab Fossil Room", "Helix Fossil Pokemon", "Omanyte", rom_addresses["Gift_Omanyte"], None,
@@ -2058,21 +2063,21 @@ location_data = [
 
     # not counted for logic currently. Could perhaps make static encounters resettable in the future?
     LocationData("Power Plant", "Fake Pokeball Battle 1", "Voltorb", rom_addresses["Static_Encounter_Voltorb_A"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=40, level_address=rom_addresses["Static_Encounter_Voltorb_A"] + 1),
     LocationData("Power Plant", "Fake Pokeball Battle 2", "Voltorb", rom_addresses["Static_Encounter_Voltorb_B"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=40, level_address=rom_addresses["Static_Encounter_Voltorb_B"] + 1),
     LocationData("Power Plant", "Fake Pokeball Battle 3", "Voltorb", rom_addresses["Static_Encounter_Voltorb_C"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=40, level_address=rom_addresses["Static_Encounter_Voltorb_C"] + 1),
     LocationData("Power Plant", "Fake Pokeball Battle 4", "Voltorb", rom_addresses["Static_Encounter_Voltorb_D"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=40, level_address=rom_addresses["Static_Encounter_Voltorb_D"] + 1),
     LocationData("Power Plant", "Fake Pokeball Battle 5", "Voltorb", rom_addresses["Static_Encounter_Voltorb_E"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=40, level_address=rom_addresses["Static_Encounter_Voltorb_E"] + 1),
     LocationData("Power Plant", "Fake Pokeball Battle 6", "Voltorb", rom_addresses["Static_Encounter_Voltorb_F"],
-                 None, event=True, type="Missable Pokemon"),
-    LocationData("Power Plant", "Fake Pokeball Battle 7", "Voltorb", rom_addresses["Static_Encounter_Electrode_A"],
-                 None, event=True, type="Missable Pokemon"),
-    LocationData("Power Plant", "Fake Pokeball Battle 8", "Voltorb", rom_addresses["Static_Encounter_Electrode_B"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=40, level_address=rom_addresses["Static_Encounter_Voltorb_F"] + 1),
+    LocationData("Power Plant", "Fake Pokeball Battle 7", "Electrode", rom_addresses["Static_Encounter_Electrode_A"],
+                 None, event=True, type="Missable Pokemon", level=43, level_address=rom_addresses["Static_Encounter_Electrode_A"] + 1),
+    LocationData("Power Plant", "Fake Pokeball Battle 8", "Electrode", rom_addresses["Static_Encounter_Electrode_B"],
+                 None, event=True, type="Missable Pokemon", level=43, level_address=rom_addresses["Static_Encounter_Electrode_B"] + 1),
 
     LocationData("Pokemon Tower 6F", "Restless Soul", "Marowak", [rom_addresses["Ghost_Battle1"],
                                                                   rom_addresses["Ghost_Battle2"],
@@ -2080,17 +2085,17 @@ location_data = [
                                                                   rom_addresses["Ghost_Battle4"],
                                                                   rom_addresses["Ghost_Battle5"],
                                                                   rom_addresses["Ghost_Battle6"]], None, event=True,
-                 type="Missable Pokemon"),
+                 type="Missable Pokemon", level=30, level_address=rom_addresses["Ghost_Battle_Level"]),
 
     LocationData("Route 12-W", "Sleeping Pokemon", "Snorlax", rom_addresses["Static_Encounter_Snorlax_A"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=30, level_address=rom_addresses["Static_Encounter_Snorlax_A_Level"]),
     LocationData("Route 16-C", "Sleeping Pokemon", "Snorlax", rom_addresses["Static_Encounter_Snorlax_B"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=30, level_address=rom_addresses["Static_Encounter_Snorlax_B_Level"]),
 
     LocationData("Saffron Fighting Dojo", "Gift 1", "Hitmonlee", rom_addresses["Gift_Hitmonlee"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=30, level_address=rom_addresses["Gift_Hitmonlee_Level"]),
     LocationData("Saffron Fighting Dojo", "Gift 2", "Hitmonchan", rom_addresses["Gift_Hitmonchan"],
-                 None, event=True, type="Missable Pokemon"),
+                 None, event=True, type="Missable Pokemon", level=30, level_address=rom_addresses["Gift_Hitmonchan_Level"]),
 
     LocationData("Oak's Lab", "Starter 1", "Charmander", [rom_addresses["Starter1_A"],
                                                             rom_addresses["Starter1_B"], rom_addresses["Starter1_C"],
@@ -2122,15 +2127,15 @@ location_data = [
                  event=True, type="Starter Pokemon"),
 
     LocationData("Power Plant", "Legendary Pokemon", "Zapdos", rom_addresses["Static_Encounter_Zapdos"],
-                 None, event=True, type="Legendary Pokemon"),
+                 None, event=True, type="Legendary Pokemon", level=50, level_address=rom_addresses["Static_Encounter_Zapdos"] + 1),
     LocationData("Seafoam Islands B4F", "Legendary Pokemon", "Articuno", rom_addresses["Static_Encounter_Articuno"],
-                 None, event=True, type="Legendary Pokemon"),
+                 None, event=True, type="Legendary Pokemon", level=50, level_address=rom_addresses["Static_Encounter_Articuno"] + 1),
     LocationData("Victory Road 2F-NW", "Legendary Pokemon", "Moltres", rom_addresses["Static_Encounter_Moltres"],
-                 None, event=True, type="Legendary Pokemon"),
+                 None, event=True, type="Legendary Pokemon", level=50, level_address=rom_addresses["Static_Encounter_Moltres"] + 1),
     LocationData("Cerulean Cave B1F-E", "Legendary Pokemon", "Mewtwo", rom_addresses["Static_Encounter_Mewtwo"],
-                 None, event=True, type="Legendary Pokemon"),
+                 None, event=True, type="Legendary Pokemon", level=70, level_address=rom_addresses["Static_Encounter_Mewtwo"] + 1),
     LocationData("Vermilion Dock", "Legendary Pokemon", "Mew", rom_addresses["Static_Encounter_Mew"],
-                 None, event=True, type="Legendary Pokemon"),
+                 None, event=True, type="Legendary Pokemon", level=10, level_address=rom_addresses["Static_Encounter_Mew"] + 1),
 
 ]
 
@@ -2241,16 +2246,19 @@ trainer_data = {
                 {'level': 24, 'party': ['Growlithe', 'Vulpix'], 'party_address': 'Trainer_Party_Route_8_Gambler_C'}],
     'Celadon Gym': [
         {'level': 23, 'party': ['Bellsprout', 'Weepinbell'], 'party_address': 'Trainer_Party_Celadon_Gym_Lass_A'},
-        {'level': 23, 'party': ['Oddish', 'Gloom'], 'party_address': 'Trainer_Party_Celadon_Gym_Lass_B'},
         {'level': 24, 'party': ['Bulbasaur', 'Ivysaur'], 'party_address': 'Trainer_Party_Celadon_Gym_JrTrainerF_A'},
         {'level': 21, 'party': ['Oddish', 'Bellsprout', 'Oddish', 'Bellsprout'],
          'party_address': 'Trainer_Party_Celadon_Gym_Beauty_A'},
-        {'level': 24, 'party': ['Bellsprout', 'Bellsprout'], 'party_address': 'Trainer_Party_Celadon_Gym_Beauty_B'},
-        {'level': 26, 'party': ['Exeggcute'], 'party_address': 'Trainer_Party_Celadon_Gym_Beauty_C'},
+        {'level': 24, 'party': ['Bellsprout', 'Bellsprout'], 'party_address': 'Trainer_Party_Celadon_Gym_Beauty_B'}],
+    'Celadon Gym-C': [
         {'level': 24, 'party': ['Weepinbell', 'Gloom', 'Ivysaur'],
          'party_address': 'Trainer_Party_Celadon_Gym_CooltrainerF_A'},
         {'level': [29, 24, 29], 'party': ['Victreebel', 'Tangela', 'Vileplume'],
-         'party_address': 'Trainer_Party_Erika_A'},], 'S.S. Anne Bow': [
+         'party_address': 'Trainer_Party_Erika_A'},
+        {'level': 23, 'party': ['Oddish', 'Gloom'], 'party_address': 'Trainer_Party_Celadon_Gym_Lass_B'},
+        {'level': 26, 'party': ['Exeggcute'], 'party_address': 'Trainer_Party_Celadon_Gym_Beauty_C'}],
+
+    'S.S. Anne Bow': [
         {'level': 18, 'party': ['Machop', 'Shellder'], 'party_address': 'Trainer_Party_SS_Anne_Stern_Sailor_A'},
         {'level': 17, 'party': ['Machop', 'Tentacool'], 'party_address': 'Trainer_Party_SS_Anne_Stern_Sailor_B'}],
     'S.S. Anne B1F Rooms-Two Sailors Room': [{'level': 21, 'party': ['Shellder'], 'party_address': 'Trainer_Party_SS_Anne_B1F_Rooms_Sailor_A'},
@@ -2547,7 +2555,7 @@ trainer_data = {
         {'level': 36, 'party': ['Primeape'], 'party_address': 'Trainer_Party_Fighting_Dojo_Blackbelt_D'},
         {'level': 31, 'party': ['Machop', 'Mankey', 'Primeape'],
          'party_address': 'Trainer_Party_Fighting_Dojo_Blackbelt_E'}],
-    'Pallet Town': [{'level': 5, 'party': [['Squirtle'], ['Bulbasaur'], ['Charmander']],
+    "Oak's Lab": [{'level': 5, 'party': [['Squirtle'], ['Bulbasaur'], ['Charmander']],
                       'party_address': ['Trainer_Party_Pallet_Town_Green1_A', 'Trainer_Party_Pallet_Town_Green1_B',
                                         'Trainer_Party_Pallet_Town_Green1_C']}],
     'Route 22': [{'level': [9, 8], 'party': [['Pidgey', 'Squirtle'], ['Pidgey', 'Bulbasaur'], ['Pidgey', 'Charmander']],
@@ -2709,16 +2717,8 @@ trainer_data = {
                          {'level': 24, 'party': ['Gastly'],
                           'party_address': 'Trainer_Party_Pokemon_Tower_6F_Channeler_C'}]}
 
-level_object_list = [(loc.name, loc.level) for loc in location_data if loc.type == "Wild Encounter" and loc.level is not None]
-# wild_lists = []
-# while wild_list:
-#     wild_lists.append(wild_list[:10])
-#     wild_list = wild_list[10:]
-# wild_lists.sort(key=lambda wild_list: sum([loc.level for loc in wild_list]))
-# wild_list = sum(wild_lists, [])
-# wild_level_list = [loc.level for loc in wild_list]
-# wild_name_list = [loc.name for loc in wild_list]
-# trainer_list = []
+level_object_list = [(loc.name, loc.level) for loc in location_data if (loc.type == "Wild Encounter" or "Pokemon" in loc.type) and loc.level is not None]
+
 for region in trainer_data:
     party_loc = LocationData(region, "Trainer Parties", "Trainer Parties", event=True, type="Trainer Parties")
     party_loc.party_data = trainer_data[region]
@@ -2734,21 +2734,10 @@ level_object_list.sort(key=lambda i: i[1])
 level_list = [i[1] for i in level_object_list]
 level_name_list = [i[0] for i in level_object_list]
 
-# wild_list = [loc for loc in location_data if loc.type == "Wild Encounter" and loc.level is not None ]
-# wild_lists = []
-# while wild_list:
-#     wild_lists.append(wild_list[:10])
-#     wild_list = wild_list[10:]
-# wild_lists.sort(key=lambda wild_list: sum([loc.level for loc in wild_list]))
-# wild_list = sum(wild_lists, [])
-# wild_level_list = [loc.level for loc in wild_list]
-# wild_name_list = [loc.name for loc in wild_list]
-
-
 class PokemonRBLocation(Location):
     game = "Pokemon Red and Blue"
 
-    def __init__(self, player, name, address, rom_address, type, level):
+    def __init__(self, player, name, address, rom_address, type, level, level_address):
         super(PokemonRBLocation, self).__init__(
             player, name,
             address
@@ -2757,3 +2746,4 @@ class PokemonRBLocation(Location):
         self.type = type
         self.level = level
         self.party_data = None
+        self.level_address = level_address
