@@ -172,8 +172,10 @@ class MessengerHardRules(MessengerRules):
             "Bamboo Creek": self.has_vertical,
             "Riviere Turquoise": self.true,
             "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player),
-            "Searing Crags Upper": self.true,
-            "Glacial Peak": self.true,
+            "Searing Crags Upper": lambda state: self.destroys_projectiles(state) or self.has_windmill(state)
+                                                 or self.has_vertical(state),
+            "Glacial Peak": lambda state: self.destroys_projectiles(state) or self.has_windmill(state)
+                                          or self.has_vertical(state),
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) or
                                                 self.has_windmill(state) or
                                                 self.has_dart(state),
@@ -190,12 +192,13 @@ class MessengerHardRules(MessengerRules):
             "Cloud Ruins Seal - Ghost Pit": self.true,
             "Bamboo Creek - Claustro": self.has_wingsuit,
             "Tower of Time Seal - Lantern Climb": self.has_wingsuit,
-            "Elemental Skylands Seal - Air": self.has_wingsuit,
-            "Elemental Skylands Seal - Water": lambda state: self.has_dart(state) or self.can_dboost(state),
-            "Elemental Skylands Seal - Fire": lambda state: (self.has_dart(state) or self.can_dboost(state)) and
+            "Elemental Skylands Seal - Water": lambda state: self.has_dart(state) or self.can_dboost(state)
+                                                             or self.has_windmill(state),
+            "Elemental Skylands Seal - Fire": lambda state: (self.has_dart(state) or self.can_dboost(state)
+                                                             or self.has_windmill(state)) and
                                                             self.destroys_projectiles(state),
-            "Earth Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state),
-            "Water Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state),
+            "Earth Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+            "Water Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
         })
 
         self.extra_rules = {
