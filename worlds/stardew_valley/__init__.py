@@ -10,7 +10,7 @@ from .logic import StardewLogic, StardewRule, True_
 from .options import stardew_valley_options, StardewOptions, fetch_options
 from .regions import create_regions
 from .rules import set_rules
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 
 client_version = 0
 

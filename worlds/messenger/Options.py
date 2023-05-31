@@ -1,8 +1,7 @@
 from typing import Dict
-
 from schema import Schema, Or, And, Optional
 
-from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle, OptionDict
+from Options import DefaultOnToggle, DeathLink, Range, Accessibility, Choice, Toggle, OptionDict, StartInventoryPool
 
 
 class MessengerAccessibility(Accessibility):
@@ -132,6 +131,7 @@ class PlannedShopPrices(OptionDict):
 
 messenger_options = {
     "accessibility": MessengerAccessibility,
+    "start_inventory": StartInventoryPool,
     "logic_level": Logic,
     "shuffle_seals": PowerSeals,
     "shuffle_shards": MegaShards,
