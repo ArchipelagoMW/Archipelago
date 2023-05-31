@@ -279,11 +279,12 @@ class RomPatcher:
 
             # apply area patches
             if self.settings["area"] == True:
+                areaPatches = list(RomPatcher.IPSPatches['Area'])
                 if not self.settings["areaLayout"]:
                     for p in ['area_rando_layout.ips', 'Sponge_Bath_Blinking_Door', 'east_ocean.ips', 'aqueduct_bomb_blocks.ips']:
-                       RomPatcher.IPSPatches['Area'].remove(p)
-                    RomPatcher.IPSPatches['Area'].append('area_rando_layout_base.ips')
-                for patchName in RomPatcher.IPSPatches['Area']:
+                       areaPatches.remove(p)
+                    areaPatches.append('area_rando_layout_base.ips')
+                for patchName in areaPatches:
                     self.applyIPSPatch(patchName)
             else:
                 self.applyIPSPatch('area_ids_alt.ips')
