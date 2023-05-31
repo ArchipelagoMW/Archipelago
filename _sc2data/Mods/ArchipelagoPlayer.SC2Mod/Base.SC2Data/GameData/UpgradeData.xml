@@ -2386,12 +2386,14 @@
         <AffectedUnitArray value="AP_Roach" />
         <EffectArray Operation="Set" Reference="Weapon,AP_RoachCorpserAcidSaliva,Options[Hidden]" Value="0"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_AcidSaliva,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Roach,Subtitle" Value="UnitSubtitle/AP_RoachCorpser"/>
     </CUpgrade>
     <CUpgrade id="AP_RoachVile">
         <Flags index="UpgradeCheat" value="0"/>
         <AffectedUnitArray value="AP_Roach" />
         <EffectArray Operation="Set" Reference="Weapon,AP_RoachVileAcidSaliva,Options[Hidden]" Value="0"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_AcidSaliva,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Roach,Subtitle" Value="UnitSubtitle/AP_RoachVile"/>
     </CUpgrade>
     <CUpgrade id="AP_RoachVileCorpser">
         <Flags index="UpgradeCheat" value="0"/>
@@ -2400,6 +2402,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_RoachVileAcidSaliva,Options[Hidden]" Value="1"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_RoachCorpserAcidSaliva,Options[Hidden]" Value="1"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_AcidSaliva,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Roach,Subtitle" Value="UnitSubtitle/AP_RoachVileCorpser"/>
     </CUpgrade>
     <CUpgrade id="AP_TunnelingClaws">
         <Flags index="TechTreeCheat" value="1"/>
