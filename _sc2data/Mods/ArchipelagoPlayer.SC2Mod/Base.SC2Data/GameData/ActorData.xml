@@ -1253,10 +1253,12 @@
         <On Terms="Abil.AP_MedivacHeal.SourceChannelStop" Send="AnimClear Spell"/>
         <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad; AbilTransport Thor" Send="Create ThorTransit"/>
         <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad; AbilTransport AP_Thor" Send="Create AP_ThorTransit"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportLoad; AbilTransport AP_ThorAP" Send="Create AP_ThorTransit"/>
         <On Terms="Signal.*.ThorTransit" Send="RefSetFromMsg ::actor.Thor ::Sender"/>
         <On Terms="Signal.*.ThorTransit" Send="RefSetFromMsg ::actor.AP_Thor ::Sender"/>
         <On Terms="AbilTransport.AP_MedivacTransport.PassengerKilled; AbilTransport Thor" Target="::actor.Thor" Send="Signal Dead"/>
         <On Terms="AbilTransport.AP_MedivacTransport.PassengerKilled; AbilTransport AP_Thor" Target="::actor.AP_Thor" Send="Signal Dead"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.PassengerKilled; AbilTransport AP_ThorAP" Target="::actor.AP_Thor" Send="Signal Dead"/>
         <On Terms="UnitDeath" Target="::actor.Thor" Send="Signal Dead"/>
         <On Terms="UnitDeath" Target="::actor.AP_Thor" Send="Signal Dead"/>
         <On Terms="ActorCreation; ValidateUnit AP_MedivacUpgrade" Send="ModelSwap MedivacUpgrade"/>
@@ -3648,6 +3650,7 @@
         <On Terms="AnimDone; AnimName Start" Send="AnimPlay Work Stand,Work PlayForever"/>
         <On Terms="AbilTransport.MedivacTransport.TransportUnload" Send="Destroy"/>
         <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport AP_Thor" Send="Destroy"/>
+        <On Terms="AbilTransport.AP_MedivacTransport.TransportUnload; AbilTransport AP_ThorAP" Send="Destroy"/>
         <!-- Yes, we can unload something else than Thor, should work as two Thors can't fit in -->
         <On Terms="Signal.*.Dead" Send="Create ThorTransitDeath"/>
         <On Terms="Signal.*.Dead" Send="Destroy"/>
@@ -3656,6 +3659,8 @@
         <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload; AbilTransport Thor" Send="Destroy"/>
         <On Terms="AbilTransport.SpecOpsDropshipTransport.TransportUnload; AbilTransport AP_Thor" Send="Destroy"/>
         <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload; AbilTransport AP_Thor" Send="Destroy"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.TransportUnload; AbilTransport AP_ThorAP" Send="Destroy"/>
+        <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload; AbilTransport AP_ThorAP" Send="Destroy"/>
         <Host Subject="::Creator"/>
         <HostSiteOps Ops="SOpAttachCenter ThorCargoSOpOffset"/>
         <Model value="ThorTransit"/>
