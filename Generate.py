@@ -27,9 +27,6 @@ from worlds.AutoWorld import AutoWorldRegister
 import copy
 
 
-
-
-
 def mystery_argparse():
     options = get_options()
     defaults = options["generator"]
@@ -74,10 +71,12 @@ def main(args=None, callback=ERmain):
         args, options = mystery_argparse()
 
     seed = get_seed(args.seed)
+    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
     random.seed(seed)
     seed_name = get_seed_name(random)
 
     if args.race:
+        logging.info("Race mode enabled. Using non-deterministic random source.")
         random.seed()  # reset to time-based random source
 
     weights_cache: Dict[str, Tuple[Any, ...]] = {}
@@ -86,15 +85,15 @@ def main(args=None, callback=ERmain):
             weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
         except Exception as e:
             raise ValueError(f"File {args.weights_file_path} is destroyed. Please fix your yaml.") from e
-        print(f"Weights: {args.weights_file_path} >> "
-              f"{get_choice('description', weights_cache[args.weights_file_path][-1], 'No description specified')}")
+        logging.info(f"Weights: {args.weights_file_path} >> "
+                     f"{get_choice('description', weights_cache[args.weights_file_path][-1], 'No description specified')}")
 
     if args.meta_file_path and os.path.exists(args.meta_file_path):
         try:
             meta_weights = read_weights_yamls(args.meta_file_path)[-1]
         except Exception as e:
             raise ValueError(f"File {args.meta_file_path} is destroyed. Please fix your yaml.") from e
-        print(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
+        logging.info(f"Meta: {args.meta_file_path} >> {get_choice('meta_description', meta_weights)}")
         try:  # meta description allows us to verify that the file named meta.yaml is intentionally a meta file
             del(meta_weights["meta_description"])
         except Exception as e:
@@ -120,17 +119,18 @@ def main(args=None, callback=ERmain):
     for filename, yaml_data in weights_cache.items():
         if filename not in {args.meta_file_path, args.weights_file_path}:
             for yaml in yaml_data:
-                print(f"P{player_id} Weights: {filename} >> "
-                      f"{get_choice('description', yaml, 'No description specified')}")
+                logging.info(f"P{player_id} Weights: {filename} >> "
+                             f"{get_choice('description', yaml, 'No description specified')}")
                 player_files[player_id] = filename
                 player_id += 1
 
     args.multi = max(player_id - 1, args.multi)
-    print(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, {seed_name} Seed {seed} with plando: "
-          f"{args.plando}")
+    logging.info(f"Generating for {args.multi} player{'s' if args.multi > 1 else ''}, "
+                 f"{seed_name} Seed {seed} with plando: {args.plando}")
 
     if not weights_cache:
-        raise Exception(f"No weights found. Provide a general weights file ({args.weights_file_path}) or individual player files. "
+        raise Exception(f"No weights found. "
+                        f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
@@ -140,8 +140,6 @@ def main(args=None, callback=ERmain):
     erargs.race = args.race
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
-
-    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
