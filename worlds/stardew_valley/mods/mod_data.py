@@ -35,7 +35,7 @@ mod_versions = {
     ModNames.jasper: "1.7.5",
     ModNames.alec: "2.1.0",
     ModNames.yoba: "1.0.0",
-    ModNames.eugene: "1.0.0",
+    ModNames.eugene: "1.3.1",
     ModNames.wellwick: "1.0.0",
     ModNames.ginger: "1.5.9",
     ModNames.shiko: "1.1.0",
