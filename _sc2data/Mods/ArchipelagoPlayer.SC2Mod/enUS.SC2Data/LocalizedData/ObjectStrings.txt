@@ -1232,6 +1232,7 @@ Light/Name/AP_VikingMercenaryAssaultPortrait=Portrait - Viking Mercenary Assault
 Light/Name/AP_VikingMercenaryFighterPortrait=Portrait - Viking Mercenary Fighter
 Light/Name/AP_VulturePortrait=Portrait - Vulture
 Light/Name/AP_WraithPortrait=Portrait - Wraith
+Light/Name/AP_AberrationPortrait=Portrait - Aberration
 Model/EditorPrefix/AP_DiamondbackPortrait=Portrait -
 Model/EditorPrefix/AP_FirebatPortrait=Portrait -
 Model/EditorPrefix/AP_GoliathGroundAttackImpact=

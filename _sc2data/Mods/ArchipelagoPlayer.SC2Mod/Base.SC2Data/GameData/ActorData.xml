@@ -3450,7 +3450,7 @@
         <On Terms="AbilMorph.*.Finish; MorphTo AP_InfestedAbomination; MorphFrom AP_InfestedAbominationBurrowed" Send="AnimBracketStop Burrow"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_InfestedAbomination; MorphFrom AP_InfestedAbominationBurrowed" Send="AnimClear Burrow"/>
         <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create Aberration_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Aberration_Land"/>
         <On Terms="UnitBirth.AP_InfestedAbomination" Send="TerrainSquibActivateGroup RippleStandard"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_InfestedAbomination" Send="TerrainSquibActivateGroup RippleStandard"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_InfestedAbominationBurrowed" Send="TerrainSquibDeactivate"/>

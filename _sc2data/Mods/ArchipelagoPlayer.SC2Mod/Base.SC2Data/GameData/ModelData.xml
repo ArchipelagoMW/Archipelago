@@ -2090,7 +2090,7 @@
         <FacialController value="LocalizedData\Facial\AberrationPortrait.fxa"/>
         <Flags index="Facial" value="1"/>
         <Image value="Assets\Textures\AberrationPortrait_Static.dds"/>
-        <Lighting value="AberrationPortrait"/>
+        <Lighting value="AP_AberrationPortrait"/>
     </CModel>
     <CModel id="AP_InfestedAbomination" parent="Unit" Race="Zerg">
         <Model value="Assets\Units\Zerg\Aberration\Aberration.m3"/>
