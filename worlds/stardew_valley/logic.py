@@ -107,10 +107,11 @@ class StardewLogic:
             "Artifact Trove": self.has("Omni Geode") & self.can_reach_region(SVRegion.desert),
             "Bait": self.has_skill_level("Fishing", 2),
             "Baked Fish": self.has("Sunfish") & self.has("Bream") & self.has("Wheat Flour"),
+            "Basic Fertilizer": (self.has("Sap") & self.has_farming_level(1)) | self.has_lived_months(1),
             "Bat Wing": self.can_mine_in_the_mines_floor_41_80() | self.can_mine_in_the_skull_cavern(),
             "Battery Pack": self.has("Lightning Rod"),
             "Bean Hotpot": self.can_cook() & self.has_relationship("Clint", 7) & self.has("Green Bean"),
-            "Bee House": self.has_skill_level("Farming", 3) & self.has("Iron Bar") & self.has("Maple Syrup"),
+            "Bee House": self.has_farming_level(3) & self.has("Iron Bar") & self.has("Maple Syrup"),
             "Beer": (self.has("Keg") & self.has("Wheat")) | self.can_spend_money(400),
             "Blackberry": self.has_season("Fall"),
             "Blackberry Cobbler": self.can_cook() & self.has_season("Fall") & self.has_year_two() &
@@ -128,7 +129,7 @@ class StardewLogic:
             "Cave Carrot": self.can_mine_to_floor(10),
             "Caviar": self.has("Preserves Jar") & self.has("Sturgeon Roe"),
             "Chanterelle": self.has_season("Fall") & self.can_reach_region(SVRegion.secret_woods),
-            "Cheese Press": (self.has_skill_level("Farming", 6) & self.has("Hardwood") & self.has("Copper Bar")),
+            "Cheese Press": (self.has_farming_level(6) & self.has("Hardwood") & self.has("Copper Bar")),
             "Cheese": (self.has("Cow Milk") & self.has("Cheese Press")) |
                       (self.can_reach_region(SVRegion.desert) & self.has("Emerald")),
             "Cheese Cauliflower": self.has(["Cheese", "Cauliflower"]) & self.has_relationship("Pam", 3) &
@@ -174,6 +175,7 @@ class StardewLogic:
             "Crystal Fruit": self.has_season("Winter"),
             "Daffodil": self.has_season("Spring"),
             "Dandelion": self.has_season("Spring"),
+            "Deluxe Fertilizer": False_(), # self.received("Deluxe Fertilizer Recipe") & self.has("Iridium Bar") & self.has("Sap"),
             "Dinosaur": self.has_building("Big Coop") & self.has("Dinosaur Egg"),
             "Dish O' The Sea": self.can_cook() & self.has_skill_level("Fishing", 3) &
                                self.has(["Sardine", "Hashbrowns"]),
@@ -190,7 +192,7 @@ class StardewLogic:
                 "Tomato"),
             "Energy Tonic": self.can_reach_region(SVRegion.hospital) & self.can_spend_money(1000),
             "Escargot": self.can_cook() & self.has_relationship("Willy", 5) & self.has("Snail") & self.has("Garlic"),
-            "Farmer's Lunch": self.can_cook() & self.has_skill_level("Farming", 3) & self.has("Omelet") & self.has(
+            "Farmer's Lunch": self.can_cook() & self.has_farming_level(3) & self.has("Omelet") & self.has(
                 "Parsnip"),
             "Fiber": True_(),
             "Fiddlehead Fern": self.can_reach_region(SVRegion.secret_woods) & self.has_season("Summer"),
@@ -248,7 +250,7 @@ class StardewLogic:
             "Junimo Kart Medium Buff": self.has_junimo_kart_power_level(4),
             "Junimo Kart Big Buff": self.has_junimo_kart_power_level(6),
             "Junimo Kart Max Buff": self.has_junimo_kart_power_level(8),
-            "Keg": self.has_skill_level("Farming", 8) & self.has("Iron Bar") & self.has("Copper Bar") & self.has(
+            "Keg": self.has_farming_level(8) & self.has("Iron Bar") & self.has("Copper Bar") & self.has(
                 "Oak Resin"),
             "Large Egg": self.has_animal("Chicken"),
             "Large Egg (Brown)": self.has_animal("Chicken"),
@@ -259,7 +261,7 @@ class StardewLogic:
                            & self.has("Morel") & self.has("Chanterelle"),
             "Lightning Rod": self.has_skill_level("Foraging", 6),
             "Lobster": self.can_crab_pot(),
-            "Loom": self.has_skill_level("Farming", 7) & self.has("Pine Tar"),
+            "Loom": self.has_farming_level(7) & self.has("Pine Tar"),
             "Magic Rock Candy": self.can_reach_region(SVRegion.desert) & self.has("Prismatic Shard"),
             "Magma Cap": self.can_reach_region(SVRegion.volcano_floor_5),
             "Magma Geode": self.can_mine_in_the_mines_floor_81_120() |
@@ -269,7 +271,7 @@ class StardewLogic:
                          self.has("Sugar") & self.has("Wheat Flour"),
             "Maple Syrup": self.has("Tapper"),
             "Mayonnaise": self.has("Mayonnaise Machine") & self.has("Chicken Egg"),
-            "Mayonnaise Machine": self.has_skill_level("Farming", 2) & self.has("Wood") & self.has("Stone") &
+            "Mayonnaise Machine": self.has_farming_level(2) & self.has("Wood") & self.has("Stone") &
                                   self.has("Earth Crystal") & self.has("Copper Bar"),
             "Mead": self.has("Keg") & self.has("Honey"),
             "Mega Bomb": self.has_skill_level("Mining", 8) & self.has("Coal") & self.has("Gold Ore"),
@@ -283,7 +285,7 @@ class StardewLogic:
             "Nautilus Shell": self.has_season("Winter"),
             "Oak Resin": self.has("Tapper"),
             "Oil": True_(),
-            "Oil Maker": self.has_skill_level("Farming", 8) & self.has("Hardwood") & self.has("Gold Bar"),
+            "Oil Maker": self.has_farming_level(8) & self.has("Hardwood") & self.has("Gold Bar"),
             "Omelet": self.can_cook() & self.can_spend_money(100) & self.has("Any Egg") & self.has("Cow Milk"),
             "Omni Geode": self.can_mine_in_the_mines_floor_41_80() |
                           self.can_reach_region(SVRegion.desert) |
@@ -315,10 +317,11 @@ class StardewLogic:
                             self.has("Wheat Flour") & self.has("Sugar"),
             "Poppyseed Muffin": self.can_cook() & self.has_season("Winter") & self.has_year_two() &
                                 self.has("Poppy") & self.has("Wheat Flour") & self.has("Sugar"),
-            "Preserves Jar": self.has_skill_level("Farming", 4),
+            "Preserves Jar": self.has_farming_level(4),
             "Pumpkin Pie": self.can_cook() & self.has_season("Winter") & self.has("Wheat Flour") &
                            self.has("Cow Milk") & self.has("Sugar"),
             "Purple Mushroom": self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern(),
+            "Quality Fertilizer": (self.has("Sap") & self.can_crab_pot() & self.has_farming_level(9)) | self.has_lived_months(4),
             "Rabbit": self.has_building("Deluxe Coop"),
             "Rabbit's Foot": self.has_animal("Rabbit"),
             "Radioactive Bar": self.can_smelt("Radioactive Ore"),
@@ -347,11 +350,12 @@ class StardewLogic:
             "Salmonberry": self.has_season("Spring"),
             "Salmon Dinner": self.can_cook() & self.has_relationship("Gus", 3) & self.has("Salmon") & self.has(
                 "Amaranth") & self.has("Kale"),
+            "Sap": self.can_chop_trees(),
             "Sashimi": self.can_fish() & self.can_cook() & self.has_relationship("Linus", 3),
             "Sea Urchin": self.can_reach_region(SVRegion.tide_pools) | self.has_season("Summer"),
             "Seaweed": self.can_fish() | self.can_reach_region(SVRegion.tide_pools),
             "Secret Note": self.received("Magnifying Glass"),
-            "Seed Maker": self.has_skill_level("Farming", 9) & self.has("Wood") & self.has("Gold Bar") & self.has("Coal"),
+            "Seed Maker": self.has_farming_level(9) & self.has("Wood") & self.has("Gold Bar") & self.has("Coal"),
             "Sheep": self.has_building("Deluxe Barn"),
             "Shrimp": self.can_crab_pot(),
             "Slime": self.can_mine_in_the_mines_floor_1_40(),
@@ -440,7 +444,7 @@ class StardewLogic:
             "Getting Started": self.has("Parsnip") & self.has_tool("Hoe") & self.can_water(0),
             "To The Beach": True_(),
             "Raising Animals": self.can_complete_quest("Getting Started") & self.has_building("Coop"),
-            "Advancement": self.can_complete_quest("Getting Started") & self.has_skill_level("Farming", 1),
+            "Advancement": self.can_complete_quest("Getting Started") & self.has_farming_level(1),
             "Archaeology": self.has_tool("Hoe") | self.can_mine_in_the_mines_floor_1_40() | self.can_fish(),
             "Meet The Wizard": True_() & self.can_reach_region(SVRegion.community_center),
             "Forging Ahead": self.has("Copper Ore") & self.has("Furnace"),
@@ -687,6 +691,9 @@ class StardewLogic:
 
         return self.can_earn_skill_level(skill, level)
 
+    def has_farming_level(self, level: int) -> StardewRule:
+        return self.has_skill_level("Farming", level)
+
     def has_total_skill_level(self, level: int, allow_modded_skills: bool = False) -> StardewRule:
         if level == 0:
             return True_()
@@ -873,16 +880,21 @@ class StardewLogic:
 
     def can_farm_perfectly(self) -> StardewRule:
         tool_rule = self.has_tool("Hoe", "Iridium") & self.can_water(4)
-        return tool_rule & self.has_skill_level("Farming", 10)
+        return tool_rule & self.has_farming_level(10)
 
     def can_fish_perfectly(self) -> StardewRule:
         skill_rule = self.has_skill_level("Fishing", 10)
         return skill_rule & self.has_max_fishing_rod()
 
+    def can_chop_trees(self) -> StardewRule:
+        return self.has_tool("Axe") & self.can_reach_region(SVRegion.forest)
+
     def can_chop_perfectly(self) -> StardewRule:
-        magic_rule = (self.can_use_clear_debris_instead_of_tool_level(3))
+        magic_rule = (self.can_use_clear_debris_instead_of_tool_level(3)) & self.has_skill_level("Magic", 10)
         tool_rule = self.has_tool("Axe", "Iridium")
-        return (tool_rule & self.has_skill_level("Foraging", 10)) | (magic_rule & self.has_skill_level("Magic", 10))
+        foraging_rule = self.has_skill_level("Foraging", 10)
+        region_rule = self.can_reach_region(SVRegion.forest)
+        return region_rule & ((tool_rule & foraging_rule) | magic_rule)
 
     def has_max_buffs(self) -> StardewRule:
         num_buffs: int = self.options[options.NumberOfPlayerBuffs]
@@ -1069,12 +1081,35 @@ class StardewLogic:
 
     def can_complete_bundle(self, bundle_requirements: List[BundleItem], number_required: int) -> StardewRule:
         item_rules = []
+        highest_quality_yet = 0
         for bundle_item in bundle_requirements:
             if bundle_item.item.item_id == -1:
                 return self.can_spend_money(bundle_item.amount)
             else:
                 item_rules.append(bundle_item.item.name)
-        return self.has(item_rules, number_required)
+                if bundle_item.quality > highest_quality_yet:
+                    highest_quality_yet = bundle_item.quality
+        return self.has(item_rules, number_required) & self.can_grow_gold_quality(highest_quality_yet)
+
+    def can_grow_gold_quality(self, quality: int) -> StardewRule:
+        if quality <= 0:
+            return True_()
+        if quality == 1:
+            return self.has_farming_level(5) | (self.has_fertilizer(1) & self.has_farming_level(2)) | (self.has_fertilizer(2) & self.has_farming_level(1)) | self.has_fertilizer(3)
+        if quality == 2:
+            return self.has_farming_level(10) | (self.has_fertilizer(1) & self.has_farming_level(5)) | (self.has_fertilizer(2) & self.has_farming_level(3)) | (self.has_fertilizer(3) & self.has_farming_level(2))
+        if quality >= 3:
+            return self.has_fertilizer(3) & self.has_farming_level(4)
+
+    def has_fertilizer(self, tier: int) -> StardewRule:
+        if tier <= 0:
+            return True_()
+        if tier == 1:
+            return self.has("Basic Fertilizer")
+        if tier == 2:
+            return self.has("Quality Fertilizer")
+        if tier >= 3:
+            return self.has("Deluxe Fertilizer")
 
     def can_complete_community_center(self) -> StardewRule:
         return (self.can_reach_location("Complete Crafts Room") &
