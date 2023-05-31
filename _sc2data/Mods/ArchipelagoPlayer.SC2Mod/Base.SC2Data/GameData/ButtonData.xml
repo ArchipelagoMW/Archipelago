@@ -12,6 +12,16 @@
         <TintRacially value="1"/>
         <HotkeyAlias value="250mmStrikeCannons"/>
     </CButton>
+    <CButton id="AP_ArmorpiercingMode">
+        <Icon value="Assets\Textures\btn-unit-terran-thorsiegemode.dds"/>
+        <HotkeySet value="ThorModes"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_ExplosiveMode">
+        <Icon value="Assets\Textures\btn-unit-terran-thor.dds"/>
+        <HotkeySet value="ThorModes"/>
+        <Universal value="1"/>
+    </CButton>
     <CButton id="AP_MedicHeal">
         <Icon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>

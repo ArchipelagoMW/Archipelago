@@ -5313,6 +5313,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="EB26DF03"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="EE4A905F"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="182F8410"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="B8535E86"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="681259FC"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="5FF93E28"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="113B7B29"/>
@@ -6791,6 +6792,42 @@
             <Value>AP_MechanicalRebirth</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="B8535E86">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="EE3B1D77"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="979BEA72"/>
+        </Element>
+        <Element Type="ParamDef" Id="EE3B1D77">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="F3778ABC"/>
+        </Element>
+        <Element Type="Param" Id="F3778ABC">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="979BEA72">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="156E2700"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="F0A72C84"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="86001C3E"/>
+        </Element>
+        <Element Type="Param" Id="156E2700">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="F0A72C84">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_ThorMorph</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="Param" Id="86001C3E">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="EE3B1D77"/>
         </Element>
         <Element Type="FunctionDef" Id="681259FC">
             <FlagAction/>

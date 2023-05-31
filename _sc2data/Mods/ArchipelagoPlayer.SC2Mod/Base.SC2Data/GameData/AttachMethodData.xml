@@ -51,4 +51,9 @@
         <Keyword value="Weapon"/>
         <Driver value="AP_HailstormMissilePodsLaunchMissile"/>
     </CAttachMethodPattern>
+    <CAttachMethodPattern id="AP_AMPatternThorAALance">
+        <Keyword value="Weapon"/>
+        <Driver value="AP_LanceMissileLaunchersDamage"/>
+        <Base value="::RollingIndex"/>
+    </CAttachMethodPattern>
 </Catalog>

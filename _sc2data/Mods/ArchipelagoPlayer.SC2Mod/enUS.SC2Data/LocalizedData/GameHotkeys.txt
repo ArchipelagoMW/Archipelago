@@ -117,3 +117,5 @@ Button/Hotkey/AP_Starport=S
 Button/Hotkey/AP_SupplyDepot=S
 Button/Hotkey/AP_TerranBuild=B
 Button/Hotkey/AP_PsiDisrupter=D
+Button/Hotkey/AP_ExplosiveMode=D
+Button/Hotkey/AP_ArmorpiercingMode=E

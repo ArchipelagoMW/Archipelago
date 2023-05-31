@@ -290,6 +290,20 @@
         <Effect value="AP_JavelinMissileLaunchersPersistent"/>
         <LegacyOptions index="KeepChanneling" value="1"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_LanceMissileLaunchers">
+        <EditorCategories value="Race:Terran"/>
+        <!--Options index="Disabled" value="1"/-->
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_LanceMissileLaunchersDamage"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="11"/>
+        <Arc value="5.625"/>
+        <Period value="1.28"/>
+        <LegacyOptions index="KeepChanneling" value="1"/>
+        <Effect value="AP_LanceMissileLaunchersDamage"/>
+        <!--Effect value="LanceMissileLaunchersLaunchMissile"/-->
+    </CWeaponLegacy>
     <CWeaponLegacy id="AP_ThorsHammer">
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>

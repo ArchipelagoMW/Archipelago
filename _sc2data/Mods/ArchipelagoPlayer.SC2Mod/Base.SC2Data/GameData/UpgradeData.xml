@@ -292,6 +292,8 @@
         <!--  Thor -->
         <EffectArray Reference="Unit,AP_Thor,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_Thor,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_ThorAP,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_ThorAP,LifeArmor" Value="1"/>
         <!--  Siege Tank -->
         <EffectArray Reference="Unit,AP_SiegeTank,LifeArmorLevel" Value="1"/>
         <EffectArray Reference="Unit,AP_SiegeTank,LifeArmor" Value="1"/>
@@ -335,6 +337,8 @@
         <!--  Thor -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_Thor,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_Thor,LifeStart" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_ThorAP,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_ThorAP,LifeStart" Value="1.05"/>
         <!--  Siege Tank -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeTank,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_SiegeTank,LifeStart" Value="1.05"/>
@@ -379,9 +383,12 @@
         <!--  Thor -->
         <EffectArray Reference="Weapon,AP_ThorsHammer,Level" Value="1"/>
         <EffectArray Reference="Weapon,AP_JavelinMissileLaunchers,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_LanceMissileLaunchers,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_ThorsHammerDamage,Amount" Value="5"/>
         <EffectArray Reference="Effect,AP_JavelinMissileLaunchersDamage,Amount" Value="1.000000"/>
         <EffectArray Reference="Effect,AP_JavelinMissileLaunchersDamage,AttributeBonus[Light]" Value="1"/>
+        <EffectArray Reference="Effect,AP_LanceMissileLaunchersDamage,Amount" Value="3"/>
+        <EffectArray Reference="Effect,AP_LanceMissileLaunchersDamage,AttributeBonus[Massive]" Value="1"/>
         <!--  Siege Tank -->
         <EffectArray Reference="Weapon,AP_90mmCannons,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_90mmCannons,Amount" Value="2"/>
@@ -439,6 +446,7 @@
         <Name value="Upgrade/Name/AP_BaseTerranVehicleWeaponsUltraCapacitors"/>
         <EffectArray Reference="Weapon,AP_ThorsHammer,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_JavelinMissileLaunchers,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_LanceMissileLaunchers,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_90mmCannons,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_CrucioShockCannon,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_InfernalFlameThrower,RateMultiplier" Value="0.05"/>
@@ -464,6 +472,9 @@
         <EffectArray Operation="Set" Reference="Button,AP_Thor,AlertTooltip" Value="Button/Tooltip/ThorUpgraded"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Thor,Description" Value="Button/Tooltip/ThorUpgraded"/>
         <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/ThorWreckageUpgraded"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ThorMorph">
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_ShieldWall" parent="Research">
@@ -1447,6 +1458,8 @@
         <EffectArray Operation="Set" Reference="Unit,AP_SiegeTankSieged,LifeRegenRate" Value="0.601500"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Thor,LifeRegenDelay" Value="3.000000"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Thor,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ThorAP,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ThorAP,LifeRegenRate" Value="0.601500"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Diamondback,LifeRegenDelay" Value="3.000000"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Diamondback,LifeRegenRate" Value="0.601500"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Vulture,LifeRegenDelay" Value="3.000000"/>
@@ -1507,6 +1520,7 @@
         <EffectArray Reference="Unit,AP_Ghost,EnergyStart" Value="100"/>
         <EffectArray Reference="Unit,AP_Medic,EnergyStart" Value="100"/>
         <EffectArray Reference="Unit,AP_Thor,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_ThorAP,EnergyStart" Value="100"/>
         <EffectArray Reference="Unit,AP_Medivac,EnergyStart" Value="100"/>
         <EffectArray Reference="Unit,AP_Wraith,EnergyStart" Value="100"/>
         <EffectArray Reference="Unit,AP_Banshee,EnergyStart" Value="100"/>
@@ -1520,6 +1534,7 @@
         <EffectArray Reference="Unit,AP_Ghost,EnergyMax" Value="100"/>
         <EffectArray Reference="Unit,AP_Medic,EnergyMax" Value="100"/>
         <EffectArray Reference="Unit,AP_Thor,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_ThorAP,EnergyMax" Value="100"/>
         <EffectArray Reference="Unit,AP_Medivac,EnergyMax" Value="100"/>
         <EffectArray Reference="Unit,AP_Wraith,EnergyMax" Value="100"/>
         <EffectArray Reference="Unit,AP_Banshee,EnergyMax" Value="100"/>
@@ -2122,6 +2137,7 @@
         <ScoreAmount value="200"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanceMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
@@ -2147,6 +2163,7 @@
         <ScoreAmount value="350"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanceMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
@@ -2172,6 +2189,7 @@
         <ScoreAmount value="500"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanceMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
@@ -2197,6 +2215,7 @@
         <ScoreAmount value="200"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanceMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
@@ -2221,6 +2240,7 @@
         <ScoreAmount value="350"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanceMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
@@ -2245,6 +2265,7 @@
         <ScoreAmount value="500"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_JavelinMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ThorsHammer,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LanceMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>

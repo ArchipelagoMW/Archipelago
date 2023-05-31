@@ -360,6 +360,10 @@
     <CRequirementNot id="AP_NotCountUpgrade330mmBarrageCannonsCompleteOnly">
         <OperandArray index="0" value="AP_CountUpgrade330mmBarrageCannonsCompleteOnly"/>
     </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeThorMorph">
+        <Count Link="AP_ThorMorph" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeRavenCorvidReactorQueuedOrBetter">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_RavenCorvidReactor" State="QueuedOrBetter"/>

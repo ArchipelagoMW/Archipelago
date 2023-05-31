@@ -435,9 +435,16 @@
         <ResultFailed value="AlreadyTargeted"/>
         <WhichUnit Effect="AP_MedivacHeal"/>
     </CValidatorUnitCompareMarkerCount>
-    <CValidatorUnitType id="AP_IsAPThor">
+    <CValidatorUnitType id="AP_IsAPThorBaseMode">
         <Value value="AP_Thor"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPThorAltMode">
+        <Value value="AP_Thor"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsAPThor">
+        <CombineArray value="AP_IsAPThorBaseMode"/>
+        <CombineArray value="AP_IsAPThorAltMode"/>
+    </CValidatorCombine>
     <CValidatorUnitType id="AP_IsVanillaThor">
         <Value value="Thor"/>
     </CValidatorUnitType>

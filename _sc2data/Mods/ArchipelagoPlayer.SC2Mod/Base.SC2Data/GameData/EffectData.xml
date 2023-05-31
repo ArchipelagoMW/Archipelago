@@ -1293,6 +1293,16 @@
         <PeriodicPeriodArray value="0.25"/>
         <PeriodicPeriodArray value="0.125"/>
     </CEffectCreatePersistent>
+    <CEffectDamage id="AP_LanceMissileLaunchersDamage" parent="DU_WEAP_SPLASH">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <AttributeBonus index="Massive" value="10"/>
+        <Amount value="25"/>
+        <Death value="Blast"/>
+        <SearchFilters value="Air;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
     <CEffectIssueOrder id="AP_ThorCancel250">
         <EditorCategories value="Race:Terran"/>
         <WhichUnit Value="Source"/>

@@ -243,11 +243,11 @@
         <Sound value="250mmStrikeCannonsSound"/>
     </CActorSound>
     <CActorSound id="AP_250mmStrikeCannonsMorph" parent="SoundOneShot">
-        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStart; ValidateUnit AP_IsAPThorBaseMode" Send="Create"/>
         <Sound value="250mmStrikeCannonsMorph"/>
     </CActorSound>
     <CActorSound id="AP_250mmStrikeCannonsUnMorph" parent="SoundOneShot">
-        <On Terms="Abil.AP_250mmStrikeCannons.SourceFinishStart" Send="Create"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceFinishStart; ValidateUnit AP_IsAPThorBaseMode" Send="Create"/>
         <Sound value="250mmStrikeCannonsUnMorph"/>
     </CActorSound>
     <CActorRange id="AP_250mmStrikeCannonsRange" parent="RangeAbil" abil="AP_250mmStrikeCannons"/>
@@ -264,10 +264,10 @@
     </CActorSound>
     <CActorRange id="AP_330mmBarrageCannonsRange" parent="RangeAbil" abil="AP_330mmBarrageCannons"/>
     <CActorSound id="AP_330mmBarrageCannonsMorph" parent="SoundOneShot">
-        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStart; ValidateUnit AP_IsAPThorBaseMode" Send="Create"/>
     </CActorSound>
     <CActorSound id="AP_330mmBarrageCannonsUnMorph" parent="SoundOneShot">
-        <On Terms="Abil.AP_330mmBarrageCannons.SourceFinishStart" Send="Create"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceFinishStart; ValidateUnit AP_IsAPThorBaseMode" Send="Create"/>
     </CActorSound>
     <CActorSplat id="AP_330mmBarrageCannonsCursorSplat" parent="TerranCursorSplat" abil="AP_330mmBarrageCannons"/>
     <CActorUnit id="AP_Medic" parent="GenericUnitStandard" unitName="AP_Medic">
@@ -2391,8 +2391,34 @@
     <CActorRange id="AP_UltrasonicPulseRange" parent="RangeAbil" abil="AP_UltrasonicPulse"/>
     <CActorUnit id="AP_Thor" parent="GenericUnitBase" unitName="AP_Thor">
         <Aliases value="_UnitHuge"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo AP_Thor" Send="Create"/>
-        <On Terms="AbilMorph.*.Start; MorphFrom AP_Thor" Send="Destroy"/>
+        <!-- morph for Liberty campaign tech -->
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Thor; MorphFrom AP_ThorWreckage" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Thor; MorphTo AP_ThorWreckage" Send="Destroy"/>
+        <!-- Swarm multi -->
+        <On Terms="UnitBirth.AP_ThorAP" Send="Create"/>
+        <On Terms="UnitBirth.AP_ThorAP" Send="AnimBracketStart Morph IGNORE Morph,Stand Morph,End"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_ThorAP; MorphFrom AP_Thor" Send="AnimBracketStart Morph Morph Morph,Stand Morph,End"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Thor; MorphFrom AP_ThorAP" Send="AnimBracketStop Morph"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_ThorAP; MorphFrom AP_Thor" Send="Create AP_250mmStrikeCannonsUnMorph"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Thor; MorphFrom AP_ThorAP" Send="Create AP_250mmStrikeCannonsMorph"/>
+        <!-- Looks like ArmorpiercingMissiles and AP_ExplosiveMissiles are scrapped Thor abilities -->
+        <On Terms="Abil.AP_ArmorpiercingMissiles.SourceCastStart" Send="AnimPlay ArmStart Morph 0 0.500000 0.500000 4.050000 AsDuration"/>
+        <On Terms="Abil.AP_ArmorpiercingMissiles.SourceCancel" Send="AnimClear Armed"/>
+        <On Terms="Abil.AP_ArmorpiercingMissiles.SourceCancel" Send="AnimClear ArmStart"/>
+        <On Terms="Abil.AP_ExplosiveMissiles.SourceCastStart" Send="AnimPlay ArmStop Morph,End 0 0.500000 0.500000 4.050000 AsDuration"/>
+        <On Terms="Abil.AP_ExplosiveMissiles.SourceCancel" Send="AnimClear ArmStop"/>
+        <On Terms="ActorCreation" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster" Send="AnimPlay SpellD Spell,D"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster" Send="StatusIncrement WeaponNext"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 4" Send="StatusSet WeaponNext 0"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 0" Send="AnimClear Attack3"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 0" Send="AnimPlay Attack4 Spell,C,02"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 1" Send="AnimClear Attack4"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 1" Send="AnimPlay Attack1 Spell,C,01"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 2" Send="AnimClear Attack1"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 2" Send="AnimPlay Attack2 Spell,C,03"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 3" Send="AnimClear Attack2"/>
+        <On Terms="Effect.AP_LanceMissileLaunchersDamage.Start; At Caster; IsStatus WeaponNext 3" Send="AnimPlay Attack3 Spell,C,00"/>
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
         <On Terms="ActorCreation" Send="AnimPlay CoverStand Cover,Stand PlayForever 0.000000"/>
         <On Terms="WeaponStart.AP_JavelinMissileLaunchers.AttackStart" Send="TimerKill CoverDelay"/>
@@ -2407,13 +2433,13 @@
         <On Terms="WeaponStart.AP_ThorsHammer.AttackStart" Send="AnimBracketStart Attack Attack"/>
         <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
         <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
-        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStart" Send="AnimPlay Morph Morph NonLooping"/>
-        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStop" Send="AnimClear Morph"/>
-        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStop" Target="AP_250mmStrikeCannonsMorph" Send="SoundSetMuted 1 0"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStart; ValidateUnit AP_IsAPThorBaseMode" Send="AnimPlay Morph Morph NonLooping"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStop; ValidateUnit AP_IsAPThorBaseMode" Send="AnimClear Morph"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceCastStop; ValidateUnit AP_IsAPThorBaseMode" Target="AP_250mmStrikeCannonsMorph" Send="SoundSetMuted 1 0"/>
         <On Terms="Abil.AP_250mmStrikeCannons.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.AP_250mmStrikeCannons.SourceChannelStop" Send="AnimClear Spell"/>
-        <On Terms="Abil.AP_250mmStrikeCannons.SourceFinishStart" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
-        <On Terms="Abil.AP_250mmStrikeCannons.SourceFinishStop" Send="AnimClear MorphEnd"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceFinishStart; ValidateUnit AP_IsAPThorBaseMode" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
+        <On Terms="Abil.AP_250mmStrikeCannons.SourceFinishStop; ValidateUnit AP_IsAPThorBaseMode" Send="AnimClear MorphEnd"/>
         <On Terms="AbilTransport.AP_MedivacTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
         <On Terms="AbilTransport.MedivacTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
         <On Terms="WeaponStart.*.AttackStart; AnimPlaying Unload" Send="AnimClear Unload"/>
@@ -2421,13 +2447,13 @@
         <On Terms="ModelEvent; ModelEventName SquibStartLeft" Send="Create ThorLeftCheerSquib"/>
         <On Terms="ModelEvent; ModelEventName SquibStartRight" Send="Create ThorRightCheerSquib"/>
         <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
-        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStart" Send="AnimPlay Morph Morph NonLooping"/>
-        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStop" Send="AnimClear Morph"/>
-        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStop" Target="AP_330mmBarrageCannonsMorph" Send="SoundSetMuted 1 0"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStart; ValidateUnit AP_IsAPThorBaseMode" Send="AnimPlay Morph Morph NonLooping"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStop; ValidateUnit AP_IsAPThorBaseMode" Send="AnimClear Morph"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceCastStop; ValidateUnit AP_IsAPThorBaseMode" Target="AP_330mmBarrageCannonsMorph" Send="SoundSetMuted 1 0"/>
         <On Terms="Abil.AP_330mmBarrageCannons.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.AP_330mmBarrageCannons.SourceChannelStop" Send="AnimClear Spell"/>
-        <On Terms="Abil.AP_330mmBarrageCannons.SourceFinishStart" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
-        <On Terms="Abil.AP_330mmBarrageCannons.SourceFinishStop" Send="AnimClear MorphEnd"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceFinishStart; ValidateUnit AP_IsAPThorBaseMode" Send="AnimPlay MorphEnd Morph,End NonLooping"/>
+        <On Terms="Abil.AP_330mmBarrageCannons.SourceFinishStop; ValidateUnit AP_IsAPThorBaseMode" Send="AnimClear MorphEnd"/>
         <On Terms="AbilTransport.SpecOpsDropshipTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
         <!-- There's no AP_SpecOpsDropship -->
         <On Terms="AbilTransport.HerculesTransport.CargoUnload" Send="AnimPlay Unload Spell,A 0 0.000000"/>
@@ -3548,6 +3574,16 @@
     <CActorMissile id="AP_ThorAAAttackMissile" parent="GenericAttackMissile" unitName="AP_ThorAAWeapon">
         <Model value="ThorAAWeapon"/>
     </CActorMissile>
+    <CActorAction id="AP_ThorAALanceAttack" parent="GenericAttack" effectAttack="AP_LanceMissileLaunchersDamage">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA2 AP_AMPatternThorAALance"/>
+        <LaunchAssets Model="" Sound=""/>
+        <DamageMap index="None" Sound=""/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <AcquisitionPitchHalfArc value="15.000000"/>
+        <AccuracyHalfArc value="5.000000"/>
+        <ImpactMap index="None" Model="ThorAAAttackImpactLance" Sound="250mmStrikeCannonsSound"/>
+        <ImpactPhysics Name="JavelinImpact" MatchKeys="Basic" Physics="ThorAAAttackForce"/>
+    </CActorAction>
     <CActorAction id="AP_ThorAttack" parent="GenericAttack" effectAttack="AP_ThorsHammerDamage">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMPatternThor"/>
         <LaunchAssets Model="ThorHandGunAttackLaunch" Sound="Thor_HandGunAttackLaunch"/>
