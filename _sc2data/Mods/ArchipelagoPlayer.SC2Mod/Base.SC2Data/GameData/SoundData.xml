@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CSound default="1" id="AP_HoS_ZergAck" parent="HoS_Voice">
+        <EditorCategories value="Race:Zerg"/>
+    </CSound>
     <CSound id="AP_Medic_Attack" parent="TerranAck">
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack00.ogg" FacialAnim="Medic_Attack00"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack01.ogg" FacialAnim="Medic_Attack01"/>
@@ -2128,9 +2131,6 @@
         <AssetArray File="Assets\Sounds\Terran\MercCompound\MercCompound_What.ogg"/>
         <Volume value="-6.000000,-6.000000"/>
     </CSound>
-    <CSound default="1" id="AP_HoS_ZergAck" parent="HoS_Voice">
-        <EditorCategories value="Race:Zerg"/>
-    </CSound>
     <CSound id="AP_RoachVile_Attack" parent="AP_HoS_ZergAck">
         <AssetArray index="0">
             <File value="Assets\Sounds\Zerg\Roach\Roach_Attack0.ogg"/>
@@ -2352,5 +2352,100 @@
         <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_Yes4.ogg"/>
         <Pitch value="9.000000,9.000000"/>
         <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Aberration_Attack" parent="AP_HoS_ZergAck">
+        <AssetArray index="0">
+            <File value="Assets\Sounds\Aberration_Attack_00.ogg"/>
+            <FacialAnim value=""/>
+            <FacialGroup value=""/>
+            <FacialFile value=""/>
+            <Speaker value=""/>
+            <Subtitle value=""/>
+        </AssetArray>
+        <AssetArray File="Assets\Sounds\Aberration_Attack_01.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Attack_02.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Attack_03.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Attack_04.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Attack_05.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Attack_06.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Attack_07.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Attack_08.ogg" FacialGroup=""/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Aberration_Death" parent="Death">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Aberration_Death_00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Death_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Death_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Death_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Death_04.wav" FacialGroup=""/>
+        <Chance value="25"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Aberration_Ready" parent="Ready">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Aberration_Ready_00.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Ready_01.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Ready_02.ogg" FacialGroup=""/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Aberration_What" parent="AP_HoS_ZergAck">
+        <AssetArray index="0">
+            <File value="Assets\Sounds\Aberration_What_00.ogg"/>
+            <FacialAnim value=""/>
+            <FacialGroup value=""/>
+            <FacialFile value=""/>
+            <Speaker value=""/>
+            <Subtitle value=""/>
+        </AssetArray>
+        <AssetArray File="Assets\Sounds\Aberration_What_01.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_What_02.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_What_03.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_What_04.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_What_05.ogg" FacialGroup=""/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Aberration_Yes" parent="AP_HoS_ZergAck">
+        <AssetArray index="0">
+            <File value="Assets\Sounds\Aberration_Yes_00.ogg"/>
+            <FacialAnim value=""/>
+            <FacialGroup value=""/>
+            <FacialFile value=""/>
+            <Speaker value=""/>
+            <Subtitle value=""/>
+        </AssetArray>
+        <AssetArray File="Assets\Sounds\Aberration_Yes_01.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Yes_02.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Yes_03.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Yes_04.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Yes_05.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Yes_06.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Yes_07.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Yes_08.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Aberration_Yes_09.ogg" FacialGroup=""/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_InfestedAbominationAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Ultralisk\Ultralisk_AttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Ultralisk\Ultralisk_AttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Ultralisk\Ultralisk_AttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Ultralisk\Ultralisk_AttackImpact3.wav"/>
+        <Volume value="-0.920000,-0.920000"/>
+    </CSound>
+    <CSound id="AP_Aberration_Burrow" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge3.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge4.wav"/>
+        <Flags index="Purgable" value="0"/>
+        <Pitch value="0.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Aberration_Land" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg_Large_Land00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg_Large_Land01.wav" FacialGroup=""/>
     </CSound>
 </Catalog>

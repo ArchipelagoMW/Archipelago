@@ -336,4 +336,22 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
     </CLight>
+    <CLight id="AP_AberrationPortrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.219608,0.137255,0.156863">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDREmisMultiplier" value="2.000000"/>
+            <Param index="CreepSpecularExp" value="40.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="5.900000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.992157,0.964706,0.874510"/>
+                <ColorMultiplier value="0.920000"/>
+                <SpecColorMultiplier value="1.429000"/>
+                <Direction value="-0.054711,0.666890,0.743145"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.003922,0.329412,0.686275" ColorMultiplier="1.700000" Direction="-0.888682,-0.329086,0.319290"/>
+            <DirectionalLight index="Back" Color="0.219608,0.392157,0.984314" ColorMultiplier="2.140000" Direction="0.381720,-0.754369,-0.534057"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
+    </CLight>
 </Catalog>

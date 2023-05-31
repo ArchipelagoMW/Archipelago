@@ -2019,7 +2019,6 @@
     <CModel id="AP_RoachVilePortrait" parent="Portrait" Race="Zerg">
         <Model value="Assets\Portraits\Zerg\RoachPortrait\RoachPortrait.m3"/>
         <Image value="Assets\Textures\RoachPortrait_Static.dds"/>
-        <Lighting value="AP_RoachVilePortrait"/>
     </CModel>
     <CModel id="AP_RoachVileUpgrade" parent="RoachBase">
         <Model value="Assets\Units\Zerg\RoachUpgrade\RoachUpgrade.m3"/>
@@ -2085,5 +2084,56 @@
         <UnitGlossaryCamera value="Star2CameraMid04"/>
         <PlanetPanelCamera value="Star2CameraMid04"/>
         <ShadowRadius value="0.541500"/>
+    </CModel>
+    <CModel id="AP_AberrationPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\AberrationPortrait\AberrationPortrait.m3"/>
+        <FacialController value="LocalizedData\Facial\AberrationPortrait.fxa"/>
+        <Flags index="Facial" value="1"/>
+        <Image value="Assets\Textures\AberrationPortrait_Static.dds"/>
+        <Lighting value="AP_AberrationPortrait"/>
+    </CModel>
+    <CModel id="AP_InfestedAbomination" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\Aberration\Aberration.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\Aberration_SwarmAnims\Aberration_SwarmAnims.m3a"/>
+        <PlanetPanelCamera value="Star2CameraHigh08"/>
+        <Radius value="0.875000"/>
+        <ScaleMax value="1.100000,1.100000,1.100000"/>
+        <ScaleMin value="1.100000,1.100000,1.100000"/>
+        <SelectionRadius value="0.972100"/>
+        <ShadowRadius value="0.972100"/>
+        <TechPurchaseCamera value="Star2CameraHigh08"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.400000"/>
+        <UnitGlossaryCamera value="Star2CameraHigh08"/>
+    </CModel>
+    <CModel id="AP_InfestedAbominationDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\AberrationDeath\AberrationDeath.m3"/>
+        <LowQualityModel value="ZergLargeUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="AbberationExplosion"/>
+            <Type value="Sound"/>
+            <Time value="0.550000"/>
+            <Attachment value="Ref_Origin"/>
+            <Payload value="Aberration_Explode"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="AbberationExplosion"/>
+            <Type value="Sound"/>
+            <Time value="1.500000"/>
+            <Attachment value="Ref_Origin"/>
+            <Payload value="Aberration_Explode"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="AbberationExplosion"/>
+            <Type value="Sound"/>
+            <Time value="2.550000"/>
+            <Attachment value="Ref_Origin"/>
+            <Payload value="Aberration_Explode"/>
+        </Events>
+        <Lighting value=""/>
     </CModel>
 </Catalog>
