@@ -37,7 +37,7 @@ regions = [
                     LocationName.ACDC_SonicWav_W_Trade,
                     LocationName.ACDC_Bubbler_C_Trade,
                     LocationName.ACDC_Recov120_S_Trade,
-                    # LocationName.ACDC_School_Desk,
+                    LocationName.ACDC_School_Desk,
                     LocationName.ACDC_Class_5B_Bookshelf,
                     LocationName.School_1_Entrance_BMD,
                     LocationName.School_1_North_Central_BMD,

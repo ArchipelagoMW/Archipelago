@@ -70,6 +70,7 @@ class MMBN3Context(CommonContext):
         self.version_warning = False
         self.auth_name = None
         self.slot_data = dict()
+        self.patching_error = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -204,9 +205,8 @@ def check_location_scouted(location, memory):
 
 async def gba_sync_task(ctx: MMBN3Context):
     logger.info("Starting GBA connector. Use /gba for status information.")
-    if not confirm_checksum():
-        logger.error('Supplied Base Rom does not match US GBA Blue Version. Please provide the correct ROM version')
-
+    if ctx.patching_error:
+        logger.error('Unable to Patch ROM. No ROM provided or ROM does not match US GBA Blue Version.')
     while not ctx.exit_event.is_set():
         error_status = None
         if ctx.gba_streams:
@@ -323,6 +323,9 @@ async def patch_and_run_game(apmmbn3_file):
 
 def confirm_checksum():
     rom_file = get_base_rom_path()
+    if not os.path.exists(rom_file):
+        return False
+
     with open(rom_file, 'rb') as rom:
         rom_bytes = rom.read()
 
@@ -346,6 +349,8 @@ if __name__ == "__main__":
                 asyncio.create_task(patch_and_run_game(args.patch_file))
 
         ctx = MMBN3Context(args.connect, args.password)
+        if not checksum_matches:
+            ctx.patching_error = True
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
         if gui_enabled:
             ctx.run_gui()

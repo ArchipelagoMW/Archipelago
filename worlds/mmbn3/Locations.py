@@ -204,7 +204,7 @@ overworlds = [
     LocationData(LocationName.Hades_GrabBack_K_Trade,             0xb3109a, 0x2000164, 0x80, 0x753A48, 192, [0], True, 0x2000161, 0x04),
     LocationData(LocationName.Comedian,                           0xb3109b, 0x200024d, 0x20, 0x76DC80, 3, [22]),
     LocationData(LocationName.Villain,                            0xb3109c, 0x200024d, 0x10, 0x77124C, 24, [24]),
-    # LocationData(LocationName.ACDC_School_Desk,                   0xb3109d, 0x200024c, 0x1, 0x739580, 236, [4]),
+    LocationData(LocationName.ACDC_School_Desk,                   0xb3109d, 0x200024c, 0x1, 0x739580, 236, [4, 5]),
     LocationData(LocationName.ACDC_Class_5B_Bookshelf,            0xb3109e, 0x200024c, 0x40, 0x737634, 235, [5, 6]),
     LocationData(LocationName.SciLab_Garbage_Can,                 0xb3109f, 0x200024c, 0x8, 0x73AC20, 222, [4, 5]),
     LocationData(LocationName.Yoka_Inn_Jars,                      0xb310a0, 0x200024c, 0x80, 0x747B1C, 237, [4, 5]),
