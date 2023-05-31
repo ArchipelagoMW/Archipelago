@@ -1214,4 +1214,10 @@
         <Find value="1"/>
         <Value value="AP_HaveRoachCorpser"/>
     </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_CommandCenterTransportCombine">
+        <CombineArray value="AP_CommandCenterTransportSCV"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_CommandCenterTransportSCV">
+        <Value value="AP_SCV"/>
+    </CValidatorUnitType>
 </Catalog>
