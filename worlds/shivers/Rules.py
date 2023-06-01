@@ -87,7 +87,7 @@ def get_rules_lookup(player: int):
             "To Workshop": lambda state: state.has("Key for Workshop", player),
             "To Lobby From Office": lambda state: state.has("Key for Lobby", player),
             "To Prehistoric": lambda state: state.has("Key for Prehistoric Room", player),
-            "To Plants": lambda state: state.has("Key for Plants Room", player),
+            "To Plants": lambda state: state.has("Key for Greenhouse Room", player),
             "To Ocean": lambda state: state.has("Key for Ocean Room", player),
             "To Projector Room": lambda state: state.has("Key for Projector Room", player),
             "To Generator": lambda state: state.has("Key for Generator Room", player),
