@@ -203,6 +203,45 @@
         <WhichUnit Value="Caster"/>
         <Value value="AP_CommandCenter"/>
     </CValidatorUnitType>
+    <CValidatorLocationCompareRange id="AP_BurrowChargeMinimumRange">
+        <ResultFailed value="TargetIsTooClose"/>
+        <Compare value="GT"/>
+        <Range value="2"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_BurrowChargeCampaignDistance">
+        <WhichLocation Effect="AP_BurrowChargePoint"/>
+        <Compare value="GE"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_BurrowChargeCampaignDistanceStructure">
+        <WhichLocation Effect="AP_BurrowChargeStructure" Value="TargetUnit"/>
+        <Compare value="GE"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_BurrowChargeDistance">
+        <WhichLocation Effect="AP_BurrowChargeInitialRevD"/>
+        <Compare value="GE"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorUnitFilters id="AP_BurrowChargeEnemyTarget">
+        <WhichUnit Effect="AP_BurrowChargeMPForcePersistent"/>
+        <Filters value="-;Player,Ally,Neutral"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_BurrowChargeRevDValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_BurrowChargeDistance"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="TargetIsPathable"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_BurrowChargeStructureValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_BurrowChargeCampaignDistanceStructure"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="TargetIsPathable"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_BurrowChargeValidators">
+        <Type value="And"/>
+        <CombineArray value="AP_BurrowChargeCampaignDistance"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="TargetIsPathable"/>
+    </CValidatorCombine>
     <CValidatorCombine id="CasterIsCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_CasterIsVanillaCommandCenter"/>
@@ -226,6 +265,29 @@
     <CValidatorUnitType id="AP_IsVanillaArmory">
         <Value value="Armory"/>
     </CValidatorUnitType>
+    <CValidatorUnitCompareDamageTakenTime id="AP_CasterNotInCombatShort">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="0.25"/>
+    </CValidatorUnitCompareDamageTakenTime>
+    <CValidatorPlayerRequirement id="AP_HaveHotSMonarchBlades">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSMonarchBlades"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSTissueAssimilation">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSTissueAssimilation"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSTorrasque">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSTorrasque"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSNoxious">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSNoxious"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>
@@ -341,6 +403,16 @@
     <CValidatorUnitType id="AP_IsRoachling">
         <Value value="AP_Roachling"/>
     </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotBurrowCharging">
+        <Behavior value="AP_BurrowCharging"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotBurrowChargingRevD">
+        <Behavior value="AP_BurrowChargingRevD"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoBurrowChargingRevD">
+        <ResultFailed value="Error,Error/CantTargetBurrowCharging"/>
+        <Behavior value="AP_BurrowChargingRevD"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <Negate value="1"/>
@@ -419,6 +491,10 @@
         <CombineArray value="AP_IsVanillaMULE"/>
         <CombineArray value="AP_IsAPMULE"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NotHaveHotSMonarchBlades">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_HaveHotSMonarchBlades"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="NotWorkerMULE" parent="CValidatorCombine">
         <!-- Overrride -->
         <CombineArray value="IsMULE"/>
@@ -1130,6 +1206,20 @@
         <CombineArray value="AP_OrbitalRelayUpgraded"/>
         <CombineArray value="IsNotConstructing"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotHarmless">
+        <Behavior value="AP_Harmless"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_SelfNotUltraliskOutOfCombat2">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_UltraliskOutOfCombat2"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorLocationEnumArea id="AP_PoisonNovaEnemiesNearby">
+        <AreaArray Compare="GE" Count="1" Radius="2"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Air,Structure,RawResource,HarvestableResource,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotNoxiousDamaged">
+        <Behavior value="AP_NoxiousDamage"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
         <!-- Override -->
         <Type value="And"/>
@@ -1217,4 +1307,25 @@
     <CValidatorCombine id="AP_CommandCenterTransportCombine">
         <CombineArray value="AP_CommandCenterTransportSCV"/>
     </CValidatorCombine>
+    <CValidatorCombine id="AP_UltraliskBurrowChargeRangeFinder">
+        <CombineArray value="AP_UltraliskBurrowChargeRangeFinderMaxRange"/>
+        <CombineArray value="AP_UltraliskOutOfCombat3"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="AP_UltraliskBurrowChargeRangeFinderMaxRange">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="5.1"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_UltraliskHasntRecentlyAttacked">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_UltraliskBurrowChargeHold"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_UltraliskOutOfCombat3">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_UltraliskOutOfCombat3"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_TorrasqueCantRevive">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_TorrasqueTimerBehavior"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

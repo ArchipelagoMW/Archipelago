@@ -2383,21 +2383,21 @@
     </CUpgrade>
     <CUpgrade id="AP_RoachCorpser">
         <Flags index="UpgradeCheat" value="0"/>
-        <AffectedUnitArray value="AP_Roach" />
+        <AffectedUnitArray value="AP_Roach"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_RoachCorpserAcidSaliva,Options[Hidden]" Value="0"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_AcidSaliva,Options[Hidden]" Value="1"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Roach,Subtitle" Value="UnitSubtitle/AP_RoachCorpser"/>
     </CUpgrade>
     <CUpgrade id="AP_RoachVile">
         <Flags index="UpgradeCheat" value="0"/>
-        <AffectedUnitArray value="AP_Roach" />
+        <AffectedUnitArray value="AP_Roach"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_RoachVileAcidSaliva,Options[Hidden]" Value="0"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_AcidSaliva,Options[Hidden]" Value="1"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Roach,Subtitle" Value="UnitSubtitle/AP_RoachVile"/>
     </CUpgrade>
     <CUpgrade id="AP_RoachVileCorpser">
         <Flags index="UpgradeCheat" value="0"/>
-        <AffectedUnitArray value="AP_Roach" />
+        <AffectedUnitArray value="AP_Roach"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_RoachVileCorpserAcidSaliva,Options[Hidden]" Value="0"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_RoachVileAcidSaliva,Options[Hidden]" Value="1"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_RoachCorpserAcidSaliva,Options[Hidden]" Value="1"/>
@@ -2430,5 +2430,95 @@
     <CUpgrade id="AP_HotSRoachShield">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
         <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ChitinousPlating">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-chitinousplating.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Ultralisk,LifeArmor" Value="2"/>
+        <EffectArray Reference="Unit,AP_UltraliskBurrowed,LifeArmor" Value="2"/>
+        <EffectArray Reference="Unit,AP_Ultralisk,LifeArmorLevel" Value="2"/>
+        <EffectArray Reference="Unit,AP_UltraliskBurrowed,LifeArmorLevel" Value="2"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Ultralisk"/>
+        <AffectedUnitArray value="AP_UltraliskBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSChitinousPlating">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Ultralisk,LifeMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_Ultralisk,LifeStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_UltraliskBurrowed,LifeMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_UltraliskBurrowed,LifeStart" Value="100"/>
+        <EffectArray Reference="Unit,HotSTorrasque,LifeMax" Value="100"/>
+        <EffectArray Reference="Unit,HotSTorrasque,LifeStart" Value="100"/>
+        <EffectArray Reference="Unit,HotSTorrasqueBurrowed,LifeMax" Value="100"/>
+        <EffectArray Reference="Unit,HotSTorrasqueBurrowed,LifeStart" Value="100"/>
+        <EffectArray Reference="Unit,HotSNoxious,LifeMax" Value="100"/>
+        <EffectArray Reference="Unit,HotSNoxious,LifeStart" Value="100"/>
+        <EffectArray Reference="Unit,HotSNoxiousBurrowed,LifeMax" Value="100"/>
+        <EffectArray Reference="Unit,HotSNoxiousBurrowed,LifeStart" Value="100"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Ultralisk"/>
+        <AffectedUnitArray value="AP_UltraliskBurrowed"/>
+        <AffectedUnitArray value="HotSTorrasque"/>
+        <AffectedUnitArray value="HotSTorrasqueBurrowed"/>
+        <AffectedUnitArray value="HotSNoxious"/>
+        <AffectedUnitArray value="HotSNoxiousBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSMonarchBlades">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Zerg"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Ultralisk"/>
+        <AffectedUnitArray value="HotSTorrasque"/>
+        <AffectedUnitArray value="HotSNoxious"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSUltraliskBurrowCharge">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_Ultralisk"/>
+        <AffectedUnitArray value="AP_UltraliskBurrowed"/>
+        <AffectedUnitArray value="HotSTorrasque"/>
+        <AffectedUnitArray value="HotSTorrasqueBurrowed"/>
+        <AffectedUnitArray value="HotSNoxious"/>
+        <AffectedUnitArray value="HotSNoxiousBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_UltraliskBurrowChargeUpgrade">
+        <InfoTooltipPriority value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-burrowcharge.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Ultralisk"/>
+        <AffectedUnitArray value="AP_UltraliskBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSTissueAssimilation">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSTorrasque">
+        <EffectArray Operation="Set" Reference="Unit,AP_Ultralisk,Subtitle" Value="UnitSubtitle/AP_UltraliskTorrasque"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_UltraliskBurrowed,Subtitle" Value="UnitSubtitle/AP_UltraliskTorrasque"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_TorrasqueChrysalis,Subtitle" Value="UnitSubtitle/AP_UltraliskTorrasque"/>
+        <AffectedUnitArray value="AP_Ultralisk"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSNoxious">
+        <EffectArray Operation="Set" Reference="Unit,AP_Ultralisk,Subtitle" Value="UnitSubtitle/AP_UltraliskNoxious"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_UltraliskBurrowed,Subtitle" Value="UnitSubtitle/AP_UltraliskNoxious"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_TorrasqueChrysalis,Subtitle" Value="UnitSubtitle/AP_UltraliskNoxious"/>
+        <AffectedUnitArray value="AP_Ultralisk"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSNoxiousTorrasque">
+        <EffectArray Operation="Set" Reference="Unit,AP_Ultralisk,Subtitle" Value="UnitSubtitle/AP_UltraliskNoxiousTorrasque"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_UltraliskBurrowed,Subtitle" Value="UnitSubtitle/AP_UltraliskNoxiousTorrasque"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_TorrasqueChrysalis,Subtitle" Value="UnitSubtitle/AP_UltraliskNoxiousTorrasque"/>
+        <AffectedUnitArray value="AP_Ultralisk"/>
     </CUpgrade>
 </Catalog>

@@ -233,6 +233,149 @@
         </Wireframe>
         <WireframeShieldColor value="255,0,128,0"/>
     </CActorUnit>
+    <CActorUnit default="1" id="AP_UltraliskBase" parent="GenericUnitBase">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ZergBurrowStandardAnimMacro"/>
+        <Macros value="ZergLargeBurrowEffects"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Remove Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create LargeBurrowDownEffects"/>
+        <Remove Terms="AbilMorph.*.Start; AbilKey BurrowUp" Send="Create LargeBurrowUpEffects"/>
+        <Remove Terms="WeaponStart.KaiserBlades.AttackStart; ValidateUnit CleaveResearched" Send="AnimBracketStart Attack Spell,A"/>
+        <Remove Terms="WeaponStart.KaiserBlades.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <Remove Terms="WeaponStart.Ram.AttackStart" Send="AnimBracketStart Attack Spell"/>
+        <Remove Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="UnitBirth.AP_UltraliskBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_UltraliskBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Ultralisk; MorphTo AP_UltraliskBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; MorphFrom AP_UltraliskBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; MorphFrom AP_UltraliskBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.AP_KaiserBlades.AttackStart; ValidateUnit CleaveResearched" Send="AnimBracketStart Attack Spell,A"/>
+        <On Terms="WeaponStart.AP_KaiserBlades.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStart.Ram.AttackStart" Send="AnimBracketStart Attack Spell"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowDownUltralisk"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="UnitBirth.AP_Ultralisk" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; MorphFrom AP_UltraliskBurrowed" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_UltraliskBurrowed; MorphFrom AP_Ultralisk" Send="TerrainSquibDeactivate"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Ultra_Land"/>
+        <On Terms="WeaponStart.AP_KaiserBlades.AttackStart; !ValidateUnit AP_HaveHotSMonarchBlades" Send="AnimPlay Attack Spell,A"/>
+        <On Terms="WeaponStart.AP_KaiserBlades.AttackStart; ValidateUnit AP_HaveHotSMonarchBlades" Send="AnimPlay Attack Spell,D"/>
+        <On Terms="WeaponStop.AP_KaiserBlades.AttackStop" Send="AnimClear Attack"/>
+        <On Terms="ActorCreation" Send="StatusSet BurrowCharging 0"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="TimerSet 0.070000 BurrowChargeFX"/>
+        <On Terms="TimerExpired; TimerName BurrowChargeFX; IsStatus BurrowCharging 1; !ModelIsLowQuality" Send="Create AP_UltraliskBurrowChargeModel"/>
+        <On Terms="TimerExpired; TimerName BurrowChargeFX; IsStatus BurrowCharging 1" Send="TimerSet 0.070000 BurrowChargeFX"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="AnimClear Fidget"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="AnimBaselineStop"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="AnimPlay BurrowChargeDown Burrow"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="AnimPlay Burrow Walk,Burrow PlayForever"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="Create AP_BurrowChargeDownSound"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="TimerSet 0.500000 BurrowChargingState"/>
+        <On Terms="TimerExpired; TimerName BurrowChargingState" Send="StatusSet BurrowCharging 1"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="TimerSet 0.600000 ChargeFailTimer"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="StatusSet ChargeFail 1"/>
+        <On Terms="Behavior.AP_BurrowCharging.On" Send="StatusSet ChargeFail 0"/>
+        <On Terms="TimerExpired; TimerName ChargeFailTimer; IsStatus ChargeFail 1" Send="AnimClear Burrow"/>
+        <On Terms="TimerExpired; TimerName ChargeFailTimer; IsStatus ChargeFail 1" Send="AnimClear BurrowChargeDown"/>
+        <On Terms="TimerExpired; TimerName ChargeFailTimer; IsStatus ChargeFail 1" Send="AnimPlay BurrowChargeUp Stand,Cover"/>
+        <On Terms="TimerExpired; TimerName ChargeFailTimer; IsStatus ChargeFail 1" Send="AnimBaselineStart"/>
+        <On Terms="TimerExpired; TimerName ChargeFailTimer; IsStatus ChargeFail 1" Send="Create BurrowChargeUpSound"/>
+        <On Terms="TimerExpired; TimerName ChargeFailTimer; IsStatus ChargeFail 1" Send="StatusSet BurrowCharging 0"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearch.Start; At Caster" Send="AnimClear Burrow"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearch.Start; At Caster" Send="AnimClear BurrowChargeDown"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearch.Start; At Caster" Send="AnimPlay BurrowChargeUp Spell,C"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearch.Start; At Caster" Send="AnimBaselineStart"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearch.Start; At Caster" Send="Create AP_BurrowChargeUpSound"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearch.Start; At Caster" Send="StatusSet BurrowCharging 0"/>
+        <On Terms="Effect.AP_BurrowChargeStructureTargetSearch.Start; At Caster" Send="AnimClear Burrow"/>
+        <On Terms="Effect.AP_BurrowChargeStructureTargetSearch.Start; At Caster" Send="AnimClear BurrowChargeDown"/>
+        <On Terms="Effect.AP_BurrowChargeStructureTargetSearch.Start; At Caster" Send="AnimPlay BurrowChargeUp Spell,C"/>
+        <On Terms="Effect.AP_BurrowChargeStructureTargetSearch.Start; At Caster" Send="AnimBaselineStart"/>
+        <On Terms="Effect.AP_BurrowChargeStructureTargetSearch.Start; At Caster" Send="Create AP_BurrowChargeUpSound"/>
+        <On Terms="Effect.AP_BurrowChargeStructureTargetSearch.Start; At Caster" Send="StatusSet BurrowCharging 0"/>
+        <On Terms="WeaponStart.AP_KaiserBlades.AttackStart" Send="AnimClear BurrowChargeUp"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear BurrowChargeUp"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="StatusSet BurrowCharging 1"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; !AbilKey BurrowUp" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_TorrasqueCorpse" Send="Destroy"/>
+        <On Terms="Behavior.AP_TorrasqueDontDie.On" Send="AnimBracketStart DontDie GLbirth GLstand IGNORE"/>
+        <On Terms="Behavior.AP_TorrasqueDontDie.Off" Send="AnimBracketStop DontDie"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; MorphFrom AP_TorrasqueChrysalis" Send="SetScale 0.200000"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; MorphFrom AP_TorrasqueChrysalis" Send="SetScale 1.000000 0.400000"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; MorphFrom AP_TorrasqueChrysalis" Send="$Birth 0 0.000000 0.250000"/>
+        <Model value="Ultralisk"/>
+        <AnimBlendTime value="0.300000"/>
+        <EventDataSound Name="UltraliskAttack" Actor="UnitSound" Sound="Ultralisk_AttackLaunch"/>
+        <EventDataSound Name="UltraliskHeadAttack" Actor="UnitSound" Sound="Ultralisk_HeadAttackImpact"/>
+        <BuildModel value="Ultralisk"/>
+        <DeathArray index="Normal" ModelLink="UltraliskDeath" SoundLink="Ultralisk_Explode" VoiceLink=""/>
+        <DeathArray index="Disintegrate" ModelLink="UltraliskDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Fire" ModelLink="UltraliskDeathFire" SoundLink="Uni_DeathFXFireLarge"/>
+        <DeathCustoms ModelLink="ZergLargeUnitDeathLow" Name="AntiGravZerg"/>
+        <DeathCustoms ActorModel="UltraliskDeathRagdoll" ModelLink="UltraliskDeathRagdoll" Name="RagdollBasic"/>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
+        <PlacementModel value="Ultralisk"/>
+        <PortraitModel value="UltraliskPortrait"/>
+        <TerrainSquibs>
+            <GroupName value="RippleStandard"/>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="2.000000"/>
+            <RangeDown value="2.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleUltralisk"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.9375"/>
+        <BarOffset value="30"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Ultralisk.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-omegalisk.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <NameOffset value="40"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Ultralisk_Ready"/>
+        <SoundArray index="What" value="Ultralisk_What"/>
+        <SoundArray index="Yes" value="Ultralisk_Yes"/>
+        <SoundArray index="Attack" value="Ultralisk_Attack"/>
+        <SoundArray index="Pissed" value="Ultralisk_Pissed"/>
+        <SoundArray index="Movement" value="Ultralisk_Movement"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-omegalisk.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Ultralisk.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
     <CActorModel id="AP_250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
@@ -3052,6 +3195,37 @@
         <Sound value="AP_Aberration_Burrow"/>
     </CActorSound>
     <CActorSound id="AP_Aberration_Land" parent="SoundOneShot"/>
+    <CActorSimple id="AP_BurrowChargeImpactAnim">
+        <On Terms="Behavior.AP_BurrowChargeMPKnockback.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackReady"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackLeft"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackRight"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay BurrowChargeFlail Flail PlayForever,RandomStartOffset 0.100000 0.300000"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.000000 KnockbackDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear BurrowChargeFlail"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Send="Destroy"/>
+        <On Terms="Behavior.AP_BurrowChargeMPKnockback.Off" Send="TimerSet 0.250000 KnockbackEndDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackEndDelay" Target="_Unit" Send="AnimClear BurrowChargeFlail"/>
+        <On Terms="TimerExpired; TimerName KnockbackEndDelay" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="AP_BurrowChargeStun" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_UltraliskBurrowChargeStun.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay BurrowChargeKnockback Flail PlayForever,RandomStartOffset 0.100000 0.100000"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 KnockbackDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear BurrowChargeKnockback"/>
+        <On Terms="Behavior.AP_UltraliskBurrowChargeStun.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSound id="AP_BurrowChargeDownSound" parent="SoundOneShot">
+        <Sound value="Zerg_BurrowLarge"/>
+    </CActorSound>
+    <CActorSound id="AP_BurrowChargeUpSound" parent="SoundOneShot">
+        <Sound value="Zerg_UnburrowLarge"/>
+    </CActorSound>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -3562,6 +3736,37 @@
         <HostEndSiteOps Ops="SOpForwardCasterPointInverted SOpMoveBy1 SOpMoveUpBy1" HoldPosition="1" HoldRotation="1"/>
         <Radius value="1.000000,0.150000"/>
     </CActorForceCylinder>
+    <CActorModel id="AP_NoxiousCloud" parent="ModelAddition">
+        <On Terms="Behavior.AP_NoxiousDamageAura.On" Send="Create"/>
+        <On Terms="Behavior.AP_NoxiousDamageAura.On" Send="SetOpacity"/>
+        <On Terms="Behavior.AP_NoxiousDamageAura.On" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Behavior.AP_NoxiousDamageAura.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorSplat id="AP_NoxiousBurrowChargeCursorSplat" parent="ZergCursorSplat" abil="AP_UltraliskBurrowCharge">
+        <On index="0" Terms="Abil.AP_UltraliskBurrowCharge.Cursor; ValidatePlayer AP_HaveHotSNoxious" Send="Create"/>
+    </CActorSplat>
+    <CActorRange id="AP_NoxiousBurrowChargeRange" parent="RangeAbil" abil="AP_UltraliskBurrowCharge">
+        <On index="1" Terms="Abil.AP_UltraliskBurrowCharge.TargetOn; ValidatePlayer AP_HaveHotSNoxious" Send="Create"/>
+        <On index="2" Terms="Abil.AP_UltraliskBurrowCharge.TargetOff; ValidatePlayer AP_HaveHotSNoxious" Send="Destroy"/>
+        <On index="3" Terms="Abil.AP_UltraliskBurrowCharge.ButtonHoverOn; ValidatePlayer AP_HaveHotSNoxious" Send="Create"/>
+        <On index="4" Terms="Abil.AP_UltraliskBurrowCharge.ButtonHoverOff; ValidatePlayer AP_HaveHotSNoxious" Send="Destroy"/>
+    </CActorRange>
+    <CActorModel id="AP_NoxiousCloudDamageModel" parent="ModelAnimationStyleOneShot">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_MiasmaImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_PoisonNovaLaunchSound" parent="SoundOneShot">
+        <On Terms="Abil.AP_PoisonNova.SourceCastStart" Send="Create"/>
+        <Host Subject="_Selectable"/>
+    </CActorSound>
+    <CActorModel id="AP_PoisonNovaModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_PoisonNova.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorModel>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -4614,6 +4819,181 @@
         <RollInArc value="105.000000,30.000000"/>
         <RollOutDuration value="0.400000,0.100000"/>
     </CActorSiteOpBankerUnit>
+    <CActorModel id="AP_TissueAssimilationModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_TissueAssimilation.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead" HoldRotation="1"/>
+    </CActorModel>
+    <CActorUnit id="AP_Ultralisk" parent="AP_UltraliskBase" unitName="AP_Ultralisk">
+        <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Create AP_UltraliskTorrasque"/>
+        <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSTorrasque" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSTorrasque" Send="Create AP_UltraliskTorrasque"/>
+        <On Terms="Upgrade.AP_HotSNoxious.Add" Send="Create AP_UltraliskNoxious"/>
+        <On Terms="Upgrade.AP_HotSNoxious.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSNoxious" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSNoxious" Send="Create AP_UltraliskNoxious"/>
+    </CActorUnit>
+    <CActorUnit id="AP_UltraliskTorrasque" parent="AP_UltraliskBase" unitName="AP_HotSTorrasque">
+        <Model value="AP_HotSTorrasque"/>
+        <BuildModel value="AP_HotSTorrasque"/>
+        <PlacementModel value="AP_HotSTorrasque"/>
+        <DeathArray index="Normal" ModelLink="AP_UltraliskEx1BDeath"/>
+        <PortraitModel value="AP_TorrasquePortrait"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-ultraliskex1b.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-ultraliskex1b.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_UltraliskNoxious" parent="AP_UltraliskBase" unitName="AP_HotSNoxious">
+        <!-- Torrasque model takes over Noxious -->
+        <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Create AP_UltraliskTorrasque"/>
+        <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSTorrasque" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSTorrasque" Send="Create AP_UltraliskTorrasque"/>
+        <Model value="AP_HotSNoxious"/>
+        <BuildModel value="AP_HotSNoxious"/>
+        <DeathArray index="Normal" ModelLink="AP_UltraliskEx1ADeath" SoundLink="Ultralisk_Explode" VoiceLink=""/>
+        <PlacementModel value="AP_HotSNoxious"/>
+        <PortraitModel value="AP_NoxiousPortrait"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-UltraliskEx1A.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-ultralisk-noxious.dds"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-ultralisk-noxious.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-UltraliskEx1A.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSplat id="AP_UltraliskBurrowedSplat" parent="BurrowedSplat" unitName="AP_Ultralisk">
+        <On Terms="Effect.AP_BurrowChargeTargetSearchRevD.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearchRevD.Start; At Caster" Send="TimerSet 5.000000 DelayDestroy"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearchRevD.Start; At Caster" Send="RefClear ::Host"/>
+        <On Terms="Abil.AP_BurrowChargeRevD.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_BurrowChargeRevD.SourceCastStart" Send="TimerSet 5.000000 DelayDestroy"/>
+        <On Terms="Abil.AP_BurrowChargeRevD.SourceCastStart" Send="RefClear ::Host"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="TimerSet 5.000000 DelayDestroy"/>
+        <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="RefClear ::Host"/>
+        <On Terms="Abil.UltraliskBurrowChargeNoxious.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.UltraliskBurrowChargeNoxious.SourceCastStart" Send="TimerSet 5.000000 DelayDestroy"/>
+        <On Terms="Abil.UltraliskBurrowChargeNoxious.SourceCastStart" Send="RefClear ::Host"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearch.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearch.Start; At Caster" Send="TimerSet 5.000000 DelayDestroy"/>
+        <On Terms="Effect.AP_BurrowChargeTargetSearch.Start; At Caster" Send="RefClear ::Host"/>
+    </CActorSplat>
+    <CActorSound id="AP_Ultra_Land" parent="SoundOneShot">
+        <Sound value="Ultra_Land"/>
+    </CActorSound>
+    <CActorModel id="AP_UltraliskBurrowChargeModel" parent="ModelAnimationStyleOneShot">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpShadow" HoldPosition="1" HoldRotation="1"/>
+        <Model value="UltraliskBurrowChargeModel"/>
+    </CActorModel>
+    <CActorForceSphere id="AP_UltraliskChargeDeathForce">
+        <On Terms="Effect.AP_BurrowChargeImpactSet.Stop; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_BurrowChargeImpactSetRevD.Stop; At Caster" Send="Create"/>
+        <Host Subject="SOpTargetPoint SOpSplashDamagePositionVariance"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="25.000000,10.000000"/>
+        <Radius value="2.500000"/>
+    </CActorForceSphere>
+    <CActorUnit id="AP_TorrasqueChrysalis" parent="GenericUnitStandard" unitName="AP_TorrasqueChrysalis">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_TorrasqueChrysalis" Send="Create"/>
+        <On Terms="AbilTrain.AP_TorrasqueChrysalis.Finish" Send="Create AP_TorrasqueChrysalisEggsplosion"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk" Send="Create AP_TorrasqueChrysalisEggsplosion"/>
+        <On Terms="UnitDeathCustomize.AP_TorrasqueChrysalis" Send="Create AP_TorrasqueChrysalisEggsplosion"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk" Send="Destroy"/>
+        <DeathArray index="Normal" ModelLink="ZergSmallUnitDeath" SoundLink="Egg_Explode"/>
+        <PortraitModel value="EggPortrait"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-ultraliskex1egg.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\Wireframe-Zerg-ultraliskex1egg.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <NameOffset value="40"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\Wireframe-Zerg-ultraliskex1egg.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-ultraliskex1egg.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorUnit id="AP_TorrasqueCorpse" parent="GenericUnitMorph" unitName="AP_TorrasqueCorpse">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TorrasqueCorpse" Send="$Birth 0 1.000000 1.000000"/>
+        <On Terms="AnimDone; AnimName Birth" Send="AnimPlay CorpseDeath Death PlayForever,NonLooping"/>
+        <On Terms="AnimDone; AnimName Birth" Send="TimerSet 3.000000 DeathPauseDelay"/>
+        <On Terms="UnitBirth.AP_TorrasqueCorpse.Suppressed" Send="AnimPlay CorpseDeath Death PlayForever,NonLooping"/>
+        <On Terms="UnitBirth.AP_TorrasqueCorpse.Suppressed" Send="TimerSet 3.000000 DeathPauseDelay"/>
+        <On Terms="TimerExpired; TimerName DeathPauseDelay" Send="AnimSetPaused CorpseDeath"/>
+        <On Terms="ActorCreation" Send="Create AP_TorrasqueCorpseExplosion"/>
+        <Baselines index="Stand" AnimProps=""/>
+        <DeathArray index="Normal" ModelLink="UltraliskDeath" SoundLink="Ultralisk_Explode"/>
+        <PortraitModel value="UltraliskPortrait"/>
+        <StandAnimTurnTime value="5"/>
+        <WalkAnimMoveSpeed value="1.75"/>
+        <BarWidth value="160"/>
+        <GroupSoundArray index="What" value="UltraliskGroupWhat"/>
+        <GroupSoundArray index="Yes" value="UltraliskGroupYes"/>
+        <GroupSoundArray index="Attack" value="UltraliskGroupAttack"/>
+        <GroupSoundArray index="Board" value="UltraliskGroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <NameOffset value="40"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Birth" value="UltraliskBirth"/>
+        <SoundArray index="Ready" value="Ultralisk_Ready"/>
+        <SoundArray index="Help" value="Ultralisk_Help"/>
+        <SoundArray index="What" value="Ultralisk_What"/>
+        <SoundArray index="Yes" value="Ultralisk_Yes"/>
+        <SoundArray index="Attack" value="Ultralisk_Attack"/>
+        <SoundArray index="Pissed" value="Ultralisk_Pissed"/>
+        <SoundArray index="Movement" value="Ultralisk_Movement"/>
+        <SoundArray index="Turning" value="UltraliskTurning"/>
+        <SoundArray index="Board" value="UltraliskBoard"/>
+        <SoundArray index="Click" value="UltraliskClick"/>
+        <SoundArray index="ClickError" value="UltraliskClickError"/>
+        <SoundArray index="Highlight" value="UltraliskHighlight"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-zerg-ultraliskex1b.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorModel id="AP_TorrasqueChrysalisEggsplosion">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary SOpShadow"/>
+        <Model value="AP_TorrasqueChrysalis"/>
+    </CActorModel>
+    <CActorModel id="AP_TorrasqueCorpseExplosion" parent="ModelAnimationStyleOneShot">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorModel>
     <CActorEventMacro id="UnloadDropAnim">
         <!-- Override -->
         <!-- Add AP_Medivac to common transport load/unload animations -->

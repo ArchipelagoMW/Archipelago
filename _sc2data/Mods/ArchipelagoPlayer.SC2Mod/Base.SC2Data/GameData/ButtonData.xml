@@ -1163,4 +1163,49 @@
         <AlertIcon value="Assets\Textures\BTN-Ability-Zerg-Towering.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_BurrowChargeCampaign">
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-BurrowCharge.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Zerg-BurrowCharge.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MonarchBlades">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-monarchblades.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-monarchblades.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_TissueAssimilation">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-tissueassimilation.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-tissueassimilation.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_BurrowCharge">
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-BurrowCharge.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Zerg-BurrowCharge.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_UltraliskWeaponCooldown">
+        <Icon value="Assets\Textures\btn-missing-kaeo.dds"/>
+        <AlertIcon value="Assets\Textures\btn-missing-kaeo.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_TorrasqueChrysalis">
+        <TooltipFlags index="ShowHotkey" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-ultralisk-revive.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_TorrasqueChrysalisFakeTimer">
+        <TooltipFlags index="ShowHotkey" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-ultralisk-revive.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_PoisonNova">
+        <Icon value="Assets\Textures\btn-ability-zerg-poisonnova.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-poisonnova.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_NoxiousCloud">
+        <Icon value="Assets\Textures\btn-ability-zerg-noxiouscloud.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-noxiouscloud.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

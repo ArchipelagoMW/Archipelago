@@ -860,4 +860,33 @@
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_UseRoachVileCorpserWeapon"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHotSMonarchBlades">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMonarchBladesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSTissueAssimilation">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSTissueAssimilationCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveBurrowCharge">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeUltraliskBurrowChargeUpgradeCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSUltraliskBurrowCharge">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSUltraliskBurrowChargeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSTorrasque">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSTorrasqueCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveTorrasqueTimerBehavior">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorTorrasqueTimerBehaviorCompleteOnlyAtUnit"/>
+        <CanBeSuppressed index="Show" value="1"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSNoxious">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSNoxiousCompleteOnly"/>
+    </CRequirement>
 </Catalog>

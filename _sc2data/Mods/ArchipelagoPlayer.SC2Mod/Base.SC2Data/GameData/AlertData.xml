@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CAlert id="AP_TorrasqueReviveComplete">
+        <Icon value="Assets\Textures\btn-unit-zerg-ultralisk-torrasque.dds"/>
+        <Sound value="Alert_ZergEvolutionComplete"/>
+        <Peripheral value="MorphComplete"/>
+    </CAlert>
+</Catalog>

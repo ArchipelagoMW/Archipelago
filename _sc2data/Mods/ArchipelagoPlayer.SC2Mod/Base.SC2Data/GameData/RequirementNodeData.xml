@@ -1776,4 +1776,31 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeTunnelingClawsCompleteOnlyTechTreeCheat">
         <Count Link="AP_TunnelingClaws" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeUltraliskBurrowChargeUpgradeCompleteOnlyTechTreeCheat">
+        <Tooltip value=""/>
+        <Count Link="AP_UltraliskBurrowChargeUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSMonarchBladesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSMonarchBlades" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSTissueAssimilationCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSTissueAssimilation" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSUltraliskBurrowChargeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSUltraliskBurrowCharge" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorTorrasqueTimerBehaviorCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_TorrasqueTimerBehavior" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSTorrasqueCompleteOnly">
+        <Count Link="AP_HotSTorrasque" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSNoxiousCompleteOnly">
+        <Count Link="AP_HotSNoxious" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

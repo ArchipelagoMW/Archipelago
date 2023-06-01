@@ -2448,4 +2448,23 @@
         <AssetArray File="Assets\Sounds\Zerg_Large_Land00.wav" FacialGroup=""/>
         <AssetArray File="Assets\Sounds\Zerg_Large_Land01.wav" FacialGroup=""/>
     </CSound>
+    <CSound id="AP_Ultra_Land" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Ultra_Land00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Ultra_Land01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Ultra_Land02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Ultra_Land03.wav" FacialGroup=""/>
+        <Pitch value="-6.000000,0.000000"/>
+        <Volume value="4.000000,5.000000"/>
+    </CSound>
+    <CSound id="AP_PoisonNovaLaunchSound" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Ultralisk\UltraLisk_Attack0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Ultralisk\UltraLisk_Attack1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Ultralisk\UltraLisk_Attack2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Ultralisk\UltraLisk_Attack3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Ultralisk\UltraLisk_Attack4.ogg"/>
+        <Spread value="130.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
 </Catalog>
