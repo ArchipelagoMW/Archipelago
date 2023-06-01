@@ -1281,8 +1281,8 @@
         room: Orange Tower
         door: Fourth Floor
       Hot Crusts Area: True # sunwarp
-      The Bearer: # This is complicated because of The Bearer's topology
-        room: The Bearer
+      Bearer Side Area: # This is complicated because of The Bearer's topology
+        room: Bearer Side Area
         door: Shortcut to Tower
       Rhyme Room (Smiley):
         door: Rhyme Room Entrance
@@ -2752,11 +2752,6 @@
         achievement: The Bearer
       MIDDLE:
         id: Shuffle Room/Panel_middle_middle_2
-      SHORTCUT:
-        id: Cross Room/Panel_shortcut_shortcut
-        colors:
-          - red
-          - yellow
       SIX (1):
         id: Backside Room/Panel_six_six_6
         colors:
@@ -2780,20 +2775,46 @@
         id: Backside Room/Panel_backside_5
         required_door:
           door: Backside Door
+      SPACE:
+        id: Cross Room/Panel_space_cape
+        colors:
+          - red
+          - yellow
     doors:
       Shortcut to The Bold:
         id: Red Blue Purple Room Area Doors/Door_middle_middle
         panels:
           - MIDDLE
-      Shortcut to Tower:
-        id: Cross Room Doors/Door_shortcut
-        panels:
-          - SHORTCUT
       Backside Door:
         id: Red Blue Purple Room Area Doors/Door_locked_knocked2 # yeah...
         group: Backside Doors
         panels:
           - FARTHER
+      Red Yellow Access:
+        event: True
+        panels:
+          - SPACE
+  Bearer Side Area:
+    entrances:
+      The Bearer:
+        room: The Bearer
+        door: Red Yellow Access
+      Orange Tower Third Floor:
+        door: Shortcut to Tower
+      Roof: True
+    panels:
+      SHORTCUT:
+        id: Cross Room/Panel_shortcut_shortcut
+        colors:
+          - red
+          - yellow
+    doors:
+      Shortcut to Tower:
+        id: Cross Room Doors/Door_shortcut
+        item_name: The Bearer - Shortcut to Tower
+        location_name: The Bearer - SHORTCUT
+        panels:
+          - SHORTCUT
   The Steady:
     # For now, let's just let the doors in here be vanilla.
     entrances:
