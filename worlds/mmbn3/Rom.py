@@ -61,9 +61,9 @@ class ArchiveScript:
                 if command_index <- 0:
                     # We can hit a command that might contain an E9 or an E7. If we do, skip checking the next few bytes
                     if byte == 0xF6:  # CheckItem
-                        command_index = 6
+                        command_index = 7
                     if byte == 0xF3:  # CheckFlag
-                        command_index = 6
+                        command_index = 7
                     if byte == 0xF2:  # FlagSet
                         command_index = 4
                 command_index -= 1
