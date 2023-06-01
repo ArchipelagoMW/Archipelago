@@ -7,7 +7,7 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
 ## Required Software
 
 - Bizhawk: [Bizhawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-  - Version 2.3.1 and later are supported. Version 2.7 is recommended for stability.
+  - Version 2.7.0 and later are supported.
   - Detailed installation instructions for Bizhawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)

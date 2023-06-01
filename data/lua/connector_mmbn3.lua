@@ -3,8 +3,18 @@ local json = require('json')
 local math = require('math')
 require('common')
 
-local last_modified_date = '2023-29-05' -- Should be the last modified date
-local script_version = 3
+local last_modified_date = '2023-31-05' -- Should be the last modified date
+local script_version = 4
+
+local bizhawk_version = client.getversion()
+local bizhawk_major, bizhawk_minor, bizhawk_patch = bizhawk_version:match("(%d+)%.(%d+)%.?(%d*)")
+bizhawk_major = tonumber(bizhawk_major)
+bizhawk_minor = tonumber(bizhawk_minor)
+if bizhawk_patch == "" then
+  bizhawk_patch = 0
+else
+  bizhawk_patch = tonumber(bizhawk_patch)
+end
 
 local STATE_OK = "Ok"
 local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
@@ -644,8 +654,8 @@ local send = function()
 end
 
 function main()
-    if (is23Or24Or25 or is26To27) == false then
-        print("Must use a version of bizhawk 2.3.1 or higher")
+    if (bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor >= 7)==false) then
+        print("Must use a version of bizhawk 2.7.0 or higher")
         return
     end
     server, error = socket.bind('localhost', 28922)
