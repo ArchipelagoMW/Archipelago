@@ -40,7 +40,7 @@ def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[s
         "server_password": options_source.get("server_password", None),
     }
     generator_options = {
-        "spoiler": int(options_source.get("spoiler", 3)),
+        "spoiler": int(options_source.get("spoiler", 0)),
         "race": race
     }
 
