@@ -231,10 +231,12 @@ def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_north_to_volcano, player),
                              (logic.can_water(0) | logic.received("Volcano Bridge") |
                               logic.can_blink()).simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.volcano_to_secret_beach, player),
+                             logic.can_water(2).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_5, player),
-                             logic.can_mine_perfectly().simplify())
+                             (logic.can_mine_perfectly() & logic.can_water(1)).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_10, player),
-                             (logic.can_mine_perfectly() & logic.received("Volcano Exit Shortcut")).simplify())
+                             (logic.can_mine_perfectly() & logic.can_water(1) & logic.received("Volcano Exit Shortcut")).simplify())
     parrots = [SVEntrance.parrot_express_docks_to_volcano, SVEntrance.parrot_express_jungle_to_volcano,
                SVEntrance.parrot_express_dig_site_to_volcano, SVEntrance.parrot_express_docks_to_dig_site,
                SVEntrance.parrot_express_jungle_to_dig_site, SVEntrance.parrot_express_volcano_to_dig_site,

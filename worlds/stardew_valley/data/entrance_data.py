@@ -133,6 +133,7 @@ class SVEntrance:
     island_north_to_field_office = "Island North to Field Office"
     island_north_to_dig_site = "Island North to Dig Site"
     island_north_to_volcano = "Island North to Volcano"
+    volcano_to_secret_beach = "Volcano to Secret Beach"
     talk_to_island_trader = "Talk to Island Trader"
     climb_to_volcano_5 = "Climb to Volcano Floor 5"
     climb_to_volcano_10 = "Climb to Volcano Floor 10"

@@ -40,6 +40,7 @@ class SVRegion:
     dig_site = "Dig Site"
     field_office = "Field Office"
     volcano = "Volcano"
+    volcano_secret_beach = "Volcano Secret Beach"
     island_trader = "Island Trader"
     volcano_floor_5 = "Volcano - Floor 5"
     volcano_floor_10 = "Volcano - Floor 10"

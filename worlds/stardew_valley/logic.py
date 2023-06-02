@@ -1362,8 +1362,8 @@ class StardewLogic:
         reach_southeast = self.can_reach_region(SVRegion.island_south_east)
         reach_pirate_cove = self.can_reach_region(SVRegion.pirate_cove)
         reach_outside_areas = And(reach_south, reach_north, reach_west, reach_hut)
-        reach_volcano_regions = [self.can_reach_region(SVRegion.volcano), self.can_reach_region(SVRegion.volcano_floor_5),
-                           self.can_reach_region(SVRegion.volcano_floor_10)]
+        reach_volcano_regions = [self.can_reach_region(SVRegion.volcano), self.can_reach_region(SVRegion.volcano_secret_beach),
+                                 self.can_reach_region(SVRegion.volcano_floor_5), self.can_reach_region(SVRegion.volcano_floor_10)]
         reach_volcano = Or(reach_volcano_regions)
         reach_all_volcano = And(reach_volcano_regions)
         reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano]
