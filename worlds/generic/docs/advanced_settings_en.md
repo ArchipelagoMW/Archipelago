@@ -196,15 +196,15 @@ A Link to the Past:
         - Ice Rod
       replacement_item: "Rupee (1)"
       link_replacement: true
-triggers:
-  - option_category: A Link to the Past
-    option_name: smallkey_shuffle
-    option_result: any_world
-    options:
-      A Link to the Past:
-        bigkey_shuffle: any_world
-        map_shuffle: any_world
-        compass_shuffle: any_world
+  triggers:
+    - option_category: A Link to the Past
+      option_name: smallkey_shuffle
+      option_result: any_world
+      options:
+        A Link to the Past:
+          bigkey_shuffle: any_world
+          map_shuffle: any_world
+          compass_shuffle: any_world
 Timespinner:
   accessibility: minimal
   progression_balancing: 50
