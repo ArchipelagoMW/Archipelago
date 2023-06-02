@@ -2455,21 +2455,9 @@
         <EffectArray Reference="Unit,AP_Ultralisk,LifeStart" Value="100"/>
         <EffectArray Reference="Unit,AP_UltraliskBurrowed,LifeMax" Value="100"/>
         <EffectArray Reference="Unit,AP_UltraliskBurrowed,LifeStart" Value="100"/>
-        <EffectArray Reference="Unit,HotSTorrasque,LifeMax" Value="100"/>
-        <EffectArray Reference="Unit,HotSTorrasque,LifeStart" Value="100"/>
-        <EffectArray Reference="Unit,HotSTorrasqueBurrowed,LifeMax" Value="100"/>
-        <EffectArray Reference="Unit,HotSTorrasqueBurrowed,LifeStart" Value="100"/>
-        <EffectArray Reference="Unit,HotSNoxious,LifeMax" Value="100"/>
-        <EffectArray Reference="Unit,HotSNoxious,LifeStart" Value="100"/>
-        <EffectArray Reference="Unit,HotSNoxiousBurrowed,LifeMax" Value="100"/>
-        <EffectArray Reference="Unit,HotSNoxiousBurrowed,LifeStart" Value="100"/>
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Ultralisk"/>
         <AffectedUnitArray value="AP_UltraliskBurrowed"/>
-        <AffectedUnitArray value="HotSTorrasque"/>
-        <AffectedUnitArray value="HotSTorrasqueBurrowed"/>
-        <AffectedUnitArray value="HotSNoxious"/>
-        <AffectedUnitArray value="HotSNoxiousBurrowed"/>
     </CUpgrade>
     <CUpgrade id="AP_HotSMonarchBlades">
         <Flags index="UpgradeCheat" value="0"/>
@@ -2483,10 +2471,6 @@
         <Flags index="UpgradeCheat" value="0"/>
         <AffectedUnitArray value="AP_Ultralisk"/>
         <AffectedUnitArray value="AP_UltraliskBurrowed"/>
-        <AffectedUnitArray value="HotSTorrasque"/>
-        <AffectedUnitArray value="HotSTorrasqueBurrowed"/>
-        <AffectedUnitArray value="HotSNoxious"/>
-        <AffectedUnitArray value="HotSNoxiousBurrowed"/>
     </CUpgrade>
     <CUpgrade id="AP_UltraliskBurrowChargeUpgrade">
         <InfoTooltipPriority value="1"/>

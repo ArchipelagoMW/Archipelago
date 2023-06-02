@@ -7416,7 +7416,7 @@
                 <Row value="2"/>
                 <Column value="2"/>
             </LayoutButtons>
-            <LayoutButtons Face="AP_TorrasqueChrysalis" Type="Passive" Behavior="AP_TorrasqueDontDie" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_TorrasqueChrysalis" Type="Passive" Behavior="AP_TorrasqueDontDie" Requirements="AP_HaveHotSTorrasque" Row="2" Column="2"/>
             <LayoutButtons Face="AP_TissueAssimilation" Type="Passive" Requirements="AP_HaveHotSTissueAssimilation" Row="1" Column="1"/>
             <LayoutButtons Face="AP_MonarchBlades" Type="Passive" Requirements="AP_HaveHotSMonarchBlades" Row="1" Column="2"/>
             <LayoutButtons Face="AP_NoxiousCloud" Type="Passive" Requirements="AP_HaveHotSNoxious" Row="1" Column="0"/>
@@ -7502,7 +7502,7 @@
                 <Row value="2"/>
                 <Column value="2"/>
             </LayoutButtons>
-            <LayoutButtons Face="AP_TorrasqueChrysalis" Type="Passive" Behavior="AP_TorrasqueDontDie" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_TorrasqueChrysalis" Type="Passive" Behavior="AP_TorrasqueDontDie" Requirements="AP_HaveHotSTorrasque" Row="2" Column="2"/>
             <LayoutButtons Face="AP_TissueAssimilation" Type="Passive" Requirements="AP_HaveHotSTissueAssimilation" Row="1" Column="1"/>
             <LayoutButtons Face="AP_MonarchBlades" Type="Passive" Requirements="AP_HaveHotSMonarchBlades" Row="1" Column="2"/>
         </CardLayouts>

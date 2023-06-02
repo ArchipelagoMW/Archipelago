@@ -288,6 +288,23 @@
         <Find value="1"/>
         <Value value="AP_HaveHotSNoxious"/>
     </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_UseBaseUltraliskModel">
+        <CombineArray value="AP_HaveHotSTorrasque"/>
+        <CombineArray value="AP_HaveHotSNoxious"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NotHaveHotSTorrasque">
+        <CombineArray value="AP_HaveHotSTorrasque"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_UseNoxiousUltraliskModel">
+        <CombineArray value="AP_NotHaveHotSTorrasque"/>
+        <CombineArray value="AP_HaveHotSNoxious"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPUltraliskBurrowed">
+        <Value value="AP_UltraliskBurrowed"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>

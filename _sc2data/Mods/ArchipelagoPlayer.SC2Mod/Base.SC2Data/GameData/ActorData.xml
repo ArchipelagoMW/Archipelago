@@ -246,8 +246,6 @@
         <Remove Terms="WeaponStart.KaiserBlades.AttackStart" Send="AnimBracketStart Attack Attack"/>
         <Remove Terms="WeaponStart.Ram.AttackStart" Send="AnimBracketStart Attack Spell"/>
         <Remove Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
-        <On Terms="UnitBirth.AP_UltraliskBurrowed" Send="Create"/>
-        <On Terms="UnitBirth.AP_UltraliskBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Ultralisk; MorphTo AP_UltraliskBurrowed" Send="AnimClear Burrow"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; MorphFrom AP_UltraliskBurrowed" Send="AnimBracketStop Burrow"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; MorphFrom AP_UltraliskBurrowed" Send="AnimClear Burrow"/>
@@ -261,6 +259,7 @@
         <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
         <On Terms="UnitBirth.AP_Ultralisk" Send="TerrainSquibActivateGroup RippleStandard"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; MorphFrom AP_UltraliskBurrowed" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsAPUltraliskBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_UltraliskBurrowed; MorphFrom AP_Ultralisk" Send="TerrainSquibDeactivate"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Ultra_Land"/>
         <On Terms="WeaponStart.AP_KaiserBlades.AttackStart; !ValidateUnit AP_HaveHotSMonarchBlades" Send="AnimPlay Attack Spell,A"/>
@@ -301,7 +300,6 @@
         <On Terms="WeaponStart.AP_KaiserBlades.AttackStart" Send="AnimClear BurrowChargeUp"/>
         <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear BurrowChargeUp"/>
         <On Terms="Abil.AP_UltraliskBurrowCharge.SourceCastStart" Send="StatusSet BurrowCharging 1"/>
-        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; !AbilKey BurrowUp" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_TorrasqueCorpse" Send="Destroy"/>
         <On Terms="Behavior.AP_TorrasqueDontDie.On" Send="AnimBracketStart DontDie GLbirth GLstand IGNORE"/>
         <On Terms="Behavior.AP_TorrasqueDontDie.Off" Send="AnimBracketStop DontDie"/>
@@ -4827,16 +4825,21 @@
         <HostSiteOps Ops="SOpAttachOverhead" HoldRotation="1"/>
     </CActorModel>
     <CActorUnit id="AP_Ultralisk" parent="AP_UltraliskBase" unitName="AP_Ultralisk">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; !AbilKey BurrowUp" Send="Create"/>
+        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_UseBaseUltraliskModel" Send="Create"/>
+        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_UseBaseUltraliskModel" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Create AP_UltraliskTorrasque"/>
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSTorrasque" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSTorrasque" Send="Create AP_UltraliskTorrasque"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSTorrasque" Send="Destroy"/>
         <On Terms="Upgrade.AP_HotSNoxious.Add" Send="Create AP_UltraliskNoxious"/>
         <On Terms="Upgrade.AP_HotSNoxious.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSNoxious" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSNoxious" Send="Create AP_UltraliskNoxious"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSNoxious" Send="Destroy"/>
     </CActorUnit>
     <CActorUnit id="AP_UltraliskTorrasque" parent="AP_UltraliskBase" unitName="AP_HotSTorrasque">
+        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_HaveHotSTorrasque" Send="Create"/>
+        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_HaveHotSTorrasque" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <Model value="AP_HotSTorrasque"/>
         <BuildModel value="AP_HotSTorrasque"/>
         <PlacementModel value="AP_HotSTorrasque"/>
@@ -4852,6 +4855,8 @@
         </Wireframe>
     </CActorUnit>
     <CActorUnit id="AP_UltraliskNoxious" parent="AP_UltraliskBase" unitName="AP_HotSNoxious">
+        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_UseNoxiousUltraliskModel" Send="Create"/>
+        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_UseNoxiousUltraliskModel" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <!-- Torrasque model takes over Noxious -->
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Create AP_UltraliskTorrasque"/>
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Destroy"/>
