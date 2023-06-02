@@ -158,8 +158,7 @@
         <On Terms="WeaponStart.AP_RoachVileCorpserMelee.AttackStart" Send="AnimBracketStart AttackCover Attack,Cover"/>
         <On Terms="WeaponStop.AP_RoachVileCorpserMelee.AttackStop" Send="AnimBracketStop AttackCover"/>
         <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
-        <On Terms="UnitBirth.AP_RoachBurrowed" Send="Create"/>
-        <On Terms="UnitBirth.AP_RoachBurrowed" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsAPRoachBurrowed" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
         <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowDownMedium"/>
         <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="AnimClear Fidget"/>
         <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Roach; MorphTo AP_RoachBurrowed" Send="AnimClear Burrow"/>
@@ -3365,6 +3364,8 @@
         <Sound value="SCV_Repair"/>
     </CActorSound>
     <CActorUnit id="AP_Roach" parent="AP_RoachBase" unitName="AP_Roach">
+        <On Terms="UnitBirth.AP_RoachBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_RoachBurrowed" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
         <On Terms="Upgrade.AP_RoachVile.Add" Send="Create AP_RoachVile"/>
         <On Terms="Upgrade.AP_RoachVile.Add" Send="Destroy"/>
         <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Destroy"/>
