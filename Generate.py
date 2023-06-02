@@ -449,7 +449,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     ret.game = get_choice("game", weights)
     if ret.game not in AutoWorldRegister.world_types:
         picks = Utils.get_fuzzy_results(ret.game, AutoWorldRegister.world_types, limit=1)[0]
-        raise Exception(f"No world found to handle game {ret.game}. Did you mean '{picks[0]}' ({picks[1]}% sure). "
+        raise Exception(f"No world found to handle game {ret.game}. Did you mean '{picks[0]}' ({picks[1]}% sure)? "
                         f"Check your spelling or installation of that world.")
 
     if ret.game not in weights:
