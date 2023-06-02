@@ -55,7 +55,7 @@ def crystal_capturable(state: CollectionState, player: int) -> bool:
         and state.has("Crystal Pot Top DUPE", player)
 
 def sand_capturable(state: CollectionState, player: int) -> bool:
-    return (state.can_reach("Plants", "Region", player) or state.can_reach("Ocean", "Region", player)) \
+    return (state.can_reach("Greenhouse", "Region", player) or state.can_reach("Ocean", "Region", player)) \
         and state.has("Sand Pot Bottom", player) \
         and state.has("Sand Pot Top", player) \
         and state.has("Sand Pot Bottom DUPE", player) \
@@ -87,7 +87,7 @@ def get_rules_lookup(player: int):
             "To Workshop": lambda state: state.has("Key for Workshop", player),
             "To Lobby From Office": lambda state: state.has("Key for Lobby", player),
             "To Prehistoric": lambda state: state.has("Key for Prehistoric Room", player),
-            "To Plants": lambda state: state.has("Key for Greenhouse Room", player),
+            "To Greenhouse": lambda state: state.has("Key for Greenhouse Room", player),
             "To Ocean": lambda state: state.has("Key for Ocean Room", player),
             "To Projector Room": lambda state: state.has("Key for Projector Room", player),
             "To Generator": lambda state: state.has("Key for Generator Room", player),
