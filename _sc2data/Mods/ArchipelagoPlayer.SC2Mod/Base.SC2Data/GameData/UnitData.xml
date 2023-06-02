@@ -1525,6 +1525,7 @@
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_ATSLaserBattery" Turret="AP_Battlecruiser"/>
         <WeaponArray Link="AP_ATALaserBattery" Turret="AP_Battlecruiser"/>
+        <WeaponArray Link="AP_AllPurposeLaserBattery" Turret="FreeRotate"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -1533,6 +1534,7 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AP_CloakOnBattlecruiser" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,0" Row="1" Column="0"/>
             <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,1" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_AllPurposeLaserBattery" Type="Passive" Requirements="AP_HaveAdvancedWeaponryBattlecruiser" Row="1" Column="4"/>
             <LayoutButtons Face="AP_YamatoGun" Type="AbilCmd" AbilCmd="AP_Yamato,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_MissilePods,0" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DefensiveMatrix,0" Row="2" Column="3"/>
@@ -3743,6 +3745,8 @@
         <WeaponArray Link="AP_DRCannonsG"/>
         <WeaponArray Link="AP_DRBattlecruiserA"/>
         <WeaponArray Link="AP_DRCannonsA"/>
+        <WeaponArray Link="AP_DRAllPurposeCannons"/>
+        <WeaponArray Link="AP_DRAllPurposeLaserBattery" Turret="FreeRotate"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -3751,6 +3755,7 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AP_CloakOnBattlecruiser" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,0" Row="1" Column="0"/>
             <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,1" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_AllPurposeLaserBattery" Type="Passive" Requirements="AP_HaveAdvancedWeaponryBattlecruiser" Row="1" Column="4"/>
             <LayoutButtons Face="AP_YamatoGun" Type="AbilCmd" AbilCmd="AP_DukesRevengeYamato,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_MissilePods,0" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DefensiveMatrix,0" Row="2" Column="3"/>

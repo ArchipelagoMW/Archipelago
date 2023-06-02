@@ -229,6 +229,11 @@
         <HotkeySet value="Cloak"/>
         <Universal value="1"/>
     </CButton>
+    <CButton id="AP_AllPurposeLaserBattery">
+        <Icon value="Assets\Textures\btn-upgrade-terran-nova-specialordance.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-nova-specialordance.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
     <CButton id="AP_AttackGhost">
         <Name value="Button/Name/Attack"/>
         <Tooltip value="Button/Tooltip/Attack"/>

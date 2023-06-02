@@ -255,6 +255,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CloakingTechnologyBattlecruiser" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAdvancedWeaponryBattlecruiserCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AdvancedWeaponryBattlecruiser" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementNot id="AP_NotCountUpgradeBattlecruiserBehemothReactorQueuedOrBetter">
         <OperandArray index="0" value="AP_CountUpgradeBattlecruiserBehemothReactorQueuedOrBetter"/>
     </CRequirementNot>

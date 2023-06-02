@@ -906,6 +906,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserCloak (int lp_player) 
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CloakingTechnologyBattlecruiser", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserATXLaserBattery (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_AdvancedWeaponryBattlecruiser", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockGhostOcularImplants (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

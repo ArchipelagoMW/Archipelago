@@ -6205,6 +6205,11 @@
         <LaunchAssets Model="AP_DRCannonsLaunch" Sound="AP_Loki_CannonLaunch"/>
         <ImpactMap index="None" Model="AP_DRCannonsImpact" Sound="AP_Loki_CannonImpact"/>
     </CActorAction>
+    <CActorAction id="AP_DRAllPurposeCannons" parent="GenericAttack" effectAttack="AP_DRAllPurposeCannons">
+        <LaunchAttachQuery Methods="AP_AMFilterDRCannons AP_AMPatternDRCannonsG"/>
+        <LaunchAssets Model="AP_DRCannonsLaunch" Sound="AP_Loki_CannonLaunch"/>
+        <ImpactMap index="None" Model="AP_DRCannonsImpact" Sound="AP_Loki_CannonImpact"/>
+    </CActorAction>
     <CActorUnit id="AP_DukesRevenge" parent="GenericUnitStandard" unitName="AP_DukesRevenge">
         <Aliases value="_UnitHuge"/>
         <On Terms="Behavior.AP_MercAirDropB.Create" Send="Create AP_BattlecruiserLokiReentry"/>
