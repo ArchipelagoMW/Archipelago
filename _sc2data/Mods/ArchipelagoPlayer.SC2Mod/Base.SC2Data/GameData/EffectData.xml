@@ -3536,6 +3536,28 @@
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
         <SearchFlags index="SameCliff" value="1"/>
     </CEffectEnumArea>
+    <CEffectDamage id="AP_ImpalerDamage">
+        <EditorCategories value="Race:Zerg"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <AttributeBonus index="Armored" value="25"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <Death value="Blast"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_Impaler">
+        <ValidatorArray index="0" value="TargetNotAcrossChasm"/>
+        <ValidatorArray value="AP_ImpalerIsBurrowed"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_ImpalerDamage"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="AP_ImpalerDummySearch">
+        <ImpactLocation Value="CasterPoint"/>
+    </CEffectEnumArea>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

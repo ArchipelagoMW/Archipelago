@@ -903,4 +903,15 @@
         <DamagePoint value="0.3332"/>
         <Effect value="AP_HotSUltraliskKaiserBlades"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Impaler">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_ImpalerDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="11"/>
+        <ArcSlop value="0"/>
+        <Period value="1.45"/>
+        <Effect value="AP_Impaler"/>
+        <LegacyOptions index="KeepChanneling" value="1"/>
+    </CWeaponLegacy>
 </Catalog>

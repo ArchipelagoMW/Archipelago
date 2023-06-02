@@ -1320,4 +1320,13 @@
         <PeriodicEffect value="AP_NoxiousDamageAuraSearch"/>
         <Requirements value="AP_HaveHotSNoxious"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImpalerWeaponDisabled">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImpalerMissileGroundCracks">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Period value="0.1"/>
+        <PeriodicEffect value="AP_ImpalerDummySearch"/>
+    </CBehaviorBuff>
 </Catalog>

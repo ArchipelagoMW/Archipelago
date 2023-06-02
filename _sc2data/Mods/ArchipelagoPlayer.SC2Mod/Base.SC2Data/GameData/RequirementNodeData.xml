@@ -1803,4 +1803,13 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSNoxiousCompleteOnly">
         <Count Link="AP_HotSNoxious" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeImpalerCompleteOnly1829818592TechTreeCheat">
+        <Count Link="AP_Impaler" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeImpalerQueuedOrBetterTechTreeCheat">
+        <Count Link="AP_Impaler" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitImpalerDenCompleteOnly3322076208TechTreeCheat">
+        <Count Link="AP_ImpalerDen" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

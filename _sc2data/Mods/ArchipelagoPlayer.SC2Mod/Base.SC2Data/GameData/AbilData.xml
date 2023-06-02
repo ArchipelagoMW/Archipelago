@@ -1975,6 +1975,30 @@
         <CursorEffect value="AP_BurrowChargeTargetSearchRevD"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_BurrowCharge" Requirements="AP_HaveBurrowCharge"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_BurrowImpaler">
+        <AbilSetId value="BrwDb"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowDown">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_ImpalerBurrowed" RandomDelayMax="0.25">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="2"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="1.8332"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1.8332"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -2186,6 +2210,29 @@
         <AutoCastValidatorArray value="AP_PoisonNovaEnemiesNearby"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_PoisonNova" Requirements="AP_HaveHotSNoxious"/>
     </CAbilEffectInstant>
+    <CAbilTrain id="AP_MorphRoachToImpaler">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RefundFraction>
+            <Resource index="Minerals" value="-0.75"/>
+            <Resource index="Vespene" value="-0.75"/>
+            <Resource index="Terrazine" value="-0.75"/>
+            <Resource index="Custom" value="-0.75"/>
+        </RefundFraction>
+        <Activity value="UI/Morphing"/>
+        <ActorKey value="ImpalerAspect"/>
+        <Flags index="DisableCollision" value="1"/>
+        <Flags index="KillOnFinish" value="1"/>
+        <Flags index="Select" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <MorphUnit value="AP_ImpalerEgg"/>
+        <InfoArray index="Train1" Time="15" Alert="MorphComplete_Zerg">
+            <Button DefaultButtonFace="AP_Impaler" Requirements="AP_HaveImpalerDen">
+                <Flags index="ShowInGlossary" value="1"/>
+            </Button>
+            <Unit value="AP_Impaler"/>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+    </CAbilTrain>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -2679,6 +2726,21 @@
         <InfoArray Unit="AP_TorrasqueCorpse">
             <SectionArray index="Stats">
                 <EffectArray index="Finish" value="AP_TorrasqueCorpseSet"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UnburrowImpaler">
+        <AbilSetId value="BrwUb"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowUp">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <ActorKey value="BurrowUp"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_Impaler" RandomDelayMax="0.5">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
             </SectionArray>
         </InfoArray>
     </CAbilMorph>

@@ -404,4 +404,29 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
     </CLight>
+    <CLight id="AP_LurkerEx1APortrait" parent="default">
+        <ToDInfoArray index="0" Id="NoLight" AmbientColor="0.031373,0.105882,0.035294" OperatorHDR="4">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDREmisMultiplier" value="3.000000"/>
+            <Param index="HDRGain" value="0.000000"/>
+            <Param index="HDRScale" value="0.000000"/>
+            <Param index="AOOcclusionRadius" value="1.000000"/>
+            <Param index="AONoOcclusion" value="0.900000"/>
+            <Param index="AOOcclusionPower" value="2.000000"/>
+            <Param index="AODetailOcclusionRadius" value="0.010000"/>
+            <Param index="AODetailNoOcclusion" value="0.060000"/>
+            <Param index="AODetailOcclusionPower" value="4.000000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.427451,1.000000,0.745098"/>
+                <ColorMultiplier value="1.718000"/>
+                <SpecularColor value="0.800000,1.000000,0.874510"/>
+                <SpecColorMultiplier value="0.569000"/>
+                <Direction value="0.404650,0.168605,-0.898794"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="1.000000,0.788235,0.568627" ColorMultiplier="2.213000" Direction="-0.802025,-0.010079,-0.597206"/>
+            <DirectionalLight index="Back" Color="0.501961,1.000000,0.501961" ColorMultiplier="1.318000" Direction="0.133256,-0.144358,0.980512"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
+    </CLight>
 </Catalog>

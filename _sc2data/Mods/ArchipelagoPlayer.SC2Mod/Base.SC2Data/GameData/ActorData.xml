@@ -3223,6 +3223,19 @@
     <CActorSound id="AP_BurrowChargeUpSound" parent="SoundOneShot">
         <Sound value="Zerg_UnburrowLarge"/>
     </CActorSound>
+    <CActorSound id="AP_ActorSound_Impaler_TentacleImpact" parent="SoundOneShot">
+        <On Terms="Effect.AP_ImpalerDamage.Start; At Target" Send="Create"/>
+        <Sound value="AP_Impaler_TentacleImpact2"/>
+    </CActorSound>
+    <CActorSound id="AP_ActorSound_Impaler_TentacleVox" parent="SoundOneShot">
+        <On Terms="Effect.AP_ImpalerDamage.Start; At Target" Send="Create"/>
+        <Sound value="AP_Impaler_TentacleVox"/>
+    </CActorSound>
+    <CActorModel id="AP_AttackDummyCursorModel" parent="TerranCursorModel" abil="attack">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="AP_AttackDummyCursorModel"/>
+    </CActorModel>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -3766,6 +3779,130 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOrigin"/>
     </CActorModel>
+    <CActorUnit id="AP_Impaler" parent="GenericUnitBase" unitName="AP_Impaler">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="ZergBurrowStandardAnimMacro"/>
+        <Macros value="ZergMediumBurrowEffects"/>
+        <Macros value="UnloadDropAnim"/>
+        <On Terms="UnitBirth.AP_ImpalerBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_ImpalerBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowDownMedium"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="AnimClear Fidget"/>
+        <On Terms="AbilMorph.AP_MorphRoachToImpaler.Finish; MorphTo AP_Impaler; !AbilKey BurrowUp" Send="Create"/>
+        <On Terms="AbilMorph.AP_MorphRoachToImpaler.Start; MorphFrom AP_Impaler; !AbilKey BurrowDown" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Impaler; MorphTo AP_ImpalerBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Impaler; MorphFrom AP_ImpalerBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Impaler; MorphFrom AP_ImpalerBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <DeathArray index="Normal" ModelLink="AP_ImpalerDeath" SoundLink="Lurker_Explode"/>
+        <DeathArray index="Disintegrate" ModelLink="AP_ImpalerDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Fire" ModelLink="AP_ImpalerDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <PortraitModel value="AP_LurkerEx1APortrait"/>
+        <WalkAnimMoveSpeed value="2.2968"/>
+        <BarOffset value="55"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerEx1A.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-impaler.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Lurker_Ready"/>
+        <SoundArray index="What" value="Lurker_What"/>
+        <SoundArray index="Yes" value="Lurker_Yes"/>
+        <SoundArray index="Attack" value="Lurker_Attack"/>
+        <SoundArray index="Pissed" value="Lurker_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-impaler.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerEx1A.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorAction id="AP_ImpalerAttack" parent="GenericAttack" effectImpact="AP_ImpalerDamage" effectLaunch="AP_Impaler">
+        <LaunchAttachQuery Methods="Origin"/>
+        <LaunchAssets Sound="Lurker_AttackLaunch"/>
+        <ImpactSiteOps Ops="SOpShadow SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="" Sound="AP_Impaler_TentacleImpact1"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorModel id="AP_ImpalerAttackImpact">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="Effect.AP_ImpalerDamage.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="$Birth 0 0.000000 0.000000 1.500000 AsDuration"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow SOpAttachOriginStationary"/>
+    </CActorModel>
+    <CActorMissile id="AP_ImpalerAttackMissile" parent="GenericAttackMissile" unitName="AP_ImpalerWeapon">
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="Invisible"/>
+        <Baselines index="Stand" AnimProps="Unburrow" BlendIn="-1.000000" BlendOut="-1.000000"/>
+    </CActorMissile>
+    <CActorUnit id="AP_ImpalerEgg" parent="GenericUnitMorph" unitName="AP_ImpalerEgg">
+        <Aliases value="_UnitMedium"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ImpalerEgg; MorphFrom AP_Hydralisk" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ImpalerEgg; MorphFrom AP_Hydralisk" Send="$Birth 0 0.000000 -1.000000 0.000000"/>
+        <On Terms="AnimDone; AnimName Birth" Send="AnimBaselineStart"/>
+        <HostSiteOps Ops="SOpRotVariancerForward30"/>
+        <DeathArray index="Normal" ModelLink="AP_HydraliskLurkerEggDeath" SoundLink="LurkerEgg_Explode"/>
+        <PortraitModel value="CocoonPortrait"/>
+        <BarOffset value="55"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerEgg.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-egg.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Egg_Ready"/>
+        <SoundArray index="What" value="Egg_What"/>
+        <SoundArray index="Yes" value=""/>
+        <SoundArray index="Pissed" value="Egg_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-egg.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerEgg.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorSound id="AP_ImpalerEggDeathSound" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_ImpalerEgg; PassChance 25.000000" Send="Create"/>
+        <Sound value="LurkerEgg_Death"/>
+    </CActorSound>
+    <CActorModel id="AP_ImpalerMissileGroundCracks" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ImpalerDummySearch.Start" Send="Create"/>
+        <Host Subject="_Missile"/>
+        <HostSiteOps Ops="SOpShadow SOpAttachOriginStationary"/>
+    </CActorModel>
+    <CActorSplat id="AP_ImpalerBurrowedSplat" parent="BurrowedSplatBase">
+        <On Terms="UnitBirth.AP_ImpalerBurrowed" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_ImpalerBurrowed" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_ImpalerBurrowed" Send="TimerSet 5.000000 DelayDestroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_ImpalerBurrowed" Send="RefClear ::Host"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+    </CActorSplat>
+    <CActorRange id="AP_ImpalerRange">
+        <On Terms="SelectionLocalUpdate.AP_ImpalerBurrowed.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_ImpalerBurrowed.StartEditorGround" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_ImpalerBurrowed.StartEditorFlyer" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_ImpalerBurrowed.Stop" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_ImpalerBurrowed; Selected" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Impaler" Send="Destroy"/>
+        <Weapon value="AP_Impaler"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="5.000000"/>
+    </CActorRange>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->

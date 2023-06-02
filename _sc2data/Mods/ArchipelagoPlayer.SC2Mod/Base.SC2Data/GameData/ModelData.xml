@@ -2391,7 +2391,6 @@
     <CModel id="AP_NoxiousPortrait" parent="Portrait" Race="Zerg">
         <Model value="Assets\Portraits\Zerg\UltraliskPortrait\UltraliskPortrait.m3"/>
         <Image value="Assets\Textures\UltraliskPortrait_Static.dds"/>
-        <Lighting value="AP_NoxiousPortrait"/>
     </CModel>
     <CModel id="AP_PoisonNovaModel">
         <Model value="Assets\Effects\Zerg\MiasmaliskPoisonCloudBirth\MiasmaliskPoisonCloudBirth.m3"/>
@@ -2402,5 +2401,77 @@
         <Model value="Assets\Units\Zerg\UltraliskEx1ADeath\UltraliskEx1ADeath.m3"/>
         <LowQualityModel value="ZergLargeUnitDeathLow"/>
         <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_AttackDummyCursorModel" parent="UI">
+        <Model value="Assets\UI\Cursors\AttackMoveSwarm\AttackMoveSwarm.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <SelectionRadius value="2.500000"/>
+        <ShadowRadius value="2.500000"/>
+    </CModel>
+    <CModel id="AP_Impaler" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerEx1A\LurkerEx1A.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid08"/>
+        <Radius value="0.700000"/>
+        <ScaleMax value="1.100000,1.100000,1.100000"/>
+        <ScaleMin value="1.100000,1.100000,1.100000"/>
+        <SelectionRadius value="0.590500"/>
+        <ShadowRadius value="0.900000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraMid08"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.800000"/>
+        <UnitGlossaryCamera value="Star2CameraMid08"/>
+    </CModel>
+    <CModel id="AP_ImpalerAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\PrimalSunkenColonyAttackImpact\PrimalSunkenColonyAttackImpact.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ScaleMax value="0.550000,0.550000,0.550000"/>
+        <ScaleMin value="0.550000,0.550000,0.550000"/>
+    </CModel>
+    <CModel id="AP_ImpalerDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerEx1ADeath\LurkerEx1ADeath.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_ImpalerDeathAcid" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerDeathAcid\LurkerDeathAcid.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_ImpalerDeathFire" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerDeathFire\LurkerDeathFire.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_LurkerEx1APortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\LurkerPortrait\LurkerPortrait.m3"/>
+        <Image value="Assets\Textures\LurkerPortrait_Static.dds"/>
+        <Lighting value="AP_LurkerEx1APortrait"/>
+    </CModel>
+    <CModel id="AP_HydraliskLurkerEggDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\LurkerEggDeath\LurkerEggDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Lighting value="LurkerEgg"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.764400"/>
+        <ShadowRadius value="0.764400"/>
+    </CModel>
+    <CModel id="AP_ImpalerEgg" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerEgg\LurkerEgg.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.764400"/>
+        <ShadowRadius value="0.764400"/>
+        <SquibTypeDefault value="Flesh"/>
+    </CModel>
+    <CModel id="AP_ImpalerMissileGroundCracks" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\PrimalLurkerMissile\PrimalLurkerMissile.m3"/>
+        <EditorCategories value="Race:Zerg"/>
     </CModel>
 </Catalog>

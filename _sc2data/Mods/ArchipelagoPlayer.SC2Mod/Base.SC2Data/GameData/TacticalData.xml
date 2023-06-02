@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Catalog>
+    <CTacticalOrder id="AP_Impaler">
+        <Abil value="AP_BurrowImpaler"/>
+        <Validator value="AP_TacticalBurrowImpalerDown"/>
+    </CTacticalOrder>
+    <CTacticalOrder id="AP_ImpalerBurrowed2">
+        <Abil value="AP_UnburrowImpaler"/>
+        <Validator value="AP_TacticalBurrowImpalerUp"/>
+    </CTacticalOrder>
+</Catalog>

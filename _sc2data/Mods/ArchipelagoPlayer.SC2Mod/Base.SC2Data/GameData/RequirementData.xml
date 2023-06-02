@@ -889,4 +889,12 @@
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSNoxiousCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveImpaler">
+        <EditorCategories value="Race:Zerg,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeImpalerCompleteOnly1829818592TechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveImpalerDen">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitImpalerDenCompleteOnly3322076208TechTreeCheat"/>
+    </CRequirement>
 </Catalog>
