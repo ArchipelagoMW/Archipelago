@@ -220,6 +220,10 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHurricaneMissilesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseHyperjump">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeTacticalJumpCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_GhostHoldingFire">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountBehaviorGhostHoldFireBCompleteOnlyAtUnit"/>

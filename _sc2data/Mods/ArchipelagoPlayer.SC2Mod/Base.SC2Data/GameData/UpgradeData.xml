@@ -943,6 +943,10 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_TacticalJump">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
     <CUpgrade id="AP_FullBoreCanisterAmmo">
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>

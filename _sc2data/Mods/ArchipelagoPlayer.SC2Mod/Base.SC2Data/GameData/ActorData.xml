@@ -1869,11 +1869,37 @@
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.On" Send="Create"/>
         <Sound value="Banshee_CloakOn"/>
     </CActorSound>
+    <CActorSound id="AP_Battlecruiser_TacticalJumpCursorSound" parent="SoundOneShot">
+        <On Terms="Abil.AP_Hyperjump.TargetApproachStart" Send="Create"/>
+        <Sound value="Battlecruiser_TacticalJumpCursor"/>
+        <ScopeBearingsTracking value="ForceOff"/>
+    </CActorSound>
+    <CActorSound id="AP_Battlecruiser_HyperJumpIn_Sound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_HyperjumpTeleportIn.On" Send="Create"/>
+        <Sound value="Battlecruiser_HyperJumpIn"/>
+    </CActorSound>
+    <CActorSound id="AP_Battlecruiser_HyperJumpOut_Sound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_HyperjumpTeleportOut.On" Send="Create"/>
+        <Sound value="Battlecruiser_HyperJumpOut"/>
+        <!-- should stay in the original Battlecruiser position and not hyperjump with it -->
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+    </CActorSound>
+    <CActorSound id="Battlecruiser_TacticalJumpWireframeSound" parent="SoundOneShot">
+        <On Terms="Behavior.HyperjumpTeleport.On" Send="Create"/>
+        <Sound value="Battlecruiser_TacticalJumpWireframe"/>
+    </CActorSound>
     <CActorUnit id="AP_Battlecruiser" parent="GenericUnitStandard" unitName="AP_Battlecruiser">
         <Aliases value="_UnitHuge"/>
         <On Terms="ActorCreation; ValidateUnit AP_BattlecruiserUpgraded" Send="AnimBlendTimeApply 0.000000"/>
         <On Terms="ActorCreation; ValidateUnit AP_BattlecruiserUpgraded" Send="AnimGroupApply A"/>
         <On Terms="ActorCreation; ValidateUnit AP_BattlecruiserUpgraded" Send="AnimBlendTimeApply"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportOut.On" Send="SetOpacity"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportIn.Off" Send="SetOpacity 1.000000"/>
+        <On Terms="Behavior.AP_HyperjumpTeleport.On" Send="Create AP_BattleCruiserTacticalJump_Placement"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportIn.Off" Target="AP_BattleCruiserTacticalJump_Placement" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportOut.On" Send="Create AP_HyperjumpLaunch"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportIn.On" Send="Create AP_HyperjumpImpact"/>
         <On Terms="Upgrade.AP_BattlecruiserEnableSpecializations.Add; ValidateUnit NotDeadOrConstruction" Send="AnimBlendTimeApply 5.000000"/>
         <On Terms="Upgrade.AP_BattlecruiserEnableSpecializations.Add; ValidateUnit NotDeadOrConstruction" Send="AnimPlay GLBirth,A"/>
         <On Terms="Upgrade.AP_BattlecruiserEnableSpecializations.Add; ValidateUnit NotDeadOrConstruction" Send="AnimGroupApply A"/>
@@ -1911,6 +1937,39 @@
             <Image value="Assets\Textures\Wireframe-Terran-Battlecruiser.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_BattleCruiserTacticalJump_Placement" parent="ModelAnimationStyleContinuous">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_BattlecruiserUpgraded" Send="ModelSwap BattlecruiserYamatoHyperjumpPlacement"/>
+        <Model value="BattlecruiserHyperjumpPlacement"/>
+    </CActorModel>
+    <CActorModel id="AP_HyperjumpImpact" parent="ModelAnimationStyleOneShot">
+        <Model value="HyperjumpImpact"/>
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation; ValidatePlayer AP_BattlecruiserUpgraded" Send="ModelSwap HyperjumpImpactUpgraded"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldPosition="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_HyperjumpLaunch" parent="ModelAnimationStyleOneShot">
+        <Model value="HyperjumpLaunch"/>
+        <EditorCategories value=""/>
+        <On Terms="AssetPreInit; ValidatePlayer AP_BattlecruiserUpgraded" Send="ModelLinkCustomize HyperjumpLaunchUpgraded"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldPosition="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <Flags index="SuppressCreationErrors" value="1"/>
+    </CActorModel>
     <CActorAction id="AP_BattlecruiserAirAttack" parent="GenericAttack" effectImpact="AP_ATALaserBatteryU" effectLaunch="AP_ATALaserBatteryLM">
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMRandomUniform"/>
         <LaunchAssets Sound="Battlecruiser_AirAttackLaunch"/>
@@ -6141,6 +6200,12 @@
     <CActorUnit id="AP_DukesRevenge" parent="GenericUnitStandard" unitName="AP_DukesRevenge">
         <Aliases value="_UnitHuge"/>
         <On Terms="Behavior.AP_MercAirDropB.Create" Send="Create AP_BattlecruiserLokiReentry"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportOut.On" Send="SetOpacity"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportIn.Off" Send="SetOpacity 1.000000"/>
+        <On Terms="Behavior.AP_HyperjumpTeleport.On" Send="Create AP_BattleCruiserTacticalJump_Placement"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportIn.Off" Target="AP_BattleCruiserTacticalJump_Placement" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportOut.On" Send="Create AP_HyperjumpLaunch"/>
+        <On Terms="Behavior.AP_HyperjumpTeleportIn.On" Send="Create AP_HyperjumpImpact"/>
         <HostSiteOps Ops="SOpBankerBattlecruiser"/>
         <DeathArray index="Normal" ModelLink="AP_DukesRevengeDeath" SoundLink=""/>
         <DeathArray index="Squish" ModelLink="BattlecruiserDeathSquish"/>

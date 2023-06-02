@@ -247,6 +247,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_YamatoCannon" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeTacticalJumpCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_TacticalJump" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementNot id="AP_NotCountUpgradeBattlecruiserBehemothReactorQueuedOrBetter">
         <OperandArray index="0" value="AP_CountUpgradeBattlecruiserBehemothReactorQueuedOrBetter"/>
     </CRequirementNot>

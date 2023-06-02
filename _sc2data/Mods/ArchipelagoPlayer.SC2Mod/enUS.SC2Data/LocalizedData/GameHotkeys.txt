@@ -118,3 +118,4 @@ Button/Hotkey/AP_Wraith=A
 Button/Hotkey/AP_WraithCloakOff=D
 Button/Hotkey/AP_WraithCloakOn=C
 Button/Hotkey/AP_YamatoGun=Y
+Button/Hotkey/AP_Hyperjump=T

@@ -555,6 +555,25 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_Hyperjump">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <!-- Need create unit as first effect to check for placement vs pathing blockers -->
+        <Effect index="0" value="AP_HyperjumpCreatePrecursor"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+        </Cost>
+        <Range value="500"/>
+        <CastIntroTime value="0"/>
+        <CastOutroTime value="6"/>
+        <ShowProgressArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <ProgressButtonArray index="Channel" value="AP_Hyperjump"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Hyperjump" Requirements="AP_UseHyperjump"/>
+    </CAbilEffectTarget>
     <CAbilQueue id="AP_que1">
         <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
         <QueueSize value="1"/>
