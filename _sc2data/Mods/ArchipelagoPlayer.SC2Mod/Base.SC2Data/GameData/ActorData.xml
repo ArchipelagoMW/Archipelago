@@ -3368,12 +3368,12 @@
         <On Terms="UnitBirth.AP_RoachBurrowed" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
         <On Terms="Upgrade.AP_RoachVile.Add" Send="Create AP_RoachVile"/>
         <On Terms="Upgrade.AP_RoachVile.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Destroy"/>
         <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Create AP_RoachVile"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Destroy"/>
         <On Terms="Upgrade.AP_RoachCorpser.Add" Send="Create AP_RoachCorpser"/>
         <On Terms="Upgrade.AP_RoachCorpser.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachCorpser" Send="Destroy"/>
         <On Terms="ActorCreation; ValidateUnit AP_HaveRoachCorpser" Send="Create AP_RoachCorpser"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachCorpser" Send="Destroy"/>
         <On Terms="Upgrade.AP_TunnelingClaws.Add" Send="ModelSwap RoachUpgrade"/>
         <On Terms="Upgrade.AP_TunnelingClaws.Add; ValidateUnit IsBuried" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
     </CActorUnit>
@@ -3398,8 +3398,8 @@
         <!-- Vile model takes over Corpser -->
         <On Terms="Upgrade.AP_RoachVile.Add" Send="Create AP_RoachVile"/>
         <On Terms="Upgrade.AP_RoachVile.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Destroy"/>
         <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Create AP_RoachVile"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Destroy"/>
         <Model value="AP_RoachCorpser"/>
         <BuildModel value="AP_RoachCorpser"/>
         <DeathArray index="Normal" ModelLink="AP_RoachCorpserDeath"/>
@@ -4827,8 +4827,8 @@
     </CActorModel>
     <CActorUnit id="AP_Ultralisk" parent="AP_UltraliskBase" unitName="AP_Ultralisk">
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Ultralisk; !AbilKey BurrowUp" Send="Create"/>
-        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_UseBaseUltraliskModel" Send="Create"/>
-        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_UseBaseUltraliskModel" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On Terms="UnitBirth.AP_UltraliskBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_UltraliskBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Create AP_UltraliskTorrasque"/>
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSTorrasque" Send="Create AP_UltraliskTorrasque"/>
@@ -4839,8 +4839,6 @@
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSNoxious" Send="Destroy"/>
     </CActorUnit>
     <CActorUnit id="AP_UltraliskTorrasque" parent="AP_UltraliskBase" unitName="AP_HotSTorrasque">
-        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_HaveHotSTorrasque" Send="Create"/>
-        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_HaveHotSTorrasque" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <Model value="AP_HotSTorrasque"/>
         <BuildModel value="AP_HotSTorrasque"/>
         <PlacementModel value="AP_HotSTorrasque"/>
@@ -4856,8 +4854,6 @@
         </Wireframe>
     </CActorUnit>
     <CActorUnit id="AP_UltraliskNoxious" parent="AP_UltraliskBase" unitName="AP_HotSNoxious">
-        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_UseNoxiousUltraliskModel" Send="Create"/>
-        <On Terms="UnitBirth.AP_UltraliskBurrowed; ValidatePlayer AP_UseNoxiousUltraliskModel" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <!-- Torrasque model takes over Noxious -->
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Create AP_UltraliskTorrasque"/>
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Destroy"/>
