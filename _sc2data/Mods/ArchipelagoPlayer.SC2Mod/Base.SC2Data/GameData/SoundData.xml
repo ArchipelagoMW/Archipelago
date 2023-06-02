@@ -1167,6 +1167,16 @@
         <Chance value="25"/>
         <Volume value="-1.000000,-1.000000"/>
     </CSound>
+    <CSound id="AP_Battlecruiser_CloakOn" parent="Terran_CloakOn">
+        <DupeDestroyCount value="4"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-2.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Battlecruiser_CloakOff" parent="Terran_CloakOff">
+        <DupeDestroyCount value="4"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-2.000000,-1.000000"/>
+    </CSound>
     <CSound id="AP_ScienceVessel_Attack" parent="TerranAck">
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Attack00.ogg" FacialAnim="ScienceVessel_Attack00"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\ScienceVessel\ScienceVessel_Attack01.ogg" FacialAnim="ScienceVessel_Attack01"/>

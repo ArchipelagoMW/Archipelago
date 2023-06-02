@@ -1521,7 +1521,8 @@
         <AbilArray Link="AP_MissilePods"/>
         <AbilArray Link="AP_DefensiveMatrix"/>
         <AbilArray Link="AP_Hyperjump"/>
-        <BehaviorArray Link="ScavengingSystemsMechDeath"/>
+        <AbilArray Link="AP_BattlecruiserCloak"/>
+        <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_ATSLaserBattery" Turret="AP_Battlecruiser"/>
         <WeaponArray Link="AP_ATALaserBattery" Turret="AP_Battlecruiser"/>
         <CardLayouts>
@@ -1530,6 +1531,8 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AP_CloakOnBattlecruiser" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,0" Row="1" Column="0"/>
+            <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,1" Row="1" Column="1"/>
             <LayoutButtons Face="AP_YamatoGun" Type="AbilCmd" AbilCmd="AP_Yamato,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_MissilePods,0" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DefensiveMatrix,0" Row="2" Column="3"/>
@@ -3735,6 +3738,7 @@
         <AbilArray Link="AP_DukesRevengeMissilePods"/>
         <AbilArray Link="AP_DukesRevengeDefensiveMatrix"/>
         <AbilArray Link="AP_Hyperjump"/>
+        <AbilArray Link="AP_BattlecruiserCloak"/>
         <WeaponArray Link="AP_DRBattlecruiserG"/>
         <WeaponArray Link="AP_DRCannonsG"/>
         <WeaponArray Link="AP_DRBattlecruiserA"/>
@@ -3745,6 +3749,8 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AP_CloakOnBattlecruiser" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,0" Row="1" Column="0"/>
+            <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,1" Row="1" Column="1"/>
             <LayoutButtons Face="AP_YamatoGun" Type="AbilCmd" AbilCmd="AP_DukesRevengeYamato,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_MissilePods,0" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DefensiveMatrix,0" Row="2" Column="3"/>

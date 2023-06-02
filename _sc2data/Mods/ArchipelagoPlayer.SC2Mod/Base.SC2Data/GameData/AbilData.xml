@@ -574,6 +574,22 @@
         <ProgressButtonArray index="Channel" value="AP_Hyperjump"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_Hyperjump" Requirements="AP_UseHyperjump"/>
     </CAbilEffectTarget>
+    <CAbilBehavior id="AP_BattlecruiserCloak">
+        <AbilSetId value="Clok"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="AP_CloakOnBattlecruiser" Requirements="AP_CloakingTechnologyBattlecruiser">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="CloakOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <BehaviorArray value="AP_BattlecruiserCloak"/>
+    </CAbilBehavior>
     <CAbilQueue id="AP_que1">
         <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
         <QueueSize value="1"/>

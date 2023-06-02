@@ -1885,7 +1885,7 @@
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
     </CActorSound>
-    <CActorSound id="Battlecruiser_TacticalJumpWireframeSound" parent="SoundOneShot">
+    <CActorSound id="AP_Battlecruiser_TacticalJumpWireframeSound" parent="SoundOneShot">
         <On Terms="Behavior.HyperjumpTeleport.On" Send="Create"/>
         <Sound value="Battlecruiser_TacticalJumpWireframe"/>
     </CActorSound>
@@ -1937,6 +1937,14 @@
             <Image value="Assets\Textures\Wireframe-Terran-Battlecruiser.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorSound id="AP_Battlecruiser_CloakOn" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloaked"/>
+        <On Terms="Behavior.AP_BattlecruiserCloak.On" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_Battlecruiser_CloakOff" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloakedAndNotDead"/>
+        <On Terms="Behavior.AP_BattlecruiserCloak.Off" Send="Create"/>
+    </CActorSound>
     <CActorModel id="AP_BattleCruiserTacticalJump_Placement" parent="ModelAnimationStyleContinuous">
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>

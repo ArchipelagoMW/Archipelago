@@ -5307,6 +5307,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="4385E314"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="B3B07D2D"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="8B9C98A7"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="B7D3966F"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="1FC30E51"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="8301DBE3"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="A973FAB0"/>
@@ -6577,6 +6578,42 @@
         <Element Type="Param" Id="4FA8D974">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_TacticalJump</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="B7D3966F">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="E9655965"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="5B1BF60C"/>
+        </Element>
+        <Element Type="ParamDef" Id="E9655965">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="1F02FE52"/>
+        </Element>
+        <Element Type="Param" Id="1F02FE52">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="5B1BF60C">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="77D615FD"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="75CB54C9"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="47DD414D"/>
+        </Element>
+        <Element Type="Param" Id="77D615FD">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="E9655965"/>
+        </Element>
+        <Element Type="Param" Id="75CB54C9">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="47DD414D">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_CloakingTechnologyBattlecruiser</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

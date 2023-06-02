@@ -222,6 +222,13 @@
         <Icon value="Assets\Textures\btn-ability-terran-warpjump.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-terran-warpjump.dds"/>
     </CButton>
+    <CButton id="AP_CloakOnBattlecruiser">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="Cloak"/>
+        <Universal value="1"/>
+    </CButton>
     <CButton id="AP_AttackGhost">
         <Name value="Button/Name/Attack"/>
         <Tooltip value="Button/Tooltip/Attack"/>

@@ -947,6 +947,12 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_CloakingTechnologyBattlecruiser">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <LeaderAlias value=""/>
+        <AffectedUnitArray value="AP_dBattlecruiser"/>
+    </CUpgrade>
     <CUpgrade id="AP_FullBoreCanisterAmmo">
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
