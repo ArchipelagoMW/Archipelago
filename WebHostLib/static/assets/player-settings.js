@@ -304,17 +304,15 @@ const toggleRandomize = (event, inputElement, optionalSelectElement) => {
     if (optionalSelectElement) {
       optionalSelectElement.disabled = undefined;
     }
-
-    updateGameSetting(inputElement);
   } else {
     randomButton.classList.add('active');
     inputElement.disabled = true;
     if (optionalSelectElement) {
       optionalSelectElement.disabled = true;
     }
-
-    updateGameSetting(randomButton);
   }
+
+  updateGameSetting(randomButton);
 };
 
 const updateBaseSetting = (event) => {
