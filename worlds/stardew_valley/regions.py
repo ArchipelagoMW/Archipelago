@@ -550,7 +550,9 @@ def swap_one_connection(regions_by_name, connections_by_name,
     randomized_connections_already_shuffled = {connection: randomized_connections[connection]
                                                for connection in randomized_connections
                                                if connection != randomized_connections[connection]}
-    chosen_unreachable_region_name = random.choice(tuple(unreachable_regions))
+    unreachable_regions_leading_somewhere = tuple([region for region in unreachable_regions
+                                                   if len(regions_by_name[region].exits) > 0])
+    chosen_unreachable_region_name = random.choice(unreachable_regions_leading_somewhere)
     chosen_unreachable_region = regions_by_name[chosen_unreachable_region_name]
     chosen_unreachable_entrance_name = random.choice(chosen_unreachable_region.exits)
     chosen_unreachable_entrance = connections_by_name[chosen_unreachable_entrance_name]
