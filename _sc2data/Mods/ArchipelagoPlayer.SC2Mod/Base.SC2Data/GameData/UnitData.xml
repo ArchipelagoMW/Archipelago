@@ -2580,6 +2580,7 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_LiberatorMorphtoAG"/>
         <AbilArray Link="AP_LiberatorAGTarget"/>
+        <AbilArray Link="AP_LiberatorCloak"/>
         <WeaponArray Link="AP_LiberatorMissileLaunchers"/>
         <WeaponArray Turret="AP_Liberator"/>
         <CardLayouts>
@@ -2589,7 +2590,22 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="AP_LiberatorAGMode" Type="AbilCmd" AbilCmd="AP_LiberatorAGTarget,0" Row="2" Column="0"/>
-            <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_SiegeProtocol" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="1" Column="1"/>
+            <LayoutButtons>
+                <Face value="AP_CloakOnLiberator"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_LiberatorCloak,On"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="CloakOff"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_LiberatorCloak,Off"/>
+                <Row value="2"/>
+                <Column value="3"/>
+            </LayoutButtons>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -2650,14 +2666,29 @@
         <AbilArray Link="AP_LiberatorMorphtoAA"/>
         <AbilArray Link="AP_LiberatorMorphtoAG"/>
         <AbilArray Link="AP_LiberatorAATarget"/>
+        <AbilArray Link="AP_LiberatorCloak"/>
         <BehaviorArray Link="AP_LiberatorInitialMovable"/>
         <WeaponArray Link="AP_LiberatorAGWeapon" Turret="AP_LiberatorAG"/>
         <CardLayouts>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="AP_LiberatorAAMode" Type="AbilCmd" AbilCmd="AP_LiberatorAATarget,0" Row="2" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="2" Column="2"/>
-            <LayoutButtons Face="AP_SiegeProtocol" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_SiegeProtocol" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="1" Column="1"/>
+            <LayoutButtons>
+                <Face value="AP_CloakOnLiberator"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_LiberatorCloak,On"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="CloakOff"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_LiberatorCloak,Off"/>
+                <Row value="2"/>
+                <Column value="3"/>
+            </LayoutButtons>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>

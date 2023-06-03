@@ -361,6 +361,10 @@
         <!-- <NodeArray index="Use" Link="AP_CountUnitFusionCoreCompleteOnly"/> -->
         <NodeArray index="Show" Link="AP_NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
     </CRequirement>
+    <CRequirement id="AP_CloakingTechnologyLiberator">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCloakingTechnologyLiberatorCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_HaveWidowMineDrillingClaws">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Use" Link="AP_CountUpgradeDrillClawsCompleteOnly"/>

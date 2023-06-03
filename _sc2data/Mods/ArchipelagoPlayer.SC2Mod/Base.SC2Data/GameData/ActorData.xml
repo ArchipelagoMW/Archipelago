@@ -4879,6 +4879,14 @@
     <CActorSound id="AP_Liberator_Land" parent="SoundOneShot">
         <Sound value="Liberator_Land"/>
     </CActorSound>
+    <CActorSound id="AP_Liberator_CloakOn" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloaked"/>
+        <On Terms="Behavior.AP_LiberatorCloak.On" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_Liberator_CloakOff" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotCloakedAndNotDead"/>
+        <On Terms="Behavior.AP_LiberatorCloak.Off" Send="Create"/>
+    </CActorSound>
     <CActorSiteOpBankerUnit id="AP_SOpBankerLiberator">
         <RollMax value="30.000000,10.000000"/>
         <RollInActivationAngle value="5.000000"/>

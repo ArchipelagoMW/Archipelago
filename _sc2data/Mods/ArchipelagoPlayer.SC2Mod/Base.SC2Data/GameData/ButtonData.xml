@@ -477,6 +477,13 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_CloakOnLiberator">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="Cloak"/>
+        <Universal value="1"/>
+    </CButton>
     <CButton id="AP_SiegeProtocol">
         <Icon value="Assets\Textures\btn-techupgrade-terran-maelstromrounds.dds"/>
         <EditorCategories value="Race:Terran"/>

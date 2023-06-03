@@ -1573,6 +1573,16 @@
         <Flags index="NeedsTTS" value="1"/>
         <Volume value="-2.000000,-2.000000"/>
     </CSound>
+    <CSound id="AP_Liberator_CloakOff" parent="Terran_CloakOff">
+        <DupeDestroyCount value="4"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-1.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Liberator_CloakOn" parent="Terran_CloakOn">
+        <DupeDestroyCount value="4"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-1.000000,0.000000"/>
+    </CSound>
     <CSound id="AP_ValkyrieSCBW@Attack" BaseDir="AP\LocalizedData\Sounds" Folder="ValkyrieSCBW" Race="Terran">
         <EditorCategories value="Race:Terran"/>
         <AssetArray TemplateParam="ValkyrieSCBW@Yes00"/>

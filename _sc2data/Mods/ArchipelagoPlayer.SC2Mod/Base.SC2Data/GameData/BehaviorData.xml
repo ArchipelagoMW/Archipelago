@@ -661,6 +661,17 @@
         <RemoveValidatorArray value="AP_HasNoLiberatorYoink"/>
         <RemoveValidatorArray value="IsNotRecallingCombine"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_LiberatorCloak">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CanSpendEnergy"/>
+        <RemoveValidatorArray value="hasEnergy"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+            <VitalRegenArray index="Energy" value="-1.4765"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_MineDroneCountdown">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-unit-terran-widowmine.dds"/>

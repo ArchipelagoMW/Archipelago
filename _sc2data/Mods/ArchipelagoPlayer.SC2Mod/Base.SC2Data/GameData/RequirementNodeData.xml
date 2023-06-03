@@ -429,6 +429,10 @@
     <CRequirementNot id="AP_NotCountUpgradeLiberatorMorphQueuedOrBetter">
         <OperandArray index="0" value="AP_CountUpgradeLiberatorMorphQueuedOrBetter"/>
     </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCloakingTechnologyLiberatorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CloakingTechnologyLiberator" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountBehavior id="AP_CountBehaviorWidowMineArmedCompleteOnlyAtUnit">
         <Count Link="AP_WidowMineArmed" State="CompleteOnlyAtUnit"/>
     </CRequirementCountBehavior>
