@@ -781,7 +781,7 @@ Critical_Checks = {
 
 Donald_Checks = {
     LocationName.DonaldScreens:          LocationData(0x13029A, 45, "Get Bonus", "Donald", 2),
-    LocationName.DonaldDemyxHBGetBonus:  LocationData(0x13029B, 28, "Get Bonus", "Donald", 2),
+    LocationName.DonaldDemyxHB2GetBonus:  LocationData(0x13029B, 28, "Get Bonus", "Donald", 2),
     LocationName.DonaldDemyxOC:          LocationData(0x13029C, 58, "Get Bonus", "Donald", 2),
     LocationName.DonaldBoatPete:         LocationData(0x13029D, 16, "Double Get Bonus", "Donald", 2),
     LocationName.DonaldBoatPeteGetBonus: LocationData(0x13029E, 16, "Second Get Bonus", "Donald", 2),
