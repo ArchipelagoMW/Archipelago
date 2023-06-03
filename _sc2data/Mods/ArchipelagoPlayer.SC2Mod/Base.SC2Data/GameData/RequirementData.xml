@@ -346,11 +346,16 @@
     </CRequirement>
     <CRequirement id="AP_HaveLiberatorRange">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeLiberatorAGRangeUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLiberatorAGRangeUpgradeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveLiberatorSiegeProtocol">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLiberatorSiegeProtocolNoDefenderMode">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleDefenderModeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_LearnLiberatorMorph">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>

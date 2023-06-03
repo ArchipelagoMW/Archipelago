@@ -423,6 +423,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_LiberatorSiegeProtocol" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNotPossibleDefenderModeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NotPossibleDefenderMode" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementNot id="AP_NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter">
         <OperandArray index="0" value="AP_CountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
     </CRequirementNot>

@@ -369,7 +369,7 @@ Button/Name/AP_ShapedBlast=Shaped Blast
 Button/Name/AP_ShapedHull=Shaped Hull
 Button/Name/AP_ShockwaveMissilePattern=Shockwave Missile Battery
 Button/Name/AP_ShrikeTurret=Shrike Turret
-Button/Name/AP_SiegeProtocol=Siege Protocol
+Button/Name/AP_LiberatorStructureAttack=Raid Artillery
 Button/Name/AP_SiegeTank=Build Siege Tank
 Button/Name/AP_SingularityAnchor=Tomahawk Power Cells
 Button/Name/AP_Snipe=Sniper Round
@@ -616,7 +616,7 @@ Button/Tooltip/AP_ShockwaveMissilePattern=Banshee attack fires multiple missile 
 Button/Tooltip/AP_ShrikeTurret=Bunkers are outfitted with an automated turret.
 Button/Tooltip/AP_SiegeBreaker=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeBreakerSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_SiegeProtocol=Concord Cannon can attack structures
+Button/Tooltip/AP_LiberatorStructureAttack=Liberators can attack structures while in Defender Mode.
 Button/Tooltip/AP_SiegeTank=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeTankSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SingularityAnchor=Wraith starts with 100 additional energy.
@@ -1424,7 +1424,8 @@ Upgrade/Name/AP_JuggernautPlating=Juggernaut Plating
 Upgrade/Name/AP_K5CreepBonuses=K5 Creep Bonuses
 Upgrade/Name/AP_LiberatorAGRangeUpgrade=Advanced Ballistics
 Upgrade/Name/AP_LiberatorMorph=Liberator Morph
-Upgrade/Name/AP_LiberatorSiegeProtocol=Siege Protocol
+Upgrade/Name/AP_LiberatorSiegeProtocol=Raid Artillery
+Upgrade/Name/AP_NotPossibleDefenderMode=Defender Mode
 Upgrade/Name/AP_MaelstromRounds=Maelstrom Rounds
 Upgrade/Name/AP_MagFieldLaunchers=Mag-Field Launchers
 Upgrade/Name/AP_MarauderLifeBoost=Kinetic Foam

@@ -2591,7 +2591,7 @@
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="AP_LiberatorAGMode" Type="AbilCmd" AbilCmd="AP_LiberatorAGTarget,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
-            <LayoutButtons Face="AP_SiegeProtocol" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_LiberatorStructureAttack" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocolNoDefenderMode" Row="1" Column="1"/>
             <LayoutButtons>
                 <Face value="AP_CloakOnLiberator"/>
                 <Type value="AbilCmd"/>
@@ -2674,7 +2674,7 @@
             <LayoutButtons Face="AP_LiberatorAAMode" Type="AbilCmd" AbilCmd="AP_LiberatorAATarget,0" Row="2" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
-            <LayoutButtons Face="AP_SiegeProtocol" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_LiberatorStructureAttack" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="1" Column="1"/>
             <LayoutButtons>
                 <Face value="AP_CloakOnLiberator"/>
                 <Type value="AbilCmd"/>
