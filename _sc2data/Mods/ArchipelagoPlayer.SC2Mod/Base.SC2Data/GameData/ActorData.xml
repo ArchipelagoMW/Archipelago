@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <const id="$AP_LurkerSpineSiteOps" value="{AP_LurkerSOpAoEVariancer SOpShadow SOpForwardCasterPoint SOp2DRotation AP_LurkerSOpShadowSpine SOpRotVariancerUp15}"/>
     <CActorAction default="1" id="AP_VikingFighterAttackBase" parent="GenericAttackNoCreateBase">
         <Missile value="AP_VikingFighterAttackMissile"/>
         <LaunchAssets Sound="VikingFighter_AttackLaunch"/>
@@ -370,6 +371,103 @@
         <VitalNames index="Shields" value="Vital/ZergShields"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Zerg-Ultralisk.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorUnit default="1" id="AP_HydraliskBase" parent="GenericUnitBase">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="ZergBurrowStandardAnimMacro"/>
+        <Macros value="ZergMediumBurrowEffects"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.NeedleSpines.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart AttackSuperior Attack,Superior"/>
+        <On Terms="WeaponStart.NeedleSpines.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart AttackInferior Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_HydraliskMelee.AttackStart" Send="AnimPlay AttackCover Attack,Cover"/>
+        <On Terms="WeaponStart.NeedleSpines.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.NeedleSpines.AttackStop" Send="AnimBracketStop AttackSuperior"/>
+        <On Terms="WeaponStop.NeedleSpines.AttackStop" Send="AnimBracketStop AttackInferior"/>
+        <On Terms="WeaponStop.NeedleSpines.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="WeaponStart.AP_HydraliskMelee.AttackStart; AnimPlaying AttackCover Cover,00" Send="TimerSet 0.400000 MeleeAttackLaunch"/>
+        <On Terms="WeaponStart.AP_HydraliskMelee.AttackStart; AnimPlaying AttackCover Cover,01" Send="TimerSet 0.100000 MeleeAttackLaunch"/>
+        <On Terms="TimerExpired; TimerName MeleeAttackLaunch" Send="Create HydraliskMeleeAttackLaunch"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowDownMedium"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Hydralisk; MorphTo AP_HydraliskBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Hydralisk; MorphFrom AP_HydraliskBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Hydralisk; MorphFrom AP_HydraliskBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsKillerPhantasm" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitBirth.AP_Hydralisk" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Hydralisk; MorphFrom AP_HydraliskBurrowed" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HydraliskBurrowed; MorphFrom AP_Hydralisk" Send="TerrainSquibDeactivate"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Hydra_Land"/>
+        <Model value="Hydralisk"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <EventDataSound Name="HydraliskAttackImpactMelee" Actor="UnitSound" Sound="Hydralisk_AttackImpactMelee"/>
+        <BuildModel value="Hydralisk"/>
+        <DeathArray index="Normal" ModelLink="HydraliskDeath" SoundLink="AP_Hydralisk_Explode"/>
+        <DeathArray index="Disintegrate" ModelLink="HydraliskDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Fire" ModelLink="HydraliskDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="AP_Spectre_KillerPhantasmDeath" Name="Hallucination"/>
+        <DeathCustoms ModelLink="HydraliskDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="FireOnMetal"/>
+            <BodySquibs Name="BloodReduced" IsFallback="1"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
+        <PlacementModel value="Hydralisk"/>
+        <PortraitModel value="HydraliskPortrait"/>
+        <TerrainSquibs>
+            <GroupName value="RippleStandard"/>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLarge"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.086"/>
+        <BarOffset value="60"/>
+        <BarWidth value="48"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Hydralisk.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-hydralisk.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Hydralisk_Ready"/>
+        <SoundArray index="What" value="Hydralisk_What"/>
+        <SoundArray index="Yes" value="Hydralisk_Yes"/>
+        <SoundArray index="Attack" value="Hydralisk_Attack"/>
+        <SoundArray index="Pissed" value="Hydralisk_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-hydralisk.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Hydralisk.dds"/>
         </Wireframe>
         <WireframeShieldColor value="255,0,128,0"/>
     </CActorUnit>
@@ -3236,6 +3334,9 @@
         <HostSiteOps Ops="SOpShadow"/>
         <Model value="AP_AttackDummyCursorModel"/>
     </CActorModel>
+    <CActorSound id="AP_BurrowDownLurker" parent="SoundOneShot">
+        <Sound value="Lurker_Burrow"/>
+    </CActorSound>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -3903,6 +4004,285 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="5.000000"/>
     </CActorRange>
+    <CActorUnit id="AP_HydraliskLurkerEgg" parent="GenericUnitMorph" unitName="AP_HydraliskLurkerEgg">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HydraliskLurkerEgg; MorphFrom AP_Hydralisk" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HydraliskLurkerEgg; MorphFrom AP_Hydralisk" Send="$Birth 0 0.000000 -1.000000 0.000000"/>
+        <On Terms="AnimDone; AnimName Birth" Send="AnimBaselineStart"/>
+        <HostSiteOps Ops="SOpRotVariancerForward30"/>
+        <DeathArray index="Normal" ModelLink="AP_HydraliskLurkerEggDeath" SoundLink="LurkerEgg_Explode"/>
+        <PortraitModel value="CocoonPortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerEgg.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-egg.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="What" value="Egg_What"/>
+        <SoundArray index="Pissed" value="Egg_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-egg.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerEgg.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorSound id="AP_HydraliskLurkerEgg_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_HydraliskLurkerEgg; PassChance 25.000000" Send="Create"/>
+        <Sound value="LurkerEgg_Death"/>
+    </CActorSound>
+    <CActorUnit id="AP_Lurker" parent="GenericBurrowerStandard" unitName="AP_Lurker">
+        <Aliases value="_UnitLarge"/>
+        <Aliases value="_UnitLarge"/>
+        <Macros value="ZergBurrowStandardAnimMacro"/>
+        <Macros value="ZergMediumBurrowEffects"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Lurker; MorphFrom AP_LurkerEgg" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Lurker; MorphFrom AP_LurkerEgg" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Lurker; MorphFrom AP_LurkerEgg" Send="$Birth 0 0.000000 -1.000000 0.000000"/>
+        <On Terms="AnimDone; AnimName Birth" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create AP_BurrowDownLurker"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Lurker; MorphTo AP_LurkerBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Lurker; MorphFrom AP_LurkerBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Lurker; MorphFrom AP_LurkerBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255"/>
+        <DeathArray index="Normal" ModelLink="AP_LurkerDeath" SoundLink="Lurker_Explode"/>
+        <DeathArray index="Disintegrate" ModelLink="AP_LurkerDeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Fire" ModelLink="AP_LurkerDeathFire" SoundLink="Uni_DeathFXFire"/>
+        <PortraitModel value="AP_LurkerEx1BPortrait"/>
+        <WalkAnimMoveSpeed value="3"/>
+        <BarOffset value="70"/>
+        <BarWidth value="80"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Lurker.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-lurker.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Lurker_Ready"/>
+        <SoundArray index="What" value="Lurker_What"/>
+        <SoundArray index="Yes" value="Lurker_Yes"/>
+        <SoundArray index="Attack" value="Lurker_Attack"/>
+        <SoundArray index="Pissed" value="Lurker_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-lurker.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Lurker.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorAction id="AP_LurkerAttackSpike" parent="AoEAttackBase">
+        <On Terms="Effect.AP_LurkerU.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.AP_LurkerU.Start; At Effect" Send="ActionDamage"/>
+        <On Terms="Effect.AP_LurkerU.Stop; At Effect" Send="Destroy"/>
+        <DamageSiteOps Ops="SOpAttachHarness SOpShadow" HoldPosition="1" HoldRotation="1"/>
+        <DamageAttachQuery Methods="AMFilterTarget AMProximityAll"/>
+        <DamageMap index="Flesh" ModelReaction="AP_LurkerAttackDeathBloodGeyser"/>
+        <DamageModelReaction value="AP_LurkerAttackDamageModelReaction"/>
+        <Lifetime value="2.600000"/>
+    </CActorAction>
+    <CActorSound id="AP_LurkerAttackSpikeSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_LurkerE.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpShadow SOpForwardCasterPoint"/>
+        <Sound value="Lurker_AttackLaunch"/>
+    </CActorSound>
+    <CActorModel id="AP_LurkerAttackSpikes6">
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 1" Send="AttachSetBearingsFrom {Weapon 0} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 2" Send="AttachSetBearingsFrom {Weapon 1} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 3" Send="AttachSetBearingsFrom {Weapon 2} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 4" Send="AttachSetBearingsFrom {Weapon 3} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 5" Send="AttachSetBearingsFrom {Weapon 4} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 6" Send="AttachSetBearingsFrom {Weapon 5} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 7" Send="AttachSetBearingsFrom {Weapon 6} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 8" Send="AttachSetBearingsFrom {Weapon 7} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 9" Send="AttachSetBearingsFrom {Weapon 8} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 10" Send="AttachSetBearingsFrom {Weapon 9} {} $AP_LurkerSpineSiteOps"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 1" Send="AnimPlay Attack00 Attack,00"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 2" Send="AnimPlay Attack01 Attack,01"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 3" Send="AnimPlay Attack02 Attack,02"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 4" Send="AnimPlay Attack03 Attack,03"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 5" Send="AnimPlay Attack04 Attack,04"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 6" Send="AnimPlay Attack05 Attack,05"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 7" Send="AnimPlay Attack06 Attack,06"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 8" Send="AnimPlay Attack07 Attack,07"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 9" Send="AnimPlay Attack08 Attack,08"/>
+        <On Terms="Effect.AP_LurkerE.Start; EffectExecuteIndex 10" Send="AnimPlay Attack09 Attack,09"/>
+        <On Terms="Effect.AP_Lurker.Stop" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="Effect.AP_LurkerExtended.Stop" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <On Terms="Effect.AP_Lurker.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpCasterPoint SOpForwardTargetPointInverted AP_LurkerSOpOffset SOp2DRotation AP_LurkerSOpShadowAllSpines" HoldPosition="1" HoldRotation="1"/>
+        <Model value="AP_LurkerAttackSpike"/>
+        <LocalOffsetFor2ndVisibilityTest value="0.000000,6.000000,0.000000"/>
+    </CActorModel>
+    <CActorSound id="AP_Lurker_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_Lurker; PassChance 25.000000" Send="Create"/>
+        <Sound value="Lurker_Death"/>
+    </CActorSound>
+    <CActorModel id="AP_LurkerAttackDamageModelReaction" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Terms value="!Option Model Low"/>
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="AnimSetPaused BSD"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.010000 DeathValidateDelay"/>
+        <On Terms="TimerExpired; TimerName DeathValidateDelay; ScopeContains UnitDeathModel" Send="AnimSetPaused BSD 0"/>
+        <On Terms="TimerExpired; TimerName DeathValidateDelay; !ScopeContains UnitDeathModel" Send="Destroy"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorSiteOpRandomPointInCircle id="AP_LurkerSOpAoEVariancer">
+        <Radius value="0.625000"/>
+        <Distribution value="Exponential"/>
+        <Mean value="0.200000"/>
+    </CActorSiteOpRandomPointInCircle>
+    <CActorSiteOpLocalOffset id="AP_LurkerSOpOffset">
+        <LocalOffset value="0.000000,0.100000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpShadow id="AP_LurkerSOpShadowAllSpines">
+        <HeightOffset value="-12.000000"/>
+    </CActorSiteOpShadow>
+    <CActorSiteOpShadow id="AP_LurkerSOpShadowSpine">
+        <HeightSourceType value="AsyncPrecise"/>
+        <HeightOffsetOnCliff value="-12.000000"/>
+        <CliffTests value="0.000000,-0.100000"/>
+        <CliffTests value="0.000000,0.100000"/>
+        <CliffTests value="-0.100000,0.000000"/>
+        <CliffTests value="0.100000,0.000000"/>
+    </CActorSiteOpShadow>
+    <CActorSiteOpShadow id="AP_LurkerSOpShadowSpineHide" parent="AP_LurkerSOpShadowAllSpines"/>
+    <CActorModel id="AP_ExplosiveSpinesModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ExplosiveSpinesDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor 64,255,64"/>
+    </CActorModel>
+    <CActorSound id="AP_HunterKiller_Death" parent="SoundOneShot">
+        <On Terms="UnitDeathCustomize.AP_Hydralisk; PassChance 25.000000" Send="Create"/>
+    </CActorSound>
+    <CActorUnit id="AP_Hydralisk" parent="AP_HydraliskBase" unitName="AP_Hydralisk">
+        <On Terms="UnitBirth.AP_HydraliskBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_HydraliskBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On Terms="Upgrade.AP_HotSLurker.Add" Send="Create AP_HydraliskLurker"/>
+        <On Terms="Upgrade.AP_HotSLurker.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSLurker" Send="Create AP_HydraliskLurker"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSLurker" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HotSImpaler.Add" Send="Create AP_HydraliskImpaler"/>
+        <On Terms="Upgrade.AP_HotSImpaler.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSImpaler" Send="Create AP_HydraliskImpaler"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSImpaler" Send="Destroy"/>
+    </CActorUnit>
+    <CActorAction id="AP_HydraliskAttack" parent="GenericAttack" effectImpact="NeedleSpinesDamage" effectLaunch="AP_NeedleSpinesLaunchMissile">
+        <LaunchSiteOps Ops="SOpAttachHarness SOpForwardImpactGuide"/>
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
+        <LaunchAssets Sound="Hydralisk_GroundAttackLaunch"/>
+        <Missile value="HydraliskAttackMissile"/>
+        <ImpactMap index="None" Model="HydraliskAttackImpact" Sound="Hydralisk_AttackImpactRanged"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ImpactPhysics Name="NeedleSpinesImpact" MatchKeys="Basic" Physics="AP_HydraliskAttackDeathForce"/>
+        <AcquisitionYawHalfArc value="20.000000"/>
+        <AcquisitionPitchHalfArc value="20.000000"/>
+        <AccuracyHalfArc value="25.000000"/>
+    </CActorAction>
+    <CActorModel id="AP_HydraliskFrenzyBirthModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Behavior.AP_HydraliskFrenzy.On" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <AutoScaleFactor value="0.750000"/>
+    </CActorModel>
+    <CActorModel id="AP_HydraliskFrenzyModel" parent="ModelAddition">
+        <Inherits index="TintColor" value="0"/>
+        <On Terms="Behavior.AP_HydraliskFrenzy.On" Send="Create"/>
+        <On Terms="Behavior.AP_HydraliskFrenzy.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+        <AutoScaleFactor value="0.500000"/>
+    </CActorModel>
+    <CActorUnit id="AP_HydraliskImpaler" parent="AP_HydraliskBase" unitName="AP_HydraliskImpaler">
+        <On Terms="Upgrade.AP_HotSLurker.Add" Send="Create AP_HydraliskLurker"/>
+        <On Terms="Upgrade.AP_HotSLurker.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSLurker" Send="Create AP_HydraliskLurker"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSLurker" Send="Destroy"/>
+        <Model value="AP_HydraliskImpaler"/>
+        <BuildModel value="AP_HydraliskImpaler"/>
+        <PlacementModel value="AP_HydraliskImpaler"/>
+        <DeathArray index="Normal" ModelLink="AP_HydraliskImpalerDeath" SoundLink="Hydralisk_Explode"/>
+        <PortraitModel value="AP_HydraliskImpalerPortrait"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-HydraliskEx1A.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-Zerg-Hydralisk-impaler.dds"/>
+        <UnitIcon value="Assets\Textures\btn-unit-Zerg-Hydralisk-impaler.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-HydraliskEx1A.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_HydraliskLurker" parent="AP_HydraliskBase" unitName="AP_HydraliskLurker">
+        <Model value="AP_HydraliskLurker"/>
+        <BuildModel value="AP_HydraliskLurker"/>
+        <PlacementModel value="AP_HydraliskLurker"/>
+        <DeathArray index="Normal" ModelLink="AP_HydraliskLurkerDeath" SoundLink="Hydralisk_Explode"/>
+        <PortraitModel value="AP_HydraliskLurkerPortrait"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-HydraliskEx1B.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-Zerg-Hydralisk-lurker.dds"/>
+        <UnitIcon value="Assets\Textures\btn-unit-Zerg-Hydralisk-lurker.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-HydraliskEx1B.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_HydraliskMeleeAttack" parent="GenericAttack" effectAttack="HydraliskMelee">
+        <ImpactPhysics>
+            <Name value="Attack"/>
+            <MatchKeys value="Basic"/>
+            <AttackAnimProps value="Cover"/>
+            <Physics value="AP_HydraliskMeleeAttackForce"/>
+        </ImpactPhysics>
+        <ShieldFlashType value="Header"/>
+        <AttackAnimName value="AttackCover"/>
+    </CActorAction>
+    <CActorSound id="AP_Spell_Frenzy_Launch" parent="SoundOneShot">
+        <On Terms="Behavior.AP_HydraliskFrenzy.On" Send="Create"/>
+    </CActorSound>
+    <CActorForceSphere id="AP_HydraliskAttackDeathForce">
+        <On Terms="ActorCreation" Send="Create AP_HydraliskAttackExplosionDeathForce"/>
+        <HostSiteOps Ops="SOpIncomingMissileDot1"/>
+        <Receiver Subject="::Main"/>
+        <Field value="Directional"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="21.000000,7.000000"/>
+        <Radius value="1.000000,0.300000"/>
+        <Direction value="Forward"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_HydraliskAttackExplosionDeathForce">
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpMoveByDot25 SOpRandomPointInSphereDot15"/>
+        <Receiver Subject="::Main"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="18.000000,11.500000"/>
+        <Radius value="0.500000,0.300000"/>
+    </CActorForceSphere>
+    <CActorForceConeRoundedEnd id="AP_HydraliskMeleeAttackForce">
+        <Host Subject="::Main" Scope="Caster"/>
+        <Receiver Subject="::Main"/>
+        <Duration value="0.300000"/>
+        <Magnitude value="19.125000,4.500000"/>
+        <HostEnd Subject="::Main" Scope="Caster"/>
+        <HostEndSiteOps Ops="SOpMoveBy2 SOpMoveUpByDot5"/>
+        <Angle value="40.000000,20.000000"/>
+    </CActorForceConeRoundedEnd>
+    <CActorSound id="AP_Hydra_Land" parent="SoundOneShot"/>
+    <CActorSplat id="AP_HydraliskBurrowedSplat" parent="BurrowedSplat" unitName="AP_Hydralisk"/>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -4998,7 +5378,7 @@
         <On Terms="ActorCreation; ValidateUnit AP_HaveHotSTorrasque" Send="Create AP_UltraliskTorrasque"/>
         <Model value="AP_HotSNoxious"/>
         <BuildModel value="AP_HotSNoxious"/>
-        <DeathArray index="Normal" ModelLink="AP_UltraliskEx1ADeath" SoundLink="Ultralisk_Explode" VoiceLink=""/>
+        <DeathArray index="Normal" ModelLink="AP_UltraliskEx1ADeath"/>
         <PlacementModel value="AP_HotSNoxious"/>
         <PortraitModel value="AP_NoxiousPortrait"/>
         <GroupIcon>

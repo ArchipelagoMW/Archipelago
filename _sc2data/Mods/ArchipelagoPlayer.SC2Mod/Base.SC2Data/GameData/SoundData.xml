@@ -2500,4 +2500,41 @@
         <ResourcePriority value="64"/>
         <Volume value="-15.000000,-13.000000"/>
     </CSound>
+    <CSound id="AP_HunterKiller_Death" parent="Death">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hydralisk\Hydralisk_Death0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hydralisk\Hydralisk_Death1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hydralisk\Hydralisk_Death2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hydralisk\Hydralisk_Death3.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hydralisk\Hydralisk_Death4.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hydralisk\Hydralisk_Death5.wav"/>
+        <DupeDestroyCount value="8"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Hydralisk_Explode" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionMedium6.wav" Pitch="-3.000000,3.000000"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Spell_Frenzy_Launch" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Hybrid\Hybrid_StealStrengthCast0.wav" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Hydra_Land" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg_Medium_Land00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg_Medium_Land02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg_Medium_Land01.wav" FacialGroup=""/>
+        <Category value="Combat"/>
+        <Pitch value="-4.000000,-2.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
 </Catalog>

@@ -2272,7 +2272,6 @@
     <CModel id="AP_TorrasquePortrait" parent="Portrait" Race="Zerg">
         <Model value="Assets\Portraits\Zerg\UltraliskPortrait\UltraliskPortrait.m3"/>
         <Image value="Assets\Textures\UltraliskPortrait_Static.dds"/>
-        <Lighting value="AP_TorrasquePortrait"/>
     </CModel>
     <CModel id="AP_UltraliskEx1BDeath" parent="UnitDeath" Race="Zerg">
         <Model value="Assets\Units\Zerg\UltraliskEx1BDeath\UltraliskEx1BDeath.m3"/>
@@ -2448,13 +2447,13 @@
     <CModel id="AP_LurkerEx1APortrait" parent="Portrait" Race="Zerg">
         <Model value="Assets\Portraits\Zerg\LurkerPortrait\LurkerPortrait.m3"/>
         <Image value="Assets\Textures\LurkerPortrait_Static.dds"/>
-        <Lighting value="AP_LurkerEx1APortrait"/>
     </CModel>
     <CModel id="AP_HydraliskLurkerEggDeath" parent="UnitDeath">
         <Model value="Assets\Units\Zerg\LurkerEggDeath\LurkerEggDeath.m3"/>
         <LowQualityModel value="ZergSmallUnitDeathLow"/>
         <EditorCategories value="Race:Zerg"/>
-        <Lighting value="LurkerEgg"/>
+        <!-- Missing in vanilla -->
+        <Lighting value="AP_LurkerEgg"/>
         <Occlusion value="Show"/>
         <ScaleMax value="0.850000,0.850000,0.850000"/>
         <ScaleMin value="0.850000,0.850000,0.850000"/>
@@ -2473,5 +2472,188 @@
     <CModel id="AP_ImpalerMissileGroundCracks" parent="ImpactFX">
         <Model value="Assets\Effects\Zerg\PrimalLurkerMissile\PrimalLurkerMissile.m3"/>
         <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_HydraliskLurkerEgg" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerEgg\LurkerEgg.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.764400"/>
+        <ShadowRadius value="0.764400"/>
+        <SquibTypeDefault value="Flesh"/>
+    </CModel>
+    <CModel id="AP_Lurker" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerEx1B\LurkerEx1B.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid07"/>
+        <Radius value="0.700000"/>
+        <ScaleMax value="1.100000,1.100000,1.100000"/>
+        <ScaleMin value="1.100000,1.100000,1.100000"/>
+        <SelectionRadius value="0.590500"/>
+        <ShadowRadius value="0.900000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraMid07"/>
+        <UnitGlossaryCamera value="Star2CameraMid07"/>
+    </CModel>
+    <CModel id="AP_LurkerAttackDeathBloodGeyser" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\BloodFountainImpact\BloodFountainImpact.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_LurkerAttackSpike" parent="MissileFX">
+        <Model value="Assets\Effects\Zerg\LurkerMissile\LurkerMissile.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_LurkerDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerEx1BDeath\LurkerEx1BDeath.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_LurkerDeathAcid" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerDeathAcid\LurkerDeathAcid.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_LurkerDeathFire" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\LurkerDeathFire\LurkerDeathFire.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_LurkerEx1BPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\LurkerPortrait\LurkerPortrait.m3"/>
+        <Image value="Assets\Textures\LurkerPortrait_Static.dds"/>
+    </CModel>
+    <CModel id="AP_ExplosiveSpinesModel" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Zerg\SymbioteImpact\SymbioteImpact.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ScaleMax value="2.000000,2.000000,1.000000"/>
+        <ScaleMin value="2.000000,2.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_HydraliskFrenzyBirthModel" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Zerg\HydraliskFrenzyBirth\HydraliskFrenzyBirth.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_HydraliskFrenzyModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\HydraliskFrenzy\HydraliskFrenzy.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_HydraliskImpaler" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\HydraliskEx1A\HydraliskEx1A.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\Hydralisk_SwarmAnims\Hydralisk_SwarmAnims.m3a"/>
+        <AttachProps Id="Ref_Weapon">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Right">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Left">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <Events>
+            <Anim value="Attack,Cover,00"/>
+            <Name value="HydraliskAttackImpactMelee"/>
+            <Type value="Sound"/>
+            <Time value="0.500000"/>
+        </Events>
+        <Events>
+            <Anim value="Attack,Cover,00"/>
+            <Name value="HydraliskAttackImpactMelee"/>
+            <Type value="Sound"/>
+            <Time value="0.550000"/>
+        </Events>
+        <Events>
+            <Anim value="Attack,Cover,01"/>
+            <Name value="HydraliskAttackImpactMelee"/>
+            <Type value="Sound"/>
+            <Time value="0.230000"/>
+        </Events>
+        <Events>
+            <Anim value="Attack,Cover,01"/>
+            <Name value="HydraliskAttackImpactMelee"/>
+            <Type value="Sound"/>
+            <Time value="0.400000"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid08"/>
+        <Radius value="0.600000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.571000"/>
+        <ShadowRadius value="0.571000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraMid08"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.800000"/>
+        <UnitGlossaryCamera value="Star2CameraMid08"/>
+    </CModel>
+    <CModel id="AP_HydraliskImpalerDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\HydraliskEx1ADeath\HydraliskEx1ADeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HydraliskImpalerPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\HydraliskPortrait\HydraliskPortrait.m3"/>
+        <Image value="Assets\Textures\HydraliskPortrait_Static.dds"/>
+        <Lighting value="AP_HydraliskImpalerPortrait"/>
+    </CModel>
+    <CModel id="AP_HydraliskLurker" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\HydraliskEx1B\HydraliskEx1B.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\Hydralisk_SwarmAnims\Hydralisk_SwarmAnims.m3a"/>
+        <AttachProps Id="Ref_Weapon">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Right">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Left">
+            <Keys index="SetA" value="1"/>
+        </AttachProps>
+        <Events>
+            <Anim value="Attack,Cover,00"/>
+            <Name value="HydraliskAttackImpactMelee"/>
+            <Type value="Sound"/>
+            <Time value="0.500000"/>
+        </Events>
+        <Events>
+            <Anim value="Attack,Cover,00"/>
+            <Name value="HydraliskAttackImpactMelee"/>
+            <Type value="Sound"/>
+            <Time value="0.550000"/>
+        </Events>
+        <Events>
+            <Anim value="Attack,Cover,01"/>
+            <Name value="HydraliskAttackImpactMelee"/>
+            <Type value="Sound"/>
+            <Time value="0.230000"/>
+        </Events>
+        <Events>
+            <Anim value="Attack,Cover,01"/>
+            <Name value="HydraliskAttackImpactMelee"/>
+            <Type value="Sound"/>
+            <Time value="0.400000"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid08"/>
+        <Radius value="0.600000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.571000"/>
+        <ShadowRadius value="0.571000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraMid08"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.800000"/>
+        <UnitGlossaryCamera value="Star2CameraMid08"/>
+    </CModel>
+    <CModel id="AP_HydraliskLurkerDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\HydraliskEx1BDeath\HydraliskEx1BDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HydraliskLurkerPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\HydraliskPortrait\HydraliskPortrait.m3"/>
+        <Image value="Assets\Textures\HydraliskPortrait_Static.dds"/>
+        <Lighting value="AP_HydraliskLurkerPortrait"/>
     </CModel>
 </Catalog>
