@@ -1520,18 +1520,25 @@
         <AbilArray Link="AP_que1"/>
         <AbilArray Link="AP_MissilePods"/>
         <AbilArray Link="AP_DefensiveMatrix"/>
-        <BehaviorArray Link="ScavengingSystemsMechDeath"/>
+        <AbilArray Link="AP_Hyperjump"/>
+        <AbilArray Link="AP_BattlecruiserCloak"/>
+        <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_ATSLaserBattery" Turret="AP_Battlecruiser"/>
         <WeaponArray Link="AP_ATALaserBattery" Turret="AP_Battlecruiser"/>
+        <WeaponArray Link="AP_AllPurposeLaserBattery" Turret="FreeRotate"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AP_CloakOnBattlecruiser" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,0" Row="1" Column="0"/>
+            <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,1" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_AllPurposeLaserBattery" Type="Passive" Requirements="AP_HaveAdvancedWeaponryBattlecruiser" Row="1" Column="4"/>
             <LayoutButtons Face="AP_YamatoGun" Type="AbilCmd" AbilCmd="AP_Yamato,0" Row="2" Column="0"/>
-            <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_MissilePods,0" Row="2" Column="1"/>
-            <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DefensiveMatrix,0" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_MissilePods,0" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DefensiveMatrix,0" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_Hyperjump" Type="AbilCmd" AbilCmd="AP_Hyperjump,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>
@@ -2573,6 +2580,7 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_LiberatorMorphtoAG"/>
         <AbilArray Link="AP_LiberatorAGTarget"/>
+        <AbilArray Link="AP_LiberatorCloak"/>
         <WeaponArray Link="AP_LiberatorMissileLaunchers"/>
         <WeaponArray Turret="AP_Liberator"/>
         <CardLayouts>
@@ -2582,7 +2590,22 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="AP_LiberatorAGMode" Type="AbilCmd" AbilCmd="AP_LiberatorAGTarget,0" Row="2" Column="0"/>
-            <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_LiberatorStructureAttack" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocolNoDefenderMode" Row="1" Column="1"/>
+            <LayoutButtons>
+                <Face value="AP_CloakOnLiberator"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_LiberatorCloak,On"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="CloakOff"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_LiberatorCloak,Off"/>
+                <Row value="2"/>
+                <Column value="3"/>
+            </LayoutButtons>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -2643,14 +2666,29 @@
         <AbilArray Link="AP_LiberatorMorphtoAA"/>
         <AbilArray Link="AP_LiberatorMorphtoAG"/>
         <AbilArray Link="AP_LiberatorAATarget"/>
+        <AbilArray Link="AP_LiberatorCloak"/>
         <BehaviorArray Link="AP_LiberatorInitialMovable"/>
         <WeaponArray Link="AP_LiberatorAGWeapon" Turret="AP_LiberatorAG"/>
         <CardLayouts>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="AP_LiberatorAAMode" Type="AbilCmd" AbilCmd="AP_LiberatorAATarget,0" Row="2" Column="1"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
-            <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="2" Column="2"/>
-            <LayoutButtons Face="AP_SiegeProtocol" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_LiberatorStructureAttack" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="1" Column="1"/>
+            <LayoutButtons>
+                <Face value="AP_CloakOnLiberator"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_LiberatorCloak,On"/>
+                <Row value="2"/>
+                <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="CloakOff"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_LiberatorCloak,Off"/>
+                <Row value="2"/>
+                <Column value="3"/>
+            </LayoutButtons>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3732,19 +3770,27 @@
         <AbilArray Link="AP_DukesRevengeYamato"/>
         <AbilArray Link="AP_DukesRevengeMissilePods"/>
         <AbilArray Link="AP_DukesRevengeDefensiveMatrix"/>
+        <AbilArray Link="AP_Hyperjump"/>
+        <AbilArray Link="AP_BattlecruiserCloak"/>
         <WeaponArray Link="AP_DRBattlecruiserG"/>
         <WeaponArray Link="AP_DRCannonsG"/>
         <WeaponArray Link="AP_DRBattlecruiserA"/>
         <WeaponArray Link="AP_DRCannonsA"/>
+        <WeaponArray Link="AP_DRAllPurposeCannons"/>
+        <WeaponArray Link="AP_DRAllPurposeLaserBattery" Turret="FreeRotate"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AP_CloakOnBattlecruiser" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,0" Row="1" Column="0"/>
+            <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,1" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_AllPurposeLaserBattery" Type="Passive" Requirements="AP_HaveAdvancedWeaponryBattlecruiser" Row="1" Column="4"/>
             <LayoutButtons Face="AP_YamatoGun" Type="AbilCmd" AbilCmd="AP_DukesRevengeYamato,0" Row="2" Column="0"/>
-            <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_DukesRevengeMissilePods,0" Row="2" Column="1"/>
-            <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DukesRevengeDefensiveMatrix,0" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_MissilePods,0" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DefensiveMatrix,0" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_Hyperjump" Type="AbilCmd" AbilCmd="AP_Hyperjump,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="1.25"/>
         <SeparationRadius value="1.25"/>

@@ -220,6 +220,18 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHurricaneMissilesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseHyperjump">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeTacticalJumpCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_CloakingTechnologyBattlecruiser">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCloakingTechnologyBattlecruiserCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveAdvancedWeaponryBattlecruiser">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAdvancedWeaponryBattlecruiserCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_GhostHoldingFire">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountBehaviorGhostHoldFireBCompleteOnlyAtUnit"/>
@@ -334,11 +346,16 @@
     </CRequirement>
     <CRequirement id="AP_HaveLiberatorRange">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeLiberatorAGRangeUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLiberatorAGRangeUpgradeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveLiberatorSiegeProtocol">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLiberatorSiegeProtocolNoDefenderMode">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleDefenderModeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_LearnLiberatorMorph">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -348,6 +365,10 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <!-- <NodeArray index="Use" Link="AP_CountUnitFusionCoreCompleteOnly"/> -->
         <NodeArray index="Show" Link="AP_NotCountUpgradeLiberatorAGRangeUpgradeQueuedOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_CloakingTechnologyLiberator">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCloakingTechnologyLiberatorCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveWidowMineDrillingClaws">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>

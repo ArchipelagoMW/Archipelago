@@ -218,6 +218,22 @@
         <EditorCategories value="Race:Terran"/>
         <Universal value="1"/>
     </CButton>
+    <CButton id="AP_Hyperjump">
+        <Icon value="Assets\Textures\btn-ability-terran-warpjump.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-warpjump.dds"/>
+    </CButton>
+    <CButton id="AP_CloakOnBattlecruiser">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="Cloak"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_AllPurposeLaserBattery">
+        <Icon value="Assets\Textures\btn-upgrade-terran-nova-specialordance.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-nova-specialordance.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
     <CButton id="AP_AttackGhost">
         <Name value="Button/Name/Attack"/>
         <Tooltip value="Button/Tooltip/Attack"/>
@@ -461,11 +477,16 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-liberator-agmode.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
-    <CButton id="AP_SiegeProtocol">
-        <Icon value="Assets\Textures\btn-techupgrade-terran-maelstromrounds.dds"/>
+    <CButton id="AP_CloakOnLiberator">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
         <EditorCategories value="Race:Terran"/>
-        <TintRacially value="1"/>
-        <HotkeyAlias value=""/>
+        <HotkeySet value="Cloak"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_LiberatorStructureAttack">
+        <Icon value="Assets\Textures\btn-upgrade-terran-nova-terrandefendermodestructureattack.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-nova-terrandefendermodestructureattack.dds"/>
     </CButton>
     <CButton id="AP_ValkyrieSCBW">
         <Icon value="AP\Assets\Textures\btn-unit-terran-valkyrie@scbw.dds"/>

@@ -243,6 +243,24 @@
         <AllowedMovement value="Slowing"/>
         <RandomDelayMax value="0.1875"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_AllPurposeLaserBattery">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_ATSLaserBatteryU"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="6"/>
+        <Arc value="360"/>
+        <Period value="0.153"/>
+        <Effect value="AP_ATSLaserBatteryLM"/>
+        <AllowedMovement value="Moving"/>
+        <RandomDelayMax value="0.1875"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="AP_C10CanisterRifle">
         <EditorCategories value="Race:Terran"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
@@ -634,6 +652,50 @@
         <AllowedMovement value="Slowing"/>
         <RandomDelayMin value="0"/>
         <RandomDelayMax value="0"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_DRAllPurposeLaserBattery">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_DRBattlecruiserGU"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="6"/>
+        <Arc value="360"/>
+        <Period value="0.153"/>
+        <Effect value="AP_DRBattlecruiserGLM"/>
+        <Cost>
+            <Cooldown Link="Weapon/AP_DRAllPurposeCannons" Location="Unit" TimeUse="0.153"/>
+        </Cost>
+        <AllowedMovement value="Moving"/>
+        <RandomDelayMax value="0.1875"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_DRAllPurposeCannons">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Options index="LinkedCooldown" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
+        <DisplayEffect value="AP_DRBattlecruiserGU"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="6"/>
+        <MinimumRange value="2"/>
+        <Period value="0.153"/>
+        <Effect value="AP_DRCannonsG"/>
+        <Cost>
+            <Cooldown Link="Weapon/AP_DRAllPurposeLaserBattery" Location="Unit" TimeUse="0.153"/>
+        </Cost>
+        <AllowedMovement value="Moving"/>
+        <RandomDelayMax value="0.1875"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
     </CWeaponLegacy>
     <CWeaponLegacy id="AP_PerditionTurretFlamethrower">
         <EditorCategories value="Race:Terran"/>

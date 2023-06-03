@@ -108,6 +108,9 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners (int 
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserMissilePods (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserDefensiveMatrix (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserTacticalJump (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserCloak (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserATXLaserBattery (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockGhostOcularImplants (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockGhostCriusSuit (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockGhostEMPRounds (int lp_player);
@@ -120,6 +123,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldAccelerators (int lp
 void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldLaunchers (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorAdvancedBallistics (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSiegeProtocol (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorCloak (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineDrillingClaws (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineConcealment (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBunkerProjectileAccelerator (int lp_player);

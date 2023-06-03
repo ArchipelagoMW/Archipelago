@@ -1013,6 +1013,57 @@
         <Death value="Blast"/>
         <SearchFlags index="CallForHelp" value="1"/>
     </CEffectDamage>
+    <CEffectCreateUnit id="AP_HyperjumpCreatePrecursor">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_HyperjumpTeleportOutABSet"/>
+        <SpawnUnit value="AP_Battlecruiser"/>
+        <SpawnRange value="0.1"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_HyperjumpTeleportOutABSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_HyperjumpTeleportOutAB"/>
+        <EffectArray value="AP_HyperjumpTeleportOutTargetAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_HyperjumpTeleportOutAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_HyperjumpTeleportOut"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_HyperjumpTeleportOutTargetAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_HyperjumpTeleportOutTargetSuppressCollision"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_HyperjumpTeleportSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_HyperjumpTeleport"/>
+        <EffectArray value="AP_HyperjumpTeleportAB"/>
+    </CEffectSet>
+    <CEffectTeleport id="AP_HyperjumpTeleport">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <TargetLocation Effect="AP_HyperjumpCreatePrecursor" Value="TargetPoint"/>
+        <TeleportFlags index="TestFog" value="0"/>
+        <PlacementRange value="15"/>
+        <PlacementAround Effect="AP_HyperjumpCreatePrecursor"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="AP_HyperjumpTeleportAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_HyperjumpTeleport"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_HyperjumpTeleportInAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_HyperjumpTeleportIn"/>
+    </CEffectApplyBehavior>
     <CEffectDamage id="AP_C10CanisterRifle" parent="DU_WEAP">
         <EditorCategories value="Race:Terran"/>
         <AttributeBonus index="Light" value="10"/>

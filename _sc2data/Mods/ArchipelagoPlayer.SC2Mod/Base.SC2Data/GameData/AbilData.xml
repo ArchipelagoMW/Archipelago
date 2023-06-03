@@ -555,6 +555,41 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_Hyperjump">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <!-- Need create unit as first effect to check for placement vs pathing blockers -->
+        <Effect index="0" value="AP_HyperjumpCreatePrecursor"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+        </Cost>
+        <Range value="500"/>
+        <CastIntroTime value="0"/>
+        <CastOutroTime value="6"/>
+        <ShowProgressArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <ProgressButtonArray index="Channel" value="AP_Hyperjump"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_Hyperjump" Requirements="AP_UseHyperjump"/>
+    </CAbilEffectTarget>
+    <CAbilBehavior id="AP_BattlecruiserCloak">
+        <AbilSetId value="Clok"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="AP_CloakOnBattlecruiser" Requirements="AP_CloakingTechnologyBattlecruiser">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="CloakOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <BehaviorArray value="AP_BattlecruiserCloak"/>
+    </CAbilBehavior>
     <CAbilQueue id="AP_que1">
         <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
         <QueueSize value="1"/>
@@ -947,6 +982,22 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilBehavior id="AP_LiberatorCloak">
+        <AbilSetId value="Clok"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="AP_CloakOnLiberator" Requirements="AP_CloakingTechnologyLiberator">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="CloakOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <BehaviorArray value="AP_LiberatorCloak"/>
+    </CAbilBehavior>
     <CAbilEffectTarget id="AP_WidowMineAttack">
         <PrepEffect value="AP_WidowMineTargetingBeamDummy"/>
         <Flags index="AutoCast" value="1"/>

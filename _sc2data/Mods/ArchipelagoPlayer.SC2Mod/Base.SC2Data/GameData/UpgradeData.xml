@@ -223,6 +223,7 @@
         <!--  Battlecruiser (Anti Ground) -->
         <EffectArray Reference="Weapon,AP_ATSLaserBattery,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_ATSLaserBatteryU,Amount" Value="1.000000"/>
+        <EffectArray Reference="Weapon,AP_AllPurposeLaserBattery,Level" Value="1"/>
         <!--  Battlecruiser (Anti Air) -->
         <EffectArray Reference="Weapon,AP_ATALaserBattery,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_ATALaserBatteryU,Amount" Value="1.000000"/>
@@ -256,6 +257,8 @@
         <EffectArray Reference="Effect,AP_DRCannonsG,Amount" Value="1.000000"/>
         <EffectArray Reference="Effect,AP_DRBattlecruiserAU,Amount" Value="1"/>
         <EffectArray Reference="Effect,AP_DRCannonsA,Amount" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRAllPurposeLaserBattery,Level" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRAllPurposeCannons,Level" Value="1"/>
         <!-- Liberator -->
         <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_LiberatorMissileDamage,Amount" Value="1"/>
@@ -943,6 +946,38 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_TacticalJump">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CloakingTechnologyBattlecruiser">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <LeaderAlias value=""/>
+        <AffectedUnitArray value="AP_dBattlecruiser"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AdvancedWeaponryBattlecruiser">
+        <EffectArray Reference="Weapon,AP_ATALaserBattery,Options[Hidden]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_ATALaserBattery,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_ATSLaserBattery,Options[Hidden]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_ATSLaserBattery,Options[Disabled]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_AllPurposeLaserBattery,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_AllPurposeLaserBattery,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserFakeA,Options[Hidden]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserFakeA,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserA,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRCannonsA,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserFakeG,Options[Hidden]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserFakeG,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRBattlecruiserG,Options[Disabled]" Value="1"/>
+        <EffectArray Reference="Weapon,AP_DRCannonsG,Options[Disabled]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_DRAllPurposeLaserBattery,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_DRAllPurposeLaserBattery,Options[Disabled]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_DRAllPurposeCannons,Options[Disabled]" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Battlecruiser"/>
+        <AffectedUnitArray value="AP_DukesRevenge"/>
+    </CUpgrade>
     <CUpgrade id="AP_FullBoreCanisterAmmo">
         <Flags index="UpgradeCheat" value="0"/>
         <Race value="Terr"/>
@@ -1125,6 +1160,19 @@
     <CUpgrade id="AP_LiberatorSiegeProtocol">
         <Icon value="Assets\Textures\btn-upgrade-raynor-maelstromrounds.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,TargetFilters" Value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NotPossibleDefenderMode">
+        <!-- Dummy upgrade to hint the player that he needs to morph hte unit -->
+    </CUpgrade>
+    <CUpgrade id="AP_CloakingTechnologyLiberator">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,EnergyMax" Value="200"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,EnergyStart" Value="50"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,EnergyRegenRate" Value=".5625"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,EnergyMax" Value="200"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,EnergyStart" Value="50"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,EnergyRegenRate" Value=".5625"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_DrillClaws">
@@ -1557,6 +1605,12 @@
         <AffectedUnitArray value="AP_DukesRevenge"/>
         <AffectedUnitArray value="AP_DuskWing"/>
     </CUpgrade>
+    <CUpgrade id="AP_CellularReactorsLiberator">
+        <EffectArray Reference="Unit,AP_Liberator,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_Liberator,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_LiberatorAG,EnergyMax" Value="100"/>
+    </CUpgrade>
     <CUpgrade id="AP_TerranInfantryArmorsLevel1" parent="AP_BaseTerranInfantryArmors">
         <!-- Set the icon here -->
         <Name value="Upgrade/Name/AP_TerranInfantryArmorsLevel1"/>
@@ -1903,6 +1957,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
@@ -1912,6 +1967,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRAllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
@@ -1924,6 +1980,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
@@ -1933,6 +1990,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRAllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
@@ -1945,6 +2003,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
@@ -1954,6 +2013,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRAllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
@@ -1966,6 +2026,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
@@ -1975,6 +2036,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRAllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel1.dds"/>
@@ -1986,6 +2048,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
@@ -1995,6 +2058,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRAllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel2.dds"/>
@@ -2006,6 +2070,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_BacklashRockets,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATALaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ATSLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_AllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_TwinGatlingCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LanzerTorpedoes,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_WraithG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
@@ -2015,6 +2080,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_WreckingCrewFighter,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeA,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_DRBattlecruiserFakeG,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_DRAllPurposeLaserBattery,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorMissileLaunchers,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_LiberatorAGWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_ValkyrieSCBWWeapon,Icon" Value="Assets\Textures\btn-upgrade-terran-shipweaponslevel3.dds"/>
