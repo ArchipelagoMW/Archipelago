@@ -1019,7 +1019,7 @@
         <BarOffset value="10"/>
         <BarWidth value="36"/>
         <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-SpiderMine.dds"/>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-SpiderMine.dds"/>
         </GroupIcon>
         <GroupSoundArray index="Birth" value="SpiderMineBirth"/>
         <GroupSoundArray index="Ready" value="SpiderMineReady"/>
@@ -3899,6 +3899,12 @@
     </CActorSound>
     <CActorSound id="AP_HealingDroneHealSoundStart" parent="SoundOneShot">
         <Sound value="Medivac_HealStart"/>
+    </CActorSound>
+    <CActorRange id="AP_RavenDeploySpiderMinesRange" parent="RangeAbil" abil="AP_RavenDeploySpiderMines"/>
+    <CActorMissile id="AP_DeploySpiderMinesReleaseMissile" parent="GenericAttackMissile" unitName="AP_DeploySpiderMinesMissile"/>
+    <CActorSound id="AP_DeploySpiderMines_Launch" parent="SoundOneShot">
+        <On Terms="Effect.AP_DeploySpiderMinesLaunchMissile.Start" Send="Create"/>
+        <Sound value="AP_Vulture_SpiderMinePlace"/>
     </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->

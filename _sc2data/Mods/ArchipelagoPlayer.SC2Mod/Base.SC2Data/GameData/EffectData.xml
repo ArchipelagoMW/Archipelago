@@ -3623,6 +3623,35 @@
         <DrainVital value="Energy"/>
         <RechargeVitalRate value="14"/>
     </CEffectCreateHealer>
+    <CEffectCreatePersistent id="AP_DeploySpiderMinesPersistent">
+        <InitialOffset value="0,1,0"/>
+        <PeriodCount value="3"/>
+        <PeriodicEffectArray value="AP_DeploySpiderMinesCreateUnit"/>
+        <PeriodicEffectArray value="AP_DeploySpiderMinesCreateUnit"/>
+        <PeriodicEffectArray value="AP_DeploySpiderMinesCreateUnit"/>
+        <PeriodicOffsetArray value="1.2,0.5,0"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="-1.2,0.5,0"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreateUnit id="AP_DeploySpiderMinesCreateUnit">
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnEffect value="AP_DeploySpiderMinesLaunchStartSet"/>
+        <SpawnUnit value="AP_SpiderMineBurrowed"/>
+        <SpawnRange value="3"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_DeploySpiderMinesLaunchStartSet">
+        <EffectArray value="AP_DeploySpiderMinesLaunchMissile"/>
+        <EffectArray value="KillsToCaster"/>
+        <EffectArray value="MakePrecursor"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_DeploySpiderMinesLaunchMissile">
+        <FinishEffect value="RemovePrecursor"/>
+        <AmmoUnit value="AP_DeploySpiderMinesMissile"/>
+        <LaunchLocation Value="CasterUnit"/>
+    </CEffectLaunchMissile>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

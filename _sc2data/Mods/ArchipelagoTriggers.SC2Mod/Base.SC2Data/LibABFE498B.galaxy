@@ -966,6 +966,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockRavenBioMechanicalReapirDrone (int 
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RavenBioMechanicalRepairDrone", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockRavenSpiderMines (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RavenSpiderMines", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldAccelerators (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

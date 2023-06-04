@@ -2281,6 +2281,21 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_BuildHealingDrone" Requirements="AP_HaveRavenBioMechanicalRepairDrone"/>
         <PlaceUnit value="AP_HealingDrone"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_RavenDeploySpiderMines">
+        <Effect index="0" value="AP_DeploySpiderMinesPersistent"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="5.5"/>
+        <Arc value="360"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <ProducedUnitArray value="AP_SpiderMine"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DeploySpiderMines" Requirements="AP_HaveSpiderMinesRaven"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

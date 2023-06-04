@@ -5318,6 +5318,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="182F8410"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="B8535E86"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="3CF92A4F"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="5F4D1121"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="681259FC"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="5FF93E28"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="113B7B29"/>
@@ -6977,6 +6978,42 @@
         <Element Type="Param" Id="FB12F561">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
             <Parameter Type="ParamDef" Library="ABFE498B" Id="C5BE23D0"/>
+        </Element>
+        <Element Type="FunctionDef" Id="5F4D1121">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="03C0CBB3"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="3237FA84"/>
+        </Element>
+        <Element Type="ParamDef" Id="03C0CBB3">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="B4F0540B"/>
+        </Element>
+        <Element Type="Param" Id="B4F0540B">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="3237FA84">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="2CAE3CC2"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="ED710664"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="8ACABDBA"/>
+        </Element>
+        <Element Type="Param" Id="2CAE3CC2">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="ED710664">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_RavenSpiderMines</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="Param" Id="8ACABDBA">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="03C0CBB3"/>
         </Element>
         <Element Type="FunctionDef" Id="681259FC">
             <FlagAction/>

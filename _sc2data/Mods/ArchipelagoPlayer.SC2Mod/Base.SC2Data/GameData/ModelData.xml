@@ -2422,4 +2422,9 @@
         <Model value="Assets\Effects\Terran\AutoTurretPodMissile\AutoTurretPodMissile.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_DeploySpiderMinesMissile" parent="MissileFX">
+        <Model value="Assets\Units\Terran\SpiderMine\SpiderMine.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <Occlusion value="Show"/>
+    </CModel>
 </Catalog>

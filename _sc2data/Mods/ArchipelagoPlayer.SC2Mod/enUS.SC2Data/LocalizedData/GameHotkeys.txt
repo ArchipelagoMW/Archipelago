@@ -123,3 +123,4 @@ Button/Hotkey/AP_WraithCloakOn=C
 Button/Hotkey/AP_YamatoGun=Y
 Button/Hotkey/AP_BioMechanicalHeal=E
 Button/Hotkey/AP_BuildHealingDrone=B
+Button/Hotkey/AP_DeploySpiderMinesRaven=E

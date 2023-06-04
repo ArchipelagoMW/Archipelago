@@ -2311,6 +2311,7 @@
         <AbilArray Link="AP_SeekerMissile"/>
         <AbilArray Link="AP_PlacePointDefenseDrone"/>
         <AbilArray Link="AP_PlaceHealingDrone"/>
+        <AbilArray Link="AP_RavenDeploySpiderMines"/>
         <BehaviorArray Link="Detector11"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -2324,6 +2325,7 @@
             <LayoutButtons Face="AP_HunterSeekerMissile" Type="AbilCmd" AbilCmd="AP_SeekerMissile,0" Row="2" Column="2"/>
             <LayoutButtons Face="AP_BuildPointDefenseDrone" Type="AbilCmd" AbilCmd="AP_PlacePointDefenseDrone,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_BuildHealingDrone" Type="AbilCmd" AbilCmd="AP_PlaceHealingDrone,0" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_DeploySpiderMinesRaven" Type="AbilCmd" AbilCmd="AP_RavenDeploySpiderMines,Execute" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -6799,6 +6801,11 @@
     <CUnit id="AP_HealingDroneReleaseWeapon" parent="MISSILE_INVULNERABLE">
         <Race value="Terr"/>
         <Mover value="AutoTurretReleaseWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_DeploySpiderMinesMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_DeploySpiderMines"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="Reactor">

@@ -1115,6 +1115,10 @@
     <CUpgrade id="AP_RavenBioMechanicalRepairDrone">
         <AffectedUnitArray value="AP_Raven"/>
     </CUpgrade>
+    <CUpgrade id="AP_RavenSpiderMines">
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Raven"/>
+    </CUpgrade>
     <CUpgrade id="AP_ScienceVessel">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>

@@ -1241,4 +1241,9 @@
         <AlertIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_DeploySpiderMinesRaven">
+        <Icon value="Assets\Textures\btn-upgrade-siegetank-spidermines.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-siegetank-spidermines.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>
