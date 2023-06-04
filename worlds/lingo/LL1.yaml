@@ -1236,6 +1236,7 @@
         door: Second Floor
       Directional Gallery:
         door: Salt Pepper Door
+      Roof: True # through the sunwarp
     panels:
       SECRET:
         id: Shuffle Room/Panel_secret_secret
