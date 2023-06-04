@@ -2401,6 +2401,27 @@
         <LowQualityModel value="ZergLargeUnitDeathLow"/>
         <Occlusion value="Show"/>
     </CModel>
+    <CModel id="AP_HealingDrone" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\PointDefenseDrone\PointDefenseDrone.m3"/>
+        <PlanetPanelCamera value="Star2CameraLow05"/>
+        <Radius value="0.600000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionRadius value="0.857100"/>
+        <ShadowRadius value="0.857100"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow05"/>
+        <UnitGlossaryCamera value="Star2CameraLow05"/>
+    </CModel>
+    <CModel id="AP_HealingDronePlacement" parent="Placement" Race="Terran">
+        <Model value="Assets\Units\Terran\PointDefenseDronePlacement\PointDefenseDronePlacement.m3"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_HealingDroneReleaseWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\AutoTurretPodMissile\AutoTurretPodMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
     <CModel id="AP_AttackDummyCursorModel" parent="UI">
         <Model value="Assets\UI\Cursors\AttackMoveSwarm\AttackMoveSwarm.m3"/>
         <EditorCategories value="Race:Terran"/>

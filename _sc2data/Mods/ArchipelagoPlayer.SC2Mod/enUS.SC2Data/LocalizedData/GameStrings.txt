@@ -152,7 +152,9 @@ Abil/Name/AP_burrowedStop=Stop
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
+Abil/Name/AP_HealingDroneHeal=Heal
 Abil/Name/MercCompoundResearch2=Research
+Abil/Name/AP_PlaceHealingDrone=Place Bio-Mechanical Repair Drone
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
 Actor/AddonIndicator/AP_TechLab=T
@@ -162,6 +164,7 @@ Behavior/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Behavior/Name/AP_330mmBarrageCannons=330mm Barrage Cannon
 Behavior/Name/AP_BansheeCloak=Cloak
 Behavior/Name/AP_BansheeCloakCrossSpectrumDampeners=Cloak
+Behavior/Name/AP_BattlecruiserCloak=Cloak
 Behavior/Name/AP_BileDucts=Bile Ducts
 Behavior/Name/AP_BurstCapacitorsDamageBuff=Burst Capacitors
 Behavior/Name/AP_DefensiveMatrix=Defensive Matrix
@@ -172,6 +175,7 @@ Behavior/Name/AP_GhostHoldFire=Hold Fire
 Behavior/Name/AP_GhostHoldFireB=Hold Fire
 Behavior/Name/AP_HydraliskFrenzy=Frenzy
 Behavior/Name/AP_Irradiate=Irradiated
+Behavior/Name/AP_LiberatorCloak=Cloak
 Behavior/Name/AP_LockOn=Lock On Target
 Behavior/Name/AP_LockdownB=Lockdown
 Behavior/Name/AP_MercAirDropDelay=Merc Air Drop Delay
@@ -203,8 +207,6 @@ Behavior/Name/AP_VileAcidSlowFlatAmountHeroic=Debilitating Saliva
 Behavior/Name/AP_VileAcidSlowFlatAmountStructure=Debilitating Saliva
 Behavior/Name/AP_ViralPlasma=Viral Plasma
 Behavior/Name/AP_WraithCloak=Cloak
-Behavior/Name/AP_LiberatorCloak=Cloak
-Behavior/Name/AP_BattlecruiserCloak=Cloak
 Behavior/Name/BileDucts3=Bile Ducts
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
@@ -238,6 +240,7 @@ Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AberrationTowering=Towering
 Button/Name/AP_AblativeScales=Kinetic Foam
 Button/Name/AP_AdvancedHealingAI=Advanced Healing AI
+Button/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
 Button/Name/AP_AncillaryCarapaceHydralisk=Ancillary Carapace
 Button/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
 Button/Name/AP_AresClassWeaponsSystemviking=Phobos-Class Weapons System
@@ -261,7 +264,9 @@ Button/Name/AP_BurrowLurkerMP=Burrow
 Button/Name/AP_CalldownMULE=Calldown: MULE
 Button/Name/AP_CerberusMines=Cerberus Mine
 Button/Name/AP_CloakOnBanshee=Cloak
+Button/Name/AP_CloakOnBattlecruiser=Cloak
 Button/Name/AP_CloakOnGhost=Cloak
+Button/Name/AP_CloakOnLiberator=Cloak
 Button/Name/AP_CloakOnPredator=Cloak On Predator
 Button/Name/AP_CloakOnSpectre=Cloak
 Button/Name/AP_CommandCenter=Build Command Center
@@ -321,6 +326,7 @@ Button/Name/AP_HiveMindEmulator=Build Hive Mind Emulator
 Button/Name/AP_HotSRoachDamage=Hydriodic Bile
 Button/Name/AP_HotSRoachShield=Adaptive Plating
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
+Button/Name/AP_Hyperjump=Tactical Jump
 Button/Name/AP_HydraliskFrenzy=Frenzy
 Button/Name/AP_ImmortalityProtocol=Immortality Protocol
 Button/Name/AP_Impaler=Morph to Impaler
@@ -333,6 +339,7 @@ Button/Name/AP_Liberator=Build Liberator
 Button/Name/AP_LiberatorAAMode=Fighter Mode
 Button/Name/AP_LiberatorAGMode=Defender Mode
 Button/Name/AP_LiberatorAGRangeUpgrade=Advanced Ballistics
+Button/Name/AP_LiberatorStructureAttack=Raid Artillery
 Button/Name/AP_LockOn=Lock On
 Button/Name/AP_LockOnAir=Lock On Air
 Button/Name/AP_LockOnCancel=Cancel
@@ -388,7 +395,6 @@ Button/Name/AP_ShapedBlast=Shaped Blast
 Button/Name/AP_ShapedHull=Shaped Hull
 Button/Name/AP_ShockwaveMissilePattern=Shockwave Missile Battery
 Button/Name/AP_ShrikeTurret=Shrike Turret
-Button/Name/AP_LiberatorStructureAttack=Raid Artillery
 Button/Name/AP_SiegeTank=Build Siege Tank
 Button/Name/AP_SingularityAnchor=Tomahawk Power Cells
 Button/Name/AP_Snipe=Sniper Round
@@ -455,15 +461,14 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_Hyperjump=Tactical Jump
-Button/Name/AP_CloakOnBattlecruiser=Cloak
-Button/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
-Button/Name/AP_CloakOnLiberator=Cloak
+Button/Name/AP_BioMechanicalHeal=Bio-Mechanical Repair
+Button/Name/AP_BuildHealingDrone=Deploy Bio-Mechanical Repair Drone
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
 Button/Tooltip/AP_AdvancedHealingAI=The Medivac can heal two targets at once.
+Button/Tooltip/AP_AllPurposeLaserBattery=Battlecruisers can attack while moving and do same damage to both ground and air targets.
 Button/Tooltip/AP_AncillaryCarapaceHydralisk=Hydralisk gains +20 maximum life.
 Button/Tooltip/AP_AresClassWeaponsSystem=Increases missile range by 3 and Autocannon range by 1.
 Button/Tooltip/AP_AresClassWeaponsSystemviking=Increases missile range by 2 and Autocannon range by 1.
@@ -494,8 +499,10 @@ Button/Tooltip/AP_CalldownMULE=Drops an experimental robotic MULE miner onto the
 Button/Tooltip/AP_CerberusMines=Increases blast radius and trigger radius by 33%.
 Button/Tooltip/AP_CloakOnBanshee=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_BansheeCloak,Modification.VitalRegenArray[2] + Unit,AP_Banshee,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnBansheeUpgrade=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="0.45 / Behavior,TimeScaleConversionBehavior,Duration)" precision="1"/> energy per second.</c>
+Button/Tooltip/AP_CloakOnBattlecruiser=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_BattlecruiserCloak,Modification.VitalRegenArray[2] + Unit,AP_Battlecruiser,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnGhost=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_GhostCloak,Modification.VitalRegenArray[2] + Unit,AP_Ghost,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnGhostFree=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.
+Button/Tooltip/AP_CloakOnLiberator=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_LiberatorCloak,Modification.VitalRegenArray[2] + Unit,AP_Liberator,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnSpectre=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_SpectreCloaking,Modification.VitalRegenArray[2] + Unit,AP_Spectre,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnSpectreFree=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.
 Button/Tooltip/AP_CommandCenter=Primary structure. Used to train SCVs and receive gathered resources. Can use the Lift Off ability.<n/><n/><c val="ffff8a">Enables:</c><n/>- SCVs
@@ -562,6 +569,7 @@ Button/Tooltip/AP_HiveMindEmulator=Defensive structure. Can permanently Mind Con
 Button/Tooltip/AP_HotSRoachDamage=Roach gains +<d ref="Upgrade,AP_HotSRoachDamage,EffectArray[0].Value / Effect,AP_AcidSalivaU"/> damage vs. light units.
 Button/Tooltip/AP_HotSRoachShield=Roach gains +<d ref="Behavior,AP_RoachShield,Modification[0].LifeArmorBonus"/> armor when life is under 50%.
 Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
+Button/Tooltip/AP_Hyperjump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
 Button/Tooltip/AP_Hydralisk=High-damage ranged unit.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Button/Tooltip/AP_HydraliskFrenzy=Attack speed increased by 50% for <d ref="Behavior,AP_HydraliskFrenzy,Duration"/> seconds.
 Button/Tooltip/AP_HydraliskLurkerEgg=This cocoon contains a Hydralisk that is morphing into a Lurker.
@@ -579,6 +587,7 @@ Button/Tooltip/AP_Liberator=Artillery fighter. Loaded with missiles that deal ar
 Button/Tooltip/AP_LiberatorAAMode=Reverts to Fighter Mode. In this mode Liberators can move, but they can only attack air targets.
 Button/Tooltip/AP_LiberatorAGMode=Deploys into Defender Mode. In this mode Liberators inflict single target damage to ground units. Liberators in this mode cannot move.
 Button/Tooltip/AP_LiberatorAGRangeUpgrade=Increases the range of Liberators in Defender Mode by 3.
+Button/Tooltip/AP_LiberatorStructureAttack=Liberators can attack structures while in Defender Mode.
 Button/Tooltip/AP_LockOn=Locks the Cyclone's weapons on the target unit, dealing <d ref="Effect,AP_LockOnCP,PeriodCount*Effect,AP_CycloneWeaponDamage,Amount"/> damage over <d ref="Effect,AP_LockOnCP,PeriodCount * Effect,AP_LockOnCP,PeriodicPeriodArray[0]"/> seconds to ground and flying targets. Can move while firing. Cancels if target moves out of range.
 Button/Tooltip/AP_LockOnAir=Locks the Cyclone's weapons on the target flying unit, dealing <d ref="Effect,AP_LockOnAirCP,PeriodCount*Effect,AP_CycloneAirWeaponDamage,Amount"/> damage over <d ref="Effect,LockOnAirCP,PeriodCount * Effect,AP_LockOnAirCP,PeriodicPeriodArray[0]"/> seconds. Can move while firing. Cancels if target moves out of range.
 Button/Tooltip/AP_LockOnCancel=Cancels the current Lock On, and allows you to select a new target.
@@ -645,7 +654,6 @@ Button/Tooltip/AP_ShockwaveMissilePattern=Banshee attack fires multiple missile 
 Button/Tooltip/AP_ShrikeTurret=Bunkers are outfitted with an automated turret.
 Button/Tooltip/AP_SiegeBreaker=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeBreakerSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_LiberatorStructureAttack=Liberators can attack structures while in Defender Mode.
 Button/Tooltip/AP_SiegeTank=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeTankSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SingularityAnchor=Wraith starts with 100 additional energy.
@@ -720,10 +728,8 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_Hyperjump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
-Button/Tooltip/AP_CloakOnBattlecruiser=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_BattlecruiserCloak,Modification.VitalRegenArray[2] + Unit,AP_Battlecruiser,EnergyRegenRate)" precision="1"/> energy per second.</c>
-Button/Tooltip/AP_AllPurposeLaserBattery=Battlecruisers can attack while moving and do same damage to both ground and air targets.
-Button/Tooltip/AP_CloakOnLiberator=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_LiberatorCloak,Modification.VitalRegenArray[2] + Unit,AP_Liberator,EnergyRegenRate)" precision="1"/> energy per second.</c>
+Button/Tooltip/AP_BioMechanicalHeal=Heals a friendly biological or mechanical unit.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_HealingDroneHeal,RechargeVitalRate[0]"/> life per second.</c>
+Button/Tooltip/AP_HealingDrone=Heals nearby biological and mechanical units.<n/>Times out after <d ref="Behavior,AP_HealingDroneTimedLife,Duration"/> seconds.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1207,6 +1213,7 @@ Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
+Effect/Name/AP_HealingDroneHeal=Heal
 Effect/Name/Kill2=Kill
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
@@ -1378,6 +1385,7 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
+Unit/Name/AP_HealingDrone=Bio-Mechanical Repair Drone
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
 UnitSubtitle/AP_HydraliskImpaler=Impaler Strain
 UnitSubtitle/AP_HydraliskLurker=Lurker Strain
@@ -1492,7 +1500,6 @@ Upgrade/Name/AP_K5CreepBonuses=K5 Creep Bonuses
 Upgrade/Name/AP_LiberatorAGRangeUpgrade=Advanced Ballistics
 Upgrade/Name/AP_LiberatorMorph=Liberator Morph
 Upgrade/Name/AP_LiberatorSiegeProtocol=Raid Artillery
-Upgrade/Name/AP_NotPossibleDefenderMode=Defender Mode
 Upgrade/Name/AP_MaelstromRounds=Maelstrom Rounds
 Upgrade/Name/AP_MagFieldLaunchers=Mag-Field Launchers
 Upgrade/Name/AP_MarauderLifeBoost=Kinetic Foam
@@ -1505,6 +1512,7 @@ Upgrade/Name/AP_NanoConstructor=Nano Constructor
 Upgrade/Name/AP_NeoSteelAndShrikeTurretIconUpgrade=Neosteel and Shrike Turret Icon Upgrade
 Upgrade/Name/AP_NeoSteelFrame=Neosteel Bunker
 Upgrade/Name/AP_NeosteelFrame=Neosteel Frame
+Upgrade/Name/AP_NotPossibleDefenderMode=Defender Mode
 Upgrade/Name/AP_NotPossibleSiegeMode=Siege Mode
 Upgrade/Name/AP_OcularImplants=Ocular Implants
 Upgrade/Name/AP_OrbitalRelay=Orbital Command
@@ -1598,6 +1606,7 @@ Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
 Weapon/Name/AP_AcidSaliva=Acid Saliva
+Weapon/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
 Weapon/Name/AP_ArcliteShockCannon=Arclite Shock Cannon
 Weapon/Name/AP_AutoTurret=12mm Gauss Cannon
 Weapon/Name/AP_BacklashRockets=Backlash Rockets
@@ -1606,6 +1615,7 @@ Weapon/Name/AP_CrucioShockCannon=Crucio Shock Cannon
 Weapon/Name/AP_CycloneFakeWeapon=Cyclone Fake Weapon
 Weapon/Name/AP_CycloneLockOnDummy=Lock On Dummy
 Weapon/Name/AP_D8Charge=D-8 Charge
+Weapon/Name/AP_DRAllPurposeLaserBattery=ATX Laser Battery
 Weapon/Name/AP_DRBattlecruiserA=ATA Laser Battery
 Weapon/Name/AP_DRBattlecruiserFakeA=ATA Laser Battery
 Weapon/Name/AP_DRBattlecruiserFakeG=ATG Laser Battery
@@ -1673,8 +1683,6 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
-Weapon/Name/AP_DRAllPurposeLaserBattery=ATX Laser Battery
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_Lurker=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>

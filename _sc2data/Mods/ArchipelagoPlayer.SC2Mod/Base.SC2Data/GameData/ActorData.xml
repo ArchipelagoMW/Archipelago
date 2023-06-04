@@ -3947,6 +3947,73 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOrigin"/>
     </CActorModel>
+    <CActorUnit id="AP_HealingDrone" parent="GenericUnitBase" unitName="AP_HealingDrone">
+        <Aliases value="_UnitMedium"/>
+        <EditorCategories value=""/>
+        <On Terms="Behavior.AP_PointDefenseReady.On" Send="AnimBracketStart Work Work,Start Work Work,End"/>
+        <On Terms="Behavior.AP_PointDefenseReady.Off" Send="AnimBracketStop Work"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="PointDefenseDroneDeath" SoundLink="Raven_TargetingDroneExplode"/>
+        <PlacementModel value="AP_HealingDronePlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PlacementActorModel value="AP_PointDefenseDronePlacementModel"/>
+        <PlaceholderActorModel value="AP_PointDefenseDronePlaceholderModel"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="20"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-PointDefenseDrone.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="What" value="Raven_PointDefenseDroneWhat"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-PointDefenseDrone.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorBeamSimple id="AP_HealingDroneHealBeamRev1" parent="BeamSimpleAnimationStyleContinuous">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_HealingDroneHeal.TargetStart" Send="Create"/>
+        <On Terms="Effect.AP_HealingDroneHeal.TargetStop" Send="Destroy"/>
+        <HostForProps Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Model value="MedivacHealBeam"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_HealingDroneHealModelRev1" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Effect.AP_HealingDroneHeal.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_HealingDroneHeal.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="MedicHealModel"/>
+    </CActorModel>
+    <CActorSound id="AP_HealingDroneHealSoundRev1" parent="SoundContinuous">
+        <On Terms="Effect.AP_HealingDroneHeal.TargetStart; At Target" Send="Create"/>
+        <On Terms="Effect.AP_HealingDroneHeal.TargetStop; At Target" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_HealingDroneHealSoundStart"/>
+        <On Terms="ActorDestruction" Send="Create AP_HealingDroneHealSoundStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Sound value="Medivac_HealLoop"/>
+    </CActorSound>
+    <CActorRange id="AP_HealingDroneRange" parent="RangeAbil" abil="AP_PlaceHealingDrone"/>
+    <CActorMissile id="AP_HealingDroneReleaseMissile" parent="GenericAttackMissile" unitName="AP_HealingDroneReleaseWeapon"/>
+    <CActorAction id="AP_HealingDroneRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_HealingDroneReleaseLaunchMissile">
+        <LaunchAssets Sound="Raven_PointDefenseDroneReleaseLaunch"/>
+        <ImpactMap index="None" Model="PointDefenseDroneAttackBeamImpact" Sound="Raven_PointDefenseDroneReleaseImpact"/>
+    </CActorAction>
+    <CActorSound id="AP_HealingDroneHealSoundStop" parent="SoundOneShot">
+        <Sound value="Medivac_HealEnd"/>
+    </CActorSound>
+    <CActorSound id="AP_HealingDroneHealSoundStart" parent="SoundOneShot">
+        <Sound value="Medivac_HealStart"/>
+    </CActorSound>
     <CActorUnit id="AP_Impaler" parent="GenericUnitBase" unitName="AP_Impaler">
         <Aliases value="_UnitLarge"/>
         <Macros value="ZergBurrowStandardAnimMacro"/>

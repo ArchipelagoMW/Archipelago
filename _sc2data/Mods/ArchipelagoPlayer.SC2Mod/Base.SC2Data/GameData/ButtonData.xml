@@ -1229,6 +1229,18 @@
         <AlertIcon value="Assets\Textures\btn-ability-zerg-noxiouscloud.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_BioMechanicalHeal">
+        <Icon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_BuildHealingDrone">
+        <Tooltip value="Button/Tooltip/AP_HealingDrone"/>
+        <Icon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <AlertTooltip value="Button/Tooltip/AP_HealingDrone"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
     <CButton id="AP_ImpalerBurrowDown">
         <Name value="Button/Name/BurrowDown"/>
         <Tooltip value="Button/Tooltip/BurrowDown"/>

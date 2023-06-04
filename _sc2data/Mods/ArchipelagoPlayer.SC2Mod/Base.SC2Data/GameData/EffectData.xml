@@ -3587,6 +3587,42 @@
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
         <SearchFlags index="SameCliff" value="1"/>
     </CEffectEnumArea>
+    <CEffectCreateUnit id="AP_HealingDroneReleaseCreateUnit">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnEffect value="AP_HealingDroneReleaseSet"/>
+        <SpawnUnit value="AP_HealingDrone"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_HealingDroneReleaseSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_HealingDroneTimedLife"/>
+        <EffectArray value="AP_HealingDroneReleaseLaunchMissile"/>
+        <EffectArray value="MakePrecursor"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_HealingDroneReleaseLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="RemovePrecursor"/>
+        <AmmoUnit value="AP_HealingDroneReleaseWeapon"/>
+        <PlaceholderUnit value="AP_HealingDrone"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="AP_HealingDroneTimedLife">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectCreateHealer id="AP_HealingDroneHeal">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="HiddenCompareAB"/>
+        <ValidatorArray value="HiddenCompareBA"/>
+        <ValidatorArray value="NotSpineCrawlerUprooted"/>
+        <ValidatorArray value="NotSporeCrawlerUprooted"/>
+        <ValidatorArray value="NotVortexd"/>
+        <ValidatorArray value="NotUncommandable"/>
+        <ValidatorArray value="SourceNotHidden"/>
+        <EditorCategories value="Race:Terran"/>
+        <DrainVital value="Energy"/>
+        <RechargeVitalRate value="14"/>
+    </CEffectCreateHealer>
     <CEffectDamage id="AP_ImpalerDamage">
         <EditorCategories value="Race:Zerg"/>
         <ResponseFlags index="Acquire" value="1"/>
