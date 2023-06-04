@@ -3789,8 +3789,8 @@
             <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,1" Row="1" Column="1"/>
             <LayoutButtons Face="AP_AllPurposeLaserBattery" Type="Passive" Requirements="AP_HaveAdvancedWeaponryBattlecruiser" Row="1" Column="4"/>
             <LayoutButtons Face="AP_YamatoGun" Type="AbilCmd" AbilCmd="AP_DukesRevengeYamato,0" Row="2" Column="0"/>
-            <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_MissilePods,0" Row="2" Column="2"/>
-            <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DefensiveMatrix,0" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_DukesRevengeMissilePods,0" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DukesRevengeDefensiveMatrix,0" Row="2" Column="3"/>
             <LayoutButtons Face="AP_Hyperjump" Type="AbilCmd" AbilCmd="AP_Hyperjump,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="1.25"/>
