@@ -8,8 +8,8 @@ from .Names import LocationName, ItemName, RegionName
 
 def create_regions(world, player: int, active_locations):
     KH2REGIONS: typing.Dict[str, typing.List[str]] = {
-        "Menu":                        [],
-        RegionName.GoA:                [
+        "Menu":                                                    [],
+        RegionName.GoA:                                            [
             LocationName.Crit_1,
             LocationName.Crit_2,
             LocationName.Crit_3,
@@ -24,7 +24,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.DonaldStarting2,
             LocationName.GoofyStarting1,
             LocationName.GoofyStarting2],
-        RegionName.LoD:                [
+        RegionName.LoD:                                            [
             LocationName.BambooGroveDarkShard,
             LocationName.BambooGroveEther,
             LocationName.BambooGroveMythrilShard,
@@ -42,11 +42,15 @@ def create_regions(world, player: int, active_locations):
             LocationName.VillageCaveBonus,
             LocationName.RidgeFrostShard,
             LocationName.RidgeAPBoost,
+        ],
+        RegionName.ShanYu:                                         [
             LocationName.ShanYu,
             LocationName.ShanYuGetBonus,
             LocationName.HiddenDragon,
-            LocationName.GoofyShanYu],
-        RegionName.LoD2:               [
+            LocationName.GoofyShanYu
+        ],
+        RegionName.LoD2:                                           [],
+        RegionName.AnsemRiku:                                      [
             LocationName.ThroneRoomTornPages,
             LocationName.ThroneRoomPalaceMap,
             LocationName.ThroneRoomAPBoost,
@@ -55,10 +59,11 @@ def create_regions(world, player: int, active_locations):
             LocationName.ThroneRoomOgreShield,
             LocationName.ThroneRoomMythrilCrystal,
             LocationName.ThroneRoomOrichalcum,
-            LocationName.StormRider,
-            LocationName.XigbarDataDefenseBoost,
-            LocationName.GoofyStormRider],
-        RegionName.Ag:                 [
+        ],
+        RegionName.StormRider:                                     [LocationName.StormRider,
+                                                                    LocationName.GoofyStormRider],
+        RegionName.DataXigbar:                                     [LocationName.XigbarDataDefenseBoost],
+        RegionName.Ag:                                             [
             LocationName.AgrabahMap,
             LocationName.AgrabahDarkShard,
             LocationName.AgrabahMythrilShard,
@@ -86,20 +91,21 @@ def create_regions(world, player: int, active_locations):
             LocationName.TreasureRoom,
             LocationName.TreasureRoomAPBoost,
             LocationName.TreasureRoomSerenityGem,
-            LocationName.ElementalLords,
-            LocationName.LampCharm,
             LocationName.GoofyTreasureRoom,
             LocationName.DonaldAbuEscort],
-        RegionName.Ag2:                [
+        RegionName.TwinLords:                                      [LocationName.ElementalLords,
+                                                                    LocationName.LampCharm],
+        RegionName.Ag2:                                            [
             LocationName.RuinedChamberTornPages,
             LocationName.RuinedChamberRuinsMap,
-            LocationName.GenieJafar,
-            LocationName.WishingLamp],
-        RegionName.Lexaeus:            [
+        ],
+        RegionName.GenieJafar:                                     [LocationName.GenieJafar,
+                                                                    LocationName.WishingLamp],
+        RegionName.DataLexaeus:                                    [
             LocationName.LexaeusBonus,
             LocationName.LexaeusASStrengthBeyondStrength,
             LocationName.LexaeusDataLostIllusion],
-        RegionName.Dc:                 [
+        RegionName.Dc:                                             [
             LocationName.DCCourtyardMythrilShard,
             LocationName.DCCourtyardStarRecipe,
             LocationName.DCCourtyardAPBoost,
@@ -111,50 +117,55 @@ def create_regions(world, player: int, active_locations):
             LocationName.DisneyCastleMap,
             LocationName.MinnieEscort,
             LocationName.MinnieEscortGetBonus],
-        RegionName.Tr:                 [
+
+        RegionName.Tr:                                             [
             LocationName.CornerstoneHillMap,
             LocationName.CornerstoneHillFrostShard,
             LocationName.PierMythrilShard,
             LocationName.PierHiPotion,
+        ],
+        RegionName.OldPete:                                        [
             LocationName.WaterwayMythrilStone,
             LocationName.WaterwayAPBoost,
             LocationName.WaterwayFrostStone,
             LocationName.WindowofTimeMap,
             LocationName.BoatPete,
+            LocationName.DonaldBoatPete,
+            LocationName.DonaldBoatPeteGetBonus,
+        ],
+        RegionName.FuturePete:                                     [
             LocationName.FuturePete,
             LocationName.FuturePeteGetBonus,
             LocationName.Monochrome,
             LocationName.WisdomForm,
-            LocationName.DonaldBoatPete,
-            LocationName.DonaldBoatPeteGetBonus,
             LocationName.GoofyFuturePete],
-        RegionName.Marluxia:           [
+        RegionName.DataMarluxia:                                   [
             LocationName.MarluxiaGetBonus,
             LocationName.MarluxiaASEternalBlossom,
             LocationName.MarluxiaDataLostIllusion],
-        RegionName.Terra:              [
+        RegionName.Terra:                                          [
             LocationName.LingeringWillBonus,
             LocationName.LingeringWillProofofConnection,
             LocationName.LingeringWillManifestIllusion],
-        RegionName.Ha1:                [
+        RegionName.Ha1:                                            [
             LocationName.PoohsHouse100AcreWoodMap,
             LocationName.PoohsHouseAPBoost,
             LocationName.PoohsHouseMythrilStone],
-        RegionName.Ha2:                [
+        RegionName.Ha2:                                            [
             LocationName.PigletsHouseDefenseBoost,
             LocationName.PigletsHouseAPBoost,
             LocationName.PigletsHouseMythrilGem],
-        RegionName.Ha3:                [
+        RegionName.Ha3:                                            [
             LocationName.RabbitsHouseDrawRing,
             LocationName.RabbitsHouseMythrilCrystal,
             LocationName.RabbitsHouseAPBoost,
         ],
-        RegionName.Ha4:                [
+        RegionName.Ha4:                                            [
             LocationName.KangasHouseMagicBoost,
             LocationName.KangasHouseAPBoost,
             LocationName.KangasHouseOrichalcum,
         ],
-        RegionName.Ha5:                [
+        RegionName.Ha5:                                            [
             LocationName.SpookyCaveMythrilGem,
             LocationName.SpookyCaveAPBoost,
             LocationName.SpookyCaveOrichalcum,
@@ -163,12 +174,11 @@ def create_regions(world, player: int, active_locations):
             LocationName.SpookyCaveAPBoost2,
             LocationName.SweetMemories,
             LocationName.SpookyCaveMap],
-        RegionName.Ha6:                [
+        RegionName.Ha6:                                            [
             LocationName.StarryHillCosmicRing,
             LocationName.StarryHillStyleRecipe,
             LocationName.StarryHillCureElement,
-            LocationName.StarryHillOrichalcumPlus],
-        RegionName.Pr:                 [
+            LocationName.StarryHillOrichalcumPlus], RegionName.Pr: [
             LocationName.RampartNavalMap,
             LocationName.RampartMythrilStone,
             LocationName.RampartDarkShard,
@@ -186,14 +196,16 @@ def create_regions(world, player: int, active_locations):
             LocationName.MoonlightNookMythrilShard,
             LocationName.MoonlightNookSerenityGem,
             LocationName.MoonlightNookPowerStone,
+            LocationName.DonaldBoatFight,
+            LocationName.GoofyInterceptorBarrels],
+        RegionName.Barbosa:                                        [
             LocationName.Barbossa,
             LocationName.BarbossaGetBonus,
             LocationName.FollowtheWind,
-            LocationName.DonaldBoatFight,
             LocationName.GoofyBarbossa,
             LocationName.GoofyBarbossaGetBonus,
-            LocationName.GoofyInterceptorBarrels],
-        RegionName.Pr2:                [
+        ],
+        RegionName.Pr2:                                            [
             LocationName.GrimReaper1,
             LocationName.InterceptorsHoldFeatherCharm,
             LocationName.SeadriftKeepAPBoost,
@@ -205,12 +217,14 @@ def create_regions(world, player: int, active_locations):
             LocationName.SeadriftRowCursedMedallion,
             LocationName.SeadriftRowShipGraveyardMap,
             LocationName.GoofyGrimReaper1],
-        RegionName.Gr2:                [
+        RegionName.GrimReaper2:                                    [
             LocationName.DonaladGrimReaper2,
             LocationName.GrimReaper2,
             LocationName.SecretAnsemReport6,
+        ],
+        RegionName.DataLuxord:                                     [
             LocationName.LuxordDataAPBoost],
-        RegionName.Oc:                 [
+        RegionName.Oc:                                             [
             LocationName.PassageMythrilShard,
             LocationName.PassageMythrilStone,
             LocationName.PassageEther,
@@ -218,6 +232,11 @@ def create_regions(world, player: int, active_locations):
             LocationName.PassageHiPotion,
             LocationName.InnerChamberUnderworldMap,
             LocationName.InnerChamberMythrilShard,
+
+            LocationName.Hydra,
+            LocationName.HydraGetBonus,
+        ],
+        RegionName.Cerberus:                                       [
             LocationName.Cerberus,
             LocationName.ColiseumMap,
             LocationName.Urns,
@@ -236,37 +255,39 @@ def create_regions(world, player: int, active_locations):
             LocationName.OlympusStone,
             LocationName.TheLockCavernsMap,
             LocationName.TheLockMythrilShard,
-            LocationName.TheLockAPBoost,
+            LocationName.TheLockAPBoost],
+        RegionName.OlympusPete:                                    [
             LocationName.PeteOC,
-            LocationName.Hydra,
-            LocationName.HydraGetBonus,
-            LocationName.HerosCrest,
             LocationName.DonaldDemyxOC,
             LocationName.GoofyPeteOC],
-        RegionName.Oc2:                [
+        RegionName.Hydra:                                          [
+            LocationName.Hydra,
+            LocationName.HydraGetBonus,
+            LocationName.HerosCrest],
+        RegionName.Oc2:                                            [
             LocationName.AuronsStatue,
             LocationName.Hades,
             LocationName.HadesGetBonus,
             LocationName.GuardianSoul],
-        RegionName.Oc2_pain_and_panic: [
+        RegionName.Oc2_pain_and_panic:                             [
             LocationName.ProtectBeltPainandPanicCup,
             LocationName.SerenityGemPainandPanicCup],
-        RegionName.Oc2_cerberus:       [
+        RegionName.Oc2_cerberus:                                   [
             LocationName.RisingDragonCerberusCup,
             LocationName.SerenityCrystalCerberusCup],
-        RegionName.Oc2_titan:          [
+        RegionName.Oc2_titan:                                      [
             LocationName.GenjiShieldTitanCup,
             LocationName.SkillfulRingTitanCup],
-        RegionName.Oc2_gof:            [
+        RegionName.Oc2_gof:                                        [
             LocationName.FatalCrestGoddessofFateCup,
             LocationName.OrichalcumPlusGoddessofFateCup,
             LocationName.HadesCupTrophyParadoxCups],
-        RegionName.Zexion:             [
+        RegionName.DataZexion:                                     [
             LocationName.ZexionBonus,
             LocationName.ZexionASBookofShadows,
             LocationName.ZexionDataLostIllusion,
             LocationName.GoofyZexion],
-        RegionName.Bc:                 [
+        RegionName.Bc:                                             [
             LocationName.BCCourtyardAPBoost,
             LocationName.BCCourtyardHiPotion,
             LocationName.BCCourtyardMythrilShard,
@@ -295,16 +316,16 @@ def create_regions(world, player: int, active_locations):
             LocationName.DarkThornCureElement,
             LocationName.DonaldThresholder,
             LocationName.GoofyBeast],
-        RegionName.Bc2:                [
+        RegionName.Bc2:                                            [
             LocationName.RumblingRose,
             LocationName.CastleWallsMap],
-        RegionName.Xaldin:             [
+        RegionName.Xaldin:                                         [
             LocationName.Xaldin,
             LocationName.XaldinGetBonus,
             LocationName.DonaldXaldinGetBonus,
             LocationName.SecretAnsemReport4,
             LocationName.XaldinDataDefenseBoost],
-        RegionName.Sp:                 [
+        RegionName.Sp:                                             [
             LocationName.PitCellAreaMap,
             LocationName.PitCellMythrilCrystal,
             LocationName.CanyonDarkCrystal,
@@ -321,21 +342,21 @@ def create_regions(world, player: int, active_locations):
             LocationName.PhotonDebugger,
             LocationName.DonaldScreens,
             LocationName.GoofyHostileProgram],
-        RegionName.Sp2:                [
+        RegionName.Sp2:                                            [
             LocationName.SolarSailer,
             LocationName.CentralComputerCoreAPBoost,
             LocationName.CentralComputerCoreOrichalcumPlus,
             LocationName.CentralComputerCoreCosmicArts,
             LocationName.CentralComputerCoreMap,
             LocationName.DonaldSolarSailer],
-        RegionName.Mcp:                [
+        RegionName.Mcp:                                            [
             LocationName.MCP,
             LocationName.MCPGetBonus],
-        RegionName.Larxene:            [
+        RegionName.DataLarxene:                                    [
             LocationName.LarxeneBonus,
             LocationName.LarxeneASCloakedThunder,
             LocationName.LarxeneDataLostIllusion],
-        RegionName.Ht:                 [
+        RegionName.Ht:                                             [
             LocationName.GraveyardMythrilShard,
             LocationName.GraveyardSerenityGem,
             LocationName.FinklesteinsLabHalloweenTownMap,
@@ -355,7 +376,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.OogieBoogieMagnetElement,
             LocationName.DonaldPrisonKeeper,
             LocationName.GoofyOogieBoogie],
-        RegionName.Ht2:                [
+        RegionName.Ht2:                                            [
             LocationName.Lock,
             LocationName.Present,
             LocationName.DecoyPresents,
@@ -363,11 +384,11 @@ def create_regions(world, player: int, active_locations):
             LocationName.DecisivePumpkin,
             LocationName.DonaldExperiment,
             LocationName.GoofyLock],
-        RegionName.Vexen:              [
+        RegionName.DataVexen:                                      [
             LocationName.VexenBonus,
             LocationName.VexenASRoadtoDiscovery,
             LocationName.VexenDataLostIllusion],
-        RegionName.Hb:                 [
+        RegionName.Hb:                                             [
             LocationName.MarketplaceMap,
             LocationName.BoroughDriveRecovery,
             LocationName.BoroughAPBoost,
@@ -379,7 +400,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.Bailey,
             LocationName.BaileySecretAnsemReport7,
             LocationName.BaseballCharm],
-        RegionName.Hb2:                [
+        RegionName.Hb2:                                            [
             LocationName.PosternCastlePerimeterMap,
             LocationName.PosternMythrilGem,
             LocationName.PosternAPBoost,
@@ -401,7 +422,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.CoRMineshaftLowerLevelDepthsofRemembranceMap,
             LocationName.CoRMineshaftLowerLevelAPBoost,
             LocationName.DonaldDemyxHBGetBonus],
-        RegionName.ThousandHeartless:  [
+        RegionName.ThousandHeartless:                              [
             LocationName.DemyxHB,
             LocationName.DemyxHBGetBonus,
             LocationName.FFFightsCureElement,
@@ -416,13 +437,13 @@ def create_regions(world, player: int, active_locations):
             LocationName.PosternGullWing,
             LocationName.HeartlessManufactoryCosmicChain,
             LocationName.DemyxDataAPBoost],
-        RegionName.Mushroom13:         [
+        RegionName.Mushroom13:                                     [
             LocationName.WinnersProof,
             LocationName.ProofofPeace],
-        RegionName.Sephi:              [
+        RegionName.Sephi:                                          [
             LocationName.SephirothBonus,
             LocationName.SephirothFenrir],
-        RegionName.CoR:                [
+        RegionName.CoR:                                            [
             LocationName.CoRDepthsUpperLevelRemembranceGem,
             LocationName.CoRMiningAreaSerenityGem,
             LocationName.CoRMiningAreaAPBoost,
@@ -436,10 +457,10 @@ def create_regions(world, player: int, active_locations):
             LocationName.CoREngineChamberAPBoost,
             LocationName.CoREngineChamberManifestIllusion,
             LocationName.CoRMineshaftUpperLevelMagicBoost],
-        RegionName.Transport:          [
+        RegionName.Transport:                                      [
             LocationName.CoRMineshaftUpperLevelAPBoost,
             LocationName.TransporttoRemembrance],
-        RegionName.Pl:                 [
+        RegionName.Pl:                                             [
             LocationName.GorgeSavannahMap,
             LocationName.GorgeDarkGem,
             LocationName.GorgeMythrilStone,
@@ -471,13 +492,13 @@ def create_regions(world, player: int, active_locations):
             LocationName.ScarFireElement,
             LocationName.DonaldScar,
             LocationName.GoofyHyenas1],
-        RegionName.Pl2:                [
+        RegionName.Pl2:                                            [
             LocationName.Hyenas2,
             LocationName.Groundshaker,
             LocationName.GroundshakerGetBonus,
             LocationName.SaixDataDefenseBoost,
             LocationName.GoofyHyenas2],
-        RegionName.Stt:                [
+        RegionName.Stt:                                            [
             LocationName.TwilightTownMap,
             LocationName.MunnyPouchOlette,
             LocationName.StationDusks,
@@ -506,7 +527,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.Axel2,
             LocationName.MansionBasementCorridorHiPotion,
             LocationName.RoxasDataMagicBoost],
-        RegionName.Tt:                 [
+        RegionName.Tt:                                             [
             LocationName.OldMansionPotion,
             LocationName.OldMansionMythrilShard,
             LocationName.TheWoodsPotion,
@@ -534,11 +555,11 @@ def create_regions(world, player: int, active_locations):
             LocationName.TowerWardrobeMythrilStone,
             LocationName.StarSeeker,
             LocationName.ValorForm],
-        RegionName.Tt2:                [
+        RegionName.Tt2:                                            [
             LocationName.SeifersTrophy,
             LocationName.Oathkeeper,
             LocationName.LimitForm],
-        RegionName.Tt3:                [
+        RegionName.Tt3:                                            [
             LocationName.UndergroundConcourseMythrilGem,
             LocationName.UndergroundConcourseAPBoost,
             LocationName.UndergroundConcourseMythrilCrystal,
@@ -562,12 +583,12 @@ def create_regions(world, player: int, active_locations):
             LocationName.BetwixtandBetweenBondofFlame,
             LocationName.AxelDataMagicBoost,
             LocationName.DonaldMansionNobodies],
-        RegionName.Twtnw:              [
+        RegionName.Twtnw:                                          [
             LocationName.FragmentCrossingMythrilStone,
             LocationName.FragmentCrossingMythrilCrystal,
             LocationName.FragmentCrossingAPBoost,
             LocationName.FragmentCrossingOrichalcum],
-        RegionName.Twtnw_PostRoxas:    [
+        RegionName.Twtnw_PostRoxas:                                [
             LocationName.Roxas,
             LocationName.RoxasGetBonus,
             LocationName.RoxasSecretAnsemReport8,
@@ -580,7 +601,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.NothingsCallMythrilGem,
             LocationName.NothingsCallOrichalcum,
             LocationName.TwilightsViewCosmicBelt],
-        RegionName.Twtnw_PostXigbar:   [
+        RegionName.Twtnw_PostXigbar:                               [
             LocationName.XigbarBonus,
             LocationName.XigbarSecretAnsemReport3,
             LocationName.NaughtsSkywayMythrilGem,
@@ -591,7 +612,7 @@ def create_regions(world, player: int, active_locations):
             LocationName.Luxord,
             LocationName.LuxordGetBonus,
             LocationName.LuxordSecretAnsemReport9],
-        RegionName.Twtnw2:             [
+        RegionName.Twtnw2:                                         [
             LocationName.SaixBonus,
             LocationName.SaixSecretAnsemReport12,
             LocationName.PreXemnas1SecretAnsemReport11,
@@ -604,42 +625,42 @@ def create_regions(world, player: int, active_locations):
             LocationName.Xemnas1SecretAnsemReport13,
             LocationName.FinalXemnas,
             LocationName.XemnasDataPowerBoost],
-        RegionName.Valor:              [
+        RegionName.Valor:                                          [
             LocationName.Valorlvl2,
             LocationName.Valorlvl3,
             LocationName.Valorlvl4,
             LocationName.Valorlvl5,
             LocationName.Valorlvl6,
             LocationName.Valorlvl7],
-        RegionName.Wisdom:             [
+        RegionName.Wisdom:                                         [
             LocationName.Wisdomlvl2,
             LocationName.Wisdomlvl3,
             LocationName.Wisdomlvl4,
             LocationName.Wisdomlvl5,
             LocationName.Wisdomlvl6,
             LocationName.Wisdomlvl7],
-        RegionName.Limit:              [
+        RegionName.Limit:                                          [
             LocationName.Limitlvl2,
             LocationName.Limitlvl3,
             LocationName.Limitlvl4,
             LocationName.Limitlvl5,
             LocationName.Limitlvl6,
             LocationName.Limitlvl7],
-        RegionName.Master:             [
+        RegionName.Master:                                         [
             LocationName.Masterlvl2,
             LocationName.Masterlvl3,
             LocationName.Masterlvl4,
             LocationName.Masterlvl5,
             LocationName.Masterlvl6,
             LocationName.Masterlvl7],
-        RegionName.Final:              [
+        RegionName.Final:                                          [
             LocationName.Finallvl2,
             LocationName.Finallvl3,
             LocationName.Finallvl4,
             LocationName.Finallvl5,
             LocationName.Finallvl6,
             LocationName.Finallvl7],
-        RegionName.Keyblade:           [
+        RegionName.Keyblade:                                       [
             LocationName.FAKESlot,
             LocationName.DetectionSaberSlot,
             LocationName.EdgeofUltimaSlot,
@@ -699,16 +720,16 @@ def create_regions(world, player: int, active_locations):
             LocationName.OgreShield,
             LocationName.SaveTheKing2,
             LocationName.UltimateMushroom],
-        RegionName.LevelsVS1:          [],
-        RegionName.LevelsVS3:          [],
-        RegionName.LevelsVS6:          [],
-        RegionName.LevelsVS9:          [],
-        RegionName.LevelsVS12:         [],
-        RegionName.LevelsVS15:         [],
-        RegionName.LevelsVS18:         [],
-        RegionName.LevelsVS21:         [],
-        RegionName.LevelsVS24:         [],
-        RegionName.LevelsVS26:         [],
+        RegionName.LevelsVS1:                                      [],
+        RegionName.LevelsVS3:                                      [],
+        RegionName.LevelsVS6:                                      [],
+        RegionName.LevelsVS9:                                      [],
+        RegionName.LevelsVS12:                                     [],
+        RegionName.LevelsVS15:                                     [],
+        RegionName.LevelsVS18:                                     [],
+        RegionName.LevelsVS21:                                     [],
+        RegionName.LevelsVS24:                                     [],
+        RegionName.LevelsVS26:                                     [],
 
     }
     # Level region depends on level depth.
@@ -805,36 +826,36 @@ def connect_regions(world: MultiWorld, player: int):
                                        RegionName.LoD,
                                        RegionName.Twtnw, RegionName.Bc, RegionName.Ag, RegionName.Pl, RegionName.Hb,
                                        RegionName.Dc, RegionName.Stt,
-                                       RegionName.Ha1,
-                                       RegionName.Keyblade, RegionName.LevelsVS1,
-                                       RegionName.Master},
-        RegionName.Sp:                {RegionName.Sp2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
+                                       RegionName.Ha1, RegionName.Keyblade, RegionName.LevelsVS1,
+                                       RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
+                                       RegionName.Final},
+        RegionName.Sp:                {RegionName.Sp2},
         RegionName.Sp2:               {RegionName.Mcp},
-        RegionName.Mcp:               {RegionName.Larxene},
-        RegionName.Pr:                {RegionName.Pr2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
+        RegionName.Mcp:               {RegionName.DataLarxene},
+        RegionName.Pr:                {RegionName.Pr2},
         RegionName.Pr2:               {RegionName.Gr2},
-        RegionName.Tt:                {RegionName.Tt2, RegionName.Valor, RegionName.Limit},
+        RegionName.Tt:                {RegionName.Tt2},
         RegionName.Tt2:               {RegionName.Tt3},
-        RegionName.Tt3:               {RegionName.Final},
-        RegionName.Oc:                {RegionName.Oc2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Oc2:               {RegionName.Oc2_gof, RegionName.Oc2_titan, RegionName.Oc2_cerberus,
-                                       RegionName.Oc2_pain_and_panic, RegionName.Zexion},
-        RegionName.Ht:                {RegionName.Ht2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Ht2:               {RegionName.Vexen},
-        RegionName.LoD:               {RegionName.LoD2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Twtnw:             {RegionName.Twtnw_PostRoxas, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Twtnw_PostRoxas:   {RegionName.Twtnw_PostXigbar, RegionName.Final},
+        # RegionName.Tt3:               {RegionName.Final},
+        RegionName.Oc:                {RegionName.Oc2, RegionName.Oc2_pain_and_panic, RegionName.Oc2_cerberus},
+        RegionName.Oc2:               {RegionName.Oc2_gof, RegionName.Oc2_titan,
+                                       RegionName.Zexion},
+        RegionName.Ht:                {RegionName.Ht2},
+        RegionName.Ht2:               {RegionName.DataVexen},
+        RegionName.LoD:               {RegionName.LoD2},
+        RegionName.Twtnw:             {RegionName.Twtnw_PostRoxas},
+        RegionName.Twtnw_PostRoxas:   {RegionName.Twtnw_PostXigbar},
         RegionName.Twtnw_PostXigbar:  {RegionName.Twtnw2},
-        RegionName.Bc:                {RegionName.Bc2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
+        RegionName.Bc:                {RegionName.Bc2},
         RegionName.Bc2:               {RegionName.Xaldin},
-        RegionName.Ag:                {RegionName.Ag2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
+        RegionName.Ag:                {RegionName.Ag2},
         RegionName.Ag2:               {RegionName.Lexaeus},
         RegionName.Pl:                {RegionName.Pl2},
-        RegionName.Hb:                {RegionName.Hb2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
+        RegionName.Hb:                {RegionName.Hb2},
         RegionName.Hb2:               {RegionName.CoR, RegionName.ThousandHeartless},
         RegionName.CoR:               {RegionName.Transport},
         RegionName.ThousandHeartless: {RegionName.Sephi, RegionName.Mushroom13},
-        RegionName.Dc:                {RegionName.Tr, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
+        RegionName.Dc:                {RegionName.Tr},
         RegionName.Tr:                {RegionName.Terra, RegionName.Marluxia},
         RegionName.Ha1:               {RegionName.Ha2},
         RegionName.Ha2:               {RegionName.Ha3},
@@ -856,38 +877,6 @@ def connect_regions(world: MultiWorld, player: int):
     for source, target in KH2RegionConnections.items():
         for region in target:
             connect(world, player, names, source, region)
-    KH2FormConnections: typing.Dict[str, typing.Set[str]] = {
-        "Menu":                       {RegionName.GoA},
-        RegionName.GoA:               {RegionName.Sp, RegionName.Pr, RegionName.Tt, RegionName.Oc, RegionName.Ht,
-                                       RegionName.LoD,
-                                       RegionName.Twtnw, RegionName.Bc, RegionName.Ag, RegionName.Pl, RegionName.Hb,
-                                       RegionName.Dc, RegionName.Stt,
-                                       RegionName.Ha1,
-                                       RegionName.Keyblade, RegionName.LevelsVS1,
-                                       RegionName.Master},
-        RegionName.Sp:                {RegionName.Sp2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Pr:                {RegionName.Pr2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Tt:                {RegionName.Tt2, RegionName.Valor, RegionName.Limit},
-        RegionName.Tt3:               {RegionName.Final},
-        RegionName.Oc:                {RegionName.Oc2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Ht:                {RegionName.Ht2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.LoD:               {RegionName.LoD2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Twtnw:             {RegionName.Twtnw_PostRoxas, RegionName.Valor, RegionName.Wisdom,
-                                       RegionName.Limit},
-        RegionName.Twtnw_PostRoxas:   {RegionName.Twtnw_PostXigbar, RegionName.Final},
-        RegionName.Twtnw_PostXigbar:  {RegionName.Twtnw2},
-        RegionName.Bc:                {RegionName.Bc2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Bc2:               {RegionName.Xaldin},
-        RegionName.Ag:                {RegionName.Ag2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Ag2:               {RegionName.Lexaeus},
-        RegionName.Pl:                {RegionName.Pl2},
-        RegionName.Hb:                {RegionName.Hb2, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Hb2:               {RegionName.CoR, RegionName.ThousandHeartless},
-        RegionName.CoR:               {RegionName.Transport},
-        RegionName.ThousandHeartless: {RegionName.Sephi, RegionName.Mushroom13},
-        RegionName.Dc:                {RegionName.Tr, RegionName.Valor, RegionName.Wisdom, RegionName.Limit},
-        RegionName.Tr:                {RegionName.Terra, RegionName.Marluxia},
-    }
     # connect(world, player, names, "Menu", RegionName.Keyblade)
     # connect(world, player, names, "Menu", RegionName.GoA)
 

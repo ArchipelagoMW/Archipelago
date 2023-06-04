@@ -664,7 +664,7 @@ GoofyStarting2                               ="Goofy Starting Item 2"
 
 
 DonaldScreens                                ="(SP) Screens Bonus: Donald Slot 1"
-DonaldDemyxHBGetBonus                        ="(HB) Demyx Bonus: Donald Slot 1"
+DonaldDemyxHBGetBonus                        ="(HB2) Demyx Bonus: Donald Slot 1"
 DonaldDemyxOC                                ="(OC) Demyx Bonus: Donald Slot 1"
 DonaldBoatPete                               ="(TR) Boat Pete Bonus: Donald Slot 1"
 DonaldBoatPeteGetBonus                       ="(TR) Boat Pete Bonus: Donald Slot 2"

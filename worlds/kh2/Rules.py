@@ -75,7 +75,15 @@ class KH2Rules:
 
             RegionName.Bc:         lambda state: self.bc_unlocked(state, 1),
             RegionName.Bc2:        lambda state: self.bc_unlocked(state, 2),
+
+            RegionName.Valor:      lambda state: self.multi_form_region_access(state),
+            RegionName.Wisdom:     lambda state: self.multi_form_region_access(state),
+            RegionName.Limit:      lambda state: self.limit_form_region_access(state),
+            RegionName.Master:     lambda state: self.multi_form_region_access(state),
+            RegionName.Final:      lambda state: self.final_form_region_access(state)
+
             # RegionName.Final:      lambda state: self.drive_form_unlock(state, "Final Form", 1),
+
         }
 
     def lod_unlocked(self, state: CollectionState, Amount) -> bool:
@@ -117,6 +125,57 @@ class KH2Rules:
     def bc_unlocked(self, state: CollectionState, Amount) -> bool:
         return state.has(ItemName.BeastsClaw, self.player, Amount)
 
+    def final_form_region_access(self, state: CollectionState) -> bool:
+        """
+        Can reach one of TT3,Twtnw post Roxas, BC2, LoD2 or PR2
+        """
+        # tt3 start, can beat roxas, can beat gr2, can beat xaldin, can beat storm rider.
+        final_leveling_access = [LocationName.MemorysSkyscaperMythrilCrystal, LocationName.GrimReaper2,
+                                 LocationName.Xaldin, LocationName.StormRider, LocationName.SunsetTerraceAbilityRing]
+        return any(self.world.multiworld.get_location(location, self.player).can_reach(state) for location in
+                   final_leveling_access)
+
+    def limit_form_region_access(self, state: CollectionState) -> bool:
+        """
+        multi_form_region_access + namine sketches for leveling
+        """
+        multi_form_region_access = {
+            ItemName.CastleKey,
+            ItemName.BattlefieldsofWar,
+            ItemName.SwordoftheAncestor,
+            ItemName.BeastsClaw,
+            ItemName.BoneFist,
+            ItemName.SkillandCrossbones,
+            ItemName.Scimitar,
+            ItemName.MembershipCard,
+            ItemName.IceCream,
+            ItemName.WaytotheDawn,
+            ItemName.IdentityDisk,
+            ItemName.NamineSketches
+        }
+        return state.has_any(multi_form_region_access, self.player)
+
+    def multi_form_region_access(self, state: CollectionState) -> bool:
+        """
+        Valor, Wisdom and Master Form region access.
+        Note: This does not account for having the drive form. See drive_form_unlock
+        """
+        # todo: if boss enemy start the player with oc stone because of cerb
+        multi_form_region_access = {
+            ItemName.CastleKey,
+            ItemName.BattlefieldsofWar,
+            ItemName.SwordoftheAncestor,
+            ItemName.BeastsClaw,
+            ItemName.BoneFist,
+            ItemName.SkillandCrossbones,
+            ItemName.Scimitar,
+            ItemName.MembershipCard,
+            ItemName.IceCream,
+            ItemName.WaytotheDawn,
+            ItemName.IdentityDisk,
+        }
+        return state.has_any(multi_form_region_access, self.player)
+
     def set_kh2_rules(self) -> None:
         multiworld = self.world.multiworld
 
@@ -133,9 +192,16 @@ class KH2Rules:
 
 class KH2FormRules(KH2Rules):
     #: Dict[str, Callable[[CollectionState], bool]]
-
     def __init__(self, world: KH2World) -> None:
         super().__init__(world)
+        # access rules on where you can level a form.
+        self.auto_form_dict = {
+            ItemName.FinalForm:  ItemName.AutoFinal,
+            ItemName.MasterForm: ItemName.AutoMaster,
+            ItemName.LimitForm:  ItemName.AutoLimit,
+            ItemName.WisdomForm: ItemName.AutoWisdom,
+            ItemName.ValorForm:  ItemName.AutoValor,
+        }
 
         self.form_rules = {
             LocationName.Valorlvl2:  lambda state: self.drive_form_unlock(state, ItemName.ValorForm, 0),
@@ -170,62 +236,58 @@ class KH2FormRules(KH2Rules):
             LocationName.Finallvl7:  lambda state: self.drive_form_unlock(state, ItemName.FinalForm, 5),
         }
 
-    def drive_form_unlock(self, state: CollectionState, driveForm, levelRequired) -> bool:
-        formLogic = {driveForm}
+    def drive_form_unlock(self, state: CollectionState, drive_form, level_required) -> bool:
+        form_access = {drive_form}
         if self.world.multiworld.AutoFormLogic[self.player] and state.has(ItemName.SecondChance, self.player):
-            autoFormDict = {
-                ItemName.FinalForm:  ItemName.AutoFinal,
-                ItemName.MasterForm: ItemName.AutoMaster,
-                ItemName.LimitForm:  ItemName.AutoLimit,
-                ItemName.WisdomForm: ItemName.AutoWisdom,
-                ItemName.ValorForm:  ItemName.AutoValor,
-            }
-            formLogic.add(autoFormDict[driveForm])
-        return state.has_any(formLogic, self.player) and self.getLevelRequirement(state, levelRequired)
+            form_access.add(self.auto_form_dict[drive_form])
+        return state.has_any(form_access, self.player) \
+            and self.get_form_level_requirement(state, level_required)
 
-    def getLevelRequirement(self, state, amount):
-        formsAvailable = 0
-        formList = [ItemName.ValorForm, ItemName.WisdomForm, ItemName.LimitForm, ItemName.MasterForm,
-                    ItemName.FinalForm]
+    def get_form_level_requirement(self, state, amount):
+        forms_available = 0
+        form_list = [ItemName.ValorForm, ItemName.WisdomForm, ItemName.LimitForm, ItemName.MasterForm,
+                     ItemName.FinalForm]
         if self.world.multiworld.FinalFormLogic[self.player] != "no_light_and_darkness":
             if self.world.multiworld.FinalFormLogic[self.player] == "light_and_darkness":
-                if state.has(ItemName.LightDarkness, self.player) and state.has_any(set(formList), self.player):
-                    formsAvailable += 1
-                    formList.remove(ItemName.FinalForm)
-            else:  # self.multiworld.FirmFormLogic=="just a form"
-                formList.remove(ItemName.FinalForm)
-                if state.has_any(formList, self.player):
-                    formsAvailable += 1
-        formsAvailable += sum([1 for form in formList if state.has(form, self.player)])
-        return formsAvailable >= amount
+                if state.has(ItemName.LightDarkness, self.player) and state.has_any(set(form_list), self.player):
+                    forms_available += 1
+                    form_list.remove(ItemName.FinalForm)
+            else:  # self.multiworld.FinalFormLogic=="just a form"
+                form_list.remove(ItemName.FinalForm)
+                if state.has_any(form_list, self.player):
+                    forms_available += 1
+        forms_available += sum([1 for form in form_list if state.has(form, self.player)])
+        return forms_available >= amount
 
     def set_kh2_form_rules(self):
+        # could use comprehension for getting a list of the region objects
+        drive_form_set = {RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
+                          RegionName.Final}
         for region in self.world.multiworld.get_regions(self.player):
-            if region.name in {RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
-                               RegionName.Final}:
+            if region.name in drive_form_set:
                 for loc in region.locations:
                     if loc.name in self.form_rules:
                         loc.access_rule = self.form_rules[loc.name]
 
 
 def set_rules(world: MultiWorld, player: int):
-    add_rule(world.get_location(LocationName.RoxasDataMagicBoost, player),
-             lambda state: state.kh_dataroxas(player))
-    add_rule(world.get_location(LocationName.DemyxDataAPBoost, player),
-             lambda state: state.kh_datademyx(player))
-    add_rule(world.get_location(LocationName.SaixDataDefenseBoost, player),
-             lambda state: state.kh_datasaix(player))
-    add_rule(world.get_location(LocationName.XaldinDataDefenseBoost, player),
-             lambda state: state.kh_dataxaldin(player))
-    add_rule(world.get_location(LocationName.XemnasDataPowerBoost, player),
-             lambda state: state.kh_dataxemnas(player))
-    add_rule(world.get_location(LocationName.XigbarDataDefenseBoost, player),
-             lambda state: state.kh_dataxigbar(player))
-    add_rule(world.get_location(LocationName.VexenDataLostIllusion, player),
-             lambda state: state.kh_dataaxel(player))
-    add_rule(world.get_location(LocationName.LuxordDataAPBoost, player),
-             lambda state: state.kh_dataluxord(player))
-
+    # add_rule(world.get_location(LocationName.RoxasDataMagicBoost, player),
+    #         lambda state: state.kh_dataroxas(player))
+    # add_rule(world.get_location(LocationName.DemyxDataAPBoost, player),
+    #         lambda state: state.kh_datademyx(player))
+    # add_rule(world.get_location(LocationName.SaixDataDefenseBoost, player),
+    #         lambda state: state.kh_datasaix(player))
+    # add_rule(world.get_location(LocationName.XaldinDataDefenseBoost, player),
+    #         lambda state: state.kh_dataxaldin(player))
+    # add_rule(world.get_location(LocationName.XemnasDataPowerBoost, player),
+    #         lambda state: state.kh_dataxemnas(player))
+    # add_rule(world.get_location(LocationName.XigbarDataDefenseBoost, player),
+    #         lambda state: state.kh_dataxigbar(player))
+    # add_rule(world.get_location(LocationName.VexenDataLostIllusion, player),
+    #         lambda state: state.kh_dataaxel(player))
+    # add_rule(world.get_location(LocationName.LuxordDataAPBoost, player),
+    #         lambda state: state.kh_dataluxord(player))
+    #
     for slot, weapon in exclusion_table["WeaponSlots"].items():
         add_rule(world.get_location(slot, player), lambda state: state.has(weapon, player))
 

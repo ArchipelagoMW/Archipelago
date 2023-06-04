@@ -11,6 +11,7 @@ from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
 from .logic import KH2Logic
 
+
 class KingdomHearts2Web(WebWorld):
     tutorials = [Tutorial(
             "Multiworld Setup Guide",
@@ -29,7 +30,7 @@ class KH2World(World):
     It is the sequel to Kingdom Hearts and Kingdom Hearts: Chain of Memories, and like the two previous games,
     focuses on Sora and his friends' continued battle against the Darkness.
     """
-    game: str = "Kingdom Hearts 2"
+    game = "Kingdom Hearts 2"
     web = KingdomHearts2Web()
     data_version = 1
     required_client_version = (0, 4, 0)
@@ -65,6 +66,7 @@ class KH2World(World):
         self.localItems = dict()
 
     def fill_slot_data(self) -> dict:
+        # localItems filling done here for the unit test.
         for values in CheckDupingItems.values():
             if isinstance(values, set):
                 self.slotDataDuping = self.slotDataDuping.union(values)
@@ -85,6 +87,9 @@ class KH2World(World):
                 "BountyRequired":       self.multiworld.BountyRequired[self.player].value}
 
     def create_item(self, name: str, ) -> Item:
+        """
+        Returns created KH2Item
+        """
         data = item_dictionary_table[name]
         if name in Progression_Dicts["Progression"]:
             item_classification = ItemClassification.progression
@@ -96,6 +101,9 @@ class KH2World(World):
         return created_item
 
     def create_items(self) -> None:
+        """
+        Fills ItemPool and manages schmovement, random growth, visit locking and random starting visit locking.
+        """
         self.visitlocking_dict = Progression_Dicts["AllVisitLocking"].copy()
         if self.multiworld.Schmovement[self.player] != "level_0":
             for _ in range(self.multiworld.Schmovement[self.player].value):
@@ -149,12 +157,16 @@ class KH2World(World):
         self.multiworld.itempool += itempool
 
     def generate_early(self) -> None:
-        # Item Quantity dict because Abilities can be a problem for KH2's Software.
+        """
+        Determines the quantity of items and maps plando locations to items.
+        """
+        # Item Quantity Map
         self.item_quantity_dict = {item: data.quantity for item, data in item_dictionary_table.items()}
         # Dictionary to mark locations with their plandoed item
         # Example. Final Xemnas: Victory
         self.plando_locations = dict()
         self.starting_invo_verify()
+
         # Option to turn off Promise Charm Item
         if not self.multiworld.Promise_Charm[self.player]:
             self.item_quantity_dict[ItemName.PromiseCharm] = 0
@@ -196,25 +208,35 @@ class KH2World(World):
         #  for location in {LocationName.JunkMedal, LocationName.JunkMedal}:
         #    self.plando_locations[location] = random_stt_item
         self.level_subtraction()
+
         # subtraction from final xemnas
         self.totalLocations -= 2
 
     def pre_fill(self):
+        """
+        Plandoing Items to their locations.
+        """
         for location, item in self.plando_locations.items():
             self.multiworld.get_location(location, self.player).place_locked_item(
                     self.create_item(item))
 
     def create_regions(self):
+        """
+        Creates the Regions and Connects them.
+        """
         location_table = setup_locations()
         create_regions(self.multiworld, self.player, location_table)
         connect_regions(self.multiworld, self.player)
 
     def set_rules(self):
+        """
+        Sets the Logic for the Regions and Locations.
+        """
         logic = Rules.KH2Rules(self)
-        formLogic=Rules.KH2FormRules(self)
+        formLogic = Rules.KH2FormRules(self)
         logic.set_kh2_rules()
         formLogic.set_kh2_form_rules()
-        #logic = self.multiworld.logic_level[self.player]
+        # logic = self.multiworld.logic_level[self.player]
         # if logic == Logic.option_normal:
         #    Rules.MessengerRules(self).set_messenger_rules()
         # elif logic == Logic.option_hard:
@@ -223,12 +245,18 @@ class KH2World(World):
         #    Rules.MessengerChallengeRules(self).set_messenger_rules()
         # else:
         #    Rules.MessengerOOBRules(self).set_messenger_rules()
-        #set_rules(self.multiworld, self.player)
+        # set_rules(self.multiworld, self.player)
 
     def generate_output(self, output_directory: str):
+        """
+        Generates the .zip for OpenKH (The KH Mod Manager)
+        """
         patch_kh2(self, output_directory)
 
     def donald_fill(self):
+        """
+        Removes donald locations from the location pool maps random donald items to be plandoded.
+        """
         for item in DonaldAbility_Table:
             data = self.item_quantity_dict[item]
             for _ in range(data):
@@ -246,12 +274,15 @@ class KH2World(World):
             self.donald_ability_pool.remove(random_ability)
 
     def goofy_fill(self):
+        """
+        Removes donald locations from the location pool maps random donald items to be plandoded.
+        """
         for item in GoofyAbility_Table.keys():
             data = self.item_quantity_dict[item]
             for _ in range(data):
                 self.goofy_ability_pool.append(item)
             self.item_quantity_dict[item] = 0
-            # 32 is the amount of goofy abilities
+            # 33 is the amount of goofy abilities
         while len(self.goofy_ability_pool) < 33:
             self.goofy_ability_pool.append(
                     self.multiworld.per_slot_randoms[self.player].choice(self.goofy_ability_pool))
@@ -263,6 +294,9 @@ class KH2World(World):
             self.goofy_ability_pool.remove(random_ability)
 
     def keyblade_fill(self):
+        """
+        Fills keyblade slots with abilities determined on player's setting
+        """
         if self.multiworld.KeybladeAbilities[self.player] == "support":
             self.sora_keyblade_ability_pool = {
                 **{item: data for item, data in self.item_quantity_dict.items() if item in SupportAbility_Table},
@@ -322,6 +356,9 @@ class KH2World(World):
             self.totalLocations -= 1
 
     def starting_invo_verify(self):
+        """
+        Making sure the player doesn't put too many abilities in their starting inventory.
+        """
         for item, value in self.multiworld.start_inventory[self.player].value.items():
             if item in ActionAbility_Table \
                     or item in SupportAbility_Table or exclusionItem_table["StatUps"] \
@@ -335,6 +372,9 @@ class KH2World(World):
                 self.item_quantity_dict[item] -= value
 
     def emblem_verify(self):
+        """
+        Making sure lucky emblems have amount>=required.
+        """
         if self.luckyemblemamount < self.luckyemblemrequired:
             logging.info(
                     f"Lucky Emblem Amount {self.multiworld.LuckyEmblemsAmount[self.player].value} is less than required "
@@ -348,6 +388,9 @@ class KH2World(World):
         self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
 
     def hitlist_verify(self):
+        """
+        Making sure hitlist have amount>=required.
+        """
         for location in self.multiworld.exclude_locations[self.player].value:
             if location in self.RandomSuperBoss:
                 self.RandomSuperBoss.remove(location)
@@ -377,6 +420,9 @@ class KH2World(World):
         self.item_quantity_dict[ItemName.ProofofNonexistence] = 0
 
     def set_excluded_locations(self):
+        """
+        Fills excluded_locations from player's settings.
+        """
         # Option to turn off all superbosses. Can do this individually but its like 20+ checks
         if not self.multiworld.SuperBosses[self.player] and not self.multiworld.Goal[self.player] == "hitlist":
             for superboss in exclusion_table["Datas"]:
@@ -393,6 +439,9 @@ class KH2World(World):
             self.multiworld.exclude_locations[self.player].value.add(LocationName.HadesCupTrophyParadoxCups)
 
     def level_subtraction(self):
+        """
+        Determine how many locations are on sora's levels.
+        """
         # there are levels but level 1 is there for the yamls
         if self.multiworld.LevelDepth[self.player] == "level_99_sanity":
             # level 99 sanity
@@ -408,5 +457,8 @@ class KH2World(World):
             self.totalLocations -= 76
 
     def get_filler_item_name(self) -> str:
+        """
+        Returns random filler item name.
+        """
         return self.multiworld.random.choice(
                 [ItemName.PowerBoost, ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost])

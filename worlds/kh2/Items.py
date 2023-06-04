@@ -839,7 +839,7 @@ Progression_Dicts = {
         ItemName.Teamwork,
         ItemName.TornadoFusion
     },
-    "2VisitLocking":   {
+    "2VisitLocking":   [
         ItemName.CastleKey,
         ItemName.BattlefieldsofWar,
         ItemName.SwordoftheAncestor,
@@ -854,7 +854,7 @@ Progression_Dicts = {
         ItemName.IdentityDisk,
         ItemName.IceCream,
         ItemName.NamineSketches
-    },
+   ],
     "AllVisitLocking": {
         ItemName.CastleKey:          2,
         ItemName.BattlefieldsofWar:  2,
