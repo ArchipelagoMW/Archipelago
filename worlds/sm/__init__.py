@@ -405,11 +405,14 @@ class SMWorld(World):
 
         escapeTrigger = (self.itemLocs, self.progItemLocs, 'Full') if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"] else None
         escapeOk = self.variaRando.randoExec.graphBuilder.escapeGraph(self.variaRando.container, self.variaRando.randoExec.areaGraph, self.variaRando.randoExec.randoSettings.maxDiff, escapeTrigger)
-        assert escapeOk, "Could not find a solution for escape"
-
+        if (not escapeOk):
+            logger.warning(f"Escape Rando forced to 'Off' for player {self.multiworld.get_player_name(self.player)} because could not find a solution for escape")
+        
+        # if we couldn't find an area layout then the escape graph is not created either
+        # and getDoorConnections will crash if random escape is activated.
         self.variaRando.doors = GraphUtils.getDoorConnections(self.variaRando.randoExec.areaGraph,
                                     self.variaRando.args.area, self.variaRando.args.bosses,
-                                    self.variaRando.args.escapeRando)
+                                    self.variaRando.args.escapeRando if escapeOk else False)
         
         self.variaRando.randoExec.postProcessItemLocs(localItemLocs, self.variaRando.args.hideItems)
 
