@@ -3782,6 +3782,64 @@
         <Death value="Eviscerate"/>
         <Kind value="Melee"/>
     </CEffectDamage>
+    <CEffectDamage id="AP_RailGunTurretDamage" parent="DU_WEAP">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="30"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="AP_RailGunTurretLaunchDummy">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+    </CEffectModifyUnit>
+    <CEffectCreateUnit id="AP_RailGunTurretRelease">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnEffect value="AP_RailGunTurretSet"/>
+        <SpawnUnit value="AP_RailGunTurret"/>
+        <SpawnRange value="0"/>
+    </CEffectCreateUnit>
+    <CEffectLaunchMissile id="AP_RailGunTurretReleaseLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="RemovePrecursor"/>
+        <AmmoUnit value="AP_RailGunTurretReleaseWeapon"/>
+        <PlaceholderUnit value="AP_RailGunTurret"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_RailGunTurretReleaseLaunch">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_RailGunTurretReleaseLM"/>
+        <EffectArray value="MakePrecursor"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_RailGunTurretSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ExcludeArray Value="Target"/>
+        <IncludeArray Effect="RailGunTurretSearchCP" Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray RectangleWidth="0.3" RectangleHeight="6.8" Effect="AP_RailGunTurretDamage"/>
+        <AreaRelativeOffset value="0,3.2"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_RailGunTurretSearchCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourcePoint"/>
+        <InitialEffect value="AP_RailGunTurretLaunchDummy"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_RailGunTurretSearch"/>
+        <PeriodicOffsetArray value="0,-6.8,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_RailGunTurretSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_RailGunTurretTimedLife"/>
+        <EffectArray value="AP_RailGunTurretReleaseLaunch"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_RailGunTurretTimedLife">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_RailGunTurretTimedLife"/>
+    </CEffectApplyBehavior>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

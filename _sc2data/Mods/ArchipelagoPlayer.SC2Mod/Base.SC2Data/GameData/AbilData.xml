@@ -2136,6 +2136,23 @@
         <AutoCastRange value="5"/>
         <AutoCastCountMin value="1"/>
     </CAbilMorph>
+    <CAbilEffectTarget id="AP_BuildRailGunTurret">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="21"/>
+        <Effect index="0" value="AP_RailGunTurretRelease"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown Link="Raven Build Link" Location="Unit"/>
+        </Cost>
+        <Placeholder value="AP_RailGunTurret"/>
+        <Range value="3"/>
+        <Marker Link="Abil/AutoTurret"/>
+        <ErrorAlert value="Error"/>
+        <ProducedUnitArray value="AP_RailGunTurret"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_BuildRailGunTurret" Requirements="AP_MagrailMunitionsRaven"/>
+        <PlaceUnit value="AP_RailGunTurret"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

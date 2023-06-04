@@ -1010,4 +1010,13 @@
         <DamagePoint value="0.208"/>
         <Effect value="AP_NeedleSpinesLaunchMissile"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RailGunTurret">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-hisecautotracking.dds"/>
+        <DisplayEffect value="AP_RailGunTurretDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="2"/>
+        <Effect value="AP_RailGunTurretSearchCP"/>
+    </CWeaponLegacy>
 </Catalog>

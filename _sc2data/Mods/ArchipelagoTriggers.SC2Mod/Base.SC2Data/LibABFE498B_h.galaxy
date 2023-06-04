@@ -121,6 +121,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockThorImmortalityProtocol (int lp_pla
 void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockRavenBioMechanicalReapirDrone (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockRavenSpiderMines (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockRavenRailgunTurret (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldAccelerators (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldLaunchers (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorAdvancedBallistics (int lp_player);

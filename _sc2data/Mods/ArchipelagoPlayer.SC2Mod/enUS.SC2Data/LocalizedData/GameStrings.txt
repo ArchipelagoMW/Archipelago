@@ -154,6 +154,7 @@ Abil/Name/AP_burrowedStop=Stop
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
+Abil/Name/AP_BuildRailGunTurret=Place Railgun Turret
 Abil/Name/MercCompoundResearch2=Research
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
@@ -285,6 +286,7 @@ Button/Name/AP_CycloneResearchLockOnAir=Research Mag-Field Accelerator
 Button/Name/AP_CycloneResearchLockOnDamageUpgrade=Research Mag-Field Accelerator
 Button/Name/AP_D8Charge=G-4 Cluster Bombs
 Button/Name/AP_DefensiveMatrix=Defensive Matrix
+Button/Name/AP_DeploySpiderMinesRaven=Deploy Spider Mines
 Button/Name/AP_Diamondback=Build Diamondback
 Button/Name/AP_DisplacementField=Displacement Field
 Button/Name/AP_DrillClaws=Drilling Claws
@@ -463,7 +465,7 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_DeploySpiderMinesRaven=Deploy Spider Mines
+Button/Name/AP_BuildRailGunTurret=Deploy Railgun Turret
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
@@ -521,6 +523,7 @@ Button/Tooltip/AP_CycloneResearchLockOnAir=Allows the Cyclone's Typhoon Missile 
 Button/Tooltip/AP_CycloneResearchLockOnDamageUpgrade=Increases <c val="ffff8a">Cyclone</c> Lock On damage. Deals 600 over <d ref="Effect,AP_LockOnCP,PeriodCount * Effect,AP_LockOnCP,PeriodicPeriodArray[0]"/> seconds to ground and flying targets.
 Button/Tooltip/AP_D8Charge=Timed explosive that does heavy area damage.
 Button/Tooltip/AP_DefensiveMatrix=Surrounds the Battlecruiser with a shield that can absorb <d ref="Behavior,AP_DefensiveMatrix,Modification.VitalMaxArray[1]"/> damage. Ability can only be used once every <d ref="Abil,AP_DefensiveMatrix,Cost[0].Cooldown.TimeUse"/> seconds.
+Button/Tooltip/AP_DeploySpiderMinesRaven=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy <c val="FFE303">Detectors</c>.
 Button/Tooltip/AP_DevilDog=Specialized anti-infantry attacker.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Diamondback=Fast, high-damage hovertank. Rail Gun can fire while the Diamondback is moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_DisplacementField=A detected Wraith evades 20% of incoming attacks while cloaked.
@@ -731,7 +734,7 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_DeploySpiderMinesRaven=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy <c val="FFE303">Detectors</c>.
+Button/Tooltip/AP_RailGunTurret=Automated defensive turret. Damages all enemy ground units in a straight line. Times out after <d ref="Behavior,AP_RailGunTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1041,6 +1044,7 @@ Effect/Name/AP_MindControl=Mind Control
 Effect/Name/AP_MindControlKillCargo=Mind Control Kill Cargo
 Effect/Name/AP_MorphToTechReactor=Morph To Tech Reactor
 Effect/Name/AP_NanoRepair=Nano-Repair
+Effect/Name/AP_NeedleSpinesDamage=Needle Spines
 Effect/Name/AP_NeedleSpinesImpactSet=Needle Spines Impact Set
 Effect/Name/AP_NeedleSpinesImpactSetUpgraded=Needle Spines Impact Set Upgraded
 Effect/Name/AP_NeedleSpinesImpactSwitch=Needle Spines Impact Switch
@@ -1217,7 +1221,15 @@ Effect/Name/AP_heal=Heal
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
 Effect/Name/Kill2=Kill
-Effect/Name/AP_NeedleSpinesDamage=Needle Spines
+Effect/Name/AP_RailGunTurretDamage=Rail Gun Turret Damage
+Effect/Name/AP_RailGunTurretLaunchDummy=Rail Gun Turret Launch Dummy
+Effect/Name/AP_RailGunTurretRelease=Rail Gun Turret Release
+Effect/Name/AP_RailGunTurretReleaseLM=Rail Gun Turret Release LM
+Effect/Name/AP_RailGunTurretReleaseLaunch=Rail Gun Turret Release Launch
+Effect/Name/AP_RailGunTurretSearch=Rail Gun Turret Search
+Effect/Name/AP_RailGunTurretSearchCP=Rail Gun Turret Search CP
+Effect/Name/AP_RailGunTurretSet=Rail Gun Turret Set
+Effect/Name/AP_RailGunTurretTimedLife=Rail Gun Turret Timed Life
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
 RequirementNode/Tooltip/AP_CountUnitFactoryCompleteOnly=Factory
@@ -1389,6 +1401,7 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
+Unit/Name/AP_RailGunTurret=Railgun Turret
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
 UnitSubtitle/AP_HydraliskImpaler=Impaler Strain
 UnitSubtitle/AP_HydraliskLurker=Lurker Strain
@@ -1605,6 +1618,7 @@ Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
+Upgrade/Name/BlackOps2=Black Ops
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
@@ -1651,6 +1665,7 @@ Weapon/Name/AP_LiberatorAGWeapon=Concord Cannon
 Weapon/Name/AP_LiberatorMissileLaunchers=Lexington Rockets
 Weapon/Name/AP_LongboltMissile=Longbolt Missile
 Weapon/Name/AP_Lurker=Spines
+Weapon/Name/AP_NeedleSpines=Needle Spines
 Weapon/Name/AP_P38ScytheGuassPistol=P-45 Gauss Pistol
 Weapon/Name/AP_PerditionTurretFlamethrower=Perdition Turret Flamethrower
 Weapon/Name/AP_Predator=Titanium Claws
@@ -1686,7 +1701,7 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_NeedleSpines=Needle Spines
+Weapon/Name/AP_RailGunTurret=RGX Perforator
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_Lurker=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>

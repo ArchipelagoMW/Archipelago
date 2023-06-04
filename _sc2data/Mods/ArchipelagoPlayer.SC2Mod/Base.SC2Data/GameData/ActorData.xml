@@ -4326,7 +4326,6 @@
         <LaunchSiteOps Ops="SOpAttachHarness SOpForwardImpactGuide"/>
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
         <LaunchAssets Sound="Hydralisk_GroundAttackLaunch"/>
-        <Missile value="AP_HydraliskAttackMissile"/>
         <ImpactMap index="None" Model="HydraliskAttackImpact" Sound="Hydralisk_AttackImpactRanged"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
         <ImpactPhysics Name="NeedleSpinesImpact" MatchKeys="Basic" Physics="AP_HydraliskAttackDeathForce"/>
@@ -4429,6 +4428,79 @@
     <CActorSound id="AP_HydraliskMeleeAttackLaunch" parent="SoundOneShot">
         <Sound value="Hydralisk_MeleeAttackLaunch"/>
     </CActorSound>
+    <CActorModel id="AP_RailGunLaunchSquib" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <On Terms="Effect.AP_RailGunTurretDamage.Start; At Caster" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+        <Model value="GhostSnipeAttackLaunch"/>
+    </CActorModel>
+    <CActorUnit id="AP_RailGunTurret" parent="GenericUnitBase" unitName="AP_RailGunTurret">
+        <Aliases value="_CreepEngulfable"/>
+        <Aliases value="_UnitMedium"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Spell,D"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Behavior.Precursor.Off" Send="Create AP_RailGunTurretReleaseMissileImpact"/>
+        <On Terms="Behavior.Precursor.Off" Send="$Birth"/>
+        <CreepHeightClass value="Small"/>
+        <DeathArray index="Normal" ModelLink="AP_RailGunTurretDeath" SoundLink="Raven_AutoTurretExplode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Raven_AutoTurretExplode"/>
+        <PlacementModel value="AP_RailGunTurretPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="50"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="Raven_Pissed"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="Birth" value="Raven_AutoTurretBirth"/>
+        <SoundArray index="Ready" value="Raven_AutoTurretReady"/>
+        <SoundArray index="What" value="Raven_AutoTurretWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_RailGunTurretAttack" parent="GenericAttack" effectAttack="AP_RailGunTurretLaunchDummy">
+        <LaunchAssets Model="AP_MagrailMunition_Launch" Sound="AP_RailGun_Launch"/>
+        <ImpactSiteOps HoldPosition="1"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_RailGunTurretAttackBeamPoint" parent="BeamSimpleAnimationStyleOneShot">
+        <On Terms="Effect.AP_RailGunTurretSearch.Start; At Caster" Send="Create"/>
+        <Model value="AP_MagrailMunition_Missile"/>
+        <HostLaunch Subject="_Unit"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon" HoldPosition="1"/>
+        <HostImpactSiteOps Ops="SOpTargetPoint"/>
+    </CActorBeamSimple>
+    <CActorAction id="AP_RailGunTurretAttackImpact" parent="GenericAttack" effectAttack="AP_RailGunTurretDamage">
+        <ImpactMap index="None" Model="AP_MagrailMunition_Impact" Sound="AP_RailGun_Impact"/>
+    </CActorAction>
+    <CActorRange id="AP_RailGunTurretRange" parent="RangeAbil" abil="AP_BuildRailGunTurret"/>
+    <CActorAction id="AP_RailGunTurretRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_RailGunTurretReleaseLM">
+        <LaunchAssets Sound="Raven_AutoTurretReleaseLaunch"/>
+        <Missile value="RailGunTurretReleaseMissile"/>
+        <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
+        <ImpactMap index="None" Sound="Raven_AutoTurretReleaseImpact"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorMissile id="AP_RailGunTurretReleaseMissile" parent="GenericAttackMissile" unitName="AP_RailGunTurretReleaseWeapon"/>
+    <CActorModel id="AP_RailGunTurretReleaseMissileImpact">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="AP_RailGunTurretReleaseMissileImpact"/>
+    </CActorModel>
+    <CActorTurret id="AP_RailGunTurretTurret">
+        <On Terms="TurretEnable.AP_RailGunTurret" Send="Create"/>
+    </CActorTurret>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->

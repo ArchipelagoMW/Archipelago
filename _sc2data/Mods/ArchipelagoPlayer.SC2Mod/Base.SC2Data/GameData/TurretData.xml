@@ -116,4 +116,11 @@
         <YawRate value="90"/>
         <Fidget DelayMax="30" DelayMin="10"/>
     </CTurret>
+    <CTurret id="AP_RailGunTurret">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="-45"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
 </Catalog>

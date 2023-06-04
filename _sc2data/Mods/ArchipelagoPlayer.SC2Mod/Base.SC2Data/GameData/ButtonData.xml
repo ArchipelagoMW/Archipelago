@@ -1299,4 +1299,11 @@
         <Icon value="Assets\Textures\btn-upgrade-zerg-frenzy.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_BuildRailGunTurret">
+        <Tooltip value="Button/Tooltip/AP_RailGunTurret"/>
+        <Icon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <AlertTooltip value="Button/Tooltip/AP_RailGunTurret"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

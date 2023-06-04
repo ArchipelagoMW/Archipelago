@@ -344,6 +344,10 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeRavenSpiderMinesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_MagrailMunitionsRaven">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMagrailMunitionsRavenCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_BuildPredator">
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradePredatorCompleteOnly"/>

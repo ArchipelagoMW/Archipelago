@@ -2557,4 +2557,41 @@
         <Pitch value="-4.000000,-2.000000"/>
         <Volume value="-6.000000,-3.000000"/>
     </CSound>
+    <CSound id="AP_RailGun_Impact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_08.wav" FacialGroup=""/>
+        <DupeDestroyCount value="6"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="6"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="-3.000000,-1.000000"/>
+        <Select value="Random"/>
+        <Spread value="20.000000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_RailGun_Launch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_06.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupePrioritization value="Oldest"/>
+        <OverlapTimeDelta value="50"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-6.000000,-4.000000"/>
+        <VolumeRolloffPoints Distance="15.472779"/>
+        <VolumeRolloffPoints Distance="30.802292" Volume="-96.000000"/>
+    </CSound>
 </Catalog>
