@@ -2736,4 +2736,19 @@
         <Model value="Assets\Effects\Terran\AutoTurretPodMissile\AutoTurretPodMissile.m3"/>
         <EditorCategories value="Race:Terran"/>
     </CModel>
+    <CModel id="AP_ShredderWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\Raven_Shredder_Missile_MP\Raven_Shredder_Missile_MP.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <PhysicsMaterialOverride value="MetalLight"/>
+    </CModel>
+    <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
+        <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
+        <LoopCount value="-1"/>
+    </CSound>
+    <CModel id="AP_AntiArmorMissileAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\AmonShards_Orange_AnimaShower_Missile_Impact\AmonShards_Orange_AnimaShower_Missile_Impact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
+    </CModel>
 </Catalog>

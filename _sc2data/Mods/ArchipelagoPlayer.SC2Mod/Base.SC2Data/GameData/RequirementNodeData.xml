@@ -403,6 +403,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_RavenInterferenceMatrix" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeRavenAntiArmorMissileCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_RavenAntiArmorMissile" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeScienceVesselCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ScienceVessel" State="CompleteOnly"/>

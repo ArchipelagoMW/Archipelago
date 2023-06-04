@@ -4514,6 +4514,98 @@
         <ImpactPhysics Name="HunterSeekerImpact" MatchKeys="Basic" Physics="HunterSeekerAttackForce"/>
         <ImpactPhysics Name="HunterSeekerImpactAir" MatchKeys="BasicAir" Physics="HunterSeekerAttackForceAir"/>
     </CActorAction>
+    <CActorRange id="AP_RavenShredderMissileRange" parent="RangeAbil" abil="AP_RavenShredderMissile">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorMissile id="AP_RavenShredderMissileAttackMissile" parent="GenericAttackMissile" unitName="AP_RavenShredderMissileWeapon">
+        <On Terms="MotionPhaseStart; MotionPhase" Send="Create AP_RavenShredderMissileTrackingBeam"/>
+        <On Terms="MotionPhaseStart; MotionPhase" Send="Create AP_RavenShredderMissileLaunchSound"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Target="AP_RavenShredderMissileLaunchSound" Send="Destroy"/>
+        <On Terms="UnitDeath" Target="AP_RavenShredderMissileLaunchSound" Send="Destroy"/>
+        <On Terms="MotionPhaseStart; MotionPhase 1" Send="Create AP_RavenShredderMissileTargetLock"/>
+        <On Terms="MotionPhaseStart; MotionPhase 1" Send="Create AP_RavenShredderMissile_Travel_AS"/>
+        <On Terms="UnitDeath" Target="RavenShredderMissile_Travel_AS" Send="Destroy"/>
+        <Model value="AP_ShredderWeapon"/>
+    </CActorMissile>
+    <CActorBeamSimple id="AP_RavenShredderMissileTrackingBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <HostLaunch Subject="_Missile" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <!-- Note that we do not have a host here.  This is b/c SOpAttachCenter is
+             using the target unit if there is one, but doing a pass through if there isn't. -->
+        <HostImpactSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
+        <Model value="HunterSeekerTrackingBeam"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_RavenShredderMissile_Travel_AS" parent="SoundContinuous">
+        <Sound value="AP_RavenShredderMissile_Travel_Loop"/>
+    </CActorSound>
+    <CActorSound id="AP_RavenShredderMissileTargetLock" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerTargetLock"/>
+        <Host Subject="RavenShredderMissileTrackingBeam"/>
+    </CActorSound>
+    <CActorSound id="AP_RavenShredderMissileLaunchSound" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerLaunch"/>
+    </CActorSound>
+    <CActorAction id="AP_RavenShredderMissileAttack" parent="GenericAttack" effectImpact="AP_RavenShredderMissileDamage" effectLaunch="AP_RavenShredderMissileLaunchMissile">
+        <ImpactSiteOps Ops="SOpTargetPoint SOp2DRotation"/>
+        <ImpactAttachQuery Methods="Origin"/>
+        <ImpactMap index="None" Model="Invisible" Sound=""/>
+        <ShieldFlashType value="Full"/>
+        <ImpactPhysics Name="HunterSeekerImpact" MatchKeys="Basic" Physics="HunterSeekerAttackForce"/>
+        <ImpactPhysics Name="HunterSeekerImpactAir" MatchKeys="BasicAir" Physics="HunterSeekerAttackForceAir"/>
+    </CActorAction>
+    <CActorModel id="AP_RavenShredderMissileFailDeath">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_RavenShredderMissileFailSound"/>
+        <On Terms="ActorCreation" Send="Create AP_RavenShredderMissileFizzleSound"/>
+        <On Terms="ActorCreation" Send="Create AP_RavenShredderMissileSadSound"/>
+        <On Terms="Effect.AP_RavenShredderMissileSuicide.Start" Send="Create"/>
+        <Model value="AP_ShredderWeapon"/>
+    </CActorModel>
+    <CActorSound id="AP_RavenShredderMissileFailSound" parent="SoundOneShot">
+        <Sound value="Terran_ExplosionSmall"/>
+    </CActorSound>
+    <CActorSound id="AP_RavenShredderMissileFizzleSound" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerMissileFizzle"/>
+    </CActorSound>
+    <CActorSound id="AP_RavenShredderMissileSadSound" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerMissileSad"/>
+    </CActorSound>
+    <CActorModel id="AP_RavenShredderMissileAttackImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_RavenShredderMissileDamage.Start" Target="_Unit" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create AP_Raven_AntiArmorMissileAttackImpact_AS"/>
+        <Model value="AP_AntiArmorMissileAttackImpact"/>
+        <Inherits index="Visibility" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_Raven_AntiArmorMissileAttackImpact_AS" parent="SoundOneShot">
+        <Sound value="AP_ArbiterMP_AttackImpact"/>
+    </CActorSound>
+    <CActorSimple id="AP_RavenShredderMissileImpactArmorReductionTint">
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.On" Target="_Unit" Send="SetTintColor {255,153,85 2.000000} 0.100000 OneShot SeekerTargetArmor"/>
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.Off" Target="_Unit" Send="ClearTintColor 0.100000 SeekerTargetArmor"/>
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="AP_RavenShredderMissileAttackImpactDebuff" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_RavenShredderMissileArmorReductionUISubtruct.Start; At Target" Send="Create"/>
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSimple id="AP_RavenShredderMissileTint">
+        <Aliases value="_AngryTinter"/>
+        <On Terms="Behavior.AP_RavenShredderMissileTint.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetTintColor 255,50,50 0.500000 OneShot SeekerTarget"/>
+        <On Terms="Behavior.AP_RavenShredderMissileTint.Off" Target="_Unit" Send="ClearTintColor 0.500000 SeekerTarget"/>
+        <On Terms="Behavior.AP_RavenShredderMissileTint.Off" Send="Destroy"/>
+    </CActorSimple>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->

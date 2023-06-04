@@ -1316,4 +1316,9 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-interferencematrix.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_RavenShredderMissile">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-ShredderMissile-Color.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-ShredderMissile-Color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

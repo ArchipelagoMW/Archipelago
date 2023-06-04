@@ -624,6 +624,74 @@
             <YawPitchRoll value="719.2968"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_RavenShredderMissile">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="16"/>
+            <MaxSpeed value="30"/>
+            <Clearance value="0.5"/>
+            <ClearanceLookahead value="3"/>
+            <Outro value="5"/>
+            <ThrowBandYaw value="-360,-360,-360,-360"/>
+            <ThrowBandPitch value="-360,-360,-360,-360"/>
+            <YawPitchRoll value="5759.6484"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="16"/>
+            <MaxSpeed value="30"/>
+            <Clearance value="0.5"/>
+            <ClearanceLookahead value="3"/>
+            <Outro value="-2.25,-2"/>
+            <ThrowBandYaw value="-360,-360,-360,-360"/>
+            <ThrowBandPitch value="-360,-360,-360,-360"/>
+            <YawPitchRoll value="5759.6484"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="16"/>
+            <MaxSpeed value="30"/>
+            <Clearance value="0.25"/>
+            <ClearanceLookahead value="3"/>
+            <ThrowBandYaw value="-360,-360,-360,-360"/>
+            <ThrowBandPitch value="-360,-360,-360,-360"/>
+            <YawPitchRoll value="5759.6484"/>
+        </MotionPhases>
+    </CMoverMissile>
+    <CMoverMissile id="AP_RavenShredderMissileDirect">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="4"/>
+            <MaxSpeed value="16"/>
+            <Clearance value="0.5"/>
+            <ClearanceLookahead value="3"/>
+            <Outro value="5"/>
+            <ThrowBandYaw value="-360,-360,-360,-360"/>
+            <ThrowBandPitch value="-360,-360,-360,-360"/>
+            <YawPitchRoll value="5759.6484"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="4"/>
+            <MaxSpeed value="16"/>
+            <Clearance value="0.5"/>
+            <ClearanceLookahead value="3"/>
+            <Outro value="-2.25,-2"/>
+            <ThrowBandYaw value="-360,-360,-360,-360"/>
+            <ThrowBandPitch value="-360,-360,-360,-360"/>
+            <YawPitchRoll value="5759.6484"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="16"/>
+            <MaxSpeed value="16"/>
+            <Clearance value="0.25"/>
+            <ClearanceLookahead value="3"/>
+            <ThrowBandYaw value="-360,-360,-360,-360"/>
+            <ThrowBandPitch value="-360,-360,-360,-360"/>
+            <YawPitchRoll value="5759.6484"/>
+        </MotionPhases>
+    </CMoverMissile>
     <CMoverMissile id="AP_ImpalerWeapon">
         <MotionPhases>
             <Driver value="Guidance"/>

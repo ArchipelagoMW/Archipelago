@@ -631,6 +631,63 @@
         <Cost Behavior="ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
         <Cost Behavior="AP_ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
     </CEffectModifyUnit>
+    <CBehaviorBuff id="AP_RavenShredderMissileTimeout">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="1.9"/>
+        <Modification MoveSpeedMaximum="0"/>
+        <RemoveValidatorArray value="NotInLastMotionPhase"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenShredderMissileTint">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-huntermissile-color.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="0.2"/>
+        <AINotifyEffect value="SeekerMissileDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenShredderMissileArmorReduction">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>--> <!-- TODO: Oracle unit -->
+        <Duration value="30"/>
+        <DamageResponse ModifyMinimumDamage="1">
+            <Kind index="Spell" value="0"/>
+            <Kind index="Splash" value="0"/>
+            <Kind index="NoProc" value="0"/>
+            <ModifyAmount value="3"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenShredderMissileArmorReductionUIAdd">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>--> <!-- TODO: Oracle unit -->
+        <Duration value="30"/>
+        <Modification ShieldArmorBonus="3">
+            <ModifyFlags index="HideChangeUI" value="1"/>
+            <LifeArmorBonus value="3"/>
+        </Modification>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenShredderMissileArmorReductionUISubtruct">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>--> <!-- TODO: Oracle unit -->
+        <Duration value="30"/>
+        <Modification ShieldArmorBonus="-2">
+            <LifeArmorBonus value="-2"/>
+        </Modification>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_Irradiate">
         <Alignment value="Negative"/>
         <InfoIcon value="AP\Assets\Textures\btn-ability-terran-irradiate.dds"/>

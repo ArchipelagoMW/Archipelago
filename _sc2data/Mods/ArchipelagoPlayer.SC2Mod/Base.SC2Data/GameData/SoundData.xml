@@ -2639,4 +2639,13 @@
         <DupeMuteCount value="8"/>
         <Volume value="-0.920000,-0.500000"/>
     </CSound>
+    <CSound id="AP_ArbiterMP_AttackImpact" parent="Combat">
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact03.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-9.000000,-7.000000"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CSound>
 </Catalog>

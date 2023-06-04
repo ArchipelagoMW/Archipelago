@@ -3918,6 +3918,88 @@
         <EditorCategories value="Race:Terran"/>
         <Behavior value="AP_RavenScramblerMissile"/>
     </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_RavenShredderMissileLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchEffect value="AP_RavenShredderMissileLaunchSet"/>
+        <ImpactEffect value="AP_RavenShredderMissileImpactSet"/>
+        <AmmoUnit value="AP_RavenShredderMissileWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_RavenShredderMissileLaunchSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_RavenShredderMissileLaunchCP"/>
+        <EffectArray value="AP_RavenShredderMissileTintCP"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_RavenShredderMissileLaunchCP">
+        <EditorCategories value="Race:Terran"/>
+        <ExpireEffect value="AP_RavenShredderMissileSuicide"/>
+        <PeriodCount value="50"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <WhichLocation Value="SourceUnit"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_RavenShredderMissileSuicide">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+        <ValidatorArray value="AP_RavenShredderMissileLaunchRange"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_RavenShredderMissileTintCP">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="250"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicEffectArray value="AP_RavenShredderMissileApplyBehavior"/>
+        <PeriodicValidator value="SourceNotDead"/>
+        <WhichLocation Value="SourceUnit"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_RavenShredderMissileApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_RavenShredderMissileTint"/>
+        <WhichUnit Effect="AP_RavenShredderMissileLaunchMissile"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_RavenShredderMissileImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_RavenShredderMissileDamage"/>
+        <EffectArray value="AP_RavenShredderMissileImpactSearchArea"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_RavenShredderMissileDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <AreaArray Radius="0.72" Fraction="1"/>
+        <AreaArray Radius="1.44" Fraction="0.5"/>
+        <AreaArray Radius="2.88" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFlags index="SameCliff" value="0"/>
+        <SearchFilters value="-;Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Visibility value="Visible"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AINotifyFlags index="MajorDanger" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_RavenShredderMissileImpactSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <AreaArray Radius="2.88" Effect="AP_RavenShredderMissileSearchImpactSet"/>
+        <SearchFilters value="-;Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_RavenShredderMissileArmorReductionUIAdd">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_RavenShredderMissileArmorReductionUISubtruct">
+        <!-- Looks like this validator doesn't exist in Vanilla -->
+        <ValidatorArray index="0" value="AP_RavenShredderMissileArmorReductionUIAddTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/RavenShredderMissileArmorReductionUIAdd"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_RavenShredderMissileImpactApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_RavenShredderMissileArmorReduction"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_RavenShredderMissileSearchImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <!--EffectArray value="RavenShredderMissileImpactApplyBehavior"/>
+        <EffectArray value="RavenShredderMissileArmorReductionUIAdd"/-->
+        <EffectArray value="AP_RavenShredderMissileArmorReductionUISubtruct"/>
+    </CEffectSet>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

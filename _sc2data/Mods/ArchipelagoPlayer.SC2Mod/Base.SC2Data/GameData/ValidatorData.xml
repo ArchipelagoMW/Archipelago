@@ -1423,4 +1423,10 @@
         <WhichUnit Value="Target"/>
         <AbilLink value="AP_Hyperjump"/>
     </CValidatorUnitOrderQueue>
+    <CValidatorLocationCompareRange id="AP_RavenShredderMissileLaunchRange">
+        <WhichLocation Effect="AP_RavenShredderMissileLaunchMissile"/>
+        <Compare value="GE"/>
+        <Range value="13"/>
+        <Value Value="SourceUnit"/>
+    </CValidatorLocationCompareRange>
 </Catalog>

@@ -2444,6 +2444,21 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_RavenScramblerMissile" Requirements="AP_HaveRavenInterferenceMatrix"/>
         <DefaultError value="MustTargetUnit,Error/MustTargetMechanicalorPsionic"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_RavenShredderMissile">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="AP_RavenShredderMissileLaunchMissile"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="10"/>
+        <Arc value="29.9926"/>
+        <ArcSlop value="0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_RavenShredderMissile" Requirements="AP_HaveRavenAntiArmorMissile"/>
+    </CAbilEffectTarget>
     <CAbilTrain id="AP_MorphRoachToImpaler">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <RefundFraction>

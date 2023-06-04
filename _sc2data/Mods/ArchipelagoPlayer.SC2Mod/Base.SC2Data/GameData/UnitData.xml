@@ -2270,6 +2270,14 @@
         <Race value="Terr"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
+    <CUnit id="AP_RavenShredderMissileWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_RavenShredderMissileDirect"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+        <BehaviorArray Link="AP_RavenShredderMissileTimeout"/>
+        <LifeStart value="5"/>
+        <LifeMax value="5"/>
+    </CUnit>
     <CUnit id="AP_Raven">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
@@ -2319,6 +2327,7 @@
         <AbilArray Link="AP_RavenDeploySpiderMines"/>
         <AbilArray Link="AP_BuildRailGunTurret"/>
         <AbilArray Link="AP_RavenScramblerMissile"/>
+        <AbilArray Link="AP_RavenShredderMissile"/>
         <WeaponArray Link="AP_NovaRavenSeekerMissile"/>
         <BehaviorArray Link="Detector11"/>
         <CardLayouts>
@@ -2337,6 +2346,7 @@
             <LayoutButtons Face="AP_BuildRailGunTurret" Type="AbilCmd" AbilCmd="AP_BuildRailGunTurret,Execute" Row="1" Column="2"/>
             <LayoutButtons Face="AP_AdvancedWeaponryRaven" Type="Passive" Requirements="AP_HaveAdvancedWeaponryRaven" Row="1" Column="3"/>
             <LayoutButtons Face="AP_RavenScramblerMissile" Type="AbilCmd" AbilCmd="AP_RavenScramblerMissile,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_RavenShredderMissile" Type="AbilCmd" AbilCmd="AP_RavenShredderMissile,Execute" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
