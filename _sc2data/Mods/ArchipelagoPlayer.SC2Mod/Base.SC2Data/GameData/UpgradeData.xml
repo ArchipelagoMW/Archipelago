@@ -2577,4 +2577,60 @@
         <EffectArray Operation="Set" Reference="Unit,AP_TorrasqueChrysalis,Subtitle" Value="UnitSubtitle/AP_UltraliskNoxiousTorrasque"/>
         <AffectedUnitArray value="AP_Ultralisk"/>
     </CUpgrade>
+    <CUpgrade id="AP_HotSLurker">
+        <EffectArray Operation="Set" Reference="Unit,AP_Hydralisk,Subtitle" Value="UnitSubtitle/AP_HydraliskLurker"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HydraliskBurrowed,Subtitle" Value="UnitSubtitle/AP_HydraliskLurker"/>
+        <AffectedUnitArray value="AP_Hydralisk"/>
+        <AffectedUnitArray value="AP_HydraliskBurrowed"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSLurkerImpaler">
+        <EffectArray Operation="Set" Reference="Unit,AP_Hydralisk,Subtitle" Value="UnitSubtitle/AP_HydraliskLurkerImpaler"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HydraliskBurrowed,Subtitle" Value="UnitSubtitle/AP_HydraliskLurkerImpaler"/>
+        <AffectedUnitArray value="AP_Hydralisk"/>
+        <AffectedUnitArray value="AP_HydraliskBurrowed"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSImpaler">
+        <EffectArray Operation="Set" Reference="Unit,AP_Hydralisk,Subtitle" Value="UnitSubtitle/AP_HydraliskImpaler"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HydraliskBurrowed,Subtitle" Value="UnitSubtitle/AP_HydraliskImpaler"/>
+        <AffectedUnitArray value="AP_Hydralisk"/>
+        <AffectedUnitArray value="AP_HydraliskBurrowed"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHydraliskHealth">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-AncillaryArmor.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <EffectArray Reference="Unit,AP_Hydralisk,LifeMax" Value="20"/>
+        <EffectArray Reference="Unit,AP_Hydralisk,LifeStart" Value="20"/>
+        <EffectArray Reference="Unit,AP_HydraliskBurrowed,LifeMax" Value="20"/>
+        <EffectArray Reference="Unit,AP_HydraliskBurrowed,LifeStart" Value="20"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Hydralisk"/>
+        <AffectedUnitArray value="AP_HydraliskBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSGroovedSpines">
+        <EffectArray Reference="Weapon,NeedleSpines,Range" Value="1"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Hydralisk"/>
+        <AffectedUnitArray value="AP_HydraliskBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSExplosiveSpines">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Hydralisk"/>
+        <AffectedUnitArray value="AP_HydraliskBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHydraliskFrenzy">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Hydralisk"/>
+        <AffectedUnitArray value="AP_HydraliskBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSParalyticSpines">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Hydralisk"/>
+        <AffectedUnitArray value="AP_HydraliskBurrowed"/>
+    </CUpgrade>
 </Catalog>

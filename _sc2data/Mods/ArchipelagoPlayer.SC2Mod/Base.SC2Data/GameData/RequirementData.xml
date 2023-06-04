@@ -914,4 +914,49 @@
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSNoxiousCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveImpaler">
+        <EditorCategories value="Race:Zerg,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeImpalerCompleteOnly1829818592TechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveImpalerDen">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitImpalerDenCompleteOnly3322076208TechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSImpalerCompleteOnly"/>
+        <CanBeSuppressed index="Show" value="1"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSLurker">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotsLurkerCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLurkerDen">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="CountUnitAP_LurkerDenCompleteOnly845243641TechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSLurkerCompleteOnly"/>
+        <CanBeSuppressed index="Show" value="1"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSGroovedSpines">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSGroovedSpinesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSHydraliskHealth">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHydraliskHealthCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSExplosiveSpines">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSExplosiveSpinesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSHydraliskFrenzy">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHydraliskFrenzyCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSParalyticSpines">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeHotSParalyticSpinesCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSParalyticSpinesCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSImpaler">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSImpalerCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

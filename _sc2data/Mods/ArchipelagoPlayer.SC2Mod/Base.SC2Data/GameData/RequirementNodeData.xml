@@ -1827,4 +1827,46 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSNoxiousCompleteOnly">
         <Count Link="AP_HotSNoxious" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeImpalerCompleteOnly1829818592TechTreeCheat">
+        <Count Link="AP_Impaler" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeImpalerQueuedOrBetterTechTreeCheat">
+        <Count Link="AP_Impaler" State="QueuedOrBetter"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotsLurkerCompleteOnlyTechTreeCheat">
+        <Count Link="AP_HotSLurker" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSImpalerCompleteOnlyTechTreeCheat">
+        <Count Link="AP_HotSImpaler" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSExplosiveSpinesCompleteOnly">
+        <Count Link="AP_HotSExplosiveSpines" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSGroovedSpinesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSGroovedSpines" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHydraliskFrenzyCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSHydraliskFrenzy" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHydraliskHealthCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSHydraliskHealth" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSParalyticSpinesCompleteOnlyTechTreeCheat">
+        <Count Link="AP_HotSParalyticSpines" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitImpalerDenCompleteOnly3322076208TechTreeCheat">
+        <Count Link="AP_ImpalerDen" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSImpalerCompleteOnly">
+        <Count Link="AP_HotSImpaler" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="CountUnitAP_LurkerDenCompleteOnly845243641TechTreeCheat">
+        <Count Link="AP_LurkerDen" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSLurkerCompleteOnly">
+        <Count Link="AP_HotSLurker" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

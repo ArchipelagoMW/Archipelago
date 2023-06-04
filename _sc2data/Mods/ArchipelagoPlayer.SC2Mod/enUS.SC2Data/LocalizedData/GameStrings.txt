@@ -18,8 +18,13 @@ Abil/Name/AP_BuildinProgressNonCancellable=Build in Progress Non Cancellable
 Abil/Name/AP_BunkerStop=Stop
 Abil/Name/AP_BunkerTransport=Load-Unload (Bunker)
 Abil/Name/AP_BurrowChargeRevD=Burrow Charge Rev D
+Abil/Name/AP_BurrowHydraliskDown=Burrow (Hydralisk)
+Abil/Name/AP_BurrowHydraliskUp=Unburrow (Hydralisk)
+Abil/Name/AP_BurrowImpaler=Burrow (Impaler)
 Abil/Name/AP_BurrowInfestedAbominationDown=Burrow
 Abil/Name/AP_BurrowInfestedAbominationUp=Unburrow
+Abil/Name/AP_BurrowLurkerDown=Burrow
+Abil/Name/AP_BurrowLurkerUp=Unburrow
 Abil/Name/AP_BurrowRoachDown=Burrow (Roach)
 Abil/Name/AP_BurrowRoachUp=Unburrow (Roach)
 Abil/Name/AP_BurrowUltraliskDown=Burrow (Ultralisk)
@@ -52,8 +57,10 @@ Abil/Name/AP_FusionCoreResearch=Research
 Abil/Name/AP_GatherSpecialObject=Gather Chrysalis Egg
 Abil/Name/AP_GhostCloak=Personal Cloaking
 Abil/Name/AP_GhostWeaponsFree=Weapons Free
+Abil/Name/AP_HealingDroneHeal=Heal
 Abil/Name/AP_HerculesTransport=Hercules Transport
 Abil/Name/AP_HeroArmNuke=Hero Arm Nuke
+Abil/Name/AP_HydraliskFrenzy=Hydralisk Frenzy
 Abil/Name/AP_Irradiate=Irradiate
 Abil/Name/AP_LiberatorAATarget=AA Target
 Abil/Name/AP_LiberatorAGTarget=AG Target
@@ -70,6 +77,8 @@ Abil/Name/AP_MedivacHeal=Heal
 Abil/Name/AP_MedivacTransport=Load-Unload (Medivac)
 Abil/Name/AP_MindControl=Mind Control
 Abil/Name/AP_MissilePods=Hurricane Missile Pods
+Abil/Name/AP_MorphHydraliskToLurker=Morph Hydralisk To Lurker
+Abil/Name/AP_MorphRoachToImpaler=Morph Roach to Primal Lurker
 Abil/Name/AP_MorphToTechReactor=Morph To Tech Reactor
 Abil/Name/AP_NanoRepair=Nano Repair
 Abil/Name/AP_Obliterate=Obliterate
@@ -77,6 +86,7 @@ Abil/Name/AP_OrbitalCommandLand=Land (Orbital Command)
 Abil/Name/AP_OrbitalLiftOff=Lift Off (Orbital Command)
 Abil/Name/AP_PerditionTurretBurrow=Perdition Turret Burrow
 Abil/Name/AP_PerditionTurretUnburrow=Perdition Turret Unburrow
+Abil/Name/AP_PlaceHealingDrone=Place Bio-Mechanical Repair Drone
 Abil/Name/AP_PlacePointDefenseDrone=Place Point Defense Drone
 Abil/Name/AP_PoisonNova=Toxic Blast
 Abil/Name/AP_RallyCommand=Command Center - Rally
@@ -125,6 +135,7 @@ Abil/Name/AP_TrainStarportAdditionalUnits=Train (Starport) - Additional Units
 Abil/Name/AP_UltraliskBurrowCharge=Ultralisk Burrow Charge
 Abil/Name/AP_UltraliskWeaponCooldown=Ultralisk Weapon Cooldown
 Abil/Name/AP_UltrasonicPulse=Ultrasonic Pulse
+Abil/Name/AP_UnburrowImpaler=Unburrow (Impaler)
 Abil/Name/AP_Unsiege=Unsiege
 Abil/Name/AP_UpgradeToOrbital=Morph Building (COCE -> Orbital Command)
 Abil/Name/AP_UpgradeToPlanetaryFortress=Morph Building (COCE -> Planetary Fortress)
@@ -143,9 +154,7 @@ Abil/Name/AP_burrowedStop=Stop
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
-Abil/Name/AP_HealingDroneHeal=Heal
 Abil/Name/MercCompoundResearch2=Research
-Abil/Name/AP_PlaceHealingDrone=Place Bio-Mechanical Repair Drone
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
 Actor/AddonIndicator/AP_TechLab=T
@@ -164,6 +173,7 @@ Behavior/Name/AP_GhostBlast="AOE Sleep"
 Behavior/Name/AP_GhostCloak=Cloak
 Behavior/Name/AP_GhostHoldFire=Hold Fire
 Behavior/Name/AP_GhostHoldFireB=Hold Fire
+Behavior/Name/AP_HydraliskFrenzy=Frenzy
 Behavior/Name/AP_Irradiate=Irradiated
 Behavior/Name/AP_LiberatorCloak=Cloak
 Behavior/Name/AP_LockOn=Lock On Target
@@ -174,6 +184,7 @@ Behavior/Name/AP_MercGroundDropDelay=Merc Ground Drop Delay
 Behavior/Name/AP_MindControl=Mind Control
 Behavior/Name/AP_MineDroneCountdown=Widow Mine Detonating
 Behavior/Name/AP_NoxiousDamage=Noxious Cloud
+Behavior/Name/AP_ParalyticSpines=Paralytic Spines
 Behavior/Name/AP_PersonalCloakingFree=Cloak
 Behavior/Name/AP_PredatorCloaking=Cloak
 Behavior/Name/AP_PsiDisruption=Psi Disruption
@@ -204,9 +215,11 @@ Behavior/Tooltip/AP_BansheeCloakCrossSpectrumDampeners=This unit is cloaked and 
 Behavior/Tooltip/AP_DefensiveMatrix=While active, the Defensive Matrix blocks all incoming damage, up to a maximum of 200.
 Behavior/Tooltip/AP_EMPDecloak=Target was recently hit by an EMP Round, making it unable to cloak for a short duration.
 Behavior/Tooltip/AP_GhostCloak=This unit is cloaked and will only be revealed by detectors or effects.
+Behavior/Tooltip/AP_HydraliskFrenzy=Attack speed increased.
 Behavior/Tooltip/AP_Irradiate=Irradiated unit. All Biological units in or near the radiation field will take damage.
 Behavior/Tooltip/AP_LockOn=This unit has been targeted by a Cyclone's Lock On ability.
 Behavior/Tooltip/AP_NoxiousDamage=Taking damage over time.
+Behavior/Tooltip/AP_ParalyticSpines=This unit's attack speed is slowed.
 Behavior/Tooltip/AP_PersonalCloakingFree=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_PredatorCloaking=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_PsiDisruption=Attack and movement speeds halved.
@@ -228,6 +241,7 @@ Button/Name/AP_AberrationTowering=Towering
 Button/Name/AP_AblativeScales=Kinetic Foam
 Button/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Button/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
+Button/Name/AP_AncillaryCarapaceHydralisk=Ancillary Carapace
 Button/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
 Button/Name/AP_AresClassWeaponsSystemviking=Phobos-Class Weapons System
 Button/Name/AP_ArmorpiercingMode=High Impact Payload
@@ -236,9 +250,11 @@ Button/Name/AP_AutomatedRefinery=Build Automated Refinery
 Button/Name/AP_Banshee=Build Banshee
 Button/Name/AP_Barracks=Build Barracks
 Button/Name/AP_Battlecruiser=Build Battlecruiser
+Button/Name/AP_BioMechanicalHeal=Bio-Mechanical Repair
 Button/Name/AP_BuildAutoTurret=Build Auto-Turret
 Button/Name/AP_BuildCyclone=Build Cyclone
 Button/Name/AP_BuildFortifiedBunker=Build Fortified Bunker
+Button/Name/AP_BuildHealingDrone=Deploy Bio-Mechanical Repair Drone
 Button/Name/AP_BuildHercules=Build Hercules
 Button/Name/AP_BuildPointDefenseDrone=Build Point Defense Drone
 Button/Name/AP_BuildScienceVessel=Build Science Vessel
@@ -246,6 +262,7 @@ Button/Name/AP_Bunker=Build Bunker
 Button/Name/AP_BunkerFortified=Build Bunker
 Button/Name/AP_BurrowCharge=Burrow Charge
 Button/Name/AP_BurrowChargeCampaign=Burrow Charge
+Button/Name/AP_BurrowLurkerMP=Burrow
 Button/Name/AP_CalldownMULE=Calldown: MULE
 Button/Name/AP_CerberusMines=Cerberus Mine
 Button/Name/AP_CloakOnBanshee=Cloak
@@ -285,6 +302,7 @@ Button/Name/AP_Ghost=Train Ghost
 Button/Name/AP_GhostAcademy=Build Shadow Ops
 Button/Name/AP_GhostHoldFire=Hold Fire
 Button/Name/AP_Goliath=Build Goliath
+Button/Name/AP_GroovedSpines=Grooved Spines
 Button/Name/AP_Heal=Heal
 Button/Name/AP_Hellion=Build Hellion
 Button/Name/AP_HellstormMissileBatteries=Hellstorm Batteries
@@ -310,8 +328,10 @@ Button/Name/AP_HiveMindEmulator=Build Hive Mind Emulator
 Button/Name/AP_HotSRoachDamage=Hydriodic Bile
 Button/Name/AP_HotSRoachShield=Adaptive Plating
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
+Button/Name/AP_HydraliskFrenzy=Frenzy
 Button/Name/AP_Hyperjump=Tactical Jump
 Button/Name/AP_ImmortalityProtocol=Immortality Protocol
+Button/Name/AP_Impaler=Morph to Impaler
 Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
 Button/Name/AP_InfernalPreIgniter=Thermite Filaments
 Button/Name/AP_Irradiate=Irradiate
@@ -325,6 +345,7 @@ Button/Name/AP_LiberatorStructureAttack=Raid Artillery
 Button/Name/AP_LockOn=Lock On
 Button/Name/AP_LockOnAir=Lock On Air
 Button/Name/AP_LockOnCancel=Cancel
+Button/Name/AP_Lurker=Morph to Lurker
 Button/Name/AP_MaelstromRounds=Maelstrom Rounds
 Button/Name/AP_MagFieldLaunchers=Mag-Field Launchers
 Button/Name/AP_Marauder=Train Marauder
@@ -442,14 +463,13 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_BioMechanicalHeal=Bio-Mechanical Repair
-Button/Name/AP_BuildHealingDrone=Deploy Bio-Mechanical Repair Drone
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
 Button/Tooltip/AP_AdvancedHealingAI=The Medivac can heal two targets at once.
 Button/Tooltip/AP_AllPurposeLaserBattery=Battlecruisers can attack while moving and do same damage to both ground and air targets.
+Button/Tooltip/AP_AncillaryCarapaceHydralisk=Hydralisk gains +20 maximum life.
 Button/Tooltip/AP_AresClassWeaponsSystem=Increases missile range by 3 and Autocannon range by 1.
 Button/Tooltip/AP_AresClassWeaponsSystemviking=Increases missile range by 2 and Autocannon range by 1.
 Button/Tooltip/AP_ArmorpiercingMode=Activates the Thor's 250mm Punisher Cannons. Punisher cannons strike a single air target for heavy damage.
@@ -464,6 +484,7 @@ Button/Tooltip/AP_Banshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackI
 Button/Tooltip/AP_Barracks=Infantry production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Marines<n/>- Bunkers from SCVs
 Button/Tooltip/AP_BarracksFlying=Barracks must land to start unit production.
 Button/Tooltip/AP_Battlecruiser=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_BioMechanicalHeal=Heals a friendly biological or mechanical unit.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_HealingDroneHeal,RechargeVitalRate[0]"/> life per second.</c>
 Button/Tooltip/AP_BuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AP_AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BuildCyclone=Mobile assault vehicle. Can use Lock On to quickly fire while moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BuildFortifiedBunker=Upgrades the Bunker to have 150 additional life. Cannot be garrisoned while the Bunker is upgrading.
@@ -474,6 +495,7 @@ Button/Tooltip/AP_Bunker=Defensive structure. Able to protect up to <d ref="Abil
 Button/Tooltip/AP_BunkerFortified=Defensive structure. Able to protect up to <d ref="Abil,BunkerTransport,TotalCargoSpace"/> infantry unit slots. Units inside the Bunker have +1 range to their attacks. Bunkers can be salvaged.
 Button/Tooltip/AP_BurrowCharge=Burrow and charge towards a unit. Range of 8.
 Button/Tooltip/AP_BurrowChargeCampaign=Ultralisk burrows and charges toward units. When the Ultralisk unburrows, all enemy units nearby are knocked back and stunned for 2 seconds.
+Button/Tooltip/AP_BurrowLurkerMP=Buries the Lurker underground. Burrowed Lurkers are unable to move, but are able to attack. They cannot be seen without detection.
 Button/Tooltip/AP_CalldownMULE=Drops an experimental robotic MULE miner onto the target Mineral Field. MULEs collect minerals more quickly than SCVs.  <n/><n/>MULEs last <d time="90"/> before their systems fail.
 Button/Tooltip/AP_CerberusMines=Increases blast radius and trigger radius by 33%.
 Button/Tooltip/AP_CloakOnBanshee=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_BansheeCloak,Modification.VitalRegenArray[2] + Unit,AP_Banshee,EnergyRegenRate)" precision="1"/> energy per second.</c>
@@ -518,8 +540,10 @@ Button/Tooltip/AP_Ghost=Infiltration unit. Can use Snipe and Cloak abilities. Ca
 Button/Tooltip/AP_GhostAcademy=Can build Nukes that Ghosts can use.<n/><n/><c val="ffff8a">Enables:</c><n/>- Ghosts at the Barracks
 Button/Tooltip/AP_GhostHoldFire=Orders selected units to holster their weapons and avoid engaging enemies, unless given a direct command. Units holding fire will flee if attacked.
 Button/Tooltip/AP_Goliath=Heavy-fire support unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_GroovedSpines=Hydralisk gains +1 attack range.
 Button/Tooltip/AP_HammerSecurity=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Heal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_MedivacHeal,RechargeVitalRate*Effect,AP_MedivacHeal,DrainVitalCostFactor"/> life per 1 energy.</c>
+Button/Tooltip/AP_HealingDrone=Heals nearby biological and mechanical units.<n/>Times out after <d ref="Behavior,AP_HealingDroneTimedLife,Duration"/> seconds.
 Button/Tooltip/AP_Hellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_HellstormMissileBatteries=The Missile Turret unleashes an additional flurry of missiles with each attack.
 Button/Tooltip/AP_HelsAngelAssault=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -547,8 +571,14 @@ Button/Tooltip/AP_HiveMindEmulator=Defensive structure. Can permanently Mind Con
 Button/Tooltip/AP_HotSRoachDamage=Roach gains +<d ref="Upgrade,AP_HotSRoachDamage,EffectArray[0].Value / Effect,AP_AcidSalivaU"/> damage vs. light units.
 Button/Tooltip/AP_HotSRoachShield=Roach gains +<d ref="Behavior,AP_RoachShield,Modification[0].LifeArmorBonus"/> armor when life is under 50%.
 Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
+Button/Tooltip/AP_Hydralisk=High-damage ranged unit.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_HydraliskFrenzy=Attack speed increased by 50% for <d ref="Behavior,AP_HydraliskFrenzy,Duration"/> seconds.
+Button/Tooltip/AP_HydraliskLurkerEgg=This cocoon contains a Hydralisk that is morphing into a Lurker.
 Button/Tooltip/AP_Hyperjump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
 Button/Tooltip/AP_ImmortalityProtocol=Allows a destroyed Thor to be rebuilt in the field.
+Button/Tooltip/AP_Impaler=Long-range anti-armor ambusher. Must burrow to attack.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_ImpalerBurrowed=Long-range anti-armor ambusher. Must burrow to attack.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_ImpalerEgg=This cocoon contains a Hydralisk that is morphing into an Impaler.
 Button/Tooltip/AP_IncineratorNozzles=Increases the Firebat's damage radius by 40%.
 Button/Tooltip/AP_InfernalPreIgniter=Hellions do an additional 10 damage to light armor.
 Button/Tooltip/AP_InfestedAbomination=Aberrations are durable units that deal heavy damage.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
@@ -563,6 +593,7 @@ Button/Tooltip/AP_LiberatorStructureAttack=Liberators can attack structures whil
 Button/Tooltip/AP_LockOn=Locks the Cyclone's weapons on the target unit, dealing <d ref="Effect,AP_LockOnCP,PeriodCount*Effect,AP_CycloneWeaponDamage,Amount"/> damage over <d ref="Effect,AP_LockOnCP,PeriodCount * Effect,AP_LockOnCP,PeriodicPeriodArray[0]"/> seconds to ground and flying targets. Can move while firing. Cancels if target moves out of range.
 Button/Tooltip/AP_LockOnAir=Locks the Cyclone's weapons on the target flying unit, dealing <d ref="Effect,AP_LockOnAirCP,PeriodCount*Effect,AP_CycloneAirWeaponDamage,Amount"/> damage over <d ref="Effect,LockOnAirCP,PeriodCount * Effect,AP_LockOnAirCP,PeriodicPeriodArray[0]"/> seconds. Can move while firing. Cancels if target moves out of range.
 Button/Tooltip/AP_LockOnCancel=Cancels the current Lock On, and allows you to select a new target.
+Button/Tooltip/AP_Lurker=Area-damage ambusher. Must burrow to attack. <n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_MULE=Prototype harvesting unit. Gathers minerals more quickly than regular SCVs. MULEs last <d time="90"/> before their systems fail.
 Button/Tooltip/AP_MaelstromRounds=Shock Cannon deals +40 damage to primary target. Splash damage remains the same.
 Button/Tooltip/AP_MagFieldLaunchers=Increases <c val="ffff8a">Cyclone's</c> attack range by +<d ref="$UpgradeEffectArrayValue:AP_MagFieldLaunchers:Weapon,AP_TyphoonMissilePod,Range$"/>.
@@ -699,8 +730,6 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_BioMechanicalHeal=Heals a friendly biological or mechanical unit.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_HealingDroneHeal,RechargeVitalRate[0]"/> life per second.</c>
-Button/Tooltip/AP_HealingDrone=Heals nearby biological and mechanical units.<n/>Times out after <d ref="Behavior,AP_HealingDroneTimedLife,Duration"/> seconds.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -861,6 +890,7 @@ Effect/Name/AP_EMPLaunchMissile=EMP
 Effect/Name/AP_EMPModifyUnit=EMP
 Effect/Name/AP_EMPSearch=EMP
 Effect/Name/AP_EMPSet=EMP
+Effect/Name/AP_ExplosiveSpinesDamage=Explosive Spines Damage
 Effect/Name/AP_Firebat=Flame Thrower (Persistent)
 Effect/Name/AP_FirebatE=Flame Thrower (Enum Area)
 Effect/Name/AP_FirebatSet=Flame Thrower (Set)
@@ -887,6 +917,7 @@ Effect/Name/AP_HammerSecurityLM=Hammer Security LM
 Effect/Name/AP_HammerSecuritySet=Concussive Grenade (Set)
 Effect/Name/AP_HealRemoveTargetBehavior=Heal Remove Target Behavior
 Effect/Name/AP_HealScanPersistent=Heal Scan Persistent
+Effect/Name/AP_HealingDroneHeal=Heal
 Effect/Name/AP_HotSUltraliskKaiserBlades=Hot SUltralisk Kaiser Blades
 Effect/Name/AP_HotSUltraliskKaiserBladesDamage=Hot SUltralisk Kaiser Blades Damage
 Effect/Name/AP_HotSUltraliskKaiserBladesSearch=Hot SUltralisk Kaiser Blades Search
@@ -902,6 +933,11 @@ Effect/Name/AP_HurricaneMissileLeftDummy=Hurricane Missile Left Dummy
 Effect/Name/AP_HurricaneMissileLeftLM=Hurricane Missile Left LM
 Effect/Name/AP_HurricaneMissileRightDummy=Hurricane Missile Right Dummy
 Effect/Name/AP_HurricaneMissileRightLM=Hurricane Missile Right LM
+Effect/Name/AP_HydraliskFrenzyApplyBehavior=Hydralisk Frenzy Apply Behavior
+Effect/Name/AP_HydraliskMeleeSet=Hydralisk Melee Set
+Effect/Name/AP_Impaler=Primal Lurker
+Effect/Name/AP_ImpalerDamage=Primal Lurker
+Effect/Name/AP_ImpalerDummySearch=Primal Lurker Dummy Search
 Effect/Name/AP_InfernalFlameThrower=Infernal Flame Thrower
 Effect/Name/AP_InfernalFlameThrowerCP=Infernal Flame Thrower
 Effect/Name/AP_InfernalFlameThrowerE=Infernal Flame Thrower
@@ -965,6 +1001,10 @@ Effect/Name/AP_LockOnTurretStart=Lock On Turret Start
 Effect/Name/AP_LongboltMissile=Longbolt Missile
 Effect/Name/AP_LongboltMissileLM=Longbolt Missile
 Effect/Name/AP_LongboltMissileU=Longbolt Missile
+Effect/Name/AP_Lurker=Lurker
+Effect/Name/AP_LurkerE=Lurker E
+Effect/Name/AP_LurkerExtended=Lurker Extended
+Effect/Name/AP_LurkerU=Lurker U
 Effect/Name/AP_MULEFate=MULE Fate
 Effect/Name/AP_MaelstromRounds=Maelstrom Rounds
 Effect/Name/AP_MakePrecursorMerc=Make Precursor Merc
@@ -999,6 +1039,10 @@ Effect/Name/AP_MindControl=Mind Control
 Effect/Name/AP_MindControlKillCargo=Mind Control Kill Cargo
 Effect/Name/AP_MorphToTechReactor=Morph To Tech Reactor
 Effect/Name/AP_NanoRepair=Nano-Repair
+Effect/Name/AP_NeedleSpinesImpactSet=Needle Spines Impact Set
+Effect/Name/AP_NeedleSpinesImpactSetUpgraded=Needle Spines Impact Set Upgraded
+Effect/Name/AP_NeedleSpinesImpactSwitch=Needle Spines Impact Switch
+Effect/Name/AP_NeedleSpinesLaunchMissile=Needle Spines
 Effect/Name/AP_NeuralParasiteLockOnRemove=Neural Parasite Lock On Remove
 Effect/Name/AP_NoxiousDamage=Noxious Damage
 Effect/Name/AP_NoxiousDamageAB=Noxious Damage AB
@@ -1011,6 +1055,7 @@ Effect/Name/AP_NukeSuicide=Nuke
 Effect/Name/AP_Obliterate=Obliterate
 Effect/Name/AP_P38ScytheGuassPistol=P-38 Scythe Guass Pistol
 Effect/Name/AP_P38ScytheGuassPistolBurst=P-38 Scythe Guass Pistol
+Effect/Name/AP_ParalyticSpines=Paralytic Spines
 Effect/Name/AP_PerditionTurretBurrowOrder=Perdition Turret Burrow Order
 Effect/Name/AP_PerditionTurretFlameThrowerCreatePersistent=Perdition Turret Flame Thrower (Create Persistent)
 Effect/Name/AP_PerditionTurretFlameThrowerDamage=Perdition Turret Flame Thrower (Damage)
@@ -1169,10 +1214,13 @@ Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
-Effect/Name/AP_HealingDroneHeal=Heal
 Effect/Name/Kill2=Kill
+Effect/Name/AP_NeedleSpinesDamage=Needle Spines
+Error/AP_ImpalerBurrowed=Must Burrow to attack.
+Error/AP_LurkerBurrowed=Must Burrow to attack.
 RequirementNode/Tooltip/AP_CountUnitFactoryCompleteOnly=Factory
 RequirementNode/Tooltip/AP_CountUnitFactoryFlyingCompleteOnly=Flying Factory
+RequirementNode/Tooltip/AP_CountUnitImpalerDenCompleteOnly3322076208TechTreeCheat=Mutate Hydralisk Den into Impaler Den
 RequirementNode/Tooltip/AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel1CompleteOnly=Terran Infantry Weapons Level 1
 RequirementNode/Tooltip/AP_CountUpgradeTerranInfantryWeaponsUltraCapacitorsLevel2CompleteOnly=Terran Infantry Weapons Level 2
 RequirementNode/Tooltip/AP_CountUpgradeTerranShipArmorsVanadiumPlatingLevel1CompleteOnly=Terran Ship Plating Level 1
@@ -1195,6 +1243,7 @@ RequirementNode/Tooltip/AP_EqCountUpgradeTerranVehicleArmorsLevel1CompleteOnly1=
 RequirementNode/Tooltip/AP_EqCountUpgradeTerranVehicleArmorsLevel2CompleteOnly1=Terran Vehicle Plating Level 2
 RequirementNode/Tooltip/AP_EqCountUpgradeTerranVehicleWeaponsLevel1CompleteOnly1=Terran Vehicle Weapons Level 1
 RequirementNode/Tooltip/AP_EqCountUpgradeTerranVehicleWeaponsLevel2CompleteOnly1=Terran Vehicle Weapons Level 2
+RequirementNode/Tooltip/CountUnitAP_LurkerDenCompleteOnly845243641TechTreeCheat=Mutate Hydralisk Den into Lurker Den
 UI/AP_SpiderMineBuilding=Constructing
 Unit/Name/AP_ATALaserBatteryLMWeapon=ATA Laser Battery
 Unit/Name/AP_ATSLaserBatteryLMWeapon=ATS Laser Battery
@@ -1238,6 +1287,7 @@ Unit/Name/AP_GoliathAWeapon=Goliath Air Weapon
 Unit/Name/AP_HailstormMissilesWeapon=Hellstorm Missiles
 Unit/Name/AP_HammerSecurity=Hammer Securities
 Unit/Name/AP_HammerSecurityLMWeapon=Hammer Securities
+Unit/Name/AP_HealingDrone=Bio-Mechanical Repair Drone
 Unit/Name/AP_Hellion=Hellion
 Unit/Name/AP_HelsAngelAssault=Hel's Angel
 Unit/Name/AP_HelsAngelFighter=Hel's Angel
@@ -1250,6 +1300,13 @@ Unit/Name/AP_HotSTorrasque=Ultralisk
 Unit/Name/AP_HunterSeekerWeapon=Seeker
 Unit/Name/AP_HurricaneMissileLeft=Hurricane Missile Left
 Unit/Name/AP_HurricaneMissileRight=Hurricane Missile Right
+Unit/Name/AP_Hydralisk=Hydralisk
+Unit/Name/AP_HydraliskImpaler=Hydralisk
+Unit/Name/AP_HydraliskLurker=Hydralisk
+Unit/Name/AP_HydraliskLurkerEgg=Lurker Cocoon
+Unit/Name/AP_Impaler=Impaler
+Unit/Name/AP_ImpalerEgg=Impaler Cocoon
+Unit/Name/AP_ImpalerWeapon=Primal Lurker
 Unit/Name/AP_InfestedAbomination=Aberration
 Unit/Name/AP_Liberator=Liberator
 Unit/Name/AP_LiberatorAG=Liberator
@@ -1257,6 +1314,7 @@ Unit/Name/AP_LiberatorAGMissile=Liberator AG Missile
 Unit/Name/AP_LiberatorDamageMissile=Liberator Damage Missile
 Unit/Name/AP_LiberatorMissile=Liberator Missile
 Unit/Name/AP_LongboltMissileWeapon=Longbolt Missile
+Unit/Name/AP_Lurker=Lurker
 Unit/Name/AP_MULE=MULE
 Unit/Name/AP_Marauder=Marauder
 Unit/Name/AP_Marine=Marine
@@ -1329,8 +1387,10 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_HealingDrone=Bio-Mechanical Repair Drone
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
+UnitSubtitle/AP_HydraliskImpaler=Impaler Strain
+UnitSubtitle/AP_HydraliskLurker=Lurker Strain
+UnitSubtitle/AP_HydraliskLurkerImpaler=Lurker + Impaler
 UnitSubtitle/AP_RoachCorpser=Corpser Strain
 UnitSubtitle/AP_RoachVile=Vile Strain
 UnitSubtitle/AP_RoachVileCorpser=Vile + Corpser
@@ -1410,11 +1470,19 @@ Upgrade/Name/AP_HiveMindEmulator=Hive Mind Emulator
 Upgrade/Name/AP_HotSBurstingGlands=Bursting Glands
 Upgrade/Name/AP_HotSChitinousPlating=HotS Chitinous Plating
 Upgrade/Name/AP_HotSEnhancedBileDucts=HotS Bile Ducts
+Upgrade/Name/AP_HotSExplosiveSpines=Hot SExplosive Spines
+Upgrade/Name/AP_HotSGroovedSpines=Grooved Spines
 Upgrade/Name/AP_HotSHardenedCarapace=HotS Hardened Carapace
+Upgrade/Name/AP_HotSHydraliskFrenzy=Hot SHydralisk Frenzy
+Upgrade/Name/AP_HotSHydraliskHealth=Ancillary Carapace
+Upgrade/Name/AP_HotSImpaler=HotS Impaler
+Upgrade/Name/AP_HotSLurker=HotS Lurker
+Upgrade/Name/AP_HotSLurkerImpaler=HotS Lurker Impaler
 Upgrade/Name/AP_HotSMonarchBlades=Monarch Blades
 Upgrade/Name/AP_HotSNoxious=Hot SNoxious
 Upgrade/Name/AP_HotSNoxiousTorrasque=HotSNoxiousTorrasque
 Upgrade/Name/AP_HotSOrganicCarapace=HotS Organic Carapace
+Upgrade/Name/AP_HotSParalyticSpines=HotS Paralytic Spines
 Upgrade/Name/AP_HotSRapidRegenerationRoach=Hot SRapid Regeneration Roach
 Upgrade/Name/AP_HotSRoachHealth=Hot SRoach Health
 Upgrade/Name/AP_HotSRoachSpeed=Hot SRoach Speed
@@ -1568,6 +1636,8 @@ Weapon/Name/AP_GoliathGUpgraded=Autocannon
 Weapon/Name/AP_HailstormMissilePods=Hellstorm Missile Pods
 Weapon/Name/AP_HammerSecurity=The Mediator
 Weapon/Name/AP_HiveMindEmulator=Hive Mind Emulator
+Weapon/Name/AP_HydraliskMelee=Melee
+Weapon/Name/AP_Impaler=Piercing Tentacle
 Weapon/Name/AP_InfernalFlameThrower=Infernal Flamethrower
 Weapon/Name/AP_InfestedAbomination=Pustulant Smash
 Weapon/Name/AP_JavelinMissileLaunchers=Javelin Missile Launchers
@@ -1578,6 +1648,7 @@ Weapon/Name/AP_LanzerTorpedoes=Lanzer Torpedoes
 Weapon/Name/AP_LiberatorAGWeapon=Concord Cannon
 Weapon/Name/AP_LiberatorMissileLaunchers=Lexington Rockets
 Weapon/Name/AP_LongboltMissile=Longbolt Missile
+Weapon/Name/AP_Lurker=Spines
 Weapon/Name/AP_P38ScytheGuassPistol=P-45 Gauss Pistol
 Weapon/Name/AP_PerditionTurretFlamethrower=Perdition Turret Flamethrower
 Weapon/Name/AP_Predator=Titanium Claws
@@ -1613,4 +1684,7 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
+Weapon/Name/AP_NeedleSpines=Needle Spines
 Weapon/Tip/AP_D8Charge=Only used against structures.
+Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
+Weapon/Tip/AP_Lurker=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>

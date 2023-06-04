@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CValidatorPlayerRequirement id="AP_HaveHotSImpaler">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSImpaler"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSLurker">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSLurker"/>
+    </CValidatorPlayerRequirement>
     <CValidatorPlayerRequirement id="AP_PunisherGrenadesResearched">
         <ResultNoPlayer value="Error"/>
         <Find value="1"/>
@@ -305,6 +313,16 @@
     <CValidatorUnitType id="AP_IsAPUltraliskBurrowed">
         <Value value="AP_UltraliskBurrowed"/>
     </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_ImpalerIsBurrowed">
+        <ResultFailed value="Error,Error/AP_ImpalerBurrowed"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ImpalerWeaponDisabled"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHotSExplosiveSpines">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSExplosiveSpines"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>
@@ -429,6 +447,19 @@
     <CValidatorUnitCompareBehaviorCount id="AP_NoBurrowChargingRevD">
         <ResultFailed value="Error,Error/CantTargetBurrowCharging"/>
         <Behavior value="AP_BurrowChargingRevD"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsNotLurkerCocoon">
+        <Value value="AP_HydraliskLurkerEgg"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_LurkerIsBurrowed">
+        <ResultFailed value="Error,Error/AP_LurkerBurrowed"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LurkerWeaponDisabled"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsKillerPhantasm">
+        <Value value="1"/>
+        <Behavior value="AP_KillerPhantasm"/>
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
@@ -1237,6 +1268,22 @@
     <CValidatorUnitCompareBehaviorCount id="AP_TargetNotNoxiousDamaged">
         <Behavior value="AP_NoxiousDamage"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorFunction id="AP_TacticalBurrowImpalerDown">
+        <Line Failure="CasterForceUnburrow"/>
+        <Line Test="TacticalBurrowHostileSearchEmpty" Failure="CasterWantsToMove"/>
+    </CValidatorFunction>
+    <CValidatorCombine id="AP_TacticalBurrowImpalerUp">
+        <CombineArray value="AP_TacticalBurrowImpalerDown"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_TargetIsAirAndHaveExplosiveSpines">
+        <Type value="And"/>
+        <CombineArray value="AP_HaveHotSExplosiveSpines"/>
+        <CombineArray value="TargetIsAir"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_TargetIsNotUnstoppable">
+        <Filters value="-;Unstoppable"/>
+    </CValidatorUnitFilters>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
         <!-- Override -->
         <Type value="And"/>
@@ -1345,4 +1392,8 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="AP_TorrasqueTimerBehavior"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_UseParalyticSpines">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSParalyticSpines"/>
+    </CValidatorPlayerRequirement>
 </Catalog>
