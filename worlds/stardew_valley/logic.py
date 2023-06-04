@@ -1055,6 +1055,8 @@ class StardewLogic:
     def can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:
         if npc == "Pet":
             return self.can_befriend_pet(hearts)
+        if npc == "Wizard" and ModNames.magic in self.options[options.Mods]:
+            return self.can_meet(npc) & self.has_lived_months(hearts)
         if npc in all_villagers_by_name:
             if not self.npc_is_in_current_slot(npc):
                 return True_()
