@@ -1236,9 +1236,9 @@
     </CButton>
     <CButton id="AP_BuildHealingDrone">
         <Tooltip value="Button/Tooltip/AP_HealingDrone"/>
-        <Icon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <Icon value="Assets\Textures\BTN-Unit-BiomechanicalDrone.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Unit-BiomechanicalDrone.dds"/>
         <AlertTooltip value="Button/Tooltip/AP_HealingDrone"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_DeploySpiderMinesRaven">

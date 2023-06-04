@@ -2341,12 +2341,12 @@
             <LayoutButtons Face="Detector" Type="Passive" Row="1" Column="4"/>
             <LayoutButtons Face="AP_HunterSeekerMissile" Type="AbilCmd" AbilCmd="AP_SeekerMissile,0" Row="2" Column="2"/>
             <LayoutButtons Face="AP_BuildPointDefenseDrone" Type="AbilCmd" AbilCmd="AP_PlacePointDefenseDrone,0" Row="2" Column="1"/>
-            <LayoutButtons Face="AP_BuildHealingDrone" Type="AbilCmd" AbilCmd="AP_PlaceHealingDrone,0" Row="1" Column="0"/>
-            <LayoutButtons Face="AP_DeploySpiderMinesRaven" Type="AbilCmd" AbilCmd="AP_RavenDeploySpiderMines,Execute" Row="1" Column="1"/>
-            <LayoutButtons Face="AP_BuildRailGunTurret" Type="AbilCmd" AbilCmd="AP_BuildRailGunTurret,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_BuildHealingDrone" Type="AbilCmd" AbilCmd="AP_PlaceHealingDrone,0" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_DeploySpiderMinesRaven" Type="AbilCmd" AbilCmd="AP_RavenDeploySpiderMines,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_BuildRailGunTurret" Type="AbilCmd" AbilCmd="AP_BuildRailGunTurret,Execute" Row="1" Column="0"/>
             <LayoutButtons Face="AP_AdvancedWeaponryRaven" Type="Passive" Requirements="AP_HaveAdvancedWeaponryRaven" Row="1" Column="3"/>
             <LayoutButtons Face="AP_RavenScramblerMissile" Type="AbilCmd" AbilCmd="AP_RavenScramblerMissile,Execute" Row="2" Column="3"/>
-            <LayoutButtons Face="AP_RavenShredderMissile" Type="AbilCmd" AbilCmd="AP_RavenShredderMissile,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_RavenShredderMissile" Type="AbilCmd" AbilCmd="AP_RavenShredderMissile,Execute" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
