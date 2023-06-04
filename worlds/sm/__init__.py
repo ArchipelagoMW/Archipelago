@@ -99,6 +99,7 @@ class SMWorld(World):
     required_client_version = (0, 2, 6)
 
     itemManager: ItemManager
+    spheres = None
 
     Logic.factory('vanilla')
 
@@ -106,6 +107,8 @@ class SMWorld(World):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
         self.need_comeback_check = True
+        if SMWorld.spheres != None:
+            SMWorld.spheres = None
         super().__init__(world, player)
 
     @classmethod
@@ -359,20 +362,40 @@ class SMWorld(World):
                 loc.address = loc.item.code = None
 
     def post_fill(self):
+        # Having a sorted itemLocs from collection order is required for escapeTrigger when Tourian is Disabled.
+        # We cant use stage_post_fill for this as its called after worlds' post_fill.
+        # get_spheres could be cached in multiworld?
+        # Another possible solution would be to have a globally accessible list of items in the order in which the get placed in push_item
+        # and use the inversed starting from the first progression item.
+        if (SMWorld.spheres == None):
+            SMWorld.spheres = [itemLoc for sphere in self.multiworld.get_spheres() for itemLoc in sphere]
+
+        #used to simulate received items
+        first_local_collected_loc = next(itemLoc for itemLoc in SMWorld.spheres if itemLoc.player == self.player)
+
         self.itemLocs = [
             ItemLocation(ItemManager.Items[itemLoc.item.type
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
                          'ArchipelagoItem'],
-                         locationsDict[itemLoc.name], itemLoc.item.player, True)
-            for itemLoc in self.multiworld.get_locations(self.player)
+                         locationsDict[itemLoc.name] if itemLoc.game == self.game else locationsDict[first_local_collected_loc.name], itemLoc.item.player, True)
+            for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player
         ]
         self.progItemLocs = [
             ItemLocation(ItemManager.Items[itemLoc.item.type
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
                          'ArchipelagoItem'],
-                         locationsDict[itemLoc.name], itemLoc.item.player, True)
-            for itemLoc in self.multiworld.get_locations(self.player) if itemLoc.item.advancement
+                         locationsDict[itemLoc.name] if itemLoc.game == self.game else locationsDict[first_local_collected_loc.name], itemLoc.item.player, True)
+            for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player and itemLoc.item.advancement
         ]
+
+        localItemLocs = [
+            ItemLocation(ItemManager.Items[itemLoc.item.type
+                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                         'ArchipelagoItem'],
+                         locationsDict[itemLoc.name], itemLoc.item.player, True)
+            for itemLoc in SMWorld.spheres if itemLoc.player == self.player
+        ]
+    
         for itemLoc in self.itemLocs:
             if itemLoc.Item.Class == "Boss":
                 itemLoc.Item.Class = "Minor"
@@ -380,10 +403,7 @@ class SMWorld(World):
             if itemLoc.Item.Class == "Boss":
                 itemLoc.Item.Class = "Minor"
 
-        localItemLocs = [il for il in self.itemLocs if il.player == self.player]
-        localprogItemLocs = [il for il in self.progItemLocs if il.player == self.player]
-
-        escapeTrigger = (localItemLocs, localprogItemLocs, 'Full') if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"] else None
+        escapeTrigger = (self.itemLocs, self.progItemLocs, 'Full') if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"] else None
         escapeOk = self.variaRando.randoExec.graphBuilder.escapeGraph(self.variaRando.container, self.variaRando.randoExec.areaGraph, self.variaRando.randoExec.randoSettings.maxDiff, escapeTrigger)
         assert escapeOk, "Could not find a solution for escape"
 
@@ -391,7 +411,7 @@ class SMWorld(World):
                                     self.variaRando.args.area, self.variaRando.args.bosses,
                                     self.variaRando.args.escapeRando)
         
-        self.variaRando.randoExec.postProcessItemLocs(self.itemLocs, self.variaRando.args.hideItems)
+        self.variaRando.randoExec.postProcessItemLocs(localItemLocs, self.variaRando.args.hideItems)
 
         self.need_comeback_check = False
 
