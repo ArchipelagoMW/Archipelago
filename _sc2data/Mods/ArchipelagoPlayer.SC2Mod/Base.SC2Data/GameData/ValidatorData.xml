@@ -1402,4 +1402,25 @@
         <Range value="13"/>
         <Value Value="SourceUnit"/>
     </CValidatorLocationCompareRange>
+    <CValidatorCombine id="AP_IsMechanicalOrIsPsionic">
+        <CombineArray value="AP_IsMechanical"/>
+        <CombineArray value="AP_IsPsionic"/>
+        <ResultFailed value="Error,Error/MustTargetMechanicalorPsionic"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_IsMechanical">
+        <Filters value="Mechanical;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_IsPsionic">
+        <Filters value="Psionic;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_TargetNotTacticalJumping">
+        <ResultFailed value="Error,Error/CantTargetBattlecruiserHyperjump"/>
+        <CombineArray value="AP_TargetTacticalJumping"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_TargetTacticalJumping">
+        <ResultFailed value="Error,Error/CantTargetBattlecruiserHyperjump"/>
+        <WhichUnit Value="Target"/>
+        <AbilLink value="AP_Hyperjump"/>
+    </CValidatorUnitOrderQueue>
 </Catalog>

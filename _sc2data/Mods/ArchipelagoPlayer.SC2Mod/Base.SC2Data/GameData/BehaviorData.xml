@@ -599,6 +599,38 @@
         <Duration value="15"/>
         <ExpireEffect value="Kill"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenScramblerMissile">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-interferencematrix.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="15"/>
+        <ExpireEffect value="AP_ImmortalBarrierCDFix"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="EnableAttack" value="1"/>
+            <ModifyFlags index="EnableMove" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressCombat" value="1"/>
+            <AbilClassEnableArray index="CAbilStop" value="1"/>
+            <BehaviorLinkDisableArray value="ImmortalBarrierSupressed"/>
+            <BehaviorLinkDisableArray value="AP_ImmortalBarrierSupressed"/>
+            <WeaponDisableArray value="InterceptorLaunch"/>
+            <WeaponDisableArray value="AP_InterceptorLaunch"/>
+        </Modification>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+<!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>--> <!-- TODO: Oracle unit -->
+        <DisableValidatorArray value="AP_TargetNotTacticalJumping"/>
+        <BuffFlags index="UpdateDurationWhileDisabled" value="1"/>
+    </CBehaviorBuff>
+    <CEffectModifyUnit id="AP_ImmortalBarrierCDFix">
+        <ValidatorArray value="BarrierOnCooldown"/>
+        <Cost Behavior="ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
+        <Cost Behavior="AP_ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
+    </CEffectModifyUnit>
     <CBehaviorBuff id="AP_Irradiate">
         <Alignment value="Negative"/>
         <InfoIcon value="AP\Assets\Textures\btn-ability-terran-irradiate.dds"/>

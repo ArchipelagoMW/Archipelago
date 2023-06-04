@@ -4770,6 +4770,61 @@
         <On Terms="MotionPhaseStart; MotionPhase 2" Send="Create AP_HunterSeekerHappySound"/>
         <Model value="HunterSeekerWeapon"/>
     </CActorMissile>
+    <CActorMissile id="AP_RavenScramblerMissileProjectile" parent="GenericAttackMissile" unitName="AP_RavenScramblerMissile">
+        <Model value="RavenScramblerMissileWeapon"/>
+    </CActorMissile>
+    <CActorRange id="AP_RavenScramblerMissileRange" parent="RangeAbil" abil="AP_RavenScramblerMissile">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSound id="AP_RavenScramblerMissileImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_RavenScramblerMissileABswitch.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_SkyTank_BarrageMissile_Impact"/>
+    </CActorSound>
+    <CActorModel id="AP_RavenScramblerMissileBehavior" parent="ModelAnimationStyleContinuous">
+        <Model value="RavenScramblerMissileBehavior"/>
+        <On Terms="Behavior.AP_RavenScramblerMissile.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenScramblerMissile.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.AP_RavenScramblerMissileCarrier.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenScramblerMissileCarrier.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidateUnit IsColossus" Send="SetScale 1.000000,1.000000,1.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsCarrier" Send="SetScale 0.750000"/>
+<!--        <On Terms="ActorCreation; ValidateUnit IsTempest" Send="SetScale 0.850000"/>-->
+        <HostSiteOps Ops="SOpAttachCenter" HoldRotation="1"/>
+        <Host Subject="_Selectable"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorAction id="AP_RavenScramblerMissileLaunch" parent="GenericAttackBase" effectImpact="AP_RavenScramblerMissileAB" effectLaunch="AP_RavenScramblerMissileLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA2"/>
+        <LaunchAssets Sound="AP_Raven_ScramblerMissileLaunch"/>
+        <Missile value="AP_RavenScramblerMissileProjectile"/>
+        <ImpactSiteOps Ops="SOpAttachCenter SOpForwardLaunchGuide SOp2DRotation"/>
+        <ImpactAttachQuery Methods="Center 0"/>
+        <ImpactMap index="None" Model="RavenScramblerMissileImpact" Sound="AP_Raven_ScramblerMissileImpact" ModelReaction=""/>
+        <ImpactMap index="Shield" Sound="" ModelReaction=""/>
+        <ImpactModel value="RavenScramblerMissileImpact"/>
+        <On Terms="Effect.AP_RavenScramblerMissileLM.Start; At Caster" Send="Create"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorModel id="AP_RavenScramblerMissileImpact" parent="GenericAttackImpactModel">
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardLaunchGuide SOp2DRotation" HoldRotation="1"/>
+        <On Terms="Effect.AP_RavenScramblerMissileABswitch.Start; At Target" Send="Create"/>
+        <!--On Terms="ActorCreation" Send="SetScale 2.500000"/-->
+        <Model value="AP_RavenScramblerMissileImpact"/>
+        <AutoScaleFactor value="1.000000"/>
+        <Host Subject="_Selectable"/>
+    </CActorModel>
+    <CActorSound id="AP_RavenScramblerMissileLoopSound" parent="SoundContinuous">
+        <On Terms="Behavior.AP_RavenScramblerMissile.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenScramblerMissile.Off" Send="Destroy"/>
+        <On Terms="Behavior.AP_RavenScramblerMissileCarrier.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenScramblerMissileCarrier.Off" Send="Destroy"/>
+        <Sound value="AP_Raven_ScramblerMissileLoop"/>
+    </CActorSound>
     <CActorAction id="AP_PointDefenseDroneRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_PointDefenseDroneReleaseLaunchMissile">
         <LaunchAssets Sound="Raven_PointDefenseDroneReleaseLaunch"/>
         <ImpactMap index="None" Model="PointDefenseDroneAttackBeamImpact" Sound="Raven_PointDefenseDroneReleaseImpact"/>

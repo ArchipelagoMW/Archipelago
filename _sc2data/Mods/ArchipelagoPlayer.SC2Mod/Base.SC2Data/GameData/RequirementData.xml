@@ -352,6 +352,10 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeAdvancedWeaponryRavenCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveRavenInterferenceMatrix">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRavenInterferenceMatrixCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_BuildPredator">
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradePredatorCompleteOnly"/>

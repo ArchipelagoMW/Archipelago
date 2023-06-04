@@ -3898,6 +3898,26 @@
         <EditorCategories value="Race:Terran"/>
         <EffectArray value="AP_NovaRavenSeekerMissileSuicide"/>
     </CEffectSet>
+    <CEffectSet id="AP_RavenScramblerDummy">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_RavenScramblerSwitchInitial">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="IsDead" Effect="AP_RavenScramblerDummy"/>
+        <CaseDefault value="AP_RavenScramblerMissileLM"/>
+    </CEffectSwitch>
+    <CEffectLaunchMissile id="AP_RavenScramblerMissileLM">
+        <EditorCategories value="Race:Terran"/>
+        <!--ImpactEffect value="BattlecruiserTargetTriggerHyperJumpCD"/-->
+        <AmmoUnit value="AP_RavenScramblerMissile"/>
+        <ValidatorArray value="AP_IsMechanicalOrIsPsionic"/>
+        <ValidatorArray value="AP_TargetNotTacticalJumping"/>
+        <FinishEffect value="AP_RavenScramblerMissileAB"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="AP_RavenScramblerMissileAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_RavenScramblerMissile"/>
+    </CEffectApplyBehavior>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

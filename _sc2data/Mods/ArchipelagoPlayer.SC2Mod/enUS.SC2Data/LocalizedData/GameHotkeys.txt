@@ -132,3 +132,4 @@ Button/Hotkey/AP_BioMechanicalHeal=E
 Button/Hotkey/AP_BuildHealingDrone=B
 Button/Hotkey/AP_DeploySpiderMinesRaven=E
 Button/Hotkey/AP_BuildRailGunTurret=G
+Button/Hotkey/AP_RavenScramblerMissile=C

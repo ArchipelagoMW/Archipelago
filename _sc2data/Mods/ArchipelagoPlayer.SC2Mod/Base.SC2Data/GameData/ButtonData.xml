@@ -1311,4 +1311,9 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-nova-specialordance.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_RavenScramblerMissile">
+        <Icon value="Assets\Textures\btn-upgrade-terran-interferencematrix.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-interferencematrix.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>
