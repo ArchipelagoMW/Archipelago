@@ -3717,12 +3717,12 @@
     <CEffectSet id="AP_HydraliskMeleeSet">
         <EditorCategories value="Race:Zerg"/>
         <EffectArray value="AP_ParalyticSpines"/>
-        <EffectArray value="HydraliskMelee"/>
+        <EffectArray value="AP_HydraliskMelee"/>
     </CEffectSet>
     <CEffectSet id="AP_NeedleSpinesImpactSet">
         <EditorCategories value="Race:Zerg"/>
         <EffectArray value="AP_ParalyticSpines"/>
-        <EffectArray value="NeedleSpinesDamage"/>
+        <EffectArray value="AP_NeedleSpinesDamage"/>
     </CEffectSet>
     <CEffectSet id="AP_NeedleSpinesImpactSetUpgraded">
         <EditorCategories value="Race:Zerg"/>
@@ -3737,13 +3737,22 @@
     <CEffectLaunchMissile id="AP_NeedleSpinesLaunchMissile">
         <EditorCategories value="Race:Zerg"/>
         <ImpactEffect value="AP_NeedleSpinesImpactSwitch"/>
-        <AmmoUnit value="NeedleSpinesWeapon"/>
+        <AmmoUnit value="AP_NeedleSpinesWeapon"/>
     </CEffectLaunchMissile>
     <CEffectApplyBehavior id="AP_ParalyticSpines">
         <ValidatorArray index="0" value="AP_UseParalyticSpines"/>
         <ValidatorArray value="AP_TargetIsNotUnstoppable"/>
         <EditorCategories value=""/>
     </CEffectApplyBehavior>
+    <CEffectDamage id="AP_NeedleSpinesDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Kind value="Ranged"/>
+        <Amount value="12"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_HydraliskMelee" parent="AP_NeedleSpinesDamage">
+        <Death value="Eviscerate"/>
+        <Kind value="Melee"/>
+    </CEffectDamage>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

@@ -57,6 +57,7 @@ Abil/Name/AP_FusionCoreResearch=Research
 Abil/Name/AP_GatherSpecialObject=Gather Chrysalis Egg
 Abil/Name/AP_GhostCloak=Personal Cloaking
 Abil/Name/AP_GhostWeaponsFree=Weapons Free
+Abil/Name/AP_HealingDroneHeal=Heal
 Abil/Name/AP_HerculesTransport=Hercules Transport
 Abil/Name/AP_HeroArmNuke=Hero Arm Nuke
 Abil/Name/AP_HydraliskFrenzy=Hydralisk Frenzy
@@ -85,6 +86,7 @@ Abil/Name/AP_OrbitalCommandLand=Land (Orbital Command)
 Abil/Name/AP_OrbitalLiftOff=Lift Off (Orbital Command)
 Abil/Name/AP_PerditionTurretBurrow=Perdition Turret Burrow
 Abil/Name/AP_PerditionTurretUnburrow=Perdition Turret Unburrow
+Abil/Name/AP_PlaceHealingDrone=Place Bio-Mechanical Repair Drone
 Abil/Name/AP_PlacePointDefenseDrone=Place Point Defense Drone
 Abil/Name/AP_PoisonNova=Toxic Blast
 Abil/Name/AP_RallyCommand=Command Center - Rally
@@ -152,9 +154,7 @@ Abil/Name/AP_burrowedStop=Stop
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
-Abil/Name/AP_HealingDroneHeal=Heal
 Abil/Name/MercCompoundResearch2=Research
-Abil/Name/AP_PlaceHealingDrone=Place Bio-Mechanical Repair Drone
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
 Actor/AddonIndicator/AP_TechLab=T
@@ -250,9 +250,11 @@ Button/Name/AP_AutomatedRefinery=Build Automated Refinery
 Button/Name/AP_Banshee=Build Banshee
 Button/Name/AP_Barracks=Build Barracks
 Button/Name/AP_Battlecruiser=Build Battlecruiser
+Button/Name/AP_BioMechanicalHeal=Bio-Mechanical Repair
 Button/Name/AP_BuildAutoTurret=Build Auto-Turret
 Button/Name/AP_BuildCyclone=Build Cyclone
 Button/Name/AP_BuildFortifiedBunker=Build Fortified Bunker
+Button/Name/AP_BuildHealingDrone=Deploy Bio-Mechanical Repair Drone
 Button/Name/AP_BuildHercules=Build Hercules
 Button/Name/AP_BuildPointDefenseDrone=Build Point Defense Drone
 Button/Name/AP_BuildScienceVessel=Build Science Vessel
@@ -326,8 +328,8 @@ Button/Name/AP_HiveMindEmulator=Build Hive Mind Emulator
 Button/Name/AP_HotSRoachDamage=Hydriodic Bile
 Button/Name/AP_HotSRoachShield=Adaptive Plating
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
-Button/Name/AP_Hyperjump=Tactical Jump
 Button/Name/AP_HydraliskFrenzy=Frenzy
+Button/Name/AP_Hyperjump=Tactical Jump
 Button/Name/AP_ImmortalityProtocol=Immortality Protocol
 Button/Name/AP_Impaler=Morph to Impaler
 Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
@@ -461,8 +463,6 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_BioMechanicalHeal=Bio-Mechanical Repair
-Button/Name/AP_BuildHealingDrone=Deploy Bio-Mechanical Repair Drone
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
@@ -484,6 +484,7 @@ Button/Tooltip/AP_Banshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackI
 Button/Tooltip/AP_Barracks=Infantry production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Marines<n/>- Bunkers from SCVs
 Button/Tooltip/AP_BarracksFlying=Barracks must land to start unit production.
 Button/Tooltip/AP_Battlecruiser=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_BioMechanicalHeal=Heals a friendly biological or mechanical unit.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_HealingDroneHeal,RechargeVitalRate[0]"/> life per second.</c>
 Button/Tooltip/AP_BuildAutoTurret=Automated defensive turret. Times out after <d ref="Behavior,AP_AutoTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BuildCyclone=Mobile assault vehicle. Can use Lock On to quickly fire while moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BuildFortifiedBunker=Upgrades the Bunker to have 150 additional life. Cannot be garrisoned while the Bunker is upgrading.
@@ -542,6 +543,7 @@ Button/Tooltip/AP_Goliath=Heavy-fire support unit.<n/><n/><c val="#ColorAttackIn
 Button/Tooltip/AP_GroovedSpines=Hydralisk gains +1 attack range.
 Button/Tooltip/AP_HammerSecurity=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Heal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_MedivacHeal,RechargeVitalRate*Effect,AP_MedivacHeal,DrainVitalCostFactor"/> life per 1 energy.</c>
+Button/Tooltip/AP_HealingDrone=Heals nearby biological and mechanical units.<n/>Times out after <d ref="Behavior,AP_HealingDroneTimedLife,Duration"/> seconds.
 Button/Tooltip/AP_Hellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_HellstormMissileBatteries=The Missile Turret unleashes an additional flurry of missiles with each attack.
 Button/Tooltip/AP_HelsAngelAssault=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -569,10 +571,10 @@ Button/Tooltip/AP_HiveMindEmulator=Defensive structure. Can permanently Mind Con
 Button/Tooltip/AP_HotSRoachDamage=Roach gains +<d ref="Upgrade,AP_HotSRoachDamage,EffectArray[0].Value / Effect,AP_AcidSalivaU"/> damage vs. light units.
 Button/Tooltip/AP_HotSRoachShield=Roach gains +<d ref="Behavior,AP_RoachShield,Modification[0].LifeArmorBonus"/> armor when life is under 50%.
 Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
-Button/Tooltip/AP_Hyperjump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
 Button/Tooltip/AP_Hydralisk=High-damage ranged unit.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Button/Tooltip/AP_HydraliskFrenzy=Attack speed increased by 50% for <d ref="Behavior,AP_HydraliskFrenzy,Duration"/> seconds.
 Button/Tooltip/AP_HydraliskLurkerEgg=This cocoon contains a Hydralisk that is morphing into a Lurker.
+Button/Tooltip/AP_Hyperjump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
 Button/Tooltip/AP_ImmortalityProtocol=Allows a destroyed Thor to be rebuilt in the field.
 Button/Tooltip/AP_Impaler=Long-range anti-armor ambusher. Must burrow to attack.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ImpalerBurrowed=Long-range anti-armor ambusher. Must burrow to attack.<n/><n/><c val="ffff8a">Can attack ground units.</c>
@@ -728,8 +730,6 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_BioMechanicalHeal=Heals a friendly biological or mechanical unit.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_HealingDroneHeal,RechargeVitalRate[0]"/> life per second.</c>
-Button/Tooltip/AP_HealingDrone=Heals nearby biological and mechanical units.<n/>Times out after <d ref="Behavior,AP_HealingDroneTimedLife,Duration"/> seconds.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -917,6 +917,7 @@ Effect/Name/AP_HammerSecurityLM=Hammer Security LM
 Effect/Name/AP_HammerSecuritySet=Concussive Grenade (Set)
 Effect/Name/AP_HealRemoveTargetBehavior=Heal Remove Target Behavior
 Effect/Name/AP_HealScanPersistent=Heal Scan Persistent
+Effect/Name/AP_HealingDroneHeal=Heal
 Effect/Name/AP_HotSUltraliskKaiserBlades=Hot SUltralisk Kaiser Blades
 Effect/Name/AP_HotSUltraliskKaiserBladesDamage=Hot SUltralisk Kaiser Blades Damage
 Effect/Name/AP_HotSUltraliskKaiserBladesSearch=Hot SUltralisk Kaiser Blades Search
@@ -1213,8 +1214,8 @@ Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
-Effect/Name/AP_HealingDroneHeal=Heal
 Effect/Name/Kill2=Kill
+Effect/Name/AP_NeedleSpinesDamage=Needle Spines
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
 RequirementNode/Tooltip/AP_CountUnitFactoryCompleteOnly=Factory
@@ -1286,6 +1287,7 @@ Unit/Name/AP_GoliathAWeapon=Goliath Air Weapon
 Unit/Name/AP_HailstormMissilesWeapon=Hellstorm Missiles
 Unit/Name/AP_HammerSecurity=Hammer Securities
 Unit/Name/AP_HammerSecurityLMWeapon=Hammer Securities
+Unit/Name/AP_HealingDrone=Bio-Mechanical Repair Drone
 Unit/Name/AP_Hellion=Hellion
 Unit/Name/AP_HelsAngelAssault=Hel's Angel
 Unit/Name/AP_HelsAngelFighter=Hel's Angel
@@ -1385,7 +1387,6 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_HealingDrone=Bio-Mechanical Repair Drone
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
 UnitSubtitle/AP_HydraliskImpaler=Impaler Strain
 UnitSubtitle/AP_HydraliskLurker=Lurker Strain
@@ -1683,6 +1684,7 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
+Weapon/Name/AP_NeedleSpines=Needle Spines
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_Lurker=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>

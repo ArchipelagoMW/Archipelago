@@ -7194,7 +7194,7 @@
         <AbilArray Link="AP_MorphRoachToImpaler"/>
         <AbilArray Link="AP_MorphHydraliskToLurker"/>
         <WeaponArray Link="AP_HydraliskMelee"/>
-        <WeaponArray Link="NeedleSpines"/>
+        <WeaponArray Link="AP_NeedleSpines"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
             <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
@@ -7286,6 +7286,10 @@
         <KillDisplay value="Always"/>
         <RankDisplay value="Always"/>
         <AIEvaluateAlias value="AP_Hydralisk"/>
+    </CUnit>
+    <CUnit id="AP_NeedleSpinesWeapon" parent="MISSILE">
+        <Name value="Unit/Name/HydraliskGroundWeapon"/>
+        <Mover value="NeedleSpinesWeapon"/>
     </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->

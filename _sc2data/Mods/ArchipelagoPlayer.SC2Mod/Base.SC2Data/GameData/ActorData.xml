@@ -382,17 +382,17 @@
         <Macros value="TerrainSquibAnimations"/>
         <Macros value="PhysicsDeathsSwarmGround"/>
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
-        <On Terms="WeaponStart.NeedleSpines.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart AttackSuperior Attack,Superior"/>
-        <On Terms="WeaponStart.NeedleSpines.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart AttackInferior Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NeedleSpines.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart AttackSuperior Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NeedleSpines.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart AttackInferior Attack,Inferior"/>
         <On Terms="WeaponStart.AP_HydraliskMelee.AttackStart" Send="AnimPlay AttackCover Attack,Cover"/>
-        <On Terms="WeaponStart.NeedleSpines.AttackStart" Send="AnimBracketStart Attack Attack"/>
-        <On Terms="WeaponStop.NeedleSpines.AttackStop" Send="AnimBracketStop AttackSuperior"/>
-        <On Terms="WeaponStop.NeedleSpines.AttackStop" Send="AnimBracketStop AttackInferior"/>
-        <On Terms="WeaponStop.NeedleSpines.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NeedleSpines.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NeedleSpines.AttackStop" Send="AnimBracketStop AttackSuperior"/>
+        <On Terms="WeaponStop.AP_NeedleSpines.AttackStop" Send="AnimBracketStop AttackInferior"/>
+        <On Terms="WeaponStop.AP_NeedleSpines.AttackStop" Send="AnimBracketStop Attack"/>
         <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
         <On Terms="WeaponStart.AP_HydraliskMelee.AttackStart; AnimPlaying AttackCover Cover,00" Send="TimerSet 0.400000 MeleeAttackLaunch"/>
         <On Terms="WeaponStart.AP_HydraliskMelee.AttackStart; AnimPlaying AttackCover Cover,01" Send="TimerSet 0.100000 MeleeAttackLaunch"/>
-        <On Terms="TimerExpired; TimerName MeleeAttackLaunch" Send="Create HydraliskMeleeAttackLaunch"/>
+        <On Terms="TimerExpired; TimerName MeleeAttackLaunch" Send="Create AP_HydraliskMeleeAttackLaunch"/>
         <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowDownMedium"/>
         <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Hydralisk; MorphTo AP_HydraliskBurrowed" Send="AnimClear Burrow"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Hydralisk; MorphFrom AP_HydraliskBurrowed" Send="AnimBracketStop Burrow"/>
@@ -4316,11 +4316,11 @@
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSImpaler" Send="Create AP_HydraliskImpaler"/>
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSImpaler" Send="Destroy"/>
     </CActorUnit>
-    <CActorAction id="AP_HydraliskAttack" parent="GenericAttack" effectImpact="NeedleSpinesDamage" effectLaunch="AP_NeedleSpinesLaunchMissile">
+    <CActorAction id="AP_HydraliskAttack" parent="GenericAttack" effectImpact="AP_NeedleSpinesDamage" effectLaunch="AP_NeedleSpinesLaunchMissile">
         <LaunchSiteOps Ops="SOpAttachHarness SOpForwardImpactGuide"/>
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0"/>
         <LaunchAssets Sound="Hydralisk_GroundAttackLaunch"/>
-        <Missile value="HydraliskAttackMissile"/>
+        <Missile value="AP_HydraliskAttackMissile"/>
         <ImpactMap index="None" Model="HydraliskAttackImpact" Sound="Hydralisk_AttackImpactRanged"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
         <ImpactPhysics Name="NeedleSpinesImpact" MatchKeys="Basic" Physics="AP_HydraliskAttackDeathForce"/>
@@ -4375,7 +4375,7 @@
             <Image value="Assets\Textures\Wireframe-Zerg-HydraliskEx1B.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorAction id="AP_HydraliskMeleeAttack" parent="GenericAttack" effectAttack="HydraliskMelee">
+    <CActorAction id="AP_HydraliskMeleeAttack" parent="GenericAttack" effectAttack="AP_HydraliskMelee">
         <ImpactPhysics>
             <Name value="Attack"/>
             <MatchKeys value="Basic"/>
@@ -4417,6 +4417,12 @@
     </CActorForceConeRoundedEnd>
     <CActorSound id="AP_Hydra_Land" parent="SoundOneShot"/>
     <CActorSplat id="AP_HydraliskBurrowedSplat" parent="BurrowedSplat" unitName="AP_Hydralisk"/>
+    <CActorMissile id="AP_HydraliskAttackMissile" parent="GenericAttackMissile" unitName="AP_NeedleSpinesWeapon">
+        <Model value="NeedleSpinesWeapon"/>
+    </CActorMissile>
+    <CActorSound id="AP_HydraliskMeleeAttackLaunch" parent="SoundOneShot">
+        <Sound value="Hydralisk_MeleeAttackLaunch"/>
+    </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->

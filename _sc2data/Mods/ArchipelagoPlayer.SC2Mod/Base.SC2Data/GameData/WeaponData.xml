@@ -659,7 +659,6 @@
         <Options index="Hidden" value="1"/>
         <Options index="OnlyFireWhileInAttackOrder" value="0"/>
         <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
-        <Options index="LinkedCooldown" value="1"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
         <DisplayEffect value="AP_DRBattlecruiserGU"/>
         <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
@@ -681,7 +680,6 @@
         <Options index="Hidden" value="1"/>
         <Options index="OnlyFireWhileInAttackOrder" value="0"/>
         <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
-        <Options index="LinkedCooldown" value="1"/>
         <Icon value="Assets\Textures\btn-upgrade-terran-shipweaponslevel0.dds"/>
         <DisplayEffect value="AP_DRBattlecruiserGU"/>
         <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
@@ -1002,5 +1000,14 @@
         <Period value="0.83"/>
         <DamagePoint value="0.3"/>
         <Effect value="AP_HydraliskMeleeSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NeedleSpines">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_NeedleSpinesDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Period value="0.83"/>
+        <DamagePoint value="0.208"/>
+        <Effect value="AP_NeedleSpinesLaunchMissile"/>
     </CWeaponLegacy>
 </Catalog>
