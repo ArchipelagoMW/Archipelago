@@ -516,7 +516,7 @@
         group: Crossroads Doors
         panels:
           - BEND HI
-      Shortcut to Roof:
+      Roof Access:
         id: Tower Room Area Doors/Door_level_6_2
         skip_location: True
         panels:
@@ -1547,7 +1547,7 @@
       Orange Tower Seventh Floor: True
       Crossroads:
         room: Crossroads
-        door: Shortcut to Roof
+        door: Roof Access
     panels:
       MASTERY (1):
         id: Master Room/Panel_mastery_mastery6
