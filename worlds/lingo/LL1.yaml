@@ -2851,13 +2851,35 @@
       - id: pencil_painting5
         disable: True
         orientation: south
-  Knight Night Room:
+  Knight Night Entrance:
     # For now, let's just let the doors in here be vanilla.
     # We will allow reverse progression because it works if the exit is open.
     entrances:
       Hidden Room:
         room: Hidden Room
         door: Knight Night Entrance
+      Knight Night Room: True
+    panels:
+      TRUST (1):
+        id: Appendix Room/Panel_trust_crust
+        colors:
+          - red
+          - blue
+      TRUST (2):
+        id: Appendix Room/Panel_trust_crust_2
+        colors: purple
+    doors:
+      Progression:
+        event: True
+        panels:
+          - TRUST (1)
+          - TRUST (2)
+  Knight Night Room:
+    entrances:
+      Knight Night Entrance:
+        - door: Exit
+        - room: Knight Night Entrance
+          door: Progression
       Orange Tower Third Floor:
         door: Exit
       Outside The Initiated:
@@ -2866,12 +2888,7 @@
       TRUSTED:
         id: Appendix Room/Panel_trusted_readjusted
         colors:
-          # We'll pretend this is also red and blue because solving the other
-          # panels is required for getting here. Not technically true if reverse
-          # progression but it's okay to have little a out-of-logic as a treat.
           - purple
-          - red
-          - blue
       SEVEN (1):
         id: Backside Room/Panel_seven_seven_7
         required_door:
