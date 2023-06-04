@@ -33,7 +33,7 @@ class PokemonWebWorld(WebWorld):
     )]
 
 
-class PokemonRedBlueWorldX(World):
+class PokemonRedBlueWorld(World):
     """Pokémon Red and Pokémon Blue are the original monster-collecting turn-based RPGs.  Explore the Kanto region with
     your Pokémon, catch more than 150 unique creatures, earn badges from the region's Gym Leaders, and challenge the
     Elite Four to become the champion!"""
@@ -107,6 +107,12 @@ class PokemonRedBlueWorldX(World):
                      or self.multiworld.randomize_wild_pokemon[self.player] == "vanilla"
                      or self.multiworld.randomize_legendary_pokemon[self.player] != "any")):
             self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("items")
+
+        if self.multiworld.extra_key_items[self.player]:
+            self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
+            self.multiworld.dexsanity[self.player] = self.multiworld.dexsanity[self.player].from_text("off")
+            self.multiworld.randomize_hidden_items[self.player] = \
+                self.multiworld.randomize_hidden_items[self.player].from_text("off")
 
         if self.multiworld.badges_needed_for_hm_moves[self.player].value >= 2:
             badges_to_add = ["Marsh Badge", "Volcano Badge", "Earth Badge"]
@@ -186,13 +192,15 @@ class PokemonRedBlueWorldX(World):
         # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
         # to the way effectiveness messages are generated.
         self.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
-       #self.multiworld.early_items[self.player]["Exp. All"] = 1
 
     def create_items(self) -> None:
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
         if self.multiworld.randomize_pokedex[self.player] == "start_with":
             start_inventory["Pokedex"] = 1
             self.multiworld.push_precollected(self.create_item("Pokedex"))
+        if self.multiworld.exp_all[self.player] == "start_with":
+            start_inventory["Exp. All"] = 1
+            self.multiworld.push_precollected(self.create_item("Exp. All"))
 
         locations = [location for location in location_data if location.type in ("Item", "Trainer Parties")]
         item_pool = []
@@ -205,20 +213,18 @@ class PokemonRedBlueWorldX(World):
             event = location.event
             if not location.inclusion(self.multiworld, self.player):
                 continue
-            if location.original_item in self.multiworld.start_inventory[self.player].value and \
-                    location.original_item in item_groups["Unique"]:
-                start_inventory[location.original_item] -= 1
+
+            if location.original_item is None:
                 item = self.create_filler()
-            elif location.original_item is None:
+            elif location.original_item == "Exp. All" and self.multiworld.exp_all[self.player] == "remove":
                 item = self.create_filler()
             elif location.original_item == "Pokedex":
                 if self.multiworld.randomize_pokedex[self.player] == "vanilla":
                     self.multiworld.get_location(location.name, self.player).event = True
                     event = True
                 item = self.create_item("Pokedex")
-            elif location.original_item == "Moon Stone" and self.multiworld.stonesanity[self.player] and stones:
-                stone = self.multiworld.random.choice(stones)
-                stones.remove(stone)
+            elif location.original_item == "Moon Stone" and self.multiworld.stonesanity[self.player]:
+                stone = stones.pop()
                 item = self.create_item(stone, self.player)
             elif location.original_item.startswith("TM"):
                 if self.multiworld.randomize_tm_moves[self.player]:
@@ -234,6 +240,17 @@ class PokemonRedBlueWorldX(World):
                 if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
                         <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
+
+            if not location.event and (self.multiworld.key_items_only[self.player] and (item.classification not in
+                                       (ItemClassification.progression, ItemClassification.progression_skip_balancing,
+                                        ItemClassification.useful) or item.name.startswith("TM"))):
+                continue
+
+            if item.name in start_inventory and start_inventory[item.name] > 0 and \
+                    location.original_item in item_groups["Unique"]:
+                start_inventory[location.original_item] -= 1
+                item = self.create_filler()
+
             if event:
                 loc = self.multiworld.get_location(location.name, self.player)
                 loc.place_locked_item(item)
@@ -244,16 +261,20 @@ class PokemonRedBlueWorldX(World):
                 item_pool.append(item)
 
         self.multiworld.random.shuffle(item_pool)
-
-        while self.multiworld.stonesanity[self.player] and stones:
-            for item in item_pool:
-                if item.name in self.item_name_groups["Consumables"]:
-                    item_pool.remove(item)
-                    item_pool.append(self.create_item(stones.pop()))
-                    break
-
-
-        self.multiworld.random.shuffle(item_pool)
+        advancement_items = [item.name for item in item_pool if item.advancement] \
+            + [item.name for item in self.multiworld.precollected_items[self.player] if item.advancement]
+        total_advancement_items = len(
+            [item for item in ["Bicycle", "Silph Scope", "Item Finder", "Super Rod", "Good Rod",
+                               "Old Rod", "Lift Key", "Card Key", "Town Map", "Coin Case", "S.S. Ticket",
+                               "Secret Key", "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key",
+                               "Hideout Key", "Card Key 2F", "Card Key 3F", "Card Key 4F", "Card Key 5F",
+                               "Card Key 6F", "Card Key 7F", "Card Key 8F", "Card Key 9F", "Card Key 10F",
+                               "Card Key 11F", "Exp. All", "Fire Stone", "Thunder Stone", "Water Stone",
+                               "Leaf Stone"] if item in advancement_items])
+        if "Progressive Card Key" in advancement_items:
+            total_advancement_items += 10
+        self.multiworld.cerulean_cave_key_items_condition[self.player].total = round((100 / total_advancement_items)
+            * self.multiworld.cerulean_cave_key_items_condition[self.player].value)
 
         self.multiworld.itempool += item_pool
 
@@ -264,7 +285,7 @@ class PokemonRedBlueWorldX(World):
         pokemon_locs = [location.name for location in location_data if location.type != "Item"]
         for location in self.multiworld.get_locations(self.player):
             if location.name in pokemon_locs:
-                 location.show_in_spoiler = False
+                location.show_in_spoiler = False
 
         def intervene(move):
             accessible_slots = [loc for loc in self.multiworld.get_reachable_locations(test_state, self.player) if loc.type == "Wild Encounter"]
@@ -299,13 +320,16 @@ class PokemonRedBlueWorldX(World):
                 intervene_move = "Strength"
             # cut may not be needed if accessibility is minimal, unless you need all 8 badges and badgesanity is off,
             # as you will require cut to access celadon gyn
-            if (self.multiworld.accessibility[self.player] != "minimal" or ((not
-                self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_condition[self.player],
-                                                                 self.multiworld.victory_road_condition[self.player]) > 7)):
+            if self.multiworld.accessibility[self.player] != "minimal" or ((not
+                    self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_condition[self.player],
+                    self.multiworld.route_22_gate_condition[self.player],
+                    self.multiworld.victory_road_condition[self.player])
+                    > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")):
                 if not test_state.pokemon_rb_can_cut(self.player):
                     intervene_move = "Cut"
-            if (self.multiworld.accessibility[self.player].current_key != "minimal" and
-                (self.multiworld.trainersanity[self.player] or self.multiworld.extra_key_items[self.player])):
+            if (not self.multiworld.dark_rock_tunnel_logic[self.player]) and ((self.multiworld.accessibility[
+                    self.player] != "minimal" and (self.multiworld.trainersanity[self.player] or
+                    self.multiworld.extra_key_items[self.player])) or self.multiworld.door_shuffle[self.player]):
                 if not test_state.pokemon_rb_can_flash(self.player):
                     intervene_move = "Flash"
             if intervene_move:
@@ -316,25 +340,38 @@ class PokemonRedBlueWorldX(World):
             else:
                 break
 
+        # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
+        # fail. Re-use test_state from previous final loop.
+        evolutions_region = self.multiworld.get_region("Evolution", self.player)
+        clear_cache = False
+        for location in evolutions_region.locations.copy():
+            if not test_state.can_reach(location, player=self.player):
+                evolutions_region.locations.remove(location)
+                # print(f"deleting {location.name}")
+                clear_cache = True
+        if clear_cache:
+            self.multiworld.clear_location_cache()
+
         tms = [item for item in self.multiworld.itempool if item.player == self.player and item.name.startswith("TM")]
-        for gym_leader in (("Pewter Gym", "Brock"), ("Cerulean Gym", "Misty"), ("Vermilion Gym", "Lt. Surge"),
-                            ("Celadon Gym-C", "Erika"), ("Fuchsia Gym", "Koga"), ("Saffron Gym-C", "Sabrina"),
-                            ("Cinnabar Gym", "Blaine"), ("Viridian Gym", "Giovanni")):
-            for party in self.multiworld.get_location(gym_leader[0] + " - Trainer Parties", self.player).party_data:
-                if party["party_address"] == f"Trainer_Party_{gym_leader[1].replace('. ', '').replace('Giovanni', 'Viridian_Gym_Giovanni')}_A":
-                    mon = party["party"][-1]
-                    learnable_tms = [tm for tm in tms if self.local_poke_data[mon]["tms"][
-                        int((int(tm.name[2:4]) - 1) / 8)] & 1 << ((int(tm.name[2:4]) - 1) % 8)]
-                    if not learnable_tms:
-                        learnable_tms = tms
-                    tm = self.multiworld.random.choice(learnable_tms)
-                    self.multiworld.get_location(f"{gym_leader[0].split('-')[0]} - {gym_leader[1]} TM",
-                                                 self.player).place_locked_item(tm)
-                    tms.remove(tm)
-                    self.multiworld.itempool.remove(tm)
-                    break
-            else:
-                raise Exception("Missing Gym Leader data")
+        if len(tms) > 7:
+            for gym_leader in (("Pewter Gym", "Brock"), ("Cerulean Gym", "Misty"), ("Vermilion Gym", "Lt. Surge"),
+                                ("Celadon Gym-C", "Erika"), ("Fuchsia Gym", "Koga"), ("Saffron Gym-C", "Sabrina"),
+                                ("Cinnabar Gym", "Blaine"), ("Viridian Gym", "Giovanni")):
+                for party in self.multiworld.get_location(gym_leader[0] + " - Trainer Parties", self.player).party_data:
+                    if party["party_address"] == f"Trainer_Party_{gym_leader[1].replace('. ', '').replace('Giovanni', 'Viridian_Gym_Giovanni')}_A":
+                        mon = party["party"][-1]
+                        learnable_tms = [tm for tm in tms if self.local_poke_data[mon]["tms"][
+                            int((int(tm.name[2:4]) - 1) / 8)] & 1 << ((int(tm.name[2:4]) - 1) % 8)]
+                        if not learnable_tms:
+                            learnable_tms = tms
+                        tm = self.multiworld.random.choice(learnable_tms)
+                        self.multiworld.get_location(f"{gym_leader[0].split('-')[0]} - {gym_leader[1]} TM",
+                                                     self.player).place_locked_item(tm)
+                        tms.remove(tm)
+                        self.multiworld.itempool.remove(tm)
+                        break
+                else:
+                    raise Exception("Missing Gym Leader data")
 
         if self.multiworld.old_man[self.player] == "early_parcel":
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
@@ -384,16 +421,17 @@ class PokemonRedBlueWorldX(World):
                 if loc.item is None:
                     locs.add(loc)
 
-        loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
-        if loc.item is None:
-            locs.add(loc)
+        if not self.multiworld.key_items_only[self.player]:
+            loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
+            if loc.item is None:
+                locs.add(loc)
 
         for loc in sorted(locs):
             unplaced_items = []
             if loc.name in self.multiworld.priority_locations[self.player].value:
                 add_item_rule(loc, lambda i: i.advancement)
             add_item_rule(loc, lambda i: i.player == self.player)
-            for item in reversed(self.multiworld.itempool):
+            for item in self.multiworld.itempool.copy():
                 if item.player == self.player and loc.can_fill(self.multiworld.state, item, False):
                     self.multiworld.itempool.remove(item)
                     if item.advancement:
@@ -406,18 +444,18 @@ class PokemonRedBlueWorldX(World):
                         unplaced_items.append(item)
             self.multiworld.itempool += unplaced_items
 
-
-
-
-
     def create_regions(self):
-        #  or self.multiworld.town_map_fly_location[self.player]:
-        if self.multiworld.old_man[self.player].value == 0: # OR ENTRANCE SHUFFLE
+        if (self.multiworld.old_man[self.player] == "vanilla" or
+                self.multiworld.door_shuffle[self.player] in ("full", "insanity")):
             fly_map_codes = self.multiworld.random.sample(range(2, 11), 2)
+        elif (self.multiworld.door_shuffle[self.player] == "simple" or
+                self.multiworld.route_3_condition[self.player] == "boulder_badge" or
+              (self.multiworld.route_3_condition[self.player] == "any_badge" and
+               self.multiworld.badgesanity[self.player])):
+            fly_map_codes = self.multiworld.random.sample(range(3, 11), 2)
+
         else:
             fly_map_codes = self.multiworld.random.sample([4, 6, 7, 8, 9, 10], 2)
-        # else:
-        #     fly_map_code = 0
         if self.multiworld.free_fly_location[self.player]:
             fly_map_code = fly_map_codes[0]
         else:
@@ -470,7 +508,6 @@ class PokemonRedBlueWorldX(World):
             if location.name in pokemon_locs:
                 spoiler_handle.write(location.name + ": " + location.item.name + "\n")
 
-
     def get_filler_item_name(self) -> str:
         combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
         if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0:
@@ -490,8 +527,9 @@ class PokemonRedBlueWorldX(World):
         return self.multiworld.random.choice(self.traps)
 
     def extend_hint_information(self, hint_data):
-        if self.multiworld.dexsanity[self.player]:
+        if self.multiworld.dexsanity[self.player] or self.multiworld.door_shuffle[self.player]:
             hint_data[self.player] = {}
+        if self.multiworld.dexsanity[self.player]:
             mon_locations = {mon: set() for mon in poke_data.pokemon_data.keys()}
             for loc in location_data:
                 if loc.type in ["Wild Encounter", "Static Pokemon", "Legendary Pokemon", "Missable Pokemon"]:
@@ -503,6 +541,10 @@ class PokemonRedBlueWorldX(World):
                 if mon_locations[mon]:
                     hint_data[self.player][self.multiworld.get_location(f"Pokedex - {mon}", self.player).address] = \
                         ", ".join(mon_locations[mon])
+        if self.multiworld.door_shuffle[self.player]:
+            for location in self.multiworld.get_locations(self.player):
+                if location.parent_region.entrance_hint and location.address:
+                    hint_data[self.player][location.address] = location.parent_region.entrance_hint
 
     def fill_slot_data(self) -> dict:
         return {
@@ -519,6 +561,9 @@ class PokemonRedBlueWorldX(World):
             "old_man": self.multiworld.old_man[self.player].value,
             "elite_four_condition": self.multiworld.elite_four_condition[self.player].value,
             "victory_road_condition": self.multiworld.victory_road_condition[self.player].value,
+            "route_22_gate_condition": self.multiworld.route_22_gate_condition[self.player].value,
+            "route_3_condition": self.multiworld.route_3_condition[self.player].value,
+            "robbed_house_officer": self.multiworld.robbed_house_officer[self.player].value,
             "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
             "cerulean_cave_condition": self.multiworld.cerulean_cave_condition[self.player].value,
             "free_fly_map": self.fly_map_code,
@@ -528,7 +573,8 @@ class PokemonRedBlueWorldX(World):
             "randomize_pokedex": self.multiworld.randomize_pokedex[self.player].value,
             "trainersanity": self.multiworld.trainersanity[self.player].value,
             "death_link": self.multiworld.death_link[self.player].value,
-            "prizesanity": self.multiworld.prizesanity[self.player].value
+            "prizesanity": self.multiworld.prizesanity[self.player].value,
+            "key_items_only": self.multiworld.key_items_only[self.player].value,
         }
 
 

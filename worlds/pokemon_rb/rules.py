@@ -5,8 +5,13 @@ from .items import item_groups
 def set_rules(world, player):
 
     item_rules = {
-        "Player's House 2F - Player's PC": (lambda i: i.player == player and "Badge" not in i.name and "Trap" not in i.name
-                                      and i.name != "Pokedex" and "Coins" not in i.name)
+        # Some items do special things when they are passed into the GiveItem function in the game, but
+        # withdrawing from the PC or buying from a shop will not call the function and will add the items
+        # directly to the inventory, so we need to avoid placing these special items (including "AP Item") to
+        # such places
+        "Player's House 2F - Player's PC": (lambda i: i.player == player and "Badge" not in i.name and "Trap" not in
+                                            i.name and i.name != "Pokedex" and "Coins" not in i.name and "Progressive"
+                                            not in i.name)
     }
 
     if world.prizesanity[player]:
@@ -70,7 +75,7 @@ def set_rules(world, player):
         "Celadon Prize Corner - Pokemon Prize - 6": lambda state: state.has("Coin Case", player),
         "Cinnabar Lab Fossil Room - Old Amber Pokemon": lambda state: state.has("Old Amber", player) and state.has("Cinnabar Island", player),
         "Cinnabar Lab Fossil Room - Helix Fossil Pokemon": lambda state: state.has("Helix Fossil", player) and state.has("Cinnabar Island", player),
-        "Cinnabar Lab Fossil Room - Dome Fossil Pokemon": lambda state: state.has("Dome Fossil", player and state.has("Cinnabar Island", player)),
+        "Cinnabar Lab Fossil Room - Dome Fossil Pokemon": lambda state: state.has("Dome Fossil", player) and state.has("Cinnabar Island", player),
         "Route 12 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Route 16 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Seafoam Islands B4F - Legendary Pokemon": lambda state: state.pokemon_rb_can_strength(player) and state.pokemon_rb_can_surf(player),
@@ -193,6 +198,80 @@ def set_rules(world, player):
         "Cerulean City - Hidden Item Gym Badge Guy's Backyard": lambda state: state.pokemon_rb_can_get_hidden_items(
             player),
         "Route 4 - Hidden Item Plateau East Of Mt Moon": lambda state: state.pokemon_rb_can_get_hidden_items(player),
+
+        # Evolutions
+        "Evolution - Ivysaur": lambda state: state.has("Bulbasaur", player) and state.pokemon_rb_evolve_level(16, player),
+        "Evolution - Venusaur": lambda state: state.has("Ivysaur", player) and state.pokemon_rb_evolve_level(32, player),
+        "Evolution - Charmeleon": lambda state: state.has("Charmander", player) and state.pokemon_rb_evolve_level(16, player),
+        "Evolution - Charizard": lambda state: state.has("Charmeleon", player) and state.pokemon_rb_evolve_level(36, player),
+        "Evolution - Wartortle": lambda state: state.has("Squirtle", player) and state.pokemon_rb_evolve_level(16, player),
+        "Evolution - Blastoise": lambda state: state.has("Wartortle", player) and state.pokemon_rb_evolve_level(36, player),
+        "Evolution - Metapod": lambda state: state.has("Caterpie", player) and state.pokemon_rb_evolve_level(7, player),
+        "Evolution - Butterfree": lambda state: state.has("Metapod", player) and state.pokemon_rb_evolve_level(10, player),
+        "Evolution - Kakuna": lambda state: state.has("Weedle", player) and state.pokemon_rb_evolve_level(7, player),
+        "Evolution - Beedrill": lambda state: state.has("Kakuna", player) and state.pokemon_rb_evolve_level(10, player),
+        "Evolution - Pidgeotto": lambda state: state.has("Pidgey", player) and state.pokemon_rb_evolve_level(18, player),
+        "Evolution - Pidgeot": lambda state: state.has("Pidgeotto", player) and state.pokemon_rb_evolve_level(36, player),
+        "Evolution - Raticate": lambda state: state.has("Rattata", player) and state.pokemon_rb_evolve_level(20, player),
+        "Evolution - Fearow": lambda state: state.has("Spearow", player) and state.pokemon_rb_evolve_level(20, player),
+        "Evolution - Arbok": lambda state: state.has("Ekans", player) and state.pokemon_rb_evolve_level(22, player),
+        "Evolution - Raichu": lambda state: state.has("Pikachu", player) and state.has("Thunder Stone", player),
+        "Evolution - Sandslash": lambda state: state.has("Sandshrew", player) and state.pokemon_rb_evolve_level(22, player),
+        "Evolution - Nidorina": lambda state: state.has("Nidoran F", player) and state.pokemon_rb_evolve_level(16, player),
+        "Evolution - Nidoqueen": lambda state: state.has("Nidorina", player) and state.has("Moon Stone", player),
+        "Evolution - Nidorino": lambda state: state.has("Nidoran M", player) and state.pokemon_rb_evolve_level(16, player),
+        "Evolution - Nidoking": lambda state: state.has("Nidorino", player) and state.has("Moon Stone", player),
+        "Evolution - Clefable": lambda state: state.has("Clefairy", player) and state.has("Moon Stone", player),
+        "Evolution - Ninetales": lambda state: state.has("Vulpix", player) and state.has("Fire Stone", player),
+        "Evolution - Wigglytuff": lambda state: state.has("Jigglypuff", player) and state.has("Moon Stone", player),
+        "Evolution - Golbat": lambda state: state.has("Zubat", player) and state.pokemon_rb_evolve_level(22, player),
+        "Evolution - Gloom": lambda state: state.has("Oddish", player) and state.pokemon_rb_evolve_level(21, player),
+        "Evolution - Vileplume": lambda state: state.has("Gloom", player) and state.has("Leaf Stone", player),
+        "Evolution - Parasect": lambda state: state.has("Paras", player) and state.pokemon_rb_evolve_level(24, player),
+        "Evolution - Venomoth": lambda state: state.has("Venonat", player) and state.pokemon_rb_evolve_level(31, player),
+        "Evolution - Dugtrio": lambda state: state.has("Diglett", player) and state.pokemon_rb_evolve_level(26, player),
+        "Evolution - Persian": lambda state: state.has("Meowth", player) and state.pokemon_rb_evolve_level(28, player),
+        "Evolution - Golduck": lambda state: state.has("Psyduck", player) and state.pokemon_rb_evolve_level(33, player),
+        "Evolution - Primeape": lambda state: state.has("Mankey", player) and state.pokemon_rb_evolve_level(28, player),
+        "Evolution - Arcanine": lambda state: state.has("Growlithe", player) and state.has("Fire Stone", player),
+        "Evolution - Poliwhirl": lambda state: state.has("Poliwag", player) and state.pokemon_rb_evolve_level(25, player),
+        "Evolution - Poliwrath": lambda state: state.has("Poliwhirl", player) and state.has("Water Stone", player),
+        "Evolution - Kadabra": lambda state: state.has("Abra", player) and state.pokemon_rb_evolve_level(16, player),
+        "Evolution - Alakazam": lambda state: state.has("Kadabra", player) and state.pokemon_rb_evolve_level(35, player),
+        "Evolution - Machoke": lambda state: state.has("Machop", player) and state.pokemon_rb_evolve_level(28, player),
+        "Evolution - Machamp": lambda state: state.has("Machoke", player) and state.pokemon_rb_evolve_level(35, player),
+        "Evolution - Weepinbell": lambda state: state.has("Bellsprout", player) and state.pokemon_rb_evolve_level(21, player),
+        "Evolution - Victreebel": lambda state: state.has("Weepinbell", player) and state.has("Leaf Stone", player),
+        "Evolution - Tentacruel": lambda state: state.has("Tentacool", player) and state.pokemon_rb_evolve_level(30, player),
+        "Evolution - Graveler": lambda state: state.has("Geodude", player) and state.pokemon_rb_evolve_level(25, player),
+        "Evolution - Golem": lambda state: state.has("Graveler", player) and state.pokemon_rb_evolve_level(35, player),
+        "Evolution - Rapidash": lambda state: state.has("Ponyta", player) and state.pokemon_rb_evolve_level(40, player),
+        "Evolution - Slowbro": lambda state: state.has("Slowpoke", player) and state.pokemon_rb_evolve_level(37, player),
+        "Evolution - Magneton": lambda state: state.has("Magnemite", player) and state.pokemon_rb_evolve_level(30, player),
+        "Evolution - Dodrio": lambda state: state.has("Doduo", player) and state.pokemon_rb_evolve_level(31, player),
+        "Evolution - Dewgong": lambda state: state.has("Seel", player) and state.pokemon_rb_evolve_level(34, player),
+        "Evolution - Muk": lambda state: state.has("Grimer", player) and state.pokemon_rb_evolve_level(38, player),
+        "Evolution - Cloyster": lambda state: state.has("Shellder", player) and state.has("Water Stone", player),
+        "Evolution - Haunter": lambda state: state.has("Gastly", player) and state.pokemon_rb_evolve_level(25, player),
+        "Evolution - Gengar": lambda state: state.has("Haunter", player) and state.pokemon_rb_evolve_level(35, player),
+        "Evolution - Hypno": lambda state: state.has("Drowzee", player) and state.pokemon_rb_evolve_level(26, player),
+        "Evolution - Kingler": lambda state: state.has("Krabby", player) and state.pokemon_rb_evolve_level(28, player),
+        "Evolution - Electrode": lambda state: state.has("Voltorb", player) and state.pokemon_rb_evolve_level(30, player),
+        "Evolution - Exeggutor": lambda state: state.has("Exeggcute", player) and state.has("Leaf Stone", player),
+        "Evolution - Marowak": lambda state: state.has("Cubone", player) and state.pokemon_rb_evolve_level(28, player),
+        "Evolution - Weezing": lambda state: state.has("Koffing", player) and state.pokemon_rb_evolve_level(35, player),
+        "Evolution - Rhydon": lambda state: state.has("Rhyhorn", player) and state.pokemon_rb_evolve_level(42, player),
+        "Evolution - Seadra": lambda state: state.has("Horsea", player) and state.pokemon_rb_evolve_level(32, player),
+        "Evolution - Seaking": lambda state: state.has("Goldeen", player) and state.pokemon_rb_evolve_level(33, player),
+        "Evolution - Starmie": lambda state: state.has("Staryu", player) and state.has("Water Stone", player),
+        "Evolution - Gyarados": lambda state: state.has("Magikarp", player) and state.pokemon_rb_evolve_level(33, player),
+        "Evolution - Vaporeon": lambda state: state.has("Eevee", player) and state.has("Water Stone", player),
+        "Evolution - Jolteon": lambda state: state.has("Eevee", player) and state.has("Thunder Stone", player),
+        "Evolution - Flareon": lambda state: state.has("Eevee", player) and state.has("Fire Stone", player),
+        "Evolution - Omastar": lambda state: state.has("Omanyte", player) and state.pokemon_rb_evolve_level(40, player),
+        "Evolution - Kabutops": lambda state: state.has("Kabuto", player) and state.pokemon_rb_evolve_level(40, player),
+        "Evolution - Dragonair": lambda state: state.has("Dratini", player) and state.pokemon_rb_evolve_level(30, player),
+        "Evolution - Dragonite": lambda state: state.has("Dragonair", player) and state.pokemon_rb_evolve_level(55, player),
     }
     for loc in world.get_locations(player):
         if loc.name in access_rules:

@@ -68,13 +68,22 @@ class ViridianGymCondition(Range):
     default = 7
 
 
-class CeruleanCaveCondition(Range):
-    """Number of badges, HMs, and key items (not counting items you can lose) required to access Cerulean Cave.
-    If extra_key_items is turned on, the number chosen will be increased by 4."""
-    display_name = "Cerulean Cave Condition"
+class CeruleanCaveBadgesCondition(Range):
+    """Number of badges needed to access the Cerulean Cave entrance in addition to the required Key Items."""
+    display_name = "Cerulean Cave Badges Condition"
     range_start = 0
-    range_end = 26
-    default = 20
+    range_end = 8
+    default = 8
+
+
+class CeruleanCaveKeyItemsCondition(Range):
+    """Percentage of available key items (not counting items you can lose) required to access the Cerulean Cave
+    entrance in addition to the required badges. Does not count HMs.
+    Evolution stones and Exp. All are key items in Archipelago."""
+    display_name = "Cerulean Cave Key Items Condition"
+    range_start = 0
+    range_end = 100
+    default = 50
 
 
 class Route3Condition(Choice):
@@ -132,12 +141,28 @@ class OldMan(Choice):
     default = 1
 
 
+class ExpAll(Choice):
+    """Choose how the Exp. All item is handled. It can be removed entirely, shuffled into the item pool, or you can
+    start with it."""
+    display_name = "Exp. All"
+    option_remove = 0
+    option_randomize = 1
+    option_start_with = 2
+    default = 1
+
+
 class RandomizePokedex(Choice):
     """Randomize the location of the Pokedex, or start with it. It is required to receive items from Oak's Aides."""
     display_name = "Randomize Pokedex"
     option_vanilla = 0
     option_randomize = 1
     option_start_with = 2
+    default = 0
+
+
+class KeyItemsOnly(Toggle):
+    """Shuffle only Key Items. This overrides Randomize Hidden Items, Trainersanity, and Dexsanity.
+    May have high generation failure rates for solo games or small multiworlds."""
     default = 0
 
 
@@ -307,7 +332,11 @@ class OaksAidRt15(Range):
 
 
 class Stonesanity(Toggle):
-    pass
+    """Removes the four evolution stones from the Celadon Department Store and replaces four of the five Moon Stones
+    in the item pool with the four shop stones. If randomize_hidden_items is off, this will cause the two hidden
+    Moon Stone locations to be randomized anyway. These are in Pokemon Mansion 1F and Mt Moon B2F."""
+    display_name = "Stonesanity"
+    default = 0
 
 
 class ExpModifier(SpecialRange):
@@ -463,7 +492,9 @@ class MoveBalancing(Toggle):
 
 
 class FixCombatBugs(Toggle):
-    """Fixes a variety of combat-related bugs."""
+    """Fixes a variety of combat-related bugs. Note that this fixes the Focus Energy bug. The Focus Energy bug causes
+    critical strike chances to be doubled when Focus Energy has not been used and halved when it is used.
+    Fixing this bug means critical strike chances outside the use of Focus Energy are quartered from the vanilla rate."""
     display_name = "Fix Combat Bugs"
     default = 1
 
@@ -561,6 +592,12 @@ class RandomizePokemonTypes(Choice):
     option_vanilla = 0
     option_follow_evolutions = 1
     option_randomize = 2
+    default = 0
+
+
+class RandomizeMoveTypes(Toggle):
+    """Randomize the types of each move."""
+    display_name = "Randomize Move Types"
     default = 0
 
 
@@ -755,9 +792,11 @@ pokemon_rb_options = {
     "route_3_condition": Route3Condition,
     "robbed_house_officer": RobbedHouseOfficer,
     "second_fossil_check_condition": SecondFossilCheckCondition,
+    "exp_all": ExpAll,
     "old_man": OldMan,
     "badgesanity": BadgeSanity,
     "badges_needed_for_hm_moves": BadgesNeededForHMMoves,
+    "key_items_only": KeyItemsOnly,
     "tea": Tea,
     "extra_key_items": ExtraKeyItems,
     "split_card_key": SplitCardKey,
@@ -809,6 +848,7 @@ pokemon_rb_options = {
     "hm_normal_type_compatibility": HMNormalTypeCompatibility,
     "hm_other_type_compatibility": HMOtherTypeCompatibility,
     "inherit_tm_hm_compatibility": InheritTMHMCompatibility,
+    "randomize_move_types": RandomizeMoveTypes,
     "randomize_pokemon_types": RandomizePokemonTypes,
     "secondary_type_chance": SecondaryTypeChance,
     "randomize_type_chart": RandomizeTypeChart,

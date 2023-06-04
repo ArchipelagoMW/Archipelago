@@ -40,13 +40,20 @@ class PokemonLogic(LogicMixin):
     def pokemon_rb_can_get_hidden_items(self, player):
         return self.has("Item Finder", player) or not self.multiworld.require_item_finder[player].value
 
-    def pokemon_rb_cerulean_cave(self, count, player):
-        return len([item for item in
-                    ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge", "Marsh Badge",
-                     "Volcano Badge", "Earth Badge", "Bicycle", "Silph Scope", "Item Finder", "Super Rod", "Good Rod",
-                     "Old Rod", "Lift Key", "Card Key", "Town Map", "Coin Case", "S.S. Ticket", "Secret Key",
-                     "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key", "Hideout Key", "HM01 Cut", "HM02 Fly",
-                     "HM03 Surf", "HM04 Strength", "HM05 Flash"] if self.has(item, player)]) >= count
+    def pokemon_rb_cerulean_cave(self, player):
+        badges = len([item for item in
+                      ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge", "Marsh Badge",
+                       "Volcano Badge", "Earth Badge"] if self.has(item, player)])
+        key_items = (len([item for item in ["Bicycle", "Silph Scope", "Item Finder", "Super Rod", "Good Rod",
+                                            "Old Rod", "Lift Key", "Card Key", "Town Map", "Coin Case", "S.S. Ticket",
+                                            "Secret Key", "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key",
+                                            "Hideout Key", "Card Key 2F", "Card Key 3F", "Card Key 4F", "Card Key 5F",
+                                            "Card Key 6F", "Card Key 7F", "Card Key 8F", "Card Key 9F", "Card Key 10F",
+                                            "Card Key 11F", "Exp. All", "Fire Stone", "Thunder Stone", "Water Stone",
+                                            "Leaf Stone"] if self.has(item, player)])
+                     + min(self.count("Progressive Card Key", player), 10))
+        return (badges >= self.multiworld.cerulean_cave_badge_condition[self.player].value
+                and key_items >= self.multiworld.cerulean_cave_key_items_condition[self.player].total)
 
     def pokemon_rb_can_pass_guards(self, player):
         if self.multiworld.tea[player].value:
@@ -92,3 +99,8 @@ class PokemonLogic(LogicMixin):
 
     def pokemon_rb_rock_tunnel(self, player):
         return self.pokemon_rb_can_flash(player) or not self.multiworld.dark_rock_tunnel_logic[player]
+
+    def pokemon_rb_evolve_level(self, level, player):
+        return len([item for item in (
+            "Defeat Brock", "Defeat Misty", "Defeat Lt. Surge", "Defeat Erika", "Defeat Koga", "Defeat Blaine",
+            "Defeat Sabrina", "Defeat Viridian Gym Giovanni") if self.has(item, player)]) > level / 7

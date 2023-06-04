@@ -11,6 +11,7 @@ from .rock_tunnel import randomize_rock_tunnel
 from .regions import PokemonRBWarp, map_ids
 import worlds.pokemon_rb.poke_data as poke_data
 
+
 def choose_forced_type(chances, random):
     n = random.randint(1, 100)
     for chance in chances:
@@ -19,10 +20,10 @@ def choose_forced_type(chances, random):
     return None
 
 
-def filter_moves(moves, type, random):
+def filter_moves(local_move_data, moves, type, random):
     ret = []
     for move in moves:
-        if poke_data.moves[move]["type"] == type or type is None:
+        if local_move_data[move]["type"] == type or type is None:
             ret.append(move)
     random.shuffle(ret)
     return ret
@@ -30,16 +31,13 @@ def filter_moves(moves, type, random):
 
 def get_move(local_move_data, moves, chances, random, starting_move=False):
     type = choose_forced_type(chances, random)
-    filtered_moves = filter_moves(moves, type, random)
+    filtered_moves = filter_moves(local_move_data, moves, type, random)
     for move in filtered_moves:
         if local_move_data[move]["accuracy"] > 80 and local_move_data[move]["power"] > 0 or not starting_move:
             moves.remove(move)
             return move
     else:
         return get_move(local_move_data, moves, [], random, starting_move)
-
-
-
 
 
 def set_mon_palettes(self, random, data):
@@ -77,12 +75,15 @@ def set_mon_palettes(self, random, data):
         data[address] = pallet
         address += 1
 
-
-
-
-
 def process_move_data(self):
     self.local_move_data = deepcopy(poke_data.moves)
+
+    if self.multiworld.randomize_move_types[self.player]:
+        for move, data in self.local_move_data.items():
+            if move == "No Move":
+                continue
+            data["type"] = self.multiworld.random.choice(list(poke_data.type_ids))
+
     if self.multiworld.move_balancing[self.player]:
         self.local_move_data["Sing"]["accuracy"] = 30
         self.local_move_data["Sleep Powder"]["accuracy"] = 40
@@ -118,31 +119,48 @@ def process_pokemon_data(self):
     compat_hms = set()
 
     for mon, mon_data in local_poke_data.items():
-        if self.multiworld.randomize_pokemon_stats[self.player].value == 1:
+        if self.multiworld.randomize_pokemon_stats[self.player] == "shuffle":
             stats = [mon_data["hp"], mon_data["atk"], mon_data["def"], mon_data["spd"], mon_data["spc"]]
-            self.multiworld.random.shuffle(stats)
-            mon_data["hp"] = stats[0]
-            mon_data["atk"] = stats[1]
-            mon_data["def"] = stats[2]
-            mon_data["spd"] = stats[3]
-            mon_data["spc"] = stats[4]
-        elif self.multiworld.randomize_pokemon_stats[self.player].value == 2:
+            if mon in poke_data.evolves_from:
+                stat_shuffle_map = local_poke_data[poke_data.evolves_from[mon]]["stat_shuffle_map"]
+            else:
+                stat_shuffle_map = self.multiworld.random.sample(range(0, 5), 5)
+
+            mon_data["stat_shuffle_map"] = stat_shuffle_map
+            mon_data["hp"] = stats[stat_shuffle_map[0]]
+            mon_data["atk"] = stats[stat_shuffle_map[1]]
+            mon_data["def"] = stats[stat_shuffle_map[2]]
+            mon_data["spd"] = stats[stat_shuffle_map[3]]
+            mon_data["spc"] = stats[stat_shuffle_map[4]]
+        elif self.multiworld.randomize_pokemon_stats[self.player] == "randomize":
             first_run = True
             while (mon_data["hp"] > 255 or mon_data["atk"] > 255 or mon_data["def"] > 255 or mon_data["spd"] > 255
                    or mon_data["spc"] > 255 or first_run):
                 first_run = False
-                total_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"] - 60
+                total_stats = mon_data["hp"] + mon_data["atk"] + mon_data["def"] + mon_data["spd"] + mon_data["spc"]
+                for stat in ("hp", "atk", "def", "spd", "spc"):
+                    if mon in poke_data.evolves_from:
+                        mon_data[stat] = local_poke_data[poke_data.evolves_from[mon]][stat]
+                        total_stats -= mon_data[stat]
+                    elif stat == "hp":
+                        mon_data[stat] = 20
+                        total_stats -= 20
+                    else:
+                        mon_data[stat] = 10
+                        total_stats -= 10
+                if total_stats < 0:
+                    print(mon)
                 dist = [self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
                         self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
                         self.multiworld.random.randint(1, 101) / 100]
                 total_dist = sum(dist)
 
-                mon_data["hp"] = int(round(dist[0] / total_dist * total_stats) + 20)
-                mon_data["atk"] = int(round(dist[1] / total_dist * total_stats) + 10)
-                mon_data["def"] = int(round(dist[2] / total_dist * total_stats) + 10)
-                mon_data["spd"] = int(round(dist[3] / total_dist * total_stats) + 10)
-                mon_data["spc"] = int(round(dist[4] / total_dist * total_stats) + 10)
-        if self.multiworld.randomize_pokemon_types[self.player].value:
+                mon_data["hp"] += int(round(dist[0] / total_dist * total_stats))
+                mon_data["atk"] += int(round(dist[1] / total_dist * total_stats))
+                mon_data["def"] += int(round(dist[2] / total_dist * total_stats))
+                mon_data["spd"] += int(round(dist[3] / total_dist * total_stats))
+                mon_data["spc"] += int(round(dist[4] / total_dist * total_stats))
+        if self.multiworld.randomize_pokemon_types[self.player]:
             if self.multiworld.randomize_pokemon_types[self.player].value == 1 and mon in poke_data.evolves_from:
                 type1 = local_poke_data[poke_data.evolves_from[mon]]["type1"]
                 type2 = local_poke_data[poke_data.evolves_from[mon]]["type2"]
@@ -164,8 +182,8 @@ def process_pokemon_data(self):
 
             mon_data["type1"] = type1
             mon_data["type2"] = type2
-        if self.multiworld.randomize_pokemon_movesets[self.player].value:
-            if self.multiworld.randomize_pokemon_movesets[self.player].value == 1:
+        if self.multiworld.randomize_pokemon_movesets[self.player]:
+            if self.multiworld.randomize_pokemon_movesets[self.player] == "prefer_types":
                 if mon_data["type1"] == "Normal" and mon_data["type2"] == "Normal":
                     chances = [[75, "Normal"]]
                 elif mon_data["type1"] == "Normal" or mon_data["type2"] == "Normal":
@@ -286,12 +304,17 @@ def process_pokemon_data(self):
 
     hm_verify = ["Surf", "Strength"]
     if self.multiworld.accessibility[self.player] != "minimal" or ((not
-                self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_condition[self.player],
-                                                                 self.multiworld.victory_road_condition[self.player]) > 7):
+            self.multiworld.badgesanity[self.player]) and max(self.multiworld.elite_four_condition[self.player],
+            self.multiworld.route_22_gate_condition[self.player], self.multiworld.victory_road_condition[self.player])
+            > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")):
         hm_verify += ["Cut"]
-    if self.multiworld.accessibility[self.player] != "minimal" and (self.multiworld.trainersanity[self.player] or
-                                                                    self.multiworld.extra_key_items[self.player]):
+    if (not self.multiworld.dark_rock_tunnel_logic[self.player]) and ((self.multiworld.accessibility[self.player] !=
+            "minimal" and (self.multiworld.trainersanity[self.player] or self.multiworld.extra_key_items[self.player]))
+                                                                      or self.multiworld.door_shuffle[self.player]):
         hm_verify += ["Flash"]
+    # Fly does not need to be verified. Full/Insanity door shuffle connects reachable regions to unreachable regions,
+    # so if Fly is available and can be learned, the towns you can fly to would be reachable, but if no Pokémon can
+    # learn it this simply would not occur
 
     for hm_move in hm_verify:
         if hm_move not in compat_hms:
@@ -440,7 +463,21 @@ def generate_output(self, output_directory: str):
     elif home_loc == 2:  # Oak's Lab
         write_bytes(data, [0x5F, 0xC7, 0x0C, 0x0C, 0x00, 0x00], rom_addresses["Pallet_Fly_Coords"])
 
+
+    # self.multiworld.state.update_reachable_regions(self.player)
     for region in self.multiworld.get_regions(self.player):
+        # def search_path(path):
+        #     if outdoor_map(path[0].split("-")[0]):
+        #         return True
+        #     p = search_path(path[1][1])
+        #     if p is True:
+        #         return path[0]
+        #     return p
+        #
+        # for region in self.multiworld.get_regions(self.player):
+        #     if region.name in map_ids and not outdoor_map(region.name):
+        #         region.entrance_hint = search_path(self.multiworld.state.path[region])
+
         for entrance in region.exits:
             if isinstance(entrance, PokemonRBWarp):
                 warp_ids = (entrance.warp_id,) if isinstance(entrance.warp_id, int) else entrance.warp_id
@@ -457,12 +494,16 @@ def generate_output(self, output_directory: str):
                     data[address] = 0 if "Elevator" in connected_map_name else warp_to_ids[i]
                     data[address + 1] = map_ids[connected_map_name]
 
-    for i, gym_leader in enumerate(("Pewter Gym - Brock TM", "Cerulean Gym - Misty TM", "Vermilion Gym - Lt. Surge TM",
-                                    "Celadon Gym - Erika TM", "Fuchsia Gym - Koga TM", "Saffron Gym - Sabrina TM",
-                                    "Cinnabar Gym - Blaine TM", "Viridian Gym - Giovanni TM")):
-        tm = int(self.multiworld.get_location(gym_leader, self.player).item.name[2:4])
-        move = poke_data.moves[self.local_tms[tm - 1]]["id"]
-        data[rom_addresses["Gym_Leader_Moves"] + (2 * i)] = move
+    if not self.multiworld.key_items_only[self.player]:
+        for i, gym_leader in enumerate(("Pewter Gym - Brock TM", "Cerulean Gym - Misty TM",
+                                        "Vermilion Gym - Lt. Surge TM", "Celadon Gym - Erika TM",
+                                        "Fuchsia Gym - Koga TM", "Saffron Gym - Sabrina TM",
+                                        "Cinnabar Gym - Blaine TM", "Viridian Gym - Giovanni TM")):
+            item_name = self.multiworld.get_location(gym_leader, self.player).item.name
+            if "TM" in item_name:
+                tm = int(item_name[2:4])
+                move = poke_data.moves[self.local_tms[tm - 1]]["id"]
+                data[rom_addresses["Gym_Leader_Moves"] + (2 * i)] = move
 
     def set_trade_mon(address, loc):
         mon = self.multiworld.get_location(loc, self.player).item.name
@@ -489,7 +530,8 @@ def generate_output(self, output_directory: str):
     if self.multiworld.fix_combat_bugs[self.player]:
         data[rom_addresses["Option_Fix_Combat_Bugs"]] = 1
         data[rom_addresses["Option_Fix_Combat_Bugs_Focus_Energy"]] = 0x28  # jr z
-        data[rom_addresses["Option_Fix_Combat_Bugs_Substitute"]] = 0x28  # jr z
+        # this bug soft locks the game, so I am fixing it always
+        #data[rom_addresses["Option_Fix_Combat_Bugs_Substitute"]] = 0x28  # jr z
         data[rom_addresses["Option_Fix_Combat_Bugs_HP_Drain_Dream_Eater"]] = 0x1A  # ld a, (de)
         data[rom_addresses["Option_Fix_Combat_Bugs_PP_Restore"]] = 0xe6  # and a, direct
         data[rom_addresses["Option_Fix_Combat_Bugs_PP_Restore"] + 1] = 0b0011111
@@ -534,25 +576,30 @@ def generate_output(self, output_directory: str):
 
     data[rom_addresses["Option_Lose_Money"]] = int(not self.multiworld.lose_money_on_blackout[self.player].value)
 
-    if self.multiworld.extra_key_items[self.player].value:
+    if self.multiworld.extra_key_items[self.player]:
         data[rom_addresses['Option_Extra_Key_Items_A']] = 1
         data[rom_addresses['Option_Extra_Key_Items_B']] = 1
         data[rom_addresses['Option_Extra_Key_Items_C']] = 1
         data[rom_addresses['Option_Extra_Key_Items_D']] = 1
+    data[rom_addresses["Option_Split_Card_Key"]] = self.multiworld.split_card_key[self.player].value
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.multiworld.blind_trainers[self.player].value * 2.55)
-    data[rom_addresses['Option_Cerulean_Cave_Condition']] = self.multiworld.cerulean_cave_condition[self.player].value
+    # data[rom_addresses['Option_Cerulean_Cave_Condition']] = self.multiworld.cerulean_cave_condition[self.player].value
+    data[rom_addresses["Option_Cerulean_Cave_Badges"]] = self.multiworld.cerulean_cave_badges_condition[self.player].value + 1
+    data[rom_addresses["Option_Cerulean_Cave_Key_Items"]] = self.multiworld.cerulean_cave_key_items_condition[self.player].total +1
+    write_bytes(data, encode_text(str(self.multiworld.cerulean_cave_badges_condition[self.player].value)), rom_addresses["Text_Cerulean_Cave_Badges"])
+    write_bytes(data, encode_text(str(self.multiworld.cerulean_cave_key_items_condition[self.player].total) + " key items."), rom_addresses["Text_Cerulean_Cave_Key_Items"])
     data[rom_addresses['Option_Encounter_Minimum_Steps']] = self.multiworld.minimum_steps_between_encounters[self.player].value
     data[rom_addresses['Option_Route23_Badges']] = self.multiworld.victory_road_condition[self.player].value
     data[rom_addresses['Option_Victory_Road_Badges']] = self.multiworld.route_22_gate_condition[self.player].value
     data[rom_addresses['Option_Pokemon_League_Badges']] = self.multiworld.elite_four_condition[self.player].value
     data[rom_addresses['Option_Viridian_Gym_Badges']] = self.multiworld.viridian_gym_condition[self.player].value
     data[rom_addresses['Option_EXP_Modifier']] = self.multiworld.exp_modifier[self.player].value
-    if not self.multiworld.require_item_finder[self.player].value:
-        data[rom_addresses['Option_Itemfinder']] = 0
-    if self.multiworld.extra_strength_boulders[self.player].value:
+    if not self.multiworld.require_item_finder[self.player]:
+        data[rom_addresses['Option_Itemfinder']] = 0  # nop
+    if self.multiworld.extra_strength_boulders[self.player]:
         for i in range(0, 3):
             data[rom_addresses['Option_Boulders'] + (i * 3)] = 0x15
-    if self.multiworld.extra_key_items[self.player].value:
+    if self.multiworld.extra_key_items[self.player]:
         for i in range(0, 4):
             data[rom_addresses['Option_Rock_Tunnel_Extra_Items'] + (i * 3)] = 0x15
     if self.multiworld.old_man[self.player] == "open_viridian_city":

@@ -204,7 +204,8 @@ def process_static_pokemon(self):
 
 def process_wild_pokemon(self):
 
-    encounter_slots = get_encounter_slots(self)
+    encounter_slots_master = get_encounter_slots(self)
+    encounter_slots = encounter_slots_master.copy()
 
     placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
     zone_mapping = {}
@@ -258,7 +259,7 @@ def process_wild_pokemon(self):
             mons_to_add.append(remaining_pokemon.pop())
         for mon in mons_to_add:
             stat_base = get_base_stat_total(mon)
-            candidate_locations = get_encounter_slots(self)
+            candidate_locations = encounter_slots_master.copy()
             if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_base_stats", "match_types_and_base_stats"]:
                 candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.original_item) - stat_base))
             if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_types", "match_types_and_base_stats"]:
@@ -270,12 +271,12 @@ def process_wild_pokemon(self):
             for location in candidate_locations:
                 zone = " - ".join(location.name.split(" - ")[:-1])
                 if self.multiworld.catch_em_all[self.player] == "all_pokemon" and self.multiworld.area_1_to_1_mapping[self.player]:
-                    if not [self.multiworld.get_location(l.name, self.player) for l in get_encounter_slots(self)
+                    if not [self.multiworld.get_location(l.name, self.player) for l in encounter_slots_master
                             if (not l.name.startswith(zone)) and
                                self.multiworld.get_location(l.name, self.player).item.name == location.item.name]:
                         continue
                 if self.multiworld.catch_em_all[self.player] == "first_stage" and self.multiworld.area_1_to_1_mapping[self.player]:
-                    if not [self.multiworld.get_location(l.name, self.player) for l in get_encounter_slots(self)
+                    if not [self.multiworld.get_location(l.name, self.player) for l in encounter_slots_master
                             if (not l.name.startswith(zone)) and
                                self.multiworld.get_location(l.name, self.player).item.name == location.item.name and l.name
                             not in poke_data.evolves_from]:

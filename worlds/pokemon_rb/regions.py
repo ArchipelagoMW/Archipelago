@@ -255,7 +255,7 @@ map_ids = {
     "Indigo Plateau Agatha's Room": 0xF7,
 }
 
-warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil Level": [], 'Pokedex': [], 'Fossil': [], 'Celadon City': [
+warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil Level": [], 'Pokedex': [], 'Fossil': [], 'Celadon City': [
     {'name': 'Celadon City to Celadon Department Store 1F W', 'address': 'Warps_CeladonCity', 'id': 0, 'to': {'map': 'Celadon Department Store 1F', 'id': (1, 0)}},
     {'name': 'Celadon City to Celadon Department Store 1F E', 'address': 'Warps_CeladonCity', 'id': 1, 'to': {'map': 'Celadon Department Store 1F', 'id': (3, 2)}},
     {'address': 'Warps_CeladonCity', 'id': 2, 'to': {'map': 'Celadon Mansion 1F', 'id': (0, 1)}},
@@ -1186,7 +1186,7 @@ warp_data = {'Menu': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil 
 
 entrance_only = [
     "Route 4-W to Mt Moon 1F", "Saffron City-G to Saffron Gym-S", "Saffron City-Copycat to Saffron Copycat's House 1F",
-    "Saffron City-Pidgey to Saffron Pidgey House", "Rocket Hideout B1F-SE to Rocket Hideout Elevator-B1F",
+    "Saffron City-Pidgey to Saffron Pidgey House", "Celadon Game Corner-Hidden Stairs to Rocket Hideout B1F"
     "Cinnabar Island-M to Pokemon Mansion 1F", "Mt Moon B2F to Mt Moon B1F-W", "Silph Co 7F-NW to Silph Co 11F-W",
     "Viridian City-G", "Cerulean City-Cave to Cerulean Cave 1F-SE", "Cerulean City-T to Cerulean Trashed House",
     "Route 10-P to Power Plant", "S.S. Anne 2F to S.S. Anne Captain's Room", "Pewter City-M to Pewter Museum 1F-E",
@@ -1219,13 +1219,12 @@ pokemarts = ['Viridian Pokemart to Viridian City', 'Pewter Pokemart to Pewter Ci
 
 
 safe_rooms = ["Rival's House to Pallet Town",
-              'Vermilion Trade House to Vermilion City', 'Viridian Pokemart to Viridian City',
+              'Vermilion Trade House to Vermilion City',
               'Viridian School House to Viridian City', 'Viridian Nickname House to Viridian City',
               'Pewter Nidoran House to Pewter City', 'Pewter Speech House to Pewter City',
               'Cerulean Trade House to Cerulean City', 'Cerulean Bicycle Shop to Cerulean City',
               "Lavender Mr. Fuji's House to Lavender Town", 'Lavender Cubone House to Lavender Town',
               "Lavender Name Rater's House to Lavender Town", 'Vermilion Pidgey House to Vermilion City',
-              'Fuchsia Pokemart to Fuchsia City',
               'Saffron Pidgey House to Saffron City-Pidgey', "Saffron Mr. Psychic's House to Saffron City",
               'Route 2 Trade House to Route 2-NE', 'Route 16 Fly House to Route 16-NW', "Bill's House to Route 25",
               'Safari Zone Center Rest House to Safari Zone Center-S',
@@ -1236,13 +1235,8 @@ safe_rooms = ["Rival's House to Pallet Town",
               'Safari Zone Secret House to Safari Zone West-NW',
               'Vermilion Old Rod House to Vermilion City', 'Daycare to Route 5',
               'Route 12 Super Rod House to Route 12-S', 'Vermilion Pokemon Fan Club to Vermilion City',
-              'Cerulean Pokemart to Cerulean City',
-              'Lavender Pokemart to Lavender Town', 'Vermilion Pokemart to Vermilion City',
-              'Saffron Pokemart to Saffron City',
-              'Pewter Pokemart to Pewter City',
               "Fuchsia Bill's Grandpa's House to Fuchsia City", "Fuchsia Warden's House to Fuchsia City",
-              'Fuchsia Meeting Room to Fuchsia City',
-              'Cinnabar Pokemart to Cinnabar Island']
+              'Fuchsia Meeting Room to Fuchsia City',]
 
 insanity_safe_rooms = [
     'Cinnabar Lab Trade Room to Cinnabar Lab',
@@ -1470,7 +1464,15 @@ def create_regions(self):
     locations_per_region = {}
     for location in location_data:
         locations_per_region.setdefault(location.region, [])
-        if location.inclusion(multiworld, player):
+        # The check for list is so that we don't try to check the item table with a list as a key
+        if location.inclusion(multiworld, player) and (isinstance(location.original_item, list) or
+                                                       not (self.multiworld.key_items_only[self.player] and
+                                                            ((item_table[location.original_item].classification not in
+                                                             (ItemClassification.progression,
+                                                              ItemClassification.progression_skip_balancing,
+                                                              ItemClassification.useful)) or
+                                                             location.original_item.startswith("TM"))
+                                                            and not location.event)):
             locations_per_region[location.region].append(PokemonRBLocation(player, location.name, location.address,
                                                                            location.rom_address, location.type,
                                                                            location.level, location.level_address))
@@ -1482,6 +1484,7 @@ def create_regions(self):
             assert not locations_per_region[region], f"locations not assigned to region {region}"
     connect(multiworld, player, "Menu", "Pallet Town", one_way=True)
     connect(multiworld, player, "Menu", "Pokedex", one_way=True)
+    connect(multiworld, player, "Menu", "Evolution", one_way=True)
     connect(multiworld, player, "Menu", "Fossil", lambda state: state.pokemon_rb_fossil_checks(
         state.multiworld.second_fossil_check_condition[player].value, player), one_way=True)
     connect(multiworld, player, "Pallet Town", "Route 1")
@@ -1517,7 +1520,7 @@ def create_regions(self):
     connect(multiworld, player, "Route 4-E", "Route 4-Grass", one_way=True)
     connect(multiworld, player, "Route 4-Grass", "Cerulean City", one_way=True)
     connect(multiworld, player, "Cerulean City", "Route 24", one_way=True)
-    connect(multiworld, player, "Cerulean City", "Cerulean City-T", lambda state: state.has("Visit Bill", player))
+    connect(multiworld, player, "Cerulean City", "Cerulean City-T", lambda state: state.has("Help Bill", player))
     connect(multiworld, player, "Cerulean City-Outskirts", "Cerulean City", one_way=True)
     connect(multiworld, player, "Cerulean City-Outskirts", "Cerulean City", lambda state: state.pokemon_rb_can_cut(player))
     connect(multiworld, player, "Cerulean City-Outskirts", "Route 9", lambda state: state.pokemon_rb_can_cut(player))
@@ -1613,6 +1616,7 @@ def create_regions(self):
     connect(multiworld, player, "Pokemon Mansion 2F", "Pokemon Mansion 2F-NW", one_way=True)
     connect(multiworld, player, "Safari Zone Gate-S", "Safari Zone Gate-N", lambda state: state.has("Safari Pass", player) or not state.multiworld.extra_key_items[player].value, one_way=True)
     connect(multiworld, player, "Fuchsia City", "Route 15-W")
+    connect(multiworld, player, "Fuchsia City", "Route 18-E")
     connect(multiworld, player, "Route 15", "Route 14")
     connect(multiworld, player, "Route 14", "Route 15-N", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
     connect(multiworld, player, "Route 14", "Route 14-Grass", lambda state: state.pokemon_rb_can_cut(player), one_way=True)
@@ -1749,9 +1753,7 @@ def create_regions(self):
     connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-4F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
     connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-5F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
     connect(multiworld, player, "Route 23-N", "Indigo Plateau")
-    connect(multiworld, player, "Cerulean City-Water", "Cerulean City-Cave", lambda state:
-            state.pokemon_rb_cerulean_cave(state.multiworld.cerulean_cave_condition[player].value + (state.multiworld.extra_key_items[player].value * 4), player) and
-            state.pokemon_rb_can_surf(player))
+    connect(multiworld, player, "Cerulean City-Water", "Cerulean City-Cave", lambda state: state.pokemon_rb_cerulean_cave(player) and state.pokemon_rb_can_surf(player))
 
     # access to any part of a city will enable flying to the Pokemon Center!
     connect(multiworld, player, "Cerulean City-Cave", "Cerulean City", lambda state: state.pokemon_rb_can_fly(player), one_way=True)
@@ -1785,8 +1787,26 @@ def create_regions(self):
         connect(multiworld, player, "Menu", multiworld.worlds[player].town_map_fly_map, lambda state: state.pokemon_rb_can_fly(player) and state.has("Town Map", 1), one_way=True,
                 name="Fly to " + multiworld.worlds[player].fly_map)
 
-    # for connection in connecting_interior_warps:
-    #     connect(multiworld, player, connection[0], connection[1])
+    # regions = set(self.multiworld.get_regions(player))
+    # regions = {region for region in regions if "Wild" not in region.name and "Grass" not in region.name and "Fishing" not in region.name and "Water" not in region.name}
+    # while regions:
+    #     region = regions.pop()
+    #     rset = {region}
+    #     rset.update({e.connected_region for e in region.exits if e.connected_region in regions})
+    #     rset.update({e.parent_region for e in region.entrances if e.parent_region in regions})
+    #     rc = rset.copy()
+    #     #rset.update(rc)
+    #     while rc:
+    #         x = rc.pop()
+    #         rset.add(x)
+    #         rc.update({e.connected_region for e in x.exits if e.connected_region not in rset and e.connected_region in regions})
+    #         rc.update({e.parent_region for e in x.entrances if e.parent_region not in rset and e.parent_region in regions})
+    #         # rset.update({e.connected_region for e in x.exits})
+    #         # rset.update({e.parent_region for e in x.entrances})
+    #     print(rset)
+    #     regions -= rset
+
+
     if multiworld.door_shuffle[player]:
         entrances = []
         for region_name, region_entrances in warp_data.items():
@@ -1801,6 +1821,9 @@ def create_regions(self):
                         shuffle = True
                     elif sorted([entrance_data['to']['map'], region.name]) == ["Celadon City", "Celadon Game Corner"]:
                         shuffle = False
+                if (multiworld.randomize_rock_tunnel[self.player] and "Rock Tunnel" in region.name and "Rock Tunnel" in
+                        entrance_data['to']['map']):
+                    shuffle = False
                 if shuffle:
                     entrance = PokemonRBWarp(player, f"{region.name} to {entrance_data['to']['map']}" if "name" not in
                                              entrance_data else entrance_data["name"], region, entrance_data["id"],
@@ -1814,12 +1837,16 @@ def create_regions(self):
                     connect(multiworld, player, region.name, entrance_data['to']['map'], one_way=True)
         forced_connections = mandatory_connections.copy()
         usable_safe_rooms = safe_rooms.copy()
+
+        if multiworld.door_shuffle[player] != "simple":
+            usable_safe_rooms += pokemarts
         if multiworld.door_shuffle[player] == "insanity":
             forced_connections.update(insanity_mandatory_connections)
             usable_safe_rooms += insanity_safe_rooms
 
         safe_rooms_sample = multiworld.random.sample(usable_safe_rooms, 6)
-        pallet_safe_room = safe_rooms_sample.pop()
+        pallet_safe_room = safe_rooms_sample[-1]
+
         for a, b in zip(multiworld.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
                                                   "Pallet Town to Rival's House"], 3), ["Oak's Lab to Pallet Town",
                                                   "Player's House 1F to Pallet Town", pallet_safe_room]):
@@ -1842,7 +1869,8 @@ def create_regions(self):
                 forced_connections.add((a, b))
             # Ensure a Pokemart is available at the beginning of the game
             if "Pokemart" not in pallet_safe_room:
-                forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(pokemarts)))
+                forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(
+                    [mart for mart in pokemarts if mart not in safe_rooms_sample])))
 
         for pair in forced_connections:
             entrance_a = multiworld.get_entrance(pair[0], player)
@@ -1858,30 +1886,6 @@ def create_regions(self):
                     connect(multiworld, player, region, entrance["to"]["map"], lambda state: state.pokemon_rb_rock_tunnel(player))
                 else:
                     connect(multiworld, player, region, entrance["to"]["map"])
-
-    def dead_end(e):
-        region = e.parent_region
-        check_warps = set()
-        checked_regions = {region}
-        check_warps.update(region.exits)
-        check_warps.remove(e)
-        for location in region.locations:
-            if location.item:
-                # print(location)
-                return False
-        while check_warps:
-            warp = check_warps.pop()
-            if warp.connected_region is None:
-                return False
-            if isinstance(warp, PokemonRBWarp) or warp.access_rule(state):
-                if warp.connected_region not in checked_regions:
-                    checked_regions.add(warp.connected_region)
-                    check_warps.update(warp.connected_region.exits)
-                    for location in warp.connected_region.locations:
-                        if location.item:
-                            # print(location)
-                            return False
-        return True
 
     if multiworld.door_shuffle[player] == "simple":
         def connect_connecting_interiors(interior_exits, exterior_entrances):
@@ -1969,7 +1973,7 @@ def create_regions(self):
         if multiworld.door_shuffle[player] == "full":
             loop_out_interiors = [[multiworld.get_entrance(e[0], player), multiworld.get_entrance(e[1], player)] for e
                                   in multiworld.random.sample(unsafe_connecting_interior_dungeons
-                                                              + safe_connecting_interior_dungeons_dungeons, 2)]
+                                                              + safe_connecting_interior_dungeons, 2)]
             entrances.remove(loop_out_interiors[0][1])
             entrances.remove(loop_out_interiors[1][1])
         if not multiworld.badgesanity[player]:
@@ -2002,38 +2006,87 @@ def create_regions(self):
                     and ("Badge" not in item or multiworld.badgesanity[player]):
                 state.collect(self.create_item(item))
 
+        def adds_reachable_locations(entrances_copy, reachable_entrances, item):
+            test_state = state.copy()
+            test_state.collect(item, False)
+            return len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
+                        entrance.parent_region.can_reach(test_state)]) > len(reachable_entrances)
+
+        def dead_end(entrances_copy, reachable_entrances, e):
+            region = e.parent_region
+            check_warps = set()
+            checked_regions = {region}
+            check_warps.update(region.exits)
+            check_warps.remove(e)
+            for location in region.locations:
+                if location.item and adds_reachable_locations(entrances_copy, reachable_entrances, location.item):
+                    return False
+            while check_warps:
+                warp = check_warps.pop()
+                if warp not in reachable_entrances:
+                    if warp.connected_region is None:
+                        return False
+                    if isinstance(warp, PokemonRBWarp) or warp.access_rule(state):
+                        if warp.connected_region not in checked_regions:
+                            checked_regions.add(warp.connected_region)
+                            check_warps.update(warp.connected_region.exits)
+                            for location in warp.connected_region.locations:
+                                if location.item and adds_reachable_locations(entrances_copy, reachable_entrances,
+                                                                              location.item):
+                                    return False
+            return True
+
+
         multiworld.random.shuffle(entrances)
         reachable_entrances = []
+        # placement_order = 1
         while entrances:
             state.update_reachable_regions(player)
             state.sweep_for_events(player=player)
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
                                    entrance.parent_region.can_reach(state)]
+            # for entrance in reachable_entrances:
+            #     if not entrance.placement_order:
+            #         entrance.placement_order = placement_order
+            # placement_order += 1
             #print(len(reachable_entrances))
             assert reachable_entrances, \
                 "Ran out of reachable entrances in Pokemon Red and Blue door shuffle"
             multiworld.random.shuffle(entrances)
-            entrances.sort(key=lambda e: e.name not in entrance_only)
-            # 100 seemed to give the best sphere distribution. Don't ask me why that is.
-            if len(reachable_entrances) < (5 if multiworld.door_shuffle[player] == "insanity" else 10):
-                entrances.sort(key=lambda e: 0 if e in reachable_entrances else 1 if dead_end(e) else 2)
-            else:
-                entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if dead_end(e) else 1)
-            if multiworld.door_shuffle[player] == "full":
-                outdoor = outdoor_map(entrances[0].parent_region.name)
-                entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
-            assert entrances[0] in reachable_entrances, \
-                "Ran out of reachable entrances in Pokemon Red and Blue door shuffle"
+            if multiworld.door_shuffle[player] != "insanity" or len(entrances) != len(reachable_entrances):
+                entrances.sort(key=lambda e: e.name not in entrance_only)
+                # entrances list is empty while it's being sorted, must pass a copy to iterate through
+                entrances_copy = entrances.copy()
+                if len(reachable_entrances) > 1:
+                    entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
+                                   dead_end(entrances_copy, reachable_entrances, e) else 1)
+                else:
+                    entrances.sort(key=lambda e: 0 if e in reachable_entrances else 1 if
+                                   dead_end(entrances_copy, reachable_entrances, e) else 2)
+                if multiworld.door_shuffle[player] == "full":
+                    outdoor = outdoor_map(entrances[0].parent_region.name)
+                    entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
+                assert entrances[0] in reachable_entrances, \
+                    "Ran out of reachable entrances in Pokemon Red and Blue door shuffle"
             if multiworld.door_shuffle[player] == "insanity" and len(entrances) == len(reachable_entrances):
-                #print("all entrances reachable")
+                print("all entrances reachable")
+                # entrances.sort(key=lambda e: e.placement_order)
+                multiworld.random.shuffle(entrances)
                 entrance_a = entrances.pop(0)
-                entrance_b = entrance_a
+
+                # for _ in range(len(entrances)):
+                #     if (entrances[0].parent_region.name.split("-")[0] == entrance_a.parent_region.name.split("-")[0]
+                #             or entrances[0].placement_order == entrance_a.placement_order):
+                #         entrances.append(entrances.pop(0))
+                #     else:
+                #         break
+                entrance_b = entrances.pop(0)
             else:
                 entrance_a = entrances.pop(0)
                 entrance_b = entrances.pop()
-                entrance_b.connect(entrance_a)
+            entrance_b.connect(entrance_a)
             entrance_a.connect(entrance_b)
-            #print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
+            print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
 
         for loc in placed_locs:
             loc.item = None
@@ -2043,6 +2096,28 @@ def create_regions(self):
                 pair[1].connected_region = pair[0].connected_region
                 pair[1].parent_region.entrances.append(pair[0])
                 pair[1].target = pair[0].target
+    if self.multiworld.door_shuffle[self.player]:
+        for region in self.multiworld.get_regions(self.player):
+            checked_regions = {region}
+
+            def check_region(region_to_check):
+                if outdoor_map(region_to_check.name):
+                    return True
+                for entrance in region_to_check.entrances:
+                    if entrance.parent_region not in checked_regions:
+                        checked_regions.add(entrance.parent_region)
+                        x = check_region(entrance.parent_region)
+                        if x is True:
+                            return entrance.name.split(" to ")[1].split("-")[0]
+                        elif x is not None:
+                            return x
+                return None
+
+            if region.name.split("-")[0] not in map_ids or outdoor_map(region.name):
+                region.entrance_hint = None
+                # print(region.name)
+            else:
+                region.entrance_hint = check_region(region)
 
 
 def connect(world: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True,
@@ -2073,6 +2148,7 @@ class PokemonRBWarp(Entrance):
         self.warp_id = warp_id
         self.address = address
         self.flags = flags
+        # self.placement_order = 0
 
     def connect(self, entrance):
         super().connect(entrance.parent_region, None, target=entrance.warp_id)
