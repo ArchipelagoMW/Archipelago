@@ -960,6 +960,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload (int lp_playe
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ThorMorph", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockRavenBioMechanicalReapirDrone (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RavenBioMechanicalRepairDrone", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldAccelerators (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

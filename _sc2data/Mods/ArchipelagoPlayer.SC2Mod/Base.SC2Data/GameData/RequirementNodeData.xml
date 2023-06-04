@@ -383,6 +383,10 @@
     <CRequirementNot id="AP_NotCountUpgradeRavenCorvidReactorQueuedOrBetter">
         <OperandArray index="0" value="AP_CountUpgradeRavenCorvidReactorQueuedOrBetter"/>
     </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeRavenBioMechanicalRepairDroneCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_RavenBioMechanicalRepairDrone" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeScienceVesselCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ScienceVessel" State="CompleteOnly"/>

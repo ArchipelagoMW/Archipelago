@@ -2272,7 +2272,6 @@
     <CModel id="AP_TorrasquePortrait" parent="Portrait" Race="Zerg">
         <Model value="Assets\Portraits\Zerg\UltraliskPortrait\UltraliskPortrait.m3"/>
         <Image value="Assets\Textures\UltraliskPortrait_Static.dds"/>
-        <Lighting value="AP_TorrasquePortrait"/>
     </CModel>
     <CModel id="AP_UltraliskEx1BDeath" parent="UnitDeath" Race="Zerg">
         <Model value="Assets\Units\Zerg\UltraliskEx1BDeath\UltraliskEx1BDeath.m3"/>
@@ -2391,7 +2390,6 @@
     <CModel id="AP_NoxiousPortrait" parent="Portrait" Race="Zerg">
         <Model value="Assets\Portraits\Zerg\UltraliskPortrait\UltraliskPortrait.m3"/>
         <Image value="Assets\Textures\UltraliskPortrait_Static.dds"/>
-        <Lighting value="AP_NoxiousPortrait"/>
     </CModel>
     <CModel id="AP_PoisonNovaModel">
         <Model value="Assets\Effects\Zerg\MiasmaliskPoisonCloudBirth\MiasmaliskPoisonCloudBirth.m3"/>
@@ -2402,5 +2400,26 @@
         <Model value="Assets\Units\Zerg\UltraliskEx1ADeath\UltraliskEx1ADeath.m3"/>
         <LowQualityModel value="ZergLargeUnitDeathLow"/>
         <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HealingDrone" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\PointDefenseDrone\PointDefenseDrone.m3"/>
+        <PlanetPanelCamera value="Star2CameraLow05"/>
+        <Radius value="0.600000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionRadius value="0.857100"/>
+        <ShadowRadius value="0.857100"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow05"/>
+        <UnitGlossaryCamera value="Star2CameraLow05"/>
+    </CModel>
+    <CModel id="AP_HealingDronePlacement" parent="Placement" Race="Terran">
+        <Model value="Assets\Units\Terran\PointDefenseDronePlacement\PointDefenseDronePlacement.m3"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_HealingDroneReleaseWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\AutoTurretPodMissile\AutoTurretPodMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
     </CModel>
 </Catalog>

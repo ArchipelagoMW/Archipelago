@@ -578,6 +578,11 @@
         <DisplayDuration index="Enemy" value="1"/>
         <Duration value="180"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HealingDroneTimedLife" parent="TimedLife">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="30"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_PointDefenseReady">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="3"/>
