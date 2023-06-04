@@ -1402,4 +1402,28 @@
         <PeriodicEffect value="AP_NoxiousDamageAuraSearch"/>
         <Requirements value="AP_HaveHotSNoxious"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImpalerWeaponDisabled">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImpalerMissileGroundCracks">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Period value="0.1"/>
+        <PeriodicEffect value="AP_ImpalerDummySearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_LurkerWeaponDisabled">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HydraliskFrenzy">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-zerg-frenzy.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="15"/>
+        <Modification AttackSpeedMultiplier="1.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ParalyticSpines">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+        <Modification AttackSpeedMultiplier="0.8"/>
+    </CBehaviorBuff>
 </Catalog>

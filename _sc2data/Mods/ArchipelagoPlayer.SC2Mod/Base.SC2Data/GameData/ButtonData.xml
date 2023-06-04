@@ -1246,4 +1246,57 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-siegetank-spidermines.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_ImpalerBurrowDown">
+        <Name value="Button/Name/BurrowDown"/>
+        <Tooltip value="Button/Tooltip/BurrowDown"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-burrow-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-burrow-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_ImpalerBurrowUp">
+        <Name value="Button/Name/BurrowUp"/>
+        <Tooltip value="Button/Tooltip/BurrowUp"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-upburrow-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-upburrow-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_Impaler">
+        <Icon value="Assets\Textures\btn-unit-zerg-impaler.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-impaler.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_BurrowLurkerMP">
+        <Icon value="Assets\Textures\btn-ability-zerg-burrow-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-burrow.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_Lurker">
+        <Icon value="Assets\Textures\btn-unit-zerg-lurker.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-lurker.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_LurkerBurrowUp">
+        <Name value="Button/Name/BurrowUp"/>
+        <Tooltip value="Button/Tooltip/BurrowUp"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-upburrow-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-upburrow-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_AncillaryCarapaceHydralisk">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-ancillaryarmor.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_GroovedSpines">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-hotsgroovedspines.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-hotsgroovedspines.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HydraliskFrenzy">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-frenzy.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>
