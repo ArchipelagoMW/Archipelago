@@ -199,8 +199,8 @@ class TerrariaWorld(World):
         state,
         sign: bool,
         ty: int,
-        condition: str | tuple[bool | None, list],
-        arg: str | int | None,
+        condition,  #: str | tuple[bool | None, list],
+        arg,  #: str | int | None,
     ) -> bool:
         if ty == COND_ITEM:
             _, flags, _, _ = rules[rule_indices[condition]]
@@ -266,10 +266,8 @@ class TerrariaWorld(World):
     def check_conditions(
         self,
         state,
-        operator: bool | None,
-        conditions: list[
-            tuple[bool, int, str | tuple[bool | None, list], str | int | None]
-        ],
+        operator,  #: bool | None,
+        conditions,  #: list[tuple[bool, int, str | tuple[bool | None, list], str | int | None]],
     ) -> bool:
         if operator is None:
             if len(conditions) == 0:
@@ -303,7 +301,7 @@ class TerrariaWorld(World):
         for location, item in self.locked_items.items():
             self.multiworld.get_location(location, self.player).place_locked_item(item)
 
-    def fill_slot_data(self) -> dict[str, object]:
+    def fill_slot_data(self):  # -> dict[str, object]:
         return {
             "goal": list(self.goal_locations),
             "deathlink": bool(self.multiworld.deathlink[self.player]),

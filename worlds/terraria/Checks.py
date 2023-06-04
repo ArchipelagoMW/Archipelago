@@ -12,7 +12,9 @@ class TerrariaLocation(Location):
 
 
 def add_token(
-    tokens: list[tuple[int, int, str | int | None]], token: str | int, token_index: int
+    tokens,  #: list[tuple[int, int, str | int | None]],
+    token,  #: str | int,
+    token_index: int,
 ):
     if token == "":
         return
@@ -48,7 +50,7 @@ CHAR_TO_TOKEN_ID = {
 TOKEN_ID_TO_CHAR = {id: char for char, id in CHAR_TO_TOKEN_ID.items()}
 
 
-def tokens(rule: str) -> list[tuple[int, int, str | int | None]]:
+def tokens(rule: str):  # -> list[tuple[int, int, str | int | None]]:
     tokens = []
     token = ""
     token_index = 0
@@ -157,9 +159,7 @@ COND_GROUP = 3
 def validate_conditions(
     rule: str,
     rule_indices: dict,
-    conditions: list[
-        tuple[bool, int, str | tuple[bool | None, list], str | int | None]
-    ],
+    conditions,  #: list[tuple[bool, int, str | tuple[bool | None, list], str | int | None]],
 ):
     for _, type, condition, _ in conditions:
         if type == COND_ITEM:
@@ -177,10 +177,8 @@ def validate_conditions(
 
 
 def mark_progression(
-    conditions: list[
-        tuple[bool, int, str | tuple[bool | None, list], str | int | None]
-    ],
-    progression: set[str],
+    conditions,  #: list[tuple[bool, int, str | tuple[bool | None, list], str | int | None]],
+    progression,  #: set[str],
     rules: list,
     rule_indices: dict,
     loc_to_item: dict,
@@ -207,58 +205,58 @@ def mark_progression(
             mark_progression(conditions, progression, rules, rule_indices, loc_to_item)
 
 
-def read_data() -> (
-    tuple[
-        # Goal to rule index that ends that goal's range and the locations required
-        list[tuple[int, set[str]]],
-        # Rules
-        list[
-            tuple[
-                # Rule
-                str,
-                # Flag to flag arg
-                dict[str, str | int | None],
-                # True = or, False = and, None = N/A
-                bool | None,
-                # Conditions
-                list[
-                    tuple[
-                        # True = positive, False = negative
-                        bool,
-                        # Condition type
-                        int,
-                        # Condition name or list (True = or, False = and, None = N/A) (list shares type with outer)
-                        str | tuple[bool | None, list],
-                        # Condition arg
-                        str | int | None,
-                    ]
-                ],
-            ]
-        ],
-        # Rule to rule index
-        dict[str, int],
-        # Label to rewards
-        dict[str, list[str]],
-        # Reward to flags
-        dict[str, set[str]],
-        # Item name to ID
-        dict[str, int],
-        # Location name to ID
-        dict[str, int],
-        # NPCs
-        list[str],
-        # Pickaxe to pick power
-        dict[str, int],
-        # Hammer to hammer power
-        dict[str, int],
-        # Mechanical bosses
-        list[str],
-        # Calamity final bosses
-        list[str],
-        # Progression rules
-        set[str],
-    ]
-):
+def read_data():  # -> (
+    # tuple[
+    #    # Goal to rule index that ends that goal's range and the locations required
+    #    list[tuple[int, set[str]]],
+    #    # Rules
+    #    list[
+    #        tuple[
+    #            # Rule
+    #            str,
+    #            # Flag to flag arg
+    #            dict[str, str | int | None],
+    #            # True = or, False = and, None = N/A
+    #            bool | None,
+    #            # Conditions
+    #            list[
+    #                tuple[
+    #                    # True = positive, False = negative
+    #                    bool,
+    #                    # Condition type
+    #                    int,
+    #                    # Condition name or list (True = or, False = and, None = N/A) (list shares type with outer)
+    #                    str | tuple[bool | None, list],
+    #                    # Condition arg
+    #                    str | int | None,
+    #                ]
+    #            ],
+    #        ]
+    #    ],
+    #    # Rule to rule index
+    #    dict[str, int],
+    #    # Label to rewards
+    #    dict[str, list[str]],
+    #    # Reward to flags
+    #    dict[str, set[str]],
+    #    # Item name to ID
+    #    dict[str, int],
+    #    # Location name to ID
+    #    dict[str, int],
+    #    # NPCs
+    #    list[str],
+    #    # Pickaxe to pick power
+    #    dict[str, int],
+    #    # Hammer to hammer power
+    #    dict[str, int],
+    #    # Mechanical bosses
+    #    list[str],
+    #    # Calamity final bosses
+    #    list[str],
+    #    # Progression rules
+    #    set[str],
+    # ]
+    # ):
     next_id = 0x7E0000
     item_name_to_id = {}
 
