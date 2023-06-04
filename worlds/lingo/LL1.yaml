@@ -3347,6 +3347,7 @@
     entrances:
       The Wondrous (Doorknob):
         painting: True
+      The Wondrous: True
     panels:
       WOOD:
         id: Wonderland Room/Panel_wood_table
