@@ -4014,6 +4014,11 @@
     <CActorSound id="AP_HealingDroneHealSoundStart" parent="SoundOneShot">
         <Sound value="Medivac_HealStart"/>
     </CActorSound>
+    <CActorAction id="AP_DeploySpiderMinesRelease" parent="GenericAttack" effectImpact="AP_DeploySpiderMinesCreateUnit" effectLaunch="AP_DeploySpiderMinesLaunchMissile">
+        <LaunchSiteOps Ops="SOpAttachCenter"/>
+        <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
     <CActorRange id="AP_RavenDeploySpiderMinesRange" parent="RangeAbil" abil="AP_RavenDeploySpiderMines"/>
     <CActorMissile id="AP_DeploySpiderMinesReleaseMissile" parent="GenericAttackMissile" unitName="AP_DeploySpiderMinesMissile"/>
     <CActorSound id="AP_DeploySpiderMines_Launch" parent="SoundOneShot">
@@ -4484,7 +4489,7 @@
     <CActorRange id="AP_RailGunTurretRange" parent="RangeAbil" abil="AP_BuildRailGunTurret"/>
     <CActorAction id="AP_RailGunTurretRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_RailGunTurretReleaseLM">
         <LaunchAssets Sound="Raven_AutoTurretReleaseLaunch"/>
-        <Missile value="RailGunTurretReleaseMissile"/>
+        <Missile value="AP_RailGunTurretReleaseMissile"/>
         <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
         <ImpactMap index="None" Sound="Raven_AutoTurretReleaseImpact"/>
         <ShieldFlashType value="None"/>
@@ -4501,6 +4506,14 @@
     <CActorTurret id="AP_RailGunTurretTurret">
         <On Terms="TurretEnable.AP_RailGunTurret" Send="Create"/>
     </CActorTurret>
+    <CActorAction id="AP_NovaRavenSeekerMissileAttack" parent="GenericAttack" effectImpact="AP_NovaRavenSeekerMissileDamage" effectLaunch="AP_NovaRavenSeekerMissileLaunchMissile">
+        <Beam value="HunterSeekerAttackBeam"/>
+        <Missile value="AP_HunterSeekerAttackMissile"/>
+        <!--ImpactSiteOps Ops="SOpTargetPoint SOp2DRotation"/-->
+        <ImpactMap index="None" Sound="Raven_HunterSeekerAttackImpact"/>
+        <ImpactPhysics Name="HunterSeekerImpact" MatchKeys="Basic" Physics="HunterSeekerAttackForce"/>
+        <ImpactPhysics Name="HunterSeekerImpactAir" MatchKeys="BasicAir" Physics="HunterSeekerAttackForceAir"/>
+    </CActorAction>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -4746,11 +4759,15 @@
     </CActorAction>
     <CActorModel id="AP_HunterSeekerAttackImpactModel" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_SeekerMissileDamage.Start" Send="Create"/>
+        <On Terms="Effect.AP_NovaRavenSeekerMissileDamage.Start" Send="Create"/>
         <Model value="HunterSeekerAttackImpact"/>
     </CActorModel>
     <CActorMissile id="AP_HunterSeekerAttackMissile" parent="GenericAttackMissile" unitName="AP_HunterSeekerWeapon">
+        <On Terms="MotionPhaseStart; MotionPhase" Send="Create AP_HunterSeekerLaunchSound"/>
         <On Terms="MotionPhaseStart; MotionPhase 1" Send="Create AP_HunterSeekerTrackingBeam"/>
-        <On Terms="MotionPhaseStart; MotionPhase 3" Send="Create AP_HunterSeekerHappySound"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Target="AP_HunterSeekerLaunchSound" Send="Destroy"/>
+        <On Terms="UnitDeath" Target="AP_HunterSeekerLaunchSound" Send="Destroy"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="Create AP_HunterSeekerHappySound"/>
         <Model value="HunterSeekerWeapon"/>
     </CActorMissile>
     <CActorAction id="AP_PointDefenseDroneRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_PointDefenseDroneReleaseLaunchMissile">
@@ -4837,6 +4854,10 @@
         <On Terms="Abil.AP_SeekerMissile.SourceCastStart" Send="$Spell"/>
         <On Terms="Abil.AP_PlacePointDefenseDrone.SourceCastStart" Send="$Spell"/>
         <On Terms="Abil.AP_BuildAutoTurret.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_PlaceHealingDrone.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_RavenDeploySpiderMines.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_BuildRailGunTurret.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.attack.SourceCastStart" Send="$Spell"/>
         <HostSiteOps Ops="SOpBankerRaven"/>
         <Model value="Raven"/>
         <BuildModel value="Raven"/>
@@ -4845,8 +4866,10 @@
         <PortraitModel value="RavenPortrait"/>
         <StandAnimTurnTime value="3"/>
         <AbilSoundArray AbilCmd="AP_BuildAutoTurret,0" Sound="Raven_AutoTurretVO"/>
+        <AbilSoundArray AbilCmd="AP_BuildRailGunTurret,0" Sound="Raven_AutoTurretVO"/>
         <AbilSoundArray AbilCmd="AP_SeekerMissile,0" Sound="AP_Raven_HunterSeekerVO"/>
         <AbilSoundArray AbilCmd="AP_PlacePointDefenseDrone,0" Sound="Raven_TargetingDroneVO"/>
+        <AbilSoundArray AbilCmd="AP_PlaceHealingDrone,0" Sound="Raven_TargetingDroneVO"/>
         <BarOffset value="55"/>
         <ErrorArray Error="CantBuildLocationInvalid" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
         <ErrorArray Error="CantFindPlacementLocation" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
@@ -4903,7 +4926,6 @@
         <HostImpactSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
     </CActorBeamSimple>
     <CActorSound id="AP_HunterSeekerLaunchSound" parent="SoundOneShot">
-        <On Terms="Abil.AP_SeekerMissile.SourcePrepStart" Send="Create"/>
         <Sound value="Raven_HunterSeekerLaunch"/>
     </CActorSound>
     <CActorRange id="AP_PointDefenseDroneRange" parent="RangeAbil" abil="AP_PlacePointDefenseDrone"/>

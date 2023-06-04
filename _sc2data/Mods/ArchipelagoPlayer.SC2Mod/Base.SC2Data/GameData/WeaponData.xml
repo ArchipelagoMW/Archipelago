@@ -1019,4 +1019,15 @@
         <Period value="2"/>
         <Effect value="AP_RailGunTurretSearchCP"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaRavenSeekerMissile">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="DisplayCooldown" value="1"/>
+        <Icon value="Assets\Textures\BTN-Ability-Terran-HunterMissile-color.dds"/>
+        <DisplayEffect value="AP_NovaRavenSeekerMissileDamage"/>
+        <Range value="10"/>
+        <Period value="7"/>
+        <Effect value="AP_NovaRavenSeekerMissileLaunchMissile"/>
+    </CWeaponLegacy>
 </Catalog>

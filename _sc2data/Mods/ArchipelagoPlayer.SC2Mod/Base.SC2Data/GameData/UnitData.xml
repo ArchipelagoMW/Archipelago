@@ -2305,6 +2305,7 @@
         <DamageDealtXP value="1"/>
         <DamageTakenXP value="1"/>
         <KillXP value="45"/>
+        <AbilArray Link="attack"/>
         <AbilArray Link="stop"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_BuildAutoTurret"/>
@@ -2313,6 +2314,7 @@
         <AbilArray Link="AP_PlaceHealingDrone"/>
         <AbilArray Link="AP_RavenDeploySpiderMines"/>
         <AbilArray Link="AP_BuildRailGunTurret"/>
+        <WeaponArray Link="AP_NovaRavenSeekerMissile"/>
         <BehaviorArray Link="Detector11"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -2322,12 +2324,13 @@
             <LayoutButtons Face="AP_BuildAutoTurret" Type="AbilCmd" AbilCmd="AP_BuildAutoTurret,0" Row="2" Column="0"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
-            <LayoutButtons Face="Detector" Type="Passive" Row="2" Column="3"/>
+            <LayoutButtons Face="Detector" Type="Passive" Row="1" Column="4"/>
             <LayoutButtons Face="AP_HunterSeekerMissile" Type="AbilCmd" AbilCmd="AP_SeekerMissile,0" Row="2" Column="2"/>
             <LayoutButtons Face="AP_BuildPointDefenseDrone" Type="AbilCmd" AbilCmd="AP_PlacePointDefenseDrone,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_BuildHealingDrone" Type="AbilCmd" AbilCmd="AP_PlaceHealingDrone,0" Row="1" Column="0"/>
             <LayoutButtons Face="AP_DeploySpiderMinesRaven" Type="AbilCmd" AbilCmd="AP_RavenDeploySpiderMines,Execute" Row="1" Column="1"/>
             <LayoutButtons Face="AP_BuildRailGunTurret" Type="AbilCmd" AbilCmd="AP_BuildRailGunTurret,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_AdvancedWeaponryRaven" Type="Passive" Requirements="AP_HaveAdvancedWeaponryRaven" Row="1" Column="3"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>

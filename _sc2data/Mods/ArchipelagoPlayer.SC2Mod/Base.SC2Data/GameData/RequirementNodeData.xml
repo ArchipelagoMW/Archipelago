@@ -395,6 +395,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MagrailMunitionsRaven" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAdvancedWeaponryRavenCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AdvancedWeaponryRaven" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeScienceVesselCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ScienceVessel" State="CompleteOnly"/>

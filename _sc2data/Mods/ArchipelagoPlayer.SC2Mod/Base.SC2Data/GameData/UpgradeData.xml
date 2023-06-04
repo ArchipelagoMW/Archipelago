@@ -267,6 +267,9 @@
         <!-- Valkyrie -->
         <EffectArray Reference="Weapon,AP_ValkyrieSCBWWeapon,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_ValkyrieSCBWWeapon@Damage,Amount" Value="1"/>
+        <!-- Raven -->
+        <EffectArray Reference="Weapon,AP_NovaRavenSeekerMissile,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_NovaRavenSeekerMissileDamage,Amount" Value="5.000000"/>
     </CUpgrade>
     <CUpgrade default="1" id="AP_BaseTerranShipWeaponsUltraCapacitors" parent="AP_BaseTerranShipWeapons">
         <Name value="Upgrade/Name/AP_BaseTerranShipWeaponsUltraCapacitors"/>
@@ -289,6 +292,7 @@
         <EffectArray Reference="Weapon,AP_LiberatorMissileLaunchers,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_LiberatorAGWeapon,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_ValkyrieSCBWWeapon,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_NovaRavenSeekerMissile,RateMultiplier" Value="0.05"/>
     </CUpgrade>
     <CUpgrade default="1" id="AP_BaseTerranVehicleArmors">
         <Name value="Upgrade/Name/AP_BaseTerranVehicleArmors"/>
@@ -1122,6 +1126,14 @@
     <CUpgrade id="AP_MagrailMunitionsRaven">
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Raven"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AdvancedWeaponryRaven">
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_NovaRavenSeekerMissile,Options[Disabled]" Value="1"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_NovaRavenSeekerMissile,Options[Hidden]" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Raven"/>
+        <LeaderAlias value=""/>
+        <Flags index="UpgradeCheat" value="0"/>
     </CUpgrade>
     <CUpgrade id="AP_ScienceVessel">
         <Flags index="UpgradeCheat" value="0"/>

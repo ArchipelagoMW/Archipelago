@@ -1396,4 +1396,10 @@
         <Find value="1"/>
         <Value value="AP_HaveHotSParalyticSpines"/>
     </CValidatorPlayerRequirement>
+    <CValidatorLocationCompareRange id="AP_NovaRavenSeekerMissileMaxLaunchRange">
+        <WhichLocation Effect="AP_NovaRavenSeekerMissileLaunchMissile"/>
+        <Compare value="GE"/>
+        <Range value="13"/>
+        <Value Value="SourceUnit"/>
+    </CValidatorLocationCompareRange>
 </Catalog>

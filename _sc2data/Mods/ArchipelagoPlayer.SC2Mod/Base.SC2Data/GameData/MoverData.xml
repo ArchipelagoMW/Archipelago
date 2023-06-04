@@ -556,6 +556,62 @@
             <YawPitchRoll value="5759.6484"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_NovaRavenSeekerMissile">
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Acceleration value="3200"/>
+            <Speed value="1"/>
+            <MaxSpeed value="1"/>
+            <Clearance value="0.5"/>
+            <ClearanceLookahead value="3"/>
+            <ClearanceAcceleration value="75"/>
+            <ClearanceIgnoresTargetProximity value="1"/>
+            <Outro value="0.3"/>
+            <Timeout value="0.3"/>
+            <ThrowVector value="0,-1,0"/>
+            <FlightTime value="0.3"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Speed value="0.0078"/>
+            <MaxSpeed value="0.0078"/>
+            <Clearance value="0.5"/>
+            <ClearanceLookahead value="3"/>
+            <ClearanceAcceleration value="75"/>
+            <ClearanceIgnoresTargetProximity value="1"/>
+            <Outro value="0.9"/>
+            <Timeout value="0.7"/>
+            <ThrowVector value="0,-1,0"/>
+            <YawPitchRoll value="MAX"/>
+            <FlightTime value="0.7"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="4"/>
+            <MaxSpeed value="16"/>
+            <Clearance value="0.5"/>
+            <ClearanceLookahead value="3"/>
+            <Outro value="5"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="4"/>
+            <MaxSpeed value="16"/>
+            <Clearance value="0.5"/>
+            <ClearanceLookahead value="3"/>
+            <Outro value="-2.25,-2"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="16"/>
+            <MaxSpeed value="16"/>
+            <Clearance value="0.25"/>
+            <ClearanceLookahead value="3"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+    </CMoverMissile>
     <CMoverMissile id="AP_ImpalerWeapon">
         <MotionPhases>
             <Driver value="Guidance"/>
