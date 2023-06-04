@@ -96,6 +96,24 @@ class StrictBosses(DefaultOnToggle):
     display_name = "Strict Bosses"
 
 
+class OpenWorld(Toggle):
+    """
+    If enabled, all 6 stages will be unlocked upon entering a world for the first time. A certain amount of stages
+    will need to be completed in order to unlock the bosses
+    """
+    display_name = "Open World"
+
+
+class OpenWorldBossRequirement(Range):
+    """
+    The amount of stages completed needed to unlock the boss of a world when Open World is turned on.
+    """
+    display_name = "Open World Boss Requirement"
+    range_start = 1
+    range_end = 6
+    default = 3
+
+
 class BossRequirementRandom(Toggle):
     """
     If enabled, boss purification will unlock in any order, requiring a random amount of Heart Stars.
@@ -212,6 +230,8 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "stage_shuffle": LevelShuffle,
     "boss_shuffle": BossShuffle,
     "strict_bosses": StrictBosses,
+    "open_world": OpenWorld,
+    "ow_boss_requirement": OpenWorldBossRequirement,
     "boss_requirement_random": BossRequirementRandom,
     "consumables": ConsumableChecks,
     "kirby_flavor_preset": KirbyFlavorPreset,
