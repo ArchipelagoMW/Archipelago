@@ -76,13 +76,15 @@ def create_all_regions_and_connections(multiworld: MultiWorld, player: int) -> N
 # - Snow Chasm is disconnected from the Snowy Wasteland
 # - Pyramid is connected to the Hiisi Base instead of the Desert due to similar difficulty
 # - Frozen Vault is connected to the Vault instead of the Snowy Wasteland due to similar difficulty
+# - Lake is connected to The Laboratory, since the boss is hard without specific set-ups (which means late game)
+# - Snowy Depths connects to Lava Lake orb since you need digging for it, so fairly early is acceptable
 noita_connections: Dict[str, Set[str]] = {
     "Menu": {"Forest"},
     "Forest": {"Mines", "Floating Island", "Desert", "Snowy Wasteland"},
-    "Snowy Wasteland": {"Lake", "Forest"},
+    "Snowy Wasteland": {"Forest"},
     "Frozen Vault": {"The Vault"},
-    "Lake": {"Snowy Wasteland", "Desert"},
-    "Desert": {"Lake", "Forest"},
+    "Lake": {"The Laboratory"},
+    "Desert": {"Forest"},
     "Floating Island": {"Forest"},
     "Pyramid": {"Hiisi Base"},
     "Overgrown Cavern": {"Sandcave", "Undeground Jungle"},
@@ -91,9 +93,9 @@ noita_connections: Dict[str, Set[str]] = {
     ###
     "Mines": {"Collapsed Mines", "Coal Pits Holy Mountain", "Lava Lake", "Forest"},
     "Collapsed Mines": {"Mines", "Dark Cave"},
-    "Lava Lake": {"Mines", "Abyss Orb Room", "Below Lava Lake"},
+    "Lava Lake": {"Mines", "Abyss Orb Room"},
     "Abyss Orb Room": {"Lava Lake"},
-    "Below Lava Lake": {"Lava Lake"},
+    "Below Lava Lake": {"Snowy Depths"},
     "Dark Cave": {"Ancient Laboratory", "Collapsed Mines"},
     "Ancient Laboratory": {"Dark Cave"},
 
@@ -104,7 +106,7 @@ noita_connections: Dict[str, Set[str]] = {
 
     ###
     "Snowy Depths Holy Mountain": {"Snowy Depths"},
-    "Snowy Depths": {"Snowy Depths Holy Mountain", "Hiisi Base Holy Mountain", "Magical Temple"},
+    "Snowy Depths": {"Snowy Depths Holy Mountain", "Hiisi Base Holy Mountain", "Magical Temple", "Below Lava Lake"},
     "Magical Temple": {"Snowy Depths"},
 
     ###
@@ -127,15 +129,15 @@ noita_connections: Dict[str, Set[str]] = {
     ###
     "Temple of the Art Holy Mountain": {"Temple of the Art"},
     "Temple of the Art": {"Temple of the Art Holy Mountain", "Laboratory Holy Mountain", "The Tower",
-                          "Wizard's Den"},
-    "Wizard's Den": {"Temple of the Art", "Powerplant"},
-    "Powerplant": {"Wizard's Den", "Deep Underground"},
+                          "Wizards' Den"},
+    "Wizards' Den": {"Temple of the Art", "Powerplant"},
+    "Powerplant": {"Wizards' Den", "Deep Underground"},
     "The Tower": {"Forest"},
     "Deep Underground": {},
 
     ###
     "Laboratory Holy Mountain": {"The Laboratory"},
-    "The Laboratory": {"Laboratory Holy Mountain", "The Work", "Friend Cave", "The Work (Hell)"},
+    "The Laboratory": {"Laboratory Holy Mountain", "The Work", "Friend Cave", "The Work (Hell)", "Lake"},
     "Friend Cave": {},
     "The Work": {},
     "The Work (Hell)": {},
