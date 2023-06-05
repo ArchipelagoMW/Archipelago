@@ -760,6 +760,12 @@
         <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
         <AffectedUnitArray value="AP_SiegeTank"/>
     </CUpgrade>
+    <CUpgrade id="AP_HoverSiegeTank">
+        <AffectedUnitArray value="AP_SiegeTank"/>
+        <AffectedUnitArray value="AP_SiegeTankSieged"/>
+        <AffectedUnitArray value="AP_SiegeBreaker"/>
+        <AffectedUnitArray value="AP_SiegeBreakerSieged"/>
+    </CUpgrade>
     <CUpgrade id="AP_AdvancedHealingAI">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>

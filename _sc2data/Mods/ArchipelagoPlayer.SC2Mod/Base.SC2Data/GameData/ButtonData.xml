@@ -141,6 +141,11 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_SiegeTankJumpJet">
+        <Icon value="Assets\Textures\btn-upgrade-terran-jumpjets.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-JetPack-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
     <CButton id="AP_Heal">
         <Icon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>

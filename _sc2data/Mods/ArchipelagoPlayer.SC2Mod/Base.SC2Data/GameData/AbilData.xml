@@ -338,6 +338,84 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilEffectTarget id="AP_SiegeTankJumpJet">
+        <AbilSetId value="AP_SiegeTankJumpJet"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_SiegeTankJumpJetCreatePlaceholder"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="8"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SiegeTankJumpJet" Requirements="AP_HaveHoverSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <PlaceUnit value="AP_SiegeTankJumpJetPlaceholder"/>
+        <PrepTime value="0.125"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_SiegeTankSiegedJumpJet">
+        <AbilSetId value="AP_SiegeTankJumpJet"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_SiegeTankSiegedJumpJetCreatePlaceholder"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Link="Abil/SiegeTankJumpJet" Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <PrepTime value="0.125"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SiegeTankJumpJet" Requirements="AP_HaveHoverSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <PlaceUnit value="AP_SiegeTankSiegedJumpJetPlaceholder"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_MercSiegeTankJumpJet">
+        <AbilSetId value="AP_SiegeTankJumpJet"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_MercSiegeTankJumpJetCreatePlaceholder"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="8"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SiegeTankJumpJet" Requirements="AP_HaveHoverSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <PlaceUnit value="AP_SiegeTankJumpJetPlaceholder"/>
+        <PrepTime value="0.125"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_MercSiegeTankSiegedJumpJet">
+        <AbilSetId value="AP_SiegeTankJumpJet"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_MercSiegeTankSiegedJumpJetCreatePlaceholder"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Link="Abil/SiegeTankJumpJet" Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <PrepTime value="0.125"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SiegeTankJumpJet" Requirements="AP_HaveHoverSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <PlaceUnit value="AP_SiegeTankSiegedJumpJetPlaceholder"/>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="AP_MedivacDoubleBeamHeal">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

@@ -127,6 +127,10 @@
         <Tooltip value="RequirementNode/Tooltip/CountUpgradeSiegeTechCompleteOnly1316718431"/>
         <Count Link="AP_SiegeTech" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHoverSiegeTankCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HoverSiegeTank" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeAdvancedHealingAICompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_AdvancedHealingAI" State="CompleteOnly"/>

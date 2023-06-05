@@ -2648,4 +2648,48 @@
         <Volume value="-9.000000,-7.000000"/>
         <EditorCategories value="Race:Protoss"/>
     </CSound>
+    <CSound id="AP_SiegeTank_Land2" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\SiegeTank_Land01.wav" FacialGroup=""/>
+        <Category value="Combat"/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="2"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_SiegeTank_Land_RockDebris" parent="Spell">
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large3.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large4.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large5.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large6.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large7.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large8.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="2"/>
+    </CSound>
+    <CSound id="AP_SiegeTank_JumpJet_Launch" parent="Spell">
+        <EditorCategories value="Race:Neutral"/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch07.wav" FacialGroup=""/>
+        <DupeDestroyCount value="2"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="2"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-2.000000"/>
+        <Pitch value="-3.000000,1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+        <VolumeRolloffBlend value="Linear"/>
+        <VolumeRolloffPoints Distance="11.000000"/>
+        <VolumeRolloffPoints Distance="29.000000" Volume="-96.000000"/>
+    </CSound>
 </Catalog>

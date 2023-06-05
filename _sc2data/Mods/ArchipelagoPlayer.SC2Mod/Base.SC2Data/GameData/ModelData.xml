@@ -2751,4 +2751,51 @@
         <ScaleMax value="0.500000,0.500000,0.500000"/>
         <ScaleMin value="0.500000,0.500000,0.500000"/>
     </CModel>
+    <CModel id="AP_SiegeTankJumpJetLaunchModel">
+        <Model value="Assets\Doodads\SmokeMedium\SmokeMedium.m3"/>
+        <ScaleMax value="3.000000,3.000000,0.500000"/>
+        <ScaleMin value="3.000000,3.000000,0.500000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankJumpJetPlaceholder">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_Tank_Placement\SiegeTank_BlackOps_Tank_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankSiegedJumpJetPlaceholder">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_Placement\SiegeTank_BlackOps_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankJumpJetPlaceholderAttachment">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_Tank_Placement\SiegeTank_BlackOps_Tank_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankSiegedJumpJetPlaceholderAttachment">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_Placement\SiegeTank_BlackOps_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_SiegeTank_BlackOps_JumpJets_Land" parent="ImpactFX">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_JumpJets_Land\SiegeTank_BlackOps_JumpJets_Land.m3"/>
+    </CModel>
+    <CModel id="AP_Merc_SiegeTank_BlackOps_Tank" parent="SiegeTankBase">
+        <Model value="Assets\Units\Terran\SiegeTank_BlackOps_Tank\SiegeTank_BlackOps_Tank.m3"/>
+        <ScaleMax value="1.000000,1.000000,1.000000"/>
+        <ScaleMin value="1.000000,1.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_Merc_SiegeTank_BlackOps" parent="SiegeTankBase">
+        <Model value="Assets\Units\Terran\SiegeTank_BlackOps\SiegeTank_BlackOps.m3"/>
+        <ScaleMax value="1.000000,1.000000,1.000000"/>
+        <ScaleMin value="1.000000,1.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_Merc_SiegeTankMorph_BlackOps" parent="SiegeTankBase">
+        <Model value="Assets\Units\Terran\SiegeTankMorph_BlackOps\SiegeTankMorph_BlackOps.m3"/>
+        <ScaleMax value="1.000000,1.000000,1.000000"/>
+        <ScaleMin value="1.000000,1.000000,1.000000"/>
+    </CModel>
 </Catalog>

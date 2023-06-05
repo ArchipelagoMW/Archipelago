@@ -1429,4 +1429,8 @@
         <Range value="13"/>
         <Value Value="SourceUnit"/>
     </CValidatorLocationCompareRange>
+    <CValidatorPlayerRequirement id="AP_HaveHoverSiegeTank">
+        <Find value="1"/>
+        <Value value="AP_HaveHoverSiegeTank"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

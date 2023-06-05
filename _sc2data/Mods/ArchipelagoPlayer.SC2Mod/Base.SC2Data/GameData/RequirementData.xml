@@ -124,6 +124,10 @@
         <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankShapedBlastCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHoverSiegeTank">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHoverSiegeTankCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_AdvancedHealingAINotPurchased">
         <NodeArray index="Show" Link="AP_NotCountUpgradeAdvancedHealingAICompleteOnly"/>
     </CRequirement>

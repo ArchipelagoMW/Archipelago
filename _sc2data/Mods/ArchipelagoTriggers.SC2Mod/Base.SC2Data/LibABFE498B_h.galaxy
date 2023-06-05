@@ -98,6 +98,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackTriLithiumPowerCell (int
 void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackShapedHull (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankMaelstromRounds (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankShapedBlast (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankJumpJets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacAdvancedHealingAI (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWraithTomahawkPowerCells (int lp_player);

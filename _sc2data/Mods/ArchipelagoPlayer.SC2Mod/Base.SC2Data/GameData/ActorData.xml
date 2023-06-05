@@ -1291,6 +1291,18 @@
         <Aliases value="_UnitLarge"/>
         <Macros value="UnloadDropAnim"/>
         <Model value="SiegeTank"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_Land"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start" Send="AnimPlay JumpStart Jump,Start"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start" Send="TimerSet 0.500000 JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimClear JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimPlay Jump Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay JumpEnd Jump,End 0 -1.000000 -1.000000 4.000000 AsDuration"/>
+        <On Terms="UnitMovementUpdate; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap SiegeTank_BlackOps_Tank"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap SiegeTank_BlackOps_Tank"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_BlackOps_JumpJets_Land"/>
         <BuildModel value="SiegeTank"/>
         <DeathArray index="Normal" ModelLink="SiegeTankDeath" SoundLink="SiegeTank_Explode"/>
         <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
@@ -1322,6 +1334,100 @@
             <Image value="Assets\Textures\Wireframe-Terran-SiegeTank-TankMode.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_SiegeTank_BlackOps_JumpJets_Land" parent="ModelAnimationStyleOneShot">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorModel>
+    <CActorSound id="AP_SiegeTank_Land">
+        <Layers>
+            <Sound value="AP_SiegeTank_Land2"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,60"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_SiegeTank_Land_RockDebris"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,60"/>
+            <Volume value="-6.000000,-3.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorUnit id="AP_SiegeTankJumpJetPlaceholder" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AP_SiegeTankJumpJetPlaceholder">
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <Model value="Invisible"/>
+        <On Terms="ActorCreation" Send="Create AP_SiegeTankJumpJetPlaceholderAttachment"/>
+        <PlacementActorModel value="AP_SiegeTankJumpJetPlaceholderPlacementModel"/>
+    </CActorUnit>
+    <CActorModel id="AP_SiegeTankJumpJetPlaceholderPlacementModel" parent="PlacementModel"/>
+    <CActorModel id="AP_SiegeTankJumpJetPlaceholderAttachment">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorUnit id="AP_SiegeTankSiegedJumpJetPlaceholder" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AP_SiegeTankSiegedJumpJetPlaceholder">
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <Model value="Invisible"/>
+        <On Terms="ActorCreation" Send="Create AP_SiegeTankSiegedJumpJetPlaceholderAttachment"/>
+    </CActorUnit>
+    <CActorModel id="AP_SiegeTankSiegedJumpJetPlaceholderAttachment">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_SiegeTankJumpJetLandingModel">
+        <Model value="UnloadFX"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <AutoScaleFactor value="1.000000"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <!-- <On Terms="ActorCreation" Send="Create AP_SiegeTank_Land"/> -->
+        <On Terms="ActorCreation" Send="$Stand,00"/>
+        <On Terms="AnimDone; AnimName Stand" Send="Destroy"/>
+        <On Terms="Effect.AP_RemoveSiegeTankJumpJetPlaceholderSet.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_RemoveMercSiegeTankJumpJetPlaceholderSet.Start; At Caster" Send="Create"/>
+    </CActorModel>
+    <CActorModel id="AP_SiegeTankJumpJetLaunchModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Stop" Send="Destroy"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Stop" Send="Destroy"/>
+    </CActorModel>
+    <CActorSound id="AP_SiegeTank_JumpJet_Launch_ActorSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <Sound value="AP_SiegeTank_JumpJet_Launch"/>
+        <!--On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Stop" Send="Destroy"/-->
+    </CActorSound>
+    <CActorRange id="AP_SiegeTankJumpJetRange" parent="RangeAbil" abil="AP_SiegeTankJumpJet"/>
+    <CActorRange id="AP_SiegeTankSiegedJumpJetRange" parent="RangeAbil" abil="AP_SiegeTankSiegedJumpJet"/>
+    <CActorRange id="AP_MercSiegeTankJumpJetRange" parent="RangeAbil" abil="AP_MercSiegeTankJumpJet"/>
+    <CActorRange id="AP_MercSiegeTankSiegedJumpJetRange" parent="RangeAbil" abil="AP_MercSiegeTankSiegedJumpJet"/>
     <CActorUnit id="AP_TankModeMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_TankModeMorphModel">
         <Model value="SiegeTankSiegedMorph"/>
         <PortraitModel value="SiegeTankPortrait"/>
@@ -1329,6 +1435,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTank" Send="AnimPlay End Morph,End"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeTank" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeTankSieged" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap SiegeTankMorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap SiegeTankMorph_BlackOps"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
         <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
         <BarWidth value="102"/>
@@ -1358,6 +1466,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTankSieged" Send="AnimPlay Start Morph,Start"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeTankSieged" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeTank" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap SiegeTankMorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap SiegeTankMorph_BlackOps"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
         <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
         <BarWidth value="102"/>
@@ -1410,6 +1520,21 @@
     <CActorUnit id="AP_SiegeTankSieged" parent="GenericUnitMorph" unitName="AP_SiegeTankSieged">
         <Aliases value="_UnitLarge"/>
         <Model value="SiegeTankSieged"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_Land"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetLM.Start; CreepEngulfs" Send="CreepEngulfmentStop"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetLM.Start; CreepIntersects" Send="CreepEngulfmentStop"/>
+        <On Terms="Effect.AP_RemoveSiegeTankJumpJetPlaceholderSet.Start; CreepEngulfs" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="Effect.AP_RemoveSiegeTankJumpJetPlaceholderSet.Start; CreepIntersects" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start" Send="AnimPlay JumpStart Jump,Start"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start" Send="TimerSet 0.500000 JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimClear JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimPlay Jump Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay JumpEnd Jump,End 0 -1.000000 -1.000000 6.000000 AsDuration"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_BlackOps_JumpJets_Land"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap SiegeTank_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap SiegeTank_BlackOps"/>
         <BuildModel value="SiegeTankSieged"/>
         <DeathArray index="Normal" ModelLink="SiegeTankSiegedDeath" SoundLink="SiegeTank_Explode"/>
         <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
@@ -6655,6 +6780,18 @@
         <Aliases value="_UnitLarge"/>
         <Macros value="UnloadDropAnim"/>
         <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_SiegeBreakerDropModel"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_Land"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start" Send="AnimPlay JumpStart Jump,Start"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start" Send="TimerSet 0.500000 JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimClear JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimPlay Jump Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay JumpEnd Jump,End 0 -1.000000 -1.000000 4.000000 AsDuration"/>
+        <On Terms="UnitMovementUpdate; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap AP_Merc_SiegeTank_BlackOps_Tank"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap AP_Merc_SiegeTank_BlackOps_Tank"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_BlackOps_JumpJets_Land"/>
         <DeathArray index="Normal" ModelLink="AP_SiegeBreakerDeath" SoundLink="AP_SiegeBreaker_Explode"/>
         <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
         <StandAnimTurnTime value="3.33"/>
@@ -6698,6 +6835,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreakerSieged" Send="AnimPlay Start Morph,Start"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreakerSieged" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreaker" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap AP_Merc_SiegeTankMorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap AP_Merc_SiegeTankMorph_BlackOps"/>
         <Model value="AP_SiegeBreakerSiegedMorph"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
         <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
@@ -6726,6 +6865,21 @@
     </CActorSound>
     <CActorUnit id="AP_SiegeBreakerSieged" parent="GenericUnitMorph" unitName="AP_SiegeBreakerSieged">
         <Aliases value="_UnitLarge"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_Land"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetLM.Start; CreepEngulfs" Send="CreepEngulfmentStop"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetLM.Start; CreepIntersects" Send="CreepEngulfmentStop"/>
+        <On Terms="Effect.AP_RemoveMercSiegeTankJumpJetPlaceholderSet.Start; CreepEngulfs" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="Effect.AP_RemoveMercSiegeTankJumpJetPlaceholderSet.Start; CreepIntersects" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start" Send="AnimPlay JumpStart Jump,Start"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start" Send="TimerSet 0.500000 JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimClear JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimPlay Jump Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay JumpEnd Jump,End 0 -1.000000 -1.000000 6.000000 AsDuration"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_BlackOps_JumpJets_Land"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap AP_Merc_SiegeTank_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap AP_Merc_SiegeTank_BlackOps"/>
         <DeathArray index="Normal" ModelLink="AP_SiegeBreakerSiegedDeath" SoundLink="SiegeTank_Explode"/>
         <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
         <BarOffset value="65"/>
@@ -6788,6 +6942,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreaker" Send="AnimPlay End Morph,End"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreaker" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreakerSieged" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap AP_Merc_SiegeTankMorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap AP_Merc_SiegeTankMorph_BlackOps"/>
         <Model value="AP_SiegeBreakerSiegedMorph"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
         <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>

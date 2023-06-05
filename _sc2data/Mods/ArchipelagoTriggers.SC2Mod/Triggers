@@ -5296,6 +5296,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="1879BA59"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="311283F0"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="DBFFE0A0"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="87978982"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="99767BCC"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="237A0428"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="7F6B5364"/>
@@ -6191,6 +6192,42 @@
         <Element Type="Param" Id="4C2772C1">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_SiegeTankShapedBlast</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="87978982">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="F4EFD9BB"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="D8C514A4"/>
+        </Element>
+        <Element Type="ParamDef" Id="F4EFD9BB">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="5410678A"/>
+        </Element>
+        <Element Type="Param" Id="5410678A">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="D8C514A4">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="80EDF45A"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="12FF60ED"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="FA9C94FC"/>
+        </Element>
+        <Element Type="Param" Id="80EDF45A">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="F4EFD9BB"/>
+        </Element>
+        <Element Type="Param" Id="12FF60ED">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="FA9C94FC">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_HoverSiegeTank</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

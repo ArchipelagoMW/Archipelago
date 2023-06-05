@@ -920,6 +920,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_SiegeMode"/>
+        <AbilArray Link="AP_SiegeTankJumpJet"/>
         <BehaviorArray Link="AP_SiegeTankThorn"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_90mmCannons" Turret="AP_SiegeTank"/>
@@ -935,17 +936,18 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseMaelstromRoundsReq"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_ShapedBlast"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseShapedBlastReq"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankJumpJet,Execute" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -1012,6 +1014,7 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="AP_Unsiege"/>
+        <AbilArray Link="AP_SiegeTankSiegedJumpJet"/>
         <BehaviorArray Link="AP_SiegeTankThorn"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_CrucioShockCannon" Turret="AP_SiegeTankSieged"/>
@@ -1027,17 +1030,18 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseMaelstromRounds"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_ShapedBlast"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseShapedBlast"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -1057,6 +1061,50 @@
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="135"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="AP_SiegeTankSiegedJumpJetPlaceholder">
+        <Facing value="45"/>
+        <Race value="Terr"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Undetectable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <LifeStart value="10000"/>
+        <LifeMax value="10000"/>
+        <Radius value="0.4375"/>
+        <SeparationRadius value="0.4375"/>
+        <InnerRadius value="0.4375"/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Other,ObjectFamily:Campaign"/>
+        <LeaderAlias value=""/>
+        <HotkeyAlias value=""/>
+    </CUnit>
+    <CUnit id="AP_SiegeTankJumpJetPlaceholder">
+        <Race value="Terr"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Undetectable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <LifeStart value="10000"/>
+        <LifeMax value="10000"/>
+        <Radius value="0.4375"/>
+        <SeparationRadius value="0.4375"/>
+        <InnerRadius value="0.4375"/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Other,ObjectFamily:Campaign"/>
+        <LeaderAlias value=""/>
+        <HotkeyAlias value=""/>
     </CUnit>
     <CUnit id="AP_Medivac">
         <DeathRevealRadius value="3"/>
@@ -3369,6 +3417,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_SiegeBreakerSiege"/>
+        <AbilArray Link="AP_MercSiegeTankJumpJet"/>
         <WeaponArray Link="AP_SiegeBreaker" Turret="SiegeTank"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3382,17 +3431,18 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseMaelstromRoundsReq"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_ShapedBlast"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseShapedBlastReq"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankJumpJet,Execute" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -3452,6 +3502,7 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="AP_SiegeBreakerUnsiege"/>
+        <AbilArray Link="AP_MercSiegeTankSiegedJumpJet"/>
         <WeaponArray Link="AP_ArcliteShockCannon" Turret="SiegeTankSieged"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3465,17 +3516,18 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseMaelstromRounds"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_ShapedBlast"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseShapedBlast"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
