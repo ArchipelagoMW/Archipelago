@@ -134,5 +134,5 @@ Button/Hotkey/AP_DeploySpiderMinesRaven=E
 Button/Hotkey/AP_BuildRailGunTurret=G
 Button/Hotkey/AP_RavenScramblerMissile=C
 Button/Hotkey/AP_RavenShredderMissile=N
-Button/Hotkey/AP_SiegeTankJumpJet=J
+Button/Hotkey/AP_SiegeTankJumpJet=T
 Button/Hotkey/AP_DeploySpiderMines=R
