@@ -921,6 +921,7 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_SiegeMode"/>
         <AbilArray Link="AP_SiegeTankJumpJet"/>
+        <AbilArray Link="AP_DeploySpiderMines"/>
         <BehaviorArray Link="AP_SiegeTankThorn"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_90mmCannons" Turret="AP_SiegeTank"/>
@@ -948,6 +949,7 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankJumpJet,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -1015,6 +1017,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="AP_Unsiege"/>
         <AbilArray Link="AP_SiegeTankSiegedJumpJet"/>
+        <AbilArray Link="AP_DeploySpiderMines"/>
         <BehaviorArray Link="AP_SiegeTankThorn"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_CrucioShockCannon" Turret="AP_SiegeTankSieged"/>
@@ -1042,6 +1045,7 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -3418,6 +3422,7 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_SiegeBreakerSiege"/>
         <AbilArray Link="AP_MercSiegeTankJumpJet"/>
+        <AbilArray Link="AP_DeploySpiderMines"/>
         <WeaponArray Link="AP_SiegeBreaker" Turret="SiegeTank"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3443,6 +3448,7 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankJumpJet,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -3503,6 +3509,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="AP_SiegeBreakerUnsiege"/>
         <AbilArray Link="AP_MercSiegeTankSiegedJumpJet"/>
+        <AbilArray Link="AP_DeploySpiderMines"/>
         <WeaponArray Link="AP_ArcliteShockCannon" Turret="SiegeTankSieged"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3528,6 +3535,7 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>

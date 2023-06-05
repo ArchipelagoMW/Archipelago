@@ -416,6 +416,24 @@
         </CmdButtonArray>
         <PlaceUnit value="AP_SiegeTankSiegedJumpJetPlaceholder"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_DeploySpiderMines">
+        <Effect index="0" value="AP_DeploySpiderMinesPersistent"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Charge CountMax="3" CountStart="3" CountUse="1"/>
+            <Cooldown Location="Unit"/>
+        </Cost>
+        <Range value="5.5"/>
+        <Arc value="360"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <ProducedUnitArray value="AP_SpiderMine"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DeploySpiderMines" Requirements="AP_HaveSpiderMinesSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="AP_MedivacDoubleBeamHeal">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

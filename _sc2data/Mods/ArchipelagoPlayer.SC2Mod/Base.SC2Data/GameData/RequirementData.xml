@@ -128,6 +128,9 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHoverSiegeTankCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveSpiderMinesSiegeTank">
+        <NodeArray index="Show" Link="AP_CountUpgradeSiegeSpiderMinesCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_AdvancedHealingAINotPurchased">
         <NodeArray index="Show" Link="AP_NotCountUpgradeAdvancedHealingAICompleteOnly"/>
     </CRequirement>

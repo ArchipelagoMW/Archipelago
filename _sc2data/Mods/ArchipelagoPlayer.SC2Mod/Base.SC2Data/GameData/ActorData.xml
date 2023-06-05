@@ -4153,6 +4153,7 @@
         <ShieldFlashType value="None"/>
     </CActorAction>
     <CActorRange id="AP_RavenDeploySpiderMinesRange" parent="RangeAbil" abil="AP_RavenDeploySpiderMines"/>
+    <CActorRange id="AP_DeploySpiderMinesRange" parent="RangeAbil" abil="AP_DeploySpiderMines"/>
     <CActorMissile id="AP_DeploySpiderMinesReleaseMissile" parent="GenericAttackMissile" unitName="AP_DeploySpiderMinesMissile"/>
     <CActorSound id="AP_DeploySpiderMines_Launch" parent="SoundOneShot">
         <On Terms="Effect.AP_DeploySpiderMinesLaunchMissile.Start" Send="Create"/>

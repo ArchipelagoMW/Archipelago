@@ -766,6 +766,12 @@
         <AffectedUnitArray value="AP_SiegeBreaker"/>
         <AffectedUnitArray value="AP_SiegeBreakerSieged"/>
     </CUpgrade>
+    <CUpgrade id="AP_SiegeSpiderMines">
+        <AffectedUnitArray value="AP_SiegeTank"/>
+        <AffectedUnitArray value="AP_SiegeTankSieged"/>
+        <AffectedUnitArray value="AP_SiegeBreaker"/>
+        <AffectedUnitArray value="AP_SiegeBreakerSieged"/>
+    </CUpgrade>
     <CUpgrade id="AP_AdvancedHealingAI">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>

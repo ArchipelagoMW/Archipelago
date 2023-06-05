@@ -131,6 +131,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HoverSiegeTank" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSiegeSpiderMinesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SiegeSpiderMines" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeAdvancedHealingAICompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_AdvancedHealingAI" State="CompleteOnly"/>

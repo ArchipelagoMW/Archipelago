@@ -146,6 +146,11 @@
         <AlertIcon value="Assets\Textures\BTN-Ability-Terran-JetPack-color.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_DeploySpiderMines">
+        <Icon value="Assets\Textures\btn-upgrade-siegetank-spidermines.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-siegetank-spidermines.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
     <CButton id="AP_Heal">
         <Icon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>

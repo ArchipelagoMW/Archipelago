@@ -479,6 +479,7 @@ Button/Name/AP_RavenScramblerMissile=Interference Matrix
 Button/Name/AP_RavenShredderMissile=Anti-Armor Missile
 Button/Name/AP_PermanentCloakBanshee=Advanced Cross-Spectrum Dampeners
 Button/Name/AP_SiegeTankJumpJet=Jump Jets
+Button/Name/AP_DeploySpiderMines=Deploy Spider Mines
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
@@ -754,6 +755,7 @@ Button/Tooltip/AP_RavenShredderMissile=Deploys a missile which pursues the targe
 Button/Tooltip/AP_CloakOnBansheeFree=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.
 Button/Tooltip/AP_PermanentCloakBanshee=Cloak no longer requires energy.
 Button/Tooltip/AP_SiegeTankJumpJet=Repositions the Siege Tank to a target location. Can be used to jump up and down cliffs.
+Button/Tooltip/AP_DeploySpiderMines=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy <c val="FFE303">Detectors</c>.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
