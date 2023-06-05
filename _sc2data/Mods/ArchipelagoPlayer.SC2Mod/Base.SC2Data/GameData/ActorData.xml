@@ -1898,6 +1898,8 @@
         <On Terms="Behavior.AP_BansheeCloak.Off" Send="StatusDecrement Cloaked"/>
         <On Terms="Behavior.AP_CloakFieldEffect.Off" Send="StatusDecrement Cloaked"/>
         <On Terms="Behavior.CloakFieldEffect.Off" Send="StatusDecrement Cloaked"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.On" Send="StatusIncrement Cloaked"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.Off" Send="StatusDecrement Cloaked"/>
         <On Terms="Behavior.AP_BansheeCloak.On; IsStatus Cloaked 1" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
         <On Terms="Behavior.AP_BansheeCloak.Off; IsStatus Cloaked 0" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
         <On Terms="Behavior.AP_CloakFieldEffect.On; IsStatus Cloaked 1" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
@@ -1908,6 +1910,10 @@
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
         <HostSiteOps Ops="SOpBankerBanshee"/>
         <Model value="Banshee"/>
         <Baselines index="Walk" BlendIn="0.750000" BlendOut="1.000000"/>
@@ -1959,12 +1965,14 @@
         <Terms value="ValidateUnit NotCloakedAndNotDead"/>
         <On Terms="Behavior.AP_BansheeCloak.Off" Send="Create"/>
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.Off" Send="Create"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.Off" Send="Create"/>
         <Sound value="Banshee_CloakOff"/>
     </CActorSound>
     <CActorSound id="AP_Banshee_CloakOn" parent="SoundOneShot">
         <Terms value="ValidateUnit NotCloaked"/>
         <On Terms="Behavior.AP_BansheeCloak.On" Send="Create"/>
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.On" Send="Create"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.On" Send="Create"/>
         <Sound value="Banshee_CloakOn"/>
     </CActorSound>
     <CActorSound id="AP_Battlecruiser_TacticalJumpCursorSound" parent="SoundOneShot">

@@ -180,6 +180,9 @@
     <CRequirement id="AP_CrossSpectrumDampenersResearched">
         <NodeArray index="Show" Link="AP_CountUpgradeCrossSpectrumDampenersCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_PermanentCloakBansheeResearched">
+        <NodeArray index="Show" Link="AP_CountUpgradePermanentCloakBansheeCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_DistortionBlastersResearched">
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountUpgradeBansheeCloakedDamageCompleteOnly"/>

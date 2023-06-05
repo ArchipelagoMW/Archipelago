@@ -222,6 +222,18 @@
             <VitalRegenArray index="Energy" value="-1"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BansheeCloakFree">
+        <Name value="Behavior/Name/AP_BansheeCloak"/>
+        <Tooltip value="Behavior/Tooltip/AP_BansheeCloak"/>
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CanSpendEnergy"/>
+        <RemoveValidatorArray value="hasEnergy"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_DistortionBlasters">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

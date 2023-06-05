@@ -882,6 +882,19 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery (int
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ClusterWarheads", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeProgressiveCrossSpectrumDampeners (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lp_level >= 1)) {
+        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CrossSpectrumDampeners", 1);
+        if ((lp_level >= 2)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_PermanentCloakBanshee", 1);
+        }
+
+    }
+
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockBattlecruiserMissilePods (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

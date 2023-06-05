@@ -1443,6 +1443,14 @@
                 <Column value="2"/>
             </LayoutButtons>
             <LayoutButtons>
+                <Face value="AP_PermanentCloakBanshee"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_PermanentCloakBansheeResearched"/>
+                <Row value="2"/>
+                <Column value="3"/>
+            </LayoutButtons>
+            <LayoutButtons>
                 <Face value="AP_CrossSpectrumDampeners"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
@@ -3690,6 +3698,14 @@
                 <Requirements value="AP_ClusterWarheadsResearched"/>
                 <Row value="2"/>
                 <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="AP_PermanentCloakBanshee"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_PermanentCloakBansheeResearched"/>
+                <Row value="2"/>
+                <Column value="3"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_CrossSpectrumDampeners"/>

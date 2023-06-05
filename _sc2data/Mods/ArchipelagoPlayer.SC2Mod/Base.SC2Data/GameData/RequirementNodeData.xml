@@ -209,6 +209,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ClusterWarheads" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradePermanentCloakBansheeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_PermanentCloakBanshee" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeCrossSpectrumDampenersCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CrossSpectrumDampeners" State="CompleteOnly"/>

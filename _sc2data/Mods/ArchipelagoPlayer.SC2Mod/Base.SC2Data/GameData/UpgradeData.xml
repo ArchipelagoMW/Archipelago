@@ -908,6 +908,15 @@
         <EffectArray Operation="Set" Reference="Button,AP_CloakOnBanshee,Tooltip" Value="Button/Tooltip/AP_CloakOnBansheeUpgrade"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_PermanentCloakBanshee">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BansheeCloak,Cost[0].Vital[Energy]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_BansheeCloak,BehaviorArray[0]" Value="AP_BansheeCloakFree"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_DuskWingBansheeCloakingField,Cost[0].Vital[Energy]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Abil,AP_DuskWingBansheeCloakingField,BehaviorArray[0]" Value="AP_BansheeCloakFree"/>
+        <EffectArray Operation="Set" Reference="Button,AP_CloakOnBanshee,Tooltip" Value="Button/Tooltip/AP_CloakOnBansheeFree"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
     <CUpgrade id="AP_DistortionBlasters">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
