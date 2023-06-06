@@ -225,7 +225,7 @@ id,name,classification,groups,mod_name
 237,Monster Musk Recipe,progression,SPECIAL_ORDER_BOARD,
 239,Sewing Machine,progression,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
 240,Coffee Maker,progression,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
-241,Mini Fridge,useful,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
+241,Mini-Fridge,useful,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
 242,Mini-Shipping Bin,progression,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
 243,Deluxe Fish Tank,useful,"RESOURCE_PACK_USEFUL,SPECIAL_ORDER_BOARD",
 244,10 Qi Gems,progression,"GINGER_ISLAND,SPECIAL_ORDER_QI",
