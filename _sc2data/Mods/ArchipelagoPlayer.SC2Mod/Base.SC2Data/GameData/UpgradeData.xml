@@ -732,6 +732,10 @@
         <LeaderAlias value=""/>
         <AffectedUnitArray value="AP_Reaper"/>
     </CUpgrade>
+    <CUpgrade id="AP_ReaperSpiderMines">
+        <EditorCategories value="Race:Human,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Reaper"/>
+    </CUpgrade>
     <CUpgrade id="AP_MarauderStimpack">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>

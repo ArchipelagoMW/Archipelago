@@ -925,6 +925,11 @@
     <CActorEventMacro id="AP_D8ChargeAnim">
         <On Terms="Abil.AP_D8Charge.SourceCastStart" Send="$Spell"/>
     </CActorEventMacro>
+    <CActorRange id="AP_ReaperSpiderMinesRange" parent="RangeAbil" abil="AP_ReaperSpiderMines"/>
+    <CActorSound id="AP_ReaperSpiderMinesDeploySound" parent="SoundOneShot">
+        <Sound value="AP_Vulture_SpiderMinePlace"/>
+        <On Terms="Effect.AP_SpawnSpiderMine.Create" Send="Create"/>
+    </CActorSound>
     <CActorSound id="AP_Marine_Stimpack" parent="SoundOneShot">
         <Sound value="Marine_Stimpack"/>
         <On Terms="Abil.AP_Stimpack.SourceCastStart" Send="Create"/>

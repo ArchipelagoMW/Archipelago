@@ -862,6 +862,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockReaperAdvancedCloakingField (int lp
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CloakingTechnologyReaper", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockReaperSpiderMines (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ReaperSpiderMines", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionTwinLinkedFlamethrower (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

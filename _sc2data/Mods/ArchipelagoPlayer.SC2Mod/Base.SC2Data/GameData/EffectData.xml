@@ -375,6 +375,16 @@
         <EffectArray value="AP_D8ClusterBombLM"/>
         <EffectArray value="MakePrecursor"/>
     </CEffectSet>
+    <CEffectSet id="AP_SpawnReaperSpiderMineSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_SpawnSpiderMine"/>
+        <EffectArray value="AP_ReplenishReaperSpiderMine"/>
+        <TargetLocationType value="UnitOrPoint"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_ReplenishReaperSpiderMine">
+        <ImpactUnit Value="Source"/>
+        <Cost Abil="AP_MakeReaperSpiderMines,Specialize1" ChargeCountUse="-1"/>
+    </CEffectModifyUnit>
     <CEffectDamage id="AP_InfernalFlameThrower" parent="DU_WEAP">
         <ValidatorArray value="noMarkers"/>
         <EditorCategories value="Race:Terran"/>

@@ -96,6 +96,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CloakingTechnologyReaper" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeReaperSpiderMinesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_ReaperSpiderMines" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementNot id="AP_NotCountUpgradeCloakingTechnologyReaperCompleteOnly">
         <OperandArray index="0" value="AP_CountUpgradeCloakingTechnologyReaperCompleteOnly"/>
     </CRequirementNot>

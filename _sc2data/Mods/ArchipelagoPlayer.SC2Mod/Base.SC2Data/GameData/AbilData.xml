@@ -279,6 +279,37 @@
         <CastOutroTime value="0.35"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_D8Charge" State="Restricted" Requirements="AP_UseG4ClusterBombs"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ReaperSpiderMines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Placeholder value="SpiderMine"/>
+        <Range value="2"/>
+        <Cost>
+            <Charge>
+                <CountMax value="3"/>
+                <CountStart value="3"/>
+                <CountUse value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpiderMine" Requirements="AP_HaveReaperSpiderMines"/>
+        <Effect index="0" value="AP_SpawnReaperSpiderMineSet"/>
+    </CAbilEffectTarget>
+    <CAbilSpecialize id="AP_MakeReaperSpiderMines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray index="Specialize1" Time="12" Alert="SpiderMineComplete" Effect="AP_ReaperReplenishMines">
+            <Resource index="Minerals" value="15"/>
+            <Charge>
+                <CountMax value="3"/>
+                <CountUse value="1"/>
+                <HideCount value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_SpiderMineReplenish" Requirements="AP_HaveReaperSpiderMines"/>
+        </InfoArray>
+        <Alert value="BuildComplete"/>
+        <Flags index="BestUnit" value="0"/>
+        <Activity value="UI/AP_SpiderMineBuilding"/>
+    </CAbilSpecialize>
     <CAbilSpecialize id="AP_MakeVultureSpiderMines">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Activity value="UI/AP_SpiderMineBuilding"/>
