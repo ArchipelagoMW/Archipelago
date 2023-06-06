@@ -584,8 +584,8 @@ def generate_output(self, output_directory: str):
     data[rom_addresses["Option_Split_Card_Key"]] = self.multiworld.split_card_key[self.player].value
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.multiworld.blind_trainers[self.player].value * 2.55)
     # data[rom_addresses['Option_Cerulean_Cave_Condition']] = self.multiworld.cerulean_cave_condition[self.player].value
-    data[rom_addresses["Option_Cerulean_Cave_Badges"]] = self.multiworld.cerulean_cave_badges_condition[self.player].value + 1
-    data[rom_addresses["Option_Cerulean_Cave_Key_Items"]] = self.multiworld.cerulean_cave_key_items_condition[self.player].total +1
+    data[rom_addresses["Option_Cerulean_Cave_Badges"]] = self.multiworld.cerulean_cave_badges_condition[self.player].value
+    data[rom_addresses["Option_Cerulean_Cave_Key_Items"]] = self.multiworld.cerulean_cave_key_items_condition[self.player].total
     write_bytes(data, encode_text(str(self.multiworld.cerulean_cave_badges_condition[self.player].value)), rom_addresses["Text_Cerulean_Cave_Badges"])
     write_bytes(data, encode_text(str(self.multiworld.cerulean_cave_key_items_condition[self.player].total) + " key items."), rom_addresses["Text_Cerulean_Cave_Key_Items"])
     data[rom_addresses['Option_Encounter_Minimum_Steps']] = self.multiworld.minimum_steps_between_encounters[self.player].value
@@ -605,8 +605,8 @@ def generate_output(self, output_directory: str):
     if self.multiworld.old_man[self.player] == "open_viridian_city":
         data[rom_addresses['Option_Old_Man']] = 0x11
         data[rom_addresses['Option_Old_Man_Lying']] = 0x15
+    data[rom_addresses['Option_Route3_Guard_A']] = self.multiworld.route_3_condition[self.player].value
     if self.multiworld.route_3_condition[self.player] == "open":
-        data[rom_addresses['Option_Route3_Guard_A']] = 0x11
         data[rom_addresses['Option_Route3_Guard_B']] = 0x11
     if not self.multiworld.robbed_house_officer[self.player]:
         data[rom_addresses['Option_Trashed_House_Guard_A']] = 0x15
@@ -732,7 +732,7 @@ def generate_output(self, output_directory: str):
         for shop in range(1, 10):
             write_bytes(data, shop_data, rom_addresses[f"Shop{shop}"])
     if self.multiworld.stonesanity[self.player]:
-        write_bytes(data, bytearray([0xFE, 1, item_table["Poke Doll"].id]), rom_addresses[f"Shop_Stones"])
+        write_bytes(data, bytearray([0xFE, 1, 51]), rom_addresses[f"Shop_Stones"])
 
     price = str(self.multiworld.master_ball_price[self.player].value).zfill(6)
     price = bytearray([int(price[:2], 16), int(price[2:4], 16), int(price[4:], 16)])

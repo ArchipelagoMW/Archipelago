@@ -172,6 +172,7 @@ item_table = {
     "TM49 Tri Attack": ItemData(249, ItemClassification.useful, ["Unique", "TMs"]),
     "TM50 Substitute": ItemData(250, ItemClassification.useful, ["Unique", "TMs"]),
 
+    "Game Corner": ItemData(None, ItemClassification.progression, []),
     "Cinnabar Island": ItemData(None, ItemClassification.progression, []),
     "Buy Poke Doll": ItemData(None, ItemClassification.progression, []),
     "Vending Machine Drinks": ItemData(None, ItemClassification.progression, []),

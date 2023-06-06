@@ -73,7 +73,7 @@ class CeruleanCaveBadgesCondition(Range):
     display_name = "Cerulean Cave Badges Condition"
     range_start = 0
     range_end = 8
-    default = 8
+    default = 4
 
 
 class CeruleanCaveKeyItemsCondition(Range):
@@ -84,16 +84,18 @@ class CeruleanCaveKeyItemsCondition(Range):
     range_start = 0
     range_end = 100
     default = 50
+    total = 0
 
 
 class Route3Condition(Choice):
+    """Set a condition to pass through from Pewter City to Route 3."""
     display_name = "Route 3 Condition"
-    option_defeat_brock = 0
-    option_defeat_any_gym = 1
-    option_boulder_badge = 2
-    option_any_badge = 3
-    option_open = 4
-    default = 0
+    option_open = 0
+    option_defeat_brock = 1
+    option_defeat_any_gym = 2
+    option_boulder_badge = 3
+    option_any_badge = 4
+    default = 1
 
 
 class RobbedHouseOfficer(Toggle):
@@ -455,7 +457,7 @@ class MinimumStepsBetweenEncounters(Range):
     """Minimum number of steps between wild Pokemon encounters."""
     display_name = "Minimum Steps Between Encounters"
     default = 3
-    range_start = 0
+    range_start = 1
     range_end = 255
 
 
@@ -753,7 +755,7 @@ class IceTrapWeight(TrapWeight):
 
 
 class PokeDollSkip(Choice):
-    """Patch out the Pokmon Tower Poke Doll skip or have this skip considered in logic."""
+    """Patch out the Pokemon Tower Poke Doll skip or have this skip considered in logic."""
     display_name = "Poke Doll Skip"
     option_patched = 0
     option_in_logic = 1
@@ -788,7 +790,8 @@ pokemon_rb_options = {
     "victory_road_condition": VictoryRoadCondition,
     "route_22_gate_condition": Route22GateCondition,
     "viridian_gym_condition": ViridianGymCondition,
-    "cerulean_cave_condition": CeruleanCaveCondition,
+    "cerulean_cave_badges_condition": CeruleanCaveBadgesCondition,
+    "cerulean_cave_key_items_condition": CeruleanCaveKeyItemsCondition,
     "route_3_condition": Route3Condition,
     "robbed_house_officer": RobbedHouseOfficer,
     "second_fossil_check_condition": SecondFossilCheckCondition,

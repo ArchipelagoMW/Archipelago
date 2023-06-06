@@ -10,7 +10,6 @@ from ..generic.Rules import add_item_rule
 from .items import item_table, item_groups
 from .locations import location_data, PokemonRBLocation
 from .regions import create_regions
-from .logic import PokemonLogic
 from .options import pokemon_rb_options
 from .rom_addresses import rom_addresses
 from .text import encode_text
@@ -19,6 +18,7 @@ from .encounters import process_wild_pokemon, process_static_pokemon, process_tr
 from .rules import set_rules
 from .level_scaling import level_scaling
 
+import worlds.pokemon_rb.logic as logic
 import worlds.pokemon_rb.poke_data as poke_data
 
 
@@ -108,7 +108,7 @@ class PokemonRedBlueWorld(World):
                      or self.multiworld.randomize_legendary_pokemon[self.player] != "any")):
             self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("items")
 
-        if self.multiworld.extra_key_items[self.player]:
+        if self.multiworld.key_items_only[self.player]:
             self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
             self.multiworld.dexsanity[self.player] = self.multiworld.dexsanity[self.player].from_text("off")
             self.multiworld.randomize_hidden_items[self.player] = \
@@ -225,7 +225,7 @@ class PokemonRedBlueWorld(World):
                 item = self.create_item("Pokedex")
             elif location.original_item == "Moon Stone" and self.multiworld.stonesanity[self.player]:
                 stone = stones.pop()
-                item = self.create_item(stone, self.player)
+                item = self.create_item(stone)
             elif location.original_item.startswith("TM"):
                 if self.multiworld.randomize_tm_moves[self.player]:
                     item = self.create_item(location.original_item.split(" ")[0])
@@ -269,11 +269,13 @@ class PokemonRedBlueWorld(World):
                                "Secret Key", "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key",
                                "Hideout Key", "Card Key 2F", "Card Key 3F", "Card Key 4F", "Card Key 5F",
                                "Card Key 6F", "Card Key 7F", "Card Key 8F", "Card Key 9F", "Card Key 10F",
-                               "Card Key 11F", "Exp. All", "Fire Stone", "Thunder Stone", "Water Stone",
+                               "Card Key 11F", "Exp. All", "Moon Stone", "Fire Stone", "Thunder Stone", "Water Stone",
                                "Leaf Stone"] if item in advancement_items])
         if "Progressive Card Key" in advancement_items:
             total_advancement_items += 10
-        self.multiworld.cerulean_cave_key_items_condition[self.player].total = round((100 / total_advancement_items)
+        if not self.multiworld.stonesanity[self.player]:
+            total_advancement_items += 4
+        self.multiworld.cerulean_cave_key_items_condition[self.player].total = round((total_advancement_items / 100)
             * self.multiworld.cerulean_cave_key_items_condition[self.player].value)
 
         self.multiworld.itempool += item_pool
@@ -314,9 +316,9 @@ class PokemonRedBlueWorld(World):
                 for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
                               "Marsh Badge", "Volcano Badge", "Earth Badge"]:
                     test_state.collect(self.create_item(badge))
-            if not test_state.pokemon_rb_can_surf(self.player):
+            if not logic.can_surf(test_state, self.player):
                 intervene_move = "Surf"
-            if not test_state.pokemon_rb_can_strength(self.player):
+            if not logic.can_strength(test_state, self.player):
                 intervene_move = "Strength"
             # cut may not be needed if accessibility is minimal, unless you need all 8 badges and badgesanity is off,
             # as you will require cut to access celadon gyn
@@ -325,12 +327,12 @@ class PokemonRedBlueWorld(World):
                     self.multiworld.route_22_gate_condition[self.player],
                     self.multiworld.victory_road_condition[self.player])
                     > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")):
-                if not test_state.pokemon_rb_can_cut(self.player):
+                if not logic.can_cut(test_state, self.player):
                     intervene_move = "Cut"
             if (not self.multiworld.dark_rock_tunnel_logic[self.player]) and ((self.multiworld.accessibility[
                     self.player] != "minimal" and (self.multiworld.trainersanity[self.player] or
                     self.multiworld.extra_key_items[self.player])) or self.multiworld.door_shuffle[self.player]):
-                if not test_state.pokemon_rb_can_flash(self.player):
+                if not logic.can_flash(test_state, self.player):
                     intervene_move = "Flash"
             if intervene_move:
                 if intervene_move == last_intervene:
@@ -395,8 +397,8 @@ class PokemonRedBlueWorld(World):
                 state = self.multiworld.get_all_state(False)
                 self.multiworld.random.shuffle(badges)
                 self.multiworld.random.shuffle(badgelocs)
-                # allow_partial so that unplaced badges aren't lost, for debugging purposes
                 badgelocs_copy = badgelocs.copy()
+                # allow_partial so that unplaced badges aren't lost, for debugging purposes
                 fill_restrictive(self.multiworld, state, badgelocs_copy, badges, True, True, allow_partial=True)
                 if badges:
                     for location in badgelocs:
@@ -431,6 +433,8 @@ class PokemonRedBlueWorld(World):
             if loc.name in self.multiworld.priority_locations[self.player].value:
                 add_item_rule(loc, lambda i: i.advancement)
             add_item_rule(loc, lambda i: i.player == self.player)
+            if self.multiworld.old_man[self.player] == "early_parcel":
+                add_item_rule(loc, lambda i: i.name != "Oak's Parcel")
             for item in self.multiworld.itempool.copy():
                 if item.player == self.player and loc.can_fill(self.multiworld.state, item, False):
                     self.multiworld.itempool.remove(item)
@@ -503,7 +507,7 @@ class PokemonRedBlueWorld(World):
             for matchup in self.type_chart:
                 spoiler_handle.write(f"{matchup[0]} deals {matchup[2] * 10}% damage to {matchup[1]}\n")
         spoiler_handle.write(f"\n\nPokémon locations ({self.multiworld.player_name[self.player]}):\n\n")
-        pokemon_locs = [location.name for location in location_data if location.type != "Item"]
+        pokemon_locs = [location.name for location in location_data if location.type not in ("Item", "Trainer Parties")]
         for location in self.multiworld.get_locations(self.player):
             if location.name in pokemon_locs:
                 spoiler_handle.write(location.name + ": " + location.item.name + "\n")
@@ -565,7 +569,8 @@ class PokemonRedBlueWorld(World):
             "route_3_condition": self.multiworld.route_3_condition[self.player].value,
             "robbed_house_officer": self.multiworld.robbed_house_officer[self.player].value,
             "viridian_gym_condition": self.multiworld.viridian_gym_condition[self.player].value,
-            "cerulean_cave_condition": self.multiworld.cerulean_cave_condition[self.player].value,
+            "cerulean_cave_badges_condition": self.multiworld.cerulean_cave_badges_condition[self.player].value,
+            "cerulean_cave_key_items_condition": self.multiworld.cerulean_cave_key_items_condition[self.player].total,
             "free_fly_map": self.fly_map_code,
             "town_map_fly_map": self.town_map_fly_map_code,
             "extra_badges": self.extra_badges,

@@ -121,7 +121,7 @@ location_data = [
     LocationData("Cerulean Gym", "Misty TM", "TM11 Bubble Beam", rom_addresses["Event_Cerulean_Gym"],
                  EventFlag(190)),
     LocationData("Route 24", "Nugget Bridge", "Nugget", rom_addresses["Event_Nugget_Bridge"], EventFlag(1344)),
-    LocationData("Route 25", "Bill", "S.S. Ticket", rom_addresses["Event_Bill"], EventFlag(1372)),
+    LocationData("Bill's House", "Bill", "S.S. Ticket", rom_addresses["Event_Bill"], EventFlag(1372)),
     LocationData("Lavender Mr. Fuji's House", "Mr. Fuji", "Poke Flute", rom_addresses["Event_Fuji"], EventFlag(296)),
     LocationData("Route 12 Gate 2F", "Mourning Girl", "TM39 Swift", rom_addresses["Event_Mourning_Girl"],
                  EventFlag(1152)),
@@ -778,6 +778,7 @@ location_data = [
     LocationData("Silph Co 10F-SE", "Hostage", "Card Key 10F", rom_addresses["Event_SKC10F"], EventFlag(0x1c7), inclusion=split_card_key),
     LocationData("Silph Co 11F-C", "Secretary", "Card Key 11F", rom_addresses["Event_SKC11F"], EventFlag(0x1c8), inclusion=split_card_key),
 
+    LocationData("Celadon Game Corner", "", "Game Corner", event=True),
     LocationData("Cinnabar Island", "", "Cinnabar Island", event=True),
     LocationData("Celadon Department Store 4F", "Buy Poke Doll", "Buy Poke Doll", event=True),
     LocationData("Celadon Department Store 4F", "Buy Fire Stone", "Fire Stone", event=True),
@@ -2759,3 +2760,8 @@ class PokemonRBLocation(Location):
         self.level = level
         self.party_data = None
         self.level_address = level_address
+        if type == "Trainer Parties":
+            self.item_rule = lambda i: i.player == player and i.name == "Trainer Parties"
+        elif type == "Wild Encounter" or "Pokemon" in type:
+            self.item_rule = lambda i: (i.player == player and i.name in poke_data.pokemon_data or
+                                        " ".join(i.name.split(" ")[1:]) in poke_data.pokemon_data)
