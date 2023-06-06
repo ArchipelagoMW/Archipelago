@@ -1433,4 +1433,8 @@
         <Find value="1"/>
         <Value value="AP_HaveHoverSiegeTank"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveGoliathJumpJets">
+        <Find value="1"/>
+        <Value value="AP_HaveGoliathJumpJets"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

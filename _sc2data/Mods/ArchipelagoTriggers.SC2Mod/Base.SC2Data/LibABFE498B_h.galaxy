@@ -94,6 +94,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockVultureCerberusMine (int lp_player)
 void libABFE498B_gf_AP_Triggers_Terran_unlockVultureReplenishableMagazine (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathMultiLockWeaponsSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathAresClassTargetingSystem (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathJumpJets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackTriLithiumPowerCell (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackShapedHull (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankMaelstromRounds (int lp_player);

@@ -810,6 +810,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathAresClassTargetingSystem (in
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_AresClassWeaponsSystem", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockGoliathJumpJets (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_GoliathJumpJet", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockDiamondbackTriLithiumPowerCell (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

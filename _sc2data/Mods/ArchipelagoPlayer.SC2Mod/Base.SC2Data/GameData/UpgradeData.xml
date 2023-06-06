@@ -705,6 +705,13 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Options[Hidden]" Value="1"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_GoliathJumpJet">
+        <EffectArray Operation="Set" Reference="Unit,AP_Goliath,Mover" Value="CliffJumper"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SpartanCompany,Mover" Value="CliffJumper"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Goliath"/>
+        <AffectedUnitArray value="AP_SpartanCompany"/>
+    </CUpgrade>
     <CUpgrade id="AP_BurstCapacitors">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>

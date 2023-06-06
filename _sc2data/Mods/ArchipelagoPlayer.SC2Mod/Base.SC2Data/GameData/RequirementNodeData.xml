@@ -96,6 +96,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MultilockTargetingSystems" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeGoliathJumpJetCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_GoliathJumpJet" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeBurstCapacitorsCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_BurstCapacitors" State="CompleteOnly"/>

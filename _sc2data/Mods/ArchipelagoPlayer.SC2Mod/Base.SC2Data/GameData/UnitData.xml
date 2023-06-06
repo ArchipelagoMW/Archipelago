@@ -749,6 +749,7 @@
         <AbilArray Link="move"/>
         <BehaviorArray Link="AP_MultilockTargetingSystems"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <BehaviorArray Link="AP_GoliathCliffJump"/>
         <WeaponArray Link="AP_GoliathA" Turret="AP_Goliath"/>
         <WeaponArray Link="AP_GoliathG" Turret="AP_Goliath"/>
         <WeaponArray Link="AP_GoliathAUpgraded" Turret="FreeRotate"/>
@@ -775,6 +776,7 @@
                 <Row value="2"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_CliffJumper" Type="Passive" Requirements="AP_HaveGoliathJumpJets" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.6875"/>
         <SeparationRadius value="0.65"/>
@@ -3336,6 +3338,7 @@
         <AbilArray Link="move"/>
         <BehaviorArray Link="AP_MultilockTargetingSystems"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <BehaviorArray Link="AP_GoliathCliffJump"/>
         <WeaponArray Link="AP_SpartanCompanyG" Turret="AP_SpartanCompany"/>
         <WeaponArray Link="AP_SpartanCompanyA" Turret="AP_SpartanCompany"/>
         <WeaponArray Link="AP_SpartanCompanyGUpgraded" Turret="AP_SpartanCompany"/>
@@ -3362,6 +3365,7 @@
                 <Row value="2"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_CliffJumper" Type="Passive" Requirements="AP_HaveGoliathJumpJets" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.6875"/>
         <SeparationRadius value="0.65"/>

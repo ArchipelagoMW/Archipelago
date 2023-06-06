@@ -87,6 +87,10 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeMultilockTargetingSystemsCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveGoliathJumpJets">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeGoliathJumpJetCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_BurstCapacitorsResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeBurstCapacitorsCompleteOnly"/>
     </CRequirement>

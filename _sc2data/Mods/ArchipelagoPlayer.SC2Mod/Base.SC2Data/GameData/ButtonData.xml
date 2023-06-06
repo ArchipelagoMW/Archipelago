@@ -1336,4 +1336,9 @@
         <AlertIcon value="Assets\Textures\BTN-Ability-Terran-ShredderMissile-Color.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_CliffJumper">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-JetPack-color.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-JetPack-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>
