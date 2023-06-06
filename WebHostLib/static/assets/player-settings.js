@@ -294,7 +294,7 @@ const buildOptionsTable = (settings, romOpts = false) => {
   return table;
 };
 
-const toggleRandomize = (event, inputElement, optionalSelectElement) => {
+const toggleRandomize = (event, inputElement, optionalSelectElement = null) => {
   const active = event.target.classList.contains('active');
   const randomButton = event.target;
 
