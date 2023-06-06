@@ -683,12 +683,29 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
     if multiworld.multi_hit_breakables[player]:
         rom.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
 
+    # Once-per-frame gameplay checks
+    rom.write_int32(0x6C848, 0x080FF40D)   # J 0x803FD034
+    rom.write_int32(0xBFD058, 0x0801AEB5)  # J 0x8006BAD4
+
+    # Everything related to dropping the previous sub-weapon
     if multiworld.drop_previous_sub_weapon[player]:
+        rom.write_int32(0xBFD034, 0x080FF3FF)  # J 0x803FCFFC
         rom.write_int32(0xBFC18C, 0x080FF3F2)  # J 0x803FCFC8
         rom.write_int32s(0xBFCFC4, Patches.prev_subweapon_spawn_checker)
-        rom.write_int32(0x6C848, 0x080FF3FF)  # J 0x803FCFFC
         rom.write_int32s(0xBFCFFC, Patches.prev_subweapon_fall_checker)
         rom.write_int32s(0xBFD060, Patches.prev_subweapon_dropper)
+
+    # Everything related to the Countdown counter
+    if multiworld.countdown[player]:
+        rom.write_int32(0xBFD03C, 0x080FF5BF)  # J 0x803FD6FC
+        rom.write_int32(0xD5D48, 0x0C01A733)   # J 0x803FD3B0
+        rom.write_int32s(0xBFD3B0, Patches.countdown_number_displayer)
+        rom.write_int32s(0xBFD6DC, Patches.countdown_number_updater)
+        rom.write_int32(0xBFCE2C, 0x080FF5D2)  # J 0x803FD748
+        # If the option is set to "all locations", count it down no matter what the item is.
+        if multiworld.countdown[player].value == 2:
+            rom.write_int32s(0xBFD71C, 0x11111111, 0x11111111, 0x11111111, 0x11111111, 0x11111111, 0x11111111,
+                             0x11111111, 0x11111111, 0x11111111, 0x11111111, 0x11111111)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():

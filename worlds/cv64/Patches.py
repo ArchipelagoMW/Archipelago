@@ -1316,7 +1316,7 @@ prev_subweapon_spawn_checker = [
     0x10AD0007,  # BEQ   A1, T5, [forward 0x07
     0x3C088040,  # LUI   T0, 0x8040
     0x01054021,  # ADDU  T0, T0, A1
-    0x0C0FF416,  # JAL   0x803FD058
+    0x0C0FF418,  # JAL   0x803FD060
     0x9104CFC3,  # LBU   A0, 0xCFC3 (T0)
     0x2484FF9C,  # ADDIU A0, A0, 0xFF9C
     0x3C088039,  # LUI   T0, 0x8039
@@ -1342,7 +1342,7 @@ prev_subweapon_fall_checker = [
     0x00000000,  # NOP
     0x50400001,  # BEQZL V0,     [forward 0x01]
     0xAD009BD4,  # SW    R0, 0x9BD4 (T0)
-    0x0801AEB5   # J     0x8006BAD4
+    0x080FF40F   # J     0x803FD03C
 ]
 
 prev_subweapon_dropper = [
@@ -1562,5 +1562,260 @@ subweapon_surface_checker = [
     0x0804EDCE,  # J     0x8013B738
     0xA56C00DD,  # SH    T4, 0x00DD (T3)
     0x00000000,  # NOP
+    0x03E00008   # JR    RA
+]
+
+countdown_number_displayer = [
+    # Displays a number below the HUD clock of however many items are left to find in whichever stage the player is in.
+    # Which number in the save file to display depends on which map the player is currently on. It can track either
+    # items marked progression only or all locations in the stage.
+    # Courtesy of B_squo; see print_text_ovl.c in the src folder for the C source code.
+    0x27BDFFD8,
+    0xAFBF0024,
+    0x00002025,
+    0x0C000360,
+    0x2405000C,
+    0x3C038040,
+    0x3C198034,
+    0x2463D6D0,
+    0x37392814,
+    0x240E0002,
+    0x3C0F0860,
+    0x24180014,
+    0xAC620000,
+    0xAFB80018,
+    0xAFAF0014,
+    0xAFAE0010,
+    0xAFB9001C,
+    0x00002025,
+    0x00402825,
+    0x2406001E,
+    0x0C0FF55D,
+    0x24070028,
+    0x8FBF0024,
+    0x3C018040,
+    0xAC22D6D4,
+    0x03E00008,
+    0x27BD0028,
+    0x27BDFFE0,
+    0xAFA40020,
+    0x93AE0023,
+    0x3C058039,
+    0xAFBF001C,
+    0x3C048040,
+    0x3C068040,
+    0x240F0014,
+    0x00AE2821,
+    0x90A59CA4,
+    0xAFAF0010,
+    0x8CC6D6D0,
+    0x8C84D6D4,
+    0x0C0FF58A,
+    0x24070002,
+    0x8FBF001C,
+    0x27BD0020,
+    0x03E00008,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x90820000,
+    0x00001825,
+    0x50400008,
+    0xA4A00000,
+    0xA4A20000,
+    0x90820001,
+    0x24840001,
+    0x24A50002,
+    0x1440FFFB,
+    0x24630001,
+    0xA4A00000,
+    0x03E00008,
+    0x00601025,
+    0x27BDFFD8,
+    0xAFBF0024,
+    0xAFB0001C,
+    0xAFA40028,
+    0xAFA5002C,
+    0xAFB10020,
+    0xAFA60030,
+    0xAFA70034,
+    0x00008025,
+    0x24050064,
+    0x0C000360,
+    0x00002025,
+    0x8FA40040,
+    0x00408825,
+    0x3C05800A,
+    0x10800004,
+    0x8FA6003C,
+    0x0C04B2E2,
+    0x8CA5B450,
+    0x00408025,
+    0x5200001A,
+    0x8FBF0024,
+    0x12200017,
+    0x8FAE0028,
+    0x11C00015,
+    0x02002025,
+    0x97A5002E,
+    0x97A60032,
+    0x0C04B33F,
+    0x24070001,
+    0x02002025,
+    0x83A50037,
+    0x87A6003A,
+    0x00003825,
+    0x0C04B345,
+    0xAFA00010,
+    0x8FA40028,
+    0x0C0FF51C,
+    0x02202825,
+    0x0C006CF0,
+    0x02202025,
+    0x02002025,
+    0x02202825,
+    0x00003025,
+    0x0C04B34E,
+    0x00003825,
+    0x8FBF0024,
+    0x02001025,
+    0x8FB0001C,
+    0x8FB10020,
+    0x03E00008,
+    0x27BD0028,
+    0x27BDFFD8,
+    0x8FAE0044,
+    0xAFB00020,
+    0xAFBF0024,
+    0xAFA40028,
+    0xAFA5002C,
+    0xAFA60030,
+    0xAFA70034,
+    0x11C00007,
+    0x00008025,
+    0x3C05800A,
+    0x8CA5B450,
+    0x01C02025,
+    0x0C04B2E2,
+    0x8FA6003C,
+    0x00408025,
+    0x12000017,
+    0x8FAF002C,
+    0x11E00015,
+    0x02002025,
+    0x97A50032,
+    0x97A60036,
+    0x0C04B33F,
+    0x24070001,
+    0x02002025,
+    0x24050001,
+    0x24060064,
+    0x00003825,
+    0x0C04B345,
+    0xAFA00010,
+    0x8FA40028,
+    0x8FA5002C,
+    0x93A6003B,
+    0x0C04B5BD,
+    0x8FA70040,
+    0x02002025,
+    0x8FA5002C,
+    0x00003025,
+    0x0C04B34E,
+    0x00003825,
+    0x8FBF0024,
+    0x02001025,
+    0x8FB00020,
+    0x03E00008,
+    0x27BD0028,
+    0x27BDFFE8,
+    0xAFBF0014,
+    0xAFA40018,
+    0xAFA5001C,
+    0xAFA60020,
+    0x10C0000B,
+    0xAFA70024,
+    0x00A02025,
+    0x00C02825,
+    0x93A60027,
+    0x0C04B5BD,
+    0x8FA70028,
+    0x8FA20018,
+    0x3C010100,
+    0x8C4F0000,
+    0x01E1C025,
+    0xAC580000,
+    0x8FBF0014,
+    0x27BD0018,
+    0x03E00008,
+    0x00000000,
+    0xAFA50004,
+    0x1080000E,
+    0x30A500FF,
+    0x24010001,
+    0x54A10008,
+    0x8C980000,
+    0x8C8E0000,
+    0x3C017FFF,
+    0x3421FFFF,
+    0x01C17824,
+    0x03E00008,
+    0xAC8F0000,
+    0x8C980000,
+    0x3C018000,
+    0x0301C825,
+    0xAC990000,
+    0x03E00008,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000
+]
+
+countdown_number_updater = [
+    # Updates the Countdown number every frame. Which number in the save file it refers to depends on the map ID.
+    0x00010102,  # Map ID offset table start
+    0x02020203,
+    0x04050505,
+    0x05050505,
+    0x07090806,
+    0x0C0C000B,
+    0x0C05020A,
+    0x00000000,  # Table end
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91089EE1,  # LBU   T0, 0x9EE1 (T0)
+    0x3C098040,  # LUI   T1, 0x8040
+    0x01284821,  # ADDU  T1, T1, T0
+    0x0C0FF507,  # JAL   0x803FD41C
+    0x9124D6DC,  # LBU   A0, 0xD6DC (T1)
+    0x080FF411,  # J     0x803FD044
+    0x00000000,
+    0x00000001,  # Major identifiers table start
+    0x01000000,
+    0x00000000,
+    0x00000000,
+    0x01000001,
+    0x01000000,
+    0x00000000,
+    0x01010101,
+    0x01010101,
+    0x01010101,
+    0x01000000,  # Table end
+    0x90E80039,  # LBU   T0, 0x0039 (A3)
+    0x3C098040,  # LUI   T1, 0x8040
+    0x01284821,  # ADDIU T1, T1, T0
+    0x9129D71C,  # LBU   T1, 0xD71C (T1)
+    0x11200009,  # BEQZ  T1,     [forward 0x09]
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91099EE1,  # LBU   T1, 0x9EE1 (T0)
+    0x3C0A8040,  # LUI   T2, 0x8040
+    0x01495021,  # ADDU  T2, T2, T1
+    0x914AD6DC,  # LBU   T2, 0xD6DC (T2)
+    0x010A4021,  # ADDU  T0, T0, T2
+    0x91099CA4,  # LBU   T1, 0x9CA4 (T0)
+    0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
+    0xA1099CA4,  # SB    T1, 0x9CA4 (T0)
     0x03E00008   # JR    RA
 ]

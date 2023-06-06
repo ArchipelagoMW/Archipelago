@@ -210,6 +210,16 @@ class SkipWaterwayPlatforms(Toggle):
     display_name = "Skip Waterway Platforms"
 
 
+class Countdown(Choice):
+    """Displays, below the HUD clock, the number of unobtained progression-marked items or locations remaining in the
+    stage you're currently in."""
+    display_name = "Countdown"
+    option_none = 0
+    option_majors = 1
+    option_all_locations = 2
+    default = 0
+
+
 class BackgroundMusic(Choice):
     """Randomizes or disables the music heard throughout the game. Randomized music is split into two pools: songs that
     loop and songs that don't."""
@@ -256,6 +266,7 @@ cv64_options: Dict[str, Option] = {
     "drop_previous_sub_weapon": DropPreviousSubWeapon,
     "disable_time_restrictions": DisableTimeRestrictions,
     "skip_waterway_platforms": SkipWaterwayPlatforms,
+    "countdown": Countdown,
     "background_music": BackgroundMusic,
     "map_lighting": MapLighting,
     "death_link": DeathLink,
