@@ -3016,4 +3016,8 @@
             <Adaptions TriggerOnSubstring="_Specular" Slot="main"/>
         </TextureDeclares>
     </CModel>
+    <CModel id="AP_ArtanisAreaStunModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Neutral\Stun_Void\Stun_Void.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
 </Catalog>

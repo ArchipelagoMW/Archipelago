@@ -7499,6 +7499,7 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_MorphToHellion"/>
+        <AbilArray Link="AP_HellbatCharge"/>
         <WeaponArray Link="AP_HellionTank"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -7523,6 +7524,7 @@
                 <Column value="1"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_MorphToHellion" Type="AbilCmd" AbilCmd="AP_MorphToHellion,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_HellbatCharge" Type="Passive" Requirements="AP_HaveHoverHellbat" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.75"/>

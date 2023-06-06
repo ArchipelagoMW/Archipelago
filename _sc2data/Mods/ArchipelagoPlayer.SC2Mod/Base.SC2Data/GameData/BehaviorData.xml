@@ -1565,4 +1565,17 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="4"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HellbatLeapStun">
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-jumpjets.dds"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <ModifyFlags index="Reveal" value="1"/>
+            <ModifyFlags index="Detected" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+        <Duration value="0.5"/>
+    </CBehaviorBuff>
 </Catalog>

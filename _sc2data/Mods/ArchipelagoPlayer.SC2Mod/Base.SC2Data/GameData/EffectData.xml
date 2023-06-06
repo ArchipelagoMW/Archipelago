@@ -374,6 +374,58 @@
         <EffectArray value="AP_InfernalFlameThrower"/>
         <EffectArray value="AP_InfernalFlameThrowerCP"/>
     </CEffectSet>
+    <CEffectCreateUnit id="AP_HellbatLeap">
+        <EditorCategories value="Race:Zerg"/>
+        <SpawnEffect value="AP_HellbatLeapSet"/>
+        <!--SpawnUnit value="HellbatPlaceholder"/-->
+        <SpawnUnit value="AP_Hellbat"/>
+        <SpawnRange value="1"/>
+        <SpawnOffset value="0,-1"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <ValidatorArray value="ChargeMinTriggerDistance"/>
+        <ValidatorArray value="HasVision"/>
+        <ValidatorArray value="AP_HellbatChargeMaxDistance"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_HellbatLeapSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_HellbatLeapSwitch"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="TempTimeout"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_HellbatLeapSwitch">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="TargetIsPathable" Effect="AP_HellbatLeapLM"/>
+        <CaseDefault value="AP_HellbatLeapRemove"/>
+        <TargetLocationType value="UnitOrPoint"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_HellbatLeapRemove">
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_HellbatLeapLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="AP_HellbatLeapImpactSet"/>
+        <Movers Link="AP_HellbatChargeMissile"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_HellbatLeapImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_HellbatLeapStunSearch"/>
+        <EffectArray value="AP_HellbatLeapRemove"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_HellbatLeapStun">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_HellbatLeapStunSearch">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AreaArray Radius="0.75" Effect="AP_HellbatLeapStun"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
     <CEffectModifyUnit id="AP_ReplenishNanoConstructor">
         <ImpactUnit Value="Source"/>
         <Cost Abil="AP_MakeVultureSpiderMines,Specialize1" ChargeCountUse="-1"/>

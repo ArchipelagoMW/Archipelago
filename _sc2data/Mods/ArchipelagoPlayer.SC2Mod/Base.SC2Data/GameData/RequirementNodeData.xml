@@ -70,6 +70,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HellbatAspect" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHoverHellbatCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HoverHellbat" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementNot id="AP_NotUpgradeVultureSpeedQueuedOrBetter">
         <OperandArray index="0" value="AP_UpgradeVultureSpeedQueuedOrBetter"/>
     </CRequirementNot>

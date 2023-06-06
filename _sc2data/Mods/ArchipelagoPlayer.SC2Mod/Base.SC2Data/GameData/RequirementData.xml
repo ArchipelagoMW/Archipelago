@@ -67,6 +67,10 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHellbatAspectCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHoverHellbat">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHoverHellbatCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_UseHighCapacityBarrels">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Use" Link="AP_CountUpgradeHighCapacityBarrelsCompleteOnlyTechTreeCheat"/>

@@ -668,6 +668,10 @@
         <AffectedUnitArray value="AP_Hellion"/>
         <AffectedUnitArray value="AP_HellionTank"/>
     </CUpgrade>
+    <CUpgrade id="AP_HoverHellbat">
+        <AffectedUnitArray value="AP_Hellion"/>
+        <AffectedUnitArray value="AP_HellionTank"/>
+    </CUpgrade>
     <CUpgrade id="AP_CerberusMines">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Operation="Multiply" Reference="Effect,AP_VultureSpiderMinesDamage,AreaArray[1].Radius" Value="1.33"/>

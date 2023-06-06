@@ -1353,4 +1353,9 @@
         <EditorCategories value="Race:Terran"/>
         <HotkeySet value="HellionModes"/>
     </CButton>
+    <CButton id="AP_HellbatCharge">
+        <Icon value="Assets\Textures\btn-upgrade-terran-jumpjets.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-jumpjets.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

@@ -992,6 +992,9 @@
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Hellion" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphFrom AP_Hellion" Send="Destroy"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimClear Visor 0.000000"/>
+        <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellion_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellion_BlackOps"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveHoverHellbat" Send="DeathCustomize BlackOps"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
         <Model value="Hellion"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
@@ -4793,6 +4796,8 @@
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
 <!--        <On Terms="ActorCreation; ValidateUnit AP_HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
 <!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbatmorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <Model value="HellionTankMorph"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="Hellion_Explode"/>
@@ -4833,6 +4838,11 @@
         <On Terms="TimerExpired; TimerName KillBeam" Target="AP_HellionAttackBeam" Send="Destroy"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Stand PlayForever 0.000000"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
+        <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbat_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbat_BlackOps"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveHoverHellbat" Send="DeathCustomize BlackOps"/>
+        <On Terms="Effect.AP_HellbatLeapLM.Start" Send="AnimBracketStart WorkerJump Jump,Start Jump Jump,End ClosingFull,ContentPlayOnce"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="AnimBracketStop WorkerJump"/>
         <Model value="HellionTank"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="HellionTank"/>
@@ -4939,6 +4949,8 @@
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
 <!--        <On Terms="ActorCreation; ValidateUnit HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
 <!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbatmorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <Model value="HellionTankMorph"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="Hellion_Explode"/>
@@ -4964,6 +4976,19 @@
     </CActorUnit>
     <CActorSound id="AP_Hellion_Land" parent="SoundOneShot">
         <Sound value="Hellion_Land"/>
+    </CActorSound>
+    <CActorModel id="AP_HellbatChargeStun" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_HellbatLeapStun.On" Send="Create"/>
+        <On Terms="Behavior.AP_HellbatLeapStun.Off" Send="AnimBracketStop BSD"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="AP_ArtanisAreaStunModel"/>
+    </CActorModel>
+    <CActorSound id="Hellbat_JumpJet_Launch_SoundActor" parent="SoundOneShot">
+        <On Terms="Effect.AP_HellbatLeapLM.Start" Send="Create"/>
+        <Sound value="Hellbat_JumpJet_Launch"/>
     </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->

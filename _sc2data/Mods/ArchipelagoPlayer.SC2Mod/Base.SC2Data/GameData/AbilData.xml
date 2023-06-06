@@ -2652,6 +2652,19 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilAugment id="AP_HellbatCharge">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_HellbatCharge" Requirements="AP_HaveHoverHellbat"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <TargetType value="UnitOrPoint"/>
+        <Cost>
+            <Cooldown Link="AP_HellbatCharge" Location="Unit" TimeUse="1.8"/>
+        </Cost>
+        <Effect value="AP_HellbatLeap"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

@@ -5289,6 +5289,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="879E57F2"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="F42EFE8F"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="8C0E7C5A"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="CDA67482"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="FB79E79C"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="D1FF83B8"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="D8068F8E"/>
@@ -5943,6 +5944,42 @@
         <Element Type="Param" Id="7769F391">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_HellbatAspect</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="CDA67482">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="E0D9067E"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="41A671B3"/>
+        </Element>
+        <Element Type="ParamDef" Id="E0D9067E">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="876BE603"/>
+        </Element>
+        <Element Type="Param" Id="876BE603">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="41A671B3">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="21FEFF72"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="1B6800D8"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="E2B37F29"/>
+        </Element>
+        <Element Type="Param" Id="21FEFF72">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="E0D9067E"/>
+        </Element>
+        <Element Type="Param" Id="1B6800D8">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="E2B37F29">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_HoverHellbat</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

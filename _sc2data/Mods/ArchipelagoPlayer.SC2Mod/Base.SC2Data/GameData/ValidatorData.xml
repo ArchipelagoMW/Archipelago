@@ -1445,4 +1445,15 @@
         <Find value="1"/>
         <Value value="AP_HaveGoliathJumpJets"/>
     </CValidatorPlayerRequirement>
+    <CValidatorLocationCompareRange id="AP_HellbatChargeMaxDistance">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="6"/>
+        <ResultFailed value="TargetIsOutOfRange"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorPlayerRequirement id="AP_HaveHoverHellbat">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHoverHellbat"/>
+    </CValidatorPlayerRequirement>
 </Catalog>
