@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectModifyUnit id="AP_ImmortalBarrierCDFix">
+        <ValidatorArray value="BarrierOnCooldown"/>
+        <Cost Behavior="ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
+        <Cost Behavior="AP_ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
+    </CEffectModifyUnit>
     <CBehaviorBuff id="AP_250mmStrikeCannons">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-bombardmentstrike.dds"/>
@@ -634,15 +639,11 @@
         <DisplayDuration index="Ally" value="1"/>
         <DisplayDuration index="Neutral" value="1"/>
         <DisplayDuration index="Enemy" value="1"/>
-<!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>--> <!-- TODO: Oracle unit -->
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <!-- TODO: Oracle unit -->
         <DisableValidatorArray value="AP_TargetNotTacticalJumping"/>
         <BuffFlags index="UpdateDurationWhileDisabled" value="1"/>
     </CBehaviorBuff>
-    <CEffectModifyUnit id="AP_ImmortalBarrierCDFix">
-        <ValidatorArray value="BarrierOnCooldown"/>
-        <Cost Behavior="ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
-        <Cost Behavior="AP_ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
-    </CEffectModifyUnit>
     <CBehaviorBuff id="AP_RavenShredderMissileTimeout">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="1.9"/>
@@ -664,7 +665,8 @@
         <DisplayDuration index="Ally" value="1"/>
         <DisplayDuration index="Neutral" value="1"/>
         <DisplayDuration index="Enemy" value="1"/>
-        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>--> <!-- TODO: Oracle unit -->
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <!-- TODO: Oracle unit -->
         <Duration value="30"/>
         <DamageResponse ModifyMinimumDamage="1">
             <Kind index="Spell" value="0"/>
@@ -678,7 +680,8 @@
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>--> <!-- TODO: Oracle unit -->
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <!-- TODO: Oracle unit -->
         <Duration value="30"/>
         <Modification ShieldArmorBonus="3">
             <ModifyFlags index="HideChangeUI" value="1"/>
@@ -690,7 +693,8 @@
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
         <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
-        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>--> <!-- TODO: Oracle unit -->
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <!-- TODO: Oracle unit -->
         <Duration value="30"/>
         <Modification ShieldArmorBonus="-2">
             <LifeArmorBonus value="-2"/>
@@ -1556,4 +1560,9 @@
         <LandArrivalRange value="0.05"/>
         <LandCheckRadius value="5"/>
     </CBehaviorJump>
+    <CBehaviorBuff id="AP_HellionTankReady">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="4"/>
+    </CBehaviorBuff>
 </Catalog>

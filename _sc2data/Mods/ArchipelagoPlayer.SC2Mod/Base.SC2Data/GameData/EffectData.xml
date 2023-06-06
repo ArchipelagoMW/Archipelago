@@ -3944,7 +3944,6 @@
     </CEffectSet>
     <CEffectApplyBehavior id="AP_RailGunTurretTimedLife">
         <EditorCategories value="Race:Terran"/>
-        <Behavior value="AP_RailGunTurretTimedLife"/>
     </CEffectApplyBehavior>
     <CEffectApplyBehavior id="AP_NovaRavenSeekerMissileApplyBehavior">
         <EditorCategories value="Race:Terran"/>
@@ -4106,6 +4105,39 @@
         <EffectArray value="RavenShredderMissileArmorReductionUIAdd"/-->
         <EffectArray value="AP_RavenShredderMissileArmorReductionUISubtruct"/>
     </CEffectSet>
+    <CEffectSet id="AP_HellionTank">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_HellionTankApplyBehavior"/>
+        <EffectArray value="AP_HellionTankDamage"/>
+        <EffectArray value="AP_HellionTankSearch"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_HellionTankApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_HellionTankReady"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_HellionTankDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Light" value="12"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Ranged"/>
+        <Amount value="18"/>
+        <Death value="Fire"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_HellionTankSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <ExcludeArray Effect="HellionTank" Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Dead,Hidden,Invulnerable"/>
+        <AreaArray Arc="45" Radius="2" Effect="AP_HellionTankDamage"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectEnumArea>
     <CAbilMorph id="AP_ReaperPlacementMorph">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoArray Unit="AP_Reaper"/>

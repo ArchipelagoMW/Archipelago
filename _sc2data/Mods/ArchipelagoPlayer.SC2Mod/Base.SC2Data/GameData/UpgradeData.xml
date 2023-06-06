@@ -310,6 +310,9 @@
         <!--  Hellion -->
         <EffectArray Reference="Unit,AP_Hellion,LifeArmor" Value="1.000000"/>
         <EffectArray Reference="Unit,AP_Hellion,LifeArmorLevel" Value="1"/>
+        <!--  Hellbat -->
+        <EffectArray Reference="Unit,AP_HellionTank,LifeArmor" Value="1.000000"/>
+        <EffectArray Reference="Unit,AP_HellionTank,LifeArmorLevel" Value="1"/>
         <!-- Diamondback -->
         <EffectArray Reference="Unit,AP_Diamondback,LifeArmor" Value="1.000000"/>
         <EffectArray Reference="Unit,AP_Diamondback,LifeArmorLevel" Value="1"/>
@@ -358,6 +361,9 @@
         <!--  Hellion -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_Hellion,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_Hellion,LifeStart" Value="1.05"/>
+        <!--  Hellbat -->
+        <EffectArray Operation="Multiply" Reference="Unit,AP_HellionTank,LifeMax" Value="1.05"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_HellionTank,LifeStart" Value="1.05"/>
         <!--  Vulture -->
         <EffectArray Operation="Multiply" Reference="Unit,AP_Vulture,LifeMax" Value="1.05"/>
         <EffectArray Operation="Multiply" Reference="Unit,AP_Vulture,LifeStart" Value="1.05"/>
@@ -411,6 +417,10 @@
         <EffectArray Reference="Weapon,AP_InfernalFlameThrower,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_InfernalFlameThrower,Amount" Value="1.000000"/>
         <EffectArray Reference="Effect,AP_InfernalFlameThrower,AttributeBonus[Light]" Value="1.000000"/>
+        <!-- Hellbat -->
+        <EffectArray Reference="Effect,AP_HellionTankDamage,Amount" Value="1.000000"/>
+        <EffectArray Reference="Weapon,AP_HellionTank,Level" Value="1"/>
+        <EffectArray Reference="Effect,AP_HellionTankDamage,AttributeBonus[Light]" Value="1.000000"/>
         <!-- Diamondback -->
         <EffectArray Reference="Weapon,AP_Diamondback,Level" Value="1"/>
         <EffectArray Reference="Effect,AP_DiamondbackBeam,Amount" Value="2"/>
@@ -457,6 +467,7 @@
         <EffectArray Reference="Weapon,AP_90mmCannons,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_CrucioShockCannon,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_InfernalFlameThrower,RateMultiplier" Value="0.05"/>
+        <EffectArray Reference="Weapon,AP_HellionTank,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_Diamondback,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_Vulture,RateMultiplier" Value="0.05"/>
         <EffectArray Reference="Weapon,AP_GoliathG,RateMultiplier" Value="0.05"/>
@@ -643,12 +654,19 @@
     <CUpgrade id="AP_TwinLinkedFlameThrowers">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Operation="Set" Reference="Effect,AP_InfernalFlameThrowerE,AreaArray[0].Radius" Value="0.5"/>
+        <EffectArray Reference="Effect,AP_HellionTankSearch,AreaArray[0].Radius" Value="1"/>
+        <EffectArray Operation="Set" Reference="Effect,AP_HellionTankSearch,AreaArray[0].Arc" Value="67.500000"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_HellionCampaignInfernalPreIgniter">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Effect,AP_InfernalFlameThrower,AttributeBonus[Light]" Value="10"/>
+        <EffectArray Operation="Add" Reference="Effect,AP_HellionTankDamage,AttributeBonus[Light]" Value="10"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HellbatAspect">
+        <AffectedUnitArray value="AP_Hellion"/>
+        <AffectedUnitArray value="AP_HellionTank"/>
     </CUpgrade>
     <CUpgrade id="AP_CerberusMines">
         <Flags index="UpgradeCheat" value="0"/>
@@ -1559,6 +1577,8 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Hellion,LifeRegenDelay" Value="3.000000"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Hellion,LifeRegenRate" Value="0.601500"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HellionTank,LifeRegenDelay" Value="3.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HellionTank,LifeRegenRate" Value="0.601500"/>
         <EffectArray Operation="Set" Reference="Unit,AP_SiegeTank,LifeRegenDelay" Value="3.000000"/>
         <EffectArray Operation="Set" Reference="Unit,AP_SiegeTank,LifeRegenRate" Value="0.601500"/>
         <EffectArray Operation="Set" Reference="Unit,AP_SiegeTankSieged,LifeRegenDelay" Value="3.000000"/>
@@ -2152,6 +2172,7 @@
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HellionTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
@@ -2171,6 +2192,7 @@
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HellionTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
@@ -2190,6 +2212,7 @@
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HellionTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
@@ -2209,6 +2232,7 @@
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HellionTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel1.dds"/>
@@ -2227,6 +2251,7 @@
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HellionTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel2.dds"/>
@@ -2245,6 +2270,7 @@
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_SiegeTankSieged,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Hellion,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HellionTank,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Diamondback,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Vulture,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Goliath,LifeArmorIcon" Value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel3.dds"/>
@@ -2266,6 +2292,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
@@ -2292,6 +2319,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
@@ -2318,6 +2346,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
@@ -2344,6 +2373,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel1.dds"/>
@@ -2369,6 +2399,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel2.dds"/>
@@ -2394,6 +2425,7 @@
         <EffectArray Operation="Set" Reference="Weapon,AP_90mmCannons,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_CrucioShockCannon,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HellionTank,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Diamondback,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_Vulture,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>
         <EffectArray Operation="Set" Reference="Weapon,AP_GoliathG,Icon" Value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel3.dds"/>

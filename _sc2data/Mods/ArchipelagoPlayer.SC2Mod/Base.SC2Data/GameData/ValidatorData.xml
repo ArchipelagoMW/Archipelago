@@ -461,6 +461,14 @@
         <Value value="1"/>
         <Behavior value="AP_KillerPhantasm"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsHellionTank">
+        <Value value="AP_HellionTank"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsNotHellionTank">
+        <ResultFailed value="CantLoadThatUnit"/>
+        <Value value="AP_HellionTank"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <Negate value="1"/>

@@ -989,12 +989,17 @@
         <On Terms="UnitMovementUpdate.*.Walk" Send="TimerSet 0.250000 KillBeam"/>
         <On Terms="Abil.attack.ReadyStop" Send="TimerSet 0.250000 KillBeam"/>
         <On Terms="TimerExpired; TimerName KillBeam" Target="AP_HellionAttackBeam" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Hellion" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Hellion" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimClear Visor 0.000000"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
         <Model value="Hellion"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Hellion"/>
         <DeathArray index="Normal" ModelLink="HellionDeath" SoundLink="Hellion_Explode"/>
         <PlacementModel value="Hellion"/>
         <PortraitModel value="HellionPortrait"/>
+        <PortraitActor value="AP_HellionPortrait"/>
         <BarOffset value="50"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Terran-Hellion.dds"/>
@@ -1013,6 +1018,10 @@
             <Image value="Assets\Textures\Wireframe-Terran-Hellion.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorPortrait id="AP_HellionPortrait" parent="PortraitActor">
+        <Model value="HellionPortrait"/>
+        <On Terms="ActorCreation" Send="AnimBlendTimeApply 0.500000"/>
+    </CActorPortrait>
     <CActorAction id="AP_HellionAttack" parent="GenericAttackBase">
         <On Terms="Effect.AP_InfernalFlameThrower.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
         <On Terms="Effect.AP_InfernalFlameThrowerCP.Start; At Caster; !ValidatePlayer AP_HasHellionInfernalPreIgniter" Send="Create"/>
@@ -4658,7 +4667,6 @@
     <CActorRange id="AP_RailGunTurretRange" parent="RangeAbil" abil="AP_BuildRailGunTurret"/>
     <CActorAction id="AP_RailGunTurretRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_RailGunTurretReleaseLM">
         <LaunchAssets Sound="Raven_AutoTurretReleaseLaunch"/>
-        <Missile value="AP_RailGunTurretReleaseMissile"/>
         <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
         <ImpactMap index="None" Sound="Raven_AutoTurretReleaseImpact"/>
         <ShieldFlashType value="None"/>
@@ -4670,7 +4678,6 @@
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOrigin"/>
-        <Model value="AP_RailGunTurretReleaseMissileImpact"/>
     </CActorModel>
     <CActorTurret id="AP_RailGunTurretTurret">
         <On Terms="TurretEnable.AP_RailGunTurret" Send="Create"/>
@@ -4775,6 +4782,189 @@
         <On Terms="Behavior.AP_RavenShredderMissileTint.Off" Target="_Unit" Send="ClearTintColor 0.500000 SeekerTarget"/>
         <On Terms="Behavior.AP_RavenShredderMissileTint.Off" Send="Destroy"/>
     </CActorSimple>
+    <CActorUnit id="AP_HellionMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_TankModeMorphModel">
+        <Aliases value="_UnitMedium"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Hellion" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Hellion" Send="AnimPlay End Morph,End"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Hellion" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_HellionTank" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 3.660000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
+<!--        <On Terms="ActorCreation; ValidateUnit AP_HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
+<!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <Model value="HellionTankMorph"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="Hellion_Explode"/>
+        <PortraitActor value="AP_HellionPortrait"/>
+        <PortraitModel value="HellionPortrait"/>
+        <BarOffset value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-hellionex1.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <HighlightTooltip value="Unit/Name/HellionTank"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Hellion_Ready"/>
+        <SoundArray index="Help" value="Hellion_Help"/>
+        <SoundArray index="What" value="Hellion_What"/>
+        <SoundArray index="Yes" value="Hellion_Yes"/>
+        <SoundArray index="Attack" value="Hellion_Attack"/>
+        <SoundArray index="Pissed" value="Hellion_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-hellionex1.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_HellionTank" parent="GenericUnitBase" unitName="AP_HellionTank">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="Behavior.AP_HellionTankReady.On" Send="AnimBracketStart CoverA Cover,A,Start Cover,A Cover,A,End"/>
+        <On Terms="Behavior.AP_HellionTankReady.Off" Send="AnimBracketStop CoverA"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimPlay CoverB Cover,B PlayForever"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimClear CoverB"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HellionTank" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_HellionTank" Send="Destroy"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="TimerSet 0.250000 KillBeam"/>
+        <On Terms="Abil.attack.ReadyStop" Send="TimerSet 0.250000 KillBeam"/>
+        <On Terms="TimerExpired; TimerName KillBeam" Target="AP_HellionAttackBeam" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Stand PlayForever 0.000000"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
+        <Model value="HellionTank"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="HellionTank"/>
+        <DeathArray index="Normal" ModelLink="HellionTankDeath" SoundLink="Hellion_Explode"/>
+        <DeathCustoms ModelLink="HellionTankDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PlacementModel value="HellionTank"/>
+        <PortraitActor value="AP_HellionPortrait"/>
+        <PortraitModel value="HellionPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLarge"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-HellionTankEx1.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="HellionTank_Ready"/>
+        <SoundArray index="Help" value="HellionTank_Help"/>
+        <SoundArray index="What" value="HellionTank_What"/>
+        <SoundArray index="Yes" value="HellionTank_Yes"/>
+        <SoundArray index="Attack" value="HellionTank_Attack"/>
+        <SoundArray index="Pissed" value="HellionTank_Pissed"/>
+        <SoundArray index="Movement" value="HellionTank_Movement"/>
+        <UnitFlags index="StandAnimBirthVariation" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-HellionTankEx1.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_HellionTankAttack" parent="GenericAttackBase" effectAttack="AP_HellionTank">
+        <On Terms="Effect.AP_HellionTank.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <LaunchAttachQuery Methods="AMFilterWeapon01"/>
+        <LaunchAssets Model="HellionTankAttackLaunch" Sound="HellionTank_AttackLaunch"/>
+        <LaunchModel value="AP_HellionTankAttackLaunch"/>
+        <ImpactMap index="None" Sound="Hellion_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_HellionTankAttackFireAddition" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Target; !ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="HellionTankAttackFireAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionTankAttackFireAdditionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Target; !ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="HellionTankAttackFireAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionTankAttackLaunch" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.750000 Kill"/>
+        <On Terms="TimerExpired; TimerName Kill" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidateUnit HasHighCapacityBarrels" Send="ModelSwap HellionTankAttackLaunchUpgraded"/>
+        <Model value="HellionTankAttackLaunch"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionTankAttackUpgradedFireAddition" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Target; ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="HellionTankAttackUpgradedFireAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionTankAttackUpgradedFireAdditionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Target; ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="HellionTankAttackUpgradedFireAddition"/>
+    </CActorModel>
+    <CActorUnit id="AP_HellionTankMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_SiegeModeMorphModel">
+        <Aliases value="_UnitMedium"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HellionTank" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HellionTank" Send="AnimPlay Start Morph,Start"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_HellionTank" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Hellion" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 3.660000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
+<!--        <On Terms="ActorCreation; ValidateUnit HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
+<!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <Model value="HellionTankMorph"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="Hellion_Explode"/>
+        <PortraitActor value="AP_HellionPortrait"/>
+        <PortraitModel value="HellionPortrait"/>
+        <BarOffset value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-HellionTankEx1.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <HighlightTooltip value="Unit/Name/Hellion"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Hellion_Ready"/>
+        <SoundArray index="Help" value="Hellion_Help"/>
+        <SoundArray index="What" value="Hellion_What"/>
+        <SoundArray index="Yes" value="Hellion_Yes"/>
+        <SoundArray index="Attack" value="Hellion_Attack"/>
+        <SoundArray index="Pissed" value="Hellion_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-HellionTankEx1.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="AP_Hellion_Land" parent="SoundOneShot">
+        <Sound value="Hellion_Land"/>
+    </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -5051,7 +5241,7 @@
         <On Terms="Behavior.AP_RavenScramblerMissileCarrier.Off" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation; ValidateUnit IsColossus" Send="SetScale 1.000000,1.000000,1.500000"/>
         <On Terms="ActorCreation; ValidateUnit IsCarrier" Send="SetScale 0.750000"/>
-<!--        <On Terms="ActorCreation; ValidateUnit IsTempest" Send="SetScale 0.850000"/>-->
+        <!--        <On Terms="ActorCreation; ValidateUnit IsTempest" Send="SetScale 0.850000"/>-->
         <HostSiteOps Ops="SOpAttachCenter" HoldRotation="1"/>
         <Host Subject="_Selectable"/>
         <Inherits index="BaseModelScale" value="1"/>

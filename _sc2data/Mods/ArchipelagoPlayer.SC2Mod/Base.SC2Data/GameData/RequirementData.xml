@@ -63,6 +63,10 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeTwinLinkedFlameThrowersCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHellbatAspect">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHellbatAspectCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_UseHighCapacityBarrels">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Use" Link="AP_CountUpgradeHighCapacityBarrelsCompleteOnlyTechTreeCheat"/>

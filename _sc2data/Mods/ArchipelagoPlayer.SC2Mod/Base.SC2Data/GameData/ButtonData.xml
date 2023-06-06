@@ -1341,4 +1341,16 @@
         <AlertIcon value="Assets\Textures\BTN-Ability-Terran-JetPack-color.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_MorphToHellion">
+        <Icon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="HellionModes"/>
+    </CButton>
+    <CButton id="AP_MorphToHellionTank">
+        <Icon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="HellionModes"/>
+    </CButton>
 </Catalog>
