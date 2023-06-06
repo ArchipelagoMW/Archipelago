@@ -721,6 +721,19 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMarineCombatShield (int lp_player) 
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CombatShield", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockMarineProgressiveStimpack (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lp_level >= 1)) {
+        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MarineStimpack", 1);
+        if ((lp_level >= 2)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SuperStimpackMarine", 1);
+        }
+
+    }
+
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -750,6 +763,19 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatJuggernautPlating (int lp_pl
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_FirebatJuggernautPlating", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatProgressiveStimpack (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lp_level >= 1)) {
+        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SuperStimpackFirebat", 1);
+        if ((lp_level >= 2)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_FirebatStimpack", 1);
+        }
+
+    }
+
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderConcussiveShells (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -762,6 +788,19 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderKineticFoam (int lp_player)
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MarauderLifeBoost", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderProgressiveStimpack (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lp_level >= 1)) {
+        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MarauderStimpack", 1);
+        if ((lp_level >= 2)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SuperStimpackMarauder", 1);
+        }
+
+    }
+
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperU238Rounds (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -772,6 +811,19 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockReaperG4Clusterbomb (int lp_player)
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ClusterBomb", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockReaperProgressiveStimpack (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lp_level >= 1)) {
+        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ReaperStimpack", 1);
+        if ((lp_level >= 2)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SuperStimpackReaper", 1);
+        }
+
+    }
+
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionTwinLinkedFlamethrower (int lp_player) {

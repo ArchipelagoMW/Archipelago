@@ -93,6 +93,31 @@
     <CEffectApplyBehavior id="AP_Stimpack">
         <EditorCategories value="Race:Terran"/>
     </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_SuperStimpack">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_SuperStim"/>
+        <WhichUnit Value="Source"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_SuperStimpackSmallSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SuperStimpack"/>
+        <EffectArray value="AP_SuperStimpackSmallSetMU"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_SuperStimpackSmallSetMU">
+        <EditorCategories value="Race:Zerg"/>
+        <VitalArray index="Life" Change="30"/>
+        <ImpactUnit Value="Source"/>
+    </CEffectModifyUnit>
+    <CEffectSet id="AP_SuperStimpackLargeSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SuperStimpack"/>
+        <EffectArray value="AP_SuperStimpackLargeSetMU"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_SuperStimpackLargeSetMU">
+        <EditorCategories value="Race:Zerg"/>
+        <VitalArray index="Life" Change="60"/>
+        <ImpactUnit Value="Source"/>
+    </CEffectModifyUnit>
     <CEffectCreateHealer id="AP_heal">
         <ValidatorArray value="noMarkers"/>
         <ValidatorArray value="NotWarpingIn"/>

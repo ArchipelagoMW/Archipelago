@@ -2706,4 +2706,28 @@
         <DupeThresholdPoints/>
         <DupeThresholdPoints Count="3" Volume="-2.000000"/>
     </CSound>
+    <CSound id="AP_SuperStimpackOn" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack4.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack5.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack6.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack7.wav"/>
+        <DupeDestroyCount value="3"/>
+        <Pitch value="2.000000,3.000000"/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_SuperStimpackSweetener" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_StimInfusionSweetener01.wav" LoopTime="0,39089" Offset="1500,1500"/>
+        <DupeDestroyCount value="3"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="2.700000,3.000000"/>
+        <PlayDelay value="30,60"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
 </Catalog>

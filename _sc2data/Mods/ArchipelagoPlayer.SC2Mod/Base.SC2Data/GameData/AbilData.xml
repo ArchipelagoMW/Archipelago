@@ -110,33 +110,93 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
-    <CAbilEffectInstant id="AP_Stimpack">
+    <CAbilEffectInstant id="AP_StimpackBase">
         <AbilSetId value="Stimpack"/>
+        <AINotifyEffect value="Stimpack"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Marker Link="Abil/AP_Stimpack"/>
         <InfoTooltipPriority value="1"/>
         <Flags index="Transient" value="1"/>
+        <Effect index="0" value="AP_Stimpack"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackSmallBase" parent="AP_StimpackBase">
         <Cost>
+            <Charge Link="Abil/AP_Stimpack"/>
+            <Cooldown Link="Abil/AP_Stimpack"/>
             <Vital index="Life" value="10"/>
         </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackLargeBase" parent="AP_StimpackBase">
+        <Cost>
+            <Charge Link="Abil/AP_Stimpack"/>
+            <Cooldown Link="Abil/AP_Stimpack"/>
+            <Vital index="Life" value="20"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_Stimpack" parent="AP_StimpackSmallBase">
         <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackSM">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
-    <CAbilEffectInstant id="AP_StimpackMarauder">
-        <AbilSetId value="Stimpack"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Flags index="Transient" value="1"/>
-        <Cost>
-            <Vital index="Life" value="20"/>
-            <Charge Link="Abil/AP_Stimpack"/>
-            <Cooldown Link="Abil/AP_Stimpack"/>
-        </Cost>
-        <Marker Link="Abil/AP_Stimpack"/>
-        <AINotifyEffect value="Stimpack"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" Requirements="AP_UseStimpack">
+    <CAbilEffectInstant id="AP_StimpackReaper" parent="AP_StimpackSmallBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackSMReaper">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackMarauder" parent="AP_StimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackMarauder">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackFirebat" parent="AP_StimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackFirebat">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackBase">
+        <AbilSetId value="Stimpack"/>
+        <AINotifyEffect value="Stimpack"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <InfoTooltipPriority value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <AutoCastRange value="5"/>
+        <AutoCastValidatorArray value="CasterIsFiringWeapon"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackSmallBase" parent="AP_SuperStimpackBase">
+        <Effect index="0" value="AP_SuperStimpackSmallSet"/>
+        <Cost>
+            <Cooldown TimeUse="18"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackLargeBase" parent="AP_SuperStimpackBase">
+        <Effect index="0" value="AP_SuperStimpackLargeSet"/>
+        <Cost>
+            <Cooldown TimeUse="18"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackMarine" parent="AP_SuperStimpackSmallBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackSmall" Requirements="AP_HaveSuperStimpackMarine">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackReaper" parent="AP_SuperStimpackSmallBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackSmall" Requirements="AP_HaveSuperStimpackReaper">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackMarauder" parent="AP_SuperStimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackLarge" Requirements="AP_HaveSuperStimpackMarauder">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackFirebat" parent="AP_SuperStimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackLarge" Requirements="AP_HaveSuperStimpackFirebat">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
     </CAbilEffectInstant>
     <CAbilEffectTarget id="AP_heal">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

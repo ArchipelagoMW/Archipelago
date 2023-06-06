@@ -13,7 +13,11 @@
     </CRequirement>
     <CRequirement id="AP_UseStimpackSM">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
-        <NodeArray index="Show" Link="AP_CountUpgradeMarineStimpackCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_UseBaseMarineStimpack"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackMarine">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackMarineCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseIncineratorNozzles">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -49,7 +53,27 @@
     </CRequirement>
     <CRequirement id="AP_UseStimpackSMReaper">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeReaperStimpackCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_UseBaseReaperStimpack"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackReaper">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackReaperCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseStimpackMarauder">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_UseBaseMarauderStimpack"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackMarauder">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackMarauderCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseStimpackFirebat">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_UseBaseFirebatStimpack"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackFirebat">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackFirebatCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseG4ClusterBombs">
         <EditorCategories value="Race:Terran,TechType:Unit"/>

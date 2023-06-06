@@ -3020,4 +3020,12 @@
         <Model value="Assets\Effects\Neutral\Stun_Void\Stun_Void.m3"/>
         <EditorCategories value="Race:Zerg"/>
     </CModel>
+    <CModel id="AP_SuperStimpackEndImpact" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\StimpackEndImpact\StimpackEndImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SuperStimpackStartImpact" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\StimpackStartImpact\StimpackStartImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

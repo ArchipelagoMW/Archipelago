@@ -1358,4 +1358,18 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-jumpjets.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_SuperStimpackSmall">
+        <Icon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="Stim"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_SuperStimpackLarge">
+        <Icon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="Stim"/>
+        <Universal value="1"/>
+    </CButton>
 </Catalog>

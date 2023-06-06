@@ -68,6 +68,21 @@
         <Value value="AP_Hellion"/>
         <Type value="SelectAlias"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_SourceIsNotVanillaHellion">
+        <WhichUnit Value="Source"/>
+        <Value value="Hellion"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_SourceIsNotAPHellion">
+        <WhichUnit Value="Source"/>
+        <Value value="AP_Hellion"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_SourceIsNotHellion">
+        <CombineArray value="AP_SourceIsNotVanillaHellion"/>
+        <CombineArray value="AP_SourceIsNotAPHellion"/>
+        <Type value="And"/>
+    </CValidatorCombine>
     <CValidatorUnitCompareBehaviorCount id="AP_AtLeastOneHealBeamBusy">
         <WhichUnit Value="Caster"/>
         <Compare value="GE"/>

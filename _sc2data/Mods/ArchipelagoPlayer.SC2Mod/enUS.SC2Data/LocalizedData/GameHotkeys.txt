@@ -138,3 +138,5 @@ Button/Hotkey/AP_WraithCloakOn=C
 Button/Hotkey/AP_YamatoGun=Y
 Button/Hotkey/AP_MorphToHellion=E
 Button/Hotkey/AP_MorphToHellionTank=D
+Button/Hotkey/AP_SuperStimpackSmall=T
+Button/Hotkey/AP_SuperStimpackLarge=T

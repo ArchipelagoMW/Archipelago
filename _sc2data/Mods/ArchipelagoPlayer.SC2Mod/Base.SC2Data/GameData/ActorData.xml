@@ -928,14 +928,18 @@
     <CActorSound id="AP_Marine_Stimpack" parent="SoundOneShot">
         <Sound value="Marine_Stimpack"/>
         <On Terms="Abil.AP_Stimpack.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackReaper.SourceCastStart" Send="Create"/>
     </CActorSound>
     <CActorSound id="AP_Marauder_Stimpack" parent="SoundOneShot">
         <Sound value="Marauder_Stimpack"/>
         <On Terms="Abil.AP_StimpackMarauder.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackFirebat.SourceCastStart" Send="Create"/>
     </CActorSound>
     <CActorModel id="AP_StimpackStartImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Abil.AP_Stimpack.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_StimpackMarauder.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackFirebat.SourceCastStart" Send="Create"/>
         <Model value="StimpackStartImpact"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
@@ -943,12 +947,46 @@
     </CActorModel>
     <CActorModel id="AP_StimpackEndImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Behavior.AP_Stimpack.Off; ValidateUnit NotDead" Send="Create"/>
+        <On Terms="Behavior.AP_StimpackReaper.Off; ValidateUnit NotDead" Send="Create"/>
         <On Terms="Behavior.AP_StimpackMarauder.Off; ValidateUnit NotDead" Send="Create"/>
+        <On Terms="Behavior.AP_StimpackFirebat.Off; ValidateUnit NotDead" Send="Create"/>
         <Model value="StimpackEndImpact"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Inherits index="CloakEffect" value="1"/>
     </CActorModel>
+    <CActorModel id="AP_SuperStimpackEndImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_SuperStim.Off; ValidateUnit NotDead" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorModel id="AP_SuperStimpackStartImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
+<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSound id="AP_SuperStimpackSweetenerStartImpactActorSound" parent="SoundOneShot">
+        <Sound value="AP_SuperStimpackSweetener"/>
+        <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
+<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_SuperStimpackStartImpactActorSound" parent="SoundOneShot">
+        <Sound value="AP_SuperStimpackOn"/>
+        <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
+<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
+    </CActorSound>
     <CActorUnit id="AP_D8ClusterBomb" parent="GenericUnitSelectableNoAutoSoundLinks" unitName="AP_D8ClusterBomb">
         <On Terms="UnitBirth.*.Normal" Send="$Birth"/>
         <On Terms="ActorCreation" Send="AnimBaselineStop"/>

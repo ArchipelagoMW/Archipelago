@@ -19,6 +19,17 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MarineStimpack" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSuperStimpackMarineCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SuperStimpackMarine" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeSuperStimpackMarineCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeSuperStimpackMarineCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_UseBaseMarineStimpack">
+        <OperandArray value="AP_CountUpgradeMarineStimpackCompleteOnly"/>
+        <OperandArray value="AP_NotCountUpgradeSuperStimpackMarineCompleteOnly"/>
+    </CRequirementAnd>
     <CRequirementCountUpgrade id="AP_CountUpgradeBearclawNozzlesCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_BearclawNozzles" State="CompleteOnly"/>
@@ -39,6 +50,36 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MarauderLifeBoost" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMarauderStimpackCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MarauderStimpack" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSuperStimpackMarauderCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SuperStimpackMarauder" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeSuperStimpackMarauderCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeSuperStimpackMarauderCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_UseBaseMarauderStimpack">
+        <OperandArray value="AP_CountUpgradeMarauderStimpackCompleteOnly"/>
+        <OperandArray value="AP_NotCountUpgradeSuperStimpackMarauderCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeFirebatStimpackCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_FirebatStimpack" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSuperStimpackFirebatCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SuperStimpackFirebat" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeSuperStimpackFirebatCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeSuperStimpackFirebatCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_UseBaseFirebatStimpack">
+        <OperandArray value="AP_CountUpgradeFirebatStimpackCompleteOnly"/>
+        <OperandArray value="AP_NotCountUpgradeSuperStimpackFirebatCompleteOnly"/>
+    </CRequirementAnd>
     <CRequirementCountUpgrade id="AP_CountUpgradeReaperU238RoundsCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ReaperU238Rounds" State="CompleteOnly"/>
@@ -47,6 +88,17 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ReaperStimpack" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSuperStimpackReaperCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SuperStimpackReaper" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeSuperStimpackReaperCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeSuperStimpackReaperCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_UseBaseReaperStimpack">
+        <OperandArray value="AP_CountUpgradeReaperStimpackCompleteOnly"/>
+        <OperandArray value="AP_NotCountUpgradeSuperStimpackReaperCompleteOnly"/>
+    </CRequirementAnd>
     <CRequirementCountUpgrade id="AP_CountUpgradeClusterBombCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ClusterBomb" State="CompleteOnly"/>
