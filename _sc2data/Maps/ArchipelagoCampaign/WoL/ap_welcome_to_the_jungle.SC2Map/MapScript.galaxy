@@ -3789,6 +3789,7 @@ bool gt_VictoryTerrazineCollected_Func (bool testConds, bool runActions) {
     }
 
     gv_gameOver = true;
+    lib5BD4895D_gf_AP_Core_sendLocationLocal(lib5BD4895D_gv_aP_Core_locationVictory);
     Wait(2.0, c_timeReal);
     TriggerExecute(gt_PrimaryObjectiveCollectTerrazineCompleted, true, true);
     libCamp_gf_RunMissionVictorySequence(gt_VictoryQ);
