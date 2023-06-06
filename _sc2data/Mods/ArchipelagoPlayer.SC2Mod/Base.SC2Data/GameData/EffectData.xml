@@ -118,6 +118,36 @@
         <VitalArray index="Life" Change="60"/>
         <ImpactUnit Value="Source"/>
     </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_MagrailMunitionsCP">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialDelay value="0.1"/>
+        <InitialEffect value="AP_MagrailMunitionsLaunchMissile"/>
+        <ExpireDelay value="0.9"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_MagrailMunitionsSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_MagrailMunitionsCP"/>
+        <EffectArray value="AP_MagrailStun1Sec"/>
+        <ValidatorArray value="AP_TargetInWeaponRange"/>
+        <ValidatorArray value="AP_CasterIsFiringOrAnimatingWeapon"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MagrailStun1Sec">
+        <EditorCategories value="Race:Terran"/>
+        <ValidatorArray index="0" value="CasterIsAttacking"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_MagrailMunitionsDamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_MagrailMunitionsLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_MagrailMunitionsDamage"/>
+        <AmmoUnit value="AP_MagrailMunitionMissile"/>
+        <Flags index="Channeled" value="1"/>
+        <ImpactLocation Effect="AP_MagrailMunitionsSet"/>
+    </CEffectLaunchMissile>
     <CEffectCreateHealer id="AP_heal">
         <ValidatorArray value="noMarkers"/>
         <ValidatorArray value="NotWarpingIn"/>

@@ -35,6 +35,7 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_Stimpack"/>
         <AbilArray Link="AP_SuperStimpackMarine"/>
+        <AbilArray Link="AP_MagrailMunitionsMarine"/>
         <WeaponArray Link="AP_GaussRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -53,6 +54,7 @@
                 <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarine" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_MagrailMunitions" Type="AbilCmd" AbilCmd="AP_MagrailMunitionsMarine,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -277,6 +279,7 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_StimpackMarauder"/>
         <AbilArray Link="AP_SuperStimpackMarauder"/>
+        <AbilArray Link="AP_MagrailMunitionsMarauder"/>
         <WeaponArray Link="AP_PunisherGrenades"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -303,6 +306,7 @@
             <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarauder" Row="1" Column="2"/>
             <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackMarauder,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarauder,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MagrailMunitions" Type="AbilCmd" AbilCmd="AP_MagrailMunitionsMarauder,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.5625"/>
         <InnerRadius value="0.375"/>
@@ -329,6 +333,11 @@
         </Fidget>
         <TauntDuration index="Cheer" value="5"/>
         <TauntDuration index="Dance" value="5"/>
+    </CUnit>
+    <CUnit id="AP_MagrailMunitionMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_WarHoundWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="AP_PunisherGrenadesLMWeapon" parent="MISSILE">
         <Race value="Terr"/>
@@ -3130,6 +3139,7 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_Stimpack"/>
         <AbilArray Link="AP_SuperStimpackMarine"/>
+        <AbilArray Link="AP_MagrailMunitionsMarine"/>
         <WeaponArray Link="AP_KelmorianMinerGaussRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3148,6 +3158,7 @@
                 <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarine" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_MagrailMunitions" Type="AbilCmd" AbilCmd="AP_MagrailMunitionsMarine,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -3289,6 +3300,7 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_StimpackMarauder"/>
         <AbilArray Link="AP_SuperStimpackMarauder"/>
+        <AbilArray Link="AP_MagrailMunitionsMarauder"/>
         <WeaponArray Link="AP_HammerSecurity"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3315,6 +3327,7 @@
             <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarauder" Row="1" Column="2"/>
             <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackMarauder,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarauder,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MagrailMunitions" Type="AbilCmd" AbilCmd="AP_MagrailMunitionsMarauder,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <InnerRadius value="0.375"/>
         <CargoSize value="2"/>

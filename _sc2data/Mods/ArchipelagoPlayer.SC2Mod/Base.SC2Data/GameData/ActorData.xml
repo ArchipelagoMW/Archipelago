@@ -9155,4 +9155,20 @@
         <Model value="AP_VileRoachDebuff"/>
         <AutoScaleFactor value="0.400000"/>
     </CActorModel>
+    <CActorAction id="AP_MagrailMunition" parent="GenericAttack" effectImpact="AP_MagrailMunitionsDamage" effectLaunch="AP_MagrailMunitionsLaunchMissile">
+        <BeamScope value="Caster"/>
+        <ImpactMap index="None" Model="AP_MagrailMunition_Impact" Sound="AP_RailGun_Impact"/>
+        <LaunchAssets Model="AP_MagrailMunition_Launch" Sound="AP_RailGun_Launch"/>
+        <LaunchAttachQuery Methods="SetC 0"/>
+    </CActorAction>
+    <!--CActorAction id="MagrailMunitionLaunch" parent="GenericAttack" effectImpact="MagrailMunitionsDamage" effectLaunch="MagrailMunitionsLaunchMissile">-->
+    <!--        <LaunchAssets Model="MagrailMunition_Launch" Sound="RailGun_Launch"/>-->
+    <!--        <Missile value="MagrailMunitionInvisibleMissile"/>-->
+    <!--    </CActorAction-->
+    <CActorBeamSimple id="AP_MagrailMunitionBeam" parent="GenericAttackBeam">
+        <Model value="AP_MagrailMunition_Missile"/>
+    </CActorBeamSimple>
+    <CActorMissile id="AP_MagrailMunitionInvisibleMissile" parent="GenericAttackMissile" unitName="AP_MagrailMunitionMissile">
+        <Model value="Invisible"/>
+    </CActorMissile>
 </Catalog>

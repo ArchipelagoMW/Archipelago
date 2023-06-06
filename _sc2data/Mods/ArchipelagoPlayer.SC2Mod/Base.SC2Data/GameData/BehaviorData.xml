@@ -49,6 +49,15 @@
         <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
         <RemoveValidatorArray value="AP_SourceIsNotHellion"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MagrailStun1Sec">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CasterIsAttacking"/>
+        <Duration value="1"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_ViralPlasma">
         <Alignment value="Negative"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

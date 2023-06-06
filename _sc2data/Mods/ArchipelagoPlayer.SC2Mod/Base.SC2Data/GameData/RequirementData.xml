@@ -79,6 +79,14 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackMarauderCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_MagrailMunitionsMarine">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMagrailMunitionsMarineCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_MagrailMunitionsMarauder">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMagrailMunitionsMarauderCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_UseStimpackFirebat">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_UseBaseFirebatStimpack"/>

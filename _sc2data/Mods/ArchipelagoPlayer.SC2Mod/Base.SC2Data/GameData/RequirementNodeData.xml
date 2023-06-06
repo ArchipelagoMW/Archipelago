@@ -138,6 +138,14 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HoverHellbat" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMagrailMunitionsMarauderCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MagrailMunitionsMarauder" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMagrailMunitionsMarineCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MagrailMunitionsMarine" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementNot id="AP_NotUpgradeVultureSpeedQueuedOrBetter">
         <OperandArray index="0" value="AP_UpgradeVultureSpeedQueuedOrBetter"/>
     </CRequirementNot>

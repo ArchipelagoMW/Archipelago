@@ -164,7 +164,7 @@
         <Flags index="Transient" value="1"/>
         <Flags index="PassengerAcquirePassengers" value="1"/>
         <AutoCastRange value="5"/>
-        <AutoCastValidatorArray value="CasterIsFiringWeapon"/>
+        <AutoCastValidatorArray value="AP_CasterIsFiringOrAnimatingWeapon"/>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_SuperStimpackSmallBase" parent="AP_SuperStimpackBase">
         <Effect index="0" value="AP_SuperStimpackSmallSet"/>
@@ -198,6 +198,28 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
+    <CAbilAugment id="AP_MagrailMunitionsMarauder">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MagrailMunitions" Requirements="AP_MagrailMunitionsMarauder"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Effect value="AP_MagrailMunitionsSet"/>
+    </CAbilAugment>
+    <CAbilAugment id="AP_MagrailMunitionsMarine">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MagrailMunitions" Requirements="AP_MagrailMunitionsMarine"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Effect value="AP_MagrailMunitionsSet"/>
+    </CAbilAugment>
     <CAbilEffectTarget id="AP_heal">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="AllowMovement" value="1"/>

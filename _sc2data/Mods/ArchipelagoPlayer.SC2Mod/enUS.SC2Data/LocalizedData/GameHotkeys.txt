@@ -140,3 +140,4 @@ Button/Hotkey/AP_MorphToHellion=E
 Button/Hotkey/AP_MorphToHellionTank=D
 Button/Hotkey/AP_SuperStimpackSmall=T
 Button/Hotkey/AP_SuperStimpackLarge=T
+Button/Hotkey/AP_MagrailMunitions=U

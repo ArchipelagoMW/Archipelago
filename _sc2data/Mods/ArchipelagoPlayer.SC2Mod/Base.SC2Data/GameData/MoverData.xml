@@ -751,4 +751,16 @@
         </MotionPhases>
         <MotionPhases index="1" removed="1"/>
     </CMoverMissile>
+    <CMoverMissile id="AP_WarHoundWeapon" parent="MissileDefault">
+        <MotionPhases index="0">
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="40"/>
+            <ClearanceAcceleration value="75"/>
+            <ActorTracking value="Actual"/>
+            <Outro value="-1"/>
+            <RotationLaunchActorType value="LaunchToTarget"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+    </CMoverMissile>
 </Catalog>

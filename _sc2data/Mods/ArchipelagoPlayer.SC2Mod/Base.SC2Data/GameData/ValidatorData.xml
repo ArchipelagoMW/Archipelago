@@ -1471,4 +1471,19 @@
         <Find value="1"/>
         <Value value="AP_HaveHoverHellbat"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitInWeaponRange id="AP_TargetInWeaponRange">
+        <ResultFailed value="TargetIsOutOfRange"/>
+    </CValidatorUnitInWeaponRange>
+    <CValidatorUnitWeaponFiring id="AP_CasterIsFiringWeapon">
+        <!-- This mutates in Multi -->
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitWeaponFiring>
+    <CValidatorUnitWeaponAnimating id="AP_CasterIsAnimatingWeapon">
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitWeaponAnimating>
+    <CValidatorCombine id="AP_CasterIsFiringOrAnimatingWeapon">
+        <!-- See https://www.sc2mapster.com/forums/development/data/183335-solved-how-could-i-make-marauders-stimpack -->
+        <CombineArray value="AP_CasterIsFiringWeapon"/>
+        <CombineArray value="AP_CasterIsAnimatingWeapon"/>
+    </CValidatorCombine>
 </Catalog>

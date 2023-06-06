@@ -740,6 +740,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMarineLaserTargetingSystem (int lp_
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_LaserTargetingSystemMarine", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockMarineMagRailMunitions (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MagrailMunitionsMarine", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -811,6 +817,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderLaserTargetingSystem (int l
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_LaserTargetingSystemMarauder", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderMagRailMunitions (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MagrailMunitionsMarauder", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperU238Rounds (int lp_player) {
