@@ -30,6 +30,10 @@
         <OperandArray value="AP_CountUpgradeMarineStimpackCompleteOnly"/>
         <OperandArray value="AP_NotCountUpgradeSuperStimpackMarineCompleteOnly"/>
     </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemMarineCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_LaserTargetingSystemMarine" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeBearclawNozzlesCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_BearclawNozzles" State="CompleteOnly"/>
@@ -49,6 +53,10 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeMarauderLifeBoostCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MarauderLifeBoost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemMarauderCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_LaserTargetingSystemMarauder" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeMarauderStimpackCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
@@ -83,6 +91,10 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeReaperU238RoundsCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ReaperU238Rounds" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemReaperCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_LaserTargetingSystemReaper" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeReaperStimpackCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>

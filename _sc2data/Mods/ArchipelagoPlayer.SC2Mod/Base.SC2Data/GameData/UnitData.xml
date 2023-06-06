@@ -45,13 +45,14 @@
             <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_Stimpack,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackSmall" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarine,0" Row="2" Column="0"/>
             <LayoutButtons>
-                <Face value="CombatShield"/>
+                <Face value="AP_CombatShield"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseCombatShield"/>
-                <Row value="2"/>
-                <Column value="1"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarine" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -288,17 +289,18 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseJackhammerConcussiveGrenade"/>
-                <Row value="2"/>
-                <Column value="1"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_AblativeScales"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255,0"/>
                 <Requirements value="AP_UseAblativeScales"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarauder" Row="1" Column="2"/>
             <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackMarauder,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarauder,0" Row="2" Column="0"/>
         </CardLayouts>
@@ -428,6 +430,7 @@
                 <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemReaper" Row="1" Column="2"/>
             <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackReaper,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackSmall" Type="AbilCmd" AbilCmd="AP_SuperStimpackReaper,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_D8Charge" Type="AbilCmd" AbilCmd="AP_D8Charge,Execute" Row="2" Column="1"/>
@@ -3137,13 +3140,14 @@
             <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_Stimpack,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackSmall" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarine,0" Row="2" Column="0"/>
             <LayoutButtons>
-                <Face value="CombatShield"/>
+                <Face value="AP_CombatShield"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseCombatShield"/>
-                <Row value="2"/>
-                <Column value="1"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarine" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -3271,7 +3275,7 @@
         <LateralAcceleration value="69.125"/>
         <StationaryTurningRate value="999.8437"/>
         <TurningRate value="999.8437"/>
-        <Sight value="8"/>
+        <Sight value="10"/>
         <Food value="-2"/>
         <CostCategory value="Army"/>
         <CostResource index="Minerals" value="125"/>
@@ -3297,17 +3301,18 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseJackhammerConcussiveGrenade"/>
-                <Row value="2"/>
-                <Column value="1"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_AblativeScales"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseAblativeScales"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarauder" Row="1" Column="2"/>
             <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackMarauder,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarauder,0" Row="2" Column="0"/>
         </CardLayouts>

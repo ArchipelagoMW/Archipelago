@@ -734,6 +734,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMarineProgressiveStimpack (int lp_p
 
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockMarineLaserTargetingSystem (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_LaserTargetingSystemMarine", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -801,6 +807,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderProgressiveStimpack (int lp
 
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderLaserTargetingSystem (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_LaserTargetingSystemMarauder", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperU238Rounds (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -824,6 +836,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockReaperProgressiveStimpack (int lp_p
 
     }
 
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockReaperLaserTargetingSystem (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_LaserTargetingSystemReaper", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionTwinLinkedFlamethrower (int lp_player) {

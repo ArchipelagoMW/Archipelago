@@ -492,6 +492,8 @@ Button/Name/AP_MorphToHellionTank=Hellbat Mode
 Button/Name/AP_HellbatCharge=Jump Jet Assault
 Button/Name/AP_SuperStimpackSmall=Super Stimpack
 Button/Name/AP_SuperStimpackLarge=Super Stimpack
+Button/Name/AP_LaserTargetingSystem=Laser Targeting System
+Button/Name/AP_CombatShield=Combat Shield
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
@@ -775,6 +777,8 @@ Button/Tooltip/AP_MorphToHellionTank=Close range combat unit. Deals damage in a 
 Button/Tooltip/AP_HellbatCharge=Launches the Hellbat toward nearby enemy ground units. Briefly stuns enemy units on impact.
 Button/Tooltip/AP_SuperStimpackSmall=Increases the unit's attack and movement speeds for <d ref="Behavior,AP_SuperStim,Duration"/> seconds. Heals the unit for <d ref="Effect,AP_SuperStimpackSmallSetMU,VitalArray[Life].Change"/> life.
 Button/Tooltip/AP_SuperStimpackLarge=Increases the unit's attack and movement speeds for <d ref="Behavior,AP_SuperStim,Duration"/> seconds. Heals the unit for <d ref="Effect,AP_SuperStimpackLargeSetMU,VitalArray[Life].Change"/> life.
+Button/Tooltip/AP_LaserTargetingSystem=Increases vision by 2 and weapon range by 1.
+Button/Tooltip/AP_CombatShield=Increases Marine life by 10.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)

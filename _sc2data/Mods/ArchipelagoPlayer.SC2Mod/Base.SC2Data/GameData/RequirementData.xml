@@ -19,6 +19,10 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackMarineCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemMarine">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemMarineCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_UseIncineratorNozzles">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeBearclawNozzlesCompleteOnly"/>
@@ -41,6 +45,10 @@
     <CRequirement id="AP_BearclawNozzlesResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeBearclawNozzlesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemMarauder">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemMarauderCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_JuggernautPlatingResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeFirebatJuggernautPlatingCompleteOnly"/>
     </CRequirement>
@@ -50,6 +58,10 @@
     <CRequirement id="AP_HaveD8ClusterBomb">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Use" Link="AP_CountUpgradeClusterBombCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemReaper">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemReaperCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseStimpackSMReaper">
         <EditorCategories value="Race:Terran,TechType:Ability"/>

@@ -81,6 +81,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSCVDualFusionWelders (int lp_player
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarineStimpack (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarineCombatShield (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarineProgressiveStimpack (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_Terran_unlockMarineLaserTargetingSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicAdvancedMedicFacilities (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedicStabilizerMedpacks (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatIncineratorGauntlets (int lp_player);
@@ -89,9 +90,11 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockFirebatProgressiveStimpack (int lp_
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderConcussiveShells (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderKineticFoam (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderProgressiveStimpack (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_Terran_unlockMarauderLaserTargetingSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperU238Rounds (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperG4Clusterbomb (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperProgressiveStimpack (int lp_player, int lp_level);
+void libABFE498B_gf_AP_Triggers_Terran_unlockReaperLaserTargetingSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionTwinLinkedFlamethrower (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionThermiteFilaments (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionHellbatAspect (int lp_player);

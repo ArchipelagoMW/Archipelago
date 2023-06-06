@@ -1372,4 +1372,12 @@
         <HotkeyAlias value="Stim"/>
         <Universal value="1"/>
     </CButton>
+    <CButton id="AP_LaserTargetingSystem">
+        <Icon value="Assets\Textures\btn-upgrade-terran-lazertargetingsystem.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CombatShield">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-combatshield-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

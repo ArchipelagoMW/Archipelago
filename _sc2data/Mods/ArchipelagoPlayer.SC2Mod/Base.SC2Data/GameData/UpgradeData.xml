@@ -638,6 +638,53 @@
         <Race value="Terran"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_LaserTargetingSystemMarine">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Marine,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_Marine,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Unit,AP_WarPig,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_WarPig,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_GaussRifle,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_GaussRifle,MinScanRange" Value="1"/>
+        <EffectArray Reference="Weapon,AP_KelmorianMinerGaussRifle,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_KelmorianMinerGaussRifle,MinScanRange" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="Marine"/>
+    </CUpgrade>
+    <CUpgrade id="AP_LaserTargetingSystemMarauder">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Marauder,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_Marauder,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Unit,AP_HammerSecurity,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_HammerSecurity,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_PunisherGrenades,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_PunisherGrenades,MinScanRange" Value="1"/>
+        <EffectArray Reference="Weapon,AP_HammerSecurity,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_HammerSecurity,MinScanRange" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Marauder"/>
+        <AffectedUnitArray value="AP_HammerSecurity"/>
+    </CUpgrade>
+    <CUpgrade id="AP_LaserTargetingSystemReaper">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Reaper,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_Reaper,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_P38ScytheGuassPistol,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_P38ScytheGuassPistol,MinScanRange" Value="1"/>
+        <EffectArray Reference="Weapon,AP_D8Charge,Range" Value="1"/>
+        <EffectArray Reference="Weapon,AP_D8Charge,MinScanRange" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Reaper"/>
+    </CUpgrade>
     <CUpgrade id="AP_ClusterBomb">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
