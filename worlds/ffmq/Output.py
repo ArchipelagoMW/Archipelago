@@ -10,9 +10,6 @@ import pkgutil
 settings_template = yaml.load(pkgutil.get_data(__name__, "data/settings.yaml"), yaml.Loader)
 
 
-
-
-
 def generate_output(self, output_directory):
 
     def output_item_name(item):

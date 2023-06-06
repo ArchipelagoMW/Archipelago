@@ -178,10 +178,10 @@ class MapShuffle(Choice):
     save the Crystal and get Pazuzu's Chest."""
     display_name = "Map Shuffle"
     option_none = 0
-    # option_overworld = 1
-    # option_dungeons = 2
-    # option_overworld_and_dungeons = 3
-    # option_everything = 4
+    option_overworld = 1
+    option_dungeons = 2
+    option_overworld_and_dungeons = 3
+    option_everything = 4
     default = 0
 
 

@@ -4,12 +4,13 @@ fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 17, "Seed": 2, "Bo
            "Projectile Refill": 50}
 
 class ItemData:
-    def __init__(self, item_id, classification, groups=[]):
+    def __init__(self, item_id, classification, groups=[], data_name=None):
         self.groups = groups
         self.classification = classification
         self.id = None
         if item_id is not None:
             self.id = item_id + 0x420000
+        self.data_name = data_name
 
 
 item_table = {
@@ -88,22 +89,22 @@ item_table = {
     "Magic Ring": ItemData(62, ItemClassification.useful, ["Accessories"]),
     "Cupid Locket": ItemData(63, ItemClassification.useful, ["Accessories"]),
 
-    # "54 Exp": ItemData(100, ItemClassification.filler),
-    # "99 Exp": ItemData(101, ItemClassification.filler),
-    # "540 Exp": ItemData(102, ItemClassification.filler),
-    # "744 Exp": ItemData(103, ItemClassification.filler),
-    # "816 Exp": ItemData(104, ItemClassification.filler),
-    # "1068 Exp": ItemData(105, ItemClassification.filler),
-    # "1200 Exp": ItemData(106, ItemClassification.filler),
-    # "2700 Exp": ItemData(107, ItemClassification.filler),
-    # "2808 Exp": ItemData(108, ItemClassification.filler),
-    # "150 Gp": ItemData(109, ItemClassification.filler),
-    # "300 Gp": ItemData(110, ItemClassification.filler),
-    # "600 Gp": ItemData(111, ItemClassification.filler),
-    # "900 Gp": ItemData(112, ItemClassification.filler),
-    # "1200 Gp": ItemData(113, ItemClassification.filler),
-    "XP": ItemData(100, ItemClassification.filler),
-    "GP": ItemData(101, ItemClassification.filler),
+
+    "54 XP": ItemData(96, ItemClassification.filler, data_name="Xp54"),
+    "99 XP": ItemData(97, ItemClassification.filler, data_name="Xp99"),
+    "540 XP": ItemData(98, ItemClassification.filler, data_name="Xp540"),
+    "744 XP": ItemData(99, ItemClassification.filler, data_name="Xp744"),
+    "816 XP": ItemData(100, ItemClassification.filler, data_name="Xp816"),
+    "1068 XP": ItemData(101, ItemClassification.filler, data_name="Xp1068"),
+    "1200 XP": ItemData(102, ItemClassification.filler, data_name="Xp1200"),
+    "2700 XP": ItemData(103, ItemClassification.filler, data_name="Xp2700"),
+    "2808 XP": ItemData(104, ItemClassification.filler, data_name="Xp2808"),
+    "150 Gp": ItemData(105, ItemClassification.filler, data_name="Gp150"),
+    "300 Gp": ItemData(106, ItemClassification.filler, data_name="Gp300"),
+    "600 Gp": ItemData(107, ItemClassification.filler, data_name="Gp600"),
+    "900 Gp": ItemData(108, ItemClassification.filler, data_name="Gp900"),
+    "1200 Gp": ItemData(109, ItemClassification.filler, data_name="Gp1200"),
+
 
     "Bomb Refill": ItemData(221, ItemClassification.filler, ["Refills"]),
     "Projectile Refill": ItemData(222, ItemClassification.filler, ["Refills"]),
