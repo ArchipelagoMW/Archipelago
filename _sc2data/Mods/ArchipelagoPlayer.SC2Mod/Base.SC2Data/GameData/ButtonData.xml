@@ -1384,4 +1384,10 @@
         <Icon value="Assets\Textures\btn-upgrade-terran-magrailmunitions.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
     </CButton>
+    <CButton id="AP_CloakOnReaper">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <Universal value="1"/>
+    </CButton>
 </Catalog>

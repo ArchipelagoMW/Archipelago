@@ -92,6 +92,13 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_ReaperU238Rounds" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCloakingTechnologyReaperCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CloakingTechnologyReaper" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeCloakingTechnologyReaperCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeCloakingTechnologyReaperCompleteOnly"/>
+    </CRequirementNot>
     <CRequirementCountUpgrade id="AP_CountUpgradeLaserTargetingSystemReaperCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_LaserTargetingSystemReaper" State="CompleteOnly"/>

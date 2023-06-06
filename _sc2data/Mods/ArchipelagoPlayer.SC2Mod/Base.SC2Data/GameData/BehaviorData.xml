@@ -118,6 +118,15 @@
         </Modification>
         <AINotifyEffect value="AP_D8ChargeExplodeDamage"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReaperPermanentCloak">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_CloakingTechnologyReaper"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_ScavengingSystemsMechDeath">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>

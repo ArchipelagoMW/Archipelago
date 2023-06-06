@@ -99,6 +99,10 @@
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradeClusterBombCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_CloakingTechnologyReaper">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCloakingTechnologyReaperCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_UseHellionInfernalPreIgniter">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHellionCampaignInfernalPreIgniterCompleteOnly"/>

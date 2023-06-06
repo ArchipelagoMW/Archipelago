@@ -5295,6 +5295,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="B0CCE1B1"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="74E97F99"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="F7DF8136"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="C7C892FE"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="879E57F2"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="F42EFE8F"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="8C0E7C5A"/>
@@ -6514,6 +6515,42 @@
         <Element Type="Param" Id="F588DA25">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_LaserTargetingSystemReaper</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="C7C892FE">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="552EC6A9"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="C7C3FF04"/>
+        </Element>
+        <Element Type="ParamDef" Id="552EC6A9">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="0434D4C8"/>
+        </Element>
+        <Element Type="Param" Id="0434D4C8">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="C7C3FF04">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="C298B39F"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="E5C474DD"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="37B8FFEE"/>
+        </Element>
+        <Element Type="Param" Id="C298B39F">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="552EC6A9"/>
+        </Element>
+        <Element Type="Param" Id="E5C474DD">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="37B8FFEE">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_CloakingTechnologyReaper</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

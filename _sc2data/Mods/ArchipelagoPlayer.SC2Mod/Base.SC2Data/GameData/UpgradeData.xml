@@ -723,6 +723,15 @@
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_CloakingTechnologyReaper">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <!--EffectArray Operation="Set" Reference="Unit,AP_Reaper,EnergyMax" Value="200"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Reaper,EnergyStart" Value="50"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Reaper,EnergyRegenRate" Value=".5625"/-->
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <LeaderAlias value=""/>
+        <AffectedUnitArray value="AP_Reaper"/>
+    </CUpgrade>
     <CUpgrade id="AP_MarauderStimpack">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
