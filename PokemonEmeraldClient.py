@@ -38,18 +38,18 @@ TRACKER_EVENT_FLAGS = [
     "FLAG_DEFEATED_FORTREE_GYM",
     "FLAG_DEFEATED_MOSSDEEP_GYM",
     "FLAG_DEFEATED_SOOTOPOLIS_GYM",
-    "FLAG_RECEIVED_POKENAV",               # Talk to Mr. Stone
+    "FLAG_RECEIVED_POKENAV",                           # Talk to Mr. Stone
     "FLAG_DELIVERED_STEVEN_LETTER",
     "FLAG_DELIVERED_DEVON_GOODS",
-    "FLAG_HIDE_ROUTE_119_TEAM_AQUA",       # Clear Weather Institute
-    "FLAG_MET_ARCHIE_METEOR_FALLS",        # Magma steals meteorite
-    "FLAG_GROUDON_AWAKENED_MAGMA_HIDEOUT", # Clear Magma Hideout
-    "FLAG_MET_TEAM_AQUA_HARBOR",           # Aqua steals submarine
-    "FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE", # Clear Aqua Hideout
-    "FLAG_DEFEATED_MAGMA_SPACE_CENTER",
+    "FLAG_HIDE_ROUTE_119_TEAM_AQUA",                   # Clear Weather Institute
+    "FLAG_MET_ARCHIE_METEOR_FALLS",                    # Magma steals meteorite
+    "FLAG_GROUDON_AWAKENED_MAGMA_HIDEOUT",             # Clear Magma Hideout
+    "FLAG_MET_TEAM_AQUA_HARBOR",                       # Aqua steals submarine
+    "FLAG_TEAM_AQUA_ESCAPED_IN_SUBMARINE",             # Clear Aqua Hideout
+    "FLAG_HIDE_MOSSDEEP_CITY_SPACE_CENTER_MAGMA_NOTE", # Clear Space Center
     "FLAG_KYOGRE_ESCAPED_SEAFLOOR_CAVERN",
-    "FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA",   # Rayquaza departs for Sootopolis
-    "FLAG_OMIT_DIVE_FROM_STEVEN_LETTER",   # Steven gives Dive HM (clears seafloor cavern grunt)
+    "FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA",               # Rayquaza departs for Sootopolis
+    "FLAG_OMIT_DIVE_FROM_STEVEN_LETTER",               # Steven gives Dive HM (clears seafloor cavern grunt)
     "FLAG_IS_CHAMPION",
 ]
 
