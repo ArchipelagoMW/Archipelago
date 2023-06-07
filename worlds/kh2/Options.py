@@ -133,7 +133,7 @@ class FinalFormLogic(Choice):
     option_no_light_and_darkness = 0
     option_light_and_darkness = 1
     option_just_a_form = 2
-    default = 2
+    default = 1
 
 
 class AutoFormLogic(Toggle):
