@@ -217,8 +217,9 @@ class TestAutoForms(KH2TestFormBase):
         self.collect_all_but(allPossibleForms)
         allPossibleFormsCopy = allPossibleForms.copy()
         collectedDrives = []
-        for i in range(6):
-            currentDriveForm = allPossibleFormsCopy[0]
+        i = 0
+        for form in allPossibleForms:
+            currentDriveForm = form
             collectedDrives += [currentDriveForm]
             allPossibleFormsCopy.remove(currentDriveForm)
             self.collect_all_but(allPossibleFormsCopy)
@@ -228,3 +229,4 @@ class TestAutoForms(KH2TestFormBase):
                 # making sure having the form still gives an extra drive level to its own form.
                 if driveForm in collectedDrives and i < 5:
                     self.assertEqual((self.can_reach_location(self.driveFormMap[driveForm][i + 1])), True, driveForm)
+            i += 1
