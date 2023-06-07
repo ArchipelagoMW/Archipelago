@@ -65,7 +65,7 @@ class MessengerWorld(World):
                            ], base_offset)}
 
     data_version = 3
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 4, 0)
 
     web = MessengerWeb()
 
