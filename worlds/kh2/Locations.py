@@ -1707,7 +1707,7 @@ RegionTable = {
     },  # could add lod2 and bc2 as an option since those spawns are rng
     "FinalRegion":  {
         RegionName.Tt3,
-        RegionName.Twtnw_PostRoxas,
+        RegionName.Roxas,
         RegionName.Twtnw2,
     }
 }

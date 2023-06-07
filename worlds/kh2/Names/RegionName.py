@@ -27,6 +27,7 @@ DataLarxene = "Data Larxene"
 Pr = "Port Royal"
 Barbosa = "Barbosa"
 Pr2 = "Port Royal 2"
+GrimReaper1 = "Grim Reaper 1"
 GrimReaper2 = "Grim Reaper 2"
 DataLuxord = "Data Luxord"
 
@@ -78,6 +79,7 @@ Saix = "Saix"
 Twtnw2 = "The World That Never Was (Second Visit)"  # Post riku transformation
 Xemnas = "Xemnas"
 ArmoredXemnas = "Armored Xemnas"
+ArmoredXemnas2 = "Armored Xemnas 2"
 FinalXemnas = "Final Xemnas"
 DataXemnas = "Data Xemnas"
 
@@ -114,6 +116,7 @@ Mushroom13 = "Mushroom 13"
 Sephi = "Sephiroth"
 DataDemyx = "Data Demyx"
 
+# CoR
 CoR = "Cavern of Rememberance"
 CorFirstFight = "Cavern of Rememberance:Fight 1"
 CorSecondFight = "Cavern of Rememberance:Fight 2"
