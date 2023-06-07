@@ -1192,7 +1192,8 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.sand_ocean_animal_14, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(world.get_location(LocationName.lost_colony_animal_14, player),
-                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+                 lambda state: state.has(ItemName.eggman_jet_engine, player) and
+                               state.has(ItemName.eggman_large_cannon, player))
         add_rule(world.get_location(LocationName.weapons_bed_animal_14, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player) and
                                state.has(ItemName.eggman_large_cannon, player))
@@ -2082,8 +2083,7 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
 
         add_rule(world.get_location(LocationName.cannon_core_animal_13, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
-                               state.has(ItemName.eggman_large_cannon, player) and
-                               state.has(ItemName.knuckles_hammer_gloves, player))
+                               state.has(ItemName.eggman_large_cannon, player))
 
         add_rule(world.get_location(LocationName.prison_lane_animal_14, player),
                  lambda state: state.has(ItemName.tails_bazooka, player))
@@ -2101,7 +2101,8 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
         add_rule(world.get_location(LocationName.lost_colony_animal_14, player),
-                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+                 lambda state: state.has(ItemName.eggman_jet_engine, player) and
+                               state.has(ItemName.eggman_large_cannon, player))
         add_rule(world.get_location(LocationName.weapons_bed_animal_14, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player) and
                                state.has(ItemName.eggman_large_cannon, player))
