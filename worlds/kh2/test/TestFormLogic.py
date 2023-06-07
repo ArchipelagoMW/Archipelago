@@ -201,7 +201,7 @@ class TestAutoForms(KH2TestFormBase):
             self.assertEqual((self.can_reach_location(loc_list[0])), False, loc_list)
 
     def testAutoFormsLevel2(self):
-        allPossibleForms = self.allForms + self.autoForms
+        allPossibleForms = self.allForms.copy() + self.autoForms.copy()
         # this tests with a light and darkness in the inventory.
         self.collect_all_but(allPossibleForms)
         for form in self.allForms:
