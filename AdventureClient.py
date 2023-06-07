@@ -396,7 +396,7 @@ async def atari_sync_task(ctx: AdventureContext):
                     ctx.atari_streams = await asyncio.wait_for(
                         asyncio.open_connection("localhost",
                                                 port),
-                                                timeout=10)
+                        timeout=10)
                     ctx.atari_status = CONNECTION_TENTATIVE_STATUS
                 except TimeoutError:
                     logger.debug("Connection Timed Out, Trying Again")
