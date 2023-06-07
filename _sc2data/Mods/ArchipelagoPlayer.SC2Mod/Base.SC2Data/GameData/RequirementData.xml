@@ -106,6 +106,10 @@
     <CRequirement id="AP_HaveReaperSpiderMines">
         <NodeArray index="Show" Link="AP_CountUpgradeReaperSpiderMinesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveCombatDrugs">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCombatDrugsCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_UseHellionInfernalPreIgniter">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHellionCampaignInfernalPreIgniterCompleteOnly"/>

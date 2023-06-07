@@ -736,6 +736,18 @@
         <EditorCategories value="Race:Human,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Reaper"/>
     </CUpgrade>
+    <CUpgrade id="AP_CombatDrugs">
+        <EffectArray Operation="Set" Reference="Unit,AP_Reaper,LifeRegenDelay" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Reaper,LifeRegenRate" Value="2"/>
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-reapercombatdrugs.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Terr"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Reaper"/>
+    </CUpgrade>
     <CUpgrade id="AP_MarauderStimpack">
         <Flags index="UpgradeCheat" value="0"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>

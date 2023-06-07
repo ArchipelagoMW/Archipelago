@@ -447,6 +447,7 @@
             <LayoutButtons Face="AP_D8Charge" Type="AbilCmd" AbilCmd="AP_D8Charge,Execute" Row="2" Column="1"/>
             <LayoutButtons Face="AP_CloakOnReaper" Type="Passive" Requirements="AP_CloakingTechnologyReaper" Row="1" Column="3"/>
             <LayoutButtons Face="AP_SpiderMine" Type="AbilCmd" AbilCmd="AP_ReaperSpiderMines,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_CombatDrugs" Type="Passive" Requirements="AP_HaveCombatDrugs" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>

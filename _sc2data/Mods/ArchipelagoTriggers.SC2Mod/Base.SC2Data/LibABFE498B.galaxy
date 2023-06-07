@@ -868,6 +868,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockReaperSpiderMines (int lp_player) {
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ReaperSpiderMines", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockReaperCombatDrugs (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CombatDrugs", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionTwinLinkedFlamethrower (int lp_player) {
     // Automatic Variable Declarations
     // Implementation

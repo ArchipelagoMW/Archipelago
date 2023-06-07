@@ -1390,4 +1390,9 @@
         <EditorCategories value="Race:Terran"/>
         <Universal value="1"/>
     </CButton>
+    <CButton id="AP_CombatDrugs">
+        <Icon value="Assets\Textures\btn-upgrade-terran-reapercombatdrugs.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-reapercombatdrugs.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

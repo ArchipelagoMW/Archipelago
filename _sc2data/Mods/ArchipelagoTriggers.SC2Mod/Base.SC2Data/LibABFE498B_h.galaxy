@@ -99,6 +99,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockReaperProgressiveStimpack (int lp_p
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperLaserTargetingSystem (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperAdvancedCloakingField (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockReaperSpiderMines (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockReaperCombatDrugs (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionTwinLinkedFlamethrower (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionThermiteFilaments (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionHellbatAspect (int lp_player);

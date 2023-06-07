@@ -5297,6 +5297,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="F7DF8136"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="C7C892FE"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="DF7B0B1A"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="A9C6E0DA"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="879E57F2"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="F42EFE8F"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="8C0E7C5A"/>
@@ -6588,6 +6589,42 @@
         <Element Type="Param" Id="AF1D4D41">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_ReaperSpiderMines</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="A9C6E0DA">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="48B4857A"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="AAAFC54A"/>
+        </Element>
+        <Element Type="ParamDef" Id="48B4857A">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="7E148301"/>
+        </Element>
+        <Element Type="Param" Id="7E148301">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="AAAFC54A">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="49EEC458"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="AB8BAD14"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="4AE3A776"/>
+        </Element>
+        <Element Type="Param" Id="49EEC458">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="48B4857A"/>
+        </Element>
+        <Element Type="Param" Id="AB8BAD14">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="4AE3A776">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_CombatDrugs</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>
