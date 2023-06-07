@@ -208,6 +208,9 @@ class TestAutoForms(KH2TestFormBase):
             self.assertEqual((self.can_reach_location(self.driveFormMap[form][0])), False, form)
             allPossibleForms.remove(self.driveToAuto[form])
             self.collect_all_but(allPossibleForms)
+            for drive_form in self.allForms:
+                if self.count(drive_form) > 0:
+                    self.remove(self.get_item_by_name(drive_form))
             self.assertEqual((self.can_reach_location(self.driveFormMap[form][0])), True, form)
             self.assertEqual((self.can_reach_location(self.driveFormMap[form][1])), False, form)
 
