@@ -42,8 +42,7 @@ def ArmosKnightsDefeatRule(state, player: int) -> bool:
             (state.has('Cane of Byrna', player) and can_extend_magic(state, player, 16)) or
             (state.has('Ice Rod', player) and can_extend_magic(state, player, 32)) or
             (state.has('Fire Rod', player) and can_extend_magic(state, player, 32)) or
-            state.has('Blue Boomerang', player) or
-            state.has('Red Boomerang', player))
+            state.has('Blue Boomerang', player))
 
 
 def LanmolasDefeatRule(state, player: int) -> bool:
