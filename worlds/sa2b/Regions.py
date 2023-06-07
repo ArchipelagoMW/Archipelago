@@ -542,7 +542,7 @@ def create_regions(world, player: int, active_locations):
         LocationName.eternal_engine_omo_11,
         LocationName.eternal_engine_omo_12,
         LocationName.eternal_engine_beetle,
-        LocationName.city_escape_animal_1,
+        LocationName.eternal_engine_animal_1,
         LocationName.eternal_engine_animal_2,
         LocationName.eternal_engine_animal_3,
         LocationName.eternal_engine_animal_4,
