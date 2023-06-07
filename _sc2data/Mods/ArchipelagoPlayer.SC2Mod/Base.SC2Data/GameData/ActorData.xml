@@ -1064,6 +1064,9 @@
             <Image value="Assets\Textures\Wireframe-Terran-Hellion.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorTurret id="AP_HellionTurret">
+        <On Terms="TurretEnable.AP_Hellion" Send="Create"/>
+    </CActorTurret>
     <CActorPortrait id="AP_HellionPortrait" parent="PortraitActor">
         <Model value="HellionPortrait"/>
         <On Terms="ActorCreation" Send="AnimBlendTimeApply 0.500000"/>
