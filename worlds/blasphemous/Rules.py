@@ -3,28 +3,25 @@ from ..AutoWorld import LogicMixin
 
 
 class BlasphemousLogic(LogicMixin):
-    def _blasphemous_aubade(self, player):
+    def _blaphemous_total_fervour(self, player) -> int:
         totalFervour: int = 60 + (20 * self.count("Fervour Upgrade", player)) + (10 * self.count("Bead of Blue Wax", player))
 
-        return self.has("Aubade of the Nameless Guardian", player) if totalFervour >= 90 else False
+        return totalFervour
+
+    def _blasphemous_aubade(self, player):
+        return self.has("Aubade of the Nameless Guardian", player) if self._blaphemous_total_fervour(player) >= 90 else False
     
     def _blasphemous_tirana(self, player):
-        totalFervour: int = 60 + (20 * self.count("Fervour Upgrade", player)) + (10 * self.count("Bead of Blue Wax", player))
-
-        return self.has("Tirana of the Celestial Bastion", player) if totalFervour >= 90 else False
+        return self.has("Tirana of the Celestial Bastion", player) if self._blaphemous_total_fervour(player) >= 90 else False
     
     def _blasphemous_pillar(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cloistered Ruby"}, player)
     
     def _blasphemous_charge_beam(self, player):
         return self.has("Charged Skill", player, 3)
-    
-    def _blasphemous_can_break_holes(self, player):
-        return self.has_any({"Charged Skill", "Dive Skill"}, player) or \
-            self.has("Lunge Skill", player, 3) or \
-                self.has_group("prayer", player) or \
-                    self.has_any({"Tirana of the Celestial Bastion", "Aubade of the Nameless Guardian"}, player) and \
-                        self.has("Fervour Upgrade", player, 2)
+
+    def _blasphemous_can_air_stall(self, logic, player):
+        return self.has("Ranged Skill", player) if logic.value > 0 else False
     
     def _blasphemous_can_dawn_jump(self, logic, player):
         return self.has_all({"Brilliant Heart of Dawn", "Dash"}, player) if logic.value >= 1 else False
@@ -32,16 +29,43 @@ class BlasphemousLogic(LogicMixin):
     def _blasphemous_can_water_jump(self, player):
         return self.has_any({"Nail Uprooted from Dirt", "Purified Hand of the Nun"}, player)
     
-    def _blasphemous_can_air_stall(self, logic, player):
-        return self.has("Ranged Skill", player) if logic.value > 0 else False
+    def _blasphemous_can_break_holes(self, player):
+        return self.has_any({"Charged Skill", "Dive Skill"}, player) or \
+            self.has("Lunge Skill", player, 3) or \
+                self.has_group("prayer", player) or \
+                    self._blasphemous_aubade(player) or \
+                        self._blasphemous_tirana(player)
+    
+    def _blasphemous_can_break_tirana(self, logic, player):
+        return self._blasphemous_tirana(player) if logic.value >= 2 else False
 
     def _blasphemous_can_dive_laser(self, logic, player):
         return self.has("Dive Skill", player, 3) if logic.value >= 2 else False
-        
-    def _blasphemous_can_break_tirana(self, logic, player):
-        totalFervour: int = 60 + (20 * self.count("Fervour Upgrade", player)) + (10 * self.count("Bead of Blue Wax", player))
-
-        return self.has("Tirana of the Celestial Bastion", player) if logic.value >= 2 and totalFervour >= 90 else False
+    
+    def _blasphemous_can_walk_on_root(self, player):
+        return self.has("Three Gnarled Tongues", player)
+    
+    def _blasphemous_can_climb_on_root(self, player):
+        return self.has_all({"Three Gnarled Tongues", "Wall Climb"}, player)
+    
+    def _blasphemous_can_survive_poison(self, logic, player, number: int):
+        if number == 1:
+            if logic.value >= 2:
+                return True
+            elif logic.value == 1:
+                return self.has("Tiento to your Thorned Hairs", player)
+            elif logic.value == 0:
+                return self.has("Silvered Lung of Dolphos", player)
+        elif number == 2:
+            if logic.value >= 1:
+                return self.has("Tiento to your Thorned Hairs", player)
+            elif logic.value == 0:
+                return self.has("Silvered Lung of Dolphos", player)
+        elif number == 3:
+            if logic.value >= 2 and self._blaphemous_total_fervour(player) >= 120:
+                return self.has("Tiento to your Thorned Hairs", player)
+            else:
+                return self.has("Silvered Lung of Dolphos", player)
         
     def _blasphemous_can_enemy_bounce(self, logic, enemy): # TODO
         return self._blasphemous_enemy_skips_allowed(logic, enemy)
@@ -49,17 +73,50 @@ class BlasphemousLogic(LogicMixin):
     def _blasphemous_can_enemy_upslash(self, logic, enemy, player):
         return self.has("Combo Skill", player, 2) and \
             self._blasphemous_enemy_skips_allowed(logic, enemy)
-
-    def _blasphemous_can_break_jondo_bell(self, world, player):
-        return (self.can_reach(world.get_connected_door("D03Z02S05[W]"), player) and \
-            (self.has("Purified Hand of the Nun", player) or \
-                self.has_all({"Brilliant Heart of Dawn", "Dash", "Ranged Skill"}, player)) or \
-                    self.can_reach(world.get_connected_door("D03Z02S05[S]"), player) or \
-                        self.can_reach(world.get_connected_door("D03Z02S05[E]"), player)) and \
-                            (self.can_reach(world.get_connected_door("D03Z02S09[S]"), player) and \
-                                self.has("Dash", player) or \
-                                    self.can_reach(world.get_connected_door("D03Z02S09[N]"), player) or \
-                                        self.can_reach(world.get_connected_door("D03Z02S09[Cherubs]"), player))
+    
+    def _blasphemous_can_cross_gap(self, logic, player, number: int):
+        if number == 1:
+            return self.has_any({"Purified Hand of the Nun", "The Young Mason's Wheel"}, player) or \
+                self._blasphemous_can_dawn_jump(logic, player) or \
+                    self._blasphemous_can_air_stall(logic, player)
+        elif number == 2:
+            return self.has_any({"Purified Hand of the Nun", "The Young Mason's Wheel"}, player) or \
+                self._blasphemous_can_dawn_jump(logic, player)
+        elif number == 3:
+            return self.has("Purified Hand of the Nun", player) or \
+                self._blasphemous_can_dawn_jump(logic, player) or \
+                    (self.has("The Young Mason's Wheel", player) and \
+                        self._blasphemous_can_air_stall(logic, player))
+        elif number == 4:
+            return self.has("Purified Hand of the Nun", player) or \
+                self._blasphemous_can_dawn_jump(logic, player)
+        elif number == 5:
+            return self.has("Purified Hand of the Nun", player) or \
+                (self._blasphemous_can_dawn_jump(logic, player) and \
+                    self._blasphemous_can_air_stall(logic, player))
+        elif number == 6:
+            return self.has("Purified Hand of the Nun", player)
+        elif number == 7:
+            return self.has("Purified Hand of the Nun", player) and \
+                (self._blasphemous_can_dawn_jump(logic, player) or \
+                    self.has("The Young Mason's Wheel", player) or \
+                        self._blasphemous_can_air_stall(logic, player))
+        elif number == 8:
+            return self.has("Purified Hand of the Nun", player) and \
+                (self._blasphemous_can_dawn_jump(logic, player) or \
+                    self.has("The Young Mason's Wheel", player))
+        elif number == 9:
+            return self.has("Purified Hand of the Nun", player) and \
+                (self._blasphemous_can_dawn_jump(logic, player) or \
+                    self.has("The Young Mason's Wheel", player) and \
+                        self._blasphemous_can_air_stall(logic, player))
+        elif number == 10:
+            return self.has("Purified Hand of the Nun", player) and \
+                self._blasphemous_can_dawn_jump(logic, player)
+        elif number == 11:
+            return self.has("Purified Hand of the Nun", player) and \
+                self._blasphemous_can_dawn_jump(logic, player) and \
+                    self._blasphemous_can_air_stall(logic, player)
     
     def _blasphemous_can_ride_albero_elevator(self, world, player):
         return self.can_reach(world.get_connected_door("D02Z02S11[NW]"), player) or \
@@ -67,55 +124,6 @@ class BlasphemousLogic(LogicMixin):
                 self.can_reach(world.get_connected_door("D02Z02S11[W]"), player) or \
                     self.can_reach(world.get_connected_door("D02Z02S11[E]"), player) or \
                         self.can_reach(world.get_connected_door("D02Z02S11[SE]"), player)
-    
-    def _blasphemous_can_fill_chalice(self, world, player):
-        return self.has("Chalice of Inverted Verses", player) and \
-            (self.can_reach(world.get_connected_door("D03Z01S01[W]"), player) or \
-                self.can_reach(world.get_connected_door("D03Z01S01[NE]"), player) or \
-                    self.can_reach(world.get_connected_door("D03Z01S01[S]"), player)) and \
-                        (self.can_reach(world.get_connected_door("D05Z02S01[W]"), player) or \
-                            self.can_reach(world.get_connected_door("D05Z02S01[E]"), player)) and \
-                                (self.can_reach(world.get_connected_door("D09Z01S07[SW]"), player) or \
-                                    self.can_reach(world.get_connected_door("D09Z01S07[SE]"), player) or \
-                                        self.can_reach(world.get_connected_door("D09Z01S07[W]"), player))
-    
-    def _blasphemous_can_cross_gap(self, player, number: int):
-        if number == 1:
-            return self.has_any({"Purified Hand of the Nun", "The Young Mason's Wheel", "Ranged Skill"}, player) or \
-                self.has_all({"Brilliant Heart of Dawn", "Dash"}, player)
-        elif number == 2:
-            return self.has_any({"Purified Hand of the Nun", "The Young Mason's Wheel"}, player) or \
-                self.has_all({"Brilliant Heart of Dawn", "Dash"}, player)
-        elif number == 3:
-            return self.has("Purified Hand of the Nun", player) or \
-                self.has_all({"Brilliant Heart of Dawn", "Dash"}, player) or \
-                    self.has_all({"The Young Mason's Wheel", "Ranged Skill"}, player)
-        elif number == 4:
-            return self.has("Purified Hand of the Nun", player) or \
-                self.has_all({"Brilliant Heart of Dawn", "Dash"}, player)
-        elif number == 5:
-            return self.has("Purified Hand of the Nun", player) or \
-                self.has_all({"Brilliant Heart of Dawn", "Dash", "Ranged Skill"}, player)
-        elif number == 6:
-            return self.has("Purified Hand of the Nun", player)
-        elif number == 7:
-            return self.has("Purified Hand of the Nun", player) and \
-                (self.has_any({"The Young Mason's Wheel", "Ranged Skill"}, player) or \
-                    self.has_all({"Brilliant Heart of Dawn", "Dash"}, player))
-        elif number == 8:
-            return self.has("Purified Hand of the Nun", player) and \
-                (self.has("The Young Mason's Wheel", player) or \
-                    self.has_all({"Brilliant Heart of Dawn", "Dash"}, player))
-        elif number == 9:
-            return self.has("Purified Hand of the Nun", player) and \
-                (self.has_all({"The Young Mason's Wheel", "Ranged Skill"}, player) or \
-                    self.has_all({"Brilliant Heart of Dawn", "Dash"}, player))
-        elif number == 10:
-            return self.has("Purified Hand of the Nun", player) and \
-                self.has_all({"Brilliant Heart of Dawn", "Dash"}, player)
-        elif number == 11:
-            return self.has_all({"Purified Hand of the Nun", "Ranged Skill"}, player) and \
-                self.has_all({"Brilliant Heart of Dawn", "Dash"}, player)
         
     def _blasphemous_opened_dc_gate_w(self, world, player):
         return self.can_reach(world.get_connected_door("D01Z05S24[W]"), player) or \
@@ -135,12 +143,34 @@ class BlasphemousLogic(LogicMixin):
                 (self.can_reach(world.get_connected_door("D02Z01S06[W]"), player) or \
                     self.can_reach(world.get_connected_door("D02Z01S06[Cherubs]"), player))
     
+    def _blasphemous_rode_gotp_elevator(self, world, player):
+        return self.can_reach(world.get_connected_door("D02Z02S11[NW]"), player) or \
+            self.can_reach(world.get_connected_door("D02Z02S11[NE]"), player) or \
+                self.can_reach(world.get_connected_door("D02Z02S11[W]"), player) or \
+                    self.can_reach(world.get_connected_door("D02Z02S11[E]"), player) or \
+                        self.can_reach(world.get_connected_door("D02Z02S11[SE]"), player)
+    
     def _blasphemous_opened_convent_ladder(self, world, player):
         return self.can_reach(world.get_connected_door("D02Z03S11[S]"), player) or \
             self.can_reach(world.get_connected_door("D02Z03S11[W]"), player) or \
                 self.can_reach(world.get_connected_door("D02Z03S11[NW]"), player) or \
                     self.can_reach(world.get_connected_door("D02Z03S11[E]"), player) or \
                         self.can_reach(world.get_connected_door("D02Z03S11[NE]"), player)
+    
+    def _blasphemous_broke_jondo_bell_w(self, world, player):
+        return self.can_reach(world.get_connected_door("D03Z02S09[S]"), player) or \
+            self.can_reach(world.get_connected_door("D03Z02S09[W]"), player) and \
+                self.has("Dash", player) or \
+                    self.can_reach(world.get_connected_door("D03Z02S09[N]"), player) or \
+                        self.can_reach(world.get_connected_door("D03Z02S09[Cherubs]"), player)
+    
+    def _blasphemous_broke_jondo_bell_e(self, world, logic, enemy, player):
+        return self.can_reach(world.get_connected_door("D03Z02S05[S]"), player) or \
+            self.can_reach(world.get_connected_door("D03Z02S05[E]"), player) or \
+                self.can_reach(world.get_connected_door("D03Z02S05[W]"), player) and \
+                    (self._blasphemous_can_cross_gap(logic, player, 5) or \
+                        self._blasphemous_can_enemy_bounce(logic, enemy) and \
+                            self._blasphemous_can_cross_gap(logic, player, 3))
     
     def _blasphemous_opened_mom_ladder(self, world, player):
         return self.can_reach(world.get_connected_door("D04Z02S06[NW]"), player) or \
@@ -158,7 +188,7 @@ class BlasphemousLogic(LogicMixin):
                 self.can_reach(world.get_connected_door("D06Z01S23[S]"), player) or \
                     self.can_reach(world.get_connected_door("D06Z01S23[Cherubs]"), player)
     
-    def _blasphemous_opened_bottc_statue(self, world, player):
+    def _blasphemous_broke_bottc_statue(self, world, player):
         return self.can_reach(world.get_connected_door("D08Z01S02[NE]"), player) or \
             self.can_reach(world.get_connected_door("D08Z01S02[SE]"), player)
     
@@ -170,34 +200,6 @@ class BlasphemousLogic(LogicMixin):
     def _blasphemous_opened_botss_ladder(self, world, player):
         return self.can_reach(world.get_connected_door("D17Z01S04[N]"), player) or \
             self.can_reach(world.get_connected_door("D17Z01S04[FrontR]"), player)
-
-
-    def _blasphemous_can_survive_poison(self, logic, player, number: int):
-        totalFervour: int = 60 + (20 * self.count("Fervour Upgrade", player)) + (10 * self.count("Bead of Blue Wax", player))
-
-        if number == 1:
-            if logic.value >= 2:
-                return True
-            elif logic.value == 1:
-                return self.has("Tiento to your Thorned Hairs", player)
-            elif logic.value == 0:
-                return self.has("Silvered Lung of Dolphos", player)
-        elif number == 2:
-            if logic.value >= 1:
-                return self.has("Tiento to your Thorned Hairs", player)
-            elif logic.value == 0:
-                return self.has("Silvered Lung of Dolphos", player)
-        elif number == 3:
-            if logic.value >= 2 and totalFervour >= 120:
-                return self.has("Tiento to your Thorned Hairs", player)
-            else:
-                return self.has("Silvered Lung of Dolphos", player)
-            
-    def _blasphemous_can_walk_on_root(self, player):
-        return self.has("Three Gnarled Tongues", player)
-    
-    def _blasphemous_can_climb_on_root(self, player):
-        return self.has_all({"Three Gnarled Tongues", "Wall Climb"}, player)
     
     def _blasphemous_upwarp_skips_allowed(self, logic):
         return True if logic.value >= 2 else False
@@ -423,6 +425,18 @@ class BlasphemousLogic(LogicMixin):
             total += 1
 
         return True if total >= number else False
+    
+    def _blasphemous_chalice_rooms(self, world, player, number: int):
+        total: int = 0
+
+        if self.can_reach(world.get_connected_door("D03Z01S01[W]"), player) or self.can_reach(world.get_connected_door("D03Z01S01[NE]"), player) or self.can_reach(world.get_connected_door("D03Z01S01[S]"), player):
+            total += 1
+        if self.can_reach(world.get_connected_door("D05Z02S01[W]"), player) or self.can_reach(world.get_connected_door("D05Z02S01[E]"), player):
+            total += 1
+        if self.can_reach(world.get_connected_door("D09Z01S07[SW]"), player) or self.can_reach(world.get_connected_door("D09Z01S07[SE]"), player) or self.can_reach(world.get_connected_door("D09Z01S07[W]"), player) or self.can_reach(world.get_connected_door("D09Z01S07[E]"), player):
+            total += 1
+
+        return True if total >= number else False
 
 
 def rules(blasphemousworld):
@@ -436,7 +450,8 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D01Z01S01[S]", player),
-        lambda state: state._blasphemous_can_break_holes(player))
+        lambda state: state._blasphemous_can_break_holes(player) or \
+            state.has("Purified Hand of the Nun", player))
 
 
     # D01Z01S02 (The Holy Line)
@@ -496,11 +511,11 @@ def rules(blasphemousworld):
     # D01Z02S03 (Albero)
     # Items
     set_rule(world.get_location("Albero: Child of Moonlight", player),
-        lambda state: state._blasphemous_can_ride_albero_elevator(blasphemousworld, player) or \
+        lambda state: state.has("RodeGOTPElevator", player) or \
             state._blasphemous_pillar(player) or \
                 state.has("Cante Jondo of the Three Sisters", player) or \
                     state.can_reach(blasphemousworld.get_connected_door("D01Z02S03[NW]"), player) and \
-                        (state._blasphemous_can_cross_gap(player, 2) or \
+                        (state._blasphemous_can_cross_gap(difficulty, player, 2) or \
                             state.has("Lorquiana", player) or \
                                 state._blasphemous_aubade(player) or \
                                     state.has("Cantina of the Blue Rose", player) or \
@@ -592,7 +607,7 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("WotBC: Under broken bridge", player),
         lambda state: state.has_any({"Blood Perpetuated in Sand", "Boots of Pleading"}, player) or \
-            state._blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
     # Doors
     set_rule(world.get_entrance("D01Z03S05[Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -608,7 +623,7 @@ def rules(blasphemousworld):
     # D01Z03S07 (Wasteland of the Buried Churches)
     # Items
     set_rule(world.get_location("WotBC: Cliffside Child of Moonlight", player),
-        lambda state: state._blasphemous_can_cross_gap(player, 1) or \
+        lambda state: state._blasphemous_can_cross_gap(difficulty, player, 1) or \
             state._blasphemous_aubade(player) or \
                 state._blasphemous_charge_beam(player) or \
                     state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", "Cloistered Ruby"}, player))
@@ -726,12 +741,12 @@ def rules(blasphemousworld):
     set_rule(world.get_location("DC: High ledge near elevator shaft", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D01Z05S17[E]"), player) or \
             state._blasphemous_can_water_jump(player) or \
-                state._blasphemous_can_cross_gap(player, 5))
+                state._blasphemous_can_cross_gap(difficulty, player, 5))
     # Doors
     set_rule(world.get_entrance("D01Z05S17[E]", player),
         lambda state: state.has("Dash", player) and \
             (state._blasphemous_can_water_jump(player) or \
-                state._blasphemous_can_cross_gap(player, 5)))
+                state._blasphemous_can_cross_gap(difficulty, player, 5)))
     
 
     # D01Z05S20 (Desecrated Cistern)
@@ -751,7 +766,8 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D01Z05S23[W]", player),
-        lambda state: state._blasphemous_can_fill_chalice(blasphemousworld, player))
+        lambda state: state._blasphemous_chalice_rooms(blasphemousworld, player, 3) and \
+            state.has("Chalice of Inverted Verses", player))
     
 
     # D01Z05S24 (Desecrated Cistern)
@@ -770,7 +786,7 @@ def rules(blasphemousworld):
                 (state.can_reach(blasphemousworld.get_connected_door("D01Z05S25[E]"), player) or \
                     state.can_reach(blasphemousworld.get_connected_door("D01Z05S25[W]"), player) and \
                         (state._blasphemous_can_walk_on_root(player) or \
-                            state._blasphemous_can_cross_gap(player, 3)))))
+                            state._blasphemous_can_cross_gap(difficulty, player, 3)))))
     # Doors
     set_rule(world.get_entrance("D01Z05S25[NE]", player),
         lambda state: state.has("Linen of Golden Thread", player) or \
@@ -783,13 +799,13 @@ def rules(blasphemousworld):
                     state._blasphemous_can_air_stall(difficulty, player))) or \
                         (state.can_reach(blasphemousworld.get_connected_door("D01Z05S25[E]"), player) and \
                             (state._blasphemous_can_walk_on_root(player) or \
-                                state._blasphemous_can_cross_gap(player, 3))))
+                                state._blasphemous_can_cross_gap(difficulty, player, 3))))
     set_rule(world.get_entrance("D01Z05S25[E]", player),
         lambda state: state._blasphemous_can_break_tirana(difficulty, player) and \
             (state.has("Linen of Golden Thread", player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D01Z05S25[W]"), player) and \
                     (state._blasphemous_can_walk_on_root(player) or \
-                        state._blasphemous_can_cross_gap(player, 3))))
+                        state._blasphemous_can_cross_gap(difficulty, player, 3))))
     set_rule(world.get_entrance("D01Z05S25[SW]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D01Z05S25[SE]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D01Z05S25[NE]"), player) or \
@@ -801,12 +817,12 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D01Z05S25[EchoesW]", player),
         lambda state: (state.can_reach(blasphemousworld.get_connected_door("D01Z05S25[EchoesE]"), player) and \
             (state.has("Blood Perpetuated in Sand", player) or \
-                state._blasphemous_can_cross_gap(player, 8))) or \
+                state._blasphemous_can_cross_gap(difficulty, player, 8))) or \
                     state.has_all({"Linen of Golden Thread", "Purified Hand of the Nun"}, player))
     set_rule(world.get_entrance("D01Z05S25[EchoesE]", player),
         lambda state: (state.can_reach(blasphemousworld.get_connected_door("D01Z05S25[EchoesW]"), player) and \
             (state.has("Blood Perpetuated in Sand", player) or \
-                state._blasphemous_can_cross_gap(player, 8))) or \
+                state._blasphemous_can_cross_gap(difficulty, player, 8))) or \
                     state.has_all({"Linen of Golden Thread", "Purified Hand of the Nun"}, player))
 
 
@@ -862,19 +878,19 @@ def rules(blasphemousworld):
             (state.can_reach(blasphemousworld.get_connected_door("D02Z01S02[NW]"), player) or \
                 state.has_any({"Purified Hand of the Nun", "Wall Climb"}, player)) and \
                     (state._blasphemous_can_walk_on_root(player) or \
-                        state._blasphemous_can_cross_gap(player, 4) or \
+                        state._blasphemous_can_cross_gap(difficulty, player, 4) or \
                             state._blasphemous_pillar(player)))
     # Doors
     set_rule(world.get_entrance("D02Z01S02[NW]", player),
         lambda state: state.has_any({"Purified Hand of the Nun", "Wall Climb"}, player) or \
             (state.can_reach(blasphemousworld.get_connected_door("D02Z01S02[NE]"), player) and \
                 state._blasphemous_can_walk_on_root(player) and \
-                    state._blasphemous_can_cross_gap(player, 5)))
+                    state._blasphemous_can_cross_gap(difficulty, player, 5)))
     set_rule(world.get_entrance("D02Z01S02[NE]", player),
         lambda state: (state.can_reach(blasphemousworld.get_connected_door("D02Z01S02[NW]"), player) or \
             state.has_any({"Purified Hand of the Nun", "Wall Climb"}, player)) and \
                 (state._blasphemous_can_walk_on_root(player) or \
-                    state._blasphemous_can_cross_gap(player, 10)))
+                    state._blasphemous_can_cross_gap(difficulty, player, 10)))
     set_rule(world.get_entrance("D02Z01S02[]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
@@ -957,14 +973,14 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("WOTW: Upper east statue", player),
         lambda state: state._blasphemous_can_walk_on_root(player) or \
-            state._blasphemous_can_cross_gap(player, 11))
+            state._blasphemous_can_cross_gap(difficulty, player, 11))
     # Doors
     set_rule(world.get_entrance("D02Z01S09[-CherubsL]", player),
         lambda state: state.has("Linen of Golden Thread", player))
     set_rule(world.get_entrance("D02Z01S09[-CherubsR]", player),
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state._blasphemous_can_walk_on_root(player) or \
-                state._blasphemous_can_cross_gap(player, 10)))
+                state._blasphemous_can_cross_gap(difficulty, player, 10)))
 
 
     # D02Z02S01 (Graveyard of the Peaks)
@@ -1018,7 +1034,7 @@ def rules(blasphemousworld):
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D02Z02S03[NW]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D02Z02S03[NE]"), player) or \
                 state.has("Wall Climb", player) or \
-                    state._blasphemous_can_cross_gap(player, 2))
+                    state._blasphemous_can_cross_gap(difficulty, player, 2))
     set_rule(world.get_location("GotP: Center east shaft", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D02Z02S03[NW]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D02Z02S03[NE]"), player) or \
@@ -1036,10 +1052,10 @@ def rules(blasphemousworld):
                 state._blasphemous_can_walk_on_root(player))
     set_rule(world.get_entrance("D02Z02S03[NE]", player),
         lambda state: state.has("Wall Climb", player) and \
-            (state._blasphemous_can_cross_gap(player, 11) or \
+            (state._blasphemous_can_cross_gap(difficulty, player, 11) or \
                 (state.has("Blood Perpetuated in Sand", player) and \
                     (state._blasphemous_can_walk_on_root(player) or \
-                        state._blasphemous_can_cross_gap(player, 7))) or \
+                        state._blasphemous_can_cross_gap(difficulty, player, 7))) or \
                             (state._blasphemous_can_walk_on_root(player) and \
                                 (state.has("Purified Hand of the Nun", player) or \
                                     state._blasphemous_can_air_stall(difficulty, player)))))
@@ -1097,7 +1113,7 @@ def rules(blasphemousworld):
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D02Z02S04[NE]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D02Z02S04[W]"), player) or \
-                    state.can_reach(blasphemousworld.get_connected_door("D02Z02S03[SE]"), player) or \
+                    state.can_reach(blasphemousworld.get_connected_door("D02Z02S04[SE]"), player) or \
                         state.has("Dash", player)))
 
 
@@ -1126,12 +1142,12 @@ def rules(blasphemousworld):
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D02Z02S08[CherubsR]"), player) or \
             state.has("Blood Perpetuated in Sand", player) or \
                 state._blasphemous_can_break_holes(player) or \
-                    state._blasphemous_can_cross_gap(player, 8))
+                    state._blasphemous_can_cross_gap(difficulty, player, 8))
     set_rule(world.get_location("GotP: Shop cave Child of Moonlight", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D02Z02S08[CherubsR]"), player) or \
             state.has("Blood Perpetuated in Sand", player) or \
                 state._blasphemous_pillar(player) or \
-                    state._blasphemous_can_cross_gap(player, 8))
+                    state._blasphemous_can_cross_gap(difficulty, player, 8))
     # No doors
 
 
@@ -1141,9 +1157,9 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D02Z02S11[E]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D02Z02S11[NW]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D02Z02S11[NE]"), player) or \
-                state._blasphemous_can_cross_gap(player, 6))
+                state._blasphemous_can_cross_gap(difficulty, player, 6))
     set_rule(world.get_entrance("D02Z02S11[-Cherubs]", player),
-        lambda state: state.has("Linen of Golden Thread"))
+        lambda state: state.has("Linen of Golden Thread", player))
 
 
     # D02Z02S14 (Graveyard of the Peaks)
@@ -1172,11 +1188,11 @@ def rules(blasphemousworld):
     set_rule(world.get_location("CoOLotCV: Snowy window ledge", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D02Z03S03[NW]"), player) or \
             state.has("Blood Perpetuated in Sand", player) or \
-                state._blasphemous_can_cross_gap(player, 3))
+                state._blasphemous_can_cross_gap(difficulty, player, 3))
     # Doors
     set_rule(world.get_entrance("D02Z03S03[NW]", player),
         lambda state: state.has("Blood Perpetuated in Sand", player) or \
-            state.blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
 
 
     # D02Z03S05 (Convent of Our Lady of the Charred Visage)
@@ -1257,10 +1273,10 @@ def rules(blasphemousworld):
     # Doors
     set_rule(world.get_entrance("D03Z01S02[W]", player),
         lambda state: state.has("Wall Climb", player) or \
-            state._blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
     set_rule(world.get_entrance("D03Z01S02[E]", player),
         lambda state: state.has("Wall Climb", player) or \
-            state._blasphemous_can_cross_gap(player, 7))
+            state._blasphemous_can_cross_gap(difficulty, player, 7))
 
 
     # D03Z01S03 (Mountains of the Endless Dusk)
@@ -1269,45 +1285,45 @@ def rules(blasphemousworld):
         lambda state: state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[W]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[SW]"), player) or \
-                    state._blasphemous_can_cross_gap(player, 9)))
+                    state._blasphemous_can_cross_gap(difficulty, player, 9)))
     set_rule(world.get_location("MotED: 1st meeting with Redento", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[W]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[SW]"), player) or \
-                state._blasphemous_can_cross_gap(player, 9))
+                state._blasphemous_can_cross_gap(difficulty, player, 9))
     set_rule(world.get_location("MotED: Child of Moonlight, above chasm", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[W]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[SW]"), player) or \
-                state._blasphemous_can_cross_gap(player, 9))
+                state._blasphemous_can_cross_gap(difficulty, player, 9))
     set_rule(world.get_location("MotED: Amanecida of the Golden Blades", player),
         lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Jondo", difficulty, player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[W]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[SW]"), player) or \
-                    state._blasphemous_can_cross_gap(player, 9)))
+                    state._blasphemous_can_cross_gap(difficulty, player, 9)))
     # Doors
     set_rule(world.get_entrance("D03Z01S03[W]", player),
         lambda state: state.has("Wall Climb", player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[SW]"), player) or \
-                state._blasphemous_can_cross_gap(player, 9)))
+                state._blasphemous_can_cross_gap(difficulty, player, 9)))
     set_rule(world.get_entrance("D03Z01S03[E]", player),
         lambda state: state.has("Wall Climb", player))
     set_rule(world.get_entrance("D03Z01S03[SW]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[W]"), player) or \
-            state._blasphemous_can_cross_gap(player, 9))
+            state._blasphemous_can_cross_gap(difficulty, player, 9))
     set_rule(world.get_entrance("D03Z01S03[-WestL]", player),
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[W]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[SW]"), player) or \
-                    state._blasphemous_can_cross_gap(player, 9)))
+                    state._blasphemous_can_cross_gap(difficulty, player, 9)))
     set_rule(world.get_entrance("D03Z01S03[-WestR]", player),
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[W]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[SW]"), player) or \
-                    state._blasphemous_can_cross_gap(player, 9)))
+                    state._blasphemous_can_cross_gap(difficulty, player, 9)))
     set_rule(world.get_entrance("D03Z01S03[-EastL]", player),
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[W]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z01S03[SW]"), player) or \
-                    state._blasphemous_can_cross_gap(player, 5)))
+                    state._blasphemous_can_cross_gap(difficulty, player, 5)))
     set_rule(world.get_entrance("D03Z01S03[-EastR]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
@@ -1339,15 +1355,15 @@ def rules(blasphemousworld):
     set_rule(world.get_location("Jondo: Upper east chest", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S01[Cherubs]"), player) or \
             (state.can_reach(blasphemousworld.get_connected_door("D03Z02S01[W]"), player) and \
-                state._blasphemous_can_cross_gap(player, 8)) or \
+                state._blasphemous_can_cross_gap(difficulty, player, 8)) or \
                     state._blasphemous_can_climb_on_root(player) or \
-                        state._blasphemous_can_cross_gap(player, 9))
+                        state._blasphemous_can_cross_gap(difficulty, player, 9))
     # Doors
     set_rule(world.get_entrance("D03Z02S01[W]", player),
         lambda state: state.has("Wall Climb", player))
     set_rule(world.get_entrance("D03Z02S01[N]", player),
         lambda state: state.has("Wall Climb", player) or \
-            state._blasphemous_can_cross_gap(player, 8))
+            state._blasphemous_can_cross_gap(difficulty, player, 8))
 
 
     # D03Z02S02 (Jondo)
@@ -1390,53 +1406,58 @@ def rules(blasphemousworld):
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSL]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSR]"), player) or \
-                    state._blasphemous_can_break_jondo_bell(blasphemousworld, player) and \
-                        (state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[W]"), player) and \
-                            state.has("Dash", player) or \
-                                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[E]"), player) or \
-                                    state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[N]"), player) or \
-                                        state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE2]"), player)))
-    set_rule(world.get_entrance("D03Z02S03[SE]", player),
-        lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SW]"), player) or \
-            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSL]"), player) or \
-                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSR]"), player) or \
-                    state._blasphemous_can_break_jondo_bell(blasphemousworld, player) and \
-                        (state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[W]"), player) and \
-                            state.has("Dash", player) or \
-                                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[E]"), player) or \
-                                    state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[N]"), player) or \
-                                        state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE2]"), player)))
-    set_rule(world.get_entrance("D03Z02S03[SSL]", player),
-        lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SW]"), player) or \
-            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE]"), player) or \
-                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSR]"), player) or \
-                    state._blasphemous_can_break_jondo_bell(blasphemousworld, player) and \
-                        (state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[W]"), player) and \
-                            state.has("Dash", player) or \
-                                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[E]"), player) or \
-                                    state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[N]"), player) or \
-                                        state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE2]"), player)))
-    set_rule(world.get_entrance("D03Z02S03[SSC]", player),
-        lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SW]"), player) or \
-            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE]"), player) or \
-                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSL]"), player) or \
-                    state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSR]"), player) or \
-                        state._blasphemous_can_break_jondo_bell(blasphemousworld, player) and \
+                    state.has("BrokeJondoBellW", player) and \
+                        state.has("BrokeJondoBellE", player) and \
                             (state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[W]"), player) and \
                                 state.has("Dash", player) or \
                                     state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[E]"), player) or \
                                         state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[N]"), player) or \
                                             state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE2]"), player)))
+    set_rule(world.get_entrance("D03Z02S03[SE]", player),
+        lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SW]"), player) or \
+            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSL]"), player) or \
+                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSR]"), player) or \
+                    state.has("BrokeJondoBellW", player) and \
+                        state.has("BrokeJondoBellE", player) and \
+                            (state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[W]"), player) and \
+                                state.has("Dash", player) or \
+                                    state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[E]"), player) or \
+                                        state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[N]"), player) or \
+                                            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE2]"), player)))
+    set_rule(world.get_entrance("D03Z02S03[SSL]", player),
+        lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SW]"), player) or \
+            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE]"), player) or \
+                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSR]"), player) or \
+                    state.has("BrokeJondoBellW", player) and \
+                        state.has("BrokeJondoBellE", player) and \
+                            (state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[W]"), player) and \
+                                state.has("Dash", player) or \
+                                    state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[E]"), player) or \
+                                        state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[N]"), player) or \
+                                            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE2]"), player)))
+    set_rule(world.get_entrance("D03Z02S03[SSC]", player),
+        lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SW]"), player) or \
+            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE]"), player) or \
+                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSL]"), player) or \
+                    state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSR]"), player) or \
+                        state.has("BrokeJondoBellW", player) and \
+                            state.has("BrokeJondoBellE", player) and \
+                                (state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[W]"), player) and \
+                                    state.has("Dash", player) or \
+                                        state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[E]"), player) or \
+                                            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[N]"), player) or \
+                                                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE2]"), player)))
     set_rule(world.get_entrance("D03Z02S03[SSR]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SW]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SSL]"), player) or \
-                    state._blasphemous_can_break_jondo_bell(blasphemousworld, player) and \
-                        (state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[W]"), player) and \
-                            state.has("Dash", player) or \
-                                state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[E]"), player) or \
-                                    state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[N]"), player) or \
-                                        state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE2]"), player)))
+                    state.has("BrokeJondoBellW", player) and \
+                        state.has("BrokeJondoBellE", player) and \
+                            (state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[W]"), player) and \
+                                state.has("Dash", player) or \
+                                    state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[E]"), player) or \
+                                        state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[N]"), player) or \
+                                            state.can_reach(blasphemousworld.get_connected_door("D03Z02S03[SE2]"), player)))
 
 
     # D03Z02S04 (Jondo)
@@ -1462,14 +1483,23 @@ def rules(blasphemousworld):
     set_rule(world.get_location("Jondo: Upper east Child of Moonlight", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S05[E]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D03Z02S05[S]"), player) or \
-                state._blasphemous_can_cross_gap(player, 5))
+                state._blasphemous_can_cross_gap(difficulty, player, 5) or \
+                    (state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
+                        state._blasphemous_can_cross_gap(difficulty, player, 3)))
     # Doors
     set_rule(world.get_entrance("D03Z02S05[E]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S05[S]"), player) or \
-            state._blasphemous_can_cross_gap(player, 5))
+            state._blasphemous_can_cross_gap(difficulty, player, 5) or \
+                (state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
+                    state._blasphemous_can_cross_gap(difficulty, player, 3)))
     set_rule(world.get_entrance("D03Z02S05[S]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S05[E]"), player) or \
-            state._blasphemous_can_cross_gap(player, 5))
+            state._blasphemous_can_cross_gap(difficulty, player, 5) or \
+                (state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
+                    state._blasphemous_can_cross_gap(difficulty, player, 3)))
+    # Event
+    set_rule(world.get_location("BrokeJondoBellE", player),
+        lambda state: state._blasphemous_broke_jondo_bell_e(blasphemousworld, difficulty, enemy, player))
 
 
     # D03Z02S07 (Jondo)
@@ -1507,6 +1537,9 @@ def rules(blasphemousworld):
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z02S09[N]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D03Z02S09[Cherubs]"), player) or \
                 state.has("Dash", player))
+    # Event
+    set_rule(world.get_location("BrokeJondoBellW", player),
+        lambda state: state._blasphemous_broke_jondo_bell_w(blasphemousworld, player))
 
 
     # D03Z02S10 (Jondo)
@@ -1525,7 +1558,7 @@ def rules(blasphemousworld):
         lambda state: state.has("Dash", player) and \
             (state.has_any({"Purified Hand of the Nun", "Wall Climb"}, player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z02S11[W]"), player) and \
-                    state._blasphemous_can_cross_gap(player, 3)))
+                    state._blasphemous_can_cross_gap(difficulty, player, 3)))
     # Doors
     set_rule(world.get_entrance("D03Z02S11[W]", player),
         lambda state: state.has("Dash", player) and \
@@ -1538,7 +1571,7 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("Jondo: Upper west tree root", player),
         lambda state: state._blasphemous_can_walk_on_root(player) or \
-            state._blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
     # Doors
     set_rule(world.get_entrance("D03Z02S13[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -1578,27 +1611,27 @@ def rules(blasphemousworld):
                 (state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[E]"), player) or \
                     state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[SW]"), player) or \
                         state.has("Blood Perpetuated in Sand", player) or \
-                            state._blasphemous_can_cross_gap(player, 10)))
+                            state._blasphemous_can_cross_gap(difficulty, player, 10)))
     set_rule(world.get_entrance("D03Z03S04[NE]", player),
         lambda state: state.has("Wall Climb", player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[NW]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[E]"), player) or \
                     state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[SW]"), player) or \
                         state.has("Blood Perpetuated in Sand", player) or \
-                            state._blasphemous_can_cross_gap(player, 10)))
+                            state._blasphemous_can_cross_gap(difficulty, player, 10)))
     set_rule(world.get_entrance("D03Z03S04[E]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[NW]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[NE]"), player) or \
                 state.has_any({"Purified Hand of the Nun", "Wall Climb"}, player) and \
                     (state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[SW]"), player) or \
                         state.has("Blood Perpetuated in Sand", player) or \
-                            state._blasphemous_can_cross_gap(player, 10)))
+                            state._blasphemous_can_cross_gap(difficulty, player, 10)))
     set_rule(world.get_entrance("D03Z03S04[SW]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[NW]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[NE]"), player) or \
                 state.can_reach(blasphemousworld.get_connected_door("D03Z03S04[E]"), player) or \
                     state.has("Blood Perpetuated in Sand", player) or \
-                        state._blasphemous_can_cross_gap(player, 10))
+                        state._blasphemous_can_cross_gap(difficulty, player, 10))
     set_rule(world.get_entrance("D03Z03S04[SE]", player),
         lambda state: state.has("Blood Perpetuated in Sand", player))
     set_rule(world.get_entrance("D03Z03S04[-Cherubs]", player),
@@ -1642,10 +1675,10 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("GA: End of blood bridge", player),
         lambda state: state.has("Blood Perpetuated in Sand", player) or \
-            state._blasphemous_can_cross_gap(player, 11))
+            state._blasphemous_can_cross_gap(difficulty, player, 11))
     set_rule(world.get_location("GA: Blood bridge Child of Moonlight", player),
         lambda state: (state.has("Blood Perpetuated in Sand", player) or \
-            state._blasphemous_can_cross_gap(player, 11)) and \
+            state._blasphemous_can_cross_gap(difficulty, player, 11)) and \
                 (state.has_any({"Purified Hand of the Nun", "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet"}, player) or \
                     state._blasphemous_pillar(player) or \
                         state._blasphemous_tirana(player) or \
@@ -1697,21 +1730,21 @@ def rules(blasphemousworld):
     set_rule(world.get_location("PotSS: First area ledge", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D04Z01S01[NE]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D04Z01S01[N]"), player) or \
-                state._blasphemous_can_cross_gap(player, 3))
+                state._blasphemous_can_cross_gap(difficulty, player, 3))
     # Doors
     set_rule(world.get_entrance("D04Z01S01[NE]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D04Z01S01[N]"), player) or \
-            state._blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
     set_rule(world.get_entrance("D04Z01S01[N]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D04Z01S01[NE]"), player) or \
-            state._blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
 
 
     # D04Z01S02 (Patio of the Silent Steps)
     # Items
     set_rule(world.get_location("PotSS: Second area ledge", player),
         lambda state: state._blasphemous_can_climb_on_root(player) or \
-            state._blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
     # No doors
 
 
@@ -1719,7 +1752,7 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("PotSS: Third area upper ledge", player),
         lambda state: state._blasphemous_can_walk_on_root(player) or \
-            state._blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
     # No doors
 
 
@@ -1766,7 +1799,7 @@ def rules(blasphemousworld):
                 state.can_reach(blasphemousworld.get_connected_door("D04Z02S01[NE]"), player) and \
                     state.has("Dash", player) and \
                         (state.has("Wall Climb", player) or \
-                            state._blasphemous_can_cross_gap(player, 1)))
+                            state._blasphemous_can_cross_gap(difficulty, player, 1)))
     # Doors
     set_rule(world.get_entrance("D04Z02S01[N]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D04Z02S04[NE]"), player) and \
@@ -1775,7 +1808,7 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D04Z02S01[NE]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D04Z02S01[N]"), player) or \
             state.has("Dash", player) and \
-                state._blasphemous_can_cross_gap(player, 1))
+                state._blasphemous_can_cross_gap(difficulty, player, 1))
 
 
     # D04Z02S02 (Mother of Mothers)
@@ -1843,7 +1876,7 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("MoM: East chandelier platform", player),
         lambda state: state.has("Blood Perpetuated in Sand", player) or \
-            state._blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
     # No doors
 
 
@@ -1957,8 +1990,8 @@ def rules(blasphemousworld):
             (state._blasphemous_can_climb_on_root(player) or \
                 state.has("Purified Hand of the Nun", player)) or \
                     (state._blasphemous_can_climb_on_root(player) and \
-                        state._blasphemous_can_cross_gap(player, 3)) or \
-                            state._blasphemous_can_cross_gap(player, 7))
+                        state._blasphemous_can_cross_gap(difficulty, player, 3)) or \
+                            state._blasphemous_can_cross_gap(difficulty, player, 7))
 
 
     # D05Z01S10 (Library of the Negated Words)
@@ -1966,7 +1999,7 @@ def rules(blasphemousworld):
     set_rule(world.get_location("LotNW: Platform puzzle chest", player),
         lambda state: state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player) or \
             state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
-                state._blasphemous_can_cross_gap(player, 2))
+                state._blasphemous_can_cross_gap(difficulty, player, 2))
     # No doors
 
 
@@ -1991,7 +2024,7 @@ def rules(blasphemousworld):
             state.has("Blood Perpetuated in Sand", player) and \
                 (state._blasphemous_can_walk_on_root(player) or \
                     state.has("Purified Hand of the Nun", player) or \
-                        state._blasphemous_can_cross_gap(player, 5) and \
+                        state._blasphemous_can_cross_gap(difficulty, player, 5) and \
                             state._blasphemous_pillar(player)))
     # Doors
     set_rule(world.get_entrance("D05Z01S21[-Cherubs]", player),
@@ -2090,7 +2123,7 @@ def rules(blasphemousworld):
                                         (state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NW]"), player) or \
                                             state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NE]"), player) and \
                                                 (state._blasphemous_can_walk_on_root(player) or \
-                                                    state._blasphemous_can_cross_gap(player, 1))))
+                                                    state._blasphemous_can_cross_gap(difficulty, player, 1))))
     set_rule(world.get_entrance("D06Z01S01[E]", player),
         lambda state: (state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[W]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NNW]"), player) or \
@@ -2103,25 +2136,25 @@ def rules(blasphemousworld):
                                         (state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NW]"), player) or \
                                             state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NE]"), player) and \
                                                 (state._blasphemous_can_walk_on_root(player) or \
-                                                    state._blasphemous_can_cross_gap(player, 1))))
+                                                    state._blasphemous_can_cross_gap(difficulty, player, 1))))
     set_rule(world.get_entrance("D06Z01S01[NW]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NE]"), player) and \
             (state._blasphemous_can_walk_on_root(player) or \
-                state._blasphemous_can_cross_gap(player, 8)) or \
+                state._blasphemous_can_cross_gap(difficulty, player, 8)) or \
                     state.has("Linen of Golden Thread", player) and \
                         (state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NNW]"), player) or \
                             state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NNE]"), player) and \
                                 (state._blasphemous_can_walk_on_root(player) or \
-                                    state._blasphemous_can_cross_gap(player, 3))))
+                                    state._blasphemous_can_cross_gap(difficulty, player, 3))))
     set_rule(world.get_entrance("D06Z01S01[NE]", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NW]"), player) or \
             (state._blasphemous_can_walk_on_root(player) or \
-                state._blasphemous_can_cross_gap(player, 8)) or \
+                state._blasphemous_can_cross_gap(difficulty, player, 8)) or \
                     state.has("Linen of Golden Thread", player) and \
                         (state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NNW]"), player) or \
                             state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NNE]"), player) and \
                                 (state._blasphemous_can_walk_on_root(player) or \
-                                    state._blasphemous_can_cross_gap(player, 3))))
+                                    state._blasphemous_can_cross_gap(difficulty, player, 3))))
     set_rule(world.get_entrance("D06Z01S01[NNW]", player),
         lambda state: (state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[NNE]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D06Z01S01[N]"), player)) or \
@@ -2295,7 +2328,7 @@ def rules(blasphemousworld):
     set_rule(world.get_location("AR: Upper east shaft ledge", player),
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D06Z01S15[SW]"), player) and \
             state.has("Wall Climb", player) and \
-                (state._blasphemous_can_cross_gap(player, 10) or \
+                (state._blasphemous_can_cross_gap(difficulty, player, 10) or \
                     state._blasphemous_can_climb_on_root(player) and \
                         (state.has("Blood Perpetuated in Sand", player) or \
                             state.has("Purified Hand of the Nun", player) and \
@@ -2327,14 +2360,14 @@ def rules(blasphemousworld):
                                                     state._blasphemous_can_dawn_jump(difficulty, player)))) or \
                                                         (state.can_reach(blasphemousworld.get_connected_door("D06Z01S16[E]"), player) and \
                                                             (state._blasphemous_can_walk_on_root(player) or \
-                                                                state._blasphemous_can_cross_gap(player, 7)) and \
+                                                                state._blasphemous_can_cross_gap(difficulty, player, 7)) and \
                                                                     (state.has("Wall Climb", player) or \
-                                                                        state._blasphemous_can_cross_gap(player, 5))))
+                                                                        state._blasphemous_can_cross_gap(difficulty, player, 5))))
     set_rule(world.get_entrance("D06Z01S16[E]", player),
         lambda state: ((state.can_reach(blasphemousworld.get_connected_door("D06Z01S16[W]"), player) or \
             state.can_reach(blasphemousworld.get_connected_door("D06Z01S16[CherubsL]"), player)) and \
                 (state._blasphemous_can_walk_on_root(player) or \
-                    state._blasphemous_can_cross_gap(player, 5))) or \
+                    state._blasphemous_can_cross_gap(difficulty, player, 5))) or \
                         (state.can_reach(blasphemousworld.get_connected_door("D06Z01S16[CherubsR]"), player) and \
                             (state.has("Purified Hand of the Nun", player) or \
                                 state._blasphemous_can_air_stall(difficulty, player) and \
@@ -2350,7 +2383,7 @@ def rules(blasphemousworld):
                                 state.has("The Young Mason's Wheel", player)))) or \
                                     (state.can_reach(blasphemousworld.get_connected_door("D06Z01S16[E]"), player) and \
                                         (state._blasphemous_can_walk_on_root(player) or \
-                                            state._blasphemous_can_cross_gap(player, 7)))))
+                                            state._blasphemous_can_cross_gap(difficulty, player, 7)))))
     set_rule(world.get_entrance("D06Z01S16[-CherubsR]", player),
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D06Z01S16[E]"), player) or \
@@ -2360,7 +2393,7 @@ def rules(blasphemousworld):
                             state.has("Purified Hand of the Nun", player))) or \
                                 (state.can_reach(blasphemousworld.get_connected_door("D06Z01S16[W]"), player) and \
                                     (state._blasphemous_can_walk_on_root(player) or \
-                                        state._blasphemous_can_cross_gap(player, 1)))))
+                                        state._blasphemous_can_cross_gap(difficulty, player, 1)))))
 
 
     # D06Z01S17 (Archcathedral Rooftops)
@@ -2439,8 +2472,8 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D08Z01S02[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
     # Event
-    set_rule(world.get_location("OpenedBOTTCStatue", player),
-        lambda state: state._blasphemous_opened_bottc_statue(blasphemousworld, player))
+    set_rule(world.get_location("BrokeBOTTCStatue", player),
+        lambda state: state._blasphemous_broke_bottc_statue(blasphemousworld, player))
 
 
     # D08Z02S03 (Ferrous Tree)
@@ -2503,7 +2536,7 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D09Z01S02[Cell4]", player),
         lambda state: state.has("Key of the Inquisitor", player))
     set_rule(world.get_entrance("D09Z01S02[Cell3]", player),
-        lambda state: state.has("Key of the Secular"))
+        lambda state: state.has("Key of the Secular", player))
     set_rule(world.get_entrance("D09Z01S02[Cell23]", player),
         lambda state: state.has("Key of the Secular", player))
 
@@ -2684,7 +2717,7 @@ def rules(blasphemousworld):
         lambda state: state.can_reach(blasphemousworld.get_connected_door("D17Z01S01[Cherubs1]"), player) or \
             state.has("Taranto to my Sister", player) or \
                 (state._blasphemous_can_climb_on_root(player) or \
-                    state._blasphemous_can_cross_gap(player, 10)) and \
+                    state._blasphemous_can_cross_gap(difficulty, player, 10)) and \
                         (state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun", "Debla of the Lights", "Verdiales of the Forsaken Hamlet", "Cloistered Ruby"}, player) or \
                             state._blasphemous_tirana(player)))
 
@@ -2762,13 +2795,13 @@ def rules(blasphemousworld):
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D17Z01S14[W]"), player) or \
                 state.has("Blood Perpetuated in Sand", player) or \
-                    state._blasphemous_can_cross_gap(player, 11)))
+                    state._blasphemous_can_cross_gap(difficulty, player, 11)))
     set_rule(world.get_entrance("D17Z01S14[-Cherubs2]", player),
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state.can_reach(blasphemousworld.get_connected_door("D17Z01S14[E]"), player) and \
-                state._blasphemous_can_cross_gap(player, 8) or \
+                state._blasphemous_can_cross_gap(difficulty, player, 8) or \
                     state.can_reach(blasphemousworld.get_connected_door("D17Z01S14[W]"), player) and \
-                        state._blasphemous_can_cross_gap(player, 10) or \
+                        state._blasphemous_can_cross_gap(difficulty, player, 10) or \
                             state.has("Blood Perpetuated in Sand", player)))
     set_rule(world.get_entrance("D17Z01S14[-Cherubs3]", player),
         lambda state: state.has("Linen of Golden Thread", player) and \
@@ -2831,7 +2864,7 @@ def rules(blasphemousworld):
     # Doors
     set_rule(world.get_entrance("D20Z02S03[NE]", player),
         lambda state: state._blasphemous_can_walk_on_root(player) or \
-            state._blasphemous_can_cross_gap(player, 5))
+            state._blasphemous_can_cross_gap(difficulty, player, 5))
 
 
     # D20Z02S04 (Mourning and Havoc)
@@ -2848,7 +2881,7 @@ def rules(blasphemousworld):
     # Doors
     set_rule(world.get_entrance("D20Z02S05[NW]", player),
         lambda state: state.has("Nail Uprooted from Dirt", player) or \
-            state._blasphemous_can_cross_gap(player, 3))
+            state._blasphemous_can_cross_gap(difficulty, player, 3))
 
 
     # D20Z02S06 (Mourning and Havoc)
@@ -2887,7 +2920,7 @@ def rules(blasphemousworld):
             state._blasphemous_can_break_tirana(difficulty, player) or \
                 state._blasphemous_mourning_skips_allowed(difficulty) and \
                     state.can_reach(blasphemousworld.get_connected_door("D20Z02S11[NW]"), player) and \
-                        state._blasphemous_can_cross_gap(player, 5))
+                        state._blasphemous_can_cross_gap(difficulty, player, 5))
     
 
     # Misc Items
@@ -2968,15 +3001,15 @@ def rules(blasphemousworld):
     set_rule(world.get_location("Skill 1, Tier 1", player),
         lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 1))
     set_rule(world.get_location("Skill 1, Tier 2", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 3))
+        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 2))
     set_rule(world.get_location("Skill 1, Tier 3", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 6))
+        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 4))
     set_rule(world.get_location("Skill 2, Tier 1", player),
         lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 1))
     set_rule(world.get_location("Skill 2, Tier 2", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 2))
+        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 3))
     set_rule(world.get_location("Skill 2, Tier 3", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 4))
+        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 6))
     set_rule(world.get_location("Skill 3, Tier 1", player),
         lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 2))
     set_rule(world.get_location("Skill 3, Tier 2", player),
@@ -2986,12 +3019,12 @@ def rules(blasphemousworld):
     set_rule(world.get_location("Skill 4, Tier 1", player),
         lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 1))
     set_rule(world.get_location("Skill 4, Tier 2", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 2))
+        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 3))
     set_rule(world.get_location("Skill 4, Tier 3", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 4))
+        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 6))
     set_rule(world.get_location("Skill 5, Tier 1", player),
         lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 1))
     set_rule(world.get_location("Skill 5, Tier 2", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 3))
+        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 2))
     set_rule(world.get_location("Skill 5, Tier 3", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 6))
+        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 4))

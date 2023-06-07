@@ -359,7 +359,7 @@ door_table: List[DoorDict] = [
 		"Direction": 2,
 		"OriginalDoor": "D01Z06S01[N]",
 		"Type": 1,
-		"Logic": "D01Z01S01[S] || canBreakHoles"
+		"Logic": "D01Z01S01[S] || canBreakHoles || doubleJump"
 	},
 	{
 		"Id": "D01Z01S02[W]",
@@ -1190,7 +1190,7 @@ door_table: List[DoorDict] = [
 		"Id": "D01Z05S23[W]",
 		"Direction": 1,
 		"OriginalDoor": "D01Z05S24[E]",
-		"Logic": "canFillChalice"
+		"Logic": "chalice && chaliceRooms >= 3"
 	},
 	{
 		"Id": "D01Z05S23[E]",
@@ -2183,34 +2183,34 @@ door_table: List[DoorDict] = [
 		"Id": "D03Z02S03[SW]",
 		"Direction": 1,
 		"OriginalDoor": "D03Z02S07[E]",
-		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || canBreakJondoBell && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
+		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || brokeJondoBellW && brokeJondoBellE && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
 	},
 	{
 		"Id": "D03Z02S03[SE]",
 		"Direction": 2,
 		"OriginalDoor": "D03Z02S06[W]",
-		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || canBreakJondoBell && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
+		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || brokeJondoBellW && brokeJondoBellE && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
 	},
 	{
 		"Id": "D03Z02S03[SSL]",
 		"Direction": 3,
 		"OriginalDoor": "D03Z03S01[NL]",
 		"Type": 1,
-		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || canBreakJondoBell && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
+		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || brokeJondoBellW && brokeJondoBellE && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
 	},
 	{
 		"Id": "D03Z02S03[SSC]",
 		"Direction": 6,
 		"OriginalDoor": "D03Z03S01[NC]",
 		"Type": 1,
-		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || canBreakJondoBell && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
+		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || brokeJondoBellW && brokeJondoBellE && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
 	},
 	{
 		"Id": "D03Z02S03[SSR]",
 		"Direction": 3,
 		"OriginalDoor": "D03Z03S01[NR]",
 		"Type": 1,
-		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || canBreakJondoBell && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
+		"Logic": "D03Z02S03[SW] || D03Z02S03[SE] || D03Z02S03[SSL] || D03Z02S03[SSR] || brokeJondoBellW && brokeJondoBellE && (D03Z02S03[W] && dash || D03Z02S03[E] || D03Z02S03[N] || D03Z02S03[SE2])"
 	},
 	{
 		"Id": "D03Z02S04[NW]",
@@ -2239,13 +2239,13 @@ door_table: List[DoorDict] = [
 		"Id": "D03Z02S05[E]",
 		"Direction": 2,
 		"OriginalDoor": "D03Z02S11[W]",
-		"Logic": "D03Z02S05[E] || D03Z02S05[S] || canCrossGap5"
+		"Logic": "D03Z02S05[E] || D03Z02S05[S] || canCrossGap5 || (canEnemyBounce && canCrossGap3)"
 	},
 	{
 		"Id": "D03Z02S05[S]",
 		"Direction": 3,
 		"OriginalDoor": "D03Z02S04[NE]",
-		"Logic": "D03Z02S05[E] || D03Z02S05[S] || canCrossGap5"
+		"Logic": "D03Z02S05[E] || D03Z02S05[S] || canCrossGap5 || (canEnemyBounce && canCrossGap3)"
 	},
 	{
 		"Id": "D03Z02S06[W]",
@@ -4271,7 +4271,7 @@ door_table: List[DoorDict] = [
 		"Direction": 1,
 		"OriginalDoor": "D08Z01S02[SE]",
 		"Type": 1,
-		"Logic": "openedBotTCStatue"
+		"Logic": "brokeBotTCStatue"
 	},
 	{
 		"Id": "D08Z02S03[E]",

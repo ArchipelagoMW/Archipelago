@@ -642,11 +642,14 @@ event_table: Dict[str, str] = {
     "OpenedDCGateE": "D01Z05S12",
     "OpenedDCLadder": "D01Z05S20",
     "OpenedWOTWCave": "D02Z01S06",
+    "RodeGOTPElevator": "D02Z02S11",
     "OpenedConventLadder": "D02Z03S11",
+    "BrokeJondoBellW": "D03Z02S09",
+    "BrokeJondoBellE": "D03Z02S05",
     "OpenedMOMLadder": "D04Z02S06",
     "OpenedTSCGate": "D05Z02S11",
     "OpenedARLadder": "D06Z01S23",
-    "OpenedBOTTCStatue": "D08Z01S02",
+    "BrokeBOTTCStatue": "D08Z01S02",
     "OpenedWOTHPGate": "D09Z01S05",
     "OpenedBOTSSLadder": "D17Z01S04"
 }
