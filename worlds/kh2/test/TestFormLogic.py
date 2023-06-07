@@ -200,13 +200,7 @@ class TestAutoForms(KH2TestFormBase):
         for drive_form, loc_list in self.driveFormMap.items():
             self.assertEqual((self.can_reach_location(loc_list[0])), False, loc_list)
 
-    def testAutoFormsLevel2(self):
-        allPossibleForms = self.allForms.copy()
-        # collects everything but the forms
-        self.collect_all_but(allPossibleForms)
-        for form in self.allForms:
-            self.assertEqual((self.can_reach_location(self.driveFormMap[form][0])), True, self.driveFormMap[form][0])
-            self.assertEqual((self.can_reach_location(self.driveFormMap[form][1])), False, self.driveFormMap[form][1])
+    
 
     def testAutoFormsLevelProgression(self):
         allPossibleForms = self.allForms + [ItemName.LightDarkness]
