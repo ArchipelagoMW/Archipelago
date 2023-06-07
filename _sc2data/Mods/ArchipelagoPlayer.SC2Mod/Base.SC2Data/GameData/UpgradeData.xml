@@ -1755,6 +1755,74 @@
         <EffectArray Operation="Set" Reference="Unit,AP_Cyclone,LifeRegenRate" Value="0.601500"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_RegenerativeBioSteelLevel2">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Hellion,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Hellion,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HellionTank,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HellionTank,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeTank,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeTank,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeTankSieged,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeTankSieged,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Thor,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Thor,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ThorAP,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ThorAP,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Diamondback,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Diamondback,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Vulture,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Vulture,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Goliath,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Goliath,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Predator,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Predator,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeBreaker,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeBreaker,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeBreakerSieged,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SiegeBreakerSieged,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingAssault,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingAssault,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingFighter,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_VikingFighter,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Banshee,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Banshee,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Medivac,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Medivac,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Battlecruiser,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Battlecruiser,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Raven,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Raven,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ScienceVessel,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ScienceVessel,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Hercules,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Hercules,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SpartanCompany,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SpartanCompany,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HelsAngelAssault,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HelsAngelAssault,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HelsAngelFighter,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HelsAngelFighter,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_DukesRevenge,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_DukesRevenge,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_DuskWing,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_DuskWing,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Wraith,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Wraith,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Liberator,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_LiberatorAG,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ValkyrieSCBW,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_ValkyrieSCBW,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_WidowMine,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_WidowMine,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_WidowMineBurrowed,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_WidowMineBurrowed,LifeRegenRate" Value="10"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Cyclone,LifeRegenDelay" Value="2"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Cyclone,LifeRegenRate" Value="10"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
     <CUpgrade id="AP_CellularReactors">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Unit,AP_Raven,EnergyStart" Value="100"/>

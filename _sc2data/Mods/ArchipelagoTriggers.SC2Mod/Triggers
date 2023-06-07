@@ -5421,7 +5421,7 @@
             <ValueGameType Type="Upgrade"/>
         </Element>
         <Element Type="FunctionDef" Id="357A6C7B">
-            <Label Type="Label" Library="Ntve" Id="8B88800F"/>
+            <Deprecated/>
             <FlagAction/>
             <Parameter Type="ParamDef" Library="ABFE498B" Id="39ED0C69"/>
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="61013542"/>
@@ -7348,7 +7348,7 @@
             <ValueGameType Type="Upgrade"/>
         </Element>
         <Element Type="FunctionDef" Id="008514A4">
-            <Label Type="Label" Library="Ntve" Id="8B88800F"/>
+            <Deprecated/>
             <FlagAction/>
             <Parameter Type="ParamDef" Library="ABFE498B" Id="52A84725"/>
             <FunctionCall Type="Comment" Library="ABFE498B" Id="A5BC0298"/>
@@ -13212,6 +13212,7 @@
             <Item Type="FunctionDef" Library="ABFE498B" Id="AEC18195"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="BE1794EA"/>
             <Item Type="FunctionDef" Library="ABFE498B" Id="6124EA5E"/>
+            <Item Type="FunctionDef" Library="ABFE498B" Id="4E0C3C5C"/>
         </Element>
         <Element Type="FunctionDef" Id="C22B56E2">
             <FlagAction/>
@@ -14058,6 +14059,7 @@
             <ValueType Type="int"/>
         </Element>
         <Element Type="FunctionDef" Id="6124EA5E">
+            <Deprecated/>
             <FlagAction/>
             <Parameter Type="ParamDef" Library="ABFE498B" Id="B5461D2C"/>
             <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="981183E7"/>
@@ -14090,6 +14092,128 @@
         <Element Type="Param" Id="1D257DF0">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
             <Value>AP_RegenerativeBioSteel</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionDef" Id="4E0C3C5C">
+            <FlagAction/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="94E868F9"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="27A446B8"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="82D9B06E"/>
+        </Element>
+        <Element Type="ParamDef" Id="94E868F9">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="3FA1EDE4"/>
+        </Element>
+        <Element Type="Param" Id="3FA1EDE4">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="ParamDef" Id="27A446B8">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="ABFE498B" Id="69D3C711"/>
+        </Element>
+        <Element Type="Param" Id="69D3C711">
+            <Value>0</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="82D9B06E">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000137"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="ACC41D5A"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="0BAE44B3"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="B34E671B"/>
+        </Element>
+        <Element Type="FunctionCall" Id="ACC41D5A">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000003"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="A3788B63"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="C82A39C3"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="9A56D3C7"/>
+        </Element>
+        <Element Type="Param" Id="A3788B63">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="27A446B8"/>
+        </Element>
+        <Element Type="Param" Id="C82A39C3">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="B128CB9A"/>
+        </Element>
+        <Element Type="Param" Id="9A56D3C7">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="0BAE44B3">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000004"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="39BA3BA9"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="D8D88CAE"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="0D743B49"/>
+        </Element>
+        <Element Type="Param" Id="39BA3BA9">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="94E868F9"/>
+        </Element>
+        <Element Type="Param" Id="D8D88CAE">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="0D743B49">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_RegenerativeBioSteel</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Upgrade"/>
+        </Element>
+        <Element Type="FunctionCall" Id="B34E671B">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000137"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000004"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="85830DE5"/>
+            <FunctionCall Type="FunctionCall" Library="ABFE498B" Id="9EBD9597"/>
+        </Element>
+        <Element Type="FunctionCall" Id="85830DE5">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000003"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="F3E983F2"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="C3CCBA93"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="B194FE3F"/>
+        </Element>
+        <Element Type="Param" Id="F3E983F2">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="27A446B8"/>
+        </Element>
+        <Element Type="Param" Id="C3CCBA93">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="B128CB9A"/>
+        </Element>
+        <Element Type="Param" Id="B194FE3F">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>2</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionCall" Id="9EBD9597">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="9F8EF8FB"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000004"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="C8B7924F"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="825FC064"/>
+            <Parameter Type="Param" Library="ABFE498B" Id="EEA3C5BC"/>
+        </Element>
+        <Element Type="Param" Id="C8B7924F">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="C7188352"/>
+            <Parameter Type="ParamDef" Library="ABFE498B" Id="94E868F9"/>
+        </Element>
+        <Element Type="Param" Id="825FC064">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="3BFEECBB"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="EEA3C5BC">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="7E5035EE"/>
+            <Value>AP_RegenerativeBioSteelLevel2</Value>
             <ValueType Type="gamelink"/>
             <ValueGameType Type="Upgrade"/>
         </Element>

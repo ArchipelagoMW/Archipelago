@@ -711,7 +711,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSCVDualFusionWelders (int lp_player
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockMarineStimpack (int lp_player) {
     // Automatic Variable Declarations
-    // Implementation
+    // Deprecated
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MarineStimpack", 1);
 }
 
@@ -996,7 +996,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockVikingPhobosClassWeaponsSystem (int
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners (int lp_player) {
     // Automatic Variable Declarations
-    // Implementation
+    // Deprecated
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_CrossSpectrumDampeners", 1);
 }
 
@@ -1700,8 +1700,21 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockCellularReactor (int lp_player) {
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockRegenerativeBioSteel (int lp_player) {
     // Automatic Variable Declarations
-    // Implementation
+    // Deprecated
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RegenerativeBioSteel", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockProgressiveRegenerativeBioSteel (int lp_player, int lp_level) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((lp_level >= 1)) {
+        libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RegenerativeBioSteel", 1);
+        if ((lp_level >= 2)) {
+            libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_RegenerativeBioSteelLevel2", 1);
+        }
+
+    }
+
 }
 
 void libABFE498B_gf_AP_Triggers_clearTerranTech (int lp_player) {
