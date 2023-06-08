@@ -841,24 +841,18 @@ class Region:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
-        :param exits: exits from the region. format is {"connecting_region", "exit_name"}
+        :param exits: exits from the region. format is {"connecting_region": "exit_name"}. if a non dict is provided,
+        created entrances will be named "self.name -> connecting_region"
         :param rules: rules for the exits from this region. format is {"connecting_region", rule}
         """
-        if isinstance(exits, Dict):
-            for exiting_region, name in exits.items():
-                ret = Entrance(self.player, name, self) if name \
-                    else Entrance(self.player, f"{self.name} -> {exiting_region}", self)
-                if rules and exiting_region in rules:
-                    ret.access_rule = rules[exiting_region]
-                self.exits.append(ret)
-                ret.connect(self.multiworld.get_region(exiting_region, self.player))
-        else:
-            for region in exits:
-                ret = Entrance(self.player, f"{self.name} -> {region}", self)
-                if rules and region in rules:
-                    ret.access_rule = rules[region]
-                self.exits.append(ret)
-                ret.connect(self.multiworld.get_region(region, self.player))
+        if not isinstance(exits, Dict):
+            exits = {_exit: None for _exit in exits}
+        for exiting_region, name in exits.items():
+            entrance = Entrance(self.player, name if name else f"{self.name} -> {exiting_region}", self)
+            if rules and exiting_region in rules:
+                entrance.access_rule = rules[exiting_region]
+            self.exits.append(entrance)
+            entrance.connect(self.multiworld.get_region(exiting_region, self.player))
 
     def __repr__(self):
         return self.__str__()
