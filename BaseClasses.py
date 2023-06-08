@@ -847,12 +847,12 @@ class Region:
         """
         if not isinstance(exits, Dict):
             exits = {_exit: None for _exit in exits}
-        for exiting_region, name in exits.items():
-            entrance = Entrance(self.player, name if name else f"{self.name} -> {exiting_region}", self)
-            if rules and exiting_region in rules:
-                entrance.access_rule = rules[exiting_region]
+        for connecting_region, name in exits.items():
+            entrance = Entrance(self.player, name if name else f"{self.name} -> {connecting_region}", self)
+            if rules and connecting_region in rules:
+                entrance.access_rule = rules[connecting_region]
             self.exits.append(entrance)
-            entrance.connect(self.multiworld.get_region(exiting_region, self.player))
+            entrance.connect(self.multiworld.get_region(connecting_region, self.player))
 
     def __repr__(self):
         return self.__str__()
