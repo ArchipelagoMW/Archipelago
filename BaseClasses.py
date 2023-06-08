@@ -846,7 +846,7 @@ class Region:
         :param rules: rules for the exits from this region. format is {"connecting_region", rule}
         """
         if not isinstance(exits, Dict):
-            exits = {_exit: None for _exit in exits}
+            exits = dict.fromkeys(exits)
         for connecting_region, name in exits.items():
             entrance = Entrance(self.player, name if name else f"{self.name} -> {connecting_region}", self)
             if rules and connecting_region in rules:
