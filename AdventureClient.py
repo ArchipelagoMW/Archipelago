@@ -25,11 +25,11 @@ from worlds.adventure.Offsets import static_item_element_size, connector_port_of
 SYSTEM_MESSAGE_ID = 0
 
 CONNECTION_TIMING_OUT_STATUS = \
-    "Connection timing out. Please restart your emulator, then restart adventure_connector.lua"
+    "Connection timing out. Please restart your emulator, then restart connector_adventure.lua"
 CONNECTION_REFUSED_STATUS = \
-    "Connection Refused. Please start your emulator and make sure adventure_connector.lua is running"
+    "Connection Refused. Please start your emulator and make sure connector_adventure.lua is running"
 CONNECTION_RESET_STATUS = \
-    "Connection was reset. Please restart your emulator, then restart adventure_connector.lua"
+    "Connection was reset. Please restart your emulator, then restart connector_adventure.lua"
 CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
@@ -396,7 +396,7 @@ async def atari_sync_task(ctx: AdventureContext):
                     ctx.atari_streams = await asyncio.wait_for(
                         asyncio.open_connection("localhost",
                                                 port),
-                                                timeout=10)
+                        timeout=10)
                     ctx.atari_status = CONNECTION_TENTATIVE_STATUS
                 except TimeoutError:
                     logger.debug("Connection Timed Out, Trying Again")
