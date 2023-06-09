@@ -105,7 +105,9 @@
     </CEffectSet>
     <CEffectModifyUnit id="AP_SuperStimpackSmallSetMU">
         <EditorCategories value="Race:Zerg"/>
-        <VitalArray index="Life" Change="30"/>
+        <VitalArray index="Life">
+            <Change value="30"/>
+        </VitalArray>
         <ImpactUnit Value="Source"/>
     </CEffectModifyUnit>
     <CEffectSet id="AP_SuperStimpackLargeSet">
@@ -115,7 +117,9 @@
     </CEffectSet>
     <CEffectModifyUnit id="AP_SuperStimpackLargeSetMU">
         <EditorCategories value="Race:Zerg"/>
-        <VitalArray index="Life" Change="60"/>
+        <VitalArray index="Life">
+            <Change value="60"/>
+        </VitalArray>
         <ImpactUnit Value="Source"/>
     </CEffectModifyUnit>
     <CEffectCreatePersistent id="AP_MagrailMunitionsCP">
@@ -655,7 +659,7 @@
         <ValidatorArray value="TargetRadiusSmall"/>
         <ValidatorArray value="AP_HasShapedBlast"/>
         <EditorCategories value="Race:Terran"/>
-        <ImpactUnitValidator value="EnemyTarget"/>
+        <ImpactUnitValidator value="AP_EnemyTarget"/>
         <Kind value="Splash"/>
         <KindSplash value="Splash"/>
         <Amount value="60"/>
@@ -1401,14 +1405,6 @@
         <Amount value="45"/>
         <Death value="Silentkill"/>
     </CEffectDamage>
-    <CEffectCreatePersistent id="AP_HeroNukePersistent">
-        <EditorCategories value="Race:Terran"/>
-        <InitialDelay value="1.75"/>
-        <ExpireDelay value="3"/>
-        <ExpireEffect value="AP_HeroNukeDetonate"/>
-        <FinalEffect value="AP_HeroNukeSuicide"/>
-        <Flags index="Channeled" value="1"/>
-    </CEffectCreatePersistent>
     <CEffectUseCalldown id="AP_HeroNukeCalldown">
         <EditorCategories value="Race:Terran"/>
         <CalldownCount value="1"/>
@@ -2573,7 +2569,7 @@
         <ValidatorArray value="TargetRadiusSmall"/>
         <ValidatorArray value="AP_HasShapedBlast"/>
         <EditorCategories value="Race:Terran"/>
-        <ImpactUnitValidator value="EnemyTarget"/>
+        <ImpactUnitValidator value="AP_EnemyTarget"/>
         <Kind value="Splash"/>
         <KindSplash value="Splash"/>
         <Amount value="100"/>
@@ -4255,11 +4251,1435 @@
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
         <SearchFlags index="OffsetByUnitRadius" value="1"/>
     </CEffectEnumArea>
-    <CAbilMorph id="AP_ReaperPlacementMorph">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <InfoArray Unit="AP_Reaper"/>
-        <Flags index="IgnoreFacing" value="1"/>
-        <Flags index="IgnoreUnitCost" value="1"/>
-        <Flags index="WaitUntilStopped" value="0"/>
-    </CAbilMorph>
+    <CEffectApplyBehavior id="AP_ApplyNovaPsiStrikeWalkSpeed">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_NovaPsiStrikeWalkSpeed"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_FlashBangGrenadeNovaTripWireRestartWarning">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectModifyUnit>
+    <CEffectIssueOrder id="AP_GravitonBeamUnburrow">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="BurrowZerglingUp"/>
+        <CmdFlags index="Queued" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_GravitonBeamUnburrowCancel">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="BurrowZerglingDown"/>
+        <AbilCmdIndex value="1"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="AP_GravitonBeamUnburrowTake2">
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="0.0625"/>
+        <ExpireEffect value="AP_GravitonBeamUnburrowTake2Set"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_GravitonBeamUnburrowTake2Set">
+        <EffectArray value="AP_GravitonBeamUnburrow"/>
+        <EffectArray value="AP_SwarmHostMPUnburrow"/>
+        <EffectArray value="AP_LurkerMPUnburrow"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_HeroNukePersistent">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialDelay value="1.75"/>
+        <ExpireDelay value="2.5"/>
+        <ExpireEffect value="AP_HeroNukeDetonate"/>
+        <FinalEffect value="AP_HeroNukeSuicide"/>
+        <PeriodCount value="2"/>
+        <PeriodicPeriodArray value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_InstantMorphUnburrowAB">
+        <ValidatorArray index="0" value="IsNotEggUnit"/>
+        <ValidatorArray value="NotSiegeTank"/>
+        <ValidatorArray value="NotViking"/>
+        <ValidatorArray value="NotHellion"/>
+        <ValidatorArray value="NotCorruptor"/>
+        <ValidatorArray value="NotOverlord"/>
+        <ValidatorArray value="AP_IsNotVanillaRoach"/>
+        <ValidatorArray value="AP_IsNotVanillaHydralisk"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_InstantMorph"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_InstantMorphUnburrowABNoChecks">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_InstantMorph"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_InstantUnburrow">
+        <EffectArray value="AP_InstantMorphUnburrowAB"/>
+        <EffectArray value="AP_GravitonBeamUnburrowCancel"/>
+        <EffectArray value="AP_GravitonBeamUnburrow"/>
+        <EffectArray value="AP_GravitonBeamUnburrowTake2"/>
+        <EffectArray value="AP_SwarmHostMPUnburrow"/>
+        <EffectArray value="AP_SwarmHostUnburrow"/>
+        <EffectArray value="AP_SwarmHostUproot"/>
+        <EffectArray value="AP_LurkerMPUnburrow"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_KillRemove">
+        <ImpactLocation Value="TargetUnit"/>
+        <Visibility value="Hidden"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="NoKillCredit" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CEffectIssueOrder id="AP_LurkerMPUnburrow">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="BurrowLurkerMPUp"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_NovaApolloCloakAB">
+        <EditorCategories value=""/>
+        <Behavior value="AP_NovaApolloCloak"/>
+    </CEffectApplyBehavior>
+    <CEffectTeleport id="AP_NovaArmorBlinkSuitBlink">
+        <ValidatorArray value="CasterNotFungalGrowthed"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Value="CasterUnit"/>
+        <PlacementRange value="8"/>
+        <Range value="8"/>
+        <TargetLocation Value="TargetPoint"/>
+        <TeleportFlags index="TestCliff" value="1"/>
+        <TeleportEffect value="AP_NovaArmorBlinkSuitBlinkCloaked"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="AP_NovaArmorBlinkSuitBlinkCloaked">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaDefensiveDroneTimedLife">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaDominationAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_NovaDomination"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaDominationApplyNova">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_NovaAlreadyDominated"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_NovaDominationApplySet">
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaDominationAB"/>
+        <EffectArray value="AP_NovaDominationApplyNova"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_NovaDominationPersistent">
+        <ValidatorArray value="AP_IsNotVanillaSonarDrone"/>
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="AP_NovaDominationApplySet"/>
+        <FinalEffect value="AP_NovaDominationRemoveSet"/>
+        <PeriodicValidator value="Domination"/>
+        <PeriodicPeriodArray value="0.2"/>
+    </CEffectCreatePersistent>
+    <CEffectRemoveBehavior id="AP_NovaDominationRB">
+        <EditorCategories value="Race:Terran"/>
+        <BehaviorLink value="AP_NovaDomination"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_NovaDominationRemoveNova">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Source"/>
+        <BehaviorLink value="AP_NovaAlreadyDominated"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_NovaDominationRemoveSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaDominationRemoveNova"/>
+        <EffectArray value="AP_NovaDominationRB"/>
+        <EffectArray value="AP_NovaHelmetDominationCooldown"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_NovaGadgetDefensiveDroneSummonCU">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnEffect value="AP_NovaGadgetDefensiveDroneSummonLMImpactSet"/>
+        <SpawnUnit value="AP_NovaDefensiveDrone"/>
+    </CEffectCreateUnit>
+    <CEffectLaunchMissile id="AP_NovaGadgetDefensiveDroneSummonLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="RemovePrecursor"/>
+        <AmmoUnit value="AP_NovaDefensiveDroneRelease"/>
+        <PlaceholderUnit value="AP_PointDefenseDrone"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_NovaGadgetDefensiveDroneSummonLMImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaDefensiveDroneTimedLife"/>
+        <EffectArray value="AP_NovaGadgetDefensiveDroneSummonLM"/>
+        <EffectArray value="MakePrecursor"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_NovaGadgetFlashBangGrenadeApplyBehavior">
+        <ValidatorArray index="0" value="NotFrenzied"/>
+        <ValidatorArray value="AP_TargetIsNotUnstoppable"/>
+        <ValidatorArray value="AP_NotStructureorIsStructureandNotDetector"/>
+        <ValidatorArray value="AP_IsNotHerculesCombined"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_FlashBangGrenade"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_NovaGadgetFlashBangGrenadeLaunchMissile">
+        <ValidatorArray index="0" value="HasVision"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactOffset value="0,0,0.1"/>
+        <ImpactEffect value="AP_NovaGadgetFlashBangGrenadeSearchSet"/>
+        <AmmoUnit value="AP_NovaGadgetFlashBangGrenadesWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="AP_NovaGadgetFlashBangGrenadeSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Massive,Missile,Destructible,Item,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AreaArray Radius="3" Effect="AP_NovaGadgetFlashBangGrenadeApplyBehavior"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_NovaGadgetFlashBangGrenadeSearchSet">
+        <EffectArray value="AP_NovaGadgetFlashBangGrenadeSearch"/>
+        <EffectArray value="AP_NovaGadgetFlashBangGrenadeTripmineSearch"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_NovaGadgetFlashBangGrenadeTripmineApplyBehavior">
+        <ValidatorArray index="0" value="IsNovaTripWire"/>
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_FlashBangGrenadeNovaTripWire"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_NovaGadgetFlashBangGrenadeTripmineSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Structure,Invulnerable;Self,Player,Ally,Neutral,Massive,Missile,Destructible,Item,Stasis,Dead,Hidden,Unstoppable"/>
+        <AreaArray Radius="3" Effect="AP_NovaGadgetFlashBangGrenadeTripmineApplyBehavior"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_NovaGadgetHiveMindAmplifierDummy">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_NovaGadgetPulseGrenadesDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Amount value="100"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <AreaArray Radius="2.5" Fraction="0.6"/>
+        <SearchFilters value="-;Self,Player,Ally,Missile,Stasis,Dead,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_NovaGadgetPulseGrenadesLaunchMissile">
+        <ValidatorArray index="0" value="HasVision"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactOffset value="0,0,0.1"/>
+        <ImpactEffect value="AP_NovaGadgetPulseGrenadesDamage"/>
+        <AmmoUnit value="AP_NovaGadgetPulseGrenadesWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_NovaGadgetSwarmGrenadesLaunchMissile">
+        <ValidatorArray index="0" value="HasVision"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="AP_SwarmGrenadeCP"/>
+        <AmmoUnit value="AP_NovaGadgetSwarmGrenadesWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectModifyUnit id="AP_NovaHelmetDominationCooldown">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <Cost Abil="AP_NovaHelmetDomination,Execute" CooldownOperation="Max" CooldownTimeUse="10"/>
+    </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_NovaHelmetHiveMindAmplifierDummy">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_NovaHolographicDecoyBehaviorSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaHolographicDecoyDamageAB"/>
+        <EffectArray value="AP_NovaHolographicDecoyTimedLifeAB"/>
+        <EffectArray value="AP_NovaHolographicDecoyGlazeAB"/>
+        <EffectArray value="AP_NovaHolographicDecoyIssueOrder"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_NovaHolographicDecoyDamageAB">
+        <Behavior value="AP_NovaHolographicDecoy"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaHolographicDecoyGlazeAB">
+        <Behavior value="AP_GlazeHolo"/>
+    </CEffectApplyBehavior>
+    <CEffectIssueOrder id="AP_NovaHolographicDecoyIssueOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="attack"/>
+        <Target Effect="AP_NovaGadgetHolographicDecoy" Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectCreateUnit id="AP_NovaHolographicDecoySpawnSet">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_NovaHolographicDecoyBehaviorSet"/>
+        <SpawnUnit value="AP_NovaHoloDecoy"/>
+        <SpawnRange value="1"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="AP_NovaHolographicDecoyTimedLifeAB">
+        <Behavior value="AP_NovaHolographicDecoyTimedLife"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_NovaPlasmaPuddleDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="2.5"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_NovaPlasmaPuddleDamageDebuff">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaPlasmaPuddleDamageDebuffSlow">
+        <ValidatorArray value="AP_NotHeroic"/>
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaPlasmaPuddleDamageDebuffSlowHeroic">
+        <ValidatorArray value="AP_IsHeroic"/>
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_NovaPlasmaPuddleDamageDebuffSlowSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaPlasmaPuddleDamageDebuffSlowHeroic"/>
+        <EffectArray value="AP_NovaPlasmaPuddleDamageDebuffSlow"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_NovaPlasmaPuddleSmall">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourceUnit"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="Placement" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="PlacementIgnoreCliffTest" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_NovaPlasmaPuddleSmallAB"/>
+        <SpawnUnit value="AP_NovaPlasmaPuddleSmall"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="AP_NovaPlasmaPuddleSmallAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_NovaPlasmaPuddleSmall"/>
+    </CEffectApplyBehavior>
+    <CEffectCreateUnit id="AP_NovaPlasmaPuddle">
+        <EditorCategories value="Race:Terran"/>
+        <SpawnUnit value="AP_NovaPlasmaPuddle"/>
+        <WhichLocation Value="SourceUnit"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="Placement" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="PlacementIgnoreCliffTest" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_NovaPlasmaPuddleLarge">
+        <EditorCategories value="Race:Terran"/>
+        <SpawnUnit value="AP_NovaPlasmaPuddleLarge"/>
+        <WhichLocation Value="SourceUnit"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="Placement" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="PlacementIgnoreCliffTest" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_NovaPlasmaPuddleLargeAB"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="AP_NovaPlasmaPuddleLargeAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_NovaPlasmaPuddleLarge"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_PlasmaPuddleSearchLarge">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_NovaPlasmaPuddleDamageDebuff"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_NovaPsiStrike">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_ApplyNovaPsiStrikeWalkSpeed"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_NovaPsiStrikeDamage" parent="DU_WEAP">
+        <ValidatorArray value="AP_EnemyTarget"/>
+        <ValidatorArray value="AP_NotNovaPsiStriked"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="NovaPsiStrike">
+            <MatchFlags index="Link" value="1"/>
+        </Marker>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Splash"/>
+        <Amount value="50"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_NovaPsiStrikeDamageAB">
+        <ValidatorArray value="AP_EnemyTarget"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_NovaPsiStrikeDamaged"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_NovaPsiStrikeStopRB">
+        <EditorCategories value="Race:Zerg"/>
+        <!-- Vanilla uses KerriganPsiStrikeDamaged, looks like a bug -->
+        <BehaviorLink value="AP_NovaPsiStrikeDamaged"/>
+    </CEffectRemoveBehavior>
+    <CEffectEnumArea id="AP_NovaPsiStrikeStopSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Ground,Visible;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="10" Effect="AP_NovaPsiStrikeStopRB"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_NovaPsiStrikeTargetSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <SearchFilters value="Ground,Visible;Self,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1" Effect="AP_NovaPsiStrikeTargetSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_NovaPsiStrikeTargetSet">
+        <ValidatorArray value="CasterIsNotHidden"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_NovaPsiStrikeDamage"/>
+        <EffectArray value="AP_NovaPsiStrikeDamageAB"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_NovaPsiStrikeWalkStopOrder">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="stop"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="AP_NovaPsiStrikeWalkStopSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaPsiStrikeStopSearch"/>
+        <EffectArray value="AP_NovaPsiStrikeWalkStopOrder"/>
+        <EffectArray value="AP_NovaPsiStrikeWalkStopStun"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_NovaPsiStrikeWalkStopStun">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectDestroyPersistent id="AP_NovaReleaseMinion">
+        <EditorCategories value="Race:Terran"/>
+        <Effect value="AP_NovaDominationPersistent"/>
+        <Count value="4294967295"/>
+        <Radius value="500"/>
+    </CEffectDestroyPersistent>
+    <CEffectApplyBehavior id="AP_NovaSilentkillCasterAB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_NovaSilentkillStunCaster"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_NovaSilentkillCasterFacing">
+        <ImpactUnit Value="Caster"/>
+        <FacingLocation Value="TargetUnit"/>
+        <FacingType value="LookAt"/>
+    </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_NovaSilentkillSeparatistCP">
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_NovaSilentkillTargetSeparatistKill"/>
+        <PeriodicPeriodArray value="0.333"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_NovaSilentkillSeparatistSet">
+        <EffectArray value="AP_NovaSilentkillCasterFacing"/>
+        <EffectArray value="AP_NovaSilentkillCasterAB"/>
+        <EffectArray value="AP_NovaSilentkillTargetAB"/>
+        <EffectArray value="AP_NovaSilentkillSeparatistCP"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_NovaSilentkillTargetAB">
+        <Behavior value="AP_NovaSilentkillStunTarget"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_NovaSilentkillTargetSeparatistKill">
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Silentkill"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_NovaWeaponBlazefireBladeShadowFuryCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="OriginPoint"/>
+        <InitialEffect value="AP_NovaWeaponBlazefireBladeShadowFuryFinal"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_NovaWeaponBlazefireBladeShadowFuryControllerAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_NovaWeaponBlazefireBladeShadowFuryController"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_NovaWeaponBlazefireBladeShadowFuryDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="45"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectTeleport id="AP_NovaWeaponBlazefireBladeShadowFuryFinal">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Effect="AP_NovaWeaponBlazefireBladeShadowFuryPersistent" Value="OriginPoint"/>
+        <PlacementRange value="10"/>
+        <Range value="10"/>
+        <TargetLocation Value="TargetPoint"/>
+        <TeleportFlags index="TestFog" value="0"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="AP_NovaWeaponBlazefireBladeShadowFuryFinalDelayAB">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_NovaWeaponBlazefireBladeShadowFuryFinalDelay"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_NovaWeaponBlazefireBladeShadowFuryImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaWeaponBlazefireBladeShadowFuryTeleportSwitch"/>
+        <EffectArray value="AP_NovaWeaponBlazefireBladeShadowFuryDamage"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_NovaWeaponBlazefireBladeShadowFuryPersistent">
+        <ValidatorArray value="TargetIsPathable"/>
+        <ValidatorArray value="AP_NovaWeaponBlazefireBladeShadowFuryTargetsInArea"/>
+        <EditorCategories value="Race:Terran"/>
+        <InitialEffect value="AP_NovaWeaponBlazefireBladeShadowFuryControllerAB"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_NovaWeaponBlazefireBladeShadowFurySearch">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Effect="NovaWeaponBlazefireBladeShadowFuryPersistent" Value="TargetPoint"/>
+        <ImpactLocation Effect="NovaWeaponBlazefireBladeShadowFuryPersistent"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Structure,RawResource,HarvestableResource,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="AP_TSNovaWeaponBlazefireBladeShadowFuryTargeted"/>
+            <SortArray value="TSRandom"/>
+        </TargetSorts>
+        <AreaArray MaxCount="1" Radius="5" Effect="AP_NovaWeaponBlazefireBladeShadowFurySearchSetAOE"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_NovaWeaponBlazefireBladeShadowFurySearchSetAOE">
+        <ValidatorArray value="NotLarva"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaWeaponBlazefireBladeShadowFuryTarget"/>
+        <EffectArray value="AP_NovaWeaponBlazefireBladeShadowFuryImpactSet"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_NovaWeaponBlazefireBladeShadowFuryTarget">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_NovaWeaponBlazefireBladeShadowFuryTargeted"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_NovaWeaponBlazefireBladeShadowFuryTeleport1CP">
+        <EditorCategories value="Race:Terran"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_NovaWeaponBlazefireBladeShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.2,-0.8,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectTeleport id="AP_NovaWeaponBlazefireBladeShadowFuryTeleport">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <TargetLocation Value="TargetPoint"/>
+        <TeleportFlags index="TestFog" value="0"/>
+        <TeleportEffect value="AP_NovaWeaponBlazefireBladeShadowFuryTeleportFacing"/>
+    </CEffectTeleport>
+    <CEffectModifyUnit id="AP_NovaWeaponBlazefireBladeShadowFuryTeleportFacing">
+        <ImpactUnit Value="Caster"/>
+        <FacingLocation Effect="AP_NovaWeaponBlazefireBladeShadowFuryImpactSet" Value="TargetUnit"/>
+        <FacingType value="LookAt"/>
+        <EditorCategories value="Race:Terran"/>
+    </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_NovaWeaponBlazefireBladeShadowFuryTeleport2CP">
+        <EditorCategories value="Race:Terran"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_NovaWeaponBlazefireBladeShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.3,-1.2,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_NovaWeaponBlazefireBladeShadowFuryTeleport3CP">
+        <EditorCategories value="Race:Terran"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_NovaWeaponBlazefireBladeShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.3,-1.7,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_NovaWeaponBlazefireBladeShadowFuryTeleport4CP">
+        <EditorCategories value="Race:Terran"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_NovaWeaponBlazefireBladeShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.4,-2.2,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_NovaWeaponBlazefireBladeShadowFuryTeleport5CP">
+        <EditorCategories value="Race:Terran"/>
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_NovaWeaponBlazefireBladeShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.4,-2.7,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectSwitch id="AP_NovaWeaponBlazefireBladeShadowFuryTeleportSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <!-- Vanilla uses TargetRadiusGT2 that checks against 2.5 range too -->
+        <CaseArray Validator="TargetRadiusGT2Dot5" Effect="AP_NovaWeaponBlazefireBladeShadowFuryTeleport5CP"/>
+        <CaseArray Validator="TargetRadiusGT1Dot5" Effect="AP_NovaWeaponBlazefireBladeShadowFuryTeleport4CP"/>
+        <CaseArray Validator="TargetRadiusGT1Dot0" Effect="AP_NovaWeaponBlazefireBladeShadowFuryTeleport3CP"/>
+        <CaseArray Validator="TargetRadiusGT0Dot5" Effect="AP_NovaWeaponBlazefireBladeShadowFuryTeleport2CP"/>
+        <CaseDefault value="AP_NovaWeaponBlazefireBladeShadowFuryTeleport1CP"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_NovaWeaponCanisterRifleSnipe" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Spell"/>
+        <Amount value="125"/>
+        <Death value="Silentkill"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_NovaWeaponHellfireShotgunBlast">
+        <WhichLocation Value="CasterPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_NovaWeaponHellfireShotgunBlastSearch"/>
+        <PeriodicOffsetArray value="0,-2.5,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_NovaWeaponHellfireShotgunBlastDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <AttributeBonus index="Light" value="50"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="50"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_NovaWeaponHellfireShotgunBlastSearch">
+        <LaunchLocation Value="CasterPoint"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Arc="59.9963" Radius="7" Effect="AP_NovaWeaponHellfireShotgunBlastDamage"/>
+        <SearchFlags index="CenterAtLaunch" value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_NovaWeaponInvictusLongshotLockdownAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_NovaWeaponInvictusLongshotLockdown"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_NovaWeaponInvictusLongshotLockdownLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_NovaWeaponInvictusLongshotLockdownAB"/>
+        <AmmoUnit value="AP_NovaLockdownMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_NovaWeaponPlasmaBlastNewFinalImpactSet" abil="NovaWeaponPlasmaBlastNew">
+        <Marker Link="Effect/WizSimpleSkillshotFinalImpactSet"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_NovaWeaponPlasmaBlastNewImpactDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <ArmorReduction value="0"/>
+        <Kind value="Ranged"/>
+        <Amount value="100"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_NovaWeaponPlasmaBlastNewImpactSet" parent="WizSimpleSkillshotImpactSet" abil="AP_NovaWeaponPlasmaBlastNew">
+        <EffectArray index="0" value="AP_NovaPlasmaPuddleDamageDebuff"/>
+        <EffectArray value="AP_NovaWeaponPlasmaBlastNewImpactDamage"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_NovaWeaponPlasmaBlastNewInitialOffset" parent="WizSimpleSkillshotInitialOffset" abil="AP_NovaWeaponPlasmaBlastNew">
+        <InitialEffect value="AP_NovaWeaponPlasmaBlastNewLaunchMissile"/>
+        <InitialOffset value="0,-10,0"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_NovaWeaponPlasmaBlastNewInitialSet" parent="WizSimpleSkillshotInitialSet" abil="AP_NovaWeaponPlasmaBlastNew">
+        <EffectArray index="0" value="AP_NovaWeaponPlasmaBlastNewInitialOffset"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_NovaWeaponPlasmaBlastNewLaunchMissile" parent="WizSimpleSkillshotLaunchMissile" abil="AP_NovaWeaponPlasmaBlastNew">
+        <LaunchEffect value="AP_NovaWeaponPlasmaBlastNewMissilePersistent"/>
+        <ImpactEffect value="AP_NovaWeaponPlasmaBlastNewFinalImpactSet"/>
+        <FinishEffect value="AP_NovaPlasmaPuddleSmall"/>
+        <PeriodicEffect value="NovaPlasmaPuddleSmall"/>
+        <PeriodicPeriod value="0.25"/>
+        <AmmoUnit value="AP_NovaWeaponPlasmaBlastNewLaunchMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_NovaWeaponPlasmaBlastNewMissilePersistent" parent="WizSimpleSkillshotMissilePersistent" abil="AP_NovaWeaponPlasmaBlastNew">
+        <PeriodCount value="33"/>
+        <PeriodicEffectArray index="0" value="AP_NovaWeaponPlasmaBlastNewMissileScan"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_NovaWeaponPlasmaBlastNewMissileScan" parent="WizSimpleSkillshotMissileScan" abil="AP_NovaWeaponPlasmaBlastNew">
+        <AreaArray index="0" RectangleWidth="2" RectangleHeight="0.3125" Effect="AP_NovaWeaponPlasmaBlastNewImpactSet"/>
+    </CEffectEnumArea>
+    <CEffectSwitch id="AP_NovaWeaponPsiRifleAbduct">
+        <EditorCategories value="Race:Zerg"/>
+        <!-- FIXME: Verify this! -->
+        <CaseArray Validator="IsVikingFighter" Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <CaseArray Validator="IsVikingAssault" Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <CaseDefault value="AP_YoinkStartCreatePlaceholder"/>
+    </CEffectSwitch>
+    <CEffectApplyBehavior id="AP_PersonalDefensiveMatrix">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_PersonalDefensiveMatrixMU">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+        <VitalArray index="Shields">
+            <ChangeFraction value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="AP_PersonalDefensiveMatrixSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_PersonalDefensiveMatrixMU"/>
+        <EffectArray value="AP_PersonalDefensiveMatrix"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_PlasmaPuddleSearchSmall">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_NovaPlasmaPuddleDamageDebuff"/>
+    </CEffectEnumArea>
+    <CEffectRemoveBehavior id="AP_RemoveCoreRecallingBehaviorVikingAir">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <BehaviorLink value="MothershipCoreRecalling"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_RemoveCoreRecallingBehaviorVikingGround">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <BehaviorLink value="MothershipCoreRecalling"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_RemoveRecallingBehaviorVikingAir">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <BehaviorLink value="Recalling"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_RemoveRecallingBehaviorVikingGround">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <BehaviorLink value="Recalling"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_SuperStimpackNovaAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_SuperStimNova"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_SuperStimpackNovaMU">
+        <EditorCategories value="Race:Terran"/>
+        <VitalArray index="Life">
+            <Change value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="AP_SuperStimpackNovaSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SuperStimpackNovaAB"/>
+        <EffectArray value="AP_SuperStimpackNovaMU"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_SwarmGrenadeApplyBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_SwarmGrenade"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_SwarmGrenadeCP">
+        <EditorCategories value="Race:Zerg"/>
+        <InitialEffect value="AP_SwarmGrenadeSearch"/>
+        <PeriodCount value="19"/>
+        <PeriodicEffectArray value="AP_SwarmGrenadeSearch"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumTransport id="AP_SwarmGrenadeIterateTransport">
+        <ValidatorArray value="AP_IsAnyBunker"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Effect value="AP_SwarmGrenadeApplyBehavior"/>
+    </CEffectEnumTransport>
+    <CEffectEnumArea id="AP_SwarmGrenadeSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_SwarmGrenadeSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_SwarmGrenadeSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SwarmGrenadeApplyBehavior"/>
+        <EffectArray value="AP_SwarmGrenadeIterateTransport"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_NovaWeaponBlazefireBladeGunDamageCloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="80"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.8" Fraction="0.5"/>
+        <SearchFilters value="Air;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <ExcludeArray Value="Target"/>
+    </CEffectDamage>
+    <CEffectSwitch id="AP_NovaWeaponBlazefireBladeGunDamageCloakedSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="AP_CasterIsCloaked" Effect="AP_NovaWeaponBlazefireBladeGunDamageCloaked"/>
+        <CaseDefault value="AP_NovaWeaponBlazefireBladeGunDamageUncloaked"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_NovaWeaponBlazefireBladeGunDamageUncloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="80"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.8" Fraction="0.5"/>
+        <SearchFilters value="Air;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <ExcludeArray Value="Target"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_NovaWeaponPlasmaKill">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaWeaponPlasmaKillSmall">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaWeaponPlasmaKillLarge">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaWeaponPlasmaKillCaster">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaWeaponPlasmaKillSmallCaster">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaWeaponPlasmaKillLargeCaster">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_NovaWeaponPlasmaRifleDamage">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="15"/>
+        <Death value="Disintegrate"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_NovaWeaponPlasmaRifleLM">
+        <EditorCategories value=""/>
+        <ImpactEffect value="AP_NovaWeaponPlasmaRifleImpactSet"/>
+        <AmmoUnit value="AP_NovaWeaponPlasmaRifleLM"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_NovaWeaponPlasmaRifleImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaWeaponPlasmaKillSwitch"/>
+        <EffectArray value="AP_NovaWeaponPlasmaRifleDamage"/>
+    </CEffectSet>
+    <CEffectSet id="AP_NovaPlasmaBlastImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaWeaponPlasmaKillSwitch"/>
+        <EffectArray value="AP_NovaPlasmaBlastDamage"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_NovaWeaponPlasmaKillSwitch">
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="AP_TargetRadiusGT0Dot75" Effect="AP_NovaWeaponPlasmaKillLarge"/>
+        <CaseArray Validator="TargetRadiusGT0Dot5" Effect="AP_NovaWeaponPlasmaKill"/>
+        <CaseDefault value="AP_NovaWeaponPlasmaKillSmall"/>
+    </CEffectSwitch>
+    <CEffectSwitch id="AP_NovaWeaponPlasmaPuddleKillCasterSwitch">
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="AP_CasterRadiusGT0Dot75" Effect="AP_NovaPlasmaPuddleLarge"/>
+        <CaseArray Validator="CasterRadiusGT0Dot5" Effect="AP_NovaPlasmaPuddle"/>
+        <CaseDefault value="AP_NovaPlasmaPuddleSmall"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_NovaWeaponBlazefireBladeDamageCloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="90"/>
+        <Death value="Eviscerate"/>
+        <AreaArray Arc="180" Radius="1" Fraction="0.3"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <ExcludeArray Value="Target"/>
+    </CEffectDamage>
+    <CEffectSwitch id="AP_NovaWeaponBlazefireBladeDamageCloakedSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="AP_CasterIsCloaked" Effect="AP_NovaWeaponBlazefireBladeDamageCloaked"/>
+        <CaseDefault value="AP_NovaWeaponBlazefireBladeDamageUncloaked"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_NovaWeaponBlazefireBladeDamageUncloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="60"/>
+        <Death value="Eviscerate"/>
+        <AreaArray Arc="180" Radius="1" Fraction="0.3"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <ExcludeArray Value="Target"/>
+    </CEffectDamage>
+    <CEffectSwitch id="AP_NovaWeaponCheck">
+        <CaseArray Validator="AP_HaveNovaWeaponCanisterRifle" Effect="AP_NovaWeaponCanisterRifleABSet"/>
+        <CaseArray Validator="AP_HaveNovaWeaponHellfireShotgun" Effect="AP_NovaWeaponHellfireShotgunABSet"/>
+        <CaseArray Validator="AP_HaveNovaWeaponPlasmaRifle" Effect="AP_NovaWeaponPlasmaRifleABSet"/>
+        <CaseArray Validator="AP_HaveNovaWeaponBlazefireBlade" Effect="AP_NovaWeaponBlazefireBladeABSet"/>
+        <CaseArray Validator="AP_HaveNovaWeaponPsiBlade" Effect="AP_NovaWeaponPsiBladeABSet"/>
+    </CEffectSwitch>
+    <CEffectSet id="AP_NovaWeaponCanisterRifleABSet">
+        <EffectArray value="AP_NovaWeaponHellfireShotgunRB"/>
+        <EffectArray value="AP_NovaWeaponPlasmaRifleRB"/>
+        <EffectArray value="AP_NovaWeaponBlazefireBladeRB"/>
+        <EffectArray value="AP_NovaWeaponUnarmedRB"/>
+        <EffectArray value="AP_NovaWeaponPsiBladeRB"/>
+        <EffectArray value="AP_NovaWeaponCanisterRifleAB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_NovaWeaponHellfireShotgunABSet">
+        <EffectArray value="AP_NovaWeaponPlasmaRifleRB"/>
+        <EffectArray value="AP_NovaWeaponBlazefireBladeRB"/>
+        <EffectArray value="AP_NovaWeaponCanisterRifleRB"/>
+        <EffectArray value="AP_NovaWeaponUnarmedRB"/>
+        <EffectArray value="AP_NovaWeaponPsiBladeRB"/>
+        <EffectArray value="AP_NovaWeaponHellfireShotgunAB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_NovaWeaponPlasmaRifleABSet">
+        <EffectArray value="AP_NovaWeaponHellfireShotgunRB"/>
+        <EffectArray value="AP_NovaWeaponBlazefireBladeRB"/>
+        <EffectArray value="AP_NovaWeaponCanisterRifleRB"/>
+        <EffectArray value="AP_NovaWeaponUnarmedRB"/>
+        <EffectArray value="AP_NovaWeaponPsiBladeRB"/>
+        <EffectArray value="AP_NovaWeaponPlasmaRifleAB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_NovaWeaponBlazefireBladeABSet">
+        <EffectArray value="AP_NovaWeaponHellfireShotgunRB"/>
+        <EffectArray value="AP_NovaWeaponPlasmaRifleRB"/>
+        <EffectArray value="AP_NovaWeaponCanisterRifleRB"/>
+        <EffectArray value="AP_NovaWeaponUnarmedRB"/>
+        <EffectArray value="AP_NovaWeaponPsiBladeRB"/>
+        <EffectArray value="AP_NovaWeaponBlazefireBladeAB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_NovaWeaponPsiBladeABSet">
+        <EffectArray value="AP_NovaWeaponHellfireShotgunRB"/>
+        <EffectArray value="AP_NovaWeaponPlasmaRifleRB"/>
+        <EffectArray value="AP_NovaWeaponBlazefireBladeRB"/>
+        <EffectArray value="AP_NovaWeaponCanisterRifleRB"/>
+        <EffectArray value="AP_NovaWeaponUnarmedRB"/>
+        <EffectArray value="AP_NovaWeaponPsiBladeAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_NovaWeaponPsiBladeAB">
+        <Behavior value="AP_NovaWeaponPsiBlade"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaWeaponCanisterRifleAB">
+        <Behavior value="AP_NovaWeaponCanisterRifle"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaWeaponHellfireShotgunAB">
+        <Behavior value="AP_NovaWeaponHellfireShotgun"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaWeaponBlazefireBladeAB">
+        <Behavior value="AP_NovaWeaponBlazefireBlade"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaWeaponPlasmaRifleAB">
+        <Behavior value="AP_NovaWeaponPlasmaRifle"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_NovaWeaponCanisterRifleRB">
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_NovaWeaponCanisterRifle"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_NovaWeaponHellfireShotgunRB">
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_NovaWeaponHellfireShotgun"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_NovaWeaponPsiBladeRB">
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_NovaWeaponPsiBlade"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_NovaWeaponBlazefireBladeRB">
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_NovaWeaponBlazefireBlade"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_NovaWeaponPlasmaRifleRB">
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_NovaWeaponPlasmaRifle"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_NovaWeaponUnarmedRB">
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_NovaWeaponUnarmed"/>
+    </CEffectRemoveBehavior>
+    <CEffectSwitch id="AP_NovaWeaponCanisterRifleCloakedSwitch">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="AP_CasterIsCloaked" Effect="AP_NovaWeaponCanisterRifleCloaked"/>
+        <CaseDefault value="AP_NovaWeaponCanisterRifleUncloaked"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_NovaWeaponCanisterRifleCloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="30"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_NovaWeaponCanisterRifleUncloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <Amount value="30"/>
+    </CEffectDamage>
+    <CEffectSwitch id="AP_NovaWeaponHellfireShotgunCloakedSwitch">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="AP_CasterIsCloaked" Effect="AP_NovaWeaponHellfireShotgunCloaked"/>
+        <CaseDefault value="AP_NovaWeaponHellfireShotgunUncloaked"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_NovaWeaponHellfireShotgunCloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="20"/>
+        <AttributeBonus index="Light" value="20"/>
+        <Death value="Blast"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_NovaWeaponHellfireShotgunUncloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="20"/>
+        <AttributeBonus index="Light" value="20"/>
+        <Death value="Blast"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
+    <CEffectSwitch id="AP_NovaWeaponPsiBladeDamageCloakedSwitch">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="AP_CasterIsCloaked" Effect="AP_NovaWeaponPsiBladeDamageCloaked"/>
+        <CaseDefault value="AP_NovaWeaponPsiBladeDamageUncloaked"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_NovaWeaponPsiBladeDamageCloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="100"/>
+        <Death value="Eviscerate"/>
+        <ArmorReduction value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_NovaWeaponPsiBladeDamageUncloaked" parent="DU_WEAP">
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="100"/>
+        <Death value="Eviscerate"/>
+        <ArmorReduction value="0"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_NovaPsiStrikeDummySearch">
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Item,Stasis,Dead,Hidden"/>
+        <AreaArray RectangleWidth="2.5" RectangleHeight="8" Effect="AP_NovaPsiStrikeDummyImpact"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_NovaPsiStrikeDummyImpact"/>
+    <CEffectIssueOrder id="AP_SwarmHostMPUnburrow">
+        <Abil value="MorphToSwarmHostMP"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_SwarmHostUnburrow">
+        <Abil value="MorphToSwarmHost"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_SwarmHostUproot">
+        <Abil value="MorphToSwarmHostUprooted"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_YoinkApplyBehavior">
+        <ValidatorArray value="NotViking"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="Yoink"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <Behavior value="AP_Yoink"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_YoinkApplyBehaviorVikingAir">
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="Yoink"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <Behavior value="AP_Yoink"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_YoinkApplyBehaviorVikingGround">
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="Yoink"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <Behavior value="AP_Yoink"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_YoinkApplyTentacleBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <Behavior value="AP_YoinkTentacle"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_YoinkApplyTentacleBehaviorVikingAir">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <Behavior value="AP_YoinkTentacle"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_YoinkApplyTentacleBehaviorVikingGround">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <Behavior value="AP_YoinkTentacle"/>
+    </CEffectApplyBehavior>
+    <CEffectCancelOrder id="AP_YoinkCancelOrders">
+        <ValidatorArray value="YoinkCancelOrder"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <Count value="32"/>
+        <Flags index="Uninterruptible" value="1"/>
+    </CEffectCancelOrder>
+    <CEffectCancelOrder id="AP_YoinkCancelOrdersVikingAir">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <Count value="32"/>
+        <Flags index="Uninterruptible" value="1"/>
+    </CEffectCancelOrder>
+    <CEffectCancelOrder id="AP_YoinkCancelOrdersVikingGround">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <Count value="32"/>
+        <Flags index="Uninterruptible" value="1"/>
+    </CEffectCancelOrder>
+    <CEffectCreatePersistent id="AP_YoinkDelayPersistent">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="EffectSuccess" value="1"/>
+        <PeriodCount value="50"/>
+        <PeriodicEffectArray value="AP_YoinkLaunchTargetMoverSwitch"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_YoinkDelayPersistentVikingAir">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="EffectSuccess" value="1"/>
+        <PeriodCount value="50"/>
+        <PeriodicEffectArray value="AP_YoinkLaunchTargetVikingAir"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_YoinkDelayPersistentVikingGround">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="EffectSuccess" value="1"/>
+        <PeriodCount value="50"/>
+        <PeriodicEffectArray value="AP_YoinkLaunchTargetVikingGround"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_YoinkEnemyStun">
+        <ValidatorArray value="AP_EnemyTargetYoink"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkLaunchMissile"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_YoinkEnemyStunVikingAir">
+        <ValidatorArray value="AP_EnemyTargetYoink"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkLaunchMissileVikingAir"/>
+        <Behavior value="AP_YoinkEnemyStun"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_YoinkEnemyStunVikingGround">
+        <ValidatorArray value="AP_EnemyTargetYoink"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkLaunchMissileVikingGround"/>
+        <Behavior value="AP_YoinkEnemyStun"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_YoinkFinishDummy">
+        <Flags index="NoDamageTimerReset" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_YoinkImpactDummy">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Effect="AP_YoinkLaunchMissile" Value="TargetUnit"/>
+        <Flags index="NoDamageTimerReset" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_YoinkImpactDummyVikingAir">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Effect="AP_YoinkLaunchMissileVikingAir" Value="TargetUnit"/>
+        <Flags index="NoDamageTimerReset" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_YoinkImpactDummyVikingGround">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Effect="AP_YoinkLaunchMissileVikingGround" Value="TargetUnit"/>
+        <Flags index="NoDamageTimerReset" value="1"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_YoinkImpactSet">
+        <ValidatorArray value="AP_IsNotMothershipCorePurifyNexus"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_KillRemove"/>
+        <EffectArray value="AP_YoinkRemoveBehavior"/>
+        <EffectArray value="AP_YoinkRemoveTentacleBehavior"/>
+        <EffectArray value="AP_YoinkEnemyStun"/>
+    </CEffectSet>
+    <CEffectSet id="AP_YoinkImpactSetVikingAir">
+        <!-- This validator doesn't exist in vanilla -->
+        <ValidatorArray value="IsNotPhaseShielded"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_KillRemove"/>
+        <EffectArray value="AP_YoinkRemoveBehaviorVikingAir"/>
+        <EffectArray value="AP_YoinkRemoveTentacleBehaviorVikingAir"/>
+        <EffectArray value="AP_YoinkEnemyStunVikingAir"/>
+    </CEffectSet>
+    <CEffectSet id="AP_YoinkImpactSetVikingGround">
+        <ValidatorArray value="IsNotPhaseShielded"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_KillRemove"/>
+        <EffectArray value="AP_YoinkRemoveBehaviorVikingGround"/>
+        <EffectArray value="AP_YoinkRemoveTentacleBehaviorVikingGround"/>
+        <EffectArray value="AP_YoinkEnemyStunVikingGround"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_YoinkIssueAssaultModeOrder">
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="AssaultMode"/>
+        <Target Effect="AP_YoinkStartSwitch" Value="TargetUnit"/>
+    </CEffectIssueOrder>
+    <!-- Viking is a troublemaker due to its morph, so we have to setup specific air and ground trees -->
+    <!-- Bug where siege mode siege tanks can't be yoinked onto ramps, the fix however makes it possible to stack many, many tanks on top of one another, which can be very, very bad. Fix data is left in but inactive just in case we find a future fix -->
+    <!-- This is the general effect tree for everything else -->
+    <CEffectSwitch id="AP_YoinkStartSwitch">
+        <EditorCategories value="Race:Zerg"/>
+        <!--CaseArray Validator="IsSiegeTank" Effect="YoinkStartCreatePlaceholderSiegeTank"/-->
+        <CaseArray Validator="IsVikingFighter" Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <CaseArray Validator="IsVikingAssault" Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <CaseDefault value="AP_YoinkStartCreatePlaceholder"/>
+    </CEffectSwitch>
+    <CEffectIssueOrder id="AP_YoinkIssueFighterModeOrder">
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="FighterMode"/>
+        <Target Effect="AP_YoinkStartSwitch" Value="TargetUnit"/>
+    </CEffectIssueOrder>
+    <CEffectLaunchMissile id="AP_YoinkLaunchMissile">
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="YoinkMarker"/>
+        <LaunchLocation Effect="AP_YoinkStartCreatePlaceholder"/>
+        <ImpactLocation Effect="AP_YoinkStartCreatePlaceholder"/>
+        <ImpactEffect value="AP_YoinkSet"/>
+        <FinishEffect value="AP_YoinkFinishDummy"/>
+        <AmmoUnit value="AP_YoinkMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_YoinkLaunchMissileVikingAir">
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="YoinkMarker"/>
+        <LaunchLocation Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <ImpactLocation Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <ImpactEffect value="AP_YoinkSetVikingAir"/>
+        <FinishEffect value="AP_YoinkFinishDummy"/>
+        <AmmoUnit value="AP_YoinkVikingAirMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_YoinkLaunchMissileVikingGround">
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="YoinkMarker"/>
+        <LaunchLocation Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <ImpactLocation Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <ImpactEffect value="AP_YoinkSetVikingGround"/>
+        <FinishEffect value="AP_YoinkFinishDummy"/>
+        <AmmoUnit value="AP_YoinkVikingGroundMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_YoinkLaunchTarget">
+        <ValidatorArray value="AP_NotHiddenYoink"/>
+        <ValidatorArray value="AP_CantYoinkYet"/>
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Effect="AP_YoinkStartCreatePlaceholder" Value="TargetUnit"/>
+        <ImpactLocation Effect="AP_YoinkStartSet"/>
+        <ImpactEffect value="AP_YoinkImpactDummy"/>
+        <FinishEffect value="AP_YoinkImpactSet"/>
+        <Flags index="2D" value="1"/>
+        <Movers Link="AP_YoinkMover"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_YoinkLaunchTargetAir">
+        <ValidatorArray value="AP_NotHiddenYoink"/>
+        <ValidatorArray value="AP_CantYoinkYet"/>
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Effect="AP_YoinkStartCreatePlaceholder" Value="TargetUnit"/>
+        <ImpactLocation Effect="AP_YoinkStartSet"/>
+        <ImpactEffect value="AP_YoinkImpactDummy"/>
+        <FinishEffect value="AP_YoinkImpactSet"/>
+        <Flags index="2D" value="1"/>
+        <Movers Link="AP_YoinkMoverAir"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_YoinkLaunchTargetGlide">
+        <ValidatorArray value="AP_NotHiddenYoink"/>
+        <ValidatorArray value="AP_CantYoinkYet"/>
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Effect="AP_YoinkStartCreatePlaceholder" Value="TargetUnit"/>
+        <ImpactLocation Effect="AP_YoinkStartSet"/>
+        <ImpactEffect value="AP_YoinkImpactDummy"/>
+        <FinishEffect value="AP_YoinkImpactSet"/>
+        <Flags index="2D" value="1"/>
+        <Movers Link="AP_YoinkMoverGlide"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectSwitch id="AP_YoinkLaunchTargetMoverSwitch">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="TargetIsAir" Effect="AP_YoinkLaunchTargetAir"/>
+        <CaseArray Validator="IsColossus" Effect="AP_YoinkLaunchTargetGlide"/>
+        <CaseDefault value="AP_YoinkLaunchTarget"/>
+    </CEffectSwitch>
+    <CEffectLaunchMissile id="AP_YoinkLaunchTargetVikingAir">
+        <ValidatorArray value="AP_NotHiddenYoinkVikingAir"/>
+        <ValidatorArray value="AP_CantYoinkYet"/>
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Effect="AP_YoinkStartCreatePlaceholderVikingAir" Value="TargetUnit"/>
+        <ImpactLocation Effect="AP_YoinkStartSetVikingAir"/>
+        <ImpactEffect value="AP_YoinkImpactDummyVikingAir"/>
+        <FinishEffect value="AP_YoinkImpactSetVikingAir"/>
+        <Flags index="2D" value="1"/>
+        <Movers Link="AP_YoinkMoverAir"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_YoinkLaunchTargetVikingGround">
+        <ValidatorArray value="AP_NotHiddenYoinkVikingGround"/>
+        <ValidatorArray value="AP_CantYoinkYet"/>
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Effect="AP_YoinkStartCreatePlaceholderVikingGround" Value="TargetUnit"/>
+        <ImpactLocation Effect="AP_YoinkStartSetVikingGround"/>
+        <ImpactEffect value="AP_YoinkImpactDummyVikingGround"/>
+        <FinishEffect value="AP_YoinkImpactSetVikingGround"/>
+        <Flags index="2D" value="1"/>
+        <Movers Link="AP_YoinkMover"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="AP_YoinkMarkerBehavior">
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <Behavior value="AP_YoinkMarker"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_YoinkMarkerBehaviorVikingAir">
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <Behavior value="AP_YoinkMarker"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_YoinkMarkerBehaviorVikingGround">
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <Behavior value="AP_YoinkMarker"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_YoinkRemoveBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <BehaviorLink value="AP_Yoink"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_YoinkRemoveBehaviorVikingAir">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <BehaviorLink value="AP_Yoink"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_YoinkRemoveBehaviorVikingGround">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <BehaviorLink value="AP_Yoink"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_YoinkRemoveTentacleBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <BehaviorLink value="AP_YoinkTentacle"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_YoinkRemoveTentacleBehaviorVikingAir">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <BehaviorLink value="AP_YoinkTentacle"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_YoinkRemoveTentacleBehaviorVikingGround">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <BehaviorLink value="AP_YoinkTentacle"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_YoinkSet">
+        <ValidatorArray value="AP_NoBurrowChargingRevD"/>
+        <ValidatorArray value="AP_IsNotMothershipCorePurifyNexus"/>
+        <ValidatorArray value="AP_IsNotRecallingCombine"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="YoinkMarker"/>
+        <EffectArray value="AP_YoinkApplyTentacleBehavior"/>
+        <EffectArray value="AP_YoinkCancelOrders"/>
+        <EffectArray value="AP_InstantUnburrow"/>
+        <EffectArray value="AP_YoinkApplyBehavior"/>
+        <EffectArray value="AP_YoinkDelayPersistent"/>
+    </CEffectSet>
+    <CEffectSet id="AP_YoinkSetVikingAir">
+        <ValidatorArray value="IsNotPhaseShielded"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="YoinkMarker"/>
+        <EffectArray value="AP_RemoveRecallingBehaviorVikingAir"/>
+        <EffectArray value="AP_RemoveCoreRecallingBehaviorVikingAir"/>
+        <EffectArray value="AP_YoinkApplyTentacleBehaviorVikingAir"/>
+        <EffectArray value="AP_YoinkCancelOrdersVikingAir"/>
+        <EffectArray value="AP_InstantMorphUnburrowABNoChecks"/>
+        <EffectArray value="AP_YoinkIssueFighterModeOrder"/>
+        <EffectArray value="AP_YoinkApplyBehaviorVikingAir"/>
+        <EffectArray value="AP_YoinkDelayPersistentVikingAir"/>
+    </CEffectSet>
+    <CEffectSet id="AP_YoinkSetVikingGround">
+        <ValidatorArray value="IsNotPhaseShielded"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="YoinkMarker"/>
+        <EffectArray value="AP_RemoveRecallingBehaviorVikingGround"/>
+        <EffectArray value="AP_RemoveCoreRecallingBehaviorVikingGround"/>
+        <EffectArray value="AP_YoinkApplyTentacleBehaviorVikingGround"/>
+        <EffectArray value="AP_YoinkCancelOrdersVikingGround"/>
+        <EffectArray value="AP_InstantMorphUnburrowABNoChecks"/>
+        <EffectArray value="AP_YoinkIssueAssaultModeOrder"/>
+        <EffectArray value="AP_YoinkApplyBehaviorVikingGround"/>
+        <EffectArray value="AP_YoinkDelayPersistentVikingGround"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_YoinkStartCreatePlaceholder">
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="IsNotEggUnit"/>
+        <ValidatorArray value="IsNotLarva"/>
+        <ValidatorArray value="NotViking"/>
+        <ValidatorArray value="AP_NoYoink"/>
+        <ValidatorArray value="AP_NoBurrowChargingRevD"/>
+        <ValidatorArray value="AP_IsNotMothershipCorePurifyNexus"/>
+        <ValidatorArray value="AP_IsNotRecallingCombine"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnitOrPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_YoinkStartSet"/>
+        <SpawnRange value="2"/>
+        <SpawnOffset value="0,0.1"/>
+        <TypeFallbackUnit Value="Target"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_YoinkStartCreatePlaceholderVikingAir">
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="AP_NoYoink"/>
+        <ValidatorArray value="IsNotPhaseShielded"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnitOrPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_YoinkStartSetVikingAir"/>
+        <SpawnUnit value="VikingFighter"/>
+        <SpawnRange value="2"/>
+        <SpawnOffset value="0,0.1"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_YoinkStartCreatePlaceholderVikingGround">
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="AP_NoYoink"/>
+        <ValidatorArray value="IsNotPhaseShielded"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnitOrPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_YoinkStartSetVikingGround"/>
+        <SpawnUnit value="VikingAssault"/>
+        <SpawnRange value="2"/>
+        <SpawnOffset value="0,0.1"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="AP_MakePrecursorYoink">
+        <Behavior value="AP_PrecursorYoink"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_YoinkStartSet">
+        <ValidatorArray value="IsNotMothershipCorePurifyNexus"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="YoinkMarker"/>
+        <EffectArray value="AP_YoinkMarkerBehavior"/>
+        <EffectArray value="AP_YoinkLaunchMissile"/>
+        <EffectArray value="AP_MakePrecursorYoink"/>
+    </CEffectSet>
+    <CEffectSet id="AP_YoinkStartSetVikingAir">
+        <ValidatorArray value="IsNotPhaseShielded"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="YoinkMarker"/>
+        <EffectArray value="AP_YoinkMarkerBehaviorVikingAir"/>
+        <EffectArray value="AP_YoinkLaunchMissileVikingAir"/>
+        <EffectArray value="AP_MakePrecursorYoink"/>
+    </CEffectSet>
+    <CEffectSet id="AP_YoinkStartSetVikingGround">
+        <ValidatorArray value="IsNotPhaseShielded"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Marker Link="YoinkMarker"/>
+        <EffectArray value="AP_YoinkMarkerBehaviorVikingGround"/>
+        <EffectArray value="AP_YoinkLaunchMissileVikingGround"/>
+        <EffectArray value="AP_MakePrecursorYoink"/>
+    </CEffectSet>
 </Catalog>

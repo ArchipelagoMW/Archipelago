@@ -970,7 +970,7 @@
         <Inherits index="CloakEffect" value="1"/>
         <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
-<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
         <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
         <Host Subject="_Selectable"/>
@@ -980,7 +980,7 @@
         <Sound value="AP_SuperStimpackSweetener"/>
         <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
-<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
         <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
     </CActorSound>
@@ -988,7 +988,7 @@
         <Sound value="AP_SuperStimpackOn"/>
         <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
-<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
         <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
     </CActorSound>
@@ -3630,6 +3630,14 @@
     <CActorSound id="AP_BurrowDownLurker" parent="SoundOneShot">
         <Sound value="Lurker_Burrow"/>
     </CActorSound>
+    <CActorSound id="AP_ApolloInfantrySuitCloakOffSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_NovaApolloCloak.Off" Send="Create"/>
+        <Sound value="Terran_CloakOff"/>
+    </CActorSound>
+    <CActorSound id="AP_ApolloInfantrySuitCloakOnSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_NovaApolloCloak.On" Send="Create"/>
+        <Sound value="Terran_CloakOn"/>
+    </CActorSound>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -4840,8 +4848,8 @@
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 3.660000 AsDuration"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
-<!--        <On Terms="ActorCreation; ValidateUnit AP_HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
-<!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <!--        <On Terms="ActorCreation; ValidateUnit AP_HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
+        <!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
         <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <Model value="HellionTankMorph"/>
@@ -4993,8 +5001,8 @@
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 3.660000 AsDuration"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
-<!--        <On Terms="ActorCreation; ValidateUnit HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
-<!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <!--        <On Terms="ActorCreation; ValidateUnit HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
+        <!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
         <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <Model value="HellionTankMorph"/>
@@ -5032,10 +5040,1639 @@
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Model value="AP_ArtanisAreaStunModel"/>
     </CActorModel>
+    <CActorModel id="AP_FlashBangImpact" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_FlashBangGrenade.On" Send="Create"/>
+        <On Terms="Behavior.AP_FlashBangGrenade.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="AP_FlashBangStun"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
     <CActorSound id="Hellbat_JumpJet_Launch_SoundActor" parent="SoundOneShot">
         <On Terms="Effect.AP_HellbatLeapLM.Start" Send="Create"/>
         <Sound value="Hellbat_JumpJet_Launch"/>
     </CActorSound>
+    <CActorModel id="AP_HeroNukeCollateralFire">
+        <On Terms="Effect.AP_HeroNukeDamage.Start; At Target" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+    </CActorModel>
+    <CActorModel id="AP_HeroNukeDrop">
+        <On Terms="Effect.AP_HeroNukeDetonate.Start" Send="Create"/>
+        <On Terms="Effect.AP_HeroNukeDetonate.Start" Send="$Birth"/>
+        <On Terms="Effect.AP_HeroNukeDamage.Start" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+    </CActorModel>
+    <CActorSound id="AP_HeroNukeDropSound" parent="SoundContinuous">
+        <On Terms="Effect.AP_HeroNukeDetonate.Start" Send="Create"/>
+        <On Terms="Effect.AP_HeroNukeDamage.Start" Send="Destroy"/>
+        <Sound value="Ghost_NukeDrop"/>
+    </CActorSound>
+    <CActorSquib id="AP_HeroNukeExplode">
+        <Remove Terms="Effect.AP_HeroNukeDamage.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.AP_HeroNukeDamage.Start; At Effect" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Map index="None" Sound="Ghost_NukeExplode"/>
+    </CActorSquib>
+    <CActorModel id="AP_HeroNukeExplodeModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HeroNukeDamage.Start; At Effect" Send="Create"/>
+        <On Terms="Signal.*.CinematicRemoval" Send="Destroy Immediate"/>
+        <HostSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <Model value="AP_HeroNukeExplode"/>
+    </CActorModel>
+    <CActorFoliageFXSpawner id="AP_HeroNukeFoliageFXSpawner" parent="FoliageFXSpawnerFire">
+        <On Terms="Effect.AP_HeroNukeDamage.Start" Send="Create"/>
+        <Radius value="5.000000"/>
+    </CActorFoliageFXSpawner>
+    <CActorModel id="AP_HeroNukeIndicator">
+        <Filter index="Enemy" value="1"/>
+        <On Terms="Effect.AP_HeroNukePersistent.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="$Stand 0 -1.000000 -1.000000 4.000000 AsDuration"/>
+        <On Terms="AnimDone; AnimName Stand" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimSetTimeScaleGlobal 1.200000 Stand"/>
+        <On Terms="ActorCreation" Send="$Stand 0 -1.000000 -1.000000 8.650000 AsDuration"/>
+        <On Terms="Signal.*.CinematicRemoval" Send="Destroy Immediate"/>
+        <Model value="GhostNukeIndicator"/>
+    </CActorModel>
+    <CActorSquib id="AP_HeroNukeLaunch">
+        <Remove Terms="Effect.AP_HeroNukePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_HeroNukePersistent.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpSourcePointSationary"/>
+        <Map index="None" Model="GhostNukeLaunch" Sound="GhostNukeLaunch"/>
+    </CActorSquib>
+    <CActorModel id="AP_HeroNukeLaunchModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HeroNukePersistent.Start" Send="Create"/>
+        <On Terms="Signal.*.CinematicRemoval" Send="Destroy Immediate"/>
+        <HostSiteOps Ops="SOpSourcePointSationary"/>
+        <Model value="AP_HeroNukeLaunch"/>
+    </CActorModel>
+    <CActorSound id="AP_HeroNukeSeek" parent="SoundContinuous">
+        <On Terms="Effect.AP_HeroNukePersistent.Initial" Send="Create"/>
+        <On Terms="Effect.AP_HeroNukePersistent.Stop; At Effect" Send="Destroy"/>
+        <Sound value="GhostNukeSeek"/>
+    </CActorSound>
+    <CActorModel id="AP_HeroNukeTarget" parent="ModelAnimationStyleOneShot">
+        <Filter index="Self" value="1"/>
+        <Filter index="Ally" value="1"/>
+        <On Terms="Effect.AP_HeroNukePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_HeroNukePersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="Signal.*.CinematicRemoval" Send="Destroy Immediate"/>
+        <Model value="GhostNukeTarget"/>
+    </CActorModel>
+    <CActorModel id="AP_LongshotLockdown" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_NovaWeaponInvictusLongshotLockdown.On" Send="Create"/>
+        <On Terms="Behavior.AP_NovaWeaponInvictusLongshotLockdown.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorSound id="AP_NovaArmorBlinkSuitBlinkFadeSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_NovaArmorBlinkSuitBlink.Stop; At Source" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="Nova_BlinkSuit_Blink_Stalker"/>
+    </CActorSound>
+    <CActorModel id="AP_NovaArmorBlinkSuitBlinkOriginModel" parent="ModelAnimationStyleOneShot">
+        <InheritType value="OneShot"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Effect.AP_NovaArmorBlinkSuitBlink.Start; At Source" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="AP_Nova_BlinkOut"/>
+    </CActorModel>
+    <CActorSound id="AP_NovaArmorBlinkSuitBlinkStartSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_NovaArmorBlinkSuitBlink.Start; At Source" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="AP_Nova_BlinkSuit_Blink_Origin"/>
+    </CActorSound>
+    <CActorModel id="AP_NovaArmorBlinkSuitBlinkStopModel" parent="ModelAnimationStyleOneShot">
+        <InheritType value="OneShot"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Effect.AP_NovaArmorBlinkSuitBlink.Stop; At Source" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="AP_Nova_BlinkIn"/>
+    </CActorModel>
+    <CActorSound id="AP_NovaArmorBlinkSuitBlinkStopSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_NovaArmorBlinkSuitBlink.Stop; At Source" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Sound value="AP_Nova_BlinkSuit_Blink_Target"/>
+    </CActorSound>
+    <CActorModel id="AP_NovaCliffJumpLandDownModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_NovaCliffJump.LandDown" Send="Create"/>
+        <On Terms="Behavior.AP_NovaCliffJump.LandUp" Send="Create"/>
+        <On Terms="Behavior.AP_NovaCliffJump.LandDown" Send="TimerSet 0.300000 TriggerSound"/>
+        <On Terms="TimerExpired; TimerName TriggerSound" Send="Create AP_ReaperJumpLandSound"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
+        <Model value="ReaperJumpLandDownModel"/>
+    </CActorModel>
+    <CActorSound id="AP_NovaCliffJumpLandSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_NovaCliffJump.LandUp" Send="Create"/>
+        <Sound value="Reaper_JumpLand"/>
+    </CActorSound>
+    <CActorModel id="AP_NovaCliffJumpLaunchModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_NovaCliffJump.Launch" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow" HoldPosition="1" HoldRotation="1"/>
+        <Model value="ReaperJumpLaunchModel"/>
+    </CActorModel>
+    <CActorSound id="AP_NovaCliffJumpLaunchSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_NovaCliffJump.Launch" Send="Create"/>
+        <Sound value="Reaper_JumpLaunch"/>
+    </CActorSound>
+    <CActorForceCylinder id="AP_NovaDashAttackForce">
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.On" Send="Create"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.Off" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpMoveBackBy2 SOpMoveDownBy1"/>
+        <Duration value="0.562500"/>
+        <Magnitude value="100.000000,6.000000"/>
+        <HostEnd Subject="_Selectable"/>
+        <HostEndSiteOps Ops="SOpAttachCenter SOpMoveBy1 SOpMoveUpByDot5 SOpMoveUpByDot5"/>
+        <Radius value="1.000000"/>
+        <Length value="3.000000"/>
+    </CActorForceCylinder>
+    <CActorAction id="AP_NovaDefensiveDroneRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_NovaGadgetDefensiveDroneSummonLM">
+        <LaunchAssets Sound="Raven_PointDefenseDroneReleaseLaunch"/>
+        <Missile value="AP_NovaDefensiveDroneReleaseMissile"/>
+        <ImpactMap index="None" Model="PointDefenseDroneAttackBeamImpact" Sound="Raven_PointDefenseDroneReleaseImpact"/>
+    </CActorAction>
+    <CActorSplat id="AP_NovaGadgetFlashBangGrenadesCursorSplat" parent="TerranCursorSplat" abil="AP_NovaGadgetFlashBangGrenades"/>
+    <CActorMissile id="AP_NovaGadgetFlashBangGrenadesAttackMissile" parent="GenericAttackMissile" unitName="AP_NovaGadgetFlashBangGrenadesWeapon"/>
+    <CActorMissile id="AP_NovaDefensiveDroneReleaseMissile" parent="GenericAttackMissile" unitName="AP_NovaDefensiveDroneRelease"/>
+    <CActorAction id="AP_NovaGadgetFlashBangGrenadesAttack" parent="GenericAttack" effectImpact="AP_NovaGadgetFlashBangGrenadeSearch" effectLaunch="AP_NovaGadgetFlashBangGrenadeLaunchMissile">
+        <LaunchAttachQuery Methods="Weapon 2"/>
+        <LaunchAssets Model="AP_NovaGadgetFlashBangGrenadesWeapon" Sound="AP_Nova_FlashBangGrenade_Toss"/>
+        <Missile value="AP_NovaGadgetFlashBangGrenadesAttackMissile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPoint SOpShadow SOpMoveUpByDot25"/>
+        <ImpactMap index="None" Model="AP_NovaGadgetFlashBangGrenadesAttackImpact" Sound="AP_Nova_FlashBangGrenade_Impact"/>
+    </CActorAction>
+    <CActorRange id="AP_NovaGadgetHiveMindAmplifierRange" parent="RangeAbil" abil="AP_NovaGadgetHiveMindAmplifier"/>
+    <CActorSplat id="AP_NovaGadgetPulseGrenadesCursorSplat" parent="TerranCursorSplat" abil="AP_NovaGadgetPulseGrenades"/>
+    <CActorRange id="AP_NovaGadgetPulseGrenadesRange" parent="RangeAbil" abil="AP_NovaGadgetPulseGrenades"/>
+    <CActorAction id="AP_NovaGadgetPulseGrenadesAttack" parent="GenericAttack" effectImpact="AP_NovaGadgetPulseGrenadesDamage" effectLaunch="AP_NovaGadgetPulseGrenadesLaunchMissile">
+        <LaunchAttachQuery Methods="Weapon 2"/>
+        <LaunchAssets Model="" Sound="AP_Nova_PulseGrenadeLaunch"/>
+        <Missile value="AP_NovaGadgetPulseGrenadesAttackMissile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPoint SOpShadow SOpMoveUpByDot25"/>
+        <ImpactMap index="None" Model="AP_NovaGadgetPulseGrenadesAttackImpact" Sound="AP_Nova_PulseGrenadeExplosion"/>
+    </CActorAction>
+    <CActorMissile id="AP_NovaGadgetPulseGrenadesAttackMissile" parent="GenericAttackMissile" unitName="AP_NovaGadgetPulseGrenadesWeapon"/>
+    <CActorForceSphere id="AP_NovaGadgetPulseGrenadesForce">
+        <On Terms="Effect.AP_NovaGadgetPulseGrenadesDamage.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create AP_NovaGadgetPulseGrenadesUpForce"/>
+        <HostSiteOps Ops="SOpTargetPoint SOp2DRotation"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="25.000000,12.000000"/>
+        <Radius value="2.500000,0.200000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_NovaGadgetPulseGrenadesUpForce">
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOp2DRotation"/>
+        <Magnitude value="23.000000,10.000000"/>
+        <Radius value="2.500000,0.200000"/>
+        <Duration value="0.150000"/>
+        <Field value="Directional"/>
+    </CActorForceSphere>
+    <CActorMissile id="AP_NovaGadgetSwarmGrenadesAttackMissile" parent="GenericAttackMissile" unitName="AP_NovaGadgetSwarmGrenadesWeapon"/>
+    <CActorSplat id="AP_NovaGadgetSwarmGrenadesCursorSplat" parent="TerranCursorSplat" abil="AP_NovaGadgetSwarmGrenades"/>
+    <CActorRange id="AP_NovaGadgetSwarmGrenadesRange" parent="RangeAbil" abil="AP_NovaGadgetSwarmGrenades"/>
+    <CActorRange id="AP_NovaHelmetHiveMindAmplifierRange" parent="RangeAbil" abil="AP_NovaHelmetHiveMindAmplifier"/>
+    <CActorRange id="AP_NovaHelmetSensorVisor">
+        <Inherits index="Visibility" value="0"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Behavior.AP_NovaHelmetSensorVisor.On" Send="Create"/>
+        <On Terms="Behavior.AP_NovaHelmetSensorVisor.Off" Send="Destroy"/>
+        <Range value="40.000000"/>
+        <RangeFlags index="Minimap" value="1"/>
+    </CActorRange>
+    <CActorRange id="AP_NovaHelmetGhostVisorDetectorRadar">
+        <RangeFlags index="Minimap" value="1"/>
+        <On Terms="Behavior.AP_NovaHelmetGhostVisorDetector.On" Send="Create"/>
+        <On Terms="Behavior.AP_NovaHelmetGhostVisorDetector.Off" Send="Destroy"/>
+        <Inherits index="Visibility" value="0"/>
+        <Range value="20.000000"/>
+        <FogVisibility value="Visible"/>
+        <Behavior value="NovaHelmetGhostVisorDetector"/>
+    </CActorRange>
+    <CActorSound id="AP_Nova_FlashBangGrenade_PinPull_Sound" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <Sound value="AP_Nova_FlashBangGrenade_PinPull"/>
+    </CActorSound>
+    <CActorModel id="AP_StimPackDevice_Nova" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachHardPoint"/>
+    </CActorModel>
+    <CActorModel default="1" id="AP_NovaDeathWarpOutParent">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <FogVisibility value="Visible"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutBase" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutBase"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutBaseA" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutBase"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply A"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutBaseB" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutBase"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply B"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutBaseC" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutBase"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply C"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutBaseM" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutBase"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply M"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutJetpack" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutJetpack"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutJetpackA" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutJetpack"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply A"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutJetpackB" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutJetpack"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply B"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutJetpackC" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutJetpack"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply C"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaDeathWarpOutJetpackM" parent="AP_NovaDeathWarpOutParent">
+        <Model value="AP_NovaHeroDeathWarpOutJetpack"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply M"/>
+    </CActorModel>
+    <CActorSound id="AP_HeroNovaMP1_Respawn" parent="SoundOneShot">
+        <Sound value="HeroNovaMP1_Respawn"/>
+    </CActorSound>
+    <CActorSound id="AP_HeroNovaMP2_Respawn" parent="SoundOneShot">
+        <Sound value="HeroNovaMP2_Ready"/>
+    </CActorSound>
+    <CActorText id="AP_DetectionConeRevealText">
+        <Host Subject="_FloatingText"/>
+        <FixedSize value="28"/>
+        <HeightOffset value="3.000000"/>
+        <Text value="Button/Tooltip/AP_NovaRevealed"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.010000 StartMover"/>
+        <On Terms="ActorCreation" Send="TimerSet 3.000000 Die"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.000000 2.000000"/>
+        <On Terms="TimerExpired; TimerName StartMover" Send="Create PickupTextMover"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <HostSiteOps Ops="SOpForwardEast SOpMoveByDot3 SOpMoveByDot15"/>
+    </CActorText>
+    <CActorSound id="AP_HeroNovaMP3_DominationVisorRangedVO" parent="SoundOneShot">
+        <Host Subject="_Unit"/>
+    </CActorSound>
+    <CActorMissile id="AP_NovaHero" parent="GenericUnitBase" unitName="AP_NovaHero">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="UnloadDropAnim"/>
+<!--        <Macros value="SnowVisualUnitMacro"/>-->
+        <On Terms="ActorCreation" Send="StatusSet SuitWireframe 0"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="WeaponStart.AP_NovaWeaponCanisterRifle.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponCanisterRifle.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponCanisterRifle.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponCanisterRifle.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponHellfireShotgun.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponHellfireShotgun.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponHellfireShotgun.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponHellfireShotgun.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponInvictusLongshot.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponInvictusLongshot.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponInvictusLongshot.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponInvictusLongshot.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiRifle.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiRifle.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiRifle.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponPsiRifle.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiBlade.AttackStart" Send="AnimBlendTimeApply 0.090000"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiBlade.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponPsiBlade.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponPsiBlade.AttackStop" Send="AnimBlendTimeApply"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPlasmaRifle.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPlasmaRifle.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPlasmaRifle.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponPlasmaRifle.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponBlazefireBlade.AttackStart" Send="AnimBlendTimeApply 0.090000"/>
+        <On Terms="WeaponStart.AP_NovaWeaponBlazefireBlade.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponBlazefireBlade.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponBlazefireBlade.AttackStop" Send="AnimBlendTimeApply"/>
+        <On Terms="WeaponStart.AP_NovaWeaponBlazefireBladeGun.AttackStart" Send="AnimBracketStart Attack Spell,H"/>
+        <On Terms="WeaponStop.AP_NovaWeaponBlazefireBladeGun.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponBlazefireBladeGun.AttackStop" Send="AnimBlendTimeApply"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Add" Send="ModelSwap AP_NovaHeroJetpack"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Add" Send="StatusSet SuitWireframe 1"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Add" Send="Signal WireframeUpdate"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Remove" Send="ModelSwap AP_NovaHeroBase"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Remove" Send="StatusSet SuitWireframe 0"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Remove" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorJumpSuit" Send="ModelSwap AP_NovaHeroJetpack"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorJumpSuit" Send="StatusSet SuitWireframe 1"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorJumpSuit" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="ModelSwap AP_NovaHeroJetpack"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="StatusSet SuitWireframe 1"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="Signal WireframeUpdate"/>
+        <!-- Just care about Jumpsuit as the suits are broken into upgrades providing the abilities instead -->
+<!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Add" Send="ModelSwap AP_NovaHeroApolloInfantrySuit"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Add" Send="StatusSet SuitWireframe 2"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Add" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Remove" Send="ModelSwap AP_NovaHeroBase"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Remove" Send="StatusSet SuitWireframe 0"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Remove" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorApolloInfantrySuit" Send="ModelSwap NAP_ovaHeroApolloInfantrySuit"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorApolloInfantrySuit" Send="StatusSet SuitWireframe 2"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorApolloInfantrySuit" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorApolloInfantrySuit" Send="ModelSwap AP_NovaHeroApolloInfantrySuit"/>-->
+<!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorApolloInfantrySuit" Send="StatusSet SuitWireframe 2"/>-->
+<!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorApolloInfantrySuit" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Add" Send="ModelSwap AP_NovaHeroBlinkSuit"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Add" Send="StatusSet SuitWireframe 3"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Add" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Remove" Send="ModelSwap AP_NovaHeroBase"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Remove" Send="StatusSet SuitWireframe 0"/>-->
+<!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Remove" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorBlinkSuit" Send="ModelSwap AP_NovaHeroBlinkSuit"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorBlinkSuit" Send="StatusSet SuitWireframe 3"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorBlinkSuit" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorBlinkSuit" Send="ModelSwap AP_NovaHeroBlinkSuit"/>-->
+<!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorBlinkSuit" Send="StatusSet SuitWireframe 3"/>-->
+<!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorBlinkSuit" Send="Signal WireframeUpdate"/>-->
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2" Send="SetWireframe 0 Assets\Textures\wireframe-novaapolloinfantrysuit.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaapolloinfantrysuit.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
+<!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupApply A"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.Off" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.Off" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
+<!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupApply A"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupRemove B"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupRemove C"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupRemove M"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.Off" Send="AnimGroupRemove A"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.Off" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="AnimGroupApply A"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponInvictusLongshotBehavior" Send="AnimGroupApply A"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="AnimGroupApply A"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="AnimGroupRemove B"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="AnimGroupRemove C"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="AnimGroupRemove M"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.Off" Send="AnimGroupRemove A"/>-->
+<!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.Off" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="AnimGroupApply A"/>-->
+<!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="Signal WireframeUpdate"/>-->
+<!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPsiRifle" Send="AnimGroupApply A"/>-->
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="AnimGroupApply C"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; !ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBlade" Send="AnimGroupApply C"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBlade" Send="AnimPlay GunbladeCover Custom PlayForever,DontResetOnUnhide"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimPlay GunbladeCover Custom PlayForever,DontResetOnUnhide"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimGroupApply C"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off; !ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off" Send="AnimClear GunbladeCover"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupApply M"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.Off" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice4" Send="SetSoundSuffix _NBlade"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice5" Send="SetSoundSuffix _NBlade"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice6" Send="SetSoundSuffix _NBlade"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; ValidateUnit AP_HaveNovaVoice4" Send="SetSoundSuffix"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; ValidateUnit AP_HaveNovaVoice5" Send="SetSoundSuffix"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; ValidateUnit AP_HaveNovaVoice6" Send="SetSoundSuffix"/>
+        <On Terms="Abil.AP_NovaWeaponCanisterRifleSnipe.SourcePrepStart" Send="Create AP_Nova_Snipe_Kneel_ActorSound"/>
+        <On Terms="Abil.AP_NovaWeaponCanisterRifleSnipe.SourceCastStart" Send="AnimBracketStart Spell Spell,E Spell,F Spell,G"/>
+        <On Terms="Abil.AP_NovaWeaponCanisterRifleSnipe.SourceCastStop" Send="AnimBracketStop Spell"/>
+        <On Terms="Abil.AP_NovaWeaponHellfireShotgunBlast.SourceCastStart" Send="$Spell,H 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaWeaponPlasmaBlast.SourceCastStart" Send="$Spell,N 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaWeaponPlasmaBlastNew.SourceCastStart" Send="$Spell,N 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaWeaponInvictusLongshotLockdown.SourceCastStart" Send="AnimBracketStart Spell,E Spell,F Spell,G"/>
+        <On Terms="Abil.AP_NovaWeaponInvictusLongshotLockdown.SourceCastStop" Send="AnimBracketStop Spell"/>
+        <On Terms="Abil.AP_NovaGadgetDefensiveDroneSummon.SourcePrepStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaGadgetSwarmGrenades.SourcePrepStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaGadgetPulseGrenades.SourcePrepStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaGadgetPulseGrenades.SourcePrepStart" Send="Create AP_Nova_FlashBangGrenade_PinPull_Sound"/>
+        <On Terms="Abil.AP_NovaGadgetFlashBangGrenades.SourcePrepStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaGadgetFlashBangGrenades.SourcePrepStart" Send="Create AP_Nova_FlashBangGrenade_PinPull_Sound"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.On" Send="AnimBracketStart Charge {} Spell,D Spell,D,End"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.Off" Send="AnimBracketStop Charge"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.On" Send="StatusSet Charging 1"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.Off" Send="StatusSet Charging 0"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimClear Spell"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Spell"/>
+        <On Terms="UnitMovementUpdate.*.Walk; IsStatus Charging 0" Send="AnimClear Charge"/>
+        <On Terms="ModelEvent; ModelEventName WalkingCheck; UnitWalking" Send="AnimClear Charge"/>
+        <On Terms="Effect.AP_NovaSilentkillGhostSet.Start" Send="AnimPlay Silentkill Silentkill,A"/>
+        <On Terms="Effect.AP_NovaSilentkillSeparatistSet.Start" Send="AnimPlay Silentkill Silentkill,A"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Marine_Land"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaVoice1" Send="SetSoundSuffix _N1"/>
+        <On Terms="Upgrade.AP_NovaVoice1.Add" Send="SetSoundSuffix _N1"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaVoice2" Send="SetSoundSuffix _N2"/>
+        <On Terms="Upgrade.AP_NovaVoice2.Add" Send="SetSoundSuffix _N2"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaVoice3" Send="SetSoundSuffix _N3"/>
+        <On Terms="Upgrade.AP_NovaVoice3.Add" Send="SetSoundSuffix _N3"/>
+        <On Terms="Upgrade.AP_SuperStimpackNova.Add" Send="Create AP_StimPackDevice_Nova"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HaveSuperStimpackNova" Send="Create AP_StimPackDevice_Nova"/>
+        <On Terms="Behavior.AP_NovaCliffJump.Launch" Send="AnimBracketStart Jump Jump,Start Jump Jump,End"/>
+        <On Terms="Behavior.AP_NovaCliffJump.LandDown" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_NovaCliffJump.LandUp" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.DOMEMPDecloak.On" Send="Create DetectionConeRevealText"/>
+        <On Terms="UnitMovementUpdate.*.Walk; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="Create AP_Nova_TurbojetJumpsuit_Movement_ActorSound"/>
+        <On Terms="UnitMovementUpdate.*.Stand; ValidateUnit AP_HaveNovaArmorJumpSuit" Target="AP_Nova_TurbojetJumpsuit_Movement_ActorSound" Send="Destroy"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceCastStart" Send="StatusSet Nuking 1"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceCastStart" Send="AnimPlay SpellE Spell,E 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="AnimDone; AnimName SpellE; IsStatus Nuking 1" Send="AnimPlay SpellF Spell,F PlayForever"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceChannelStop" Send="StatusSet Nuking 0"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceChannelStop" Send="AnimClear SpellF"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceFinishStart" Send="AnimPlay SpellG Spell,G 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying SpellG" Send="AnimClear SpellG"/>
+        <On Terms="UnitDeathCustomize; !ValidatePlayer AP_HaveNovaWarpOut" Send="AnimGroupRemove A"/>
+        <On Terms="UnitDeathCustomize; !ValidatePlayer AP_HaveNovaWarpOut" Send="AnimGroupRemove B"/>
+        <On Terms="UnitDeathCustomize; !ValidatePlayer AP_HaveNovaWarpOut" Send="AnimGroupRemove C"/>
+        <On Terms="UnitDeathCustomize; !ValidatePlayer AP_HaveNovaWarpOut" Send="AnimGroupRemove M"/>
+<!--        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveNovaWarpOut; ValidateUnit AP_HaveNovaArmorStealthSuit" Send="DeathCustomize Rescue00"/>-->
+        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveNovaWarpOut; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="DeathCustomize Rescue01"/>
+<!--        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveNovaWarpOut; ValidateUnit AP_HaveNovaArmorApolloInfantrySuit" Send="DeathCustomize Rescue02"/>-->
+<!--        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveNovaWarpOut; ValidateUnit AP_HaveNovaArmorBlinkSuit" Send="DeathCustomize Rescue03"/>-->
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBase; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBase"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseA; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBaseA"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseB; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBaseB"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseC; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBaseC"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseM; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBaseM"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJet; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpack"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetA; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpackA"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetB; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpackB"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetC; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpackC"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetM; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpackM"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBase; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseA; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseB; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseC; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseM; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJet; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetA; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetB; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetC; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetM; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBase; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseA; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseB; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseC; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJet; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetA; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetB; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetC; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="Upgrade.CinematicMode.Remove" Send="SetVisibility 1"/>
+        <On Terms="UnitRevive.AP_NovaHero; AnimPlaying Death" Send="Destroy"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice1" Send="Create AP_HeroNovaMP1_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice2" Send="Create AP_HeroNovaMP1_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice3" Send="Create AP_HeroNovaMP1_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice4" Send="Create AP_HeroNovaMP2_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice5" Send="Create AP_HeroNovaMP2_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice6" Send="Create AP_HeroNovaMP2_Respawn"/>
+        <On Terms="AnimPlay; AnimPlayable Unload,End" Send="SetVisibility 1"/>
+        <On Terms="Signal.*.Disarm" Send="AnimGroupRemove A"/>
+        <On Terms="Signal.*.Disarm" Send="AnimGroupRemove B"/>
+        <On Terms="Signal.*.Disarm" Send="AnimGroupRemove C"/>
+        <On Terms="Signal.*.Disarm" Send="AnimGroupRemove M"/>
+        <On Terms="Signal.*.RemoveEquipment" Target="AP_StimPackDevice_Nova" Send="Destroy"/>
+        <On Terms="Signal.*.PsiEmitterAdd" Send="Create AP_NovaPsiEmitterCarry"/>
+        <On Terms="Signal.*.PsiEmitterRemove" Target="AP_NovaPsiEmitterCarry" Send="Destroy"/>
+        <On Terms="Effect.AP_NovaWeaponBlazefireBladeShadowFuryDamage.Start" Send="AnimPlay Attack Attack DontResetOnUnhide -1.000000 -1.000000 0.400000 AsDuration"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBladeShadowFuryController.On" Send="AnimBracketStart Charge {} Spell,D Spell,D,End"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBladeShadowFuryController.Off" Send="AnimBracketStop Charge"/>
+        <On Terms="Behavior.OracleSearchlightRevealed.On" Send="Create AP_DetectionConeRevealText"/>
+        <On Terms="Behavior.AP_OracleSearchlightRevealed.On" Send="Create AP_DetectionConeRevealText"/>
+        <On Terms="Abil.AP_NovaHelmetDomination.SourceApproachStart; ValidateUnit AP_NovaHelmetDominationRangeCheck; !ScopeContains AP_HeroNovaMP3_DominationVisorRangedVO" Send="Create AP_HeroNovaMP3_DominationVisorRangedVO"/>
+        <Model value="AP_NovaHeroBase"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" SoundLink="AP_Nova_Death"/>
+        <DeathArray index="Disintegrate" AnimProps="Death" ModelLink="AP_NovaEx3_DeathAcid" SoundLink="Uni_DeathFXAcid"/>
+        <DeathArray index="Fire" AnimProps="Death" ModelLink="AP_NovaEx3_DeathFire" SoundLink="Uni_DeathFXFire"/>
+        <DeathCustoms AnimProps="Death,Pickup" ModelLink="AP_NovaHeroBase" Name="Rescue00"/>
+        <DeathCustoms AnimProps="Death,Pickup" ModelLink="AP_NovaHeroJetpack" Name="Rescue01"/>
+        <DeathCustoms AnimProps="Death,Pickup" ModelLink="AP_NovaHeroApolloInfantrySuit" Name="Rescue02"/>
+        <DeathCustoms AnimProps="Death,Pickup" ModelLink="AP_NovaHeroBlinkSuit" Name="Rescue03"/>
+        <ImpactSoundActor value="Nova_COOP_Impact_Sound"/>
+        <PortraitActor value="SMX3_NovaPortrait"/>
+        <PortraitModel value="SMX3_NovaPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleSmall"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="3"/>
+        <AbilSoundArray AbilCmd="AP_HeroNuclearStrike,0" Sound="AP_HeroNovaMP1_Nuclear_Strike"/>
+        <AbilSoundArray AbilCmd="AP_NovaGadgetHolographicDecoy,0" Sound="AP_HeroNovaMP2_HolographicDecoyVO"/>
+        <AbilSoundArray AbilCmd="AP_NovaHelmetDomination,0" Sound="AP_HeroNovaMP3_DominationVisorPersistentVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="36"/>
+<!--        <CustomUnitStatusFrame value="Nova_UnitStatus/NovaHeroUnitStatusFrameTemplateNoShield"/>-->
+        <GroupIcon>
+            <Image value="Assets\Textures\WireFrame-NovaEx3.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\ui-heroicon-nova.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <MinimapIcon value="Assets\Textures\btn-ac-terran-novamapicon.dds"/>
+        <MinimapIconScale value="0.700000"/>
+        <MinimapRenderPriority value="Hero"/>
+        <MinimapTooltip value="Unit/Name/AP_NovaHero"/>
+        <MinimapUseSelfColor value="0"/>
+        <MinimapUseSelectionColor value="0"/>
+        <SoundArray index="Birth" value="Nova_Birth"/>
+        <SoundArray index="Ready" value="AP_HeroNovaMP1_Ready"/>
+        <SoundArray index="Help" value="AP_HeroNovaMP1_Help"/>
+        <SoundArray index="What" value="AP_HeroNovaMP1_What"/>
+        <SoundArray index="Yes" value="AP_HeroNovaMP1_Yes"/>
+        <SoundArray index="Attack" value="AP_HeroNovaMP1_Attack"/>
+        <SoundArray index="Pissed" value="AP_HeroNovaMP1_Pissed"/>
+        <StatusBarOn index="Custom" value="1"/>
+        <UnitBorderNormalColor value="150,150,150"/>
+        <UnitBorderSubgroupColor value="255,255,255"/>
+<!--        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>-->
+        <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-Nova.dds"/>
+        <UnitKillRank Text="UnitKillRank/AP_Nova"/>
+        <Wireframe>
+            <Image value="Assets\Textures\WireFrame-NovaEx3.dds"/>
+        </Wireframe>
+    </CActorMissile>
+    <CActorRange id="AP_NovaGadgetHolographicDecoyRange" parent="RangeAbil" abil="AP_NovaGadgetHolographicDecoy"/>
+    <CActorMissile id="AP_NovaHoloDecoy" parent="GenericUnitBase" unitName="AP_NovaHoloDecoy">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="UnloadDropAnim"/>
+<!--        <Macros value="SnowVisualUnitMacro"/>-->
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <On Terms="ActorCreation" Send="StatusSet SuitWireframe 0"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="WeaponStart.AP_NovaWeaponCanisterRifle.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponCanisterRifle.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponCanisterRifle.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponCanisterRifle.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponHellfireShotgun.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponHellfireShotgun.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponHellfireShotgun.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponHellfireShotgun.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponInvictusLongshot.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponInvictusLongshot.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponInvictusLongshot.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponInvictusLongshot.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiRifle.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiRifle.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiRifle.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponPsiRifle.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiBlade.AttackStart" Send="AnimBlendTimeApply 0.090000"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPsiBlade.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponPsiBlade.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponPsiBlade.AttackStop" Send="AnimBlendTimeApply"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPlasmaRifle.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPlasmaRifle.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_NovaWeaponPlasmaRifle.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponPlasmaRifle.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStart.AP_NovaWeaponBlazefireBlade.AttackStart" Send="AnimBlendTimeApply 0.090000"/>
+        <On Terms="WeaponStart.AP_NovaWeaponBlazefireBlade.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponBlazefireBlade.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponBlazefireBlade.AttackStop" Send="AnimBlendTimeApply"/>
+        <On Terms="WeaponStart.AP_NovaWeaponBlazefireBladeGun.AttackStart" Send="AnimBracketStart Attack Spell,H"/>
+        <On Terms="WeaponStop.AP_NovaWeaponBlazefireBladeGun.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="WeaponStop.AP_NovaWeaponBlazefireBladeGun.AttackStop" Send="AnimBlendTimeApply"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Add" Send="ModelSwap AP_NovaHeroJetpack"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Add" Send="StatusSet SuitWireframe 1"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Add" Send="Signal WireframeUpdate"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Remove" Send="ModelSwap AP_NovaHeroBase"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Remove" Send="StatusSet SuitWireframe 0"/>
+        <On Terms="Upgrade.AP_NovaArmorJumpSuit.Remove" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorJumpSuit" Send="ModelSwap AP_NovaHeroJetpack"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorJumpSuit" Send="StatusSet SuitWireframe 1"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorJumpSuit" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="ModelSwap AP_NovaHeroJetpack"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="StatusSet SuitWireframe 1"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="Signal WireframeUpdate"/>
+        <!-- Just care about Jumpsuit as the suits are broken into upgrades providing the abilities instead -->
+        <!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Add" Send="ModelSwap AP_NovaHeroApolloInfantrySuit"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Add" Send="StatusSet SuitWireframe 2"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Add" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Remove" Send="ModelSwap AP_NovaHeroBase"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Remove" Send="StatusSet SuitWireframe 0"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorApolloInfantrySuit.Remove" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorApolloInfantrySuit" Send="ModelSwap NAP_ovaHeroApolloInfantrySuit"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorApolloInfantrySuit" Send="StatusSet SuitWireframe 2"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorApolloInfantrySuit" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorApolloInfantrySuit" Send="ModelSwap AP_NovaHeroApolloInfantrySuit"/>-->
+        <!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorApolloInfantrySuit" Send="StatusSet SuitWireframe 2"/>-->
+        <!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorApolloInfantrySuit" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Add" Send="ModelSwap AP_NovaHeroBlinkSuit"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Add" Send="StatusSet SuitWireframe 3"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Add" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Remove" Send="ModelSwap AP_NovaHeroBase"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Remove" Send="StatusSet SuitWireframe 0"/>-->
+        <!--        <On Terms="Upgrade.AP_NovaArmorBlinkSuit.Remove" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorBlinkSuit" Send="ModelSwap AP_NovaHeroBlinkSuit"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorBlinkSuit" Send="StatusSet SuitWireframe 3"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaArmorBlinkSuit" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorBlinkSuit" Send="ModelSwap AP_NovaHeroBlinkSuit"/>-->
+        <!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorBlinkSuit" Send="StatusSet SuitWireframe 3"/>-->
+        <!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaArmorBlinkSuit" Send="Signal WireframeUpdate"/>-->
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2" Send="SetWireframe 0 Assets\Textures\wireframe-novaapolloinfantrysuit.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaapolloinfantrysuit.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
+        <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupApply A"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.Off" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponCanisterRifle.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupApply B"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.Off" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
+        <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupApply A"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupRemove B"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupRemove C"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupRemove M"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.Off" Send="AnimGroupRemove A"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.Off" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="AnimGroupApply A"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponInvictusLongshotBehavior" Send="AnimGroupApply A"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="AnimGroupApply A"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="AnimGroupRemove B"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="AnimGroupRemove C"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="AnimGroupRemove M"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.On" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.Off" Send="AnimGroupRemove A"/>-->
+        <!--        <On Terms="Behavior.AP_NovaWeaponPsiRifle.Off" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="AnimGroupApply A"/>-->
+        <!--        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="Signal WireframeUpdate"/>-->
+        <!--        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPsiRifle" Send="AnimGroupApply A"/>-->
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="AnimGroupApply C"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; !ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBlade" Send="AnimGroupApply C"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBlade" Send="AnimPlay GunbladeCover Custom PlayForever,DontResetOnUnhide"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimPlay GunbladeCover Custom PlayForever,DontResetOnUnhide"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimGroupApply C"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off; !ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off" Send="AnimClear GunbladeCover"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupApply M"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupRemove A"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupRemove B"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupRemove C"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="Signal WireframeUpdate"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.Off" Send="AnimGroupRemove M"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.Off" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice4" Send="SetSoundSuffix _NBlade"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice5" Send="SetSoundSuffix _NBlade"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice6" Send="SetSoundSuffix _NBlade"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; ValidateUnit AP_HaveNovaVoice4" Send="SetSoundSuffix"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; ValidateUnit AP_HaveNovaVoice5" Send="SetSoundSuffix"/>
+        <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; ValidateUnit AP_HaveNovaVoice6" Send="SetSoundSuffix"/>
+        <On Terms="Abil.AP_NovaWeaponCanisterRifleSnipe.SourcePrepStart" Send="Create AP_Nova_Snipe_Kneel_ActorSound"/>
+        <On Terms="Abil.AP_NovaWeaponCanisterRifleSnipe.SourceCastStart" Send="AnimBracketStart Spell Spell,E Spell,F Spell,G"/>
+        <On Terms="Abil.AP_NovaWeaponCanisterRifleSnipe.SourceCastStop" Send="AnimBracketStop Spell"/>
+        <On Terms="Abil.AP_NovaWeaponHellfireShotgunBlast.SourceCastStart" Send="$Spell,H 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaWeaponPlasmaBlast.SourceCastStart" Send="$Spell,N 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaWeaponPlasmaBlastNew.SourceCastStart" Send="$Spell,N 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaWeaponInvictusLongshotLockdown.SourceCastStart" Send="AnimBracketStart Spell,E Spell,F Spell,G"/>
+        <On Terms="Abil.AP_NovaWeaponInvictusLongshotLockdown.SourceCastStop" Send="AnimBracketStop Spell"/>
+        <On Terms="Abil.AP_NovaGadgetDefensiveDroneSummon.SourcePrepStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaGadgetSwarmGrenades.SourcePrepStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaGadgetPulseGrenades.SourcePrepStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaGadgetPulseGrenades.SourcePrepStart" Send="Create AP_Nova_FlashBangGrenade_PinPull_Sound"/>
+        <On Terms="Abil.AP_NovaGadgetFlashBangGrenades.SourcePrepStart" Send="$Spell 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="Abil.AP_NovaGadgetFlashBangGrenades.SourcePrepStart" Send="Create AP_Nova_FlashBangGrenade_PinPull_Sound"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.On" Send="AnimBracketStart Charge {} Spell,D Spell,D,End"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.Off" Send="AnimBracketStop Charge"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.On" Send="StatusSet Charging 1"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.Off" Send="StatusSet Charging 0"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimClear Spell"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Spell"/>
+        <On Terms="UnitMovementUpdate.*.Walk; IsStatus Charging 0" Send="AnimClear Charge"/>
+        <On Terms="ModelEvent; ModelEventName WalkingCheck; UnitWalking" Send="AnimClear Charge"/>
+        <On Terms="Effect.AP_NovaSilentkillGhostSet.Start" Send="AnimPlay Silentkill Silentkill,A"/>
+        <On Terms="Effect.AP_NovaSilentkillSeparatistSet.Start" Send="AnimPlay Silentkill Silentkill,A"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Marine_Land"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaVoice1" Send="SetSoundSuffix _N1"/>
+        <On Terms="Upgrade.AP_NovaVoice1.Add" Send="SetSoundSuffix _N1"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaVoice2" Send="SetSoundSuffix _N2"/>
+        <On Terms="Upgrade.AP_NovaVoice2.Add" Send="SetSoundSuffix _N2"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaVoice3" Send="SetSoundSuffix _N3"/>
+        <On Terms="Upgrade.AP_NovaVoice3.Add" Send="SetSoundSuffix _N3"/>
+        <On Terms="Upgrade.AP_SuperStimpackNova.Add" Send="Create AP_StimPackDevice_Nova"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HaveSuperStimpackNova" Send="Create AP_StimPackDevice_Nova"/>
+        <On Terms="Behavior.AP_NovaCliffJump.Launch" Send="AnimBracketStart Jump Jump,Start Jump Jump,End"/>
+        <On Terms="Behavior.AP_NovaCliffJump.LandDown" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_NovaCliffJump.LandUp" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.DOMEMPDecloak.On" Send="Create DetectionConeRevealText"/>
+        <On Terms="UnitMovementUpdate.*.Walk; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="Create AP_Nova_TurbojetJumpsuit_Movement_ActorSound"/>
+        <On Terms="UnitMovementUpdate.*.Stand; ValidateUnit AP_HaveNovaArmorJumpSuit" Target="AP_Nova_TurbojetJumpsuit_Movement_ActorSound" Send="Destroy"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceCastStart" Send="StatusSet Nuking 1"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceCastStart" Send="AnimPlay SpellE Spell,E 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="AnimDone; AnimName SpellE; IsStatus Nuking 1" Send="AnimPlay SpellF Spell,F PlayForever"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceChannelStop" Send="StatusSet Nuking 0"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceChannelStop" Send="AnimClear SpellF"/>
+        <On Terms="Abil.HeroNuclearStrike.SourceFinishStart" Send="AnimPlay SpellG Spell,G 0 -1.000000 -1.000000 1.000000 AsTimeScale"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying SpellG" Send="AnimClear SpellG"/>
+        <On Terms="UnitDeathCustomize; !ValidatePlayer AP_HaveNovaWarpOut" Send="AnimGroupRemove A"/>
+        <On Terms="UnitDeathCustomize; !ValidatePlayer AP_HaveNovaWarpOut" Send="AnimGroupRemove B"/>
+        <On Terms="UnitDeathCustomize; !ValidatePlayer AP_HaveNovaWarpOut" Send="AnimGroupRemove C"/>
+        <On Terms="UnitDeathCustomize; !ValidatePlayer AP_HaveNovaWarpOut" Send="AnimGroupRemove M"/>
+        <!--        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveNovaWarpOut; ValidateUnit AP_HaveNovaArmorStealthSuit" Send="DeathCustomize Rescue00"/>-->
+        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveNovaWarpOut; ValidateUnit AP_HaveNovaArmorJumpSuit" Send="DeathCustomize Rescue01"/>
+        <!--        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveNovaWarpOut; ValidateUnit AP_HaveNovaArmorApolloInfantrySuit" Send="DeathCustomize Rescue02"/>-->
+        <!--        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveNovaWarpOut; ValidateUnit AP_HaveNovaArmorBlinkSuit" Send="DeathCustomize Rescue03"/>-->
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBase; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBase"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseA; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBaseA"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseB; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBaseB"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseC; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBaseC"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseM; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutBaseM"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJet; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpack"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetA; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpackA"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetB; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpackB"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetC; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpackC"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetM; ValidateUnit IsDead" Send="Create AP_NovaDeathWarpOutJetpackM"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBase; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseA; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseB; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseC; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseM; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJet; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetA; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetB; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetC; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetM; ValidateUnit IsDead" Send="SetVisibility"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBase; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseA; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseB; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutBaseC; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJet; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetA; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetB; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName DeathWarpOutJumpJetC; !ValidateUnit IsDead" Send="Destroy"/>
+        <On Terms="Upgrade.CinematicMode.Remove" Send="SetVisibility 1"/>
+        <On Terms="UnitRevive.AP_NovaHero; AnimPlaying Death" Send="Destroy"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice1" Send="Create AP_HeroNovaMP1_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice2" Send="Create AP_HeroNovaMP1_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice3" Send="Create AP_HeroNovaMP1_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice4" Send="Create AP_HeroNovaMP2_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice5" Send="Create AP_HeroNovaMP2_Respawn"/>
+        <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaVoice6" Send="Create AP_HeroNovaMP2_Respawn"/>
+        <On Terms="AnimPlay; AnimPlayable Unload,End" Send="SetVisibility 1"/>
+        <On Terms="Signal.*.Disarm" Send="AnimGroupRemove A"/>
+        <On Terms="Signal.*.Disarm" Send="AnimGroupRemove B"/>
+        <On Terms="Signal.*.Disarm" Send="AnimGroupRemove C"/>
+        <On Terms="Signal.*.Disarm" Send="AnimGroupRemove M"/>
+        <On Terms="Signal.*.RemoveEquipment" Target="AP_StimPackDevice_Nova" Send="Destroy"/>
+        <On Terms="Signal.*.PsiEmitterAdd" Send="Create AP_NovaPsiEmitterCarry"/>
+        <On Terms="Signal.*.PsiEmitterRemove" Target="AP_NovaPsiEmitterCarry" Send="Destroy"/>
+        <On Terms="Effect.AP_NovaWeaponBlazefireBladeShadowFuryDamage.Start" Send="AnimPlay Attack Attack DontResetOnUnhide -1.000000 -1.000000 0.400000 AsDuration"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBladeShadowFuryController.On" Send="AnimBracketStart Charge {} Spell,D Spell,D,End"/>
+        <On Terms="Behavior.AP_NovaWeaponBlazefireBladeShadowFuryController.Off" Send="AnimBracketStop Charge"/>
+        <On Terms="Behavior.OracleSearchlightRevealed.On" Send="Create AP_DetectionConeRevealText"/>
+        <On Terms="Behavior.AP_OracleSearchlightRevealed.On" Send="Create AP_DetectionConeRevealText"/>
+        <On Terms="Abil.AP_NovaHelmetDomination.SourceApproachStart; ValidateUnit AP_NovaHelmetDominationRangeCheck; !ScopeContains AP_HeroNovaMP3_DominationVisorRangedVO" Send="Create AP_HeroNovaMP3_DominationVisorRangedVO"/>
+        <Model value="AP_Nova_Holographic_Decoy"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_Nova_Holographic_Decoy"/>
+        <DeathArray index="Normal" ModelLink="AP_Nova_Holographic_Decoy_Death" SoundLink="AP_Nova_Holographic_Decoy_Death2" VoiceLink="AP_Nova_Holographic_Decoy_Death3"/>
+        <ImpactSoundActor value="AP_Nova_Holographic_Decoy_Impact_Sound"/>
+        <PlacementModel value="AP_Nova_Holographic_Decoy"/>
+        <PortraitActor value="SMX3_NovaPortrait"/>
+        <PortraitModel value="SMX3_NovaPortrait"/>
+        <WalkAnimMoveSpeed value="3"/>
+        <AbilSoundArray AbilCmd="HeroNuclearStrike,Execute" Sound="HeroNovaMP1_Nuclear_Strike"/>
+        <BarOffset value="80"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\WireFrame-NovaEx3.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-upgrade-nova-holographicdecoy.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-infantryarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="AP_HeroNovaMP2HD_Birth"/>
+        <SoundArray index="Ready" value="AP_HeroNovaMP2HD_Ready"/>
+        <SoundArray index="Help" value="AP_HeroNovaMP2HD_Help"/>
+        <SoundArray index="What" value="AP_HeroNovaMP2HD_What"/>
+        <SoundArray index="Yes" value="AP_HeroNovaMP2HD_Yes"/>
+        <SoundArray index="Attack" value="AP_HeroNovaMP2HD_Attack"/>
+        <!-- <SoundArray index="Pissed" value="HeroNovaMP2HD_Pissed"/> -->
+        <UnitBorderNormalColor value="150,150,150"/>
+        <UnitBorderSubgroupColor value="255,255,255"/>
+        <UnitIcon value="Assets\Textures\btn-upgrade-nova-holographicdecoy.dds"/>
+        <UnitKillRank Text="UnitKillRank/AP_Nova"/>
+        <Wireframe>
+            <Image value="Assets\Textures\WireFrame-NovaEx3.dds"/>
+        </Wireframe>
+    </CActorMissile>
+    <CActorModel id="AP_NovaJumpJetRegen">
+        <AcceptedTransfers index="Rotation" value="0"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Birth Death"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <On Terms="Behavior.AP_NovaJumpJetRegen.On" Send="Create"/>
+        <On Terms="Behavior.AP_NovaJumpJetRegen.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+    </CActorModel>
+    <CActorMissile id="AP_NovaLockdownMissile" parent="GenericAttackMissile" unitName="AP_NovaLockdownMissile"/>
+    <CActorModel id="AP_NovaNeckBreakImpact" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Terms value="Cap 1"/>
+        <On Terms="Effect.AP_NovaSilentkillTargetGhostKill.Start; At Target" Send="Create"/>
+        <On Terms="Effect.AP_NovaSilentkillTargetSeparatistKill.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+    </CActorModel>
+    <CActorSquib id="AP_NovaNukeLaunch">
+        <On Terms="Effect.AP_HeroNukePersistent.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpSourcePointStationary"/>
+        <Map index="None" Model="GhostNukeLaunch" Sound="Ghost_NukeLaunch"/>
+    </CActorSquib>
+    <CActorModel id="AP_TerranGuideVisualQuadLaunch" parent="GuideVisualQuadModel">
+        <Model value="TerranGuideVisualQuadLaunch"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_TerranGuideVisualQuadCenter" parent="GuideVisualQuadModel">
+        <Model value="TerranGuideVisualQuadCenter"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_TerranGuideVisualQuadImpact" parent="GuideVisualQuadModel">
+        <Model value="TerranGuideVisualQuadImpact"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorQuad id="AP_NovaPsiStrikeGuide" parent="ZergGuideVisualQuadDown" abil="AP_NovaPsiStrike">
+        <Height value="8.000000"/>
+        <Width value="2.500000"/>
+        <LaunchActor value="AP_TerranGuideVisualQuadLaunch"/>
+        <CenterActor value="AP_TerranGuideVisualQuadCenter"/>
+        <ImpactActor value="AP_TerranGuideVisualQuadImpact"/>
+    </CActorQuad>
+    <CActorModel id="AP_NovaPsiStrikeModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.On" Send="Create"/>
+        <On Terms="Behavior.AP_NovaPsiStrikeWalkSpeed.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaWeaponBlazefireBladeShadowFury" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_NovaWeaponBlazefireBladeShadowFuryTeleport.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_NovaWeaponBlazefireBladeShadowFuryFinal.Start; At Caster" Send="Create"/>
+<!--        <On Terms="Effect.AP_MohandarOmnislashTeleport.Start; At Caster" Send="Create"/>-->
+<!--        <On Terms="Effect.AP_MohandarOmnislashTeleportFinal.Start; At Caster" Send="Create"/>-->
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardTargetPoint" HoldPosition="1" HoldRotation="1"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaWeaponBlazefireBladeShadowFuryImpact" parent="ModelAnimationStyleOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Effect.AP_NovaWeaponBlazefireBladeShadowFuryDamage.Start; At Caster" Send="Create"/>
+<!--        <On Terms="Effect.AP_VorazunShadowFuryDamage.Start; At Caster" Send="Create"/>-->
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenterStationary SOp2DRotation"/>
+    </CActorModel>
+    <CActorSound id="AP_NovaWeaponBlazefireBladeShadowFurySound" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Effect.AP_NovaWeaponBlazefireBladeShadowFuryDamage.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="DarkTemplar_AttackLaunch"/>
+    </CActorSound>
+    <CActorSplat id="AP_NovaWeaponBlazefireBladeShadowFuryCursorSplat" parent="TerranCursorSplat" abil="AP_NovaWeaponBlazefireBladeShadowFury">
+        <!--Model value="PsiStormCursorSplat"/-->
+    </CActorSplat>
+    <CActorRange id="AP_NovaWeaponCanisterRifleSnipeRange" parent="RangeAbil" abil="AP_NovaWeaponCanisterRifleSnipe"/>
+    <CActorAction id="AP_NovaWeaponCanisterRifleSnipeAttack" parent="GenericAttack" effectAttack="AP_NovaWeaponCanisterRifleSnipe">
+        <LaunchSiteOps Ops="SOpAttachHarnessStationary"/>
+        <LaunchAssets Model="AP_NovaWeaponCanisterRifleSnipeAttackLaunch" Sound="AP_Nova_Snipe_AttackLaunch"/>
+        <LaunchSound value="AP_Nova_Snipe_Tail"/>
+        <Beam value="AP_NovaWeaponCanisterRifleSnipeAttackBeam"/>
+        <ImpactMap index="None" Model="AP_NovaWeaponCanisterRifleSnipeAttackImpact" Sound="AP_Nova_Snipe_AttackImpact"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_NovaWeaponCanisterRifleSnipeAttackBeam" parent="GenericAttackBeam"/>
+    <CActorModel id="AP_NovaWeaponHellfireShotgunBlastImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_NovaWeaponHellfireShotgunBlastDamage.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaWeaponHellfireShotgunBlastGuide">
+        <Model value="AP_Nova_ShotGunCone"/>
+        <On Terms="Abil.AP_NovaWeaponHellfireShotgunBlast.TargetOn" Send="Create"/>
+        <On Terms="Abil.AP_NovaWeaponHellfireShotgunBlast.TargetOff" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="AnimDone; AnimName BSD" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow SOpLookAtCursor SOp2DRotation"/>
+        <Host Subject="_Unit"/>
+        <Scale value="1.130000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="AP_NovaWeaponHellfireShotgunBlastLaunchModel">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="Effect.AP_NovaWeaponHellfireShotgunBlastSearch.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachWeapon01" HoldPosition="1" HoldRotation="1"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorAction id="AP_NovaWeaponHellfireShotgunAttackCloaked" parent="GenericAttack" effectAttack="AP_NovaWeaponHellfireShotgunCloaked">
+        <!-- Need the SOpTargetUnitZ op to keep the explosion from dropping on cliff edges.  This
+            is b/c we push the explosion to the edge of the unit, where the terrain may have fallen
+            off, b/c of a chasm. -->
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="AnimDone; AnimName BSD" Send="Destroy"/>
+        <ImpactSiteOps Ops="SOpActionCenter SOpTargetUnitZ SOpRotationRandomFull SOp2DRotation" HoldPosition="1"/>
+        <ImpactMap index="None" Model="AP_NovaWeaponHellfireShotgunImpact" Sound="AP_Nova_HellfireShotgun_Impact" ModelReaction=""/>
+        <ShieldFlashType value="Full"/>
+        <LaunchAttachQuery Methods="AMFilterWeapon01"/>
+        <LaunchAssets Model="AP_NovaWeaponHellfireShotgunLaunchModel" Sound="AP_Nova_ShotgunAuto_Blast"/>
+        <LaunchSound value="AP_Nova_ShotgunAuto_TailsSound"/>
+    </CActorAction>
+    <CActorAction id="AP_NovaWeaponHellfireShotgunAttackUnCloaked" parent="GenericAttack" effectAttack="AP_NovaWeaponHellfireShotgunUncloaked">
+        <!-- Need the SOpTargetUnitZ op to keep the explosion from dropping on cliff edges.  This
+            is b/c we push the explosion to the edge of the unit, where the terrain may have fallen
+            off, b/c of a chasm. -->
+        <On Terms="ActorCreation" Send="$Birth"/>
+        <On Terms="AnimDone; AnimName BSD" Send="Destroy"/>
+        <ImpactSiteOps Ops="SOpActionCenter SOpTargetUnitZ SOpRotationRandomFull SOp2DRotation" HoldPosition="1"/>
+        <ImpactMap index="None" Model="AP_NovaWeaponHellfireShotgunImpact" Sound="AP_Nova_HellfireShotgun_Impact" ModelReaction=""/>
+        <ShieldFlashType value="Full"/>
+        <LaunchAttachQuery Methods="AMFilterWeapon01"/>
+        <LaunchAssets Model="AP_NovaWeaponHellfireShotgunLaunchModel" Sound="AP_Nova_ShotgunAuto_Blast"/>
+        <LaunchSound value="AP_Nova_ShotgunAuto_TailsSound"/>
+    </CActorAction>
+    <CActorAction id="AP_NovaWeaponPlasmaBlastNew" parent="WizWeaponMissileAttack" effectImpact="AP_NovaWeaponPlasmaBlastNewFinalImpactSet" effectLaunch="AP_NovaWeaponPlasmaBlastNewLaunchMissile">
+        <LaunchAssets Model="AP_NovaWeaponPlasmaBlastNewLaunch" Sound="AP_Nova_PlasmaBlast_Launch"/>
+        <Missile value="AP_NovaWeaponPlasmaBlastNewLaunchMissile"/>
+        <ImpactMap index="None" Model="AP_NovaWeaponPlasmaBlastNewImpact" Sound="AP_Nova_PlasmaBlast_Impact"/>
+    </CActorAction>
+    <CActorAction id="AP_NovaWeaponPlasmaBlastNewHit" parent="WizWeaponAttack" effectAttack="AP_NovaWeaponPlasmaBlastNewImpactSet">
+        <ImpactMap index="None" Model="AP_NovaWeaponPlasmaBlastNewHitImpact" Sound="AP_Nova_PlasmaRifle_Impact"/>
+    </CActorAction>
+    <CActorMissile id="AP_NovaWeaponPlasmaBlastNewLaunchMissile" parent="WizSimpleMissile" unitName="AP_NovaWeaponPlasmaBlastNewLaunchMissile"/>
+    <CActorAction id="AP_NovaWeaponPlasmaBlast" parent="GenericAttack" effectImpact="AP_NovaPlasmaBlastDamage" effectLaunch="AP_NovaPlasmaBlastLM">
+        <LaunchAttachQuery Methods="Weapon 3"/>
+        <LaunchAssets Model="AP_NovaPlasmaRifleWeaponLaunch" Sound="AP_Nova_PlasmaBlast_Launch"/>
+        <Missile value="AP_NovaPlasmaBlastMissile"/>
+        <ImpactMap index="None" Model="AP_NovaPlasmaBlastWeaponImpact" Sound="AP_Nova_PlasmaBlast_Impact"/>
+    </CActorAction>
+    <CActorMissile id="AP_NovaPlasmaBlastMissile" parent="GenericAttackMissile" unitName="AP_NovaPlasmaBlastWeapon"/>
+    <CActorQuad id="AP_NovaWeaponPlasmaBlastNewGuide" parent="WizGuideVisualQuadDown" abil="AP_NovaWeaponPlasmaBlastNew">
+        <Height value="10.156250"/>
+        <Width value="2.000000"/>
+    </CActorQuad>
+    <CActorAction id="AP_NovaWeaponPlasmaRifle" parent="GenericAttack" effectImpact="AP_NovaWeaponPlasmaRifleImpactSet" effectLaunch="AP_NovaWeaponPlasmaRifleLM">
+        <LaunchAttachQuery Methods="Weapon 3"/>
+        <LaunchAssets Model="AP_NovaPlasmaRifleWeaponLaunch" Sound="AP_Nova_PlasmaRifle_Launch"/>
+        <Missile value="AP_NovaWeaponPlasmaRifleLM"/>
+        <ImpactMap index="None" Model="AP_NovaPlasmaRifleWeaponImpact" Sound="AP_Nova_PlasmaRifle_Impact"/>
+        <AcquisitionYawHalfArc value="5.000000"/>
+        <AcquisitionPitchHalfArc value="5.000000"/>
+        <AccuracyHalfArc value="5.000000"/>
+    </CActorAction>
+    <CActorMissile id="AP_NovaWeaponPlasmaRifleLM" parent="GenericAttackMissile" unitName="AP_NovaWeaponPlasmaRifleLM">
+        <Model value="AP_NovaPlasmaRifleWeapon"/>
+    </CActorMissile>
+    <CActorRange id="AP_NovaPlasmaBlastRange" parent="RangeAbil" abil="AP_NovaWeaponPlasmaBlast"/>
+    <CActorUnit id="AP_NovaPlasmaPuddle" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AP_NovaPlasmaPuddle">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorCreation" Send="Create AP_Nova_PlasmaRifle_Puddle"/>
+        <DeathArray index="Normal" ModelLink="" SoundLink=""/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <HighlightTooltip value=""/>
+    </CActorUnit>
+    <CActorUnit id="AP_NovaPlasmaPuddleSmall" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AP_NovaPlasmaPuddleSmall">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorCreation" Send="Create AP_Nova_PlasmaRifle_Puddle"/>
+        <DeathArray index="Normal" ModelLink="" SoundLink=""/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <HighlightTooltip value=""/>
+    </CActorUnit>
+    <CActorUnit id="AP_NovaPlasmaPuddleLarge" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AP_NovaPlasmaPuddleLarge">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorCreation" Send="Create AP_Nova_PlasmaRifle_Puddle"/>
+        <DeathArray index="Normal" ModelLink="" SoundLink=""/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <HighlightTooltip value=""/>
+    </CActorUnit>
+    <CActorModel id="AP_NovaWeaponPsiStrikeImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_NovaPsiStrikeDamage.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_Nova_DominationVisorEnd_AtCaster_Sound" parent="SoundOneShot">
+        <On Terms="Effect.AP_NovaDominationPersistent.Stop; At Caster" Send="Create"/>
+        <Sound value="AP_Nova_DominationEnd"/>
+        <Layers>
+            <Sound value="AP_Nova_DominationVisorCasterEndSwtnr"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_DominationVisorEnd_AtTarget_Sound" parent="SoundOneShot">
+        <On Terms="Effect.AP_NovaDominationPersistent.Stop; At Target" Send="Create"/>
+        <Sound value="AP_Nova_DominationEnd"/>
+        <Layers>
+            <Sound value="AP_Nova_DominationVisorTargetEndSwtnr"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_DominationVisorStartSound" parent="SoundOneShot">
+        <Remove Terms="Effect.NovaDominationPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_NovaDominationPersistent.Start" Send="Create"/>
+        <Sound value="AP_NovaDominationSound"/>
+    </CActorSound>
+    <CActorSound id="AP_Nova_DominationVisorStart_AtCaster_Sound" parent="SoundOneShot">
+        <On Terms="Effect.AP_NovaDominationPersistent.Start; At Caster" Send="Create"/>
+        <Sound value="AP_NovaDominationSound"/>
+        <Layers>
+            <Sound value="Nova_DominationVisorCasterStartSwtnr"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_DominationVisorStart_AtTarget_Sound" parent="SoundOneShot">
+        <On Terms="Effect.AP_NovaDominationPersistent.Start; At Target" Send="Create"/>
+        <Sound value="AP_NovaDominationSound"/>
+        <Layers>
+            <Sound value="AP_Nova_DominationVisorTargetStartSwtnr"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_DominationVisor_AtCaster_LoopSound" parent="SoundContinuous">
+        <On Terms="Effect.AP_NovaDominationPersistent.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_NovaDominationPersistent.Stop" Send="Destroy"/>
+        <Sound value="AP_Nova_DominationLoop"/>
+    </CActorSound>
+    <CActorBeamSimple id="AP_Nova_DominationVisor_Beam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.AP_NovaDominationPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_NovaDominationPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachHead"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachHead"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_Nova_DominationVisor_Impact" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_NovaDomination.On" Send="Create"/>
+        <On Terms="Behavior.AP_NovaDomination.On" Target="::Main" Send="SetSoundSuffix _DOM"/>
+        <On Terms="Behavior.AP_NovaDomination.On" Send="TimerSet 0.125000 ReadyDelay"/>
+        <On Terms="Behavior.AP_NovaDomination.Off" Target="::Main" Send="SetSoundSuffix"/>
+        <On Terms="Behavior.AP_NovaDomination.Off" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName ReadyDelay" Target="::Main" Send="PlayUnitSound Ready"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <AutoScaleFactor value="0.600000"/>
+    </CActorModel>
+    <CActorSound id="AP_Nova_HellfireShotgun_BlastSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_NovaWeaponHellfireShotgunBlastSearch.Start; At Caster" Send="Create"/>
+        <Sound value="AP_Nova_HellfireShotgun_Blast"/>
+        <Layers>
+            <Sound value="AP_Nova_HellfireShotgun_HandPump"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="-1.000000,-1.000000"/>
+            <PlayDelay value="300,500"/>
+            <Volume value="-6.000000,-6.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_HellfireShotgun_Blast_Tails_L"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="-1.000000,-1.000000"/>
+            <PlayDelay value="100,200"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_HellfireShotgun_Blast_Tails_R"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="-1.000000,-1.000000"/>
+            <PlayDelay value="100,200"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSimple id="AP_Nova_Plasma_Death_Tinter">
+        <On Terms="Behavior.AP_NovaWeaponPlasmaKill.On; ValidateUnit NotStructure" Send="Create"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaKillSmall.On; ValidateUnit NotStructure" Send="Create"/>
+        <On Terms="Behavior.AP_NovaWeaponPlasmaKillLarge.On; ValidateUnit NotStructure" Send="Create"/>
+        <On Terms="Behavior.AP_NovaPlasmaPuddleDamageDebuff.On; ValidateUnit NotStructure" Send="Create"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_UnitIsBiological" Target="_Unit" Send="SetTintColor {48,50,200 10.000000}"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_UnitIsBiological" Send="TimerSet 0.100000 Delay"/>
+        <On Terms="TimerExpired; TimerName Delay" Target="_Unit" Send="SetTintColor {48,50,200 10.000000}"/>
+        <On Terms="UnitDeathCustomize" Send="TimerSet 0.200000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+    </CActorSimple>
+    <CActorSound id="AP_Nova_PlasmaRifle_Puddle" parent="SoundOneShot">
+        <Sound value="AP_Nova_PlasmaRifle_Puddle_Small"/>
+    </CActorSound>
+    <CActorSound id="AP_Nova_Snipe_Tail" parent="SoundOneShot">
+        <Terms value="SoundIsFinalSound"/>
+        <Sound value="AP_Nova_SniperRifleTail_Dummy"/>
+        <Layers>
+            <Sound value="AP_Nova_Snipe_Tail"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_PersonalDefensiveMatrixBirth" parent="SoundOneShot">
+        <On Terms="Behavior.AP_AP_PersonalDefensiveMatrix.On" Send="Create"/>
+        <On Terms="Behavior.AP_AP_PersonalDefensiveMatrix.Off" Send="Destroy"/>
+        <Sound value="AP_Nova_DefensiveMatrix_Birth"/>
+        <Layers Sound="AP_Nova_DefensiveMatrix_AttackBeam">
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_PersonalDefensiveMatrixDeath" parent="SoundOneShot">
+        <On Terms="Behavior.AP_PersonalDefensiveMatrix.Off" Send="Create"/>
+        <Sound value="AP_Nova_DefensiveMatrix_Death"/>
+    </CActorSound>
+    <CActorSound id="AP_PersonalDefensiveMatrixLoop" parent="SoundContinuous">
+        <On Terms="Behavior.AP_PersonalDefensiveMatrix.On" Send="Create"/>
+        <On Terms="Behavior.AP_PersonalDefensiveMatrix.Off" Send="Destroy"/>
+        <Sound value="AP_Nova_DefensiveMatrix_Loop"/>
+    </CActorSound>
+    <CActorModel id="AP_PersonalDefensiveMatrixModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_PersonalDefensiveMatrix.On" Send="Create"/>
+        <On Terms="Behavior.AP_PersonalDefensiveMatrix.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_Nova_Blink_Shield"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_Spell_SwarmGrenade_Impact" parent="SoundOneShot">
+        <On Terms="Effect.AP_SwarmGrenadeCP.Start" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_Spell_Yoink_Impact" parent="SoundOneShot">
+        <On Terms="Behavior.AP_YoinkTentacle.On" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="AP_SuperStimNovaHoT">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Birth Death Instant"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <On Terms="Behavior.AP_SuperStimNova.On" Send="Create"/>
+        <On Terms="Behavior.AP_SuperStimNova.Off" Send="AnimBracketStop BSD"/>
+<!--        <On Terms="Behavior.SuperStimpackStone.On" Send="Create"/>-->
+<!--        <On Terms="Behavior.SuperStimpackStone.Off" Send="AnimBracketStop BSD"/>-->
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorModel id="AP_SwarmGrenade" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Effect.AP_SwarmGrenadeCP.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="Effect.AP_SwarmGrenadeCP.Stop" Send="Destroy"/>
+    </CActorModel>
+    <CActorModel id="AP_SwarmGrenadeModelAttachment" parent="ModelAddition">
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <On Terms="Behavior.AP_SwarmGrenade.On" Send="Create"/>
+        <On Terms="Behavior.AP_SwarmGrenade.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorSound id="AP_Nova_SniperRifleTailHighStereo" parent="SoundOneShot">
+        <Sound value="AP_Nova_SniperRifleTail_Dummy"/>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifleTailHighLeft"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifleTailHighRight"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_Snipe_Kneel_ActorSound">
+        <Sound value="AP_Nova_Snipe_Kneel"/>
+    </CActorSound>
+    <CActorSound id="AP_Nova_Snipe_TailExterior" parent="SoundOneShot">
+        <Terms value="SoundIsFinalSound"/>
+        <Sound value="AP_Nova_SniperRifleTail_Dummy"/>
+        <Layers>
+            <Sound value="AP_Nova_Snipe_TailExterior"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_SniperRifle_AttackLaunch_BoomySweetenerSound" parent="SoundOneShot">
+        <Sound value="AP_Nova_SniperRifleTail_Dummy"/>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifle_AttackLaunch_BoomySweetener"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_SniperRifle_AttackLaunch_BoomySweetenerTailSound" parent="SoundOneShot">
+        <Sound value="AP_Nova_SniperRifleTail_Dummy"/>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifle_AttackLaunch_BoomySweetener"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifleTailLeft"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifleTailRight"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_SniperRifle_AttackLaunch_MechySweetenerSound" parent="SoundOneShot">
+        <Sound value="AP_Nova_SniperRifleTail_Dummy"/>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifle_AttackLaunch_MechySweetener"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_SniperRifle_AttackLaunch_MechySweetenerTailSound" parent="SoundOneShot">
+        <Sound value="AP_Nova_SniperRifleTail_Dummy"/>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifle_AttackLaunch_MechySweetener"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifleTailLeft"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_SniperRifleTailRight"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Nova_TurbojetJumpsuit_Movement_ActorSound">
+        <Sound value="AP_Nova_TurbojetJumpsuit_Movement"/>
+    </CActorSound>
+    <CActorAction id="AP_NovaWeaponPsiBladeAttack" parent="GenericAttack" effectAttack="AP_NovaWeaponPsiBladeDamageCloakedSwitch">
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorModel id="AP_SuperStimpackNovaEndImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_SuperStimNova.Off; ValidateUnit NotDead" Send="Create"/>
+        <!--On Terms="Behavior.StimpackMarauder.Off; ValidateUnit NotDead" Send="Create"/-->
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorModel id="AP_SuperStimpackNovaStartImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Abil.AP_SuperStimpackNova.SourceCastStart" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSound id="AP_Nova_StimInfusion_ActorSound" parent="SoundOneShot">
+        <On Terms="Abil.AP_SuperStimpackNova.SourceCastStart" Send="Create"/>
+        <Sound value="AP_Nova_StimInfusion"/>
+    </CActorSound>
+    <CActorSound id="AP_Nova_StimInfusionSweetener_ActorSound" parent="SoundOneShot">
+        <On Terms="Abil.AP_SuperStimpackNova.SourceCastStart" Send="Create"/>
+        <Sound value="AP_Nova_StimInfusionSweetener"/>
+    </CActorSound>
+    <CActorAction id="AP_NovaWeaponCanisterRifleAttackCloaked" parent="GenericAttack" effectAttack="AP_NovaWeaponCanisterRifleCloaked">
+        <ImpactMap index="None" Sound="AP_Nova_SniperRifle_AttackImpact"/>
+        <LaunchAssets Model="GhostAttackLaunch" Sound="Nova_SniperRifle_AttackLaunch_Mechy"/>
+        <LaunchSound value="AP_Nova_SniperRifle_AttackLaunch_BoomySweetenerSound"/>
+    </CActorAction>
+    <CActorAction id="AP_NovaWeaponCanisterRifleAttackUncloaked" parent="GenericAttack" effectAttack="AP_NovaWeaponCanisterRifleUncloaked">
+        <ImpactMap index="None" Sound="AP_Nova_SniperRifle_AttackImpact"/>
+        <LaunchAssets Model="GhostAttackLaunch" Sound="AP_Nova_SniperRifle_AttackLaunch_Boomy"/>
+        <LaunchSound value="AP_Nova_SniperRifle_AttackLaunch_MechySweetenerSound"/>
+    </CActorAction>
+    <CActorAction id="AP_NovaWeaponBlazefireBladeAttack" parent="GenericAttack" effectAttack="AP_NovaWeaponBlazefireBladeDamageCloakedSwitch">
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorAction id="AP_NovaWeaponBlazefireBladeGunAttack" parent="GenericAttack" effectAttack="AP_NovaWeaponBlazefireBladeGunDamageCloakedSwitch">
+        <LaunchAssets Sound="AP_Nova_Gunblade_Gun_Launch"/>
+        <ImpactMap index="None" Model="ThorHandGunAttackImpact" Sound="AP_Nova_Gunblade_Gun_Impact"/>
+        <ShieldFlashType value="Header"/>
+        <LaunchAttachQuery Methods="Weapon 4"/>
+        <LaunchSiteOps HoldPosition="1"/>
+    </CActorAction>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -9177,6 +10814,226 @@
         <Model value="AP_MagrailMunition_Missile"/>
     </CActorBeamSimple>
     <CActorMissile id="AP_MagrailMunitionInvisibleMissile" parent="GenericAttackMissile" unitName="AP_MagrailMunitionMissile">
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorSimple id="AP_VoidDetectorRadarSetup">
+        <Terms value="Cap 1"/>
+        <On Terms="Behavior.AP_VoidDetectorRadar.On" Send="Create"/>
+        <On Terms="Behavior.AP_VoidDetectorRadar.On" Send="StatusIncrement ActiveCount"/>
+<!--        <On Terms="Behavior.DarkPylonCloakTarget.On" Send="Create"/>-->
+<!--        <On Terms="Behavior.DarkPylonCloakTarget.On" Send="StatusIncrement ActiveCount"/>-->
+<!--        <On Terms="Behavior.GhostCloak.On" Send="Create"/>-->
+<!--        <On Terms="Behavior.GhostCloak.On" Send="StatusIncrement ActiveCount"/>-->
+<!--        <On Terms="Behavior.BansheeCloak.On" Send="Create"/>-->
+<!--        <On Terms="Behavior.BansheeCloak.On" Send="StatusIncrement ActiveCount"/>-->
+<!--        <On Terms="Behavior.CloakFieldEffect.On" Send="Create"/>-->
+<!--        <On Terms="Behavior.CloakFieldEffect.On" Send="StatusIncrement ActiveCount"/>-->
+        <On Terms="ActorCreation" Send="TimerSet 0.500000 Retest"/>
+        <On Terms="TimerExpired; TimerName Retest" Send="Create AP_VoidDetectorRadarSearch"/>
+        <On Terms="TimerExpired; TimerName Retest" Send="TimerSet 0.500000 Retest"/>
+        <On Terms="Behavior.AP_VoidDetectorRadar.Off" Send="StatusDecrement ActiveCount"/>
+<!--        <On Terms="Behavior.DarkPylonCloakTarget.Off" Send="StatusDecrement ActiveCount"/>-->
+<!--        <On Terms="Behavior.GhostCloak.Off" Send="StatusDecrement ActiveCount"/>-->
+<!--        <On Terms="Behavior.BansheeCloak.Off" Send="StatusDecrement ActiveCount"/>-->
+        <On Terms="Behavior.CloakFieldEffect.Off" Send="StatusDecrement ActiveCount"/>
+        <On Terms="StatusDecrement; IsStatus ActiveCount 0" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveDetectionEnemy" Send="Destroy"/>
+<!--        <On Terms="Behavior.BansheePermanentCloak.On" Send="Create"/>-->
+<!--        <On Terms="Behavior.BansheePermanentCloak.On" Send="StatusIncrement ActiveCount"/>-->
+<!--        <On Terms="Behavior.BansheePermanentCloak.Off" Send="StatusDecrement ActiveCount"/>-->
+    </CActorSimple>
+    <CActorRegionCircle id="AP_VoidDetectorRadarSearch">
+        <On Terms="ActorCreation" Send="QueryRegion ::Self AP_VoidDetectorRadarSearchQuery AgainstCenterGame"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.100000 Die"/>
+        <On Terms="TimerExpired; TimerName Die" Send="Destroy"/>
+        <Radius value="15.000000"/>
+    </CActorRegionCircle>
+    <CActorQueryResponse id="AP_VoidDetectorRadarSearchQuery">
+        <Subject Filters="Unit" Terms="ScopeContains _DetectorEnemy"/>
+        <OnResponse Target="_DetectorEnemy" Send="Signal FoundDetector"/>
+    </CActorQueryResponse>
+    <CActorSite id="AP_YoinkTentacleLaunchSite">
+        <Host Subject="::scope.YoinkTentacle"/>
+    </CActorSite>
+    <CActorAction id="AP_Yoink" parent="GenericAttack" effectImpact="AP_YoinkSet" effectLaunch="AP_YoinkLaunchMissile">
+        <LaunchSiteOps Ops="SOpAttachWeapon"/>
+        <LaunchSite value="AP_YoinkTentacleLaunchSite"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="AP_Spell_Yoink_Launch"/>
+        <Missile value="AP_YoinkMissile"/>
+        <ImpactSiteOps Ops="SOpAttachCenter SOpForwardLaunchGuide"/>
+        <ImpactSiteOpsReaction Ops="SOp2DRotation SOp180" HoldPosition="1" HoldRotation="1"/>
+        <ImpactAttachQuery Methods="AMFilterCenter"/>
+        <ImpactMap index="None" Sound=""/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+    </CActorAction>
+    <CActorModel id="AP_YoinkEnemyStunModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Behavior.AP_YoinkEnemyStun.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="Behavior.AP_YoinkEnemyStun.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="MindBlastStun"/>
+    </CActorModel>
+    <CActorSimple id="AP_YoinkImpactAnim">
+        <On Terms="Behavior.AP_Yoink.On; ValidateUnit IsNotConstructing" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="Signal YoinkStart"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear Attack"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackReady"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackLeft"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackRight"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay AbductFlail Flail PlayForever,RandomStartOffset 0.100000 0.100000"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="HostSiteOpsAdd ::Host SOpTilterYoink"/>
+        <On Terms="ActorCreation" Send="TimerSet 3.500000 KnockbackDelay"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear AbductFlail"/>
+        <On Terms="TimerExpired; TimerName KnockbackDelay" Send="Destroy"/>
+        <On Terms="Behavior.AP_Yoink.Off" Target="_Unit" Send="AnimClear AbductFlail"/>
+        <On Terms="Behavior.AP_Yoink.Off" Target="_Unit" Send="Signal YoinkStop"/>
+        <On Terms="Behavior.AP_Yoink.Off" Target="_Unit" Send="HostSiteOpsRemove ::Host SOpTilterYoink"/>
+        <On Terms="Behavior.AP_Yoink.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="AP_YoinkImpactModel" parent="ModelAddition">
+        <On Terms="Behavior.AP_YoinkTentacle.On" Send="Create"/>
+        <On Terms="Behavior.AP_YoinkTentacle.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+    </CActorModel>
+    <CActorMissile id="AP_YoinkMissile" parent="GenericAttackMissile" unitName="AP_YoinkMissile">
+        <Supporter>
+            <Subject value="YoinkTentacle"/>
+            <Scope value="Caster"/>
+            <Actor value="Find"/>
+            <Effect value="YoinkLaunchMissile"/>
+        </Supporter>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleAttack ::Self"/>
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorModel id="AP_YoinkTentacle">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_YoinkLaunchMissile.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.YoinkTentacle ::Self"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.AP_YoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="StatusSet Yoinking 1"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="AnimClear Attack"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="Create YoinkImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="RefSetFromRequest TentacleAttack YoinkImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="TimerSet 1.250000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <HostedAttaches Name="TentacleAttack">
+            <AttachQuery Methods="Hardpoint"/>
+        </HostedAttaches>
+    </CActorModel>
+    <CActorModel id="AP_YoinkTentacleVikingAir">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_YoinkLaunchMissileVikingAir.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.YoinkTentacleVikingAir ::Self"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.AP_YoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="StatusSet Yoinking 1"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="AnimClear Attack"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="Create YoinkVikingAirImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="RefSetFromRequest TentacleVikingAirAttack YoinkVikingAirImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="TimerSet 1.250000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="AP_YoinkTentacle"/>
+        <HostedAttaches Name="TentacleVikingAirAttack">
+            <AttachQuery Methods="Hardpoint"/>
+        </HostedAttaches>
+    </CActorModel>
+    <CActorModel id="AP_YoinkTentacleVikingGround">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_YoinkLaunchMissileVikingGround.Start; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.YoinkTentacleVikingGround ::Self"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
+        <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.500000"/>
+        <On Terms="Effect.AP_YoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="StatusSet Yoinking 1"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="AnimClear Attack"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="Create YoinkVikingGroundImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="RefSetFromRequest TentacleVikingGroundAttack YoinkVikingGroundImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="TimerSet 1.250000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
+        <Model value="AP_YoinkTentacle"/>
+        <HostedAttaches Name="TentacleVikingGroundAttack">
+            <AttachQuery Methods="Hardpoint"/>
+        </HostedAttaches>
+    </CActorModel>
+    <CActorAction id="AP_YoinkVikingAir" parent="GenericAttack" effectImpact="AP_YoinkSetVikingAir" effectLaunch="AP_YoinkLaunchMissileVikingAir">
+        <LaunchSiteOps Ops="SOpAttachWeapon"/>
+        <LaunchSite value="YoinkVikingAirTentacleLaunchSite"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="AP_Spell_Yoink_Launch"/>
+        <Missile value="AP_YoinkVikingAirMissile"/>
+        <ImpactSiteOps Ops="SOpAttachHead SOpForwardLaunchGuide"/>
+        <ImpactSiteOpsReaction Ops="SOp2DRotation SOp180" HoldPosition="1" HoldRotation="1"/>
+        <ImpactAttachQuery Methods="AMFilterHead"/>
+        <ImpactMap index="None" Sound=""/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+    </CActorAction>
+    <CActorMissile id="AP_YoinkVikingAirMissile" parent="GenericAttackMissile" unitName="AP_YoinkVikingAirMissile">
+        <Supporter>
+            <Subject value="YoinkTentacleVikingAir"/>
+            <Scope value="Caster"/>
+            <Actor value="Find"/>
+            <Effect value="YoinkLaunchMissileVikingAir"/>
+        </Supporter>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleVikingAirAttack ::Self"/>
+        <Model value="Invisible"/>
+    </CActorMissile>
+    <CActorAction id="AP_YoinkVikingGround" parent="GenericAttack" effectImpact="AP_YoinkSetVikingGround" effectLaunch="AP_YoinkLaunchMissileVikingGround">
+        <LaunchSiteOps Ops="SOpAttachWeapon"/>
+        <LaunchSite value="YoinkVikingGroundTentacleLaunchSite"/>
+        <LaunchAttachQuery Methods="Weapon"/>
+        <LaunchAssets Sound="AP_Spell_Yoink_Launch"/>
+        <Missile value="AP_YoinkVikingGroundMissile"/>
+        <ImpactSiteOps Ops="SOpAttachHead SOpForwardLaunchGuide"/>
+        <ImpactSiteOpsReaction Ops="SOp2DRotation SOp180" HoldPosition="1" HoldRotation="1"/>
+        <ImpactAttachQuery Methods="AMFilterHead"/>
+        <ImpactMap index="None" Sound=""/>
+        <ShieldFlashType value="None"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+    </CActorAction>
+    <CActorMissile id="AP_YoinkVikingGroundMissile" parent="GenericAttackMissile" unitName="AP_YoinkVikingGroundMissile">
+        <Supporter>
+            <Subject value="YoinkTentacleVikingGround"/>
+            <Scope value="Caster"/>
+            <Actor value="Find"/>
+            <Effect value="YoinkLaunchMissileVikingGround"/>
+        </Supporter>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleVikingGroundAttack ::Self"/>
         <Model value="Invisible"/>
     </CActorMissile>
 </Catalog>

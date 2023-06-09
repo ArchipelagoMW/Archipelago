@@ -10,6 +10,28 @@ void lib15EF4C78_InitLibraries () {
     libNtve_InitVariables();
 }
 
+// Functions
+string lib15EF4C78_gf_AP_Player_findNovaWeapon (unit lp_sourceNovaUnit) {
+    // Automatic Variable Declarations
+    // Implementation
+    if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponCanisterRifle") == true)) {
+        return "AP_NovaWeaponCanisterRifle";
+    }
+    else if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponHellfireShotgun") == true)) {
+        return "AP_NovaWeaponHellfireShotgun";
+    }
+    else if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponPlasmaRifle") == true)) {
+        return "AP_NovaWeaponPlasmaRifle";
+    }
+    else if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponPsiBlade") == true)) {
+        return "AP_NovaWeaponPsiBlade";
+    }
+    else if ((UnitHasBehavior(lp_sourceNovaUnit, "AP_NovaWeaponBlazefireBlade") == true)) {
+        return "AP_NovaWeaponBlazefireBlade";
+    }
+    return null;
+}
+
 // Triggers
 //--------------------------------------------------------------------------------------------------
 // Trigger: ArchipelagoPlayerHandlersConstructor
@@ -429,6 +451,33 @@ void lib15EF4C78_gt_TechReactorswaptoAP_Starport_Init () {
     TriggerAddEventUnitBehaviorChange(lib15EF4C78_gt_TechReactorswaptoAP_Starport, null, "AP_StarportTechReactor", c_unitBehaviorChangeActivate);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Trigger: AP_Player_setHolodecoyWeapon
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnitCreatedUnit()) == "AP_NovaHoloDecoy"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitBehaviorAdd(EventUnitCreatedUnit(), lib15EF4C78_gf_AP_Player_findNovaWeapon(EventUnit()), EventUnitCreatedUnit(), 1);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Init () {
+    lib15EF4C78_gt_AP_Player_setHolodecoyWeapon = TriggerCreate("lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Func");
+    TriggerAddEventUnitCreated(lib15EF4C78_gt_AP_Player_setHolodecoyWeapon, null, null, null);
+}
+
 void lib15EF4C78_InitTriggers () {
     lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor_Init();
     lib15EF4C78_gt_ReactorswaptoAP_Barracks_Init();
@@ -446,6 +495,7 @@ void lib15EF4C78_InitTriggers () {
     lib15EF4C78_gt_TechReactorswaptoAP_Barracks_Init();
     lib15EF4C78_gt_TechReactorswaptoAP_Factory_Init();
     lib15EF4C78_gt_TechReactorswaptoAP_Starport_Init();
+    lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Init();
 }
 
 //--------------------------------------------------------------------------------------------------

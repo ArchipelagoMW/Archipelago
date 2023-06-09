@@ -783,7 +783,7 @@
     <CUpgrade id="AP_HellionCampaignInfernalPreIgniter">
         <Flags index="UpgradeCheat" value="0"/>
         <EffectArray Reference="Effect,AP_InfernalFlameThrower,AttributeBonus[Light]" Value="10"/>
-        <EffectArray Operation="Add" Reference="Effect,AP_HellionTankDamage,AttributeBonus[Light]" Value="10"/>
+        <EffectArray Reference="Effect,AP_HellionTankDamage,AttributeBonus[Light]" Value="10"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_HellbatAspect">
@@ -2914,5 +2914,309 @@
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Hydralisk"/>
         <AffectedUnitArray value="AP_HydraliskBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaBaseSuitEnhancements">
+        <!-- These attributes are for all suits -->
+        <EffectArray Reference="Unit,AP_NovaHero,LifeMax" Value="150"/>
+        <EffectArray Reference="Unit,AP_NovaHero,LifeStart" Value="150"/>
+        <EffectArray Reference="Unit,AP_NovaHero,Speed" Value="0.25"/>
+        <EffectArray Reference="Unit,AP_NovaHero,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,LifeMax" Value="150"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,LifeStart" Value="150"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,Speed" Value="0.25"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,LifeArmor" Value="1"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaArmoredSuit">
+        <!-- Armor and life from Jumpsuit - on top on the base -->
+        <EffectArray Reference="Unit,AP_NovaHero,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_NovaHero,LifeMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_NovaHero,LifeStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,LifeMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,LifeStart" Value="100"/>
+        <EffectArray Operation="Set" Reference="Behavior,AP_NovaJumpJetRegen,Modification.VitalRegenArray[Life]" Value="20"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaArmorApolloInfantrySuit">
+        <!-- Just Energy upgrade -->
+        <EffectArray Reference="Unit,AP_NovaHero,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_NovaHero,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_NovaHero,EnergyRegenRate" Value="1.750000"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,EnergyStart" Value="100"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,EnergyMax" Value="100"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,EnergyRegenRate" Value="1.750000"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaArmorBlinkSuit">
+        <!-- Just grant Blink ability -->
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaArmorJumpSuit">
+        <!-- Mobility upgrade -->
+        <EffectArray Reference="Unit,AP_NovaHero,Speed" Value="1.500000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_NovaHero,Mover" Value="CliffJumper"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,Speed" Value="1.500000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_NovaHoloDecoy,Mover" Value="CliffJumper"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaArmorPredatorBattlesuit">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_NovaHero,LifeArmorName" Value="Unit/LifeArmorName/PredatorBattlesuit"/>
+        <EffectArray Reference="Unit,AP_NovaHero,LifeArmorLevel" Value="1"/>
+        <EffectArray Reference="Unit,AP_NovaHero,LifeArmor" Value="1"/>
+        <EffectArray Reference="Unit,AP_NovaHero,Speed" Value="0.5"/>
+        <EffectArray Reference="Unit,AP_NovaHero,SpeedMultiplierCreep" Value="0.3"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaCloak">
+        <!-- Basic Nova Cloak -->
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaArmorStealthSuit">
+        <!-- Nova permanent cloak -->
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaGadgetFlashBangGrenades">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaGadgetHiveMindAmplifier">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaGadgetHolographicDecoy">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaGadgetPersonalDefensiveMatrix">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Race value="Terr"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaGadgetPulseGrenades">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaGadgetSwarmGrenade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaHelmetDominationVisor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaHelmetGhostVisor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaHelmetHiveMindAmplifier">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaHelmetRangefinderOculus">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_NovaHero,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_NovaHero,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,SightBonus[Dusk]" Value="2"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,SightBonus[Dawn]" Value="2"/>
+        <EffectArray Reference="Weapon,AP_NovaWeaponHellfireShotgun,Range" Value="2"/>
+        <EffectArray Reference="Weapon,AP_NovaWeaponCanisterRifle,Range" Value="2"/>
+        <EffectArray Reference="Weapon,AP_NovaWeaponPlasmaRifle,Range" Value="2"/>
+        <EffectArray Reference="Weapon,AP_NovaWeaponBlazefireBladeGun,Range" Value="2"/>
+        <EffectArray Reference="Weapon,AP_NovaWeaponPsiBlade,Range" Value="1"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaHelmetSensorVisor">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_NovaHero,SightBonus[Dusk]" Value="3"/>
+        <EffectArray Reference="Unit,AP_NovaHero,SightBonus[Dawn]" Value="3"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,SightBonus[Dusk]" Value="3"/>
+        <EffectArray Reference="Unit,AP_NovaHoloDecoy,SightBonus[Dawn]" Value="3"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaIndoorSounds">
+        <EffectArray Operation="Set" Reference="Actor,AP_NovaWeaponCanisterRifleAttackCloaked,LaunchSound" Value="AP_Nova_SniperRifle_AttackLaunch_BoomySweetenerSound"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_NovaWeaponCanisterRifleAttackUncloaked,LaunchSound" Value="AP_Nova_SniperRifle_AttackLaunch_MechySweetenerSound"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_NovaWeaponCanisterRifleSnipeAttack,LaunchSound" Value="AP_Nova_Snipe_Tail"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaOutdoorSounds">
+        <EffectArray Operation="Set" Reference="Actor,AP_NovaWeaponCanisterRifleAttackCloaked,LaunchSound" Value="AP_Nova_SniperRifle_AttackLaunch_BoomySweetenerTailSound"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_NovaWeaponCanisterRifleAttackUncloaked,LaunchSound" Value="AP_Nova_SniperRifle_AttackLaunch_MechySweetenerTailSound"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_NovaWeaponCanisterRifleSnipeAttack,LaunchSound" Value="AP_Nova_Snipe_TailExterior"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaSilentkill">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaVoice1">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaVoice2">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaVoice3">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaVoice4">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaVoice5">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaVoice6">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaWeaponBlazefireBlade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaWeaponCanisterRifle">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaWeaponHellfireShotgun">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaWeaponInvictusLongshot">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaWeaponPlasmaRifle">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaWeaponPsiBlade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Terr"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaWeaponPsiRifle">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+        <AffectedUnitArray value="AP_NovaHoloDecoy"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SuperStimpackNova">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_NovaHero"/>
+    </CUpgrade>
+    <CUpgrade id="AP_DetectionEnemy">
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
+    <CUpgrade id="AP_NovaWarpOut">
+        <Flags index="UpgradeCheat" value="0"/>
     </CUpgrade>
 </Catalog>

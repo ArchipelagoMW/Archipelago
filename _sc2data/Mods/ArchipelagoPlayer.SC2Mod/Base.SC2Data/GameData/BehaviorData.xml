@@ -800,7 +800,7 @@
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <RemoveValidatorArray value="AP_HasNoLiberatorYoink"/>
-        <RemoveValidatorArray value="IsNotRecallingCombine"/>
+        <RemoveValidatorArray value="AP_IsNotRecallingCombine"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_LiberatorCloak">
         <Alignment value="Positive"/>
@@ -1603,5 +1603,468 @@
             <AbilClassDisableArray index="CAbilAttack" value="1"/>
         </Modification>
         <Duration value="0.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_FlashBangGrenade">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-vorazun-shadowstun.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <DurationOverride>
+            <Duration value="2.5"/>
+            <ValidatorArray value="AP_IsHeroic"/>
+        </DurationOverride>
+        <DurationOverride>
+            <Duration value="2.5"/>
+            <ValidatorArray value="AP_IsStone"/>
+        </DurationOverride>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
+            <DamageTakenFraction index="Spell" value="0.15"/>
+            <DamageTakenFraction index="Melee" value="0.15"/>
+            <DamageTakenFraction index="Ranged" value="0.15"/>
+            <DamageTakenFraction index="Splash" value="0.15"/>
+            <DamageTakenFraction index="NoProc" value="0.15"/>
+            <AbilClassDisableArray index="CAbilEffectTarget" value="1"/>
+            <BehaviorLinkDisableArray value="NovaAlarmBotAura"/>
+            <BehaviorLinkDisableArray value="NovaAlarmBotDetectionMode"/>
+            <BehaviorLinkDisableArray value="AP_NovaAlarmBotAura"/>
+            <BehaviorLinkDisableArray value="AP_NovaAlarmBotDetectionMode"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaAlarmBotAura">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Period value="0.125"/>
+        <PeriodicEffect value="NovaAlarmBotAuraSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaAlarmBotDetectionMode">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_FlashBangGrenadeNovaTripWire">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-vorazun-shadowstun.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <Period value="3"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffect value="AP_FlashBangGrenadeNovaTripWireRestartWarning"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_GlazeHolo">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_InstantMorph">
+        <InfoFlags index="Hidden" value="1"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="0.2"/>
+        <Modification>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="TransientMorph" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaAlreadyDominated">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaApolloCloak">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="30"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaArmorBlinkSuitBlinkCloaked">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="10"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaArmorStealthSuit">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_HaveNovaArmorStealthSuit"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorJump id="AP_NovaCliffJump">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TriggerHeightDeltaMin value="1.5"/>
+        <TriggerHeightDeltaMax value="4.5"/>
+        <InitiateRangeUp value="1.5"/>
+        <InitiateRangeDown value="0.5"/>
+        <JumpRangeMax value="12"/>
+        <Mover value="CliffJumper"/>
+        <MoverUp value="ReaperJumpDown"/>
+        <MoverDown value="ReaperJumpDown"/>
+        <DurationPreLaunch value="0.05"/>
+        <DurationPostLand value="0.075"/>
+        <DurationMoveOut value="0.08"/>
+        <Placeholder value="ReaperPlaceholder"/>
+        <LandAdjustmentDown value="1"/>
+        <LandArrivalRange value="0.05"/>
+        <LandCheckRadius value="5"/>
+    </CBehaviorJump>
+    <CBehaviorBuff id="AP_NovaDefensiveDroneTimedLife" parent="TimedLife">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="180"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaDomination">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-Nova-Domination.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <Player Value="Caster"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaHelmetGhostVisorDetector">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-nova-equipment-ghostvisor.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_HaveNovaHelmetGhostVisor"/>
+        <Modification Detect="20" Radar="20" RadarFilters="-;Player,Ally,Neutral,RawResource,HarvestableResource,Missile,Destructible,Invulnerable"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaHelmetSensorVisor">
+        <InfoIcon value="Assets\Textures\btn-status-radar.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_HaveNovaHelmetSensorVisor"/>
+        <Modification Radar="40" RadarFilters="-;RawResource,HarvestableResource,Missile,Destructible,Buried"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaHolographicDecoy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <DamageDealtFraction index="Spell" value="-0.75"/>
+            <DamageDealtFraction index="Melee" value="-0.75"/>
+            <DamageDealtFraction index="Ranged" value="-0.75"/>
+            <DamageDealtFraction index="Splash" value="-0.75"/>
+            <DamageDealtFraction index="NoProc" value="-0.75"/>
+            <AbilClassDisableArray index="CAbilEffectInstant" value="1"/>
+            <AbilClassDisableArray index="CAbilEffectTarget" value="1"/>
+        </Modification>
+        <DamageResponse ModifyFraction="0.75">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaHolographicDecoyTimedLife" parent="TimedLife">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="45"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaJumpJetRegen">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_HaveNovaArmoredSuit"/>
+        <DisableValidatorArray value="AP_CasterNotInCombat10s"/>
+        <DisableValidatorArray value="AP_NotFullLife"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaPlasmaPuddleDamageDebuff">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-banelingspooge.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="1.1"/>
+        <Period value="0.5"/>
+        <InitialEffect value="AP_NovaPlasmaPuddleDamageDebuffSlowSet"/>
+        <RefreshEffect value="AP_NovaPlasmaPuddleDamageDebuffSlowSet"/>
+        <PeriodicEffect value="AP_NovaPlasmaPuddleDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaPlasmaPuddleDamageDebuffSlow">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-banelingspooge.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="1.1"/>
+        <Modification MoveSpeedMultiplier="0.25" AttackSpeedMultiplier="0.25"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaPlasmaPuddleDamageDebuffSlowHeroic">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-banelingspooge.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="1.1"/>
+        <Modification MoveSpeedMultiplier="0.8" AttackSpeedMultiplier="0.8"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaPlasmaPuddleSmall">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="6"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="AP_PlasmaPuddleSearchSmall"/>
+        <FinalEffect value="Suicide"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaPlasmaPuddleLarge">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="6"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="AP_PlasmaPuddleSearchLarge"/>
+        <FinalEffect value="Suicide"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaPsiStrikeDamaged">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_CasterHasNovaPsiStrikeWalkSpeed"/>
+        <Duration value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaPsiStrikeWalkSpeed">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="0.5625"/>
+        <Period value="0.0625"/>
+        <PeriodicEffect value="AP_NovaPsiStrikeTargetSearch"/>
+        <FinalEffect value="AP_NovaPsiStrikeWalkStopSet"/>
+        <Modification MoveSpeedMultiplier="7">
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+        </Modification>
+        <DamageResponse ModifyFraction="0" ModifyMinimumDamage="1">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaPsiStrikeWalkStopStun">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="0.125"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaSilentkillStunCaster">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaSilentkillStunTarget">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponBlazefireBlade">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+<!--        <DisableValidatorArray value="AP_HaveNovaWeaponBlazefireBlade"/>-->
+        <Modification>
+            <WeaponArray Link="AP_NovaWeaponBlazefireBlade"/>
+            <WeaponArray Link="AP_NovaWeaponBlazefireBladeGun"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponBlazefireBladeShadowFuryController">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_NovaWeaponBlazefireBladeShadowFuryTargetsInArea"/>
+        <Duration value="4"/>
+        <Period value="0.4"/>
+        <PeriodCount value="10"/>
+        <InitialEffect value="AP_NovaWeaponBlazefireBladeShadowFurySearch"/>
+        <PeriodicEffect value="AP_NovaWeaponBlazefireBladeShadowFurySearch"/>
+        <FinalEffect value="AP_NovaWeaponBlazefireBladeShadowFuryFinalDelayAB"/>
+        <Modification>
+            <ModifyFlags index="DisableWeapons" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponBlazefireBladeShadowFuryFinalDelay">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="0.3"/>
+        <FinalEffect value="AP_NovaWeaponBlazefireBladeShadowFuryCP"/>
+        <Modification>
+            <ModifyFlags index="DisableWeapons" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponBlazefireBladeShadowFuryTargeted">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <RemoveValidatorArray value="CasterHasNovaWeaponBlazefireBladeShadowFury"/>
+        <MaxStackCount value="10"/>
+        <Duration value="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponCanisterRifle">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+<!--        <DisableValidatorArray value="AP_HaveNovaWeaponCanisterRifle"/>-->
+        <Modification>
+            <WeaponArray Link="AP_NovaWeaponCanisterRifle"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponHellfireShotgun">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+<!--        <DisableValidatorArray value="AP_HaveNovaWeaponHellfireShotgun"/>-->
+        <Modification>
+            <WeaponArray Link="AP_NovaWeaponHellfireShotgun"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponInvictusLongshotLockdown">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-swann-defensivematrix.dds"/>
+        <BehaviorCategories index="Restorable" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="60"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="Reveal" value="1"/>
+            <ModifyFlags index="Detected" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <BehaviorLinkDisableArray value="Detector10"/>
+            <BehaviorLinkDisableArray value="Detector11"/>
+            <BehaviorLinkDisableArray value="Detector12"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponPlasmaRifle">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+<!--        <DisableValidatorArray value="AP_HaveNovaWeaponPlasmaRifle"/>-->
+        <Modification>
+            <WeaponArray Link="AP_NovaWeaponPlasmaRifle"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponPsiBlade">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+<!--        <DisableValidatorArray value="HaveNovaWeaponPsiBlade"/>-->
+        <Modification>
+            <WeaponArray Link="AP_NovaWeaponPsiBlade"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NovaWeaponUnarmed">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="AP_NovaWeaponCheck"/>
+        <BehaviorFlags index="Permanent" value="1"/>
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+<!--        <BehaviorCategories index="User9" value="1"/>-->
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PersonalDefensiveMatrix">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-defensivematrix.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_TempShieldsNotEmptyOrNoTempShields"/>
+        <Duration value="10"/>
+        <Modification>
+            <VitalMaxArray index="Shields" value="500"/>
+        </Modification>
+        <DamageResponse ClampMaximum="10" Minimum="10">
+            <Kind index="Spell" value="0"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PrecursorYoink">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="2.5"/>
+        <FinalEffect value="SuicideRemove"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="NoDraw" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SuperStimNova">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-stimpack.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5">
+            <VitalRegenArray index="Life" value="20"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SwarmGrenade">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-blindingcloud.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="0.625"/>
+        <Modification MoveSpeedMultiplier="0.5">
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressEnergy" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidDetectorRadar">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-status-radar.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_Yoink">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <AbilLinkDisableArray value="WidowMineAttack"/>
+            <AbilLinkDisableArray value="TacNukeStrike"/>
+            <AbilLinkDisableArray value="SwarmHostDeepBurrow"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_YoinkEnemyStun">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="AP\Assets\Textures\btn-ability-terran-ultrasonicpulse.dds"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <AbilLinkDisableArray value="AP_TacNukeStrike"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_YoinkMarker">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_YoinkTentacle">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
     </CBehaviorBuff>
 </Catalog>

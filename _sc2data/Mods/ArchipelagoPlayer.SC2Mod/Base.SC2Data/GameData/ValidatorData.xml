@@ -1486,4 +1486,253 @@
         <CombineArray value="AP_CasterIsFiringWeapon"/>
         <CombineArray value="AP_CasterIsAnimatingWeapon"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsStone">
+        <Value value="NovaStoneHeroic"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareDamageTakenTime id="AP_CasterNotInCombat10s">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Value value="10"/>
+    </CValidatorUnitCompareDamageTakenTime>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasNovaPsiStrikeWalkSpeed">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaPsiStrikeWalkSpeed"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorLocationEnumArea id="AP_NovaWeaponBlazefireBladeShadowFuryTargetsInArea">
+        <AreaArray Compare="GT" Count="0" Radius="5"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Structure,RawResource,HarvestableResource,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <ResultFailed value="LoadAllNoTargetsFound,No Targets Found"/>
+        <WhichLocation Effect="AP_NovaWeaponBlazefireBladeShadowFuryPersistent"/>
+        <SearchFlags index="SameCliff" value="1"/>
+        <LaunchLocation Effect="AP_NovaWeaponBlazefireBladeShadowFuryPersistent" Value="TargetPoint"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasNovaWeaponBlazefireBladeShadowFury">
+        <Behavior value="AP_NovaWeaponBlazefireBladeShadowFury"/>
+        <Compare value="GT"/>
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_TempShieldsNotEmptyOrNoTempShields">
+        <CombineArray value="hasShields"/>
+        <CombineArray value="AP_CasterMaxShieldEQ0"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareVital id="AP_CasterMaxShieldEQ0">
+        <WhichUnit Value="Caster"/>
+        <Type value="Maximum"/>
+        <Vital value="Shields"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitType id="AP_IsNotVanillaRoach">
+        <!-- TODO: AP_Roach? -->
+        <Value value="Roach"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsNotVanillaHydralisk">
+        <!-- TODO: AP_Hydralisk? -->
+        <Value value="Hydralisk"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsNotVanillaSonarDrone">
+        <!-- TODO: Verify this -->
+        <Value value="NovaSonarDrone"/>
+        <Find value="0"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_NotStructureorIsStructureandNotDetector">
+        <CombineArray value="NotStructureTarget"/>
+        <CombineArray value="AP_NotStructureandNotDetector"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NotStructureandNotDetector">
+        <Type value="And"/>
+        <CombineArray value="AP_IsDetectorUnitFlag"/>
+        <CombineArray value="IsStructureTarget"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_IsDetectorUnitFlag">
+        <Filters value="Detector;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_IsNotHerculesCombined">
+        <CombineArray value="AP_IsHerculesCombine"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsHerculesCombine">
+        <CombineArray value="AP_IsAPHercules"/>
+<!--        <CombineArray value="IsHercules"/>-->
+<!--        <CombineArray value="IsHerculesLander"/>-->
+<!--        <CombineArray value="IsHerculesLanderFlying"/>-->
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsAPHercules">
+        <Value value="AP_Hercules"/>
+    </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_EnemyTarget">
+        <Filters value="-;Self,Player,Ally,Neutral"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotNovaPsiStriked">
+        <Behavior value="AP_NovaPsiStrikeDamaged"/>
+        <Compare value="LE"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="AP_EnemyTargetYoink">
+        <WhichUnit Effect="AP_YoinkLaunchMissile"/>
+        <Filters value="-;Self,Player,Ally"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotMothershipCorePurifyNexus">
+        <ResultFailed value="Error,Error/MothershipCorePurifyNexus"/>
+        <Compare value="NE"/>
+        <Value value="1"/>
+        <Behavior value="MothershipCorePurifyNexus"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="AP_NotHiddenYoink">
+        <WhichUnit Effect="AP_YoinkLaunchMissile"/>
+        <Filters value="-;Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_NotHiddenYoinkVikingAir">
+        <WhichUnit Effect="AP_YoinkLaunchMissileVikingAir"/>
+        <Filters value="-;Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_NotHiddenYoinkVikingGround">
+        <WhichUnit Effect="AP_YoinkLaunchMissileVikingGround"/>
+        <Filters value="-;Hidden"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_CantYoinkYet">
+        <Behavior value="AP_YoinkWait"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_IsNotRecallingCombine">
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoYoink">
+        <Behavior value="AP_YoinkMarker"/>
+        <ResultFailed value="Error,Error/CantTargetMultipleAbduct"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="AP_CasterIsCloaked">
+        <WhichUnit Value="Caster"/>
+        <Filters value="Cloaked;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareField id="AP_TargetRadiusGT0Dot75">
+        <Compare value="GT"/>
+        <Field value="Radius"/>
+        <Value value=".75"/>
+    </CValidatorUnitCompareField>
+    <CValidatorPlayerRequirement id="AP_HaveNovaArmorStealthSuit">
+        <Find value="1"/>
+        <Value value="AP_HaveNovaArmorStealthSuit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaHelmetGhostVisor">
+        <Find value="1"/>
+        <Value value="AP_HaveNovaHelmetGhostVisor"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaHelmetSensorVisor">
+        <Find value="1"/>
+        <Value value="AP_HaveNovaHelmetSensorVisor"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveDetectionEnemy">
+        <Value value="AP_HaveDetectionEnemy"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareVital id="AP_NotFullLife">
+        <ResultFailed value="TooMuchLife"/>
+        <Compare value="LT"/>
+        <Value value="1"/>
+        <Type value="Fraction"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorPlayerRequirement id="AP_HaveNovaArmorJumpSuit">
+        <Find value="1"/>
+        <Value value="AP_HaveNovaArmorJumpSuit"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveSuperStimpackNova">
+        <Find value="1"/>
+        <Value value="AP_HaveSuperStimpackNova"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponCanisterRifleBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponCanisterRifle"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponHellfireShotgunBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponHellfireShotgun"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponPlasmaRifleBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponPlasmaRifle"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponPsiBladeBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponPsiBlade"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveNovaWeaponBlazefireBladeBehavior">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_NovaWeaponBlazefireBlade"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice1">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice1"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice2">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice2"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice3">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice3"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice4">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice4"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice5">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice5"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaVoice6">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaVoice6"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWarpOut">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveNovaWarpOut"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareOrderTargetRange id="AP_NovaHelmetDominationRangeCheck">
+        <Compare value="GT"/>
+        <AbilLink value="AP_NovaHelmetDomination"/>
+        <Value value="7"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponCanisterRifle">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToCanisterRifle"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponHellfireShotgun">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToHellfireShotgun"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponPlasmaRifle">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToPlasmaRifle"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponPsiBlade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToPsiBlade"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveNovaWeaponBlazefireBlade">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_NovaWeaponCanSwapToBlazefireBlade"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitFilters id="AP_UnitIsBiological">
+        <Filters value="Biological;-"/>
+    </CValidatorUnitFilters>
 </Catalog>

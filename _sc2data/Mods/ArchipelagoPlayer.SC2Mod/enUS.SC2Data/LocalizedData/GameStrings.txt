@@ -80,6 +80,8 @@ Abil/Name/AP_MindControl=Mind Control
 Abil/Name/AP_MissilePods=Hurricane Missile Pods
 Abil/Name/AP_MorphHydraliskToLurker=Morph Hydralisk To Lurker
 Abil/Name/AP_MorphRoachToImpaler=Morph Roach to Primal Lurker
+Abil/Name/AP_MorphToHellion=Morph To Hellion
+Abil/Name/AP_MorphToHellionTank=Morph To Hellbat
 Abil/Name/AP_MorphToTechReactor=Morph To Tech Reactor
 Abil/Name/AP_NanoRepair=Nano Repair
 Abil/Name/AP_Obliterate=Obliterate
@@ -155,11 +157,34 @@ Abil/Name/AP_burrowedStop=Stop
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
+Abil/Name/AP_HeroNuclearStrike=Hero Nuclear Strike
 Abil/Name/MercCompoundResearch2=Research
-Abil/Name/AP_MorphToHellion=Morph To Hellion
-Abil/Name/AP_MorphToHellionTank=Morph To Hellbat
+Abil/Name/AP_NovaApolloCloak=Apollo Suit Cloak
+Abil/Name/AP_NovaArmorBlinkSuitBlink=Blink
+Abil/Name/AP_NovaGadgetDefensiveDroneSummon=Defensive Drone
+Abil/Name/AP_NovaGadgetFlashBangGrenades=Flashbang Grenades
+Abil/Name/AP_NovaGadgetHiveMindAmplifier=Nova - Gadget - Hive Mind Amplifier
+Abil/Name/AP_NovaGadgetHolographicDecoy=Holographic Decoy
+Abil/Name/AP_NovaGadgetPulseGrenades=Pulse Grenades
+Abil/Name/AP_NovaGadgetSwarmGrenades=Swarm Grenades
+Abil/Name/AP_NovaHelmetDomination=Domination
+Abil/Name/AP_NovaHelmetHiveMindAmplifier=Nova - Helmet - Hive Mind Amplifier
+Abil/Name/AP_NovaHoldFire=Hold Fire
+Abil/Name/AP_NovaNukeTimer=Drop Nuke
+Abil/Name/AP_NovaPersonalDefensiveMatrix=Personal Defensive Matrix
+Abil/Name/AP_NovaPsiStrike=Nova - Weapon - Monomolecular Blade - Dash Attack
+Abil/Name/AP_NovaReleaseMinion=Release
+Abil/Name/AP_NovaSilentkill=Break Neck
+Abil/Name/AP_NovaWeaponBlazefireBladeShadowFury=Fury of One
+Abil/Name/AP_NovaWeaponCanisterRifleSnipe=Snipe
+Abil/Name/AP_NovaWeaponHellfireShotgunBlast=Nova - Weapon - Hellfire Shotgun - Blast
+Abil/Name/AP_NovaWeaponInvictusLongshotLockdown=Nova - Weapon - Invictus Longshot - Lockdown
+Abil/Name/AP_NovaWeaponPlasmaBlastNew=Plasma Surge
+Abil/Name/AP_NovaWeaponPsiRifleAbduct=Nova - Weapon - Psi Rifle - Abduct
+Abil/Name/AP_NovaWeaponsFree=NovaWeaponsFree
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
+Abil/Name/AP_SuperStimpackNova=Stim Infusion
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -176,6 +201,7 @@ Behavior/Name/AP_GhostBlast="AOE Sleep"
 Behavior/Name/AP_GhostCloak=Cloak
 Behavior/Name/AP_GhostHoldFire=Hold Fire
 Behavior/Name/AP_GhostHoldFireB=Hold Fire
+Behavior/Name/AP_HellbatLeapStun=Stunned
 Behavior/Name/AP_HydraliskFrenzy=Frenzy
 Behavior/Name/AP_Irradiate=Irradiated
 Behavior/Name/AP_LiberatorCloak=Cloak
@@ -196,6 +222,7 @@ Behavior/Name/AP_RavenShredderMissileArmorReduction=Anti-Armor Missile Targeting
 Behavior/Name/AP_RavenShredderMissileArmorReductionUIAdd=Armor Reduction
 Behavior/Name/AP_RavenShredderMissileArmorReductionUISubtruct=Armor Reduction
 Behavior/Name/AP_RavenShredderMissileTint=Anti-Armor Missile Targeting
+Behavior/Name/AP_ReaperPermanentCloak=Cloak
 Behavior/Name/AP_RoachCorpser=Roachling Infestation
 Behavior/Name/AP_ScienceVesselCloakField=Cloaking Field
 Behavior/Name/AP_SeekerMissileTimeout=Seeker Missile timeout
@@ -206,6 +233,7 @@ Behavior/Name/AP_SpectreHoldFire=Hold Fire
 Behavior/Name/AP_SpectreHoldFireB=Hold Fire
 Behavior/Name/AP_SpectreLockdownB=Lockdown
 Behavior/Name/AP_Stimpack=Stimpack
+Behavior/Name/AP_SuperStim=Super Stimpack
 Behavior/Name/AP_SupplyDrop=Supply drop
 Behavior/Name/AP_TorrasqueTimerBehavior=Reincarnation Suppressed
 Behavior/Name/AP_UltraliskBurrowChargeStun=Burrow Charge Stun
@@ -215,9 +243,19 @@ Behavior/Name/AP_VileAcidSlowFlatAmountHeroic=Debilitating Saliva
 Behavior/Name/AP_VileAcidSlowFlatAmountStructure=Debilitating Saliva
 Behavior/Name/AP_ViralPlasma=Viral Plasma
 Behavior/Name/AP_WraithCloak=Cloak
-Behavior/Name/AP_HellbatLeapStun=Stunned
-Behavior/Name/AP_SuperStim=Super Stimpack
-Behavior/Name/AP_ReaperPermanentCloak=Cloak
+Behavior/Name/AP_FlashBangGrenade=Flashbang Grenade
+Behavior/Name/GhostHoldFire2=Hold Fire
+Behavior/Name/GhostHoldFireB2=Hold Fire
+Behavior/Name/AP_NovaApolloCloak=Cloaked
+Behavior/Name/AP_NovaDomination=Domination
+Behavior/Name/AP_NovaPlasmaPuddleDamageDebuff=Plasma Pool
+Behavior/Name/AP_NovaPsiStrikeWalkStopStun=NovaPsiStrikeWalkStopStun
+Behavior/Name/AP_NovaWeaponInvictusLongshotLockdown=Lockdown
+Behavior/Name/AP_PersonalDefensiveMatrix=Ionic Force Field
+Behavior/Name/AP_SuperStimNova=Stim Infusion
+Behavior/Name/AP_SwarmGrenade=Swarm Grenade
+Behavior/Name/AP_NovaHelmetGhostVisorDetector=Ghost Visor
+Behavior/Name/AP_NovaArmorBlinkSuitBlinkCloaked=Cloaked
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_BansheeCloak=This unit is cloaked and will only be revealed by detectors or effects.
@@ -225,6 +263,7 @@ Behavior/Tooltip/AP_BansheeCloakCrossSpectrumDampeners=This unit is cloaked and 
 Behavior/Tooltip/AP_DefensiveMatrix=While active, the Defensive Matrix blocks all incoming damage, up to a maximum of 200.
 Behavior/Tooltip/AP_EMPDecloak=Target was recently hit by an EMP Round, making it unable to cloak for a short duration.
 Behavior/Tooltip/AP_GhostCloak=This unit is cloaked and will only be revealed by detectors or effects.
+Behavior/Tooltip/AP_HellbatLeapStun=This unit cannot move or attack.
 Behavior/Tooltip/AP_HydraliskFrenzy=Attack speed increased.
 Behavior/Tooltip/AP_Irradiate=Irradiated unit. All Biological units in or near the radiation field will take damage.
 Behavior/Tooltip/AP_LockOn=This unit has been targeted by a Cyclone's Lock On ability.
@@ -237,11 +276,13 @@ Behavior/Tooltip/AP_RavenScramblerMissile=Weapons and abilities are disabled.
 Behavior/Tooltip/AP_RavenShredderMissileArmorReductionUIAdd=This unit takes additional melee and ranged damage.
 Behavior/Tooltip/AP_RavenShredderMissileArmorReductionUISubtruct=This unit has reduced armor.
 Behavior/Tooltip/AP_RavenShredderMissileTint=This unit is being targeted by an Anti-Armor Missile.
+Behavior/Tooltip/AP_ReaperPermanentCloak=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_RoachCorpser=When this unit dies, it will spawn two Roachlings.
 Behavior/Tooltip/AP_Slow=Target's movement speed is reduced for a short period of time.
 Behavior/Tooltip/AP_SpectreCloaking=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_SpectreCloakingFree=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_Stimpack=This unit moves and attacks more quickly while under the effects of Stimpack.
+Behavior/Tooltip/AP_SuperStim=This unit moves and attacks more quickly while under the effects of Super Stimpack.
 Behavior/Tooltip/AP_SupplyDrop=This Supply Depot is providing an additional 8 supply.
 Behavior/Tooltip/AP_TorrasqueTimerBehavior=Cannot revive at this time.
 Behavior/Tooltip/AP_UltraliskBurrowChargeStun=This unit is stunned.
@@ -249,9 +290,15 @@ Behavior/Tooltip/AP_VileAcidSlowFlatAmount=Attack and movement speeds are slowed
 Behavior/Tooltip/AP_VileAcidSlowFlatAmountHeroic=Attack and movement speeds are slowed.
 Behavior/Tooltip/AP_VileAcidSlowFlatAmountStructure=Attack speeds are slowed.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
-Behavior/Tooltip/AP_HellbatLeapStun=This unit cannot move or attack.
-Behavior/Tooltip/AP_SuperStim=This unit moves and attacks more quickly while under the effects of Super Stimpack.
-Behavior/Tooltip/AP_ReaperPermanentCloak=This unit is cloaked and will only be revealed by detectors or effects.
+Behavior/Tooltip/GhostHoldFireB2=This unit will not attack enemy units unless ordered to do so.
+Behavior/Tooltip/AP_NovaApolloCloak=This unit is cloaked and will only be revealed by detectors or effects.
+Behavior/Tooltip/AP_NovaDomination=This unit is being controlled by Nova.
+Behavior/Tooltip/AP_NovaPlasmaPuddleDamageDebuff=This unit is taking damage over time.
+Behavior/Tooltip/AP_PersonalDefensiveMatrix=Nova is absorbing a portion of the damage dealt to her.
+Behavior/Tooltip/AP_SuperStimNova=Nova's attack and movement speeds are greatly increased. Nova is healing life over time.
+Behavior/Tooltip/AP_SwarmGrenade=This unit is slowed and cannot attack or use energy-based abilities.
+Behavior/Tooltip/AP_NovaHelmetGhostVisorDetector=Reveals the locations of enemy units within a radius of <d ref="Behavior,AP_NovaHelmetGhostVisorDetector,Modification.Radar"/> from Nova's position. Can detect cloaked and burrowed units.
+Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AberrationTowering=Towering
@@ -290,7 +337,10 @@ Button/Name/AP_CloakOnBattlecruiser=Cloak
 Button/Name/AP_CloakOnGhost=Cloak
 Button/Name/AP_CloakOnLiberator=Cloak
 Button/Name/AP_CloakOnPredator=Cloak On Predator
+Button/Name/AP_CloakOnReaper=Permanently Cloaked
 Button/Name/AP_CloakOnSpectre=Cloak
+Button/Name/AP_CombatDrugs=Combat Drugs
+Button/Name/AP_CombatShield=Combat Shield
 Button/Name/AP_CommandCenter=Build Command Center
 Button/Name/AP_CommandCenterOrbRelay=Build Command Center with Orbital Relay
 Button/Name/AP_CommandCenterUnloadAll=Unload All
@@ -326,6 +376,7 @@ Button/Name/AP_GhostHoldFire=Hold Fire
 Button/Name/AP_Goliath=Build Goliath
 Button/Name/AP_GroovedSpines=Grooved Spines
 Button/Name/AP_Heal=Heal
+Button/Name/AP_HellbatCharge=Jump Jet Assault
 Button/Name/AP_Hellion=Build Hellion
 Button/Name/AP_HellstormMissileBatteries=Hellstorm Batteries
 Button/Name/AP_HerculesLoad=Load
@@ -359,6 +410,7 @@ Button/Name/AP_InfernalPreIgniter=Thermite Filaments
 Button/Name/AP_Irradiate=Irradiate
 Button/Name/AP_JackhammerConcussionGrenade=Concussive Shells
 Button/Name/AP_JuggernautPlating=Juggernaut Plating
+Button/Name/AP_LaserTargetingSystem=Laser Targeting System
 Button/Name/AP_Liberator=Build Liberator
 Button/Name/AP_LiberatorAAMode=Fighter Mode
 Button/Name/AP_LiberatorAGMode=Defender Mode
@@ -370,6 +422,7 @@ Button/Name/AP_LockOnCancel=Cancel
 Button/Name/AP_Lurker=Morph to Lurker
 Button/Name/AP_MaelstromRounds=Maelstrom Rounds
 Button/Name/AP_MagFieldLaunchers=Mag-Field Launchers
+Button/Name/AP_MagrailMunitions=Magrail Munitions
 Button/Name/AP_Marauder=Train Marauder
 Button/Name/AP_Marine=Train Marine
 Button/Name/AP_Medic=Train Medic
@@ -381,6 +434,8 @@ Button/Name/AP_MindControl=Mind Control
 Button/Name/AP_MissilePods=Missile Pods
 Button/Name/AP_MissileTurret=Build Missile Turret
 Button/Name/AP_MonarchBlades=Monarch Blades
+Button/Name/AP_MorphToHellion=Hellion Mode
+Button/Name/AP_MorphToHellionTank=Hellbat Mode
 Button/Name/AP_MultiLockTargetingSystem=Multi-Lock Weapons System
 Button/Name/AP_NanoRepair=Nano-Repair
 Button/Name/AP_NeoSteelFrame=Neosteel Bunker
@@ -440,6 +495,8 @@ Button/Name/AP_StabilizerMedPacks=Stabilizer Medpacks
 Button/Name/AP_Starport=Build Starport
 Button/Name/AP_StimRedirect=Use Stimpack
 Button/Name/AP_StopPlanetaryFortress=Stop
+Button/Name/AP_SuperStimpackLarge=Super Stimpack
+Button/Name/AP_SuperStimpackSmall=Super Stimpack
 Button/Name/AP_SupplyDepot=Build Supply Depot
 Button/Name/AP_SupplyDepotDrop=Calldown: Supply Depot
 Button/Name/AP_SupplyDrop=Calldown: Extra Supplies
@@ -489,16 +546,37 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_MorphToHellion=Hellion Mode
-Button/Name/AP_MorphToHellionTank=Hellbat Mode
-Button/Name/AP_HellbatCharge=Jump Jet Assault
-Button/Name/AP_SuperStimpackSmall=Super Stimpack
-Button/Name/AP_SuperStimpackLarge=Super Stimpack
-Button/Name/AP_LaserTargetingSystem=Laser Targeting System
-Button/Name/AP_CombatShield=Combat Shield
-Button/Name/AP_MagrailMunitions=Magrail Munitions
-Button/Name/AP_CloakOnReaper=Permanently Cloaked
-Button/Name/AP_CombatDrugs=Combat Drugs
+Button/Name/AP_ApolloCloakOnNova=Cloak
+Button/Name/AP_AttackChampions=Attack
+Button/Name/AP_HaveNovaGadgetDefensiveDroneSummon=[PH] Place Defensive Drone
+Button/Name/AP_HeroNukeCalldown=Tac Nuke Strike
+Button/Name/AP_MoveChampions=Move
+Button/Name/AP_NovaArmorBlinkSuitBlink=Blink
+Button/Name/AP_NovaArmorJumpSuit=Turbojet Jumpsuit
+Button/Name/AP_NovaArmorMoebiusSuit=Apollo Infantry Suit
+Button/Name/AP_NovaArmorStealthSuit=Tactical Stealth Suit
+Button/Name/AP_NovaDomination=Domination
+Button/Name/AP_NovaGadgetFlashBangGrenades=Flashbang Grenades
+Button/Name/AP_NovaGadgetHolographicDecoy=Holo Decoy
+Button/Name/AP_NovaGadgetPulseGrenades=Pulse Grenades
+Button/Name/AP_NovaHelmetGhostVisor=Ghost Visor
+Button/Name/AP_NovaHelmetRangefinderOculus=Rangefinder Oculus
+Button/Name/AP_NovaReleaseMinion=Release Minion
+Button/Name/AP_NovaSilentkill=Break Neck
+Button/Name/AP_NovaWeaponBlazefireBladeShadowFury=Fury of One
+Button/Name/AP_NovaWeaponCanisterRifleSnipe=Snipe
+Button/Name/AP_NovaWeaponHellfireShotgunBlast=Penetrating Blast
+Button/Name/AP_NovaWeaponPlasmaBlastNew=Plasma Shot
+Button/Name/AP_NovaWeaponPsiBlade=Dash Attack
+Button/Name/AP_PersonalDefensiveMatrix=Ionic Force Field
+Button/Name/AP_SuperStimpackNova=Stim Infusion
+Button/Name/AP_NovaWeaponSwap=Weapon Swap
+Button/Name/AP_NovaWeaponCanisterRifleSwap=Equip C-20A Canister Rifle
+Button/Name/AP_NovaWeaponHellfireShotgunSwap=Equip Hellfire Shotgun
+Button/Name/AP_NovaWeaponPsiBladeSwap=Equip Monomolecular Blade
+Button/Name/AP_NovaWeaponPlasmaRifleSwap=Equip Plasma Rifle
+Button/Name/AP_NovaWeaponBlazefireBladeSwap=Equip Blazefire Gunblade
+Button/Name/AP_PermanentlyCloakedNova=Permanently Cloaked
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
@@ -543,8 +621,11 @@ Button/Tooltip/AP_CloakOnBattlecruiser=Cloaks the unit, preventing enemy units f
 Button/Tooltip/AP_CloakOnGhost=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_GhostCloak,Modification.VitalRegenArray[2] + Unit,AP_Ghost,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnGhostFree=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.
 Button/Tooltip/AP_CloakOnLiberator=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_LiberatorCloak,Modification.VitalRegenArray[2] + Unit,AP_Liberator,EnergyRegenRate)" precision="1"/> energy per second.</c>
+Button/Tooltip/AP_CloakOnReaper=The Reaper is permanently cloaked.
 Button/Tooltip/AP_CloakOnSpectre=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_SpectreCloaking,Modification.VitalRegenArray[2] + Unit,AP_Spectre,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnSpectreFree=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.
+Button/Tooltip/AP_CombatDrugs=Regenerates life quickly while out of combat.
+Button/Tooltip/AP_CombatShield=Increases Marine life by 10.
 Button/Tooltip/AP_CommandCenter=Primary structure. Used to train SCVs and receive gathered resources. Can use the Lift Off ability.<n/><n/><c val="ffff8a">Enables:</c><n/>- SCVs
 Button/Tooltip/AP_CommandCenterFlying=Primary structure. Used to train SCVs and receive gathered resources. Can upgrade into an Orbital Command or Planetary Fortress.
 Button/Tooltip/AP_CommandCenterOrbRelay=Primary structure. Used to train SCVs and receive gathered resources. Can use the Lift Off, Calldown: MULE, and Scanner Sweep abilities.<n/><n/><c val="ffff8a">Enables:</c><n/>- SCVs
@@ -585,7 +666,9 @@ Button/Tooltip/AP_GroovedSpines=Hydralisk gains +1 attack range.
 Button/Tooltip/AP_HammerSecurity=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Heal=Heals a friendly biological target.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_MedivacHeal,RechargeVitalRate*Effect,AP_MedivacHeal,DrainVitalCostFactor"/> life per 1 energy.</c>
 Button/Tooltip/AP_HealingDrone=Heals nearby biological and mechanical units.<n/>Times out after <d ref="Behavior,AP_HealingDroneTimedLife,Duration"/> seconds.
+Button/Tooltip/AP_HellbatCharge=Launches the Hellbat toward nearby enemy ground units. Briefly stuns enemy units on impact.
 Button/Tooltip/AP_Hellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_HellstormMissileBatteries=The Missile Turret unleashes an additional flurry of missiles with each attack.
 Button/Tooltip/AP_HelsAngelAssault=Durable support unit. Can switch into Fighter Mode to attack air units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_HelsAngelFighter=Durable support flyer. Loaded with strong anti-capital air missiles. Can switch into Assault Mode to attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
@@ -626,6 +709,7 @@ Button/Tooltip/AP_InfestedAbomination=Aberrations are durable units that deal he
 Button/Tooltip/AP_Irradiate=Irradiates a single target, causing damage over time to target and any nearby units for <d ref="Behavior,Irradiate,Duration"/> seconds. Irradiate does not damage mechanical units, but nearby biological units will take damage from an Irradiated mechanical unit.
 Button/Tooltip/AP_JackhammerConcussionGrenade=Marauder attack temporarily slows all units in target area.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
 Button/Tooltip/AP_JuggernautPlating=Increases the Firebat's armor by 2.
+Button/Tooltip/AP_LaserTargetingSystem=Increases vision by 2 and weapon range by 1.
 Button/Tooltip/AP_Liberator=Artillery fighter. Loaded with missiles that deal area damage to enemy air targets. Can switch into Defender Mode to provide siege support.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
 Button/Tooltip/AP_LiberatorAAMode=Reverts to Fighter Mode. In this mode Liberators can move, but they can only attack air targets.
 Button/Tooltip/AP_LiberatorAGMode=Deploys into Defender Mode. In this mode Liberators inflict single target damage to ground units. Liberators in this mode cannot move.
@@ -638,6 +722,7 @@ Button/Tooltip/AP_Lurker=Area-damage ambusher. Must burrow to attack. <n/><n/><c
 Button/Tooltip/AP_MULE=Prototype harvesting unit. Gathers minerals more quickly than regular SCVs. MULEs last <d time="90"/> before their systems fail.
 Button/Tooltip/AP_MaelstromRounds=Shock Cannon deals +40 damage to primary target. Splash damage remains the same.
 Button/Tooltip/AP_MagFieldLaunchers=Increases <c val="ffff8a">Cyclone's</c> attack range by +<d ref="$UpgradeEffectArrayValue:AP_MagFieldLaunchers:Weapon,AP_TyphoonMissilePod,Range$"/>.
+Button/Tooltip/AP_MagrailMunitions=Deals <d ref="Effect,AP_MagrailMunitionsDamage,Amount"/> damage to target enemy unit.
 Button/Tooltip/AP_Marauder=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Marine=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_Medic=Support trooper. Heals nearby biological units.
@@ -649,6 +734,8 @@ Button/Tooltip/AP_MindControl=Permanently converts targeted Zerg unit to player 
 Button/Tooltip/AP_MissilePods=Missile Pods deal <d ref="Effect,AP_HurricaneMissileDamage,Amount * Effect,AP_HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,AP_HurricaneMissileDamage,AttributeBonus[0] * Effect,AP_HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
 Button/Tooltip/AP_MissileTurret=Primary anti-air defensive structure. <n/><n/><c val="#ColorAttackInfo">Can attack air units.</c><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_MonarchBlades=Splash damage of Ultralisk attacks increased to <d ref="Effect,AP_HotSUltraliskKaiserBladesSecondaryUpgradeDamage,Amount"/>.
+Button/Tooltip/AP_MorphToHellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire. Can transform into a close range combat unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_MorphToHellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_MultiLockTargetingSystem=The Goliath can target ground and air units simultaneously.
 Button/Tooltip/AP_NanoRepair=Heals a friendly mechanical unit.<n/><n/><c val="f078ff">Heals 3 life per 1 energy.</c>
 Button/Tooltip/AP_NeoSteelFrame=Increases the number of Bunker slots by 2.
@@ -722,6 +809,8 @@ Button/Tooltip/AP_Starport=Air-unit production facility. <n/><n/><c val="ffff8a"
 Button/Tooltip/AP_StarportFlying=Starport must land to start unit production.
 Button/Tooltip/AP_StimRedirect=Orders Marines inside of the Bunker to use Stimpacks. They will take damage and have increased attack speed as normal.
 Button/Tooltip/AP_StopPlanetaryFortress=Orders selected units to cancel all orders and stop moving.
+Button/Tooltip/AP_SuperStimpackLarge=Increases the unit's attack and movement speeds for <d ref="Behavior,AP_SuperStim,Duration"/> seconds. Heals the unit for <d ref="Effect,AP_SuperStimpackLargeSetMU,VitalArray[Life].Change"/> life.
+Button/Tooltip/AP_SuperStimpackSmall=Increases the unit's attack and movement speeds for <d ref="Behavior,AP_SuperStim,Duration"/> seconds. Heals the unit for <d ref="Effect,AP_SuperStimpackSmallSetMU,VitalArray[Life].Change"/> life.
 Button/Tooltip/AP_SupplyDepot=Provides supply.<n/>Supply allows you to create more units.<n/>Supply Depots can be lowered to allow units to walk over them.
 Button/Tooltip/AP_SupplyDepotDrop=Improved Supply Depot. Can be instantly deployed from orbit. Eliminates the time required for an SCV to assemble a standard Supply Depot.
 Button/Tooltip/AP_SupplyDepotLowered=Provides supply.<n/>Supply allows you to create more units.<n/>Supply Depots can be lowered to allow units to walk over them.
@@ -776,17 +865,40 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_HellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_MorphToHellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire. Can transform into a close range combat unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_MorphToHellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_HellbatCharge=Launches the Hellbat toward nearby enemy ground units. Briefly stuns enemy units on impact.
-Button/Tooltip/AP_SuperStimpackSmall=Increases the unit's attack and movement speeds for <d ref="Behavior,AP_SuperStim,Duration"/> seconds. Heals the unit for <d ref="Effect,AP_SuperStimpackSmallSetMU,VitalArray[Life].Change"/> life.
-Button/Tooltip/AP_SuperStimpackLarge=Increases the unit's attack and movement speeds for <d ref="Behavior,AP_SuperStim,Duration"/> seconds. Heals the unit for <d ref="Effect,AP_SuperStimpackLargeSetMU,VitalArray[Life].Change"/> life.
-Button/Tooltip/AP_LaserTargetingSystem=Increases vision by 2 and weapon range by 1.
-Button/Tooltip/AP_CombatShield=Increases Marine life by 10.
-Button/Tooltip/AP_MagrailMunitions=Deals <d ref="Effect,AP_MagrailMunitionsDamage,Amount"/> damage to target enemy unit.
-Button/Tooltip/AP_CloakOnReaper=The Reaper is permanently cloaked.
-Button/Tooltip/AP_CombatDrugs=Regenerates life quickly while out of combat.
+Button/Tooltip/AP_ApolloCloakOnNova=Cloaks Nova for <d ref="Behavior,AP_NovaApolloCloak,Duration"/> seconds, preventing enemy units from seeing or attacking her. A cloaked unit will only be revealed by detectors or effects.
+Button/Tooltip/AP_AttackChampions=Orders selected units to move to the target point, fighting nearby enemies along the way. Targeting a unit with the Attack command orders that it be attacked until it is destroyed.
+Button/Tooltip/AP_HaveNovaGadgetDefensiveDroneSummon=
+Button/Tooltip/AP_HeroNukeCalldown=Calls down a Nuclear Strike at a target location. Nukes take <d time="5"/> to land, but they deal up to <d ref="Effect,AP_HeroNukeDamage,Amount"/> (+<d ref="Effect,AP_HeroNukeDamage,AttributeBonus[Structure]"/> vs. structures) damage in a large radius.
+Button/Tooltip/AP_MoveChampions=Orders selected units to move to the target area or follow the target unit. Moving units will not engage enemies.
+Button/Tooltip/AP_NovaArmorBlinkSuitBlink=Teleports Nova to a nearby target location. Ability can only be used once every <d ref="Abil,AP_NovaArmorBlinkSuitBlink,Cost[0].Cooldown[0].TimeUse"/> seconds. Nova is cloaked for <d ref="Behavior,AP_NovaArmorBlinkSuitBlinkCloaked,Duration"/> seconds after teleporting.
+Button/Tooltip/AP_NovaArmorJumpSuit=Allows Nova to jump up and down cliffs.
+Button/Tooltip/AP_NovaArmorMoebiusSuit=Psionic amplification suit. Increases both energy regeneration rate and maximum energy.
+Button/Tooltip/AP_NovaArmorStealthSuit=Allows Nova to remain permanently cloaked.
+Button/Tooltip/AP_NovaDefensiveDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,AP_PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
+Button/Tooltip/AP_NovaDomination=Takes control of target enemy unit. Only one enemy unit can be controlled at a time. Effect lasts until cancelled. Cooldown timer begins after effect is cancelled.
+Button/Tooltip/AP_NovaGadgetFlashBangGrenades=Stuns and disables the <c val="FFE303">Detection</c> of enemy ground and air units in the target area for <d ref="Behavior,AP_FlashBangGrenade,Duration"/> seconds.</n></n><c val ="#ColorAttackInfo">Massive units and friendly units are immune.</c>
+Button/Tooltip/AP_NovaGadgetHolographicDecoy=Deploys a holographic duplicate of Nova that can be controlled. The hologram deals 25% of Nova's damage and takes 25% less damage.
+Button/Tooltip/AP_NovaGadgetPulseGrenades=Deals up to <d ref="Effect,AP_NovaGadgetPulseGrenadesDamage,Amount"/> damage to enemy ground and air units in the target area.</n></n><c val="ffff8a">Does not damage friendly units.</c>
+Button/Tooltip/AP_NovaHelmetGhostVisor=Reveals the locations of enemy units within a radius of <d ref="Behavior,AP_NovaHelmetGhostVisorDetector,Modification.Radar"/> from Nova's position. Can detect cloaked and burrowed units.
+Button/Tooltip/AP_NovaHelmetRangefinderOculus=Increases Nova's vision and the range of her non-melee weapons by 2. Increases the range of Nova's melee weapons by 1.
+Button/Tooltip/AP_NovaHero=Dominion covert operative. Can equip and use a variety of weapons and gear.<n/><n/><c val="#ColorAttackInfo">Can attack different enemy units based on weaponry.</c>
+Button/Tooltip/AP_NovaHoloDecoy=A holographic duplicate of Nova. Deals 50% of Nova's damage and takes 50% extra damage. <n/><n/><c val="#ColorAttackInfo">Can attack units based on Nova's weaponry.</c><n/>
+Button/Tooltip/AP_NovaReleaseMinion=Releases Nova's current Domination target, returning it to its original alliance.
+Button/Tooltip/AP_NovaSilentkill=Instantly kill target enemy unit. Nova must move within melee range to execute the attack.
+Button/Tooltip/AP_NovaWeaponBlazefireBladeShadowFury=Rapidly jump to random enemies within <d ref="Effect,AP_NovaWeaponBlazefireBladeShadowFurySearch,AreaArray[0].Radius"/> radius <d ref="Behavior,AP_NovaWeaponBlazefireBladeShadowFuryController,PeriodCount+1"/> times, attacking each of them for <d ref="Effect,AP_NovaWeaponBlazefireBladeShadowFuryDamage,Amount"/> damage. A single target can be hit more than once. Can target ground and air units.
+Button/Tooltip/AP_NovaWeaponCanisterRifleSnipe=Deals <d ref="Effect,AP_NovaWeaponCanisterRifleSnipe,Amount"/> damage to target enemy ground or air unit from long range.</n></n><C val = "#ColorAttackInfo">Cannot target structures.</c>
+Button/Tooltip/AP_NovaWeaponHellfireShotgunBlast=Deals <d ref="Effect,AP_NovaWeaponHellfireShotgunBlastDamage,Amount"/> (<d ref ="Effect,AP_NovaWeaponHellfireShotgunBlastDamage,Amount + Effect,AP_NovaWeaponHellfireShotgunBlastDamage,AttributeBonus[Light]"/> vs Light) damage to enemy ground units in a wide arc.</n></n><c val ="#ColorAttackInfo">Does not damage friendly units.</c>
+Button/Tooltip/AP_NovaWeaponPlasmaBlastNew=Fires a slow moving ball of plasma that deals <d ref="Effect,AP_NovaWeaponPlasmaBlastNewImpactDamage,Amount"/> damage to enemies in its path and leaves behind a trail of plasma that damages enemies within it.
+Button/Tooltip/AP_NovaWeaponPsiBlade=Dashes forward and deals <d ref="Effect,AP_NovaPsiStrikeDamage,Amount"/> damage to enemy ground units in a straight line.</n></n><c val ="#ColorAttackInfo">Does not damage friendly units.</c>
+Button/Tooltip/AP_PersonalDefensiveMatrix=Provides Nova with a shield that reduces incoming damage to a maximum of <d ref="Behavior,AP_PersonalDefensiveMatrix,DamageResponse.ClampMaximum"/> until <d ref="Behavior,AP_PersonalDefensiveMatrix,Modification.VitalMaxArray[Shields]"/> total damage is absorbed. Shield lasts for <d time="10"/>.
+Button/Tooltip/AP_SuperStimpackNova=Increases Nova's attack speed and movement speeds by <d ref="Behavior,AP_SuperStimNova,Modification.AttackSpeedMultiplier *100-100"/>% for <d ref="Behavior,AP_SuperStimNova,Duration"/> seconds. Heals Nova for <d ref="Behavior,AP_SuperStimNova,Modification.VitalRegenArray[Life]*Behavior,AP_SuperStimNova,Duration"/> life over the effect's duration.
+Button/Tooltip/AP_NovaWeaponSwap=Select a different weapon.
+Button/Tooltip/AP_NovaWeaponCanisterRifleSwap=Damage: 30<n/>Range: 7<n/>Fire Rate: 1.5 seconds<n/><n/>Special: Snipe
+Button/Tooltip/AP_NovaWeaponHellfireShotgunSwap=Damage: 20, AoE Attack<n/>Range: 5<n/>Fire Rate: 2 seconds<n/><n/>Special: Penetrating Blast
+Button/Tooltip/AP_NovaWeaponPsiBladeSwap=Special: Dash Attack
+Button/Tooltip/AP_NovaWeaponPlasmaRifleSwap=Special: Plasma Shot
+Button/Tooltip/AP_NovaWeaponBlazefireBladeSwap=Special: Fury of One
+Button/Tooltip/AP_PermanentlyCloakedNova=Nova is permanently cloaked.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -975,6 +1087,10 @@ Effect/Name/AP_HammerSecuritySet=Concussive Grenade (Set)
 Effect/Name/AP_HealRemoveTargetBehavior=Heal Remove Target Behavior
 Effect/Name/AP_HealScanPersistent=Heal Scan Persistent
 Effect/Name/AP_HealingDroneHeal=Heal
+Effect/Name/AP_HellionTank=Hellion Tank
+Effect/Name/AP_HellionTankApplyBehavior=Hellion Tank Apply Behavior
+Effect/Name/AP_HellionTankDamage=Hellion Tank Damage
+Effect/Name/AP_HellionTankSearch=Hellion Tank Search
 Effect/Name/AP_HotSUltraliskKaiserBlades=Hot SUltralisk Kaiser Blades
 Effect/Name/AP_HotSUltraliskKaiserBladesDamage=Hot SUltralisk Kaiser Blades Damage
 Effect/Name/AP_HotSUltraliskKaiserBladesSearch=Hot SUltralisk Kaiser Blades Search
@@ -1281,11 +1397,130 @@ Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
-Effect/Name/AP_HellionTank=Hellion Tank
-Effect/Name/AP_HellionTankApplyBehavior=Hellion Tank Apply Behavior
-Effect/Name/AP_HellionTankDamage=Hellion Tank Damage
-Effect/Name/AP_HellionTankSearch=Hellion Tank Search
+Effect/Name/AP_GravitonBeamUnburrow=Anti Gravity
+Effect/Name/AP_GravitonBeamUnburrowCancel=Anti Gravity
+Effect/Name/AP_GravitonBeamUnburrowTake2=GravitonBeamUnburrowTake2
+Effect/Name/AP_HeroNukeCalldown=Hero Nuke Calldown
+Effect/Name/AP_HeroNukeDamage=Hero Nuke Damage
+Effect/Name/AP_HeroNukeDetonate=Hero Nuke Detonate
+Effect/Name/AP_HeroNukePersistent=Hero Nuke Persistent
+Effect/Name/AP_HeroNukeSuicide=Hero Nuke Suicide
+Effect/Name/AP_InstantMorphUnburrowAB=Instant Morph Unburrow
+Effect/Name/AP_InstantMorphUnburrowABNoChecks=Instant Morph Unburrow AB No Checks
+Effect/Name/AP_InstantUnburrow=Instant Unburrow
 Effect/Name/Kill2=Kill
+Effect/Name/AP_KillRemove=Kill Remove
+Effect/Name/AP_NovaArmorBlinkSuitBlink=NovaArmorBlinkSuitBlink
+Effect/Name/AP_NovaDefensiveDroneTimedLife=NovaDefensiveDroneTimedLife
+Effect/Name/AP_NovaDominationAB=NovaDominationAB
+Effect/Name/AP_NovaDominationApplyNova=NovaDominationApplyNova
+Effect/Name/AP_NovaDominationApplySet=NovaDominationApplySet
+Effect/Name/AP_NovaDominationPersistent=NovaDominationPersistent
+Effect/Name/AP_NovaDominationRB=NovaDominationRB
+Effect/Name/AP_NovaDominationRemoveNova=NovaDominationRemoveNova
+Effect/Name/AP_NovaDominationRemoveSet=NovaDominationRemoveSet
+Effect/Name/AP_NovaGadgetDefensiveDroneSummonCU=NovaGadgetDefensiveDroneSummonCU
+Effect/Name/AP_NovaGadgetDefensiveDroneSummonLM=NovaGadgetDefensiveDroneSummonLM
+Effect/Name/AP_NovaGadgetDefensiveDroneSummonLMImpactSet=NovaGadgetDefensiveDroneSummonLMImpactSet
+Effect/Name/AP_NovaGadgetHiveMindAmplifierDummy=NovaGadgetHiveMindAmplifierDummy
+Effect/Name/AP_NovaHelmetDominationCooldown=NovaHelmetDominationCooldown
+Effect/Name/AP_NovaHolographicDecoyBehaviorSet=Nova Holographic Decoy Behavior Set
+Effect/Name/AP_NovaHolographicDecoyDamageAB=Nova Holographic Decoy Damage AB
+Effect/Name/AP_NovaHolographicDecoyGlazeAB=Nova Holographic Decoy Glaze AB
+Effect/Name/AP_NovaHolographicDecoyTimedLifeAB=Nova Holographic Decoy Timed Life AB
+Effect/Name/AP_NovaPlasmaPuddleDamage=PlasmaPuddleDamage
+Effect/Name/AP_NovaPlasmaPuddleDamageDebuff=PlasmaPuddleDamageDebuff
+Effect/Name/AP_NovaPlasmaPuddleDamageDebuffSlow=NovaPlasmaPuddleDamageDebuffSlow
+Effect/Name/AP_NovaPlasmaPuddleDamageDebuffSlowHeroic=NovaPlasmaPuddleDamageDebuffSlowHeroic
+Effect/Name/AP_NovaPlasmaPuddleDamageDebuffSlowSet=NovaPlasmaPuddleDamageDebuffSlowSet
+Effect/Name/AP_NovaPsiStrikeWalkStopStun=NovaPsiStrikeWalkStopStun
+Effect/Name/AP_NovaReleaseMinion=NovaReleaseMinion
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryCP=NovaWeaponBlazefireBladeShadowFuryCP
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryControllerAB=NovaWeaponBlazefireBladeShadowFuryControllerAB
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryDamage=NovaWeaponBlazefireBladeShadowFuryDamage
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryFinal=NovaWeaponBlazefireBladeShadowFuryFinal
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryFinalDelayAB=NovaWeaponBlazefireBladeShadowFuryFinalDelayAB
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryImpactSet=NovaWeaponBlazefireBladeShadowFuryImpactSet
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryPersistent=NovaWeaponBlazefireBladeShadowFuryPersistent
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFurySearch=NovaWeaponBlazefireBladeShadowFurySearch
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFurySearchSetAOE=NovaWeaponBlazefireBladeShadowFurySearchSetAOE
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryTarget=NovaWeaponBlazefireBladeShadowFuryTarget
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryTeleport1CP=NovaWeaponBlazefireBladeShadowFuryTeleport1CP
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryTeleport=NovaWeaponBlazefireBladeShadowFuryTeleport
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryTeleport2CP=AP_NovaWeaponBlazefireBladeShadowFuryTeleportCP
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryTeleport3CP=NovaWeaponBlazefireBladeShadowFuryTeleport3CP
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryTeleport4CP=NovaWeaponBlazefireBladeShadowFuryTeleport4CP
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryTeleport5CP=NovaWeaponBlazefireBladeShadowFuryTeleport5CP
+Effect/Name/AP_NovaWeaponBlazefireBladeShadowFuryTeleportSwitch=NovaWeaponBlazefireBladeShadowFuryTeleportSwitch
+Effect/Name/AP_NovaWeaponPlasmaBlastNewFinalImpactSet=Plasma Blast
+Effect/Name/AP_NovaWeaponPlasmaBlastNewImpactDamage=NovaWeaponPlasmaBlastNewImpactDamage
+Effect/Name/AP_NovaWeaponPlasmaBlastNewImpactSet=Plasma Blast
+Effect/Name/AP_NovaWeaponPlasmaBlastNewInitialOffset=Plasma Blast
+Effect/Name/AP_NovaWeaponPlasmaBlastNewInitialSet=Plasma Blast
+Effect/Name/AP_NovaWeaponPlasmaBlastNewLaunchMissile=Plasma Blast
+Effect/Name/AP_NovaWeaponPlasmaBlastNewMissilePersistent=Plasma Blast
+Effect/Name/AP_NovaWeaponPlasmaBlastNewMissileScan=Plasma Blast
+Effect/Name/AP_PersonalDefensiveMatrix=Personal Defensive Matrix
+Effect/Name/AP_PersonalDefensiveMatrixMU=Personal Defensive Matrix MU
+Effect/Name/AP_PersonalDefensiveMatrixSet=Personal Defensive Matrix Set
+Effect/Name/AP_RemoveCoreRecallingBehaviorVikingAir=Remove Core Recalling Behavior Viking Air
+Effect/Name/AP_RemoveCoreRecallingBehaviorVikingGround=Remove Core Recalling Behavior Viking Ground
+Effect/Name/AP_RemoveRecallingBehaviorVikingAir=Remove Recalling Behavior Viking Air
+Effect/Name/AP_RemoveRecallingBehaviorVikingGround=Remove Recalling Behavior Viking Ground
+Effect/Name/AP_SuperStimpackNovaAB=Super Stimpack Nova
+Effect/Name/AP_SuperStimpackNovaMU=Super Stimpack Nova
+Effect/Name/AP_SuperStimpackNovaSet=Super Stimpack Nova Set
+Effect/Name/AP_SwarmHostMPUnburrow=Swarm Host MPUnburrow
+Effect/Name/AP_SwarmHostUnburrow=Swarm Host Unburrow
+Effect/Name/AP_SwarmHostUproot=Swarm Host Uproot
+Effect/Name/AP_YoinkApplyBehavior=Abduct (Apply Behavior)
+Effect/Name/AP_YoinkApplyBehaviorVikingAir=Yoink Apply Behavior Viking Air
+Effect/Name/AP_YoinkApplyBehaviorVikingGround=Yoink Apply Behavior Viking Ground
+Effect/Name/AP_YoinkApplyTentacleBehavior=Abduct
+Effect/Name/AP_YoinkApplyTentacleBehaviorVikingAir=Yoink Apply Tentacle Behavior Viking Air
+Effect/Name/AP_YoinkApplyTentacleBehaviorVikingGround=Yoink Apply Tentacle Behavior Viking Ground
+Effect/Name/AP_YoinkCancelOrders=Yoink Cancel Orders
+Effect/Name/AP_YoinkCancelOrdersVikingAir=Yoink Cancel Orders Viking Air
+Effect/Name/AP_YoinkCancelOrdersVikingGround=Yoink Cancel Orders Viking Ground
+Effect/Name/AP_YoinkDelayPersistent=Abduct
+Effect/Name/AP_YoinkDelayPersistentVikingAir=Yoink Delay Persistent Viking Air
+Effect/Name/AP_YoinkDelayPersistentVikingGround=Yoink Delay Persistent Viking Ground
+Effect/Name/AP_YoinkEnemyStun=Yoink Enemy Stun
+Effect/Name/AP_YoinkEnemyStunVikingAir=Yoink Enemy Stun Viking Air
+Effect/Name/AP_YoinkEnemyStunVikingGround=Yoink Enemy Stun Viking Ground
+Effect/Name/AP_YoinkFinishDummy=Yoink Finish Dummy
+Effect/Name/AP_YoinkImpactDummy=Yoink Impact Dummy
+Effect/Name/AP_YoinkImpactDummyVikingAir=Yoink Impact Dummy Viking Air
+Effect/Name/AP_YoinkImpactDummyVikingGround=Yoink Impact Dummy Viking Ground
+Effect/Name/AP_YoinkImpactSet=Abduct
+Effect/Name/AP_YoinkImpactSetVikingAir=Yoink Impact Set Viking Air
+Effect/Name/AP_YoinkImpactSetVikingGround=Yoink Impact Set Viking Ground
+Effect/Name/AP_YoinkIssueAssaultModeOrder=Yoink Issue Assault Mode Order
+Effect/Name/AP_YoinkIssueFighterModeOrder=Yoink Issue Fighter Mode Order
+Effect/Name/AP_YoinkLaunchMissile=Abduct
+Effect/Name/AP_YoinkLaunchMissileVikingAir=Yoink Launch Missile Viking Air
+Effect/Name/AP_YoinkLaunchMissileVikingGround=Yoink Launch Missile Viking Ground
+Effect/Name/AP_YoinkLaunchTarget=Abduct
+Effect/Name/AP_YoinkLaunchTargetVikingAir=Yoink Launch Target Viking Air
+Effect/Name/AP_YoinkLaunchTargetVikingGround=Yoink Launch Target Viking Ground
+Effect/Name/AP_YoinkMarkerBehavior=Yoink Marker Behavior
+Effect/Name/AP_YoinkMarkerBehaviorVikingAir=Yoink Marker Behavior Viking Air
+Effect/Name/AP_YoinkMarkerBehaviorVikingGround=Yoink Marker Behavior Viking Ground
+Effect/Name/AP_YoinkRemoveBehavior=Yoink Remove Behavior
+Effect/Name/AP_YoinkRemoveBehaviorVikingAir=Yoink Remove Behavior Viking Air
+Effect/Name/AP_YoinkRemoveBehaviorVikingGround=Yoink Remove Behavior Viking Ground
+Effect/Name/AP_YoinkRemoveTentacleBehavior=Abduct
+Effect/Name/AP_YoinkRemoveTentacleBehaviorVikingAir=Yoink Remove Tentacle Behavior Viking Air
+Effect/Name/AP_YoinkRemoveTentacleBehaviorVikingGround=Yoink Remove Tentacle Behavior Viking Ground
+Effect/Name/AP_YoinkSet=Abduct
+Effect/Name/AP_YoinkSetVikingAir=Yoink Set Viking Air
+Effect/Name/AP_YoinkSetVikingGround=Yoink Set Viking Ground
+Effect/Name/AP_YoinkStartCreatePlaceholder=Yoink Start Create Placeholder
+Effect/Name/AP_YoinkStartCreatePlaceholderVikingAir=Yoink Start Create Placeholder Viking Air
+Effect/Name/AP_YoinkStartCreatePlaceholderVikingGround=Yoink Start Create Placeholder Viking Ground
+Effect/Name/AP_YoinkStartSet=Yoink Start Set
+Effect/Name/AP_YoinkStartSetVikingAir=Yoink Start Set Viking Air
+Effect/Name/AP_YoinkStartSetVikingGround=Yoink Start Set Viking Ground
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
 RequirementNode/Tooltip/AP_CountUnitFactoryCompleteOnly=Factory
@@ -1359,6 +1594,7 @@ Unit/Name/AP_HammerSecurity=Hammer Securities
 Unit/Name/AP_HammerSecurityLMWeapon=Hammer Securities
 Unit/Name/AP_HealingDrone=Bio-Mechanical Repair Drone
 Unit/Name/AP_Hellion=Hellion
+Unit/Name/AP_HellionTank=Hellbat
 Unit/Name/AP_HelsAngelAssault=Hel's Angel
 Unit/Name/AP_HelsAngelFighter=Hel's Angel
 Unit/Name/AP_HelsAngelFighterWeapon=Hel's Angels (Fighter Weapon)
@@ -1458,8 +1694,22 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
-Unit/Name/AP_HellionTank=Hellbat
+Unit/Name/AP_NovaDefensiveDrone=Defensive Drone
+Unit/Name/AP_NovaDefensiveDroneRelease=Nova Defensive Drone Release
+Unit/Name/AP_NovaGadgetFlashBangGrenadesWeapon=Nova Gadget Flashbang Grenades
+Unit/Name/AP_NovaGadgetPulseGrenadesWeapon=Nova Gadget Pulse Grenades
+Unit/Name/AP_NovaGadgetSwarmGrenadesWeapon=Nova Gadget Swarm Grenades
+Unit/Name/AP_NovaHero=Nova
+Unit/Name/AP_NovaHoloDecoy=Nova
+Unit/Name/AP_NovaLockdownMissile=Lockdown Missile
+Unit/Name/AP_NovaPlasmaPuddleSmall=Plasma Puddle
+Unit/Name/AP_NovaWeaponPlasmaBlastNewLaunchMissile=Plasma Surge
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
+Unit/Name/AP_YoinkMissile=Abduct Missile
+Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
+Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
+Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
+UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HydraliskImpaler=Impaler Strain
 UnitSubtitle/AP_HydraliskLurker=Lurker Strain
 UnitSubtitle/AP_HydraliskLurkerImpaler=Lurker + Impaler
@@ -1676,6 +1926,28 @@ Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
 Upgrade/Name/BlackOps2=Black Ops
+Upgrade/Name/AP_NovaArmorApolloInfantrySuit=Apollo Infantry Suit
+Upgrade/Name/AP_NovaArmorBlinkSuit=NovaArmorBlinkSuit
+Upgrade/Name/AP_NovaArmorJumpSuit=Jump Suit
+Upgrade/Name/AP_NovaArmorPredatorBattlesuit=Predator Battlesuit
+Upgrade/Name/AP_NovaArmorStealthSuit=Tactical Stealth Suit
+Upgrade/Name/AP_NovaGadgetFlashBangGrenades=Flashbang Grenades
+Upgrade/Name/AP_NovaGadgetHiveMindAmplifier=Nova Gadget - Hive Mind Amplifier
+Upgrade/Name/AP_NovaGadgetHolographicDecoy=Holographic Decoy
+Upgrade/Name/AP_NovaGadgetPersonalDefensiveMatrix=Personal Defensive Matrix
+Upgrade/Name/AP_NovaGadgetPulseGrenades=Pulse Grenades
+Upgrade/Name/AP_NovaGadgetSwarmGrenade=Swarm Grenade
+Upgrade/Name/AP_NovaHelmetDominationVisor=Domination Visor
+Upgrade/Name/AP_NovaHelmetGhostVisor=Ghost Visor
+Upgrade/Name/AP_NovaHelmetHiveMindAmplifier=Hive Mind Amplifier
+Upgrade/Name/AP_NovaHelmetSensorVisor=Sensor Visor
+Upgrade/Name/AP_NovaWeaponBlazefireBlade=NovaWeaponBlazefireBlade
+Upgrade/Name/AP_NovaWeaponCanisterRifle=C-20A Canister Rifle
+Upgrade/Name/AP_NovaWeaponHellfireShotgun=Hellfire Shotgun
+Upgrade/Name/AP_NovaWeaponInvictusLongshot=Invictus Longshot
+Upgrade/Name/AP_NovaWeaponPsiBlade=Monomolecular Blade
+Upgrade/Name/AP_NovaWeaponPsiRifle=Graviton Rifle
+Upgrade/Name/AP_SuperStimpackNova=Super Stimpack Nova
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
@@ -1708,6 +1980,7 @@ Weapon/Name/AP_GoliathG=Autocannon
 Weapon/Name/AP_GoliathGUpgraded=Autocannon
 Weapon/Name/AP_HailstormMissilePods=Hellstorm Missile Pods
 Weapon/Name/AP_HammerSecurity=The Mediator
+Weapon/Name/AP_HellionTank=Napalm Spray
 Weapon/Name/AP_HiveMindEmulator=Hive Mind Emulator
 Weapon/Name/AP_HydraliskMelee=Melee
 Weapon/Name/AP_Impaler=Piercing Tentacle
@@ -1760,7 +2033,12 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_HellionTank=Napalm Spray
+Weapon/Name/AP_NovaWeaponCanisterRifle=C-20A Canister Rifle
+Weapon/Name/AP_NovaWeaponHellfireShotgun=Hellfire Shotgun
+Weapon/Name/AP_NovaWeaponPsiBlade=Monomolecular Blade
+Weapon/Name/AP_NovaWeaponPlasmaRifle=Plasma Rifle
+Weapon/Name/AP_NovaWeaponBlazefireBlade=Blazefire Gunblade
+Weapon/Name/AP_NovaWeaponBlazefireBladeGun=Blazefire Blaster
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_Lurker=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>

@@ -1056,4 +1056,114 @@
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSImpalerCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackNova">
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackNovaCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaGadgetPulseGrenades">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaGadgetPulseGrenadesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaGadgetFlashBangGrenades">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaGadgetFlashBangGrenadesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaGadgetPersonalDefensiveMatrix">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaGadgetPersonalDefensiveMatrixCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaGadgetHolographicDecoy">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaGadgetHolographicDecoyCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseDominationVisor">
+        <NodeArray index="Show" Link="AP_AndCountUpgradeNovaHelmetDominationVisorCompleteOnlyNotCountBehaviorNovaAlreadyDominatedInProgressOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_NovaUseReleaseMinion">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorNovaAlreadyDominatedInProgressOrBetter"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaArmorBlinkSuit">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaArmorBlinkSuitCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseNovaCloak">
+        <NodeArray index="Show" Link="AP_UseNovaBasicCloak"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaArmorStealthSuit">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaArmorStealthSuitCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaHelmetGhostVisor">
+        <NodeArray index="Use" Link="AP_CountUpgradeNovaHelmetGhostVisorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaHelmetSensorVisor">
+        <NodeArray index="Use" Link="AP_CountUpgradeNovaHelmetSensorVisorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveDetectionEnemy">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeDetectionEnemyCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaArmoredSuit">
+        <NodeArray index="Use" Link="AP_CountUpgradeNovaArmoredSuitCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaArmorJumpSuit">
+        <NodeArray index="Use" Link="AP_CountUpgradeNovaArmorJumpSuitCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaWeaponCanisterRifleBehavior">
+        <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponCanisterRifleCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_NovaWeaponCanSwapToCanisterRifle">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponCanisterRifleCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponCanisterRifleCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaWeaponHellfireShotgunBehavior">
+        <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponHellfireShotgunCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_NovaWeaponCanSwapToHellfireShotgun">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponHellfireShotgunCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponHellfireShotgunCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaWeaponPlasmaRifleBehavior">
+        <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponPlasmaRifleCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_NovaWeaponCanSwapToPlasmaRifle">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponPlasmaRifleCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponPlasmaRifleCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaWeaponPsiBladeBehavior">
+        <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponPsiBladeCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_NovaWeaponCanSwapToPsiBlade">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponPsiBladeCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponPsiBladeCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaWeaponBlazefireBladeBehavior">
+        <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponBlazefireBladeCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_NovaWeaponCanSwapToBlazefireBlade">
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponBlazefireBladeCompleteOnly"/>
+        <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponBlazefireBladeCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaVoice1">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaVoice1CompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaVoice2">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaVoice2CompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaVoice3">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaVoice3CompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaVoice4">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaVoice4CompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaVoice5">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaVoice5CompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaVoice6">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaVoice6CompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveNovaWarpOut">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWarpOutCompleteOnly"/>
+    </CRequirement>
 </Catalog>

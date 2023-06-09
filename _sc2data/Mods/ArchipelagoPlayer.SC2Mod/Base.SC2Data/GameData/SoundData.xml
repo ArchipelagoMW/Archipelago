@@ -2114,7 +2114,7 @@
         <EditorCategories value="Race:Terran"/>
         <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationEnd0.wav"/>
         <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationEnd1.wav"/>
-        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationEnd2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\AP_Nova_DominationEnd.wav"/>
         <Flags index="VariationFallback" value="0"/>
         <Volume value="-3.000000,-3.000000"/>
     </CSound>
@@ -2729,5 +2729,1206 @@
         <Pitch value="2.700000,3.000000"/>
         <PlayDelay value="30,60"/>
         <Volume value="-9.000000,-9.000000"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP1_Attack" parent="HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_Attack00"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack01"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack02"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack03"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack04"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack05"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP1_Help" parent="HeroNova_Help">
+        <AssetArray TemplateParam="HeroNovaMP1_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP1_Nuclear_Strike" parent="HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_Nuclear_Strike00"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Nuclear_Strike01"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Nuclear_Strike02"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP1_Pissed" parent="HeroNova_Pissed">
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP1_Ready" parent="HeroNova_Ready">
+        <AssetArray TemplateParam="HeroNovaMP1_Ready_N200"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP1_What" parent="HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_What_N200"/>
+        <AssetArray TemplateParam="HeroNovaMP1_What_N201"/>
+        <AssetArray TemplateParam="HeroNovaMP1_What_N202"/>
+        <AssetArray TemplateParam="HeroNovaMP1_What_N203"/>
+        <AssetArray TemplateParam="HeroNovaMP1_What_N204"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP1_Yes" parent="HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_Yes00"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes01"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes02"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes03"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N200"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N201"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N202"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N203"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N204"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <DupeWait value="4000,4000"/>
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP2_HolographicDecoyVO" parent="HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_Help00;HeroNovaMP2HD_Help00"/>
+        <Chance value="0"/>
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP3_DominationVisorPersistentVO" parent="HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_Yes02"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes03"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N100"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N200"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N201"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N202"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N203"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N204"/>
+        <Chance value="0"/>
+        <DupeDestroyCount value="1"/>
+        <DupeMuteCount value="1"/>
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+    </CSound>
+    <CSound id="AP_NovaDominationSound" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationLaunch2.wav"/>
+        <Flags index="Temporary" value="1"/>
+        <Pitch value="-5.000000,0.000000"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_BlinkSuit_Blink_Origin" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_BlinkSuit_Blink_Origin_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_BlinkSuit_Blink_Origin_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_BlinkSuit_Blink_Origin_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_BlinkSuit_Blink_Origin_04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <Pitch value="4.000000,6.000000"/>
+        <PlayDelay value="225,225"/>
+        <Volume value="-16.000000,-14.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_BlinkSuit_Blink_Target" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_BlinkSuit_Blink_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_BlinkSuit_Blink_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_BlinkSuit_Blink_04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <Pitch value="2.000000,2.000000"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Death" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Nova\Nova_Death00.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Nova\Nova_Death01.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Nova\Nova_Death02.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Nova\Nova_Death03.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Nova\Nova_Death04.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Nova\Nova_Death05.wav"/>
+        <AssetArray File="LocalizedData\Sounds\TerranVO\CampaignUnits\Nova\Nova_Death06.wav"/>
+        <Flags index="Stream" value="1"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_DefensiveMatrix_Birth" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\NovaAC_Blink_Birth_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaAC_Blink_Birth_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaAC_Blink_Birth_03.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+    </CSound>
+    <CSound id="AP_Nova_DefensiveMatrix_Death" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\NovaAC_Blink_Death_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaAC_Blink_Death_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaAC_Blink_Death_03.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="-6.000000,-3.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_DefensiveMatrix_Loop" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Def_Matrix_Loop_01.wav" LoopCount="-1" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" LoopCount="-1" FacialGroup=""/>
+        <DupeDestroyCount value="2"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="2"/>
+        <Pitch value="-2.100000,-2.000000"/>
+        <Volume value="-20.000000,-20.000000"/>
+        <VolumeRolloffFadeOut/>
+        <VolumeRolloffFadeOut Time="1000" Volume="-96.000000"/>
+        <VolumeRolloffPoints Distance="3.000000"/>
+        <VolumeRolloffPoints Distance="25.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_DominationEnd" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationEnd0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationEnd1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\AP_Nova_DominationEnd.wav"/>
+        <Pitch value="-5.000000,0.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_DominationLoop" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationLoop0.wav" LoopCount="-1"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\Nova_DominationLoop1.wav" LoopCount="-1"/>
+        <AssetArray File="Assets\Sounds\Terran\Nova\AP_Nova_DominationLoop.wav" LoopCount="-1"/>
+        <Pitch value="-4.000000,-2.000000"/>
+        <Volume value="-21.000000,-21.000000"/>
+        <VolumeRolloffPoints Distance="15.000000"/>
+        <VolumeRolloffPoints Distance="20.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_FlashBangGrenade_Impact" parent="Combat">
+        <AssetArray File="Assets\Sounds\FlashBang_Explosion_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Explosion_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Explosion_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Explosion_08.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_FlashBangGrenade_Toss" parent="Combat">
+        <AssetArray File="Assets\Sounds\FlashBang_Toss_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Toss_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Toss_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Toss_05.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_HellfireShotgun_Blast" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_08.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_PlasmaBlast_Impact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaBlast_AttackImpact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaBlast_AttackImpact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaBlast_AttackImpact_03.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_PlasmaBlast_Launch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaBlast_AttackLaunch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaBlast_AttackLaunch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaBlast_AttackLaunch_03.wav" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Nova_PlasmaRifle_Impact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_AttackImpact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_AttackImpact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_AttackImpact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_AttackImpact_04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-14.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_PulseGrenadeExplosion" parent="Spell">
+        <AssetArray File="Assets\Sounds\GrenadePulse_Explosion01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\GrenadePulse_Explosion02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\GrenadePulse_Explosion03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\GrenadePulse_Explosion04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="6"/>
+        <Pitch value="-2.000000,2.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_PulseGrenadeLaunch" parent="Spell">
+        <AssetArray File="Assets\Sounds\GrenadePulse_Activate01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\GrenadePulse_Activate02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\GrenadePulse_Activate03.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="6"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Snipe_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact08.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact09.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact10.wav" FacialGroup=""/>
+        <Pitch value="0.000000,2.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Snipe_AttackLaunch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_Snipe_AttackLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Snipe_AttackLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Snipe_AttackLaunch03.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Spell_Yoink_Impact" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Impact_00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Impact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Impact_04.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
+    <CSound id="AP_Spell_Yoink_Launch" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Launch_00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Launch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Launch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Launch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Yoink_Launch_04.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,2.000000"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_FlashBangGrenade_PinPull" parent="Combat">
+        <AssetArray File="Assets\Sounds\FlashBang_Pin_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Pin_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Pin_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Pin_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\FlashBang_Pin_05.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP3_DominationVisorRangedVO" parent="HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_Yes02"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes03"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N100"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N200"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N201"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N202"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N203"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N204"/>
+        <DupeDestroyCount value="1"/>
+        <DupeMuteCount value="1"/>
+        <Exclusivity value="Nova_UnitDX_Exclusivity"/>
+        <NonLocalVolumeAdjustment value="-96.000000,-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_DominationVisorCasterEndSwtnr" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\UI_DominationVisor_Select.wav" Offset="20000,20000" FacialGroup=""/>
+        <Flags index="Temporary" value="1"/>
+        <DupeDestroyCount value="3"/>
+        <DupeMuteCount value="3"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="-10.700000,-10.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_DominationVisorTargetStartSwtnr" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\UI_DominationVisor_Select.wav" Offset="20000,20000" FacialGroup=""/>
+        <Flags index="Temporary" value="1"/>
+        <DupeDestroyCount value="3"/>
+        <DupeMuteCount value="3"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="-5.000000,-4.700000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_DominationVisorTargetEndSwtnr" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\UI_DominationVisor_Select.wav" Offset="20000,20000" FacialGroup=""/>
+        <Flags index="Temporary" value="1"/>
+        <DupeDestroyCount value="3"/>
+        <DupeMuteCount value="3"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="-11.700000,-11.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_HellfireShotgun_HandPump" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Shotgun_ManualPump_01.wav" Pitch="-1.000000,-1.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_ManualPump_03.wav" Pitch="-1.000000,-1.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_AutoLoad_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_AutoLoad_02.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,-1.000000"/>
+        <Volume value="-16.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_HellfireShotgun_Blast_Tails_L" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_01a.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_02a.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_05.wav" Volume="-4.000000,-4.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_05a.wav" Volume="-4.000000,-4.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_08.wav" FacialGroup=""/>
+        <Mode value="2D"/>
+        <Pitch value="-4.000000,-1.000000"/>
+        <PlayDelay value="60,120"/>
+        <Select value="Random"/>
+        <SpeakerMix index="FrontRight" value="0.500000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackRight" value="0.250000"/>
+        <SpeakerMix index="SideRight" value="0.250000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_HellfireShotgun_Blast_Tails_R" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_01a.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_02a.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_05.wav" Volume="-4.000000,-4.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_05a.wav" Volume="-4.000000,-4.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_08.wav" FacialGroup=""/>
+        <Mode value="2D"/>
+        <Pitch value="-4.000000,-1.000000"/>
+        <PlayDelay value="60,120"/>
+        <Select value="Random"/>
+        <SpeakerMix index="FrontLeft" value="0.500000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackLeft" value="0.250000"/>
+        <SpeakerMix index="SideLeft" value="0.250000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifleTail_Dummy" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTail01.wav" FacialGroup=""/>
+        <Chance value="0"/>
+        <DupeDestroyCount value="1"/>
+        <DupeMuteCount value="1"/>
+        <Volume value="-90.000000,-90.000000"/>
+        <VolumeRolloffPoints Distance="15.000000"/>
+        <VolumeRolloffPoints Distance="30.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_DefensiveMatrix_AttackBeam" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\WarHawk_LaserBeam_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarHawk_LaserBeam_01a.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="6.000000,6.000000"/>
+        <Volume value="-12.000000,-12.000000"/>
+        <PlayDelay value="200,200"/>
+    </CSound>
+    <CSound id="AP_Nova_TurbojetJumpsuit_Movement" parent="Movement">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Reaper\Reaper_Movement0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Reaper\Reaper_Movement1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Reaper\Reaper_Movement2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Reaper\Reaper_Movement3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Reaper\Reaper_Movement4.wav"/>
+        <DupeDestroyCount value="3"/>
+        <Pitch value="1.000000,3.000000"/>
+        <Volume value="-16.000000,-16.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifle_AttackLaunch_MechySweetener" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifle_Cloaked_AttackLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifle_Cloaked_AttackLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifle_Cloaked_AttackLaunch03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifle_Cloaked_AttackLaunch04.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="1.000000,2.000000"/>
+        <PlayDelay value="0,30"/>
+        <Volume value="-14.000000,-10.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifleTailLeft" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTail01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTail02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTail03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTail04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="3"/>
+        <PanLevel value="0.250000"/>
+        <Pitch value="0.000000,4.000000"/>
+        <SpeakerMix index="FrontRight" value="0.000000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackLeft" value="0.700000"/>
+        <SpeakerMix index="BackRight" value="0.000000"/>
+        <SpeakerMix index="SideLeft" value="0.700000"/>
+        <SpeakerMix index="SideRight" value="0.000000"/>
+        <Spread value="60.000000"/>
+        <Volume value="-9.000000,-9.000000"/>
+        <VolumeRolloffPoints Distance="15.000000"/>
+        <VolumeRolloffPoints Distance="30.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifleTailRight" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTail01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTail02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTail03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTail04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="3"/>
+        <PanLevel value="0.250000"/>
+        <Pitch value="0.000000,4.000000"/>
+        <SpeakerMix index="FrontLeft" value="0.000000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackLeft" value="0.000000"/>
+        <SpeakerMix index="BackRight" value="0.700000"/>
+        <SpeakerMix index="SideLeft" value="0.000000"/>
+        <SpeakerMix index="SideRight" value="0.700000"/>
+        <Spread value="60.000000"/>
+        <Volume value="-9.000000,-9.000000"/>
+        <VolumeRolloffPoints Distance="15.000000"/>
+        <VolumeRolloffPoints Distance="30.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifleTailHighLeft" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="3"/>
+        <PanLevel value="0.250000"/>
+        <Pitch value="-2.000000,2.000000"/>
+        <SpeakerMix index="FrontLeft" value="0.500000"/>
+        <SpeakerMix index="FrontRight" value="0.000000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackRight" value="0.000000"/>
+        <SpeakerMix index="SideRight" value="0.000000"/>
+        <Spread value="60.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+        <VolumeRolloffPoints Distance="15.000000"/>
+        <VolumeRolloffPoints Distance="30.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifleTailHighRight" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="3"/>
+        <PanLevel value="0.250000"/>
+        <Pitch value="-2.000000,2.000000"/>
+        <SpeakerMix index="FrontLeft" value="0.000000"/>
+        <SpeakerMix index="FrontRight" value="0.500000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackLeft" value="0.000000"/>
+        <SpeakerMix index="SideLeft" value="0.000000"/>
+        <Spread value="60.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+        <VolumeRolloffPoints Distance="15.000000"/>
+        <VolumeRolloffPoints Distance="30.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifle_AttackLaunch_BoomySweetener" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleAttackLaunch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleAttackLaunch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleAttackLaunch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleAttackLaunch_04.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="-6.000000,-5.000000"/>
+        <PlayDelay value="0,30"/>
+        <Volume value="-13.000000,-11.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Snipe_TailExterior" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="2"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="2"/>
+        <PanLevel value="0.500000"/>
+        <Pitch value="-2.000000,2.000000"/>
+        <Spread value="60.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+        <VolumeRolloffPoints Distance="15.000000"/>
+        <VolumeRolloffPoints Distance="30.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Snipe_Tail" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleTailHigh04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="2"/>
+        <DupeMuteCount value="2"/>
+        <Pan value="0.000000,0.200000"/>
+        <PanLevel value="0.500000"/>
+        <Pitch value="6.000000,6.000000"/>
+        <Spread value="60.000000"/>
+        <Volume value="-18.000000,-18.000000"/>
+        <DupeMaximumMethod value="Replace"/>
+    </CSound>
+    <CSound id="AP_Nova_HellfireShotgun_Foley" parent="Foley">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray index="0" File="Assets\Sounds\Shotgun_Lower_Foley_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Lower_Foley_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Lower_Foley_03.wav" FacialGroup=""/>
+        <Flags index="Download" value="1"/>
+        <Flags index="Ignorable" value="0"/>
+        <Flags index="Purgable" value="1"/>
+        <Category value="Combat"/>
+        <Pitch value="-3.000000,1.000000"/>
+        <ResourcePriority value="32"/>
+        <ReverbBalance Room="0"/>
+        <Volume value="-7.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_HellfireShotgun_AutoPump" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Shotgun_AutoLoad_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_AutoLoad_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_AutoLoad_03.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,-1.000000"/>
+        <Volume value="-16.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_HellfireShotgun_KneePump" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Shotgun_KneePump_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_KneePump_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_KneePump_03.wav" FacialGroup=""/>
+        <Pitch value="-4.000000,-3.000000"/>
+        <Volume value="-14.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-6.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Impact" parent="Combat">
+        <AssetArray File="Assets\Sounds\Nova_Psi_Blade_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Psi_Blade_Impact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Psi_Blade_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Psi_Blade_Impact_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Psi_Blade_Impact_05.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,-1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_Dx_Exert" parent="Combat">
+        <AssetArray File="Assets\Sounds\Nova_Dx_Launch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Dx_Launch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Dx_Launch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Dx_Launch_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_Dx_Launch_05.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C_Foley.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C_Superior" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_CSup_Foley.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C_Superior_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_CSupa.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C_Superior_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_CSup_a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-4.000000,-2.000000"/>
+        <Volume value="-10.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C01_Superior" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C01Sup.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C_BladeTwirl" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C_BladeTwirl.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C01_Superior" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_CSup01_Foley.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-9.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C01_Superior_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C01Supa.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C01_Superior_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_CSup01a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C_Inferior" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C_Inf.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C_Inferior" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_CInf_Foley.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-9.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C_Inferior_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C_Infa.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C_Inferior_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_CInf_a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-9.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C01_Inferior" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C01_Inf.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C01_Inferior" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C01_Inf_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C01_Inferior_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C01_Infa.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C01_Inferior_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C01a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C02" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C02.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C03a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C03a.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C06" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C06.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C_Superior" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_CSup.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C03" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C03_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C2" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C01_Foley.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_Ca.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C_a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C_a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C01" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C01.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C01a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C01a.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C01a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C01a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C02" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C02_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-10.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C02a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C02a.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C02a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C02a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-9.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C03" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C03.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C03a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C03a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-10.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C04" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C04.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C04" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C04_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-10.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C04a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C04a.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-8.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C04a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C04a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C05" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C05.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-8.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C05" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C05_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C05a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C05a.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C05a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C05a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C06" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C06_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Launch_C06a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Launch_C06a.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_NovaPsiBlade_Foley_C06a" parent="Combat">
+        <AssetArray File="Assets\Sounds\PsiBlade_Nova_Foley_C06a_Foley.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Snipe_Kneel" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Ghost_HoldFire.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Ghost_WeaponsFree.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="1"/>
+        <Pitch value="3.000000,5.000000"/>
+        <Volume value="-13.000000,-13.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_StimInfusion" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack4.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack5.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack6.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack7.wav"/>
+        <DupeDestroyCount value="3"/>
+        <Pitch value="-3.000000,-2.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_StimInfusionSweetener" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_StimInfusionSweetener01.wav" LoopTime="0,39089" Offset="1500,1500"/>
+        <DupeDestroyCount value="3"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="2.700000,3.000000"/>
+        <PlayDelay value="30,60"/>
+        <Volume value="-11.000000,-11.000000"/>
+    </CSound>
+    <CSound id="AP_NovaHoloDecoyPsiBlade_Impact_Dx_Exert" parent="Combat">
+        <AssetArray File="Assets\Sounds\NovaHoloDecoy_Dx_Impact_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaHoloDecoy_Dx_Impact_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaHoloDecoy_Dx_Impact_07.wav" FacialGroup=""/>
+        <Chance value="50"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-5.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_NovaHoloDecoyPsiBlade_Launch_Dx_Exert" parent="Combat">
+        <AssetArray File="Assets\Sounds\NovaHoloDecoy_Dx_Launch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaHoloDecoy_Dx_Launch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaHoloDecoy_Dx_Launch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaHoloDecoy_Dx_Launch_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\NovaHoloDecoy_Dx_Launch_05.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Holographic_Decoy_Death2" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\UI_HoloDecoy_Select.wav" Offset="7500,7500" FacialGroup=""/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="-4.000000,-3.000000"/>
+        <VolumeRolloffPoints Distance="10.000000"/>
+        <VolumeRolloffPoints Distance="20.000000" Volume="-96.000000"/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Holographic_Decoy_Birth3" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\UI_EscapeTimer_Start_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\UI_EscapeTimer_Start_03.wav" FacialGroup=""/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="-6.000000,-5.000000"/>
+        <VolumeRolloffPoints Distance="10.000000"/>
+        <VolumeRolloffPoints Distance="20.000000" Volume="-96.000000"/>
+        <Volume value="-8.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Holographic_Decoy_Death" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\HologramProjectorOff1.wav"/>
+        <Pitch value="-10.000000,-9.000000"/>
+        <Volume value="-17.000000,-17.000000"/>
+        <VolumeRolloffPoints Distance="10.000000"/>
+        <VolumeRolloffPoints Distance="20.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Holographic_Decoy_Death3" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\HologramProjectorOff2.wav"/>
+        <Pitch value="-12.000000,-11.000000"/>
+        <Volume value="-14.000000,-14.000000"/>
+        <VolumeRolloffPoints Distance="10.000000"/>
+        <VolumeRolloffPoints Distance="20.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP2HD_Ready" parent="HeroNova_Ready">
+        <AssetArray TemplateParam="HeroNovaMP1_What_N200;HeroNovaMP2HD_What_N200"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP2HD_Help" parent="HeroNova_Help">
+        <AssetArray TemplateParam="HeroNovaMP1_Help00;HeroNovaMP2HD_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound default="1" id="AP_HeroNova_Ack" parent="TerranAck">
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound id="AP_HeroNovaMP2HD_What" parent="AP_HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_What_N201;HeroNovaMP2HD_What_N201"/>
+        <AssetArray TemplateParam="HeroNovaMP1_What_N202;HeroNovaMP2HD_What_N202"/>
+        <AssetArray TemplateParam="HeroNovaMP1_What_N203;HeroNovaMP2HD_What_N203"/>
+        <AssetArray TemplateParam="HeroNovaMP1_What_N204;HeroNovaMP2HD_What_N204"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP2HD_Yes" parent="AP_HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_Ready_N200;HeroNovaMP2HD_Ready_N200"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes00;HeroNovaMP2HD_Yes00"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes01;HeroNovaMP2HD_Yes01"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes02;HeroNovaMP2HD_Yes02"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes03;HeroNovaMP2HD_Yes03"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N200;HeroNovaMP2HD_Yes_N200"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N201;HeroNovaMP2HD_Yes_N201"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N202;HeroNovaMP2HD_Yes_N202"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N203;HeroNovaMP2HD_Yes_N203"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Yes_N204;HeroNovaMP2HD_Yes_N204"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP2HD_Attack" parent="AP_HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_Attack00;HeroNovaMP2HD_Attack00"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack01;HeroNovaMP2HD_Attack01"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack02;HeroNovaMP2HD_Attack02"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack03;HeroNovaMP2HD_Attack03"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack04;HeroNovaMP2HD_Attack04"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Attack05;HeroNovaMP2HD_Attack05"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP2HD_Pissed" parent="AP_HeroNova_Ack">
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed00;HeroNovaMP2HD_Pissed00"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed01;HeroNovaMP2HD_Pissed01"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed02;HeroNovaMP2HD_Pissed02"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed03;HeroNovaMP2HD_Pissed03"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed04;HeroNovaMP2HD_Pissed04"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed05;HeroNovaMP2HD_Pissed05"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed06;HeroNovaMP2HD_Pissed06"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed07;HeroNovaMP2HD_Pissed07"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed08;HeroNovaMP2HD_Pissed08"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed09;HeroNovaMP2HD_Pissed09"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed10;HeroNovaMP2HD_Pissed10"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed11;HeroNovaMP2HD_Pissed11"/>
+        <AssetArray TemplateParam="HeroNovaMP1_Pissed12;HeroNovaMP2HD_Pissed12"/>
+    </CSound>
+    <CSound id="AP_HeroNovaMP2HD_Death" parent="Death">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="LocalizedData\Sounds\TerranUnitVO\Nova\HeroNovaMP2HD_Death02.wav" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\TerranUnitVO\Nova\HeroNovaMP2HD_Death03.wav" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\TerranUnitVO\Nova\HeroNovaMP2HD_Death05.wav" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifle_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact08.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact09.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleBulletImpact10.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact0.wav" Volume="3.000000,3.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact2.wav" Volume="3.000000,3.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact3.wav" Weight="10" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact4.wav" Volume="3.000000,3.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\BulletImpacts\Terran_SingleBulletAttackImpact5.wav" Weight="10" FacialGroup=""/>
+        <Pitch value="-2.000000,2.000000"/>
+        <Volume value="-11.000000,-7.000000"/>
+        <Select value="Random"/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifle_AttackLaunch_Mechy" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifle_Cloaked_AttackLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifle_Cloaked_AttackLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifle_Cloaked_AttackLaunch03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifle_Cloaked_AttackLaunch04.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="1.000000,2.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_SniperRifle_AttackLaunch_Boomy" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleAttackLaunch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleAttackLaunch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleAttackLaunch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_SniperRifleAttackLaunch_04.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="-7.000000,-5.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_HellfireShotgun_Impact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\HellFire_Shotgun_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HellFire_Shotgun_Impact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HellFire_Shotgun_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HellFire_Shotgun_Impact_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HellFire_Shotgun_Impact_05.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <PlayDelay value="60,100"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_ShotgunAuto_Blast" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellfire_Shotgun_08.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CActorSound id="AP_Nova_ShotgunAuto_TailsSound" parent="SoundOneShot">
+        <Sound value="PhysicsImpactBase"/>
+        <Layers>
+            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_L"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="-1.000000,-1.000000"/>
+            <PlayDelay value="60,120"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_R"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="-1.000000,-1.000000"/>
+            <PlayDelay value="60,120"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+    </CActorSound>
+    <CSound id="AP_Nova_AutoShotgun_Blast_Tails_L" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_01a.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_02a.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_05.wav" Volume="-4.000000,-4.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_05a.wav" Volume="-4.000000,-4.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_08.wav" FacialGroup=""/>
+        <PanLevel value="0.000000"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <PlayDelay value="60,120"/>
+        <Select value="Random"/>
+        <SpeakerMix index="FrontRight" value="0.500000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackRight" value="0.250000"/>
+        <SpeakerMix index="SideRight" value="0.250000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_AutoShotgun_Blast_Tails_R" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_01a.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_02a.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_05.wav" Volume="-4.000000,-4.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_05a.wav" Volume="-4.000000,-4.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_08.wav" FacialGroup=""/>
+        <PanLevel value="0.000000"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <PlayDelay value="60,120"/>
+        <Select value="Random"/>
+        <SpeakerMix index="FrontLeft" value="0.500000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackLeft" value="0.250000"/>
+        <SpeakerMix index="SideLeft" value="0.250000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_PlasmaRifle_Launch_Tail_R" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_Attack_Tail_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_Attack_Tail_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_Attack_Tail_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_Attack_Tail_04.wav" FacialGroup=""/>
+        <PanLevel value="0.750000"/>
+        <PlayDelay value="60,120"/>
+        <SpeakerMix index="FrontLeft" value="0.500000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackLeft" value="0.250000"/>
+        <SpeakerMix index="SideLeft" value="0.250000"/>
+        <Volume value="-5.000000,-5.000000"/>
+        <DupeDestroyCount value="6"/>
+        <Pitch value="2.000000,2.000000"/>
+        <DupeMuteCount value="6"/>
+    </CSound>
+    <CSound id="AP_Nova_PlasmaRifle_Launch_Tail_L" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_Attack_Tail_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_Attack_Tail_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_Attack_Tail_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_PlasmaRifle_Attack_Tail_04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="6"/>
+        <PanLevel value="0.750000"/>
+        <Pitch value="2.000000,2.000000"/>
+        <PlayDelay value="60,120"/>
+        <SpeakerMix index="FrontRight" value="0.500000"/>
+        <SpeakerMix index="Center" value="0.000000"/>
+        <SpeakerMix index="BackRight" value="0.250000"/>
+        <SpeakerMix index="SideRight" value="0.250000"/>
+        <Volume value="-5.000000,-5.000000"/>
+        <DupeMuteCount value="6"/>
+    </CSound>
+    <CSound id="AP_Nova_PlasmaRifle_Puddle_Small" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Plasma_Puddle_Small_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Plasma_Puddle_Small_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Plasma_Puddle_Small_03.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <Volume value="-6.000000,-4.000000"/>
+        <DupeMuteCount value="3"/>
+        <DupeWait value="1000,2000"/>
+    </CSound>
+    <CSound id="AP_Nova_Gunblade_Gun_Launch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_AttackLaunch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_AttackLaunch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_AttackLaunch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_AttackLaunch_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_AttackLaunch_05.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-2.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Nova_Gunblade_Gun_Impact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_Impact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_Impact_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Nova_GunBlade_Impact_05.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-4.000000,-2.000000"/>
     </CSound>
 </Catalog>

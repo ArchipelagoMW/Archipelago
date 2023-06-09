@@ -121,16 +121,16 @@
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackSmallBase" parent="AP_StimpackBase">
         <Cost>
+            <Vital index="Life" value="10"/>
             <Charge Link="Abil/AP_Stimpack"/>
             <Cooldown Link="Abil/AP_Stimpack"/>
-            <Vital index="Life" value="10"/>
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackLargeBase" parent="AP_StimpackBase">
         <Cost>
+            <Vital index="Life" value="20"/>
             <Charge Link="Abil/AP_Stimpack"/>
             <Cooldown Link="Abil/AP_Stimpack"/>
-            <Vital index="Life" value="20"/>
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_Stimpack" parent="AP_StimpackSmallBase">
@@ -169,13 +169,15 @@
     <CAbilEffectInstant id="AP_SuperStimpackSmallBase" parent="AP_SuperStimpackBase">
         <Effect index="0" value="AP_SuperStimpackSmallSet"/>
         <Cost>
-            <Cooldown TimeUse="18"/>
+            <Charge Link="Abil/AP_SuperStimpackSmallBase"/>
+            <Cooldown Link="Abil/AP_SuperStimpackSmallBase" TimeUse="18"/>
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_SuperStimpackLargeBase" parent="AP_SuperStimpackBase">
         <Effect index="0" value="AP_SuperStimpackLargeSet"/>
         <Cost>
-            <Cooldown TimeUse="18"/>
+            <Charge Link="Abil/AP_SuperStimpackLargeBase"/>
+            <Cooldown Link="Abil/AP_SuperStimpackLargeBase" TimeUse="18"/>
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_SuperStimpackMarine" parent="AP_SuperStimpackSmallBase">
@@ -2778,6 +2780,332 @@
         <Effect value="AP_HellbatLeap"/>
         <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
     </CAbilAugment>
+    <CAbilEffectTarget id="AP_HeroNuclearStrike">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_HeroNukeCalldown"/>
+        <Range value="12"/>
+        <FinishTime value="0"/>
+        <CancelableArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <ValidatedArray index="Channel" value="0"/>
+        <AlertArray index="Cast" value="CalldownLaunch"/>
+        <CursorEffect value="AP_HeroNukeDamage"/>
+        <CalldownEffect value="AP_HeroNukeCalldown"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NukeCalldown" Requirements="AP_HaveNukeHero"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_NovaApolloCloak">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_NovaApolloCloakAB"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="40"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ApolloCloakOnNova" Requirements="AP_UseNovaCloak"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_NovaArmorBlinkSuitBlink">
+        <AbilSetId value="Blnk"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown TimeUse="8"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaArmorBlinkSuitBlink" Requirements="AP_HaveNovaArmorBlinkSuit">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaGadgetDefensiveDroneSummon">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="11"/>
+        <Effect index="0" value="AP_NovaGadgetDefensiveDroneSummonCU"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Charge Link="Abil/PlacePointDefenseDrone"/>
+            <Cooldown Link="Raven Build Link" Location="Unit" TimeUse="30"/>
+        </Cost>
+        <InterruptCost>
+            <Charge Link="Abil/PlacePointDefenseDrone"/>
+            <Cooldown Link="Abil/PlacePointDefenseDrone"/>
+        </InterruptCost>
+        <Placeholder value="AP_NovaDefensiveDrone"/>
+        <Range value="7"/>
+        <ProducedUnitArray value="AP_PointDefenseDrone"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_HaveNovaGadgetDefensiveDroneSummon" Requirements="AP_HaveNovaGadgetDefensiveDrone"/>
+        <PlaceUnit value="NovaDefensiveDrone"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaGadgetFlashBangGrenades">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_NovaGadgetFlashBangGrenadeLaunchMissile"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="5"/>
+        </Cost>
+        <Range value="7"/>
+        <Arc value="9.9975"/>
+        <PrepTime value="0.1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CursorEffect value="AP_NovaGadgetFlashBangGrenadeSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaGadgetFlashBangGrenades" Requirements="AP_HaveNovaGadgetFlashBangGrenades"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaGadgetHiveMindAmplifier">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_NovaGadgetHiveMindAmplifierDummy"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Range value="10"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaGadgetHiveMindAmplifier" Requirements="AP_HaveNovaGadgetHiveMindAmplifier"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaGadgetHolographicDecoy">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_NovaHolographicDecoySpawnSet"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaGadgetHolographicDecoy" Requirements="AP_HaveNovaGadgetHolographicDecoy"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaGadgetPulseGrenades">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_NovaGadgetPulseGrenadesLaunchMissile"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="5"/>
+        </Cost>
+        <Range value="7"/>
+        <Arc value="9.9975"/>
+        <PrepTime value="0.1"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CursorEffect value="AP_NovaGadgetPulseGrenadesDamage"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaGadgetPulseGrenades" Requirements="AP_HaveNovaGadgetPulseGrenades"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaGadgetSwarmGrenades">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_AP_NovaGadgetSwarmGrenadesLaunchMissile"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Range value="10"/>
+        <Arc value="9.9975"/>
+        <PrepTime value="0.361"/>
+        <CursorEffect value="AP_SwarmGrenadeSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaGadgetSwarmGenades" Requirements="AP_HaveNovaGadgetSwarmGrenades"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaHelmetDomination">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_NovaDominationPersistent"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <TargetFilters value="Visible;Player,Ally,Neutral,Robotic,Structure,Heroic,Missile,Uncommandable,Stasis,Dead,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="100"/>
+        <AINotifyEffect value="AP_DominationApplySet"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaDomination" Requirements="AP_UseDominationVisor"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaHelmetHiveMindAmplifier">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_NovaHelmetHiveMindAmplifierDummy"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Range value="10"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaHelmetHiveMindAmplifier" Requirements="AP_HaveNovaHelmetHiveMindAmplifier"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_NovaHoldFire">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_GhostHoldFire"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GhostHoldFire" Requirements="AP_GhostNotHoldingFire">
+            <Flags index="ShowInGlossary" value="0"/>
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_NovaNukeTimer">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Cost>
+            <Cooldown TimeStart="300" TimeUse="300"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaNukeTimer" Requirements="AP_NovaNukeTimer"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_NovaPersonalDefensiveMatrix">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_PersonalDefensiveMatrixSet"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <AINotifyEffect value="AP_PersonalDefensiveMatrix"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PersonalDefensiveMatrix" Requirements="AP_HaveNovaGadgetPersonalDefensiveMatrix"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_NovaPsiStrike">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown Location="Unit"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <PrepTime value="0.01"/>
+        <CursorEffect value="AP_NovaPsiStrikeDummySearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponPsiBlade" Requirements="AP_HaveNovaWeaponPsiBladeBehavior"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_NovaReleaseMinion">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaReleaseMinion" Requirements="AP_NovaUseReleaseMinion"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_NovaSilentkill">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_NovaSilentkillSeparatistSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="Smart" value="1"/>
+        <TargetFilters value="Biological,Visible;Self,Player,Ally,Neutral,Missile,UnderConstruction,Dead,Hidden"/>
+        <Range value="0.01"/>
+        <AINotifyEffect value="AP_NovaSilentkill"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaSilentkill" Requirements="AP_HaveNovaSilentkill"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaWeaponBlazefireBladeShadowFury">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Effect index="0" value="AP_NovaWeaponBlazefireBladeShadowFuryPersistent"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="RangeUsePathing" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+        </Cost>
+        <TargetFilters value="Ground,Visible;Self,Player,Ally,Neutral,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="5"/>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure"/>
+        <AutoCastRange value="4"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+        <AutoCastValidatorArray value="AP_NovaWeaponBlazefireBladeShadowFuryAutoCast"/>
+        <UninterruptibleArray index="Wait" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <UninterruptibleArray index="Bail" value="1"/>
+        <CursorEffect value="AP_NovaWeaponBlazefireBladeShadowFurySearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponBlazefireBladeShadowFury" Requirements="AP_HaveNovaWeaponBlazefireBladeBehavior"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaWeaponCanisterRifleSnipe">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Player,Ally,Structure,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="10"/>
+        <CastIntroTime value="0.5"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponCanisterRifleSnipe" Requirements="AP_HaveNovaWeaponCanisterRifleBehavior"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaWeaponHellfireShotgunBlast">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="1"/>
+        </Cost>
+        <Range value="250"/>
+        <CastIntroTime value="0.125"/>
+        <CursorEffect value="AP_NovaWeaponHellfireShotgunBlastSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponHellfireShotgunBlast" Requirements="AP_HaveNovaWeaponHellfireShotgunBehavior"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaWeaponInvictusLongshotLockdown">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_NovaWeaponInvictusLongshotLockdownLaunchMissile"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <TargetFilters value="-;Player,Ally,Heroic"/>
+        <Range value="9"/>
+        <CastIntroTime value="0.25"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponInvictusLongshotLockdown" Requirements="AP_HaveNovaWeaponInvictusLongshotBehavior"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaWeaponPlasmaBlastNew" parent="WizSimpleSkillshot">
+        <Effect index="0" value="AP_NovaWeaponPlasmaBlastNewInitialSet"/>
+        <Cost index="0">
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <CursorEffect index="0" value="AP_NovaWeaponPlasmaBlastNewMissileScan"/>
+        <CmdButtonArray index="Execute" Requirements="AP_HaveNovaWeaponPlasmaRifleBehavior"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NovaWeaponPsiRifleAbduct">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <Range value="9"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponPsiRifleAbduct" Requirements="AP_HaveNovaWeaponPsiRifleBehavior"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_NovaWeaponsFree">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_GhostWeaponsFree"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_WeaponsFree" Requirements="AP_GhostHoldingFire">
+            <Flags index="ShowInGlossary" value="0"/>
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_NovaWeaponCanisterRifleSwap">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponCanisterRifleSwap" Requirements="AP_NovaWeaponCanSwapToCanisterRifle"/>
+        <Effect index="0" value="AP_NovaWeaponCanisterRifleABSet"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_NovaWeaponHellfireShotgunSwap">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponHellfireShotgunSwap" Requirements="AP_NovaWeaponCanSwapToHellfireShotgun"/>
+        <Effect index="0" value="AP_NovaWeaponHellfireShotgunABSet"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_NovaWeaponPlasmaRifleSwap">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponPlasmaRifleSwap" Requirements="AP_NovaWeaponCanSwapToPlasmaRifle"/>
+        <Effect index="0" value="AP_NovaWeaponPlasmaRifleABSet"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_NovaWeaponBlazefireBladeSwap">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponBlazefireBladeSwap" Requirements="AP_NovaWeaponCanSwapToBlazefireBlade"/>
+        <Effect index="0" value="AP_NovaWeaponBlazefireBladeABSet"/>
+    </CAbilEffectInstant>
+<!--    <CAbilEffectInstant id="AP_NovaWeaponInvictusLongshotSwap">-->
+<!--        <EditorCategories value="AbilityorEffectType:Units"/>-->
+<!--        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponInvictusLongshotSwap" Requirements="AP_HaveNovaWeaponInvictusLongshotAndNovaEquipmentSwapVisible"/>-->
+<!--        <Effect index="0" value="AP_NovaWeaponInvictusLongshotABSet"/>-->
+<!--    </CAbilEffectInstant>-->
+<!--    <CAbilEffectInstant id="AP_NovaWeaponPsiRifleSwap">-->
+<!--        <EditorCategories value="AbilityorEffectType:Units"/>-->
+<!--        <Effect index="0" value="AP_NovaWeaponPsiRifleABSet"/>-->
+<!--        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponPsiRifleSwap" Requirements="AP_HaveNovaWeaponPsiRifleAndNovaEquipmentSwapVisible"/>-->
+<!--    </CAbilEffectInstant>-->
+    <CAbilEffectInstant id="AP_NovaWeaponPsiBladeSwap">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_NovaWeaponPsiBladeABSet"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponPsiBladeSwap" Requirements="AP_NovaWeaponCanSwapToPsiBlade"/>
+    </CAbilEffectInstant>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -3289,5 +3617,25 @@
                 <DurationArray index="Duration" value="1"/>
             </SectionArray>
         </InfoArray>
+    </CAbilMorph>
+    <CAbilEffectInstant id="AP_SuperStimpackNova">
+        <AbilSetId value="Stimpack"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="AP_SuperStimpackNovaSet"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="25"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackNova" Requirements="AP_HaveSuperStimpackNova">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilMorph id="AP_ReaperPlacementMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray Unit="AP_Reaper"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
     </CAbilMorph>
 </Catalog>

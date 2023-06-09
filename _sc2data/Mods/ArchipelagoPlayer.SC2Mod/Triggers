@@ -4,6 +4,7 @@
         <Root>
             <Item Type="Trigger" Library="15EF4C78" Id="A5D195AA"/>
             <Item Type="Category" Library="15EF4C78" Id="1912941C"/>
+            <Item Type="Category" Library="15EF4C78" Id="22668676"/>
         </Root>
         <Element Type="Trigger" Id="A5D195AA">
             <Action Type="Comment" Library="15EF4C78" Id="B1C6C33B"/>
@@ -1649,6 +1650,400 @@
             <Comment>
                 Vanilla Tech Reactors need to be handled in child mods as they don&apos;t exist in Liberty.SC2Mod
             </Comment>
+        </Element>
+        <Element Type="Category" Id="22668676">
+            <Item Type="Trigger" Library="15EF4C78" Id="C970113D"/>
+            <Item Type="FunctionDef" Library="15EF4C78" Id="C99B5628"/>
+        </Element>
+        <Element Type="Trigger" Id="C970113D">
+            <Event Type="FunctionCall" Library="15EF4C78" Id="FFB21F5A"/>
+            <Condition Type="FunctionCall" Library="15EF4C78" Id="2C5EA0FF"/>
+            <Action Type="FunctionCall" Library="15EF4C78" Id="2C2C8E04"/>
+        </Element>
+        <Element Type="FunctionCall" Id="FFB21F5A">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="18377668"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="37AB6B84"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="C4D015AB"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="75E21F18"/>
+        </Element>
+        <Element Type="Param" Id="37AB6B84">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="B38CA56F"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="C84C7A78"/>
+        </Element>
+        <Element Type="Param" Id="C4D015AB">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="B6D9C7C9"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="00000231"/>
+        </Element>
+        <Element Type="Param" Id="75E21F18">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4E42D7EB"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="C9DCA6C0"/>
+        </Element>
+        <Element Type="FunctionCall" Id="2C5EA0FF">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="9269FB45"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="413B1DE8"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="DD35AF53"/>
+        </Element>
+        <Element Type="Param" Id="9269FB45">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="A4BC3FE3"/>
+        </Element>
+        <Element Type="FunctionCall" Id="A4BC3FE3">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000079"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="BA9D37F9"/>
+        </Element>
+        <Element Type="Param" Id="BA9D37F9">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000138"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="2145C3AB"/>
+        </Element>
+        <Element Type="FunctionCall" Id="2145C3AB">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="11EB5EB1"/>
+        </Element>
+        <Element Type="Param" Id="413B1DE8">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="1E7A4625"/>
+        </Element>
+        <Element Type="Param" Id="DD35AF53">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>AP_NovaHoloDecoy</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Unit"/>
+        </Element>
+        <Element Type="FunctionCall" Id="2C2C8E04">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C47C0524"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="B6C661B7"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="A755B59B"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="F7CDAB6C"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="3C3C038C"/>
+        </Element>
+        <Element Type="Param" Id="B6C661B7">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="6F19F7ED"/>
+            <Value>1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="Param" Id="A755B59B">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="9A6B09E3"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="24DE93C9"/>
+        </Element>
+        <Element Type="FunctionCall" Id="24DE93C9">
+            <FunctionDef Type="FunctionDef" Library="15EF4C78" Id="C99B5628"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="B5DE09B6"/>
+        </Element>
+        <Element Type="Param" Id="B5DE09B6">
+            <ParameterDef Type="ParamDef" Library="15EF4C78" Id="13FDBE69"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="641E04A2"/>
+        </Element>
+        <Element Type="FunctionCall" Id="641E04A2">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000092"/>
+        </Element>
+        <Element Type="Param" Id="F7CDAB6C">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="2E722704"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="37CE6AD7"/>
+        </Element>
+        <Element Type="FunctionCall" Id="37CE6AD7">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="11EB5EB1"/>
+        </Element>
+        <Element Type="Param" Id="3C3C038C">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="02BBDCC1"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="20384CAB"/>
+        </Element>
+        <Element Type="FunctionCall" Id="20384CAB">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="11EB5EB1"/>
+        </Element>
+        <Element Type="FunctionDef" Id="C99B5628">
+            <FlagCall/>
+            <ReturnType>
+                <Type Value="gamelink"/>
+                <GameType Value="Behavior"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="15EF4C78" Id="13FDBE69"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="62240055"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="91BD4B68"/>
+        </Element>
+        <Element Type="ParamDef" Id="13FDBE69">
+            <ParameterType>
+                <Type Value="unit"/>
+            </ParameterType>
+            <Default Type="Param" Library="15EF4C78" Id="E9C2D900"/>
+        </Element>
+        <Element Type="Param" Id="E9C2D900">
+            <Preset Type="PresetValue" Library="Ntve" Id="D6EA4D09"/>
+        </Element>
+        <Element Type="FunctionCall" Id="62240055">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C0083258"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="4D2789EF"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="42899142"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="9F3A23C8"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="8A33E607"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="D5DFAB86"/>
+        </Element>
+        <Element Type="FunctionCall" Id="4D2789EF">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="BB1891ED"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C7699CD9"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="067CFAF3"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="DE10111E"/>
+        </Element>
+        <Element Type="FunctionCall" Id="067CFAF3">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000097"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="BF750C3C"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="E48E462F"/>
+        </Element>
+        <Element Type="Param" Id="E48E462F">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000488"/>
+            <Value>AP_NovaWeaponCanisterRifle</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="FunctionCall" Id="DE10111E">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C60B9062"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="F3799619"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="ED332742"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="A23D3A1D"/>
+        </Element>
+        <Element Type="Param" Id="F3799619">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="00F98AD6"/>
+        </Element>
+        <Element Type="FunctionCall" Id="00F98AD6">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="ABD41ECF"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="C4CE4D4E"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="0EDD0FA7"/>
+        </Element>
+        <Element Type="Param" Id="C4CE4D4E">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="E163785B"/>
+            <Parameter Type="ParamDef" Library="15EF4C78" Id="13FDBE69"/>
+        </Element>
+        <Element Type="Param" Id="0EDD0FA7">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="D54684BD"/>
+            <Value>AP_NovaWeaponCanisterRifle</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="Param" Id="ED332742">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="1E7A4625"/>
+        </Element>
+        <Element Type="Param" Id="A23D3A1D">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>true</Value>
+            <ValueType Type="bool"/>
+        </Element>
+        <Element Type="FunctionCall" Id="42899142">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="BB1891ED"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C7699CD9"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="8311F6DF"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="90C75E8B"/>
+        </Element>
+        <Element Type="FunctionCall" Id="8311F6DF">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000097"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="BF750C3C"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="36315ED1"/>
+        </Element>
+        <Element Type="Param" Id="36315ED1">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000488"/>
+            <Value>AP_NovaWeaponHellfireShotgun</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="FunctionCall" Id="90C75E8B">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C60B9062"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="6F1C7EE6"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="9B170D31"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="19D119C8"/>
+        </Element>
+        <Element Type="Param" Id="6F1C7EE6">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="30053CA4"/>
+        </Element>
+        <Element Type="FunctionCall" Id="30053CA4">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="ABD41ECF"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="D57625CB"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="6DD52DD9"/>
+        </Element>
+        <Element Type="Param" Id="D57625CB">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="E163785B"/>
+            <Parameter Type="ParamDef" Library="15EF4C78" Id="13FDBE69"/>
+        </Element>
+        <Element Type="Param" Id="6DD52DD9">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="D54684BD"/>
+            <Value>AP_NovaWeaponHellfireShotgun</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="Param" Id="9B170D31">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="1E7A4625"/>
+        </Element>
+        <Element Type="Param" Id="19D119C8">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>true</Value>
+            <ValueType Type="bool"/>
+        </Element>
+        <Element Type="FunctionCall" Id="9F3A23C8">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="BB1891ED"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C7699CD9"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="830435E8"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="92565FCD"/>
+        </Element>
+        <Element Type="FunctionCall" Id="830435E8">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000097"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="BF750C3C"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="BC122199"/>
+        </Element>
+        <Element Type="Param" Id="BC122199">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000488"/>
+            <Value>AP_NovaWeaponPlasmaRifle</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="FunctionCall" Id="92565FCD">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C60B9062"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="555A4B87"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="E7A143F3"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="101BEDBE"/>
+        </Element>
+        <Element Type="Param" Id="555A4B87">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="85F9935B"/>
+        </Element>
+        <Element Type="FunctionCall" Id="85F9935B">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="ABD41ECF"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="69092C1A"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="59A3B66E"/>
+        </Element>
+        <Element Type="Param" Id="69092C1A">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="E163785B"/>
+            <Parameter Type="ParamDef" Library="15EF4C78" Id="13FDBE69"/>
+        </Element>
+        <Element Type="Param" Id="59A3B66E">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="D54684BD"/>
+            <Value>AP_NovaWeaponPlasmaRifle</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="Param" Id="E7A143F3">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="1E7A4625"/>
+        </Element>
+        <Element Type="Param" Id="101BEDBE">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>true</Value>
+            <ValueType Type="bool"/>
+        </Element>
+        <Element Type="FunctionCall" Id="8A33E607">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="BB1891ED"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C7699CD9"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="27D45310"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="3D0A2C2B"/>
+        </Element>
+        <Element Type="FunctionCall" Id="27D45310">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000097"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="BF750C3C"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="A7C52BA6"/>
+        </Element>
+        <Element Type="Param" Id="A7C52BA6">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000488"/>
+            <Value>AP_NovaWeaponPsiBlade</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="FunctionCall" Id="3D0A2C2B">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C60B9062"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="09B0EB33"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="3B2B87CF"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="D29D7E2A"/>
+        </Element>
+        <Element Type="Param" Id="09B0EB33">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="D1DD713C"/>
+        </Element>
+        <Element Type="FunctionCall" Id="D1DD713C">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="ABD41ECF"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="574952F6"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="8024D784"/>
+        </Element>
+        <Element Type="Param" Id="574952F6">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="E163785B"/>
+            <Parameter Type="ParamDef" Library="15EF4C78" Id="13FDBE69"/>
+        </Element>
+        <Element Type="Param" Id="8024D784">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="D54684BD"/>
+            <Value>AP_NovaWeaponPsiBlade</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="Param" Id="3B2B87CF">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="1E7A4625"/>
+        </Element>
+        <Element Type="Param" Id="D29D7E2A">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>true</Value>
+            <ValueType Type="bool"/>
+        </Element>
+        <Element Type="FunctionCall" Id="D5DFAB86">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="BB1891ED"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C7699CD9"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="45BB01BC"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="974CCF23"/>
+        </Element>
+        <Element Type="FunctionCall" Id="45BB01BC">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000097"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="BF750C3C"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="5FDF714F"/>
+        </Element>
+        <Element Type="Param" Id="5FDF714F">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000488"/>
+            <Value>AP_NovaWeaponBlazefireBlade</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="FunctionCall" Id="974CCF23">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>
+            <SubFunctionType Type="SubFuncType" Library="Ntve" Id="C60B9062"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="67492AAF"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="8BA45902"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="FB26D6F8"/>
+        </Element>
+        <Element Type="Param" Id="67492AAF">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="ABB380C4"/>
+            <FunctionCall Type="FunctionCall" Library="15EF4C78" Id="ACD11543"/>
+        </Element>
+        <Element Type="FunctionCall" Id="ACD11543">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="ABD41ECF"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="F9F5E693"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="5ED23D4C"/>
+        </Element>
+        <Element Type="Param" Id="F9F5E693">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="E163785B"/>
+            <Parameter Type="ParamDef" Library="15EF4C78" Id="13FDBE69"/>
+        </Element>
+        <Element Type="Param" Id="5ED23D4C">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="D54684BD"/>
+            <Value>AP_NovaWeaponBlazefireBlade</Value>
+            <ValueType Type="gamelink"/>
+            <ValueGameType Type="Behavior"/>
+        </Element>
+        <Element Type="Param" Id="8BA45902">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="51567265"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="1E7A4625"/>
+        </Element>
+        <Element Type="Param" Id="FB26D6F8">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="4A15EC5F"/>
+            <Value>true</Value>
+            <ValueType Type="bool"/>
+        </Element>
+        <Element Type="FunctionCall" Id="91BD4B68">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000097"/>
+            <Parameter Type="Param" Library="15EF4C78" Id="EE9771FA"/>
+        </Element>
+        <Element Type="Param" Id="EE9771FA">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000488"/>
+            <Preset Type="PresetValue" Library="Ntve" Id="C9DCA6C0"/>
         </Element>
     </Library>
 </TriggerData>

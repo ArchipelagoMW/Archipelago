@@ -1395,4 +1395,178 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-reapercombatdrugs.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_ApolloCloakOnNova">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="AP_AttackChampions">
+        <Icon value="Assets\Textures\btn-command-attack.dds"/>
+        <AlertIcon value="Assets\Textures\btn-command-attack.dds"/>
+        <Hotkey value="Button/Hotkey/Attack"/>
+        <EditorCategories value="Race:Neutral"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="Attack"/>
+        <Universal value="1"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="AP_HaveNovaGadgetDefensiveDroneSummon">
+        <Icon value="Assets\Textures\talent-raynor-level05-pointdefensedrones.dds"/>
+        <AlertIcon value="Assets\Textures\talent-raynor-level05-pointdefensedrones.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <Placeholder value="1"/>
+    </CButton>
+    <CButton id="AP_HeroNukeCalldown">
+        <Icon value="Assets\Textures\btn-ability-terran-nuclearstrike-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-nuclearstrike-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_MoveChampions">
+        <Icon value="Assets\Textures\btn-command-move.dds"/>
+        <AlertIcon value="Assets\Textures\btn-command-move.dds"/>
+        <Hotkey value="Button/Hotkey/Move"/>
+        <EditorCategories value="Race:Neutral"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="Move"/>
+        <Universal value="1"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="AP_NovaArmorBlinkSuitBlink">
+        <Icon value="Assets\Textures\btn-upgrade-nova-blink.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-nova-blink.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="ApolloCloakOnNova"/>
+    </CButton>
+    <CButton id="AP_NovaArmorJumpSuit">
+        <Icon value="Assets\Textures\btn-upgrade-nova-jetpack.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-nova-equipment-jetpack.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="AP_NovaArmorMoebiusSuit">
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-apolloinfantrysuit.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="AP_NovaArmorStealthSuit">
+        <Icon value="Assets\Textures\btn-upgrade-nova-tacticalstealthsuit.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="AP_NovaDomination">
+        <Icon value="Assets\Textures\btn-ability-nova-domination.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-nova-domination.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaGadgetFlashBangGrenades">
+        <Icon value="Assets\Textures\btn-upgrade-nova-btn-upgrade-nova-flashgrenade.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="NovaGadgetPulseGrenades"/>
+    </CButton>
+    <CButton id="AP_NovaGadgetHolographicDecoy">
+        <Icon value="Assets\Textures\btn-upgrade-nova-holographicdecoy.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="NovaGadgetPulseGrenades"/>
+    </CButton>
+    <CButton id="AP_NovaGadgetPulseGrenades">
+        <Icon value="Assets\Textures\btn-upgrade-nova-btn-upgrade-nova-pulsegrenade.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaHelmetGhostVisor">
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-ghostvisor.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaHelmetRangefinderOculus">
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-rangefinderoculus.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaReleaseMinion">
+        <Icon value="Assets\Textures\btn-command-cancel.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaSilentkill">
+        <Icon value="Assets\Textures\btn-ability-nova-neckbreaker.dds"/>
+        <Hotkey value="Button/Hotkey/AP_NovaWeaponCanisterRifleSnipe"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="AP_NovaWeaponCanisterRifleSnipe"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponBlazefireBladeShadowFury">
+        <Icon value="Assets\Textures\btn-ability-nova-furyofone.dds"/>
+        <Hotkey value="Button/Hotkey/AP_NovaWeaponCanisterRifleSnipe"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="AP_NovaWeaponCanisterRifleSnipe"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponCanisterRifleSnipe">
+        <Icon value="Assets\Textures\btn-ability-terran-snipe-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponHellfireShotgunBlast">
+        <Icon value="Assets\Textures\BTN-Upgrade-Nova-ShotGun.dds"/>
+        <Hotkey value="Button/Hotkey/AP_NovaWeaponCanisterRifleSnipe"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="AP_NovaWeaponCanisterRifleSnipe"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponPlasmaBlastNew" parent="WizButton" art="Assets\Textures\btn-upgrade-terran-plasmashot.dds">
+        <Hotkey value="Button/Hotkey/AP_NovaWeaponCanisterRifleSnipe"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="AP_NovaWeaponCanisterRifleSnipe"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponPsiBlade">
+        <Icon value="Assets\Textures\btn-upgrade-nova-monomolecularblade.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-nova-monomolecularblade.dds"/>
+        <Hotkey value="Button/Hotkey/AP_NovaWeaponCanisterRifleSnipe"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="AP_NovaWeaponCanisterRifleSnipe"/>
+    </CButton>
+    <CButton id="AP_PersonalDefensiveMatrix">
+        <Icon value="Assets\Textures\btn-upgrade-terran-nova-personaldefensivematrix.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-nova-personaldefensivematrix.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SuperStimpackNova">
+        <Icon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponSwap">
+        <Icon value="Assets\Textures\btn-ability-terran-experiencedplasmagun.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <!--Placeholder value="1"/-->
+    </CButton>
+    <CButton id="AP_NovaWeaponCanisterRifleSwap">
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-canisterrifle.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponHellfireShotgunSwap">
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-shotgun.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponInvictusLongshotSwap">
+        <Icon value="Assets\Textures\btn-upgrade-swann-defensivematrix.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-swann-defensivematrix.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponPsiBladeSwap">
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-monomolecularblade.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponPlasmaRifleSwap">
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-plasmagun.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponBlazefireBladeSwap">
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-gunblade_sword.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_NovaWeaponPsiRifleSwap">
+        <Icon value="Assets\Textures\btn-ability-zerg-abduct.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-abduct.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_PermanentlyCloakedNova">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-Cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
 </Catalog>

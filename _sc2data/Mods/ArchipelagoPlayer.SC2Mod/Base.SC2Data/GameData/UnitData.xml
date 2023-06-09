@@ -7588,7 +7588,7 @@
         <LeaderAlias value="Hellion"/>
         <HotkeyAlias value="Hellion"/>
         <SubgroupAlias value="Hellion"/>
-        <GlossaryAlias value="Hellion"/>
+        <GlossaryAlias value="HellionTank"/>
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="81"/>
         <GlossaryStrongArray value="Zergling"/>
@@ -7596,8 +7596,323 @@
         <GlossaryWeakArray value="Baneling"/>
         <GlossaryWeakArray value="Stalker"/>
         <GlossaryWeakArray value="Marauder"/>
-        <GlossaryAlias value="HellionTank"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="AP_NovaDefensiveDrone">
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="AILifetime" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="50"/>
+        <LifeMax value="50"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <EnergyStart value="200"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="1"/>
+        <Mover value="Fly"/>
+        <Sight value="7"/>
+        <Height value="3"/>
+        <VisionHeight value="4"/>
+        <CostResource index="Minerals" value="100"/>
+        <RepairTime value="33.3332"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="stop"/>
+        <BehaviorArray Link="TerranBuildingBurnDown"/>
+        <WeaponArray Link="NovaDefenseLaser" Turret="PointDefenseDrone"/>
+        <CardLayouts>
+            <LayoutButtons Face="DefenseSystem" Type="Passive" Row="1" Column="0"/>
+        </CardLayouts>
+        <Radius value="0.625"/>
+        <SeparationRadius value="0.6"/>
+        <SubgroupPriority value="6"/>
+        <MinimapRadius value="0.6"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <LeaderAlias value=""/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="315"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
+        <KillDisplay value="Never"/>
+        <RankDisplay value="Never"/>
+    </CUnit>
+    <CUnit id="AP_NovaDefensiveDroneRelease" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AutoTurretReleaseWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_NovaGadgetFlashBangGrenadesWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="TossGrenade2"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_NovaGadgetPulseGrenadesWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="TossGrenade2"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_NovaGadgetSwarmGrenadesWeapon" parent="MISSILE">
+        <Race value="Terr"/>
+        <Mover value="TossGrenade2"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_NovaHero">
+        <DeathTime value="-1"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Psionic" value="1"/>
+        <Attributes index="Heroic" value="1"/>
+        <LifeStart value="250"/>
+        <LifeMax value="250"/>
+        <LifeRegenRate value="2"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
+        <EnergyStart value="100"/>
+        <EnergyMax value="100"/>
+        <EnergyRegenRate value="3.5"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/AP_NovaShieldArmor"/>
+        <Speed value="2.25"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <Sight value="13"/>
+        <CostCategory value="Army"/>
+        <RepairTime value="41.667"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="30"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_NovaWeaponCanisterRifleSnipe"/>
+        <AbilArray Link="AP_NovaWeaponHellfireShotgunBlast"/>
+<!--        <AbilArray Link="AP_NovaWeaponInvictusLongshotLockdown"/>-->
+<!--        <AbilArray Link="AP_NovaWeaponPsiRifleAbduct"/>-->
+        <AbilArray Link="AP_NovaPsiStrike"/>
+        <AbilArray Link="AP_NovaWeaponCanisterRifleSwap"/>
+        <AbilArray Link="AP_NovaWeaponHellfireShotgunSwap"/>
+        <AbilArray Link="AP_NovaWeaponPlasmaRifleSwap"/>
+        <AbilArray Link="AP_NovaWeaponBlazefireBladeSwap"/>
+        <AbilArray Link="AP_NovaWeaponPsiBladeSwap"/>
+        <!--AbilArray Link="NovaWeaponPlasmaBlast"/-->
+<!--        <AbilArray Link="AP_NovaGadgetSwarmGrenades"/>-->
+        <AbilArray Link="AP_NovaGadgetPulseGrenades"/>
+        <AbilArray Link="AP_NovaGadgetFlashBangGrenades"/>
+        <!--        <AbilArray Link="AP_NovaGadgetHiveMindAmplifier"/>-->
+        <AbilArray Link="AP_NovaGadgetHolographicDecoy"/>
+        <AbilArray Link="AP_NovaHelmetHiveMindAmplifier"/>
+        <AbilArray Link="AP_HeroNuclearStrike"/>
+<!--        <AbilArray Link="AP_NovaSilentkill"/>-->
+        <AbilArray Link="AP_SuperStimpackNova"/>
+        <AbilArray Link="AP_NovaWeaponsFree"/>
+        <AbilArray Link="AP_NovaHoldFire"/>
+        <AbilArray Link="AP_NovaNukeTimer"/>
+        <AbilArray Link="AP_NovaApolloCloak"/>
+        <AbilArray Link="AP_NovaHelmetDomination"/>
+        <AbilArray Link="AP_NovaReleaseMinion"/>
+        <AbilArray Link="AP_NovaArmorBlinkSuitBlink"/>
+        <AbilArray Link="AP_NovaGadgetDefensiveDroneSummon"/>
+        <AbilArray Link="AP_NovaWeaponPlasmaBlastNew"/>
+        <AbilArray Link="AP_NovaWeaponBlazefireBladeShadowFury"/>
+        <AbilArray Link="AP_NovaPersonalDefensiveMatrix"/>
+<!--        <BehaviorArray Link="AP_NovaWeaponPsiBlade"/>-->
+<!--        <BehaviorArray Link="AP_NovaWeaponCanisterRifle"/>-->
+<!--        <BehaviorArray Link="AP_NovaWeaponHellfireShotgun"/>-->
+<!--        <BehaviorArray Link="AP_NovaWeaponPlasmaRifle"/>-->
+<!--        <BehaviorArray Link="AP_NovaWeaponBlazefireBlade"/>-->
+        <BehaviorArray Link="AP_NovaWeaponUnarmed"/>
+        <BehaviorArray Link="AP_NovaArmorStealthSuit"/>
+        <BehaviorArray Link="AP_NovaHelmetGhostVisorDetector"/>
+        <BehaviorArray Link="AP_NovaHelmetSensorVisor"/>
+        <BehaviorArray Link="AP_NovaCliffJump"/>
+        <BehaviorArray Link="AP_VoidDetectorRadar"/>
+        <BehaviorArray Link="AP_NovaJumpJetRegen"/>
+        <!--BehaviorArray Link="NovaEquipmentSwapVisible"/-->
+        <WeaponArray Link="AP_NovaHero"/>
+        <CardLayouts>
+            <LayoutButtons Face="AP_MoveChampions" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_AttackChampions" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <!--            <LayoutButtons Face="AP_NovaArmorStealthSuit" Type="Passive" Requirements="HaveNovaArmorStealthSuit" Row="2" Column="2"/>-->
+            <!--            <LayoutButtons Face="AP_NovaArmorJumpSuit" Type="Passive" Requirements="HaveNovaArmorJumpSuit" Row="2" Column="2"/>-->
+            <LayoutButtons Face="AP_ApolloCloakOnNova" Type="AbilCmd" AbilCmd="AP_NovaApolloCloak,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_PermanentlyCloakedNova" Type="Passive" Requirements="AP_HaveNovaArmorStealthSuit" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_NovaArmorBlinkSuitBlink" Type="AbilCmd" AbilCmd="AP_NovaArmorBlinkSuitBlink,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_NovaDomination" Type="AbilCmd" AbilCmd="AP_NovaHelmetDomination,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_NovaReleaseMinion" Type="AbilCmd" AbilCmd="AP_NovaReleaseMinion,Execute" Row="2" Column="4"/>
+            <!--            <LayoutButtons Face="AP_NovaHelmetGhostVisor" Type="Passive" Requirements="HaveNovaHelmetGhostVisor" Row="2" Column="3"/>-->
+            <!--            <LayoutButtons Face="AP_NovaHelmetRangefinderOculus" Type="Passive" Requirements="HaveNovaHelmetRangefinderOculus" Row="2" Column="3"/>-->
+            <LayoutButtons Face="AP_NovaWeaponCanisterRifleSnipe" Type="AbilCmd" AbilCmd="AP_NovaWeaponCanisterRifleSnipe,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_NovaWeaponBlazefireBladeShadowFury" Type="AbilCmd" AbilCmd="AP_NovaWeaponBlazefireBladeShadowFury,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_NovaWeaponPlasmaBlastNew" Type="AbilCmd" AbilCmd="AP_NovaWeaponPlasmaBlastNew,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_NovaWeaponHellfireShotgunBlast" Type="AbilCmd" AbilCmd="AP_NovaWeaponHellfireShotgunBlast,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_NovaWeaponPsiBlade" Type="AbilCmd" AbilCmd="AP_NovaPsiStrike,Execute" Row="2" Column="0"/>
+<!--            <LayoutButtons Face="AP_NovaWeaponInvictusLongshotLockdown" Type="AbilCmd" AbilCmd="AP_NovaWeaponInvictusLongshotLockdown,Execute" Row="2" Column="0"/>-->
+<!--            <LayoutButtons Face="AP_NovaWeaponPsiRifleAbduct" Type="AbilCmd" AbilCmd="AP_NovaWeaponPsiRifleAbduct,Execute" Row="2" Column="0"/>-->
+<!--            <LayoutButtons Face="AP_NovaSilentkill" Type="AbilCmd" AbilCmd="AP_NovaSilentkill,Execute" Row="2" Column="0"/>-->
+            <LayoutButtons Face="AP_SuperStimpackNova" Type="AbilCmd" AbilCmd="AP_SuperStimpackNova,Execute" Row="1" Column="0"/>
+<!--            <LayoutButtons Face="AP_NovaArmorMoebiusSuit" Type="Passive" Requirements="HaveNovaArmorApolloInfantrySuit" Row="1" Column="0"/>-->
+            <LayoutButtons Face="AP_NovaGadgetPulseGrenades" Type="AbilCmd" AbilCmd="AP_NovaGadgetPulseGrenades,Execute" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_NovaGadgetFlashBangGrenades" Type="AbilCmd" AbilCmd="AP_NovaGadgetFlashBangGrenades,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_PersonalDefensiveMatrix" Type="AbilCmd" AbilCmd="AP_NovaPersonalDefensiveMatrix,Execute" Row="1" Column="3"/>
+            <LayoutButtons Face="AP_NovaGadgetHolographicDecoy" Type="AbilCmd" AbilCmd="AP_NovaGadgetHolographicDecoy,Execute" Row="1" Column="4"/>
+<!--            <LayoutButtons Face="AP_HaveNovaGadgetDefensiveDroneSummon" Type="AbilCmd" AbilCmd="AP_NovaGadgetDefensiveDroneSummon,Execute" Row="1" Column="2"/>-->
+            <LayoutButtons Face="AP_NovaWeaponSwap" Type="Submenu" SubmenuCardId="WPN1" Row="2" Column="1"/>
+        </CardLayouts>
+        <CardLayouts CardId="WPN1">
+            <LayoutButtons Face="AP_NovaWeaponCanisterRifleSwap" Type="AbilCmd" AbilCmd="AP_NovaWeaponCanisterRifleSwap,Execute" Row="0" Column="0"/>
+            <LayoutButtons Face="AP_NovaWeaponHellfireShotgunSwap" Type="AbilCmd" AbilCmd="AP_NovaWeaponHellfireShotgunSwap,Execute" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_NovaWeaponPlasmaRifleSwap" Type="AbilCmd" AbilCmd="AP_NovaWeaponPlasmaRifleSwap,Execute" Row="0" Column="2"/>
+            <LayoutButtons Face="AP_NovaWeaponPsiBladeSwap" Type="AbilCmd" AbilCmd="AP_NovaWeaponPsiBladeSwap,Execute" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_NovaWeaponBlazefireBladeSwap" Type="AbilCmd" AbilCmd="AP_NovaWeaponBlazefireBladeSwap,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="CancelSubmenu" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_HeroNukeCalldown" Type="AbilCmd" AbilCmd="AP_NovaNukeTimer,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_HeroNukeCalldown" Type="AbilCmd" AbilCmd="AP_HeroNuclearStrike,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_GhostHoldFire" Type="AbilCmd" AbilCmd="AP_NovaHoldFire,Execute" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_WeaponsFree" Type="AbilCmd" AbilCmd="AP_NovaWeaponsFree,Execute" Row="1" Column="3"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="500"/>
+        <ScoreKill value="1000"/>
+        <SubgroupPriority value="99"/>
+        <EditorCategories value="ObjectType:Hero,ObjectFamily:Campaign"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="340"/>
+        <HotkeyCategory value="Unit/Category/TerranStory"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="33"/>
+            <ChanceArray index="Idle" value="33"/>
+            <ChanceArray index="Turn" value="33"/>
+        </Fidget>
+        <ReviveInfoBase>
+            <Charge Link="Nova/Revive"/>
+            <Cooldown Link="Nova/Revive" Location="Player" TimeUse="0.1"/>
+        </ReviveInfoBase>
+        <AlliedPushPriority value="11"/>
+    </CUnit>
+    <CUnit id="AP_NovaHoloDecoy">
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="AP_NovaHero"/>
+        <Race value="Terr"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Psionic" value="1"/>
+        <Attributes index="Heroic" value="1"/>
+        <LifeStart value="250"/>
+        <LifeMax value="250"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranInfantryArmor"/>
+        <Speed value="2.25"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <Sight value="13"/>
+        <CostCategory value="Army"/>
+        <RepairTime value="41.667"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="30"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="move"/>
+<!--        <BehaviorArray Link="AP_NovaWeaponPsiBlade"/>-->
+<!--        <BehaviorArray Link="AP_NovaWeaponCanisterRifle"/>-->
+<!--        <BehaviorArray Link="AP_NovaWeaponHellfireShotgun"/>-->
+<!--        <BehaviorArray Link="AP_NovaWeaponPlasmaRifle"/>-->
+<!--        <BehaviorArray Link="AP_NovaWeaponBlazefireBlade"/>-->
+<!--        <BehaviorArray Link="AP_NovaWeaponUnarmed"/>-->
+        <BehaviorArray Link="AP_NovaArmorStealthSuitHoloDecoy"/>
+        <BehaviorArray Link="AP_NovaHelmetGhostVisorDetector"/>
+        <BehaviorArray Link="AP_NovaHelmetSensorVisor"/>
+        <BehaviorArray Link="AP_NovaCliffJump"/>
+        <WeaponArray Link="AP_NovaHero"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AttackGhost" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <ScoreMake value="500"/>
+        <ScoreKill value="1000"/>
+        <SubgroupPriority value="99"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAI value="AP_NovaHero"/>
+        <LeaderAlias value="AP_NovaHero"/>
+        <HotkeyAlias value="AP_NovaHero"/>
+        <SelectAlias value="AP_NovaHero"/>
+        <SubgroupAlias value="AP_NovaHero"/>
+        <Fidget>
+            <ChanceArray index="Anim" value="33"/>
+            <ChanceArray index="Idle" value="33"/>
+            <ChanceArray index="Turn" value="33"/>
+        </Fidget>
+        <AlliedPushPriority value="11"/>
+    </CUnit>
+    <CUnit id="AP_NovaLockdownMissile" parent="MISSILE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_NovaPlasmaPuddleSmall">
+        <Race value="Terr"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Uncursorable" value="1"/>
+        <FlagArray index="KillCredit" value="0"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <Response value="Nothing"/>
+        <LifeStart value="10"/>
+        <LifeMax value="10"/>
+        <StationaryTurningRate value="0"/>
+        <TurningRate value="0"/>
+        <Height value="-0.2"/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <Fidget DelayMax="0" DelayMin="0"/>
+    </CUnit>
+    <CUnit id="AP_NovaWeaponPlasmaBlastNewLaunchMissile" parent="WizSimpleMissile" abil="NovaWeaponPlasmaBlastNew">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_NovaWeaponPlasmaRifleLM" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_NovaPlasmaBlast"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_NovaPlasmaBlastWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_NovaPlasmaBlast"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+        <TacticalAI value="YamatoWeapon"/>
+        <LeaderAlias value="YamatoWeapon"/>
+        <SelectAlias value="YamatoWeapon"/>
+        <AIEvaluateAlias value="YamatoWeapon"/>
     </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
@@ -8519,5 +8834,17 @@
             <Charge Link="AP_Ultralisk/Revive"/>
             <Cooldown Link="AP_Ultralisk/Revive"/>
         </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_YoinkMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Zerg"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_YoinkVikingAirMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Zerg"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_YoinkVikingGroundMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Zerg"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
 </Catalog>

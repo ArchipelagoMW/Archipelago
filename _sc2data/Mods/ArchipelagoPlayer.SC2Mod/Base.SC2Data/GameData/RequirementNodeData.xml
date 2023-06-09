@@ -2000,4 +2000,147 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSLurkerCompleteOnly">
         <Count Link="AP_HotSLurker" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaGadgetFlashBangGrenadesCompleteOnly">
+        <Count Link="AP_NovaGadgetFlashBangGrenades" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaGadgetPulseGrenadesCompleteOnly">
+        <Count Link="AP_NovaGadgetPulseGrenades" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaGadgetHolographicDecoyCompleteOnly">
+        <Count Link="AP_NovaGadgetHolographicDecoy" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaGadgetPersonalDefensiveMatrixCompleteOnly">
+        <Count Link="AP_NovaGadgetPersonalDefensiveMatrix" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSuperStimpackNovaCompleteOnly">
+        <Count Link="AP_SuperStimpackNova" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaHelmetDominationVisorCompleteOnly">
+        <Count Link="AP_NovaHelmetDominationVisor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorNovaAlreadyDominatedInProgressOrBetter">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaAlreadyDominated" State="InProgressOrBetter"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaArmorBlinkSuitCompleteOnly">
+        <Count Link="AP_NovaArmorBlinkSuit" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaCloakCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaCloak" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaArmorStealthSuitCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaArmorStealthSuit" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeNovaArmorStealthSuitCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <OperandArray index="0" value="AP_CountUpgradeNovaArmorStealthSuitCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_UseNovaBasicCloak">
+        <Flags index="TechTreeCheat" value="0"/>
+        <OperandArray value="AP_CountUpgradeNovaCloakCompleteOnly"/>
+        <OperandArray value="AP_NotCountUpgradeNovaArmorStealthSuitCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaHelmetGhostVisorCompleteOnly">
+        <Count Link="AP_NovaHelmetGhostVisor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaHelmetSensorVisorCompleteOnly">
+        <Count Link="AP_NovaHelmetSensorVisor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeDetectionEnemyCompleteOnly">
+        <Count Link="AP_DetectionEnemy" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaArmoredSuitCompleteOnly">
+        <Count Link="AP_NovaArmoredSuit" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaArmorJumpSuitCompleteOnly">
+        <Count Link="AP_NovaArmorJumpSuit" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaWeaponCanisterRifleCompleteOnly">
+        <Count Link="AP_NovaWeaponCanisterRifle" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorNovaWeaponCanisterRifleCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaWeaponCanisterRifle" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementNot id="AP_NotCountBehaviorNovaWeaponCanisterRifleCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorNovaWeaponCanisterRifleCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaWeaponHellfireShotgunCompleteOnly">
+        <Count Link="AP_NovaWeaponHellfireShotgun" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorNovaWeaponHellfireShotgunCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaWeaponHellfireShotgun" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementNot id="AP_NotCountBehaviorNovaWeaponHellfireShotgunCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorNovaWeaponHellfireShotgunCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaWeaponPlasmaRifleCompleteOnly">
+        <Count Link="AP_NovaWeaponPlasmaRifle" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorNovaWeaponPlasmaRifleCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaWeaponPlasmaRifle" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementNot id="AP_NotCountBehaviorNovaWeaponPlasmaRifleCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorNovaWeaponPlasmaRifleCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaWeaponPsiBladeCompleteOnly">
+        <Count Link="AP_NovaWeaponPsiBlade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorNovaWeaponPsiBladeCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaWeaponPsiBlade" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementNot id="AP_NotCountBehaviorNovaWeaponPsiBladeCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorNovaWeaponPsiBladeCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaWeaponBlazefireBladeCompleteOnly">
+        <Count Link="AP_NovaWeaponBlazefireBlade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorNovaWeaponBlazefireBladeCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaWeaponBlazefireBlade" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementNot id="AP_NotCountBehaviorNovaWeaponBlazefireBladeCompleteOnlyAtUnit">
+        <OperandArray index="0" value="AP_CountBehaviorNovaWeaponBlazefireBladeCompleteOnlyAtUnit"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaVoice1CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaVoice1" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaVoice2CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaVoice2" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaVoice3CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaVoice3" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaVoice4CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaVoice4" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaVoice5CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaVoice5" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaVoice6CompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaVoice6" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeNovaWarpOutCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_NovaWarpOut" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountBehaviorNovaAlreadyDominatedInProgressOrBetter">
+        <OperandArray index="0" value="AP_CountBehaviorNovaAlreadyDominatedInProgressOrBetter"/>
+    </CRequirementNot>
+    <CRequirementAnd id="AP_AndCountUpgradeNovaHelmetDominationVisorCompleteOnlyNotCountBehaviorNovaAlreadyDominatedInProgressOrBetter">
+        <OperandArray value="AP_CountUpgradeNovaHelmetDominationVisorCompleteOnly"/>
+        <OperandArray value="AP_NotCountBehaviorNovaAlreadyDominatedInProgressOrBetter"/>
+    </CRequirementAnd>
 </Catalog>

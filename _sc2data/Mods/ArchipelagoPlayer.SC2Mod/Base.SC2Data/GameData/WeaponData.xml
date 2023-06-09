@@ -1039,4 +1039,96 @@
         <Range value="2"/>
         <Period value="2"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaWeaponBlazefireBlade">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-gunblade_sword.dds"/>
+        <DisplayEffect value="AP_NovaWeaponBlazefireBladeDamageCloaked"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Period value="1.2"/>
+        <DamagePoint value="0.1875"/>
+        <Backswing value="0.6"/>
+        <Effect value="AP_NovaWeaponBlazefireBladeDamageCloakedSwitch"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaWeaponBlazefireBladeGun">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-gunblade_gun.dds"/>
+        <DisplayEffect value="AP_NovaWeaponBlazefireBladeGunDamageCloaked"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="4"/>
+        <Period value="1.2"/>
+        <DamagePoint value="0.1875"/>
+        <Backswing value="0.6"/>
+        <Effect value="AP_NovaWeaponBlazefireBladeGunDamageCloakedSwitch"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaWeaponCanisterRifle">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-canisterrifle.dds"/>
+        <DisplayEffect value="AP_NovaWeaponCanisterRifleCloaked"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <Period value="1.5"/>
+        <DamagePoint value="0.083"/>
+        <Backswing value="1.167"/>
+        <Effect value="AP_NovaWeaponCanisterRifleCloakedSwitch"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaWeaponHellfireShotgun">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-shotgun.dds"/>
+        <DisplayEffect value="AP_NovaWeaponHellfireShotgunCloaked"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="4"/>
+        <Period value="1.5"/>
+        <DamagePoint value="0.083"/>
+        <Backswing value="1.167"/>
+        <Effect value="AP_NovaWeaponHellfireShotgunCloakedSwitch"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaWeaponInvictusLongshot">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <Period value="2"/>
+        <DamagePoint value="0.083"/>
+        <Backswing value="1.167"/>
+        <DisplayEffect value="AP_NovaWeaponInvictusLongshotCloaked"/>
+        <Effect value="AP_NovaWeaponInvictusLongshotCloakedSwitch"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaWeaponPsiRifle">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-infantryweaponslevel0.dds"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <Period value="2"/>
+        <DamagePoint value="0.083"/>
+        <Backswing value="1.167"/>
+        <DisplayEffect value="AP_NovaWeaponPsiRifleCloaked"/>
+        <Effect value="AP_NovaWeaponPsiRifleCloakedSwitch"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaWeaponPsiBlade">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-monomolecularblade.dds"/>
+        <DisplayEffect value="AP_NovaWeaponPsiBladeDamageCloaked"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.1"/>
+        <Period value="1.5"/>
+        <DamagePoint value="0.1875"/>
+        <Backswing value="0.6"/>
+        <Effect value="AP_NovaWeaponPsiBladeDamageCloakedSwitch"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaWeaponPlasmaRifle">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-nova-equipment-plasmagun.dds"/>
+        <DisplayEffect value="AP_NovaWeaponPlasmaRifleDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="0.86"/>
+        <DamagePoint value="0.125"/>
+        <Backswing value="1.167"/>
+        <Effect value="AP_NovaWeaponPlasmaRifleLM"/>
+        <MinScanRange value="6.5"/>
+        <RandomDelayMin value="0"/>
+        <RandomDelayMax value="0"/>
+    </CWeaponLegacy>
 </Catalog>

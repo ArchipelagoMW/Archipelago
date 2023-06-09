@@ -3,4 +3,8 @@
     <CTargetSortValidator id="AP_TSThreatensCyclone">
         <Validator value="AP_ThreatensCyclone"/>
     </CTargetSortValidator>
+    <CTargetSortBehaviorCount id="AP_TSNovaWeaponBlazefireBladeShadowFuryTargeted">
+        <WhichUnit Value="Target"/>
+        <Behavior value="AP_NovaWeaponBlazefireBladeShadowFuryTargeted"/>
+    </CTargetSortBehaviorCount>
 </Catalog>
