@@ -684,6 +684,7 @@ async def main() -> None:
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
             import webbrowser
+            await _snes_connect(SNIContext(args.snes, args.connect, args.password), args.snes)
             webbrowser.open(f"http://www.evermizer.com/apclient/#server={meta['server']}")
             logging.info("Starting Evermizer Client in your Browser...")
             import time
