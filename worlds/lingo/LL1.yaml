@@ -2361,6 +2361,7 @@
           - Count Up Room Area Doors/Door_five_hider_4
           - Count Up Room Area Doors/Door_five_hider_5
         location_name: Fours
+        item_name: Number Hunt - Fives
         include_reduce: True
         panels:
           - FOUR
@@ -2372,6 +2373,7 @@
             panel: FOUR
       Challenge Entrance:
         id: Count Up Room Area Doors/Door_zero_unlocked
+        item_name: Number Hunt - Challenge Entrance
         panels:
           - ZERO
     paintings:
@@ -2541,6 +2543,7 @@
         # The black wall isn't a door, so we can't ever hide it.
         id: Count Up Room Area Doors/Door_zero_hider_2
         location_name: Nines
+        item_name: Outside The Undeterred - Zero Door
         include_reduce: True
         panels:
           - NINE
