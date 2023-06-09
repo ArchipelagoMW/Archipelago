@@ -2557,4 +2557,39 @@
         <Pitch value="-4.000000,-2.000000"/>
         <Volume value="-6.000000,-3.000000"/>
     </CSound>
+    <CSound id="AP_Evolution_SwarmHostLocust_Single" parent="Movement">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Evo_SwarmHost_Locust_1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Evo_SwarmHost_Locust_2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Evo_SwarmHost_Locust_3.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Evo_SwarmHost_Locust_4.wav" FacialGroup=""/>
+        <Flags index="Download" value="1"/>
+        <Flags index="Purgable" value="0"/>
+        <DupeDestroyCount value="4"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-6.000000,4.000000"/>
+        <ResourcePriority value="32"/>
+        <ReverbBalance Room="-10000"/>
+        <Volume value="-10.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Swarm_Silent" parent="Voice">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Swarm_Silent.wav" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Spell_DeepTunnel_Burrow" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge0.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge3.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_BurrowLarge4.wav" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Spell_DeepTunnel_Unburrow" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_UnburrowLarge0.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_UnburrowLarge1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_UnburrowLarge2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_UnburrowLarge3.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_UnburrowLarge4.wav" FacialGroup=""/>
+    </CSound>
 </Catalog>

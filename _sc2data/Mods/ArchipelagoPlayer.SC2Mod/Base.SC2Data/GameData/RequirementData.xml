@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CRequirement id="AP_NotHotSHaveSwarmHostSplit">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeHotSHaveSwarmHostSplitACompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_UseCombatShield">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeCombatShieldCompleteOnly"/>
@@ -358,8 +362,8 @@
     </CRequirement>
     <CRequirement id="AP_HaveLiberatorSiegeProtocolNoDefenderMode">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
-        <NodeArray index="Show" Link="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly"/>
         <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleDefenderModeCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLiberatorSiegeProtocolUpgradeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_LearnLiberatorMorph">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -958,5 +962,33 @@
     <CRequirement id="AP_HaveHotSImpaler">
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSImpalerCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSBurrowSwarmHost">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSBurrowSwarmHostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSLocustSpeed">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSLocustSpeedCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSPressurizedGlands">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSPressurizedGlandsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSRapidIncubation">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSRapidIncubationCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_NotHaveHotSBurrowSwarmHost">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeHotSBurrowSwarmHostCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveSwarmHostSplitA">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveSwarmHostSplitACompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveSwarmHostSplitB">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveSwarmHostSplitBCompleteOnly"/>
     </CRequirement>
 </Catalog>

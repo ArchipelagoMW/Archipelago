@@ -2633,4 +2633,70 @@
         <AffectedUnitArray value="AP_Hydralisk"/>
         <AffectedUnitArray value="AP_HydraliskBurrowed"/>
     </CUpgrade>
+    <CUpgrade id="AP_HotSLocustSpeed">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_Locust,Speed" Value="1.200000"/>
+        <EffectArray Operation="Multiply" Reference="Unit,AP_LocustFlying,Speed" Value="1.200000"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Locust"/>
+        <AffectedUnitArray value="AP_LocustFlying"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSPressurizedGlands">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Locust,TargetFilters" Value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LocustFlying,TargetFilters" Value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LocustLaunch,TargetFilters" Value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LocustFlyingLaunch,TargetFilters" Value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Locust"/>
+        <AffectedUnitArray value="AP_LocustFlying"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSRapidIncubation">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_LocustLaunch,Cost[0].Cooldown.TimeUse" Value="3.000000"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_LocustFlyingLaunch,Cost[0].Cooldown.TimeUse" Value="3.000000"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_LocustLaunch,Cost.Cooldown.TimeUse" Value="3.000000"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_LocustFlyingLaunch,Cost.Cooldown.TimeUse" Value="3.000000"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_LocustLaunch,Period" Value="3.000000"/>
+        <EffectArray Operation="Subtract" Reference="Weapon,AP_LocustFlyingLaunch,Period" Value="3.000000"/>
+        <EffectArray Operation="Subtract" Reference="Behavior,AP_SwarmHostEggAnimation,Duration" Value="3.000000"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSBurrowSwarmHost">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <!-- Carrion -->
+    <CUpgrade id="AP_HotSHaveSwarmHostSplitA">
+        <EffectArray Operation="Set" Reference="Weapon,AP_LocustLaunch,Options[Hidden]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LocustLaunch,Options[Disabled]" Value="1"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LocustFlyingLaunch,Options[Hidden]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_LocustFlyingLaunch,Options[Disabled]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SwarmHost,Subtitle" Value="UnitSubtitle/AP_SwarmHostSplitA"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SwarmHostRooted,Subtitle" Value="UnitSubtitle/AP_SwarmHostSplitA"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SwarmHostBurrowed,Subtitle" Value="UnitSubtitle/AP_SwarmHostSplitA"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_SwarmHost"/>
+        <AffectedUnitArray value="AP_SwarmHostRooted"/>
+        <AffectedUnitArray value="AP_SwarmHostBurrowed"/>
+    </CUpgrade>
+    <!-- Creeper -->
+    <CUpgrade id="AP_HotSHaveSwarmHostSplitB">
+        <EffectArray Operation="Set" Reference="Unit,AP_SwarmHost,Subtitle" Value="UnitSubtitle/AP_SwarmHostSplitB"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SwarmHostRooted,Subtitle" Value="UnitSubtitle/AP_SwarmHostSplitB"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SwarmHostBurrowed,Subtitle" Value="UnitSubtitle/AP_SwarmHostSplitB"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_SwarmHost"/>
+        <AffectedUnitArray value="AP_SwarmHostRooted"/>
+        <AffectedUnitArray value="AP_SwarmHostBurrowed"/>
+    </CUpgrade>
+    <!-- Carrion + Creeper -->
+    <CUpgrade id="AP_HotSHaveSwarmHostSplitAB">
+        <EffectArray Operation="Set" Reference="Unit,AP_SwarmHost,Subtitle" Value="UnitSubtitle/AP_SwarmHostSplitAB"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SwarmHostRooted,Subtitle" Value="UnitSubtitle/AP_SwarmHostSplitAB"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_SwarmHostBurrowed,Subtitle" Value="UnitSubtitle/AP_SwarmHostSplitAB"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_SwarmHost"/>
+        <AffectedUnitArray value="AP_SwarmHostRooted"/>
+        <AffectedUnitArray value="AP_SwarmHostBurrowed"/>
+    </CUpgrade>
 </Catalog>

@@ -2615,7 +2615,6 @@
     <CModel id="AP_HydraliskImpalerPortrait" parent="Portrait" Race="Zerg">
         <Model value="Assets\Portraits\Zerg\HydraliskPortrait\HydraliskPortrait.m3"/>
         <Image value="Assets\Textures\HydraliskPortrait_Static.dds"/>
-        <Lighting value="AP_HydraliskImpalerPortrait"/>
     </CModel>
     <CModel id="AP_HydraliskLurker" parent="Unit" Race="Zerg">
         <Model value="Assets\Units\Zerg\HydraliskEx1B\HydraliskEx1B.m3"/>
@@ -2675,6 +2674,225 @@
     <CModel id="AP_HydraliskLurkerPortrait" parent="Portrait" Race="Zerg">
         <Model value="Assets\Portraits\Zerg\HydraliskPortrait\HydraliskPortrait.m3"/>
         <Image value="Assets\Textures\HydraliskPortrait_Static.dds"/>
-        <Lighting value="AP_HydraliskLurkerPortrait"/>
+    </CModel>
+    <CModel id="AP_LocustEggAMissileWeapon" parent="MissileFX">
+        <Model value="Assets\Units\Zerg\SwarmHostEgg\SwarmHostEgg.m3"/>
+        <Events>
+            <Anim value="Death"/>
+            <Name value="EggPop"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="SwarmHost_SpawnLaunch"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionLayer value="3"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+        <SquibTypeDefault value="Flesh"/>
+    </CModel>
+    <CModel id="AP_LocustEggBMissileWeapon" parent="MissileFX">
+        <Model value="Assets\Units\Zerg\SwarmHostEgg\SwarmHostEgg.m3"/>
+        <Events>
+            <Anim value="Death"/>
+            <Name value="EggPop"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="SwarmHost_SpawnLaunch"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionLayer value="3"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+        <SquibTypeDefault value="Flesh"/>
+    </CModel>
+    <CModel id="AP_LocustFlying" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\SwarmHostSpawnFlyer\SwarmHostSpawnFlyer.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow05"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.500000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <TechPurchaseCamera value="Star2CameraLow05"/>
+        <Tipability value="0.750000"/>
+        <UnitGlossaryCamera value="Star2CameraLow05"/>
+    </CModel>
+    <CModel id="AP_LocustFlyingAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\SwarmHostSpawnMissileImpact\SwarmHostSpawnMissileImpact.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_LocustFlyingWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Zerg\SwarmHostSpawnAAMissile\SwarmHostSpawnAAMissile.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_LocustWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Zerg\SwarmHostSpawnMissile\SwarmHostSpawnMissile.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_SwarmHostSpawnFlyerDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\SwarmHostSpawnFlyerDeath\SwarmHostSpawnFlyerDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_LocustFlyingEggAMissileWeapon" parent="MissileFX">
+        <Model value="Assets\Units\Zerg\SwarmHostEggEx1A\SwarmHostEggEx1A.m3"/>
+        <Events>
+            <Anim value="Death"/>
+            <Name value="EggPop"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="SwarmHost_SpawnLaunch"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionLayer value="3"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+        <SquibTypeDefault value="Flesh"/>
+    </CModel>
+    <CModel id="AP_LocustFlyingEggAMissileWeaponDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\SwarmHostEggEx1A\SwarmHostEggEx1A.m3"/>
+        <Events>
+            <Anim value="Death"/>
+            <Name value="EggPop"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="SwarmHost_SpawnLaunch"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionLayer value="3"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+        <SquibTypeDefault value="Flesh"/>
+    </CModel>
+    <CModel id="AP_LocustFlyingEggBMissileWeapon" parent="MissileFX">
+        <Model value="Assets\Units\Zerg\SwarmHostEggEx1A\SwarmHostEggEx1A.m3"/>
+        <Events>
+            <Anim value="Death"/>
+            <Name value="EggPop"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="SwarmHost_SpawnLaunch"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionLayer value="3"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+        <SquibTypeDefault value="Flesh"/>
+    </CModel>
+    <CModel id="AP_LocustFlyingEggBMissileWeaponDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\SwarmHostEggEx1A\SwarmHostEggEx1A.m3"/>
+        <Events>
+            <Anim value="Death"/>
+            <Name value="EggPop"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="SwarmHost_SpawnLaunch"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionLayer value="3"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+        <SquibTypeDefault value="Flesh"/>
+    </CModel>
+    <CModel id="AP_SwarmHostDeepBurrow" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Zerg\ZagaraDeepBurrow\ZagaraDeepBurrow.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <!-- Missing in vanilla -->
+    <CModel id="AP_LurkerEggDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\LurkerEggDeath\LurkerEggDeath.m3"/>
+        <LowQualityModel value="ZergSmallUnitDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <!-- Missing in vanilla -->
+        <Lighting value="AP_LurkerEgg"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.764400"/>
+        <ShadowRadius value="0.764400"/>
+    </CModel>
+    <CModel id="AP_MendBuff" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\MendBuff\MendBuff.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SwarmHostEx1ADeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\SwarmHostEx1ADeath\SwarmHostEx1ADeath.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <VariationCount value="2"/>
+    </CModel>
+    <CModel id="AP_SwarmHostEx1BDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\SwarmHostEx1BDeath\SwarmHostEx1BDeath.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <VariationCount value="2"/>
+    </CModel>
+    <CModel id="AP_SwarmHostSplitAPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\EggMonsterPortrait\EggMonsterPortrait.m3"/>
+        <Image value="Assets\Textures\EggMonsterPortrait_Static.dds"/>
+    </CModel>
+    <CModel id="AP_SwarmHostSplitBPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\EggMonsterPortrait\EggMonsterPortrait.m3"/>
+        <Image value="Assets\Textures\EggMonsterPortrait_Static.dds"/>
+    </CModel>
+    <CModel id="AP_SwarmHostEggCreeperCampaign" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Zerg\SwarmHostEggEx1B\SwarmHostEggEx1B.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Events>
+            <Anim value="Death"/>
+            <Name value="EggPop"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="SwarmHost_SpawnLaunch"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_SwarmHostSplitA" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\SwarmHostEx1A\SwarmHostEx1A.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\SwarmHost_Campaign_RequiredAnims\SwarmHost_Campaign_RequiredAnims.m3a"/>
+        <AnimBlendTime value="0.400000"/>
+        <AttachProps Id="Ref_Target 03">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Target 04">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Target 05">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Target 06">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <Radius value="0.750000"/>
+        <SelectionRadius value="1.000000"/>
+        <ShadowRadius value="1.000000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="1.000000"/>
+        <TipabilityWidth value="1.000000"/>
+    </CModel>
+    <CModel id="AP_SwarmHostSplitB" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\SwarmHostEx1B\SwarmHostEx1B.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\SwarmHost_Campaign_RequiredAnims\SwarmHost_Campaign_RequiredAnims.m3a"/>
+        <AnimBlendTime value="0.400000"/>
+        <AttachProps Id="Ref_Target 03">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Target 04">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Target 05">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Target 06">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <Radius value="0.750000"/>
+        <SelectionRadius value="1.000000"/>
+        <ShadowRadius value="1.000000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="1.000000"/>
+        <TipabilityWidth value="1.000000"/>
     </CModel>
 </Catalog>

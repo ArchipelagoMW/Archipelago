@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CBehaviorBuff default="1" id="AP_SwarmHostEggAnimationDefault">
+        <InfoFlags index="Hidden" value="1"/>
+        <DisableValidatorArray value="NotStasis"/>
+        <DisableValidatorArray value="NotVortexd"/>
+        <DisableValidatorArray value="NotGravitonBeamd"/>
+        <DisableValidatorArray value="NotThunderCannond"/>
+        <Duration value="25"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_250mmStrikeCannons">
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-ability-terran-bombardmentstrike.dds"/>
@@ -1425,5 +1433,77 @@
         <EditorCategories value="AbilityorEffectType:Units"/>
         <Duration value="2"/>
         <Modification AttackSpeedMultiplier="0.8"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_LocustLaunchDisabled">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_LocustStun">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+        <FinalEffect value="AP_LocustTimedLife"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_LocustTimedLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="12"/>
+        <DurationRandomMax value="0.5"/>
+        <ExpireEffect value="TimedLifeFate"/>
+        <Modification>
+            <StateFlags index="Summoned" value="1"/>
+        </Modification>
+        <KillCredit Value="Caster"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PrecursorLocust">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="NoDraw" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_LocustFlyingStun">
+        <InfoFlags index="Hidden" value="1"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="0.1"/>
+        <FinalEffect value="AP_LocustTimedLife"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="Unselectable" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorCreepSource id="AP_MakeCreepSwarmHost">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <Delay value="2"/>
+        <Period value="1"/>
+        <Start value="AP_CreepSwarmHostStart"/>
+        <Birth value="AP_CreepSwarmHostStart"/>
+        <Grown value="AP_CreepSwarmHostGrown"/>
+        <DisableValidatorArray value="CasterIsStationary"/>
+        <DisableValidatorArray value="Pathable"/>
+        <Requirements value="AP_HotSHaveSwarmHostSplitB"/>
+    </CBehaviorCreepSource>
+    <CBehaviorBuff id="AP_SwarmHostSplitBPlacementRemove">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="0.1"/>
+        <FinalEffect value="AP_SuicideRemove"/>
     </CBehaviorBuff>
 </Catalog>
