@@ -1010,6 +1010,35 @@
         <DamagePoint value="0.208"/>
         <Effect value="AP_NeedleSpinesLaunchMissile"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_RailGunTurret">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-hisecautotracking.dds"/>
+        <DisplayEffect value="AP_RailGunTurretDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="2"/>
+        <Effect value="AP_RailGunTurretSearchCP"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NovaRavenSeekerMissile">
+        <EditorCategories value="Race:Terran"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="DisplayCooldown" value="1"/>
+        <Icon value="Assets\Textures\BTN-Ability-Terran-HunterMissile-color.dds"/>
+        <DisplayEffect value="AP_NovaRavenSeekerMissileDamage"/>
+        <Range value="10"/>
+        <Period value="7"/>
+        <Effect value="AP_NovaRavenSeekerMissileLaunchMissile"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HellionTank">
+        <EditorCategories value="Race:Terran"/>
+        <Icon value="Assets\Textures\btn-upgrade-terran-vehicleweaponslevel0.dds"/>
+        <DisplayEffect value="AP_HellionTankDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquirePrioritization value="ByAngle"/>
+        <Range value="2"/>
+        <Period value="2"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="AP_Locust">
         <EditorCategories value="Race:Zerg"/>
         <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>

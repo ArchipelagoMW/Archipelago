@@ -141,6 +141,16 @@
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
     </CButton>
+    <CButton id="AP_SiegeTankJumpJet">
+        <Icon value="Assets\Textures\btn-upgrade-terran-jumpjets.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-JetPack-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_DeploySpiderMines">
+        <Icon value="Assets\Textures\btn-upgrade-siegetank-spidermines.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-siegetank-spidermines.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
     <CButton id="AP_Heal">
         <Icon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
@@ -187,6 +197,11 @@
         <TintRacially value="1"/>
     </CButton>
     <CButton id="AP_CrossSpectrumDampeners">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-crossspectrumdampeners.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <TintRacially value="1"/>
+    </CButton>
+    <CButton id="AP_PermanentCloakBanshee">
         <Icon value="Assets\Textures\btn-techupgrade-terran-crossspectrumdampeners.dds"/>
         <EditorCategories value="Race:Terran"/>
         <TintRacially value="1"/>
@@ -1236,9 +1251,14 @@
     </CButton>
     <CButton id="AP_BuildHealingDrone">
         <Tooltip value="Button/Tooltip/AP_HealingDrone"/>
-        <Icon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <Icon value="Assets\Textures\BTN-Unit-BiomechanicalDrone.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Unit-BiomechanicalDrone.dds"/>
         <AlertTooltip value="Button/Tooltip/AP_HealingDrone"/>
-        <AlertIcon value="Assets\Textures\btn-unit-terran-targetingdrone.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_DeploySpiderMinesRaven">
+        <Icon value="Assets\Textures\btn-upgrade-siegetank-spidermines.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-siegetank-spidermines.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_ImpalerBurrowDown">
@@ -1293,6 +1313,87 @@
     <CButton id="AP_HydraliskFrenzy">
         <Icon value="Assets\Textures\btn-upgrade-zerg-frenzy.dds"/>
         <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_BuildRailGunTurret">
+        <Tooltip value="Button/Tooltip/AP_RailGunTurret"/>
+        <Icon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <AlertTooltip value="Button/Tooltip/AP_RailGunTurret"/>
+        <AlertIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_AdvancedWeaponryRaven">
+        <Icon value="Assets\Textures\btn-upgrade-terran-nova-specialordance.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-nova-specialordance.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_RavenScramblerMissile">
+        <Icon value="Assets\Textures\btn-upgrade-terran-interferencematrix.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-interferencematrix.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_RavenShredderMissile">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-ShredderMissile-Color.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-ShredderMissile-Color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CliffJumper">
+        <Icon value="Assets\Textures\BTN-Ability-Terran-JetPack-color.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Terran-JetPack-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_MorphToHellion">
+        <Icon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="HellionModes"/>
+    </CButton>
+    <CButton id="AP_MorphToHellionTank">
+        <Icon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeySet value="HellionModes"/>
+    </CButton>
+    <CButton id="AP_HellbatCharge">
+        <Icon value="Assets\Textures\btn-upgrade-terran-jumpjets.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-jumpjets.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_SuperStimpackSmall">
+        <Icon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="Stim"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_SuperStimpackLarge">
+        <Icon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <HotkeyAlias value="Stim"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_LaserTargetingSystem">
+        <Icon value="Assets\Textures\btn-upgrade-terran-lazertargetingsystem.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_CombatShield">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-combatshield-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_MagrailMunitions">
+        <Icon value="Assets\Textures\btn-upgrade-terran-magrailmunitions.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-surfacetoairtargeting.dds"/>
+    </CButton>
+    <CButton id="AP_CloakOnReaper">
+        <Icon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-cloak-color.dds"/>
+        <EditorCategories value="Race:Terran"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_CombatDrugs">
+        <Icon value="Assets\Textures\btn-upgrade-terran-reapercombatdrugs.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-reapercombatdrugs.dds"/>
+        <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_BurrowSwarmHost">
         <Icon value="Assets\Textures\BTN-Upgrade-Zerg-SwarmHostBurrow.dds"/>

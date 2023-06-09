@@ -110,34 +110,116 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
-    <CAbilEffectInstant id="AP_Stimpack">
+    <CAbilEffectInstant id="AP_StimpackBase">
         <AbilSetId value="Stimpack"/>
+        <AINotifyEffect value="Stimpack"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Marker Link="Abil/AP_Stimpack"/>
         <InfoTooltipPriority value="1"/>
         <Flags index="Transient" value="1"/>
+        <Effect index="0" value="AP_Stimpack"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackSmallBase" parent="AP_StimpackBase">
         <Cost>
+            <Charge Link="Abil/AP_Stimpack"/>
+            <Cooldown Link="Abil/AP_Stimpack"/>
             <Vital index="Life" value="10"/>
         </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackLargeBase" parent="AP_StimpackBase">
+        <Cost>
+            <Charge Link="Abil/AP_Stimpack"/>
+            <Cooldown Link="Abil/AP_Stimpack"/>
+            <Vital index="Life" value="20"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_Stimpack" parent="AP_StimpackSmallBase">
         <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackSM">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
-    <CAbilEffectInstant id="AP_StimpackMarauder">
-        <AbilSetId value="Stimpack"/>
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <Flags index="Transient" value="1"/>
-        <Cost>
-            <Vital index="Life" value="20"/>
-            <Charge Link="Abil/AP_Stimpack"/>
-            <Cooldown Link="Abil/AP_Stimpack"/>
-        </Cost>
-        <Marker Link="Abil/AP_Stimpack"/>
-        <AINotifyEffect value="Stimpack"/>
-        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" Requirements="AP_UseStimpack">
+    <CAbilEffectInstant id="AP_StimpackReaper" parent="AP_StimpackSmallBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackSMReaper">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
-        <InfoTooltipPriority value="1"/>
     </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackMarauder" parent="AP_StimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackMarauder">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_StimpackFirebat" parent="AP_StimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="Stim" State="Restricted" Requirements="AP_UseStimpackFirebat">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackBase">
+        <AbilSetId value="Stimpack"/>
+        <AINotifyEffect value="Stimpack"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Flags index="PassengerAcquirePassengers" value="1"/>
+        <AutoCastRange value="5"/>
+        <AutoCastValidatorArray value="AP_CasterIsFiringOrAnimatingWeapon"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackSmallBase" parent="AP_SuperStimpackBase">
+        <Effect index="0" value="AP_SuperStimpackSmallSet"/>
+        <Cost>
+            <Cooldown TimeUse="18"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackLargeBase" parent="AP_SuperStimpackBase">
+        <Effect index="0" value="AP_SuperStimpackLargeSet"/>
+        <Cost>
+            <Cooldown TimeUse="18"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackMarine" parent="AP_SuperStimpackSmallBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackSmall" Requirements="AP_HaveSuperStimpackMarine">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackReaper" parent="AP_SuperStimpackSmallBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackSmall" Requirements="AP_HaveSuperStimpackReaper">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackMarauder" parent="AP_SuperStimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackLarge" Requirements="AP_HaveSuperStimpackMarauder">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_SuperStimpackFirebat" parent="AP_SuperStimpackLargeBase">
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SuperStimpackLarge" Requirements="AP_HaveSuperStimpackFirebat">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilAugment id="AP_MagrailMunitionsMarauder">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MagrailMunitions" Requirements="AP_MagrailMunitionsMarauder"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Effect value="AP_MagrailMunitionsSet"/>
+    </CAbilAugment>
+    <CAbilAugment id="AP_MagrailMunitionsMarine">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MagrailMunitions" Requirements="AP_MagrailMunitionsMarine"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Effect value="AP_MagrailMunitionsSet"/>
+    </CAbilAugment>
     <CAbilEffectTarget id="AP_heal">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Flags index="AllowMovement" value="1"/>
@@ -197,6 +279,37 @@
         <CastOutroTime value="0.35"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_D8Charge" State="Restricted" Requirements="AP_UseG4ClusterBombs"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ReaperSpiderMines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Placeholder value="SpiderMine"/>
+        <Range value="2"/>
+        <Cost>
+            <Charge>
+                <CountMax value="3"/>
+                <CountStart value="3"/>
+                <CountUse value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SpiderMine" Requirements="AP_HaveReaperSpiderMines"/>
+        <Effect index="0" value="AP_SpawnReaperSpiderMineSet"/>
+    </CAbilEffectTarget>
+    <CAbilSpecialize id="AP_MakeReaperSpiderMines">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray index="Specialize1" Time="12" Alert="SpiderMineComplete" Effect="AP_ReaperReplenishMines">
+            <Resource index="Minerals" value="15"/>
+            <Charge>
+                <CountMax value="3"/>
+                <CountUse value="1"/>
+                <HideCount value="1"/>
+                <Location value="Unit"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_SpiderMineReplenish" Requirements="AP_HaveReaperSpiderMines"/>
+        </InfoArray>
+        <Alert value="BuildComplete"/>
+        <Flags index="BestUnit" value="0"/>
+        <Activity value="UI/AP_SpiderMineBuilding"/>
+    </CAbilSpecialize>
     <CAbilSpecialize id="AP_MakeVultureSpiderMines">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Activity value="UI/AP_SpiderMineBuilding"/>
@@ -338,6 +451,102 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilEffectTarget id="AP_SiegeTankJumpJet">
+        <AbilSetId value="AP_SiegeTankJumpJet"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_SiegeTankJumpJetCreatePlaceholder"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="8"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SiegeTankJumpJet" Requirements="AP_HaveHoverSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <PlaceUnit value="AP_SiegeTankJumpJetPlaceholder"/>
+        <PrepTime value="0.125"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_SiegeTankSiegedJumpJet">
+        <AbilSetId value="AP_SiegeTankJumpJet"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_SiegeTankSiegedJumpJetCreatePlaceholder"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Link="Abil/SiegeTankJumpJet" Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <PrepTime value="0.125"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SiegeTankJumpJet" Requirements="AP_HaveHoverSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <PlaceUnit value="AP_SiegeTankSiegedJumpJetPlaceholder"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_MercSiegeTankJumpJet">
+        <AbilSetId value="AP_SiegeTankJumpJet"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_MercSiegeTankJumpJetCreatePlaceholder"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="8"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SiegeTankJumpJet" Requirements="AP_HaveHoverSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <PlaceUnit value="AP_SiegeTankJumpJetPlaceholder"/>
+        <PrepTime value="0.125"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_MercSiegeTankSiegedJumpJet">
+        <AbilSetId value="AP_SiegeTankJumpJet"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_MercSiegeTankSiegedJumpJetCreatePlaceholder"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown Link="Abil/SiegeTankJumpJet" Location="Unit" TimeUse="8"/>
+        </Cost>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <PrepTime value="0.125"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SiegeTankJumpJet" Requirements="AP_HaveHoverSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <PlaceUnit value="AP_SiegeTankSiegedJumpJetPlaceholder"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_DeploySpiderMines">
+        <Effect index="0" value="AP_DeploySpiderMinesPersistent"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Charge CountMax="3" CountStart="3" CountUse="1"/>
+            <Cooldown Location="Unit"/>
+        </Cost>
+        <Range value="5.5"/>
+        <Arc value="360"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <ProducedUnitArray value="AP_SpiderMine"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DeploySpiderMines" Requirements="AP_HaveSpiderMinesSiegeTank">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
     <CAbilEffectTarget id="AP_MedivacDoubleBeamHeal">
         <Alignment value="Positive"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -2136,6 +2345,23 @@
         <AutoCastRange value="5"/>
         <AutoCastCountMin value="1"/>
     </CAbilMorph>
+    <CAbilEffectTarget id="AP_BuildRailGunTurret">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="21"/>
+        <Effect index="0" value="AP_RailGunTurretRelease"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown Link="Raven Build Link" Location="Unit"/>
+        </Cost>
+        <Placeholder value="AP_RailGunTurret"/>
+        <Range value="3"/>
+        <Marker Link="Abil/AutoTurret"/>
+        <ErrorAlert value="Error"/>
+        <ProducedUnitArray value="AP_RailGunTurret"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_BuildRailGunTurret" Requirements="AP_MagrailMunitionsRaven"/>
+        <PlaceUnit value="AP_RailGunTurret"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -2391,6 +2617,57 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_BuildHealingDrone" Requirements="AP_HaveRavenBioMechanicalRepairDrone"/>
         <PlaceUnit value="AP_HealingDrone"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_RavenDeploySpiderMines">
+        <Effect index="0" value="AP_DeploySpiderMinesPersistent"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="5.5"/>
+        <Arc value="360"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <ProducedUnitArray value="AP_SpiderMine"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DeploySpiderMines" Requirements="AP_HaveSpiderMinesRaven"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_RavenScramblerMissile">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="AP_RavenScramblerSwitchInitial"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="ChannelingMinimum" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <Range value="9"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <ValidatedArray index="Wait" value="1"/>
+        <ValidatedArray index="Channel" value="0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_RavenScramblerMissile" Requirements="AP_HaveRavenInterferenceMatrix"/>
+        <DefaultError value="MustTargetUnit,Error/MustTargetMechanicalorPsionic"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_RavenShredderMissile">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="AP_RavenShredderMissileLaunchMissile"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="10"/>
+        <Arc value="29.9926"/>
+        <ArcSlop value="0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_RavenShredderMissile" Requirements="AP_HaveRavenAntiArmorMissile"/>
+    </CAbilEffectTarget>
     <CAbilTrain id="AP_MorphRoachToImpaler">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <RefundFraction>
@@ -2446,6 +2723,61 @@
         </Cost>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_HydraliskFrenzy" Requirements="AP_HaveHotSHydraliskFrenzy"/>
     </CAbilEffectInstant>
+    <CAbilMorph id="AP_MorphToHellion">
+        <AbilSetId value="HellionMode"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MorphToHellion" Requirements="AP_HaveHellbatAspect">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_Hellion" RandomDelayMax="0.25">
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="0.33"/>
+                <DurationArray index="Duration" value="3.67"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="4"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.33"/>
+                <DurationArray index="Duration" value="3.67"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_MorphToHellionTank">
+        <AbilSetId value="TankMode"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MorphToHellionTank" Requirements="AP_HaveHellbatAspect">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_HellionTank" RandomDelayMax="0.25">
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="0.33"/>
+                <DurationArray index="Duration" value="3.67"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="4"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.33"/>
+                <DurationArray index="Duration" value="3.67"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilAugment id="AP_HellbatCharge">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_HellbatCharge" Requirements="AP_HaveHoverHellbat"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <AbilCmd value="attack,Execute"/>
+        <TargetType value="UnitOrPoint"/>
+        <Cost>
+            <Cooldown Link="AP_HellbatCharge" Location="Unit" TimeUse="1.8"/>
+        </Cost>
+        <Effect value="AP_HellbatLeap"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+    </CAbilAugment>
     <CAbilEffectTarget id="AP_LocustLaunch">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <Effect index="0" value="AP_LocustCreateSet"/>
@@ -2634,6 +2966,7 @@
         <LoadCargoBehavior value="AP_BunkerWeaponRangeBonus"/>
         <TargetFilters value="Biological,Visible;Ally,Neutral,Enemy,Dead,Hidden"/>
         <LoadValidatorArray value="RequiresTerran"/>
+        <LoadValidatorArray value="AP_IsNotHellionTank"/>
     </CAbilTransport>
     <CAbilRedirectTarget id="AP_AttackRedirect">
         <Abil value="attack"/>

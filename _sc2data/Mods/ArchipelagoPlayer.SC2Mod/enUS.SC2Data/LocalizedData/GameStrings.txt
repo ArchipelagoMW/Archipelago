@@ -14,6 +14,7 @@ Abil/Name/AP_BarracksTechLabResearch=Tech Lab Research (Barracks)
 Abil/Name/AP_BarracksTechReactorMorph=Barracks Tech Reactor Morph
 Abil/Name/AP_BarracksTrain=Train
 Abil/Name/AP_BuildAutoTurret=Place Auto Turret
+Abil/Name/AP_BuildRailGunTurret=Place Railgun Turret
 Abil/Name/AP_BuildinProgressNonCancellable=Build in Progress Non Cancellable
 Abil/Name/AP_BunkerStop=Stop
 Abil/Name/AP_BunkerTransport=Load-Unload (Bunker)
@@ -162,6 +163,8 @@ Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
 Abil/Name/MercCompoundResearch2=Research
+Abil/Name/AP_MorphToHellion=Morph To Hellion
+Abil/Name/AP_MorphToHellionTank=Morph To Hellbat
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
 Actor/AddonIndicator/AP_TechLab=T
@@ -195,6 +198,11 @@ Behavior/Name/AP_ParalyticSpines=Paralytic Spines
 Behavior/Name/AP_PersonalCloakingFree=Cloak
 Behavior/Name/AP_PredatorCloaking=Cloak
 Behavior/Name/AP_PsiDisruption=Psi Disruption
+Behavior/Name/AP_RavenScramblerMissile=Interference Matrix
+Behavior/Name/AP_RavenShredderMissileArmorReduction=Anti-Armor Missile Targeting
+Behavior/Name/AP_RavenShredderMissileArmorReductionUIAdd=Armor Reduction
+Behavior/Name/AP_RavenShredderMissileArmorReductionUISubtruct=Armor Reduction
+Behavior/Name/AP_RavenShredderMissileTint=Anti-Armor Missile Targeting
 Behavior/Name/AP_RoachCorpser=Roachling Infestation
 Behavior/Name/AP_ScienceVesselCloakField=Cloaking Field
 Behavior/Name/AP_SeekerMissileTimeout=Seeker Missile timeout
@@ -215,7 +223,9 @@ Behavior/Name/AP_VileAcidSlowFlatAmountHeroic=Debilitating Saliva
 Behavior/Name/AP_VileAcidSlowFlatAmountStructure=Debilitating Saliva
 Behavior/Name/AP_ViralPlasma=Viral Plasma
 Behavior/Name/AP_WraithCloak=Cloak
-Behavior/Name/BileDucts3=Bile Ducts
+Behavior/Name/AP_HellbatLeapStun=Stunned
+Behavior/Name/AP_SuperStim=Super Stimpack
+Behavior/Name/AP_ReaperPermanentCloak=Cloak
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_BansheeCloak=This unit is cloaked and will only be revealed by detectors or effects.
@@ -231,6 +241,10 @@ Behavior/Tooltip/AP_ParalyticSpines=This unit's attack speed is slowed.
 Behavior/Tooltip/AP_PersonalCloakingFree=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_PredatorCloaking=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_PsiDisruption=Attack and movement speeds halved.
+Behavior/Tooltip/AP_RavenScramblerMissile=Weapons and abilities are disabled.
+Behavior/Tooltip/AP_RavenShredderMissileArmorReductionUIAdd=This unit takes additional melee and ranged damage.
+Behavior/Tooltip/AP_RavenShredderMissileArmorReductionUISubtruct=This unit has reduced armor.
+Behavior/Tooltip/AP_RavenShredderMissileTint=This unit is being targeted by an Anti-Armor Missile.
 Behavior/Tooltip/AP_RoachCorpser=When this unit dies, it will spawn two Roachlings.
 Behavior/Tooltip/AP_Slow=Target's movement speed is reduced for a short period of time.
 Behavior/Tooltip/AP_SpectreCloaking=This unit is cloaked and will only be revealed by detectors or effects.
@@ -243,11 +257,15 @@ Behavior/Tooltip/AP_VileAcidSlowFlatAmount=Attack and movement speeds are slowed
 Behavior/Tooltip/AP_VileAcidSlowFlatAmountHeroic=Attack and movement speeds are slowed.
 Behavior/Tooltip/AP_VileAcidSlowFlatAmountStructure=Attack speeds are slowed.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
+Behavior/Tooltip/AP_HellbatLeapStun=This unit cannot move or attack.
+Behavior/Tooltip/AP_SuperStim=This unit moves and attacks more quickly while under the effects of Super Stimpack.
+Behavior/Tooltip/AP_ReaperPermanentCloak=This unit is cloaked and will only be revealed by detectors or effects.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AberrationTowering=Towering
 Button/Name/AP_AblativeScales=Kinetic Foam
 Button/Name/AP_AdvancedHealingAI=Advanced Healing AI
+Button/Name/AP_AdvancedWeaponryRaven=Hunter-Seeker Missile
 Button/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
 Button/Name/AP_AncillaryCarapaceHydralisk=Ancillary Carapace
 Button/Name/AP_AresClassWeaponsSystem=Ares-Class Targeting System
@@ -265,6 +283,7 @@ Button/Name/AP_BuildFortifiedBunker=Build Fortified Bunker
 Button/Name/AP_BuildHealingDrone=Deploy Bio-Mechanical Repair Drone
 Button/Name/AP_BuildHercules=Build Hercules
 Button/Name/AP_BuildPointDefenseDrone=Build Point Defense Drone
+Button/Name/AP_BuildRailGunTurret=Deploy Railgun Turret
 Button/Name/AP_BuildScienceVessel=Build Science Vessel
 Button/Name/AP_Bunker=Build Bunker
 Button/Name/AP_BunkerFortified=Build Bunker
@@ -274,6 +293,7 @@ Button/Name/AP_BurrowLurkerMP=Burrow
 Button/Name/AP_BurrowSwarmHost=Burrow
 Button/Name/AP_CalldownMULE=Calldown: MULE
 Button/Name/AP_CerberusMines=Cerberus Mine
+Button/Name/AP_CliffJumper=Cliff Jumper
 Button/Name/AP_CloakOnBanshee=Cloak
 Button/Name/AP_CloakOnBattlecruiser=Cloak
 Button/Name/AP_CloakOnGhost=Cloak
@@ -294,6 +314,8 @@ Button/Name/AP_CycloneResearchLockOnAir=Research Mag-Field Accelerator
 Button/Name/AP_CycloneResearchLockOnDamageUpgrade=Research Mag-Field Accelerator
 Button/Name/AP_D8Charge=G-4 Cluster Bombs
 Button/Name/AP_DefensiveMatrix=Defensive Matrix
+Button/Name/AP_DeploySpiderMines=Deploy Spider Mines
+Button/Name/AP_DeploySpiderMinesRaven=Deploy Spider Mines
 Button/Name/AP_Diamondback=Build Diamondback
 Button/Name/AP_DisplacementField=Displacement Field
 Button/Name/AP_DrillClaws=Drilling Claws
@@ -383,6 +405,7 @@ Button/Name/AP_NyxClassCloakingModule=Nyx-Class Cloaking Module
 Button/Name/AP_Obliterate=Psionic Lash
 Button/Name/AP_OcularImplants=Ocular Implants
 Button/Name/AP_PerditionTurret=Build Perdition Turret
+Button/Name/AP_PermanentCloakBanshee=Advanced Cross-Spectrum Dampeners
 Button/Name/AP_PermanentlyCloakedGhost=Permanently Cloaked
 Button/Name/AP_PermanentlyCloakedSpectre=Permanently Cloaked
 Button/Name/AP_PlanetaryFortressLoad=Load
@@ -396,6 +419,8 @@ Button/Name/AP_RapidDeploymentTubes=Rapid Deployment
 Button/Name/AP_RapidIncubation=Rapid Incubation
 Button/Name/AP_RapidRegeneration=Rapid Regeneration
 Button/Name/AP_Raven=Build Raven
+Button/Name/AP_RavenScramblerMissile=Interference Matrix
+Button/Name/AP_RavenShredderMissile=Anti-Armor Missile
 Button/Name/AP_Reactor=Build Reactor
 Button/Name/AP_Reaper=Train Reaper
 Button/Name/AP_Refinery=Build Refinery
@@ -413,6 +438,7 @@ Button/Name/AP_ShapedHull=Shaped Hull
 Button/Name/AP_ShockwaveMissilePattern=Shockwave Missile Battery
 Button/Name/AP_ShrikeTurret=Shrike Turret
 Button/Name/AP_SiegeTank=Build Siege Tank
+Button/Name/AP_SiegeTankJumpJet=Jump Jets
 Button/Name/AP_SingularityAnchor=Tomahawk Power Cells
 Button/Name/AP_Snipe=Sniper Round
 Button/Name/AP_SpecterPsiRound=Spectre Psi Round
@@ -484,12 +510,23 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
+Button/Name/AP_MorphToHellion=Hellion Mode
+Button/Name/AP_MorphToHellionTank=Hellbat Mode
+Button/Name/AP_HellbatCharge=Jump Jet Assault
+Button/Name/AP_SuperStimpackSmall=Super Stimpack
+Button/Name/AP_SuperStimpackLarge=Super Stimpack
+Button/Name/AP_LaserTargetingSystem=Laser Targeting System
+Button/Name/AP_CombatShield=Combat Shield
+Button/Name/AP_MagrailMunitions=Magrail Munitions
+Button/Name/AP_CloakOnReaper=Permanently Cloaked
+Button/Name/AP_CombatDrugs=Combat Drugs
 Button/Name/AP_LocustFlyingLaunch=Spawn Locusts
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
 Button/Tooltip/AP_AdvancedHealingAI=The Medivac can heal two targets at once.
+Button/Tooltip/AP_AdvancedWeaponryRaven=Adds a Hunter-Seeker Missile weapon that automatically attacks enemy units and does not cost energy.
 Button/Tooltip/AP_AllPurposeLaserBattery=Battlecruisers can attack while moving and do same damage to both ground and air targets.
 Button/Tooltip/AP_AncillaryCarapaceHydralisk=Hydralisk gains +20 maximum life.
 Button/Tooltip/AP_AresClassWeaponsSystem=Increases missile range by 3 and Autocannon range by 1.
@@ -521,7 +558,9 @@ Button/Tooltip/AP_BurrowLurkerMP=Buries the Lurker underground. Burrowed Lurkers
 Button/Tooltip/AP_BurrowSwarmHost=Allows Swarm Hosts to burrow. When burrowed, they cannot be seen without detection.
 Button/Tooltip/AP_CalldownMULE=Drops an experimental robotic MULE miner onto the target Mineral Field. MULEs collect minerals more quickly than SCVs.  <n/><n/>MULEs last <d time="90"/> before their systems fail.
 Button/Tooltip/AP_CerberusMines=Increases blast radius and trigger radius by 33%.
+Button/Tooltip/AP_CliffJumper=This unit can jump up and down cliffs.
 Button/Tooltip/AP_CloakOnBanshee=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_BansheeCloak,Modification.VitalRegenArray[2] + Unit,AP_Banshee,EnergyRegenRate)" precision="1"/> energy per second.</c>
+Button/Tooltip/AP_CloakOnBansheeFree=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.
 Button/Tooltip/AP_CloakOnBansheeUpgrade=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="0.45 / Behavior,TimeScaleConversionBehavior,Duration)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnBattlecruiser=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_BattlecruiserCloak,Modification.VitalRegenArray[2] + Unit,AP_Battlecruiser,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_CloakOnGhost=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_GhostCloak,Modification.VitalRegenArray[2] + Unit,AP_Ghost,EnergyRegenRate)" precision="1"/> energy per second.</c>
@@ -543,6 +582,8 @@ Button/Tooltip/AP_CycloneResearchLockOnAir=Allows the Cyclone's Typhoon Missile 
 Button/Tooltip/AP_CycloneResearchLockOnDamageUpgrade=Increases <c val="ffff8a">Cyclone</c> Lock On damage. Deals 600 over <d ref="Effect,AP_LockOnCP,PeriodCount * Effect,AP_LockOnCP,PeriodicPeriodArray[0]"/> seconds to ground and flying targets.
 Button/Tooltip/AP_D8Charge=Timed explosive that does heavy area damage.
 Button/Tooltip/AP_DefensiveMatrix=Surrounds the Battlecruiser with a shield that can absorb <d ref="Behavior,AP_DefensiveMatrix,Modification.VitalMaxArray[1]"/> damage. Ability can only be used once every <d ref="Abil,AP_DefensiveMatrix,Cost[0].Cooldown.TimeUse"/> seconds.
+Button/Tooltip/AP_DeploySpiderMines=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy <c val="FFE303">Detectors</c>.
+Button/Tooltip/AP_DeploySpiderMinesRaven=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy <c val="FFE303">Detectors</c>.
 Button/Tooltip/AP_DevilDog=Specialized anti-infantry attacker.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Diamondback=Fast, high-damage hovertank. Rail Gun can fire while the Diamondback is moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_DisplacementField=A detected Wraith evades 20% of incoming attacks while cloaked.
@@ -648,6 +689,7 @@ Button/Tooltip/AP_OrbitalCommandFlying=Primary structure. Must land to receive r
 Button/Tooltip/AP_OrbitalCommandUnit=Primary structure. Used to train SCVs and receive gathered resources. Can use the Scanner Sweep ability. Can use the abilities Calldown: MULE and Calldown: Extra Supplies.
 Button/Tooltip/AP_PerditionTurret=Automated defensive turret. Burrows when there are no enemies nearby.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_PerditionTurretUnderground=Automated defensive turret. Burrows when there are no enemies nearby.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_PermanentCloakBanshee=Cloak no longer requires energy.
 Button/Tooltip/AP_PermanentlyCloakedGhost=The Ghost is permanently cloaked.
 Button/Tooltip/AP_PermanentlyCloakedSpectre=The Spectre is permanently cloaked.
 Button/Tooltip/AP_PlanetaryFortress=Primary structure. Used to train SCVs and receive gathered resources. Has exceptional combat capabilities that are extremely potent against swarms of small units.<n/><n/><c val="ffff8a">Can attack ground units.</c>
@@ -658,11 +700,14 @@ Button/Tooltip/AP_Predator=Anti-infantry specialist that deals area damage with 
 Button/Tooltip/AP_ProjectileAccelerators=Increases the range of all units in the Bunker by 1.
 Button/Tooltip/AP_PsiDisruption=Slows the attack and movement speeds of all nearby Zerg units.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
 Button/Tooltip/AP_PsiDisruptor=Defensive structure. Slows the attack and movement speeds of all nearby Zerg units.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
+Button/Tooltip/AP_RailGunTurret=Automated defensive turret. Damages all enemy ground units in a straight line. Times out after <d ref="Behavior,AP_RailGunTurretTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_RapidDeployment=The Hercules deploys loaded troops almost instantly.
 Button/Tooltip/AP_RapidDeploymentTubes=The Medivac deploys loaded troops almost instantly.
 Button/Tooltip/AP_RapidIncubation=Locusts spawn 20% faster.
 Button/Tooltip/AP_RapidRegeneration=The Roach regenerates life very quickly while burrowed.
 Button/Tooltip/AP_Raven=Aerial support unit. Can use Auto-Turret, Point Defense Drone and Seeker Missile.<n/><n/><c val="FFE303">Detector</c>
+Button/Tooltip/AP_RavenScramblerMissile=Disables a target unit rendering it unable to attack or use abilities for <d ref="Behavior,AP_RavenScramblerMissile,Duration"/> seconds. Reveals Cloaked units.<n/><n/><c val="#ColorAttackInfo">Can target mechanical and psionic units.</c>
+Button/Tooltip/AP_RavenShredderMissile=Deploys a missile which pursues the target unit and, upon contact, reduces the armor and shield armor of affected units by <d ref="-1*Behavior,AP_RavenShredderMissileArmorReductionUISubtruct,Modification.LifeArmorBonus"/> for <d ref="Behavior,AP_RavenShredderMissileArmorReductionUISubtruct,Duration"/> seconds.
 Button/Tooltip/AP_Reactor=Allows 2 units to be created simultaneously.
 Button/Tooltip/AP_Reaper=Raider. Capable of jumping up and down cliffs. Throws explosive mines.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Refinery=Built over a Vespene Geyser to allow harvesting of vespene gas.
@@ -685,6 +730,7 @@ Button/Tooltip/AP_ShrikeTurret=Bunkers are outfitted with an automated turret.
 Button/Tooltip/AP_SiegeBreaker=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeBreakerSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SiegeTank=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_SiegeTankJumpJet=Repositions the Siege Tank to a target location. Can be used to jump up and down cliffs.
 Button/Tooltip/AP_SiegeTankSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SingularityAnchor=Wraith starts with 100 additional energy.
 Button/Tooltip/AP_Snipe=A careful shot, dealing 45 damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
@@ -765,6 +811,17 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
+Button/Tooltip/AP_HellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_MorphToHellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire. Can transform into a close range combat unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_MorphToHellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_HellbatCharge=Launches the Hellbat toward nearby enemy ground units. Briefly stuns enemy units on impact.
+Button/Tooltip/AP_SuperStimpackSmall=Increases the unit's attack and movement speeds for <d ref="Behavior,AP_SuperStim,Duration"/> seconds. Heals the unit for <d ref="Effect,AP_SuperStimpackSmallSetMU,VitalArray[Life].Change"/> life.
+Button/Tooltip/AP_SuperStimpackLarge=Increases the unit's attack and movement speeds for <d ref="Behavior,AP_SuperStim,Duration"/> seconds. Heals the unit for <d ref="Effect,AP_SuperStimpackLargeSetMU,VitalArray[Life].Change"/> life.
+Button/Tooltip/AP_LaserTargetingSystem=Increases vision by 2 and weapon range by 1.
+Button/Tooltip/AP_CombatShield=Increases Marine life by 10.
+Button/Tooltip/AP_MagrailMunitions=Deals <d ref="Effect,AP_MagrailMunitionsDamage,Amount"/> damage to target enemy unit.
+Button/Tooltip/AP_CloakOnReaper=The Reaper is permanently cloaked.
+Button/Tooltip/AP_CombatDrugs=Regenerates life quickly while out of combat.
 Button/Tooltip/AP_LocustFlyingLaunch=Sends flying Locusts to target location.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
@@ -1162,6 +1219,15 @@ Effect/Name/AP_PunisherGrenadesLM=Punisher Grenades
 Effect/Name/AP_PunisherGrenadesSet=Punisher Grenades
 Effect/Name/AP_PunisherGrenadesSlow=Punisher Grenades
 Effect/Name/AP_PunisherGrenadesU=Punisher Grenades
+Effect/Name/AP_RailGunTurretDamage=Rail Gun Turret Damage
+Effect/Name/AP_RailGunTurretLaunchDummy=Rail Gun Turret Launch Dummy
+Effect/Name/AP_RailGunTurretRelease=Rail Gun Turret Release
+Effect/Name/AP_RailGunTurretReleaseLM=Rail Gun Turret Release LM
+Effect/Name/AP_RailGunTurretReleaseLaunch=Rail Gun Turret Release Launch
+Effect/Name/AP_RailGunTurretSearch=Rail Gun Turret Search
+Effect/Name/AP_RailGunTurretSearchCP=Rail Gun Turret Search CP
+Effect/Name/AP_RailGunTurretSet=Rail Gun Turret Set
+Effect/Name/AP_RailGunTurretTimedLife=Rail Gun Turret Timed Life
 Effect/Name/AP_RefineryMorph=Refinery Morph
 Effect/Name/AP_RemoveCommandCenterCargo=Remove Cargo on Death
 Effect/Name/AP_RemovePrecursorLocust=Remove Precursor Locust
@@ -1305,6 +1371,10 @@ Effect/Name/AP_YamatoU=Yamato Cannon (Damage)
 Effect/Name/AP_heal=Heal
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
+Effect/Name/AP_HellionTank=Hellion Tank
+Effect/Name/AP_HellionTankApplyBehavior=Hellion Tank Apply Behavior
+Effect/Name/AP_HellionTankDamage=Hellion Tank Damage
+Effect/Name/AP_HellionTankSearch=Hellion Tank Search
 Effect/Name/Kill2=Kill
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
@@ -1437,6 +1507,7 @@ Unit/Name/AP_Predator=Predator
 Unit/Name/AP_PreviewBunkerUpgraded=Bunker
 Unit/Name/AP_PsiDisruptor=Psi Disrupter
 Unit/Name/AP_PunisherGrenadesLMWeapon=Punisher Grenades
+Unit/Name/AP_RailGunTurret=Railgun Turret
 Unit/Name/AP_Raven=Raven
 Unit/Name/AP_Reactor=Reactor
 Unit/Name/AP_Reaper=Reaper
@@ -1494,6 +1565,7 @@ Unit/Name/AP_WraithAirWeaponLeft=Wraith Air Left
 Unit/Name/AP_WraithAirWeaponRight=Wraith Air Right
 Unit/Name/AP_WraithGroundWeapon=Wraith Ground
 Unit/Name/AP_YamatoWeapon=Yamato
+Unit/Name/AP_HellionTank=Hellbat
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
 UnitSubtitle/AP_HydraliskImpaler=Impaler Strain
 UnitSubtitle/AP_HydraliskLurker=Lurker Strain
@@ -1720,6 +1792,7 @@ Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
+Upgrade/Name/BlackOps2=Black Ops
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
 Weapon/Name/AP_ATSLaserBattery=ATS Laser Battery
@@ -1772,10 +1845,13 @@ Weapon/Name/AP_LocustMelee=Locust Melee
 Weapon/Name/AP_LongboltMissile=Longbolt Missile
 Weapon/Name/AP_Lurker=Spines
 Weapon/Name/AP_NeedleSpines=Needle Spines
+Weapon/Name/AP_NovaRavenSeekerMissile=Hunter-Seeker Missile
+Weapon/Name/AP_NeedleSpines=Needle Spines
 Weapon/Name/AP_P38ScytheGuassPistol=P-45 Gauss Pistol
 Weapon/Name/AP_PerditionTurretFlamethrower=Perdition Turret Flamethrower
 Weapon/Name/AP_Predator=Titanium Claws
 Weapon/Name/AP_PunisherGrenades=Punisher Grenades
+Weapon/Name/AP_RailGunTurret=RGX Perforator
 Weapon/Name/AP_RoachCorpserAcidSaliva=Acid Saliva
 Weapon/Name/AP_RoachCorpserMelee=Roach Corpser Melee
 Weapon/Name/AP_RoachCorpserSpray=Acid Spray
@@ -1807,6 +1883,7 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
+Weapon/Name/AP_HellionTank=Napalm Spray
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

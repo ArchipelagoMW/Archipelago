@@ -2557,6 +2557,179 @@
         <Pitch value="-4.000000,-2.000000"/>
         <Volume value="-6.000000,-3.000000"/>
     </CSound>
+    <CSound id="AP_RailGun_Impact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Thrasher_Missile_Impact_08.wav" FacialGroup=""/>
+        <DupeDestroyCount value="6"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="6"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="-3.000000,-1.000000"/>
+        <Select value="Random"/>
+        <Spread value="20.000000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_RailGun_Launch" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Eradicator_RailGun_Launch_06.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupePrioritization value="Oldest"/>
+        <OverlapTimeDelta value="50"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-6.000000,-4.000000"/>
+        <VolumeRolloffPoints Distance="15.472779"/>
+        <VolumeRolloffPoints Distance="30.802292" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_SkyTank_BarrageMissile_Impact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Liberator_AG_Impacts_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Liberator_AG_Impacts_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Liberator_AG_Impacts_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Uni_ImpactExplosions_08.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-3.000000"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Select value="Random"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Raven_ScramblerMissileLoop" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray>
+            <File value="Assets\Sounds\Goliath_BlackOps_Lockdown_Loop_01.wav"/>
+            <Pitch value="-2.000000,-2.000000"/>
+            <Volume value="-10.000000,-10.000000"/>
+            <FacialGroup value=""/>
+        </AssetArray>
+        <LoopCount value="-1"/>
+    </CSound>
+    <CSound id="AP_Raven_ScramblerMissileImpact" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\WarMissile_Impact00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarMissile_Impact01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarMissile_Impact02.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="8"/>
+    </CSound>
+    <CSound id="AP_Raven_ScramblerMissileLaunch" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\WarMissile_Launch00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarMissile_Launch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarMissile_Launch02.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="8"/>
+        <Volume value="-0.920000,-0.500000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_AttackImpact" parent="Combat">
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact03.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-9.000000,-7.000000"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CSound>
+    <CSound id="AP_SiegeTank_Land2" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\SiegeTank_Land01.wav" FacialGroup=""/>
+        <Category value="Combat"/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="2"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_SiegeTank_Land_RockDebris" parent="Spell">
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large3.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large4.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large5.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large6.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large7.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\RockDebris_ImpactExplosion_Large8.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="2"/>
+    </CSound>
+    <CSound id="AP_SiegeTank_JumpJet_Launch" parent="Spell">
+        <EditorCategories value="Race:Neutral"/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SiegeTank_JumpJet_Launch07.wav" FacialGroup=""/>
+        <DupeDestroyCount value="2"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="2"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-2.000000"/>
+        <Pitch value="-3.000000,1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+        <VolumeRolloffBlend value="Linear"/>
+        <VolumeRolloffPoints Distance="11.000000"/>
+        <VolumeRolloffPoints Distance="29.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_Hellbat_JumpJet_Launch" parent="Movement">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Hellbat_JumpJet_Launch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellbat_JumpJet_Launch02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellbat_JumpJet_Launch03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Hellbat_JumpJet_Launch04.wav" FacialGroup=""/>
+        <DupeDestroyCount value="1"/>
+        <Pitch value="-4.000000,1.000000"/>
+        <Volume value="-8.000000,-8.000000"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="2"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-2.000000"/>
+    </CSound>
+    <CSound id="AP_SuperStimpackOn" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack0.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack1.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack2.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack3.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack4.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack5.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack6.wav"/>
+        <AssetArray File="Assets\Sounds\Terran\Marine\Marine_Stimpack7.wav"/>
+        <DupeDestroyCount value="3"/>
+        <Pitch value="2.000000,3.000000"/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_SuperStimpackSweetener" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Nova_StimInfusionSweetener01.wav" LoopTime="0,39089" Offset="1500,1500"/>
+        <DupeDestroyCount value="3"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="100"/>
+        <Pitch value="2.700000,3.000000"/>
+        <PlayDelay value="30,60"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
     <CSound id="AP_Evolution_SwarmHostLocust_Single" parent="Movement">
         <EditorCategories value="Race:Zerg"/>
         <AssetArray File="Assets\Sounds\Evo_SwarmHost_Locust_1.wav" FacialGroup=""/>

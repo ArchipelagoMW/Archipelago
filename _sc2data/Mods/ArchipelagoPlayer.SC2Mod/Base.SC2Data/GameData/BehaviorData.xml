@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CEffectModifyUnit id="AP_ImmortalBarrierCDFix">
+        <ValidatorArray value="BarrierOnCooldown"/>
+        <Cost Behavior="ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
+        <Cost Behavior="AP_ImmortalBarrierSupressed" CooldownOperation="Add" CooldownTimeUse="15"/>
+    </CEffectModifyUnit>
     <CBehaviorBuff default="1" id="AP_SwarmHostEggAnimationDefault">
         <InfoFlags index="Hidden" value="1"/>
         <DisableValidatorArray value="NotStasis"/>
@@ -43,6 +48,23 @@
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="15"/>
         <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SuperStim">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-superstimppack.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="15"/>
+        <Modification MoveSpeedMultiplier="1.5" AttackSpeedMultiplier="1.5"/>
+        <RemoveValidatorArray value="AP_SourceIsNotHellion"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MagrailStun1Sec">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CasterIsAttacking"/>
+        <Duration value="1"/>
+        <Modification>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_ViralPlasma">
         <Alignment value="Negative"/>
@@ -103,6 +125,15 @@
             <StateFlags index="SuppressCloak" value="1"/>
         </Modification>
         <AINotifyEffect value="AP_D8ChargeExplodeDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReaperPermanentCloak">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Requirements value="AP_CloakingTechnologyReaper"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_ScavengingSystemsMechDeath">
         <InfoFlags index="Hidden" value="1"/>
@@ -228,6 +259,18 @@
         <Modification>
             <StateFlags index="Cloak" value="1"/>
             <VitalRegenArray index="Energy" value="-1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BansheeCloakFree">
+        <Name value="Behavior/Name/AP_BansheeCloak"/>
+        <Tooltip value="Behavior/Tooltip/AP_BansheeCloak"/>
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-cloak.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="CanSpendEnergy"/>
+        <RemoveValidatorArray value="hasEnergy"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_DistortionBlasters">
@@ -591,6 +634,11 @@
         <DisplayDuration index="Enemy" value="1"/>
         <Duration value="30"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RailGunTurretTimedLife" parent="TimedLife">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="180"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_PointDefenseReady">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="3"/>
@@ -601,6 +649,94 @@
         <RemoveValidatorArray value="NotInLastMotionPhase"/>
         <Duration value="15"/>
         <ExpireEffect value="Kill"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenScramblerMissile">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-interferencematrix.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="15"/>
+        <ExpireEffect value="AP_ImmortalBarrierCDFix"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="EnableAttack" value="1"/>
+            <ModifyFlags index="EnableMove" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressCombat" value="1"/>
+            <AbilClassEnableArray index="CAbilStop" value="1"/>
+            <BehaviorLinkDisableArray value="ImmortalBarrierSupressed"/>
+            <BehaviorLinkDisableArray value="AP_ImmortalBarrierSupressed"/>
+            <WeaponDisableArray value="InterceptorLaunch"/>
+            <WeaponDisableArray value="AP_InterceptorLaunch"/>
+        </Modification>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <!-- TODO: Oracle unit -->
+        <DisableValidatorArray value="AP_TargetNotTacticalJumping"/>
+        <BuffFlags index="UpdateDurationWhileDisabled" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenShredderMissileTimeout">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="1.9"/>
+        <Modification MoveSpeedMaximum="0"/>
+        <RemoveValidatorArray value="NotInLastMotionPhase"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenShredderMissileTint">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-huntermissile-color.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="0.2"/>
+        <AINotifyEffect value="SeekerMissileDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenShredderMissileArmorReduction">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <!-- TODO: Oracle unit -->
+        <Duration value="30"/>
+        <DamageResponse ModifyMinimumDamage="1">
+            <Kind index="Spell" value="0"/>
+            <Kind index="Splash" value="0"/>
+            <Kind index="NoProc" value="0"/>
+            <ModifyAmount value="3"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenShredderMissileArmorReductionUIAdd">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <!-- TODO: Oracle unit -->
+        <Duration value="30"/>
+        <Modification ShieldArmorBonus="3">
+            <ModifyFlags index="HideChangeUI" value="1"/>
+            <LifeArmorBonus value="3"/>
+        </Modification>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RavenShredderMissileArmorReductionUISubtruct">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-terran-ignorearmor.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <!-- TODO: Oracle unit -->
+        <Duration value="30"/>
+        <Modification ShieldArmorBonus="-2">
+            <LifeArmorBonus value="-2"/>
+        </Modification>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_Irradiate">
         <Alignment value="Negative"/>
@@ -1433,6 +1569,48 @@
         <EditorCategories value="AbilityorEffectType:Units"/>
         <Duration value="2"/>
         <Modification AttackSpeedMultiplier="0.8"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SiegeTankJumpJetCreateTimeOut">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="1.75"/>
+        <FinalEffect value="SuicideRemove"/>
+    </CBehaviorBuff>
+    <CBehaviorJump id="AP_GoliathCliffJump">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TriggerHeightDeltaMin value="1.5"/>
+        <TriggerHeightDeltaMax value="4.5"/>
+        <InitiateRangeUp value="1.5"/>
+        <InitiateRangeDown value="0.5"/>
+        <JumpRangeMax value="12"/>
+        <Mover value="CliffJumper"/>
+        <MoverUp value="ReaperJumpDown"/>
+        <MoverDown value="ReaperJumpDown"/>
+        <DurationPreLaunch value="0.05"/>
+        <DurationPostLand value="0.075"/>
+        <DurationMoveOut value="0.08"/>
+        <Placeholder value="ReaperPlaceholder"/>
+        <LandAdjustmentDown value="1"/>
+        <LandArrivalRange value="0.05"/>
+        <LandCheckRadius value="5"/>
+    </CBehaviorJump>
+    <CBehaviorBuff id="AP_HellionTankReady">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="4"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HellbatLeapStun">
+        <InfoIcon value="Assets\Textures\btn-upgrade-terran-jumpjets.dds"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Modification>
+            <ModifyFlags index="Reveal" value="1"/>
+            <ModifyFlags index="Detected" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+        <Duration value="0.5"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_LocustLaunchDisabled">
         <InfoFlags index="Hidden" value="1"/>

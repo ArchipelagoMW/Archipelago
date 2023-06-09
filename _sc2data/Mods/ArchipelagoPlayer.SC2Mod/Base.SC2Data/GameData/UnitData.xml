@@ -34,6 +34,8 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_Stimpack"/>
+        <AbilArray Link="AP_SuperStimpackMarine"/>
+        <AbilArray Link="AP_MagrailMunitionsMarine"/>
         <WeaponArray Link="AP_GaussRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -42,14 +44,17 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_Stimpack,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SuperStimpackSmall" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarine,0" Row="2" Column="0"/>
             <LayoutButtons>
-                <Face value="CombatShield"/>
+                <Face value="AP_CombatShield"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseCombatShield"/>
-                <Row value="2"/>
-                <Column value="1"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarine" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_MagrailMunitions" Type="AbilCmd" AbilCmd="AP_MagrailMunitionsMarine,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -187,6 +192,8 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
+        <AbilArray Link="AP_StimpackFirebat"/>
+        <AbilArray Link="AP_SuperStimpackFirebat"/>
         <WeaponArray Link="AP_Firebat"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -199,7 +206,7 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseIncineratorNozzles"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
@@ -207,9 +214,11 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseJuggernautPlatingFirebat"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackFirebat,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackFirebat,0" Row="2" Column="0"/>
         </CardLayouts>
         <InnerRadius value="0.4375"/>
         <CargoSize value="2"/>
@@ -268,6 +277,9 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
+        <AbilArray Link="AP_StimpackMarauder"/>
+        <AbilArray Link="AP_SuperStimpackMarauder"/>
+        <AbilArray Link="AP_MagrailMunitionsMarauder"/>
         <WeaponArray Link="AP_PunisherGrenades"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -280,17 +292,21 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseJackhammerConcussiveGrenade"/>
-                <Row value="2"/>
-                <Column value="1"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_AblativeScales"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255,0"/>
                 <Requirements value="AP_UseAblativeScales"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarauder" Row="1" Column="2"/>
+            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackMarauder,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarauder,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MagrailMunitions" Type="AbilCmd" AbilCmd="AP_MagrailMunitionsMarauder,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.5625"/>
         <InnerRadius value="0.375"/>
@@ -317,6 +333,11 @@
         </Fidget>
         <TauntDuration index="Cheer" value="5"/>
         <TauntDuration index="Dance" value="5"/>
+    </CUnit>
+    <CUnit id="AP_MagrailMunitionMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_WarHoundWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
     <CUnit id="AP_PunisherGrenadesLMWeapon" parent="MISSILE">
         <Race value="Terr"/>
@@ -398,7 +419,11 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_D8Charge"/>
+        <AbilArray Link="AP_StimpackReaper"/>
+        <AbilArray Link="AP_SuperStimpackReaper"/>
+        <AbilArray Link="AP_ReaperSpiderMines"/>
         <BehaviorArray Link="AP_ReaperJump"/>
+        <BehaviorArray Link="AP_ReaperPermanentCloak"/>
         <WeaponArray Link="AP_P38ScytheGuassPistol"/>
         <WeaponArray Link="AP_D8Charge"/>
         <CardLayouts>
@@ -407,16 +432,22 @@
             <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
-            <LayoutButtons Face="JetPack" Type="Passive" AbilCmd="255" Row="2" Column="1"/>
+            <LayoutButtons Face="JetPack" Type="Passive" AbilCmd="255" Row="1" Column="0"/>
             <LayoutButtons>
                 <Face value="AP_U238Rounds"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseReaperU238Rounds"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
-            <LayoutButtons Face="AP_D8Charge" Type="AbilCmd" AbilCmd="AP_D8Charge,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemReaper" Row="1" Column="2"/>
+            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackReaper,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SuperStimpackSmall" Type="AbilCmd" AbilCmd="AP_SuperStimpackReaper,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_D8Charge" Type="AbilCmd" AbilCmd="AP_D8Charge,Execute" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_CloakOnReaper" Type="Passive" Requirements="AP_CloakingTechnologyReaper" Row="1" Column="3"/>
+            <LayoutButtons Face="AP_SpiderMine" Type="AbilCmd" AbilCmd="AP_ReaperSpiderMines,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_CombatDrugs" Type="Passive" Requirements="AP_HaveCombatDrugs" Row="1" Column="4"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -516,6 +547,7 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
+        <AbilArray Link="AP_MorphToHellionTank"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_InfernalFlameThrower" Turret="AP_Hellion"/>
         <CardLayouts>
@@ -529,7 +561,7 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseTwinLinkedFlameThrowers"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
@@ -537,9 +569,10 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseHellionInfernalPreIgniter"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_MorphToHellionTank" Type="AbilCmd" AbilCmd="AP_MorphToHellionTank,0" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -552,6 +585,11 @@
         <MinimapRadius value="0.625"/>
         <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
         <TechAliasArray value="Alias_Hellion"/>
+        <SelectAlias value="Hellion"/>
+        <LeaderAlias value="Hellion"/>
+        <HotkeyAlias value="Hellion"/>
+        <GlossaryAlias value="Hellion"/>
+        <SubgroupAlias value="Hellion"/>
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="80"/>
         <GlossaryStrongArray value="Zergling"/>
@@ -749,6 +787,7 @@
         <AbilArray Link="move"/>
         <BehaviorArray Link="AP_MultilockTargetingSystems"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <BehaviorArray Link="AP_GoliathCliffJump"/>
         <WeaponArray Link="AP_GoliathA" Turret="AP_Goliath"/>
         <WeaponArray Link="AP_GoliathG" Turret="AP_Goliath"/>
         <WeaponArray Link="AP_GoliathAUpgraded" Turret="FreeRotate"/>
@@ -775,6 +814,7 @@
                 <Row value="2"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_CliffJumper" Type="Passive" Requirements="AP_HaveGoliathJumpJets" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.6875"/>
         <SeparationRadius value="0.65"/>
@@ -920,6 +960,8 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_SiegeMode"/>
+        <AbilArray Link="AP_SiegeTankJumpJet"/>
+        <AbilArray Link="AP_DeploySpiderMines"/>
         <BehaviorArray Link="AP_SiegeTankThorn"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_90mmCannons" Turret="AP_SiegeTank"/>
@@ -935,17 +977,19 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseMaelstromRoundsReq"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_ShapedBlast"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseShapedBlastReq"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankJumpJet,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -1012,6 +1056,8 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="AP_Unsiege"/>
+        <AbilArray Link="AP_SiegeTankSiegedJumpJet"/>
+        <AbilArray Link="AP_DeploySpiderMines"/>
         <BehaviorArray Link="AP_SiegeTankThorn"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
         <WeaponArray Link="AP_CrucioShockCannon" Turret="AP_SiegeTankSieged"/>
@@ -1027,17 +1073,19 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseMaelstromRounds"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_ShapedBlast"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseShapedBlast"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="0.875"/>
         <SeparationRadius value="1"/>
@@ -1057,6 +1105,50 @@
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="135"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
+    </CUnit>
+    <CUnit id="AP_SiegeTankSiegedJumpJetPlaceholder">
+        <Facing value="45"/>
+        <Race value="Terr"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Undetectable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <LifeStart value="10000"/>
+        <LifeMax value="10000"/>
+        <Radius value="0.4375"/>
+        <SeparationRadius value="0.4375"/>
+        <InnerRadius value="0.4375"/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Other,ObjectFamily:Campaign"/>
+        <LeaderAlias value=""/>
+        <HotkeyAlias value=""/>
+    </CUnit>
+    <CUnit id="AP_SiegeTankJumpJetPlaceholder">
+        <Race value="Terr"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Undetectable" value="1"/>
+        <FlagArray index="Unradarable" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <LifeStart value="10000"/>
+        <LifeMax value="10000"/>
+        <Radius value="0.4375"/>
+        <SeparationRadius value="0.4375"/>
+        <InnerRadius value="0.4375"/>
+        <MinimapRadius value="0"/>
+        <EditorCategories value="ObjectType:Other,ObjectFamily:Campaign"/>
+        <LeaderAlias value=""/>
+        <HotkeyAlias value=""/>
     </CUnit>
     <CUnit id="AP_Medivac">
         <DeathRevealRadius value="3"/>
@@ -1441,6 +1533,14 @@
                 <Requirements value="AP_ClusterWarheadsResearched"/>
                 <Row value="2"/>
                 <Column value="2"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="AP_PermanentCloakBanshee"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_PermanentCloakBansheeResearched"/>
+                <Row value="2"/>
+                <Column value="3"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_CrossSpectrumDampeners"/>
@@ -2266,6 +2366,18 @@
         <Mover value="AutoTurretReleaseWeapon"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
+    <CUnit id="AP_RavenScramblerMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_RavenShredderMissileWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_RavenShredderMissileDirect"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+        <BehaviorArray Link="AP_RavenShredderMissileTimeout"/>
+        <LifeStart value="5"/>
+        <LifeMax value="5"/>
+    </CUnit>
     <CUnit id="AP_Raven">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
@@ -2305,12 +2417,18 @@
         <DamageDealtXP value="1"/>
         <DamageTakenXP value="1"/>
         <KillXP value="45"/>
+        <AbilArray Link="attack"/>
         <AbilArray Link="stop"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_BuildAutoTurret"/>
         <AbilArray Link="AP_SeekerMissile"/>
         <AbilArray Link="AP_PlacePointDefenseDrone"/>
         <AbilArray Link="AP_PlaceHealingDrone"/>
+        <AbilArray Link="AP_RavenDeploySpiderMines"/>
+        <AbilArray Link="AP_BuildRailGunTurret"/>
+        <AbilArray Link="AP_RavenScramblerMissile"/>
+        <AbilArray Link="AP_RavenShredderMissile"/>
+        <WeaponArray Link="AP_NovaRavenSeekerMissile"/>
         <BehaviorArray Link="Detector11"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -2320,10 +2438,15 @@
             <LayoutButtons Face="AP_BuildAutoTurret" Type="AbilCmd" AbilCmd="AP_BuildAutoTurret,0" Row="2" Column="0"/>
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
-            <LayoutButtons Face="Detector" Type="Passive" Row="2" Column="3"/>
+            <LayoutButtons Face="Detector" Type="Passive" Row="1" Column="4"/>
             <LayoutButtons Face="AP_HunterSeekerMissile" Type="AbilCmd" AbilCmd="AP_SeekerMissile,0" Row="2" Column="2"/>
             <LayoutButtons Face="AP_BuildPointDefenseDrone" Type="AbilCmd" AbilCmd="AP_PlacePointDefenseDrone,0" Row="2" Column="1"/>
-            <LayoutButtons Face="AP_BuildHealingDrone" Type="AbilCmd" AbilCmd="AP_PlaceHealingDrone,0" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_BuildHealingDrone" Type="AbilCmd" AbilCmd="AP_PlaceHealingDrone,0" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_DeploySpiderMinesRaven" Type="AbilCmd" AbilCmd="AP_RavenDeploySpiderMines,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_BuildRailGunTurret" Type="AbilCmd" AbilCmd="AP_BuildRailGunTurret,Execute" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_AdvancedWeaponryRaven" Type="Passive" Requirements="AP_HaveAdvancedWeaponryRaven" Row="1" Column="3"/>
+            <LayoutButtons Face="AP_RavenScramblerMissile" Type="AbilCmd" AbilCmd="AP_RavenScramblerMissile,Execute" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_RavenShredderMissile" Type="AbilCmd" AbilCmd="AP_RavenShredderMissile,Execute" Row="1" Column="2"/>
         </CardLayouts>
         <Radius value="0.625"/>
         <SeparationRadius value="0.625"/>
@@ -3020,6 +3143,8 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_Stimpack"/>
+        <AbilArray Link="AP_SuperStimpackMarine"/>
+        <AbilArray Link="AP_MagrailMunitionsMarine"/>
         <WeaponArray Link="AP_KelmorianMinerGaussRifle"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3028,14 +3153,17 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
             <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_Stimpack,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SuperStimpackSmall" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarine,0" Row="2" Column="0"/>
             <LayoutButtons>
-                <Face value="CombatShield"/>
+                <Face value="AP_CombatShield"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseCombatShield"/>
-                <Row value="2"/>
-                <Column value="1"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarine" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_MagrailMunitions" Type="AbilCmd" AbilCmd="AP_MagrailMunitionsMarine,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="0.375"/>
         <SeparationRadius value="0.375"/>
@@ -3094,6 +3222,8 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
+        <AbilArray Link="AP_StimpackFirebat"/>
+        <AbilArray Link="AP_SuperStimpackFirebat"/>
         <WeaponArray Link="AP_DevilDogFlameThrower"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3106,7 +3236,7 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseIncineratorNozzles"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
@@ -3114,9 +3244,11 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseJuggernautPlatingFirebat"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackFirebat,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackFirebat,0" Row="2" Column="0"/>
         </CardLayouts>
         <InnerRadius value="0.4375"/>
         <CargoSize value="2"/>
@@ -3159,7 +3291,7 @@
         <LateralAcceleration value="69.125"/>
         <StationaryTurningRate value="999.8437"/>
         <TurningRate value="999.8437"/>
-        <Sight value="8"/>
+        <Sight value="10"/>
         <Food value="-2"/>
         <CostCategory value="Army"/>
         <CostResource index="Minerals" value="125"/>
@@ -3172,6 +3304,8 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_StimpackMarauder"/>
+        <AbilArray Link="AP_SuperStimpackMarauder"/>
+        <AbilArray Link="AP_MagrailMunitionsMarauder"/>
         <WeaponArray Link="AP_HammerSecurity"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3184,7 +3318,7 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseJackhammerConcussiveGrenade"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
@@ -3192,9 +3326,13 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseAblativeScales"/>
-                <Row value="2"/>
+                <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_LaserTargetingSystem" Type="Passive" Requirements="AP_HaveLaserTargetingSystemMarauder" Row="1" Column="2"/>
+            <LayoutButtons Face="Stim" Type="AbilCmd" AbilCmd="AP_StimpackMarauder,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SuperStimpackLarge" Type="AbilCmd" AbilCmd="AP_SuperStimpackMarauder,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MagrailMunitions" Type="AbilCmd" AbilCmd="AP_MagrailMunitionsMarauder,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <InnerRadius value="0.375"/>
         <CargoSize value="2"/>
@@ -3253,6 +3391,7 @@
         <AbilArray Link="move"/>
         <BehaviorArray Link="AP_MultilockTargetingSystems"/>
         <BehaviorArray Link="AP_ScavengingSystemsMechDeath"/>
+        <BehaviorArray Link="AP_GoliathCliffJump"/>
         <WeaponArray Link="AP_SpartanCompanyG" Turret="AP_SpartanCompany"/>
         <WeaponArray Link="AP_SpartanCompanyA" Turret="AP_SpartanCompany"/>
         <WeaponArray Link="AP_SpartanCompanyGUpgraded" Turret="AP_SpartanCompany"/>
@@ -3279,6 +3418,7 @@
                 <Row value="2"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_CliffJumper" Type="Passive" Requirements="AP_HaveGoliathJumpJets" Row="2" Column="2"/>
         </CardLayouts>
         <Radius value="0.6875"/>
         <SeparationRadius value="0.65"/>
@@ -3338,6 +3478,8 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="move"/>
         <AbilArray Link="AP_SiegeBreakerSiege"/>
+        <AbilArray Link="AP_MercSiegeTankJumpJet"/>
+        <AbilArray Link="AP_DeploySpiderMines"/>
         <WeaponArray Link="AP_SiegeBreaker" Turret="SiegeTank"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3351,17 +3493,19 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseMaelstromRoundsReq"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_ShapedBlast"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseShapedBlastReq"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankJumpJet,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -3421,6 +3565,8 @@
         <AbilArray Link="stop"/>
         <AbilArray Link="attack"/>
         <AbilArray Link="AP_SiegeBreakerUnsiege"/>
+        <AbilArray Link="AP_MercSiegeTankSiegedJumpJet"/>
+        <AbilArray Link="AP_DeploySpiderMines"/>
         <WeaponArray Link="AP_ArcliteShockCannon" Turret="SiegeTankSieged"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -3434,17 +3580,19 @@
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseMaelstromRounds"/>
-                <Row value="2"/>
-                <Column value="2"/>
+                <Row value="1"/>
+                <Column value="0"/>
             </LayoutButtons>
             <LayoutButtons>
                 <Face value="AP_ShapedBlast"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
                 <Requirements value="AP_UseShapedBlast"/>
-                <Row value="2"/>
-                <Column value="3"/>
+                <Row value="1"/>
+                <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -3669,6 +3817,14 @@
                 <Column value="2"/>
             </LayoutButtons>
             <LayoutButtons>
+                <Face value="AP_PermanentCloakBanshee"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_PermanentCloakBansheeResearched"/>
+                <Row value="2"/>
+                <Column value="3"/>
+            </LayoutButtons>
+            <LayoutButtons>
                 <Face value="AP_CrossSpectrumDampeners"/>
                 <Type value="Passive"/>
                 <AbilCmd value="255"/>
@@ -3766,8 +3922,8 @@
             <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_BattlecruiserCloak,1" Row="1" Column="1"/>
             <LayoutButtons Face="AP_AllPurposeLaserBattery" Type="Passive" Requirements="AP_HaveAdvancedWeaponryBattlecruiser" Row="1" Column="4"/>
             <LayoutButtons Face="AP_YamatoGun" Type="AbilCmd" AbilCmd="AP_DukesRevengeYamato,0" Row="2" Column="0"/>
-            <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_MissilePods,0" Row="2" Column="2"/>
-            <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DefensiveMatrix,0" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_MissilePods" Type="AbilCmd" AbilCmd="AP_DukesRevengeMissilePods,0" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_DefensiveMatrix" Type="AbilCmd" AbilCmd="AP_DukesRevengeDefensiveMatrix,0" Row="2" Column="3"/>
             <LayoutButtons Face="AP_Hyperjump" Type="AbilCmd" AbilCmd="AP_Hyperjump,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="1.25"/>
@@ -6801,6 +6957,11 @@
         <Mover value="AutoTurretReleaseWeapon"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
     </CUnit>
+    <CUnit id="AP_DeploySpiderMinesMissile" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AP_DeploySpiderMines"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="AP_Impaler">
         <DeathRevealRadius value="3"/>
         <Race value="Zerg"/>
@@ -7290,6 +7451,153 @@
     <CUnit id="AP_NeedleSpinesWeapon" parent="MISSILE">
         <Name value="Unit/Name/HydraliskGroundWeapon"/>
         <Mover value="NeedleSpinesWeapon"/>
+    </CUnit>
+    <CUnit id="AP_RailGunTurret">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="AILifetime" value="1"/>
+        <FlagArray index="AIDefense" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="150"/>
+        <LifeMax value="150"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranBuildingPlating"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="7"/>
+        <CostResource index="Minerals" value="100"/>
+        <RepairTime value="50"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <BehaviorArray Link="AP_TerranBuildingBurnDown"/>
+        <BehaviorArray Link="AP_FireSuppressionSystem"/>
+        <WeaponArray Link="AP_RailGunTurret" Turret="AP_RailGunTurret"/>
+        <CardLayouts>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="AttackBuilding" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="0.75"/>
+        <Footprint value="FootprintAutoTurret"/>
+        <PlacementFootprint value="FootprintAutoTurret"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <GlossaryPriority value="346"/>
+        <KillDisplay value="Never"/>
+        <RankDisplay value="Never"/>
+    </CUnit>
+    <CUnit id="AP_RailGunTurretReleaseWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Terr"/>
+        <Mover value="AutoTurretReleaseWeapon"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_HellionTank">
+        <DeathRevealRadius value="3"/>
+        <Race value="Terr"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AISplash" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="135"/>
+        <LifeMax value="135"/>
+        <LifeArmorName value="Unit/LifeArmorName/TerranVehiclePlating"/>
+        <Speed value="2.25"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46"/>
+        <StationaryTurningRate value="1499.9414"/>
+        <Sight value="10"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="100"/>
+        <RepairTime value="30"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="30"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_MorphToHellion"/>
+        <AbilArray Link="AP_HellbatCharge"/>
+        <WeaponArray Link="AP_HellionTank"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons>
+                <Face value="AP_TwinLinkedFlameThrowers"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_UseTwinLinkedFlameThrowers"/>
+                <Row value="1"/>
+                <Column value="0"/>
+            </LayoutButtons>
+            <LayoutButtons>
+                <Face value="AP_InfernalPreIgniter"/>
+                <Type value="Passive"/>
+                <AbilCmd value="255"/>
+                <Requirements value="AP_UseHellionInfernalPreIgniter"/>
+                <Row value="1"/>
+                <Column value="1"/>
+            </LayoutButtons>
+            <LayoutButtons Face="AP_MorphToHellion" Type="AbilCmd" AbilCmd="AP_MorphToHellion,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_HellbatCharge" Type="Passive" Requirements="AP_HaveHoverHellbat" Row="2" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.625"/>
+        <SeparationRadius value="0.75"/>
+        <InnerRadius value="0.5"/>
+        <CargoSize value="4"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="8"/>
+        <MinimapRadius value="0.625"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkHellionTank"/>
+        <TechAliasArray value="Alias_Hellion"/>
+        <SelectAlias value="Hellion"/>
+        <LeaderAlias value="Hellion"/>
+        <HotkeyAlias value="Hellion"/>
+        <SubgroupAlias value="Hellion"/>
+        <GlossaryAlias value="Hellion"/>
+        <GlossaryCategory value="Unit/Category/TerranUnits"/>
+        <GlossaryPriority value="81"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryWeakArray value="Baneling"/>
+        <GlossaryWeakArray value="Stalker"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <GlossaryAlias value="HellionTank"/>
+        <HotkeyCategory value="Unit/Category/TerranUnits"/>
     </CUnit>
     <CUnit id="AP_Locust">
         <DeathRevealRadius value="3"/>

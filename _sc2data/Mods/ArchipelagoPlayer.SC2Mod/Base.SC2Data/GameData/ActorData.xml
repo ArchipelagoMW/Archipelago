@@ -1025,17 +1025,26 @@
     <CActorEventMacro id="AP_D8ChargeAnim">
         <On Terms="Abil.AP_D8Charge.SourceCastStart" Send="$Spell"/>
     </CActorEventMacro>
+    <CActorRange id="AP_ReaperSpiderMinesRange" parent="RangeAbil" abil="AP_ReaperSpiderMines"/>
+    <CActorSound id="AP_ReaperSpiderMinesDeploySound" parent="SoundOneShot">
+        <Sound value="AP_Vulture_SpiderMinePlace"/>
+        <On Terms="Effect.AP_SpawnSpiderMine.Create" Send="Create"/>
+    </CActorSound>
     <CActorSound id="AP_Marine_Stimpack" parent="SoundOneShot">
         <Sound value="Marine_Stimpack"/>
         <On Terms="Abil.AP_Stimpack.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackReaper.SourceCastStart" Send="Create"/>
     </CActorSound>
     <CActorSound id="AP_Marauder_Stimpack" parent="SoundOneShot">
         <Sound value="Marauder_Stimpack"/>
         <On Terms="Abil.AP_StimpackMarauder.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackFirebat.SourceCastStart" Send="Create"/>
     </CActorSound>
     <CActorModel id="AP_StimpackStartImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Abil.AP_Stimpack.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_StimpackMarauder.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_StimpackFirebat.SourceCastStart" Send="Create"/>
         <Model value="StimpackStartImpact"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
@@ -1043,12 +1052,46 @@
     </CActorModel>
     <CActorModel id="AP_StimpackEndImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Behavior.AP_Stimpack.Off; ValidateUnit NotDead" Send="Create"/>
+        <On Terms="Behavior.AP_StimpackReaper.Off; ValidateUnit NotDead" Send="Create"/>
         <On Terms="Behavior.AP_StimpackMarauder.Off; ValidateUnit NotDead" Send="Create"/>
+        <On Terms="Behavior.AP_StimpackFirebat.Off; ValidateUnit NotDead" Send="Create"/>
         <Model value="StimpackEndImpact"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
         <Inherits index="CloakEffect" value="1"/>
     </CActorModel>
+    <CActorModel id="AP_SuperStimpackEndImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.AP_SuperStim.Off; ValidateUnit NotDead" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorModel id="AP_SuperStimpackStartImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
+<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSound id="AP_SuperStimpackSweetenerStartImpactActorSound" parent="SoundOneShot">
+        <Sound value="AP_SuperStimpackSweetener"/>
+        <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
+<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_SuperStimpackStartImpactActorSound" parent="SoundOneShot">
+        <Sound value="AP_SuperStimpackOn"/>
+        <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
+<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
+    </CActorSound>
     <CActorUnit id="AP_D8ClusterBomb" parent="GenericUnitSelectableNoAutoSoundLinks" unitName="AP_D8ClusterBomb">
         <On Terms="UnitBirth.*.Normal" Send="$Birth"/>
         <On Terms="ActorCreation" Send="AnimBaselineStop"/>
@@ -1089,12 +1132,20 @@
         <On Terms="UnitMovementUpdate.*.Walk" Send="TimerSet 0.250000 KillBeam"/>
         <On Terms="Abil.attack.ReadyStop" Send="TimerSet 0.250000 KillBeam"/>
         <On Terms="TimerExpired; TimerName KillBeam" Target="AP_HellionAttackBeam" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Hellion" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Hellion" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimClear Visor 0.000000"/>
+        <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellion_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellion_BlackOps"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveHoverHellbat" Send="DeathCustomize BlackOps"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
         <Model value="Hellion"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="Hellion"/>
         <DeathArray index="Normal" ModelLink="HellionDeath" SoundLink="Hellion_Explode"/>
         <PlacementModel value="Hellion"/>
         <PortraitModel value="HellionPortrait"/>
+        <PortraitActor value="AP_HellionPortrait"/>
         <BarOffset value="50"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Terran-Hellion.dds"/>
@@ -1113,6 +1164,13 @@
             <Image value="Assets\Textures\Wireframe-Terran-Hellion.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorTurret id="AP_HellionTurret">
+        <On Terms="TurretEnable.AP_Hellion" Send="Create"/>
+    </CActorTurret>
+    <CActorPortrait id="AP_HellionPortrait" parent="PortraitActor">
+        <Model value="HellionPortrait"/>
+        <On Terms="ActorCreation" Send="AnimBlendTimeApply 0.500000"/>
+    </CActorPortrait>
     <CActorAction id="AP_HellionAttack" parent="GenericAttackBase">
         <On Terms="Effect.AP_InfernalFlameThrower.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
         <On Terms="Effect.AP_InfernalFlameThrowerCP.Start; At Caster; !ValidatePlayer AP_HasHellionInfernalPreIgniter" Send="Create"/>
@@ -1217,7 +1275,7 @@
         <BarOffset value="10"/>
         <BarWidth value="36"/>
         <GroupIcon>
-            <Image value="Assets\Textures\Wireframe-Terran-SpiderMine.dds"/>
+            <Image value="AP\Assets\Textures\Wireframe-Terran-SpiderMine.dds"/>
         </GroupIcon>
         <GroupSoundArray index="Birth" value="SpiderMineBirth"/>
         <GroupSoundArray index="Ready" value="SpiderMineReady"/>
@@ -1303,7 +1361,17 @@
         <On Terms="WeaponStop.AP_GoliathAUpgraded.AttackStop" Send="AnimBracketStop Spell"/>
         <On Terms="ActorCreation" Send="TextureSelectBySlot main {RequireAll diffuse}"/>
         <On Terms="ActorCreation" Send="TextureSelectByMatch main.specular main"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.Launch" Send="AnimBracketStart Jump Jump,Start Jump Jump,End"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.Launch" Send="AnimBlendTimeApply 0.100000"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandDown" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandDown" Send="AnimBlendTimeApply"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandUp" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandUp" Send="AnimBlendTimeApply"/>
+        <On Terms="Upgrade.AP_GoliathJumpJet.Add" Send="ModelSwap AP_Goliath_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveGoliathJumpJets" Send="ModelSwap AP_Goliath_BlackOps"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveGoliathJumpJets" Send="DeathCustomize BlackOps"/>
         <DeathArray index="Normal" ModelLink="AP_GoliathDeath" SoundLink="AP_Goliath_Explode"/>
+        <DeathCustoms ModelLink="AP_Goliath_BlackOps_Death" Name="BlackOps"/>
         <DeathActorModel value="AP_GoliathDeath"/>
         <PortraitModel value="AP_GoliathPortrait"/>
         <StandAnimTurnTime value="4"/>
@@ -1327,6 +1395,31 @@
             <Image value="AP\Assets\Textures\Wireframe-Terran-goliath.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_GoliathCliffJumpLandDownModel" parent="ModelAnimationStyleOneShot">
+        <Model value="ReaperJumpLandDownModel"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandDown" Send="Create"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandUp" Send="Create"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandDown" Send="TimerSet 0.300000 TriggerSound"/>
+        <On Terms="TimerExpired; TimerName TriggerSound" Send="Create AP_ReaperJumpLandSound"/>
+        <Inherits index="CloakEffect" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_GoliathCliffJumpLandSound" parent="SoundOneShot">
+        <Sound value="Reaper_JumpLand"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandUp" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="AP_GoliathCliffJumpLaunchModel" parent="ModelAnimationStyleOneShot">
+        <Model value="ReaperJumpLaunchModel"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.Launch" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow" HoldPosition="1" HoldRotation="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_GoliathCliffJumpLaunchSound" parent="SoundOneShot">
+        <Sound value="Reaper_JumpLaunch"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.Launch" Send="Create"/>
+    </CActorSound>
     <CActorAction id="AP_GoliathAirAttack" parent="GenericAttack" effectImpact="AP_GoliathAU" effectLaunch="AP_GoliathALM">
         <LaunchAttachQuery Methods="AP_AMPatternGoliath"/>
         <LaunchAssets Sound="VikingFighter_AttackLaunch"/>
@@ -1391,6 +1484,18 @@
         <Aliases value="_UnitLarge"/>
         <Macros value="UnloadDropAnim"/>
         <Model value="SiegeTank"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_Land"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start" Send="AnimPlay JumpStart Jump,Start"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start" Send="TimerSet 0.500000 JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimClear JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimPlay Jump Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay JumpEnd Jump,End 0 -1.000000 -1.000000 4.000000 AsDuration"/>
+        <On Terms="UnitMovementUpdate; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap SiegeTank_BlackOps_Tank"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap SiegeTank_BlackOps_Tank"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_BlackOps_JumpJets_Land"/>
         <BuildModel value="SiegeTank"/>
         <DeathArray index="Normal" ModelLink="SiegeTankDeath" SoundLink="SiegeTank_Explode"/>
         <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
@@ -1422,6 +1527,100 @@
             <Image value="Assets\Textures\Wireframe-Terran-SiegeTank-TankMode.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorModel id="AP_SiegeTank_BlackOps_JumpJets_Land" parent="ModelAnimationStyleOneShot">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorModel>
+    <CActorSound id="AP_SiegeTank_Land">
+        <Layers>
+            <Sound value="AP_SiegeTank_Land2"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,60"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_SiegeTank_Land_RockDebris"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,60"/>
+            <Volume value="-6.000000,-3.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorUnit id="AP_SiegeTankJumpJetPlaceholder" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AP_SiegeTankJumpJetPlaceholder">
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <Model value="Invisible"/>
+        <On Terms="ActorCreation" Send="Create AP_SiegeTankJumpJetPlaceholderAttachment"/>
+        <PlacementActorModel value="AP_SiegeTankJumpJetPlaceholderPlacementModel"/>
+    </CActorUnit>
+    <CActorModel id="AP_SiegeTankJumpJetPlaceholderPlacementModel" parent="PlacementModel"/>
+    <CActorModel id="AP_SiegeTankJumpJetPlaceholderAttachment">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorUnit id="AP_SiegeTankSiegedJumpJetPlaceholder" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AP_SiegeTankSiegedJumpJetPlaceholder">
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <Model value="Invisible"/>
+        <On Terms="ActorCreation" Send="Create AP_SiegeTankSiegedJumpJetPlaceholderAttachment"/>
+    </CActorUnit>
+    <CActorModel id="AP_SiegeTankSiegedJumpJetPlaceholderAttachment">
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_SiegeTankJumpJetLandingModel">
+        <Model value="UnloadFX"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <AutoScaleFactor value="1.000000"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpShadow"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <!-- <On Terms="ActorCreation" Send="Create AP_SiegeTank_Land"/> -->
+        <On Terms="ActorCreation" Send="$Stand,00"/>
+        <On Terms="AnimDone; AnimName Stand" Send="Destroy"/>
+        <On Terms="Effect.AP_RemoveSiegeTankJumpJetPlaceholderSet.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_RemoveMercSiegeTankJumpJetPlaceholderSet.Start; At Caster" Send="Create"/>
+    </CActorModel>
+    <CActorModel id="AP_SiegeTankJumpJetLaunchModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Stop" Send="Destroy"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Stop" Send="Destroy"/>
+    </CActorModel>
+    <CActorSound id="AP_SiegeTank_JumpJet_Launch_ActorSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start; At Caster" Send="Create"/>
+        <Sound value="AP_SiegeTank_JumpJet_Launch"/>
+        <!--On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Stop" Send="Destroy"/-->
+    </CActorSound>
+    <CActorRange id="AP_SiegeTankJumpJetRange" parent="RangeAbil" abil="AP_SiegeTankJumpJet"/>
+    <CActorRange id="AP_SiegeTankSiegedJumpJetRange" parent="RangeAbil" abil="AP_SiegeTankSiegedJumpJet"/>
+    <CActorRange id="AP_MercSiegeTankJumpJetRange" parent="RangeAbil" abil="AP_MercSiegeTankJumpJet"/>
+    <CActorRange id="AP_MercSiegeTankSiegedJumpJetRange" parent="RangeAbil" abil="AP_MercSiegeTankSiegedJumpJet"/>
     <CActorUnit id="AP_TankModeMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_TankModeMorphModel">
         <Model value="SiegeTankSiegedMorph"/>
         <PortraitModel value="SiegeTankPortrait"/>
@@ -1429,6 +1628,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTank" Send="AnimPlay End Morph,End"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeTank" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeTankSieged" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap SiegeTankMorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap SiegeTankMorph_BlackOps"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
         <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
         <BarWidth value="102"/>
@@ -1458,6 +1659,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTankSieged" Send="AnimPlay Start Morph,Start"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeTankSieged" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeTank" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap SiegeTankMorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap SiegeTankMorph_BlackOps"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
         <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
         <BarWidth value="102"/>
@@ -1510,6 +1713,21 @@
     <CActorUnit id="AP_SiegeTankSieged" parent="GenericUnitMorph" unitName="AP_SiegeTankSieged">
         <Aliases value="_UnitLarge"/>
         <Model value="SiegeTankSieged"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_Land"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetLM.Start; CreepEngulfs" Send="CreepEngulfmentStop"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetLM.Start; CreepIntersects" Send="CreepEngulfmentStop"/>
+        <On Terms="Effect.AP_RemoveSiegeTankJumpJetPlaceholderSet.Start; CreepEngulfs" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="Effect.AP_RemoveSiegeTankJumpJetPlaceholderSet.Start; CreepIntersects" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start" Send="AnimPlay JumpStart Jump,Start"/>
+        <On Terms="Effect.AP_SiegeTankJumpJetCreateCP.Start" Send="TimerSet 0.500000 JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimClear JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimPlay Jump Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay JumpEnd Jump,End 0 -1.000000 -1.000000 6.000000 AsDuration"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_BlackOps_JumpJets_Land"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap SiegeTank_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap SiegeTank_BlackOps"/>
         <BuildModel value="SiegeTankSieged"/>
         <DeathArray index="Normal" ModelLink="SiegeTankSiegedDeath" SoundLink="SiegeTank_Explode"/>
         <DeathCustoms ModelLink="TerranLargeUnitDeathLow" Name="AntiGravTerran"/>
@@ -1998,6 +2216,8 @@
         <On Terms="Behavior.AP_BansheeCloak.Off" Send="StatusDecrement Cloaked"/>
         <On Terms="Behavior.AP_CloakFieldEffect.Off" Send="StatusDecrement Cloaked"/>
         <On Terms="Behavior.CloakFieldEffect.Off" Send="StatusDecrement Cloaked"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.On" Send="StatusIncrement Cloaked"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.Off" Send="StatusDecrement Cloaked"/>
         <On Terms="Behavior.AP_BansheeCloak.On; IsStatus Cloaked 1" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
         <On Terms="Behavior.AP_BansheeCloak.Off; IsStatus Cloaked 0" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
         <On Terms="Behavior.AP_CloakFieldEffect.On; IsStatus Cloaked 1" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
@@ -2008,6 +2228,10 @@
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.On" Target="::PortraitGameSelf" Send="AnimBracketStart Visor Morph,Start Morph,Stand Morph,End"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.Off" Target="::PortraitGameSelf" Send="AnimBracketStop Visor"/>
         <HostSiteOps Ops="SOpBankerBanshee"/>
         <Model value="Banshee"/>
         <Baselines index="Walk" BlendIn="0.750000" BlendOut="1.000000"/>
@@ -2059,12 +2283,14 @@
         <Terms value="ValidateUnit NotCloakedAndNotDead"/>
         <On Terms="Behavior.AP_BansheeCloak.Off" Send="Create"/>
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.Off" Send="Create"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.Off" Send="Create"/>
         <Sound value="Banshee_CloakOff"/>
     </CActorSound>
     <CActorSound id="AP_Banshee_CloakOn" parent="SoundOneShot">
         <Terms value="ValidateUnit NotCloaked"/>
         <On Terms="Behavior.AP_BansheeCloak.On" Send="Create"/>
         <On Terms="Behavior.AP_BansheeCloakCrossSpectrumDampeners.On" Send="Create"/>
+        <On Terms="Behavior.AP_BansheeCloakFree.On" Send="Create"/>
         <Sound value="Banshee_CloakOn"/>
     </CActorSound>
     <CActorSound id="AP_Battlecruiser_TacticalJumpCursorSound" parent="SoundOneShot">
@@ -4114,6 +4340,18 @@
     <CActorSound id="AP_HealingDroneHealSoundStart" parent="SoundOneShot">
         <Sound value="Medivac_HealStart"/>
     </CActorSound>
+    <CActorAction id="AP_DeploySpiderMinesRelease" parent="GenericAttack" effectImpact="AP_DeploySpiderMinesCreateUnit" effectLaunch="AP_DeploySpiderMinesLaunchMissile">
+        <LaunchSiteOps Ops="SOpAttachCenter"/>
+        <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorRange id="AP_RavenDeploySpiderMinesRange" parent="RangeAbil" abil="AP_RavenDeploySpiderMines"/>
+    <CActorRange id="AP_DeploySpiderMinesRange" parent="RangeAbil" abil="AP_DeploySpiderMines"/>
+    <CActorMissile id="AP_DeploySpiderMinesReleaseMissile" parent="GenericAttackMissile" unitName="AP_DeploySpiderMinesMissile"/>
+    <CActorSound id="AP_DeploySpiderMines_Launch" parent="SoundOneShot">
+        <On Terms="Effect.AP_DeploySpiderMinesLaunchMissile.Start" Send="Create"/>
+        <Sound value="AP_Vulture_SpiderMinePlace"/>
+    </CActorSound>
     <CActorUnit id="AP_Impaler" parent="GenericUnitBase" unitName="AP_Impaler">
         <Aliases value="_UnitLarge"/>
         <Macros value="ZergBurrowStandardAnimMacro"/>
@@ -4527,6 +4765,382 @@
     </CActorMissile>
     <CActorSound id="AP_HydraliskMeleeAttackLaunch" parent="SoundOneShot">
         <Sound value="Hydralisk_MeleeAttackLaunch"/>
+    </CActorSound>
+    <CActorModel id="AP_RailGunLaunchSquib" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <On Terms="Effect.AP_RailGunTurretDamage.Start; At Caster" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+        <Model value="GhostSnipeAttackLaunch"/>
+    </CActorModel>
+    <CActorUnit id="AP_RailGunTurret" parent="GenericUnitBase" unitName="AP_RailGunTurret">
+        <Aliases value="_CreepEngulfable"/>
+        <Aliases value="_UnitMedium"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Spell,D"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Behavior.Precursor.Off" Send="Create AP_RailGunTurretReleaseMissileImpact"/>
+        <On Terms="Behavior.Precursor.Off" Send="$Birth"/>
+        <CreepHeightClass value="Small"/>
+        <DeathArray index="Normal" ModelLink="AP_RailGunTurretDeath" SoundLink="Raven_AutoTurretExplode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TerranBuildingDeath" SoundLink="Raven_AutoTurretExplode"/>
+        <PlacementModel value="AP_RailGunTurretPlacement"/>
+        <PlacementSound value="Terran_BuildingPlacement"/>
+        <PortraitModel value="AdjutantPortrait"/>
+        <BarOffset value="50"/>
+        <ErrorArray Error="CantBuildLocationInvalid" Sound="Raven_Pissed"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
+        <SoundArray index="Birth" value="Raven_AutoTurretBirth"/>
+        <SoundArray index="Ready" value="Raven_AutoTurretReady"/>
+        <SoundArray index="What" value="Raven_AutoTurretWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_RailGunTurretAttack" parent="GenericAttack" effectAttack="AP_RailGunTurretLaunchDummy">
+        <LaunchAssets Model="AP_MagrailMunition_Launch" Sound="AP_RailGun_Launch"/>
+        <ImpactSiteOps HoldPosition="1"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_RailGunTurretAttackBeamPoint" parent="BeamSimpleAnimationStyleOneShot">
+        <On Terms="Effect.AP_RailGunTurretSearch.Start; At Caster" Send="Create"/>
+        <Model value="AP_MagrailMunition_Missile"/>
+        <HostLaunch Subject="_Unit"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon" HoldPosition="1"/>
+        <HostImpactSiteOps Ops="SOpTargetPoint"/>
+    </CActorBeamSimple>
+    <CActorAction id="AP_RailGunTurretAttackImpact" parent="GenericAttack" effectAttack="AP_RailGunTurretDamage">
+        <ImpactMap index="None" Model="AP_MagrailMunition_Impact" Sound="AP_RailGun_Impact"/>
+    </CActorAction>
+    <CActorRange id="AP_RailGunTurretRange" parent="RangeAbil" abil="AP_BuildRailGunTurret"/>
+    <CActorAction id="AP_RailGunTurretRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_RailGunTurretReleaseLM">
+        <LaunchAssets Sound="Raven_AutoTurretReleaseLaunch"/>
+        <ImpactSiteOps Ops="SOpAttachOrigin SOpShadow"/>
+        <ImpactMap index="None" Sound="Raven_AutoTurretReleaseImpact"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorMissile id="AP_RailGunTurretReleaseMissile" parent="GenericAttackMissile" unitName="AP_RailGunTurretReleaseWeapon"/>
+    <CActorModel id="AP_RailGunTurretReleaseMissileImpact">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorModel>
+    <CActorTurret id="AP_RailGunTurretTurret">
+        <On Terms="TurretEnable.AP_RailGunTurret" Send="Create"/>
+    </CActorTurret>
+    <CActorAction id="AP_NovaRavenSeekerMissileAttack" parent="GenericAttack" effectImpact="AP_NovaRavenSeekerMissileDamage" effectLaunch="AP_NovaRavenSeekerMissileLaunchMissile">
+        <Beam value="HunterSeekerAttackBeam"/>
+        <Missile value="AP_HunterSeekerAttackMissile"/>
+        <!--ImpactSiteOps Ops="SOpTargetPoint SOp2DRotation"/-->
+        <ImpactMap index="None" Sound="Raven_HunterSeekerAttackImpact"/>
+        <ImpactPhysics Name="HunterSeekerImpact" MatchKeys="Basic" Physics="HunterSeekerAttackForce"/>
+        <ImpactPhysics Name="HunterSeekerImpactAir" MatchKeys="BasicAir" Physics="HunterSeekerAttackForceAir"/>
+    </CActorAction>
+    <CActorRange id="AP_RavenShredderMissileRange" parent="RangeAbil" abil="AP_RavenShredderMissile">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorMissile id="AP_RavenShredderMissileAttackMissile" parent="GenericAttackMissile" unitName="AP_RavenShredderMissileWeapon">
+        <On Terms="MotionPhaseStart; MotionPhase" Send="Create AP_RavenShredderMissileTrackingBeam"/>
+        <On Terms="MotionPhaseStart; MotionPhase" Send="Create AP_RavenShredderMissileLaunchSound"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Target="AP_RavenShredderMissileLaunchSound" Send="Destroy"/>
+        <On Terms="UnitDeath" Target="AP_RavenShredderMissileLaunchSound" Send="Destroy"/>
+        <On Terms="MotionPhaseStart; MotionPhase 1" Send="Create AP_RavenShredderMissileTargetLock"/>
+        <On Terms="MotionPhaseStart; MotionPhase 1" Send="Create AP_RavenShredderMissile_Travel_AS"/>
+        <On Terms="UnitDeath" Target="RavenShredderMissile_Travel_AS" Send="Destroy"/>
+        <Model value="AP_ShredderWeapon"/>
+    </CActorMissile>
+    <CActorBeamSimple id="AP_RavenShredderMissileTrackingBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <HostLaunch Subject="_Missile" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <!-- Note that we do not have a host here.  This is b/c SOpAttachCenter is
+             using the target unit if there is one, but doing a pass through if there isn't. -->
+        <HostImpactSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
+        <Model value="HunterSeekerTrackingBeam"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_RavenShredderMissile_Travel_AS" parent="SoundContinuous">
+        <Sound value="AP_RavenShredderMissile_Travel_Loop"/>
+    </CActorSound>
+    <CActorSound id="AP_RavenShredderMissileTargetLock" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerTargetLock"/>
+        <Host Subject="RavenShredderMissileTrackingBeam"/>
+    </CActorSound>
+    <CActorSound id="AP_RavenShredderMissileLaunchSound" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerLaunch"/>
+    </CActorSound>
+    <CActorAction id="AP_RavenShredderMissileAttack" parent="GenericAttack" effectImpact="AP_RavenShredderMissileDamage" effectLaunch="AP_RavenShredderMissileLaunchMissile">
+        <ImpactSiteOps Ops="SOpTargetPoint SOp2DRotation"/>
+        <ImpactAttachQuery Methods="Origin"/>
+        <ImpactMap index="None" Model="Invisible" Sound=""/>
+        <ShieldFlashType value="Full"/>
+        <ImpactPhysics Name="HunterSeekerImpact" MatchKeys="Basic" Physics="HunterSeekerAttackForce"/>
+        <ImpactPhysics Name="HunterSeekerImpactAir" MatchKeys="BasicAir" Physics="HunterSeekerAttackForceAir"/>
+    </CActorAction>
+    <CActorModel id="AP_RavenShredderMissileFailDeath">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <On Terms="ActorCreation" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_RavenShredderMissileFailSound"/>
+        <On Terms="ActorCreation" Send="Create AP_RavenShredderMissileFizzleSound"/>
+        <On Terms="ActorCreation" Send="Create AP_RavenShredderMissileSadSound"/>
+        <On Terms="Effect.AP_RavenShredderMissileSuicide.Start" Send="Create"/>
+        <Model value="AP_ShredderWeapon"/>
+    </CActorModel>
+    <CActorSound id="AP_RavenShredderMissileFailSound" parent="SoundOneShot">
+        <Sound value="Terran_ExplosionSmall"/>
+    </CActorSound>
+    <CActorSound id="AP_RavenShredderMissileFizzleSound" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerMissileFizzle"/>
+    </CActorSound>
+    <CActorSound id="AP_RavenShredderMissileSadSound" parent="SoundOneShot">
+        <Sound value="Raven_HunterSeekerMissileSad"/>
+    </CActorSound>
+    <CActorModel id="AP_RavenShredderMissileAttackImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_RavenShredderMissileDamage.Start" Target="_Unit" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create AP_Raven_AntiArmorMissileAttackImpact_AS"/>
+        <Model value="AP_AntiArmorMissileAttackImpact"/>
+        <Inherits index="Visibility" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_Raven_AntiArmorMissileAttackImpact_AS" parent="SoundOneShot">
+        <Sound value="AP_ArbiterMP_AttackImpact"/>
+    </CActorSound>
+    <CActorSimple id="AP_RavenShredderMissileImpactArmorReductionTint">
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.On" Target="_Unit" Send="SetTintColor {255,153,85 2.000000} 0.100000 OneShot SeekerTargetArmor"/>
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.Off" Target="_Unit" Send="ClearTintColor 0.100000 SeekerTargetArmor"/>
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="AP_RavenShredderMissileAttackImpactDebuff" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_RavenShredderMissileArmorReductionUISubtruct.Start; At Target" Send="Create"/>
+        <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSimple id="AP_RavenShredderMissileTint">
+        <Aliases value="_AngryTinter"/>
+        <On Terms="Behavior.AP_RavenShredderMissileTint.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetTintColor 255,50,50 0.500000 OneShot SeekerTarget"/>
+        <On Terms="Behavior.AP_RavenShredderMissileTint.Off" Target="_Unit" Send="ClearTintColor 0.500000 SeekerTarget"/>
+        <On Terms="Behavior.AP_RavenShredderMissileTint.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorUnit id="AP_HellionMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_TankModeMorphModel">
+        <Aliases value="_UnitMedium"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Hellion" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Hellion" Send="AnimPlay End Morph,End"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Hellion" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_HellionTank" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 3.660000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
+<!--        <On Terms="ActorCreation; ValidateUnit AP_HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
+<!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbatmorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbatmorph_BlackOps"/>
+        <Model value="HellionTankMorph"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="Hellion_Explode"/>
+        <PortraitActor value="AP_HellionPortrait"/>
+        <PortraitModel value="HellionPortrait"/>
+        <BarOffset value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-hellionex1.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <HighlightTooltip value="Unit/Name/HellionTank"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Hellion_Ready"/>
+        <SoundArray index="Help" value="Hellion_Help"/>
+        <SoundArray index="What" value="Hellion_What"/>
+        <SoundArray index="Yes" value="Hellion_Yes"/>
+        <SoundArray index="Attack" value="Hellion_Attack"/>
+        <SoundArray index="Pissed" value="Hellion_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-hellion.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-hellionex1.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_HellionTank" parent="GenericUnitBase" unitName="AP_HellionTank">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="Behavior.AP_HellionTankReady.On" Send="AnimBracketStart CoverA Cover,A,Start Cover,A Cover,A,End"/>
+        <On Terms="Behavior.AP_HellionTankReady.Off" Send="AnimBracketStop CoverA"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimPlay CoverB Cover,B PlayForever"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimClear CoverB"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HellionTank" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_HellionTank" Send="Destroy"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="TimerSet 0.250000 KillBeam"/>
+        <On Terms="Abil.attack.ReadyStop" Send="TimerSet 0.250000 KillBeam"/>
+        <On Terms="TimerExpired; TimerName KillBeam" Target="AP_HellionAttackBeam" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Stand PlayForever 0.000000"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
+        <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbat_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbat_BlackOps"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveHoverHellbat" Send="DeathCustomize BlackOps"/>
+        <On Terms="Effect.AP_HellbatLeapLM.Start" Send="AnimBracketStart WorkerJump Jump,Start Jump Jump,End ClosingFull,ContentPlayOnce"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="AnimBracketStop WorkerJump"/>
+        <Model value="HellionTank"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="HellionTank"/>
+        <DeathArray index="Normal" ModelLink="HellionTankDeath" SoundLink="Hellion_Explode"/>
+        <DeathCustoms ModelLink="HellionTankDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="TerranSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PlacementModel value="HellionTank"/>
+        <PortraitActor value="AP_HellionPortrait"/>
+        <PortraitModel value="HellionPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLarge"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-HellionTankEx1.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="HellionTank_Ready"/>
+        <SoundArray index="Help" value="HellionTank_Help"/>
+        <SoundArray index="What" value="HellionTank_What"/>
+        <SoundArray index="Yes" value="HellionTank_Yes"/>
+        <SoundArray index="Attack" value="HellionTank_Attack"/>
+        <SoundArray index="Pissed" value="HellionTank_Pissed"/>
+        <SoundArray index="Movement" value="HellionTank_Movement"/>
+        <UnitFlags index="StandAnimBirthVariation" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-HellionTankEx1.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_HellionTankAttack" parent="GenericAttackBase" effectAttack="AP_HellionTank">
+        <On Terms="Effect.AP_HellionTank.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <LaunchAttachQuery Methods="AMFilterWeapon01"/>
+        <LaunchAssets Model="HellionTankAttackLaunch" Sound="HellionTank_AttackLaunch"/>
+        <LaunchModel value="AP_HellionTankAttackLaunch"/>
+        <ImpactMap index="None" Sound="Hellion_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_HellionTankAttackFireAddition" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Target; !ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="HellionTankAttackFireAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionTankAttackFireAdditionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Target; !ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="HellionTankAttackFireAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionTankAttackLaunch" parent="ModelAnimationStyleOneShot">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.750000 Kill"/>
+        <On Terms="TimerExpired; TimerName Kill" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidateUnit HasHighCapacityBarrels" Send="ModelSwap HellionTankAttackLaunchUpgraded"/>
+        <Model value="HellionTankAttackLaunch"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionTankAttackUpgradedFireAddition" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Target; ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType NotStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="HellionTankAttackUpgradedFireAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_HellionTankAttackUpgradedFireAdditionStructure" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_HellionTankDamage.Start; At Target; ValidateEffect AP_HasHighCapacityBarrels; ValidateUnitType IsStructureTarget" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachRandomDamage"/>
+        <Model value="HellionTankAttackUpgradedFireAddition"/>
+    </CActorModel>
+    <CActorUnit id="AP_HellionTankMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_SiegeModeMorphModel">
+        <Aliases value="_UnitMedium"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HellionTank" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HellionTank" Send="AnimPlay Start Morph,Start"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_HellionTank" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Hellion" Send="Destroy"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 3.660000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
+<!--        <On Terms="ActorCreation; ValidateUnit HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
+<!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbatmorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbatmorph_BlackOps"/>
+        <Model value="HellionTankMorph"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="Hellion_Explode"/>
+        <PortraitActor value="AP_HellionPortrait"/>
+        <PortraitModel value="HellionPortrait"/>
+        <BarOffset value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-HellionTankEx1.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <HighlightTooltip value="Unit/Name/Hellion"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Hellion_Ready"/>
+        <SoundArray index="Help" value="Hellion_Help"/>
+        <SoundArray index="What" value="Hellion_What"/>
+        <SoundArray index="Yes" value="Hellion_Yes"/>
+        <SoundArray index="Attack" value="Hellion_Attack"/>
+        <SoundArray index="Pissed" value="Hellion_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-hellionbattlemode.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-HellionTankEx1.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="AP_Hellion_Land" parent="SoundOneShot">
+        <Sound value="Hellion_Land"/>
+    </CActorSound>
+    <CActorModel id="AP_HellbatChargeStun" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_HellbatLeapStun.On" Send="Create"/>
+        <On Terms="Behavior.AP_HellbatLeapStun.Off" Send="AnimBracketStop BSD"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="AP_ArtanisAreaStunModel"/>
+    </CActorModel>
+    <CActorSound id="Hellbat_JumpJet_Launch_SoundActor" parent="SoundOneShot">
+        <On Terms="Effect.AP_HellbatLeapLM.Start" Send="Create"/>
+        <Sound value="Hellbat_JumpJet_Launch"/>
     </CActorSound>
     <CActorUnit id="AP_Locust" parent="GenericBurrowerStandard" unitName="AP_Locust">
         <Aliases value="_UnitSmall"/>
@@ -5364,13 +5978,72 @@
     </CActorAction>
     <CActorModel id="AP_HunterSeekerAttackImpactModel" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_SeekerMissileDamage.Start" Send="Create"/>
+        <On Terms="Effect.AP_NovaRavenSeekerMissileDamage.Start" Send="Create"/>
         <Model value="HunterSeekerAttackImpact"/>
     </CActorModel>
     <CActorMissile id="AP_HunterSeekerAttackMissile" parent="GenericAttackMissile" unitName="AP_HunterSeekerWeapon">
+        <On Terms="MotionPhaseStart; MotionPhase" Send="Create AP_HunterSeekerLaunchSound"/>
         <On Terms="MotionPhaseStart; MotionPhase 1" Send="Create AP_HunterSeekerTrackingBeam"/>
-        <On Terms="MotionPhaseStart; MotionPhase 3" Send="Create AP_HunterSeekerHappySound"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Target="AP_HunterSeekerLaunchSound" Send="Destroy"/>
+        <On Terms="UnitDeath" Target="AP_HunterSeekerLaunchSound" Send="Destroy"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="Create AP_HunterSeekerHappySound"/>
         <Model value="HunterSeekerWeapon"/>
     </CActorMissile>
+    <CActorMissile id="AP_RavenScramblerMissileProjectile" parent="GenericAttackMissile" unitName="AP_RavenScramblerMissile">
+        <Model value="RavenScramblerMissileWeapon"/>
+    </CActorMissile>
+    <CActorRange id="AP_RavenScramblerMissileRange" parent="RangeAbil" abil="AP_RavenScramblerMissile">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSound id="AP_RavenScramblerMissileImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_RavenScramblerMissileABswitch.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_SkyTank_BarrageMissile_Impact"/>
+    </CActorSound>
+    <CActorModel id="AP_RavenScramblerMissileBehavior" parent="ModelAnimationStyleContinuous">
+        <Model value="RavenScramblerMissileBehavior"/>
+        <On Terms="Behavior.AP_RavenScramblerMissile.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenScramblerMissile.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.AP_RavenScramblerMissileCarrier.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenScramblerMissileCarrier.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidateUnit IsColossus" Send="SetScale 1.000000,1.000000,1.500000"/>
+        <On Terms="ActorCreation; ValidateUnit IsCarrier" Send="SetScale 0.750000"/>
+        <!--        <On Terms="ActorCreation; ValidateUnit IsTempest" Send="SetScale 0.850000"/>-->
+        <HostSiteOps Ops="SOpAttachCenter" HoldRotation="1"/>
+        <Host Subject="_Selectable"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorAction id="AP_RavenScramblerMissileLaunch" parent="GenericAttackBase" effectImpact="AP_RavenScramblerMissileAB" effectLaunch="AP_RavenScramblerMissileLM">
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA2"/>
+        <LaunchAssets Sound="AP_Raven_ScramblerMissileLaunch"/>
+        <Missile value="AP_RavenScramblerMissileProjectile"/>
+        <ImpactSiteOps Ops="SOpAttachCenter SOpForwardLaunchGuide SOp2DRotation"/>
+        <ImpactAttachQuery Methods="Center 0"/>
+        <ImpactMap index="None" Model="RavenScramblerMissileImpact" Sound="AP_Raven_ScramblerMissileImpact" ModelReaction=""/>
+        <ImpactMap index="Shield" Sound="" ModelReaction=""/>
+        <ImpactModel value="RavenScramblerMissileImpact"/>
+        <On Terms="Effect.AP_RavenScramblerMissileLM.Start; At Caster" Send="Create"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorModel id="AP_RavenScramblerMissileImpact" parent="GenericAttackImpactModel">
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardLaunchGuide SOp2DRotation" HoldRotation="1"/>
+        <On Terms="Effect.AP_RavenScramblerMissileABswitch.Start; At Target" Send="Create"/>
+        <!--On Terms="ActorCreation" Send="SetScale 2.500000"/-->
+        <Model value="AP_RavenScramblerMissileImpact"/>
+        <AutoScaleFactor value="1.000000"/>
+        <Host Subject="_Selectable"/>
+    </CActorModel>
+    <CActorSound id="AP_RavenScramblerMissileLoopSound" parent="SoundContinuous">
+        <On Terms="Behavior.AP_RavenScramblerMissile.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenScramblerMissile.Off" Send="Destroy"/>
+        <On Terms="Behavior.AP_RavenScramblerMissileCarrier.On" Send="Create"/>
+        <On Terms="Behavior.AP_RavenScramblerMissileCarrier.Off" Send="Destroy"/>
+        <Sound value="AP_Raven_ScramblerMissileLoop"/>
+    </CActorSound>
     <CActorAction id="AP_PointDefenseDroneRelease" parent="GenericAttack" effectImpact="RemovePrecursor" effectLaunch="AP_PointDefenseDroneReleaseLaunchMissile">
         <LaunchAssets Sound="Raven_PointDefenseDroneReleaseLaunch"/>
         <ImpactMap index="None" Model="PointDefenseDroneAttackBeamImpact" Sound="Raven_PointDefenseDroneReleaseImpact"/>
@@ -5455,6 +6128,10 @@
         <On Terms="Abil.AP_SeekerMissile.SourceCastStart" Send="$Spell"/>
         <On Terms="Abil.AP_PlacePointDefenseDrone.SourceCastStart" Send="$Spell"/>
         <On Terms="Abil.AP_BuildAutoTurret.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_PlaceHealingDrone.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_RavenDeploySpiderMines.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.AP_BuildRailGunTurret.SourceCastStart" Send="$Spell"/>
+        <On Terms="Abil.attack.SourceCastStart" Send="$Spell"/>
         <HostSiteOps Ops="SOpBankerRaven"/>
         <Model value="Raven"/>
         <BuildModel value="Raven"/>
@@ -5463,8 +6140,10 @@
         <PortraitModel value="RavenPortrait"/>
         <StandAnimTurnTime value="3"/>
         <AbilSoundArray AbilCmd="AP_BuildAutoTurret,0" Sound="Raven_AutoTurretVO"/>
+        <AbilSoundArray AbilCmd="AP_BuildRailGunTurret,0" Sound="Raven_AutoTurretVO"/>
         <AbilSoundArray AbilCmd="AP_SeekerMissile,0" Sound="AP_Raven_HunterSeekerVO"/>
         <AbilSoundArray AbilCmd="AP_PlacePointDefenseDrone,0" Sound="Raven_TargetingDroneVO"/>
+        <AbilSoundArray AbilCmd="AP_PlaceHealingDrone,0" Sound="Raven_TargetingDroneVO"/>
         <BarOffset value="55"/>
         <ErrorArray Error="CantBuildLocationInvalid" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
         <ErrorArray Error="CantFindPlacementLocation" Sound="e_cmdBuildTechRequirementsNotMet_Terr"/>
@@ -5521,7 +6200,6 @@
         <HostImpactSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
     </CActorBeamSimple>
     <CActorSound id="AP_HunterSeekerLaunchSound" parent="SoundOneShot">
-        <On Terms="Abil.AP_SeekerMissile.SourcePrepStart" Send="Create"/>
         <Sound value="Raven_HunterSeekerLaunch"/>
     </CActorSound>
     <CActorRange id="AP_PointDefenseDroneRange" parent="RangeAbil" abil="AP_PlacePointDefenseDrone"/>
@@ -7056,7 +7734,17 @@
         <On Terms="WeaponStart.AP_SpartanCompanyAUpgraded.AttackStart" Send="AnimBracketStart Spell Spell"/>
         <On Terms="WeaponStop.AP_SpartanCompanyAUpgraded.AttackStop" Send="AnimBracketStop Spell"/>
         <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_SpartanCompanyDropModel"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.Launch" Send="AnimBracketStart Jump Jump,Start Jump Jump,End"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.Launch" Send="AnimBlendTimeApply 0.100000"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandDown" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandDown" Send="AnimBlendTimeApply"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandUp" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_GoliathCliffJump.LandUp" Send="AnimBlendTimeApply"/>
+        <On Terms="Upgrade.AP_GoliathJumpJet.Add" Send="ModelSwap AP_MercGoliath_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveGoliathJumpJets" Send="ModelSwap AP_MercGoliath_BlackOps"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveGoliathJumpJets" Send="DeathCustomize BlackOps"/>
         <DeathArray index="Normal" ModelLink="AP_SpartanCompanyDeath" SoundLink="Goliath_Explode"/>
+        <DeathCustoms ModelLink="AP_MercGoliath_BlackOps_Death" Name="BlackOps"/>
         <PortraitModel value="AP_GoliathMercenaryPortrait"/>
         <StandAnimTurnTime value="4"/>
         <WalkAnimMoveSpeed value="3.6093"/>
@@ -7109,6 +7797,18 @@
         <Aliases value="_UnitLarge"/>
         <Macros value="UnloadDropAnim"/>
         <On Terms="Behavior.AP_MercGroundDrop.Create" Send="Create AP_SiegeBreakerDropModel"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_Land"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start" Send="AnimPlay JumpStart Jump,Start"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start" Send="TimerSet 0.500000 JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimClear JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimPlay Jump Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay JumpEnd Jump,End 0 -1.000000 -1.000000 4.000000 AsDuration"/>
+        <On Terms="UnitMovementUpdate; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap AP_Merc_SiegeTank_BlackOps_Tank"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap AP_Merc_SiegeTank_BlackOps_Tank"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_BlackOps_JumpJets_Land"/>
         <DeathArray index="Normal" ModelLink="AP_SiegeBreakerDeath" SoundLink="AP_SiegeBreaker_Explode"/>
         <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
         <StandAnimTurnTime value="3.33"/>
@@ -7152,6 +7852,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreakerSieged" Send="AnimPlay Start Morph,Start"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreakerSieged" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreaker" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap AP_Merc_SiegeTankMorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap AP_Merc_SiegeTankMorph_BlackOps"/>
         <Model value="AP_SiegeBreakerSiegedMorph"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
         <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
@@ -7180,6 +7882,21 @@
     </CActorSound>
     <CActorUnit id="AP_SiegeBreakerSieged" parent="GenericUnitMorph" unitName="AP_SiegeBreakerSieged">
         <Aliases value="_UnitLarge"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_Land"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetLM.Start; CreepEngulfs" Send="CreepEngulfmentStop"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetLM.Start; CreepIntersects" Send="CreepEngulfmentStop"/>
+        <On Terms="Effect.AP_RemoveMercSiegeTankJumpJetPlaceholderSet.Start; CreepEngulfs" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="Effect.AP_RemoveMercSiegeTankJumpJetPlaceholderSet.Start; CreepIntersects" Send="CreepEngulfmentStartTransition"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start" Send="AnimPlay JumpStart Jump,Start"/>
+        <On Terms="Effect.AP_MercSiegeTankJumpJetCreateCP.Start" Send="TimerSet 0.500000 JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimClear JumpStart"/>
+        <On Terms="TimerExpired; TimerName JumpStart" Send="AnimPlay Jump Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimClear Jump"/>
+        <On Terms="MotionPhaseStart; MotionPhase 2" Send="AnimPlay JumpEnd Jump,End 0 -1.000000 -1.000000 6.000000 AsDuration"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying JumpEnd" Send="AnimClear JumpEnd"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_SiegeTank_BlackOps_JumpJets_Land"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap AP_Merc_SiegeTank_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap AP_Merc_SiegeTank_BlackOps"/>
         <DeathArray index="Normal" ModelLink="AP_SiegeBreakerSiegedDeath" SoundLink="SiegeTank_Explode"/>
         <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
         <BarOffset value="65"/>
@@ -7242,6 +7959,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreaker" Send="AnimPlay End Morph,End"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreaker" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_SiegeBreakerSieged" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HoverSiegeTank.Add" Send="ModelSwap AP_Merc_SiegeTankMorph_BlackOps"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHoverSiegeTank" Send="ModelSwap AP_Merc_SiegeTankMorph_BlackOps"/>
         <Model value="AP_SiegeBreakerSiegedMorph"/>
         <DeathArray index="Normal" ModelLink="TerranLargeUnitDeath" SoundLink="SiegeTank_Explode"/>
         <PortraitModel value="AP_SiegeTankMercenaryPortrait"/>
@@ -9154,4 +9873,20 @@
         <Model value="AP_VileRoachDebuff"/>
         <AutoScaleFactor value="0.400000"/>
     </CActorModel>
+    <CActorAction id="AP_MagrailMunition" parent="GenericAttack" effectImpact="AP_MagrailMunitionsDamage" effectLaunch="AP_MagrailMunitionsLaunchMissile">
+        <BeamScope value="Caster"/>
+        <ImpactMap index="None" Model="AP_MagrailMunition_Impact" Sound="AP_RailGun_Impact"/>
+        <LaunchAssets Model="AP_MagrailMunition_Launch" Sound="AP_RailGun_Launch"/>
+        <LaunchAttachQuery Methods="SetC 0"/>
+    </CActorAction>
+    <!--CActorAction id="MagrailMunitionLaunch" parent="GenericAttack" effectImpact="MagrailMunitionsDamage" effectLaunch="MagrailMunitionsLaunchMissile">-->
+    <!--        <LaunchAssets Model="MagrailMunition_Launch" Sound="RailGun_Launch"/>-->
+    <!--        <Missile value="MagrailMunitionInvisibleMissile"/>-->
+    <!--    </CActorAction-->
+    <CActorBeamSimple id="AP_MagrailMunitionBeam" parent="GenericAttackBeam">
+        <Model value="AP_MagrailMunition_Missile"/>
+    </CActorBeamSimple>
+    <CActorMissile id="AP_MagrailMunitionInvisibleMissile" parent="GenericAttackMissile" unitName="AP_MagrailMunitionMissile">
+        <Model value="Invisible"/>
+    </CActorMissile>
 </Catalog>

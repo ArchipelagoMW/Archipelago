@@ -93,6 +93,61 @@
     <CEffectApplyBehavior id="AP_Stimpack">
         <EditorCategories value="Race:Terran"/>
     </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_SuperStimpack">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_SuperStim"/>
+        <WhichUnit Value="Source"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_SuperStimpackSmallSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SuperStimpack"/>
+        <EffectArray value="AP_SuperStimpackSmallSetMU"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_SuperStimpackSmallSetMU">
+        <EditorCategories value="Race:Zerg"/>
+        <VitalArray index="Life" Change="30"/>
+        <ImpactUnit Value="Source"/>
+    </CEffectModifyUnit>
+    <CEffectSet id="AP_SuperStimpackLargeSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SuperStimpack"/>
+        <EffectArray value="AP_SuperStimpackLargeSetMU"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_SuperStimpackLargeSetMU">
+        <EditorCategories value="Race:Zerg"/>
+        <VitalArray index="Life" Change="60"/>
+        <ImpactUnit Value="Source"/>
+    </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_MagrailMunitionsCP">
+        <EditorCategories value="Race:Terran"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialDelay value="0.1"/>
+        <InitialEffect value="AP_MagrailMunitionsLaunchMissile"/>
+        <ExpireDelay value="0.9"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_MagrailMunitionsSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_MagrailMunitionsCP"/>
+        <EffectArray value="AP_MagrailStun1Sec"/>
+        <ValidatorArray value="AP_TargetInWeaponRange"/>
+        <ValidatorArray value="AP_CasterIsFiringOrAnimatingWeapon"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MagrailStun1Sec">
+        <EditorCategories value="Race:Terran"/>
+        <ValidatorArray index="0" value="CasterIsAttacking"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_MagrailMunitionsDamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Terran"/>
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_MagrailMunitionsLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_MagrailMunitionsDamage"/>
+        <AmmoUnit value="AP_MagrailMunitionMissile"/>
+        <Flags index="Channeled" value="1"/>
+        <ImpactLocation Effect="AP_MagrailMunitionsSet"/>
+    </CEffectLaunchMissile>
     <CEffectCreateHealer id="AP_heal">
         <ValidatorArray value="noMarkers"/>
         <ValidatorArray value="NotWarpingIn"/>
@@ -320,6 +375,16 @@
         <EffectArray value="AP_D8ClusterBombLM"/>
         <EffectArray value="MakePrecursor"/>
     </CEffectSet>
+    <CEffectSet id="AP_SpawnReaperSpiderMineSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_SpawnSpiderMine"/>
+        <EffectArray value="AP_ReplenishReaperSpiderMine"/>
+        <TargetLocationType value="UnitOrPoint"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_ReplenishReaperSpiderMine">
+        <ImpactUnit Value="Source"/>
+        <Cost Abil="AP_MakeReaperSpiderMines,Specialize1" ChargeCountUse="-1"/>
+    </CEffectModifyUnit>
     <CEffectDamage id="AP_InfernalFlameThrower" parent="DU_WEAP">
         <ValidatorArray value="noMarkers"/>
         <EditorCategories value="Race:Terran"/>
@@ -374,6 +439,58 @@
         <EffectArray value="AP_InfernalFlameThrower"/>
         <EffectArray value="AP_InfernalFlameThrowerCP"/>
     </CEffectSet>
+    <CEffectCreateUnit id="AP_HellbatLeap">
+        <EditorCategories value="Race:Zerg"/>
+        <SpawnEffect value="AP_HellbatLeapSet"/>
+        <!--SpawnUnit value="HellbatPlaceholder"/-->
+        <SpawnUnit value="AP_Hellbat"/>
+        <SpawnRange value="1"/>
+        <SpawnOffset value="0,-1"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <ValidatorArray value="ChargeMinTriggerDistance"/>
+        <ValidatorArray value="HasVision"/>
+        <ValidatorArray value="AP_HellbatChargeMaxDistance"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_HellbatLeapSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_HellbatLeapSwitch"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="TempTimeout"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_HellbatLeapSwitch">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="TargetIsPathable" Effect="AP_HellbatLeapLM"/>
+        <CaseDefault value="AP_HellbatLeapRemove"/>
+        <TargetLocationType value="UnitOrPoint"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_HellbatLeapRemove">
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_HellbatLeapLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="AP_HellbatLeapImpactSet"/>
+        <Movers Link="AP_HellbatChargeMissile"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_HellbatLeapImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_HellbatLeapStunSearch"/>
+        <EffectArray value="AP_HellbatLeapRemove"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_HellbatLeapStun">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_HellbatLeapStunSearch">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable,Unstoppable"/>
+        <AreaArray Radius="0.75" Effect="AP_HellbatLeapStun"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
     <CEffectModifyUnit id="AP_ReplenishNanoConstructor">
         <ImpactUnit Value="Source"/>
         <Cost Abil="AP_MakeVultureSpiderMines,Specialize1" ChargeCountUse="-1"/>
@@ -592,6 +709,112 @@
         <Kind value="Ranged"/>
         <Amount value="40"/>
         <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectCreateUnit id="AP_SiegeTankSiegedJumpJetCreatePlaceholder">
+        <SpawnEffect value="AP_SiegeTankJumpJetCreateCP"/>
+        <SpawnUnit value="AP_SiegeTankSiegedJumpJetPlaceholder"/>
+        <SpawnRange value="0"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="UseFood" value="0"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_MercSiegeTankSiegedJumpJetCreatePlaceholder">
+        <SpawnEffect value="AP_MercSiegeTankJumpJetCreateCP"/>
+        <SpawnUnit value="AP_SiegeTankSiegedJumpJetPlaceholder"/>
+        <SpawnRange value="0"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="UseFood" value="0"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_SiegeTankJumpJetCreatePlaceholder">
+        <SpawnEffect value="AP_SiegeTankJumpJetCreateCP"/>
+        <SpawnUnit value="AP_SiegeTankJumpJetPlaceholder"/>
+        <SpawnRange value="0"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="UseFood" value="0"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_MercSiegeTankJumpJetCreatePlaceholder">
+        <SpawnEffect value="AP_MercSiegeTankJumpJetCreateCP"/>
+        <SpawnUnit value="AP_SiegeTankJumpJetPlaceholder"/>
+        <SpawnRange value="0"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="UseFood" value="0"/>
+    </CEffectCreateUnit>
+    <CEffectCreatePersistent id="AP_SiegeTankJumpJetCreateCP">
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="AP_SiegeTankJumpJetCreateTimeOutAB"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="NotDead"/>
+        <PeriodicEffectArray value="AP_SiegeTankJumpJetLM"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_MercSiegeTankJumpJetCreateCP">
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="AP_MercSiegeTankJumpJetCreateTimeOutAB"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="NotDead"/>
+        <PeriodicEffectArray value="AP_MercSiegeTankJumpJetLM"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_SiegeTankJumpJetCreateTimeOutAB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_SiegeTankJumpJetCreateCP" Value="TargetOuter"/>
+        <Behavior value="AP_SiegeTankJumpJetCreateTimeOut"/>
+        <Count value="5"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_MercSiegeTankJumpJetCreateTimeOutAB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_MercSiegeTankJumpJetCreateCP" Value="TargetOuter"/>
+        <Behavior value="AP_SiegeTankJumpJetCreateTimeOut"/>
+        <Count value="5"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_SiegeTankJumpJetLM">
+        <DeathType value="Unknown"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <ImpactEffect value="AP_RemoveSiegeTankJumpJetPlaceholderSet"/>
+        <FinishEffect value="AP_RemoveSiegeTankJumpJetPlaceholderSet"/>
+        <Movers Link="AP_SiegeTankJumpJet"/>
+        <Flags index="ValidateWeapon" value="0"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_MercSiegeTankJumpJetLM">
+        <DeathType value="Unknown"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <ImpactEffect value="AP_RemoveMercSiegeTankJumpJetPlaceholderSet"/>
+        <FinishEffect value="AP_RemoveMercSiegeTankJumpJetPlaceholderSet"/>
+        <Movers Link="AP_SiegeTankJumpJet"/>
+        <Flags index="ValidateWeapon" value="0"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_RemoveSiegeTankJumpJetPlaceholderSet">
+        <EffectArray value="AP_RemoveSiegeTankJumpJetPlaceholder"/>
+    </CEffectSet>
+    <CEffectSet id="AP_RemoveMercSiegeTankJumpJetPlaceholderSet">
+        <EffectArray value="AP_RemoveMercSiegeTankJumpJetPlaceholder"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_RemoveSiegeTankJumpJetPlaceholder">
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="NoKillCredit" value="1"/>
+        <Death value="Remove"/>
+        <Visibility value="Hidden"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_RemoveMercSiegeTankJumpJetPlaceholder">
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="NoKillCredit" value="1"/>
+        <Death value="Remove"/>
+        <Visibility value="Hidden"/>
     </CEffectDamage>
     <CEffectRemoveBehavior id="AP_HealRemoveTargetBehavior">
         <EditorCategories value="Race:Terran"/>
@@ -3623,6 +3846,35 @@
         <DrainVital value="Energy"/>
         <RechargeVitalRate value="14"/>
     </CEffectCreateHealer>
+    <CEffectCreatePersistent id="AP_DeploySpiderMinesPersistent">
+        <InitialOffset value="0,1,0"/>
+        <PeriodCount value="3"/>
+        <PeriodicEffectArray value="AP_DeploySpiderMinesCreateUnit"/>
+        <PeriodicEffectArray value="AP_DeploySpiderMinesCreateUnit"/>
+        <PeriodicEffectArray value="AP_DeploySpiderMinesCreateUnit"/>
+        <PeriodicOffsetArray value="1.2,0.5,0"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="-1.2,0.5,0"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectCreateUnit id="AP_DeploySpiderMinesCreateUnit">
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnEffect value="AP_DeploySpiderMinesLaunchStartSet"/>
+        <SpawnUnit value="AP_SpiderMineBurrowed"/>
+        <SpawnRange value="3"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_DeploySpiderMinesLaunchStartSet">
+        <EffectArray value="AP_DeploySpiderMinesLaunchMissile"/>
+        <EffectArray value="KillsToCaster"/>
+        <EffectArray value="MakePrecursor"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_DeploySpiderMinesLaunchMissile">
+        <FinishEffect value="RemovePrecursor"/>
+        <AmmoUnit value="AP_DeploySpiderMinesMissile"/>
+        <LaunchLocation Value="CasterUnit"/>
+    </CEffectLaunchMissile>
     <CEffectDamage id="AP_ImpalerDamage">
         <EditorCategories value="Race:Zerg"/>
         <ResponseFlags index="Acquire" value="1"/>
@@ -3753,6 +4005,256 @@
         <Death value="Eviscerate"/>
         <Kind value="Melee"/>
     </CEffectDamage>
+    <CEffectDamage id="AP_RailGunTurretDamage" parent="DU_WEAP">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Terran"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="30"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="AP_RailGunTurretLaunchDummy">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactUnit Value="Caster"/>
+    </CEffectModifyUnit>
+    <CEffectCreateUnit id="AP_RailGunTurretRelease">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnEffect value="AP_RailGunTurretSet"/>
+        <SpawnUnit value="AP_RailGunTurret"/>
+        <SpawnRange value="0"/>
+    </CEffectCreateUnit>
+    <CEffectLaunchMissile id="AP_RailGunTurretReleaseLM">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="RemovePrecursor"/>
+        <AmmoUnit value="AP_RailGunTurretReleaseWeapon"/>
+        <PlaceholderUnit value="AP_RailGunTurret"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_RailGunTurretReleaseLaunch">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_RailGunTurretReleaseLM"/>
+        <EffectArray value="MakePrecursor"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_RailGunTurretSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ExcludeArray Value="Target"/>
+        <IncludeArray Effect="AP_RailGunTurretSearchCP" Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray RectangleWidth="0.3" RectangleHeight="6.8" Effect="AP_RailGunTurretDamage"/>
+        <AreaRelativeOffset value="0,3.2"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_RailGunTurretSearchCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourcePoint"/>
+        <InitialEffect value="AP_RailGunTurretLaunchDummy"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_RailGunTurretSearch"/>
+        <PeriodicOffsetArray value="0,-6.8,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_RailGunTurretSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_RailGunTurretTimedLife"/>
+        <EffectArray value="AP_RailGunTurretReleaseLaunch"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_RailGunTurretTimedLife">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_NovaRavenSeekerMissileApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Effect="AP_SeekerMissileLaunchMissile"/>
+        <Behavior value="AP_SeekerMissile"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_NovaRavenSeekerMissileDamage">
+        <EditorCategories value="Race:Terran"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="75"/>
+        <AreaArray Radius="0.6" Fraction="1"/>
+        <AreaArray Radius="1.2" Fraction="0.5"/>
+        <AreaArray Radius="2.4" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="-;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_NovaRavenSeekerMissileLaunchCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourceUnit"/>
+        <ExpireEffect value="AP_NovaRavenSeekerMissileSuicideSet"/>
+        <PeriodCount value="10"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_NovaRavenSeekerMissileLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchEffect value="AP_NovaRavenSeekerMissileLaunchSet"/>
+        <ImpactEffect value="AP_NovaRavenSeekerMissileDamage"/>
+        <AmmoUnit value="AP_HunterSeekerWeapon"/>
+        <Movers Link="AP_NovaRavenSeekerMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_NovaRavenSeekerMissileLaunchSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaRavenSeekerMissileLaunchCP"/>
+        <EffectArray value="AP_NovaRavenSeekerMissileLaunchTintCP"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_NovaRavenSeekerMissileLaunchTintCP">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="SourceUnit"/>
+        <PeriodCount value="250"/>
+        <PeriodicValidator value="SourceNotDead"/>
+        <PeriodicEffectArray value="AP_NovaRavenSeekerMissileApplyBehavior"/>
+        <PeriodicPeriodArray value="0.1"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_NovaRavenSeekerMissileSuicide">
+        <ValidatorArray value="AP_NovaRavenSeekerMissileMaxLaunchRange"/>
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_NovaRavenSeekerMissileSuicideSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_NovaRavenSeekerMissileSuicide"/>
+    </CEffectSet>
+    <CEffectSet id="AP_RavenScramblerDummy">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_RavenScramblerSwitchInitial">
+        <EditorCategories value="Race:Terran"/>
+        <CaseArray Validator="IsDead" Effect="AP_RavenScramblerDummy"/>
+        <CaseDefault value="AP_RavenScramblerMissileLM"/>
+    </CEffectSwitch>
+    <CEffectLaunchMissile id="AP_RavenScramblerMissileLM">
+        <EditorCategories value="Race:Terran"/>
+        <!--ImpactEffect value="BattlecruiserTargetTriggerHyperJumpCD"/-->
+        <AmmoUnit value="AP_RavenScramblerMissile"/>
+        <ValidatorArray value="AP_IsMechanicalOrIsPsionic"/>
+        <ValidatorArray value="AP_TargetNotTacticalJumping"/>
+        <FinishEffect value="AP_RavenScramblerMissileAB"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="AP_RavenScramblerMissileAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_RavenScramblerMissile"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_RavenShredderMissileLaunchMissile">
+        <EditorCategories value="Race:Terran"/>
+        <LaunchEffect value="AP_RavenShredderMissileLaunchSet"/>
+        <ImpactEffect value="AP_RavenShredderMissileImpactSet"/>
+        <AmmoUnit value="AP_RavenShredderMissileWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_RavenShredderMissileLaunchSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_RavenShredderMissileLaunchCP"/>
+        <EffectArray value="AP_RavenShredderMissileTintCP"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_RavenShredderMissileLaunchCP">
+        <EditorCategories value="Race:Terran"/>
+        <ExpireEffect value="AP_RavenShredderMissileSuicide"/>
+        <PeriodCount value="50"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <WhichLocation Value="SourceUnit"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_RavenShredderMissileSuicide">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+        <ValidatorArray value="AP_RavenShredderMissileLaunchRange"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_RavenShredderMissileTintCP">
+        <EditorCategories value="Race:Terran"/>
+        <PeriodCount value="250"/>
+        <PeriodicPeriodArray value="0.1"/>
+        <PeriodicEffectArray value="AP_RavenShredderMissileApplyBehavior"/>
+        <PeriodicValidator value="SourceNotDead"/>
+        <WhichLocation Value="SourceUnit"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_RavenShredderMissileApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_RavenShredderMissileTint"/>
+        <WhichUnit Effect="AP_RavenShredderMissileLaunchMissile"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_RavenShredderMissileImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_RavenShredderMissileDamage"/>
+        <EffectArray value="AP_RavenShredderMissileImpactSearchArea"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_RavenShredderMissileDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <AreaArray Radius="0.72" Fraction="1"/>
+        <AreaArray Radius="1.44" Fraction="0.5"/>
+        <AreaArray Radius="2.88" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFlags index="SameCliff" value="0"/>
+        <SearchFilters value="-;Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Visibility value="Visible"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AINotifyFlags index="MajorDanger" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_RavenShredderMissileImpactSearchArea">
+        <EditorCategories value="Race:Terran"/>
+        <AreaArray Radius="2.88" Effect="AP_RavenShredderMissileSearchImpactSet"/>
+        <SearchFilters value="-;Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_RavenShredderMissileArmorReductionUIAdd">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_RavenShredderMissileArmorReductionUISubtruct">
+        <!-- Looks like this validator doesn't exist in Vanilla -->
+        <ValidatorArray index="0" value="AP_RavenShredderMissileArmorReductionUIAddTargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/RavenShredderMissileArmorReductionUIAdd"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_RavenShredderMissileImpactApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_RavenShredderMissileArmorReduction"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_RavenShredderMissileSearchImpactSet">
+        <EditorCategories value="Race:Terran"/>
+        <!--EffectArray value="RavenShredderMissileImpactApplyBehavior"/>
+        <EffectArray value="RavenShredderMissileArmorReductionUIAdd"/-->
+        <EffectArray value="AP_RavenShredderMissileArmorReductionUISubtruct"/>
+    </CEffectSet>
+    <CEffectSet id="AP_HellionTank">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_HellionTankApplyBehavior"/>
+        <EffectArray value="AP_HellionTankDamage"/>
+        <EffectArray value="AP_HellionTankSearch"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_HellionTankApplyBehavior">
+        <EditorCategories value="Race:Terran"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_HellionTankReady"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_HellionTankDamage">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Light" value="12"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Ranged"/>
+        <Amount value="18"/>
+        <Death value="Fire"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_HellionTankSearch">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <ExcludeArray Effect="HellionTank" Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Missile,Dead,Hidden,Invulnerable"/>
+        <AreaArray Arc="45" Radius="2" Effect="AP_HellionTankDamage"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectEnumArea>
     <CEffectLaunchMissile id="AP_LocustCreateLMA">
         <EditorCategories value="Race:Zerg"/>
         <ImpactLocation Value="TargetUnitOrPoint"/>

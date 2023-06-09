@@ -17,7 +17,15 @@
     </CRequirement>
     <CRequirement id="AP_UseStimpackSM">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
-        <NodeArray index="Show" Link="AP_CountUpgradeMarineStimpackCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_UseBaseMarineStimpack"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackMarine">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackMarineCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemMarine">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemMarineCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseIncineratorNozzles">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -41,6 +49,10 @@
     <CRequirement id="AP_BearclawNozzlesResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeBearclawNozzlesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemMarauder">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemMarauderCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_JuggernautPlatingResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeFirebatJuggernautPlatingCompleteOnly"/>
     </CRequirement>
@@ -51,13 +63,56 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Use" Link="AP_CountUpgradeClusterBombCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveLaserTargetingSystemReaper">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeLaserTargetingSystemReaperCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_UseStimpackSMReaper">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
-        <NodeArray index="Use" Link="AP_CountUpgradeReaperStimpackCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_UseBaseReaperStimpack"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackReaper">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackReaperCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseStimpackMarauder">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_UseBaseMarauderStimpack"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackMarauder">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackMarauderCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_MagrailMunitionsMarine">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMagrailMunitionsMarineCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_MagrailMunitionsMarauder">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMagrailMunitionsMarauderCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseStimpackFirebat">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_UseBaseFirebatStimpack"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSuperStimpackFirebat">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSuperStimpackFirebatCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseG4ClusterBombs">
         <EditorCategories value="Race:Terran,TechType:Unit"/>
         <NodeArray index="Show" Link="AP_CountUpgradeClusterBombCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_CloakingTechnologyReaper">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCloakingTechnologyReaperCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveReaperSpiderMines">
+        <NodeArray index="Show" Link="AP_CountUpgradeReaperSpiderMinesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveCombatDrugs">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeCombatDrugsCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseHellionInfernalPreIgniter">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -66,6 +121,14 @@
     <CRequirement id="AP_UseTwinLinkedFlameThrowers">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeTwinLinkedFlameThrowersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHellbatAspect">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHellbatAspectCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHoverHellbat">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHoverHellbatCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_UseHighCapacityBarrels">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
@@ -90,6 +153,10 @@
     <CRequirement id="AP_UseMultilockTargetingSystems">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeMultilockTargetingSystemsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveGoliathJumpJets">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeGoliathJumpJetCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_BurstCapacitorsResearched">
         <NodeArray index="Use" Link="AP_CountUpgradeBurstCapacitorsCompleteOnly"/>
@@ -127,6 +194,13 @@
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Use" Link="AP_CountUpgradeNotPossibleSiegeModeCompleteOnly"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSiegeTankShapedBlastCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHoverSiegeTank">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHoverSiegeTankCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpiderMinesSiegeTank">
+        <NodeArray index="Show" Link="AP_CountUpgradeSiegeSpiderMinesCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_AdvancedHealingAINotPurchased">
         <NodeArray index="Show" Link="AP_NotCountUpgradeAdvancedHealingAICompleteOnly"/>
@@ -183,6 +257,9 @@
     </CRequirement>
     <CRequirement id="AP_CrossSpectrumDampenersResearched">
         <NodeArray index="Show" Link="AP_CountUpgradeCrossSpectrumDampenersCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_PermanentCloakBansheeResearched">
+        <NodeArray index="Show" Link="AP_CountUpgradePermanentCloakBansheeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_DistortionBlastersResearched">
         <EditorCategories value="Race:Terran,TechType:Unit"/>
@@ -343,6 +420,26 @@
     <CRequirement id="AP_HaveRavenBioMechanicalRepairDrone">
         <EditorCategories value="Race:Terran,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeRavenBioMechanicalRepairDroneCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSpiderMinesRaven">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRavenSpiderMinesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_MagrailMunitionsRaven">
+        <EditorCategories value="Race:Terran,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMagrailMunitionsRavenCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveAdvancedWeaponryRaven">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAdvancedWeaponryRavenCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveRavenInterferenceMatrix">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRavenInterferenceMatrixCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveRavenAntiArmorMissile">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeRavenAntiArmorMissileCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_BuildPredator">
         <EditorCategories value="Race:Terran,TechType:Unit"/>

@@ -72,6 +72,21 @@
         <Value value="AP_Hellion"/>
         <Type value="SelectAlias"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_SourceIsNotVanillaHellion">
+        <WhichUnit Value="Source"/>
+        <Value value="Hellion"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_SourceIsNotAPHellion">
+        <WhichUnit Value="Source"/>
+        <Value value="AP_Hellion"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_SourceIsNotHellion">
+        <CombineArray value="AP_SourceIsNotVanillaHellion"/>
+        <CombineArray value="AP_SourceIsNotAPHellion"/>
+        <Type value="And"/>
+    </CValidatorCombine>
     <CValidatorUnitCompareBehaviorCount id="AP_AtLeastOneHealBeamBusy">
         <WhichUnit Value="Caster"/>
         <Compare value="GE"/>
@@ -475,6 +490,14 @@
         <Value value="1"/>
         <Behavior value="AP_KillerPhantasm"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsHellionTank">
+        <Value value="AP_HellionTank"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsNotHellionTank">
+        <ResultFailed value="CantLoadThatUnit"/>
+        <Value value="AP_HellionTank"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
     <CValidatorUnitType id="AP_IsSwarmHostBurrowed">
         <Value value="AP_SwarmHostBurrowed"/>
     </CValidatorUnitType>
@@ -1432,4 +1455,71 @@
         <Find value="1"/>
         <Value value="AP_HaveHotSParalyticSpines"/>
     </CValidatorPlayerRequirement>
+    <CValidatorLocationCompareRange id="AP_NovaRavenSeekerMissileMaxLaunchRange">
+        <WhichLocation Effect="AP_NovaRavenSeekerMissileLaunchMissile"/>
+        <Compare value="GE"/>
+        <Range value="13"/>
+        <Value Value="SourceUnit"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="AP_IsMechanicalOrIsPsionic">
+        <CombineArray value="AP_IsMechanical"/>
+        <CombineArray value="AP_IsPsionic"/>
+        <ResultFailed value="Error,Error/MustTargetMechanicalorPsionic"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_IsMechanical">
+        <Filters value="Mechanical;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_IsPsionic">
+        <Filters value="Psionic;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_TargetNotTacticalJumping">
+        <ResultFailed value="Error,Error/CantTargetBattlecruiserHyperjump"/>
+        <CombineArray value="AP_TargetTacticalJumping"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_TargetTacticalJumping">
+        <ResultFailed value="Error,Error/CantTargetBattlecruiserHyperjump"/>
+        <WhichUnit Value="Target"/>
+        <AbilLink value="AP_Hyperjump"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorLocationCompareRange id="AP_RavenShredderMissileLaunchRange">
+        <WhichLocation Effect="AP_RavenShredderMissileLaunchMissile"/>
+        <Compare value="GE"/>
+        <Range value="13"/>
+        <Value Value="SourceUnit"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorPlayerRequirement id="AP_HaveHoverSiegeTank">
+        <Find value="1"/>
+        <Value value="AP_HaveHoverSiegeTank"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveGoliathJumpJets">
+        <Find value="1"/>
+        <Value value="AP_HaveGoliathJumpJets"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorLocationCompareRange id="AP_HellbatChargeMaxDistance">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="LT"/>
+        <Range value="6"/>
+        <ResultFailed value="TargetIsOutOfRange"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorPlayerRequirement id="AP_HaveHoverHellbat">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHoverHellbat"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitInWeaponRange id="AP_TargetInWeaponRange">
+        <ResultFailed value="TargetIsOutOfRange"/>
+    </CValidatorUnitInWeaponRange>
+    <CValidatorUnitWeaponFiring id="AP_CasterIsFiringWeapon">
+        <!-- This mutates in Multi -->
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitWeaponFiring>
+    <CValidatorUnitWeaponAnimating id="AP_CasterIsAnimatingWeapon">
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitWeaponAnimating>
+    <CValidatorCombine id="AP_CasterIsFiringOrAnimatingWeapon">
+        <!-- See https://www.sc2mapster.com/forums/development/data/183335-solved-how-could-i-make-marauders-stimpack -->
+        <CombineArray value="AP_CasterIsFiringWeapon"/>
+        <CombineArray value="AP_CasterIsAnimatingWeapon"/>
+    </CValidatorCombine>
 </Catalog>
