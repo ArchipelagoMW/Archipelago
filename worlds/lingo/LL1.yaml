@@ -172,6 +172,8 @@
         door: Seeker Entrance
       Dead End Area:
         door: Dead End Door
+      Knight Night Entrance:
+        door: Knight Night Entrance
     panels:
       DEAD END:
         id: Appendix Room/Panel_deadend_deadened
