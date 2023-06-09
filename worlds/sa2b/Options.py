@@ -309,8 +309,8 @@ class ChaoGardenDifficulty(Choice):
     Determines the number of chao garden difficulty levels included. Easier difficulty settings means fewer chao garden checks
     None: No Chao Garden Activities have checks
     Beginner: Beginner Races
-    Intermediate: Beginner and Jewel Races
-    Expert: Beginner, Jewel, Challenge, Hero, and Dark Races
+    Intermediate: Beginner, Challenge, Hero, and Dark Races
+    Expert: Beginner, Challenge, Hero, Dark and Jewel Races
     """
     display_name = "Chao Garden Difficulty"
     option_none = 0
