@@ -48,7 +48,7 @@ class DarkSouls3World(World):
     data_version = 6
     base_id = 100000
     enabled_location_categories: Set[DS3LocationCategory] = set()
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 4, 2)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
     location_name_to_id = DarkSouls3Location.get_name_to_id()
 
