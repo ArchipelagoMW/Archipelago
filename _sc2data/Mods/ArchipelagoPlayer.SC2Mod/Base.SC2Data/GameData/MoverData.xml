@@ -763,6 +763,26 @@
             <YawPitchRoll value="719.2968"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_LocustEggMissile">
+        <MotionPhases>
+            <Driver value="Ballistic"/>
+            <Acceleration value="-1"/>
+            <Gravity value="25"/>
+            <RotationActorType value="Upright"/>
+            <YawPitchRoll value="MAX"/>
+            <FlightTime value="0.5"/>
+        </MotionPhases>
+    </CMoverMissile>
+    <CMoverMissile id="AP_LocustAirEggMissile">
+        <MotionPhases>
+            <Driver value="Ballistic"/>
+            <Acceleration value="-1"/>
+            <Gravity value="25"/>
+            <RotationActorType value="Upright"/>
+            <YawPitchRoll value="MAX"/>
+            <FlightTime value="0.75"/>
+        </MotionPhases>
+    </CMoverMissile>
     <CMoverMissile id="AP_NovaLockdownMissile">
         <MotionPhases>
             <Driver value="Guidance"/>

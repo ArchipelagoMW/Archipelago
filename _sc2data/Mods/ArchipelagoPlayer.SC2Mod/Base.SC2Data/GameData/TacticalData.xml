@@ -8,4 +8,16 @@
         <Abil value="AP_UnburrowImpaler"/>
         <Validator value="AP_TacticalBurrowImpalerUp"/>
     </CTacticalOrder>
+    <CTacticalOrder id="AP_SwarmHost">
+        <Abil value="AP_MorphToSwarmHostRooted"/>
+        <Validator value="AP_TacticalBurrowSwarmHostDown"/>
+    </CTacticalOrder>
+    <CTacticalOrder id="AP_SwarmHostBurrowed">
+        <Abil value="AP_MorphToSwarmHost"/>
+        <Validator value="AP_TacticalBurrowSwarmHostUp"/>
+    </CTacticalOrder>
+    <CTacticalOrder id="AP_SwarmHostRooted">
+        <Abil value="AP_MorphToSwarmHostUprooted"/>
+        <Validator value="AP_TacticalBurrowSwarmHostUp"/>
+    </CTacticalOrder>
 </Catalog>

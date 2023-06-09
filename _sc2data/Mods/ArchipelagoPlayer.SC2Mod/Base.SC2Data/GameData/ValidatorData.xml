@@ -8,6 +8,10 @@
         <Find value="1"/>
         <Value value="AP_HaveHotSLurker"/>
     </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_NotHaveHotSSwarmHostSplitA">
+        <CombineArray value="AP_HaveHotSSwarmHostSplitA"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
     <CValidatorPlayerRequirement id="AP_PunisherGrenadesResearched">
         <ResultNoPlayer value="Error"/>
         <Find value="1"/>
@@ -338,6 +342,16 @@
         <Find value="1"/>
         <Value value="AP_HaveHotSExplosiveSpines"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSSwarmHostSplitA">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HotSHaveSwarmHostSplitA"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSSwarmHostSplitB">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HotSHaveSwarmHostSplitB"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>
@@ -483,6 +497,15 @@
         <ResultFailed value="CantLoadThatUnit"/>
         <Value value="AP_HellionTank"/>
         <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsSwarmHostBurrowed">
+        <Value value="AP_SwarmHostBurrowed"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsSwarmHost">
+        <Value value="AP_SwarmHost"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsSwarmHostRooted">
+        <Value value="AP_SwarmHostRooted"/>
     </CValidatorUnitType>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
@@ -1307,6 +1330,19 @@
     <CValidatorUnitFilters id="AP_TargetIsNotUnstoppable">
         <Filters value="-;Unstoppable"/>
     </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_SwarmHostBurrowed">
+        <ResultFailed value="Error,Error/AP_SwarmHostBurrowed"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_LocustLaunchDisabled"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorFunction id="AP_TacticalBurrowSwarmHostDown">
+        <Line Failure="CasterForceUnburrow"/>
+        <Line Test="TacticalBurrowHostileSearchEmpty" Failure="CasterWantsToMove"/>
+    </CValidatorFunction>
+    <CValidatorCombine id="AP_TacticalBurrowSwarmHostUp">
+        <CombineArray value="AP_TacticalBurrowSwarmHostDown"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
         <!-- Override -->
         <Type value="And"/>

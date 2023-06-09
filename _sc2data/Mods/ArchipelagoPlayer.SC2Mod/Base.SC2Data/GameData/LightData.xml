@@ -504,4 +504,43 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
     </CLight>
+    <CLight id="AP_SwarmHostSplitAPortrait" parent="default">
+        <ToDInfoArray index="0" Id="NoLight" AmbientColor="0.031373,0.105882,0.035294" OperatorHDR="4">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDREmisMultiplier" value="3.000000"/>
+            <Param index="HDRGain" value="0.000000"/>
+            <Param index="HDRScale" value="0.000000"/>
+            <Param index="AOOcclusionRadius" value="1.000000"/>
+            <Param index="AONoOcclusion" value="0.900000"/>
+            <Param index="AOOcclusionPower" value="2.000000"/>
+            <Param index="AODetailOcclusionRadius" value="0.010000"/>
+            <Param index="AODetailNoOcclusion" value="0.060000"/>
+            <Param index="AODetailOcclusionPower" value="4.000000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.003922,1.000000,0.466667"/>
+                <ColorMultiplier value="0.832000"/>
+                <SpecularColor value="0.800000,1.000000,0.874510"/>
+                <SpecColorMultiplier value="2.851000"/>
+                <Direction value="0.431320,0.210089,-0.877397"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="1.000000,0.592157,0.219608" ColorMultiplier="3.090000" Direction="-0.685471,-0.031607,-0.727414"/>
+            <DirectionalLight index="Back" Color="0.501961,1.000000,0.501961" ColorMultiplier="0.861000" Direction="-0.536562,0.399796,0.743145"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
+    </CLight>
+    <CLight id="AP_SwarmHostSplitBPortrait" parent="default">
+        <ToDInfoArray index="0" Id="SwarmHostSplitBPortrait" AmbientColor="0.050980,0.054902,0.094118" OperatorHDR="4">
+            <Param index="HDRExposure" value="1.475000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.501961,0.501961,1.000000"/>
+                <ColorMultiplier value="1.514000"/>
+                <SpecColorMultiplier value="3.126000"/>
+                <Direction value="-0.375838,0.574121,-0.727414"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.000000,1.000000,1.000000" ColorMultiplier="2.018000" Direction="-0.794517,-0.546669,-0.264378"/>
+            <DirectionalLight index="Back" Color="0.501961,0.501961,1.000000" ColorMultiplier="0.285000" Direction="0.740401,0.470779,0.479764"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
+    </CLight>
 </Catalog>

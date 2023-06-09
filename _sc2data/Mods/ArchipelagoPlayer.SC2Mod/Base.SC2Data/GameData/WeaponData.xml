@@ -1039,6 +1039,81 @@
         <Range value="2"/>
         <Period value="2"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Locust">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_LocustDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="10"/>
+        <Range value="2"/>
+        <Period value="1.2"/>
+        <DamagePoint value="0.2666"/>
+        <Effect value="AP_LocustLM"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_LocustFlying">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_LocustFlyingDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="10"/>
+        <Range value="2"/>
+        <Period value="1.2"/>
+        <DamagePoint value="0.2666"/>
+        <Effect value="AP_LocustFlyingLM"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_LocustMelee">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level0.dds"/>
+        <DisplayEffect value="AP_LocustMeleeDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="10"/>
+        <Range value="0.5"/>
+        <Marker Link="Weapon/AP_Locust"/>
+        <Cost>
+            <Cooldown Link="Weapon/AP_Locust"/>
+        </Cost>
+        <Period value="1.2"/>
+        <DamagePoint value="0.2666"/>
+        <Effect value="AP_LocustMeleeDamage"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_LocustLaunch">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="DisplayCooldown" value="1"/>
+        <Icon value="Assets\Textures\btn-unit-zerg-locust.dds"/>
+        <DisplayEffect value="AP_LocustDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="15"/>
+        <Arc value="360"/>
+        <Cost>
+            <Cooldown Link="Abil/AP_LocustLaunch" Location="Unit" TimeUse="15"/>
+        </Cost>
+        <Period value="15"/>
+        <DamagePoint value="0"/>
+        <Backswing value="0"/>
+        <Effect value="AP_LocustWeaponCreateSet"/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_LocustFlyingLaunch">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="DisplayCooldown" value="1"/>
+        <Icon value="Assets\Textures\btn-unit-zerg-locustflyer.dds"/>
+        <DisplayEffect value="AP_LocustFlyingDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="15"/>
+        <Arc value="360"/>
+        <Cost>
+            <Cooldown Link="Abil/AP_LocustFlyingLaunch" Location="Unit" TimeUse="15"/>
+        </Cost>
+        <Period value="15"/>
+        <DamagePoint value="0"/>
+        <Backswing value="0"/>
+        <Effect value="AP_LocustWeaponFlyingCreateSet"/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="AP_NovaWeaponBlazefireBlade">
         <EditorCategories value="Race:Terran"/>
         <Options index="Melee" value="1"/>

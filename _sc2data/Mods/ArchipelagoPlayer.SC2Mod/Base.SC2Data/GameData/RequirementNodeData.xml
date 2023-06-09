@@ -7,6 +7,9 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CombatShield" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeHotSHaveSwarmHostSplitACompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeHotSHaveSwarmHostSplitACompleteOnly"/>
+    </CRequirementNot>
     <CRequirementOr id="AP_OrCountUpgradeCombatShieldCompleteOnlyCountUpgradeShieldWallCompleteOnly">
         <OperandArray value="AP_CountUpgradeCombatShieldCompleteOnly"/>
         <OperandArray value="AP_CountUpgradeShieldWallCompleteOnly"/>
@@ -1999,6 +2002,35 @@
     </CRequirementCountUnit>
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSLurkerCompleteOnly">
         <Count Link="AP_HotSLurker" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSBurrowSwarmHostCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSBurrowSwarmHost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSLocustSpeedCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSLocustSpeed" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSPressurizedGlandsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSPressurizedGlands" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSRapidIncubationCompleteOnly">
+        <Count Link="AP_HotSRapidIncubation" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementNot id="AP_NotCountUpgradeHotSBurrowSwarmHostCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeHotSBurrowSwarmHostCompleteOnly"/>
+    </CRequirementNot>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveSwarmHostSplitACompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSHaveSwarmHostSplitA" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveSwarmHostSplitBCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSHaveSwarmHostSplitB" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeNovaGadgetFlashBangGrenadesCompleteOnly">
         <Count Link="AP_NovaGadgetFlashBangGrenades" State="CompleteOnly"/>

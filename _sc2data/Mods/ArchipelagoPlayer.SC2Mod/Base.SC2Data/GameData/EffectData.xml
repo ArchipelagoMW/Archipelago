@@ -3228,7 +3228,7 @@
     <CEffectSet id="AP_CorpserSet">
         <EditorCategories value="Race:Zerg"/>
         <EffectArray value="AP_CorpserRemoveBehavior"/>
-        <EffectArray value="AP_SpawnerActive"/>
+        <EffectArray value="AP_SpawnerActive2"/>
         <EffectArray value="AP_RoachCorpserSpawnRoachlings"/>
     </CEffectSet>
     <CEffectLaunchMissile id="AP_RoachCorpserAcidSalivaLM">
@@ -4251,6 +4251,362 @@
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
         <SearchFlags index="OffsetByUnitRadius" value="1"/>
     </CEffectEnumArea>
+    <CEffectLaunchMissile id="AP_LocustCreateLMA">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_LocustCreateLMImpactSetA"/>
+        <AmmoUnit value="AP_LocustEggAMissileWeapon"/>
+        <Movers Link="AP_LocustEggMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_LocustCreateLMB">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_LocustCreateLMImpactSetB"/>
+        <AmmoUnit value="AP_LocustEggBMissileWeapon"/>
+        <Movers Link="AP_LocustEggMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_LocustCreateLMImpactSetA">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorLocust"/>
+        <EffectArray value="AP_LocustIssueOrder"/>
+        <EffectArray value="AP_LocustStun"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustCreateLMImpactSetB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorLocust"/>
+        <EffectArray value="AP_LocustIssueOrder"/>
+        <EffectArray value="AP_LocustStun"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustCreateSet">
+        <ValidatorArray value="AP_SwarmHostBurrowed"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SwarmHostEggAnimationAB"/>
+        <EffectArray value="AP_LocustCreateUnitA"/>
+        <EffectArray value="AP_LocustCreateUnitB"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustCreateSetA">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorLocust"/>
+        <EffectArray value="AP_SpawnerActive"/>
+        <EffectArray value="AP_LocustCreateLMA"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustCreateSetB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorLocust"/>
+        <EffectArray value="AP_LocustCreateLMB"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_LocustCreateUnitA">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <RallyUnit Value="Source"/>
+        <SpawnEffect value="AP_LocustCreateSetA"/>
+        <SpawnUnit value="AP_Locust"/>
+        <SpawnRange value="1.5"/>
+        <SpawnOffset value="0.4,-0.2"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_LocustCreateUnitB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <RallyUnit Value="Source"/>
+        <SpawnEffect value="AP_LocustCreateSetB"/>
+        <SpawnUnit value="AP_Locust"/>
+        <SpawnRange value="1.5"/>
+        <SpawnOffset value="-0.4,-0.2"/>
+    </CEffectCreateUnit>
+    <CEffectDamage id="AP_LocustDamage">
+        <EditorCategories value="Race:Zerg"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="10"/>
+        <Death value="Disintegrate"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_LocustFlyingDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Kind value="Ranged"/>
+        <Amount value="15"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_LocustFlyingLM">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_LocustFlyingDamage"/>
+        <AmmoUnit value="AP_LocustFlyingWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectIssueOrder id="AP_LocustIssueOrder">
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="attack"/>
+        <Target Effect="AP_LocustCreateSet" Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectLaunchMissile id="AP_LocustLM">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_LocustDamage"/>
+        <AmmoUnit value="AP_LocustWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_LocustMeleeDamage" parent="AP_LocustDamage"/>
+    <CEffectApplyBehavior id="AP_LocustStun">
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_LocustTimedLife">
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_LocustWeaponCreateLMA">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_LocustWeaponCreateLMImpactSetA"/>
+        <AmmoUnit value="AP_LocustEggAWeaponMissileWeapon"/>
+        <Movers Link="AP_LocustEggMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_LocustWeaponCreateLMB">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_LocustWeaponCreateLMImpactSetB"/>
+        <AmmoUnit value="AP_LocustEggBWeaponMissileWeapon"/>
+        <Movers Link="AP_LocustEggMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_LocustWeaponCreateLMImpactSetA">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorLocust"/>
+        <EffectArray value="AP_LocustWeaponIssueOrder"/>
+        <EffectArray value="AP_LocustStun"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustWeaponCreateLMImpactSetB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorLocust"/>
+        <EffectArray value="AP_LocustWeaponIssueOrder"/>
+        <EffectArray value="AP_LocustStun"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustWeaponCreateSet">
+        <ValidatorArray value="AP_SwarmHostBurrowed"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SwarmHostEggAnimationAB"/>
+        <EffectArray value="AP_LocustWeaponCreateUnitA"/>
+        <EffectArray value="AP_LocustWeaponCreateUnitB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustWeaponCreateSetA">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorLocust"/>
+        <EffectArray value="AP_SpawnerActive"/>
+        <EffectArray value="AP_LocustWeaponCreateLMA"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustWeaponCreateSetB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorLocust"/>
+        <EffectArray value="AP_LocustWeaponCreateLMB"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_LocustWeaponCreateUnitA">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <RallyUnit Value="Source"/>
+        <SpawnEffect value="AP_LocustWeaponCreateSetA"/>
+        <SpawnUnit value="AP_Locust"/>
+        <SpawnRange value="1.5"/>
+        <SpawnOffset value="0.4,-0.2"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_LocustWeaponCreateUnitB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <RallyUnit Value="Source"/>
+        <SpawnEffect value="AP_LocustWeaponCreateSetB"/>
+        <SpawnUnit value="AP_Locust"/>
+        <SpawnRange value="1.5"/>
+        <SpawnOffset value="-0.4,-0.2"/>
+    </CEffectCreateUnit>
+    <CEffectIssueOrder id="AP_LocustWeaponIssueOrder">
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="attack"/>
+        <Target Effect="AP_LocustWeaponCreateSet" Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_MakePrecursorLocust">
+        <Behavior value="AP_PrecursorLocust"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_RemovePrecursorLocust">
+        <BehaviorLink value="AP_PrecursorLocust"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_SpawnerActive">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_SwarmHostEggAnimationAB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_SwarmHostEggAnimation"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_LocustFlyingCreateLMA">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_LocustFlyingCreateLMImpactSetA"/>
+        <AmmoUnit value="AP_LocustFlyingEggAMissileWeapon"/>
+        <Movers Link="AP_LocustAirEggMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_LocustFlyingCreateLMB">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_LocustFlyingCreateLMImpactSetB"/>
+        <AmmoUnit value="AP_LocustFlyingEggBMissileWeapon"/>
+        <Movers Link="AP_LocustAirEggMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_LocustFlyingCreateLMImpactSetA">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorLocust"/>
+        <EffectArray value="AP_LocustFlyingIssueOrder"/>
+        <EffectArray value="AP_LocustFlyingStun"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustFlyingCreateLMImpactSetB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorLocust"/>
+        <EffectArray value="AP_LocustFlyingIssueOrder"/>
+        <EffectArray value="AP_LocustFlyingStun"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_LocustFlyingIssueOrder">
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="attack"/>
+        <Target Effect="AP_LocustFlyingCreateSet" Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_LocustFlyingStun">
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_LocustWeaponFlyingCreateLMA">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_LocustWeaponFlyingCreateLMImpactSetA"/>
+        <AmmoUnit value="AP_LocustFlyingEggAWeaponMissileWeapon"/>
+        <Movers Link="AP_LocustAirEggMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_LocustWeaponFlyingCreateLMB">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_LocustWeaponFlyingCreateLMImpactSetB"/>
+        <AmmoUnit value="AP_LocustFlyingEggBWeaponMissileWeapon"/>
+        <Movers Link="AP_LocustAirEggMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_LocustWeaponFlyingCreateLMImpactSetA">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorLocust"/>
+        <EffectArray value="AP_LocustWeaponFlyingIssueOrder"/>
+        <EffectArray value="AP_LocustFlyingStun"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustWeaponFlyingCreateLMImpactSetB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_RemovePrecursorLocust"/>
+        <EffectArray value="AP_LocustWeaponFlyingIssueOrder"/>
+        <EffectArray value="AP_LocustFlyingStun"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_LocustWeaponFlyingIssueOrder">
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="attack"/>
+        <Target Effect="AP_LocustWeaponFlyingCreateSet" Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="AP_LocustFlyingCreateSet">
+        <ValidatorArray value="AP_SwarmHostBurrowed"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SwarmHostEggAnimationAB"/>
+        <EffectArray value="AP_LocustFlyingCreateUnitA"/>
+        <EffectArray value="AP_LocustFlyingCreateUnitB"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustFlyingCreateSetA">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorLocust"/>
+        <EffectArray value="AP_SpawnerActive"/>
+        <EffectArray value="AP_LocustFlyingCreateLMA"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustFlyingCreateSetB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorLocust"/>
+        <EffectArray value="AP_LocustFlyingCreateLMB"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_LocustFlyingCreateUnitA">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <RallyUnit Value="Source"/>
+        <SpawnEffect value="AP_LocustFlyingCreateSetA"/>
+        <SpawnUnit value="AP_LocustFlying"/>
+        <SpawnRange value="1.5"/>
+        <SpawnOffset value="0.4,-0.2"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_LocustFlyingCreateUnitB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <RallyUnit Value="Source"/>
+        <SpawnEffect value="AP_LocustFlyingCreateSetB"/>
+        <SpawnUnit value="AP_LocustFlying"/>
+        <SpawnRange value="1.5"/>
+        <SpawnOffset value="-0.4,-0.2"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_LocustWeaponFlyingCreateSet">
+        <ValidatorArray value="AP_SwarmHostBurrowed"/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SwarmHostEggAnimationAB"/>
+        <EffectArray value="AP_LocustWeaponFlyingCreateUnitA"/>
+        <EffectArray value="AP_LocustWeaponFlyingCreateUnitB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustWeaponFlyingCreateSetA">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorLocust"/>
+        <EffectArray value="AP_SpawnerActive"/>
+        <EffectArray value="AP_LocustWeaponFlyingCreateLMA"/>
+    </CEffectSet>
+    <CEffectSet id="AP_LocustWeaponFlyingCreateSetB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_MakePrecursorLocust"/>
+        <EffectArray value="AP_LocustWeaponFlyingCreateLMB"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_LocustWeaponFlyingCreateUnitA">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <RallyUnit Value="Source"/>
+        <SpawnEffect value="AP_LocustWeaponFlyingCreateSetA"/>
+        <SpawnUnit value="AP_LocustFlying"/>
+        <SpawnRange value="1.5"/>
+        <SpawnOffset value="0.4,-0.2"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_LocustWeaponFlyingCreateUnitB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <RallyUnit Value="Source"/>
+        <SpawnEffect value="AP_LocustWeaponFlyingCreateSetB"/>
+        <SpawnUnit value="AP_LocustFlying"/>
+        <SpawnRange value="1.5"/>
+        <SpawnOffset value="-0.4,-0.2"/>
+    </CEffectCreateUnit>
+    <CEffectCreateUnit id="AP_SwarmHostDeepBurrow">
+        <ValidatorArray value="TargetPointIsCreep"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnEffect value="AP_SwarmHostDeepBurrowPlacementSet"/>
+        <SpawnUnit value="AP_SwarmHostSplitBPlacement"/>
+        <SpawnRange value="15"/>
+    </CEffectCreateUnit>
+    <CEffectTeleport id="AP_SwarmHostDeepBurrowPlacement">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Effect="AP_SwarmHostDeepBurrow" Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <TargetLocation Effect="AP_SwarmHostDeepBurrowPlacementSet" Value="TargetPoint"/>
+        <TeleportFlags index="TestFog" value="0"/>
+    </CEffectTeleport>
+    <CEffectSet id="AP_SwarmHostDeepBurrowPlacementSet">
+        <EffectArray value="AP_SwarmHostDeepBurrowPlacement"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CAbilMorph id="AP_ReaperPlacementMorph">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <InfoArray Unit="AP_Reaper"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="WaitUntilStopped" value="0"/>
+    </CAbilMorph>
     <CEffectApplyBehavior id="AP_ApplyNovaPsiStrikeWalkSpeed">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
