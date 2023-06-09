@@ -197,7 +197,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Saint Bident",                        0x008C1360, DS3ItemCategory.WEAPON_UPGRADE_10),
     ("Yorshka's Spear",                     0x008C3A70, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Pike",                                0x008C6180, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
-    ("Channeler's Trident",                 0x008C8890, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Heavy Four-pronged Plow",             0x008ADAE0, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
     ("Dragonslayer Spear",                  0x008CAFA0, DS3ItemCategory.WEAPON_UPGRADE_5),
     ("Great Scythe",                        0x00989680, DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE),
@@ -735,7 +734,6 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Lightning Clutch Ring",               0x20005014, DS3ItemCategory.RING),
     ("Fire Clutch Ring",                    0x2000501E, DS3ItemCategory.RING),
     ("Dark Clutch Ring",                    0x20005028, DS3ItemCategory.RING),
-    ("Baneful Bird Ring",                   0x20005032, DS3ItemCategory.RING),
     ("Flynn's Ring",                        0x2000503C, DS3ItemCategory.RING),
     ("Prisoner's Chain",                    0x20005046, DS3ItemCategory.RING),
     ("Untrue Dark Ring",                    0x20005050, DS3ItemCategory.RING),
@@ -979,7 +977,7 @@ _vanilla_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Dark Edge",                           0x40189CC8, DS3ItemCategory.SPELL),
     ("Soul Stream",                         0x4018B820, DS3ItemCategory.SPELL),
     ("Twisted Wall of Light",               0x40193138, DS3ItemCategory.SPELL),
-    ("Pestilent Mercury",                   0x401A8CE0, DS3ItemCategory.SPELL),
+    ("Pestilent Mist",                      0x401A8CE0, DS3ItemCategory.SPELL), # Originally called "Pestilent Mercury" pre 1.15
     ("Fireball",                            0x40249F00, DS3ItemCategory.SPELL),
     ("Fire Orb",                            0x4024A6D0, DS3ItemCategory.SPELL),
     ("Firestorm",                           0x4024AAB8, DS3ItemCategory.SPELL),
@@ -1213,6 +1211,7 @@ _cut_content_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
     ("Dancer's Short Bow",                  0x00D77440, DS3ItemCategory.SKIP),
     ("Shield Crossbow",                     0x00D81080, DS3ItemCategory.SKIP),
     ("Golden Dual Swords",                  0x00F55C80, DS3ItemCategory.SKIP),
+    ("Channeler's Trident",                 0x008C8890, DS3ItemCategory.SKIP),
 
     # Shields
     ("Cleric's Parma",                      0x013524A0, DS3ItemCategory.SKIP),
@@ -1251,6 +1250,7 @@ _cut_content_items = [DS3ItemData(row[0], row[1], False, row[2]) for row in [
 
     # Rings
     ("Rare Ring of Sacrifice",              0x20004EFC, DS3ItemCategory.SKIP),
+    ("Baneful Bird Ring",                   0x20005032, DS3ItemCategory.SKIP),
     ("Darkmoon Blade Covenant Ring",        0x20004F7E, DS3ItemCategory.SKIP),
     ("Yorgh's Ring",                        0x2000505A, DS3ItemCategory.SKIP),
     ("Ring of Hiding",                      0x200050D2, DS3ItemCategory.SKIP),

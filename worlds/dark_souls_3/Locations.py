@@ -65,7 +65,8 @@ class DarkSouls3Location(Location):
             "Untended Graves",
             "Archdragon Peak",
 
-            "Painted World of Ariandel",
+            "Painted World of Ariandel 1",
+            "Painted World of Ariandel 2",
             "Dreg Heap",
             "Ringed City",
 
@@ -472,7 +473,7 @@ location_tables = {
     "Kiln of the First Flame": [],
 
     # DLC
-    "Painted World of Ariandel": [
+    "Painted World of Ariandel 1": [
         DS3LocationData("PW: Follower Javelin",                    "Follower Javelin",                        DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Frozen Weapon",                       "Frozen Weapon",                           DS3LocationCategory.SPELL),
         DS3LocationData("PW: Millwood Greatbow",                   "Millwood Greatbow",                       DS3LocationCategory.WEAPON),
@@ -486,6 +487,10 @@ location_tables = {
         DS3LocationData("PW: Slave Knight Leggings",               "Slave Knight Leggings",                   DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Way of White Corona",                 "Way of White Corona",                     DS3LocationCategory.SPELL),
         DS3LocationData("PW: Crow Talons",                         "Crow Talons",                             DS3LocationCategory.WEAPON),
+        DS3LocationData("PW: Onyx Blade",                          "Onyx Blade",                              DS3LocationCategory.WEAPON),
+        DS3LocationData("PW: Contraption Key",                     "Contraption Key",                         DS3LocationCategory.KEY),
+    ],
+    "Painted World of Ariandel 2": [  
         DS3LocationData("PW: Quakestone Hammer",                   "Quakestone Hammer",                       DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Earth Seeker",                        "Earth Seeker",                            DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Follower Torch",                      "Follower Torch",                          DS3LocationCategory.SHIELD),
@@ -500,10 +505,8 @@ location_tables = {
         DS3LocationData("PW: Vilhelm's Leggings",                  "Vilhelm's Leggings",                      DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Valorheart",                          "Valorheart",                              DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Champion's Bones",                    "Champion's Bones",                        DS3LocationCategory.MISC),
-        DS3LocationData("PW: Onyx Blade",                          "Onyx Blade",                              DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Soul of Sister Friede",               "Soul of Sister Friede",                   DS3LocationCategory.MISC),
         DS3LocationData("PW: Chillbite Ring",                      "Chillbite Ring",                          DS3LocationCategory.RING),
-        DS3LocationData("PW: Contraption Key",                     "Contraption Key",                         DS3LocationCategory.KEY),
     ],
     "Dreg Heap": [
         DS3LocationData("DH: Loincloth",                           "Loincloth",                               DS3LocationCategory.ARMOR),
@@ -658,7 +661,7 @@ location_tables = {
         [DS3LocationData(f"Titanite Chunk ${i + 1}",       "Titanite Chunk",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)] +
         [DS3LocationData(f"Titanite Slab ${i + 1}",        "Titanite Slab",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Twinkling Titanite ${i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
-        [DS3LocationData(f"Titanite Scale #{i + 1}",       "Titanite Scale",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(11)] +
+        [DS3LocationData(f"Titanite Scale ${i + 1}",       "Titanite Scale",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(11)] +
 
 
         # Items
@@ -674,10 +677,10 @@ location_tables = {
         [DS3LocationData(f"Large Soul of a Crestfallen Knight ${i + 1}", "Large Soul of a Crestfallen Knight", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
 
         # Gems
-        [DS3LocationData(f"Dark Gem #{i + 1}",                           "Dark Gem",                           DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
-        [DS3LocationData(f"Blood Gem #{i + 1}",                          "Blood Gem",                          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
-        [DS3LocationData(f"Blessed Gem #{i + 1}",                        "Blessed Gem",                        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
-        [DS3LocationData(f"Hollow Gem #{i + 1}",                         "Hollow Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)]
+        [DS3LocationData(f"Dark Gem ${i + 1}",                           "Dark Gem",                           DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Blood Gem ${i + 1}",                          "Blood Gem",                          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
+        [DS3LocationData(f"Blessed Gem ${i + 1}",                        "Blessed Gem",                        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
+        [DS3LocationData(f"Hollow Gem ${i + 1}",                         "Hollow Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)]
 
 
 }

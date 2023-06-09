@@ -121,7 +121,8 @@ class DarkSouls3World(World):
         # Create DLC Regions
         if self.multiworld.enable_dlc[self.player]:
             regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
-                "Painted World of Ariandel",
+                "Painted World of Ariandel 1",
+                "Painted World of Ariandel 2",
                 "Dreg Heap",
                 "Ringed City",
             ]})
@@ -165,8 +166,9 @@ class DarkSouls3World(World):
 
         # Connect DLC Regions
         if self.multiworld.enable_dlc[self.player]:
-            create_connection("Cathedral of the Deep", "Painted World of Ariandel")
-            create_connection("Painted World of Ariandel", "Dreg Heap")
+            create_connection("Cathedral of the Deep", "Painted World of Ariandel 1")
+            create_connection("Painted World of Ariandel 1", "Painted World of Ariandel 2")
+            create_connection("Painted World of Ariandel 2", "Dreg Heap")
             create_connection("Dreg Heap", "Ringed City")
 
 
@@ -373,11 +375,11 @@ class DarkSouls3World(World):
             # If key items are randomized, must have contraption key to enter DLC
             # If key items are not randomized, Contraption Key is guaranteed to be accessible before it is needed
             if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
-                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel", self.player),
+                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel 2", self.player),
                          lambda state: state.has("Contraption Key", self.player))
 
             if self.multiworld.late_dlc[self.player] == Toggle.option_true:
-                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel", self.player),
+                add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel 2", self.player),
                          lambda state: state.has("Small Doll", self.player))
 
         # Define the access rules to some specific locations
@@ -389,6 +391,8 @@ class DarkSouls3World(World):
                      lambda state: state.has("Jailbreaker's Key", self.player))
             set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
                      lambda state: state.has("Old Cell Key", self.player))
+            set_rule(self.multiworld.get_location("UG: Hornet Ring", self.player),
+                     lambda state: state.has("Small Lothric Banner", self.player))
 
         if self.multiworld.enable_npc_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
