@@ -5154,9 +5154,6 @@
         <On Terms="Behavior.AP_LocustStun.Off" Target="AP_SwarmHostEggCampaign" Send="$Death"/>
         <On Terms="Behavior.AP_LocustStun.Off" Send="ModelSwap LocustMP"/>
         <On Terms="Behavior.AP_LocustStun.Off" Send="$Birth 0 0.000000"/>
-        <On Terms="Behavior.AP_LocustCreeperStun.Off" Target="AP_SwarmHostEggCreeperCampaign" Send="$Death"/>
-        <On Terms="Behavior.AP_LocustCreeperStun.Off" Send="ModelSwap LocustMP"/>
-        <On Terms="Behavior.AP_LocustCreeperStun.Off" Send="$Birth 0 0.000000"/>
         <On Terms="AnimDone; AnimName Birth" Send="AnimBaselineStart"/>
         <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
         <On Terms="WeaponStart.AP_Locust.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart AttackSuperior Attack,Superior"/>
@@ -5224,9 +5221,7 @@
     </CActorAction>
     <CActorMissile id="AP_LocustEggAAttackMissile" parent="GenericAttackMissile" unitName="AP_LocustEggAMissileWeapon">
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitB.Add" Send="ModelSwap AP_SwarmHostEggCreeperCampaign"/>
-        <!-- On Terms="Upgrade.AP_RoachVile.Add" Send="Destroy"/ -->
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitB" Send="ModelSwap AP_SwarmHostEggCreeperCampaign"/>
-        <!-- On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Destroy"/ -->
     </CActorMissile>
     <CActorForceSphere id="AP_LocustAttackDeathForce">
         <On Terms="ActorCreation" Send="Create AP_LocustAttackExplosionDeathForce"/>
@@ -5364,7 +5359,6 @@
         <BuildModel value="AP_SwarmHostSplitB"/>
         <PlacementModel value="AP_SwarmHostSplitB"/>
         <PortraitModel value="AP_SwarmHostSplitBPortrait"/>
-        <!-- AbilSoundArray AbilCmd="LocustLaunchCreeper,Execute" Sound="Swarm_Silent"/ -->
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Zerg-SwarmHostEx1B.dds"/>
         </GroupIcon>
@@ -5579,9 +5573,7 @@
         <On Terms="ActorCreation" Send="AnimPlay Work Stand,Work PlayForever"/>
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitB.Add" Send="ModelSwap AP_SwarmHostEggCreeperCampaign"/>
-        <!-- On Terms="Upgrade.AP_RoachVile.Add" Send="Destroy"/ -->
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitB" Send="ModelSwap AP_SwarmHostEggCreeperCampaign"/>
-        <!-- On Terms="ActorCreation; ValidateUnit AP_HaveRoachVile" Send="Destroy"/ -->
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpShadow" HoldPosition="1" HoldRotation="1"/>
         <Model value="SwarmHostEgg"/>
