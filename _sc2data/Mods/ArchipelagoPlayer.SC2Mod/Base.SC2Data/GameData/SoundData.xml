@@ -2786,7 +2786,7 @@
         <AssetArray TemplateParam="HeroNovaMP1_Yes_N204"/>
         <Flags index="NeedsUpdate" value="1"/>
         <Flags index="NeedsTTS" value="1"/>
-        <DupeWait value="4000,4000"/>
+<!--        <DupeWait value="4000,4000"/>-->
         <Exclusivity value="Nova_UnitDX_Exclusivity"/>
     </CSound>
     <CSound id="AP_HeroNovaMP2_HolographicDecoyVO" parent="HeroNova_Ack">
