@@ -174,7 +174,7 @@
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitCompareBehaviorCount id="AP_HasNoLiberatorYoink">
         <WhichUnit Value="Caster"/>
-        <Behavior value="YoinkTentacle"/>
+        <Behavior value="AP_YoinkTentacle"/>
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="AP_DontDamageOwnedWidowMines">
         <CombineArray value="AP_IsWidowMineOrWidowMineBurrowed"/>
@@ -793,7 +793,7 @@
         <Type value="And"/>
         <CombineArray value="CasterNotDead"/>
         <CombineArray value="AP_HasLiberatorMorphBehavior"/>
-        <!-- <CombineArray value="AP_HasNoLiberatorYoink"/> -->
+        <CombineArray value="AP_HasNoLiberatorYoink"/>
         <CombineArray value="AP_LiberatorNotRecallingMothership"/>
         <CombineArray value="AP_LiberatorNotRecallingMothershipCore"/>
         <CombineArray value="AP_LiberatorAGNotOutOfRange"/>
@@ -1633,7 +1633,11 @@
         <ResultFailed value="CantTargetThatUnit"/>
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="AP_IsNotRecallingCombine">
+        <CombineArray value="AP_Dummy"/>
     </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_Dummy">
+        <Filters value="-;-"/>
+    </CValidatorUnitFilters>
     <CValidatorUnitCompareBehaviorCount id="AP_NoYoink">
         <Behavior value="AP_YoinkMarker"/>
         <ResultFailed value="Error,Error/CantTargetMultipleAbduct"/>
