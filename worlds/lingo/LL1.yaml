@@ -2806,9 +2806,6 @@
     panels:
       SHORTCUT:
         id: Cross Room/Panel_shortcut_shortcut
-        colors:
-          - red
-          - yellow
     doors:
       Shortcut to Tower:
         id: Cross Room Doors/Door_shortcut
