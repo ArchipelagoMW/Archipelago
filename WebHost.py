@@ -72,6 +72,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             with zipfile.ZipFile(zipfile_path) as zf:
                 for zfile in zf.infolist():
                     if not zfile.is_dir() and "/docs/" in zfile.filename:
+                        zfile.filename = os.path.basename(zfile.filename)
                         zf.extract(zfile, target_path)
         else:
             source_path = Utils.local_path(os.path.dirname(world.__file__), "docs")
