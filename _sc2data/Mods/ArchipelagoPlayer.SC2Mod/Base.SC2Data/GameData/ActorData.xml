@@ -6110,14 +6110,14 @@
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2" Send="SetWireframe 0 Assets\Textures\wireframe-novaapolloinfantrysuit.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
@@ -6126,30 +6126,30 @@
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaapolloinfantrysuit.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
@@ -6158,18 +6158,18 @@
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
 <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupApply A"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove B"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove C"/>
@@ -6177,8 +6177,8 @@
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="Signal WireframeUpdate"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.Off" Send="AnimGroupRemove A"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupApply B"/>
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupRemove A"/>
@@ -6187,8 +6187,8 @@
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="Signal WireframeUpdate"/>
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.Off" Send="AnimGroupRemove B"/>
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
 <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupApply A"/>-->
 <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupRemove B"/>-->
@@ -6217,8 +6217,8 @@
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="Signal WireframeUpdate"/>
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; !ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupRemove C"/>
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBlade" Send="AnimGroupApply C"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBlade" Send="AnimPlay GunbladeCover Custom PlayForever,DontResetOnUnhide"/>
@@ -6231,8 +6231,8 @@
         <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off; !ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupRemove C"/>
         <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off" Send="AnimClear GunbladeCover"/>
         <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupApply M"/>
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupRemove A"/>
@@ -6241,8 +6241,8 @@
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="Signal WireframeUpdate"/>
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.Off" Send="AnimGroupRemove M"/>
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice4" Send="SetSoundSuffix _NBlade"/>
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice5" Send="SetSoundSuffix _NBlade"/>
@@ -6491,14 +6491,14 @@
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2" Send="SetWireframe 0 Assets\Textures\wireframe-novaapolloinfantrysuit.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
@@ -6507,30 +6507,30 @@
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetWireframe 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaapolloinfantrysuit.dds"/>
         <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Shotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitshotgun.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-shotgun.dds"/>
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Rifle.dds"/>-->
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponInvictusLongshotBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
@@ -6539,18 +6539,18 @@
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Rifle.dds"/>-->
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitrifle.dds"/>-->
         <!--        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiRifle" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-rifle.dds"/>-->
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
-        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitplasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-plasmarifle.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 0; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaEx3-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 1; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\WireFrame-NovaJetpack-Sword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 2; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-apolloinfantrysuitsword.dds"/>
+        <On Terms="Signal.*.WireframeUpdate; IsStatus SuitWireframe 3; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="SetGroupIcon 0 Assets\Textures\wireframe-novaex3-blinksuit-sword.dds"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupApply A"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove B"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="AnimGroupRemove C"/>
@@ -6558,8 +6558,8 @@
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.On" Send="Signal WireframeUpdate"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.Off" Send="AnimGroupRemove A"/>
         <On Terms="Behavior.AP_NovaWeaponCanisterRifle.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponCanisterRifleBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponCanisterRifleBehavior" Send="AnimGroupApply A"/>
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupApply B"/>
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="AnimGroupRemove A"/>
@@ -6568,8 +6568,8 @@
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.On" Send="Signal WireframeUpdate"/>
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.Off" Send="AnimGroupRemove B"/>
         <On Terms="Behavior.AP_NovaWeaponHellfireShotgun.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponHellfireShotgunBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponHellfireShotgunBehavior" Send="AnimGroupApply B"/>
         <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupApply A"/>-->
         <!--        <On Terms="Behavior.AP_NovaWeaponInvictusLongshot.On" Send="AnimGroupRemove B"/>-->
@@ -6598,8 +6598,8 @@
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.On" Send="Signal WireframeUpdate"/>
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off; !ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupRemove C"/>
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPsiBladeBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupApply C"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBlade" Send="AnimGroupApply C"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBlade" Send="AnimPlay GunbladeCover Custom PlayForever,DontResetOnUnhide"/>
@@ -6612,8 +6612,8 @@
         <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off; !ValidateUnit AP_HaveNovaWeaponPsiBladeBehavior" Send="AnimGroupRemove C"/>
         <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off" Send="AnimClear GunbladeCover"/>
         <On Terms="Behavior.AP_NovaWeaponBlazefireBlade.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponBlazefireBladeBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponBlazefireBladeBehavior" Send="AnimGroupApply C"/>
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupApply M"/>
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="AnimGroupRemove A"/>
@@ -6622,8 +6622,8 @@
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.On" Send="Signal WireframeUpdate"/>
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.Off" Send="AnimGroupRemove M"/>
         <On Terms="Behavior.AP_NovaWeaponPlasmaRifle.Off" Send="Signal WireframeUpdate"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
-        <On Terms="ActorCreation; ValidatePlayer AP_HaveNovaWeaponPlasmaRifleBehavior" Send="Signal WireframeUpdate"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="Signal WireframeUpdate"/>
         <On Terms="UnitRevive.AP_NovaHero; ValidateUnit AP_HaveNovaWeaponPlasmaRifleBehavior" Send="AnimGroupApply M"/>
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice4" Send="SetSoundSuffix _NBlade"/>
         <On Terms="Behavior.AP_NovaWeaponPsiBlade.On; ValidateUnit AP_HaveNovaVoice5" Send="SetSoundSuffix _NBlade"/>
