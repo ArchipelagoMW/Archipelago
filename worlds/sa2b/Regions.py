@@ -1459,7 +1459,7 @@ def create_regions(world, player: int, active_locations):
         green_hill_region_locations = [
             LocationName.green_hill,
             LocationName.green_hill_chao_1,
-            LocationName.green_hill_animal_1,
+            #LocationName.green_hill_animal_1,
         ]
         green_hill_region = create_region(world, player, active_locations, LocationName.green_hill_region,
                                           green_hill_region_locations)

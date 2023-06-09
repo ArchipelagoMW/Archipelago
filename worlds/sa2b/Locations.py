@@ -1363,7 +1363,7 @@ green_hill_chao_location_table = {
 }
 
 green_hill_animal_location_table = {
-    LocationName.green_hill_chao_1: 0xFF0B1F,
+    #LocationName.green_hill_animal_1: 0xFF0B1F, # Disabled for technical reasons, may return
 }
 
 final_boss_location_table = {
