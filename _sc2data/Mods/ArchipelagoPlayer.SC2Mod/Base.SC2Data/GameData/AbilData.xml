@@ -44,6 +44,14 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_330mmBarrageCannons" Requirements="AP_Use330mmBarrageCannons"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_MorphSwarmHostRootedToBurrowed">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Raise" Requirements="AP_HaveHotSBurrowSwarmHost"/>
+        <Flags index="Automatic" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <InfoArray Unit="AP_SwarmHostBurrowed" CollideRange="0"/>
+    </CAbilMorph>
     <CAbilMorph id="AP_ThorNormalMode">
         <AbilSetId value="NormalMode"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
@@ -121,16 +129,16 @@
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackSmallBase" parent="AP_StimpackBase">
         <Cost>
+            <Vital index="Life" value="10"/>
             <Charge Link="Abil/AP_Stimpack"/>
             <Cooldown Link="Abil/AP_Stimpack"/>
-            <Vital index="Life" value="10"/>
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_StimpackLargeBase" parent="AP_StimpackBase">
         <Cost>
+            <Vital index="Life" value="20"/>
             <Charge Link="Abil/AP_Stimpack"/>
             <Cooldown Link="Abil/AP_Stimpack"/>
-            <Vital index="Life" value="20"/>
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_Stimpack" parent="AP_StimpackSmallBase">
@@ -169,13 +177,15 @@
     <CAbilEffectInstant id="AP_SuperStimpackSmallBase" parent="AP_SuperStimpackBase">
         <Effect index="0" value="AP_SuperStimpackSmallSet"/>
         <Cost>
-            <Cooldown TimeUse="18"/>
+            <Charge Link="Abil/AP_SuperStimpackSmallBase"/>
+            <Cooldown Link="Abil/AP_SuperStimpackSmallBase" TimeUse="18"/>
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_SuperStimpackLargeBase" parent="AP_SuperStimpackBase">
         <Effect index="0" value="AP_SuperStimpackLargeSet"/>
         <Cost>
-            <Cooldown TimeUse="18"/>
+            <Charge Link="Abil/AP_SuperStimpackLargeBase"/>
+            <Cooldown Link="Abil/AP_SuperStimpackLargeBase" TimeUse="18"/>
         </Cost>
     </CAbilEffectInstant>
     <CAbilEffectInstant id="AP_SuperStimpackMarine" parent="AP_SuperStimpackSmallBase">

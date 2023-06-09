@@ -2899,4 +2899,352 @@
         <TipabilityLength value="1.000000"/>
         <TipabilityWidth value="1.000000"/>
     </CModel>
+    <CModel id="AP_MagrailMunition_Impact" parent="RaceImpactFX" Race="Terran">
+        <Model value="Assets\Effects\Terran\MagrailMunition_Impact\MagrailMunition_Impact.m3"/>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="RailGun_Model_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.081000"/>
+            <Payload value="RailGun_Model_Impact"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_MagrailMunition_Launch" parent="RaceLaunchFX" Race="Terran">
+        <Model value="Assets\Effects\Terran\MagrailMunition_Launch\MagrailMunition_Launch.m3"/>
+    </CModel>
+    <CModel id="AP_MagrailMunition_Missile" parent="RaceMissileFX" Race="Terran">
+        <Model value="Assets\Effects\Terran\MagrailMunition_Missile\MagrailMunition_Missile.m3"/>
+    </CModel>
+    <CModel id="AP_RailGunTurret" parent="Building" Race="Terran">
+        <Model value="Assets\Buildings\Terran\AutoTurret\AutoTurret.m3"/>
+        <AttachProps Id="Ref_Hardpoint">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <Radius value="0.750000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="0.937500"/>
+        <ShadowRadius value="0.937500"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_RailGunTurretDeath" parent="BuildingDeath">
+        <Model value="Assets\Buildings\Terran\AutoTurretDeath\AutoTurretDeath.m3"/>
+        <LowQualityModel value="TerranBuildingDeathLow"/>
+        <EditorCategories value="Race:Terran"/>
+        <Radius value="-1.000000"/>
+        <SelectionRadius value="0.000000"/>
+        <ShadowRadius value="0.000000"/>
+    </CModel>
+    <CModel id="AP_RailGunTurretPlacement" parent="Placement" Race="Terran">
+        <Model value="Assets\Buildings\Terran\AutoturretPlacement\AutoturretPlacement.m3"/>
+        <LowQualityModel value="RailGunTurret"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionRadius value="0.625000"/>
+        <ShadowRadius value="0.625000"/>
+    </CModel>
+    <CModel id="AP_RailGunTurretReleaseWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\AutoTurretPodMissile\AutoTurretPodMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_RailGunTurretReleaseMissileImpact" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\AutoTurretPodMissile\AutoTurretPodMissile.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ShredderWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Terran\Raven_Shredder_Missile_MP\Raven_Shredder_Missile_MP.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <PhysicsMaterialOverride value="MetalLight"/>
+    </CModel>
+    <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
+        <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
+        <LoopCount value="-1"/>
+    </CSound>
+    <CModel id="AP_AntiArmorMissileAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\AmonShards_Orange_AnimaShower_Missile_Impact\AmonShards_Orange_AnimaShower_Missile_Impact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankJumpJetLaunchModel">
+        <Model value="Assets\Doodads\SmokeMedium\SmokeMedium.m3"/>
+        <ScaleMax value="3.000000,3.000000,0.500000"/>
+        <ScaleMin value="3.000000,3.000000,0.500000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankJumpJetPlaceholder">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_Tank_Placement\SiegeTank_BlackOps_Tank_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankSiegedJumpJetPlaceholder">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_Placement\SiegeTank_BlackOps_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankJumpJetPlaceholderAttachment">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_Tank_Placement\SiegeTank_BlackOps_Tank_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_SiegeTankSiegedJumpJetPlaceholderAttachment">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_Placement\SiegeTank_BlackOps_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_SiegeTank_BlackOps_JumpJets_Land" parent="ImpactFX">
+        <Model value="AP\Assets\Effects\Terran\SiegeTank_BlackOps_JumpJets_Land\SiegeTank_BlackOps_JumpJets_Land.m3"/>
+    </CModel>
+    <CModel id="AP_Merc_SiegeTank_BlackOps_Tank" parent="SiegeTankBase">
+        <Model value="Assets\Units\Terran\SiegeTank_BlackOps_Tank\SiegeTank_BlackOps_Tank.m3"/>
+        <ScaleMax value="1.000000,1.000000,1.000000"/>
+        <ScaleMin value="1.000000,1.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_Merc_SiegeTank_BlackOps" parent="SiegeTankBase">
+        <Model value="Assets\Units\Terran\SiegeTank_BlackOps\SiegeTank_BlackOps.m3"/>
+        <ScaleMax value="1.000000,1.000000,1.000000"/>
+        <ScaleMin value="1.000000,1.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_Merc_SiegeTankMorph_BlackOps" parent="SiegeTankBase">
+        <Model value="Assets\Units\Terran\SiegeTankMorph_BlackOps\SiegeTankMorph_BlackOps.m3"/>
+        <ScaleMax value="1.000000,1.000000,1.000000"/>
+        <ScaleMin value="1.000000,1.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_Goliath_BlackOps" parent="Unit" Race="Terran">
+    <Model value="Assets\Units\Terran\Goliath_BlackOps\Goliath_BlackOps.m3"/>
+    <AttachProps Id="Ref_TurretZ">
+        <Keys index="Turret" value="0"/>
+    </AttachProps>
+    <AttachProps Id="Ref_Weapon">
+        <Keys index="SetA" value="0"/>
+    </AttachProps>
+    <AttachProps Id="Ref_Weapon 01">
+        <Keys index="SetA" value="0"/>
+    </AttachProps>
+    <AttachProps Id="Ref_Weapon 02">
+        <Keys index="SetB" value="0"/>
+    </AttachProps>
+    <AttachProps Id="Ref_Weapon 03">
+        <Keys index="SetB" value="2"/>
+    </AttachProps>
+    <!--AttachProps Id="Ref_Weapon 04">
+        <Keys index="SetB" value="4"/>
+    </AttachProps-->
+    <AttachProps Id="Ref_Weapon 05">
+        <Keys index="SetB" value="1"/>
+    </AttachProps>
+    <AttachProps Id="Ref_Weapon 06">
+        <Keys index="SetB" value="3"/>
+    </AttachProps>
+    <AttachProps Id="Ref_Weapon 07">
+        <Keys index="SetC" value="0"/>
+    </AttachProps>
+    <Occlusion value="Show"/>
+    <PlanetPanelCamera value="Star2CameraHigh09"/>
+    <!--AttachProps Id="Ref_Weapon 07">
+        <Keys index="SetB" value="5"/>
+    </AttachProps-->
+    <Radius value="1.200000"/>
+    <ScaleMax value="0.550000,0.550000,0.550000"/>
+    <ScaleMin value="0.550000,0.550000,0.550000"/>
+    <SelectionRadius value="0.999700"/>
+    <ShadowRadius value="0.999700"/>
+    <TechPurchaseCamera value="TechPurchaseGoliath"/>
+    <UnitGlossaryCamera value="Star2CameraHigh09"/>
+</CModel>
+    <CModel id="AP_Goliath_BlackOps_Death" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\Goliath_BlackOps_Death\Goliath_BlackOps_Death.m3"/>
+        <LowQualityModel value="TerranMediumUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Goliath_Death_Fx_A"/>
+            <Type value="Sound"/>
+            <Time value="0.011000"/>
+            <Payload value="Goliath_Death_Fx_A"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Marauder_Death_Evis_Ronk_02"/>
+            <Type value="Sound"/>
+            <Time value="0.988000"/>
+            <Payload value="Marauder_Death_Evis_Ronk_02"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Marauder_BodyFall_Metal_Hits"/>
+            <Type value="Sound"/>
+            <Time value="2.221000"/>
+            <Payload value="Marauder_BodyFall_Metal_Hits"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Goliath_Death_Fx_A"/>
+            <Type value="Sound"/>
+            <Time value="0.098000"/>
+            <Payload value="Goliath_Death_Fx_A"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Moebius02_Reactor_Metal_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.214000"/>
+            <Payload value="Moebius02_Reactor_Metal_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Marauder_Death_Evis_Ronk_02"/>
+            <Type value="Sound"/>
+            <Time value="0.018000"/>
+            <Payload value="Marauder_Death_Evis_Ronk_02"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Marauder_Body_Eviscerate_Sparks"/>
+            <Type value="Sound"/>
+            <Time value="0.009000"/>
+            <Payload value="Marauder_Body_Eviscerate_Sparks"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Goliath_Death_Fx_B"/>
+            <Type value="Sound"/>
+            <Time value="0.661000"/>
+            <Payload value="Goliath_Death_Fx_B"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.999700"/>
+        <ShadowRadius value="0.999700"/>
+        <TextureDeclares Prefix="Goliath_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+            <Adaptions TriggerOnSubstring="_Specular" Slot="main"/>
+        </TextureDeclares>
+    </CModel>
+    <CModel id="AP_MercGoliath_BlackOps" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\Goliath_BlackOps\Goliath_BlackOps.m3"/>
+        <AttachProps Id="Ref_TurretZ">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="SetA" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 02">
+            <Keys index="SetB" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 03">
+            <Keys index="SetB" value="2"/>
+        </AttachProps>
+        <!--AttachProps Id="Ref_Weapon 04">
+            <Keys index="SetB" value="4"/>
+        </AttachProps-->
+        <AttachProps Id="Ref_Weapon 05">
+            <Keys index="SetB" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 06">
+            <Keys index="SetB" value="3"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 07">
+            <Keys index="SetC" value="0"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh09"/>
+        <!--AttachProps Id="Ref_Weapon 07">
+            <Keys index="SetB" value="5"/>
+        </AttachProps-->
+        <Radius value="1.200000"/>
+        <ScaleMax value="0.650000,0.650000,0.650000"/>
+        <ScaleMin value="0.650000,0.650000,0.650000"/>
+        <SelectionRadius value="0.999700"/>
+        <ShadowRadius value="0.999700"/>
+        <TechPurchaseCamera value="TechPurchaseGoliath"/>
+        <UnitGlossaryCamera value="Star2CameraHigh09"/>
+    </CModel>
+    <CModel id="AP_MercGoliath_BlackOps_Death" parent="UnitDeath" Race="Terran">
+        <Model value="Assets\Units\Terran\Goliath_BlackOps_Death\Goliath_BlackOps_Death.m3"/>
+        <LowQualityModel value="TerranMediumUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Goliath_Death_Fx_A"/>
+            <Type value="Sound"/>
+            <Time value="0.011000"/>
+            <Payload value="Goliath_Death_Fx_A"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Marauder_Death_Evis_Ronk_02"/>
+            <Type value="Sound"/>
+            <Time value="0.988000"/>
+            <Payload value="Marauder_Death_Evis_Ronk_02"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Marauder_BodyFall_Metal_Hits"/>
+            <Type value="Sound"/>
+            <Time value="2.221000"/>
+            <Payload value="Marauder_BodyFall_Metal_Hits"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Goliath_Death_Fx_A"/>
+            <Type value="Sound"/>
+            <Time value="0.098000"/>
+            <Payload value="Goliath_Death_Fx_A"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Moebius02_Reactor_Metal_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.214000"/>
+            <Payload value="Moebius02_Reactor_Metal_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Marauder_Death_Evis_Ronk_02"/>
+            <Type value="Sound"/>
+            <Time value="0.018000"/>
+            <Payload value="Marauder_Death_Evis_Ronk_02"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Marauder_Body_Eviscerate_Sparks"/>
+            <Type value="Sound"/>
+            <Time value="0.009000"/>
+            <Payload value="Marauder_Body_Eviscerate_Sparks"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Goliath_Death_Fx_B"/>
+            <Type value="Sound"/>
+            <Time value="0.661000"/>
+            <Payload value="Goliath_Death_Fx_B"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.999700"/>
+        <ShadowRadius value="0.999700"/>
+        <TextureDeclares Prefix="Goliath_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+            <Adaptions TriggerOnSubstring="_Specular" Slot="main"/>
+        </TextureDeclares>
+    </CModel>
+    <CModel id="AP_ArtanisAreaStunModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Neutral\Stun_Void\Stun_Void.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_SuperStimpackEndImpact" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\StimpackEndImpact\StimpackEndImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_SuperStimpackStartImpact" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Terran\StimpackStartImpact\StimpackStartImpact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
 </Catalog>

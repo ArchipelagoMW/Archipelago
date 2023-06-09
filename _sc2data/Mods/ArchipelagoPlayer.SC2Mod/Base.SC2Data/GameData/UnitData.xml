@@ -7588,7 +7588,7 @@
         <LeaderAlias value="Hellion"/>
         <HotkeyAlias value="Hellion"/>
         <SubgroupAlias value="Hellion"/>
-        <GlossaryAlias value="Hellion"/>
+        <GlossaryAlias value="HellionTank"/>
         <GlossaryCategory value="Unit/Category/TerranUnits"/>
         <GlossaryPriority value="81"/>
         <GlossaryStrongArray value="Zergling"/>
@@ -7596,7 +7596,6 @@
         <GlossaryWeakArray value="Baneling"/>
         <GlossaryWeakArray value="Stalker"/>
         <GlossaryWeakArray value="Marauder"/>
-        <GlossaryAlias value="HellionTank"/>
         <HotkeyCategory value="Unit/Category/TerranUnits"/>
     </CUnit>
     <CUnit id="AP_Locust">
@@ -8508,6 +8507,7 @@
         <AbilArray Link="AP_LocustLaunch"/>
         <AbilArray Link="AP_SwarmHostDeepBurrow"/>
         <AbilArray Link="AP_LocustFlyingLaunch"/>
+        <AbilArray Link="AP_MorphSwarmHostRootedToBurrowed"/>
         <BehaviorArray Link="AP_MakeCreepSwarmHost"/>
         <WeaponArray Link="AP_LocustLaunch"/>
         <WeaponArray Link="AP_LocustFlyingLaunch"/>

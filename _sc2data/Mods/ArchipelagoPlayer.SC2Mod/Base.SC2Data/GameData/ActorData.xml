@@ -508,6 +508,9 @@
         <On Terms="AbilMorph.*.Cancel; MorphFrom AP_SwarmHost; MorphTo AP_SwarmHostRooted" Send="AnimClear Root"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_SwarmHost; MorphFrom AP_SwarmHostRooted" Send="AnimBracketStop Root"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_SwarmHost; MorphFrom AP_SwarmHostRooted" Send="AnimClear Root"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SwarmHostBurrowed; MorphFrom AP_SwarmHostRooted" Send="AnimBracketStop Root"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SwarmHostBurrowed; MorphFrom AP_SwarmHostRooted" Send="AnimClear Root"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_SwarmHostBurrowed; MorphFrom AP_SwarmHostRooted" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant,DontResetOnUnhide"/>
         <On Terms="Abil.AP_SwarmHostDeepBurrow.SourceChannelStop; ValidateUnit AP_IsSwarmHostBurrowed" Send="Create AP_SwarmHostBurrowedSplat"/>
         <On Terms="Abil.AP_SwarmHostDeepBurrow.SourceCastStart" Send="TimerSet 1.200000 DeepBurrowTimer"/>
         <On Terms="TimerExpired; TimerName DeepBurrowTimer" Send="Create AP_SwarmHostDeepBurrow"/>
@@ -1070,7 +1073,7 @@
         <Inherits index="CloakEffect" value="1"/>
         <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
-<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
         <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
         <Host Subject="_Selectable"/>
@@ -1080,7 +1083,7 @@
         <Sound value="AP_SuperStimpackSweetener"/>
         <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
-<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
         <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
     </CActorSound>
@@ -1088,7 +1091,7 @@
         <Sound value="AP_SuperStimpackOn"/>
         <On Terms="Abil.AP_SuperStimpackMarine.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackMarauder.SourceCastStart" Send="Create"/>
-<!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
+        <!--        <On Terms="Abil.AP_SuperStimpackHellbat.SourceCastStart" Send="Create"/>-->
         <On Terms="Abil.AP_SuperStimpackReaper.SourceCastStart" Send="Create"/>
         <On Terms="Abil.AP_SuperStimpackFirebat.SourceCastStart" Send="Create"/>
     </CActorSound>
@@ -4946,8 +4949,8 @@
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 3.660000 AsDuration"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
-<!--        <On Terms="ActorCreation; ValidateUnit AP_HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
-<!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <!--        <On Terms="ActorCreation; ValidateUnit AP_HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
+        <!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
         <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <Model value="HellionTankMorph"/>
@@ -5099,8 +5102,8 @@
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 3.660000 AsDuration"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hellion_Land"/>
-<!--        <On Terms="ActorCreation; ValidateUnit HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
-<!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
+        <!--        <On Terms="ActorCreation; ValidateUnit HaveSmartServos" Send="AnimGroupApply Upgrade"/>-->
+        <!--        <On Terms="Upgrade.SmartServos.Add" Send="AnimGroupApply Upgrade"/>-->
         <On Terms="Upgrade.AP_HoverHellbat.Add" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <On Terms="ActorCreation; ValidateUnit AP_HaveHoverHellbat" Send="ModelSwap Hellbatmorph_BlackOps"/>
         <Model value="HellionTankMorph"/>
@@ -5321,6 +5324,7 @@
         <ShieldFlashType value="Header"/>
     </CActorAction>
     <CActorUnit id="AP_SwarmHost" parent="AP_SwarmHostBase" unitName="AP_SwarmHost">
+        <On index="92" Terms="AbilMorph.*.Finish; MorphTo AP_SwarmHostBurrowed; MorphFrom AP_SwarmHostRooted" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,DontResetOnUnhide"/>
         <On Terms="UnitBirth.AP_SwarmHostBurrowed" Send="Create"/>
         <On Terms="UnitBirth.AP_SwarmHostBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
         <On Terms="UnitBirth.AP_SwarmHostRooted" Send="Create"/>
@@ -5335,6 +5339,7 @@
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitA" Send="Destroy"/>
     </CActorUnit>
     <CActorUnit id="AP_SwarmHostSplitA" parent="AP_SwarmHostBase" unitName="AP_SwarmHostSplitA">
+        <On index="92" Terms="AbilMorph.*.Finish; MorphTo AP_SwarmHostBurrowed; MorphFrom AP_SwarmHostRooted" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,DontResetOnUnhide"/>
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitB.Add" Send="Create AP_SwarmHostSplitB"/>
         <On Terms="Upgrade.AP_HotSHaveSwarmHostSplitB.Add" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSwarmHostSplitB" Send="Create AP_SwarmHostSplitB"/>
@@ -5342,7 +5347,7 @@
         <Model value="AP_SwarmHostSplitA"/>
         <BuildModel value="AP_SwarmHostSplitA"/>
         <PlacementModel value="AP_SwarmHostSplitA"/>
-        <DeathArray index="Normal" ModelLink="AP_SwarmHostEx1ADeath" SoundLink="BroodLord_Explode"/>
+        <DeathArray index="Normal" ModelLink="AP_SwarmHostEx1ADeath"/>
         <PortraitModel value="AP_SwarmHostSplitAPortrait"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Zerg-SwarmHostEx1A.dds"/>
@@ -5354,7 +5359,7 @@
         </Wireframe>
     </CActorUnit>
     <CActorUnit id="AP_SwarmHostSplitB" parent="AP_SwarmHostBase" unitName="AP_SwarmHostSplitB">
-        <DeathArray index="Normal" ModelLink="AP_SwarmHostEx1BDeath" SoundLink="BroodLord_Explode"/>
+        <DeathArray index="Normal" ModelLink="AP_SwarmHostEx1BDeath"/>
         <Model value="AP_SwarmHostSplitB"/>
         <BuildModel value="AP_SwarmHostSplitB"/>
         <PlacementModel value="AP_SwarmHostSplitB"/>
@@ -5367,6 +5372,7 @@
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Zerg-SwarmHostEx1B.dds"/>
         </Wireframe>
+        <On index="92" Terms="AbilMorph.*.Finish; MorphTo AP_SwarmHostBurrowed; MorphFrom AP_SwarmHostRooted" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,DontResetOnUnhide"/>
     </CActorUnit>
     <CActorRange id="AP_SwarmHostLocustRange">
         <On Terms="SelectionLocalUpdate.AP_SwarmHostBurrowed.Start" Send="Create"/>
