@@ -6380,7 +6380,7 @@
         <AbilSoundArray AbilCmd="AP_NovaHelmetDomination,0" Sound="AP_HeroNovaMP3_DominationVisorPersistentVO"/>
         <BarOffset value="50"/>
         <BarWidth value="36"/>
-<!--        <CustomUnitStatusFrame value="Nova_UnitStatus/NovaHeroUnitStatusFrameTemplateNoShield"/>-->
+        <CustomUnitStatusFrame value="AP_Nova_UnitStatus/NovaHeroUnitStatusFrameTemplateNoShield"/>
         <GroupIcon>
             <Image value="Assets\Textures\WireFrame-NovaEx3.dds"/>
         </GroupIcon>
@@ -6402,7 +6402,7 @@
         <StatusBarOn index="Custom" value="1"/>
         <UnitBorderNormalColor value="150,150,150"/>
         <UnitBorderSubgroupColor value="255,255,255"/>
-<!--        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>-->
+        <UnitFlags index="SuppressDefaultStatusBar" value="1"/>
         <UnitIcon value="AP\Assets\Textures\BTN-Unit-Terran-Nova.dds"/>
         <UnitKillRank Text="UnitKillRank/AP_Nova"/>
         <Wireframe>
