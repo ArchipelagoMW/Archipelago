@@ -1193,6 +1193,7 @@
         <Player Value="Caster"/>
         <Modification>
             <AbilLinkDisableArray value="NeuralParasite"/>
+            <AbilLinkDisableArray value="AP_NPSwarm"/>
         </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_MercAirDrop">
@@ -1949,7 +1950,7 @@
         <BehaviorFlags index="EnabledWhileDead" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-<!--        <DisableValidatorArray value="AP_HaveNovaWeaponBlazefireBlade"/>-->
+        <!--        <DisableValidatorArray value="AP_HaveNovaWeaponBlazefireBlade"/>-->
         <Modification>
             <WeaponArray Link="AP_NovaWeaponBlazefireBlade"/>
             <WeaponArray Link="AP_NovaWeaponBlazefireBladeGun"/>
@@ -1994,7 +1995,7 @@
         <BehaviorFlags index="EnabledWhileDead" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
-<!--        <DisableValidatorArray value="AP_HaveNovaWeaponCanisterRifle"/>-->
+        <!--        <DisableValidatorArray value="AP_HaveNovaWeaponCanisterRifle"/>-->
         <Modification>
             <WeaponArray Link="AP_NovaWeaponCanisterRifle"/>
         </Modification>
@@ -2004,7 +2005,7 @@
         <BehaviorFlags index="EnabledWhileDead" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
-<!--        <DisableValidatorArray value="AP_HaveNovaWeaponHellfireShotgun"/>-->
+        <!--        <DisableValidatorArray value="AP_HaveNovaWeaponHellfireShotgun"/>-->
         <Modification>
             <WeaponArray Link="AP_NovaWeaponHellfireShotgun"/>
         </Modification>
@@ -2031,7 +2032,7 @@
         <BehaviorFlags index="EnabledWhileDead" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
-<!--        <DisableValidatorArray value="AP_HaveNovaWeaponPlasmaRifle"/>-->
+        <!--        <DisableValidatorArray value="AP_HaveNovaWeaponPlasmaRifle"/>-->
         <Modification>
             <WeaponArray Link="AP_NovaWeaponPlasmaRifle"/>
         </Modification>
@@ -2041,7 +2042,7 @@
         <BehaviorFlags index="EnabledWhileDead" value="1"/>
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
-<!--        <DisableValidatorArray value="HaveNovaWeaponPsiBlade"/>-->
+        <!--        <DisableValidatorArray value="HaveNovaWeaponPsiBlade"/>-->
         <Modification>
             <WeaponArray Link="AP_NovaWeaponPsiBlade"/>
         </Modification>
@@ -2053,7 +2054,7 @@
         <PeriodicEffect value="AP_NovaWeaponCheck"/>
         <BehaviorFlags index="Permanent" value="1"/>
         <BehaviorFlags index="EnabledWhileDead" value="1"/>
-<!--        <BehaviorCategories index="User9" value="1"/>-->
+        <!--        <BehaviorCategories index="User9" value="1"/>-->
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_PersonalDefensiveMatrix">
         <Alignment value="Positive"/>
@@ -2146,5 +2147,126 @@
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <Duration value="2"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_FungalGrowth">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-fungalgrowth.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="4.01"/>
+        <Period value="0.2"/>
+        <PeriodicEffect value="AP_FungalGrowthDamage"/>
+        <Modification>
+            <StateFlags index="SuppressCloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NPSwarm">
+        <Alignment value="Negative"/>
+        <InfoIcon value="AP\Assets\Textures\BTN-Ability-terran-domination.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Player Value="Caster"/>
+        <Modification>
+            <StateFlags index="SuppressRequirements" value="1"/>
+            <AbilClassDisableArray index="CAbilBuild" value="1"/>
+            <AbilClassDisableArray index="CAbilMerge" value="1"/>
+            <AbilClassDisableArray index="CAbilResearch" value="1"/>
+            <AbilClassDisableArray index="CAbilTrain" value="1"/>
+            <AbilClassDisableArray index="CAbilWarpTrain" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SurfaceForSpellcast">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="1.5"/>
+        <Modification>
+            <ModifyFlags index="Reveal" value="1"/>
+            <ModifyFlags index="Detected" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <AbilLinkDisableArray value="AP_BurrowInfestorUp"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_FungalGrowthMovement">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-fungalgrowth.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="NotFrenzied"/>
+        <DisableValidatorArray value="AP_NotBurrowCharging"/>
+        <RemoveValidatorArray value="AP_NotFungalGrowthed"/>
+        <RemoveValidatorArray value="AP_TargetIsNotUnstoppable"/>
+        <Duration value="8"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <AbilClassDisableArray index="CAbilMove" value="1"/>
+            <AbilLinkDisableArray value="BurrowInfestorUp"/>
+            <AbilLinkDisableArray value="BurrowInfestorDown"/>
+            <AbilLinkDisableArray value="BurrowRoachUp"/>
+            <AbilLinkDisableArray value="BurrowRoachDown"/>
+            <AbilLinkDisableArray value="BurrowZerglingUp"/>
+            <AbilLinkDisableArray value="BurrowZerglingDown"/>
+            <AbilLinkDisableArray value="BurrowDroneUp"/>
+            <AbilLinkDisableArray value="BurrowDroneDown"/>
+            <AbilLinkDisableArray value="BurrowUltraliskUp"/>
+            <AbilLinkDisableArray value="BurrowUltraliskDown"/>
+            <AbilLinkDisableArray value="BurrowQueenUp"/>
+            <AbilLinkDisableArray value="BurrowQueenDown"/>
+            <AbilLinkDisableArray value="BurrowBanelingUp"/>
+            <AbilLinkDisableArray value="BurrowBanelingDown"/>
+            <AbilLinkDisableArray value="BurrowHydraliskUp"/>
+            <AbilLinkDisableArray value="BurrowHydraliskDown"/>
+            <AbilLinkDisableArray value="BurrowInfestorTerranUp"/>
+            <AbilLinkDisableArray value="BurrowInfestorTerranDown"/>
+            <AbilLinkDisableArray value="SiegeMode"/>
+            <AbilLinkDisableArray value="Unsiege"/>
+            <AbilLinkDisableArray value="FighterMode"/>
+            <AbilLinkDisableArray value="AssaultMode"/>
+            <AbilLinkDisableArray value="PhasingMode"/>
+            <AbilLinkDisableArray value="TransportMode"/>
+            <AbilLinkDisableArray value="MorphToSwarmHostBurrowedMP"/>
+            <AbilLinkDisableArray value="MorphToSwarmHostMP"/>
+            <AbilLinkDisableArray value="MorphToHellionTank"/>
+            <AbilLinkDisableArray value="MorphToHellion"/>
+            <AbilLinkDisableArray value="WidowMineBurrow"/>
+            <AbilLinkDisableArray value="WidowMineUnburrow"/>
+            <AbilLinkDisableArray value="PhasingMode"/>
+            <AbilLinkDisableArray value="TransportMode"/>
+            <AbilLinkDisableArray value="AP_BurrowInfestorUp"/>
+            <AbilLinkDisableArray value="AP_BurrowInfestorDown"/>
+            <AbilLinkDisableArray value="AP_BurrowRoachUp"/>
+            <AbilLinkDisableArray value="AP_BurrowRoachDown"/>
+            <AbilLinkDisableArray value="AP_BurrowZerglingUp"/>
+            <AbilLinkDisableArray value="AP_BurrowZerglingDown"/>
+            <AbilLinkDisableArray value="AP_BurrowDroneUp"/>
+            <AbilLinkDisableArray value="AP_BurrowDroneDown"/>
+            <AbilLinkDisableArray value="AP_BurrowUltraliskUp"/>
+            <AbilLinkDisableArray value="AP_BurrowUltraliskDown"/>
+            <AbilLinkDisableArray value="AP_BurrowQueenUp"/>
+            <AbilLinkDisableArray value="AP_BurrowQueenDown"/>
+            <AbilLinkDisableArray value="AP_BurrowBanelingUp"/>
+            <AbilLinkDisableArray value="AP_BurrowBanelingDown"/>
+            <AbilLinkDisableArray value="AP_BurrowHydraliskUp"/>
+            <AbilLinkDisableArray value="AP_BurrowHydraliskDown"/>
+            <AbilLinkDisableArray value="AP_BurrowInfestorTerranUp"/>
+            <AbilLinkDisableArray value="AP_BurrowInfestorTerranDown"/>
+            <AbilLinkDisableArray value="AP_SiegeMode"/>
+            <AbilLinkDisableArray value="AP_Unsiege"/>
+            <AbilLinkDisableArray value="AP_FighterMode"/>
+            <AbilLinkDisableArray value="AP_AssaultMode"/>
+            <AbilLinkDisableArray value="AP_PhasingMode"/>
+            <AbilLinkDisableArray value="AP_TransportMode"/>
+            <AbilLinkDisableArray value="AP_MorphToSwarmHostBurrowed"/>
+            <AbilLinkDisableArray value="AP_MorphToSwarmHostRooted"/>
+            <AbilLinkDisableArray value="AP_MorphToSwarmHost"/>
+            <AbilLinkDisableArray value="AP_MorphToHellionTank"/>
+            <AbilLinkDisableArray value="AP_MorphToHellion"/>
+            <AbilLinkDisableArray value="AP_WidowMineBurrow"/>
+            <AbilLinkDisableArray value="AP_WidowMineUnburrow"/>
+            <AbilLinkDisableArray value="AP_PhasingMode"/>
+            <AbilLinkDisableArray value="AP_TransportMode"/>
+        </Modification>
     </CBehaviorBuff>
 </Catalog>

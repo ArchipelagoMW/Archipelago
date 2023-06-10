@@ -6809,10 +6809,6 @@
         <Model value="Assets\Effects\Zerg\ViperTongue\ViperTongue.m3"/>
         <EditorCategories value="Race:Zerg"/>
     </CModel>
-    <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
-        <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
-        <LoopCount value="-1"/>
-    </CSound>
     <CModel id="AP_NovaHeroDeathWarpOutBase" parent="UnitDeath" Race="Terran">
         <Model value="Assets\Effects\Terran\NovaEx3_WarpOut\NovaEx3_WarpOut.m3"/>
         <Occlusion value="Show"/>
@@ -7755,4 +7751,12 @@
         <!--ScaleMax value="0.500000,0.500000,1.000000"/>
         <ScaleMin value="0.500000,0.500000,1.000000"/-->
     </CModel>
+    <CModel id="AP_NPSwarmWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Zerg\InfestorParasiteMissile\InfestorParasiteMissile.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
+        <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
+        <LoopCount value="-1"/>
+    </CSound>
 </Catalog>

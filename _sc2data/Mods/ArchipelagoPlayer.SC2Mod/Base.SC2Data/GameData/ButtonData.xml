@@ -1649,4 +1649,12 @@
         <Icon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
         <AlertIcon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
     </CButton>
+    <CButton id="AP_InfestorConsumption">
+        <Icon value="Assets\Textures\BTN-Ability-Zerg-Consume.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_NPSwarm">
+        <Icon value="Assets\Textures\BTN-Ability-Zerg-NeuralParasite-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

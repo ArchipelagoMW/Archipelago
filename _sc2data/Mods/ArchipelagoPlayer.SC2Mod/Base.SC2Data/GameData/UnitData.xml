@@ -7891,8 +7891,8 @@
         <AbilArray Link="move"/>
         <AbilArray Link="AP_NovaWeaponCanisterRifleSnipe"/>
         <AbilArray Link="AP_NovaWeaponHellfireShotgunBlast"/>
-<!--        <AbilArray Link="AP_NovaWeaponInvictusLongshotLockdown"/>-->
-<!--        <AbilArray Link="AP_NovaWeaponPsiRifleAbduct"/>-->
+        <!--        <AbilArray Link="AP_NovaWeaponInvictusLongshotLockdown"/>-->
+        <!--        <AbilArray Link="AP_NovaWeaponPsiRifleAbduct"/>-->
         <AbilArray Link="AP_NovaPsiStrike"/>
         <AbilArray Link="AP_NovaWeaponCanisterRifleSwap"/>
         <AbilArray Link="AP_NovaWeaponHellfireShotgunSwap"/>
@@ -7900,14 +7900,14 @@
         <AbilArray Link="AP_NovaWeaponBlazefireBladeSwap"/>
         <AbilArray Link="AP_NovaWeaponPsiBladeSwap"/>
         <!--AbilArray Link="NovaWeaponPlasmaBlast"/-->
-<!--        <AbilArray Link="AP_NovaGadgetSwarmGrenades"/>-->
+        <!--        <AbilArray Link="AP_NovaGadgetSwarmGrenades"/>-->
         <AbilArray Link="AP_NovaGadgetPulseGrenades"/>
         <AbilArray Link="AP_NovaGadgetFlashBangGrenades"/>
         <!--        <AbilArray Link="AP_NovaGadgetHiveMindAmplifier"/>-->
         <AbilArray Link="AP_NovaGadgetHolographicDecoy"/>
         <AbilArray Link="AP_NovaHelmetHiveMindAmplifier"/>
         <AbilArray Link="AP_HeroNuclearStrike"/>
-<!--        <AbilArray Link="AP_NovaSilentkill"/>-->
+        <!--        <AbilArray Link="AP_NovaSilentkill"/>-->
         <AbilArray Link="AP_SuperStimpackNova"/>
         <AbilArray Link="AP_NovaWeaponsFree"/>
         <AbilArray Link="AP_NovaHoldFire"/>
@@ -7920,11 +7920,11 @@
         <AbilArray Link="AP_NovaWeaponPlasmaBlastNew"/>
         <AbilArray Link="AP_NovaWeaponBlazefireBladeShadowFury"/>
         <AbilArray Link="AP_NovaPersonalDefensiveMatrix"/>
-<!--        <BehaviorArray Link="AP_NovaWeaponPsiBlade"/>-->
-<!--        <BehaviorArray Link="AP_NovaWeaponCanisterRifle"/>-->
-<!--        <BehaviorArray Link="AP_NovaWeaponHellfireShotgun"/>-->
-<!--        <BehaviorArray Link="AP_NovaWeaponPlasmaRifle"/>-->
-<!--        <BehaviorArray Link="AP_NovaWeaponBlazefireBlade"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponPsiBlade"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponCanisterRifle"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponHellfireShotgun"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponPlasmaRifle"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponBlazefireBlade"/>-->
         <BehaviorArray Link="AP_NovaWeaponUnarmed"/>
         <BehaviorArray Link="AP_NovaArmorStealthSuit"/>
         <BehaviorArray Link="AP_NovaHelmetGhostVisorDetector"/>
@@ -7954,16 +7954,16 @@
             <LayoutButtons Face="AP_NovaWeaponPlasmaBlastNew" Type="AbilCmd" AbilCmd="AP_NovaWeaponPlasmaBlastNew,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="AP_NovaWeaponHellfireShotgunBlast" Type="AbilCmd" AbilCmd="AP_NovaWeaponHellfireShotgunBlast,Execute" Row="2" Column="0"/>
             <LayoutButtons Face="AP_NovaWeaponPsiBlade" Type="AbilCmd" AbilCmd="AP_NovaPsiStrike,Execute" Row="2" Column="0"/>
-<!--            <LayoutButtons Face="AP_NovaWeaponInvictusLongshotLockdown" Type="AbilCmd" AbilCmd="AP_NovaWeaponInvictusLongshotLockdown,Execute" Row="2" Column="0"/>-->
-<!--            <LayoutButtons Face="AP_NovaWeaponPsiRifleAbduct" Type="AbilCmd" AbilCmd="AP_NovaWeaponPsiRifleAbduct,Execute" Row="2" Column="0"/>-->
-<!--            <LayoutButtons Face="AP_NovaSilentkill" Type="AbilCmd" AbilCmd="AP_NovaSilentkill,Execute" Row="2" Column="0"/>-->
+            <!--            <LayoutButtons Face="AP_NovaWeaponInvictusLongshotLockdown" Type="AbilCmd" AbilCmd="AP_NovaWeaponInvictusLongshotLockdown,Execute" Row="2" Column="0"/>-->
+            <!--            <LayoutButtons Face="AP_NovaWeaponPsiRifleAbduct" Type="AbilCmd" AbilCmd="AP_NovaWeaponPsiRifleAbduct,Execute" Row="2" Column="0"/>-->
+            <!--            <LayoutButtons Face="AP_NovaSilentkill" Type="AbilCmd" AbilCmd="AP_NovaSilentkill,Execute" Row="2" Column="0"/>-->
             <LayoutButtons Face="AP_SuperStimpackNova" Type="AbilCmd" AbilCmd="AP_SuperStimpackNova,Execute" Row="1" Column="0"/>
-<!--            <LayoutButtons Face="AP_NovaArmorMoebiusSuit" Type="Passive" Requirements="HaveNovaArmorApolloInfantrySuit" Row="1" Column="0"/>-->
+            <!--            <LayoutButtons Face="AP_NovaArmorMoebiusSuit" Type="Passive" Requirements="HaveNovaArmorApolloInfantrySuit" Row="1" Column="0"/>-->
             <LayoutButtons Face="AP_NovaGadgetPulseGrenades" Type="AbilCmd" AbilCmd="AP_NovaGadgetPulseGrenades,Execute" Row="1" Column="1"/>
             <LayoutButtons Face="AP_NovaGadgetFlashBangGrenades" Type="AbilCmd" AbilCmd="AP_NovaGadgetFlashBangGrenades,Execute" Row="1" Column="2"/>
             <LayoutButtons Face="AP_PersonalDefensiveMatrix" Type="AbilCmd" AbilCmd="AP_NovaPersonalDefensiveMatrix,Execute" Row="1" Column="3"/>
             <LayoutButtons Face="AP_NovaGadgetHolographicDecoy" Type="AbilCmd" AbilCmd="AP_NovaGadgetHolographicDecoy,Execute" Row="1" Column="4"/>
-<!--            <LayoutButtons Face="AP_HaveNovaGadgetDefensiveDroneSummon" Type="AbilCmd" AbilCmd="AP_NovaGadgetDefensiveDroneSummon,Execute" Row="1" Column="2"/>-->
+            <!--            <LayoutButtons Face="AP_HaveNovaGadgetDefensiveDroneSummon" Type="AbilCmd" AbilCmd="AP_NovaGadgetDefensiveDroneSummon,Execute" Row="1" Column="2"/>-->
             <LayoutButtons Face="AP_NovaWeaponSwap" Type="Submenu" SubmenuCardId="WPN1" Row="2" Column="1"/>
         </CardLayouts>
         <CardLayouts CardId="WPN1">
@@ -8028,12 +8028,12 @@
         <AbilArray Link="attack"/>
         <AbilArray Link="stop"/>
         <AbilArray Link="move"/>
-<!--        <BehaviorArray Link="AP_NovaWeaponPsiBlade"/>-->
-<!--        <BehaviorArray Link="AP_NovaWeaponCanisterRifle"/>-->
-<!--        <BehaviorArray Link="AP_NovaWeaponHellfireShotgun"/>-->
-<!--        <BehaviorArray Link="AP_NovaWeaponPlasmaRifle"/>-->
-<!--        <BehaviorArray Link="AP_NovaWeaponBlazefireBlade"/>-->
-<!--        <BehaviorArray Link="AP_NovaWeaponUnarmed"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponPsiBlade"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponCanisterRifle"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponHellfireShotgun"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponPlasmaRifle"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponBlazefireBlade"/>-->
+        <!--        <BehaviorArray Link="AP_NovaWeaponUnarmed"/>-->
         <BehaviorArray Link="AP_NovaArmorStealthSuitHoloDecoy"/>
         <BehaviorArray Link="AP_NovaHelmetGhostVisorDetector"/>
         <BehaviorArray Link="AP_NovaHelmetSensorVisor"/>
@@ -8104,6 +8104,179 @@
         <LeaderAlias value="YamatoWeapon"/>
         <SelectAlias value="YamatoWeapon"/>
         <AIEvaluateAlias value="YamatoWeapon"/>
+    </CUnit>
+    <CUnit id="AP_Infestor">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AlwaysThreatens" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="AIThreatAir" value="1"/>
+        <FlagArray index="AISplash" value="1"/>
+        <FlagArray index="AIHighPrioTarget" value="1"/>
+        <FlagArray index="AICaster" value="1"/>
+        <FlagArray index="AIPressForwardDisabled" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Psionic" value="1"/>
+        <LifeStart value="150"/>
+        <LifeMax value="150"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Speed value="2.25"/>
+        <SpeedMultiplierCreep value="1.3"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="10"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="100"/>
+        <CostResource index="Vespene" value="150"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="40"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_BurrowInfestorDown"/>
+        <AbilArray Link="AP_FungalGrowth"/>
+        <AbilArray Link="AP_NPSwarm"/>
+        <AbilArray Link="AP_InfestorConsumption"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_NPSwarm" Type="AbilCmd" AbilCmd="AP_NPSwarm,0" Row="2" Column="1"/>
+            <LayoutButtons Row="0" Column="0"/>
+            <LayoutButtons Face="FungalGrowth" Type="AbilCmd" AbilCmd="AP_FungalGrowth,0" Row="2" Column="0"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
+            <LayoutButtons Face="BurrowMove" Type="AbilCmd" AbilCmd="AP_BurrowInfestorDown,0" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_InfestorConsumption" Type="AbilCmd" AbilCmd="AP_InfestorConsumption,0" Row="2" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <InnerRadius value="0.5"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="250"/>
+        <ScoreKill value="250"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="19"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="Infestor"/>
+        <TacticalAIThink value="AIThinkInfestor"/>
+        <AIEvalFactor value="1.8"/>
+        <GlossaryCategory value="Unit/Category/ZergUnits"/>
+        <GlossaryPriority value="150"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryStrongArray value="Mutalisk"/>
+        <GlossaryStrongArray value="Immortal"/>
+        <GlossaryWeakArray value="Ghost"/>
+        <GlossaryWeakArray value="Ultralisk"/>
+        <GlossaryWeakArray value="HighTemplar"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+    </CUnit>
+    <CUnit id="AP_InfestorBurrowed">
+        <Name value="Unit/Name/AP_Infestor"/>
+        <Description value="Button/Tooltip/AP_Infestor"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="Buried" value="1"/>
+        <FlagArray index="AlwaysThreatens" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="AIThreatAir" value="1"/>
+        <FlagArray index="AICaster" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Psionic" value="1"/>
+        <LifeStart value="150"/>
+        <LifeMax value="150"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Mover value="Burrowed"/>
+        <Speed value="2"/>
+        <SpeedMultiplierCreep value="1.3"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="10"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="100"/>
+        <CostResource index="Vespene" value="150"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="40"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_BurrowInfestorUp"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="BurrowUp" Type="AbilCmd" AbilCmd="AP_BurrowInfestorUp,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
+            <LayoutButtons Row="0" Column="0"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0"/>
+        <InnerRadius value="0.5"/>
+        <CargoSize value="2"/>
+        <ScoreKill value="250"/>
+        <SubgroupPriority value="19"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="InfestorBurrowed"/>
+        <TacticalAIThink value="AIThinkInfestor"/>
+        <LeaderAlias value="Infestor"/>
+        <HotkeyAlias value="Infestor"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+        <AIEvaluateAlias value="Infestor"/>
+    </CUnit>
+    <CUnit id="AP_NPSwarmWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Zerg"/>
+        <Mover value="AP_InfestorNeuralParasite"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_FungalGrowthMissile" parent="MISSILE_INVULNERABLE">
+        <ReviveType value=""/>
+        <Race value="Zerg"/>
+        <Mover value="AP_FungalGrowthWeapon"/>
+        <TacticalAI value=""/>
+        <SelectAlias value=""/>
+        <AIEvaluateAlias value=""/>
     </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
