@@ -22,8 +22,9 @@ class TestBase(unittest.TestCase):
             "ZD Eyeball Frog Timeout",  # trade quest starts after this item
             "ZR Top of Waterfall",  # dummy region used for entrance shuffle
         },
-        # The following SM regions are only used when the corresponding StartLocation option is selected (so not with default settings).
-        # Also, those dont have any entrances as they serve as starting Region (that's why they have to be excluded for testAllStateCanReachEverything).
+        # The following SM regions are only used when the corresponding StartLocation option is selected (so not with
+        # default settings). Also, those don't have any entrances as they serve as starting Region (that's why they
+        # have to be excluded for testAllStateCanReachEverything).
         "Super Metroid": {
             "Ceres",
             "Gauntlet Top",
@@ -31,7 +32,7 @@ class TestBase(unittest.TestCase):
         }
     }
 
-    def testAllStateCanReachEverything(self):
+    def testDefaultAllStateCanReachEverything(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             # Final Fantasy logic is controlled by finalfantasyrandomizer.com
             if game_name not in {"Ori and the Blind Forest"}:  # TODO: fix Ori Logic
@@ -53,15 +54,15 @@ class TestBase(unittest.TestCase):
                     with self.subTest("Completion Condition"):
                         self.assertTrue(world.can_beat_game(state))
 
-    def testEmptyStateCanReachSomething(self):
+    def testDefaultEmptyStateCanReachSomething(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            # Final Fantasy logic is controlled by finalfantasyrandomizer.com
-            if game_name not in {"Archipelago", "Sudoku"}:
-                with self.subTest("Game", game=game_name):
-                    world = setup_solo_multiworld(world_type)
-                    state = CollectionState(world)
+            with self.subTest("Game", game=game_name):
+                world = setup_solo_multiworld(world_type)
+                state = CollectionState(world)
+                all_locations = world.get_locations()
+                if all_locations:
                     locations = set()
-                    for location in world.get_locations():
+                    for location in all_locations:
                         if location.can_reach(state):
                             locations.add(location)
                     self.assertGreater(len(locations), 0,
