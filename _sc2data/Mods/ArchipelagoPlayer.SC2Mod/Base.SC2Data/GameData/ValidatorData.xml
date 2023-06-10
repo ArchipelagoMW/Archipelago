@@ -507,6 +507,10 @@
     <CValidatorUnitType id="AP_IsSwarmHostRooted">
         <Value value="AP_SwarmHostRooted"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsInfestorBurrowed">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_InfestorBurrowed"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <Negate value="1"/>
@@ -589,6 +593,16 @@
         <WhichPlayer Value="Caster"/>
         <Value value="AP_HaveHotSMonarchBlades"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotFungalGrowthed">
+        <Value value="1"/>
+        <!-- Used to remove AP_FungalGrowthMovement behavior, -->
+        <!-- so should ignore vanilla FungalGrowth -->
+        <Behavior value="AP_FungalGrowth"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_NotInfestorBurrowed">
+        <Value value="AP_InfestorBurrowed"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="NotWorkerMULE" parent="CValidatorCombine">
         <!-- Overrride -->
         <CombineArray value="IsMULE"/>
@@ -1591,9 +1605,9 @@
     </CValidatorCombine>
     <CValidatorCombine id="AP_IsHerculesCombine">
         <CombineArray value="AP_IsAPHercules"/>
-<!--        <CombineArray value="IsHercules"/>-->
-<!--        <CombineArray value="IsHerculesLander"/>-->
-<!--        <CombineArray value="IsHerculesLanderFlying"/>-->
+        <!--        <CombineArray value="IsHercules"/>-->
+        <!--        <CombineArray value="IsHerculesLander"/>-->
+        <!--        <CombineArray value="IsHerculesLanderFlying"/>-->
     </CValidatorCombine>
     <CValidatorUnitType id="AP_IsAPHercules">
         <Value value="AP_Hercules"/>
@@ -1635,9 +1649,7 @@
     <CValidatorCombine id="AP_IsNotRecallingCombine">
         <CombineArray value="AP_Dummy"/>
     </CValidatorCombine>
-    <CValidatorUnitFilters id="AP_Dummy">
-        <Filters value="-;-"/>
-    </CValidatorUnitFilters>
+    <CValidatorUnitFilters id="AP_Dummy"/>
     <CValidatorUnitCompareBehaviorCount id="AP_NoYoink">
         <Behavior value="AP_YoinkMarker"/>
         <ResultFailed value="Error,Error/CantTargetMultipleAbduct"/>

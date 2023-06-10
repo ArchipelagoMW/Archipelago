@@ -4600,13 +4600,6 @@
         <EffectArray value="AP_SwarmHostDeepBurrowPlacement"/>
         <TargetLocationType value="Point"/>
     </CEffectSet>
-    <CAbilMorph id="AP_ReaperPlacementMorph">
-        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
-        <InfoArray Unit="AP_Reaper"/>
-        <Flags index="IgnoreFacing" value="1"/>
-        <Flags index="IgnoreUnitCost" value="1"/>
-        <Flags index="WaitUntilStopped" value="0"/>
-    </CAbilMorph>
     <CEffectApplyBehavior id="AP_ApplyNovaPsiStrikeWalkSpeed">
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
@@ -5230,23 +5223,16 @@
         <EffectArray value="AP_NovaWeaponPlasmaBlastNewImpactDamage"/>
     </CEffectSet>
     <CEffectCreatePersistent id="AP_NovaWeaponPlasmaBlastNewInitialOffset" parent="WizSimpleSkillshotInitialOffset" abil="AP_NovaWeaponPlasmaBlastNew">
-        <InitialEffect value="AP_NovaWeaponPlasmaBlastNewLaunchMissile"/>
         <InitialOffset value="0,-10,0"/>
     </CEffectCreatePersistent>
-    <CEffectSet id="AP_NovaWeaponPlasmaBlastNewInitialSet" parent="WizSimpleSkillshotInitialSet" abil="AP_NovaWeaponPlasmaBlastNew">
-        <EffectArray index="0" value="AP_NovaWeaponPlasmaBlastNewInitialOffset"/>
-    </CEffectSet>
+    <CEffectSet id="AP_NovaWeaponPlasmaBlastNewInitialSet" parent="WizSimpleSkillshotInitialSet" abil="AP_NovaWeaponPlasmaBlastNew"/>
     <CEffectLaunchMissile id="AP_NovaWeaponPlasmaBlastNewLaunchMissile" parent="WizSimpleSkillshotLaunchMissile" abil="AP_NovaWeaponPlasmaBlastNew">
-        <LaunchEffect value="AP_NovaWeaponPlasmaBlastNewMissilePersistent"/>
-        <ImpactEffect value="AP_NovaWeaponPlasmaBlastNewFinalImpactSet"/>
         <FinishEffect value="AP_NovaPlasmaPuddleSmall"/>
         <PeriodicEffect value="NovaPlasmaPuddleSmall"/>
         <PeriodicPeriod value="0.25"/>
-        <AmmoUnit value="AP_NovaWeaponPlasmaBlastNewLaunchMissile"/>
     </CEffectLaunchMissile>
     <CEffectCreatePersistent id="AP_NovaWeaponPlasmaBlastNewMissilePersistent" parent="WizSimpleSkillshotMissilePersistent" abil="AP_NovaWeaponPlasmaBlastNew">
         <PeriodCount value="33"/>
-        <PeriodicEffectArray index="0" value="AP_NovaWeaponPlasmaBlastNewMissileScan"/>
     </CEffectCreatePersistent>
     <CEffectEnumArea id="AP_NovaWeaponPlasmaBlastNewMissileScan" parent="WizSimpleSkillshotMissileScan" abil="AP_NovaWeaponPlasmaBlastNew">
         <AreaArray index="0" RectangleWidth="2" RectangleHeight="0.3125" Effect="AP_NovaWeaponPlasmaBlastNewImpactSet"/>
@@ -6038,4 +6024,87 @@
         <EffectArray value="AP_YoinkLaunchMissileVikingGround"/>
         <EffectArray value="AP_MakePrecursorYoink"/>
     </CEffectSet>
+    <CEffectApplyBehavior id="AP_FungalGrowthApplyBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_FungalGrowth"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_FungalGrowthApplyMovementBehavior">
+        <ValidatorArray index="0" value="AP_TargetIsNotUnstoppable"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_FungalGrowthMovement"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_FungalGrowthDamage">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="3"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_FungalGrowthInitialSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_SurfaceForSpellcast"/>
+        <EffectArray value="AP_FungalGrowthSearch"/>
+        <EffectArray value="AP_FungalGrowthSearchDummy"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_FungalGrowthSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2" Effect="AP_FungalGrowthSet"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_FungalGrowthSearchDummy">
+        <EditorCategories value="Race:Terran"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <AreaArray Radius="2" Fraction="1"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_FungalGrowthSet">
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_FungalGrowthApplyBehavior"/>
+        <EffectArray value="AP_FungalGrowthApplyMovementBehavior"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_InfestorConsumption">
+        <ValidatorArray value="EnergyNotFullCaster"/>
+        <ValidatorArray value="RequiresZerg"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <PeriodCount value="75"/>
+        <PeriodicEffectArray value="AP_InfestorConsumptionDamage"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_InfestorConsumptionDamage">
+        <ValidatorArray value="EnergyNotFullCaster"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Amount value="1"/>
+        <LeechFraction index="Energy" value="2"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_NPSwarmAB">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="AP_NPSwarm"/>
+    </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_NPSwarmLM">
+        <ValidatorArray index="0" value="noMarkers"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="NotFrenzied"/>
+        <ValidatorArray value="HasNoCargo"/>
+        <ValidatorArray value="NotPointDefenseDrone"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Abil/AP_NeuralParasite">
+            <MatchFlags index="Link" value="1"/>
+        </Marker>
+        <ImpactEffect value="AP_NPSwarmAB"/>
+        <AmmoUnit value="AP_NPSwarmWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="AP_SurfaceForSpellcast">
+        <ValidatorArray index="0" value="AP_IsInfestorBurrowed"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_SurfaceForSpellcast"/>
+    </CEffectApplyBehavior>
 </Catalog>

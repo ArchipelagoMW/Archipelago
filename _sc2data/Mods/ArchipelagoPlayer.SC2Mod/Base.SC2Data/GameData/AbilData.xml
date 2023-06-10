@@ -2372,6 +2372,51 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_BuildRailGunTurret" Requirements="AP_MagrailMunitionsRaven"/>
         <PlaceUnit value="AP_RailGunTurret"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_BurrowInfestorDown">
+        <AbilSetId value="BrwD"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowDown">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="BurrowDown"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnorePlacement" value="0"/>
+        <InfoArray Unit="AP_InfestorBurrowed" RandomDelayMax="0.3703">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_BurrowInfestorUp">
+        <AbilSetId value="BrwU"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BurrowUp">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <ActorKey value="BurrowUp"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_Infestor" RandomDelayMax="0.5">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="0.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="0.5"/>
+            </SectionArray>
+        </InfoArray>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Air,Missile,Stasis,Dead,Hidden"/>
+        <AutoCastValidatorArray value="TargetNotChangeling"/>
+        <AutoCastRange value="5"/>
+        <AutoCastCountMin value="1"/>
+    </CAbilMorph>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -3132,7 +3177,6 @@
         <Flags index="Smart" value="1"/>
         <TargetFilters value="Biological,Visible;Self,Player,Ally,Neutral,Missile,UnderConstruction,Dead,Hidden"/>
         <Range value="0.01"/>
-        <AINotifyEffect value="AP_NovaSilentkill"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaSilentkill" Requirements="AP_HaveNovaSilentkill"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AP_NovaWeaponBlazefireBladeShadowFury">
@@ -3191,11 +3235,9 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponInvictusLongshotLockdown" Requirements="AP_HaveNovaWeaponInvictusLongshotBehavior"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AP_NovaWeaponPlasmaBlastNew" parent="WizSimpleSkillshot">
-        <Effect index="0" value="AP_NovaWeaponPlasmaBlastNewInitialSet"/>
         <Cost index="0">
             <Vital index="Energy" value="75"/>
         </Cost>
-        <CursorEffect index="0" value="AP_NovaWeaponPlasmaBlastNewMissileScan"/>
         <CmdButtonArray index="Execute" Requirements="AP_HaveNovaWeaponPlasmaRifleBehavior"/>
     </CAbilEffectTarget>
     <CAbilEffectTarget id="AP_NovaWeaponPsiRifleAbduct">
@@ -3235,21 +3277,57 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponBlazefireBladeSwap" Requirements="AP_NovaWeaponCanSwapToBlazefireBlade"/>
         <Effect index="0" value="AP_NovaWeaponBlazefireBladeABSet"/>
     </CAbilEffectInstant>
-<!--    <CAbilEffectInstant id="AP_NovaWeaponInvictusLongshotSwap">-->
-<!--        <EditorCategories value="AbilityorEffectType:Units"/>-->
-<!--        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponInvictusLongshotSwap" Requirements="AP_HaveNovaWeaponInvictusLongshotAndNovaEquipmentSwapVisible"/>-->
-<!--        <Effect index="0" value="AP_NovaWeaponInvictusLongshotABSet"/>-->
-<!--    </CAbilEffectInstant>-->
-<!--    <CAbilEffectInstant id="AP_NovaWeaponPsiRifleSwap">-->
-<!--        <EditorCategories value="AbilityorEffectType:Units"/>-->
-<!--        <Effect index="0" value="AP_NovaWeaponPsiRifleABSet"/>-->
-<!--        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponPsiRifleSwap" Requirements="AP_HaveNovaWeaponPsiRifleAndNovaEquipmentSwapVisible"/>-->
-<!--    </CAbilEffectInstant>-->
+    <!--    <CAbilEffectInstant id="AP_NovaWeaponInvictusLongshotSwap">-->
+    <!--        <EditorCategories value="AbilityorEffectType:Units"/>-->
+    <!--        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponInvictusLongshotSwap" Requirements="AP_HaveNovaWeaponInvictusLongshotAndNovaEquipmentSwapVisible"/>-->
+    <!--        <Effect index="0" value="AP_NovaWeaponInvictusLongshotABSet"/>-->
+    <!--    </CAbilEffectInstant>-->
+    <!--    <CAbilEffectInstant id="AP_NovaWeaponPsiRifleSwap">-->
+    <!--        <EditorCategories value="AbilityorEffectType:Units"/>-->
+    <!--        <Effect index="0" value="AP_NovaWeaponPsiRifleABSet"/>-->
+    <!--        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponPsiRifleSwap" Requirements="AP_HaveNovaWeaponPsiRifleAndNovaEquipmentSwapVisible"/>-->
+    <!--    </CAbilEffectInstant>-->
     <CAbilEffectInstant id="AP_NovaWeaponPsiBladeSwap">
         <EditorCategories value="AbilityorEffectType:Units"/>
         <Effect index="0" value="AP_NovaWeaponPsiBladeABSet"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_NovaWeaponPsiBladeSwap" Requirements="AP_NovaWeaponCanSwapToPsiBlade"/>
     </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_FungalGrowth">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_FungalGrowthInitialSet"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown Link="Abil/Leech" Location="Unit"/>
+        </Cost>
+        <Range value="9"/>
+        <CursorEffect value="AP_FungalGrowthSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="FungalGrowth"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_InfestorConsumption">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="10"/>
+        </Cost>
+        <TargetFilters value="Biological;Self,Enemy,Structure,Heroic,Missile,Uncommandable,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
+        <Range value="4"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_InfestorConsumption"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_NPSwarm">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_NPSwarmLM"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="125"/>
+            <Cooldown Location="Unit" TimeUse="5"/>
+        </Cost>
+        <TargetFilters value="Visible;Player,Ally,Neutral,Robotic,Structure,Heroic,Missile,Stasis,Dead,Invulnerable"/>
+        <Range value="7"/>
+        <RangeSlop value="10"/>
+        <AINotifyEffect value="AP_NPSwarmApplySet"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NPSwarm"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
