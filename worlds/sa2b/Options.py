@@ -179,6 +179,7 @@ class TrapFillPercentage(Range):
 class Keysanity(Toggle):
     """
     Determines whether picking up Chao Keys grants checks
+    (86 Locations)
     """
     display_name = "Keysanity"
 
@@ -187,9 +188,9 @@ class Whistlesanity(Choice):
     """
     Determines whether whistling at various spots grants checks
     None: No Whistle Spots grant checks
-    Pipes: Whistling at Pipes grants checks
-    Hidden: Whistling at Hidden Whistle Spots grants checks
-    Both: Whistling at both Pipes and Hidden Whistle Spots grants checks
+    Pipes: Whistling at Pipes grants checks (97 Locations)
+    Hidden: Whistling at Hidden Whistle Spots grants checks (32 Locations)
+    Both: Whistling at both Pipes and Hidden Whistle Spots grants checks (129 Locations)
     """
     display_name = "Whistlesanity"
     option_none = 0
@@ -202,6 +203,7 @@ class Whistlesanity(Choice):
 class Beetlesanity(Toggle):
     """
     Determines whether destroying Gold Beetles grants checks
+    (27 Locations)
     """
     display_name = "Beetlesanity"
 
@@ -209,6 +211,7 @@ class Beetlesanity(Toggle):
 class Omosanity(Toggle):
     """
     Determines whether activating Omochao grants checks
+    (192 Locations)
     """
     display_name = "Omosanity"
 
@@ -216,6 +219,7 @@ class Omosanity(Toggle):
 class Animalsanity(Toggle):
     """
     Determines whether picking up counted small animals grants checks
+    (420 Locations)
     """
     display_name = "Animalsanity"
 
