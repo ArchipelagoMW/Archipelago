@@ -132,7 +132,7 @@
     "p_visible_item_end": "84:FD1E",
     "p_visible_item_loop": "84:FD0B",
     "p_visible_item_trigger": "84:FD17",
-    "patch_load_multiworld": "B8:8694",
+    "patch_load_multiworld": "B8:869D",
     "perform_item_pickup": "84:FE2E",
     "plm_graphics_entry_offworld_item": "84:FC36",
     "plm_graphics_entry_offworld_progression_item": "84:FC2C",
