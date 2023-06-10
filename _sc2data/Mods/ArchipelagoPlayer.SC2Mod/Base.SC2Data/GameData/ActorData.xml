@@ -7385,7 +7385,7 @@
     </CActorAction>
     <CActorSound id="AP_ConsumptionImpactSound" parent="SoundOneShot">
         <On Terms="Effect.AP_InfestorConsumption.Start" Send="Create"/>
-        <Sound value="Tosh_ConsumptionImpact"/>
+        <Sound value="AP_Tosh_ConsumptionImpact"/>
     </CActorSound>
     <CActorModel id="AP_FungalGrowth" parent="ModelAddition">
         <On Terms="Behavior.AP_FungalGrowth.On" Send="Create"/>
