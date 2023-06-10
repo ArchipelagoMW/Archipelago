@@ -346,8 +346,6 @@ class DarkSouls3World(World):
 
     def set_rules(self) -> None:
         # Define the access rules to the entrances
-        set_rule(self.multiworld.get_entrance("Go To Firelink Shrine Bell Tower", self.player),
-                 lambda state: state.has("Tower Key", self.player))
         set_rule(self.multiworld.get_entrance("Go To Undead Settlement", self.player),
                  lambda state: state.has("Small Lothric Banner", self.player))
         set_rule(self.multiworld.get_entrance("Go To Lothric Castle", self.player),
