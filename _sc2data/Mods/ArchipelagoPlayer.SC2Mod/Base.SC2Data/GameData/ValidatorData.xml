@@ -595,8 +595,14 @@
     </CValidatorPlayerRequirement>
     <CValidatorUnitCompareBehaviorCount id="AP_NotFungalGrowthed">
         <Value value="1"/>
+        <!-- Used to remove AP_FungalGrowthMovement behavior, -->
+        <!-- so should ignore vanilla FungalGrowth -->
         <Behavior value="AP_FungalGrowth"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_NotInfestorBurrowed">
+        <Value value="AP_InfestorBurrowed"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="NotWorkerMULE" parent="CValidatorCombine">
         <!-- Overrride -->
         <CombineArray value="IsMULE"/>

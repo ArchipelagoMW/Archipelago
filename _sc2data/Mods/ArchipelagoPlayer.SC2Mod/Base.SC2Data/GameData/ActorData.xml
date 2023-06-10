@@ -7416,8 +7416,8 @@
         <On Terms="UnitBirth.AP_InfestorBurrowed" Send="AnimGroupApply Burrow Burrow Unburrow ClosingFull,Instant"/>
         <On Terms="UnitMovementUpdate.AP_InfestorBurrowed.Stand" Send="Create AP_InfestorBurrowedSplat"/>
         <On Terms="UnitMovementUpdate.AP_InfestorBurrowed.Walk" Target="AP_InfestorBurrowedSplat" Send="Destroy"/>
-        <On Terms="Abil.FungalGrowth.SourceCastStart; ValidateUnit NotInfestorBurrowed" Send="$Spell,A"/>
-        <On Terms="Abil.FungalGrowth.SourceCastStart; !ValidateUnit NotInfestorBurrowed" Send="AnimPlay Spell Stand,Burrow,Spell,A"/>
+        <On Terms="Abil.AP_FungalGrowth.SourceCastStart; ValidateUnit AP_NotInfestorBurrowed" Send="$Spell,A"/>
+        <On Terms="Abil.AP_FungalGrowth.SourceCastStart; !ValidateUnit AP_NotInfestorBurrowed" Send="AnimPlay Spell Stand,Burrow,Spell,A"/>
         <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowDownMedium"/>
         <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Infestor; MorphTo AP_InfestorBurrowed" Send="AnimClear Burrow"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Infestor; MorphFrom AP_InfestorBurrowed" Send="AnimBracketStop Burrow"/>
