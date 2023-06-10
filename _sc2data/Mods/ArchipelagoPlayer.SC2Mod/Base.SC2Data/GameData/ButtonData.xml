@@ -1641,4 +1641,12 @@
         <Icon value="Assets\Textures\BTN-Ability-Terran-Cloak-color.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
+    <CButton id="AP_NovaMultiTaskMAFServos">
+        <Icon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
+    </CButton>
+    <CButton id="AP_NovaMultiTaskMAFServosHellion">
+        <Icon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
+    </CButton>
 </Catalog>

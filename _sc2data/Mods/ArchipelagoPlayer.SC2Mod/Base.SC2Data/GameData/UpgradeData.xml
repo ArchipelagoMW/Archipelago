@@ -3285,4 +3285,119 @@
         <AffectedUnitArray value="AP_SwarmHostRooted"/>
         <AffectedUnitArray value="AP_SwarmHostBurrowed"/>
     </CUpgrade>
+    <CUpgrade id="AP_MultiTaskMAFServosSiegeTank">
+        <Icon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerSiege,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerSiege,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerSiege,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerSiege,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerSiege,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_Unsiege,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_Unsiege,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_Unsiege,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_Unsiege,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_Unsiege,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerUnsiege,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerUnsiege,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerUnsiege,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerUnsiege,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_SiegeBreakerUnsiege,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MultiTaskMAFServosHellion">
+        <Icon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,AllowedMovement" Value="Moving"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Options[OnlyFireWhileInAttackOrder]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InfernalFlameThrower,Options[OnlyFireAtAttackOrderTarget]" Value="0"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellionTank,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellionTank,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellionTank,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellionTank,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellionTank,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellion,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellion,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellion,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellion,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_MorphToHellion,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MultiTaskMAFServosLiberator">
+        <Icon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAA,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAA,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAA,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAA,InfoArray[0].SectionArray[Mover].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAA,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAA,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAG,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAG,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAG,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAG,InfoArray[0].SectionArray[Facing].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAG,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_LiberatorMorphtoAG,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Effect,AP_LiberatorTargetMorphDelayPersistent,PeriodicPeriodArray[0]" Value="4.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MultiTaskMAFServosThor">
+        <Icon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorNormalMode,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorNormalMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorNormalMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorNormalMode,InfoArray[0].SectionArray[Mover].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorNormalMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorNormalMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorAPMode,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorAPMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorAPMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorAPMode,InfoArray[0].SectionArray[Facing].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorAPMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_ThorAPMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_MultiTaskMAFServosViking">
+        <Icon value="Assets\Textures\btn-upgrade-terran-transformationservos.dds"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Mover].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Mover].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
+
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Mover].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Mover].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
+
+        <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Facing].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Mover].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Mover].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
+
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Facing].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Mover].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Mover].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
+        <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
+        <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

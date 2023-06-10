@@ -103,6 +103,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockReaperCombatDrugs (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionTwinLinkedFlamethrower (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionThermiteFilaments (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellionHellbatAspect (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockHellionSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellbatJumpJets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockVultureCerberusMine (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockVultureReplenishableMagazine (int lp_player);
@@ -115,12 +116,14 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankMaelstromRounds (int lp_pl
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankShapedBlast (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankJumpJets (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSpiderMines (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacAdvancedHealingAI (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWraithTomahawkPowerCells (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWraithDisplacementField (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockVikingRipwaveMissiles (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockVikingPhobosClassWeaponsSystem (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockVikingSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeShockwaveMissileBattery (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeProgressiveCrossSpectrumDampeners (int lp_player, int lp_level);
@@ -137,6 +140,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSpectreNyxClassCloakingModule (int 
 void libABFE498B_gf_AP_Triggers_Terran_unlockThor330mmBarrageCannon (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockThorImmortalityProtocol (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockRavenBioMechanicalReapirDrone (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockRavenSpiderMines (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockRavenRailgunTurret (int lp_player);
@@ -148,6 +152,7 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockCycloneMagFieldLaunchers (int lp_pl
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorAdvancedBallistics (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSiegeProtocol (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorCloak (int lp_player);
+void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSmartServos (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineDrillingClaws (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineConcealment (int lp_player);
 void libABFE498B_gf_AP_Triggers_Terran_unlockBunkerProjectileAccelerator (int lp_player);

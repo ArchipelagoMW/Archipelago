@@ -892,6 +892,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockHellionHellbatAspect (int lp_player
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_HellbatAspect", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockHellionSmartServos (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MultiTaskMAFServosHellion", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockHellbatJumpJets (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -964,6 +970,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSpiderMines (int lp_player
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_SiegeSpiderMines", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockSiegeTankSmartServos (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MultiTaskMAFServosSiegeTank", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockMedivacRapidDeploymentTube (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -998,6 +1010,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockVikingPhobosClassWeaponsSystem (int
     // Automatic Variable Declarations
     // Implementation
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_AresClassWeaponsSystemViking", 1);
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockVikingSmartServos (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MultiTaskMAFServosViking", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockBansheeCrossSpectrumDampeners (int lp_player) {
@@ -1103,6 +1121,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighImpactPayload (int lp_playe
     libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_ThorMorph", 1);
 }
 
+void libABFE498B_gf_AP_Triggers_Terran_unlockThorHighSmartServos (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MultiTaskMAFServosThor", 1);
+}
+
 void libABFE498B_gf_AP_Triggers_Terran_unlockRavenBioMechanicalReapirDrone (int lp_player) {
     // Automatic Variable Declarations
     // Implementation
@@ -1195,6 +1219,12 @@ void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorCloak (int lp_player) {
         if (lv_currentUnit == null) { break; }
         UnitSetPropertyFixed(lv_currentUnit, c_unitPropEnergy, 50.0);
     }
+}
+
+void libABFE498B_gf_AP_Triggers_Terran_unlockLiberatorSmartServos (int lp_player) {
+    // Automatic Variable Declarations
+    // Implementation
+    libNtve_gf_SetUpgradeLevelForPlayer(lp_player, "AP_MultiTaskMAFServosLiberator", 1);
 }
 
 void libABFE498B_gf_AP_Triggers_Terran_unlockWidowMineDrillingClaws (int lp_player) {

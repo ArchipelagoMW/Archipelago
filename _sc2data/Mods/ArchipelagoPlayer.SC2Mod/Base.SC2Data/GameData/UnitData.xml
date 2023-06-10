@@ -572,6 +572,7 @@
                 <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServosHellion" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosHellion" Row="1" Column="2"/>
             <LayoutButtons Face="AP_MorphToHellionTank" Type="AbilCmd" AbilCmd="AP_MorphToHellionTank,0" Row="2" Column="0"/>
         </CardLayouts>
         <Radius value="0.625"/>
@@ -988,6 +989,7 @@
                 <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosSiegeTank" Row="1" Column="2"/>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankJumpJet,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
@@ -1084,6 +1086,7 @@
                 <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosSiegeTank" Row="1" Column="2"/>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_SiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
@@ -1365,6 +1368,7 @@
             <LayoutButtons Face="FighterMode" Type="AbilCmd" AbilCmd="AP_FighterMode,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
             <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -1442,6 +1446,7 @@
             <LayoutButtons Face="AssaultMode" Type="AbilCmd" AbilCmd="AP_AssaultMode,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
             <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -2045,6 +2050,7 @@
                 <Row value="1"/>
                 <Column value="0"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosThor" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="1.375"/>
         <SeparationRadius value="1"/>
@@ -2142,6 +2148,7 @@
                 <Row value="1"/>
                 <Column value="0"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosThor" Row="1" Column="1"/>
         </CardLayouts>
         <Radius value="1"/>
         <SeparationRadius value="1"/>
@@ -2717,6 +2724,7 @@
             <LayoutButtons Face="AP_LiberatorAGMode" Type="AbilCmd" AbilCmd="AP_LiberatorAGTarget,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
             <LayoutButtons Face="AP_LiberatorStructureAttack" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocolNoDefenderMode" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosLiberator" Row="1" Column="2"/>
             <LayoutButtons Face="AP_CloakOnLiberator" Type="AbilCmd" AbilCmd="AP_LiberatorCloak,On" Row="2" Column="2"/>
             <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_LiberatorCloak,Off" Row="2" Column="3"/>
         </CardLayouts>
@@ -2788,6 +2796,7 @@
             <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
             <LayoutButtons Face="AP_LiberatorAGRangeUpgrade" Type="Passive" Requirements="AP_HaveLiberatorRange" Row="1" Column="0"/>
             <LayoutButtons Face="AP_LiberatorStructureAttack" Type="Passive" Requirements="AP_HaveLiberatorSiegeProtocol" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosLiberator" Row="1" Column="2"/>
             <LayoutButtons Face="AP_CloakOnLiberator" Type="AbilCmd" AbilCmd="AP_LiberatorCloak,On" Row="2" Column="2"/>
             <LayoutButtons Face="CloakOff" Type="AbilCmd" AbilCmd="AP_LiberatorCloak,Off" Row="2" Column="3"/>
         </CardLayouts>
@@ -3504,6 +3513,7 @@
                 <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosSiegeTank" Row="1" Column="2"/>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankJumpJet,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
@@ -3591,6 +3601,7 @@
                 <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosSiegeTank" Row="1" Column="2"/>
             <LayoutButtons Face="AP_SiegeTankJumpJet" Type="AbilCmd" AbilCmd="AP_MercSiegeTankSiegedJumpJet,Execute" Row="2" Column="2"/>
             <LayoutButtons Face="AP_DeploySpiderMines" Type="AbilCmd" AbilCmd="AP_DeploySpiderMines,Execute" Row="2" Column="3"/>
         </CardLayouts>
@@ -3660,6 +3671,7 @@
             <LayoutButtons Face="FighterMode" Type="AbilCmd" AbilCmd="AP_WreckingCrewFighterMode,0" Row="2" Column="0"/>
             <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
             <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -3733,6 +3745,7 @@
             <LayoutButtons Face="AssaultMode" Type="AbilCmd" AbilCmd="AP_WreckingCrewAssaultMode,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_AresClassWeaponsSystemviking" Type="Passive" Requirements="AP_PhobusClassWeaponSystemsResearched" Row="2" Column="3"/>
             <LayoutButtons Face="AP_RipwaveMissiles" Type="Passive" Requirements="AP_HALORocketsResearched" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosViking" Row="2" Column="4"/>
         </CardLayouts>
         <Radius value="0.75"/>
         <SeparationRadius value="0.75"/>
@@ -7569,6 +7582,7 @@
                 <Row value="1"/>
                 <Column value="1"/>
             </LayoutButtons>
+            <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosHellion" Row="1" Column="2"/>
             <LayoutButtons Face="AP_MorphToHellion" Type="AbilCmd" AbilCmd="AP_MorphToHellion,0" Row="2" Column="1"/>
             <LayoutButtons Face="AP_HellbatCharge" Type="Passive" Requirements="AP_HaveHoverHellbat" Row="2" Column="2"/>
         </CardLayouts>

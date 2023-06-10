@@ -3966,4 +3966,26 @@
         <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_UnburrowLarge3.wav" FacialGroup=""/>
         <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Burrowing\Zerg_UnburrowLarge4.wav" FacialGroup=""/>
     </CSound>
+    <CSound id="AP_Liberator_AA_Morph_Servo" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Liberator_MophToFighter_SmartServos.wav" FacialGroup=""/>
+        <DupeMuteCount value="4"/>
+        <Volume value="-8.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_Liberator_AG_Morph_Servo" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Liberator_MorphToDefender_SmartServos.wav" FacialGroup=""/>
+        <DupeMuteCount value="4"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_SiegeTank_MorphToSiege_Servo" parent="Build">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\SiegeTank_MorphToSiege_SmartServos.wav" FacialGroup=""/>
+        <Volume value="-8.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_SiegeTank_MorphToTank_Servo" parent="Build">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\SiegeTank_MorphToTank_SmartServos.wav" FacialGroup=""/>
+        <Volume value="-7.960000,-7.960000"/>
+    </CSound>
 </Catalog>

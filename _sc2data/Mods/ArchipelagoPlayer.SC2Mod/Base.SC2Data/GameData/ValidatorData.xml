@@ -1775,4 +1775,20 @@
     <CValidatorUnitFilters id="AP_UnitIsBiological">
         <Filters value="Biological;-"/>
     </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosLiberator">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosLiberator"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosSiegeTank">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosSiegeTank"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosViking">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosViking"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosThor">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosThor"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

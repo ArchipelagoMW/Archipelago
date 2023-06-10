@@ -1198,4 +1198,20 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeNovaWarpOutCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveMultiTaskMAFServosLiberator">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMultiTaskMAFServosLiberatorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveMultiTaskMAFServosSiegeTank">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMultiTaskMAFServosSiegeTankCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveMultiTaskMAFServosViking">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMultiTaskMAFServosVikingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveMultiTaskMAFServosThor">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMultiTaskMAFServosThorCompleteOnly"/>
+    </CRequirement>
 </Catalog>

@@ -1692,13 +1692,27 @@
     </CActorUnit>
     <CActorSound id="AP_TankModeSound" parent="SoundOneShot">
         <Sound value="SiegeTank_MorphToTank"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTank" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTank; !ValidatePlayer AP_HaveMultiTaskMAFServosSiegeTank" Send="Create"/>
         <On Terms="UnitDeath.AP_SiegeTank" Send="Destroy"/>
     </CActorSound>
     <CActorSound id="AP_SiegeModeSound" parent="SoundOneShot">
         <Sound value="SiegeTank_MorphToSiege"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTankSieged" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTankSieged; !ValidatePlayer AP_HaveMultiTaskMAFServosSiegeTank" Send="Create"/>
         <On Terms="UnitDeath.AP_SiegeTankSieged" Send="Destroy"/>
+    </CActorSound>
+    <CActorSound id="AP_TankModeSoundServos" parent="SoundOneShot">
+        <Sound value="AP_SiegeTank_MorphToTank_Servo"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTank; ValidatePlayer AP_HaveMultiTaskMAFServosSiegeTank" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreaker; ValidatePlayer AP_HaveMultiTaskMAFServosSiegeTank" Send="Create"/>
+        <On Terms="UnitDeath.AP_SiegeTank" Send="Destroy"/>
+        <On Terms="UnitDeath.AP_SiegeBreaker" Send="Destroy"/>
+    </CActorSound>
+    <CActorSound id="AP_SiegeModeSoundServos" parent="SoundOneShot">
+        <Sound value="AP_SiegeTank_MorphToSiege_Servo"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeTankSieged; ValidatePlayer AP_HaveMultiTaskMAFServosSiegeTank" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreakerSieged; ValidatePlayer AP_HaveMultiTaskMAFServosSiegeTank" Send="Create"/>
+        <On Terms="UnitDeath.AP_SiegeTankSieged" Send="Destroy"/>
+        <On Terms="UnitDeath.AP_SiegeBreakerSieged" Send="Destroy"/>
     </CActorSound>
     <CActorAction id="AP_SiegeTankAttack" parent="GenericAttack" effectAttack="AP_90mmCannons">
         <LaunchAttachQuery Methods="AMPatternRollingStripe"/>
@@ -2167,6 +2181,8 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault" Send="AnimPlay Start Morph,Start PlayForever"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_VikingAssault" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_VikingFighter" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="AnimGroupApply Upgrade"/>
+        <On Terms="Upgrade.AP_MultiTaskMAFServosViking.Add" Send="AnimGroupApply Upgrade"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
         <Aliases value="_UnitLarge"/>
@@ -2197,17 +2213,19 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter" Send="AnimPlay End Morph,End PlayForever,NonLooping"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_VikingFighter" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_VikingAssault" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="AnimGroupApply Upgrade"/>
+        <On Terms="Upgrade.AP_MultiTaskMAFServosViking.Add" Send="AnimGroupApply Upgrade"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
         <Aliases value="_UnitLarge"/>
     </CActorUnit>
     <CActorSound id="AP_FighterMode" parent="SoundOneShot">
         <Sound value="Viking_MorphToFighter"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter; !ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
     </CActorSound>
     <CActorSound id="AP_AssaultMode" parent="SoundOneShot">
         <Sound value="Viking_MorphToAssault"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault; !ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
     </CActorSound>
     <CActorUnit id="AP_Banshee" parent="GenericUnitStandard" unitName="AP_Banshee">
         <Aliases value="_UnitLarge"/>
@@ -3035,8 +3053,10 @@
         <On Terms="UnitBirth.AP_ThorAP" Send="AnimBracketStart Morph IGNORE Morph,Stand Morph,End"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_ThorAP; MorphFrom AP_Thor" Send="AnimBracketStart Morph Morph Morph,Stand Morph,End"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_Thor; MorphFrom AP_ThorAP" Send="AnimBracketStop Morph"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_ThorAP; MorphFrom AP_Thor" Send="Create AP_250mmStrikeCannonsUnMorph"/>
-        <On Terms="AbilMorph.*.Start; MorphTo AP_Thor; MorphFrom AP_ThorAP" Send="Create AP_250mmStrikeCannonsMorph"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_ThorAP; MorphFrom AP_Thor; !ValidatePlayer AP_HaveMultiTaskMAFServosThor" Send="Create AP_250mmStrikeCannonsUnMorph"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Thor; MorphFrom AP_ThorAP; !ValidatePlayer AP_HaveMultiTaskMAFServosThor" Send="Create AP_250mmStrikeCannonsMorph"/>
+<!--        <On Terms="AbilMorph.*.Start; MorphTo AP_ThorAP; MorphFrom AP_Thor; ValidatePlayer AP_HaveMultiTaskMAFServosThor" Send="Create AP_LiberatorAGSoundServo"/>-->
+<!--        <On Terms="AbilMorph.*.Start; MorphTo AP_Thor; MorphFrom AP_ThorAP; ValidatePlayer AP_HaveMultiTaskMAFServosThor" Send="Create AP_LiberatorAASoundServo"/>-->
         <!-- Looks like ArmorpiercingMissiles and AP_ExplosiveMissiles are scrapped Thor abilities -->
         <On Terms="Abil.AP_ArmorpiercingMissiles.SourceCastStart" Send="AnimPlay ArmStart Morph 0 0.500000 0.500000 4.050000 AsDuration"/>
         <On Terms="Abil.AP_ArmorpiercingMissiles.SourceCancel" Send="AnimClear Armed"/>
@@ -5157,9 +5177,9 @@
         <Model value="AP_FlashBangStun"/>
         <AutoScaleFactor value="1.000000"/>
     </CActorModel>
-    <CActorSound id="Hellbat_JumpJet_Launch_SoundActor" parent="SoundOneShot">
+    <CActorSound id="AP_Hellbat_JumpJet_Launch_SoundActor" parent="SoundOneShot">
         <On Terms="Effect.AP_HellbatLeapLM.Start" Send="Create"/>
-        <Sound value="Hellbat_JumpJet_Launch"/>
+        <Sound value="AP_Hellbat_JumpJet_Launch"/>
     </CActorSound>
     <CActorUnit id="AP_Locust" parent="GenericBurrowerStandard" unitName="AP_Locust">
         <Aliases value="_UnitSmall"/>
@@ -8149,7 +8169,7 @@
         </Wireframe>
     </CActorUnit>
     <CActorSound id="AP_LiberatorAASound" parent="SoundOneShot">
-        <On Terms="AbilMorph.*.Start; MorphTo AP_Liberator" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Liberator; !ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Send="Create"/>
         <On Terms="UnitDeath.AP_Liberator" Send="Destroy"/>
         <Sound value="Liberator_AA_Morph"/>
     </CActorSound>
@@ -8245,9 +8265,12 @@
         <On Terms="AbilMorph.*.Start; MorphTo AP_LiberatorAG" Send="AnimPlay Start Work,Start"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_LiberatorAG" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_Liberator" Send="Destroy"/>
-        <On Terms="UnitPortrait.*.Configure; GameSpeed LE Normal" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 4.000000 AsDuration"/>
-        <On Terms="UnitPortrait.*.Configure; GameSpeed Eq Fast" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 3.330000 AsDuration"/>
-        <On Terms="UnitPortrait.*.Configure; GameSpeed GE Faster" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 2.850000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed LE Normal; !ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 4.000000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed Eq Fast; !ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 3.330000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed GE Faster; !ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.250000 0.250000 2.850000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed LE Normal; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.062500 0.062500 1.000000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed Eq Fast; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.062500 0.062500 0.8325000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed GE Faster; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,Start PlayForever,NonLooping 0.062500 0.062500 0.712500 AsDuration"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Liberator_Land"/>
         <On Terms="AbilMorph.*.Start; FlyerHelper All; !ScopeContains FlyerHelperSplat" Send="Create FlyerHelperSplat"/>
@@ -8305,7 +8328,7 @@
         <Model value="LiberatorAGSearchIndicator"/>
     </CActorModel>
     <CActorSound id="AP_LiberatorAGSound" parent="SoundOneShot">
-        <On Terms="AbilMorph.*.Start; MorphTo AP_LiberatorAG" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_LiberatorAG; !ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Send="Create"/>
         <On Terms="UnitDeath.AP_LiberatorAG" Send="Destroy"/>
         <Sound value="Liberator_AG_Morph"/>
     </CActorSound>
@@ -8417,9 +8440,12 @@
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_Liberator" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_LiberatorAG" Send="Destroy"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_LiberatorAG" Target="AP_LiberatorAGTurret" Send="Destroy"/>
-        <On Terms="UnitPortrait.*.Configure; GameSpeed LE Normal" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 2.000000 AsDuration"/>
-        <On Terms="UnitPortrait.*.Configure; GameSpeed Eq Fast" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 1.660000 AsDuration"/>
-        <On Terms="UnitPortrait.*.Configure; GameSpeed GE Faster" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 1.420000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed LE Normal; !ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 2.000000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed Eq Fast; !ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 1.660000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed GE Faster; !ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.250000 0.250000 1.420000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed LE Normal; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.062500 0.062500 0.500000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed Eq Fast; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.062500 0.062500 0.415000 AsDuration"/>
+        <On Terms="UnitPortrait.*.Configure; GameSpeed GE Faster; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Target="::PortraitGameSelf" Send="AnimPlay Visor Morph,End PlayForever,NonLooping 0.062500 0.062500 0.355000 AsDuration"/>
         <On Terms="UnitPortrait.*.Configure" Target="::PortraitGameSelf" Send="PortraitAnimSetTimeFrom Visor MorphStart"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Liberator_Land"/>
         <On Terms="AbilMorph.*.Start; FlyerHelper All; !ScopeContains FlyerHelperSplat" Send="Create FlyerHelperSplat"/>
@@ -8485,6 +8511,24 @@
     <CActorSound id="AP_Liberator_CloakOff" parent="SoundOneShot">
         <Terms value="ValidateUnit NotCloakedAndNotDead"/>
         <On Terms="Behavior.AP_LiberatorCloak.Off" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_LiberatorAGSoundServo" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_LiberatorAG; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
+        <On Terms="UnitDeath.AP_LiberatorAG" Send="Destroy"/>
+        <On Terms="UnitDeath.AP_VikingFighter" Send="Destroy"/>
+        <On Terms="UnitDeath.AP_HelsAngelFighter" Send="Destroy"/>
+        <Sound value="AP_Liberator_AG_Morph_Servo"/>
+    </CActorSound>
+    <CActorSound id="AP_LiberatorAASoundServo" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Start; MorphTo AP_Liberator; ValidatePlayer AP_HaveMultiTaskMAFServosLiberator" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_VikingAssault; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelAssault; ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
+        <On Terms="UnitDeath.AP_Liberator" Send="Destroy"/>
+        <On Terms="UnitDeath.AP_VikingAssault" Send="Destroy"/>
+        <On Terms="UnitDeath.AP_HelsAngelAssault" Send="Destroy"/>
+        <Sound value="AP_Liberator_AA_Morph_Servo"/>
     </CActorSound>
     <CActorSiteOpBankerUnit id="AP_SOpBankerLiberator">
         <RollMax value="30.000000,10.000000"/>
@@ -9512,7 +9556,7 @@
         </Wireframe>
     </CActorUnit>
     <CActorSound id="AP_SiegeBreakerSiegeModeSound" parent="SoundOneShot">
-        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreakerSieged" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreakerSieged; !ValidatePlayer AP_HaveMultiTaskMAFServosSiegeTank" Send="Create"/>
         <Sound value="AP_SiegeBreaker_MorphToSiege"/>
     </CActorSound>
     <CActorUnit id="AP_SiegeBreakerSieged" parent="GenericUnitMorph" unitName="AP_SiegeBreakerSieged">
@@ -9620,7 +9664,7 @@
         </Wireframe>
     </CActorUnit>
     <CActorSound id="AP_SiegeBreakerTankModeSound" parent="SoundOneShot">
-        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreaker" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_SiegeBreaker; !ValidatePlayer AP_HaveMultiTaskMAFServosSiegeTank" Send="Create"/>
         <Sound value="AP_SiegeBreaker_MorphToTank"/>
     </CActorSound>
     <CActorUnit id="AP_WreckingCrewAssault" parent="GenericUnitMorph" unitName="AP_HelsAngelAssault">
@@ -9658,7 +9702,7 @@
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
     </CActorAction>
     <CActorSound id="AP_WreckingCrewAssaultMode" parent="SoundOneShot">
-        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelAssault" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelAssault; !ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
         <Sound value="Viking_MorphToAssault"/>
     </CActorSound>
     <CActorUnit id="AP_WreckingCrewAssaultMorphModel" parent="GenericUnitBaseMorphTransition" unitName="WreckingCrewAssaultMorphModel">
@@ -9746,7 +9790,7 @@
         <PreHost value="_ActorAction"/>
     </CActorMissile>
     <CActorSound id="AP_WreckingCrewFighterMode" parent="SoundOneShot">
-        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_HelsAngelFighter; !ValidatePlayer AP_HaveMultiTaskMAFServosViking" Send="Create"/>
         <Sound value="Viking_MorphToFighter"/>
     </CActorSound>
     <CActorUnit id="AP_WreckingCrewFighterMorphModel" parent="GenericUnitBaseMorphTransition" unitName="AP_WreckingCrewFighterMorphModel">

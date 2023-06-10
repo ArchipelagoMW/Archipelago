@@ -2175,4 +2175,20 @@
         <OperandArray value="AP_CountUpgradeNovaHelmetDominationVisorCompleteOnly"/>
         <OperandArray value="AP_NotCountBehaviorNovaAlreadyDominatedInProgressOrBetter"/>
     </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMultiTaskMAFServosLiberatorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MultiTaskMAFServosLiberator" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMultiTaskMAFServosSiegeTankCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MultiTaskMAFServosSiegeTank" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMultiTaskMAFServosVikingCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MultiTaskMAFServosViking" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMultiTaskMAFServosThorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MultiTaskMAFServosThor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>
