@@ -43,6 +43,8 @@ class BlasphemousWorld(World):
 
     door_connections: Dict[str, str] = {}
 
+    required_client_version = (0, 4, 2)
+
 
     def set_rules(self):
         rules(self)
