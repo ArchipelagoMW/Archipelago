@@ -345,13 +345,13 @@ class BlasphemousWorld(World):
             if len(self.door_connections) != len(door_table):
                 raise Exception(f"[Blasphemous - \"{world.get_player_name(player)}\"] Exception: not all doors were mapped.")
             
-            for d1, d2 in self.door_connections.items():
-                parent: Region = self.get_room_from_door(d1)
-                target: Region = self.get_room_from_door(d2)
-                exit: Entrance = Entrance(player, d1, parent)
+        for d1, d2 in self.door_connections.items():
+            parent: Region = self.get_room_from_door(d1)
+            target: Region = self.get_room_from_door(d2)
+            exit: Entrance = Entrance(player, d1, parent)
 
-                exit.connect(target)
-                parent.exits.append(exit)
+            exit.connect(target)
+            parent.exits.append(exit)
 
         for door in door_table:
             if door.get("RequiredDoors") is not None:
@@ -368,11 +368,11 @@ class BlasphemousWorld(World):
             add_rule(event, lambda state: state.can_reach(self.get_connected_door(door["Id"]), player))
             reg.locations.append(event)
 
-        keys = list(self.door_connections.keys())
-        keys.sort()
-        sorted_dict = {i: self.door_connections[i] for i in keys}
-        for d1, d2 in sorted_dict.items():
-            print(f"{d1} -> {d2}")
+        #keys = list(self.door_connections.keys())
+        #keys.sort()
+        #sorted_dict = {i: self.door_connections[i] for i in keys}
+        #for d1, d2 in sorted_dict.items():
+        #    print(f"{d1} -> {d2}")
 
         for loc in location_table:
             if not world.boots_of_pleading[player] and loc["name"] == "BotSS: 2nd meeting with Redento":
@@ -492,7 +492,8 @@ class BlasphemousWorld(World):
                     "id": self.location_name_to_game_id[loc.name],
                     "ap_id": loc.address,
                     "name": loc.item.name,
-                    "player_name": world.player_name[loc.item.player]
+                    "player_name": world.player_name[loc.item.player],
+                    "type": int(loc.item.classification)
                 }
 
                 locations.append(data)
