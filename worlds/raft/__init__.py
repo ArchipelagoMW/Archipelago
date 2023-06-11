@@ -43,7 +43,7 @@ class RaftWorld(World):
     data_version = 2
     required_client_version = (0, 3, 4)
 
-    def generate_basic(self):
+    def create_items(self):
         minRPSpecified = self.multiworld.minimum_resource_pack_amount[self.player].value
         maxRPSpecified = self.multiworld.maximum_resource_pack_amount[self.player].value
         minimumResourcePackAmount = min(minRPSpecified, maxRPSpecified)
