@@ -1,12 +1,13 @@
 # world/dark_souls_3/__init__.py
 from typing import Dict, Set, List
 
+from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
+from Options import Toggle
+
 from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names
 from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
 from .Options import RandomizeWeaponLevelOption, PoolTypeOption, dark_souls_options
 from ..AutoWorld import World, WebWorld
-from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification
-from Options import Toggle
 from ..generic.Rules import set_rule, add_rule, add_item_rule
 
 
@@ -47,7 +48,7 @@ class DarkSouls3World(World):
     data_version = 6
     base_id = 100000
     enabled_location_categories: Set[DS3LocationCategory] = set()
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 4, 2)
     item_name_to_id = DarkSouls3Item.get_name_to_id()
     location_name_to_id = DarkSouls3Location.get_name_to_id()
 
@@ -345,8 +346,6 @@ class DarkSouls3World(World):
 
     def set_rules(self) -> None:
         # Define the access rules to the entrances
-        set_rule(self.multiworld.get_entrance("Go To Firelink Shrine Bell Tower", self.player),
-                 lambda state: state.has("Tower Key", self.player))
         set_rule(self.multiworld.get_entrance("Go To Undead Settlement", self.player),
                  lambda state: state.has("Small Lothric Banner", self.player))
         set_rule(self.multiworld.get_entrance("Go To Lothric Castle", self.player),
@@ -417,6 +416,9 @@ class DarkSouls3World(World):
                      lambda state: state.has("Storm Ruler", self.player))
             set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
                      lambda state: state.has("Basin of Vows", self.player))
+
+            # Lump Soul of the Dancer in with LC for locations that should not be reachable
+            # before having access to US. (Prevents requiring getting Basin to fight Dancer to get SLB to go to US)
             if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
                 add_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
                          lambda state: state.has("Small Lothric Banner", self.player))

@@ -681,8 +681,6 @@ location_tables = {
         [DS3LocationData(f"Blood Gem ${i + 1}",                          "Blood Gem",                          DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(1)] +
         [DS3LocationData(f"Blessed Gem ${i + 1}",                        "Blessed Gem",                        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Hollow Gem ${i + 1}",                         "Hollow Gem",                         DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)]
-
-
 }
 
 location_dictionary: Dict[str, DS3LocationData] = {}

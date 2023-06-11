@@ -1,4 +1,5 @@
 import typing
+
 from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, DeathLink
 
 
@@ -184,7 +185,7 @@ class EnableDLCOption(Toggle):
     display_name = "Enable DLC"
 
 
-dark_souls_options: typing.Dict[str, type(Option)] = {
+dark_souls_options: typing.Dict[str, Option] = {
     "enable_weapon_locations": RandomizeWeaponLocations,
     "enable_shield_locations": RandomizeShieldLocations,
     "enable_armor_locations": RandomizeArmorLocations,
