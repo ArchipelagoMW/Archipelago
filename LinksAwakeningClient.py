@@ -544,8 +544,9 @@ class LinksAwakeningContext(CommonContext):
             if check is not None:
                 # TODO Need to do this one at a time, wait for a response
                 # TODO Need to know if a check is local. If local, we can either not collect it, or send the item
+                high, low = divmod(check.address, 0x100)
                 self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
-                                                 bytes=[check.address, check.mask])
+                                                 bytes=[high, low, check.mask])
 
     item_id_lookup = get_locations_to_id()
 
