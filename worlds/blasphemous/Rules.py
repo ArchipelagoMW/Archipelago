@@ -53,17 +53,17 @@ class BlasphemousLogic(LogicMixin):
             if logic.value >= 2:
                 return True
             elif logic.value == 1:
-                return self.has("Tiento to your Thorned Hairs", player)
+                return self.has_any({"Silvered Lung of Dolphos", "Tiento to your Thorned Hairs"}, player)
             elif logic.value == 0:
                 return self.has("Silvered Lung of Dolphos", player)
         elif number == 2:
             if logic.value >= 1:
-                return self.has("Tiento to your Thorned Hairs", player)
-            elif logic.value == 0:
+                return self.has_any({"Silvered Lung of Dolphos", "Tiento to your Thorned Hairs"}, player)
+            else:
                 return self.has("Silvered Lung of Dolphos", player)
         elif number == 3:
             if logic.value >= 2 and self._blaphemous_total_fervour(player) >= 120:
-                return self.has("Tiento to your Thorned Hairs", player)
+                return self.has_any({"Silvered Lung of Dolphos", "Tiento to your Thorned Hairs"}, player)
             else:
                 return self.has("Silvered Lung of Dolphos", player)
         
@@ -458,9 +458,6 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("THL: Across blood platforms", player),
         lambda state: state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player))
-    set_rule(world.get_location("THL: Hanging skeleton", player),
-        lambda state: state.has("Purified Hand of the Nun", player) or \
-            state.has("Blood Perpetuated in Sand", player))
     # No doors
 
 

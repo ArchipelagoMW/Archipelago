@@ -23,7 +23,6 @@ class Difficulty(Choice):
     option_easy = 0
     option_normal = 1
     option_hard = 2
-    option_impossible = 3
     default = 1
 
 
@@ -32,9 +31,18 @@ class Penitence(Toggle):
     display_name = "Penitence"
 
 
-class ExpertLogic(Toggle):
-    """Expands the logic used by the randomizer to allow for some difficult and/or lesser known tricks."""
-    display_name = "Expert Logic"
+class StartingLocation(Choice):
+    """Choose where to start the randomizer. Note that some starting locations cannot be chosen with certain other options.
+    Specifically, Brotherhood and Mourning And Havoc cannot be chosen if Shuffle Dash is enabled, and Grievance Ascends cannot be chosen if Shuffle Wall Climb is enabled."""
+    display_name = "Starting Location"
+    option_brotherhood = 0
+    option_albero = 1
+    option_convent = 2
+    option_grievance = 3
+    option_knot_of_words = 4
+    option_rooftops = 5
+    option_mourning_havoc = 6
+    default = 0
 
 
 class Ending(Choice):
@@ -125,11 +133,6 @@ class EnemyScaling(DefaultOnToggle):
     display_name = "Enemy Scaling"
 
 
-class DoorRando(Toggle):
-    """Randomizes the connections between each scene."""
-    display_name = "Door Randomizer"
-
-
 class BlasphemousDeathLink(DeathLink):
     """When you die, everyone dies. The reverse is also true.
     Note that Guilt Fragments will not appear when killed by Death Link."""
@@ -141,7 +144,7 @@ blasphemous_options = {
     "corpse_hints": CorpseHints,
     "difficulty": Difficulty,
     "penitence": Penitence,
-    "expert_logic": ExpertLogic,
+    "starting_location": StartingLocation,
     "ending": Ending,
     "skip_long_quests": SkipLongQuests,
     "thorn_shuffle" : ThornShuffle,
@@ -155,6 +158,5 @@ blasphemous_options = {
     "enemy_randomizer": EnemyRando,
     "enemy_groups": EnemyGroups,
     "enemy_scaling": EnemyScaling,
-    "door_randomizer": DoorRando,
     "death_link": BlasphemousDeathLink
 }

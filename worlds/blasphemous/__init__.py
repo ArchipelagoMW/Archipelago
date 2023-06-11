@@ -41,6 +41,7 @@ class BlasphemousWorld(World):
     item_name_groups = group_table
     option_definitions = blasphemous_options
 
+    start_room: str = "D17Z01S01"
     door_connections: Dict[str, str] = {}
 
     required_client_version = (0, 4, 2)
@@ -69,6 +70,18 @@ class BlasphemousWorld(World):
         world = self.multiworld
         player = self.player
 
+        if world.starting_location[player].value == 6 and world.difficulty[player].value < 2:
+            raise Exception(f'[Blasphemous - "{world.get_player_name(player)}"] {world.starting_location[player]}'
+                            ' cannot be chosen if Difficulty is lower than Hard.')
+
+        if (world.starting_location[player].value == 0 or world.starting_location[player].value == 6) and world.dash_shuffle[player]:
+            raise Exception(f'[Blasphemous - "{world.get_player_name(player)}"] {world.starting_location[player]}'
+                            ' cannot be chosen if Shuffle Dash is enabled.')
+        
+        if world.starting_location[player].value == 3 and world.wall_climb_shuffle[player]:
+            raise Exception(f'[Blasphemous - "{world.get_player_name(player)}"] {world.starting_location[player]}'
+                            ' cannot be chosen if Shuffle Wall Climb is enabled.')
+        
         if not world.dash_shuffle[player]:
             world.start_inventory[player].value["Dash Ability"] = 1
 
@@ -78,6 +91,19 @@ class BlasphemousWorld(World):
         if world.skip_long_quests[player]:
             for loc in junk_locations:
                 world.exclude_locations[player].value.add(loc)
+
+        if world.starting_location[player].value == 1:
+            self.start_room = "D01Z02S01"
+        if world.starting_location[player].value == 2:
+            self.start_room = "D02Z03S09"
+        if world.starting_location[player].value == 3:
+            self.start_room = "D03Z03S11"
+        if world.starting_location[player].value == 4:
+            self.start_room = "D04Z03S01"
+        if world.starting_location[player].value == 5:
+            self.start_room = "D06Z01S09"
+        if world.starting_location[player].value == 6:
+            self.start_room = "D20Z02S09"
 
 
     def create_items(self):
@@ -193,12 +219,12 @@ class BlasphemousWorld(World):
             reg = Region(room, player, world)
             world.regions.append(reg)
 
-        ent = Entrance(player, "Misc", world.get_region("D17Z01S01", player))
+        ent = Entrance(player, "Misc", world.get_region(self.start_room, player))
         ent.connect(misc)
-        world.get_region("D17Z01S01", player).exits.append(ent)
+        world.get_region(self.start_room, player).exits.append(ent)
 
         ent2 = Entrance(player, "New Game", menu)
-        ent2.connect(world.get_region("D17Z01S01", player))
+        ent2.connect(world.get_region(self.start_room, player))
         menu.exits.append(ent2)
 
         for door in door_table:
@@ -317,16 +343,6 @@ class BlasphemousWorld(World):
             visible = True if (self.multiworld.purified_hand[self.player] or self.multiworld.enemy_randomizer[self.player] < 1) and self.multiworld.difficulty[self.player].value >= 2 else False
 
         return visible
-    
-
-    def write_spoiler(self, spoiler_handle):
-        if self.multiworld.door_randomizer[self.player]:
-            keys = list(self.door_connections.keys())
-            keys.sort()
-            sorted_dict = {i: self.door_connections[i] for i in keys}
-            spoiler_handle.write("\nDoor Connections:\n")
-            for d1, d2 in sorted_dict.items():
-                spoiler_handle.write(f"{d1} -> {d2}\n")
 
     
     def fill_slot_data(self) -> Dict[str, Any]:
@@ -356,7 +372,7 @@ class BlasphemousWorld(World):
 
         config = {
             "LogicDifficulty": world.difficulty[player].value,
-            "StartingLocation": 0,
+            "StartingLocation": world.starting_location[player].value,
             "VersionCreated": "AP",
             
             "UnlockTeleportation": bool(world.prie_dieu_warp[player].value),
