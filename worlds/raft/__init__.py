@@ -14,6 +14,7 @@ from ..AutoWorld import World, WebWorld
 
 
 class RaftWeb(WebWorld):
+    theme = "ocean"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up Raft integration for Archipelago multiworld games.",
