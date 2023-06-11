@@ -35,14 +35,17 @@ MainLoop:
     ; Test if the mask is 0
     or  a
     jr  z, .spawnDelay
+    ld  b, a
     ; Load the high memory address of the check into h
-    ld  h, [wLinkCollectCheckHigh]
+    ld  a, [wLinkCollectCheckHigh]
+    ld  h, a
     ; Load the low memory address of the check into l
-    ld  l, [wLinkCollectCheckLow]
-    ; Load the current state of the check into b
-    ld  b, [hl]
+    ld  a, [wLinkCollectCheckLow]
+    ld  l, a
+    ; Load the current state of the check into a
+    ld  a, [hl]
     ; Bitwise or the accumulator and load it back into the check
-    or  b
+    or  a, b
     ld  [hl], a
     ; Reset the check value
     xor a
