@@ -175,7 +175,7 @@ map_ids = {
     "Cinnabar Gym": 0xA6,
     "Cinnabar Lab": 0xA7,
     "Cinnabar Lab Trade Room": 0xA8,
-    "Cinnabar Lab Metronome Room": 0xA9,
+    "Cinnabar Lab R&D Room": 0xA9,
     "Cinnabar Lab Fossil Room": 0xAA,
     "Cinnabar Pokemon Center": 0xAB,
     "Cinnabar Pokemart": 0xAC,
@@ -256,17 +256,20 @@ map_ids = {
     "Indigo Plateau Agatha's Room": 0xF7,
 }
 
-warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], "Fossil Level": [], 'Pokedex': [], 'Fossil': [], 'Celadon City': [
-    {'name': 'Celadon City to Celadon Department Store 1F W', 'address': 'Warps_CeladonCity', 'id': 0, 'to': {'map': 'Celadon Department Store 1F', 'id': (1, 0)}},
-    {'name': 'Celadon City to Celadon Department Store 1F E', 'address': 'Warps_CeladonCity', 'id': 1, 'to': {'map': 'Celadon Department Store 1F', 'id': (3, 2)}},
-    {'address': 'Warps_CeladonCity', 'id': 2, 'to': {'map': 'Celadon Mansion 1F', 'id': (0, 1)}},
-    {'address': 'Warps_CeladonCity', 'id': (3, 4), 'to': {'map': 'Celadon Mansion 1F', 'id': 2}},
-    {'address': 'Warps_CeladonCity', 'id': 5, 'to': {'map': 'Celadon Pokemon Center', 'id': 0}},
-    {'address': 'Warps_CeladonCity', 'id': 7, 'to': {'map': 'Celadon Game Corner', 'id': (0, 1)}},
-    {'address': 'Warps_CeladonCity', 'id': 9, 'to': {'map': 'Celadon Prize Corner', 'id': (0, 1)}},
-    {'address': 'Warps_CeladonCity', 'id': 10, 'to': {'map': 'Celadon Diner', 'id': (0, 1)}},
-    {'address': 'Warps_CeladonCity', 'id': 11, 'to': {'map': 'Celadon Chief House', 'id': (0, 1)}},
-    {'address': 'Warps_CeladonCity', 'id': 12, 'to': {'map': 'Celadon Hotel', 'id': (0, 1)}}],
+warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], 'Fossil Level': [],
+             'Pokedex': [], 'Fossil': [], 'Celadon City': [
+        {'name': 'Celadon City to Celadon Department Store 1F W', 'address': 'Warps_CeladonCity', 'id': 0,
+         'to': {'map': 'Celadon Department Store 1F', 'id': (1, 0)}},
+        {'name': 'Celadon City to Celadon Department Store 1F E', 'address': 'Warps_CeladonCity', 'id': 1,
+         'to': {'map': 'Celadon Department Store 1F', 'id': (3, 2)}},
+        {'address': 'Warps_CeladonCity', 'id': 2, 'to': {'map': 'Celadon Mansion 1F', 'id': (0, 1)}},
+        {'address': 'Warps_CeladonCity', 'id': (3, 4), 'to': {'map': 'Celadon Mansion 1F-Back', 'id': 2}},
+        {'address': 'Warps_CeladonCity', 'id': 5, 'to': {'map': 'Celadon Pokemon Center', 'id': 0}},
+        {'address': 'Warps_CeladonCity', 'id': 7, 'to': {'map': 'Celadon Game Corner', 'id': (0, 1)}},
+        {'address': 'Warps_CeladonCity', 'id': 9, 'to': {'map': 'Celadon Prize Corner', 'id': (0, 1)}},
+        {'address': 'Warps_CeladonCity', 'id': 10, 'to': {'map': 'Celadon Diner', 'id': (0, 1)}},
+        {'address': 'Warps_CeladonCity', 'id': 11, 'to': {'map': 'Celadon Chief House', 'id': (0, 1)}},
+        {'address': 'Warps_CeladonCity', 'id': 12, 'to': {'map': 'Celadon Hotel', 'id': (0, 1)}}],
              'Celadon City-G': [{'address': 'Warps_CeladonCity', 'id': 6, 'to': {'map': 'Celadon Gym', 'id': (0, 1)}}],
              'Pallet Town': [{'address': 'Warps_PalletTown', 'id': 0, 'to': {'map': "Player's House 1F", 'id': (0, 1)}},
                              {'address': 'Warps_PalletTown', 'id': 1, 'to': {'map': "Rival's House", 'id': (0, 1)}},
@@ -277,10 +280,9 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_ViridianCity', 'id': 2, 'to': {'map': 'Viridian School House', 'id': (0, 1)}},
                  {'address': 'Warps_ViridianCity', 'id': 3, 'to': {'map': 'Viridian Nickname House', 'id': (0, 1)}}],
              'Viridian City-N': [], 'Viridian City-G': [
-        {'address': 'Warps_ViridianCity', 'id': 4, 'to': {'map': 'Viridian Gym', 'id': (0, 1)}}],
-             'Pewter City-E': [],
+        {'address': 'Warps_ViridianCity', 'id': 4, 'to': {'map': 'Viridian Gym', 'id': (0, 1)}}], 'Pewter City-E': [],
              'Pewter City-M': [
-                             {'address': 'Warps_PewterCity', 'id': 1, 'to': {'map': 'Pewter Museum 1F', 'id': (2, 3)}}],
+                 {'address': 'Warps_PewterCity', 'id': 1, 'to': {'map': 'Pewter Museum 1F-E', 'id': (2, 3)}}],
              'Pewter City': [{'address': 'Warps_PewterCity', 'id': 0, 'to': {'map': 'Pewter Museum 1F', 'id': (0, 1)}},
                              {'address': 'Warps_PewterCity', 'id': 2, 'to': {'map': 'Pewter Gym', 'id': (0, 1)}},
                              {'address': 'Warps_PewterCity', 'id': 3,
@@ -289,20 +291,19 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                              {'address': 'Warps_PewterCity', 'id': 5,
                               'to': {'map': 'Pewter Speech House', 'id': (0, 1)}},
                              {'address': 'Warps_PewterCity', 'id': 6,
-                              'to': {'map': 'Pewter Pokemon Center', 'id': (0, 1)}}],
-             'Cerulean City-T': [
-        {'address': 'Warps_CeruleanCity', 'id': 0, 'to': {'map': 'Cerulean Trashed House', 'id': (0, 1)}},],
+                              'to': {'map': 'Pewter Pokemon Center', 'id': (0, 1)}}], 'Cerulean City-T': [
+        {'address': 'Warps_CeruleanCity', 'id': 0, 'to': {'map': 'Cerulean Trashed House', 'id': (0, 1)}}],
              'Cerulean City': [
-        {'address': 'Warps_CeruleanCity', 'id': 1, 'to': {'map': 'Cerulean Trade House', 'id': (0, 1)}},
-        {'address': 'Warps_CeruleanCity', 'id': 2, 'to': {'map': 'Cerulean Pokemon Center', 'id': (0, 1)}},
-        {'address': 'Warps_CeruleanCity', 'id': 3, 'to': {'map': 'Cerulean Gym', 'id': (0, 1)}},
-        {'address': 'Warps_CeruleanCity', 'id': 4, 'to': {'map': 'Cerulean Bicycle Shop', 'id': (0, 1)}},
-        {'address': 'Warps_CeruleanCity', 'id': 5, 'to': {'map': 'Cerulean Pokemart', 'id': (0, 1)}},
-        {'address': 'Warps_CeruleanCity', 'id': 8, 'to': {'map': 'Cerulean Badge House', 'id': (1, 2)}}],
+                 {'address': 'Warps_CeruleanCity', 'id': 1, 'to': {'map': 'Cerulean Trade House', 'id': (0, 1)}},
+                 {'address': 'Warps_CeruleanCity', 'id': 2, 'to': {'map': 'Cerulean Pokemon Center', 'id': (0, 1)}},
+                 {'address': 'Warps_CeruleanCity', 'id': 3, 'to': {'map': 'Cerulean Gym', 'id': (0, 1)}},
+                 {'address': 'Warps_CeruleanCity', 'id': 4, 'to': {'map': 'Cerulean Bicycle Shop', 'id': (0, 1)}},
+                 {'address': 'Warps_CeruleanCity', 'id': 5, 'to': {'map': 'Cerulean Pokemart', 'id': (0, 1)}},
+                 {'address': 'Warps_CeruleanCity', 'id': 8, 'to': {'map': 'Cerulean Badge House', 'id': (1, 2)}}],
              'Cerulean City-Badge House Backyard': [
-        {'address': 'Warps_CeruleanCity', 'id': 9, 'to': {'map': 'Cerulean Badge House', 'id': 0}}],
+                 {'address': 'Warps_CeruleanCity', 'id': 9, 'to': {'map': 'Cerulean Badge House', 'id': 0}}],
              'Cerulean City-Water': [], 'Cerulean City-Cave': [
-        {'address': 'Warps_CeruleanCity', 'id': 6, 'to': {'map': 'Cerulean Cave 1F', 'id': (0, 1)}}],
+        {'address': 'Warps_CeruleanCity', 'id': 6, 'to': {'map': 'Cerulean Cave 1F-SE', 'id': (0, 1)}}],
              'Cerulean City-Outskirts': [
                  {'address': 'Warps_CeruleanCity', 'id': 7, 'to': {'map': 'Cerulean Trashed House', 'id': 2}}],
              'Vermilion City': [
@@ -332,9 +333,8 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_VermilionTradeHouse', 'id': (0, 1), 'to': {'map': 'Vermilion City', 'id': 7}}],
              'Indigo Plateau Lobby': [
                  {'address': 'Warps_IndigoPlateauLobby', 'id': (0, 1), 'to': {'map': 'Indigo Plateau', 'id': (0, 1)}}],
-             'Indigo Plateau Lobby-N': [
-                 {'address': 'Warps_IndigoPlateauLobby', 'id': 2,
-                  'to': {'map': "Indigo Plateau Lorelei's Room", 'id': 0}}],
+             'Indigo Plateau Lobby-N': [{'address': 'Warps_IndigoPlateauLobby', 'id': 2,
+                                         'to': {'map': "Indigo Plateau Lorelei's Room", 'id': 0}}],
              'Silph Co 4F': [{'address': 'Warps_SilphCo4F', 'id': 0, 'to': {'map': 'Silph Co 3F', 'id': 1}},
                              {'address': 'Warps_SilphCo4F', 'id': 1, 'to': {'map': 'Silph Co 5F', 'id': 1}},
                              {'address': 'Warps_SilphCo4F', 'id': 2, 'to': {'map': 'Silph Co Elevator-4F', 'id': 3}},
@@ -352,7 +352,7 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Silph Co 5F-SW': [{'address': 'Warps_SilphCo5F', 'id': 6, 'to': {'map': 'Silph Co 3F', 'id': 5}}],
              'Silph Co 6F': [{'address': 'Warps_SilphCo6F', 'id': 0, 'to': {'map': 'Silph Co 7F', 'id': 1}},
                              {'address': 'Warps_SilphCo6F', 'id': 1, 'to': {'map': 'Silph Co 5F', 'id': 0}},
-                             {'address': 'Warps_SilphCo6F', 'id': 2, 'to': {'map': 'Silph Co Elevator-6F', 'id': 6}},
+                             {'address': 'Warps_SilphCo6F', 'id': 2, 'to': {'map': 'Silph Co Elevator-7F', 'id': 6}},
                              {'address': 'Warps_SilphCo6F', 'id': 3, 'to': {'map': 'Silph Co 4F-N', 'id': 4}},
                              {'address': 'Warps_SilphCo6F', 'id': 4, 'to': {'map': 'Silph Co 2F-SW', 'id': 6}}],
              'Cinnabar Island-M': [
@@ -380,7 +380,8 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_CeruleanTrashedHouse', 'id': 2, 'to': {'map': 'Cerulean City-Outskirts', 'id': 7}}],
              'Cerulean Trade House': [
                  {'address': 'Warps_CeruleanTradeHouse', 'id': (0, 1), 'to': {'map': 'Cerulean City', 'id': 1}}],
-             'Cerulean Bicycle Shop': [{'address': 'Warps_BikeShop', 'id': (0, 1), 'to': {'map': 'Cerulean City', 'id': 4}}],
+             'Cerulean Bicycle Shop': [
+                 {'address': 'Warps_BikeShop', 'id': (0, 1), 'to': {'map': 'Cerulean City', 'id': 4}}],
              "Lavender Mr. Fuji's House": [
                  {'address': 'Warps_MrFujisHouse', 'id': (0, 1), 'to': {'map': 'Lavender Town', 'id': 2}}],
              'Lavender Cubone House': [
@@ -389,13 +390,15 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_NameRatersHouse', 'id': (0, 1), 'to': {'map': 'Lavender Town', 'id': 5}}],
              'Vermilion Pidgey House': [
                  {'address': 'Warps_VermilionPidgeyHouse', 'id': (0, 1), 'to': {'map': 'Vermilion City', 'id': 4}}],
-             'Vermilion Dock': [{'address': 'Warps_VermilionDock', 'id': 0, 'to': {'map': 'Vermilion City', 'id': 5}},
-                                {'address': 'Warps_VermilionDock', 'id': 1, 'to': {'map': 'S.S. Anne 1F', 'id': 1}}],
+             'Vermilion Dock': [
+                 {'address': 'Warps_VermilionDock', 'id': 0, 'to': {'map': 'Vermilion City-Dock', 'id': 5}},
+                 {'address': 'Warps_VermilionDock', 'id': 1, 'to': {'map': 'S.S. Anne 1F', 'id': 1}}],
              'Celadon Mansion Roof House': [{'address': 'Warps_CeladonMansionRoofHouse', 'id': (0, 1),
-                                             'to': {'map': 'Celadon Mansion Roof', 'id': 2}}], 'Fuchsia Pokemart': [
-        {'address': 'Warps_FuchsiaMart', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 0}}],
+                                             'to': {'map': 'Celadon Mansion Roof-Back', 'id': 2}}],
+             'Fuchsia Pokemart': [
+                 {'address': 'Warps_FuchsiaMart', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 0}}],
              'Saffron Pidgey House': [
-                 {'address': 'Warps_SaffronPidgeyHouse', 'id': (0, 1), 'to': {'map': 'Saffron City', 'id': 3}}],
+                 {'address': 'Warps_SaffronPidgeyHouse', 'id': (0, 1), 'to': {'map': 'Saffron City-Pidgey', 'id': 3}}],
              "Saffron Mr. Psychic's House": [
                  {'address': 'Warps_MrPsychicsHouse', 'id': (0, 1), 'to': {'map': 'Saffron City', 'id': 7}}],
              "Diglett's Cave Route 2": [
@@ -408,18 +411,20 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Route 6 Gate-S': [{'address': 'Warps_Route6Gate', 'id': (0, 1), 'to': {'map': 'Route 6', 'id': 2}}],
              'Route 6 Gate-N': [{'address': 'Warps_Route6Gate', 'id': (2, 3), 'to': {'map': 'Route 6-N', 'id': 1}}],
              'Route 7 Gate-W': [{'address': 'Warps_Route7Gate', 'id': (0, 1), 'to': {'map': 'Route 7', 'id': 3}}],
-             'Route 7 Gate-E': [{'address': 'Warps_Route7Gate', 'id': (2, 3), 'to': {'map': 'Route 7-E', 'id': (0, 1)}}],
-             'Route 8 Gate-W': [{'address': 'Warps_Route8Gate', 'id': (0, 1), 'to': {'map': 'Route 8-W', 'id': (0, 1)}}],
+             'Route 7 Gate-E': [
+                 {'address': 'Warps_Route7Gate', 'id': (2, 3), 'to': {'map': 'Route 7-E', 'id': (0, 1)}}],
+             'Route 8 Gate-W': [
+                 {'address': 'Warps_Route8Gate', 'id': (0, 1), 'to': {'map': 'Route 8-W', 'id': (0, 1)}}],
              'Route 8 Gate-E': [{'address': 'Warps_Route8Gate', 'id': (2, 3), 'to': {'map': 'Route 8', 'id': (2, 3)}}],
              'Underground Path Route 8': [
                  {'address': 'Warps_UndergroundPathRoute8', 'id': (0, 1), 'to': {'map': 'Route 8', 'id': 4}},
                  {'address': 'Warps_UndergroundPathRoute8', 'id': 2,
                   'to': {'map': 'Underground Path West East', 'id': 1}}],
              'Power Plant': [{'address': 'Warps_PowerPlant', 'id': (0, 1), 'to': {'map': 'Route 10-P', 'id': 3}},
-                             {'name': "Power Plant to Route 10-P Back Door", 'address': 'Warps_PowerPlant', 'id': 2, 'to': {'map': 'Route 10-P', 'id': 3}}],
-             "Diglett's Cave Route 11": [
-                 {'address': 'Warps_DiglettsCaveRoute11', 'id': (0, 1), 'to': {'map': 'Route 11', 'id': 4}},
-                 {'address': 'Warps_DiglettsCaveRoute11', 'id': 2, 'to': {'map': "Diglett's Cave", 'id': 1}}],
+                             {'name': 'Power Plant to Route 10-P Back Door', 'address': 'Warps_PowerPlant', 'id': 2,
+                              'to': {'map': 'Route 10-P', 'id': 3}}], "Diglett's Cave Route 11": [
+        {'address': 'Warps_DiglettsCaveRoute11', 'id': (0, 1), 'to': {'map': 'Route 11', 'id': 4}},
+        {'address': 'Warps_DiglettsCaveRoute11', 'id': 2, 'to': {'map': "Diglett's Cave", 'id': 1}}],
              'Route 16 Fly House': [
                  {'address': 'Warps_Route16FlyHouse', 'id': (0, 1), 'to': {'map': 'Route 16-NW', 'id': 8}}],
              'Route 22 Gate-S': [{'address': 'Warps_Route22Gate', 'id': (0, 1), 'to': {'map': 'Route 22', 'id': 0}}],
@@ -435,13 +440,11 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_LavenderTown', 'id': 5, 'to': {'map': "Lavender Name Rater's House", 'id': 0}}],
              'Viridian Pokemon Center': [
                  {'address': 'Warps_ViridianPokecenter', 'id': (0, 1), 'to': {'map': 'Viridian City', 'id': 0}}],
-             'Pokemon Mansion 1F-Wild': [],
-             'Pokemon Mansion 1F': [
-                 {'address': 'Warps_PokemonMansion1F', 'id': 4, 'to': {'map': 'Pokemon Mansion 2F', 'id': 0}},
-                 {'address': 'Warps_PokemonMansion1F', 'id': (0, 1, 2, 3),
-                  'to': {'map': 'Cinnabar Island-M', 'id': 0}}], 'Pokemon Mansion 1F-SE': [
-        {'address': 'Warps_PokemonMansion1F', 'id': 5, 'to': {'map': 'Pokemon Mansion B1F', 'id': 0}},
-        {'address': 'Warps_PokemonMansion1F', 'id': (6, 7), 'to': {'map': 'Cinnabar Island-M', 'id': 0}}],
+             'Pokemon Mansion 1F-Wild': [], 'Pokemon Mansion 1F': [
+        {'address': 'Warps_PokemonMansion1F', 'id': 4, 'to': {'map': 'Pokemon Mansion 2F', 'id': 0}},
+        {'address': 'Warps_PokemonMansion1F', 'id': (0, 1, 2, 3), 'to': {'map': 'Cinnabar Island-M', 'id': 0}}],
+             'Pokemon Mansion 1F-SE': [
+                 {'address': 'Warps_PokemonMansion1F', 'id': 5, 'to': {'map': 'Pokemon Mansion B1F', 'id': 0}},],
              'Pokemon Mansion 2F': [
                  {'address': 'Warps_PokemonMansion2F', 'id': 0, 'to': {'map': 'Pokemon Mansion 1F', 'id': 4}},
                  {'address': 'Warps_PokemonMansion2F', 'id': 1, 'to': {'map': 'Pokemon Mansion 3F-SW', 'id': 0}}],
@@ -449,51 +452,51 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_PokemonMansion2F', 'id': 3, 'to': {'map': 'Pokemon Mansion 3F', 'id': 1}}],
              'Pokemon Mansion 2F-E': [
                  {'address': 'Warps_PokemonMansion2F', 'id': 2, 'to': {'map': 'Pokemon Mansion 3F-SE', 'id': 2}}],
-             'Pokemon Mansion 3F-Wild': [], 'Pokemon Mansion 2F-Wild': [],
-             'Pokemon Mansion 3F': [
+             'Pokemon Mansion 3F-Wild': [], 'Pokemon Mansion 2F-Wild': [], 'Pokemon Mansion 3F': [
         {'address': 'Warps_PokemonMansion3F', 'id': 1, 'to': {'map': 'Pokemon Mansion 2F-NW', 'id': 3}}],
              'Pokemon Mansion 3F-SE': [
-                 {'address': 'Warps_PokemonMansion3F', 'id': 2, 'to': {'map': 'Pokemon Mansion 2F-E', 'id': 2}}],
+                 {'address': 'Warps_PokemonMansion3F', 'id': 2, 'to': {'map': 'Pokemon Mansion 2F-E', 'id': 2}},
+                 {'name': "Pokemon Mansion 1F-SE to Cinnabar Island-M", 'address': 'Warps_PokemonMansion1F',
+                  'id': (6, 7), 'to': {'map': 'Cinnabar Island-M', 'id': 0}}],
              'Pokemon Mansion 3F-SW': [
                  {'address': 'Warps_PokemonMansion3F', 'id': 0, 'to': {'map': 'Pokemon Mansion 2F', 'id': 1}}],
              'Pokemon Mansion B1F': [
                  {'address': 'Warps_PokemonMansionB1F', 'id': 0, 'to': {'map': 'Pokemon Mansion 1F-SE', 'id': 5}}],
              'Rock Tunnel 1F-NE': [{'address': 'Warps_RockTunnel1F', 'id': 0, 'to': {'map': 'Route 10-N', 'id': 1}},
-                                {'address': 'Warps_RockTunnel1F', 'id': 4, 'to': {'map': 'Rock Tunnel B1F', 'id': 0}}],
-             'Rock Tunnel 1F-NW':
-                                [{'address': 'Warps_RockTunnel1F', 'id': 5, 'to': {'map': 'Rock Tunnel B1F', 'id': 1}},
-                                {'address': 'Warps_RockTunnel1F', 'id': 6, 'to': {'map': 'Rock Tunnel B1F', 'id': 2}},],
-             'Rock Tunnel 1F-S': [
-                                {'address': 'Warps_RockTunnel1F', 'id': 2, 'to': {'map': 'Route 10-S', 'id': 2}},
-                                {'address': 'Warps_RockTunnel1F', 'id': 7, 'to': {'map': 'Rock Tunnel B1F', 'id': 3}}],
-             'Rock Tunnel 1F-Wild': [], 'Rock Tunnel B1F-Wild': [],
-             'Seafoam Islands 1F': [
-                 {'address': 'Warps_SeafoamIslands1F', 'id': (2, 3), 'to': {'map': 'Route 20-IW', 'id': 1}},
-                 {'address': 'Warps_SeafoamIslands1F', 'id': 4, 'to': {'map': 'Seafoam Islands B1F', 'id': 1}},
-                 {'address': 'Warps_SeafoamIslands1F', 'id': 5, 'to': {'map': 'Seafoam Islands B1F-NE', 'id': 6}}],
-             'Seafoam Islands B1F-Wild': [],
-             'Seafoam Islands 1F-Wild': [],
-             'Seafoam Islands 1F-SE': [
-                 {'address': 'Warps_SeafoamIslands1F', 'id': (0, 1), 'to': {'map': 'Route 20-IE', 'id': 0}},
-                 {'address': 'Warps_SeafoamIslands1F', 'id': 6, 'to': {'map': 'Seafoam Islands B1F-SE', 'id': 4}}],
+                                   {'address': 'Warps_RockTunnel1F', 'id': 4,
+                                    'to': {'map': 'Rock Tunnel B1F-E', 'id': 0}}], 'Rock Tunnel 1F-NW': [
+        {'address': 'Warps_RockTunnel1F', 'id': 5, 'to': {'map': 'Rock Tunnel B1F-E', 'id': 1}},
+        {'address': 'Warps_RockTunnel1F', 'id': 6, 'to': {'map': 'Rock Tunnel B1F-W', 'id': 2}}],
+             'Rock Tunnel 1F-S': [{'address': 'Warps_RockTunnel1F', 'id': 2, 'to': {'map': 'Route 10-S', 'id': 2}},
+                                  {'address': 'Warps_RockTunnel1F', 'id': 7,
+                                   'to': {'map': 'Rock Tunnel B1F-W', 'id': 3}}], 'Rock Tunnel 1F-Wild': [],
+             'Rock Tunnel B1F-Wild': [], 'Seafoam Islands 1F': [
+        {'address': 'Warps_SeafoamIslands1F', 'id': (2, 3), 'to': {'map': 'Route 20-IE', 'id': 1}},
+        {'address': 'Warps_SeafoamIslands1F', 'id': 4, 'to': {'map': 'Seafoam Islands B1F', 'id': 1}},
+        {'address': 'Warps_SeafoamIslands1F', 'id': 5, 'to': {'map': 'Seafoam Islands B1F-NE', 'id': 6}}],
+             'Seafoam Islands B1F-Wild': [], 'Seafoam Islands 1F-Wild': [], 'Seafoam Islands 1F-SE': [
+        {'address': 'Warps_SeafoamIslands1F', 'id': (0, 1), 'to': {'map': 'Route 20-IW', 'id': 0}},
+        {'address': 'Warps_SeafoamIslands1F', 'id': 6, 'to': {'map': 'Seafoam Islands B1F-SE', 'id': 4}}],
              'S.S. Anne 3F': [{'address': 'Warps_SSAnne3F', 'id': 0, 'to': {'map': 'S.S. Anne Bow', 'id': 0}},
                               {'address': 'Warps_SSAnne3F', 'id': 1, 'to': {'map': 'S.S. Anne 2F', 'id': 7}}],
-             'Victory Road 3F': [{'address': 'Warps_VictoryRoad3F', 'id': 0, 'to': {'map': 'Victory Road 2F', 'id': 3}},
-                                 {'address': 'Warps_VictoryRoad3F', 'id': 3,
-                                  'to': {'map': 'Victory Road 2F', 'id': 6}}],
+             'Victory Road 3F': [
+                 {'address': 'Warps_VictoryRoad3F', 'id': 0, 'to': {'map': 'Victory Road 2F-C', 'id': 3}},
+                 {'address': 'Warps_VictoryRoad3F', 'id': 3, 'to': {'map': 'Victory Road 2F-NW', 'id': 6}}],
              'Victory Road 3F-SE': [
-        {'address': 'Warps_VictoryRoad3F', 'id': 1, 'to': {'map': 'Victory Road 2F', 'id': 5}},
-        {'address': 'Warps_VictoryRoad3F', 'id': 2, 'to': {'map': 'Victory Road 2F', 'id': 4}}],
+                 {'address': 'Warps_VictoryRoad3F', 'id': 1, 'to': {'map': 'Victory Road 2F-E', 'id': 5}},
+                 {'address': 'Warps_VictoryRoad3F', 'id': 2, 'to': {'map': 'Victory Road 2F-SE', 'id': 4}}],
              'Victory Road 3F-S': [], 'Victory Road 3F-Wild': [], 'Rocket Hideout B1F': [
         {'address': 'Warps_RocketHideoutB1F', 'id': 0, 'to': {'map': 'Rocket Hideout B2F', 'id': 0}},
-        {'address': 'Warps_RocketHideoutB1F', 'id': 1, 'to': {'map': 'Celadon Game Corner', 'id': 2}}],
+        {'address': 'Warps_RocketHideoutB1F', 'id': 1, 'to': {'map': 'Celadon Game Corner-Hidden Stairs', 'id': 2}}],
              'Rocket Hideout B1F-SE': [{'address': 'Warps_RocketHideoutB1F', 'id': (2, 4),
-                                        'to': {'map': 'Rocket Hideout Elevator-B1F', 'id': 0}}], 'Rocket Hideout B1F-S': [
-        {'address': 'Warps_RocketHideoutB1F', 'id': 3, 'to': {'map': 'Rocket Hideout B2F', 'id': 3}}],
+                                        'to': {'map': 'Rocket Hideout Elevator-B1F', 'id': 0}}],
+             'Rocket Hideout B1F-S': [
+                 {'address': 'Warps_RocketHideoutB1F', 'id': 3, 'to': {'map': 'Rocket Hideout B2F', 'id': 3}}],
              'Rocket Hideout B2F': [
                  {'address': 'Warps_RocketHideoutB2F', 'id': 0, 'to': {'map': 'Rocket Hideout B1F', 'id': 0}},
                  {'address': 'Warps_RocketHideoutB2F', 'id': 1, 'to': {'map': 'Rocket Hideout B3F', 'id': 0}},
-                 {'address': 'Warps_RocketHideoutB2F', 'id': (2, 4), 'to': {'map': 'Rocket Hideout Elevator-B2F', 'id': 1}},
+                 {'address': 'Warps_RocketHideoutB2F', 'id': (2, 4),
+                  'to': {'map': 'Rocket Hideout Elevator-B2F', 'id': 1}},
                  {'address': 'Warps_RocketHideoutB2F', 'id': 3, 'to': {'map': 'Rocket Hideout B1F-S', 'id': 3}}],
              'Rocket Hideout B3F': [
                  {'address': 'Warps_RocketHideoutB3F', 'id': 0, 'to': {'map': 'Rocket Hideout B2F', 'id': 1}},
@@ -502,57 +505,47 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                                      'to': {'map': 'Rocket Hideout Elevator-B4F', 'id': 2}}], 'Rocket Hideout B4F-NW': [
         {'address': 'Warps_RocketHideoutB4F', 'id': 0, 'to': {'map': 'Rocket Hideout B3F', 'id': 1}}],
              'Rocket Hideout Elevator': [], 'Silph Co Elevator': [], 'Celadon Department Store Elevator': [],
-             'Rocket Hideout Elevator-B1F': [
-                 {'address': 'RocketHideoutElevatorWarpMaps', 'id': 0, 'to': {'map': 'Rocket Hideout B1F', 'id': 4}}],
+             'Rocket Hideout Elevator-B1F': [{'address': 'RocketHideoutElevatorWarpMaps', 'id': 0,
+                                              'to': {'map': 'Rocket Hideout B1F-SE', 'id': 4}}],
              'Rocket Hideout Elevator-B2F': [
                  {'address': 'RocketHideoutElevatorWarpMaps', 'id': 1, 'to': {'map': 'Rocket Hideout B2F', 'id': 4}}],
              'Rocket Hideout Elevator-B4F': [
                  {'address': 'RocketHideoutElevatorWarpMaps', 'id': 2, 'to': {'map': 'Rocket Hideout B4F', 'id': 2}}],
              'Silph Co Elevator-1F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 0, 'to': {'map': 'Silph Co 1F', 'id': 3}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 0, 'to': {'map': 'Silph Co 1F', 'id': 3}}],
              'Silph Co Elevator-2F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 1, 'to': {'map': 'Silph Co 2F', 'id': 2}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 1, 'to': {'map': 'Silph Co 2F', 'id': 2}}],
              'Silph Co Elevator-3F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 2, 'to': {'map': 'Silph Co 3F', 'id': 2}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 2, 'to': {'map': 'Silph Co 3F', 'id': 2}}],
              'Silph Co Elevator-4F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 3, 'to': {'map': 'Silph Co 4F', 'id': 2}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 3, 'to': {'map': 'Silph Co 4F', 'id': 2}}],
              'Silph Co Elevator-5F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 4, 'to': {'map': 'Silph Co 5F', 'id': 2}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 4, 'to': {'map': 'Silph Co 5F', 'id': 2}}],
              'Silph Co Elevator-6F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 5, 'to': {'map': 'Silph Co 6F', 'id': 2}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 5, 'to': {'map': 'Silph Co 6F', 'id': 2}}],
              'Silph Co Elevator-7F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 6, 'to': {'map': 'Silph Co 7F', 'id': 2}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 6, 'to': {'map': 'Silph Co 7F', 'id': 2}}],
              'Silph Co Elevator-8F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 7, 'to': {'map': 'Silph Co 8F', 'id': 2}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 7, 'to': {'map': 'Silph Co 8F', 'id': 2}}],
              'Silph Co Elevator-9F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 8, 'to': {'map': 'Silph Co 9F', 'id': 2}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 8, 'to': {'map': 'Silph Co 9F', 'id': 2}}],
              'Silph Co Elevator-10F': [
-                 {'address': 'SilphCoElevatorWarpMaps', 'id': 9, 'to': {'map': 'Silph Co 10F', 'id': 2}},
-                 ],
+                 {'address': 'SilphCoElevatorWarpMaps', 'id': 9, 'to': {'map': 'Silph Co 10F', 'id': 2}}],
              'Silph Co Elevator-11F': [
                  {'address': 'SilphCoElevatorWarpMaps', 'id': 10, 'to': {'map': 'Silph Co 11F', 'id': 1}}],
              'Safari Zone East': [
                  {'address': 'Warps_SafariZoneEast', 'id': (0, 1), 'to': {'map': 'Safari Zone North', 'id': (6, 7)}},
-                 {'address': 'Warps_SafariZoneEast', 'id': (2, 3), 'to': {'map': 'Safari Zone Center', 'id': (6, 7)}},
+                 {'address': 'Warps_SafariZoneEast', 'id': (2, 3), 'to': {'map': 'Safari Zone Center-S', 'id': (6, 7)}},
                  {'address': 'Warps_SafariZoneEast', 'id': 4, 'to': {'map': 'Safari Zone East Rest House', 'id': 0}}],
              'Safari Zone North': [
-                 {'address': 'Warps_SafariZoneNorth', 'id': (0, 1), 'to': {'map': 'Safari Zone West', 'id': (0, 1)}},
+                 {'address': 'Warps_SafariZoneNorth', 'id': (0, 1), 'to': {'map': 'Safari Zone West-NW', 'id': (0, 1)}},
                  {'address': 'Warps_SafariZoneNorth', 'id': (2, 3), 'to': {'map': 'Safari Zone West', 'id': (2, 3)}},
-                 {'address': 'Warps_SafariZoneNorth', 'id': (4, 5), 'to': {'map': 'Safari Zone Center', 'id': (4, 5)}},
+                 {'address': 'Warps_SafariZoneNorth', 'id': (4, 5),
+                  'to': {'map': 'Safari Zone Center-NE', 'id': (4, 5)}},
                  {'address': 'Warps_SafariZoneNorth', 'id': (6, 7), 'to': {'map': 'Safari Zone East', 'id': (0, 1)}},
                  {'address': 'Warps_SafariZoneNorth', 'id': 8, 'to': {'map': 'Safari Zone North Rest House', 'id': 0}}],
-             'Safari Zone Center-C': [], 'Safari Zone Center-Wild': [],
-             'Safari Zone Center-NW': [
-                 {'address': 'Warps_SafariZoneCenter', 'id': (2, 3), 'to': {'map': 'Safari Zone West', 'id': (4, 5)}}],
+             'Safari Zone Center-C': [], 'Safari Zone Center-Wild': [], 'Safari Zone Center-NW': [
+        {'address': 'Warps_SafariZoneCenter', 'id': (2, 3), 'to': {'map': 'Safari Zone West', 'id': (4, 5)}}],
              'Safari Zone Center-NE': [
                  {'address': 'Warps_SafariZoneCenter', 'id': (4, 5), 'to': {'map': 'Safari Zone North', 'id': (4, 5)}}],
              'Safari Zone Center-S': [
@@ -560,110 +553,113 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_SafariZoneCenter', 'id': (6, 7), 'to': {'map': 'Safari Zone East', 'id': (2, 3)}},
                  {'address': 'Warps_SafariZoneCenter', 'id': 8,
                   'to': {'map': 'Safari Zone Center Rest House', 'id': 0}}], 'Safari Zone Center Rest House': [
-        {'address': 'Warps_SafariZoneCenterRestHouse', 'id': (0, 1), 'to': {'map': 'Safari Zone Center', 'id': 8}}],
+        {'address': 'Warps_SafariZoneCenterRestHouse', 'id': (0, 1), 'to': {'map': 'Safari Zone Center-S', 'id': 8}}],
              'Safari Zone West Rest House': [{'address': 'Warps_SafariZoneWestRestHouse', 'id': (0, 1),
                                               'to': {'map': 'Safari Zone West', 'id': 7}}],
              'Safari Zone East Rest House': [{'address': 'Warps_SafariZoneEastRestHouse', 'id': (0, 1),
                                               'to': {'map': 'Safari Zone East', 'id': 4}}],
              'Safari Zone North Rest House': [{'address': 'Warps_SafariZoneNorthRestHouse', 'id': (0, 1),
                                                'to': {'map': 'Safari Zone North', 'id': 8}}], 'Cerulean Cave 2F-E': [
-        {'address': 'Warps_CeruleanCave2F', 'id': 0, 'to': {'map': 'Cerulean Cave 1F', 'id': 2}},
-        {'address': 'Warps_CeruleanCave2F', 'id': 1, 'to': {'map': 'Cerulean Cave 1F', 'id': 3}}],
-             'Cerulean Cave 2F-Wild': [],
-             'Cerulean Cave 2F-W': [
-                 {'address': 'Warps_CeruleanCave2F', 'id': 4, 'to': {'map': 'Cerulean Cave 1F', 'id': 6}},
-                 {'address': 'Warps_CeruleanCave2F', 'id': 5, 'to': {'map': 'Cerulean Cave 1F', 'id': 7}}],
+        {'address': 'Warps_CeruleanCave2F', 'id': 0, 'to': {'map': 'Cerulean Cave 1F-NE', 'id': 2}},
+        {'address': 'Warps_CeruleanCave2F', 'id': 1, 'to': {'map': 'Cerulean Cave 1F-SE', 'id': 3}}],
+             'Cerulean Cave 2F-Wild': [], 'Cerulean Cave 2F-W': [
+        {'address': 'Warps_CeruleanCave2F', 'id': 4, 'to': {'map': 'Cerulean Cave 1F-NW', 'id': 6}},
+        {'address': 'Warps_CeruleanCave2F', 'id': 5, 'to': {'map': 'Cerulean Cave 1F-SW', 'id': 7}}],
              'Cerulean Cave 2F-N': [
-                 {'address': 'Warps_CeruleanCave2F', 'id': 2, 'to': {'map': 'Cerulean Cave 1F', 'id': 4}},
-                 {'address': 'Warps_CeruleanCave2F', 'id': 3, 'to': {'map': 'Cerulean Cave 1F', 'id': 5}}],
+                 {'address': 'Warps_CeruleanCave2F', 'id': 2, 'to': {'map': 'Cerulean Cave 1F-SW', 'id': 4}},
+                 {'address': 'Warps_CeruleanCave2F', 'id': 3, 'to': {'map': 'Cerulean Cave 1F-N', 'id': 5}}],
              'Cerulean Cave B1F': [
-                 {'address': 'Warps_CeruleanCaveB1F', 'id': 0, 'to': {'map': 'Cerulean Cave 1F', 'id': 8}}],
-             'Cerulean Cave B1F-E': [],
-             'Rock Tunnel B1F-E': [{'address': 'Warps_RockTunnelB1F', 'id': 0, 'to': {'map': 'Rock Tunnel 1F', 'id': 4}},
-                                 {'address': 'Warps_RockTunnelB1F', 'id': 1, 'to': {'map': 'Rock Tunnel 1F', 'id': 5}}],
+                 {'address': 'Warps_CeruleanCaveB1F', 'id': 0, 'to': {'map': 'Cerulean Cave 1F-NW', 'id': 8}}],
+             'Cerulean Cave B1F-E': [], 'Rock Tunnel B1F-E': [
+        {'address': 'Warps_RockTunnelB1F', 'id': 0, 'to': {'map': 'Rock Tunnel 1F-NE', 'id': 4}},
+        {'address': 'Warps_RockTunnelB1F', 'id': 1, 'to': {'map': 'Rock Tunnel 1F-NW', 'id': 5}}],
              'Rock Tunnel B1F-W': [
-                                 {'address': 'Warps_RockTunnelB1F', 'id': 2, 'to': {'map': 'Rock Tunnel 1F', 'id': 6}},
-                                 {'address': 'Warps_RockTunnelB1F', 'id': 3, 'to': {'map': 'Rock Tunnel 1F', 'id': 7}}],
+                 {'address': 'Warps_RockTunnelB1F', 'id': 2, 'to': {'map': 'Rock Tunnel 1F-NW', 'id': 6}},
+                 {'address': 'Warps_RockTunnelB1F', 'id': 3, 'to': {'map': 'Rock Tunnel 1F-S', 'id': 7}}],
              'Seafoam Islands B1F': [
                  {'address': 'Warps_SeafoamIslandsB1F', 'id': 0, 'to': {'map': 'Seafoam Islands B2F-NW', 'id': 0}},
                  {'address': 'Warps_SeafoamIslandsB1F', 'id': 1, 'to': {'map': 'Seafoam Islands 1F', 'id': 4}},
-                 {'name': "Seafoam Islands B1F to Seafoam Islands B2F-SW N",'address': 'Warps_SeafoamIslandsB1F', 'id': 2, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 2}},
-                 {'name': "Seafoam Islands B1F to Seafoam Islands B2F-SW S", 'address': 'Warps_SeafoamIslandsB1F', 'id': 3, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 3}}],
-             'Seafoam Islands B1F-SE': [
-                 {'address': 'Warps_SeafoamIslandsB1F', 'id': 4, 'to': {'map': 'Seafoam Islands 1F-SE', 'id': 6}},
-                 {'address': 'Warps_SeafoamIslandsB1F', 'id': 5, 'to': {'map': 'Seafoam Islands B2F-SE', 'id': 5}}],
+                 {'name': 'Seafoam Islands B1F to Seafoam Islands B2F-SW N', 'address': 'Warps_SeafoamIslandsB1F',
+                  'id': 2, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 2}},
+                 {'name': 'Seafoam Islands B1F to Seafoam Islands B2F-SW S', 'address': 'Warps_SeafoamIslandsB1F',
+                  'id': 3, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 3}}], 'Seafoam Islands B1F-SE': [
+        {'address': 'Warps_SeafoamIslandsB1F', 'id': 4, 'to': {'map': 'Seafoam Islands 1F-SE', 'id': 6}},
+        {'address': 'Warps_SeafoamIslandsB1F', 'id': 5, 'to': {'map': 'Seafoam Islands B2F-SE', 'id': 5}}],
              'Seafoam Islands B1F-NE': [
                  {'address': 'Warps_SeafoamIslandsB1F', 'id': 6, 'to': {'map': 'Seafoam Islands 1F', 'id': 5}}],
-             'Seafoam Islands B2F-Wild': [],
-             'Seafoam Islands B2F-SE': [
-                 {'address': 'Warps_SeafoamIslandsB2F', 'id': 5, 'to': {'map': 'Seafoam Islands B1F-SE', 'id': 5}},
-                 {'address': 'Warps_SeafoamIslandsB2F', 'id': 6, 'to': {'map': 'Seafoam Islands B3F-SE', 'id': 4}}],
+             'Seafoam Islands B2F-Wild': [], 'Seafoam Islands B2F-SE': [
+        {'address': 'Warps_SeafoamIslandsB2F', 'id': 5, 'to': {'map': 'Seafoam Islands B1F-SE', 'id': 5}},
+        {'address': 'Warps_SeafoamIslandsB2F', 'id': 6, 'to': {'map': 'Seafoam Islands B3F-SE', 'id': 4}}],
              'Seafoam Islands B2F-NE': [
                  {'address': 'Warps_SeafoamIslandsB2F', 'id': 4, 'to': {'map': 'Seafoam Islands B3F-NE', 'id': 3}}],
              'Seafoam Islands B2F-SW': [
-                 {'name': "Seafoam Islands B2F-SW to Seafoam Islands 1F-SW S", 'address': 'Warps_SeafoamIslandsB2F', 'id': 3, 'to': {'map': 'Seafoam Islands B1F', 'id': 3}},
+                 {'name': 'Seafoam Islands B2F-SW to Seafoam Islands 1F-SW S', 'address': 'Warps_SeafoamIslandsB2F',
+                  'id': 3, 'to': {'map': 'Seafoam Islands B1F', 'id': 3}},
                  {'address': 'Warps_SeafoamIslandsB2F', 'id': 1, 'to': {'map': 'Seafoam Islands B3F', 'id': 0}},
-                 {'name': "Seafoam Islands B2F-SW to Seafoam Islands 1F-SW N", 'address': 'Warps_SeafoamIslandsB2F', 'id': 2, 'to': {'map': 'Seafoam Islands B1F', 'id': 2}}],
-             'Seafoam Islands B2F-NW': [
-                 {'address': 'Warps_SeafoamIslandsB2F', 'id': 0, 'to': {'map': 'Seafoam Islands B1F', 'id': 0}}],
+                 {'name': 'Seafoam Islands B2F-SW to Seafoam Islands 1F-SW N', 'address': 'Warps_SeafoamIslandsB2F',
+                  'id': 2, 'to': {'map': 'Seafoam Islands B1F', 'id': 2}}], 'Seafoam Islands B2F-NW': [
+        {'address': 'Warps_SeafoamIslandsB2F', 'id': 0, 'to': {'map': 'Seafoam Islands B1F', 'id': 0}}],
              'Seafoam Islands B3F': [
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 0, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 1}},
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 1, 'to': {'map': 'Seafoam Islands B4F', 'id': 2}},
-                 {"name": "Seafoam Islands B3F to Seafoam Islands B4F Water Tunnel", 'flags': 'm', 'address': 'Warps_SeafoamIslandsB3F', 'id': (5, 6), 'to': {'map': 'Seafoam Islands B4F', 'id': (0, 1)}}],
-             'Seafoam Islands B3F-SE': [
-                 {'address': 'Warps_SeafoamIslandsB3F', 'id': 4, 'to': {'map': 'Seafoam Islands B2F-SE', 'id': 6}}],
-             'Seafoam Islands B3F-Wild': [],
-             'Seafoam Islands B3F-NE': [
-                 {'address': 'Warps_SeafoamIslandsB3F', 'id': 2, 'to': {'map': 'Seafoam Islands B4F', 'id': 3}},
-                 {'address': 'Warps_SeafoamIslandsB3F', 'id': 3, 'to': {'map': 'Seafoam Islands B2F-NE', 'id': 4}}],
-             'Seafoam Islands B4F': [
-                 {"name": "Seafoam Islands B4F to Seafoam Islands B3F Water Tunnel", 'flags': 'm', 'address': 'Warps_SeafoamIslandsB4F', 'id': (0, 1), 'to': {'map': 'Seafoam Islands B3F', 'id': (5, 6)}},
-                 {'address': 'Warps_SeafoamIslandsB4F', 'id': 2, 'to': {'map': 'Seafoam Islands B3F', 'id': 1}},
-                 {'address': 'Warps_SeafoamIslandsB4F', 'id': 3, 'to': {'map': 'Seafoam Islands B3F-NE', 'id': 2}}],
-             'Route 7': [{'address': 'Warps_Route7', 'id': 3, 'to': {'map': 'Route 7 Gate', 'id': (0, 1)}},
+                 {'name': 'Seafoam Islands B3F to Seafoam Islands B4F Water Tunnel',
+                  'address': 'Warps_SeafoamIslandsB3F', 'id': (5, 6),
+                  'to': {'map': 'Seafoam Islands B4F', 'id': (0, 1)}}], 'Seafoam Islands B3F-SE': [
+        {'address': 'Warps_SeafoamIslandsB3F', 'id': 4, 'to': {'map': 'Seafoam Islands B2F-SE', 'id': 6}}],
+             'Seafoam Islands B3F-Wild': [], 'Seafoam Islands B3F-NE': [
+        {'address': 'Warps_SeafoamIslandsB3F', 'id': 2, 'to': {'map': 'Seafoam Islands B4F', 'id': 3}},
+        {'address': 'Warps_SeafoamIslandsB3F', 'id': 3, 'to': {'map': 'Seafoam Islands B2F-NE', 'id': 4}}],
+             'Seafoam Islands B4F': [{'name': 'Seafoam Islands B4F to Seafoam Islands B3F Water Tunnel',
+                                      'address': 'Warps_SeafoamIslandsB4F', 'id': (0, 1),
+                                      'to': {'map': 'Seafoam Islands B3F', 'id': (5, 6)}},
+                                     {'address': 'Warps_SeafoamIslandsB4F', 'id': 2,
+                                      'to': {'map': 'Seafoam Islands B3F', 'id': 1}},
+                                     {'address': 'Warps_SeafoamIslandsB4F', 'id': 3,
+                                      'to': {'map': 'Seafoam Islands B3F-NE', 'id': 2}}],
+             'Route 7': [{'address': 'Warps_Route7', 'id': 3, 'to': {'map': 'Route 7 Gate-W', 'id': (0, 1)}},
                          {'address': 'Warps_Route7', 'id': 4, 'to': {'map': 'Underground Path Route 7', 'id': 0}}],
-             'Route 7-E': [{'address': 'Warps_Route7', 'id': (0, 1), 'to': {'map': 'Route 7 Gate', 'id': (2, 3)}}],
+             'Route 7-E': [{'address': 'Warps_Route7', 'id': (0, 1), 'to': {'map': 'Route 7 Gate-E', 'id': (2, 3)}}],
              "Player's House 1F": [
                  {'address': 'Warps_RedsHouse1F', 'id': (0, 1), 'to': {'map': 'Pallet Town', 'id': 0}},
-                 {'flags': 'm', 'address': 'Warps_RedsHouse1F', 'id': 2, 'to': {'map': "Player's House 2F", 'id': 0}}],
+                 {'address': 'Warps_RedsHouse1F', 'id': 2, 'to': {'map': "Player's House 2F", 'id': 0}}],
              'Celadon Department Store 3F': [
                  {'address': 'Warps_CeladonMart3F', 'id': 0, 'to': {'map': 'Celadon Department Store 4F', 'id': 0}},
                  {'address': 'Warps_CeladonMart3F', 'id': 1, 'to': {'map': 'Celadon Department Store 2F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart3F', 'id': 2, 'to': {'map': 'Celadon Department Store Elevator-3F', 'id': 2}}],
-             'Celadon Department Store 4F': [
-                 {'address': 'Warps_CeladonMart4F', 'id': 0, 'to': {'map': 'Celadon Department Store 3F', 'id': 0}},
-                 {'address': 'Warps_CeladonMart4F', 'id': 1, 'to': {'map': 'Celadon Department Store 5F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart4F', 'id': 2, 'to': {'map': 'Celadon Department Store Elevator-4F', 'id': 3}}],
+                 {'address': 'Warps_CeladonMart3F', 'id': 2,
+                  'to': {'map': 'Celadon Department Store Elevator-3F', 'id': 2}}], 'Celadon Department Store 4F': [
+        {'address': 'Warps_CeladonMart4F', 'id': 0, 'to': {'map': 'Celadon Department Store 3F', 'id': 0}},
+        {'address': 'Warps_CeladonMart4F', 'id': 1, 'to': {'map': 'Celadon Department Store 5F', 'id': 1}},
+        {'address': 'Warps_CeladonMart4F', 'id': 2, 'to': {'map': 'Celadon Department Store Elevator-4F', 'id': 3}}],
              'Celadon Department Store Roof': [
                  {'address': 'Warps_CeladonMartRoof', 'id': 0, 'to': {'map': 'Celadon Department Store 5F', 'id': 0}}],
-             'Celadon Department Store Elevator-1F': [
-                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 0, 'to': {'map': 'Celadon Department Store 1F', 'id': 5}}],
-             'Celadon Department Store Elevator-2F': [
-                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 1, 'to': {'map': 'Celadon Department Store 2F', 'id': 2}}],
-             'Celadon Department Store Elevator-3F': [
-                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 2, 'to': {'map': 'Celadon Department Store 3F', 'id': 2}}],
-             'Celadon Department Store Elevator-4F': [
-                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 3, 'to': {'map': 'Celadon Department Store 4F', 'id': 2}}],
-             'Celadon Department Store Elevator-5F': [
-                 {'address': 'CeladonMartElevatorWarpMaps', 'id': 4, 'to': {'map': 'Celadon Department Store 5F', 'id': 2}}],
+             'Celadon Department Store Elevator-1F': [{'address': 'CeladonMartElevatorWarpMaps', 'id': 0,
+                                                       'to': {'map': 'Celadon Department Store 1F', 'id': 5}}],
+             'Celadon Department Store Elevator-2F': [{'address': 'CeladonMartElevatorWarpMaps', 'id': 1,
+                                                       'to': {'map': 'Celadon Department Store 2F', 'id': 2}}],
+             'Celadon Department Store Elevator-3F': [{'address': 'CeladonMartElevatorWarpMaps', 'id': 2,
+                                                       'to': {'map': 'Celadon Department Store 3F', 'id': 2}}],
+             'Celadon Department Store Elevator-4F': [{'address': 'CeladonMartElevatorWarpMaps', 'id': 3,
+                                                       'to': {'map': 'Celadon Department Store 4F', 'id': 2}}],
+             'Celadon Department Store Elevator-5F': [{'address': 'CeladonMartElevatorWarpMaps', 'id': 4,
+                                                       'to': {'map': 'Celadon Department Store 5F', 'id': 2}}],
              'Celadon Mansion 1F': [
                  {'address': 'Warps_CeladonMansion1F', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 2}},
-                 {'address': 'Warps_CeladonMansion1F', 'id': 3, 'to': {'map': 'Celadon Mansion 2F', 'id': 1}},],
+                 {'address': 'Warps_CeladonMansion1F', 'id': 3, 'to': {'map': 'Celadon Mansion 2F', 'id': 1}}],
              'Celadon Mansion 1F-Back': [
-                 {'address': 'Warps_CeladonMansion1F', 'id': 4, 'to': {'map': 'Celadon Mansion 2F', 'id': 2}},
+                 {'address': 'Warps_CeladonMansion1F', 'id': 4, 'to': {'map': 'Celadon Mansion 2F-Back', 'id': 2}},
                  {'address': 'Warps_CeladonMansion1F', 'id': 2, 'to': {'map': 'Celadon City', 'id': 4}}],
              'Celadon Mansion 2F': [
                  {'address': 'Warps_CeladonMansion2F', 'id': 0, 'to': {'map': 'Celadon Mansion 3F', 'id': 0}},
-                 {'address': 'Warps_CeladonMansion2F', 'id': 1, 'to': {'map': 'Celadon Mansion 1F', 'id': 3}},],
+                 {'address': 'Warps_CeladonMansion2F', 'id': 1, 'to': {'map': 'Celadon Mansion 1F', 'id': 3}}],
              'Celadon Mansion 2F-Back': [
-                 {'address': 'Warps_CeladonMansion2F', 'id': 2, 'to': {'map': 'Celadon Mansion 1F', 'id': 4}},
-                 {'address': 'Warps_CeladonMansion2F', 'id': 3, 'to': {'map': 'Celadon Mansion 3F', 'id': 3}}],
+                 {'address': 'Warps_CeladonMansion2F', 'id': 2, 'to': {'map': 'Celadon Mansion 1F-Back', 'id': 4}},
+                 {'address': 'Warps_CeladonMansion2F', 'id': 3, 'to': {'map': 'Celadon Mansion 3F-Back', 'id': 3}}],
              'Celadon Mansion 3F': [
                  {'address': 'Warps_CeladonMansion3F', 'id': 0, 'to': {'map': 'Celadon Mansion 2F', 'id': 0}},
                  {'address': 'Warps_CeladonMansion3F', 'id': 1, 'to': {'map': 'Celadon Mansion Roof', 'id': 0}}],
              'Celadon Mansion 3F-Back': [
                  {'address': 'Warps_CeladonMansion3F', 'id': 2, 'to': {'map': 'Celadon Mansion Roof-Back', 'id': 1}},
-                 {'address': 'Warps_CeladonMansion3F', 'id': 3, 'to': {'map': 'Celadon Mansion 2F', 'id': 3}}],
+                 {'address': 'Warps_CeladonMansion3F', 'id': 3, 'to': {'map': 'Celadon Mansion 2F-Back', 'id': 3}}],
              'Celadon Mansion Roof': [
                  {'address': 'Warps_CeladonMansionRoof', 'id': 0, 'to': {'map': 'Celadon Mansion 3F', 'id': 1}}],
              'Celadon Mansion Roof-Back': [
@@ -672,17 +668,16 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                   'to': {'map': 'Celadon Mansion Roof House', 'id': 0}}], 'Celadon Pokemon Center': [
         {'address': 'Warps_CeladonPokecenter', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 5}}],
              'Celadon Gym': [{'address': 'Warps_CeladonGym', 'id': (0, 1), 'to': {'map': 'Celadon City-G', 'id': 6}}],
-             'Celadon Gym-C': [],
-             'Celadon Game Corner': [
-                 {'address': 'Warps_GameCorner', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 7}}],
+             'Celadon Gym-C': [], 'Celadon Game Corner': [
+        {'address': 'Warps_GameCorner', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 7}}],
              'Celadon Game Corner-Hidden Stairs': [
                  {'address': 'Warps_GameCorner', 'id': 2, 'to': {'map': 'Rocket Hideout B1F', 'id': 1}}],
              'Celadon Department Store 5F': [
                  {'address': 'Warps_CeladonMart5F', 'id': 0, 'to': {'map': 'Celadon Department Store Roof', 'id': 0}},
                  {'address': 'Warps_CeladonMart5F', 'id': 1, 'to': {'map': 'Celadon Department Store 4F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart5F', 'id': 2, 'to': {'map': 'Celadon Department Store Elevator-5F', 'id': 4}}],
-             'Celadon Prize Corner': [
-                 {'address': 'Warps_GameCornerPrizeRoom', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 9}}],
+                 {'address': 'Warps_CeladonMart5F', 'id': 2,
+                  'to': {'map': 'Celadon Department Store Elevator-5F', 'id': 4}}], 'Celadon Prize Corner': [
+        {'address': 'Warps_GameCornerPrizeRoom', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 9}}],
              'Celadon Diner': [
                  {'address': 'Warps_CeladonDiner', 'id': (0, 1), 'to': {'map': 'Celadon City', 'id': 10}}],
              'Celadon Chief House': [
@@ -694,8 +689,8 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Rock Tunnel Pokemon Center': [
                  {'address': 'Warps_RockTunnelPokecenter', 'id': (0, 1), 'to': {'map': 'Route 10-N', 'id': 0}}],
              'Route 11 Gate 1F': [
-                 {'address': 'Warps_Route11Gate1F', 'id': (0, 1), 'to': {'map': 'Route 11', 'id': (0, 1)}},
-                 {'address': 'Warps_Route11Gate1F', 'id': (2, 3), 'to': {'map': 'Route 11', 'id': (2, 3)}},
+                 {'address': 'Warps_Route11Gate1F', 'id': (0, 1), 'to': {'map': 'Route 11-C', 'id': (0, 1)}},
+                 {'address': 'Warps_Route11Gate1F', 'id': (2, 3), 'to': {'map': 'Route 11-E', 'id': (2, 3)}},
                  {'address': 'Warps_Route11Gate1F', 'id': 4, 'to': {'map': 'Route 11 Gate 2F', 'id': 0}}],
              'Route 11 Gate 2F': [
                  {'address': 'Warps_Route11Gate2F', 'id': 0, 'to': {'map': 'Route 11 Gate 1F', 'id': 4}}],
@@ -727,41 +722,38 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_Route18Gate1F', 'id': (2, 3), 'to': {'map': 'Route 18-E', 'id': (2, 3)}},
                  {'address': 'Warps_Route18Gate1F', 'id': 4, 'to': {'map': 'Route 18 Gate 2F', 'id': 0}}],
              'Route 18 Gate 2F': [
-                 {'address': 'Warps_Route18Gate2F', 'id': 0, 'to': {'map': 'Route 18 Gate 1F', 'id': 4}}],
+                 {'address': 'Warps_Route18Gate2F', 'id': 0, 'to': {'map': 'Route 18 Gate 1F-E', 'id': 4}}],
              'Mt Moon 1F': [{'address': 'Warps_MtMoon1F', 'id': (0, 1), 'to': {'map': 'Route 4-W', 'id': 1}},
-                            {'address': 'Warps_MtMoon1F', 'id': 2, 'to': {'map': 'Mt Moon B1F', 'id': 0}},
-                            {'address': 'Warps_MtMoon1F', 'id': 3, 'to': {'map': 'Mt Moon B1F', 'id': 2}},
-                            {'address': 'Warps_MtMoon1F', 'id': 4, 'to': {'map': 'Mt Moon B1F', 'id': 3}}],
-             'Mt Moon B2F': [{'address': 'Warps_MtMoonB2F', 'id': 1, 'to': {'map': 'Mt Moon B1F', 'id': 4}},
-                             {'address': 'Warps_MtMoonB2F', 'id': 3, 'to': {'map': 'Mt Moon B1F', 'id': 6}}],
-             'Mt Moon B2F-NE': [{'address': 'Warps_MtMoonB2F', 'id': 0, 'to': {'map': 'Mt Moon B1F', 'id': 1}}],
-             'Mt Moon B2F-C': [{'address': 'Warps_MtMoonB2F', 'id': 2, 'to': {'map': 'Mt Moon B1F', 'id': 5}}],
-             'Mt Moon B2F-Wild': [], 'Victory Road 1F-Wild': [],
-             "Pallet/Viridian Fishing": [], "Route 22 Fishing": [], "Route 24/25/Cerulean/Cerulean Gym Fishing": [],
-             "Route 6/11/Vermilion/Dock Fishing": [], "Route 10/Celadon Fishing": [], "Safari Zone Fishing": [],
-             "Route 12/13/17/18 Fishing": [], "Sea Routes/Cinnabar/Seafoam Fishing": [], "Route 23/Cerulean Cave Fishing": [],
-             "Fuchsia Fishing": [],
+                            {'address': 'Warps_MtMoon1F', 'id': 2, 'to': {'map': 'Mt Moon B1F-W', 'id': 0}},
+                            {'address': 'Warps_MtMoon1F', 'id': 3, 'to': {'map': 'Mt Moon B1F-C', 'id': 2}},
+                            {'address': 'Warps_MtMoon1F', 'id': 4, 'to': {'map': 'Mt Moon B1F-SE', 'id': 3}}],
+             'Mt Moon B2F': [{'address': 'Warps_MtMoonB2F', 'id': 1, 'to': {'map': 'Mt Moon B1F-W', 'id': 4}},
+                             {'address': 'Warps_MtMoonB2F', 'id': 3, 'to': {'map': 'Mt Moon B1F-NE', 'id': 6}}],
+             'Mt Moon B2F-NE': [{'address': 'Warps_MtMoonB2F', 'id': 0, 'to': {'map': 'Mt Moon B1F-C', 'id': 1}}],
+             'Mt Moon B2F-C': [{'address': 'Warps_MtMoonB2F', 'id': 2, 'to': {'map': 'Mt Moon B1F-SE', 'id': 5}}],
+             'Mt Moon B2F-Wild': [], 'Victory Road 1F-Wild': [], 'Pallet/Viridian Fishing': [], 'Route 22 Fishing': [],
+             'Route 24/25/Cerulean/Cerulean Gym Fishing': [], 'Route 6/11/Vermilion/Dock Fishing': [],
+             'Route 10/Celadon Fishing': [], 'Safari Zone Fishing': [], 'Route 12/13/17/18 Fishing': [],
+             'Sea Routes/Cinnabar/Seafoam Fishing': [], 'Route 23/Cerulean Cave Fishing': [], 'Fuchsia Fishing': [],
              'Safari Zone West': [
                  {'address': 'Warps_SafariZoneWest', 'id': (2, 3), 'to': {'map': 'Safari Zone North', 'id': (2, 3)}},
-                 {'address': 'Warps_SafariZoneWest', 'id': (4, 5), 'to': {'map': 'Safari Zone Center', 'id': (2, 3)}},
+                 {'address': 'Warps_SafariZoneWest', 'id': (4, 5),
+                  'to': {'map': 'Safari Zone Center-NW', 'id': (2, 3)}},
                  {'address': 'Warps_SafariZoneWest', 'id': 7, 'to': {'map': 'Safari Zone West Rest House', 'id': 0}}],
              'Safari Zone West-NW': [
                  {'address': 'Warps_SafariZoneWest', 'id': (0, 1), 'to': {'map': 'Safari Zone North', 'id': (0, 1)}},
-                 {'address': 'Warps_SafariZoneWest', 'id': 6, 'to': {'map': 'Safari Zone Secret House', 'id': 0}},],
-             'Safari Zone West-Wild': [],
-             'Safari Zone Secret House': [
-                 {'address': 'Warps_SafariZoneSecretHouse', 'id': (0, 1), 'to': {'map': 'Safari Zone West', 'id': 6}}],
-             'Trade Center': [], 'Colosseum': [],
+                 {'address': 'Warps_SafariZoneWest', 'id': 6, 'to': {'map': 'Safari Zone Secret House', 'id': 0}}],
+             'Safari Zone West-Wild': [], 'Safari Zone Secret House': [
+        {'address': 'Warps_SafariZoneSecretHouse', 'id': (0, 1), 'to': {'map': 'Safari Zone West-NW', 'id': 6}}],
              'Route 22': [{'address': 'Warps_Route22', 'id': 0, 'to': {'map': 'Route 22 Gate-S', 'id': (0, 1)}}],
              'Route 22-F': [],
-             'Route 20-IW': [{'address': 'Warps_Route20', 'id': 0, 'to': {'map': 'Seafoam Islands 1F', 'id': 0}}],
+             'Route 20-IW': [{'address': 'Warps_Route20', 'id': 0, 'to': {'map': 'Seafoam Islands 1F-SE', 'id': 0}}],
              'Route 20-IE': [{'address': 'Warps_Route20', 'id': 1, 'to': {'map': 'Seafoam Islands 1F', 'id': 2}}],
              'Route 20-E': [], 'Route 20-W': [], 'Route 19/20-Water': [],
              'Route 23-S': [{'address': 'Warps_Route23', 'id': (0, 1), 'to': {'map': 'Route 22 Gate-N', 'id': (2, 3)}}],
              'Route 23-C': [{'address': 'Warps_Route23', 'id': 2, 'to': {'map': 'Victory Road 1F-S', 'id': 0}}],
-             'Route 23-N': [{'address': 'Warps_Route23', 'id': 3, 'to': {'map': 'Victory Road 2F', 'id': 1}}],
-             'Route 23-Grass': [],
-             'Route 24': [],
+             'Route 23-N': [{'address': 'Warps_Route23', 'id': 3, 'to': {'map': 'Victory Road 2F-E', 'id': 1}}],
+             'Route 23-Grass': [], 'Route 24': [],
              'Route 25': [{'address': 'Warps_Route25', 'id': 0, 'to': {'map': "Bill's House", 'id': 0}}],
              'Indigo Plateau': [
                  {'address': 'Warps_IndigoPlateau', 'id': (0, 1), 'to': {'map': 'Indigo Plateau Lobby', 'id': (0, 1)}}],
@@ -774,31 +766,28 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_SaffronCity', 'id': 3, 'to': {'map': 'Saffron Pidgey House', 'id': 0}}],
              'Saffron City-Copycat': [
                  {'address': 'Warps_SaffronCity', 'id': 0, 'to': {'map': "Saffron Copycat's House 1F", 'id': 0}}],
-             'Saffron City-G': [{'address': 'Warps_SaffronCity', 'id': 2, 'to': {'map': 'Saffron Gym', 'id': 0}}],
+             'Saffron City-G': [{'address': 'Warps_SaffronCity', 'id': 2, 'to': {'map': 'Saffron Gym-S', 'id': 0}}],
              'Saffron City-Silph': [{'address': 'Warps_SaffronCity', 'id': 5, 'to': {'map': 'Silph Co 1F', 'id': 0}}],
              'Victory Road 2F-E': [
-                                 {'address': 'Warps_VictoryRoad2F', 'id': (1, 2), 'to': {'map': 'Route 23-N', 'id': 3}},
-                                 {'address': 'Warps_VictoryRoad2F', 'id': 5,
-                                  'to': {'map': 'Victory Road 3F-SE', 'id': 1}},],
-             'Victory Road 2F-W': [{'address': 'Warps_VictoryRoad2F', 'id': 0, 'to': {'map': 'Victory Road 1F', 'id': 2}},],
-             'Victory Road 2F-NW': [{'address': 'Warps_VictoryRoad2F', 'id': 6,
-                                  'to': {'map': 'Victory Road 3F', 'id': 3}}],
+                 {'address': 'Warps_VictoryRoad2F', 'id': (1, 2), 'to': {'map': 'Route 23-N', 'id': 3}},
+                 {'address': 'Warps_VictoryRoad2F', 'id': 5, 'to': {'map': 'Victory Road 3F-SE', 'id': 1}}],
+             'Victory Road 2F-W': [
+                 {'address': 'Warps_VictoryRoad2F', 'id': 0, 'to': {'map': 'Victory Road 1F', 'id': 2}}],
+             'Victory Road 2F-NW': [
+                 {'address': 'Warps_VictoryRoad2F', 'id': 6, 'to': {'map': 'Victory Road 3F', 'id': 3}}],
              'Victory Road 2F-C': [
-                                 {'address': 'Warps_VictoryRoad2F', 'id': 3, 'to': {'map': 'Victory Road 3F', 'id': 0}},],
+                 {'address': 'Warps_VictoryRoad2F', 'id': 3, 'to': {'map': 'Victory Road 3F', 'id': 0}}],
              'Victory Road 2F-SE': [
-                                 {'address': 'Warps_VictoryRoad2F', 'id': 4,
-                                  'to': {'map': 'Victory Road 3F-SE', 'id': 2}},],
+                 {'address': 'Warps_VictoryRoad2F', 'id': 4, 'to': {'map': 'Victory Road 3F-SE', 'id': 2}}],
              'Victory Road 2F-Wild': [],
              'Mt Moon B1F-W': [{'address': 'Warps_MtMoonB1F', 'id': 0, 'to': {'map': 'Mt Moon 1F', 'id': 2}},
                                {'address': 'Warps_MtMoonB1F', 'id': 4, 'to': {'map': 'Mt Moon B2F', 'id': 1}}],
              'Mt Moon B1F-C': [{'address': 'Warps_MtMoonB1F', 'id': 1, 'to': {'map': 'Mt Moon B2F-NE', 'id': 0}},
-                             {'address': 'Warps_MtMoonB1F', 'id': 2, 'to': {'map': 'Mt Moon 1F', 'id': 3}}],
-             'Mt Moon B1F-NE': [
-                             {'address': 'Warps_MtMoonB1F', 'id': 6, 'to': {'map': 'Mt Moon B2F', 'id': 3}},
-                             {'address': 'Warps_MtMoonB1F', 'id': 7, 'to': {'map': 'Route 4-C', 'id': 2}}],
-             'Mt Moon B1F-SE': [
-                             {'address': 'Warps_MtMoonB1F', 'id': 3, 'to': {'map': 'Mt Moon 1F', 'id': 4}},
-                             {'address': 'Warps_MtMoonB1F', 'id': 5, 'to': {'map': 'Mt Moon B2F-C', 'id': 2}}],
+                               {'address': 'Warps_MtMoonB1F', 'id': 2, 'to': {'map': 'Mt Moon 1F', 'id': 3}}],
+             'Mt Moon B1F-NE': [{'address': 'Warps_MtMoonB1F', 'id': 6, 'to': {'map': 'Mt Moon B2F', 'id': 3}},
+                                {'address': 'Warps_MtMoonB1F', 'id': 7, 'to': {'map': 'Route 4-C', 'id': 2}}],
+             'Mt Moon B1F-SE': [{'address': 'Warps_MtMoonB1F', 'id': 3, 'to': {'map': 'Mt Moon 1F', 'id': 4}},
+                                {'address': 'Warps_MtMoonB1F', 'id': 5, 'to': {'map': 'Mt Moon B2F-C', 'id': 2}}],
              'Mt Moon B1F-Wild': [],
              'Silph Co 7F': [{'address': 'Warps_SilphCo7F', 'id': 0, 'to': {'map': 'Silph Co 8F', 'id': 1}},
                              {'address': 'Warps_SilphCo7F', 'id': 1, 'to': {'map': 'Silph Co 6F', 'id': 0}},
@@ -806,8 +795,7 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Silph Co 7F-NW': [{'address': 'Warps_SilphCo7F', 'id': 4, 'to': {'map': 'Silph Co 3F-C', 'id': 8}},
                                 {'address': 'Warps_SilphCo7F', 'id': 3, 'to': {'map': 'Silph Co 11F-W', 'id': 3}}],
              'Silph Co 7F-SE': [{'address': 'Warps_SilphCo7F', 'id': 5, 'to': {'map': 'Silph Co 5F', 'id': 3}}],
-             'Silph Co 7F-E': [],
-             'Silph Co 11F-C': [],
+             'Silph Co 7F-E': [], 'Silph Co 11F-C': [],
              'Route 2-NW': [{'address': 'Warps_Route2', 'id': 1, 'to': {'map': 'Viridian Forest North Gate', 'id': 1}}],
              'Route 2-SW': [{'address': 'Warps_Route2', 'id': 5, 'to': {'map': 'Viridian Forest South Gate', 'id': 2}}],
              'Route 2-NE': [{'address': 'Warps_Route2', 'id': 0, 'to': {'map': "Diglett's Cave Route 2", 'id': 0}},
@@ -817,66 +805,58 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Route 2-Grass': [], 'Route 3': [],
              'Route 4-W': [{'address': 'Warps_Route4', 'id': 0, 'to': {'map': 'Route 4 Pokemon Center', 'id': 0}},
                            {'address': 'Warps_Route4', 'id': 1, 'to': {'map': 'Mt Moon 1F', 'id': 0}}],
-             'Route 4-C': [{'address': 'Warps_Route4', 'id': 2, 'to': {'map': 'Mt Moon B1F', 'id': 7}}],
-             'Route 4-E': [],
-             'Route 4-Lass': [],
-             'Route 4-Grass': [],
+             'Route 4-C': [{'address': 'Warps_Route4', 'id': 2, 'to': {'map': 'Mt Moon B1F-NE', 'id': 7}}],
+             'Route 4-E': [], 'Route 4-Lass': [], 'Route 4-Grass': [],
              'Route 5': [{'address': 'Warps_Route5', 'id': (1, 0), 'to': {'map': 'Route 5 Gate-N', 'id': (3, 2)}},
                          {'address': 'Warps_Route5', 'id': 3, 'to': {'map': 'Underground Path Route 5', 'id': 0}},
                          {'address': 'Warps_Route5', 'id': 4, 'to': {'map': 'Daycare', 'id': 0}}], 'Route 9': [],
-             'Route 5-S': [
-                         {'address': 'Warps_Route5', 'id': 2, 'to': {'map': 'Route 5 Gate', 'id': 0}},],
+             'Route 5-S': [{'address': 'Warps_Route5', 'id': 2, 'to': {'map': 'Route 5 Gate-S', 'id': 0}}],
              'Route 13': [], 'Route 13-E': [], 'Route 13-Grass': [], 'Route 14': [], 'Route 14-Grass': [],
-             'Route 17': [], 'Route 19-S': [],
-             'Route 19-N': [], 'Route 21': [],
-             'Vermilion Old Rod House': [
-                 {'address': 'Warps_VermilionOldRodHouse', 'id': (0, 1), 'to': {'map': 'Vermilion City', 'id': 8}}],
+             'Route 17': [], 'Route 19-S': [], 'Route 19-N': [], 'Route 21': [], 'Vermilion Old Rod House': [
+        {'address': 'Warps_VermilionOldRodHouse', 'id': (0, 1), 'to': {'map': 'Vermilion City', 'id': 8}}],
              'Celadon Department Store 2F': [
                  {'address': 'Warps_CeladonMart2F', 'id': 0, 'to': {'map': 'Celadon Department Store 1F', 'id': 4}},
                  {'address': 'Warps_CeladonMart2F', 'id': 1, 'to': {'map': 'Celadon Department Store 3F', 'id': 1}},
-                 {'address': 'Warps_CeladonMart2F', 'id': 2, 'to': {'map': 'Celadon Department Store Elevator-2F', 'id': 1}}],
-             'Fuchsia Good Rod House': [{'address': 'Warps_FuchsiaGoodRodHouse', 'id': 0,
-                                         'to': {'map': 'Fuchsia City-Good Rod House Backyard', 'id': 8}},
-                                        {'address': 'Warps_FuchsiaGoodRodHouse', 'id': (1, 2),
-                                         'to': {'map': 'Fuchsia City', 'id': 7}}],
+                 {'address': 'Warps_CeladonMart2F', 'id': 2,
+                  'to': {'map': 'Celadon Department Store Elevator-2F', 'id': 1}}], 'Fuchsia Good Rod House': [
+        {'address': 'Warps_FuchsiaGoodRodHouse', 'id': 0,
+         'to': {'map': 'Fuchsia City-Good Rod House Backyard', 'id': 8}},
+        {'address': 'Warps_FuchsiaGoodRodHouse', 'id': (1, 2), 'to': {'map': 'Fuchsia City', 'id': 7}}],
              'Daycare': [{'address': 'Warps_Daycare', 'id': (0, 1), 'to': {'map': 'Route 5', 'id': 4}}],
              'Route 12 Super Rod House': [
                  {'address': 'Warps_Route12SuperRodHouse', 'id': (0, 1), 'to': {'map': 'Route 12-S', 'id': 3}}],
              'Silph Co 8F': [{'address': 'Warps_SilphCo8F', 'id': 0, 'to': {'map': 'Silph Co 9F', 'id': 1}},
                              {'address': 'Warps_SilphCo8F', 'id': 1, 'to': {'map': 'Silph Co 7F', 'id': 0}},
                              {'address': 'Warps_SilphCo8F', 'id': 2, 'to': {'map': 'Silph Co Elevator-8F', 'id': 7}},
-                             {'name': 'Silph Co 8F to Silph Co 2F S', 'address': 'Warps_SilphCo8F', 'id': 4, 'to': {'map': 'Silph Co 2F', 'id': 4}},
-                             {'name': 'Silph Co 8F to Silph Co 2F N', 'address': 'Warps_SilphCo8F', 'id': 5, 'to': {'map': 'Silph Co 2F', 'id': 5}},
+                             {'name': 'Silph Co 8F to Silph Co 2F S', 'address': 'Warps_SilphCo8F', 'id': 4,
+                              'to': {'map': 'Silph Co 2F', 'id': 4}},
+                             {'name': 'Silph Co 8F to Silph Co 2F N', 'address': 'Warps_SilphCo8F', 'id': 5,
+                              'to': {'map': 'Silph Co 2F', 'id': 5}},
                              {'address': 'Warps_SilphCo8F', 'id': 6, 'to': {'map': 'Silph Co 8F-W', 'id': 3}}],
              'Silph Co 8F-W': [{'address': 'Warps_SilphCo8F', 'id': 3, 'to': {'map': 'Silph Co 8F', 'id': 6}}],
-             'Route 6': [
-                         {'address': 'Warps_Route6', 'id': 2, 'to': {'map': 'Route 6 Gate', 'id': 0}},
+             'Route 6': [{'address': 'Warps_Route6', 'id': 2, 'to': {'map': 'Route 6 Gate-S', 'id': 0}},
                          {'address': 'Warps_Route6', 'id': 3, 'to': {'map': 'Underground Path Route 6', 'id': 0}}],
-             'Route 6-N': [{'address': 'Warps_Route6', 'id': 1, 'to': {'map': 'Route 6 Gate', 'id': 2}},],
-             'Route 8-W': [{'address': 'Warps_Route8', 'id': (0, 1), 'to': {'map': 'Route 8 Gate', 'id': (0, 1)}}],
-             'Route 8': [
-                         {'address': 'Warps_Route8', 'id': (2, 3), 'to': {'map': 'Route 8 Gate', 'id': (2, 3)}},
+             'Route 6-N': [{'address': 'Warps_Route6', 'id': 1, 'to': {'map': 'Route 6 Gate-N', 'id': 2}}],
+             'Route 8-W': [{'address': 'Warps_Route8', 'id': (0, 1), 'to': {'map': 'Route 8 Gate-W', 'id': (0, 1)}}],
+             'Route 8': [{'address': 'Warps_Route8', 'id': (2, 3), 'to': {'map': 'Route 8 Gate-E', 'id': (2, 3)}},
                          {'address': 'Warps_Route8', 'id': 4, 'to': {'map': 'Underground Path Route 8', 'id': 0}}],
              'Route 8-Grass': [],
              'Route 10-N': [{'address': 'Warps_Route10', 'id': 0, 'to': {'map': 'Rock Tunnel Pokemon Center', 'id': 0}},
-                            {'address': 'Warps_Route10', 'id': 1, 'to': {'map': 'Rock Tunnel 1F', 'id': 0}}],
-             'Route 10-S': [{'address': 'Warps_Route10', 'id': 2, 'to': {'map': 'Rock Tunnel 1F', 'id': 2}}],
+                            {'address': 'Warps_Route10', 'id': 1, 'to': {'map': 'Rock Tunnel 1F-NE', 'id': 0}}],
+             'Route 10-S': [{'address': 'Warps_Route10', 'id': 2, 'to': {'map': 'Rock Tunnel 1F-S', 'id': 2}}],
              'Route 10-P': [{'address': 'Warps_Route10', 'id': 3, 'to': {'map': 'Power Plant', 'id': 0}}],
              'Route 10-C': [],
-             'Route 11': [
-                          {'address': 'Warps_Route11', 'id': 4, 'to': {'map': "Diglett's Cave Route 11", 'id': 0}}],
+             'Route 11': [{'address': 'Warps_Route11', 'id': 4, 'to': {'map': "Diglett's Cave Route 11", 'id': 0}}],
              'Route 11-E': [
-                          {'address': 'Warps_Route11', 'id': (2, 3), 'to': {'map': 'Route 11 Gate 1F', 'id': (2, 3)}}],
-             'Route 11-C': [{'address': 'Warps_Route11', 'id': (0, 1), 'to': {'map': 'Route 11 Gate 1F', 'id': (0, 1)}}],
+                 {'address': 'Warps_Route11', 'id': (2, 3), 'to': {'map': 'Route 11 Gate 1F', 'id': (2, 3)}}],
+             'Route 11-C': [
+                 {'address': 'Warps_Route11', 'id': (0, 1), 'to': {'map': 'Route 11 Gate 1F', 'id': (0, 1)}}],
              'Route 12-L': [
                  {'address': 'Warps_Route12', 'id': (0, 1), 'to': {'map': 'Route 12 Gate 1F', 'id': (0, 1)}}],
              'Route 12-N': [{'address': 'Warps_Route12', 'id': 2, 'to': {'map': 'Route 12 Gate 1F', 'id': 2}}],
              'Route 12-S': [{'address': 'Warps_Route12', 'id': 3, 'to': {'map': 'Route 12 Super Rod House', 'id': 0}}],
-             'Route 12-W': [],
-             'Route 12-Grass': [],
-             'Route 15-N': [],
-             'Route 15-W': [
-                 {'address': 'Warps_Route15', 'id': (0, 1), 'to': {'map': 'Route 15 Gate 1F', 'id': (0, 1)}}],
+             'Route 12-W': [], 'Route 12-Grass': [], 'Route 15-N': [], 'Route 15-W': [
+        {'address': 'Warps_Route15', 'id': (0, 1), 'to': {'map': 'Route 15 Gate 1F', 'id': (0, 1)}}],
              'Route 15': [{'address': 'Warps_Route15', 'id': (2, 3), 'to': {'map': 'Route 15 Gate 1F', 'id': (2, 3)}}],
              'Route 16-E': [],
              'Route 16-C': [{'address': 'Warps_Route16', 'id': 2, 'to': {'map': 'Route 16 Gate 1F-E', 'id': (2, 3)}}],
@@ -886,25 +866,29 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_Route16', 'id': (4, 5), 'to': {'map': 'Route 16 Gate 1F-N', 'id': (4, 5)}},
                  {'address': 'Warps_Route16', 'id': 8, 'to': {'map': 'Route 16 Fly House', 'id': 0}}], 'Route 16-NE': [
         {'address': 'Warps_Route16', 'id': (6, 7), 'to': {'map': 'Route 16 Gate 1F-N', 'id': (6, 7)}}], 'Route 18-W': [
-        {'address': 'Warps_Route18', 'id': (0, 1), 'to': {'map': 'Route 18 Gate 1F', 'id': (0, 1)}}], 'Route 18-E': [
-        {'address': 'Warps_Route18', 'id': (2, 3), 'to': {'map': 'Route 18 Gate 1F', 'id': (2, 3)}}],
+        {'address': 'Warps_Route18', 'id': (0, 1), 'to': {'map': 'Route 18 Gate 1F-W', 'id': (0, 1)}}], 'Route 18-E': [
+        {'address': 'Warps_Route18', 'id': (2, 3), 'to': {'map': 'Route 18 Gate 1F-E', 'id': (2, 3)}}],
              'Vermilion Pokemon Fan Club': [
                  {'address': 'Warps_PokemonFanClub', 'id': (0, 1), 'to': {'map': 'Vermilion City', 'id': 1}}],
              'Silph Co 2F-NW': [{'address': 'Warps_SilphCo2F', 'id': 3, 'to': {'map': 'Silph Co 3F', 'id': 6}}],
              'Silph Co 2F': [{'address': 'Warps_SilphCo2F', 'id': 0, 'to': {'map': 'Silph Co 1F', 'id': 2}},
                              {'address': 'Warps_SilphCo2F', 'id': 1, 'to': {'map': 'Silph Co 3F', 'id': 0}},
                              {'address': 'Warps_SilphCo2F', 'id': 2, 'to': {'map': 'Silph Co Elevator-2F', 'id': 1}},
-                             {'name': 'Silph Co 2F to Silph Co 8F N', 'address': 'Warps_SilphCo2F', 'id': 4, 'to': {'map': 'Silph Co 8F', 'id': 4}},
-                             {'name': 'Silph Co 2F to Silph Co 8F S', 'address': 'Warps_SilphCo2F', 'id': 5, 'to': {'map': 'Silph Co 8F', 'id': 5}}],
+                             {'name': 'Silph Co 2F to Silph Co 8F N', 'address': 'Warps_SilphCo2F', 'id': 4,
+                              'to': {'map': 'Silph Co 8F', 'id': 4}},
+                             {'name': 'Silph Co 2F to Silph Co 8F S', 'address': 'Warps_SilphCo2F', 'id': 5,
+                              'to': {'map': 'Silph Co 8F', 'id': 5}}],
              'Silph Co 2F-SW': [{'address': 'Warps_SilphCo2F', 'id': 6, 'to': {'map': 'Silph Co 6F', 'id': 4}}],
              'Silph Co 3F': [{'address': 'Warps_SilphCo3F', 'id': 0, 'to': {'map': 'Silph Co 2F', 'id': 1}},
                              {'address': 'Warps_SilphCo3F', 'id': 1, 'to': {'map': 'Silph Co 4F', 'id': 0}},
                              {'address': 'Warps_SilphCo3F', 'id': 2, 'to': {'map': 'Silph Co Elevator-3F', 'id': 2}},
-                             {'name': 'Silph Co 3F to Silph Co 3F N', 'address': 'Warps_SilphCo3F', 'id': 3, 'to': {'map': 'Silph Co 3F', 'id': 9}},
+                             {'name': 'Silph Co 3F to Silph Co 3F N', 'address': 'Warps_SilphCo3F', 'id': 3,
+                              'to': {'map': 'Silph Co 3F', 'id': 9}},
                              {'address': 'Warps_SilphCo3F', 'id': 4, 'to': {'map': 'Silph Co 5F', 'id': 5}},
                              {'address': 'Warps_SilphCo3F', 'id': 5, 'to': {'map': 'Silph Co 5F-SW', 'id': 6}},
                              {'address': 'Warps_SilphCo3F', 'id': 6, 'to': {'map': 'Silph Co 2F-NW', 'id': 3}},
-                             {'name': 'Silph Co 3F to Silph Co 3F S', 'address': 'Warps_SilphCo3F', 'id': 9, 'to': {'map': 'Silph Co 3F', 'id': 3}}],
+                             {'name': 'Silph Co 3F to Silph Co 3F S', 'address': 'Warps_SilphCo3F', 'id': 9,
+                              'to': {'map': 'Silph Co 3F', 'id': 3}}],
              'Silph Co 3F-C': [{'address': 'Warps_SilphCo3F', 'id': 8, 'to': {'map': 'Silph Co 7F-NW', 'id': 4}}],
              'Silph Co 3F-W': [{'address': 'Warps_SilphCo3F', 'id': 7, 'to': {'map': 'Silph Co 9F-NW', 'id': 3}}],
              'Silph Co 10F': [{'address': 'Warps_SilphCo10F', 'id': 0, 'to': {'map': 'Silph Co 9F', 'id': 0}},
@@ -917,13 +901,13 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_LancesRoom', 'id': 0, 'to': {'map': "Indigo Plateau Agatha's Room", 'id': 2}},
                  {'address': 'Warps_LancesRoom', 'id': (1, 2),
                   'to': {'map': "Indigo Plateau Champion's Room", 'id': 0}}], 'Indigo Plateau Hall of Fame': [
-        {'flags': 'm', 'address': 'Warps_HallOfFame', 'id': 0, 'to': {'map': "Indigo Plateau Champion's Room", 'id': (2, 3)}},],
+        {'address': 'Warps_HallOfFame', 'id': 0, 'to': {'map': "Indigo Plateau Champion's Room", 'id': (2, 3)}}],
              "Player's House 2F": [
-                 {'flags': 'm', 'address': 'Warps_RedsHouse2F', 'id': 0, 'to': {'map': "Player's House 1F", 'id': 2}}],
+                 {'address': 'Warps_RedsHouse2F', 'id': 0, 'to': {'map': "Player's House 1F", 'id': 2}}],
              'Pewter Museum 1F': [{'address': 'Warps_Museum1F', 'id': (0, 1), 'to': {'map': 'Pewter City', 'id': 0}},
                                   {'address': 'Warps_Museum1F', 'id': 4, 'to': {'map': 'Pewter Museum 2F', 'id': 0}}],
              'Pewter Museum 1F-E': [
-                                  {'address': 'Warps_Museum1F', 'id': (2, 3), 'to': {'map': 'Pewter City', 'id': 1}}],
+                 {'address': 'Warps_Museum1F', 'id': (2, 3), 'to': {'map': 'Pewter City-M', 'id': 1}}],
              'Pewter Museum 2F': [{'address': 'Warps_Museum2F', 'id': 0, 'to': {'map': 'Pewter Museum 1F', 'id': 4}}],
              'Pewter Gym': [{'address': 'Warps_PewterGym', 'id': (0, 1), 'to': {'map': 'Pewter City', 'id': 2}}],
              'Pewter Pokemon Center': [
@@ -982,7 +966,7 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_SaffronMart', 'id': (0, 1), 'to': {'map': 'Saffron City', 'id': 4}}],
              'Silph Co 1F': [{'address': 'Warps_SilphCo1F', 'id': (0, 1), 'to': {'map': 'Saffron City-Silph', 'id': 5}},
                              {'address': 'Warps_SilphCo1F', 'id': 2, 'to': {'map': 'Silph Co 2F', 'id': 0}},
-                             {'address': 'Warps_SilphCo1F', 'id': 3, 'to': {'map': 'Silph Co Elevator-10F', 'id': 0}}],
+                             {'address': 'Warps_SilphCo1F', 'id': 3, 'to': {'map': 'Silph Co Elevator-1F', 'id': 0}}],
              'Saffron Pokemon Center': [
                  {'address': 'Warps_SaffronPokecenter', 'id': (0, 1), 'to': {'map': 'Saffron City', 'id': 6}}],
              'Viridian Forest North Gate': [
@@ -1002,96 +986,114 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Underground Path Route 7': [
                  {'address': 'Warps_UndergroundPathRoute7', 'id': (0, 1), 'to': {'map': 'Route 7', 'id': 4}},
                  {'address': 'Warps_UndergroundPathRoute7', 'id': 2,
-                  'to': {'map': 'Underground Path West East', 'id': 0}}],
-             'Silph Co 9F-SW': [],
+                  'to': {'map': 'Underground Path West East', 'id': 0}}], 'Silph Co 9F-SW': [],
              'Silph Co 9F': [{'address': 'Warps_SilphCo9F', 'id': 0, 'to': {'map': 'Silph Co 10F', 'id': 0}},
                              {'address': 'Warps_SilphCo9F', 'id': 1, 'to': {'map': 'Silph Co 8F', 'id': 0}},
                              {'address': 'Warps_SilphCo9F', 'id': 2, 'to': {'map': 'Silph Co Elevator-9F', 'id': 8}},
                              {'address': 'Warps_SilphCo9F', 'id': 4, 'to': {'map': 'Silph Co 5F', 'id': 4}}],
              'Silph Co 9F-NW': [{'address': 'Warps_SilphCo9F', 'id': 3, 'to': {'map': 'Silph Co 3F-W', 'id': 7}}],
-             'Victory Road 1F-S': [{'address': 'Warps_VictoryRoad1F', 'id': (0, 1), 'to': {'map': 'Route 23-C', 'id': 2}}],
-                                   'Victory Road 1F': [
-                                 {'address': 'Warps_VictoryRoad1F', 'id': 2,
-                                  'to': {'map': 'Victory Road 2F', 'id': 0}}], 'Pokemon Tower 1F': [
-        {'address': 'Warps_PokemonTower1F', 'id': (0, 1), 'to': {'map': 'Lavender Town', 'id': 1}},
-        {'address': 'Warps_PokemonTower1F', 'id': 2, 'to': {'map': 'Pokemon Tower 2F', 'id': 1}}], 'Pokemon Tower 2F': [
-        {'address': 'Warps_PokemonTower2F', 'id': 0, 'to': {'map': 'Pokemon Tower 3F', 'id': 0}},
-        {'address': 'Warps_PokemonTower2F', 'id': 1, 'to': {'map': 'Pokemon Tower 1F', 'id': 2}}], 'Pokemon Tower 3F': [
-        {'address': 'Warps_PokemonTower3F', 'id': 0, 'to': {'map': 'Pokemon Tower 2F', 'id': 0}},
-        {'address': 'Warps_PokemonTower3F', 'id': 1, 'to': {'map': 'Pokemon Tower 4F', 'id': 1}}], 'Pokemon Tower 4F': [
-        {'address': 'Warps_PokemonTower4F', 'id': 0, 'to': {'map': 'Pokemon Tower 5F', 'id': 0}},
-        {'address': 'Warps_PokemonTower4F', 'id': 1, 'to': {'map': 'Pokemon Tower 3F', 'id': 1}}], 'Pokemon Tower 5F': [
-        {'address': 'Warps_PokemonTower5F', 'id': 0, 'to': {'map': 'Pokemon Tower 4F', 'id': 0}},
-        {'address': 'Warps_PokemonTower5F', 'id': 1, 'to': {'map': 'Pokemon Tower 6F', 'id': 0}}],
+             'Victory Road 1F-S': [
+                 {'address': 'Warps_VictoryRoad1F', 'id': (0, 1), 'to': {'map': 'Route 23-C', 'id': 2}}],
+             'Victory Road 1F': [
+                 {'address': 'Warps_VictoryRoad1F', 'id': 2, 'to': {'map': 'Victory Road 2F-W', 'id': 0}}],
+             'Pokemon Tower 1F': [
+                 {'address': 'Warps_PokemonTower1F', 'id': (0, 1), 'to': {'map': 'Lavender Town', 'id': 1}},
+                 {'address': 'Warps_PokemonTower1F', 'id': 2, 'to': {'map': 'Pokemon Tower 2F', 'id': 1}}],
+             'Pokemon Tower 2F': [
+                 {'address': 'Warps_PokemonTower2F', 'id': 0, 'to': {'map': 'Pokemon Tower 3F', 'id': 0}},
+                 {'address': 'Warps_PokemonTower2F', 'id': 1, 'to': {'map': 'Pokemon Tower 1F', 'id': 2}}],
+             'Pokemon Tower 3F': [
+                 {'address': 'Warps_PokemonTower3F', 'id': 0, 'to': {'map': 'Pokemon Tower 2F', 'id': 0}},
+                 {'address': 'Warps_PokemonTower3F', 'id': 1, 'to': {'map': 'Pokemon Tower 4F', 'id': 1}}],
+             'Pokemon Tower 4F': [
+                 {'address': 'Warps_PokemonTower4F', 'id': 0, 'to': {'map': 'Pokemon Tower 5F', 'id': 0}},
+                 {'address': 'Warps_PokemonTower4F', 'id': 1, 'to': {'map': 'Pokemon Tower 3F', 'id': 1}}],
+             'Pokemon Tower 5F': [
+                 {'address': 'Warps_PokemonTower5F', 'id': 0, 'to': {'map': 'Pokemon Tower 4F', 'id': 0}},
+                 {'address': 'Warps_PokemonTower5F', 'id': 1, 'to': {'map': 'Pokemon Tower 6F', 'id': 0}}],
              'Pokemon Tower 6F': [
-        {'address': 'Warps_PokemonTower6F', 'id': 0, 'to': {'map': 'Pokemon Tower 5F', 'id': 1}}],
+                 {'address': 'Warps_PokemonTower6F', 'id': 0, 'to': {'map': 'Pokemon Tower 5F', 'id': 1}}],
              'Pokemon Tower 6F-S': [
-        {'address': 'Warps_PokemonTower6F', 'id': 1, 'to': {'map': 'Pokemon Tower 7F', 'id': 0}}],
-
+                 {'address': 'Warps_PokemonTower6F', 'id': 1, 'to': {'map': 'Pokemon Tower 7F', 'id': 0}}],
              'Pokemon Tower 7F': [
-        {'address': 'Warps_PokemonTower7F', 'id': 0, 'to': {'map': 'Pokemon Tower 6F-S', 'id': 1}}],
+                 {'address': 'Warps_PokemonTower7F', 'id': 0, 'to': {'map': 'Pokemon Tower 6F-S', 'id': 1}}],
              'Celadon Department Store 1F': [
-                 {'name': 'Celadon Department Store 1F to Celadon City W', 'address': 'Warps_CeladonMart1F', 'id': (1, 0), 'to': {'map': 'Celadon City', 'id': 0}},
-                 {'name': 'Celadon Department Store 1F to Celadon City E', 'address': 'Warps_CeladonMart1F', 'id': (3, 2), 'to': {'map': 'Celadon City', 'id': 1}},
+                 {'name': 'Celadon Department Store 1F to Celadon City W', 'address': 'Warps_CeladonMart1F',
+                  'id': (1, 0), 'to': {'map': 'Celadon City', 'id': 0}},
+                 {'name': 'Celadon Department Store 1F to Celadon City E', 'address': 'Warps_CeladonMart1F',
+                  'id': (3, 2), 'to': {'map': 'Celadon City', 'id': 1}},
                  {'address': 'Warps_CeladonMart1F', 'id': 4, 'to': {'map': 'Celadon Department Store 2F', 'id': 0}},
-                 {'address': 'Warps_CeladonMart1F', 'id': 5, 'to': {'map': 'Celadon Department Store Elevator-1F', 'id': 0}}],
-             'Viridian Forest': [{'address': 'Warps_ViridianForest', 'id': (0, 1),
-                                  'to': {'map': 'Viridian Forest North Gate', 'id': (2, 3)}},
-                                 {'address': 'Warps_ViridianForest', 'id': (2, 3, 4, 5),
-                                  'to': {'map': 'Viridian Forest South Gate', 'id': 1}}],
+                 {'address': 'Warps_CeladonMart1F', 'id': 5,
+                  'to': {'map': 'Celadon Department Store Elevator-1F', 'id': 0}}], 'Viridian Forest': [
+        {'address': 'Warps_ViridianForest', 'id': (0, 1), 'to': {'map': 'Viridian Forest North Gate', 'id': (2, 3)}},
+        {'address': 'Warps_ViridianForest', 'id': (4, 2, 5, 3), 'to': {'map': 'Viridian Forest South Gate', 'id': 1}}],
              'S.S. Anne 1F': [{'address': 'Warps_SSAnne1F', 'id': (0, 1), 'to': {'map': 'Vermilion Dock', 'id': 1}},
-                              {'address': 'Warps_SSAnne1F', 'id': 2, 'to': {'map': 'S.S. Anne 1F Rooms', 'id': 0}},
-                              {'address': 'Warps_SSAnne1F', 'id': 3, 'to': {'map': 'S.S. Anne 1F Rooms', 'id': 1}},
-                              {'address': 'Warps_SSAnne1F', 'id': 4, 'to': {'map': 'S.S. Anne 1F Rooms', 'id': 2}},
-                              {'address': 'Warps_SSAnne1F', 'id': 5, 'to': {'map': 'S.S. Anne 1F Rooms', 'id': 3}},
-                              {'address': 'Warps_SSAnne1F', 'id': 6, 'to': {'map': 'S.S. Anne 1F Rooms', 'id': 4}},
-                              {'address': 'Warps_SSAnne1F', 'id': 7, 'to': {'map': 'S.S. Anne 1F Rooms', 'id': 5}},
+                              {'address': 'Warps_SSAnne1F', 'id': 2,
+                               'to': {'map': 'S.S. Anne 1F Rooms-East Gentleman Room', 'id': 0}},
+                              {'address': 'Warps_SSAnne1F', 'id': 3,
+                               'to': {'map': 'S.S. Anne 1F Rooms-West Gentleman Room', 'id': 1}},
+                              {'address': 'Warps_SSAnne1F', 'id': 4,
+                               'to': {'map': 'S.S. Anne 1F Rooms-Cherry Pie Room', 'id': 2}},
+                              {'address': 'Warps_SSAnne1F', 'id': 5,
+                               'to': {'map': 'S.S. Anne 1F Rooms-Wigglytuff Room', 'id': 3}},
+                              {'address': 'Warps_SSAnne1F', 'id': 6,
+                               'to': {'map': 'S.S. Anne 1F Rooms-Youngster and Lass Room', 'id': 4}},
+                              {'address': 'Warps_SSAnne1F', 'id': 7,
+                               'to': {'map': 'S.S. Anne 1F Rooms-Police Room', 'id': 5}},
                               {'address': 'Warps_SSAnne1F', 'id': 8, 'to': {'map': 'S.S. Anne 2F', 'id': 6}},
                               {'address': 'Warps_SSAnne1F', 'id': 9, 'to': {'map': 'S.S. Anne B1F', 'id': 5}},
                               {'address': 'Warps_SSAnne1F', 'id': 10, 'to': {'map': 'S.S. Anne Kitchen', 'id': 0}}],
-             'S.S. Anne 2F': [{'address': 'Warps_SSAnne2F', 'id': 0, 'to': {'map': 'S.S. Anne 2F Rooms', 'id': 0}},
-                              {'address': 'Warps_SSAnne2F', 'id': 1, 'to': {'map': 'S.S. Anne 2F Rooms', 'id': 2}},
-                              {'address': 'Warps_SSAnne2F', 'id': 2, 'to': {'map': 'S.S. Anne 2F Rooms', 'id': 4}},
-                              {'address': 'Warps_SSAnne2F', 'id': 3, 'to': {'map': 'S.S. Anne 2F Rooms', 'id': 6}},
-                              {'address': 'Warps_SSAnne2F', 'id': 4, 'to': {'map': 'S.S. Anne 2F Rooms', 'id': 8}},
-                              {'address': 'Warps_SSAnne2F', 'id': 5, 'to': {'map': 'S.S. Anne 2F Rooms', 'id': 10}},
-                              {'address': 'Warps_SSAnne2F', 'id': 6, 'to': {'map': 'S.S. Anne 1F', 'id': 8}},
-                              {'address': 'Warps_SSAnne2F', 'id': 7, 'to': {'map': 'S.S. Anne 3F', 'id': 1}},
-                              {'address': 'Warps_SSAnne2F', 'id': 8,
-                               'to': {'map': "S.S. Anne Captain's Room", 'id': 0}}],
-             'S.S. Anne B1F': [{'address': 'Warps_SSAnneB1F', 'id': 0, 'to': {'map': 'S.S. Anne B1F Rooms', 'id': 8}},
-                               {'address': 'Warps_SSAnneB1F', 'id': 1, 'to': {'map': 'S.S. Anne B1F Rooms', 'id': 6}},
-                               {'address': 'Warps_SSAnneB1F', 'id': 2, 'to': {'map': 'S.S. Anne B1F Rooms', 'id': 4}},
-                               {'address': 'Warps_SSAnneB1F', 'id': 3, 'to': {'map': 'S.S. Anne B1F Rooms', 'id': 2}},
-                               {'address': 'Warps_SSAnneB1F', 'id': 4, 'to': {'map': 'S.S. Anne B1F Rooms', 'id': 0}},
-                               {'address': 'Warps_SSAnneB1F', 'id': 5, 'to': {'map': 'S.S. Anne 1F', 'id': 9}}],
+             'S.S. Anne 2F': [
+                 {'address': 'Warps_SSAnne2F', 'id': 0, 'to': {'map': 'S.S. Anne 2F Rooms-Snorlax Room', 'id': 0}},
+                 {'address': 'Warps_SSAnne2F', 'id': 1,
+                  'to': {'map': 'S.S. Anne 2F Rooms-Fisherman and Gentleman Room', 'id': 2}},
+                 {'address': 'Warps_SSAnne2F', 'id': 2, 'to': {'map': 'S.S. Anne 2F Rooms-Surf and Cut Room', 'id': 4}},
+                 {'address': 'Warps_SSAnne2F', 'id': 3,
+                  'to': {'map': 'S.S. Anne 2F Rooms-Gentleman and Lass Room', 'id': 6}},
+                 {'address': 'Warps_SSAnne2F', 'id': 4, 'to': {'map': 'S.S. Anne 2F Rooms-Safari Zone Room', 'id': 8}},
+                 {'address': 'Warps_SSAnne2F', 'id': 5, 'to': {'map': 'S.S. Anne 2F Rooms-Seasickness Room', 'id': 10}},
+                 {'address': 'Warps_SSAnne2F', 'id': 6, 'to': {'map': 'S.S. Anne 1F', 'id': 8}},
+                 {'address': 'Warps_SSAnne2F', 'id': 7, 'to': {'map': 'S.S. Anne 3F', 'id': 1}},
+                 {'address': 'Warps_SSAnne2F', 'id': 8, 'to': {'map': "S.S. Anne Captain's Room", 'id': 0}}],
+             'S.S. Anne B1F': [
+                 {'address': 'Warps_SSAnneB1F', 'id': 0, 'to': {'map': 'S.S. Anne B1F Rooms-Machoke Room', 'id': 8}},
+                 {'address': 'Warps_SSAnneB1F', 'id': 1,
+                  'to': {'map': 'S.S. Anne B1F Rooms-Two Sailors Room', 'id': 6}},
+                 {'address': 'Warps_SSAnneB1F', 'id': 2,
+                  'to': {'map': 'S.S. Anne B1F Rooms-East Single Sailor Room', 'id': 4}},
+                 {'address': 'Warps_SSAnneB1F', 'id': 3,
+                  'to': {'map': 'S.S. Anne B1F Rooms-West Single Sailor Room', 'id': 2}},
+                 {'address': 'Warps_SSAnneB1F', 'id': 4, 'to': {'map': 'S.S. Anne B1F Rooms-Fisherman Room', 'id': 0}},
+                 {'address': 'Warps_SSAnneB1F', 'id': 5, 'to': {'map': 'S.S. Anne 1F', 'id': 9}}],
              'S.S. Anne Bow': [{'address': 'Warps_SSAnneBow', 'id': (0, 1), 'to': {'map': 'S.S. Anne 3F', 'id': 0}}],
              'S.S. Anne Kitchen': [
                  {'address': 'Warps_SSAnneKitchen', 'id': 0, 'to': {'map': 'S.S. Anne 1F', 'id': 10}}],
              "S.S. Anne Captain's Room": [
                  {'address': 'Warps_SSAnneCaptainsRoom', 'id': 0, 'to': {'map': 'S.S. Anne 2F', 'id': 8}}],
-             'S.S. Anne 1F Rooms-West Gentleman Room': [{'address': 'Warps_SSAnne1FRooms', 'id': 1, 'to': {'map': 'S.S. Anne 1F', 'id': 3}},],
-             'S.S. Anne 1F Rooms-East Gentleman Room': [{'address': 'Warps_SSAnne1FRooms', 'id': 0, 'to': {'map': 'S.S. Anne 1F', 'id': 2}}],
-             'S.S. Anne 1F Rooms-Police Room': [{'address': 'Warps_SSAnne1FRooms', 'id': 5,
-                                     'to': {'map': 'S.S. Anne 1F', 'id': 7}}],
+             'S.S. Anne 1F Rooms-West Gentleman Room': [
+                 {'address': 'Warps_SSAnne1FRooms', 'id': 1, 'to': {'map': 'S.S. Anne 1F', 'id': 3}}],
+             'S.S. Anne 1F Rooms-East Gentleman Room': [
+                 {'address': 'Warps_SSAnne1FRooms', 'id': 0, 'to': {'map': 'S.S. Anne 1F', 'id': 2}}],
+             'S.S. Anne 1F Rooms-Police Room': [
+                 {'address': 'Warps_SSAnne1FRooms', 'id': 5, 'to': {'map': 'S.S. Anne 1F', 'id': 7}}],
              'S.S. Anne 1F Rooms-Youngster and Lass Room': [
-                                    {'address': 'Warps_SSAnne1FRooms', 'id': 4, 'to': {'map': 'S.S. Anne 1F', 'id': 6}},],
+                 {'address': 'Warps_SSAnne1FRooms', 'id': 4, 'to': {'map': 'S.S. Anne 1F', 'id': 6}}],
              'S.S. Anne 1F Rooms-Wigglytuff Room': [
-                                    {'address': 'Warps_SSAnne1FRooms', 'id': 3, 'to': {'map': 'S.S. Anne 1F', 'id': 5}},],
+                 {'address': 'Warps_SSAnne1FRooms', 'id': 3, 'to': {'map': 'S.S. Anne 1F', 'id': 5}}],
              'S.S. Anne 1F Rooms-Cherry Pie Room': [
-                                    {'address': 'Warps_SSAnne1FRooms', 'id': 2, 'to': {'map': 'S.S. Anne 1F', 'id': 4}},],
+                 {'address': 'Warps_SSAnne1FRooms', 'id': 2, 'to': {'map': 'S.S. Anne 1F', 'id': 4}}],
              'S.S. Anne 2F Rooms-Snorlax Room': [
-        {'address': 'Warps_SSAnne2FRooms', 'id': (0, 1), 'to': {'map': 'S.S. Anne 2F', 'id': 0}}],
+                 {'address': 'Warps_SSAnne2FRooms', 'id': (0, 1), 'to': {'map': 'S.S. Anne 2F', 'id': 0}}],
              'S.S. Anne 2F Rooms-Fisherman and Gentleman Room': [
-        {'address': 'Warps_SSAnne2FRooms', 'id': (2, 3), 'to': {'map': 'S.S. Anne 2F', 'id': 1}}],
+                 {'address': 'Warps_SSAnne2FRooms', 'id': (2, 3), 'to': {'map': 'S.S. Anne 2F', 'id': 1}}],
              'S.S. Anne 2F Rooms-Surf and Cut Room': [
-        {'address': 'Warps_SSAnne2FRooms', 'id': (4, 5), 'to': {'map': 'S.S. Anne 2F', 'id': 2}}],
+                 {'address': 'Warps_SSAnne2FRooms', 'id': (4, 5), 'to': {'map': 'S.S. Anne 2F', 'id': 2}}],
              'S.S. Anne 2F Rooms-Gentleman and Lass Room': [
-        {'address': 'Warps_SSAnne2FRooms', 'id': (6, 7), 'to': {'map': 'S.S. Anne 2F', 'id': 3}}],
+                 {'address': 'Warps_SSAnne2FRooms', 'id': (6, 7), 'to': {'map': 'S.S. Anne 2F', 'id': 3}}],
              'S.S. Anne 2F Rooms-Safari Zone Room': [
-        {'address': 'Warps_SSAnne2FRooms', 'id': (8, 9), 'to': {'map': 'S.S. Anne 2F', 'id': 4}}],
+                 {'address': 'Warps_SSAnne2FRooms', 'id': (8, 9), 'to': {'map': 'S.S. Anne 2F', 'id': 4}}],
              'S.S. Anne 2F Rooms-Seasickness Room': [
-        {'address': 'Warps_SSAnne2FRooms', 'id': (10, 11), 'to': {'map': 'S.S. Anne 2F', 'id': 5}}],
+                 {'address': 'Warps_SSAnne2FRooms', 'id': (10, 11), 'to': {'map': 'S.S. Anne 2F', 'id': 5}}],
              'S.S. Anne B1F Rooms-Fisherman Room': [
                  {'address': 'Warps_SSAnneB1FRooms', 'id': (0, 1), 'to': {'map': 'S.S. Anne B1F', 'id': 4}}],
              'S.S. Anne B1F Rooms-West Single Sailor Room': [
@@ -1113,10 +1115,11 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
         {'address': 'Warps_DiglettsCave', 'id': 0, 'to': {'map': "Diglett's Cave Route 2", 'id': 2}},
         {'address': 'Warps_DiglettsCave', 'id': 1, 'to': {'map': "Diglett's Cave Route 11", 'id': 2}}],
              'Silph Co 11F': [{'address': 'Warps_SilphCo11F', 'id': 0, 'to': {'map': 'Silph Co 10F', 'id': 1}},
-                              {'address': 'Warps_SilphCo11F', 'id': 1, 'to': {'map': 'Silph Co Elevator-11F', 'id': 10}}],
+                              {'address': 'Warps_SilphCo11F', 'id': 1,
+                               'to': {'map': 'Silph Co Elevator-11F', 'id': 10}}],
              'Silph Co 11F-W': [{'address': 'Warps_SilphCo11F', 'id': 3, 'to': {'map': 'Silph Co 7F-NW', 'id': 3}}],
              'Viridian Gym': [
-                 {'address': 'Warps_ViridianGym', 'id': (0, 1), 'to': {'map': 'Viridian City-Gym', 'id': 4}}],
+                 {'address': 'Warps_ViridianGym', 'id': (0, 1), 'to': {'map': 'Viridian City-G', 'id': 4}}],
              'Pewter Pokemart': [{'address': 'Warps_PewterMart', 'id': (0, 1), 'to': {'map': 'Pewter City', 'id': 4}}],
              'Cerulean Cave 1F-SE': [
                  {'address': 'Warps_CeruleanCave1F', 'id': (0, 1), 'to': {'map': 'Cerulean City-Cave', 'id': 6}},
@@ -1131,11 +1134,9 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Cerulean Cave 1F-NW': [
                  {'address': 'Warps_CeruleanCave1F', 'id': 6, 'to': {'map': 'Cerulean Cave 2F-W', 'id': 4}},
                  {'address': 'Warps_CeruleanCave1F', 'id': 8, 'to': {'map': 'Cerulean Cave B1F', 'id': 0}}],
-             'Cerulean Cave 1F-Wild': [],
-             'Cerulean Cave 1F-Water': [],
-             'Cerulean Badge House': [
-                 {'address': 'Warps_CeruleanBadgeHouse', 'id': 0, 'to': {'map': 'Cerulean City-Badge House Backyard', 'id': 9}},
-                 {'address': 'Warps_CeruleanBadgeHouse', 'id': (1, 2), 'to': {'map': 'Cerulean City', 'id': 8}}],
+             'Cerulean Cave 1F-Wild': [], 'Cerulean Cave 1F-Water': [], 'Cerulean Badge House': [
+        {'address': 'Warps_CeruleanBadgeHouse', 'id': 0, 'to': {'map': 'Cerulean City-Badge House Backyard', 'id': 9}},
+        {'address': 'Warps_CeruleanBadgeHouse', 'id': (1, 2), 'to': {'map': 'Cerulean City', 'id': 8}}],
              "Fuchsia Bill's Grandpa's House": [
                  {'address': 'Warps_FuchsiaBillsGrandpasHouse', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 1}}],
              'Fuchsia Pokemon Center': [
@@ -1144,8 +1145,8 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_WardensHouse', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 3}}],
              'Safari Zone Gate-S': [
                  {'address': 'Warps_SafariZoneGate', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 4}}],
-             'Safari Zone Gate-N': [
-                 {'address': 'Warps_SafariZoneGate', 'id': (2, 3), 'to': {'map': 'Safari Zone Center', 'id': (0, 1)}}],
+             'Safari Zone Gate-N': [{'address': 'Warps_SafariZoneGate', 'id': (2, 3),
+                                     'to': {'map': 'Safari Zone Center-S', 'id': (0, 1)}}],
              'Fuchsia Gym': [{'address': 'Warps_FuchsiaGym', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 5}}],
              'Fuchsia Meeting Room': [
                  {'address': 'Warps_FuchsiaMeetingRoom', 'id': (0, 1), 'to': {'map': 'Fuchsia City', 'id': 6}}],
@@ -1155,12 +1156,11 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                               {'address': 'Warps_CinnabarLab', 'id': 2,
                                'to': {'map': 'Cinnabar Lab Trade Room', 'id': 0}},
                               {'address': 'Warps_CinnabarLab', 'id': 3,
-                               'to': {'map': 'Cinnabar Lab Metronome Room', 'id': 0}},
+                               'to': {'map': 'Cinnabar Lab R&D Room', 'id': 0}},
                               {'address': 'Warps_CinnabarLab', 'id': 4,
-                               'to': {'map': 'Cinnabar Lab Fossil Room', 'id': 0}}],
-             'Cinnabar Lab Trade Room': [
+                               'to': {'map': 'Cinnabar Lab Fossil Room', 'id': 0}}], 'Cinnabar Lab Trade Room': [
         {'address': 'Warps_CinnabarLabTradeRoom', 'id': (0, 1), 'to': {'map': 'Cinnabar Lab', 'id': 2}}],
-             'Cinnabar Lab Metronome Room': [
+             'Cinnabar Lab R&D Room': [
                  {'address': 'Warps_CinnabarLabMetronomeRoom', 'id': (0, 1), 'to': {'map': 'Cinnabar Lab', 'id': 3}}],
              'Cinnabar Lab Fossil Room': [
                  {'address': 'Warps_CinnabarLabFossilRoom', 'id': (0, 1), 'to': {'map': 'Cinnabar Lab', 'id': 4}}],
@@ -1171,9 +1171,10 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              "Saffron Copycat's House 1F": [
                  {'address': 'Warps_CopycatsHouse1F', 'id': (0, 1), 'to': {'map': 'Saffron City-Copycat', 'id': 0}},
                  {'address': 'Warps_CopycatsHouse1F', 'id': 2, 'to': {'map': "Saffron Copycat's House 2F", 'id': 0}}],
-             "Indigo Plateau Champion's Room": [
-                 {'address': 'Warps_ChampionsRoom', 'id': (0, 1), 'to': {'map': "Indigo Plateau Lance's Room", 'id': (1, 2)}},
-                 {'flags': 'm', 'address': 'Warps_ChampionsRoom', 'id': (2, 3), 'to': {'map': 'Indigo Plateau Hall of Fame', 'id': 0}}],
+             "Indigo Plateau Champion's Room": [{'address': 'Warps_ChampionsRoom', 'id': (0, 1),
+                                                 'to': {'map': "Indigo Plateau Lance's Room", 'id': (1, 2)}},
+                                                {'address': 'Warps_ChampionsRoom', 'id': (2, 3),
+                                                 'to': {'map': 'Indigo Plateau Hall of Fame', 'id': 0}}],
              "Indigo Plateau Lorelei's Room": [
                  {'address': 'Warps_LoreleisRoom', 'id': (0, 1), 'to': {'map': 'Indigo Plateau Lobby-N', 'id': 2}},
                  {'address': 'Warps_LoreleisRoom', 'id': (2, 3),
@@ -1184,6 +1185,7 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                                                'to': {'map': "Indigo Plateau Bruno's Room", 'id': (2, 3)}},
                                               {'address': 'Warps_AgathasRoom', 'id': (2, 3),
                                                'to': {'map': "Indigo Plateau Lance's Room", 'id': 0}}]}
+
 
 entrance_only = [
     "Route 4-W to Mt Moon 1F", "Saffron City-G to Saffron Gym-S", "Saffron City-Copycat to Saffron Copycat's House 1F",
@@ -1241,7 +1243,7 @@ safe_rooms = ["Rival's House to Pallet Town",
 
 insanity_safe_rooms = [
     'Cinnabar Lab Trade Room to Cinnabar Lab',
-    'Cinnabar Lab Metronome Room to Cinnabar Lab', 'Cinnabar Lab Fossil Room to Cinnabar Lab',
+    'Cinnabar Lab R&D Room to Cinnabar Lab', 'Cinnabar Lab Fossil Room to Cinnabar Lab',
     'Celadon Mansion Roof House to Celadon Mansion Roof-Back',
     "Saffron Copycat's House 2F to Saffron Copycat's House 1F",
     'Route 11 Gate 2F to Route 11 Gate 1F', 'Route 12 Gate 2F to Route 12 Gate 1F',
@@ -1295,23 +1297,27 @@ insanity_mandatory_connections = {
     pair("Indigo Plateau Hall of Fame", "Indigo Plateau Champion's Room")
 }
 
+simple_mandatory_connections = {
+    pair("Fuchsia City", "Safari Zone Gate S")
+
+}
+
 safari_zone_houses = ["Safari Zone Center-S to Safari Zone Center Rest House",
                       "Safari Zone West to Safari Zone West Rest House",
                       "Safari Zone West-NW to Safari Zone Secret House",
                       "Safari Zone East to Safari Zone East Rest House",
                       "Safari Zone North to Safari Zone North Rest House"]
 
-unsafe_connecting_interior_dungeons = [
-    ["Seafoam Islands 1F to Route 20-IE", "Seafoam Islands 1F-SE to Route 20-IW"],
-    ["Rock Tunnel 1F-NE to Route 10-N", "Rock Tunnel 1F-S to Route 10-S"],
-    ["Victory Road 1F-S to Route 23-C", "Victory Road 2F-E to Route 23-N"],
-]
-
 safe_connecting_interior_dungeons = [
     ["Viridian Forest South Gate to Route 2-SW", "Viridian Forest North Gate to Route 2-NW"],
     ["Diglett's Cave Route 2 to Route 2-NE", "Diglett's Cave Route 11 to Route 11"],
     ["Mt Moon 1F to Route 4-W", "Mt Moon B1F-NE to Route 4-C"],
+]
 
+unsafe_connecting_interior_dungeons = [
+    ["Seafoam Islands 1F to Route 20-IE", "Seafoam Islands 1F-SE to Route 20-IW"],
+    ["Rock Tunnel 1F-NE to Route 10-N", "Rock Tunnel 1F-S to Route 10-S"],
+    ["Victory Road 1F-S to Route 23-C", "Victory Road 2F-E to Route 23-N"],
 ]
 
 multi_purpose_dungeons = [
@@ -1386,18 +1392,20 @@ dungeons = [
     "Cerulean Cave 1F-SE to Cerulean City-Cave",
     "Vermilion Dock to Vermilion City-Dock",
     "Pokemon Tower 1F to Lavender Town"
-
 ]
-dungeon_entrances = ['Saffron City-Silph to Silph Co 1F', 'Celadon Game Corner-Hidden Stairs to Rocket Hideout B1F',
-                     'Cerulean City-Cave to Cerulean Cave 1F-SE', 'Vermilion City-Dock to Vermilion Dock',
-                     'Lavender Town to Pokemon Tower 1F']
+
+dungeon_entrances = [
+    'Saffron City-Silph to Silph Co 1F', 'Celadon Game Corner-Hidden Stairs to Rocket Hideout B1F',
+    'Cerulean City-Cave to Cerulean Cave 1F-SE', 'Vermilion City-Dock to Vermilion Dock',
+    'Lavender Town to Pokemon Tower 1F'
+]
 
 gyms = [
     "Pewter Gym to Pewter City", "Cerulean Gym to Cerulean City", "Vermilion Gym to Vermilion City-G",
     "Celadon Gym to Celadon City-G", "Fuchsia Gym to Fuchsia City", "Saffron Gym-S to Saffron City-G",
     "Cinnabar Gym to Cinnabar Island-G", "Viridian Gym to Viridian City-G"
-
 ]
+
 gym_entrances = [
     'Pewter City to Pewter Gym', 'Cerulean City to Cerulean Gym', 'Vermilion City-G to Vermilion Gym',
     'Celadon City-G to Celadon Gym', 'Fuchsia City to Fuchsia Gym', 'Saffron City-G to Saffron Gym-S',
@@ -1410,32 +1418,25 @@ initial_doors = [
     "Viridian City to Viridian School House",
     "Route 22 to Route 22 Gate-S"
 ]
-
-for region in warp_data:
-    for entrance in warp_data[region]:
-        m = entrance['to']["map"].split("-")[0]
-        i = entrance['to']["id"]
-        for region2 in warp_data:
-            if region2.split("-")[0] == m:
-                for entrance2 in warp_data[region2]:
-                    if (entrance2["id"] == i or (isinstance(entrance2["id"], tuple) and i in entrance2["id"])): #and region2 != m:
-                        # print(f"change {entrance} to {region2}")
-                        #if entrance["to"]["map"] != region2:
-                            #print(region + " changing " + entrance["to"]["map"] + " to " + region2)
-                        entrance["to"]["map"] = region2
-                        break
-                else:
-                    continue
-                break
-        else:
-            breakpoint()
-
-for region in warp_data:
-    for entrance in warp_data[region]:
-        if "flags" in entrance:
-            del entrance["flags"]
-
-# print(warp_data)
+#
+# for region in warp_data:
+#     for entrance in warp_data[region]:
+#         m = entrance['to']["map"].split("-")[0]
+#         i = entrance['to']["id"]
+#         for region2 in warp_data:
+#             if region2.split("-")[0] == m:
+#                 for entrance2 in warp_data[region2]:
+#                     if (entrance2["id"] == i or (isinstance(entrance2["id"], tuple) and i in entrance2["id"])): #and region2 != m:
+#                         # print(f"change {entrance} to {region2}")
+#                         #if entrance["to"]["map"] != region2:
+#                             #print(region + " changing " + entrance["to"]["map"] + " to " + region2)
+#                         entrance["to"]["map"] = region2
+#                         break
+#                 else:
+#                     continue
+#                 break
+#         else:
+#             breakpoint()
 
 
 def create_region(multiworld: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
@@ -1467,13 +1468,9 @@ def create_regions(self):
         locations_per_region.setdefault(location.region, [])
         # The check for list is so that we don't try to check the item table with a list as a key
         if location.inclusion(multiworld, player) and (isinstance(location.original_item, list) or
-                                                       not (self.multiworld.key_items_only[self.player] and
-                                                            ((item_table[location.original_item].classification not in
-                                                             (ItemClassification.progression,
-                                                              ItemClassification.progression_skip_balancing,
-                                                              ItemClassification.useful)) or
-                                                             location.original_item.startswith("TM"))
-                                                            and not location.event)):
+                not (self.multiworld.key_items_only[self.player] and ((item_table[location.original_item].classification
+                not in (ItemClassification.progression, ItemClassification.progression_skip_balancing,
+                ItemClassification.useful)) or location.original_item.startswith("TM")) and not location.event)):
             locations_per_region[location.region].append(PokemonRBLocation(player, location.name, location.address,
                                                                            location.rom_address, location.type,
                                                                            location.level, location.level_address))
@@ -1652,6 +1649,8 @@ def create_regions(self):
     connect(multiworld, player, "Victory Road 2F-W", "Victory Road 2F-Wild", one_way=True)
     connect(multiworld, player, "Victory Road 2F-NW", "Victory Road 2F-Wild", one_way=True)
     connect(multiworld, player, "Victory Road 2F-C", "Victory Road 2F-Wild", one_way=True)
+    connect(multiworld, player, "Victory Road 2F-E", "Victory Road 2F-Wild", one_way=True)
+    connect(multiworld, player, "Victory Road 2F-SE", "Victory Road 2F-Wild", one_way=True)
     connect(multiworld, player, "Victory Road 2F-W", "Victory Road 2F-C", lambda state: logic.can_strength(state, player), one_way=True)
     connect(multiworld, player, "Victory Road 2F-NW", "Victory Road 2F-W", lambda state: logic.can_strength(state, player), one_way=True)
     connect(multiworld, player, "Victory Road 2F-C", "Victory Road 2F-SE", lambda state: logic.can_strength(state, player) and state.has("Victory Road Boulder", player), one_way=True)
@@ -1689,8 +1688,8 @@ def create_regions(self):
     connect(multiworld, player, "Pallet Town", "Route 21", lambda state: logic.can_surf(state, player))
 
     connect(multiworld, player, "Celadon Gym", "Celadon Gym-C", lambda state: logic.can_cut(state, player), one_way=True)
-    connect(multiworld, player, "Celadon Game Corner", "Celadon Game Corner-Hidden Stairs", one_way=True)
-    connect(multiworld, player, "Celadon Game Corner-Hidden Stairs", "Celadon Game Corner", lambda state: (not state.multiworld.extra_key_items[player]) or state.has("Hideout Key", player) ,one_way=True)
+    connect(multiworld, player, "Celadon Game Corner", "Celadon Game Corner-Hidden Stairs", lambda state: (not state.multiworld.extra_key_items[player]) or state.has("Hideout Key", player), one_way=True)
+    connect(multiworld, player, "Celadon Game Corner-Hidden Stairs", "Celadon Game Corner", one_way=True)
     connect(multiworld, player, "Rocket Hideout B1F-SE", "Rocket Hideout B1F", one_way=True)
 
     connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N", lambda state: logic.has_badges(state, state.multiworld.elite_four_condition[player], player)) # and logic.has_pokemon(state, 151, player))
@@ -1815,7 +1814,7 @@ def create_regions(self):
                 region = self.multiworld.get_region(region_name, player)
                 shuffle = True
                 if not outdoor_map(region.name) and not outdoor_map(entrance_data['to']['map']) and \
-                        multiworld.door_shuffle[player] != "insanity":
+                        multiworld.door_shuffle[player] not in ("insanity", "decoupled"):
                     shuffle = False
                 if multiworld.door_shuffle[player] == "simple":
                     if sorted([entrance_data['to']['map'], region.name]) == ["Celadon Game Corner-Hidden Stairs", "Rocket Hideout B1F"]:
@@ -1839,9 +1838,11 @@ def create_regions(self):
         forced_connections = mandatory_connections.copy()
         usable_safe_rooms = safe_rooms.copy()
 
-        if multiworld.door_shuffle[player] != "simple":
+        if multiworld.door_shuffle[player] == "simple":
+            forced_connections.update(simple_mandatory_connections)
+        else:
             usable_safe_rooms += pokemarts
-        if multiworld.door_shuffle[player] == "insanity":
+        if multiworld.door_shuffle[player] in ("insanity", "decoupled"):
             forced_connections.update(insanity_mandatory_connections)
             usable_safe_rooms += insanity_safe_rooms
 
@@ -1923,10 +1924,16 @@ def create_regions(self):
         interior_dungeons = safe_connecting_interior_dungeons + unsafe_connecting_interior_dungeons
         interior_dungeon_entrances = connecting_interior_dungeon_entrances.copy()
 
+        single_entrance_dungeons = dungeons.copy()
+        single_entrance_dungeon_entrances = dungeon_entrances.copy()
+
         for i in range(2):
             if not self.multiworld.random.randint(0, 2):
                 interior_dungeons.append(multi_purpose_dungeons[i])
                 interior_dungeon_entrances.append([multi_purpose_dungeon_entrances[i], None])
+            else:
+                single_entrance_dungeons.append(multi_purpose_dungeons[i])
+                single_entrance_dungeon_entrances.append(multi_purpose_dungeon_entrances[i])
 
         multiworld.random.shuffle(interior_dungeons)
         while interior_dungeons[0] in unsafe_connecting_interior_dungeons:
@@ -1948,21 +1955,78 @@ def create_regions(self):
         connect_connecting_interiors(interiors, connecting_interior_entrances)
         g = gyms.copy()
         multiworld.random.shuffle(g)
-        while (gyms[0] == g[1]  # Pewter Gym in Cerulean City
-               and interiors[0] in connecting_interiors[13:17]  # Saffron Gate at Underground Path North South
-               and interiors[13] in connecting_interiors[13:17] # Saffron Gate at Route 5 Saffron Gate
-               and multi_purpose_dungeons[0] == interior_dungeons[4]  # Pokemon Mansion at Rock Tunnel, which is
-                                                                      # not traversable backwards
-               and (not multiworld.tea[player]) and multiworld.route_3_condition[player] == "defeat_brock"
-               and (not multiworld.tea[player]) and multiworld.worlds[player].free_fly_map != "Cerulean City"
-               and multiworld.worlds[player].town_map_fly_map != "Cerulean City"):
+
+        # Celadon Gym requires Cut access to reach the Gym Leader. There are some scenarios where its placement
+        # could make badge placement impossible
+        def celadon_gym_problem():
+            # Badgesanity or no badges needed for HM moves means gyms can go anywhere
+            if multiworld.badgesanity[player] or not multiworld.badges_needed_for_hm_moves[player]:
+                return False
+
+            # Celadon Gym in Pewter City and need one or more badges for Viridian City gym.
+            # No gym leaders would be reachable.
+            if gyms[3] == g[0] and multiworld.viridian_gym_condition[player] > 0:
+                return True
+
+            # Celadon Gym not on Cinnabar Island or can access Viridian City gym with one badge
+            if not gyms[3] == g[6] and multiworld.viridian_gym_condition[player] > 1:
+                return False
+
+            # At this point we need to see if we can get beyond Pewter/Cinnabar with just one badge
+
+            # Can get Fly access from Pewter City gym and fly beyond Pewter/Cinnabar
+            if multiworld.worlds[player].free_fly_map not in ("Pallet Town", "Viridian City", "Cinnabar Island",
+                "Indigo Plateau") and multiworld.worlds[player].town_map_fly_map not in ("Pallet Town", "Viridian City",
+                "Cinnabar Island", "Indigo Plateau"):
+                return False
+
+            # Route 3 condition is boulder badge but Mt Moon entrance leads to safe dungeons or Rock Tunnel
+            if self.multiworld.route_3_condition[player] == "boulder_badge" and interior_dungeons[2] not in \
+                    (unsafe_connecting_interior_dungeons[0], unsafe_connecting_interior_dungeons[2]):
+                return False
+
+            # Route 3 condition is Defeat Brock and he is in Pewter City, or any other condition besides Boulder Badge.
+            # Any badge can land in Pewter City, so the only problematic dungeon at Mt Moon is Seafoam Islands since
+            # it requires two badges
+            if (((self.multiworld.route_3_condition[player] == "defeat_brock" and gyms[0] == g[0])
+                    or self.multiworld.route_3_condition[player] not in ("defeat_brock", "boulder_badge"))
+                    and interior_dungeons[2] != unsafe_connecting_interior_dungeons[0]):
+                return False
+
+            # If dungeon at Diglett's Cave does not require a badge, we can get Cut access and make it through
+            if interior_dungeons[1] in safe_connecting_interior_dungeons:
+                return False
+
+            # If dungeon at Seafoam Islands does not require a badge, we can get Surf access and make it through
+            if interior_dungeons[3] in safe_connecting_interior_dungeons:
+                return False
+
+            # No apparent way to proceed, reshuffle
+            return True
+
+        # Also check for a very specific situation where Brock or vending machines are needed to access
+        # Cerulean City, but they are placed in Cerulean City
+        def cerulean_city_problem():
+            if (gyms[0] == g[1]  # Pewter Gym in Cerulean City
+                    and interiors[0] in connecting_interiors[13:17]  # Saffron Gate at Underground Path North South
+                    and interiors[13] in connecting_interiors[13:17]  # Saffron Gate at Route 5 Saffron Gate
+                    and multi_purpose_dungeons[0] == interior_dungeons[4]  # Pokémon Mansion at Rock Tunnel, which is
+                    and (not multiworld.tea[player])                       # not traversable backwards
+                    and multiworld.route_3_condition[player] == "defeat_brock"
+                    and multiworld.worlds[player].fly_map != "Cerulean City"
+                    and multiworld.worlds[player].town_map_fly_map != "Cerulean City"):
+                return True
+
+        while celadon_gym_problem() or cerulean_city_problem():
             multiworld.random.shuffle(g)
+
         connect_interiors(g, gym_entrances)
-        d = dungeons + mpd
-        multiworld.random.shuffle(d)
-        while dungeons[4] == d[0]:  # Pokémon Tower at Silph Co
-            multiworld.random.shuffle(d)
-        connect_interiors(d, dungeon_entrances + mpde)
+
+        multiworld.random.shuffle(single_entrance_dungeons)
+        while dungeons[4] == single_entrance_dungeons[0]:  # Pokémon Tower at Silph Co
+            multiworld.random.shuffle(single_entrance_dungeons)
+        connect_interiors(single_entrance_dungeons, single_entrance_dungeon_entrances)
+
         remaining_entrances = [entrance for entrance in entrances if outdoor_map(entrance.parent_region.name)]
         multiworld.random.shuffle(remaining_entrances)
         remaining_interiors = [entrance for entrance in entrances if entrance not in remaining_entrances]
@@ -2045,6 +2109,7 @@ def create_regions(self):
 
         # placement_order = 1
         starting_entrances = len(entrances)
+        dc_connected = []
         while entrances:
             state.update_reachable_regions(player)
             state.sweep_for_events(player=player)
@@ -2058,11 +2123,27 @@ def create_regions(self):
             assert reachable_entrances, \
                 "Ran out of reachable entrances in Pokemon Red and Blue door shuffle"
             multiworld.random.shuffle(entrances)
-            if multiworld.door_shuffle[player] != "insanity" or len(entrances) != len(reachable_entrances):
+            if multiworld.door_shuffle[player] == "decoupled" and len(entrances) == 1:
+                entrances += dc_connected
+                print(f"Final zip")
+                entrances[-1].connect(entrances[0])
+                while len(entrances) > 1:
+                    entrances.pop(0).connect(entrances[0])
+                break
+            if multiworld.door_shuffle[player] == "full" or len(entrances) != len(reachable_entrances):
                 entrances.sort(key=lambda e: e.name not in entrance_only)
                 # entrances list is empty while it's being sorted, must pass a copy to iterate through
                 entrances_copy = entrances.copy()
-                if len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity" else 8) and len(
+                if multiworld.door_shuffle[player] == "decoupled":
+                    if len(reachable_entrances) <= 8 and not logic.rock_tunnel(state, player):
+                        entrances.sort(key=lambda e: 1 if "Rock Tunnel" in e.name else 2 if e.connected_region is not
+                                       None else 3 if e not in reachable_entrances else 0)
+                    else:
+                        entrances.sort(key=lambda e: 1 if e.connected_region is not None else 2 if e not in
+                                       reachable_entrances else 0)
+                    assert entrances[0].connected_region is None,\
+                        "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
+                elif len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity" else 8) and len(
                         entrances) <= (starting_entrances - 3):
                     print("Dead End")
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
@@ -2075,18 +2156,26 @@ def create_regions(self):
                     outdoor = outdoor_map(entrances[0].parent_region.name)
                     entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
                 assert entrances[0] in reachable_entrances, \
-                    "Ran out of reachable entrances in Pokemon Red and Blue door shuffle"
-            if multiworld.door_shuffle[player] == "insanity" and len(entrances) == len(reachable_entrances):
-                print("all entrances reachable")
-                # entrances.sort(key=lambda e: e.placement_order)
-                multiworld.random.shuffle(entrances)
-                entrance_a = entrances.pop(0)
-                entrance_b = entrances.pop(0)
+                    "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
+            # if multiworld.door_shuffle[player] == "insanity" and len(entrances) == len(reachable_entrances):
+            #     print("all entrances reachable")
+            #     # entrances.sort(key=lambda e: e.placement_order)
+            #     # multiworld.random.shuffle(entrances)
+            #     entrance_a = entrances.pop(0)
+            #     entrance_b = entrances.pop(0)
+            # else:
+            if (multiworld.door_shuffle[player] == "decoupled" and len(reachable_entrances) > 8 and len(entrances)
+                    <= (starting_entrances - 3)):
+                entrance_b = entrances.pop(1)
             else:
-                entrance_a = entrances.pop(0)
                 entrance_b = entrances.pop()
-            entrance_b.connect(entrance_a)
+            entrance_a = entrances.pop(0)
             entrance_a.connect(entrance_b)
+            if multiworld.door_shuffle[player] == "decoupled":
+                entrances.append(entrance_b)
+                dc_connected.append(entrance_a)
+            else:
+                entrance_b.connect(entrance_a)
             print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
 
         for loc in placed_locs:

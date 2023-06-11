@@ -165,6 +165,7 @@ class RandomizePokedex(Choice):
 class KeyItemsOnly(Toggle):
     """Shuffle only Key Items. This overrides Randomize Hidden Items, Trainersanity, and Dexsanity.
     May have high generation failure rates for solo games or small multiworlds."""
+    display_name = "Key Items Only"
     default = 0
 
 
@@ -284,6 +285,7 @@ class DoorShuffle(Choice):
     option_simple = 1
     option_full = 2
     option_insanity = 3
+    option_decoupled = 4
     default = 0
 
 
@@ -339,6 +341,20 @@ class Stonesanity(Toggle):
     Moon Stone locations to be randomized anyway. These are in Pokemon Mansion 1F and Mt Moon B2F."""
     display_name = "Stonesanity"
     default = 0
+
+
+class LevelScaling(Choice):
+    """Off: Encounters use vanilla game levels.
+    By Spheres: Levels are scaled by access sphere. Areas reachable in later spheres will have higher levels.
+    Spheres and Distance: Levels are scaled by access spheres as well as distance from Pallet Town, measured by number
+    of internal region connections. This is a much more severe curving of levels and may lead to much less variation in
+    levels found in a particular map. However, it may make the higher door shuffle settings significantly more bearable,
+    as these options more often result in a smaller number of larger access spheres."""
+    display_name = "Level Scaling"
+    option_off = 0
+    option_by_spheres = 1
+    option_by_spheres_and_distance = 2
+    default = 1
 
 
 class ExpModifier(SpecialRange):
@@ -825,6 +841,7 @@ pokemon_rb_options = {
     "town_map_fly_location": TownMapFlyLocation,
     "blind_trainers": BlindTrainers,
     "minimum_steps_between_encounters": MinimumStepsBetweenEncounters,
+    "level_scaling": LevelScaling,
     "exp_modifier": ExpModifier,
     "randomize_wild_pokemon": RandomizeWildPokemon,
     "area_1_to_1_mapping": Area1To1Mapping,

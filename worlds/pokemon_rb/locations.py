@@ -153,7 +153,7 @@ location_data = [
     LocationData("Fuchsia Warden's House", "Safari Zone Warden", "HM04 Strength", rom_addresses["Event_Warden"], EventFlag(568)),
     LocationData("Fuchsia Gym", "Koga TM", "TM06 Toxic", rom_addresses["Event_Fuschia_Gym"], EventFlag(600)),
     LocationData("Safari Zone Secret House", "", "HM03 Surf", rom_addresses["Event_Safari_Zone_Secret_House"], EventFlag(2176)),
-    LocationData("Cinnabar Lab Metronome Room", "Lab Scientist", "TM35 Metronome", rom_addresses["Event_Lab_Scientist"], EventFlag(727)),
+    LocationData("Cinnabar Lab R&D Room", "Lab Scientist", "TM35 Metronome", rom_addresses["Event_Lab_Scientist"], EventFlag(727)),
     LocationData("Cinnabar Gym", "Blaine TM", "TM38 Fire Blast", rom_addresses["Event_Cinnabar_Gym"],
                  EventFlag(664)),
     LocationData("Saffron Copycat's House 2F", "Copycat", "TM31 Mimic", rom_addresses["Event_Copycat"], EventFlag(832)),

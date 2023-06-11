@@ -84,16 +84,16 @@ def set_rules(multiworld, player):
         "Cerulean Cave B1F - Legendary Pokemon": lambda state: logic.can_surf(state, player),
 
         **{f"Pokemon Tower {floor}F - Wild Pokemon - {slot}": lambda state: state.has("Silph Scope", player) for floor in range(3, 8) for slot in range(1, 11)},
-        "Pokemon Tower 6F - Restless Soul": lambda state: state.has("Silph Scope", player), # just for level scaling
+        "Pokemon Tower 6F - Restless Soul": lambda state: state.has("Silph Scope", player),  # just for level scaling
 
         "Silph Co 1F - Receptionist": lambda state: state.has("Silph Co Liberated", player),
         "Silph Co 5F - Hostage": lambda state: logic.card_key(state, 5, player),
         "Silph Co 7F - Hostage": lambda state: logic.card_key(state, 7, player),
 
-        "Saffron Fighting Dojo - Blackbelt 1": lambda state: logic.dojo(player),
-        "Saffron Fighting Dojo - Blackbelt 2": lambda state: logic.dojo(player),
-        "Saffron Fighting Dojo - Blackbelt 3": lambda state: logic.dojo(player),
-        "Saffron Fighting Dojo - Blackbelt 4": lambda state: logic.dojo(player),
+        "Saffron Fighting Dojo - Blackbelt 1": lambda state: logic.dojo(state, player),
+        "Saffron Fighting Dojo - Blackbelt 2": lambda state: logic.dojo(state, player),
+        "Saffron Fighting Dojo - Blackbelt 3": lambda state: logic.dojo(state, player),
+        "Saffron Fighting Dojo - Blackbelt 4": lambda state: logic.dojo(state, player),
 
         "Route 2 Trade House - Marcel Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
         "Underground Path Route 5 - Spot Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),

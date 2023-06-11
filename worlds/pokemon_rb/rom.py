@@ -33,11 +33,37 @@ def get_move(local_move_data, moves, chances, random, starting_move=False):
     type = choose_forced_type(chances, random)
     filtered_moves = filter_moves(local_move_data, moves, type, random)
     for move in filtered_moves:
-        if local_move_data[move]["accuracy"] > 80 and local_move_data[move]["power"] > 0 or not starting_move:
+        if (not starting_move) or (local_move_data[move]["accuracy"] > 80 and local_move_data[move]["power"] > 0):
             moves.remove(move)
             return move
     else:
         return get_move(local_move_data, moves, [], random, starting_move)
+
+
+def move_power(move_data):
+    power = move_data["power"]
+    if move_data["effect"] in (29, 42):
+        # 29: two-to-five attacks. 42: trapping effect, two-to-five turns.
+        power *= 3
+    elif move_data["effect"] in (77, 44):
+        # 77: Twineedle. Two attacks and poison chance. 44: Just two attacks
+        power *= 2
+    elif move_data["effect"] == 48:
+        # 25% recoil damage taken. Reduce power considered by that amount
+        power *= 0.75
+    elif move_data["effect"] == 3:
+        # 50% absorb. Increase power considered by that amount
+        power *= 1.5
+    elif move_data["effect"] == 39 and move_data["id"] != 91:
+        # Takes two turns while vulnerable. Dig uses this effect ID but is semi-invulnerable
+        power *= 0.66
+    elif move_data["effect"] == 7:
+        # Faint user
+        power *= 0.5
+    elif move_data["id"] in (2, 75, 152, 163,):
+        # High critical strike moves: Karate Chop, Razor Leaf, Crabhammer, Slash
+        power *= 2
+    return power
 
 
 def set_mon_palettes(self, random, data):
@@ -223,7 +249,7 @@ def process_pokemon_data(self):
                     non_power_moves.append(move)
                 else:
                     learnsets[mon].append(move)
-            learnsets[mon].sort(key=lambda move: self.local_move_data[move]["power"])
+            learnsets[mon].sort(key=lambda move: move_power(self.local_move_data[move]))
             if learnsets[mon]:
                 for move in non_power_moves:
                     learnsets[mon].insert(self.multiworld.random.randint(1, len(learnsets[mon])), move)
@@ -732,7 +758,7 @@ def generate_output(self, output_directory: str):
         for shop in range(1, 10):
             write_bytes(data, shop_data, rom_addresses[f"Shop{shop}"])
     if self.multiworld.stonesanity[self.player]:
-        write_bytes(data, bytearray([0xFE, 1, 51]), rom_addresses[f"Shop_Stones"])
+        write_bytes(data, bytearray([0xFE, 1, item_table["Poke Doll"].id - 172000000, 0xFF]), rom_addresses[f"Shop_Stones"])
 
     price = str(self.multiworld.master_ball_price[self.player].value).zfill(6)
     price = bytearray([int(price[:2], 16), int(price[2:4], 16), int(price[4:], 16)])
