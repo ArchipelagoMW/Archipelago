@@ -277,15 +277,40 @@ class TownMapFlyLocation(Toggle):
 
 class DoorShuffle(Choice):
     """Simple: entrances are randomized together in groups: Pokemarts, Gyms, single exit dungeons, dual exit dungeons,
-    single exit misc interiors, dual exit misc interiors are all shuffled separately.
+    single exit misc interiors, dual exit misc interiors are all shuffled separately. Safari Zone is not shuffled.
     Full: Any outdoor entrance may lead to any interior.
-    Insanity: All warps in the game are shuffled."""
+    Insanity: All rooms in the game are shuffled."""
     display_name = "Door Shuffle"
     option_off = 0
     option_simple = 1
     option_full = 2
     option_insanity = 3
-    option_decoupled = 4
+    # I've left the code in for this option, but it is such a terrible option, often putting almost the entire game in
+    # sphere 1, and requiring a large number of save-warps, so I've disabled it for now. It is there if someone
+    # running from source wants to torture themselves by turning it on, but I personally don't want to play in any
+    # multiworlds where this is played. Perhaps I will come up with a solution to tweak this to make it more viable in
+    # the future.
+    # option_decoupled = 4
+    default = 0
+
+    # remove assertions that blow up checks for decoupled
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            return other == self.current_key
+        elif isinstance(other, int):
+            return other == self.value
+        elif isinstance(other, bool):
+            return other == bool(self.value)
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
+
+class WarpTileShuffle(Toggle):
+    """Shuffle the warp tiles in Silph Co and Sabrina's Gym among themselves, separately.
+    On Insanity, turning this off means they are mixed into the general door shuffle instead of only being shuffled
+    among themselves."""
     default = 0
 
 
@@ -531,6 +556,7 @@ class ConfineTranstormToDitto(Toggle):
     If an enemy Pokemon uses transform before you catch it, it will permanently change to Ditto after capture."""
     display_name = "Confine Transform to Ditto"
     default = 1
+
 
 class StartWithFourMoves(Toggle):
     """If movesets are randomized, this will give all Pokemon 4 starting moves."""
@@ -834,6 +860,7 @@ pokemon_rb_options = {
     "oaks_aide_rt_15": OaksAidRt15,
     "stonesanity": Stonesanity,
     "door_shuffle": DoorShuffle,
+    "warp_tile_shuffle": WarpTileShuffle,
     "pitch_black_rock_tunnel": PitchBlackRockTunnel,
     "randomize_rock_tunnel": RandomizeRockTunnel,
     "dark_rock_tunnel_logic": DarkRockTunnelLogic,

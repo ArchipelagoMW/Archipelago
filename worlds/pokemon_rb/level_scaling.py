@@ -94,6 +94,7 @@ def level_scaling(multiworld):
                     else:
                         sphere_objects[object].level = level_list_copy.pop(0)
                         #print(f"{sphere_objects[object]} - {sphere_objects[object].level}")
+        for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
             world.finished_level_scaling.set()
 
             print([len([item for item in sphere if item.player == world.player and item.type == "Item"]) for sphere in multiworld.get_spheres()])
