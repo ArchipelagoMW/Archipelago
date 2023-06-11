@@ -73,6 +73,7 @@ class GBAContext(CommonContext):
     local_set_events: Dict[str, bool]
     goal_flag: int = IS_CHAMPION_FLAG
 
+
     def __init__(self, server_address: Optional[str], password: Optional[str]):
         super().__init__(server_address, password)
         self.gba_streams = None
@@ -80,6 +81,7 @@ class GBAContext(CommonContext):
         self.gba_push_pull_task = None
         self.local_checked_locations = set()
         self.local_set_events = {event_name: False for event_name in TRACKER_EVENT_FLAGS}
+
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -90,6 +92,7 @@ class GBAContext(CommonContext):
             return
         await self.send_connect()
 
+
     def run_gui(self):
         from kvui import GameManager
 
@@ -98,6 +101,7 @@ class GBAContext(CommonContext):
 
         self.ui = GBAManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+
 
     def on_package(self, cmd, args):
         if cmd == 'Connected':
@@ -172,7 +176,7 @@ async def handle_read_data(gba_data, ctx: GBAContext):
 
             await ctx.send_msgs([{
                 "cmd": "Set",
-                "key": "events",
+                "key": f"pokemon_emerald_events_{ctx.team}_{ctx.slot}",
                 "default": 0,
                 "want_reply": False,
                 "operations": [{"operation": "replace", "value": event_bitfield}]
