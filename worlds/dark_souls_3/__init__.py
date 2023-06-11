@@ -53,13 +53,15 @@ class DarkSouls3World(World):
     location_name_to_id = DarkSouls3Location.get_name_to_id()
 
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.locked_items = []
         self.locked_locations = []
         self.main_path_locations = []
-
         self.enabled_location_categories = set()
+
+
+    def generate_early(self):
         if self.multiworld.enable_weapon_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.WEAPON)
         if self.multiworld.enable_shield_locations[self.player] == Toggle.option_true:
@@ -338,10 +340,6 @@ class DarkSouls3World(World):
 
     def get_filler_item_name(self) -> Item:
         return "Soul of an Intrepid Hero"
-
-
-    def generate_early(self):
-        pass
 
 
     def set_rules(self) -> None:
