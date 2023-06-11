@@ -12,9 +12,10 @@ class DS3LocationCategory(Enum):
     SPELL = 4
     NPC = 5
     KEY = 6
-    MISC = 7
-    HEALTH = 8
-    PROGRESSIVE_ITEM = 9
+    BOSS = 7
+    MISC = 8
+    HEALTH = 9
+    PROGRESSIVE_ITEM = 10
 
 
 class DS3LocationData(NamedTuple):
@@ -118,8 +119,8 @@ location_tables = {
         DS3LocationData("HWL: Lucerne",                            "Lucerne",                           DS3LocationCategory.WEAPON),
         DS3LocationData("HWL: Small Lothric Banner",               "Small Lothric Banner",              DS3LocationCategory.KEY),
         DS3LocationData("HWL: Basin of Vows",                      "Basin of Vows",                     DS3LocationCategory.KEY),
-        DS3LocationData("HWL: Soul of Boreal Valley Vordt",        "Soul of Boreal Valley Vordt",       DS3LocationCategory.MISC),
-        DS3LocationData("HWL: Soul of the Dancer",                 "Soul of the Dancer",                DS3LocationCategory.MISC),
+        DS3LocationData("HWL: Soul of Boreal Valley Vordt",        "Soul of Boreal Valley Vordt",       DS3LocationCategory.BOSS),
+        DS3LocationData("HWL: Soul of the Dancer",                 "Soul of the Dancer",                DS3LocationCategory.BOSS),
         DS3LocationData("HWL: Way of Blue",                        "Way of Blue",                       DS3LocationCategory.MISC),
         DS3LocationData("HWL: Greirat's Ashes",                    "Greirat's Ashes",                   DS3LocationCategory.NPC),
         DS3LocationData("HWL: Blue Tearstone Ring",                "Blue Tearstone Ring",               DS3LocationCategory.NPC),
@@ -159,7 +160,7 @@ location_tables = {
         DS3LocationData("US: Loretta's Bone",                      "Loretta's Bone",                    DS3LocationCategory.KEY),
         DS3LocationData("US: Hand Axe",                            "Hand Axe",                          DS3LocationCategory.WEAPON),
         DS3LocationData("US: Great Scythe",                        "Great Scythe",                      DS3LocationCategory.WEAPON),
-        DS3LocationData("US: Soul of the Rotted Greatwood",        "Soul of the Rotted Greatwood",      DS3LocationCategory.MISC),
+        DS3LocationData("US: Soul of the Rotted Greatwood",        "Soul of the Rotted Greatwood",      DS3LocationCategory.BOSS),
         DS3LocationData("US: Hawk Ring",                           "Hawk Ring",                         DS3LocationCategory.RING),
         DS3LocationData("US: Warrior of Sunlight",                 "Warrior of Sunlight",               DS3LocationCategory.MISC),
         DS3LocationData("US: Blessed Red and White Shield+1",      "Blessed Red and White Shield+1",    DS3LocationCategory.SHIELD),
@@ -170,6 +171,7 @@ location_tables = {
         DS3LocationData("US: Cornyx's Skirt",                      "Cornyx's Skirt",                    DS3LocationCategory.NPC),
         DS3LocationData("US: Pyromancy Flame",                     "Pyromancy Flame",                   DS3LocationCategory.NPC),
         DS3LocationData("US: Transposing Kiln",                    "Transposing Kiln",                  DS3LocationCategory.MISC),
+        DS3LocationData("US: Tower Key",                           "Tower Key",                         DS3LocationCategory.NPC),
     ],
     "Road of Sacrifices": [
         DS3LocationData("RS: Brigand Twindaggers",                 "Brigand Twindaggers",               DS3LocationCategory.WEAPON),
@@ -211,7 +213,7 @@ location_tables = {
         DS3LocationData("RS: Herald Gloves",                       "Herald Gloves",                     DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Herald Trousers",                     "Herald Trousers",                   DS3LocationCategory.ARMOR),
         DS3LocationData("RS: Grass Crest Shield",                  "Grass Crest Shield",                DS3LocationCategory.SHIELD),
-        DS3LocationData("RS: Soul of a Crystal Sage",              "Soul of a Crystal Sage",            DS3LocationCategory.MISC),
+        DS3LocationData("RS: Soul of a Crystal Sage",              "Soul of a Crystal Sage",            DS3LocationCategory.BOSS),
         DS3LocationData("RS: Great Swamp Ring",                    "Great Swamp Ring",                  DS3LocationCategory.RING),
         DS3LocationData("RS: Orbeck's Ashes",                      "Orbeck's Ashes",                    DS3LocationCategory.NPC),
     ],
@@ -244,7 +246,7 @@ location_tables = {
         DS3LocationData("CD: Archdeacon Skirt",                    "Archdeacon Skirt",                  DS3LocationCategory.ARMOR),
         DS3LocationData("CD: Arbalest",                            "Arbalest",                          DS3LocationCategory.WEAPON),
         DS3LocationData("CD: Small Doll",                          "Small Doll",                        DS3LocationCategory.KEY),
-        DS3LocationData("CD: Soul of the Deacons of the Deep",     "Soul of the Deacons of the Deep",   DS3LocationCategory.MISC),
+        DS3LocationData("CD: Soul of the Deacons of the Deep",     "Soul of the Deacons of the Deep",   DS3LocationCategory.BOSS),
         DS3LocationData("CD: Rosaria's Fingers",                   "Rosaria's Fingers",                 DS3LocationCategory.MISC)
     ],
     "Farron Keep": [
@@ -275,8 +277,8 @@ location_tables = {
         DS3LocationData("FK: Atonement",                           "Atonement",                         DS3LocationCategory.SPELL),
         DS3LocationData("FK: Great Magic Weapon",                  "Great Magic Weapon",                DS3LocationCategory.SPELL),
         DS3LocationData("FK: Cinders of a Lord - Abyss Watcher",   "Cinders of a Lord - Abyss Watcher", DS3LocationCategory.KEY),
-        DS3LocationData("FK: Soul of the Blood of the Wolf",       "Soul of the Blood of the Wolf",     DS3LocationCategory.MISC),
-        DS3LocationData("FK: Soul of a Stray Demon",               "Soul of a Stray Demon",             DS3LocationCategory.MISC),
+        DS3LocationData("FK: Soul of the Blood of the Wolf",       "Soul of the Blood of the Wolf",     DS3LocationCategory.BOSS),
+        DS3LocationData("FK: Soul of a Stray Demon",               "Soul of a Stray Demon",             DS3LocationCategory.BOSS),
         DS3LocationData("FK: Watchdogs of Farron",                 "Watchdogs of Farron",               DS3LocationCategory.MISC),
     ],
     "Catacombs of Carthus": [
@@ -288,8 +290,8 @@ location_tables = {
         DS3LocationData("CC: Old Sage's Blindfold",                "Old Sage's Blindfold",              DS3LocationCategory.ARMOR),
         DS3LocationData("CC: Witch's Ring",                        "Witch's Ring",                      DS3LocationCategory.RING),
         DS3LocationData("CC: Black Blade",                         "Black Blade",                       DS3LocationCategory.WEAPON),
-        DS3LocationData("CC: Soul of High Lord Wolnir",            "Soul of High Lord Wolnir",          DS3LocationCategory.MISC),
-        DS3LocationData("CC: Soul of a Demon",                     "Soul of a Demon",                   DS3LocationCategory.MISC),
+        DS3LocationData("CC: Soul of High Lord Wolnir",            "Soul of High Lord Wolnir",          DS3LocationCategory.BOSS),
+        DS3LocationData("CC: Soul of a Demon",                     "Soul of a Demon",                   DS3LocationCategory.BOSS),
     ],
     "Smouldering Lake": [
         DS3LocationData("SL: Shield of Want",                      "Shield of Want",                    DS3LocationCategory.SHIELD),
@@ -305,7 +307,7 @@ location_tables = {
         DS3LocationData("SL: Sacred Flame",                        "Sacred Flame",                      DS3LocationCategory.SPELL),
         DS3LocationData("SL: Fume Ultra Greatsword",               "Fume Ultra Greatsword",             DS3LocationCategory.WEAPON),
         DS3LocationData("SL: Black Iron Greatshield",              "Black Iron Greatshield",            DS3LocationCategory.SHIELD),
-        DS3LocationData("SL: Soul of the Old Demon King",          "Soul of the Old Demon King",        DS3LocationCategory.MISC),
+        DS3LocationData("SL: Soul of the Old Demon King",          "Soul of the Old Demon King",        DS3LocationCategory.BOSS),
         DS3LocationData("SL: Knight Slayer's Ring",                "Knight Slayer's Ring",              DS3LocationCategory.RING),
     ],
     "Irithyll of the Boreal Valley": [
@@ -335,7 +337,7 @@ location_tables = {
         DS3LocationData("IBV: Brass Leggings",                     "Brass Leggings",                    DS3LocationCategory.ARMOR),
         DS3LocationData("IBV: Ring of Favor",                      "Ring of Favor",                     DS3LocationCategory.RING),
         DS3LocationData("IBV: Golden Ritual Spear",                "Golden Ritual Spear",               DS3LocationCategory.WEAPON),
-        DS3LocationData("IBV: Soul of Pontiff Sulyvahn",           "Soul of Pontiff Sulyvahn",          DS3LocationCategory.MISC),
+        DS3LocationData("IBV: Soul of Pontiff Sulyvahn",           "Soul of Pontiff Sulyvahn",          DS3LocationCategory.BOSS),
         DS3LocationData("IBV: Aldrich Faithful",                   "Aldrich Faithful",                  DS3LocationCategory.MISC),
         DS3LocationData("IBV: Drang Twinspears",                   "Drang Twinspears",                  DS3LocationCategory.WEAPON),
     ],
@@ -378,14 +380,14 @@ location_tables = {
         DS3LocationData("PC: Greatshield of Glory",                "Greatshield of Glory",                DS3LocationCategory.SHIELD),
         DS3LocationData("PC: Storm Ruler",                         "Storm Ruler",                         DS3LocationCategory.KEY),
         DS3LocationData("PC: Cinders of a Lord - Yhorm the Giant", "Cinders of a Lord - Yhorm the Giant", DS3LocationCategory.KEY),
-        DS3LocationData("PC: Soul of Yhorm the Giant",             "Soul of Yhorm the Giant",             DS3LocationCategory.MISC),
+        DS3LocationData("PC: Soul of Yhorm the Giant",             "Soul of Yhorm the Giant",             DS3LocationCategory.BOSS),
     ],
     "Anor Londo": [
         DS3LocationData("AL: Giant's Coal",                        "Giant's Coal",                        DS3LocationCategory.MISC),
         DS3LocationData("AL: Sun Princess Ring",                   "Sun Princess Ring",                   DS3LocationCategory.RING),
         DS3LocationData("AL: Aldrich's Ruby",                      "Aldrich's Ruby",                      DS3LocationCategory.RING),
         DS3LocationData("AL: Cinders of a Lord - Aldrich",         "Cinders of a Lord - Aldrich",         DS3LocationCategory.KEY),
-        DS3LocationData("AL: Soul of Aldrich",                     "Soul of Aldrich",                     DS3LocationCategory.MISC),
+        DS3LocationData("AL: Soul of Aldrich",                     "Soul of Aldrich",                     DS3LocationCategory.BOSS),
     ],
     "Lothric Castle": [
         DS3LocationData("LC: Hood of Prayer",                      "Hood of Prayer",                      DS3LocationCategory.ARMOR),
@@ -405,7 +407,7 @@ location_tables = {
         DS3LocationData("LC: Knight's Ring",                       "Knight's Ring",                       DS3LocationCategory.RING),
         DS3LocationData("LC: Irithyll Rapier",                     "Irithyll Rapier",                     DS3LocationCategory.WEAPON),
         DS3LocationData("LC: Sunlight Straight Sword",             "Sunlight Straight Sword",             DS3LocationCategory.WEAPON),
-        DS3LocationData("LC: Soul of Dragonslayer Armour",         "Soul of Dragonslayer Armour",         DS3LocationCategory.MISC),
+        DS3LocationData("LC: Soul of Dragonslayer Armour",         "Soul of Dragonslayer Armour",         DS3LocationCategory.BOSS),
         DS3LocationData("LC: Grand Archives Key",                  "Grand Archives Key",                  DS3LocationCategory.KEY),
         DS3LocationData("LC: Gotthard Twinswords",                 "Gotthard Twinswords",                 DS3LocationCategory.WEAPON),
     ],
@@ -416,7 +418,7 @@ location_tables = {
         DS3LocationData("CKG: Shadow Gauntlets",                   "Shadow Gauntlets",                        DS3LocationCategory.ARMOR),
         DS3LocationData("CKG: Shadow Leggings",                    "Shadow Leggings",                         DS3LocationCategory.ARMOR),
         DS3LocationData("CKG: Claw",                               "Claw",                                    DS3LocationCategory.WEAPON),
-        DS3LocationData("CKG: Soul of Consumed Oceiros",           "Soul of Consumed Oceiros",                DS3LocationCategory.MISC),
+        DS3LocationData("CKG: Soul of Consumed Oceiros",           "Soul of Consumed Oceiros",                DS3LocationCategory.BOSS),
         DS3LocationData("CKG: Magic Stoneplate Ring",              "Magic Stoneplate Ring",                   DS3LocationCategory.RING),
     ],
     "Grand Archives": [
@@ -432,7 +434,7 @@ location_tables = {
         DS3LocationData("GA: Hunter's Ring",                       "Hunter's Ring",                           DS3LocationCategory.RING),
         DS3LocationData("GA: Divine Pillars of Light",             "Divine Pillars of Light",                 DS3LocationCategory.SPELL),
         DS3LocationData("GA: Cinders of a Lord - Lothric Prince",  "Cinders of a Lord - Lothric Prince",      DS3LocationCategory.KEY),
-        DS3LocationData("GA: Soul of the Twin Princes",            "Soul of the Twin Princes",                DS3LocationCategory.MISC),
+        DS3LocationData("GA: Soul of the Twin Princes",            "Soul of the Twin Princes",                DS3LocationCategory.BOSS),
         DS3LocationData("GA: Sage's Crystal Staff",                "Sage's Crystal Staff",                    DS3LocationCategory.WEAPON),
         DS3LocationData("GA: Outrider Knight Helm",                "Outrider Knight Helm",                    DS3LocationCategory.ARMOR),
         DS3LocationData("GA: Outrider Knight Armor",               "Outrider Knight Armor",                   DS3LocationCategory.ARMOR),
@@ -448,7 +450,7 @@ location_tables = {
         DS3LocationData("UG: Blacksmith Hammer",                   "Blacksmith Hammer",                       DS3LocationCategory.WEAPON),
         DS3LocationData("UG: Eyes of a Fire Keeper",               "Eyes of a Fire Keeper",                   DS3LocationCategory.KEY),
         DS3LocationData("UG: Coiled Sword Fragment",               "Coiled Sword Fragment",                   DS3LocationCategory.MISC),
-        DS3LocationData("UG: Soul of Champion Gundyr",             "Soul of Champion Gundyr",                 DS3LocationCategory.MISC),
+        DS3LocationData("UG: Soul of Champion Gundyr",             "Soul of Champion Gundyr",                 DS3LocationCategory.BOSS),
     ],
     "Archdragon Peak": [
         DS3LocationData("AP: Lightning Clutch Ring",               "Lightning Clutch Ring",                   DS3LocationCategory.RING),
@@ -466,7 +468,7 @@ location_tables = {
         DS3LocationData("AP: Dragonslayer Gauntlets",              "Dragonslayer Gauntlets",                  DS3LocationCategory.ARMOR),
         DS3LocationData("AP: Dragonslayer Leggings",               "Dragonslayer Leggings",                   DS3LocationCategory.ARMOR),
         DS3LocationData("AP: Ricard's Rapier",                     "Ricard's Rapier",                         DS3LocationCategory.WEAPON),
-        DS3LocationData("AP: Soul of the Nameless King",           "Soul of the Nameless King",               DS3LocationCategory.MISC),
+        DS3LocationData("AP: Soul of the Nameless King",           "Soul of the Nameless King",               DS3LocationCategory.BOSS),
         DS3LocationData("AP: Dragon Tooth",                        "Dragon Tooth",                            DS3LocationCategory.WEAPON),
         DS3LocationData("AP: Havel's Greatshield",                 "Havel's Greatshield",                     DS3LocationCategory.SHIELD),
     ],
@@ -505,7 +507,7 @@ location_tables = {
         DS3LocationData("PW: Vilhelm's Leggings",                  "Vilhelm's Leggings",                      DS3LocationCategory.ARMOR),
         DS3LocationData("PW: Valorheart",                          "Valorheart",                              DS3LocationCategory.WEAPON),
         DS3LocationData("PW: Champion's Bones",                    "Champion's Bones",                        DS3LocationCategory.MISC),
-        DS3LocationData("PW: Soul of Sister Friede",               "Soul of Sister Friede",                   DS3LocationCategory.MISC),
+        DS3LocationData("PW: Soul of Sister Friede",               "Soul of Sister Friede",                   DS3LocationCategory.BOSS),
         DS3LocationData("PW: Chillbite Ring",                      "Chillbite Ring",                          DS3LocationCategory.RING),
     ],
     "Dreg Heap": [
@@ -523,7 +525,7 @@ location_tables = {
         DS3LocationData("DH: Giant Door Shield",                   "Giant Door Shield",                       DS3LocationCategory.SHIELD),
         DS3LocationData("DH: Herald Curved Greatsword",            "Herald Curved Greatsword",                DS3LocationCategory.WEAPON),
         DS3LocationData("DH: Flame Fan",                           "Flame Fan",                               DS3LocationCategory.SPELL),
-        DS3LocationData("DH: Soul of the Demon Prince",            "Soul of the Demon Prince",                DS3LocationCategory.MISC),
+        DS3LocationData("DH: Soul of the Demon Prince",            "Soul of the Demon Prince",                DS3LocationCategory.BOSS),
         DS3LocationData("DH: Small Envoy Banner",                  "Small Envoy Banner",                      DS3LocationCategory.KEY),
         DS3LocationData("DH: Ring of Favor+3",                     "Ring of Favor+3",                         DS3LocationCategory.RING),
         DS3LocationData("DH: Covetous Silver Serpent Ring+3",      "Covetous Silver Serpent Ring+3",          DS3LocationCategory.RING),
@@ -562,8 +564,8 @@ location_tables = {
         DS3LocationData("RC: Ritual Spear Fragment",               "Ritual Spear Fragment",                   DS3LocationCategory.MISC),
         DS3LocationData("RC: Antiquated Plain Garb",               "Antiquated Plain Garb",                   DS3LocationCategory.ARMOR),
         DS3LocationData("RC: Violet Wrappings",                    "Violet Wrappings",                        DS3LocationCategory.ARMOR),
-        DS3LocationData("RC: Soul of Darkeater Midir",             "Soul of Darkeater Midir",                 DS3LocationCategory.MISC),
-        DS3LocationData("RC: Soul of Slave Knight Gael",           "Soul of Slave Knight Gael",               DS3LocationCategory.MISC),
+        DS3LocationData("RC: Soul of Darkeater Midir",             "Soul of Darkeater Midir",                 DS3LocationCategory.BOSS),
+        DS3LocationData("RC: Soul of Slave Knight Gael",           "Soul of Slave Knight Gael",               DS3LocationCategory.BOSS),
         DS3LocationData("RC: Blood of the Dark Soul",              "Blood of the Dark Soul",                  DS3LocationCategory.KEY),
         DS3LocationData("RC: Chloranthy Ring+3",                   "Chloranthy Ring+3",                       DS3LocationCategory.RING),
         DS3LocationData("RC: Ring of Steel Protection+3",          "Ring of Steel Protection+3",              DS3LocationCategory.RING),
