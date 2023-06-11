@@ -116,7 +116,11 @@ def display_log(room: UUID):
     if room is None:
         return abort(404)
     if room.owner == session["_id"]:
-        return Response(_read_log(os.path.join("logs", str(room.id) + ".txt")), mimetype="text/plain;charset=UTF-8")
+        file_path = os.path.join("logs", str(room.id) + ".txt")
+        if os.path.exists(file_path):
+            return Response(_read_log(file_path), mimetype="text/plain;charset=UTF-8")
+        return "Log File does not exist."
+
     return "Access Denied", 403
 
 

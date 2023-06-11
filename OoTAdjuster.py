@@ -44,7 +44,7 @@ def adjustGUI():
         StringVar, IntVar, Checkbutton, Frame, Label, X, Entry, Button, \
         OptionMenu, filedialog, messagebox, ttk
     from argparse import Namespace
-    from Main import __version__ as MWVersion
+    from Utils import __version__ as MWVersion
 
     window = tk.Tk()
     window.wm_title(f"Archipelago {MWVersion} OoT Adjuster")

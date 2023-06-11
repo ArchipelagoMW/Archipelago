@@ -227,7 +227,7 @@ class SMWorld(World):
                 add_postAvailable_rule(location, self.player, value.PostAvailable)
 
             if self.multiworld.doors_colors_rando[self.player].value != 0:
-                add_item_rule(location, lambda item:    item.type not in ammoItems or 
+                add_item_rule(location, lambda item:    item.game != self.game or item.type not in ammoItems or 
                                                         (item.type in ammoItems and \
                                                         (not item.advancement or (item.advancement and item.player == self.player))))
                 
@@ -641,7 +641,7 @@ class SMWorld(World):
 
         # set rom name
         # 21 bytes
-        from Main import __version__
+        from Utils import __version__
         self.romName = bytearray(f'SM{__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}', 'utf8')[:21]
         self.romName.extend([0] * (21 - len(self.romName)))
         # clients should read from 0x7FC0, the location of the rom title in the SNES header.
