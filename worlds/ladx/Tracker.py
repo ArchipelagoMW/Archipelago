@@ -37,6 +37,7 @@ class Check:
 
 class LocationTracker:
     all_checks = []
+    meta_to_check_dict = {}
 
     def __init__(self, gameboy):
         self.gameboy = gameboy
@@ -87,7 +88,7 @@ class LocationTracker:
         blacklist = {'None', '0x2A1-2'}
 
         # in no dungeons boss shuffle, the d3 boss in d7 set 0x20 in fascade's room (0x1BC)
-        # after beating evil eagile in D6, 0x1BC is now 0xAC (other things may have happened in between)
+        # after beating evil eagle in D6, 0x1BC is now 0xAC (other things may have happened in between)
         # entered d3, slime eye flag had already been set (0x15A 0x20). after killing angler fish, bits 0x0C were set
         lowest_check = 0xffff
         highest_check = 0
@@ -116,6 +117,7 @@ class LocationTracker:
             if check_id == '0x2A3':
                 self.start_check = check
             self.all_checks.append(check)
+            self.meta_to_check_dict[check.id] = check
         self.remaining_checks = [check for check in self.all_checks]
         self.gameboy.set_cache_limits(
             lowest_check, highest_check - lowest_check + 1)
@@ -140,6 +142,9 @@ class LocationTracker:
         if new_checks:
             cb(new_checks)
         return True
+
+    def get_check_from_meta(self, meta):
+        return self.meta_to_check_dict[meta]
 
 
 class MagpieBridge:

@@ -29,6 +29,22 @@ MainLoop:
     and  a
     ret  nz
 
+; Check if any checks should be collected
+CollectCheck:
+    ; Load the or mask into a
+    ld  a, [wLinkCollectCheckValue]
+    ; Test if the mask is 0
+    or  a
+    jr  z, SpawnDelay
+    ; Load the current state of the check into b
+    ld b, [wLinkCollectCheckHigh]
+    ; Bitwise or the accumulator and load it back into the check
+    or b
+    ld [wLinkCollectCheckHigh], a
+    ; Reset the check value
+    ld [wLinkCollectCheckValue], 0
+
+SpawnDelay:
     ld   a, [wLinkSpawnDelay]
     and  a
     jr   z, .allowSpawn
@@ -353,3 +369,12 @@ RandomTeleportPositions:
     db $55, $55, $55, $55, $46, $55, $55, $56, $55, $55, $55, $54, $55, $45, $55, $55
     db $55, $55, $54, $55, $55, $55, $65, $55, $55, $46, $55, $55, $56, $55, $55, $55
     db $55, $55, $54, $55, $55, $55, $45, $36, $53, $51, $57, $53, $56, $54, $45, $46
+
+CollectCheck:
+    # Load the current state of the check into a
+    ld a, [wLinkCollectCheckHigh]
+    # Load the or mask into b
+    ld b, [wLinkCollectCheckValue]
+    # Bitwise or the accumulator
+    or b
+    ld [wLinkCollectCheckHigh], a

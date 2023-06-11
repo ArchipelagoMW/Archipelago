@@ -99,9 +99,10 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     assembler.const("wLinkStatusBits", 0xDDF7)
     assembler.const("wLinkGiveItem", 0xDDF8)
     assembler.const("wLinkGiveItemFrom", 0xDDF9)
-    assembler.const("wLinkSendItemRoomHigh", 0xDDFA)
-    assembler.const("wLinkSendItemRoomLow", 0xDDFB)
-    assembler.const("wLinkSendItemTarget", 0xDDFC)
+    # Store the memory location of a check to be collected, as well as the mask to write.
+    assembler.const("wLinkCollectCheckHigh", 0xDDFA)
+    assembler.const("wLinkCollectCheckLow", 0xDDFB)
+    assembler.const("wLinkCollectCheckValue", 0xDDFC)
     assembler.const("wLinkSendItemItem", 0xDDFD)
 
     assembler.const("wZolSpawnCount", 0xDE10)
@@ -333,16 +334,16 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             #         room_editor.objects.append(Object(x, y, 0xCF + rnd.randint(0, 3)))
 
     # Attempt at imitating gb palette, fails
-    if False:
-        gb_colors = [
-            [0x0f, 0x38, 0x0f],
-            [0x30, 0x62, 0x30],
-            [0x8b, 0xac, 0x0f],
-            [0x9b, 0xbc, 0x0f], 
-        ]
-        for color in gb_colors:
-            for channel in range(3):
-                color[channel] = color[channel] * 31 // 0xbc
+    # if False:
+    #     gb_colors = [
+    #         [0x0f, 0x38, 0x0f],
+    #         [0x30, 0x62, 0x30],
+    #         [0x8b, 0xac, 0x0f],
+    #         [0x9b, 0xbc, 0x0f],
+    #     ]
+    #     for color in gb_colors:
+    #         for channel in range(3):
+    #             color[channel] = color[channel] * 31 // 0xbc
         
 
     palette = ap_settings["palette"]

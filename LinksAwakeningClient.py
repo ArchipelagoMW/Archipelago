@@ -28,7 +28,7 @@ from worlds.ladx.GpsTracker import GpsTracker
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
-from worlds.ladx.Tracker import LocationTracker, MagpieBridge
+from worlds.ladx.Tracker import LocationTracker, MagpieBridge, Check
 
 class GameboyException(Exception):
     pass
@@ -81,10 +81,11 @@ class LAClientConstants:
     wLinkHealth = 0xDB5A
     wLinkGiveItem = 0xDDF8  # RW
     wLinkGiveItemFrom = 0xDDF9  # RW
-    # All of these six bytes are unused, we can repurpose
-    # wLinkSendItemRoomHigh = 0xDDFA  # RO
-    # wLinkSendItemRoomLow = 0xDDFB  # RO
-    # wLinkSendItemTarget = 0xDDFC  # RO
+    # Store the memory location of a check to be collected, as well as the mask to write.
+    wLinkCollectCheckHigh = 0xDDFA  # RW
+    wLinkCollectCheckLow = 0xDDFB  # RW
+    wLinkCollectCheckValue = 0xDDFC  # RW
+    # All of these three bytes are unused, we can repurpose
     # wLinkSendItemItem = 0xDDFD  # RO
     # wLinkSendShopItem = 0xDDFE # RO, which item to send (1 based, order of the shop items)
     # RO, which player to send to, but it's just the X position of the NPC used, so 0x18 is player 0
@@ -101,7 +102,7 @@ class LAClientConstants:
     VictoryGameplayAndSub = 0x0102
 
 
-class RAGameboy():
+class RAGameboy:
     cache = []
     cache_start = 0
     cache_size = 0
@@ -112,7 +113,7 @@ class RAGameboy():
         self.address = address
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        assert (self.socket)
+        assert self.socket
         self.socket.setblocking(False)
 
     def get_retroarch_version(self):
@@ -448,11 +449,12 @@ class LinksAwakeningContext(CommonContext):
         if magpie:
             self.magpie_enabled = True
             self.magpie = MagpieBridge()
+        # The set of check names to iternal meta ids
+        self.check_name_to_metadata_map = {str(v): k for k, v in checkMetadataTable.items()}
         super().__init__(server_address, password)
 
     def run_gui(self) -> None:
         import webbrowser
-        import kvui
         from kvui import Button, GameManager
         from kivy.uix.image import Image
 
@@ -487,6 +489,7 @@ class LinksAwakeningContext(CommonContext):
         await self.send_msgs(message)
 
     ENABLE_DEATHLINK = False
+
     async def send_deathlink(self):
         if self.ENABLE_DEATHLINK:
             message = [{"cmd": 'Deathlink',
@@ -524,10 +527,25 @@ class LinksAwakeningContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
+            checks = args["checked_locations"]
+            self.mark_locations_as_checked(checks=checks)
         # TODO - use watcher_event
-        if cmd == "ReceivedItems":
+        elif cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], args["index"]):
                 self.client.recvd_checks[index] = item
+        elif cmd != "RoomInfo":
+            pass
+
+    def mark_locations_as_checked(self, checks: typing.List[int]):
+        for check in checks:
+            name = self.location_names[check]
+            meta = self.check_name_to_metadata_map[name]
+            check = self.client.tracker.get_check_from_meta(meta=meta)
+            if check is not None:
+                # TODO Need to do this one at a time, wait for a response
+                # TODO Need to know if a check is local. If local, we can either not collect it, or send the item
+                self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
+                                                 bytes=[check.address, check.mask])
 
     item_id_lookup = get_locations_to_id()
 

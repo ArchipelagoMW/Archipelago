@@ -3,9 +3,9 @@ class CheckMetadata:
     def __init__(self, name, area):
         self.name = name
         self.area = area
-
+    # Match the archipelago check names
     def __repr__(self):
-        result = "%s - %s" % (self.area, self.name)
+        result = "%s (%s)" % (self.name, self.area)
         return result
 
 
