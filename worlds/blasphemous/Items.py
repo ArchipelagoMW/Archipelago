@@ -417,10 +417,10 @@ item_table: List[ItemDict] = [
     {'name': "Lunge Skill",
         'count': 3,
         'classification': ItemClassification.useful},
-    {'name': "Dash",
+    {'name': "Dash Ability",
         'count': 1,
         'classification': ItemClassification.progression},
-    {'name': "Wall Climb",
+    {'name': "Wall Climb Ability",
         'count': 1,
         'classification': ItemClassification.progression},
 

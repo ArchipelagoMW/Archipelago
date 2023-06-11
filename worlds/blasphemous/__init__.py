@@ -70,10 +70,10 @@ class BlasphemousWorld(World):
         player = self.player
 
         if not world.dash_shuffle[player]:
-            world.start_inventory[player].value["Dash"] = 1
+            world.start_inventory[player].value["Dash Ability"] = 1
 
         if not world.wall_climb_shuffle[player]:
-            world.start_inventory[player].value["Wall Climb"] = 1
+            world.start_inventory[player].value["Wall Climb Ability"] = 1
 
         if world.skip_long_quests[player]:
             for loc in junk_locations:
@@ -127,9 +127,9 @@ class BlasphemousWorld(World):
         pool = []
 
         for item in item_table:
-            if not world.dash_shuffle[player] and item["name"] == "Dash":
+            if not world.dash_shuffle[player] and item["name"] == "Dash Abliity":
                 continue
-            if not world.wall_climb_shuffle[player] and item["name"] == "Wall Climb":
+            if not world.wall_climb_shuffle[player] and item["name"] == "Wall Climb Ability":
                 continue
             if not world.boots_of_pleading[player] and item["name"] == "Boots of Pleading":
                 continue
@@ -201,159 +201,20 @@ class BlasphemousWorld(World):
         ent2.connect(world.get_region("D17Z01S01", player))
         menu.exits.append(ent2)
 
-        doorsInRoom: Dict[str, List[DoorDict]] = {}
-        unconnectedDoors = door_table.copy()
-        visibleDoors: List[DoorDict] = []
-        reachableDoors: List[str] = []
-
         for door in door_table:
-            if not self.get_room_from_door(door["Id"]).name in doorsInRoom.keys():
-                doorsInRoom[self.get_room_from_door(door["Id"]).name] = [door]
+            if door.get("OriginalDoor") is None:
+                continue
             else:
-                doorsInRoom[self.get_room_from_door(door["Id"]).name].append(door)
+                if not door["Id"] in self.door_connections.keys():
+                    self.door_connections[door["Id"]] = door["OriginalDoor"]
+                    self.door_connections[door["OriginalDoor"]] = door["Id"]
 
-            #print(doorsInRoom)
-            if not world.door_randomizer[player]:
-                if door.get("OriginalDoor") is None:
-                    continue
-                else:
-                    if not door["Id"] in self.door_connections.keys():
-                        self.door_connections[door["Id"]] = door["OriginalDoor"]
-                        self.door_connections[door["OriginalDoor"]] = door["Id"]
+                parent: Region = self.get_room_from_door(door["Id"])
+                target: Region = self.get_room_from_door(door["OriginalDoor"])
+                exit: Entrance = Entrance(player, door["Id"], parent)
 
-                    parent: Region = self.get_room_from_door(door["Id"])
-                    target: Region = self.get_room_from_door(door["OriginalDoor"])
-                    exit: Entrance = Entrance(player, door["Id"], parent)
-
-                    exit.connect(target)
-                    parent.exits.append(exit)
-                    
-        if world.door_randomizer[player]:
-            for d in doorsInRoom["D17Z01S01"]:
-                if d["Direction"] != 5:
-                    visibleDoors.append(d)
-
-            reachableDoors.append("D17Z01S01[E]")
-            world.random.shuffle(unconnectedDoors)
-
-            while len(unconnectedDoors) > 0:
-                #stuck: bool = True
-                newlyFoundDoors: List[DoorDict] = visibleDoors.copy()
-                visibleDoors.clear()
-                #print(f"[Blasphemous - \"{world.get_player_name(player)}\"] Door Randomization: {abs(len(unconnectedDoors) / len(door_table) * 100 - 100)}%")
-                #print(unconnectedDoors)
-                while len(newlyFoundDoors) > 0:
-                    #stuck = False
-                    enterDoor: DoorDict = world.random.choice(newlyFoundDoors)
-
-                    attempts: int = 0
-                    while (enterDoor.get("Logic") != None or enterDoor.get("RequiredDoors") != None) and attempts < 10:
-                        enterDoor = world.random.choice(newlyFoundDoors)
-                        attempts += 1
-
-                    newlyFoundDoors.remove(enterDoor)
-
-                    if enterDoor["Id"] in self.door_connections.keys():
-                        #print(f"Door \"{enterDoor['Id']}\" is already mapped.")
-                        continue
-                    else:
-                        exitDoor: DoorDict = None
-                        exitIdx: int = -1
-                        undesirableIdx: int = -1
-
-                        for d in unconnectedDoors:
-                            currentDoor: DoorDict = d
-
-                            if currentDoor["Direction"] != self.get_opposite_direction(enterDoor["Direction"]):
-                                #print(f"Door \"{currentDoor['Id']}\" can't connect - wrong direction.")
-                                continue
-
-                            if self.get_room_from_door(currentDoor["Id"]).name == self.get_room_from_door(enterDoor["Id"]):
-                                #print(f"Door \"{currentDoor['Id']}\" can't connect - same room.")
-                                continue
-                            
-                            if currentDoor in newlyFoundDoors or currentDoor in visibleDoors:
-                                undesirableIdx = unconnectedDoors.index(currentDoor)
-                                #print(f"Door \"{currentDoor['Id']}\" is in a room the player already has access to.")
-                                continue
-
-                            if currentDoor.get("RequiredDoors") != None:
-                                for req in currentDoor["RequiredDoors"]:
-                                    if not req in reachableDoors:
-                                        continue
-
-                            if len(unconnectedDoors) > 2:
-                                # Find if this door will grant access to any new doors
-                                newDoors: int = -1
-                                reachableDoors.append(currentDoor["Id"])
-
-                                for obj in doorsInRoom[self.get_room_from_door(currentDoor["Id"]).name]:
-                                    if obj["Id"] in self.door_connections.keys() or currentDoor["Id"] == obj["Id"]:
-                                        #print(f"Door \"{obj['Id']}\" is already mapped or is the current door.")
-                                        continue
-
-                                    if obj in newlyFoundDoors or obj in visibleDoors:
-                                        #print(f"Door \"{obj['Id']}\" has already been made visible.")
-                                        continue
-
-                                    if self.door_should_be_visible(obj, reachableDoors):
-                                        newDoors += 1
-                                reachableDoors.remove(currentDoor["Id"])
-
-                                if len(newlyFoundDoors) + len(visibleDoors) + newDoors < 0:
-                                    continue
-
-                            exitIdx = unconnectedDoors.index(d)
-                            break
-
-                        if exitIdx >= 0:
-                            exitDoor = unconnectedDoors[exitIdx]
-                        elif undesirableIdx >= 0:
-                            exitDoor = unconnectedDoors[undesirableIdx]
-
-                        if exitDoor == None:
-                            if not enterDoor in visibleDoors:
-                                visibleDoors.append(enterDoor)
-                            #print(f"Door \"{enterDoor['Id']}\" is reachable but cannot connect to anything without closing the loop.")
-                            continue
-
-                        self.door_connections[enterDoor["Id"]] = exitDoor["Id"]
-                        self.door_connections[exitDoor["Id"]] = enterDoor["Id"]
-                        reachableDoors.append(enterDoor["Id"])
-                        reachableDoors.append(exitDoor["Id"])
-                        #print(enterDoor)
-                        #print(exitDoor)
-                        unconnectedDoors.remove(enterDoor)
-                        unconnectedDoors.remove(exitDoor)
-
-                        for obj in doorsInRoom[self.get_room_from_door(exitDoor["Id"]).name]:
-                            if not obj["Id"] in self.door_connections.keys():
-                                newlyFoundDoors.append(obj)
-
-                #if stuck and len(unconnectedDoors) > 0:
-                #    d1 = world.random.choice(unconnectedDoors)
-                #    unconnectedDoors.remove(d1)
-                #    d2 = world.random.choice(unconnectedDoors)
-                    #print(d1, d2)
-                #    while d1["Direction"] != self.get_opposite_direction(d2["Direction"]):
-                #        d2 = world.random.choice(unconnectedDoors)
-
-                #    unconnectedDoors.remove(d2)
-                #    self.door_connections[d1["Id"]] = d2["Id"]
-                #    self.door_connections[d2["Id"]] = d1["Id"]
-                #    reachableDoors.append(d1["Id"])
-                #    reachableDoors.append(d2["Id"])
-            
-            if len(self.door_connections) != len(door_table):
-                raise Exception(f"[Blasphemous - \"{world.get_player_name(player)}\"] Exception: not all doors were mapped.")
-            
-        for d1, d2 in self.door_connections.items():
-            parent: Region = self.get_room_from_door(d1)
-            target: Region = self.get_room_from_door(d2)
-            exit: Entrance = Entrance(player, d1, parent)
-
-            exit.connect(target)
-            parent.exits.append(exit)
+                exit.connect(target)
+                parent.exits.append(exit)
 
         for door in door_table:
             if door.get("RequiredDoors") is not None:
@@ -362,13 +223,6 @@ class BlasphemousWorld(World):
                     connection = self.get_connected_door(d)
                     add_rule(world.get_entrance(door["Id"], player), lambda state: state.can_reach(connection), "or")
                 add_rule(world.get_entrance(door["Id"], player), lambda state: state.can_reach(self.get_connected_door(door["Id"])), "or")
-
-            reg: Region = self.get_room_from_door(door["Id"])
-            event = BlasphemousLocation(player, door["Id"], None, reg)
-            event.show_in_spoiler = False
-            event.place_locked_item(self.create_event(door["Id"]))
-            add_rule(event, lambda state: state.can_reach(self.get_connected_door(door["Id"]), player))
-            reg.locations.append(event)
 
         #keys = list(self.door_connections.keys())
         #keys.sort()
