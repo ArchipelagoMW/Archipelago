@@ -29,26 +29,26 @@ MainLoop:
     and  a
     ret  nz
 
-; Check if any checks should be collected
-CollectCheck:
+    ; Check if any checks should be collected
     ; Load the or mask into a
     ld  a, [wLinkCollectCheckValue]
     ; Test if the mask is 0
     or  a
-    jr  z, SpawnDelay
+    jr  z, .spawnDelay
     ; Load the high memory address of the check into h
-    ld h, [wLinkCollectCheckHigh]
+    ld  h, [wLinkCollectCheckHigh]
     ; Load the low memory address of the check into l
-    ld l, [wLinkCollectCheckLow]
+    ld  l, [wLinkCollectCheckLow]
     ; Load the current state of the check into b
-    ld b, [hl]
+    ld  b, [hl]
     ; Bitwise or the accumulator and load it back into the check
-    or b
-    ld [wLinkCollectCheckHigh], a
+    or  b
+    ld  [hl], a
     ; Reset the check value
-    ld [wLinkCollectCheckValue], 0
+    xor a
+    ld  [wLinkCollectCheckValue], a
 
-SpawnDelay:
+.spawnDelay:
     ld   a, [wLinkSpawnDelay]
     and  a
     jr   z, .allowSpawn
@@ -88,10 +88,10 @@ SpawnDelay:
     ; Paste the item text
     call BuildItemMessage
     ; Paste " from "
-    ld hl, SpaceFrom
+    ld   hl, SpaceFrom
     call MessageCopyString
     ; Paste the player name
-    ld  a, [wLinkGiveItemFrom]
+    ld   a, [wLinkGiveItemFrom]
     call MessageAddPlayerName
     ld   a, $C9
     ; hl = $wLinkStatusBits
@@ -373,12 +373,3 @@ RandomTeleportPositions:
     db $55, $55, $55, $55, $46, $55, $55, $56, $55, $55, $55, $54, $55, $45, $55, $55
     db $55, $55, $54, $55, $55, $55, $65, $55, $55, $46, $55, $55, $56, $55, $55, $55
     db $55, $55, $54, $55, $55, $55, $45, $36, $53, $51, $57, $53, $56, $54, $45, $46
-
-CollectCheck:
-    # Load the current state of the check into a
-    ld a, [wLinkCollectCheckHigh]
-    # Load the or mask into b
-    ld b, [wLinkCollectCheckValue]
-    # Bitwise or the accumulator
-    or b
-    ld [wLinkCollectCheckHigh], a
