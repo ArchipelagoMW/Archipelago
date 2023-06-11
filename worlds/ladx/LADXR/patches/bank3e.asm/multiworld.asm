@@ -36,8 +36,10 @@ CollectCheck:
     ; Test if the mask is 0
     or  a
     jr  z, SpawnDelay
+    ; Load the memory address of the check into hl
+    ld hl, [wLinkCollectCheckHigh]
     ; Load the current state of the check into b
-    ld b, [wLinkCollectCheckHigh]
+    ld b, [hl]
     ; Bitwise or the accumulator and load it back into the check
     or b
     ld [wLinkCollectCheckHigh], a
