@@ -528,7 +528,6 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             checks = args["checked_locations"]
-            self.mark_locations_as_checked(checks=checks)
         # TODO - use watcher_event
         elif cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], args["index"]):
@@ -536,17 +535,26 @@ class LinksAwakeningContext(CommonContext):
         elif cmd != "RoomInfo":
             pass
 
-    def mark_locations_as_checked(self, checks: typing.List[int]):
-        for check in checks:
-            name = self.location_names[check]
-            meta = self.check_name_to_metadata_map[name]
-            check = self.client.tracker.get_check_from_meta(meta=meta)
-            if check is not None:
-                # TODO Need to do this one at a time, wait for a response
-                # TODO Need to know if a check is local. If local, we can either not collect it, or send the item
-                high, low = divmod(check.address, 0x100)
-                self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
-                                                 bytes=[high, low, check.mask])
+    async def mark_locations_as_checked(self):
+        checks = list(self.checked_locations)
+        await self.get_location_checks_from_server(checks=checks)
+        if self.client.tracker is not None and self.locations_info is not None:
+            for check in checks:
+                player = self.locations_info[check].player
+                # TODO We should also only do this if we haven't already done it, and reset this dict when needed
+                # TODO We could also just reset the dict to contain checks which should never be collected
+                if player == self.slot:
+                    name = self.location_names[check]
+                    meta = self.check_name_to_metadata_map[name]
+                    check = self.client.tracker.get_check_from_meta(meta=meta)
+                    if check is not None:
+                        # TODO Need to do this one at a time, wait for a response
+                        high, low = divmod(check.address, 0x100)
+                        self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
+                                                         bytes=[high, low, check.mask])
+
+    async def get_location_checks_from_server(self, checks: typing.List[int]):
+        return await self.send_msgs([{"cmd": "LocationScouts", "locations": checks}])
 
     item_id_lookup = get_locations_to_id()
 
@@ -584,6 +592,7 @@ class LinksAwakeningContext(CommonContext):
                     if self.last_resend + 5.0 < now:
                         self.last_resend = now
                         await self.send_checks()
+                        await self.mark_locations_as_checked()
                     if self.magpie_enabled:
                         self.magpie.set_checks(self.client.tracker.all_checks)
                         await self.magpie.set_item_tracker(self.client.item_tracker)
