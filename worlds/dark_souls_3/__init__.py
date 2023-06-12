@@ -76,6 +76,8 @@ class DarkSouls3World(World):
             self.enabled_location_categories.add(DS3LocationCategory.NPC)
         if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
+        if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
+            self.enabled_location_categories.add(DS3LocationCategory.BOSS)
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
         if self.multiworld.enable_health_upgrade_locations[self.player] == Toggle.option_true:

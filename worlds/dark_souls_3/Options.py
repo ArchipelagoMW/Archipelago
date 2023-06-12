@@ -33,6 +33,11 @@ class RandomizeKeyLocations(DefaultOnToggle):
     display_name = "Randomize Key Locations"
 
 
+class RandomizeBossSoulLocations(DefaultOnToggle):
+    """Randomizes Boss Souls (+18 Locations)"""
+    display_name = "Randomize Boss Soul Locations"
+
+
 class RandomizeNPCLocations(Toggle):
     """Randomizes friendly NPC drops (meaning you will probably have to kill them) (+14 locations)"""
     display_name = "Randomize NPC Locations"
@@ -192,6 +197,7 @@ dark_souls_options: typing.Dict[str, Option] = {
     "enable_ring_locations": RandomizeRingLocations,
     "enable_spell_locations": RandomizeSpellLocations,
     "enable_key_locations": RandomizeKeyLocations,
+    "enable_boss_locations": RandomizeBossSoulLocations,
     "enable_npc_locations": RandomizeNPCLocations,
     "enable_misc_locations": RandomizeMiscLocations,
     "enable_health_upgrade_locations": RandomizeHealthLocations,
