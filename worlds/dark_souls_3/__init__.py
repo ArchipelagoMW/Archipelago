@@ -412,6 +412,8 @@ class DarkSouls3World(World):
         if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
+
+        if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
             set_rule(self.multiworld.get_location("PC: Soul of Yhorm the Giant", self.player),
                      lambda state: state.has("Storm Ruler", self.player))
             set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),

@@ -44,7 +44,7 @@ class RandomizeNPCLocations(Toggle):
 
 
 class RandomizeMiscLocations(Toggle):
-    """Randomizes miscellaneous items (ashes, tomes, scrolls, etc.) to the pool. (+54 locations)"""
+    """Randomizes miscellaneous items (ashes, tomes, scrolls, etc.) to the pool. (+36 locations)"""
     display_name = "Randomize Miscellaneous Locations"
 
 
