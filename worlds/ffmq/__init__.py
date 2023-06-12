@@ -32,8 +32,7 @@ class FFMQWorld(World):
     def __init__(self, world, player: int):
         self.rom_name_available_event = threading.Event()
         self.rom_name = None
-        self.rooms = None # deepcopy(rooms)
-        #self.post_early_coin = None
+        self.rooms = None
         super().__init__(world, player)
 
     def generate_early(self):
@@ -53,14 +52,16 @@ class FFMQWorld(World):
                  self.multiworld.bosses_scaling_lower[self.player].value)
 
         map_shuffle = self.multiworld.map_shuffle[self.player].value
-        crest_shuffle = self.multiworld.crest_shuffle[self.player].current_key.title()
-        url = f"https://ffmqrapi.azurewebsites.net/GenerateRooms?s={1}&m={map_shuffle}&c={crest_shuffle}"
+        crest_shuffle = self.multiworld.crest_shuffle[self.player].current_key
+        battlefield_shuffle = self.multiworld.crest_shuffle[self.player].current_key
+
+        url = f"https://ffmqrapi.azurewebsites.net/GenerateRooms?s={2}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}"
         response = requests.get(url)
         if response.ok:
             self.rooms = yaml.load(response.text, yaml.Loader)
         else:
-            raise Exception("Got error {} {} {} from trying to fetch map shuffle data for FFMQ player {}".format(response.status_code, response.reason, response.text, self.player))
-        breakpoint()
+            raise Exception(f"Got error {response.status_code} {response.reason} {response.text} from trying to fetch map shuffle data for FFMQ player {self.player}")
+        # breakpoint()
     # @classmethod
     # def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
     #     coins = []

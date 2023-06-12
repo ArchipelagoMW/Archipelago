@@ -62,180 +62,182 @@ crest_dead_ends = (51, 52, 53, 108, 158, 396, 397)
 dupe_rooms = ((336, 171), (175, 96))
 
 
-def crest_shuffle(self):
-    def pair(entrance_a, entrance_b, access_rule, barred=False):
-        entrance_a_to = get_entrance_to(entrance_a)
-        entrance_b_to = get_entrance_to(entrance_b)
-        entrance_a["teleporter"] = entrance_b_to["teleporter"]
-        entrance_b["teleporter"] = entrance_a_to["teleporter"]
-        entrance_a["target_room"] = entrance_b_to["target_room"]
-        entrance_b["target_room"] = entrance_a_to["target_room"]
-        entrance_a["access"][0] = access_rule
-        entrance_b["access"][0] = access_rule
-        if barred:
-            entrance_a["access"].append("Barred")
-            entrance_b["access"].append("Barred")
-        if "room" in entrance_a:
-            del entrance_a["room"]
-        if "room" in entrance_b:
-            del entrance_b["room"]
-
-    if self.multiworld.crest_shuffle[self.player]:
-        crest_tiles = (["MobiusCrest"] * 4) + (["LibraCrest"] * 2) + (["GeminiCrest"] * 3)
-        self.multiworld.random.shuffle(crest_tiles)
-        crest_dead_end_entrances = []
-        crest_open_entrances = []
-        for room in self.rooms:
-            for link in room["links"]:
-                if ("GeminiCrest" in link["access"] or "LibraCrest" in link["access"] or "MobiusCrest" in
-                        link["access"]) and "Spencer" not in room["name"]:
-                    link["room"] = room["id"]
-                    if link["entrance"] in crest_dead_ends:
-                        crest_dead_end_entrances.append(link)
-                    else:
-                        crest_open_entrances.append(link)
-        dupe_room_crests = [self.multiworld.random.choice(crest_tiles), self.multiworld.random.choice(crest_tiles)]
-        while dupe_room_crests == ["GeminiCrest", "GeminiCrest"] or dupe_room_crests == ["LibraCrest", "LibraCrest"]:
-            dupe_room_crests = [self.multiworld.random.choice(crest_tiles), self.multiworld.random.choice(crest_tiles)]
-        self.multiworld.random.shuffle(crest_open_entrances)
-        # there are two different sets of "dupe rooms" - rooms which use the same tile map. These must have the same
-        # crest tiles set up for both instances. We have chosen two sets of crest tiles to be used for the dupe room
-        # sets. If these are not the same crest, then we need to ensure we aren't going to try to connect a room from
-        # one set to another.
-        if dupe_room_crests[0] != dupe_room_crests[1]:
-            while ((crest_open_entrances[-1]["entrance"] in dupe_rooms[0] and crest_open_entrances[-2]["entrance"]
-                    in dupe_rooms[1]) or (crest_open_entrances[-1]["entrance"] in dupe_rooms[1] and
-                    crest_open_entrances[-2]["entrance"] in dupe_rooms[0]) or (crest_open_entrances[-3]["entrance"]
-                    in dupe_rooms[0] and crest_open_entrances[-4]["entrance"] in dupe_rooms[1]) or
-                    (crest_open_entrances[-3]["entrance"] in dupe_rooms[1] and crest_open_entrances[-4]["entrance"]
-                    in dupe_rooms[0])):
-                self.multiworld.random.shuffle(crest_open_entrances)
-
-        crest_tiles.remove(dupe_room_crests[0])
-        crest_tiles.remove(dupe_room_crests[1])
-        # we need to remove a second copy of the chosen dupe room crests unless two dupe rooms from the same set are
-        # going to be connected.
-        for x, dupe_room in enumerate(dupe_rooms):
-            for i in (-1, -3):
-                if crest_open_entrances[i]["entrance"] in dupe_room and crest_open_entrances[i-1]["entrance"] in dupe_room:
-                    break
-            else:
-                crest_tiles.remove(dupe_room_crests[x])
-        # crest_open_entrances.sort(key=lambda i: i["entrance"] not in dupe_rooms[0]
-        #                               and i["entrance"] not in dupe_rooms[1])
-        for entrance_a in crest_dead_end_entrances:
-            entrance_b = crest_open_entrances.pop(0)
-            for i, dupe_room in enumerate(dupe_rooms):
-                if entrance_b["entrance"] in dupe_room:
-                    crest_tile = dupe_room_crests[i]
-                    break
-            else:
-                crest_tile = crest_tiles.pop()
-            pair(entrance_a, entrance_b, crest_tile)
-        for _ in range(2):
-            entrance_a = crest_open_entrances.pop(0)
-            entrance_b = crest_open_entrances.pop(0)
-            for i, dupe_room in enumerate(dupe_rooms):
-                if entrance_a["entrance"] in dupe_room or entrance_b["entrance"] in dupe_room:
-                    crest_tile = dupe_room_crests[i]
-                    break
-            else:
-                crest_tile = crest_tiles.pop()
-            pair(entrance_a, entrance_b, crest_tile, barred=self.multiworld.logic[self.player] != "expert")
-
-
-non_shuffled_things = ("FocusTowerForesta", "FocusTowerAquaria", "LifeTemple", "FocusTowerFrozen", "FocusTowerFireburg",
-                       "FocusTowerWindia", "GiantTree", "SpencersPlace", "ShipDock", "MacsShip", "LightTemple",
-                       "DoomCastle", "MacsShipDoom")
-
-
-def overworld_shuffle(self):
-
-    overworld_things = []
-
-    for room in self.rooms:
-        if "type" in room and room["type"] == "Subregion":
-            if "game_objects" in room:
-                for object in room["game_objects"]:
-                    if "location" in object:
-                        overworld_things.append(object.copy())
-            for object in room["links"]:
-                if "location" in object and object["location"] not in non_shuffled_things:
-                    overworld_things.append(object.copy())
-    self.multiworld.random.shuffle(overworld_things)
-
-    def swap_ow_things(room_id, links, objects):
-        thing = overworld_things.pop()
-        thing["location_slot"] = object["location_slot"]
-        if "target_room" in thing:
-            links.append(thing)
-            target_room = thing["target_room"]
-            for room in self.rooms:
-                if room["id"] == target_room:
-                    for link in room["links"]:
-                        if link["target_room"] >= 220 <= 231:
-                            link["target_room"] = room_id
-        else:
-            objects.append(thing)
-
-    for room in self.rooms:
-        if "type" in room and room["type"] == "Subregion":
-            modified_objects = []
-            modified_links = []
-            if "game_objects" in room:
-                for object in room["game_objects"]:
-                    if "location" in object:
-                        swap_ow_things(room["id"], modified_links, modified_objects)
-
-                    else:
-                        modified_objects.append(object)
-            for link in room["links"]:
-                if "location" in link and link["location"] not in non_shuffled_things:
-                    swap_ow_things(room["id"], modified_links, modified_objects)
-                else:
-                    modified_links.append(link)
-            room["game_objects"] = modified_objects
-            room["links"] = modified_links
+# def crest_shuffle(self):
+#     def pair(entrance_a, entrance_b, access_rule, barred=False):
+#         entrance_a_to = get_entrance_to(entrance_a)
+#         entrance_b_to = get_entrance_to(entrance_b)
+#         entrance_a["teleporter"] = entrance_b_to["teleporter"]
+#         entrance_b["teleporter"] = entrance_a_to["teleporter"]
+#         entrance_a["target_room"] = entrance_b_to["target_room"]
+#         entrance_b["target_room"] = entrance_a_to["target_room"]
+#         entrance_a["access"][0] = access_rule
+#         entrance_b["access"][0] = access_rule
+#         if barred:
+#             entrance_a["access"].append("Barred")
+#             entrance_b["access"].append("Barred")
+#         if "room" in entrance_a:
+#             del entrance_a["room"]
+#         if "room" in entrance_b:
+#             del entrance_b["room"]
+#
+#     if self.multiworld.crest_shuffle[self.player]:
+#         crest_tiles = (["MobiusCrest"] * 4) + (["LibraCrest"] * 2) + (["GeminiCrest"] * 3)
+#         self.multiworld.random.shuffle(crest_tiles)
+#         crest_dead_end_entrances = []
+#         crest_open_entrances = []
+#         for room in self.rooms:
+#             for link in room["links"]:
+#                 if ("GeminiCrest" in link["access"] or "LibraCrest" in link["access"] or "MobiusCrest" in
+#                         link["access"]) and "Spencer" not in room["name"]:
+#                     link["room"] = room["id"]
+#                     if link["entrance"] in crest_dead_ends:
+#                         crest_dead_end_entrances.append(link)
+#                     else:
+#                         crest_open_entrances.append(link)
+#         dupe_room_crests = [self.multiworld.random.choice(crest_tiles), self.multiworld.random.choice(crest_tiles)]
+#         while dupe_room_crests == ["GeminiCrest", "GeminiCrest"] or dupe_room_crests == ["LibraCrest", "LibraCrest"]:
+#             dupe_room_crests = [self.multiworld.random.choice(crest_tiles), self.multiworld.random.choice(crest_tiles)]
+#         self.multiworld.random.shuffle(crest_open_entrances)
+#         # there are two different sets of "dupe rooms" - rooms which use the same tile map. These must have the same
+#         # crest tiles set up for both instances. We have chosen two sets of crest tiles to be used for the dupe room
+#         # sets. If these are not the same crest, then we need to ensure we aren't going to try to connect a room from
+#         # one set to another.
+#         if dupe_room_crests[0] != dupe_room_crests[1]:
+#             while ((crest_open_entrances[-1]["entrance"] in dupe_rooms[0] and crest_open_entrances[-2]["entrance"]
+#                     in dupe_rooms[1]) or (crest_open_entrances[-1]["entrance"] in dupe_rooms[1] and
+#                     crest_open_entrances[-2]["entrance"] in dupe_rooms[0]) or (crest_open_entrances[-3]["entrance"]
+#                     in dupe_rooms[0] and crest_open_entrances[-4]["entrance"] in dupe_rooms[1]) or
+#                     (crest_open_entrances[-3]["entrance"] in dupe_rooms[1] and crest_open_entrances[-4]["entrance"]
+#                     in dupe_rooms[0])):
+#                 self.multiworld.random.shuffle(crest_open_entrances)
+#
+#         crest_tiles.remove(dupe_room_crests[0])
+#         crest_tiles.remove(dupe_room_crests[1])
+#         # we need to remove a second copy of the chosen dupe room crests unless two dupe rooms from the same set are
+#         # going to be connected.
+#         for x, dupe_room in enumerate(dupe_rooms):
+#             for i in (-1, -3):
+#                 if crest_open_entrances[i]["entrance"] in dupe_room and crest_open_entrances[i-1]["entrance"] in dupe_room:
+#                     break
+#             else:
+#                 crest_tiles.remove(dupe_room_crests[x])
+#         # crest_open_entrances.sort(key=lambda i: i["entrance"] not in dupe_rooms[0]
+#         #                               and i["entrance"] not in dupe_rooms[1])
+#         for entrance_a in crest_dead_end_entrances:
+#             entrance_b = crest_open_entrances.pop(0)
+#             for i, dupe_room in enumerate(dupe_rooms):
+#                 if entrance_b["entrance"] in dupe_room:
+#                     crest_tile = dupe_room_crests[i]
+#                     break
+#             else:
+#                 crest_tile = crest_tiles.pop()
+#             pair(entrance_a, entrance_b, crest_tile)
+#         for _ in range(2):
+#             entrance_a = crest_open_entrances.pop(0)
+#             entrance_b = crest_open_entrances.pop(0)
+#             for i, dupe_room in enumerate(dupe_rooms):
+#                 if entrance_a["entrance"] in dupe_room or entrance_b["entrance"] in dupe_room:
+#                     crest_tile = dupe_room_crests[i]
+#                     break
+#             else:
+#                 crest_tile = crest_tiles.pop()
+#             pair(entrance_a, entrance_b, crest_tile, barred=self.multiworld.logic[self.player] != "expert")
+#
+#
+# non_shuffled_things = ("FocusTowerForesta", "FocusTowerAquaria", "LifeTemple", "FocusTowerFrozen", "FocusTowerFireburg",
+#                        "FocusTowerWindia", "GiantTree", "SpencersPlace", "ShipDock", "MacsShip", "LightTemple",
+#                        "DoomCastle", "MacsShipDoom")
+#
+#
+# def overworld_shuffle(self):
+#
+#     overworld_things = []
+#
+#     for room in self.rooms:
+#         if "type" in room and room["type"] == "Subregion":
+#             if "game_objects" in room:
+#                 for object in room["game_objects"]:
+#                     if "location" in object:
+#                         overworld_things.append(object.copy())
+#             for object in room["links"]:
+#                 if "location" in object and object["location"] not in non_shuffled_things:
+#                     overworld_things.append(object.copy())
+#     self.multiworld.random.shuffle(overworld_things)
+#
+#     def swap_ow_things(room_id, links, objects):
+#         thing = overworld_things.pop()
+#         thing["location_slot"] = object["location_slot"]
+#         if "target_room" in thing:
+#             links.append(thing)
+#             target_room = thing["target_room"]
+#             for room in self.rooms:
+#                 if room["id"] == target_room:
+#                     for link in room["links"]:
+#                         if link["target_room"] >= 220 <= 231:
+#                             link["target_room"] = room_id
+#         else:
+#             objects.append(thing)
+#
+#     for room in self.rooms:
+#         if "type" in room and room["type"] == "Subregion":
+#             modified_objects = []
+#             modified_links = []
+#             if "game_objects" in room:
+#                 for object in room["game_objects"]:
+#                     if "location" in object:
+#                         swap_ow_things(room["id"], modified_links, modified_objects)
+#
+#                     else:
+#                         modified_objects.append(object)
+#             for link in room["links"]:
+#                 if "location" in link and link["location"] not in non_shuffled_things:
+#                     swap_ow_things(room["id"], modified_links, modified_objects)
+#                 else:
+#                     modified_links.append(link)
+#             room["game_objects"] = modified_objects
+#             room["links"] = modified_links
 
 def create_regions(self):
 
-    crest_shuffle(self)
+    # crest_shuffle(self)
 
-    overworld_shuffle(self)
+    # overworld_shuffle(self)
 
     menu_region = create_region(self.multiworld, self.player, "Menu")
     self.multiworld.regions.append(menu_region)
+    #
+    # battlefields = []
+    # if self.multiworld.shuffle_battlefield_rewards[self.player]:
+    #     battlefield_types = (["BattlefieldItem"] * 5) + (["BattlefieldXp"] * 10) + (["BattlefieldGp"] * 5)
+    #     self.multiworld.random.shuffle(battlefield_types)
 
-    battlefields = []
-    if self.multiworld.shuffle_battlefield_rewards[self.player]:
-        battlefield_types = (["BattlefieldItem"] * 5) + (["BattlefieldXp"] * 10) + (["BattlefieldGp"] * 5)
-        self.multiworld.random.shuffle(battlefield_types)
-
-    for room in self.rooms:
-        if "type" not in room or room["type"] != "Subregion":
-            continue
-        for object in room["game_objects"]:
-            if object["type"].startswith("Battlefield"):
-                if self.multiworld.shuffle_battlefield_rewards[self.player]:
-                    object["type"] = battlefield_types.pop()
-                battlefields.append(object)
+    # for room in self.rooms:
+    #     if "type" not in room or room["type"] != "Subregion":
+    #         continue
+    #     for object in room["game_objects"]:
+    #         if object["type"].startswith("Battlefield"):
+    #             if self.multiworld.shuffle_battlefield_rewards[self.player]:
+    #                 object["type"] = battlefield_types.pop()
+    #             battlefields.append(object)
 
     for room in self.rooms:
         self.multiworld.regions.append(create_region(self.multiworld, self.player, room["name"], room["id"],
             [FFMQLocation(self.player, object["name"], location_table[object["name"]] if object["name"] in
             location_table else None, object["type"], object["access"],
             self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
-            object in room["game_objects"] if "Hero Chest" not in object["name"] and (object["type"] != "Box" or
+            object in room["game_objects"] if "Hero Chest" not in object["name"] and object["type"] not in
+            ("BattlefieldGp", "BattlefieldXp") and (object["type"] != "Box" or
             self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
 
-    for battlefield in battlefields:
-        if battlefield["type"] == "BattlefieldItem":
-            continue
-        elif battlefield["type"] == "BattlefieldXp":
-            item = self.create_item("XP")
-        elif battlefield["type"] == "BattlefieldGp":
-            item = self.create_item("GP")
-        self.multiworld.get_location(battlefield["name"], self.player).place_locked_item(item)
+    #
+    # for battlefield in battlefields:
+    #     if battlefield["type"] == "BattlefieldItem":
+    #         continue
+    #     elif battlefield["type"] == "BattlefieldXp":
+    #         item = self.create_item("XP")
+    #     elif battlefield["type"] == "BattlefieldGp":
+    #         item = self.create_item("GP")
+    #     self.multiworld.get_location(battlefield["name"], self.player).place_locked_item(item)
 
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
     dark_king = FFMQLocation(self.player, "Dark King", None, "Trigger", [])
