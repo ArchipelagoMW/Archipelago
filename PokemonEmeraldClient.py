@@ -168,7 +168,7 @@ async def handle_read_data(gba_data, ctx: GBAContext):
                 "status": ClientStatus.CLIENT_GOAL
             }])
 
-        if local_set_events != ctx.local_set_events:
+        if local_set_events != ctx.local_set_events and ctx.slot is not None:
             event_bitfield = 0
             for i, flag_name in enumerate(TRACKER_EVENT_FLAGS):
                 if local_set_events[flag_name]:
