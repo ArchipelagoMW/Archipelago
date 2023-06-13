@@ -6234,4 +6234,142 @@
         <EditorCategories value="Race:Protoss"/>
         <AttributeBonus index="Armored" value="6"/>
     </CEffectDamage>
+    <CEffectDamage id="AP_VoidRayChargeBeamBounce1Damage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <DamageModifierSource Value="Caster"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_VoidRayChargeBeamBounce1DamageSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounce1Damage"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_VoidRayChargeBeamBounce1Search">
+        <ValidatorArray value="AP_VoidRayChargeBeamCounterPhase1"/>
+        <EditorCategories value=""/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSFarthestDistance"/>
+        </TargetSorts>
+        <AreaArray Radius="5" Effect="AP_VoidRayChargeBeamBounce1DamageSet"/>
+        <MaxCount value="1"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_VoidRayChargeBeamBounce">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="AP_VoidRayChargeBeamBounceInitialImpactSet"/>
+        <PeriodicEffectArray value="AP_VoidRayChargeBeamBounceImpactSet"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_VoidRayChargeBeamBounce2Damage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <DamageModifierSource Value="Caster"/>
+        <AttributeBonus index="Armored" value="1"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_VoidRayChargeBeamBounceDamageSet2">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounce2Damage"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_VoidRayChargeBeamBounce2Search">
+        <ValidatorArray value="VoidRayChargeBeamCounterCheckPhase2Ready"/>
+        <EditorCategories value=""/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSFarthestDistance"/>
+        </TargetSorts>
+        <AreaArray Radius="5" Effect="AP_VoidRayChargeBeamBounceDamageSet2"/>
+        <MaxCount value="2"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_VoidRayChargeBeamBounce3Damage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <DamageModifierSource Value="Caster"/>
+        <AttributeBonus index="Armored" value="2"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_VoidRayChargeBeamBounce3DamageSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounce3Damage"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_VoidRayChargeBeamBounce3Search">
+        <ValidatorArray value="VoidRayChargeBeamCounterCheckPhase3Ready"/>
+        <EditorCategories value=""/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSFarthestDistance"/>
+        </TargetSorts>
+        <AreaArray Radius="5" Effect="AP_VoidRayChargeBeamBounce3DamageSet"/>
+        <MaxCount value="3"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_VoidRayChargeBeamBounceCasterAB">
+        <ValidatorArray value="AP_HaveVoidRayBeamCanCharge"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidRayChargeBeamCounter"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_VoidRayChargeBeamBounceDamage"/>
+    <CEffectDamage id="AP_VoidRayChargeBeamBounceDamageCharge1" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <DamageModifierSource Value="Caster"/>
+        <AttributeBonus index="Armored" value="4"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_VoidRayChargeBeamBounceDamageCharge2" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <DamageModifierSource Value="Caster"/>
+        <AttributeBonus index="Armored" value="4"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_VoidRayChargeBeamBounceDamageCharge3" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <DamageModifierSource Value="Caster"/>
+        <AttributeBonus index="Armored" value="4"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectSwitch id="AP_VoidRayChargeBeamBounceDamageSwitch">
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="AP_VoidRayChargeBeamCounterCheckPhase2Ready" Effect="AP_VoidRayChargeBeamBounceDamageCharge2"/>
+        <CaseArray Validator="AP_VoidRayChargeBeamCounterCheckPhase3Ready" Effect="AP_VoidRayChargeBeamBounceDamageCharge3"/>
+        <CaseDefault value="AP_VoidRayChargeBeamBounceDamageCharge1"/>
+    </CEffectSwitch>
+    <CEffectSet id="AP_VoidRayChargeBeamBounceImpactSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounceDamage"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounceDamageSwitch"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounceCasterAB"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounce1Search"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounce2Search"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounce3Search"/>
+    </CEffectSet>
+    <CEffectSet id="AP_VoidRayChargeBeamBounceInitialImpactSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounceDamage"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounceDamageSwitch"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounceCasterAB"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounce1Search"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounce2Search"/>
+        <EffectArray value="AP_VoidRayChargeBeamBounce3Search"/>
+    </CEffectSet>
 </Catalog>

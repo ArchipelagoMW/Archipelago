@@ -2191,4 +2191,9 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MultiTaskMAFServosThor" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVoidRayBeamCanChargeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_VoidRayBeamCanCharge" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

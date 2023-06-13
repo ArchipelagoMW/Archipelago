@@ -1214,4 +1214,8 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeMultiTaskMAFServosThorCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveVoidRayBeamCanCharge">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeVoidRayBeamCanChargeCompleteOnly"/>
+    </CRequirement>
 </Catalog>

@@ -9524,4 +9524,14 @@
         <SelectAlias value="VoidRay"/>
         <HotkeyCategory value="Unit/Category/ProtossStory"/>
     </CUnit>
+    <CUnit id="AP_VoidRayTaldarim" parent="AP_VoidRayCampaignBase">
+        <WeaponArray Link="AP_VoidRayChargeBeamBounce"/>
+        <CardLayouts index="0">
+            <LayoutButtons Face="AP_VoidVoidRayBeamBounce" Type="Passive" Row="2" Column="0"/>
+        </CardLayouts>
+        <SubgroupPriority value="10"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <SelectAlias value="VoidRay"/>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
+    </CUnit>
 </Catalog>

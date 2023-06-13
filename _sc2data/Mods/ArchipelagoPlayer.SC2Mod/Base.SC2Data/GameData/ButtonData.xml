@@ -1672,4 +1672,8 @@
         <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-VoidRayPrismaticAlignment.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_VoidVoidRayBeamBounce">
+        <Icon value="Assets\Textures\btn-ability-protoss-beambounce.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

@@ -7342,6 +7342,29 @@
     <CActorAction id="AP_NovaWeaponPsiBladeAttack" parent="GenericAttack" effectAttack="AP_NovaWeaponPsiBladeDamageCloakedSwitch">
         <ShieldFlashType value="Header"/>
     </CActorAction>
+    <CActorSound id="AP_Nova_ShotgunAuto_TailsSound" parent="SoundOneShot">
+        <Sound value="PhysicsImpactBase"/>
+        <Layers>
+            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_L"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="-1.000000,-1.000000"/>
+            <PlayDelay value="60,120"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_R"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="-1.000000,-1.000000"/>
+            <PlayDelay value="60,120"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+    </CActorSound>
     <CActorModel id="AP_SuperStimpackNovaEndImpact" parent="ModelAnimationStyleOneShot">
         <Inherits index="CloakEffect" value="1"/>
         <On Terms="Behavior.AP_SuperStimNova.Off; ValidateUnit NotDead" Send="Create"/>
@@ -12023,7 +12046,6 @@
         <On Terms="Effect.AP_VoidRayChargeBeamRange.Start; At Caster" Send="Create"/>
         <On Terms="Effect.AP_VoidRayChargeBeamRange.Stop" Send="Destroy"/>
         <LaunchAttachQuery Methods="Weapon 1"/>
-        <Beam value="AP_VoidRayChargeBeamAttackBeam"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
         <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
         <ActionFlags index="LaunchForceSite" value="1"/>
@@ -12219,4 +12241,182 @@
         <On Terms="Effect.AP_PrismaticBeamChargeEffect03.Start" Send="Create"/>
         <On Terms="Effect.AP_PrismaticBeamChargeEffect03.Stop" Send="Destroy"/>
     </CActorSound>
+    <CActorAction id="AP_VoidRayChargeBeamBounce1Attack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_VoidRayChargeBeamBounce1Damage.Start" Send="Create"/>
+        <On Terms="Effect.AP_VoidRayChargeBeamBounce1Damage.Start; At Effect; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.900000 DelayDeath"/>
+        <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
+        <LaunchRequest Subject="AP_VoidRayChargeBeamBounceAttackBeam1ImpactSite" Actor="Find"/>
+        <Beam value="AP_VoidRayChargeBeamBounce1AttackBeam"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance"/>
+        <AcquisitionYawHalfArc value="0.100000"/>
+        <AcquisitionPitchHalfArc value="0.100000"/>
+        <AccuracyHalfArc value="0.100000"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+        <Lifetime value="0.750000"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_VoidRayChargeBeamBounce1AttackBeam">
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack,02 PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.300000"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.600000 OpacTimer"/>
+        <On Terms="TimerExpired; TimerName OpacTimer" Send="SetOpacity 0.000000 0.300000"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.900000 DelayDeath"/>
+        <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
+        <Model value="AP_VoidRayTaldarimAttackBounceBeam"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorBeamSimple>
+    <CActorAction id="AP_AP_VoidRayChargeBeamBounceAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_VoidRayChargeBeamBounce2Damage.Start" Send="Create"/>
+        <On Terms="Effect.AP_VoidRayChargeBeamBounce2Damage.Start; At Effect; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.900000 DelayDeath"/>
+        <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
+        <LaunchRequest Subject="AP_VoidRayChargeBeamBounceAttackBeam1ImpactSite" Actor="Find"/>
+        <Beam value="AP_VoidRayChargeBeamBounce2AttackBeam"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance"/>
+        <AcquisitionYawHalfArc value="0.100000"/>
+        <AcquisitionPitchHalfArc value="0.100000"/>
+        <AccuracyHalfArc value="0.100000"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+        <Lifetime value="0.750000"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_VoidRayChargeBeamBounce2AttackBeam">
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack,04 PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.300000"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.600000 OpacTimer"/>
+        <On Terms="TimerExpired; TimerName OpacTimer" Send="SetOpacity 0.000000 0.300000"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.900000 DelayDeath"/>
+        <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
+        <Model value="AP_VoidRayTaldarimAttackBounceBeam"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorBeamSimple>
+    <CActorAction id="AP_VoidRayChargeBeamBounce3Attack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_VoidRayChargeBeamBounce3Damage.Start" Send="Create"/>
+        <On Terms="Effect.AP_VoidRayChargeBeamBounce3Damage.Start; At Effect; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.900000 DelayDeath"/>
+        <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
+        <LaunchRequest Subject="AP_VoidRayChargeBeamBounceAttackBeam1ImpactSite" Actor="Find"/>
+        <Beam value="AP_VoidRayChargeBeamBounce3AttackBeam"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance"/>
+        <AcquisitionYawHalfArc value="0.100000"/>
+        <AcquisitionPitchHalfArc value="0.100000"/>
+        <AccuracyHalfArc value="0.100000"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+        <Lifetime value="0.750000"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_VoidRayChargeBeamBounce3AttackBeam">
+        <On Terms="ActorCreation" Send="AnimPlay Attack Attack,06 PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 1.000000 0.300000"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.600000 OpacTimer"/>
+        <On Terms="TimerExpired; TimerName OpacTimer" Send="SetOpacity 0.000000 0.300000"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.900000 DelayDeath"/>
+        <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
+        <Model value="AP_VoidRayTaldarimAttackBounceBeam"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorBeamSimple>
+    <CActorAction id="AP_VoidRayChargeBeamBounceAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_VoidRayChargeBeamBounce.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.VoidRayChargeBeamBounceDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.AP_VoidRayChargeBeamBounce.Stop" Send="Destroy"/>
+        <LaunchAttachQuery Methods="Weapon 1"/>
+        <Beam value="AP_VoidRayChargeBeamBounceAttackBeam"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
+        <ImpactSite value="AP_VoidRayChargeBeamBounceAttackBeam1ImpactSite"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+        <Lifetime value="-1.000000"/>
+    </CActorAction>
+    <CActorSite id="AP_VoidRayChargeBeamBounceAttackBeam1ImpactSite" parent="GenericAttackImpactSite"/>
+    <CActorBeamSimple id="AP_VoidRayChargeBeamBounceAttackBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Aliases value="_VoidRayChargeAttackBeam"/>
+        <Supporter Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <On Terms="ActorCreation" Target="::Host" Send="Signal VoidRayChargeAttackBeamModel"/>
+        <On Terms="ActorCreation; ValidateEffect AP_VoidRayChargeBeamCounterPhase1" Send="AnimPlay Attack Attack,02 PlayForever"/>
+        <On Terms="ActorCreation; ValidateEffect AP_VoidRayChargeBeamCounterCheckPhase2Ready" Send="AnimPlay Attack Attack,04 PlayForever"/>
+        <On Terms="ActorCreation; ValidateEffect AP_VoidRayChargeBeamCounterCheckPhase3Ready" Send="AnimPlay Attack Attack,06 PlayForever"/>
+        <On Terms="Effect.AP_VoidRayChargeBeamPhase2AB.Start" Send="AnimPlay Attack Attack,04 PlayForever"/>
+        <On Terms="Effect.AP_VoidRayChargeBeamPhase3AB.Start" Send="AnimPlay Attack Attack,06 PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Effect.AP_VoidRayChargeBeamBounce.Stop; At Effect" Send="TimerSet 0.125000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="RefSetFromRequest ::actor.CasterUnit _Unit Caster Find"/>
+        <On Terms="ActorCreation" Target="::actor.CasterUnit" Send="Signal CampaignBeamCreated"/>
+        <Host Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <Model value="AP_VoidRayTaldarimAttackBeam"/>
+    </CActorBeamSimple>
+    <CActorUnit id="AP_VoidRayTaldarim" parent="GenericUnitBase" unitName="AP_VoidRayTaldarim">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create VoidRay_Land"/>
+        <On Terms="ActorCreation" Send="StatusSet WeaponAttacking 0"/>
+        <On Terms="ActorCreation" Send="StatusSet WeaponAnim 0"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="StatusSet WeaponAttacking 1"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="StatusSet WeaponAttacking 0"/>
+        <On Terms="Behavior.AP_VoidRayChargeBeamCounter.On; IsStatus WeaponAnim 0" Send="AnimBracketStart Powered Attack Stand,Channel Attack,End"/>
+        <On Terms="Behavior.AP_VoidRayChargeBeamCounter.On; IsStatus WeaponAnim 0" Send="StatusSet WeaponAnim 1"/>
+        <On Terms="Behavior.AP_VoidRayChargeBeamCounter.On" Send="StatusSet WeaponEnhanced 1"/>
+        <On Terms="Behavior.AP_VoidRayChargeBeamCounter.Off" Send="StatusSet WeaponEnhanced 0"/>
+        <On Terms="Behavior.AP_VoidRayChargeBeamCounter.Off; IsStatus WeaponAttacking 0" Send="AnimBracketStop Powered"/>
+        <On Terms="Behavior.AP_VoidRayChargeBeamCounter.Off; IsStatus WeaponAttacking 0" Send="StatusSet WeaponAnim 0"/>
+        <On Terms="WeaponStart.*.AttackStart; ValidateUnit AP_VoidRayChargeBeamPhase1" Send="Create AP_VoidRaySound1"/>
+        <On Terms="WeaponStart.*.AttackStart; ValidateUnit AP_VoidRayChargeBeamPhase2" Send="Create AP_VoidRaySound2"/>
+        <On Terms="WeaponStart.*.AttackStart; ValidateUnit AP_VoidRayChargeBeamPhase3" Send="Create AP_VoidRaySound3"/>
+        <On Terms="WeaponStop.*.AttackStop" Target="AP_VoidRaySound1" Send="Destroy"/>
+        <On Terms="WeaponStop.*.AttackStop" Target="AP_VoidRaySound2" Send="Destroy"/>
+        <On Terms="WeaponStop.*.AttackStop" Target="AP_VoidRaySound3" Send="Destroy"/>
+        <On Terms="Behavior.VoidRayChargeBeamPhase2.On" Target="AP_VoidRaySound1" Send="Destroy"/>
+        <On Terms="Behavior.VoidRayChargeBeamPhase2.On; IsStatus WeaponAttacking 1" Send="Create AP_VoidRaySound2"/>
+        <On Terms="Behavior.VoidRayChargeBeamPhase3.On" Target="AP_VoidRaySound2" Send="Destroy"/>
+        <On Terms="Behavior.VoidRayChargeBeamPhase3.On; IsStatus WeaponAttacking 1" Send="Create AP_VoidRaySound3"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap AP_VoidRayTaldarimWarpInStargate"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="$Spell"/>
+        <On Terms="AnimDone; AnimName Spell" Send="ModelSwap AP_VoidRayTaldarim"/>
+        <On Terms="AnimDone; AnimName Spell" Send="AnimClear Spell"/>
+        <On Terms="Signal.*.UnitRemoved" Target="VoidRayChargeBeamBounce1AttackBeam" Send="Destroy Immediate"/>
+        <On Terms="Signal.*.CampaignBeamCreated" Send="RefSetFromMsg ::actor.MyAttackBeam ::Sender"/>
+        <On Terms="Signal.*.UnitRemoved" Target="::actor.MyAttackBeam" Send="Destroy Immediate"/>
+        <HostSiteOps Ops="SOpBankerVoidRay"/>
+        <AnimBlendTime value="0.500000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="AP_VoidRayTaldarimWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_VoidRayTaldarimDeath" SoundLink="VoidRay_Explode"/>
+        <PlacementModel value="AP_VoidRayTalDarimPlacement"/>
+        <PortraitModel value="AP_VoidRayTaldarimPortrait"/>
+        <BarOffset value="65"/>
+        <BarWidth value="100"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-voidray-taldarim.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-voidray-taldarim.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="60"/>
+        <SoundArray index="Birth" value="VoidRay_Birth"/>
+        <SoundArray index="Ready" value="AP_Destroyer_Ready"/>
+        <SoundArray index="Help" value="AP_Destroyer_Help"/>
+        <SoundArray index="What" value="AP_Destroyer_What"/>
+        <SoundArray index="Yes" value="AP_Destroyer_Yes"/>
+        <SoundArray index="Attack" value="AP_Destroyer_Attack"/>
+        <SoundArray index="Pissed" value="AP_Destroyer_Pissed"/>
+        <SoundArray index="Movement" value="VoidRay_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-voidray-taldarim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-voidray-taldarim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-voidray-taldarim-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-voidray-taldarim-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-voidray-taldarim-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
 </Catalog>

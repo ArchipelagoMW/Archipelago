@@ -1871,4 +1871,30 @@
         <Value value="1"/>
         <Behavior value="AP_VoidRaySwarmDamageBoost"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoVoidRayChargeBeamPhase2">
+        <Behavior value="AP_VoidRayChargeBeamPhase2"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoVoidRayChargeBeamPhase3">
+        <Behavior value="AP_VoidRayChargeBeamPhase3"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveVoidRayBeamCanCharge">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveVoidRayBeamCanCharge"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_VoidRayChargeBeamPhase1">
+        <Type value="And"/>
+        <CombineArray value="AP_NoVoidRayChargeBeamPhase2"/>
+        <CombineArray value="AP_NoVoidRayChargeBeamPhase3"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamPhase2">
+        <Behavior value="AP_VoidRayChargeBeamPhase2"/>
+        <Compare value="NE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamPhase3">
+        <Behavior value="AP_VoidRayChargeBeamPhase3"/>
+        <Compare value="NE"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

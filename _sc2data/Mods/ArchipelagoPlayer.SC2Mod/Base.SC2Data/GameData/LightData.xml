@@ -543,4 +543,23 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
     </CLight>
+    <CLight id="AP_DestroyerEx2Portrait" parent="default">
+        <ToDInfoArray index="0" AmbientColor="0.050980,0.180392,0.223529">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDREmisMultiplier" value="2.000000"/>
+            <Param index="CreepSpecularExp" value="40.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="5.900000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.807843,0.874510,1.000000"/>
+                <ColorMultiplier value="1.950000"/>
+                <SpecularColor value="0.874510,0.949020,0.988235"/>
+                <SpecColorMultiplier value="1.778000"/>
+                <Direction value="0.212497,-0.089457,-0.973058"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.549020,0.635294,1.000000" ColorMultiplier="2.138000" Direction="-0.800380,-0.158044,-0.578285"/>
+            <DirectionalLight index="Back" Color="0.803922,0.584314,0.364706" ColorMultiplier="1.047000" Direction="0.570197,0.425012,0.703022"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>

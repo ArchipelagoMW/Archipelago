@@ -3,6 +3,14 @@
     <CSound default="1" id="AP_HoS_ZergAck" parent="HoS_Voice">
         <EditorCategories value="Race:Zerg"/>
     </CSound>
+    <CSound default="1" id="AP_HeroNova_Ack" parent="TerranAck">
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
     <CSound id="AP_Medic_Attack" parent="TerranAck">
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack00.ogg" FacialAnim="Medic_Attack00"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack01.ogg" FacialAnim="Medic_Attack01"/>
@@ -2786,7 +2794,7 @@
         <AssetArray TemplateParam="HeroNovaMP1_Yes_N204"/>
         <Flags index="NeedsUpdate" value="1"/>
         <Flags index="NeedsTTS" value="1"/>
-<!--        <DupeWait value="4000,4000"/>-->
+        <!--        <DupeWait value="4000,4000"/>-->
         <Exclusivity value="Nova_UnitDX_Exclusivity"/>
     </CSound>
     <CSound id="AP_HeroNovaMP2_HolographicDecoyVO" parent="HeroNova_Ack">
@@ -3665,14 +3673,6 @@
         <Flags index="NeedsUpdate" value="1"/>
         <Flags index="NeedsTTS" value="1"/>
     </CSound>
-    <CSound default="1" id="AP_HeroNova_Ack" parent="TerranAck">
-        <AssetArrayTemplate>
-            <File value="AP\LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam2^.ogg"/>
-            <FacialAnim value="^TemplateParam1^"/>
-            <FacialGroup value="^TemplateParam1^"/>
-            <FacialFile value="LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam1^.fxe"/>
-        </AssetArrayTemplate>
-    </CSound>
     <CSound id="AP_HeroNovaMP2HD_What" parent="AP_HeroNova_Ack">
         <AssetArray TemplateParam="HeroNovaMP1_What_N201;HeroNovaMP2HD_What_N201"/>
         <AssetArray TemplateParam="HeroNovaMP1_What_N202;HeroNovaMP2HD_What_N202"/>
@@ -3792,29 +3792,6 @@
         <Pitch value="-2.000000,1.000000"/>
         <Volume value="-5.000000,-5.000000"/>
     </CSound>
-    <CActorSound id="AP_Nova_ShotgunAuto_TailsSound" parent="SoundOneShot">
-        <Sound value="PhysicsImpactBase"/>
-        <Layers>
-            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_L"/>
-            <PitchSource value="Actor"/>
-            <PlayDelaySource value="Actor"/>
-            <VolumeSource value="Sound"/>
-            <Chance value="100"/>
-            <Pitch value="-1.000000,-1.000000"/>
-            <PlayDelay value="60,120"/>
-            <Volume value="-2.000000,-2.000000"/>
-        </Layers>
-        <Layers>
-            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_R"/>
-            <PitchSource value="Actor"/>
-            <PlayDelaySource value="Actor"/>
-            <VolumeSource value="Sound"/>
-            <Chance value="100"/>
-            <Pitch value="-1.000000,-1.000000"/>
-            <PlayDelay value="60,120"/>
-            <Volume value="-2.000000,-2.000000"/>
-        </Layers>
-    </CActorSound>
     <CSound id="AP_Nova_AutoShotgun_Blast_Tails_L" parent="Combat">
         <EditorCategories value="Race:Terran"/>
         <AssetArray File="Assets\Sounds\Shotgun_Ext_Decay_01.wav" FacialGroup=""/>
@@ -3991,5 +3968,106 @@
     <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
         <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
         <LoopCount value="-1"/>
+    </CSound>
+    <CSound default="1" id="AP_ProtossAck_Void" parent="ProtossAck">
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound default="1" id="AP_ProtossHelp" parent="Alert">
+        <EditorCategories value="Race:Protoss"/>
+        <Mode value="3DWorld"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound default="1" id="AP_ProtossPissed" parent="ProtossAck">
+        <Flags index="Download" value="0"/>
+        <Select value="Sequential"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound default="1" id="AP_ProtossReady" parent="Ready">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound id="AP_Destroyer_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Destroyer_Attack00"/>
+        <AssetArray TemplateParam="Destroyer_Attack01"/>
+        <AssetArray TemplateParam="Destroyer_Attack02"/>
+        <AssetArray TemplateParam="Destroyer_Attack03"/>
+        <AssetArray TemplateParam="Destroyer_Attack04"/>
+        <AssetArray TemplateParam="Destroyer_Attack05"/>
+        <AssetArray TemplateParam="Destroyer_Attack06"/>
+        <AssetArray TemplateParam="Destroyer_Attack07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Destroyer_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="Destroyer_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Destroyer_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="Destroyer_Pissed00"/>
+        <AssetArray TemplateParam="Destroyer_Pissed01"/>
+        <AssetArray TemplateParam="Destroyer_Pissed02"/>
+        <AssetArray TemplateParam="Destroyer_Pissed03"/>
+        <AssetArray TemplateParam="Destroyer_Pissed04"/>
+        <AssetArray TemplateParam="Destroyer_Pissed05"/>
+        <AssetArray TemplateParam="Destroyer_Pissed06"/>
+        <AssetArray TemplateParam="Destroyer_Pissed07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Destroyer_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="Destroyer_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Destroyer_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Destroyer_What00"/>
+        <AssetArray TemplateParam="Destroyer_What01"/>
+        <AssetArray TemplateParam="Destroyer_What02"/>
+        <AssetArray TemplateParam="Destroyer_What03"/>
+        <AssetArray TemplateParam="Destroyer_What04"/>
+        <AssetArray TemplateParam="Destroyer_What05"/>
+        <AssetArray TemplateParam="Destroyer_What06"/>
+        <AssetArray TemplateParam="Destroyer_What07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Destroyer_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Destroyer_Yes00"/>
+        <AssetArray TemplateParam="Destroyer_Yes01"/>
+        <AssetArray TemplateParam="Destroyer_Yes02"/>
+        <AssetArray TemplateParam="Destroyer_Yes03"/>
+        <AssetArray TemplateParam="Destroyer_Yes04"/>
+        <AssetArray TemplateParam="Destroyer_Yes05"/>
+        <AssetArray TemplateParam="Destroyer_Yes06"/>
+        <AssetArray TemplateParam="Destroyer_Yes07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
     </CSound>
 </Catalog>
