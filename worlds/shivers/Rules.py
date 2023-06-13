@@ -105,7 +105,6 @@ def get_rules_lookup(player: int):
             "To Lobby From Library": lambda state: state.has("Key for Library Room", player),
             "To Egypt From Lobby": lambda state: state.has("Key for Egypt Room", player),
             "To Egypt From Burial": lambda state: state.can_reach("Egypt", "Region", player),
-            "To Egypt": lambda state: state.has("Key for Egypt Room", player),
             "To Tiki": lambda state: state.has("Key for Tiki Room", player),
             "To Gods Room": lambda state: state.can_reach("Clock Tower", "Region", player),
             "To Gods Room From Anansi": lambda state: state.can_reach("Gods Room", "Region", player),
