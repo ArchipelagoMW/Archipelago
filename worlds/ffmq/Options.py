@@ -28,7 +28,7 @@ class BrownBoxes(Choice):
 
 
 class SkyCoinMode(Choice):
-    """Configure how the Sky Coin is acquired. With standard, the Sky Coin will placed randomly. With start_with, the
+    """Configure how the Sky Coin is acquired. With standard, the Sky Coin will be placed randomly. With start_with, the
     Sky Coin will be in your inventory at the start of the game. With save_the_crystals, the Sky Coin will be acquired
     once you save all 4 crystals. With shattered_sky_coin, the Sky Coin is split in 40 fragments; you can enter Doom
     Castle once the required amount is found. shattered_sky_coin will force brown box locations to be included."""

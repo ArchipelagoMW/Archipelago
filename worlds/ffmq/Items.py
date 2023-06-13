@@ -3,6 +3,7 @@ from BaseClasses import ItemClassification, Item
 fillers = {"Cure Potion": 61, "Heal Potion": 52, "Refresher": 17, "Seed": 2, "Bomb Refill": 19,
            "Projectile Refill": 50}
 
+
 class ItemData:
     def __init__(self, item_id, classification, groups=[], data_name=None):
         self.groups = groups
@@ -197,6 +198,7 @@ prog_map = {
     "Accessories": "Progressive Accessory",
 }
 
+
 def yaml_item(text):
     if text == "CaptainCap":
         return "Captain's Cap"
@@ -215,7 +217,15 @@ for item, data in item_table.items():
 
 def create_items(self) -> None:
     items = []
-    self.multiworld.push_precollected(self.create_item(self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")))
+    starting_weapon = self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")
+    if self.multiworld.progressive_gear[self.player]:
+        for item_group in prog_map:
+            if starting_weapon in self.item_name_groups[item_group]:
+                starting_weapon = prog_map[item_group]
+                break
+        else:
+            raise Exception(f"Failed to convert {starting_weapon} to a Progressive item")
+    self.multiworld.push_precollected(self.create_item(starting_weapon))
     self.multiworld.push_precollected(self.create_item("Steel Armor"))
     if self.multiworld.sky_coin_mode[self.player] == "start_with":
         self.multiworld.push_precollected(self.create_item("Sky Coin"))
@@ -230,6 +240,8 @@ def create_items(self) -> None:
                 if item_name in self.item_name_groups[item_group]:
                     item_name = prog_map[item_group]
                     break
+            else:
+                raise Exception(f"Failed to convert {starting_weapon} to a Progressive item")
         if item_name == "Sky Coin":
             if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
                 for _ in range(40):
@@ -276,7 +288,15 @@ def create_items(self) -> None:
         items += filler_items
 
 
-    if len(self.multiworld.player_ids) > 1:
+    self.multiworld.itempool += items
+
+    if True or len(self.multiworld.player_ids) > 1:
+        # swept_state = self.multiworld.state.copy()
+        # swept_state.sweep_for_events()
+        # locations = [location for location in self.multiworld.get_reachable_locations(swept_state, self.player)
+        #              if location.address]
+        # sphere_1_size = ((100 / (251 if self.multiworld.brown_boxes[self.player] == "include" else 80))
+        #                  * len(locations))
         early_choices = ["Sand Coin", "River Coin"]
         # if self.multiworld.starting_weapon[self.player] != "bomb":
         #     if self.multiworld.progressive_gear[self.player]:
@@ -289,7 +309,6 @@ def create_items(self) -> None:
         #     self.multiworld.worlds[self.player].post_early_coin = self.create_item(self.multiworld.random.choice(
         #         ["Sand Coin", "River Coin"]))
         #     items.remove(self.multiworld.worlds[self.player].post_early_coin)
-    self.multiworld.itempool += items
 
 class FFMQItem(Item):
     game = "Final Fantasy Mystic Quest"
