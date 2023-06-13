@@ -5,9 +5,9 @@
     "Puzzle Solved Workshop Drawers",
     "Puzzle Solved Library Statue",
     "Puzzle Solved Theater Door",
-    "Puzzle Solved Geoffrey Door",
+    "Puzzle Solved Clock Tower Door",
     "Puzzle Solved Clock Chains",
-    "Puzzle Solved Atlantist",
+    "Puzzle Solved Atlantis",
     "Puzzle Solved Organ",
     "Puzzle Solved Maze Door",
     "Puzzle Solved Columns of RA",
@@ -61,13 +61,13 @@
     "Puzzle Hint Found: Brown Symbol",
     "Puzzle Hint Found: Tan Symbol",
     "Puzzle Hint Found: Basilisk Bone Fragments",
-    "Puzzle Hint Found: Atlantist Map",
+    "Puzzle Hint Found: Atlantis Map",
     "Puzzle Hint Found: Sirens Song Heard",
     "Puzzle Hint Found: Egyptian Sphinx Heard",
     "Puzzle Hint Found: Gallows Information Plaque",
     "Puzzle Hint Found: Mastermind Information Plaque",
-    "Puzzle Hint Found: Geoffrey Elevator Writing",
-    "Puzzle Hint Found: RamTaBoBa (Security Camera)"
+    "Puzzle Hint Found: Elevator Writing",
+    "Puzzle Hint Found: Tiki Security Camera"
   ],
   "locations_by_region": {
     "Outside": [
@@ -96,7 +96,8 @@
     ],
     "Office": [
       "Flashback Memory Obtained Scrapbook",
-      "Accessible: Storage: Desk Drawer"
+      "Accessible: Storage: Desk Drawer",
+      "Puzzle Hint Found: Atlantis Map"
     ],
     "Workshop": [
       "Puzzle Solved Workshop Drawers",
@@ -119,7 +120,7 @@
       "Flashback Memory Obtained Beth's Address Book"
     ],
     "Three Floor Elevator": [
-      "Puzzle Hint Found: Geoffrey Elevator Writing"
+      "Puzzle Hint Found: Elevator Writing"
     ],
     "Lobby": [
       "Puzzle Solved Theater Door",
@@ -131,7 +132,7 @@
       "Final Riddle: Beth's Body Page 17"
     ],
     "Theater Back Hallways": [
-      "Puzzle Solved Geoffrey Door"
+      "Puzzle Solved Clock Tower Door"
     ],
     "Clock Tower Staircase": [
       "Puzzle Solved Clock Chains"
@@ -139,17 +140,16 @@
     "Clock Tower": [
       "Flashback Memory Obtained Beth's Ghost",
       "Accessible: Storage: Clock Tower",
-      "Puzzle Hint Found: RamTaBoBa (Security Camera)"
+      "Puzzle Hint Found: Tiki Security Camera"
     ],
     "Projector Room": [
       "Flashback Memory Obtained Theater Movie"
     ],
     "Ocean": [
-      "Puzzle Solved Atlantist",
+      "Puzzle Solved Atlantis",
       "Puzzle Solved Organ",
       "Flashback Memory Obtained Museum Blueprints",
       "Accessible: Storage: Ocean",
-      "Puzzle Hint Found: Atlantist Map",
       "Puzzle Hint Found: Sirens Song Heard"
     ],
     "Maze Staircase": [

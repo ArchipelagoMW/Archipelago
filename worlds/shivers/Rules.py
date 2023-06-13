@@ -3,6 +3,7 @@ from collections.abc import Callable
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
 from worlds.generic.Rules import forbid_item
+from .Options import get_option_value
 
 def water_capturable(state: CollectionState, player: int) -> bool:
     return (state.can_reach("Lobby", "Region", player) or
@@ -67,6 +68,22 @@ def metal_capturable(state: CollectionState, player: int) -> bool:
         and state.has("Metal Pot Top", player) \
         and state.has("Metal Pot Bottom DUPE", player) \
         and state.has("Metal Pot Top DUPE", player)
+
+#def lightning_capturable(state: CollectionState, player: int) -> bool:
+#    return state.can_reach("Generator", "Region", player) \
+#        and state.has("Lightning Pot Bottom", player) \
+#        and state.has("Lightning Pot Top", player) \
+#        and state.has("Lightning Pot Bottom DUPE", player) \
+#        and state.has("Lightning Pot Top DUPE", player)
+
+def lightning_capturable(state: CollectionState, player: int) -> bool:
+    return beths_body_available(state, player) \
+        and state.can_reach("Torture", "Region", player) \
+        and state.has("Lightning Pot Bottom", player) \
+        and state.has("Lightning Pot Top", player) \
+        and state.has("Lightning Pot Bottom DUPE", player) \
+        and state.has("Lightning Pot Top DUPE", player)
+
 def beths_body_available(state: CollectionState, player: int) -> bool:
     return water_capturable(state, player) and wax_capturable(state, player) \
         and ash_capturable(state, player) and oil_capturable(state, player) \
@@ -79,32 +96,36 @@ def beths_body_available(state: CollectionState, player: int) -> bool:
 def get_rules_lookup(player: int):
     rules_lookup: typing.Dict[str, typing.List[Callable[[CollectionState], bool]]] = {
         "entrances": {
-            "To Office Elevator": lambda state: state.has("Key for Office Elevator", player),
-            "To Bedroom Elevator": lambda state: state.has("Key for Bedroom Elevator", player) and state.has("Crawling", player),
+            "To Underground Tunnels From Underground Lake": lambda state: state.has("Key for Office Elevator", player),
+            "To Bedroom Elevator From Office": lambda state: state.has("Key for Bedroom Elevator", player) and state.has("Crawling", player),
             "To Three Floor Elevator From Maintenance Tunnels": lambda state: state.has("Key for Three Floor Elevator", player),
             "To Three Floor Elevator From Blue Maze Bottom": lambda state: state.has("Key for Three Floor Elevator", player),
             "To Three Floor Elevator From Blue Maze Top": lambda state: state.has("Key for Three Floor Elevator", player),
             "To Workshop": lambda state: state.has("Key for Workshop", player),
             "To Lobby From Office": lambda state: state.has("Key for Lobby", player),
-            "To Prehistoric": lambda state: state.has("Key for Prehistoric Room", player),
+            "To Lobby From Tar River": lambda state: state.has("Key for Library Room", player),
+            "To Lobby From Egypt": lambda state: state.has("Key for Egypt Room", player),
+            "To Prehistoric From Lobby": lambda state: state.has("Key for Prehistoric Room", player),
             "To Greenhouse": lambda state: state.has("Key for Greenhouse Room", player),
-            "To Ocean": lambda state: state.has("Key for Ocean Room", player),
+            "To Ocean From Prehistoric": lambda state: state.has("Key for Ocean Room", player),
             "To Projector Room": lambda state: state.has("Key for Projector Room", player),
             "To Generator": lambda state: state.has("Key for Generator Room", player),
             "To Library": lambda state: state.has("Key for Library Room", player),
-            "To Egypt": lambda state: state.has("Key for Egypt Room", player),
-            "To Tiki": lambda state: state.has("Key for Tiki Room", player),
-            "To UFO": lambda state: state.has("Key for UFO Room", player),
-            "To Torture": lambda state: state.has("Key for Torture Room", player),
-            "To Puzzle Room Mastermind": lambda state: state.has("Key for Puzzle Room", player),
+            "To Egypt From Lobby": lambda state: state.has("Key for Egypt Room", player),
+            "To Tiki From Burial": lambda state: state.has("Key for Tiki Room", player),
+            "To Inventions From UFO": lambda state: state.has("Key for UFO Room", player),
+            "To UFO From Inventions": lambda state: state.has("Key for UFO Room", player),
+            "To Torture From Inventions": lambda state: state.has("Key for Torture Room", player),
+            "To Puzzle Room Mastermind From Torture": lambda state: state.has("Key for Puzzle Room", player),
             "To Bedroom": lambda state: state.has("Key for Bedroom", player),
-            "To Underground Lake": lambda state: state.has("Key for Underground Lake Room", player),
+            "To Underground Lake From Underground Tunnels": lambda state: state.has("Key for Underground Lake Room", player),
             "To Maintenance Tunnels From Theater Back Hallways": lambda state: state.has("Crawling", player),
-            "To Blue Maze": lambda state: state.has("Crawling", player),
-            "To Lobby From Tar River": lambda state: (state.has("Crawling", player) and state.has("Oil Pot Bottom", player) and 
-                                                      state.has("Oil Pot Top", player)),
-            "To Anansi": lambda state: state.can_reach("Gods Room", "Region", player),
-            "To Burial": lambda state: state.can_reach("Egypt", "Region", player),
+            "To Blue Maze From Egypt": lambda state: state.has("Crawling", player),
+            "To Egypt From Blue Maze": lambda state: state.has("Crawling", player),
+            "To Lobby From Tar River": lambda state: (state.has("Crawling", player) and oil_capturable(state, player)),
+            "To Tar River From Lobby": lambda state: (state.has("Crawling", player) and oil_capturable(state, player) and state.can_reach("Tar River", "Region", player)),
+            "To Burial From Egypt": lambda state: state.can_reach("Egypt", "Region", player),
+            "To Gods Room From Anansi": lambda state: state.can_reach("Gods Room", "Region", player),
             "To Slide Room": lambda state: (
                         state.can_reach("Prehistoric", "Region", player) and state.can_reach("Tar River", "Region",player) and 
                         state.can_reach("Egypt", "Region", player) and state.can_reach("Burial", "Region", player) and 
@@ -112,14 +133,8 @@ def get_rules_lookup(player: int):
             "To Lobby From Slide Room": lambda state: (
                         state.can_reach("Generator", "Region", player) and state.can_reach("Torture", "Region", player))
         },
-        "locations": {
+        "locations_required": {
             "Puzzle Solved Anansi Musicbox": lambda state: state.can_reach("Clock Tower", "Region", player),
-            "Puzzle Solved Geoffrey Door": lambda state: state.can_reach("Three Floor Elevator", "Region", player),
-            "Puzzle Solved Clock Chains": lambda state: state.can_reach("Bedroom", "Region", player),
-            "Puzzle Solved Tiki Drums": lambda state: state.can_reach("Clock Tower", "Region", player),
-            "Puzzle Solved Red Door": lambda state: state.can_reach("Maintenance Tunnels", "Region", player),
-            "Puzzle Solved UFO Symbols": lambda state: state.can_reach("Library", "Region", player),
-            "Puzzle Solved Maze Door": lambda state: state.can_reach("Projector Room", "Region", player),
             "Accessible: Storage: Janitor Closet": lambda state: cloth_capturable(state, player),
             "Accessible: Storage: Tar River": lambda state: oil_capturable(state, player),
             "Accessible: Storage: Theater": lambda state: state.can_reach("Projector Room", "Region", player),
@@ -135,7 +150,15 @@ def get_rules_lookup(player: int):
             "Final Riddle: Planets Aligned": lambda state: state.can_reach("Fortune Teller", "Region", player),
             "Final Riddle: Norse God Stone Message": lambda state: (state.can_reach("Fortune Teller", "Region", player) and state.can_reach("UFO", "Region", player)),
             "Final Riddle: Beth's Body Page 17": lambda state: beths_body_available(state, player),
-            "Final Riddle: Guillotine Dropped": lambda state: beths_body_available(state, player) and state.can_reach("Generator", "Region", player),
+            "Final Riddle: Guillotine Dropped": lambda state: beths_body_available(state, player) and state.can_reach("Torture", "Region", player),
+            },
+        "locations_puzzle_hints": {
+            "Puzzle Solved Clock Tower Door": lambda state: state.can_reach("Three Floor Elevator", "Region", player),
+            "Puzzle Solved Clock Chains": lambda state: state.can_reach("Bedroom", "Region", player),
+            "Puzzle Solved Tiki Drums": lambda state: state.can_reach("Clock Tower", "Region", player),
+            "Puzzle Solved Red Door": lambda state: state.can_reach("Maintenance Tunnels", "Region", player),
+            "Puzzle Solved UFO Symbols": lambda state: state.can_reach("Library", "Region", player),
+            "Puzzle Solved Maze Door": lambda state: state.can_reach("Projector Room", "Region", player)
             }
     }
     return rules_lookup
@@ -147,13 +170,18 @@ def set_rules(Shivers: World) -> None:
 
     rules_lookup = get_rules_lookup(player)
 
-    # Set entrance rules
+    # Set required entrance rules
     for entrance_name, rule in rules_lookup["entrances"].items():
         multiworld.get_entrance(entrance_name, player).access_rule = rule
 
-    # Set location rules
-    for location_name, rule in rules_lookup["locations"].items():
+    # Set required location rules
+    for location_name, rule in rules_lookup["locations_required"].items():
         multiworld.get_location(location_name, player).access_rule = rule
+
+    #Set option location rules
+    if get_option_value(multiworld, player, "puzzle_hints_required") == True:
+        for entrance_name, rule in rules_lookup["locations_puzzle_hints"].items():
+            multiworld.get_location(location_name, player).access_rule = rule
 
     #forbid cloth in janitor closet and oil in tar river
     forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Bottom DUPE", player)
@@ -183,5 +211,25 @@ def set_rules(Shivers: World) -> None:
 
     #Filler Item Forbids
     forbid_item(multiworld.get_location("Puzzle Solved Lyre", player), "Easier Lyre", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Water", player), "Water Always Available in Lobby", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Library", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Anansi Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Tiki Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Ash", player), "Ash Always Availalbe in Office", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Ash", player), "Ash Always Available in Burial Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Oil", player), "Oil Always Available in Prehistoric Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Cloth", player), "Cloth Always Available in Egypt", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Cloth", player), "Cloth Always Available in Burial Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Wood", player), "Wood Always Available in Workshop", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Wood", player), "Wood Always Available in Blue Maze", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Wood", player), "Wood Always Available in Pegasus Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Wood", player), "Wood Always Available in Gods Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Crystal", player), "Crystal Always Available in Lobby", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Crystal", player), "Crystal Always Available in Ocean", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Sand", player), "Sand Always Available in Plants Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Sand", player), "Sand Always Available in Ocean", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Projector Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Bedroom", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Metal", player), "Metal Always Available in Prehistoric", player)
 
     

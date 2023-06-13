@@ -53,6 +53,7 @@ item_table = {
     "Key for Puzzle Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 35, "key"),
     "Key for Bedroom": ItemData(SHIVERS_ITEM_ID_OFFSET + 36, "key"),
     "Key for Underground Lake Room": ItemData(SHIVERS_ITEM_ID_OFFSET + 37, "key"),
+    "Key for Janitor Closet": ItemData(SHIVERS_ITEM_ID_OFFSET + 38, "key"),
 
     #Abilities
     "Crawling": ItemData(SHIVERS_ITEM_ID_OFFSET + 50, "ability"),
