@@ -6105,6 +6105,133 @@
         <ValidatorArray index="0" value="AP_IsInfestorBurrowed"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
-        <Behavior value="AP_SurfaceForSpellcast"/>
     </CEffectApplyBehavior>
+    <CEffectDamage id="AP_VoidRayChargeBeamBaseDamage"/>
+    <CEffectDamage id="AP_VoidRayChargeBeamBaseDamageCharge1" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <DamageModifierSource Value="Caster"/>
+        <AttributeBonus index="Armored" value="4"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_VoidRayChargeBeamBaseDamageCharge2" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <DamageModifierSource Value="Caster"/>
+        <AttributeBonus index="Armored" value="6"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_VoidRayChargeBeamBaseDamageCharge3" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <DamageModifierSource Value="Caster"/>
+        <AttributeBonus index="Armored" value="8"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="6"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_VoidRayChargeBeamRange">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="AP_VoidRayChargeBeamRangeInitialImpactSet"/>
+        <PeriodicEffectArray value="AP_VoidRayChargeBeamRangeImpactSet"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_VoidRayChargeBeamRangeCasterAB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidRayChargeBeamRangeCounter"/>
+    </CEffectApplyBehavior>
+    <CEffectSwitch id="AP_VoidRayChargeBeamRangeCounterCheck">
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="AP_VoidRayChargeBeamRangeCounterCheckPhase2Ready" Effect="AP_VoidRayChargeBeamRangeCounterCheckPhase2"/>
+        <CaseArray Validator="AP_VoidRayChargeBeamRangeCounterCheckPhase3Ready" Effect="AP_VoidRayChargeBeamRangeCounterCheckPhase3"/>
+    </CEffectSwitch>
+    <CEffectSet id="AP_VoidRayChargeBeamRangeCounterCheckPhase2">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamRangePhase2AB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_VoidRayChargeBeamRangeCounterCheckPhase3">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamRangePhase2RB"/>
+        <EffectArray value="AP_VoidRayChargeBeamRangePhase3AB"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_VoidRayChargeBeamRangeDamageSwitch">
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="AP_VoidRayChargeBeamRangeCounterCheckPhase2Ready" Effect="AP_VoidRayChargeBeamBaseDamageCharge2"/>
+        <CaseArray Validator="AP_VoidRayChargeBeamRangeCounterCheckPhase3Ready" Effect="AP_VoidRayChargeBeamBaseDamageCharge3"/>
+        <CaseDefault value="AP_VoidRayChargeBeamBaseDamageCharge1"/>
+    </CEffectSwitch>
+    <CEffectSet id="AP_VoidRayChargeBeamRangeImpactSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamBaseDamage"/>
+        <EffectArray value="AP_VoidRayChargeBeamRangeDamageSwitch"/>
+        <EffectArray value="AP_VoidRayChargeBeamRangeCasterAB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_VoidRayChargeBeamRangeInitialImpactSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamBaseDamage"/>
+        <EffectArray value="AP_VoidRayChargeBeamRangeDamageSwitch"/>
+        <EffectArray value="AP_VoidRayChargeBeamRangeCasterAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_VoidRayChargeBeamRangePhase2AB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidRayChargeBeamRangePhase2"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_VoidRayChargeBeamRangePhase2RB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_VoidRayChargeBeamRangePhase2"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_VoidRayChargeBeamRangePhase3AB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidRayChargeBeamRangePhase3"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_VoidRayVoidDamageBoost">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectApplyBehavior>
+    <CEffectSwitch id="AP_VoidRayChargeBeamCounterCheck">
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="AP_VoidRayChargeBeamCounterCheckPhase2Ready" Effect="AP_VoidRayChargeBeamCounterCheckPhase2"/>
+        <CaseArray Validator="AP_VoidRayChargeBeamCounterCheckPhase3Ready" Effect="AP_VoidRayChargeBeamCounterCheckPhase3"/>
+    </CEffectSwitch>
+    <CEffectSet id="AP_VoidRayChargeBeamCounterCheckPhase2">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamPhase2AB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_VoidRayChargeBeamCounterCheckPhase3">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidRayChargeBeamPhase2RB"/>
+        <EffectArray value="AP_VoidRayChargeBeamPhase3AB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_VoidRayChargeBeamPhase2AB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidRayChargeBeamPhase2"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_VoidRayChargeBeamPhase2RB">
+        <EditorCategories value="Race:Protoss"/>
+        <BehaviorLink value="AP_VoidRayChargeBeamPhase2"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_VoidRayChargeBeamPhase3AB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidRayChargeBeamPhase3"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_PrismaticBeamChargeEffect01">
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_PrismaticBeamChargeEffect02">
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_PrismaticBeamChargeEffect03">
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_VoidRayVoidEnhancedDamage">
+        <ValidatorArray value="AP_HaveVoidRaySwarmDamageBoost"/>
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Armored" value="6"/>
+    </CEffectDamage>
 </Catalog>

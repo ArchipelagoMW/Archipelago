@@ -7755,8 +7755,41 @@
         <Model value="Assets\Effects\Zerg\InfestorParasiteMissile\InfestorParasiteMissile.m3"/>
         <EditorCategories value="Race:Zerg"/>
     </CModel>
-    <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
-        <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
-        <LoopCount value="-1"/>
-    </CSound>
+    <CModel id="AP_VoidRayShakuras" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\VoidRayHero\VoidRayHero.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow08"/>
+        <Radius value="0.750000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow08"/>
+        <UnitGlossaryCamera value="Star2CameraLow08"/>
+    </CModel>
+    <CModel id="AP_VoidRayShakurasDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\VoidRayHeroDeath\VoidRayHeroDeath.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_VoidRayShakurasPlacement">
+        <Model value="Assets\Units\Protoss\VoidRay_Shakuras_Placement\VoidRay_Shakuras_Placement.m3"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+    </CModel>
+    <CModel id="AP_VoidRayShakurasWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\VoidRayHeroWarpIn\VoidRayHeroWarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+    </CModel>
 </Catalog>

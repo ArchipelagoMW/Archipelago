@@ -3988,4 +3988,8 @@
         <AssetArray File="Assets\Sounds\SiegeTank_MorphToTank_SmartServos.wav" FacialGroup=""/>
         <Volume value="-7.960000,-7.960000"/>
     </CSound>
+    <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
+        <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
+        <LoopCount value="-1"/>
+    </CSound>
 </Catalog>

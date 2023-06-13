@@ -1206,4 +1206,17 @@
         <RandomDelayMin value="0"/>
         <RandomDelayMax value="0"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_VoidRayChargeBeamRange">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel0.dds"/>
+        <DisplayEffect value="AP_VoidRayChargeBeamBaseDamageCharge1"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <RangeSlop value="2"/>
+        <ArcSlop value="39.9902"/>
+        <Period value="0.5"/>
+        <Backswing value="0.75"/>
+        <LegacyOptions index="CanRetargetWhileChanneling" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
 </Catalog>

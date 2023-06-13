@@ -1,5 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CUnit default="1" id="AP_VoidRayCampaignBase">
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AIFleeDamageDisabled" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="150"/>
+        <LifeMax value="150"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossPlating"/>
+        <ShieldsStart value="100"/>
+        <ShieldsMax value="100"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Mover value="Fly"/>
+        <Speed value="2.25"/>
+        <Acceleration value="2"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="10"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-4"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="250"/>
+        <CostResource index="Vespene" value="150"/>
+        <RepairTime value="60"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="100"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="ProgressRally"/>
+        <!-- TODO -->
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="0.75"/>
+        <ScoreMake value="400"/>
+        <ScoreKill value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="14"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="160"/>
+        <GlossaryStrongArray value="Battlecruiser"/>
+        <GlossaryStrongArray value="Corruptor"/>
+        <GlossaryStrongArray value="Carrier"/>
+        <GlossaryWeakArray value="VikingFighter"/>
+        <GlossaryWeakArray value="Mutalisk"/>
+        <GlossaryWeakArray value="Phoenix"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+    </CUnit>
     <CUnit id="AP_Marine">
         <DeathRevealRadius value="3"/>
         <Race value="Terr"/>
@@ -9443,5 +9512,16 @@
     <CUnit id="AP_YoinkVikingGroundMissile" parent="MISSILE_INVULNERABLE">
         <Race value="Zerg"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_VoidRayShakuras" parent="AP_VoidRayCampaignBase">
+        <WeaponArray Link="AP_VoidRayChargeBeamRange"/>
+        <CardLayouts index="0">
+            <LayoutButtons Face="AP_VoidRayPrismaticAlignmentBase" Type="Passive" AbilCmd="AP_VoidRayVoidDamageBoost,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_VoidRayVoidPrismaticRange" Type="Passive" Row="2" Column="1"/>
+        </CardLayouts>
+        <SubgroupPriority value="16"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <SelectAlias value="VoidRay"/>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
     </CUnit>
 </Catalog>

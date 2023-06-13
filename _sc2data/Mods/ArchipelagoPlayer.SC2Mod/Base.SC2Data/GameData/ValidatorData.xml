@@ -1803,4 +1803,72 @@
         <Find value="1"/>
         <Value value="AP_HaveMultiTaskMAFServosThor"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamCounterPhase1">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="6"/>
+        <Behavior value="AP_VoidRayChargeBeamCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamCounterPhase2CountLow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="6"/>
+        <Behavior value="AP_VoidRayChargeBeamCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamCounterPhase2CountHigh">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="12"/>
+        <Behavior value="AP_VoidRayChargeBeamCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamCounterPhase3CountLow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="12"/>
+        <Behavior value="AP_VoidRayChargeBeamCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsVoidRayTaldarim">
+        <Value value="AP_VoidRayTaldarim"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamRangeCounterPhase2CountLow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="6"/>
+        <Behavior value="AP_VoidRayChargeBeamRangeCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamRangeCounterPhase2CountHigh">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LT"/>
+        <Value value="12"/>
+        <Behavior value="AP_VoidRayChargeBeamRangeCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_VoidRayChargeBeamRangeCounterPhase3CountLow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="12"/>
+        <Behavior value="AP_VoidRayChargeBeamRangeCounter"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_VoidRayChargeBeamRangeCounterCheckPhase2Ready">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidRayChargeBeamRangeCounterPhase2CountHigh"/>
+        <CombineArray value="AP_VoidRayChargeBeamRangeCounterPhase2CountLow"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_VoidRayChargeBeamRangeCounterCheckPhase3Ready">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidRayChargeBeamRangeCounterPhase3CountLow"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_VoidRayChargeBeamCounterCheckPhase2Ready">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidRayChargeBeamCounterPhase2CountHigh"/>
+        <CombineArray value="AP_VoidRayChargeBeamCounterPhase2CountLow"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_VoidRayChargeBeamCounterCheckPhase3Ready">
+        <Type value="And"/>
+        <CombineArray value="AP_VoidRayChargeBeamCounterPhase3CountLow"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveVoidRaySwarmDamageBoost">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_VoidRaySwarmDamageBoost"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

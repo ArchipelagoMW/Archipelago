@@ -1657,4 +1657,19 @@
         <Icon value="Assets\Textures\BTN-Ability-Zerg-NeuralParasite-color.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_VoidRayPrismaticAlignmentBase">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-VoidRayPrismaticAlignment.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-VoidRayPrismaticAlignment.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidRayVoidPrismaticRange">
+        <Icon value="Assets\Textures\btn-ability-protoss-prismaticrange.dds"/>
+        <AlertIcon value="Assets\Textures\btn-missing-kaeo.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidRayVoidDamageBoost">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-VoidRayPrismaticAlignment.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-VoidRayPrismaticAlignment.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

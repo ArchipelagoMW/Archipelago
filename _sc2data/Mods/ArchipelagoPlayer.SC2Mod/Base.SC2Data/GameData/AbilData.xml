@@ -3879,4 +3879,14 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_VoidRayVoidDamageBoost">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="VoidRayVoidDamageBoost">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
 </Catalog>

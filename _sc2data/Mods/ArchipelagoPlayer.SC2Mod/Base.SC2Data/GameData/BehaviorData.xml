@@ -2269,4 +2269,69 @@
             <AbilLinkDisableArray value="AP_TransportMode"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamRangeCounter">
+        <InfoFlags index="Hidden" value="1"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="30"/>
+        <Duration value="5"/>
+        <InitialEffect value="AP_VoidRayChargeBeamRangeCounterCheck"/>
+        <RefreshEffect value="AP_VoidRayChargeBeamRangeCounterCheck"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamCounter">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="30"/>
+        <InitialEffect value="AP_VoidRayChargeBeamCounterCheck"/>
+        <RefreshEffect value="AP_VoidRayChargeBeamCounterCheck"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamRangePhase2">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <Modification WeaponRange="1.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamRangePhase3">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <Modification WeaponRange="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayVoidDamageBoost">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-prismaticbeam.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="10"/>
+        <Modification WeaponRange="3" WeaponScanBonus="3">
+            <DamageDealtAttributeScaled index="Armored" value="6"/>
+            <WeaponArray Link="AP_VoidRayVoid"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamPhase2">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <!--Modification>
+            <DamageDealtUnscaled index="Ranged" value="4"/>
+        </Modification-->
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamPhase3">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <!--Modification>
+            <DamageDealtUnscaled index="Ranged" value="6"/>
+        </Modification-->
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRaySwarmDamageBoost">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-prismaticbeam.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="20"/>
+        <Modification>
+            <DamageDealtAttributeScaled index="Armored" value="0"/>
+        </Modification>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+    </CBehaviorBuff>
 </Catalog>
