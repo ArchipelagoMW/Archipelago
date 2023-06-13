@@ -119,49 +119,50 @@ class BlasphemousWorld(World):
             "Tears of Atonement (500)"
         ]
 
-        placed_items = []
+        skipped_items = []
 
-        placed_items.extend(unrandomized_dict.values())
+        skipped_items.extend(unrandomized_dict.values())
 
         if world.thorn_shuffle[player] == 2:
             for i in range(8):
-                placed_items.append("Thorn Upgrade")
+                skipped_items.append("Thorn Upgrade")
 
         if world.dash_shuffle[player]:
-            placed_items.append(to_remove[removed])
+            skipped_items.append(to_remove[removed])
             removed += 1
+        elif not world.dash_shuffle[player]:
+            skipped_items.append("Dash Ability")
 
         if world.wall_climb_shuffle[player]:
-            placed_items.append(to_remove[removed])
+            skipped_items.append(to_remove[removed])
             removed += 1
+        elif not world.wall_climb_shuffle[player]:
+            skipped_items.append("Wall Climb Ability")
 
         if not world.reliquary_shuffle[player]:
-            placed_items.extend(reliquary_set)
+            skipped_items.extend(reliquary_set)
         elif world.reliquary_shuffle[player]:
             for i in range(3):
-                placed_items.append(to_remove[removed])
+                skipped_items.append(to_remove[removed])
                 removed += 1
 
+        if not world.boots_of_pleading[player]:
+            skipped_items.append("Boots of Pleading")
+
+        if not world.purified_hand[player]:
+            skipped_items.append("Purified Hand of the Nun")
+
         if world.start_wheel[player]:
-            placed_items.append("The Young Mason's Wheel")
+            skipped_items.append("The Young Mason's Wheel")
 
         if not world.skill_randomizer[player]:
-            placed_items.extend(skill_dict.values())
+            skipped_items.extend(skill_dict.values())
 
-        counter = Counter(placed_items)
+        counter = Counter(skipped_items)
 
         pool = []
 
         for item in item_table:
-            if not world.dash_shuffle[player] and item["name"] == "Dash Abliity":
-                continue
-            if not world.wall_climb_shuffle[player] and item["name"] == "Wall Climb Ability":
-                continue
-            if not world.boots_of_pleading[player] and item["name"] == "Boots of Pleading":
-                continue
-            if not world.purified_hand[player] and item["name"] == "Purified Hand of the Nun":
-                continue
-
             count = item["count"] - counter[item["name"]]
             
             if count <= 0:
@@ -228,6 +229,13 @@ class BlasphemousWorld(World):
         menu.exits.append(ent2)
 
         for door in door_table:
+            reg: Region = self.get_room_from_door(door["Id"])
+            event = BlasphemousLocation(player, door["Id"], None, reg)
+            event.show_in_spoiler = False
+            event.place_locked_item(self.create_event(door["Id"]))
+            add_rule(event, lambda state: state.can_reach(self.get_connected_door(door["Id"]), player))
+            reg.locations.append(event)
+
             if door.get("OriginalDoor") is None:
                 continue
             else:
@@ -239,16 +247,11 @@ class BlasphemousWorld(World):
                 target: Region = self.get_room_from_door(door["OriginalDoor"])
                 exit: Entrance = Entrance(player, door["Id"], parent)
 
+                if not door.get("VisibilityFlags") is None and door["VisibilityFlags"] == 1:
+                    set_rule(exit, lambda x: False)
+
                 exit.connect(target)
                 parent.exits.append(exit)
-
-        for door in door_table:
-            if door.get("RequiredDoors") is not None:
-                for d in door["RequiredDoors"]:
-                    #print(d, self.get_connected_door(d))
-                    connection = self.get_connected_door(d)
-                    add_rule(world.get_entrance(door["Id"], player), lambda state: state.can_reach(connection), "or")
-                add_rule(world.get_entrance(door["Id"], player), lambda state: state.can_reach(self.get_connected_door(door["Id"])), "or")
 
         #keys = list(self.door_connections.keys())
         #keys.sort()
@@ -298,52 +301,6 @@ class BlasphemousWorld(World):
     def get_connected_door(self, door: str) -> Entrance:
         return self.multiworld.get_entrance(self.door_connections[door], self.player)
     
-
-    def get_opposite_direction(self, direction: int) -> int:
-        if direction == 0:
-            return 3
-        elif direction == 3:
-            return 0
-        elif direction == 1:
-            return 2
-        elif direction == 2:
-            return 1
-        elif direction == 4:
-            return 7
-        elif direction == 5:
-            return 6
-        elif direction == 6:
-            return 5
-        elif direction == 7:
-            return 4
-        else:
-            return -1
-        
-    
-    def door_should_be_visible(self, door: DoorDict, reachable: List[str]) -> bool:
-        if door["Direction"] == 5:
-            return False
-        if door.get("VisibilityFlags") == None:
-            return True
-        
-        visible: bool = False
-        if not visible and (door.get("VisibilityFlags") & 1) > 0:
-            visible = True if door["Id"] in reachable else False
-        if not visible and (door.get("VisibilityFlags") & 2) > 0:
-            if door.get("RequiredDoors") is not None:
-                for d in door.get("RequiredDoors"):
-                    if d in reachable:
-                        visible = True
-                        break
-        if not visible and (door.get("VisibilityFlags") & 4) > 0:
-            visible = True if self.multiworld.difficulty[self.player].value >= 2 else False
-        if not visible and (door.get("VisibilityFlags") & 8) > 0:
-            visible = self.multiworld.purified_hand[self.player]
-        if not visible and (door.get("VisibilityFlags") & 16) > 0:
-            visible = True if (self.multiworld.purified_hand[self.player] or self.multiworld.enemy_randomizer[self.player] < 1) and self.multiworld.difficulty[self.player].value >= 2 else False
-
-        return visible
-
     
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
