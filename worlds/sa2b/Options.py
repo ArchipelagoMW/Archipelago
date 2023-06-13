@@ -12,6 +12,7 @@ class Goal(Choice):
     Grand Prix: Win every race in Kart Race Mode (all standard levels are disabled)
     Boss Rush: Beat all of the bosses in the Boss Rush, ending with Finalhazard
     Cannon's Core Boss Rush: Beat Cannon's Core, then beat all of the bosses in the Boss Rush, ending with Finalhazard
+    Boss Rush Chaos Emerald Hunt: Find the Seven Chaos Emeralds, then beat all of the bosses in the Boss Rush, ending with Finalhazard
     """
     display_name = "Goal"
     option_biolizard = 0
@@ -20,6 +21,7 @@ class Goal(Choice):
     option_grand_prix = 3
     option_boss_rush = 4
     option_cannons_core_boss_rush = 5
+    option_boss_rush_chaos_emerald_hunt = 6
     default = 0
 
     @classmethod
@@ -174,25 +176,10 @@ class TrapFillPercentage(Range):
     default = 0
 
 
-class IncludeMissions(Range):
-    """
-    Allows logic to place items in a range of Missions for each level
-    Each mission setting includes lower settings
-    1: Base Story Missions
-    2: 100 Ring Missions
-    3: Lost Chao Missions
-    4: Timer Missions
-    5: Hard Mode Missions
-    """
-    display_name = "Include Missions"
-    range_start = 1
-    range_end = 5
-    default = 2
-
-
 class Keysanity(Toggle):
     """
     Determines whether picking up Chao Keys grants checks
+    (86 Locations)
     """
     display_name = "Keysanity"
 
@@ -201,9 +188,9 @@ class Whistlesanity(Choice):
     """
     Determines whether whistling at various spots grants checks
     None: No Whistle Spots grant checks
-    Pipes: Whistling at Pipes grants checks
-    Hidden: Whistling at Hidden Whistle Spots grants checks
-    Both: Whistling at both Pipes and Hidden Whistle Spots grants checks
+    Pipes: Whistling at Pipes grants checks (97 Locations)
+    Hidden: Whistling at Hidden Whistle Spots grants checks (32 Locations)
+    Both: Whistling at both Pipes and Hidden Whistle Spots grants checks (129 Locations)
     """
     display_name = "Whistlesanity"
     option_none = 0
@@ -216,6 +203,7 @@ class Whistlesanity(Choice):
 class Beetlesanity(Toggle):
     """
     Determines whether destroying Gold Beetles grants checks
+    (27 Locations)
     """
     display_name = "Beetlesanity"
 
@@ -223,6 +211,7 @@ class Beetlesanity(Toggle):
 class Omosanity(Toggle):
     """
     Determines whether activating Omochao grants checks
+    (192 Locations)
     """
     display_name = "Omosanity"
 
@@ -230,6 +219,7 @@ class Omosanity(Toggle):
 class Animalsanity(Toggle):
     """
     Determines whether picking up counted small animals grants checks
+    (420 Locations)
     """
     display_name = "Animalsanity"
 
@@ -323,8 +313,8 @@ class ChaoGardenDifficulty(Choice):
     Determines the number of chao garden difficulty levels included. Easier difficulty settings means fewer chao garden checks
     None: No Chao Garden Activities have checks
     Beginner: Beginner Races
-    Intermediate: Beginner and Jewel Races
-    Expert: Beginner, Jewel, Challenge, Hero, and Dark Races
+    Intermediate: Beginner, Challenge, Hero, and Dark Races
+    Expert: Beginner, Challenge, Hero, Dark and Jewel Races
     """
     display_name = "Chao Garden Difficulty"
     option_none = 0
@@ -356,7 +346,7 @@ class ChaoRaceChecks(Choice):
 
 class RequiredCannonsCoreMissions(Choice):
     """
-    Determines how many Cannon's Core missions must be completed to unlock the Biolizard (for the "Biolizard" goal)
+    Determines how many Cannon's Core missions must be completed (for Biolizard or Cannon's Core goals)
     First: Only the first mission must be completed
     All Active: All active Cannon's Core missions must be completed
     """
@@ -571,6 +561,13 @@ class RingLoss(Choice):
             return cls.name_lookup[value]
 
 
+class RingLink(Toggle):
+    """
+    Whether your in-level ring gain/loss is linked to other players
+    """
+    display_name = "Ring Link"
+
+
 class SADXMusic(Choice):
     """
     Whether the randomizer will include Sonic Adventure DX Music in the music pool
@@ -615,13 +612,15 @@ class VoiceShuffle(Choice):
     None: No voices are shuffled.
     Shuffled: Voices are shuffled.
     Rude: Voices are shuffled, but some are replaced with rude words.
+    Chao: All voices are replaced with chao sounds.
     Singularity: All voices are replaced with a single random voice.
     """
     display_name = "Voice Shuffle Type"
     option_none = 0
     option_shuffled = 1
     option_rude = 2
-    option_singularity = 3
+    option_chao = 3
+    option_singularity = 4
     default = 0
 
 
@@ -691,6 +690,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "pong_trap_weight": PongTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
     "ring_loss": RingLoss,
+    "ring_link": RingLink,
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
     "voice_shuffle": VoiceShuffle,

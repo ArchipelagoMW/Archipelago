@@ -495,8 +495,6 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(world.get_location(LocationName.hidden_base_pipe_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
-        add_rule(world.get_location(LocationName.eternal_engine_pipe_1, player),
-                 lambda state: state.has(ItemName.tails_booster, player))
 
         add_rule(world.get_location(LocationName.sand_ocean_pipe_1, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
@@ -1194,7 +1192,8 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
         add_rule(world.get_location(LocationName.sand_ocean_animal_14, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
         add_rule(world.get_location(LocationName.lost_colony_animal_14, player),
-                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+                 lambda state: state.has(ItemName.eggman_jet_engine, player) and
+                               state.has(ItemName.eggman_large_cannon, player))
         add_rule(world.get_location(LocationName.weapons_bed_animal_14, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player) and
                                state.has(ItemName.eggman_large_cannon, player))
@@ -1622,8 +1621,6 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
     # Pipe Upgrade Requirements
     if world.whistlesanity[player].value == 1 or world.whistlesanity[player].value == 3:
         add_rule(world.get_location(LocationName.hidden_base_pipe_1, player),
-                 lambda state: state.has(ItemName.tails_booster, player))
-        add_rule(world.get_location(LocationName.eternal_engine_pipe_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
         add_rule(world.get_location(LocationName.cosmic_wall_pipe_1, player),
@@ -2086,8 +2083,7 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
 
         add_rule(world.get_location(LocationName.cannon_core_animal_13, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
-                               state.has(ItemName.eggman_large_cannon, player) and
-                               state.has(ItemName.knuckles_hammer_gloves, player))
+                               state.has(ItemName.eggman_large_cannon, player))
 
         add_rule(world.get_location(LocationName.prison_lane_animal_14, player),
                  lambda state: state.has(ItemName.tails_bazooka, player))
@@ -2105,7 +2101,8 @@ def set_mission_upgrade_rules_hard(world: MultiWorld, player: int):
                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
         add_rule(world.get_location(LocationName.lost_colony_animal_14, player),
-                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+                 lambda state: state.has(ItemName.eggman_jet_engine, player) and
+                               state.has(ItemName.eggman_large_cannon, player))
         add_rule(world.get_location(LocationName.weapons_bed_animal_14, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player) and
                                state.has(ItemName.eggman_large_cannon, player))
@@ -2210,7 +2207,7 @@ def set_rules(world: MultiWorld, player: int, gate_bosses: typing.Dict[int, int]
         elif world.logic_difficulty[player].value == 1:
             set_mission_upgrade_rules_hard(world, player)
 
-    if world.goal[player] in [4, 5]:
+    if world.goal[player] in [4, 5, 6]:
         for i in range(16):
             if boss_rush_map[i] == 10:
                 add_rule(world.get_location("Boss Rush - " + str(i + 1), player),
