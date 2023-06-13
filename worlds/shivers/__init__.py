@@ -133,7 +133,7 @@ class ShiversWorld(World):
         
 
     def generate_output(self, output_directory: str) -> None:
-
+        self.multiworld.completion_condition[self.player] = lambda state: Rules.lightning_capturable(state, self.player)
         return super().generate_output(output_directory)
 
     def _get_slot_data(self):
