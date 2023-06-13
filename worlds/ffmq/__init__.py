@@ -51,16 +51,22 @@ class FFMQWorld(World):
                 (self.multiworld.bosses_scaling_upper[self.player].value,
                  self.multiworld.bosses_scaling_lower[self.player].value)
 
-        map_shuffle = self.multiworld.map_shuffle[self.player].value
-        crest_shuffle = self.multiworld.crest_shuffle[self.player].current_key
-        battlefield_shuffle = self.multiworld.crest_shuffle[self.player].current_key
+        if (self.multiworld.map_shuffle[self.player] or self.multiworld.crest_shuffle[self.player] or
+                self.multiworld.crest_shuffle[self.player]):
+            seed = hex(self.multiworld.random.randint(0, int("FFFFFFFF", 16))).split("0x")[1].upper()
+            map_shuffle = self.multiworld.map_shuffle[self.player].value
+            crest_shuffle = self.multiworld.crest_shuffle[self.player].current_key
+            battlefield_shuffle = self.multiworld.crest_shuffle[self.player].current_key
 
-        url = f"https://ffmqrapi.azurewebsites.net/GenerateRooms?s={2}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}"
-        response = requests.get(url)
-        if response.ok:
-            self.rooms = yaml.load(response.text, yaml.Loader)
+            url = f"https://ffmqrapi.azurewebsites.net/GenerateRooms?s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}"
+            response = requests.get(url)
+            if response.ok:
+                self.rooms = yaml.load(response.text, yaml.Loader)
+            else:
+                raise Exception(f"Got error {response.status_code} {response.reason} {response.text} from trying to "
+                                f"fetch map shuffle data for FFMQ player {self.player}")
         else:
-            raise Exception(f"Got error {response.status_code} {response.reason} {response.text} from trying to fetch map shuffle data for FFMQ player {self.player}")
+            self.rooms = rooms
         # breakpoint()
     # @classmethod
     # def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
