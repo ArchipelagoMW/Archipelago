@@ -1842,7 +1842,9 @@
         <On Terms="AbilTransport.AP_MedivacTransport.PassengerKilled; AbilTransport AP_ThorAP" Target="::actor.AP_Thor" Send="Signal Dead"/>
         <On Terms="UnitDeath" Target="::actor.Thor" Send="Signal Dead"/>
         <On Terms="UnitDeath" Target="::actor.AP_Thor" Send="Signal Dead"/>
-        <On Terms="ActorCreation; ValidateUnit AP_MedivacUpgrade" Send="ModelSwap MedivacUpgrade"/>
+        <On Terms="ActorCreation; ValidateUnit AP_MedivacUpgrade" Send="ModelSwap AP_MedivacUpgrade"/>
+        <On Terms="Upgrade.AP_MedivacRapidDeployment.Add" Send="ModelSwap AP_MedivacUpgrade"/>
+        <On Terms="Upgrade.AP_ExpandedHull.Add" Send="ModelSwap AP_MedivacUpgrade"/>
         <On Terms="Abil.AP_MedivacDoubleBeamHeal.SourceChannelStart" Send="$Spell PlayForever"/>
         <On Terms="Abil.AP_MedivacDoubleBeamHeal.SourceChannelStop" Send="AnimClear Spell"/>
         <HostSiteOps Ops="SOpBankerMedivac"/>

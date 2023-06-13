@@ -7858,4 +7858,17 @@
         <EditorCategories value="Race:Protoss"/>
         <RadiusLoose value="1.000000"/>
     </CModel>
+    <CModel id="AP_MedivacUpgrade" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\MedivacUpgrade\MedivacUpgrade.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.700000,0.700000,0.700000"/>
+        <ScaleMin value="0.700000,0.700000,0.700000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.500000"/>
+        <SelectionRadius value="1.071200"/>
+        <Radius value="0.750000"/>
+        <TechPurchaseCamera value="Star2CameraLow09"/>
+        <UnitGlossaryCamera value="Star2CameraLow09"/>
+        <PlanetPanelCamera value="Star2CameraLow09"/>
+        <ShadowRadius value="1.071200"/>
+    </CModel>
 </Catalog>
