@@ -353,9 +353,20 @@ local getChipCodeIndex = function(chip_id, chip_code)
 end
 
 local getProgramColorIndex = function(program_id, program_color)
-    --TO DO Figure out where the color comes from.
-    if program_color > 4 then return 3 end
-    return program_color-1
+    -- The general case, most programs use white pink or yellow. This is the values the enums already have
+    if program_id >= 23 and program_id <= 47 then
+        return program_color-1
+    end
+    --The final three programs only have a color index 0, so just return those
+    if program_id > 47 then
+        return 0
+    end
+    --BrakChrg as an AP item only comes in orange, index 0
+    if program_id == 3 then
+        return 0
+    end
+    -- every other AP obtainable program returns only color index 3
+    return 3
 end
 
 local addChip = function(chip_id, chip_code, amount)
@@ -372,12 +383,6 @@ local addProgram = function(program_id, program_color, amount)
     programOffset = 0x04 * program_id
     program_code_index = getProgramColorIndex(program_id, program_color)
     currentProgramAddress = programStartAddress + programOffset + program_code_index
-    currentProgramCount = memory.read_u8(currentProgramAddress)
-    memory.write_u8(currentProgramAddress, currentProgramCount+amount)
-    -- As far as I can tell, everything uses either some combination of 1, 2, and 3, or it uses 4
-    -- And having extra data in one does not affect the other. So, until I find out how to actually check which index
-    -- We set both.
-    currentProgramAddress = programStartAddress + programOffset + 3
     currentProgramCount = memory.read_u8(currentProgramAddress)
     memory.write_u8(currentProgramAddress, currentProgramCount+amount)
 end
