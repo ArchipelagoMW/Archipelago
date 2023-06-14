@@ -16,7 +16,7 @@ class ShiversWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["GodlFire, Mathx2"]
+        ["GodlFire, Mathx2, Mouse"]
     )]
 
 class ShiversWorld(World):
