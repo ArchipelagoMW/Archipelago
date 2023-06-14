@@ -83,11 +83,9 @@ class BlasphemousWorld(World):
                             ' cannot be chosen if Shuffle Wall Climb is enabled.')
         
         if not world.dash_shuffle[player]:
-            world.start_inventory[player].value["Dash Ability"] = 1
             world.push_precollected(self.create_item("Dash Ability"))
 
         if not world.wall_climb_shuffle[player]:
-            world.start_inventory[player].value["Wall Climb Ability"] = 1
             world.push_precollected(self.create_item("Wall Climb Ability"))
 
         if world.skip_long_quests[player]:
@@ -235,7 +233,7 @@ class BlasphemousWorld(World):
             event = BlasphemousLocation(player, door["Id"], None, reg)
             event.show_in_spoiler = False
             event.place_locked_item(self.create_event(door["Id"]))
-            add_rule(event, lambda state: state.can_reach(door["Id"]), player)
+            add_rule(event, lambda state: state.can_reach(self.get_connected_door(door["Id"])), player)
             reg.locations.append(event)
 
             if door.get("OriginalDoor") is None:
