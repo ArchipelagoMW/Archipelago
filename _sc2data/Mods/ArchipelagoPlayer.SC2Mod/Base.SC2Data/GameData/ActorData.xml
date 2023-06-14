@@ -3769,6 +3769,358 @@
         <On Terms="Behavior.AP_NovaApolloCloak.On" Send="Create"/>
         <Sound value="Terran_CloakOn"/>
     </CActorSound>
+    <CActorUnit id="AP_BroodLord" parent="GenericUnitMorph" unitName="AP_BroodLord">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <On Terms="ActorCreation" Send="$Birth 0 0.000000 -1.000000 0.000000"/>
+        <On Terms="Abil.AP_BroodLordHangar.Launch" Send="AnimPlay SWE Stand,Work,End"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Broodlord_Land"/>
+        <HostSiteOps Ops="AP_SOpBankerBroodLord"/>
+        <Model value="AP_BroodLordEx1"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <Baselines index="Stand" BlendIn="1.000000" BlendOut="1.000000"/>
+        <Baselines index="Walk" BlendIn="1.000000" BlendOut="1.000000"/>
+        <BuildModel value="BroodLord"/>
+        <DeathArray index="Normal" ModelLink="AP_BroodLordEx1Death" SoundLink="BroodLord_Explode"/>
+        <DeathCustoms>
+            <ActorModel value="AP_BroodLordDeathRagdoll"/>
+            <ModelLink value="BroodLordDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="BroodLord"/>
+        <PlacementSound value="Zerg_BuildingPlacement"/>
+        <PortraitModel value="AP_BroodLordEx1Portrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="2.000000,3.000000"/>
+            <IdlePeriod value="1.500000,5.000000"/>
+            <RangeDown value="5.000000"/>
+            <RangeDownFade value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMassive"/>
+        </TerrainSquibs>
+        <BarOffset value="60"/>
+        <BarWidth value="100"/>
+        <GlossaryAnim value="Walk"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-BroodLord.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-mantalisk.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level0.dds"/>
+        <NameOffset value="80"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="BroodLord_Ready"/>
+        <SoundArray index="What" value="BroodLord_What"/>
+        <SoundArray index="Yes" value="BroodLord_Yes"/>
+        <SoundArray index="Attack" value="BroodLord_Attack"/>
+        <SoundArray index="Pissed" value="BroodLord_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-mantalisk.dds"/>
+        <UnitModelFrameActor value="BroodLordUnitModelFrameActor"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-BroodLord.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorAction id="AP_BroodLordAttackImpactAction" parent="GenericAttack" effectAttack="AP_BroodlingEscortDamage">
+        <ImpactMap index="None" Model="BroodLordAttackImpact" Sound="BroodLord_AttackImpact"/>
+    </CActorAction>
+    <CActorUnit id="AP_BroodLordCocoon" parent="GenericUnitMorph" unitName="AP_BroodLordCocoon">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="AnimDone; AnimName Birth" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BroodLordCocoon; MorphFrom AP_Mutalisk" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BroodLordCocoon; MorphFrom AP_Mutalisk" Send="$Birth 0 0.000000 -1.000000 0.000000"/>
+        <HostSiteOps Ops="SOpRotVariancerForward30"/>
+        <Model value="BroodLordCocoon"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="BroodLordCocoon"/>
+        <DeathArray index="Normal" ModelLink="BroodLordCocoonDeath" SoundLink="Egg_Explode"/>
+        <PlacementModel value="BroodLordCocoon"/>
+        <PortraitModel value="BroodLordCocoonPortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="78"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-BroodLordEgg.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\Wireframe-Zerg-BroodLordEgg.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="What" value="Egg_What"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\Wireframe-Zerg-BroodLordEgg.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-BroodLordEgg.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorSound id="AP_BroodLord_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_BroodLord; PassChance 25.000000" Send="Create"/>
+        <Sound value="BroodLord_Death"/>
+    </CActorSound>
+    <CActorUnit id="AP_Broodling" parent="GenericUnitStandard" unitName="AP_Broodling">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="BroodlingAnimSlateCleaner"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <On Terms="ActorCreation" Send="$Birth 0 0.000000"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Broodling_Land"/>
+        <HostSiteOps Ops="SOpMoveUpByDot2"/>
+        <Model value="Broodling"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Broodling"/>
+        <DeathArray index="Normal" ModelLink="BroodlingDeath" SoundLink="Broodling_Explode"/>
+        <DeathArray index="Disintegrate" ModelLink="BroodlingDeathAcid" SoundLink="Broodling_DeathFXAcid"/>
+        <DeathArray index="Fire" ModelLink="BroodlingDeathFire" SoundLink="Broodling_DeathFXFire"/>
+        <DeathCustoms ModelLink="BroodlingDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="FireOnMetal"/>
+            <BodySquibs Name="BloodReduced" IsFallback="1"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdoll" ModelLink="BroodlingDeathRagdoll" Name="RagdollSpineCrawlerHurl"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustomData Name="RagdollBasic" SyncPassChance="65"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
+        <PlacementModel value="Broodling"/>
+        <PortraitModel value="BroodlingPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.250000,0.250000"/>
+            <IdlePeriod value="0.200000,0.400000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleTiny"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1.5"/>
+        <BarOffset value="25"/>
+        <BarWidth value="40"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Broodling.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Broodling_Ready"/>
+        <SoundArray index="What" value="Broodling_What"/>
+        <SoundArray index="Yes" value="Broodling_Yes"/>
+        <SoundArray index="Attack" value="Broodling_Attack"/>
+        <SoundArray index="Pissed" value="Broodling_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-symbiote.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Broodling.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorAction id="AP_BroodlingAttack" parent="GenericAttack" effectAttack="AP_NeedleClaws">
+        <ImpactMap index="None" Sound="Broodling_AttackImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorSound id="AP_Cocoon_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_BroodLordCocoon; PassChance 25.000000" Send="Create"/>
+        <On Terms="UnitDeath.AP_ViperCocoon; PassChance 25.000000" Send="Create"/>
+        <Sound value="Cocoon_Death"/>
+    </CActorSound>
+    <CActorAction id="AP_BroodLordAttack" parent="GenericAttack" effectImpact="AP_BroodlingEscortDamage" effectLaunch="AP_BroodlingEscortMissile">
+        <LaunchAssets Sound="BroodLord_AttackLaunch"/>
+        <Missile value="AP_BroodLordAttackMissile"/>
+        <ImpactMap index="None" Model=""/>
+    </CActorAction>
+    <CActorAction id="AP_BroodLordAttackA" parent="GenericAttack" effectImpact="AP_BroodlingEscortDamageUnit" effectLaunch="AP_BroodlingEscortLaunchA">
+        <On Terms="ActorCreation" Send="TimerSet 2.000000 DelayDestroy"/>
+        <On Terms="TimerExpired; TimerName DelayDestroy" Send="Destroy"/>
+        <LaunchAssets Sound="BroodLord_AttackLaunch"/>
+        <Missile value="AP_BroodlingEscort"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Sound="BroodLord_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_BroodLordAttackAMissile" parent="GenericAttackMissile" unitName="AP_BroodLordAWeapon"/>
+    <CActorAction id="AP_BroodLordAttackB" parent="GenericAttack" effectImpact="AP_BroodlingEscortImpactB" effectLaunch="AP_BroodlingEscortMissileB">
+        <Missile value="AP_BroodLordAttackBMissile"/>
+    </CActorAction>
+    <CActorMissile id="AP_BroodLordAttackBMissile" parent="GenericAttackMissile" unitName="AP_BroodLordBWeapon">
+        <Model value="BroodLordBWeapon"/>
+    </CActorMissile>
+    <CActorMissile id="AP_BroodLordAttackMissile" parent="GenericAttackMissile" unitName="AP_BroodLordWeapon"/>
+    <CActorModel id="AP_BroodLordCocoonHatch">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_BroodLordCocoon" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_BroodLordCocoon" Send="$Death"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BroodLordCocoon" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_CocoonCancelOrCocoonComplete"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="BroodLordCocoon"/>
+        <PhysicsImpactDefault AutoVolumeRangeMin="0.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_BroodLordDeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_BroodLordDeathRagdollDetonationForce"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionFlier"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorForceSphere id="AP_BroodLordDeathRagdollDetonationForce">
+        <Host Subject="::Main"/>
+        <HostSiteOps Ops="SOpAttachInternalDetonation SOpForwardCasterCenter SOpRotVariancerForward60 SOpMoveByDot15ToDot5 SOpMoveDownByDot15ToDot25 SOpPointSouthWorld" HoldPosition="1"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="17.500000,5.000000"/>
+        <Radius value="1.000000,0.500000"/>
+    </CActorForceSphere>
+    <CActorEventMacro id="AP_BroodlingAnimSlateCleaner">
+        <Remove Terms="UnitBirth.*.Normal" Send="$Birth"/>
+        <Remove Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <Remove Terms="ActorOrphan" Send="AnimBracketStop GL_BSD"/>
+        <Remove Terms="AnimDone; AnimName GL_Death" Send="AnimPlay GL_Dead GLdead PlayForever"/>
+    </CActorEventMacro>
+    <CActorSound id="AP_BroodlingAttackLaunch" parent="SoundOneShot">
+        <On Terms="WeaponStart.AP_NeedleClaws.AttackStart" Send="Create"/>
+        <Sound value="Broodling_AttackLaunch"/>
+    </CActorSound>
+    <CActorMissile id="AP_BroodlingEscort" parent="GenericUnitBase" unitName="AP_BroodlingEscort">
+        <Model value="BroodlingEscort"/>
+        <Aliases value="_MissileHybrids"/>
+        <Macros value="AP_BroodlingAnimSlateCleaner"/>
+        <On Terms="ActorCreation" Send="$Birth 0 0.000000"/>
+        <On Terms="Effect.AP_BroodlingEscort.Start; At Caster" Send="TimerSet 0.375000 AnimTransition"/>
+        <On Terms="TimerExpired; TimerName AnimTransition" Send="AnimClear Birth"/>
+        <On Terms="TimerExpired; TimerName AnimTransition" Send="$Spell PlayForever"/>
+        <AnimBlendTime value="0.300000"/>
+        <Baselines index="Stand" AnimProps="Fly"/>
+        <Baselines index="Walk" AnimProps="Fly"/>
+        <PortraitModel value="BroodlingPortrait"/>
+        <WalkAnimMoveSpeed value="1.5"/>
+        <BarOffset value="25"/>
+        <BarWidth value="40"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Broodling.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="BroodlingGroupWhat"/>
+        <GroupSoundArray index="Yes" value="BroodlingGroupYes"/>
+        <GroupSoundArray index="Attack" value="BroodlingGroupAttack"/>
+        <GroupSoundArray index="Board" value="BroodlingGroupBoard"/>
+        <HighlightTooltip value="Unit/Name/AP_BroodlingEscort"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-zerg-building.dds"/>
+        <SoundArray index="Birth" value="BroodlingBirth"/>
+        <SoundArray index="Ready" value="Broodling_Ready"/>
+        <SoundArray index="Help" value="BroodlingHelp"/>
+        <SoundArray index="What" value="Broodling_What"/>
+        <SoundArray index="Yes" value="Broodling_Yes"/>
+        <SoundArray index="Attack" value="Broodling_Attack"/>
+        <SoundArray index="Pissed" value="Broodling_Pissed"/>
+        <SoundArray index="Movement" value="BroodlingMovement"/>
+        <SoundArray index="Turning" value="BroodlingTurning"/>
+        <SoundArray index="Board" value="BroodlingBoard"/>
+        <SoundArray index="Click" value="BroodlingClick"/>
+        <SoundArray index="ClickError" value="BroodlingClickError"/>
+        <SoundArray index="Highlight" value="BroodlingHighlight"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-symbiote.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Broodling.dds"/>
+        </Wireframe>
+        <PreHost value="_ActorAction"/>
+    </CActorMissile>
+    <CActorSound id="AP_Broodling_Death" parent="SoundOneShot">
+        <Sound value="Broodling_Death"/>
+    </CActorSound>
+    <CActorSound id="AP_Broodling_Land" parent="SoundOneShot">
+        <Sound value="Broodling_Land"/>
+    </CActorSound>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -7598,7 +7950,6 @@
     <CActorAction id="AP_FungalGrowthAttack" parent="GenericAttack" effectImpact="AP_FungalGrowthSearch" effectLaunch="AP_FungalGrowthMissile">
         <LaunchAttachQuery Methods="Weapon"/>
         <LaunchAssets Sound="Infestor_FungalGrowthLaunch"/>
-        <Missile value="AP_FungalGrowthAttackMissile"/>
         <ImpactMap index="None" Sound="Infestor_FungalGrowthImpact"/>
     </CActorAction>
     <CActorMissile id="AP_FungalGrowthAttackMissile" parent="GenericAttackMissile" unitName="AP_FungalGrowthMissile"/>
@@ -7617,6 +7968,11 @@
         <Host Subject="AP_NPSwarmModel"/>
         <Sound value="Infestor_AttackLaunch_NP"/>
     </CActorSound>
+    <CActorSiteOpBankerUnit id="AP_SOpBankerBroodLord">
+        <RollInActivationAngle value="15.000000"/>
+        <RollInArc value="120.000000"/>
+        <RollOutDuration value="1.500000"/>
+    </CActorSiteOpBankerUnit>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->

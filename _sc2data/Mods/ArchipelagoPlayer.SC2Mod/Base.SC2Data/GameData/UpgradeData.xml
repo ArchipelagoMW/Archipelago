@@ -492,6 +492,10 @@
         <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/ThorWreckageUpgraded"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_HotsKeneticMitosis">
+        <AffectedUnitArray value="AP_BroodLord"/>
+        <AffectedUnitArray value="AP_Broodling"/>
+    </CUpgrade>
     <CUpgrade id="AP_ThorMorph">
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
@@ -3369,7 +3373,6 @@
         <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_FighterMode,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
-
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
@@ -3378,7 +3381,6 @@
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewFighterMode,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
-
         <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>
@@ -3388,7 +3390,6 @@
         <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Stats].DurationArray[Delay]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_AssaultMode,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
-
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Abils].DurationArray[Delay]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Actor].DurationArray[Delay]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Actor].DurationArray[Duration]" Value="4.000000"/>

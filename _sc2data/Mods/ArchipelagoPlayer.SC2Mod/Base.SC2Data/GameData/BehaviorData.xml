@@ -2269,4 +2269,27 @@
             <AbilLinkDisableArray value="AP_TransportMode"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_KillsToCaster">
+        <InfoFlags index="Hidden" value="1"/>
+        <KillCredit Value="Caster"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_KeneticMitosisSplitBehavior">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <PeriodicEffect value="AP_KeneticMitosisSplit"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BroodlingFate" parent="TimedLife">
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="8"/>
+        <KillCredit Value="Unknown"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_BroodlingAttackDelay">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="0.5"/>
+        <Modification>
+            <AbilLinkDisableArray value="attack"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

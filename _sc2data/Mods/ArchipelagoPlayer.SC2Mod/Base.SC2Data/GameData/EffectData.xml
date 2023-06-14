@@ -6107,4 +6107,173 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="AP_SurfaceForSpellcast"/>
     </CEffectApplyBehavior>
+    <CEffectDamage id="AP_BroodlingEscortDamage" parent="DU_WEAP_MISSILE">
+        <ValidatorArray value="AP_BroodlingEscortFilters"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Effect="AP_BroodlingEscort" Value="TargetUnit"/>
+        <Visibility value="Visible"/>
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_KillsToCaster">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_NeedleClaws" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Amount value="4"/>
+    </CEffectDamage>
+    <CEffectSwitch id="AP_BroodlingEscort">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="IsStructure" Effect="AP_BroodlingEscortStructure"/>
+        <CaseDefault value="AP_BroodlingEscortUnitSet"/>
+    </CEffectSwitch>
+    <CEffectCreateUnit id="AP_BroodlingEscortCU">
+        <ValidatorArray value="NotHallucination"/>
+        <EditorCategories value="Race:Zerg"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <SpawnEffect value="AP_BroodlingEscortLaunch"/>
+        <SpawnUnit value="AP_Broodling"/>
+        <SpawnRange value="5"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_BroodlingEscortDamageSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BroodlingEscortDamageUnit"/>
+        <EffectArray value="AP_BroodlingEscortImpactA"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_BroodlingEscortDamageUnit" parent="DU_WEAP_MISSILE">
+        <ValidatorArray value="AP_BroodlingEscortFilters"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_BroodlingEscortFallbackMissile">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_BroodlingEscortDamage"/>
+        <Flags index="ValidateWeapon" value="0"/>
+        <Movers Link="AP_BroodLordWeaponRight" IfRangeLTE="500"/>
+        <Movers Link="AP_BroodLordWeaponLeft" IfRangeLTE="500"/>
+        <MoverRollingJump value="1"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_BroodlingEscortImpact">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="RemovePrecursor"/>
+        <EffectArray value="AP_BroodlingEscortImpactTransfer"/>
+        <EffectArray value="AP_BroodlingAttack"/>
+        <EffectArray value="AP_SuicideRemove"/>
+        <EffectArray value="AP_KeneticMitosisSplitBehavior"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_BroodlingEscortImpactA">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <SpawnEffect value="AP_BroodlingEscortLaunchB"/>
+        <SpawnUnit value="AP_Broodling"/>
+        <SpawnRange value="5"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_BroodlingEscortImpactB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="RemovePrecursor"/>
+        <EffectArray value="AP_BroodlingAttack"/>
+        <EffectArray value="AP_SuicideRemove"/>
+    </CEffectSet>
+    <CEffectTransferBehavior id="AP_BroodlingEscortImpactTransfer">
+        <LaunchUnit Effect="AP_BroodlingEscortMissile" Value="Source"/>
+        <ImpactUnit Value="Target"/>
+        <Behavior value="AP_KillsToCaster"/>
+    </CEffectTransferBehavior>
+    <CEffectSet id="AP_BroodlingEscortLaunch">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BroodlingEscortRelease"/>
+        <EffectArray value="AP_BroodlingEscortMissile"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="AP_BroodlingTimedLife"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_BroodlingEscortLaunchA">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_BroodlingEscortDamageUnit"/>
+        <FinishEffect value="AP_BroodlingEscortImpactA"/>
+        <Flags index="ValidateWeapon" value="0"/>
+        <Movers Link="AP_BroodLordWeaponRight" IfRangeLTE="500"/>
+        <Movers Link="AP_BroodLordWeaponLeft" IfRangeLTE="500"/>
+        <MoverRollingJump value="1"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_BroodlingEscortLaunchB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BroodlingEscortMissileB"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="AP_BroodlingTimedLife"/>
+        <EffectArray value="AP_KeneticMitosisSplitBehavior"/>
+        <EffectArray value="AP_BroodlingEscortLaunchBTransfer"/>
+    </CEffectSet>
+    <CEffectTransferBehavior id="AP_BroodlingEscortLaunchBTransfer">
+        <LaunchUnit Effect="AP_BroodlingEscortLaunchA" Value="Source"/>
+        <ImpactUnit Value="Target"/>
+        <Behavior value="AP_KillsToCaster"/>
+    </CEffectTransferBehavior>
+    <CEffectLaunchMissile id="AP_BroodlingEscortMissile">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <ImpactEffect value="AP_BroodlingEscortDamage"/>
+        <FinishEffect value="AP_BroodlingEscortImpact"/>
+        <Flags index="ValidateWeapon" value="0"/>
+        <Movers Link="AP_BroodLordWeaponRight" IfRangeLTE="500"/>
+        <Movers Link="AP_BroodLordWeaponLeft" IfRangeLTE="500"/>
+        <MoverRollingJump value="1"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_BroodlingEscortMissileB">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="AP_BroodlingEscortImpactB"/>
+        <AmmoUnit value="AP_BroodLordBWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectReleaseMagazine id="AP_BroodlingEscortRelease">
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectReleaseMagazine>
+    <CEffectSwitch id="AP_BroodlingEscortStructure">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Effect="AP_BroodlingEscortCU" FallThrough="1"/>
+        <CaseDefault value="AP_BroodlingEscortFallbackMissile"/>
+    </CEffectSwitch>
+    <CEffectSet id="AP_BroodlingEscortUnitSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BroodlingEscortRelease"/>
+        <EffectArray value="AP_BroodlingEscortLaunchA"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_BroodlingAttack">
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="attack"/>
+        <Target Effect="AP_BroodlingEscort" Value="TargetUnitOrPoint"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_BroodlingTimedLife">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_BroodlingFate"/>
+    </CEffectApplyBehavior>
+    <CEffectCreateUnit id="AP_KeneticMitosisSpawn">
+        <ValidatorArray value="NotHallucination"/>
+        <EditorCategories value="Race:Zerg"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <SpawnEffect value="AP_KeneticMitosisSplitSet"/>
+        <SpawnUnit value="AP_Broodling"/>
+        <SpawnRange value="5"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_KeneticMitosisSplit">
+        <EffectArray value="AP_KeneticMitosisSpawn"/>
+        <EffectArray value="AP_KeneticMitosisSpawn"/>
+        <EffectArray value="Suicide"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_KeneticMitosisSplitBehavior">
+        <ValidatorArray value="AP_HotSKeneticMitosisResearched"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_KeneticMitosisSplitBehavior"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_KeneticMitosisSplitSet">
+        <EffectArray value="AP_BroodlingTimedLife"/>
+        <EffectArray value="AP_BroodlingAttack"/>
+    </CEffectSet>
 </Catalog>

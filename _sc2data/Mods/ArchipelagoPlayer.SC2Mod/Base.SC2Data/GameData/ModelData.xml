@@ -7755,6 +7755,83 @@
         <Model value="Assets\Effects\Zerg\InfestorParasiteMissile\InfestorParasiteMissile.m3"/>
         <EditorCategories value="Race:Zerg"/>
     </CModel>
+    <CModel id="AP_BroodLordEx1" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\BroodLordEx1\BroodLordEx1.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\BroodLord_SwarmAnims\BroodLord_SwarmAnims.m3a"/>
+        <AnimBlendTime value="0.400000"/>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="BroodLord_wings"/>
+            <Type value="Sound"/>
+            <Time value="0.916000"/>
+            <Payload value="BroodLord_wings"/>
+        </Events>
+        <Events>
+            <Anim value="Walk,00"/>
+            <Name value="BroodLord_wings"/>
+            <Type value="Sound"/>
+            <Time value="0.600000"/>
+            <Payload value="BroodLord_wings"/>
+        </Events>
+        <Events>
+            <Anim value="Walk,01"/>
+            <Name value="BroodLord_wings"/>
+            <Type value="Sound"/>
+            <Time value="0.625000"/>
+            <Payload value="BroodLord_wings"/>
+        </Events>
+        <Events>
+            <Anim value="Walk,01"/>
+            <Name value="BroodLord_wings"/>
+            <Type value="Sound"/>
+            <Time value="2.793000"/>
+            <Payload value="BroodLord_wings"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,01"/>
+            <Name value="BroodLord_wings"/>
+            <Type value="Sound"/>
+            <Time value="0.663000"/>
+            <Payload value="BroodLord_wings"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,01"/>
+            <Name value="BroodLord_wings"/>
+            <Type value="Sound"/>
+            <Time value="2.041000"/>
+            <Payload value="BroodLord_wings"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,02"/>
+            <Name value="BroodLord_wings"/>
+            <Type value="Sound"/>
+            <Time value="1.754000"/>
+            <Payload value="BroodLord_wings"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow08"/>
+        <Radius value="0.850000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.700000"/>
+        <SelectionRadius value="1.250000"/>
+        <ShadowRadius value="1.250000"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraLow08"/>
+        <Tipability value="0.750000"/>
+        <UnitGlossaryCamera value="Star2CameraLow08"/>
+    </CModel>
+    <CModel id="AP_BroodLordEx1Death" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets/Units/Zerg/BroodLordDeath/BroodLordDeath.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <VariationCount value="2"/>
+    </CModel>
+    <CModel id="AP_BroodLordEx1Portrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\BroodLordPortrait\BroodLordPortrait.m3"/>
+        <Image value="Assets\Textures\BroodLordPortrait_Static.dds"/>
+        <Lighting value="AP_BroodLordEx1Portrait"/>
+    </CModel>
     <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
         <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
         <LoopCount value="-1"/>

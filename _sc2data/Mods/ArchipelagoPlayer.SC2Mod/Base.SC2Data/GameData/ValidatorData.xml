@@ -269,6 +269,10 @@
         <CombineArray value="CasterNotDead"/>
         <CombineArray value="TargetIsPathable"/>
     </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_BroodlingEscortFilters">
+        <WhichUnit Effect="AP_BroodlingEscort"/>
+        <Filters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
     <CValidatorCombine id="CasterIsCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_CasterIsVanillaCommandCenter"/>
@@ -351,6 +355,11 @@
         <WhichPlayer Value="Caster"/>
         <Find value="1"/>
         <Value value="AP_HotSHaveSwarmHostSplitB"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HotSKeneticMitosisResearched">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSKeneticMitosis"/>
     </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
@@ -511,6 +520,11 @@
         <WhichUnit Value="Caster"/>
         <Value value="AP_InfestorBurrowed"/>
     </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotBroodlingFate">
+        <Compare value="NE"/>
+        <Value value="1"/>
+        <Behavior value="AP_BroodlingFate"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <Negate value="1"/>

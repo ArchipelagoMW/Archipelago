@@ -1139,36 +1139,36 @@
         <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponCanisterRifleCompleteOnlyAtUnit"/>
     </CRequirement>
     <CRequirement id="AP_NovaWeaponCanSwapToCanisterRifle">
-        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponCanisterRifleCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponCanisterRifleCompleteOnlyAtUnit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponCanisterRifleCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveNovaWeaponHellfireShotgunBehavior">
         <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponHellfireShotgunCompleteOnlyAtUnit"/>
     </CRequirement>
     <CRequirement id="AP_NovaWeaponCanSwapToHellfireShotgun">
-        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponHellfireShotgunCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponHellfireShotgunCompleteOnlyAtUnit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponHellfireShotgunCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveNovaWeaponPlasmaRifleBehavior">
         <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponPlasmaRifleCompleteOnlyAtUnit"/>
     </CRequirement>
     <CRequirement id="AP_NovaWeaponCanSwapToPlasmaRifle">
-        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponPlasmaRifleCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponPlasmaRifleCompleteOnlyAtUnit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponPlasmaRifleCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveNovaWeaponPsiBladeBehavior">
         <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponPsiBladeCompleteOnlyAtUnit"/>
     </CRequirement>
     <CRequirement id="AP_NovaWeaponCanSwapToPsiBlade">
-        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponPsiBladeCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponPsiBladeCompleteOnlyAtUnit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponPsiBladeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveNovaWeaponBlazefireBladeBehavior">
         <NodeArray index="Show" Link="AP_CountBehaviorNovaWeaponBlazefireBladeCompleteOnlyAtUnit"/>
     </CRequirement>
     <CRequirement id="AP_NovaWeaponCanSwapToBlazefireBlade">
-        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponBlazefireBladeCompleteOnly"/>
         <NodeArray index="Use" Link="AP_NotCountBehaviorNovaWeaponBlazefireBladeCompleteOnlyAtUnit"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeNovaWeaponBlazefireBladeCompleteOnly"/>
     </CRequirement>
     <CRequirement id="AP_HaveNovaVoice1">
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
@@ -1213,5 +1213,20 @@
     <CRequirement id="AP_HaveMultiTaskMAFServosThor">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeMultiTaskMAFServosThorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_ArmBroodlingEscort">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <CanBeSuppressed index="Use" value="0"/>
+        <NodeArray index="Use" Link="AP_LTCountUnitBroodlingEscortQueuedOrBetterAtUnit2"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveGreaterSpire">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <CanBeSuppressed index="Use" value="0"/>
+        <NodeArray index="Use" Link="AP_CountUnitGreaterSpireCompleteOnly291495724TechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSKeneticMitosis">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeHotsKeneticMitosisCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotsKeneticMitosisCompleteOnlyTechTreeCheat"/>
     </CRequirement>
 </Catalog>

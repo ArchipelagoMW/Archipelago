@@ -2417,6 +2417,29 @@
         <AutoCastRange value="5"/>
         <AutoCastCountMin value="1"/>
     </CAbilMorph>
+    <CAbilArmMagazine id="AP_BroodLordHangar">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Flags index="AutoCastOffOwnerLeave" value="0"/>
+        <Flags index="Retarget" value="1"/>
+        <Leash value="12"/>
+        <InfoArray index="Ammo1" Time="2.5" CountStart="2" Manage="Recall" Unit="AP_BroodlingEscort">
+            <Button DefaultButtonFace="Broodling" Requirements="AP_ArmBroodlingEscort"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+        </InfoArray>
+        <Alert value=""/>
+        <EffectArray index="Death" value="InterceptorFate"/>
+        <EffectArray index="Release" value="AP_KillsToCaster"/>
+        <ExternalAngle value="-149.9853"/>
+        <ExternalAngle value="149.9853"/>
+    </CAbilArmMagazine>
+    <CAbilQueue id="AP_BroodLordQueue2">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <QueueSize value="2"/>
+        <Flags index="Hidden" value="1"/>
+        <Flags index="Passive" value="1"/>
+    </CAbilQueue>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -3328,6 +3351,37 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_NPSwarm"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_MorphToBroodLord">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BroodLord" State="Restricted" Requirements="AP_HaveGreaterSpire"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="GuardianAspect"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="Rally" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_BroodLordCocoon" RandomDelayMin="0.001" RandomDelayMax="0.001"/>
+        <InfoArray Score="1" Unit="AP_BroodLord">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="33.8332"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="33.8332"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="33.8332"/>
+                <EffectArray index="Finish" value="PostMorphHeal"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <AbilClassEnableArray index="CAbilMove" value="1"/>
+        <AbilClassEnableArray index="CAbilStop" value="1"/>
+    </CAbilMorph>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

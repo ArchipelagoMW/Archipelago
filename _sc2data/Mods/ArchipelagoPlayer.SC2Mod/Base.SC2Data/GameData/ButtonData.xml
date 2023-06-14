@@ -1657,4 +1657,8 @@
         <Icon value="Assets\Textures\BTN-Ability-Zerg-NeuralParasite-color.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_SwarmSeeds">
+        <Icon value="Assets\Textures\btn-ability-zerg-swarmseeds-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>
