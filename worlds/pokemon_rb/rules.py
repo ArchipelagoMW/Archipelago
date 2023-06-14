@@ -79,7 +79,7 @@ def set_rules(multiworld, player):
         "Cinnabar Lab Fossil Room - Dome Fossil Pokemon": lambda state: state.has("Dome Fossil", player) and state.has("Cinnabar Island", player),
         "Route 12 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Route 16 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
-        "Seafoam Islands B4F - Legendary Pokemon": lambda state: logic.can_strength(state, player) and logic.can_surf(state, player),
+        "Seafoam Islands B4F - Legendary Pokemon": lambda state: logic.can_strength(state, player) and state.has("Seafoam Boss Boulders", player),
         "Vermilion Dock - Legendary Pokemon": lambda state: logic.can_surf(state, player),
         "Cerulean Cave B1F - Legendary Pokemon": lambda state: logic.can_surf(state, player),
 
@@ -164,7 +164,11 @@ def set_rules(multiworld, player):
         "Power Plant - Hidden Item Before Zapdos": lambda state: logic.can_get_hidden_items(state, player),
         "Seafoam Islands B2F - Hidden Item Rock": lambda state: logic.can_get_hidden_items(state, player),
         "Seafoam Islands B3F - Hidden Item Rock": lambda state: logic.can_get_hidden_items(state, player),
-        "Seafoam Islands B4F - Hidden Item Corner Island": lambda state: logic.can_get_hidden_items(state, player) and logic.can_surf(state, player),
+        # if you can reach any exit boulders, that means you can drop into the water tunnel and auto-surf
+        "Seafoam Islands B4F - Hidden Item Corner Island": lambda state: (logic.can_get_hidden_items(state, player)
+                                                                          and (logic.can_surf(state, player)
+                                                                               or state.has("Seafoam Exit Boulder",
+                                                                                            player))),
         "Pokemon Mansion 1F - Hidden Item Block Near Entrance Carpet": lambda
             state: logic.can_get_hidden_items(state, player),
         "Pokemon Mansion 3F - Hidden Item Behind Burglar": lambda state: logic.can_get_hidden_items(state, player),

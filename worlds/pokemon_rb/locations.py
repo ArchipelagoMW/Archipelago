@@ -10,7 +10,9 @@ def trainersanity(multiworld, player):
 
 
 def dexsanity(multiworld, player):
-    return multiworld.dexsanity[player]
+    include = multiworld.worlds[player].dexsanity_table.pop(0)
+    multiworld.worlds[player].dexsanity_table.append(include)
+    return include
 
 
 def hidden_items(multiworld, player):
@@ -799,6 +801,13 @@ location_data = [
     LocationData("Indigo Plateau Champion's Room", "Become Champion", "Become Champion", event=True),
     LocationData("Pokemon Tower 7F", "Fuji Saved", "Fuji Saved", event=True),
     LocationData("Silph Co 11F-C", "Silph Co Liberated", "Silph Co Liberated", event=True),
+    LocationData("Seafoam Islands 1F", "Seafoam Exit Boulder 1", "Seafoam Exit Boulder", event=True),
+    LocationData("Seafoam Islands 1F", "Seafoam Exit Boulder 2", "Seafoam Exit Boulder", event=True),
+    LocationData("Seafoam Islands B1F", "Seafoam Exit Boulder 1", "Seafoam Exit Boulder", event=True),
+    LocationData("Seafoam Islands B1F-NE", "Seafoam Exit Boulder 2", "Seafoam Exit Boulder", event=True),
+    LocationData("Seafoam Islands B2F-NW", "Seafoam Exit Boulder 1", "Seafoam Exit Boulder", event=True),
+    LocationData("Seafoam Islands B2F-NE", "Seafoam Exit Boulder 2", "Seafoam Exit Boulder", event=True),
+    LocationData("Seafoam Islands B3F", "Seafoam Boss Boulders", "Seafoam Boss Boulders", event=True),
 
     LocationData("Pallet/Viridian Fishing", "Super Rod Pokemon - 1", "Tentacool", rom_addresses["Wild_Super_Rod_A"] + 1, None,
                  event=True, type="Wild Encounter", level=15),

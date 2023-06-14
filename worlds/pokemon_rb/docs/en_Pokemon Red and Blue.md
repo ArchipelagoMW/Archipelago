@@ -15,15 +15,15 @@ A great many things besides item placement can be randomized, such as the locati
 
 Many baseline changes are made to the game, including:
 
-* Bag item space increased to 128 slots (up from 20)
-* PC item storage increased to 64 slots (up from 50)
+* Bag item space increased to 128 slots (up from 20).
+* PC item storage increased to 64 slots (up from 50).
 * You can hold B to run (or bike extra fast!).
 * You can hold select while talking to a trainer to re-battle them.
-* You can return to route 2 from Diglett's Cave without the use of Cut.
+* You can select "Pallet Warp" below the "Continue" option to warp to Pallet Towna s you load your save.
 * Mew can be encountered at the S.S. Anne dock truck. This can be randomized depending on your settings.
 * The S.S. Anne will never depart.
 * Seafoam Islands entrances are swapped. This means you need Strength to travel through from Cinnabar Island to Fuchsia
-City
+City. You also cannot Surf onto the water from the end going backwards if you have not yet dropped the boulders.
 * After obtaining one of the fossil item checks in Mt Moon, the remaining item can be received from the Cinnabar Lab
 fossil scientist. This may require reviving a number of fossils, depending on your settings.
 * Obedience depends on the total number of badges you have obtained instead of depending on specific badges.
@@ -34,7 +34,10 @@ fossil scientist. This may require reviving a number of fossils, depending on yo
 exhausted your money and Poké Balls, you can get a free Poké Ball from your mom.
 * HM moves can be overwritten if you have the HM for it in your bag.
 * The NPC on the left behind the Celadon Game Corner counter will sell 1500 coins at once instead of giving information
-about the Prize Corner
+about the Prize Corner.
+* You can disable and re-enable experience gains by talking to an aide in Oak's Lab.
+* You can reset static encounters (Poké Flute encounters,, legendaries, and the trap Pokéball battles in Power Plant)
+for any Pokémon you have defeated but not caught, by talking to an aide in Oak's Lab.
 
 ## What items and locations get shuffled?
 

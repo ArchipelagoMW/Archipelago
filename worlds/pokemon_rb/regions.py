@@ -444,20 +444,19 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
         {'address': 'Warps_PokemonMansion1F', 'id': 4, 'to': {'map': 'Pokemon Mansion 2F', 'id': 0}},
         {'address': 'Warps_PokemonMansion1F', 'id': (0, 1, 2, 3), 'to': {'map': 'Cinnabar Island-M', 'id': 0}}],
              'Pokemon Mansion 1F-SE': [
-                 {'address': 'Warps_PokemonMansion1F', 'id': 5, 'to': {'map': 'Pokemon Mansion B1F', 'id': 0}},],
+                 {'address': 'Warps_PokemonMansion1F', 'id': 5, 'to': {'map': 'Pokemon Mansion B1F', 'id': 0}},
+                 {'name': "Pokemon Mansion 1F-SE to Cinnabar Island-M", 'address': 'Warps_PokemonMansion1F',
+                  'id': (6, 7), 'to': {'map': 'Cinnabar Island-M', 'id': 0}}],
              'Pokemon Mansion 2F': [
                  {'address': 'Warps_PokemonMansion2F', 'id': 0, 'to': {'map': 'Pokemon Mansion 1F', 'id': 4}},
-                 {'address': 'Warps_PokemonMansion2F', 'id': 1, 'to': {'map': 'Pokemon Mansion 3F-SW', 'id': 0}}],
-             'Pokemon Mansion 2F-NW': [
+                 {'address': 'Warps_PokemonMansion2F', 'id': 1, 'to': {'map': 'Pokemon Mansion 3F-SW', 'id': 0}},
                  {'address': 'Warps_PokemonMansion2F', 'id': 3, 'to': {'map': 'Pokemon Mansion 3F', 'id': 1}}],
              'Pokemon Mansion 2F-E': [
                  {'address': 'Warps_PokemonMansion2F', 'id': 2, 'to': {'map': 'Pokemon Mansion 3F-SE', 'id': 2}}],
              'Pokemon Mansion 3F-Wild': [], 'Pokemon Mansion 2F-Wild': [], 'Pokemon Mansion 3F': [
-        {'address': 'Warps_PokemonMansion3F', 'id': 1, 'to': {'map': 'Pokemon Mansion 2F-NW', 'id': 3}}],
+        {'address': 'Warps_PokemonMansion3F', 'id': 1, 'to': {'map': 'Pokemon Mansion 2F', 'id': 3}}],
              'Pokemon Mansion 3F-SE': [
-                 {'address': 'Warps_PokemonMansion3F', 'id': 2, 'to': {'map': 'Pokemon Mansion 2F-E', 'id': 2}},
-                 {'name': "Pokemon Mansion 1F-SE to Cinnabar Island-M", 'address': 'Warps_PokemonMansion1F',
-                  'id': (6, 7), 'to': {'map': 'Cinnabar Island-M', 'id': 0}}],
+                 {'address': 'Warps_PokemonMansion3F', 'id': 2, 'to': {'map': 'Pokemon Mansion 2F-E', 'id': 2}},],
              'Pokemon Mansion 3F-SW': [
                  {'address': 'Warps_PokemonMansion3F', 'id': 0, 'to': {'map': 'Pokemon Mansion 2F', 'id': 1}}],
              'Pokemon Mansion B1F': [
@@ -601,17 +600,13 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
         {'address': 'Warps_SeafoamIslandsB2F', 'id': 0, 'to': {'map': 'Seafoam Islands B1F', 'id': 0}}],
              'Seafoam Islands B3F': [
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 0, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 1}},
-                 {'address': 'Warps_SeafoamIslandsB3F', 'id': 1, 'to': {'map': 'Seafoam Islands B4F', 'id': 2}},
-                 {'name': 'Seafoam Islands B3F to Seafoam Islands B4F Water Tunnel',
-                  'address': 'Warps_SeafoamIslandsB3F', 'id': (5, 6),
-                  'to': {'map': 'Seafoam Islands B4F', 'id': (0, 1)}}], 'Seafoam Islands B3F-SE': [
+                 {'address': 'Warps_SeafoamIslandsB3F', 'id': 1, 'to': {'map': 'Seafoam Islands B4F', 'id': 2}}
+                 ], 'Seafoam Islands B3F-SE': [
         {'address': 'Warps_SeafoamIslandsB3F', 'id': 4, 'to': {'map': 'Seafoam Islands B2F-SE', 'id': 6}}],
              'Seafoam Islands B3F-Wild': [], 'Seafoam Islands B3F-NE': [
         {'address': 'Warps_SeafoamIslandsB3F', 'id': 2, 'to': {'map': 'Seafoam Islands B4F', 'id': 3}},
         {'address': 'Warps_SeafoamIslandsB3F', 'id': 3, 'to': {'map': 'Seafoam Islands B2F-NE', 'id': 4}}],
-             'Seafoam Islands B4F': [{'name': 'Seafoam Islands B4F to Seafoam Islands B3F Water Tunnel',
-                                      'address': 'Warps_SeafoamIslandsB4F', 'id': (0, 1),
-                                      'to': {'map': 'Seafoam Islands B3F', 'id': (5, 6)}},
+             'Seafoam Islands B4F': [
                                      {'address': 'Warps_SeafoamIslandsB4F', 'id': 2,
                                       'to': {'map': 'Seafoam Islands B3F', 'id': 1}},
                                      {'address': 'Warps_SeafoamIslandsB4F', 'id': 3,
@@ -1314,8 +1309,6 @@ insanity_mandatory_connections = {
     pair("Seafoam Islands B3F-NE", "Seafoam Islands B2F-NE"),
     pair("Seafoam Islands B4F", "Seafoam Islands B3F-NE"),
     pair("Seafoam Islands B4F", "Seafoam Islands B3F"),
-
-    ("Seafoam Islands B3F to Seafoam Islands B4F Water Tunnel", "Seafoam Islands B4F to Seafoam Islands B3F Water Tunnel"),
     pair("Player's House 1F", "Player's House 2F"),
     pair("Indigo Plateau Lorelei's Room", "Indigo Plateau Lobby-N"),
     pair("Indigo Plateau Bruno's Room", "Indigo Plateau Lorelei's Room"),
@@ -1326,7 +1319,7 @@ insanity_mandatory_connections = {
 }
 
 simple_mandatory_connections = {
-    pair("Fuchsia City", "Safari Zone Gate S")
+    pair("Fuchsia City", "Safari Zone Gate-S")
 
 }
 
@@ -1446,6 +1439,19 @@ initial_doors = [
     "Viridian City to Viridian School House",
     "Route 22 to Route 22 Gate-S"
 ]
+
+mansion_dead_ends = [
+    "Pokemon Mansion 2F-E to Pokemon Mansion 3F-SE",
+    "Pokemon Mansion 3F-SW to Pokemon Mansion 2F",
+]
+
+mansion_stair_destinations = [
+    "Pokemon Mansion 2F to Pokemon Mansion 1F",
+    "Pokemon Mansion 2F to Pokemon Mansion 3F-SW",
+    "Pokemon Mansion 3F to Pokemon Mansion 2F"
+    "Pokemon Mansion 1F to Pokemon Mansion 2F"
+]
+
 #
 # for region in warp_data:
 #     for entrance in warp_data[region]:
@@ -1638,7 +1644,7 @@ def create_regions(self):
     connect(multiworld, player, "Route 16-E", "Route 16-C", lambda state: state.has("Poke Flute", player))
     connect(multiworld, player, "Route 17", "Route 16-SW")
     connect(multiworld, player, "Route 17", "Route 18-W")
-    connect(multiworld, player, "Pokemon Mansion 2F", "Pokemon Mansion 2F-NW", one_way=True)
+    # connect(multiworld, player, "Pokemon Mansion 2F", "Pokemon Mansion 2F-NW", one_way=True)
     connect(multiworld, player, "Safari Zone Gate-S", "Safari Zone Gate-N", lambda state: state.has("Safari Pass", player) or not state.multiworld.extra_key_items[player].value, one_way=True)
     connect(multiworld, player, "Fuchsia City", "Route 15-W")
     connect(multiworld, player, "Fuchsia City", "Route 18-E")
@@ -1702,7 +1708,8 @@ def create_regions(self):
     connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B3F-Wild", one_way=True)
     connect(multiworld, player, "Seafoam Islands B3F-NE", "Seafoam Islands B3F-Wild", one_way=True)
     connect(multiworld, player, "Seafoam Islands B3F-SE", "Seafoam Islands B3F-Wild", one_way=True)
-    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B3F-SE", lambda state: logic.can_surf(state, player) and logic.can_strength(state, player), one_way=True)
+    # Surf is not needed as you can drop from above and auto-surf
+    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B3F-SE", lambda state: logic.can_strength(state, player) and state.has("Seafoam Exit Boulder", player, 6))
     connect(multiworld, player, "Viridian City", "Viridian City-N", lambda state: state.has("Oak's Parcel", player) or state.multiworld.old_man[player].value == 2 or logic.can_cut(state, player))
     connect(multiworld, player, "Route 11", "Route 11-C", lambda state: logic.can_strength(state, player) or not state.multiworld.extra_strength_boulders[player])
     connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-G", lambda state: state.has("Secret Key", player) and logic.cinnabar_gym(state, player))
@@ -1718,7 +1725,6 @@ def create_regions(self):
     connect(multiworld, player, "Pokemon Mansion 3F-SW", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 2F-E", "Pokemon Mansion 2F-Wild", one_way=True)
-    connect(multiworld, player, "Pokemon Mansion 2F-NW", "Pokemon Mansion 2F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 1F-SE", "Pokemon Mansion 1F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 1F", "Pokemon Mansion 1F-Wild", one_way=True)
     connect(multiworld, player, "Rock Tunnel 1F-S", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, player), one_way=True)
@@ -1794,6 +1800,7 @@ def create_regions(self):
     connect(multiworld, player, "Seafoam Islands B1F-NE", "Seafoam Islands B2F-NE", one_way=True)
     connect(multiworld, player, "Seafoam Islands B2F-NW", "Seafoam Islands B2F-NW", one_way=True)
     connect(multiworld, player, "Seafoam Islands B2F-NE", "Seafoam Islands B2F-NE", one_way=True)
+    # both the drops and the water tunnel
     connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B4F", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 2F", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 1F-SE", one_way=True)
@@ -1882,7 +1889,33 @@ def create_regions(self):
             usable_safe_rooms += pokemarts
         if multiworld.door_shuffle[player] in ("insanity", "decoupled"):
             forced_connections.update(insanity_mandatory_connections)
+            r = multiworld.random.randint(0, 3)
+            if r == 2:
+                forced_connections.add(("Pokemon Mansion 1F-SE to Pokemon Mansion B1F",
+                                        "Pokemon Mansion 3F-SE to Pokemon Mansion 2F-E"))
+                forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
+                                        multiworld.random.choice(mansion_stair_destinations + mansion_dead_ends
+                                                                 + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
+            elif r == 3:
+                dead_end = multiworld.random.randint(0, 1)
+                forced_connections.add(("Pokemon Mansion 3F-SE to Pokemon Mansion 2F-E",
+                                        mansion_dead_ends[dead_end]))
+                forced_connections.add(("Pokemon Mansion 1F-SE to Pokemon Mansion B1F",
+                                        "Pokemon Mansion B1F to Pokemon Mansion 1F-SE"))
+                forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
+                                        multiworld.random.choice(mansion_stair_destinations
+                                                                 + [mansion_dead_ends[dead_end ^ 1]])))
+            else:
+                forced_connections.add(("Pokemon Mansion 3F-SE to Pokemon Mansion 2F-E",
+                                        mansion_dead_ends[r]))
+                forced_connections.add(("Pokemon Mansion 1F-SE to Pokemon Mansion B1F",
+                                        mansion_dead_ends[r ^ 1]))
+                forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
+                                        multiworld.random.choice(mansion_stair_destinations
+                                                                 + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
+
             usable_safe_rooms += insanity_safe_rooms
+
 
         safe_rooms_sample = multiworld.random.sample(usable_safe_rooms, 6)
         pallet_safe_room = safe_rooms_sample[-1]
@@ -1924,6 +1957,7 @@ def create_regions(self):
         warps = multiworld.random.sample(saffron_gym_warps, len(saffron_gym_warps))
         solution = ["SW", "W", "NW", "N", "NE", "E", "SE"]
         multiworld.random.shuffle(solution)
+        solution = ["S"] + solution + ["C"]
         for i in range(len(solution) - 1):
             f, t = solution[i], solution[i + 1]
             fw = None
@@ -1995,7 +2029,7 @@ def create_regions(self):
         single_entrance_dungeon_entrances = dungeon_entrances.copy()
 
         for i in range(2):
-            if not multiworld.random.randint(0, 2):
+            if True or not multiworld.random.randint(0, 2):
                 interior_dungeons.append(multi_purpose_dungeons[i])
                 interior_dungeon_entrances.append([multi_purpose_dungeon_entrances[i], None])
             else:
@@ -2015,7 +2049,7 @@ def create_regions(self):
                      or interiors[12] in connecting_interiors[13:17]))  # Saffron Gate at Rt 18 Gate
                 and interiors[15] in connecting_interiors[13:17]  # Saffron Gate at Rt 7 Gate
                 and interiors[1] in connecting_interiors[13:17]  # Saffron Gate at Rt 7-8 Underground Path
-                and (not multiworld.tea[player]) and multiworld.worlds[player].free_fly_map != "Celadon City"
+                and (not multiworld.tea[player]) and multiworld.worlds[player].fly_map != "Celadon City"
                 and multiworld.worlds[player].town_map_fly_map != "Celadon City"):
             multiworld.random.shuffle(interiors)
 
@@ -2042,7 +2076,7 @@ def create_regions(self):
             # At this point we need to see if we can get beyond Pewter/Cinnabar with just one badge
 
             # Can get Fly access from Pewter City gym and fly beyond Pewter/Cinnabar
-            if multiworld.worlds[player].free_fly_map not in ("Pallet Town", "Viridian City", "Cinnabar Island",
+            if multiworld.worlds[player].fly_map not in ("Pallet Town", "Viridian City", "Cinnabar Island",
                     "Indigo Plateau") and multiworld.worlds[player].town_map_fly_map not in ("Pallet Town",
                     "Viridian City", "Cinnabar Island", "Indigo Plateau"):
                 return False

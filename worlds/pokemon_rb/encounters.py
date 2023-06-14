@@ -143,29 +143,29 @@ def process_static_pokemon(self):
 
     mons_list = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon
                  or self.multiworld.randomize_legendary_pokemon[self.player].value == 3]
-    if self.multiworld.randomize_legendary_pokemon[self.player].value == 0:
+    if self.multiworld.randomize_legendary_pokemon[self.player] == "vanilla":
         for slot in legendary_slots:
             location = self.multiworld.get_location(slot.name, self.player)
-            location.place_locked_item(self.create_item("Missable " + slot.original_item))
-    elif self.multiworld.randomize_legendary_pokemon[self.player].value == 1:
+            location.place_locked_item(self.create_item("Static " + slot.original_item))
+    elif self.multiworld.randomize_legendary_pokemon[self.player] == "shuffle":
         self.multiworld.random.shuffle(legendary_mons)
         for slot in legendary_slots:
             location = self.multiworld.get_location(slot.name, self.player)
-            location.place_locked_item(self.create_item("Missable " + legendary_mons.pop()))
-    elif self.multiworld.randomize_legendary_pokemon[self.player].value == 2:
+            location.place_locked_item(self.create_item("Static " + legendary_mons.pop()))
+    elif self.multiworld.randomize_legendary_pokemon[self.player] == "static":
         static_slots = static_slots + legendary_slots
         self.multiworld.random.shuffle(static_slots)
-        static_slots.sort(key=lambda s: 0 if s.name == "Pokemon Tower 6F - Restless Soul" else 1)
+        static_slots.sort(key=lambda s: s.name != "Pokemon Tower 6F - Restless Soul")
         while legendary_slots:
             swap_slot = legendary_slots.pop()
             slot = static_slots.pop()
             slot_type = slot.type.split()[0]
             if slot_type == "Legendary":
-                slot_type = "Missable"
+                slot_type = "Static"
             location = self.multiworld.get_location(slot.name, self.player)
             location.place_locked_item(self.create_item(slot_type + " " + swap_slot.original_item))
             swap_slot.original_item = slot.original_item
-    elif self.multiworld.randomize_legendary_pokemon[self.player].value == 3:
+    elif self.multiworld.randomize_legendary_pokemon[self.player] == "any":
         static_slots = static_slots + legendary_slots
 
     for slot in static_slots:
@@ -173,13 +173,13 @@ def process_static_pokemon(self):
         randomize_type = self.multiworld.randomize_static_pokemon[self.player].value
         slot_type = slot.type.split()[0]
         if slot_type == "Legendary":
-            slot_type = "Missable"
+            slot_type = "Static"
         if not randomize_type:
             location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
             mon = self.create_item(slot_type + " " +
-                                       randomize_pokemon(self, slot.original_item, mons_list, randomize_type,
-                                                         self.multiworld.random))
+                                   randomize_pokemon(self, slot.original_item, mons_list, randomize_type,
+                                                     self.multiworld.random))
             while location.name == "Pokemon Tower 6F - Restless Soul" and mon in tower_6F_mons:
                 mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
                                                                            randomize_type, self.multiworld.random))

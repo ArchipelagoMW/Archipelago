@@ -29,13 +29,24 @@ def level_scaling(multiworld):
 
             distances = {}
 
+
             for location in locations:
-                # We want areas that are accessible earlier to have lower levels. If an important item is at a fossil
-                # location, but you require fossil items for the second, they may not be in logic until much later,
-                # despite your ability to potentially reach them earlier. We treat them both as reachable right away for
-                # this purpose
-                if location.can_reach(state) or (location.parent_region.name == "Fossil" and
-                                                 state.can_reach("Mt Moon B2F", "Region", location.player)):
+                def reachable():
+                    if location.can_reach(state):
+                        return True
+                    if location.parent_region.name == "Fossil" and state.can_reach("Mt Moon B2F", "Region",
+                                                                                   location.player):
+                        # We want areas that are accessible earlier to have lower levels. If an important item is at a
+                        # fossil location, it may not be in logic until much later, despite your ability to potentially
+                        # reach them earlier. We treat them both as reachable right away for this purpose
+                        return True
+                    if (location.name == "Route 25 - Item" and state.can_reach("Route 25", "Region", location.player)
+                            and multiworld.blind_trainers[location.player].value < 100):
+                        # Assume they will take their one chance to get the trainer to walk out of the way to reach
+                        # the item behind them
+                        return True
+                    return False
+                if reachable():
                     sphere.add(location)
                     parent_region = location.parent_region
                     if parent_region.name == "Fossil":

@@ -1,5 +1,5 @@
 
-from Options import Toggle, Choice, Range, SpecialRange, TextChoice, DeathLink
+from Options import Toggle, Choice, Range, SpecialRange, TextChoice, DeathLink, FreeText
 
 
 class GameVersion(Choice):
@@ -252,15 +252,21 @@ class AllPokemonSeen(Toggle):
     display_name = "All Pokemon Seen"
 
 
-class DexSanity(Toggle):
-    """Adds a location check for each Pokemon flagged "Owned" on your Pokedex. If accessibility is set to `locations`
-    and randomize_wild_pokemon is off, catch_em_all is not `all_pokemon` or randomize_legendary_pokemon is not `any`,
-    accessibility will be forced to `items` instead, as not all Dexsanity locations can be guaranteed to be considered
-    reachable in logic.
+class DexSanity(SpecialRange):
+    """Adds location checks for Pokemon flagged "owned" on your Pokedex. You may specify a percentage of Pokemon to
+    have checks added. If Accessibility is set to locations, this will be the percentage of all logically reachable
+    Pokemon that will get a location check added to it. With items or minimal Accessibility, it will be the percentage
+    of all 151 Pokemon.
     If Pokedex is required, the items for Pokemon acquired before acquiring the Pokedex can be found by talking to
     Professor Oak or evaluating the Pokedex via Oak's PC."""
     display_name = "Dexsanity"
     default = 0
+    range_start = 0
+    range_end = 100
+    special_range_names = {
+        "off": 0,
+        "on": 100
+    }
 
 
 class FreeFlyLocation(Toggle):
@@ -313,6 +319,13 @@ class WarpTileShuffle(Toggle):
     among themselves."""
     default = 0
 
+
+class DoorShuffleSeed(FreeText):
+    """If this is set to a valid integer, it will be used as a set random seed for Door Shuffle and Warp Tile Shuffle.
+    If it is set to random, a random seed number will be chosen.
+    If it is set to anything else, it will be used as a group name, and all players using the same group name will
+    have the same random seed."""
+    default = "random"
 
 class PitchBlackRockTunnel(Toggle):
     """Enable absolute darkness in the Rock Tunnel"""
@@ -385,9 +398,9 @@ class LevelScaling(Choice):
 class ExpModifier(SpecialRange):
     """Modifier for EXP gained. When specifying a number, exp is multiplied by this amount and divided by 16."""
     display_name = "Exp Modifier"
-    range_start = 0
-    range_end = 255
     default = 16
+    range_start = default / 4
+    range_end = 255
     special_range_names = {
         "half": default / 2,
         "normal": default,
@@ -790,6 +803,11 @@ class ParalyzeTrapWeight(TrapWeight):
     display_name = "Paralyze Trap Weight"
 
 
+class SleepTrapWeight(TrapWeight):
+    """Weights for Sleep Traps. These apply the Sleep status to all your party members, for randomly between 1 and 7 turns."""
+    display_name = "Sleep Trap Weight"
+
+
 class IceTrapWeight(TrapWeight):
     """Weights for Ice Traps. These apply the Ice status to all your party members. Don't forget to buy Ice Heals!"""
     display_name = "Ice Trap Weight"
@@ -916,6 +934,7 @@ pokemon_rb_options = {
     "poison_trap_weight": PoisonTrapWeight,
     "fire_trap_weight": FireTrapWeight,
     "paralyze_trap_weight": ParalyzeTrapWeight,
+    "sleep_trap_weight": SleepTrapWeight,
     "ice_trap_weight": IceTrapWeight,
     "randomize_pokemon_palettes": RandomizePokemonPalettes,
     "death_link": DeathLink

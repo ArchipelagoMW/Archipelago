@@ -1,3 +1,4 @@
+import sys
 from typing import TextIO
 import os
 import threading
@@ -17,7 +18,6 @@ from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, process
 from .encounters import process_wild_pokemon, process_static_pokemon, process_trainer_data
 from .rules import set_rules
 from .level_scaling import level_scaling
-
 import worlds.pokemon_rb.logic as logic
 import worlds.pokemon_rb.poke_data as poke_data
 
@@ -71,6 +71,7 @@ class PokemonRedBlueWorld(World):
         self.traps = None
         self.trade_mons = {}
         self.finished_level_scaling = threading.Event()
+        self.dexsanity_table = []
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
@@ -102,11 +103,11 @@ class PokemonRedBlueWorld(World):
         if len(self.multiworld.player_name[self.player].encode()) > 16:
             raise Exception(f"Player name too long for {self.multiworld.get_player_name(self.player)}. Player name cannot exceed 16 bytes for Pokémon Red and Blue.")
 
-        if (self.multiworld.dexsanity[self.player] and self.multiworld.accessibility[self.player] == "locations"
-                and (self.multiworld.catch_em_all[self.player] != "all_pokemon"
-                     or self.multiworld.randomize_wild_pokemon[self.player] == "vanilla"
-                     or self.multiworld.randomize_legendary_pokemon[self.player] != "any")):
-            self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("items")
+        # if (self.multiworld.dexsanity[self.player] and self.multiworld.accessibility[self.player] == "locations"
+        #         and (self.multiworld.catch_em_all[self.player] != "all_pokemon"
+        #              or self.multiworld.randomize_wild_pokemon[self.player] == "vanilla"
+        #              or self.multiworld.randomize_legendary_pokemon[self.player] != "any")):
+        #     self.multiworld.accessibility[self.player] = self.multiworld.accessibility[self.player].from_text("items")
 
         if self.multiworld.key_items_only[self.player]:
             self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
@@ -192,6 +193,12 @@ class PokemonRedBlueWorld(World):
         # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
         # to the way effectiveness messages are generated.
         self.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
+
+        self.dexsanity_table = [
+            *[True for _ in range(round(self.multiworld.dexsanity[self.player].value * 1.51))],
+            *[False for _ in range(151 - round(self.multiworld.dexsanity[self.player].value * 1.51))]
+        ]
+        self.multiworld.random.shuffle(self.dexsanity_table)
 
     def create_items(self) -> None:
         start_inventory = self.multiworld.start_inventory[self.player].value.copy()
@@ -414,19 +421,23 @@ class PokemonRedBlueWorld(World):
         locs = {self.multiworld.get_location("Fossil - Choice A", self.player),
                 self.multiworld.get_location("Fossil - Choice B", self.player)}
 
-        if self.multiworld.dexsanity[self.player]:
-            for mon in ([" ".join(self.multiworld.get_location(
-                    f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
-                    + [" ".join(self.multiworld.get_location(
-                    f"Saffron Fighting Dojo - Gift {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 3)]):
+        for mon in ([" ".join(self.multiworld.get_location(
+                f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
+                + [" ".join(self.multiworld.get_location(
+                f"Saffron Fighting Dojo - Gift {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 3)]):
+            try:
                 loc = self.multiworld.get_location(f"Pokedex - {mon}", self.player)
                 if loc.item is None:
                     locs.add(loc)
+            except KeyError:
+                pass
 
-        if not self.multiworld.key_items_only[self.player]:
+        try:
             loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
             if loc.item is None:
                 locs.add(loc)
+        except KeyError:
+            pass
 
         for loc in sorted(locs):
             unplaced_items = []
@@ -447,6 +458,43 @@ class PokemonRedBlueWorld(World):
                     else:
                         unplaced_items.append(item)
             self.multiworld.itempool += unplaced_items
+
+        if self.multiworld.accessibility[self.player] == "locations":
+            balls = [self.create_item(ball) for ball in ["Poke Ball", "Great Ball", "Ultra Ball"]]
+            traps = [self.create_item(trap) for trap in item_groups["Traps"]]
+            all_state = self.multiworld.get_all_state(False)
+            locations = self.multiworld.get_locations(self.player)
+            locations = [location for location in locations if "Pokedex - " in location.name]
+            pokedex = self.multiworld.get_region("Pokedex", self.player)
+            remove_items = 0
+
+            for location in locations:
+                if not location.can_reach(all_state):
+                    pokedex.locations.remove(location)
+                    remove_items += 1
+
+            for _ in range(remove_items - 5):
+                balls.append(balls.pop(0))
+                for ball in balls:
+                    try:
+                        self.multiworld.itempool.remove(ball)
+                    except ValueError:
+                        continue
+                    else:
+                        break
+                else:
+                    self.multiworld.random.shuffle(traps)
+                    for trap in traps:
+                        try:
+                            self.multiworld.itempool.remove(trap)
+                        except ValueError:
+                            continue
+                        else:
+                            break
+                    else:
+                        raise Exception("Failed to remove corresponding item while deleting unrechable Dexsanity location")
+
+            self.multiworld._recache()
 
     def create_regions(self):
         if (self.multiworld.old_man[self.player] == "vanilla" or
@@ -513,8 +561,13 @@ class PokemonRedBlueWorld(World):
                 spoiler_handle.write(location.name + ": " + location.item.name + "\n")
 
     def get_filler_item_name(self) -> str:
-        combined_traps = self.multiworld.poison_trap_weight[self.player].value + self.multiworld.fire_trap_weight[self.player].value + self.multiworld.paralyze_trap_weight[self.player].value + self.multiworld.ice_trap_weight[self.player].value
-        if self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0:
+        combined_traps = (self.multiworld.poison_trap_weight[self.player].value
+                          + self.multiworld.fire_trap_weight[self.player].value
+                          + self.multiworld.paralyze_trap_weight[self.player].value
+                          + self.multiworld.ice_trap_weight[self.player].value
+                          + self.multiworld.sleep_trap_weight[self.player].value)
+        if (combined_traps > 0 and
+                self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value):
             return self.select_trap()
 
         return self.multiworld.random.choice([item for item in item_table if item_table[item].id and item_table[
@@ -528,6 +581,7 @@ class PokemonRedBlueWorld(World):
             self.traps += ["Fire Trap"] * self.multiworld.fire_trap_weight[self.player].value
             self.traps += ["Paralyze Trap"] * self.multiworld.paralyze_trap_weight[self.player].value
             self.traps += ["Ice Trap"] * self.multiworld.ice_trap_weight[self.player].value
+            self.traps += ["Sleep Trap"] * self.multiworld.sleep_trap_weight[self.player].value
         return self.multiworld.random.choice(self.traps)
 
     def extend_hint_information(self, hint_data):
@@ -543,8 +597,11 @@ class PokemonRedBlueWorld(World):
                     mon_locations[mon].add(loc.name.split(" -")[0])
             for mon in mon_locations:
                 if mon_locations[mon]:
-                    hint_data[self.player][self.multiworld.get_location(f"Pokedex - {mon}", self.player).address] = \
-                        ", ".join(mon_locations[mon])
+                    try:
+                        hint_data[self.player][self.multiworld.get_location(f"Pokedex - {mon}", self.player).address] =\
+                            ", ".join(mon_locations[mon])
+                    except KeyError:
+                        pass
         if self.multiworld.door_shuffle[self.player]:
             for location in self.multiworld.get_locations(self.player):
                 if location.parent_region.entrance_hint and location.address:
