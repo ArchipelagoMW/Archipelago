@@ -233,7 +233,7 @@ class BlasphemousWorld(World):
             event = BlasphemousLocation(player, door["Id"], None, reg)
             event.show_in_spoiler = False
             event.place_locked_item(self.create_event(door["Id"]))
-            add_rule(event, lambda state: state.can_reach(self.get_connected_door(door["Id"]), player))
+            add_rule(event, lambda state: state.can_reach(door["Id"]), player)
             reg.locations.append(event)
 
             if door.get("OriginalDoor") is None:
@@ -277,8 +277,9 @@ class BlasphemousWorld(World):
             event.place_locked_item(self.create_event(e))
             reg.locations.append(event)
 
-        #for r in world.get_regions(player):
-            #print(r.name, r.entrances)
+        #for r in room_table:
+        #    regio = world.get_region(r, player)
+        #    print(f'Door: {regio.name}\nEntrances: {regio.entrances}\nExits: {regio.exits}\n\n')
         #print(world.get_region("D07Z01S03", player).name, world.get_region("D07Z01S03", player).entrances)
         
         victory = Location(player, "His Holiness Escribar", None, world.get_region("D07Z01S03", player))

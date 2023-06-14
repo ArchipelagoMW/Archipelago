@@ -17,8 +17,7 @@ class CorpseHints(DefaultOnToggle):
 
 
 class Difficulty(Choice):
-    """Adjusts the logic required to defeat bosses.
-    Impossible: Removes all logic requirements for bosses. Good luck."""
+    """Adjusts the overall difficulty of the randomizer, including upgrades required to defeat bosses and advanced movement tricks or glitches."""
     display_name = "Difficulty"
     option_easy = 0
     option_normal = 1

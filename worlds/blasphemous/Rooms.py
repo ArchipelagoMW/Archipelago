@@ -1,7 +1,7 @@
-from typing import Set, List, TypedDict
+from typing import List, TypedDict
 
 
-room_table: Set[str] = {
+room_table: List[str] = [
     "D01Z01S01", # THL
     "D01Z01S02", # THL
     "D01Z01S03", # THL
@@ -330,7 +330,7 @@ room_table: Set[str] = {
     "D20Z02S11", # MAH
     "D20Z02S12", # MAH
     "D20Z03S01", # TRPOTS
-}
+]
 
 
 class DoorDict(TypedDict, total=False):
