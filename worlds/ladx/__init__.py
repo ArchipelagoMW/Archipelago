@@ -2,7 +2,10 @@ import binascii
 import bsdiff4
 import os
 import pkgutil
+import settings
+import typing
 import tempfile
+
 
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
@@ -29,6 +32,16 @@ from .Rom import LADXDeltaPatch
 DEVELOPER_MODE = False
 
 
+class LinksAwakeningSettings(settings.Group):
+    class RomFile(settings.UserFilePath):
+        """File name of the Link's Awakening DX rom"""
+        copy_to = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
+        description = "LADX ROM File"
+        md5s = [LADXDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+
+
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -40,6 +53,7 @@ class LinksAwakeningWebWorld(WebWorld):
     )]
     theme = "dirt"
 
+
 class LinksAwakeningWorld(World):
     """
     After a previous adventure, Link is stranded on Koholint Island, full of mystery and familiar faces.
@@ -49,6 +63,7 @@ class LinksAwakeningWorld(World):
     web = LinksAwakeningWebWorld()
     
     option_definitions = links_awakening_options  # options the player can set
+    settings: typing.ClassVar[LinksAwakeningSettings]
     topology_present = True  # show path to required location checks in spoiler
 
     # data_version is used to signal that items, locations or their names

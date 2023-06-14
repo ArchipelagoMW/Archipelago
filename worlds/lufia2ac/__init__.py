@@ -1,6 +1,9 @@
 import base64
 import itertools
 import os
+import settings
+import typing
+
 from enum import IntFlag
 from random import Random
 from typing import Any, ClassVar, Dict, get_type_hints, Iterator, List, Set, Tuple
@@ -20,6 +23,16 @@ from .Utils import constrained_choices, constrained_shuffle
 from .basepatch import apply_basepatch
 
 CHESTS_PER_SPHERE: int = 5
+
+
+class L2ACSettings(settings.Group):
+    class RomFile(settings.SNESROMPath):
+        """File name of the US rom"""
+        description = "Lufia II ROM File"
+        copy_to = "Lufia II - Rise of the Sinistrals (USA).sfc"
+        md5s = [L2ACDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
 class L2ACWeb(WebWorld):
@@ -45,6 +58,7 @@ class L2ACWorld(World):
     web: ClassVar[WebWorld] = L2ACWeb()
 
     option_definitions: ClassVar[Dict[str, AssembleOptions]] = get_type_hints(L2ACOptions)
+    settings: typing.ClassVar[L2ACSettings]
     item_name_to_id: ClassVar[Dict[str, int]] = l2ac_item_name_to_id
     location_name_to_id: ClassVar[Dict[str, int]] = l2ac_location_name_to_id
     item_name_groups: ClassVar[Dict[str, Set[str]]] = {

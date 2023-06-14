@@ -13,12 +13,23 @@ from Options import AssembleOptions
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
+    from settings import Group
 
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
     __file__: str
     zip_path: Optional[str]
+    settings_key: str
+    __settings: Any
+
+    @property
+    def settings(cls) -> Any:  # actual type is defined in World
+        # lazy loading + caching to minimize runtime cost
+        if cls.__settings is None:
+            from settings import get_settings
+            cls.__settings = get_settings()[cls.settings_key]
+        return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
         if "web" in dct:
@@ -60,6 +71,11 @@ class AutoWorldRegister(type):
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
+        if "settings_key" not in dct:
+            mod_name = new_class.__module__
+            world_folder_name = mod_name[7:].lower() if mod_name.startswith("worlds.") else mod_name.lower()
+            new_class.settings_key = world_folder_name + "_options"
+        new_class.__settings = None
         return new_class
 
 
@@ -205,6 +221,11 @@ class World(metaclass=AutoWorldRegister):
 
     random: random.Random
     """This world's random object. Should be used for any randomization needed in world for this player slot."""
+
+    settings_key: ClassVar[str]
+    """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
+    settings: ClassVar[Optional["Group"]] = None
+    """loaded settings from host.yaml"""
 
     zip_path: ClassVar[Optional[pathlib.Path]] = None
     """If loaded from a .apworld, this is the Path to it."""

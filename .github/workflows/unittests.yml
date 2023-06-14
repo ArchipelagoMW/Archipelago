@@ -55,6 +55,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest pytest-subtests
         python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
+        python Launcher.py --update_settings  # make sure host.yaml exists for tests
     - name: Unittests
       run: |
         pytest

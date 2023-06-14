@@ -10,6 +10,7 @@ ModuleUpdate.update()
 
 # in case app gets imported by something like gunicorn
 import Utils
+import settings
 
 Utils.local_path.cached_path = os.path.dirname(__file__) or "."  # py3.8 is not abs. remove "." when dropping 3.8
 
@@ -21,6 +22,7 @@ from WebHostLib.autolauncher import autohost, autogen
 from WebHostLib.lttpsprites import update_sprites_lttp
 from WebHostLib.options import create as create_options_files
 
+settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home
     configpath = os.path.abspath(Utils.user_path('config.yaml'))
