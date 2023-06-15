@@ -27,11 +27,10 @@ logger = logging.getLogger("Client")
 sc2_logger = logging.getLogger("Starcraft2")
 
 import nest_asyncio
-import sc2
-from sc2.bot_ai import BotAI
-from sc2.data import Race
-from sc2.main import run_game
-from sc2.player import Bot
+from worlds._sc2common import bot
+from worlds._sc2common.bot.data import Race
+from worlds._sc2common.bot.main import run_game
+from worlds._sc2common.bot.player import Bot
 from worlds.sc2hots import SC2HotSWorld
 from worlds.sc2hots.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups, upgrade_numbers
 from worlds.sc2hots.Locations import SC2HOTS_LOC_ID_OFFSET
@@ -40,6 +39,7 @@ from worlds.sc2hots.Regions import MissionInfo
 
 import colorama
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
+from Utils import persistent_store, persistent_load
 from MultiServer import mark_raw
 
 loop = asyncio.get_event_loop_policy().new_event_loop()
@@ -154,22 +154,25 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_set_path(self, path: str = '') -> bool:
         """Manually set the SC2 install directory (if the automatic detection fails)."""
         if path:
-            os.environ["SC2PATH"] = path
+            persistent_store("Starcraft 2", "path", path)
             is_mod_installed_correctly()
             return True
         else:
+            cur_path = get_persistent_install_path()
             sc2_logger.warning(f"When using set_path, you must type the path to your SC2 install directory.\
-                                Current directory: {os.environ['SC2PATH'] if 'SC2PATH' in os.environ else None}")
+                                Current directory: {cur_path}")
         return False
 
     def _cmd_download_data(self) -> bool:
         """Download the most recent release of the necessary files for playing SC2 with
         Archipelago. Will overwrite existing files."""
-        if "SC2PATH" not in os.environ:
+        cur_path = get_persistent_install_path()
+        if cur_path is None:
             check_game_install_path()
+            cur_path = get_persistent_install_path()
 
-        if os.path.exists(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt"):
-            with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "r") as f:
+        if os.path.exists(cur_path+"ArchipelagoSC2Version.txt"):
+            with open(cur_path+"ArchipelagoSC2Version.txt", "r") as f:
                 current_ver = f.read()
         else:
             current_ver = None
@@ -179,9 +182,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         if tempzip != '':
             try:
-                zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
+                zipfile.ZipFile(tempzip).extractall(path=cur_path)
                 sc2_logger.info(f"Download complete. Version {version} installed.")
-                with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "w") as f:
+                with open(cur_path+"ArchipelagoSC2Version.txt", "w") as f:
                     f.write(version)
             finally:
                 os.remove(tempzip)
@@ -281,8 +284,8 @@ class SC2Context(CommonContext):
 
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
             # maps_present = is_mod_installed_correctly()
-            # if os.path.exists(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt"):
-            #     with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
+            # if os.path.exists(cur_path + "ArchipelagoSC2Version.txt"):
+            #     with open(cur_path + "ArchipelagoSC2Version.txt", "r") as f:
             #         current_ver = f.read()
             #     if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
             #         sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
@@ -721,11 +724,11 @@ async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
     with DllDirectory(None):
-        run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Zerg, ArchipelagoBot(ctx, mission_id),
+        run_game(bot.maps.get(maps_table[mission_id - 1]), [Bot(Race.Zerg, ArchipelagoBot(ctx, mission_id),
                                                                 name="Archipelago", fullscreen=True)], realtime=True)
 
 
-class ArchipelagoBot(sc2.bot_ai.BotAI):
+class ArchipelagoBot(bot.bot_ai.BotAI):
     game_running: bool = False
     mission_completed: bool = False
     boni: typing.List[bool]
@@ -1063,6 +1066,14 @@ def initialize_blank_mission_dict(location_table):
     return unlocks
 
 
+def get_persistent_install_path() -> str | None:
+    game_path = persistent_load().get("Starcraft 2", {}).get("path", None)
+    if game_path is None and 'SC2PATH' in os.environ:
+        game_path = os.environ['SC2PATH']
+        persistent_store("Starcraft 2", "path", game_path)
+    return game_path
+
+
 def check_game_install_path() -> bool:
     # First thing: go to the default location for ExecuteInfo.
     # An exception for Windows is included because it's very difficult to find ~\Documents if the user moved it.
@@ -1078,7 +1089,7 @@ def check_game_install_path() -> bool:
         documentspath = buf.value
         einfo = str(documentspath / Path("StarCraft II\\ExecuteInfo.txt"))
     else:
-        einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
+        einfo = str(bot.paths.get_home() / Path(bot.paths.USERPATH[bot.paths.PF]))
 
     # Check if the file exists.
     if os.path.isfile(einfo):
@@ -1094,15 +1105,15 @@ def check_game_install_path() -> bool:
                                    f"try again.")
                 return False
             if os.path.exists(base):
-                executable = sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
+                executable = bot.paths.latest_executeble(Path(base).expanduser() / "Versions")
 
                 # Finally, check the path for an actual executable.
-                # If we find one, great. Set up the SC2PATH.
+                # If we find one, great. Set up the persistent SC2 path.
                 if os.path.isfile(executable):
                     sc2_logger.info(f"Found an SC2 install at {base}!")
                     sc2_logger.debug(f"Latest executable at {executable}.")
-                    os.environ["SC2PATH"] = base
-                    sc2_logger.debug(f"SC2PATH set to {base}.")
+                    persistent_store("Starcraft 2", "path", base)
+                    sc2_logger.debug(f"Persistent SC2 path set to {base}.")
                     return True
                 else:
                     sc2_logger.warning(f"We may have found an SC2 install at {base}, but couldn't find {executable}.")
@@ -1116,11 +1127,14 @@ def check_game_install_path() -> bool:
 
 def is_mod_installed_correctly() -> bool:
     """Searches for all required files."""
-    if "SC2PATH" not in os.environ:
-        check_game_install_path()
+    base_path = get_persistent_install_path()
 
-    mapdir = os.environ['SC2PATH'] / Path('Maps/ArchipelagoCampaignHotS')
-    modfile = os.environ["SC2PATH"] / Path("Mods/ArchipelagoHotS.SC2Mod")
+    if base_path is None:
+        check_game_install_path()
+        base_path = get_persistent_install_path()
+
+    mapdir = base_path / Path('Maps/ArchipelagoCampaignHotS')
+    modfile = base_path / Path("Mods/ArchipelagoHotS.SC2Mod")
     hots_required_maps = [
         "ap_zlab01.SC2Map", "ap_zlab02.SC2Map", "ap_zlab03.SC2Map",
         "ap_zexpedition01.SC2Map", "ap_zexpedition02.SC2Map", "ap_zexpedition03.SC2Map",
