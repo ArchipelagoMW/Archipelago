@@ -641,7 +641,7 @@ class SMWorld(World):
 
         # set rom name
         # 21 bytes
-        from Main import __version__
+        from Utils import __version__
         self.romName = bytearray(f'SM{__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}', 'utf8')[:21]
         self.romName.extend([0] * (21 - len(self.romName)))
         # clients should read from 0x7FC0, the location of the rom title in the SNES header.
