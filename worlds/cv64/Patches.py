@@ -1817,5 +1817,33 @@ countdown_number_updater = [
     0x91099CA4,  # LBU   T1, 0x9CA4 (T0)
     0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
     0xA1099CA4,  # SB    T1, 0x9CA4 (T0)
-    0x03E00008   # JR    RA
+    0x03E00008,  # JR    RA
+    0x00000000,  # NOP
+    0x3C088040,  # LUI   T0, 0x8040
+    0x8D08D6D4,  # LW    T0, 0xD6D4
+    0x11000009,  # BEQZ  T0,     [forward 0x09]
+    0x92090000,  # LBU   T1, 0x0000 (S0)
+    0x14200004,  # BNEZ  AT,     [forward 0x04]
+    0x3C0A0033,  # LUI   T2, 0x0033
+    0x254A001F,  # ADDIU T2, T2, 0x001F
+    0x03E00008,  # JR    RA
+    0xAD0A0014,  # SW    T2, 0x0014 (T0)
+    0x3C0A00D4,  # LUI   T2, 0x00D4
+    0x254A003C,  # ADDIU T2, T2, 0x003C
+    0xAD0A0014,  # SW    T2, 0x0014 (T0)
+    0x03E00008,  # JR    RA
+    0x00000000,  # NOP
+    0x3C048040,  # LUI   A0, 0x8040
+    0x8C84D6D4,  # LW    A0, 0xD6D4 (A0)
+    0x0C0FF59F,  # JAL   0x803FD67C
+    0x24050000,  # ADDIU A1, R0, 0x0000
+    0x0804DFE0,  # J     0x80137FB0
+    0x3C048000,  # LUI   A0, 0x8000
+    0x00000000,  # NOP
+    0x3C048040,  # LUI   A0, 0x8040
+    0x8C84D6D4,  # LW    A0, 0xD6D4 (A0)
+    0x0C0FF59F,  # JAL   0x803FD67C
+    0x24050001,  # ADDIU A1, R0, 0x0000
+    0x0804DFFA,  # J     0x8013
+    0x3C047FFF   # LUI   A0, 0x7FFFF
 ]
