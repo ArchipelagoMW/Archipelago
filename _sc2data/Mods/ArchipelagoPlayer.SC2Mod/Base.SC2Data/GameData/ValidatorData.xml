@@ -2039,6 +2039,7 @@
     </CValidatorCombine>
     <CValidatorCombine id="GravitonBeamValidators">
         <!-- Override -->
+        <!-- At index 0 there is CasterHasEnergyAndNotDead and LotV Phoenixes don't use energy -->
         <CombineArray index="0" value="AP_CasterHasEnergyIfAvailableAndNotDead"/>
         <CombineArray value="AP_NotAbducted"/>
     </CValidatorCombine>
