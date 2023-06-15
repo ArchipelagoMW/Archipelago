@@ -329,7 +329,8 @@ def set_mission_upgrade_rules_standard(world: MultiWorld, player: int):
                   lambda state: state.has(ItemName.eggman_jet_engine, player))
     add_rule_safe(world, LocationName.egg_quarters_5, player,
                   lambda state: state.has(ItemName.rouge_pick_nails, player) and
-                                state.has(ItemName.rouge_treasure_scope, player))
+                                state.has(ItemName.rouge_treasure_scope, player) and
+                                state.has(ItemName.rouge_iron_boots, player))
     add_rule_safe(world, LocationName.lost_colony_5, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player) and
                                 state.has(ItemName.eggman_large_cannon, player))
