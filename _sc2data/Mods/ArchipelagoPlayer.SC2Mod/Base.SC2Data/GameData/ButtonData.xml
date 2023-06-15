@@ -1661,4 +1661,17 @@
         <Icon value="Assets\Textures\btn-ability-zerg-swarmseeds-color.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_DisablingCloud">
+        <Icon value="Assets\Textures\btn-ability-zerg-blindingcloud.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_FaceEmbrace">
+        <Icon value="Assets\Textures\btn-ability-zerg-abduct.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-abduct.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_ViperConsumption">
+        <Icon value="Assets\Textures\BTN-Ability-Zerg-Consume.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

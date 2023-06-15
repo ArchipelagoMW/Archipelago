@@ -2440,6 +2440,17 @@
         <Flags index="Hidden" value="1"/>
         <Flags index="Passive" value="1"/>
     </CAbilQueue>
+    <CAbilEffectTarget id="AP_DisablingCloud">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <Range value="9"/>
+        <CursorEffect value="AP_DisablingCloudSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DisablingCloud"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -3932,5 +3943,30 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_SwarmHostDeepBurrow" Requirements="AP_HotSHaveSwarmHostSplitB">
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ViperConsumption">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <TargetFilters value="Biological;Self,Enemy,Structure,Heroic,Missile,Uncommandable,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
+        <Range value="4"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ViperConsumption"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_Yoink">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_YoinkStartSwitch"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Structure,Heroic,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <AINotifyEffect value="FaceEmbrace"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_FaceEmbrace"/>
     </CAbilEffectTarget>
 </Catalog>

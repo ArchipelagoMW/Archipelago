@@ -1229,11 +1229,19 @@
         <EditorCategories value="Race:Zerg"/>
         <Options index="Hidden" value="1"/>
         <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level0.dds"/>
-        <DisplayEffect value="AP_BroodlingEscort"/>
         <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <Range value="9"/>
         <Arc value="360"/>
         <Period value="10"/>
-        <Effect value="AP_BroodlingEscort"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ViperAir">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level0.dds"/>
+        <DisplayEffect value="AP_ViperAirDamage"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="1.5"/>
+        <Effect value="AP_ViperAirLaunchMissile"/>
+        <AllowedMovement value="Slowing"/>
     </CWeaponLegacy>
 </Catalog>

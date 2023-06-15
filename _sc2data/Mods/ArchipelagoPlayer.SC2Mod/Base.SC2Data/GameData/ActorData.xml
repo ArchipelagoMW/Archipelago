@@ -3777,7 +3777,7 @@
         <AcceptedHostedPropTransfers index="Scale" value="0"/>
         <On Terms="ActorCreation" Send="$Birth 0 0.000000 -1.000000 0.000000"/>
         <On Terms="Abil.AP_BroodLordHangar.Launch" Send="AnimPlay SWE Stand,Work,End"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Broodlord_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Broodlord_Land"/>
         <HostSiteOps Ops="AP_SOpBankerBroodLord"/>
         <Model value="AP_BroodLordEx1"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
@@ -3972,7 +3972,6 @@
     </CActorSound>
     <CActorAction id="AP_BroodLordAttack" parent="GenericAttack" effectImpact="AP_BroodlingEscortDamage" effectLaunch="AP_BroodlingEscortMissile">
         <LaunchAssets Sound="BroodLord_AttackLaunch"/>
-        <Missile value="AP_BroodLordAttackMissile"/>
         <ImpactMap index="None" Model=""/>
     </CActorAction>
     <CActorAction id="AP_BroodLordAttackA" parent="GenericAttack" effectImpact="AP_BroodlingEscortDamageUnit" effectLaunch="AP_BroodlingEscortLaunchA">
@@ -3984,9 +3983,7 @@
         <ImpactMap index="None" Sound="BroodLord_AttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_BroodLordAttackAMissile" parent="GenericAttackMissile" unitName="AP_BroodLordAWeapon"/>
-    <CActorAction id="AP_BroodLordAttackB" parent="GenericAttack" effectImpact="AP_BroodlingEscortImpactB" effectLaunch="AP_BroodlingEscortMissileB">
-        <Missile value="AP_BroodLordAttackBMissile"/>
-    </CActorAction>
+    <CActorAction id="AP_BroodLordAttackB" parent="GenericAttack" effectImpact="AP_BroodlingEscortImpactB" effectLaunch="AP_BroodlingEscortMissileB"/>
     <CActorMissile id="AP_BroodLordAttackBMissile" parent="GenericAttackMissile" unitName="AP_BroodLordBWeapon">
         <Model value="BroodLordBWeapon"/>
     </CActorMissile>
@@ -4091,7 +4088,6 @@
         <GroupSoundArray index="Yes" value="BroodlingGroupYes"/>
         <GroupSoundArray index="Attack" value="BroodlingGroupAttack"/>
         <GroupSoundArray index="Board" value="BroodlingGroupBoard"/>
-        <HighlightTooltip value="Unit/Name/AP_BroodlingEscort"/>
         <LifeArmorIcon value="Assets\Textures\btn-armor-zerg-building.dds"/>
         <SoundArray index="Birth" value="BroodlingBirth"/>
         <SoundArray index="Ready" value="Broodling_Ready"/>
@@ -4121,6 +4117,20 @@
     <CActorSound id="AP_Broodling_Land" parent="SoundOneShot">
         <Sound value="Broodling_Land"/>
     </CActorSound>
+    <CActorSound id="AP_BurrowProtectorSound">
+        <On Terms="Effect.AP_DisablingCloud.Start" Send="Create"/>
+        <On Terms="Effect.AP_DisablingCloud.Stop" Send="Destroy"/>
+    </CActorSound>
+    <CActorModel id="AP_BlindingCloudModelAttachment" parent="ModelAddition">
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <On Terms="Behavior.AP_DisablingCloud.On" Send="Create"/>
+        <On Terms="Behavior.AP_DisablingCloud.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+        <Model value="BlindingCloudModelAttachment"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -7973,6 +7983,59 @@
         <RollInArc value="120.000000"/>
         <RollOutDuration value="1.500000"/>
     </CActorSiteOpBankerUnit>
+    <CActorModel id="AP_DisablingCloud" parent="ModelAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Effect.AP_DisablingCloud.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart $BSD"/>
+        <On Terms="Effect.AP_DisablingCloud.Stop" Send="Destroy"/>
+        <Model value="BlindingCloud"/>
+    </CActorModel>
+    <CActorSound id="AP_Spell_DisablingCloud_Impact" parent="SoundContinuous">
+        <On Terms="Effect.AP_DisablingCloud.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+    </CActorSound>
+    <CActorSplat id="AP_DisablingCloudCursorSplat" parent="ZergCursorSplat" abil="AP_DisablingCloud"/>
+    <CActorRange id="AP_DisablingCloudRange" parent="RangeAbil" abil="AP_DisablingCloud"/>
+    <CActorSiteOpRotationSmooth id="AP_SOpRotationSmoothViper">
+        <Acceleration value="2799.8437"/>
+        <Deceleration value="2799.8437"/>
+        <MaxSpeed value="999.8437"/>
+    </CActorSiteOpRotationSmooth>
+    <CActorSiteOpSerpentHead id="AP_SOpSerpentHeadViper">
+        <Aggregate>
+            <Type value="Swimming"/>
+            <BaseElementLengthMax value="0.100000"/>
+            <SegmentRotationRate value="450.000000"/>
+            <SwimmingUndulationElementLength value="0.050000"/>
+            <SwimmingUndulationStartOffset value="0.500000"/>
+            <SwimmingUndulationAmplitudePerUnit value="0.260000"/>
+            <SwimmingUndulationWavelength value="2.500000"/>
+            <SwimmingUndulationIdlePhaseVelocity value="0.800000"/>
+            <TurnSmoothingActivationAngleMin value="15.000000"/>
+            <TurnSmoothingActivationAngleMax value="165.000000"/>
+            <TurnSmoothingRadiusMax value="0.300000"/>
+            <UncoilingWhileIdleRotationRateMin value="60.000000"/>
+            <UncoilingWhileIdleRotationRateMax value="360.000000"/>
+            <Flags index="UseAttachDistances" value="1"/>
+        </Aggregate>
+    </CActorSiteOpSerpentHead>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViperBase">
+        <Head value="AP_Viper"/>
+    </CActorSiteOpSerpentSegment>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViper0" parent="AP_SOpSerpentSegmentViperBase"/>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViper1" parent="AP_SOpSerpentSegmentViperBase"/>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViper2" parent="AP_SOpSerpentSegmentViperBase"/>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViper3" parent="AP_SOpSerpentSegmentViperBase"/>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViper4" parent="AP_SOpSerpentSegmentViperBase"/>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViper5" parent="AP_SOpSerpentSegmentViperBase"/>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViper6" parent="AP_SOpSerpentSegmentViperBase"/>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViper7" parent="AP_SOpSerpentSegmentViperBase"/>
+    <CActorSiteOpSerpentSegment id="AP_SOpSerpentSegmentViper8" parent="AP_SOpSerpentSegmentViperBase"/>
+    <CActorSiteOpTilter id="AP_SOpTilterYoink">
+        <TiltAmount value="0.500000"/>
+        <AngleRate value="180.000000"/>
+    </CActorSiteOpTilter>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -12190,7 +12253,7 @@
         <OnResponse Target="_DetectorEnemy" Send="Signal FoundDetector"/>
     </CActorQueryResponse>
     <CActorSite id="AP_YoinkTentacleLaunchSite">
-        <Host Subject="::scope.YoinkTentacle"/>
+        <Host Subject="::scope.AP_YoinkTentacle"/>
     </CActorSite>
     <CActorAction id="AP_Yoink" parent="GenericAttack" effectImpact="AP_YoinkSet" effectLaunch="AP_YoinkLaunchMissile">
         <LaunchSiteOps Ops="SOpAttachWeapon"/>
@@ -12221,13 +12284,13 @@
         <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackLeft"/>
         <On Terms="ActorCreation" Target="_Unit" Send="AnimClear AttackRight"/>
         <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay AbductFlail Flail PlayForever,RandomStartOffset 0.100000 0.100000"/>
-        <On Terms="ActorCreation" Target="_Unit" Send="HostSiteOpsAdd ::Host SOpTilterYoink"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="HostSiteOpsAdd ::Host AP_SOpTilterYoink"/>
         <On Terms="ActorCreation" Send="TimerSet 3.500000 KnockbackDelay"/>
         <On Terms="TimerExpired; TimerName KnockbackDelay" Target="_Unit" Send="AnimClear AbductFlail"/>
         <On Terms="TimerExpired; TimerName KnockbackDelay" Send="Destroy"/>
         <On Terms="Behavior.AP_Yoink.Off" Target="_Unit" Send="AnimClear AbductFlail"/>
         <On Terms="Behavior.AP_Yoink.Off" Target="_Unit" Send="Signal YoinkStop"/>
-        <On Terms="Behavior.AP_Yoink.Off" Target="_Unit" Send="HostSiteOpsRemove ::Host SOpTilterYoink"/>
+        <On Terms="Behavior.AP_Yoink.Off" Target="_Unit" Send="HostSiteOpsRemove ::Host AP_SOpTilterYoink"/>
         <On Terms="Behavior.AP_Yoink.Off" Send="Destroy"/>
     </CActorSimple>
     <CActorModel id="AP_YoinkImpactModel" parent="ModelAddition">
@@ -12238,12 +12301,12 @@
     </CActorModel>
     <CActorMissile id="AP_YoinkMissile" parent="GenericAttackMissile" unitName="AP_YoinkMissile">
         <Supporter>
-            <Subject value="YoinkTentacle"/>
+            <Subject value="AP_YoinkTentacle"/>
             <Scope value="Caster"/>
             <Actor value="Find"/>
-            <Effect value="YoinkLaunchMissile"/>
+            <Effect value="AP_YoinkLaunchMissile"/>
         </Supporter>
-        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleAttack ::Self"/>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet AP_TentacleAttack ::Self"/>
         <Model value="Invisible"/>
     </CActorMissile>
     <CActorModel id="AP_YoinkTentacle">
@@ -12252,7 +12315,7 @@
         <On Terms="Effect.AP_YoinkLaunchMissile.Start; At Caster" Send="Create"/>
         <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
         <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
-        <On Terms="ActorCreation" Send="RefSet ::scope.YoinkTentacle ::Self"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.AP_YoinkTentacle ::Self"/>
         <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
         <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
         <On Terms="ActorCreation" Send="SetOpacity"/>
@@ -12260,15 +12323,15 @@
         <On Terms="Effect.AP_YoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
         <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="StatusSet Yoinking 1"/>
         <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="AnimClear Attack"/>
-        <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="Create YoinkImpactHoldingSite"/>
-        <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="RefSetFromRequest TentacleAttack YoinkImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="Create AP_YoinkImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="RefSetFromRequest AP_TentacleAttack AP_YoinkImpactHoldingSite"/>
         <On Terms="Effect.AP_YoinkApplyTentacleBehavior.Start" Send="TimerSet 1.250000 DelayDestroy"/>
         <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
         <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
         <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
-        <HostedAttaches Name="TentacleAttack">
+        <HostedAttaches Name="AP_TentacleAttack">
             <AttachQuery Methods="Hardpoint"/>
         </HostedAttaches>
     </CActorModel>
@@ -12278,7 +12341,7 @@
         <On Terms="Effect.AP_YoinkLaunchMissileVikingAir.Start; At Caster" Send="Create"/>
         <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
         <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
-        <On Terms="ActorCreation" Send="RefSet ::scope.YoinkTentacleVikingAir ::Self"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.AP_YoinkTentacleVikingAir ::Self"/>
         <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
         <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
         <On Terms="ActorCreation" Send="SetOpacity"/>
@@ -12286,8 +12349,8 @@
         <On Terms="Effect.AP_YoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
         <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="StatusSet Yoinking 1"/>
         <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="AnimClear Attack"/>
-        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="Create YoinkVikingAirImpactHoldingSite"/>
-        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="RefSetFromRequest TentacleVikingAirAttack YoinkVikingAirImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="Create AP_YoinkVikingAirImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="RefSetFromRequest AP_TentacleVikingAirAttack AP_YoinkVikingAirImpactHoldingSite"/>
         <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingAir.Start" Send="TimerSet 1.250000 DelayDestroy"/>
         <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
         <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
@@ -12295,7 +12358,7 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
         <Model value="AP_YoinkTentacle"/>
-        <HostedAttaches Name="TentacleVikingAirAttack">
+        <HostedAttaches Name="AP_TentacleVikingAirAttack">
             <AttachQuery Methods="Hardpoint"/>
         </HostedAttaches>
     </CActorModel>
@@ -12305,7 +12368,7 @@
         <On Terms="Effect.AP_YoinkLaunchMissileVikingGround.Start; At Caster" Send="Create"/>
         <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth GLstand Death"/>
         <On Terms="ActorCreation" Send="AnimPlay Attack Attack"/>
-        <On Terms="ActorCreation" Send="RefSet ::scope.YoinkTentacleVikingGround ::Self"/>
+        <On Terms="ActorCreation" Send="RefSet ::scope.AP_YoinkTentacleVikingGround ::Self"/>
         <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDestroy"/>
         <On Terms="ActorCreation" Send="StatusSet Yoinking 0"/>
         <On Terms="ActorCreation" Send="SetOpacity"/>
@@ -12313,8 +12376,8 @@
         <On Terms="Effect.AP_YoinkFinishDummy.Start; IsStatus Yoinking 0" Send="AnimBracketStop BSD"/>
         <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="StatusSet Yoinking 1"/>
         <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="AnimClear Attack"/>
-        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="Create YoinkVikingGroundImpactHoldingSite"/>
-        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="RefSetFromRequest TentacleVikingGroundAttack YoinkVikingGroundImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="Create AP_YoinkVikingGroundImpactHoldingSite"/>
+        <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="RefSetFromRequest AP_TentacleVikingGroundAttack AP_YoinkVikingGroundImpactHoldingSite"/>
         <On Terms="Effect.AP_YoinkApplyTentacleBehaviorVikingGround.Start" Send="TimerSet 1.250000 DelayDestroy"/>
         <On Terms="TimerExpired; TimerName DelayDestroy" Send="AnimBracketStop BSD"/>
         <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
@@ -12322,13 +12385,13 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachWeapon01Soft"/>
         <Model value="AP_YoinkTentacle"/>
-        <HostedAttaches Name="TentacleVikingGroundAttack">
+        <HostedAttaches Name="AP_TentacleVikingGroundAttack">
             <AttachQuery Methods="Hardpoint"/>
         </HostedAttaches>
     </CActorModel>
     <CActorAction id="AP_YoinkVikingAir" parent="GenericAttack" effectImpact="AP_YoinkSetVikingAir" effectLaunch="AP_YoinkLaunchMissileVikingAir">
         <LaunchSiteOps Ops="SOpAttachWeapon"/>
-        <LaunchSite value="YoinkVikingAirTentacleLaunchSite"/>
+        <LaunchSite value="AP_YoinkVikingAirTentacleLaunchSite"/>
         <LaunchAttachQuery Methods="Weapon"/>
         <LaunchAssets Sound="AP_Spell_Yoink_Launch"/>
         <ImpactSiteOps Ops="SOpAttachHead SOpForwardLaunchGuide"/>
@@ -12340,17 +12403,17 @@
     </CActorAction>
     <CActorMissile id="AP_YoinkVikingAirMissile" parent="GenericAttackMissile" unitName="AP_YoinkVikingAirMissile">
         <Supporter>
-            <Subject value="YoinkTentacleVikingAir"/>
+            <Subject value="AP_YoinkTentacleVikingAir"/>
             <Scope value="Caster"/>
             <Actor value="Find"/>
-            <Effect value="YoinkLaunchMissileVikingAir"/>
+            <Effect value="AP_YoinkLaunchMissileVikingAir"/>
         </Supporter>
-        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleVikingAirAttack ::Self"/>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet AP_TentacleVikingAirAttack ::Self"/>
         <Model value="Invisible"/>
     </CActorMissile>
     <CActorAction id="AP_YoinkVikingGround" parent="GenericAttack" effectImpact="AP_YoinkSetVikingGround" effectLaunch="AP_YoinkLaunchMissileVikingGround">
         <LaunchSiteOps Ops="SOpAttachWeapon"/>
-        <LaunchSite value="YoinkVikingGroundTentacleLaunchSite"/>
+        <LaunchSite value="AP_YoinkVikingGroundTentacleLaunchSite"/>
         <LaunchAttachQuery Methods="Weapon"/>
         <LaunchAssets Sound="AP_Spell_Yoink_Launch"/>
         <ImpactSiteOps Ops="SOpAttachHead SOpForwardLaunchGuide"/>
@@ -12362,12 +12425,262 @@
     </CActorAction>
     <CActorMissile id="AP_YoinkVikingGroundMissile" parent="GenericAttackMissile" unitName="AP_YoinkVikingGroundMissile">
         <Supporter>
-            <Subject value="YoinkTentacleVikingGround"/>
+            <Subject value="AP_YoinkTentacleVikingGround"/>
             <Scope value="Caster"/>
             <Actor value="Find"/>
-            <Effect value="YoinkLaunchMissileVikingGround"/>
+            <Effect value="AP_YoinkLaunchMissileVikingGround"/>
         </Supporter>
-        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet TentacleVikingGroundAttack ::Self"/>
+        <On Terms="MotionPhaseStart; MotionPhase" Target="::Supporter" Send="RefSet AP_TentacleVikingGroundAttack ::Self"/>
         <Model value="Invisible"/>
     </CActorMissile>
+    <CActorUnit id="AP_Viper" parent="GenericUnitMorph" unitName="AP_Viper">
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Viper_Land"/>
+        <On Terms="Abil.AP_Yoink.SourceCastStart" Send="$Spell"/>
+        <On Terms="UnitDeathCustomize" Send="SetTeamColor 255,255,255"/>
+        <On Terms="UnitDeathCustomize; Option Model Low" Send="DeathCustomize Low"/>
+        <On Terms="UnitDeath" Send="Create AP_ViperDeathAddition"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Spell"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <HostSiteOps Ops="AP_SOpSerpentHeadViper AP_SOpRotationSmoothViper AP_SOpBankerBroodLord"/>
+        <AnimBlendTime value="0.500000"/>
+        <HostedAttaches Name="Seg0">
+            <AttachQuery Methods="Attacher"/>
+            <HostSiteOps Ops="AP_SOpSerpentSegmentViper0"/>
+        </HostedAttaches>
+        <HostedAttaches Name="Seg1">
+            <AttachQuery Methods="Attacher 1"/>
+            <HostSiteOps Ops="AP_SOpSerpentSegmentViper1"/>
+        </HostedAttaches>
+        <HostedAttaches Name="Seg2">
+            <AttachQuery Methods="Attacher 2"/>
+            <HostSiteOps Ops="AP_SOpSerpentSegmentViper2"/>
+        </HostedAttaches>
+        <HostedAttaches Name="Seg3">
+            <AttachQuery Methods="Attacher 3"/>
+            <HostSiteOps Ops="AP_SOpSerpentSegmentViper3"/>
+        </HostedAttaches>
+        <HostedAttaches Name="Seg4">
+            <AttachQuery Methods="Attacher 4"/>
+            <HostSiteOps Ops="AP_SOpSerpentSegmentViper4"/>
+        </HostedAttaches>
+        <HostedAttaches Name="Seg5">
+            <AttachQuery Methods="Attacher 5"/>
+            <HostSiteOps Ops="AP_SOpSerpentSegmentViper5"/>
+        </HostedAttaches>
+        <HostedAttaches Name="Seg6">
+            <AttachQuery Methods="Attacher 6"/>
+            <HostSiteOps Ops="AP_SOpSerpentSegmentViper6"/>
+        </HostedAttaches>
+        <HostedAttaches Name="Seg7">
+            <AttachQuery Methods="Attacher 7"/>
+            <HostSiteOps Ops="AP_SOpSerpentSegmentViper7"/>
+        </HostedAttaches>
+        <HostedAttaches Name="Seg8">
+            <AttachQuery Methods="Attacher 8"/>
+            <HostSiteOps Ops="AP_SOpSerpentSegmentViper8"/>
+        </HostedAttaches>
+        <DeathArray index="Normal" SoundLink="Zerg_ExplosionMedium" VoiceLink="LairViper_Death"/>
+        <DeathCustoms>
+            <ActorModel value="ViperDeathRagdoll"/>
+            <ModelLink value="ViperDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ModelLink="ZergMediumUnitDeathLow" Name="Low"/>
+        <DeathCustoms ModelLink="ZergMediumUnitDeath_Mecha" Name="LowMecha"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PortraitModel value="AP_ViperEx1Portrait"/>
+        <BarOffset value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Viper.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-Viper.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level0.dds"/>
+        <NameOffset value="70"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="LairViper_Ready"/>
+        <SoundArray index="What" value="LairViper_What"/>
+        <SoundArray index="Yes" value="LairViper_Yes"/>
+        <SoundArray index="Attack" value="LairViper_Attack"/>
+        <SoundArray index="Pissed" value="LairViper_What"/>
+        <SoundArray index="Movement" value="LairViper_Movement"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-Viper.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Viper.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorAction id="AP_ViperAirAttack" parent="GenericAttack" effectImpact="AP_ViperAirDamage" effectLaunch="AP_ViperAirLaunchMissile">
+        <LaunchAssets Sound="Viper_AirAttack"/>
+        <ImpactMap index="None" Sound="AP_Viper_AirAttack_Impact"/>
+    </CActorAction>
+    <CActorMissile id="AP_ViperAirAttackMissile" parent="GenericAttackMissile" unitName="AP_ViperAirWeapon"/>
+    <CActorModel id="AP_ViperConsumptionDamageImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_ViperConsumption.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="ViperConsume"/>
+    </CActorModel>
+    <CActorModel id="AP_ViperConsumptionHealImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ViperConsumption.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="ConsumptionImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_ViperConsumptionImpactSound">
+        <On Terms="Effect.AP_ViperConsumption.Start" Send="Create"/>
+        <Sound value="ConsumptionImpactSound"/>
+    </CActorSound>
+    <CActorUnit id="AP_ViperCocoon" parent="GenericUnitMorph" unitName="AP_ViperCocoon">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ViperCocoon; MorphFrom AP_Mutalisk" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ViperCocoon; MorphFrom AP_Mutalisk" Send="$Birth 0 0.000000 -1.000000 0.000000"/>
+        <On Terms="AnimDone; AnimName Birth" Send="AnimBaselineStart"/>
+        <HostSiteOps Ops="SOpRotVariancerForward30"/>
+        <DeathArray index="Normal" ModelLink="AP_ViperCocoonDeath" SoundLink="Egg_Explode"/>
+        <PortraitModel value="CocoonPortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="78"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-BroodLordEgg.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\Wireframe-Zerg-BroodLordEgg.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="What" value="Egg_What"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\Wireframe-Zerg-BroodLordEgg.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-BroodLordEgg.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorModel id="AP_ViperCocoonDeath">
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_ViperCocoon" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_ViperCocoon" Send="$Death"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ViperCocoon" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+    </CActorModel>
+    <CActorRange id="AP_ViperConsumptionRange" parent="RangeAbil" abil="AP_ViperConsumption"/>
+    <CActorModel id="AP_ViperDeathAddition" parent="ModelAnimationStyleOneShot">
+        <Model value="ViperDeathAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_ViperDeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_ViperDeathRagdollDetonationForce"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionFlier"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorForceSphere id="AP_ViperDeathRagdollDetonationForce" parent="AP_DeathRagdollDetonationForce">
+        <On Terms="ActorCreation" Send="Create AP_ViperDeathRagdollSecondaryDetonationForce"/>
+        <Magnitude value="10.000000,5.000000"/>
+        <Radius value="2.750000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_ViperDeathRagdollSecondaryDetonationForce" parent="AP_DeathRagdollDetonationForce">
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardCasterCenter SOpRotVariancerForward60 SOpMoveByDot15ToDot5 SOpMoveDownByDot15ToDot25"/>
+        <Magnitude value="12.500000,5.000000"/>
+        <Radius value="0.750000,0.500000"/>
+    </CActorForceSphere>
+    <CActorSound id="AP_Viper_Land" parent="SoundOneShot">
+        <Sound value="Viper_Land"/>
+    </CActorSound>
+    <CActorSite id="AP_YoinkImpactHoldingSite">
+        <Host Subject="_ImpactGuide" Scope="Target" Effect="AP_YoinkStartCreatePlaceholder"/>
+        <HostSiteOps Ops="SOp180"/>
+    </CActorSite>
+    <CActorRange id="AP_YoinkRange" parent="RangeAbil" abil="AP_Yoink">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSite id="AP_YoinkVikingAirImpactHoldingSite">
+        <Host Subject="_ImpactGuide" Scope="Target" Effect="AP_YoinkStartCreatePlaceholderVikingAir"/>
+        <HostSiteOps Ops="SOp180"/>
+    </CActorSite>
+    <CActorSite id="AP_YoinkVikingAirTentacleLaunchSite">
+        <Host Subject="::scope.AP_YoinkTentacleVikingAir"/>
+    </CActorSite>
+    <CActorSite id="AP_YoinkVikingGroundImpactHoldingSite">
+        <Host Subject="_ImpactGuide" Scope="Target" Effect="AP_YoinkStartCreatePlaceholderVikingGround"/>
+        <HostSiteOps Ops="SOp180"/>
+    </CActorSite>
+    <CActorSite id="AP_YoinkVikingGroundTentacleLaunchSite">
+        <Host Subject="::scope.AP_YoinkTentacleVikingGround"/>
+    </CActorSite>
 </Catalog>

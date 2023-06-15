@@ -5634,7 +5634,7 @@
         <Behavior value="AP_YoinkTentacle"/>
     </CEffectApplyBehavior>
     <CEffectCancelOrder id="AP_YoinkCancelOrders">
-        <ValidatorArray value="YoinkCancelOrder"/>
+        <ValidatorArray value="AP_YoinkCancelOrder"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
         <Count value="32"/>
@@ -5744,6 +5744,7 @@
         <Abil value="AssaultMode"/>
         <Target Effect="AP_YoinkStartSwitch" Value="TargetUnit"/>
     </CEffectIssueOrder>
+    <!-- Blizzard comment: -->
     <!-- Viking is a troublemaker due to its morph, so we have to setup specific air and ground trees -->
     <!-- Bug where siege mode siege tanks can't be yoinked onto ramps, the fix however makes it possible to stack many, many tanks on top of one another, which can be very, very bad. Fix data is left in but inactive just in case we find a future fix -->
     <!-- This is the general effect tree for everything else -->
@@ -5897,9 +5898,14 @@
     <CEffectSet id="AP_YoinkSet">
         <ValidatorArray value="AP_NoBurrowChargingRevD"/>
         <ValidatorArray value="AP_IsNotMothershipCorePurifyNexus"/>
-        <ValidatorArray value="AP_IsNotRecallingCombine"/>
+        <!-- LotV change; AP Viper is based on HotS -->
+        <!-- ValidatorArray value="AP_IsNotRecallingCombine"/ -->
         <EditorCategories value="Race:Zerg"/>
         <Marker Link="YoinkMarker"/>
+        <!-- HotS change -->
+        <EffectArray value="AP_RemoveRecallingBehavior"/>
+        <EffectArray value="AP_RemoveCoreRecallingBehavior"/>
+        <!-- HotS change end -->
         <EffectArray value="AP_YoinkApplyTentacleBehavior"/>
         <EffectArray value="AP_YoinkCancelOrders"/>
         <EffectArray value="AP_InstantUnburrow"/>
@@ -6001,7 +6007,7 @@
         <Behavior value="AP_PrecursorYoink"/>
     </CEffectApplyBehavior>
     <CEffectSet id="AP_YoinkStartSet">
-        <ValidatorArray value="IsNotMothershipCorePurifyNexus"/>
+        <ValidatorArray value="AP_IsNotMothershipCorePurifyNexus"/>
         <EditorCategories value="Race:Zerg"/>
         <Marker Link="YoinkMarker"/>
         <EffectArray value="AP_YoinkMarkerBehavior"/>
@@ -6105,7 +6111,6 @@
         <ValidatorArray index="0" value="AP_IsInfestorBurrowed"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Value="Caster"/>
-        <Behavior value="AP_SurfaceForSpellcast"/>
     </CEffectApplyBehavior>
     <CEffectDamage id="AP_BroodlingEscortDamage" parent="DU_WEAP_MISSILE">
         <ValidatorArray value="AP_BroodlingEscortFilters"/>
@@ -6270,10 +6275,74 @@
     <CEffectApplyBehavior id="AP_KeneticMitosisSplitBehavior">
         <ValidatorArray value="AP_HotSKeneticMitosisResearched"/>
         <EditorCategories value="Race:Zerg"/>
-        <Behavior value="AP_KeneticMitosisSplitBehavior"/>
     </CEffectApplyBehavior>
     <CEffectSet id="AP_KeneticMitosisSplitSet">
         <EffectArray value="AP_BroodlingTimedLife"/>
         <EffectArray value="AP_BroodlingAttack"/>
     </CEffectSet>
+    <CEffectCreatePersistent id="AP_DisablingCloud">
+        <EditorCategories value="Race:Zerg"/>
+        <InitialEffect value="AP_DisablingCloudSearch"/>
+        <PeriodCount value="19"/>
+        <PeriodicEffectArray value="AP_DisablingCloudSearch"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_DisablingCloudApplyBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_DisablingCloud"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumTransport id="AP_DisablingCloudIterateTransport">
+        <ValidatorArray value="AP_IsAnyBunker"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Effect value="AP_DisablingCloudApplyBehavior"/>
+    </CEffectEnumTransport>
+    <CEffectEnumArea id="AP_DisablingCloudSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_DisablingCloudSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_DisablingCloudSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_DisablingCloudApplyBehavior"/>
+        <EffectArray value="AP_DisablingCloudIterateTransport"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_RemoveCoreRecallingBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <BehaviorLink value="MothershipCoreRecalling"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_RemoveRecallingBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <BehaviorLink value="Recalling"/>
+    </CEffectRemoveBehavior>
+    <CEffectDamage id="AP_ViperAirDamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <AttributeBonus index="Armored" value="5"/>
+        <Visibility value="Visible"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_ViperAirLaunchMissile">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_ViperAirDamage"/>
+        <AmmoUnit value="AP_ViperAirWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_ViperConsumption">
+        <ValidatorArray value="EnergyNotFullCaster"/>
+        <ValidatorArray value="RequiresZerg"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <PeriodCount value="75"/>
+        <PeriodicEffectArray value="AP_ViperConsumptionDamage"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_ViperConsumptionDamage">
+        <ValidatorArray value="EnergyNotFullCaster"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Amount value="1"/>
+        <LeechFraction index="Energy" value="2"/>
+    </CEffectDamage>
 </Catalog>

@@ -2292,4 +2292,15 @@
             <AbilLinkDisableArray value="attack"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DisablingCloud">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-blindingcloud.dds"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="0.625"/>
+        <Modification MoveSpeedMultiplier="0.5">
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressEnergy" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

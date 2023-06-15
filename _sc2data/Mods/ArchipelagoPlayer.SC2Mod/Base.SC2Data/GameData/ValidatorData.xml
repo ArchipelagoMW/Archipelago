@@ -503,6 +503,7 @@
         <Value value="AP_HellionTank"/>
     </CValidatorUnitType>
     <CValidatorUnitType id="AP_IsNotHellionTank">
+        <!-- TODO: Add vanilla HellionTank in ArchipelagoPlayerHotS/LotV -->
         <ResultFailed value="CantLoadThatUnit"/>
         <Value value="AP_HellionTank"/>
         <Find value="0"/>
@@ -615,6 +616,12 @@
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorUnitType id="AP_NotInfestorBurrowed">
         <Value value="AP_InfestorBurrowed"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotMothershipCore">
+        <ResultFailed value="Error,Error/NotMothershipCore"/>
+        <!-- TODO: Replace with MothershipCore in ArchipelagoPlayerHotS/LotV -->
+        <Value value="AP_Dummy"/>
         <Find value="0"/>
     </CValidatorUnitType>
     <CValidatorCombine id="NotWorkerMULE" parent="CValidatorCombine">
@@ -1817,4 +1824,13 @@
         <Find value="1"/>
         <Value value="AP_HaveMultiTaskMAFServosThor"/>
     </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_YoinkCancelOrder">
+        <Type value="And"/>
+        <CombineArray value="NotSiegeTank"/>
+        <CombineArray value="NotHellion"/>
+        <CombineArray value="AP_IsNotHellionTank"/>
+        <CombineArray value="AP_NotMothershipCore"/>
+        <CombineArray value="NotWarpPrism"/>
+        <CombineArray value="NotThor"/>
+    </CValidatorCombine>
 </Catalog>
