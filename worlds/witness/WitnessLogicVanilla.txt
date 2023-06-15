@@ -988,7 +988,7 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Path to Challenge - 0x019A5:
 158473 - 0x32966 (First Floor Grounded) - True - Stars & Black/White Squares & Stars + Same Colored Symbol
 158474 - 0x01A31 (First Floor Middle) - True - Colored Squares
 158475 - 0x00B71 (First Floor Right) - True - Colored Squares & Stars & Stars + Same Colored Symbol & Eraser
-158478 - 0x288EA (First Wooden Beam) - True - Shapers
+158478 - 0x288EA (First Wooden Beam) - True - Rotated Shapers
 158479 - 0x288FC (Second Wooden Beam) - True - Black/White Squares & Shapers & Rotated Shapers
 158480 - 0x289E7 (Third Wooden Beam) - True - Black/White Squares
 158481 - 0x288AA (Fourth Wooden Beam) - True - Black/White Squares & Shapers

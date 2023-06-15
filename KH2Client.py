@@ -433,7 +433,8 @@ class KH2Context(CommonContext):
                 if len(self.kh2seedsave["AmountInvo"][ItemType]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
                     if itemname in self.sora_ability_set:
-                        self.kh2seedsave["AmountInvo"][ItemType]["Ability"][itemname].append(self.kh2seedsave["SoraInvo"][abilityInvoType])
+                        self.kh2seedsave["AmountInvo"][ItemType]["Ability"][itemname].append(
+                                self.kh2seedsave["SoraInvo"][abilityInvoType])
                         self.kh2seedsave["SoraInvo"][abilityInvoType] -= TwilightZone
                     elif itemname in self.donald_ability_set:
                         self.kh2seedsave["AmountInvo"][ItemType]["Ability"][itemname].append(
@@ -686,6 +687,10 @@ class KH2Context(CommonContext):
                         self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1), "big")
                 if (int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + self.Save + itemData.memaddr, 1),
                                    "big") & 0x1 << itemData.bitmask) == 0:
+                    # when getting a form anti points should be reset to 0 but bit-shift doesn't trigger the game.
+                    if itemName in {"Valor Form", "Wisdom Form", "Limit Form", "Master Form", "Final Form"}:
+                        self.kh2.write_bytes(self.kh2.base_address + self.Save + 0x3410,
+                                             (0).to_bytes(1, 'big'), 1)
                     self.kh2.write_bytes(self.kh2.base_address + self.Save + itemData.memaddr,
                                          (itemMemory | 0x01 << itemData.bitmask).to_bytes(1, 'big'), 1)
 
