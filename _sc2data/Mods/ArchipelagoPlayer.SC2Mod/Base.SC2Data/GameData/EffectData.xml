@@ -6440,7 +6440,6 @@
     </CEffectRemoveBehavior>
     <CEffectApplyBehavior id="AP_CarrierRepairDroneRecall">
         <EditorCategories value=""/>
-        <Behavior value="AP_CarrierRepairDroneRecall"/>
     </CEffectApplyBehavior>
     <CEffectTeleport id="AP_CarrierRepairDroneRecallTeleport">
         <ValidatorArray value="AP_CasterisGreaterThan5"/>
@@ -6579,6 +6578,140 @@
         <Player Value="Caster"/>
         <Target Effect="AP_ReleaseInterceptorsSet" Value="TargetPoint"/>
     </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_DisableCasterEnergyRegenApplyBehavior">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_DisableEnergyRegen"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_DisableCasterWeaponsApplyBehavior">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_DisablePhoenixWeapons"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_GravitonBeam">
+        <ValidatorArray value="NoGravitonBeamInProgress"/>
+        <ValidatorArray value="AP_NotAbducted"/>
+        <ValidatorArray value="AP_NoReaperKD8Knockback"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="AP_GravitonBeamInitialSet"/>
+        <PeriodCount value="80"/>
+        <PeriodicValidator value="GravitonBeamValidators"/>
+        <PeriodicEffectArray value="AP_GravitonBeamPeriodicSet"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_GravitonBeamBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_GravitonBeam"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_GravitonBeamDummy">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Flags index="NoBehaviorResponse" value="1"/>
+        <Flags index="NoDamageTimerReset" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectIssueOrder id="AP_GravitonBeamHaltTerranBuild">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="TerranBuild"/>
+        <AbilCmdIndex value="30"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_GravitonBeamHeightBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_GravitonBeamHeight"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_GravitonBeamInitialSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_DisableCasterEnergyRegenApplyBehavior"/>
+        <EffectArray value="AP_DisableCasterWeaponsApplyBehavior"/>
+        <EffectArray value="InstantUnburrow"/>
+        <EffectArray value="AP_GravitonBeamHeightBehavior"/>
+        <EffectArray value="AP_GravitonBeamHaltTerranBuild"/>
+        <EffectArray value="AttackCancel"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GravitonBeamPeriodicSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_GravitonBeamDummy"/>
+        <EffectArray value="AP_GravitonBeamBehavior"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_GravitonBeamVoidCampaign">
+        <ValidatorArray value="NoGravitonBeamInProgress"/>
+        <ValidatorArray value="AP_NotAbducted"/>
+        <ValidatorArray value="AP_NoReaperKD8Knockback"/>
+        <ValidatorArray value="GravitonBeamValidators"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Marker Link="Effect/GravitonBeam"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <InitialEffect value="AP_GravitonBeamVoidCampaignInitialSet"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="GravitonBeamValidators"/>
+        <PeriodicEffectArray value="AP_GravitonBeamVoidCampaignPeriodicSet"/>
+        <PeriodicEffectArray value="AP_GravitonBeamVoidCampaignPeriodicSet"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_GravitonBeamVoidCampaignBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_GravitonBeamVoidCampaign"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_GravitonBeamVoidCampaignHeightBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_GravitonBeamHeightVoidCampaign"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_GravitonBeamVoidCampaignInitialSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_DisableCasterEnergyRegenApplyBehavior"/>
+        <EffectArray value="AP_DisableCasterWeaponsApplyBehavior"/>
+        <EffectArray value="InstantUnburrow"/>
+        <EffectArray value="AP_GravitonBeamVoidCampaignHeightBehavior"/>
+        <EffectArray value="AP_GravitonBeamHaltTerranBuild"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GravitonBeamVoidCampaignPeriodicSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_GravitonBeamDummy"/>
+        <EffectArray value="AP_GravitonBeamVoidCampaignBehavior"/>
+        <EffectArray value="AP_VoidPhoenixDoubleGravitonSwitch"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_IonCannons">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_IonCannonsLMLeft"/>
+        <PeriodicEffectArray value="AP_IonCannonsLMRight"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_IonCannonsLMLeft">
+        <Name value="Effect/Name/IonCannonsLM"/>
+        <ValidatorArray index="0" value="IonCannonsLMTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Marker Link="Effect/IonCannonsLM"/>
+        <ImpactEffect value="IonCannonsULeft"/>
+        <AmmoUnit value="AP_IonCannonsWeapon"/>
+        <Movers Link="MissileDefault" IfRangeLTE="1"/>
+        <Movers Link="IonCannonsWeaponLeft" IfRangeLTE="6"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_IonCannonsLMRight">
+        <Name value="Effect/Name/IonCannonsLM"/>
+        <ValidatorArray index="0" value="IonCannonsLMTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Marker Link="Effect/IonCannonsLM"/>
+        <ImpactEffect value="IonCannonsURight"/>
+        <AmmoUnit value="AP_IonCannonsWeapon"/>
+        <Movers Link="MissileDefault" IfRangeLTE="1"/>
+        <Movers Link="IonCannonsWeaponRight" IfRangeLTE="6"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_IonCannonsU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Light" value="5"/>
+        <Visibility value="Visible"/>
+        <Amount value="5"/>
+    </CEffectDamage>
     <CEffectSet id="ReleaseInterceptorsReleaseSet2">
         <EditorCategories value="Race:Protoss"/>
         <EffectArray value="AP_ReleaseInterceptors"/>
@@ -6712,4 +6845,50 @@
         <AbilCmdIndex value="1"/>
         <CmdFlags index="Queued" value="1"/>
     </CEffectIssueOrder>
+    <CEffectSet id="AP_VoidPhoenixDoubleGravitonPeriodicSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_GravitonBeamDummy"/>
+        <EffectArray value="AP_GravitonBeamVoidCampaignBehavior"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_VoidPhoenixDoubleGravitonPersistent">
+        <ValidatorArray value="NoGravitonBeamInProgress"/>
+        <ValidatorArray value="AP_NotAbducted"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Marker Link="Effect/GravitonBeam"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <InitialEffect value="AP_GravitonBeamVoidCampaignInitialSet"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="GravitonBeamValidators"/>
+        <PeriodicEffectArray value="AP_VoidPhoenixDoubleGravitonPeriodicSet"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_VoidPhoenixDoubleGravitonSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetUnit"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Massive,Structure,Heroic,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray MaxCount="1" Radius="2.5" Effect="AP_VoidPhoenixDoubleGravitonPersistent"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_VoidPhoenixDoubleGravitonSecondSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Massive,Structure,Heroic,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray MaxCount="1" Radius="4" Effect="AP_VoidPhoenixDoubleGravitonPersistent"/>
+    </CEffectEnumArea>
+    <CEffectSwitch id="AP_VoidPhoenixDoubleGravitonSwitch">
+        <ValidatorArray value="AP_HaveVoidPhoenixDoubleGraviton"/>
+        <ValidatorArray value="AP_CasterCanUseGravitonDoubleBeam"/>
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="AP_VoidPhoenixDoubleGravitonEnemyNearTarget" Effect="AP_VoidPhoenixDoubleGravitonSearch"/>
+        <CaseDefault value="AP_VoidPhoenixDoubleGravitonSecondSearch"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_IonCannonsULeft" parent="AP_IonCannonsU"/>
+    <CEffectDamage id="AP_IonCannonsURight" parent="AP_IonCannonsU"/>
+    <CEffectApplyBehavior id="AP_VoidPhoenixPhasingArmorApply">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidPhoenixPhasingArmorBuff"/>
+    </CEffectApplyBehavior>
 </Catalog>

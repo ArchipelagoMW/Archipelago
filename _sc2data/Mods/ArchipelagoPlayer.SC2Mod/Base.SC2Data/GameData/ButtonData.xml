@@ -1691,4 +1691,30 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-carrierrepairdrones.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_GravitonBeam">
+        <Icon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_PhoenixAiurGravitonBeam">
+        <Icon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_PhoenixAiurGravitonBeamPassive">
+        <Icon value="Assets\Textures\btn-ability-protoss-dualgravitonbeam.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-dualgravitonbeam.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_GravitonBeamVoidCampaign">
+        <Icon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Hotkey value="Button/Hotkey/GravitonBeam"/>
+        <HotkeyAlias value="GravitonBeam"/>
+    </CButton>
+    <CButton id="AP_VoidPhoenixPhasingArmor">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-PhasingArmor.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-PhasingArmor.dds"/>
+    </CButton>
 </Catalog>

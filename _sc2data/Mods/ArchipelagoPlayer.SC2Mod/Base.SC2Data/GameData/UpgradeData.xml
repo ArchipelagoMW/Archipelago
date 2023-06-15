@@ -3580,9 +3580,9 @@
         <InfoTooltipPriority value="2"/>
         <Race value="Protoss"/>
         <ScoreResult value="BuildOrder"/>
-<!--        <EffectArray Operation="Set" Reference="Actor,TechTreeCarrier,UnitIcon" Value="Assets\Textures\btn-unit-protoss-carrier.dds"/>-->
-<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeCarrier,Name" Value="Unit/Name/Carrier"/>-->
-<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeCarrier,Description" Value="Button/Tooltip/Carrier"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Actor,TechTreeCarrier,UnitIcon" Value="Assets\Textures\btn-unit-protoss-carrier.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,TechTreeCarrier,Name" Value="Unit/Name/Carrier"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,TechTreeCarrier,Description" Value="Button/Tooltip/Carrier"/>-->
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Carrier"/>
         <LeaderAlias value=""/>
@@ -3592,5 +3592,24 @@
     </CUpgrade>
     <CUpgrade id="AP_PurifierProtoss">
         <!-- Stub -->
+    </CUpgrade>
+    <CUpgrade id="AP_VoidPhoenixDoubleGraviton">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <ScoreResult value="BuildOrder"/>
+<!--        <EffectArray Operation="Set" Reference="Button,Phoenix,Tooltip" Value="Button/Tooltip/PhoenixAiur"/>-->
+<!--        <EffectArray Operation="Set" Reference="Button,Phoenix,AlertTooltip" Value="Button/Tooltip/PhoenixAiur"/>-->
+<!--        <EffectArray Operation="Set" Reference="Actor,TechTreePhoenix,UnitIcon" Value="Assets\Textures\btn-unit-protoss-phoenix.dds"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreePhoenix,Name" Value="Unit/Name/PhoenixAiur"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreePhoenix,Description" Value="Button/Tooltip/PhoenixAiur"/>-->
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_PhoenixAiur"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidPhoenixGravitonCampaignVersion">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
     </CUpgrade>
 </Catalog>

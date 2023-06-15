@@ -1237,4 +1237,20 @@
     <CRequirement id="AP_UseGravitonCatapult">
         <NodeArray index="Use" Link="AP_CountUpgradeCarrierLaunchSpeedUpgradeCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveVoidPhoenixGravitonCampaignVersion">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeVoidPhoenixGravitonCampaignVersionCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_NotHaveVoidPhoenixGravitonCampaignVersion">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeVoidPhoenixGravitonCampaignVersionCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVoidPhoenixGravitonDamage">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeVoidPhoenixGravitonDamageCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVoidPhoenixDoubleGraviton">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeVoidPhoenixDoubleGravitonCompleteOnly"/>
+    </CRequirement>
 </Catalog>

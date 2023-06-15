@@ -1681,6 +1681,10 @@
         <CombineArray value="AP_Dummy"/>
     </CValidatorCombine>
     <CValidatorUnitFilters id="AP_Dummy"/>
+    <CValidatorCombine id="AP_NotDummy">
+        <CombineArray value="AP_Dummy"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
     <CValidatorUnitCompareBehaviorCount id="AP_NoYoink">
         <Behavior value="AP_YoinkMarker"/>
         <ResultFailed value="Error,Error/CantTargetMultipleAbduct"/>
@@ -1994,4 +1998,82 @@
         <CombineArray value="AP_CasterIsStopped"/>
         <CombineArray value="CasterHasNoOrders"/>
     </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsNotVanillaLarva">
+        <Value value="Larva"/>
+        <Find value="0"/>
+        <ResultFailed value="Error,Error/CantTargetLarva"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsNotLarva">
+        <CombineArray value="AP_IsNotVanillaLarva"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsDisruptor">
+        <CombineArray value="AP_NotDummy"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveVoidPhoenixGravitonDamage">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveVoidPhoenixGravitonDamage"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoVanillaGravitonBeamInProgress">
+        <Behavior value="GravitonBeam"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoAPGravitonBeamInProgress">
+        <Behavior value="AP_GravitonBeam"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="NoGravitonBeamInProgress" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="CantTargetAirUnits"/>
+        <CombineArray value="AP_NoVanillaGravitonBeamInProgress"/>
+        <CombineArray value="AP_NoAPGravitonBeamInProgress"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotAbducted">
+        <Compare value="LE"/>
+        <Behavior value="AP_Yoink"/>
+        <ResultFailed value="Error,Error/NotAbducted"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_NoReaperKD8Knockback">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="GravitonBeamValidators">
+        <!-- Override -->
+        <CombineArray index="0" value="AP_CasterHasEnergyIfAvailableAndNotDead"/>
+        <CombineArray value="AP_NotAbducted"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveVoidPhoenixDoubleGraviton">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveVoidPhoenixDoubleGraviton"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorLocationEnumArea id="AP_VoidPhoenixDoubleGravitonEnemyNearTarget" parent="HostileSearch">
+        <WhichLocation Value="TargetUnit"/>
+        <AreaArray Radius="2.5"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Massive,Structure,Heroic,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareVital id="AP_CasterMaxEnergyGT0">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Type value="Maximum"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorCombine id="AP_CasterNotHaveEnergyBar">
+        <CombineArray value="AP_CasterMaxEnergyGT0"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_CasterHasEnergyOrNotHaveEnergyBar">
+        <CombineArray value="CasterHasEnergy"/>
+        <CombineArray value="AP_CasterNotHaveEnergyBar"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_CasterHasEnergyIfAvailableAndNotDead">
+        <Type value="And"/>
+        <CombineArray value="AP_CasterHasEnergyOrNotHaveEnergyBar"/>
+        <CombineArray value="NotDead"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterCanUseGravitonDoubleBeam">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_CanUseGravitonDoubleBeam"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

@@ -562,4 +562,20 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
     </CLight>
+    <CLight id="AP_PurifierPhoenixPortrait" parent="default">
+        <ToDInfoArray index="0" Id="PhoenixPortrait" AmbientColor="0.184314,0.125490,0.090196">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.350000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.784314,0.768628,0.749020"/>
+                <ColorMultiplier value="1.365000"/>
+                <SpecularColor value="0.992157,0.949020,0.811765"/>
+                <SpecColorMultiplier value="2.512000"/>
+                <Direction value="0.619311,-0.202901,-0.758476"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.243137,0.450980,0.941177" ColorMultiplier="0.661000" Direction="-0.770999,-0.418792,-0.479764"/>
+            <DirectionalLight index="Back" Color="0.992157,0.596078,0.000000" ColorMultiplier="2.210000" Direction="-0.470323,-0.522530,0.711168"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>

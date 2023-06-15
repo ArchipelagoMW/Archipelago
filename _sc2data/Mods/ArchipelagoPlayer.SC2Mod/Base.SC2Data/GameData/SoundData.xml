@@ -11,6 +11,43 @@
             <FacialFile value="LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam1^.fxe"/>
         </AssetArrayTemplate>
     </CSound>
+    <CSound default="1" id="AP_ProtossAck_Void" parent="ProtossAck">
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound default="1" id="AP_ProtossHelp" parent="Alert">
+        <EditorCategories value="Race:Protoss"/>
+        <Mode value="3DWorld"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound default="1" id="AP_ProtossPissed" parent="ProtossAck">
+        <Flags index="Download" value="0"/>
+        <Select value="Sequential"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound default="1" id="AP_ProtossReady" parent="Ready">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
     <CSound id="AP_Medic_Attack" parent="TerranAck">
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack00.ogg" FacialAnim="Medic_Attack00"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack01.ogg" FacialAnim="Medic_Attack01"/>
@@ -3969,43 +4006,6 @@
         <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
         <LoopCount value="-1"/>
     </CSound>
-    <CSound default="1" id="AP_ProtossAck_Void" parent="ProtossAck">
-        <AssetArrayTemplate>
-            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
-            <FacialAnim value="^TemplateParam1^"/>
-            <FacialGroup value="^TemplateParam1^"/>
-            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
-        </AssetArrayTemplate>
-    </CSound>
-    <CSound default="1" id="AP_ProtossHelp" parent="Alert">
-        <EditorCategories value="Race:Protoss"/>
-        <Mode value="3DWorld"/>
-        <AssetArrayTemplate>
-            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
-            <FacialAnim value="^TemplateParam1^"/>
-            <FacialGroup value="^TemplateParam1^"/>
-            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
-        </AssetArrayTemplate>
-    </CSound>
-    <CSound default="1" id="AP_ProtossPissed" parent="ProtossAck">
-        <Flags index="Download" value="0"/>
-        <Select value="Sequential"/>
-        <AssetArrayTemplate>
-            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
-            <FacialAnim value="^TemplateParam1^"/>
-            <FacialGroup value="^TemplateParam1^"/>
-            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
-        </AssetArrayTemplate>
-    </CSound>
-    <CSound default="1" id="AP_ProtossReady" parent="Ready">
-        <EditorCategories value="Race:Protoss"/>
-        <AssetArrayTemplate>
-            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.ogg"/>
-            <FacialAnim value="^TemplateParam1^"/>
-            <FacialGroup value="^TemplateParam1^"/>
-            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
-        </AssetArrayTemplate>
-    </CSound>
     <CSound id="AP_Destroyer_Attack" parent="AP_ProtossAck_Void">
         <AssetArray TemplateParam="Destroyer_Attack00"/>
         <AssetArray TemplateParam="Destroyer_Attack01"/>
@@ -4113,5 +4113,95 @@
         <DupeDestroyCount value="4"/>
         <Pitch value="-1.820000,1.640000"/>
         <Volume value="-12.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Mirage_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Mirage_Attack00"/>
+        <AssetArray TemplateParam="Mirage_Attack01"/>
+        <AssetArray TemplateParam="Mirage_Attack02"/>
+        <AssetArray TemplateParam="Mirage_Attack03"/>
+        <AssetArray TemplateParam="Mirage_Attack04"/>
+        <AssetArray TemplateParam="Mirage_Attack05"/>
+        <AssetArray TemplateParam="Mirage_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Mirage_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="Mirage_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Mirage_Movement" parent="Movement">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Phoenix\Phoenix_Movement01.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Phoenix\Phoenix_Movement02.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Phoenix\Phoenix_Movement03.wav"/>
+        <Pitch value="-3.000000,-2.000000"/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_Mirage_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="Mirage_Pissed00"/>
+        <AssetArray TemplateParam="Mirage_Pissed01"/>
+        <AssetArray TemplateParam="Mirage_Pissed02"/>
+        <AssetArray TemplateParam="Mirage_Pissed03"/>
+        <AssetArray TemplateParam="Mirage_Pissed04"/>
+        <AssetArray TemplateParam="Mirage_Pissed05"/>
+        <AssetArray TemplateParam="Mirage_Pissed06"/>
+        <AssetArray TemplateParam="Mirage_Pissed07"/>
+        <AssetArray TemplateParam="Mirage_Pissed08"/>
+        <AssetArray TemplateParam="Mirage_Pissed09"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Mirage_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="Mirage_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Mirage_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Mirage_What00"/>
+        <AssetArray TemplateParam="Mirage_What01"/>
+        <AssetArray TemplateParam="Mirage_What02"/>
+        <AssetArray TemplateParam="Mirage_What03"/>
+        <AssetArray TemplateParam="Mirage_What04"/>
+        <AssetArray TemplateParam="Mirage_What05"/>
+        <AssetArray TemplateParam="Mirage_What06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Mirage_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Mirage_Yes00"/>
+        <AssetArray TemplateParam="Mirage_Yes01"/>
+        <AssetArray TemplateParam="Mirage_Yes02"/>
+        <AssetArray TemplateParam="Mirage_Yes03"/>
+        <AssetArray TemplateParam="Mirage_Yes04"/>
+        <AssetArray TemplateParam="Mirage_Yes05"/>
+        <AssetArray TemplateParam="Mirage_Yes06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_PhoenixPurifier_Cloak_On" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOn01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOn02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOn03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOn04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOn05_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_PhoenixPurifier_Cloak_Off" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOff01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOff02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOff03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOff04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Mirage_PhoenixPurifier_CloakOff05_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-8.000000,-8.000000"/>
     </CSound>
 </Catalog>
