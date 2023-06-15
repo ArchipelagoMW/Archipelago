@@ -1067,7 +1067,11 @@ def initialize_blank_mission_dict(location_table):
 
 
 def get_persistent_install_path() -> str | None:
-    return persistent_load().get("Starcraft 2", {}).get("path", None)
+    game_path = persistent_load().get("Starcraft 2", {}).get("path", None)
+    if game_path is None and 'SC2PATH' in os.environ:
+        game_path = os.environ['SC2PATH']
+        persistent_store("Starcraft 2", "path", game_path)
+    return game_path
 
 
 def check_game_install_path() -> bool:
