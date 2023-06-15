@@ -3771,6 +3771,229 @@
         <On Terms="Behavior.AP_NovaApolloCloak.On" Send="Create"/>
         <Sound value="Terran_CloakOn"/>
     </CActorSound>
+    <CActorUnit id="AP_Carrier" parent="GenericUnitStandard" unitName="AP_Carrier">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="Abil.CarrierHangar.Launch" Send="AnimPlay Cover Cover 0 0.500000 0.500000 3.000000 AsDuration"/>
+        <On Terms="Behavior.WarpInEffect.On; !ValidateUnit AP_NoDarkProtoss" Send="ModelSwap CarrierWarpInStargate"/>
+        <On Terms="Behavior.WarpInEffect.On; !ValidateUnit AP_NoDarkProtoss" Send="$Spell"/>
+        <On Terms="Behavior.WarpInEffect.Off; !ValidateUnit AP_NoDarkProtoss" Send="ModelSwap Carrier"/>
+        <On Terms="Behavior.WarpInEffect.Off; !ValidateUnit AP_NoDarkProtoss" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkCarrier"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkCarrier"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Carrier_Land"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="Behavior.WarpInEffect.On; !ValidateUnit AP_NoDarkProtoss" Send="ModelSwap CarrierWarpInStargate"/>
+        <On Terms="Behavior.WarpInEffect.On; !ValidateUnit AP_NoDarkProtoss" Send="$Spell"/>
+        <On Terms="Behavior.WarpInEffect.On; !ValidateUnit AP_NoDarkProtoss" Send="AnimBaselineStop"/>
+        <On Terms="Behavior.WarpInEffect.Off; !ValidateUnit AP_NoDarkProtoss" Send="ModelSwap Carrier"/>
+        <On Terms="Behavior.WarpInEffect.Off; !ValidateUnit AP_AP_NoDarkProtoss" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Behavior.WarpInEffect.Off; !ValidateUnit AP_NoDarkProtoss" Send="AnimBaselineStart"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Abil.AP_CarrierHyperjump.SourceCastStart" Send="SetTintColor 0,192,255 6.000000 OneShot HyperjumpingTint"/>
+        <On Terms="Abil.AP_CarrierHyperjump.SourceFinishStart" Send="ClearTintColor 0.000000 HyperjumpingTint"/>
+        <On Terms="Abil.AP_CarrierHyperjump.SourceCastStart" Send="SetOpacity 0.100000 6.000000 HyperjumpingOpacity"/>
+        <On Terms="Abil.AP_CarrierHyperjump.SourceFinishStart" Send="ClearOpacity 0.000000 HyperjumpingOpacity"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <HostSiteOps Ops="SOpBankerCarrier"/>
+        <Model value="Carrier"/>
+        <AnimBlendTime value="0.750000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="CarrierWarpIn"/>
+        <DeathArray index="Normal" ModelLink="CarrierDeath" SoundLink=""/>
+        <DeathCustoms ModelLink="DarkCarrierDeath" Name="DarkProtoss"/>
+        <DeathCustoms>
+            <ActorModel value="CarrierDeathRagdoll"/>
+            <ModelLink value="CarrierDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathLarge" Name="Hallucination"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowLarge"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="CarrierPlacement"/>
+        <PortraitModel value="CarrierPortrait"/>
+        <BarOffset value="60"/>
+        <BarWidth value="156"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-carrier.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="Carrier_Ready"/>
+        <SoundArray index="Help" value="Carrier_Help"/>
+        <SoundArray index="What" value="Carrier_What"/>
+        <SoundArray index="Yes" value="CarrierVoid_Yes"/>
+        <SoundArray index="Attack" value="Carrier_Attack"/>
+        <SoundArray index="Pissed" value="Carrier_Pissed"/>
+        <SoundArray index="Movement" value="Carrier_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-carrier.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorUnit id="AP_CarrierAiur" parent="GenericUnitStandard" unitName="AP_CarrierAiur">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="Abil.CarrierHangar.Launch" Send="AnimPlay Cover Cover 0 0.500000 0.500000 3.000000 AsDuration"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Carrier_Land"/>
+        <On Terms="Behavior.PortalDeath.On" Send="ModelSwap AP_CarrierPortalDeath"/>
+        <On Terms="Behavior.PortalDeath.On" Send="AnimPlay PortalDeath Death"/>
+        <On Terms="Behavior.PortalDeath.On" Send="AnimPlay PortalDeathGL GLstand PlayForever"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap AP_CarrierAiurWarpInStargate"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="$Spell"/>
+        <On Terms="AnimDone; AnimName Spell" Send="ModelSwap AP_CarrierAiur"/>
+        <HostSiteOps Ops="SOpBankerCarrier"/>
+        <AnimBlendTime value="0.750000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="AP_CarrierAiurWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_CarrierAiurDeath" SoundLink=""/>
+        <PlacementModel value="AP_CarrierAiurPlacement"/>
+        <PortraitModel value="CarrierPortrait"/>
+        <BarOffset value="60"/>
+        <BarWidth value="156"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-CarrierHero.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="Carrier_Ready"/>
+        <SoundArray index="Help" value="CarrierVoid_Help"/>
+        <SoundArray index="What" value="Carrier_What"/>
+        <SoundArray index="Yes" value="CarrierVoid_Yes"/>
+        <SoundArray index="Attack" value="Carrier_Attack"/>
+        <SoundArray index="Pissed" value="Carrier_Pissed"/>
+        <SoundArray index="Movement" value="Carrier_Movement"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Protoss-CarrierHero.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Carrier-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_Carrier_Land" parent="SoundOneShot">
+        <Sound value="Carrier_Land"/>
+    </CActorSound>
+    <CActorAction id="AP_CarrierInterceptorBombAttack" parent="GenericAttack" effectImpact="AP_CarrierInterceptorBombDamage" effectLaunch="AP_CarrierInterceptorBombLM">
+        <LaunchAssets Sound="PhotonCannon_AttackLaunch"/>
+        <Missile value="AP_CarrierInterceptorBombAttackMissile"/>
+        <ImpactMap index="None" Sound="PhotonCannon_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_CarrierInterceptorBombAttackMissile" parent="GenericAttackMissile" unitName="AP_CarrierInterceptorBombWeapon">
+        <On Terms="UnitBirth" Send="AnimSetTimeScaleAbsolute Lifetime 1.000000"/>
+        <Model value="AP_CarrierInterceptorBombWeapon"/>
+    </CActorMissile>
+    <CActorModel id="AP_CarrierInterceptorBombImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_CarrierInterceptorBombDamage.Start" Send="Create"/>
+        <Model value="AP_CarrierInterceptorBombImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_CarrierInterceptorLaunch" parent="SoundOneShot">
+        <On Terms="Abil.AP_CarrierHangar.Launch" Send="Create"/>
+<!--        <On Terms="Abil.AP_CarrierHangarVoid.Launch" Send="Create"/>-->
+        <Sound value="Carrier_InterceptorLaunch"/>
+    </CActorSound>
+    <CActorUnit id="AP_CarrierRepairDrone" parent="GenericUnitStandard" unitName="AP_CarrierRepairDrone">
+        <On Terms="Behavior.WarpInEffect15.On" Send="ModelSwap ObserverWarpIn"/>
+        <On Terms="Behavior.WarpInEffect15.On" Send="$Birth"/>
+        <On Terms="Behavior.WarpInEffect15.Off" Send="ModelSwap Observer"/>
+        <On Terms="Behavior.WarpInEffect15.Off" Send="AnimBaselineStart"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Observer_Land"/>
+        <AnimBlendTime value="1.200000"/>
+        <BuildModel value="ProtossGenericWarpInOut"/>
+        <DeathArray index="Normal" ModelLink="AP_CarrierRepairDroneDeath" SoundLink="Observer_Explode"/>
+        <PortraitModel value="ObserverPortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-observer.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_CarrierRepairDrone"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Observer_Ready"/>
+        <SoundArray index="What" value="Observer_What"/>
+        <SoundArray index="Yes" value="Observer_Yes"/>
+        <SoundArray index="Pissed" value="Observer_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-observer.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorBeamSimple id="AP_CarrierRepairDroneHealBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.AP_CarrierRepairDroneHealTargetAB.Start; At Target" Send="Create"/>
+        <On Terms="Behavior.AP_CarrierRepairDroneHealTarget.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,115,255"/>
+        <Model value="AP_CarrierRepairDroneHealBeam"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <HostLaunch Subject="_Selectable" Scope="Caster"/>
+        <HostLaunchSiteOps Ops="SOpAttachWeapon"/>
+        <HostImpact Subject="_Selectable" Scope="Target"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_CarrierRepairDroneHealImpact">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Behavior.AP_CarrierRepairDroneHealTarget.On" Send="Create"/>
+        <On Terms="Behavior.AP_CarrierRepairDroneHealTarget.Off" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_CarrierRepairDroneHealImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_CarrierRepairDroneHealSound" parent="SoundContinuous">
+        <On Terms="Behavior.AP_CarrierRepairDroneHealController.On" Send="Create"/>
+        <On Terms="Behavior.AP_CarrierRepairDroneHealController.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_Carrier_RepairDroneHealStartSound"/>
+        <On Terms="ActorDestruction" Send="Create AP_Carrier_RepairDroneHealStopSound"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_Carrier_RepairDroneHeal_Loop"/>
+    </CActorSound>
+    <CActorSound id="AP_Carrier_RepairDroneHealStopSound" parent="SoundOneShot">
+        <Sound value="AP_Carrier_RepairDroneHeal_End"/>
+    </CActorSound>
+    <CActorSound id="AP_Carrier_RepairDroneHealStartSound" parent="SoundOneShot">
+        <Sound value="AP_Carrier_RepairDroneHeal_Start"/>
+    </CActorSound>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -7641,6 +7864,115 @@
         <Host Subject="AP_NPSwarmModel"/>
         <Sound value="Infestor_AttackLaunch_NP"/>
     </CActorSound>
+    <CActorSound id="AP_Interceptor_Land" parent="SoundOneShot">
+        <Sound value="Interceptor_Land"/>
+    </CActorSound>
+    <CActorUnit id="AP_Interceptor" parent="GenericUnitStandard" unitName="AP_Interceptor">
+        <Model value="Interceptor"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkInterceptor"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkInterceptor"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Interceptor_Land"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <DeathCustoms ModelLink="InterceptorDeathRagdoll" Name="RagdollBasic" PhysicsMatchKeysOrdered="BasicAir,Basic">
+            <BodySquibs Name="Basic" Model="ProtossTinyRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ModelLink="DarkInterceptorDeath" Name="DarkProtoss"/>
+        <DeathArray index="Normal" ModelLink="InterceptorDeath" SoundLink="Interceptor_Explode"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="Behavior.AP_ReleaseInterceptorsTimedLifeWarning.Off" Send="AnimPlay Work Work PlayForever"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowSmall"/>
+            <SoundLink value="ShadowUnit_Small_DeathFX"/>
+            <VoiceLink value="ShadowUnit_Small_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Magazine" value="0"/>
+        <StatusBarFlags index="Workers" value="0"/>
+        <StatusBarFlags index="Custom" value="0"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <BarWidth value="36"/>
+        <BarOffset value="25"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Movement" value="InterceptorWeaponBirth"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <Aliases value="_UnitSmall"/>
+    </CActorUnit>
+    <CActorAction id="AP_InterceptorAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_InterceptorBeamPersistent.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_InterceptorBeamDamage.Start; At Caster; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Signal.*.DarkProtossTest" Send="RefSetFromMsg ::actor.sender ::Sender"/>
+        <On Terms="Signal.*.DarkProtossTest; ValidateUnit AP_NoDarkProtoss" Target="::actor.sender" Send="Signal DarkProtossSwap"/>
+        <On Terms="Effect.AP_InterceptorBeamDamage.Stop; At Caster; FromEffectTreeDescendant" Send="ActionDamagePhysics"/>
+        <LaunchAttachQuery Methods="AMFilterWeapon"/>
+        <LaunchAssets Sound="Interceptor_AttackLaunch"/>
+        <Beam value="AP_InterceptorAttackBeam"/>
+        <BeamScope value="Caster"/>
+        <ImpactMap index="None" Model="InterceptorAttackImpact" Sound="Interceptor_AttackImpact"/>
+        <ImpactModel value="DarkInterceptorTestImpact"/>
+        <DamagePhysics Name="InterceptorBeamImpact" MatchKeys="Basic" Physics="InterceptorAttackDeathForce"/>
+        <DamagePhysics Name="InterceptorBeamImpact" MatchKeys="BasicAir" Physics="InterceptorAttackAirDeathForce"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_InterceptorAttackBeam">
+        <Macros value="ActionTargetTeleportDestroy"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkInterceptorAttackBeam"/>
+        <Model value="InterceptorAttackBeam"/>
+    </CActorBeamSimple>
+    <CActorUnit id="AP_ReleaseInterceptorsBeacon" parent="GenericUnitMinimal" unitName="ReleaseInterceptorsBeacon">
+        <On Terms="ActorCreation" Send="$Stand 0 -1.000000 -1.000000 60.000000 AsDuration"/>
+        <Model value="Invisible"/>
+        <HighlightTooltip value="Unit/Name/AP_ReleaseInterceptorsBeacon"/>
+    </CActorUnit>
+    <CActorModel id="AP_ReleaseInterceptorsBeaconAddition" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ReleaseInterceptorsInitialCP.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.250000 DelayDeath"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.250000 DelayDeath"/>
+        <On Terms="TimerExpired; TimerName DelayDeath" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="ReleaseInterceptorsBeaconAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_ReleaseInterceptorsCooldown" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_ReleaseInterceptorsCooldown.On" Send="Create"/>
+        <On Terms="Behavior.AP_ReleaseInterceptorsCooldown.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="ReleaseInterceptorsCooldown"/>
+    </CActorModel>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -12249,7 +12581,6 @@
         <On Terms="ActorCreation" Send="TimerSet 0.900000 DelayDeath"/>
         <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
         <LaunchRequest Subject="AP_VoidRayChargeBeamBounceAttackBeam1ImpactSite" Actor="Find"/>
-        <Beam value="AP_VoidRayChargeBeamBounce1AttackBeam"/>
         <BeamScope value="Caster"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance"/>
         <AcquisitionYawHalfArc value="0.100000"/>
@@ -12305,7 +12636,6 @@
         <On Terms="ActorCreation" Send="TimerSet 0.900000 DelayDeath"/>
         <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
         <LaunchRequest Subject="AP_VoidRayChargeBeamBounceAttackBeam1ImpactSite" Actor="Find"/>
-        <Beam value="AP_VoidRayChargeBeamBounce3AttackBeam"/>
         <BeamScope value="Caster"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance"/>
         <AcquisitionYawHalfArc value="0.100000"/>
@@ -12332,7 +12662,6 @@
         <On Terms="Effect.VoidRayChargeBeamBounceDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
         <On Terms="Effect.AP_VoidRayChargeBeamBounce.Stop" Send="Destroy"/>
         <LaunchAttachQuery Methods="Weapon 1"/>
-        <Beam value="AP_VoidRayChargeBeamBounceAttackBeam"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
         <ImpactSite value="AP_VoidRayChargeBeamBounceAttackBeam1ImpactSite"/>
         <ActionFlags index="AlignedImpactsAndDamages" value="1"/>

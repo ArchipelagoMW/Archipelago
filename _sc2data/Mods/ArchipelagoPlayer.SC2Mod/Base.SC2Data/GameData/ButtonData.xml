@@ -1676,4 +1676,19 @@
         <Icon value="Assets\Textures\btn-ability-protoss-beambounce.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_GravitonCatapult">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-GravitonCatapult.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-GravitonCatapult.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Interceptor">
+        <Icon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_RepairDrones">
+        <Icon value="Assets\Textures\btn-ability-protoss-carrierrepairdrones.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-carrierrepairdrones.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

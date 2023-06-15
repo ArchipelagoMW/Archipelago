@@ -269,6 +269,14 @@
         <CombineArray value="CasterNotDead"/>
         <CombineArray value="TargetIsPathable"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_CarrierRepairDroneHealNotCasting">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_CarrierRepairDroneHealController"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CarrierRepairDroneHealTargetNotBeingHealed">
+        <ResultFailed value="Error,VoidScienceVesselNanoRepairTargetNotBeingHealed"/>
+        <Behavior value="AP_CarrierRepairDroneHealTarget"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="CasterIsCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_CasterIsVanillaCommandCenter"/>
@@ -352,6 +360,9 @@
         <Find value="1"/>
         <Value value="AP_HotSHaveSwarmHostSplitB"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareSpeed id="AP_InterceptorIsNotStationary">
+        <Compare value="NE"/>
+    </CValidatorUnitCompareSpeed>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>
@@ -1357,6 +1368,26 @@
         <CombineArray value="AP_TacticalBurrowSwarmHostDown"/>
         <Negate value="1"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_ReleaseInterceptorsBeaconHasNoStacks">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ReleaseInterceptorsBeacon"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_ReleaseInterceptorsDestinationNotReached">
+        <Type value="And"/>
+        <CombineArray value="AP_ReleaseInterceptorsNotNearDestination"/>
+        <CombineArray value="AP_InterceptorIsNotStationary"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareRange id="AP_ReleaseInterceptorsNotNearDestination">
+        <WhichLocation Effect="AP_ReleaseInterceptorsSet"/>
+        <Compare value="GE"/>
+        <Value Value="TargetUnit"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorLocationCompareRange id="AP_ReleaseInterceptorsNotNearStartingPoint">
+        <WhichLocation Effect="AP_ReleaseInterceptorsSet"/>
+        <Compare value="GT"/>
+        <Range value="15"/>
+        <Value Value="SourceUnit"/>
+    </CValidatorLocationCompareRange>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
         <!-- Override -->
         <Type value="And"/>
@@ -1897,4 +1928,70 @@
         <Behavior value="AP_VoidRayChargeBeamPhase3"/>
         <Compare value="NE"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_NoDarkProtoss">
+        <Value value="AP_UseDarkProtoss"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HasPurifierProtoss">
+        <Value value="AP_UsePurifierProtoss"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasTerrazineShadow">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="TerrazineShadow"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasVoidShade">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GT"/>
+        <Behavior value="VoidShade"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorLocationCompareRange id="AP_CasterisGreaterThan5">
+        <WhichLocation Value="TargetUnit"/>
+        <Compare value="GT"/>
+        <Range value="5"/>
+    </CValidatorLocationCompareRange>
+    <CValidatorCombine id="AP_ReleaseInterceptorsNotNearStartingPointOrNotDoingStuff">
+        <CombineArray value="AP_ReleaseInterceptorsNotNearStartingPoint"/>
+        <CombineArray value="AP_ReleaseInterceptorsNotDoingStuff"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_ReleaseInterceptorsNotDoingStuff">
+        <CombineArray value="AP_InterceptorNotPatrolling"/>
+        <CombineArray value="AP_InterceptorNotAttacking"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_InterceptorNotPatrolling">
+        <AbilLink value="move"/>
+        <Find value="0"/>
+        <AbilCmdIndex value="1"/>
+        <WhichUnit Value="Source"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_InterceptorNotAttacking">
+        <AbilLink value="attack"/>
+        <Find value="0"/>
+        <WhichUnit Value="Source"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorPlayerRequirement id="AP_HaveVoidCarrierBombingRun">
+        <Value value="AP_HaveVoidCarrierBombingRun"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsTerrazineShadow">
+        <Value value="1"/>
+        <Behavior value="TerrazineShadow"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitOrderQueue id="AP_CasterIsNotMoving">
+        <AbilLink value="move"/>
+        <Find value="0"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_CasterIsStopped">
+        <AbilLink value="stop"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_CasterIsNotMovingOrStopped">
+        <CombineArray value="AP_CasterIsNotMoving"/>
+        <CombineArray value="AP_CasterIsStopped"/>
+        <CombineArray value="CasterHasNoOrders"/>
+    </CValidatorCombine>
 </Catalog>

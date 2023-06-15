@@ -3402,7 +3402,7 @@
     <CUpgrade id="AP_VoidRayBeamCanCharge">
         <Flags index="UpgradeCheat" value="0"/>
         <AffectedUnitArray value="AP_VoidRay"/>
-<!--        <AffectedUnitArray value="VoidRayAiur"/>-->
+        <!--        <AffectedUnitArray value="VoidRayAiur"/>-->
         <AffectedUnitArray value="AP_VoidRayTaldarim"/>
         <AffectedUnitArray value="AP_VoidRayShakuras"/>
     </CUpgrade>
@@ -3554,5 +3554,43 @@
         <AffectedUnitArray value="AP_RoboticsBay"/>
         <AffectedUnitArray value="AP_DarkShrine"/>
         <AffectedUnitArray value="AP_TwilightCouncil"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CarrierLaunchSpeedUpgrade">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-gravitoncatapult.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorLaunch,Effect" Value="AP_InterceptorLaunchUpgradedPersistent"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Carrier"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HaveCarrier">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Carrier"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_HaveCarrierBase">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+<!--        <EffectArray Operation="Set" Reference="Actor,TechTreeCarrier,UnitIcon" Value="Assets\Textures\btn-unit-protoss-carrier.dds"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeCarrier,Name" Value="Unit/Name/Carrier"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeCarrier,Description" Value="Button/Tooltip/Carrier"/>-->
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Carrier"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_DarkProtoss">
+        <!-- Stub -->
+    </CUpgrade>
+    <CUpgrade id="AP_PurifierProtoss">
+        <!-- Stub -->
     </CUpgrade>
 </Catalog>

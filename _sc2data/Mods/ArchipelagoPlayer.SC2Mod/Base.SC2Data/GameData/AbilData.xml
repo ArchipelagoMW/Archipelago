@@ -2417,6 +2417,107 @@
         <AutoCastRange value="5"/>
         <AutoCastCountMin value="1"/>
     </CAbilMorph>
+    <CAbilArmMagazine id="AP_CarrierAiurHanger">
+        <AbilSetId value="CarrierAiurHanger"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Flags index="Retarget" value="1"/>
+        <Leash value="12"/>
+        <InfoArray index="Ammo1" Time="10" CountStart="4" Manage="Recall" Unit="AP_Interceptor">
+            <Charge Link="CarrierInterceptor" Location="Unit"/>
+            <Button DefaultButtonFace="Interceptor" Requirements="AP_ArmInterceptor">
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+        </InfoArray>
+        <Alert value="TrainComplete"/>
+        <EffectArray index="Death" value="InterceptorFate"/>
+        <MaxCount value="8"/>
+    </CAbilArmMagazine>
+    <CAbilArmMagazine id="AP_CarrierHangar">
+        <AbilSetId value="CarrierHanger"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Flags index="Retarget" value="1"/>
+        <Leash value="12"/>
+        <InfoArray index="Ammo1" Time="10" CountStart="4" Manage="Recall" Unit="AP_Interceptor">
+            <Charge Link="CarrierInterceptor" Location="Unit"/>
+            <Cooldown Link="CarrierTrainInterceptor" TimeUse="0.01"/>
+            <Button DefaultButtonFace="Interceptor" Requirements="AP_ArmInterceptor">
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="LeashRetarget" value="1"/>
+        </InfoArray>
+        <Alert value="TrainComplete"/>
+<!--        <EffectArray index="Create" value="AP_InterceptorCreateAB"/>-->
+        <EffectArray index="Death" value="InterceptorFate"/>
+        <MaxCount value="8"/>
+    </CAbilArmMagazine>
+    <CAbilArmMagazine id="AP_CarrierRepairDroneHanger">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Launch value="ReleaseAtSource"/>
+        <Flags index="AutoCreate" value="1"/>
+        <Flags index="Retarget" value="1"/>
+        <Leash value="4"/>
+        <InfoArray index="Ammo1" CountStart="2" Manage="Recall" Unit="AP_CarrierRepairDrone">
+            <Charge HideCount="1" Link="CarrierRepairDrone" Location="Unit"/>
+            <Button DefaultButtonFace="RepairDrones">
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+        </InfoArray>
+        <EffectArray index="Create" value="AP_CarrierRepairDroneRecall"/>
+        <ExternalAngle value="-135"/>
+        <ExternalAngle value="135"/>
+        <MaxCount value="2"/>
+    </CAbilArmMagazine>
+    <CAbilEffectTarget id="AP_CarrierHyperjump">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="CarrierHyperjumpTeleportSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="120"/>
+        </Cost>
+        <Range value="500"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="CarrierHyperjump"/>
+        <!--CmdButtonArray index="Execute" DefaultButtonFace="CarrierHyperjump" Requirements="HaveVoidCarrierHyperjump"/-->
+        <CastIntroTime value="0"/>
+        <CastOutroTime value="6"/>
+        <ShowProgressArray index="Channel" value="1"/>
+        <ProgressButtonArray index="Channel" value="CarrierHyperjump"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_CarrierRepairDroneHeal">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_CarrierRepairDroneHealSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <TargetFilters value="Mechanical,Visible;Self,Neutral,Enemy,Missile,Uncommandable,UnderConstruction,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSAlliancePassive"/>
+            <SortArray value="TSLifeFraction"/>
+            <SortArray value="TSDistance"/>
+        </TargetSorts>
+        <Range value="4"/>
+        <AutoCastAcquireLevel value="Defensive"/>
+        <AutoCastFilters value="Mechanical,Visible;Self,Neutral,Enemy,Missile,Dead,Hidden,Invulnerable"/>
+        <AutoCastRange value="8"/>
+        <AutoCastValidatorArray value="NotWarpingIn"/>
+        <AutoCastValidatorArray value="AP_CarrierRepairDroneHealNotCasting"/>
+        <AutoCastValidatorArray value="AP_CarrierRepairDroneHealTargetNotBeingHealed"/>
+        <AutoCastValidatorArray value="AP_CasterIsNotMovingOrStopped"/>
+        <DefaultError value="RequiresHealTarget"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="CarrierRepairDroneHeal"/>
+        <AcquireAttackers value="1"/>
+        <RangeSlop value="2"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -3328,6 +3429,11 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_NPSwarm"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
+    <CAbilQueue id="AP_HangarQueue5">
+        <EditorCategories value="Race:Neutral,AbilityorEffectType:Structures"/>
+        <QueueSize value="5"/>
+        <Flags index="Passive" value="1"/>
+    </CAbilQueue>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

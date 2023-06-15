@@ -4070,4 +4070,48 @@
         <Flags index="NeedsTTS" value="1"/>
         <Volume value="-2.000000,-2.000000"/>
     </CSound>
+    <CSound id="AP_Carrier_RepairDroneHeal_Loop" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray>
+            <File value="AP\Assets\Sounds\CarrierAiur_ReconstructionBeam_Loop01_1ch.wav"/>
+            <LoopCount value="-1"/>
+            <Pitch value="-0.500000,0.500000"/>
+            <FacialGroup value=""/>
+        </AssetArray>
+        <AssetArray>
+            <File value="AP\Assets\Sounds\CarrierAiur_ReconstructionBeam_Loop02_1ch.wav"/>
+            <LoopCount value="-1"/>
+            <Pitch value="-0.500000,0.500000"/>
+            <FacialGroup value=""/>
+        </AssetArray>
+        <AssetArray>
+            <File value="AP\Assets\Sounds\CarrierAiur_ReconstructionBeam_Loop03_1ch.wav"/>
+            <LoopCount value="-1"/>
+            <Pitch value="-0.500000,0.000000"/>
+            <FacialGroup value=""/>
+        </AssetArray>
+        <DupeDestroyCount value="4"/>
+        <DupeHistoryCount value="8"/>
+        <DupeMuteCount value="8"/>
+        <Pitch value="-1.820000,1.640000"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
+    <CSound id="AP_Carrier_RepairDroneHeal_Start" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\CarrierAiur_ReconstructionBeam_Launch01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\CarrierAiur_ReconstructionBeam_Launch02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\CarrierAiur_ReconstructionBeam_Launch03_1ch.wav" FacialGroup=""/>
+        <DupeDestroyCount value="4"/>
+        <Pitch value="-1.820000,1.640000"/>
+        <Volume value="-12.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Carrier_RepairDroneHeal_End" parent="Spell">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="AP\Assets\Sounds\CarrierAiur_ReconstructionBeam_End01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\CarrierAiur_ReconstructionBeam_End02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\CarrierAiur_ReconstructionBeam_End03_1ch.wav" FacialGroup=""/>
+        <DupeDestroyCount value="4"/>
+        <Pitch value="-1.820000,1.640000"/>
+        <Volume value="-12.000000,-12.000000"/>
+    </CSound>
 </Catalog>

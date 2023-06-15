@@ -2196,4 +2196,30 @@
         <Tooltip value=""/>
         <Count Link="AP_VoidRayBeamCanCharge" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementLT id="AP_LTCountUnitInterceptorQueuedOrBetterAtUnit8">
+        <OperandArray index="0" value="AP_CountUnitInterceptorQueuedOrBetterAtUnit"/>
+        <OperandArray index="1" value="8"/>
+        <Tooltip value="RequirementNode/Tooltip/LT1066578242CountUnitInterceptorQueuedOrBetterAtUnit8"/>
+    </CRequirementLT>
+    <CRequirementCountUnit id="AP_CountUnitInterceptorQueuedOrBetterAtUnit">
+        <Count Link="AP_Interceptor" State="QueuedOrBetterAtUnit"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeDarkProtossCompleteOnly">
+        <Count Link="AP_DarkProtoss" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradePurifierProtossCompleteOnly">
+        <Count Link="AP_PurifierProtoss" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVoidCarrierBombingRunCompleteOnly">
+        <!-- This upgrade only exists as commented out in starcoop -->
+        <Count Link="AP_VoidCarrierBombingRun" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCarrierLaunchSpeedUpgradeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CarrierLaunchSpeedUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

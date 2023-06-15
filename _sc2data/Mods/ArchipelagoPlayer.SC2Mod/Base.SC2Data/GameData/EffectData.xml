@@ -6372,4 +6372,344 @@
         <EffectArray value="AP_VoidRayChargeBeamBounce2Search"/>
         <EffectArray value="AP_VoidRayChargeBeamBounce3Search"/>
     </CEffectSet>
+    <CEffectUseMagazine id="AP_CarrierInterceptor">
+        <EditorCategories value="Race:Protoss"/>
+        <AmmoEffect value="AP_CarrierInterceptorLaunchSet"/>
+    </CEffectUseMagazine>
+    <CEffectDamage id="AP_CarrierInterceptorBombDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="10"/>
+        <AreaArray Radius="0.5" Fraction="1"/>
+        <SearchFilters value="-;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_CarrierInterceptorBombLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="AP_CarrierInterceptorBombDamage"/>
+        <AmmoUnit value="AP_CarrierInterceptorBombWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_CarrierInterceptorLaunchSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_CarrierInterceptorLaunchTerrazineShadowAB"/>
+        <EffectArray value="AP_CarrierInterceptorLaunchVoidShadeAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_CarrierInterceptorLaunchTerrazineShadowAB">
+        <ValidatorArray index="0" value="AP_CasterHasTerrazineShadow"/>
+        <Behavior value="TerrazineShadow"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_CarrierInterceptorLaunchVoidShadeAB">
+        <ValidatorArray index="0" value="AP_CasterHasVoidShade"/>
+        <Behavior value="VoidShade"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_CarrierRepairDroneHealControllerAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_CarrierRepairDroneHealController"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_CarrierRepairDroneHealControllerRB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_CarrierRepairDroneHealController"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_CarrierRepairDroneHealSet">
+        <ValidatorArray value="AP_CarrierRepairDroneHealTargetNotBeingHealed"/>
+        <ValidatorArray value="AP_NotFullLife"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_CarrierRepairDroneHealControllerRB"/>
+        <EffectArray value="AP_CarrierRepairDroneHealTargetAB"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_CarrierRepairDroneHealTarget">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchUnit Value="Caster"/>
+        <ImpactUnit Value="Source"/>
+        <VitalArray index="Life">
+            <Change value="0.5"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="AP_CarrierRepairDroneHealTargetAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_CarrierRepairDroneHealTarget"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_CarrierRepairDroneHealTargetRB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_CarrierRepairDroneHealTargetAB"/>
+        <BehaviorLink value="AP_CarrierRepairDroneHealTarget"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_CarrierRepairDroneRecall">
+        <EditorCategories value=""/>
+        <Behavior value="AP_CarrierRepairDroneRecall"/>
+    </CEffectApplyBehavior>
+    <CEffectTeleport id="AP_CarrierRepairDroneRecallTeleport">
+        <ValidatorArray value="AP_CasterisGreaterThan5"/>
+        <EditorCategories value=""/>
+        <PlacementAround Value="CasterUnit"/>
+        <SourceLocation Value="TargetUnit"/>
+    </CEffectTeleport>
+    <CEffectCreatePersistent id="AP_InterceptorAiurLaunchPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="10"/>
+        <PeriodicValidator value="CasterNotDead"/>
+        <PeriodicEffectArray value="AP_CarrierInterceptor"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_InterceptorBeamDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_InterceptorBeamPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <InitialEffect value="AP_InterceptorBeamDamage"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_InterceptorBeamDamage"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_InterceptorCreateAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_CarrierInterceptorBombs"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_InterceptorLaunchPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="8"/>
+        <PeriodicValidator value="CasterNotDead"/>
+        <PeriodicEffectArray value="AP_CarrierInterceptor"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_InterceptorLaunchUpgradedPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="8"/>
+        <PeriodicValidator value="CasterNotDead"/>
+        <PeriodicEffectArray value="AP_CarrierInterceptor"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.25"/>
+        <PeriodicPeriodArray value="0.25"/>
+        <PeriodicPeriodArray value="0.25"/>
+        <PeriodicPeriodArray value="0.25"/>
+    </CEffectCreatePersistent>
+    <CEffectReleaseMagazine id="AP_ReleaseInterceptors">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Target"/>
+    </CEffectReleaseMagazine>
+    <CEffectApplyBehavior id="AP_ReleaseInterceptorsApplyTimedLife">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ReleaseInterceptorsTimedLife"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ReleaseInterceptorsApplyWander">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ReleaseInterceptorsWander"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ReleaseInterceptorsApplyWanderDelay">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ReleaseInterceptorsWanderDelay"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ReleaseInterceptorsBeaconAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_ReleaseInterceptorsSet"/>
+        <Behavior value="AP_ReleaseInterceptorsBeacon"/>
+    </CEffectApplyBehavior>
+    <CEffectCreateUnit id="AP_ReleaseInterceptorsBeaconCU">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetPoint"/>
+        <Origin Value="TargetPoint"/>
+        <CreateFlags index="PlacementIgnoreCliffTest" value="1"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <SpawnEffect value="AP_ReleaseInterceptorsSet"/>
+        <SpawnUnit value="AP_ReleaseInterceptorsBeacon"/>
+    </CEffectCreateUnit>
+    <CEffectRemoveBehavior id="AP_ReleaseInterceptorsBeaconRB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_ReleaseInterceptorsSet"/>
+        <BehaviorLink value="AP_ReleaseInterceptorsBeacon"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_ReleaseInterceptorsCooldownAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ReleaseInterceptorsCooldown"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_ReleaseInterceptorsInitialCP">
+        <EditorCategories value="Race:Protoss"/>
+        <OffsetVectorStartLocation Value="CasterUnit"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="AP_ReleaseInterceptorsIterateMagazine"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumMagazine id="AP_ReleaseInterceptorsIterateMagazine">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <MaxCount value="1"/>
+        <EffectInternal value="AP_ReleaseInterceptorsLaunch"/>
+        <EffectExternal value="AP_ReleaseInterceptorsReleaseSet"/>
+    </CEffectEnumMagazine>
+    <CEffectUseMagazine id="AP_ReleaseInterceptorsLaunch">
+        <EditorCategories value="Race:Protoss"/>
+        <AmmoEffect value="AP_ReleaseInterceptorsReleaseSet"/>
+        <TargetLocation Effect="AP_ReleaseInterceptorsSet" Value="TargetPoint"/>
+    </CEffectUseMagazine>
+    <CEffectIssueOrder id="AP_ReleaseInterceptorsLeashOrder">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="move"/>
+        <Player Value="Source"/>
+        <Target Effect="AP_ReleaseInterceptorsSet" Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_ReleaseInterceptorsMoveOrder">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="move"/>
+        <Player Value="Caster"/>
+        <Target Effect="AP_ReleaseInterceptorsSet" Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="ReleaseInterceptorsReleaseSet2">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ReleaseInterceptors"/>
+        <EffectArray value="AP_ReleaseInterceptorsMoveOrder"/>
+        <EffectArray value="AP_ReleaseInterceptorsApplyTimedLife"/>
+        <EffectArray value="AP_ReleaseInterceptorsApplyTimedLifeWarning"/>
+        <EffectArray value="AP_ReleaseInterceptorsApplyWanderDelay"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_ReleaseInterceptorsApplyTimedLifeWarning">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ReleaseInterceptorsTimedLifeWarning"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_ReleaseInterceptorsRemoveBeacon">
+        <ValidatorArray value="AP_ReleaseInterceptorsBeaconHasNoStacks"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Remove"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_ReleaseInterceptorsSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ReleaseInterceptorsInitialCP"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ReleaseInterceptorsLeashSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ReleaseInterceptorsLeashOrder"/>
+        <EffectArray value="AP_ReleaseInterceptorsApplyWanderDelay"/>
+        <ValidatorArray value="AP_ReleaseInterceptorsNotNearStartingPointOrNotDoingStuff"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_VoidCarrierInterceptorBombsCP">
+        <ValidatorArray value="SourceNotHidden"/>
+        <ValidatorArray value="HaveVoidCarrierBombingRun"/>
+        <ValidatorArray value="HaveCarrierInterceptorBombActive"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Flags index="RandomPeriod" value="1"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_CarrierInterceptorBombLM"/>
+        <PeriodicOffsetArray value="0.1,0,-3.2"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0.1875"/>
+        <PeriodicPeriodArray value="0.25"/>
+        <PeriodicPeriodArray value="0.3125"/>
+        <PeriodicPeriodArray value="0.375"/>
+        <PeriodicPeriodArray value="0.4375"/>
+        <PeriodicPeriodArray value="0.5"/>
+        <PeriodicPeriodArray value="0.5625"/>
+        <PeriodicPeriodArray value="0.625"/>
+        <PeriodicPeriodArray value="0.6875"/>
+        <PeriodicPeriodArray value="0.75"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_ReleaseInterceptorsPatrolCP">
+        <WhichLocation Effect="AP_ReleaseInterceptorsSet"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Flags index="RandomEffect" value="1"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_ReleaseInterceptorsPatrolLeftTurnCP"/>
+        <PeriodicEffectArray value="AP_ReleaseInterceptorsPatrolRightTurnCP"/>
+        <PeriodicOffsetArray value="2.5,0,0"/>
+        <PeriodicOffsetArray value="2.165,1.25,0"/>
+        <PeriodicOffsetArray value="1.25,2.165,0"/>
+        <PeriodicOffsetArray value="0,2.5,0"/>
+        <PeriodicOffsetArray value="-1.25,2.165,0"/>
+        <PeriodicOffsetArray value="-2.165,1.25,0"/>
+        <PeriodicOffsetArray value="-2.5,0,0"/>
+        <PeriodicOffsetArray value="-2.165,-1.25,0"/>
+        <PeriodicOffsetArray value="-1.25,-2.165,0"/>
+        <PeriodicOffsetArray value="0,-2.5,0"/>
+        <PeriodicOffsetArray value="1.25,-2.165,0"/>
+        <PeriodicOffsetArray value="2.165,-1.25,0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_ReleaseInterceptorsPatrolLeftTurnCP">
+        <EditorCategories value="Race:Protoss"/>
+        <OffsetVectorStartLocation Effect="AP_ReleaseInterceptorsSet" Value="TargetPoint"/>
+        <PeriodCount value="7"/>
+        <PeriodicEffectArray value="AP_ReleaseInterceptorsPatrolRandomizerCP"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="-1.768,0.732,0"/>
+        <PeriodicOffsetArray value="-2.5,2.5,0"/>
+        <PeriodicOffsetArray value="2.5,2.5,0"/>
+        <PeriodicOffsetArray value="1.768,4.268,0"/>
+        <PeriodicOffsetArray value="0,5,0"/>
+        <PeriodicOffsetArray value="0,2.5,0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_ReleaseInterceptorsPatrolRightTurnCP">
+        <EditorCategories value="Race:Protoss"/>
+        <OffsetVectorStartLocation Effect="AP_ReleaseInterceptorsSet" Value="TargetPoint"/>
+        <PeriodCount value="7"/>
+        <PeriodicEffectArray value="AP_ReleaseInterceptorsPatrolRandomizerCP"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="1.768,0.732,0"/>
+        <PeriodicOffsetArray value="2.5,2.5,0"/>
+        <PeriodicOffsetArray value="-2.5,2.5,0"/>
+        <PeriodicOffsetArray value="-1.768,4.268,0"/>
+        <PeriodicOffsetArray value="0,5,0"/>
+        <PeriodicOffsetArray value="0,2.5,0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_ReleaseInterceptorsPatrolRandomizerCP">
+        <EditorCategories value="Race:Protoss"/>
+        <Flags index="RandomOffset" value="1"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_ReleaseInterceptorsPatrolIssueOrder"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="0.25,0,0"/>
+        <PeriodicOffsetArray value="0.125,0.2165,0"/>
+        <PeriodicOffsetArray value="-0.125,0.2165,0"/>
+        <PeriodicOffsetArray value="-0.25,0,0"/>
+        <PeriodicOffsetArray value="-0.125,-0.2165,0"/>
+        <PeriodicOffsetArray value="0.125,-0.2165,0"/>
+        <PeriodicOffsetArray value="0.5,0,0"/>
+        <PeriodicOffsetArray value="0.433,0.25,0"/>
+        <PeriodicOffsetArray value="0.25,0.433,0"/>
+        <PeriodicOffsetArray value="0,0.5,0"/>
+        <PeriodicOffsetArray value="-0.25,0.433,0"/>
+        <PeriodicOffsetArray value="-0.433,0.25,0"/>
+        <PeriodicOffsetArray value="-0.5,0,0"/>
+        <PeriodicOffsetArray value="-0.433,-0.25,0"/>
+        <PeriodicOffsetArray value="-0.25,-0.433,0"/>
+        <PeriodicOffsetArray value="0,-0.5,0"/>
+        <PeriodicOffsetArray value="0.25,-0.433,0"/>
+        <PeriodicOffsetArray value="0.433,-0.25,0"/>
+    </CEffectCreatePersistent>
+    <CEffectIssueOrder id="AP_ReleaseInterceptorsPatrolIssueOrder">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="move"/>
+        <Player Value="Source"/>
+        <Target Value="TargetPoint"/>
+        <AbilCmdIndex value="1"/>
+        <CmdFlags index="Queued" value="1"/>
+    </CEffectIssueOrder>
 </Catalog>

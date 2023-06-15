@@ -2327,11 +2327,73 @@
         <InfoIcon value="Assets\Textures\btn-ability-protoss-prismaticbeam.dds"/>
         <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
         <Duration value="20"/>
-        <Modification>
-            <DamageDealtAttributeScaled index="Armored" value="0"/>
-        </Modification>
         <DisplayDuration index="Self" value="1"/>
         <DisplayDuration index="Ally" value="1"/>
         <DisplayDuration index="Enemy" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierInterceptorBombActive">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="10"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierInterceptorBombs">
+        <Period value="1"/>
+        <PeriodicEffect value="AP_VoidCarrierInterceptorBombsCP"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierRepairDroneHealController">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="Channeled" value="1"/>
+        <FinalEffect value="AP_CarrierRepairDroneHealTargetRB"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierRepairDroneHealTarget">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_NotFullLife"/>
+        <RemoveValidatorArray value="NotHidden"/>
+        <RemoveValidatorArray value="AP_IsMechanical"/>
+        <Period value="0.0625"/>
+        <InitialEffect value="AP_CarrierRepairDroneHealControllerAB"/>
+        <PeriodicEffect value="AP_CarrierRepairDroneHealTarget"/>
+        <FinalEffect value="AP_CarrierRepairDroneHealControllerRB"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierRepairDroneRecall">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="AP_CarrierRepairDroneRecallTeleport"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsCooldown">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="20"/>
+        <Modification>
+            <AbilLinkDisableArray value="AP_HangarQueue5"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsTimedLife" parent="TimedLife">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="60"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="AP_ReleaseInterceptorsLeashSet"/>
+        <InitialEffect value="AP_ReleaseInterceptorsBeaconAB"/>
+        <FinalEffect value="AP_ReleaseInterceptorsBeaconRB"/>
+    </CBehaviorBuff>
+    <CBehaviorWander id="AP_ReleaseInterceptorsWander">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Leash value="1"/>
+        <Range value="2.5"/>
+    </CBehaviorWander>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsWanderDelay">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_ReleaseInterceptorsDestinationNotReached"/>
+        <FinalEffect value="AP_ReleaseInterceptorsPatrolCP"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsBeacon">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <MaxStackCount value="65535"/>
+        <FinalEffect value="AP_ReleaseInterceptorsRemoveBeacon"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsTimedLifeWarning">
+        <Duration value="50"/>
     </CBehaviorBuff>
 </Catalog>

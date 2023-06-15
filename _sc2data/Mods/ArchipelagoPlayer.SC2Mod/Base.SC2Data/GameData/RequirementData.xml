@@ -1218,4 +1218,23 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeVoidRayBeamCanChargeCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_ArmInterceptor">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_LTCountUnitInterceptorQueuedOrBetterAtUnit8"/>
+    </CRequirement>
+    <CRequirement id="AP_UseDarkProtoss">
+        <EditorCategories value="Race:Zerg,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeDarkProtossCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UsePurifierProtoss">
+        <EditorCategories value="Race:Zerg,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradePurifierProtossCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVoidCarrierBombingRun">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeVoidCarrierBombingRunCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_UseGravitonCatapult">
+        <NodeArray index="Use" Link="AP_CountUpgradeCarrierLaunchSpeedUpgradeCompleteOnly"/>
+    </CRequirement>
 </Catalog>
