@@ -40,16 +40,24 @@ misc_item_table = {
     "Invincible Candy": ItemData(0x770023, False),
 }
 
+trap_item_table = {
+    "Gooey Bag": ItemData(0x770040, False, False, True),
+    "Slowness": ItemData(0x770041, False, False, True),
+    "Eject Ability": ItemData(0x770042, False, False, True)
+}
+
 filler_item_weights = {
     "1-Up": 4,
     "Maxim Tomato": 2,
     "Invincible Candy": 2
 }
 
+
 item_table = {
     **copy_ability_table,
     **animal_friend_table,
     **misc_item_table,
+    **trap_item_table
 }
 
 item_names = {

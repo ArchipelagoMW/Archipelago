@@ -151,6 +151,43 @@ class FillerPercentage(Range):
     default = 50
 
 
+class TrapPercentage(Range):
+    """
+    Percentage of non-required Heart Stars to be converted to trap items (Gooey Bags, Slowness, Eject Ability).
+    """
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 50
+
+class GooeyTrapPercentage(Range):
+    """
+    Percentage of non-required Heart Stars to be converted to trap items (Gooey Bags, Slowness, Eject Ability).
+    """
+    display_name = "Gooey Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 50
+
+class SlowTrapPercentage(Range):
+    """
+    Percentage of non-required Heart Stars to be converted to trap items (Gooey Bags, Slowness, Eject Ability).
+    """
+    display_name = "Slowness Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 50
+
+class AbilityTrapPercentage(Range):
+    """
+    Percentage of traps that are Eject Ability (ejects your ability when you receive it).
+    """
+    display_name = "Ability Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 50
+
+
 class ConsumableChecks(Toggle):
     """
     When enabled, adds all 1-Ups and Maxim Tomatoes as possible locations.
@@ -218,6 +255,20 @@ class GooeyFlavor(OptionDict):
     default = {}
 
 
+class MusicShuffle(Choice):
+    """
+    None: default music will play
+    Shuffled: music will be shuffled amongst each other
+    Full: random music will play in each room
+    Note that certain songs will not be chosen in shuffled or full
+    """
+    display_name = "Music Randomization"
+    option_none = 0
+    option_shuffled = 1
+    option_full = 2
+    default = 0
+
+
 kdl3_options: typing.Dict[str, type(Option)] = {
     "death_link": DeathLink,
     "game_language": GameLanguage,
@@ -226,6 +277,10 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "total_heart_stars": TotalHeartStars,
     "heart_stars_required": HeartStarsRequired,
     "filler_percentage": FillerPercentage,
+    "trap_percentage": TrapPercentage,
+    "gooey_trap_weight": GooeyTrapPercentage,
+    "slow_trap_weight": SlowTrapPercentage,
+    "ability_trap_weight": AbilityTrapPercentage,
     "jumping_target": JumpingTarget,
     "stage_shuffle": LevelShuffle,
     "boss_shuffle": BossShuffle,
@@ -238,4 +293,5 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "kirby_flavor": KirbyFlavor,
     "gooey_flavor_preset": GooeyFlavorPreset,
     "gooey_flavor": GooeyFlavor,
+    "music_shuffle": MusicShuffle,
 }

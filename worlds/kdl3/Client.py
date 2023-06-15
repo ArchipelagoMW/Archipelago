@@ -1,4 +1,5 @@
 import logging
+import struct
 import time
 from struct import unpack, pack
 
@@ -40,6 +41,10 @@ KDL3_ANIMAL_FRIENDS = SRAM_1_START + 0x8000
 KDL3_ABILITY_ARRAY = SRAM_1_START + 0x8020
 KDL3_RECV_COUNT = SRAM_1_START + 0x8050
 KDL3_HEART_STAR_COUNT = SRAM_1_START + 0x8070
+KDL3_GOOEY_TRAP = SRAM_1_START + 0x8080
+KDL3_SLOWNESS_TRAP = SRAM_1_START + 0x8082
+KDL3_ABILITY_TRAP = SRAM_1_START + 0x8084
+KDL3_COMPLETED_STAGES = SRAM_1_START + 0x8200
 KDL3_CONSUMABLES = SRAM_1_START + 0xA000
 
 consumable_addrs = {
@@ -141,15 +146,15 @@ class KDL3SNIClient(SNIClient):
         if len(self.item_queue) > 0:
             item = self.item_queue.pop()
             # special handling for the remaining three
-            item = item.item & 0x00000F
-            if item == 1:
+            item = item.item & 0x0000FF
+            if item == 0x21:
                 # 1-Up
                 life_count = await snes_read(ctx, KDL3_LIFE_COUNT, 1)
                 life_bytes = pack("H", life_count[0] + 1)
                 snes_buffered_write(ctx, KDL3_LIFE_COUNT, life_bytes)
                 snes_buffered_write(ctx, KDL3_LIFE_VISUAL, life_bytes)
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x33]))
-            elif item == 2:
+            elif item == 0x22:
                 # Maxim Tomato
                 # Check for Gooey
                 gooey_hp = await snes_read(ctx, KDL3_KIRBY_HP + 2, 1)
@@ -159,10 +164,32 @@ class KDL3SNIClient(SNIClient):
                     snes_buffered_write(ctx, KDL3_KIRBY_HP + 2, bytes([0x08]))
                 else:
                     snes_buffered_write(ctx, KDL3_KIRBY_HP, bytes([0x0A]))
-            elif item == 3:
+            elif item == 0x23:
                 # Invincibility Candy
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x26]))
                 snes_buffered_write(ctx, KDL3_INVINCIBILITY_TIMER, bytes([0x84, 0x03]))
+            elif item == 0x40:
+                check_gooey_r = await snes_read(ctx, KDL3_GOOEY_TRAP, 2)
+                check_gooey = struct.unpack("H", check_gooey_r)
+                if check_gooey[0] == 0:
+                    snes_buffered_write(ctx, KDL3_GOOEY_TRAP, bytes([0x01, 0x00]))
+                else:
+                    self.item_queue.append(item)  # We can't apply this yet
+            elif item == 0x41:
+                check_slow_r = await snes_read(ctx, KDL3_SLOWNESS_TRAP, 2)
+                check_slow = struct.unpack("H", check_slow_r)
+                if check_slow[0] == 0:
+                    snes_buffered_write(ctx, KDL3_SLOWNESS_TRAP, bytes([0x84, 0x03]))
+                    snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0xA7]))
+                else:
+                    self.item_queue.append(item)  # We can't apply this yet
+            elif item == 0x42:
+                check_ability_r = await snes_read(ctx, KDL3_ABILITY_TRAP, 2)
+                check_ability = struct.unpack("H", check_ability_r)
+                if check_ability[0] == 0:
+                    snes_buffered_write(ctx, KDL3_ABILITY_TRAP, bytes([0x01, 0x00]))
+                else:
+                    self.item_queue.append(item)  # We can't apply this yet
 
     async def game_watcher(self, ctx) -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
@@ -209,7 +236,7 @@ class KDL3SNIClient(SNIClient):
                 ctx.location_names[item.location], recv_amount, len(ctx.items_received)))
 
             snes_buffered_write(ctx, KDL3_RECV_COUNT, pack("H", recv_amount))
-            if item.item & 0x000030 == 0:
+            if item.item & 0x000070 == 0:
                 ability = item.item & 0x00000F
                 snes_buffered_write(ctx, KDL3_ABILITY_ARRAY + (ability * 2), pack("H", ability))
                 snes_buffered_write(ctx, KDL3_SOUND_FX, bytes([0x32]))
@@ -230,14 +257,13 @@ class KDL3SNIClient(SNIClient):
         new_checks = []
         # level completion status
         world_unlocks = await snes_read(ctx, KDL3_WORLD_UNLOCK, 1)
-        level_unlocks = await snes_read(ctx, KDL3_LEVEL_UNLOCK, 1)
-        current_world = world_unlocks[0] - 1
-        current_level = level_unlocks[0] - 1
         if world_unlocks[0] > 0x06:
             return  # save is not loaded, ignore
-        for i in range(0, world_unlocks[0]):
-            for j in range(0, 6 if current_world > i else current_level):
-                loc_id = 0x770000 + self.levels[i][j]
+        stages_raw = await snes_read(ctx, KDL3_COMPLETED_STAGES, 60)
+        stages = struct.unpack("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", stages_raw)
+        for i in range(30):
+            if stages[i] == 1:
+                loc_id = 0x770000 + i + 1
                 if loc_id not in ctx.checked_locations:
                     new_checks.append(loc_id)
         # heart star status

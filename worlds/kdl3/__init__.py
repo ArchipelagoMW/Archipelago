@@ -2,7 +2,8 @@ import logging
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
-from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item
+from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
+    trap_item_table
 from .Locations import location_table, KDL3Location, level_consumables, consumable_locations
 from .Regions import create_levels
 from .Options import kdl3_options
@@ -69,11 +70,19 @@ class KDL3World(World):
         if item.progression and not force_non_progression:
             classification = ItemClassification.progression_skip_balancing \
                 if item.skip_balancing else ItemClassification.progression
+        elif item.trap:
+            classification = ItemClassification.trap
         return KDL3Item(name, classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choices(list(filler_item_weights.keys()),
                                               weights=list(filler_item_weights.values()))[0]
+
+    def get_trap_item_name(self) -> str:
+        return self.multiworld.random.choices( ["Gooey Bag", "Slowness", "Eject Ability"],
+                                              weights=[self.multiworld.gooey_trap_weight[self.player],
+                                                       self.multiworld.slow_trap_weight[self.player],
+                                                       self.multiworld.ability_trap_weight[self.player]])[0]
 
     def generate_early(self) -> None:
         # just check for invalid option combos here
@@ -94,7 +103,9 @@ class KDL3World(World):
                                    1)  # ensure at least 1 heart star required
         filler_items = total_heart_stars - required_heart_stars
         filler_amount = math.floor(filler_items * (self.multiworld.filler_percentage[self.player].value / 100.0))
-        nonrequired_heart_stars = filler_items - filler_amount
+        trap_amount = math.floor(filler_amount * (self.multiworld.trap_percentage[self.player] / 100.0))
+        filler_amount -= trap_amount
+        nonrequired_heart_stars = filler_items - filler_amount - trap_amount
         self.required_heart_stars[self.player] = required_heart_stars
         # handle boss requirements here
         requirements = [required_heart_stars]
@@ -114,6 +125,8 @@ class KDL3World(World):
         itempool.extend([self.create_item("Heart Star") for _ in range(required_heart_stars)])
         itempool.extend([self.create_item(self.get_filler_item_name())
                          for _ in range(filler_amount + (remaining_items - total_heart_stars))])
+        itempool.extend([self.create_item(self.get_trap_item_name())
+                         for _ in range(trap_amount)])
         itempool.extend([self.create_item("Heart Star", True) for _ in range(nonrequired_heart_stars)])
         self.multiworld.itempool += itempool
 

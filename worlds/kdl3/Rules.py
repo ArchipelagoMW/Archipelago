@@ -7,6 +7,20 @@ if typing.TYPE_CHECKING:
     from BaseClasses import CollectionState
 
 
+def can_reach_level(state: "CollectionState", player: int, level: int, player_levels: dict, ow_boss_req: int):
+    if level == 1:
+        return True
+    else:
+        finishable_stages = 0
+        for stage in player_levels[level - 1]:
+            if state.can_reach(location_table[stage], "Location", player):
+                finishable_stages += 1
+        if finishable_stages >= ow_boss_req:
+            return True
+        else:
+            return False
+
+
 def can_reach_coo(state: "CollectionState", player: int) -> bool:
     return state.can_reach("Grass Land 3 - Complete", "Location", player) or \
             state.can_reach("Grass Land 5 - Complete", "Location", player) or \
@@ -52,6 +66,7 @@ def set_rules(world: "KDL3World") -> None:
                     world.multiworld.get_location(location_table[world.player_levels[world.player][level][stage]],
                                                  world.player),
                     lambda state, level=level, stage=stage: True if level == 1 and stage == 0
+                    or world.multiworld.open_world[world.player]
                     else state.can_reach(location_table[world.player_levels[world.player][level - 1][5]], "Location",
                                          world.player)
                     if stage == 0
@@ -62,6 +77,7 @@ def set_rules(world: "KDL3World") -> None:
                     world.multiworld.get_location(
                         location_table[world.player_levels[world.player][level][stage] + 0x100], world.player),
                     lambda state, level=level, stage=stage: True if level == 1 and stage == 0
+                    or world.multiworld.open_world[world.player]
                     else state.can_reach(location_table[world.player_levels[world.player][level - 1][5]], "Location",
                                          world.player)
                     if stage == 0
@@ -77,6 +93,7 @@ def set_rules(world: "KDL3World") -> None:
                                     location_table[0x770300 + consumable],
                                     world.player),
                                 lambda state, level=level, stage=stage: True if level == 1 and stage == 0
+                                or world.multiworld.open_world[world.player]
                                 else state.can_reach(location_table[world.player_levels[world.player][level - 1][5]],
                                                      "Location",
                                                      world.player)
@@ -250,6 +267,26 @@ def set_rules(world: "KDL3World") -> None:
 
     set_rule(world.multiworld.get_entrance("To Level 6", world.player),
              lambda state: state.has("Heart Star", world.player, world.required_heart_stars[world.player]))
+
+    if world.multiworld.open_world[world.player]:
+        add_rule(world.multiworld.get_entrance("To Level 2", world.player),
+                 lambda state: can_reach_level(state, world.player, 2,
+                                               world.player_levels[world.player],
+                                               world.multiworld.ow_boss_requirement[world.player]))
+        add_rule(world.multiworld.get_entrance("To Level 3", world.player),
+                 lambda state: can_reach_level(state, world.player, 3,
+                                               world.player_levels[world.player],
+                                               world.multiworld.ow_boss_requirement[world.player]))
+        add_rule(world.multiworld.get_entrance("To Level 4", world.player),
+                 lambda state: can_reach_level(state, world.player, 4,
+                                               world.player_levels[world.player],
+                                               world.multiworld.ow_boss_requirement[world.player]))
+        add_rule(world.multiworld.get_entrance("To Level 5", world.player),
+                 lambda state: can_reach_level(state, world.player, 5,
+                                               world.player_levels[world.player],
+                                               world.multiworld.ow_boss_requirement[world.player]))
+
+
 
     if world.multiworld.goal_speed[world.player] == 0:
         add_rule(world.multiworld.get_entrance("To Level 6", world.player),
