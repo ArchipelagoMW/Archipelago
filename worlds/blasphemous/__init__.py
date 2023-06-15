@@ -228,6 +228,8 @@ class BlasphemousWorld(World):
         ent2.connect(world.get_region(self.start_room, player))
         menu.exits.append(ent2)
 
+        unconnectedDoors: List[DoorDict] = []
+
         for door in door_table:
             reg: Region = self.get_room_from_door(door["Id"])
             event = BlasphemousLocation(player, door["Id"], None, reg)
@@ -237,7 +239,11 @@ class BlasphemousWorld(World):
             reg.locations.append(event)
 
             if door.get("OriginalDoor") is None:
+                if world.door_randomizer[player].value == 1 and door["Direction"] == 5 and door.get("Type") == 1:
+                    unconnectedDoors.append(door)
                 continue
+            elif world.door_randomizer[player].value == 1 and door.get("Type") == 1:
+                unconnectedDoors.append(door)
             else:
                 if not door["Id"] in self.door_connections.keys():
                     self.door_connections[door["Id"]] = door["OriginalDoor"]
@@ -247,11 +253,82 @@ class BlasphemousWorld(World):
                 target: Region = self.get_room_from_door(door["OriginalDoor"])
                 exit: Entrance = Entrance(player, door["Id"], parent)
 
-                if not door.get("VisibilityFlags") is None and door["VisibilityFlags"] == 1:
+                if door.get("VisibilityFlags") == 1:
                     set_rule(exit, lambda x: False)
 
                 exit.connect(target)
                 parent.exits.append(exit)
+
+        if world.door_randomizer[player].value == 1:
+            zone_exits: Dict[str, List[DoorDict]] = {}
+            zone_connections: Dict[str, DoorDict] = {}
+            reachable_zones: List[str] = []
+            reachable_zones.append(self.start_room.split("S")[0])
+
+            for x in unconnectedDoors:
+                zone: str = x["Id"].split("S")[0]
+                if not zone in zone_exits.keys():
+                    zone_exits[zone] = [x]
+                else:
+                    zone_exits[zone].append(x)
+            
+            #for y in zone_exits.keys():
+            #    print(y, zone_exits[y])
+
+            start_zone: str = self.start_room.split("S")[0]
+
+            def connect_exits(zone: str):
+                for ex in zone_exits[zone]:
+                    #print(ex["Id"], unconnectedDoors)
+                    if ex["Id"] in zone_connections.keys():
+                        continue
+
+                    target: DoorDict = world.random.choice(unconnectedDoors)
+                    target_zone: str = target["Id"].split("S")[0]
+
+                    attempts: int = 0
+                    while self.get_opposite_direction(target["Direction"]) != ex["Direction"] or ((target_zone == zone or target_zone in reachable_zones) and attempts < 30):
+                        target = world.random.choice(unconnectedDoors)
+                        target_zone = target["Id"].split("S")[0]
+                        attempts += 1
+                    
+                    if not target_zone in reachable_zones:
+                        reachable_zones.append(target_zone)
+                    
+                    zone_connections[ex["Id"]] = target
+                    zone_connections[target["Id"]] = ex
+                    #print(f'{ex["Id"]} -> {target["Id"]}')
+                    unconnectedDoors.remove(ex)
+                    unconnectedDoors.remove(target)
+
+            connect_exits(start_zone)
+            
+            while len(unconnectedDoors) > 0:
+                #print(reachable_zones)
+                for z in reachable_zones:
+                    connect_exits(z)   
+                #print(unconnectedDoors)
+
+            for x, y in zone_connections.items():
+                d1: DoorDict = zone_connections[y["Id"]]
+                d2: DoorDict = y
+
+                if d1.get("OriginalDoor") is None:
+                    continue
+                else:
+                    if not d1["Id"] in self.door_connections.keys():
+                        self.door_connections[d1["Id"]] = d2["Id"]
+                        self.door_connections[d2["Id"]] = d1["Id"]
+
+                    parent: Region = self.get_room_from_door(d1["Id"])
+                    target: Region = self.get_room_from_door(d2["Id"])
+                    exit: Entrance = Entrance(player, d1["Id"], parent)
+
+                    if d1.get("VisibilityFlags") == 1:
+                        set_rule(exit, lambda x: False)
+
+                    exit.connect(target)
+                    parent.exits.append(exit)
 
         #keys = list(self.door_connections.keys())
         #keys.sort()
@@ -298,14 +375,47 @@ class BlasphemousWorld(World):
     def get_room_from_door(self, door: str) -> Region:
         return self.multiworld.get_region(door.split("[")[0], self.player)
 
-    
+
     def get_connected_door(self, door: str) -> Entrance:
         return self.multiworld.get_entrance(self.door_connections[door], self.player)
+
+
+    def get_opposite_direction(self, direction: int) -> int:
+        if direction == 0:
+            return 3
+        elif direction == 3:
+            return 0
+        elif direction == 1:
+            return 2
+        elif direction == 2:
+            return 1
+        elif direction == 4:
+            return 7
+        elif direction == 5:
+            return 6
+        elif direction == 6:
+            return 5
+        elif direction == 7:
+            return 4
+        else:
+            return -1
+        
+
+    def write_spoiler(self, spoiler_handle):
+        if self.multiworld.door_randomizer[self.player].value == 1:
+            spoiler_handle.write("\nDoor Randomizer:\n")
+            for door in door_table:
+                if door.get("OriginalDoor") is None:
+                    continue
+                else:
+                    if self.door_connections[door["Id"]] != door["OriginalDoor"]:
+                        spoiler_handle.write(f'{door["Id"]} -> {self.door_connections[door["Id"]]}\n')
     
     
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
         locations = []
+        doors: Dict[str, str] = {}
 
         world = self.multiworld
         player = self.player
@@ -327,6 +437,17 @@ class BlasphemousWorld(World):
                 }
 
                 locations.append(data)
+
+        if self.multiworld.door_randomizer[self.player].value == 1:
+            for door in door_table:
+                if door.get("OriginalDoor") is None:
+                    continue
+                else:
+                    if self.door_connections[door["Id"]] != door["OriginalDoor"]:
+                        doors[door["Id"]] = self.door_connections[door["Id"]]
+                        doors[self.door_connections[door["Id"]]] = door["Id"]
+
+        print(doors)
 
         config = {
             "LogicDifficulty": world.difficulty[player].value,
@@ -353,11 +474,12 @@ class BlasphemousWorld(World):
             "AreaScaling": bool(world.enemy_scaling[player].value),
 
             "BossShuffleType": 0,
-            "DoorShuffleType": 0
+            "DoorShuffleType": world.door_randomizer[player].value
         }
     
         slot_data = {
             "locations": locations,
+            "doors": doors,
             "cfg": config,
             "ending": world.ending[self.player].value,
             "death_link": bool(world.death_link[self.player].value)

@@ -132,6 +132,14 @@ class EnemyScaling(DefaultOnToggle):
     display_name = "Enemy Scaling"
 
 
+class DoorRando(Choice):
+    """to do"""
+    display_name = "Door Randomizer"
+    option_disabled = 0
+    option_zones = 1
+    default = 0
+
+
 class BlasphemousDeathLink(DeathLink):
     """When you die, everyone dies. The reverse is also true.
     Note that Guilt Fragments will not appear when killed by Death Link."""
@@ -157,5 +165,6 @@ blasphemous_options = {
     "enemy_randomizer": EnemyRando,
     "enemy_groups": EnemyGroups,
     "enemy_scaling": EnemyScaling,
+    "door_randomizer": DoorRando,
     "death_link": BlasphemousDeathLink
 }
