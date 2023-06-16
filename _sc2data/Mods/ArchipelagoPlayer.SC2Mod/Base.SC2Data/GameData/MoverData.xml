@@ -901,7 +901,18 @@
         </MotionPhases>
         <MotionPhases YawPitchRoll="MAX"/>
     </CMoverMissile>
-    <CMoverMissile id="TossGrenade2">
+    <CMoverMissile id="AP_ImmortalTaldarimWeaponMover">
+        <MotionPhases>
+            <Driver value="Ballistic"/>
+            <Acceleration value="-1"/>
+            <Speed value="10"/>
+            <MaxSpeed value="20"/>
+            <Gravity value="60"/>
+            <ClearanceLookahead value="3"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+    </CMoverMissile>
+    <CMoverMissile id="AP_TossGrenade">
         <MotionPhases Driver="Ballistic" Gravity="12" FlightTime="0.5"/>
     </CMoverMissile>
     <CMoverMissile id="AP_YoinkMissile">
@@ -993,5 +1004,69 @@
             <YawPitchRoll value="719.2968"/>
         </MotionPhases>
         <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
+    <CMoverMissile id="AP_TornadoMissileWeapon" parent="MissileDefault">
+        <MotionPhases index="0">
+            <Driver value="Throw"/>
+            <Acceleration value="3200"/>
+            <Speed value="10"/>
+            <MaxSpeed value="12"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="2.5,3"/>
+            <Timeout value="10"/>
+            <ThrowRotationType value="ThrowForward"/>
+            <ThrowVector value="0,-1,0"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+        <MotionPhases index="1">
+            <Driver value="Guidance"/>
+            <Acceleration value="56"/>
+            <Speed value="14"/>
+            <MaxSpeed value="28"/>
+            <Outro value="3.5,4"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="MAX"/>
+            <Overlays Scale="1,0.5"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <MaxSpeed value="3200"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="5568.75"/>
+        </MotionPhases>
+        <PathMode value="Flying"/>
+        <MotionOverlays Type="Revolver" Axis="0.15,0.25,0"/>
+    </CMoverMissile>
+    <CMoverMissile id="AP_TornadoMissileWeaponClose" parent="MissileDefault">
+        <MotionPhases index="0">
+            <Driver value="Throw"/>
+            <Acceleration value="3200"/>
+            <Speed value="10"/>
+            <MaxSpeed value="12"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="0.5,1"/>
+            <Timeout value="10"/>
+            <ThrowRotationType value="ThrowForward"/>
+            <ThrowVector value="0,-1,0"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+        <MotionPhases index="1">
+            <Driver value="Guidance"/>
+            <Acceleration value="56"/>
+            <Speed value="14"/>
+            <MaxSpeed value="28"/>
+            <Outro value="1.5,2"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="MAX"/>
+            <Overlays Scale="0.5,0.25"/>
+        </MotionPhases>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <MaxSpeed value="3200"/>
+            <Timeout value="10"/>
+            <YawPitchRoll value="5568.75"/>
+        </MotionPhases>
+        <PathMode value="Flying"/>
+        <MotionOverlays Type="Revolver" Axis="0.15,0.25,0"/>
     </CMoverMissile>
 </Catalog>

@@ -8352,4 +8352,539 @@
         <ShadowRadius value="0.882000"/>
         <SquibTypeDefault value="Metal"/>
     </CModel>
+    <CModel id="AP_ImmortalAiur" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Immortal_EX2\Immortal_EX2.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Immortal_SwarmAnims\Immortal_SwarmAnims.m3a"/>
+        <AttachProps Id="Ref_Hardpoint">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh08"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.866400"/>
+        <ShadowRadius value="0.866400"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraHigh08"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.800000"/>
+        <UnitGlossaryCamera value="Star2CameraHigh08"/>
+    </CModel>
+    <CModel id="AP_ImmortalAiurDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\ImmortalDeathEx1\ImmortalDeathEx1.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Events>
+            <Variation value="0"/>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Variation value="0"/>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Legs_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.160000"/>
+            <Payload value="Immortal_Explode_Legs_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Legs_Mech"/>
+            <Type value="Sound"/>
+            <Time value="0.703000"/>
+            <Payload value="Immortal_Explode_Legs_Mech"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Legs_Impact"/>
+            <Type value="Sound"/>
+            <Time value="1.050000"/>
+            <Payload value="Immortal_Explode_Legs_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode_Var"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Immortal_Explode_Legs_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.800000"/>
+            <Payload value="Immortal_Explode_Legs_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Immortal_Explode_Body_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.187000"/>
+            <Payload value="Immortal_Explode_Body_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Immortal_Explode_Body_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.887000"/>
+            <Payload value="Immortal_Explode_Body_Impact"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,03"/>
+            <Name value="Immortal_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode_Var"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,03"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Immortal_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Immortal_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <VariationCount value="2"/>
+    </CModel>
+    <CModel id="AP_ImmortalAiurPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\ImmortalPlacement\ImmortalPlacement.m3"/>
+        <Lighting value="Immortal"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.866400"/>
+        <ShadowRadius value="0.866400"/>
+    </CModel>
+    <CModel id="AP_ImmortalAiurPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\ImmortalPortrait\ImmortalPortrait.m3"/>
+    </CModel>
+    <CModel id="AP_ImmortalAiurWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\ImmortalWarpIn\ImmortalWarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+    </CModel>
+    <CModel id="AP_ImmortalAttackStrafeImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ImmortalMissileImpact\ImmortalMissileImpact.m3"/>
+        <LowQualityModel value="ImmortalAttackImpactLow"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakuras" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Immortal_Nerazim\Immortal_Nerazim.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Immortal_SwarmAnims\Immortal_SwarmAnims.m3a"/>
+        <AttachProps Id="Ref_Weapon Right">
+            <Keys index="Weapon" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Left">
+            <Keys index="Weapon" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Hardpoint">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh08"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.866400"/>
+        <ShadowRadius value="0.866400"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraHigh08"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.800000"/>
+        <UnitGlossaryCamera value="Star2CameraHigh08"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasAirAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ImmortalMissileImpact\ImmortalMissileImpact.m3"/>
+        <LowQualityModel value="ImmortalShakurasAirAttackImpactLow"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasAirAttackImpactLow" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ImmortalMissileImpact\ImmortalMissileImpact_Low.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Immortal_Nerazim_Death\Immortal_Nerazim_Death.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Events>
+            <Variation value="0"/>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Variation value="0"/>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Legs_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.160000"/>
+            <Payload value="Immortal_Explode_Legs_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Legs_Mech"/>
+            <Type value="Sound"/>
+            <Time value="0.703000"/>
+            <Payload value="Immortal_Explode_Legs_Mech"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Legs_Impact"/>
+            <Type value="Sound"/>
+            <Time value="1.050000"/>
+            <Payload value="Immortal_Explode_Legs_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode_Var"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Immortal_Explode_Legs_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.800000"/>
+            <Payload value="Immortal_Explode_Legs_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Immortal_Explode_Body_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.187000"/>
+            <Payload value="Immortal_Explode_Body_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Immortal_Explode_Body_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.887000"/>
+            <Payload value="Immortal_Explode_Body_Impact"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,03"/>
+            <Name value="Immortal_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode_Var"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,03"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Immortal_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Immortal_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasGroundAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ImmortalMissileImpact\ImmortalMissileImpact.m3"/>
+        <LowQualityModel value="ImmortalShakurasGroundAttackImpactLow"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasGroundAttackImpactLow" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ImmortalMissileImpact\ImmortalMissileImpact_Low.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\ImmortalNerazim_Placement\ImmortalNerazim_Placement.m3"/>
+        <Lighting value="Immortal"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.866400"/>
+        <ShadowRadius value="0.866400"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\Immortal_Nerazim_Portrait\Immortal_Nerazim_Portrait.m3"/>
+        <Image value="Assets\Textures\nerazimimmortalportrait_static.dds"/>
+        <Lighting value="AP_PortraitNerazimImmortal"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasShadowCannonAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Protoss\ShadowCannonLaunch\ShadowCannonLaunch.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasShadowCannonMissile" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\ShadowCannonMissile\ShadowCannonMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\ImmortalNerazim_WarpIn\ImmortalNerazim_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+    </CModel>
+    <CModel id="AP_ImmortalTaldarim" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Immortal_Taldarim\Immortal_Taldarim.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Immortal_SwarmAnims\Immortal_SwarmAnims.m3a"/>
+        <AttachProps Id="Ref_Weapon Right">
+            <Keys index="Weapon" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Left">
+            <Keys index="Weapon" value="1"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Hardpoint">
+            <Keys index="Turret" value="0"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh08"/>
+        <Radius value="0.650000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.866400"/>
+        <ShadowRadius value="0.866400"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraHigh08"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.800000"/>
+        <UnitGlossaryCamera value="Star2CameraHigh08"/>
+    </CModel>
+    <CModel id="AP_ImmortalTaldarimDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Immortal_Taldarim_Death\Immortal_Taldarim_Death.m3"/>
+        <LowQualityModel value="ProtossLargeTaldarimUnitDeathLow"/>
+        <Events>
+            <Variation value="0"/>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Variation value="0"/>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Legs_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.160000"/>
+            <Payload value="Immortal_Explode_Legs_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Legs_Mech"/>
+            <Type value="Sound"/>
+            <Time value="0.703000"/>
+            <Payload value="Immortal_Explode_Legs_Mech"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Legs_Impact"/>
+            <Type value="Sound"/>
+            <Time value="1.050000"/>
+            <Payload value="Immortal_Explode_Legs_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Immortal_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode_Var"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Immortal_Explode_Legs_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.800000"/>
+            <Payload value="Immortal_Explode_Legs_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Immortal_Explode_Body_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.187000"/>
+            <Payload value="Immortal_Explode_Body_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Immortal_Explode_Body_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.887000"/>
+            <Payload value="Immortal_Explode_Body_Impact"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,03"/>
+            <Name value="Immortal_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode_Var"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,03"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.450000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Immortal_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Immortal_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Immortal_Explode"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_ImmortalTaldarimPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\ImmortalTaldarim_Placement\ImmortalTaldarim_Placement.m3"/>
+        <Lighting value="Immortal"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.866400"/>
+        <ShadowRadius value="0.866400"/>
+    </CModel>
+    <CModel id="AP_ImmortalTaldarimPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\Immortal_TalDarim_Portrait\Immortal_TalDarim_Portrait.m3"/>
+        <Image value="Assets\Textures\taldarimimmortalportrait_static.dds"/>
+        <Lighting value="AP_PortraitTalDarimImmortal"/>
+    </CModel>
+    <CModel id="AP_ImmortalTaldarimWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Immortal_Taldarim_WarpIn\Immortal_Taldarim_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+    </CModel>
+    <CModel id="AP_ImmortalTaldarimWeaponAttackLaunchModel" parent="LaunchFX">
+        <Model value="Assets\Effects\Protoss\ScatterCannonLaunch\ScatterCannonLaunch.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalTaldarimWeaponImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ScatterCannonMissileImpact\ScatterCannonMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalTaldarimWeaponMissile" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\ScatterCannonMissile\ScatterCannonMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_PhoenixScoutMissileWeaponLeft" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\ScoutAirMissile\ScoutAirMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ScoutAirLeftAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\PhoenixMissileImpact\PhoenixMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalShakurasShadowCannonAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ShadowCannonImpact\ShadowCannonImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ImmortalStasisHealImpact">
+        <Model value="Assets\Effects\Terran\ArcadeVikingShield\ArcadeVikingShield.m3"/>
+        <ScaleMax value="0.700000,0.700000,0.700000"/>
+        <ScaleMin value="0.700000,0.700000,0.700000"/>
+    </CModel>
+    <CModel id="AP_AnnihilatorAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ImmortalMissileImpact\ImmortalMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <LowQualityModel value="ImmortalAttackImpactLow"/>
+    </CModel>
 </Catalog>

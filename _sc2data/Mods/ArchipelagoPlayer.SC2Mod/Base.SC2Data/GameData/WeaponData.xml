@@ -1351,4 +1351,91 @@
         <LegacyOptions index="NoDeceleration" value="1"/>
         <AllowedMovement value="Slowing"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_AnnihilatorParticleDisruptors">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="1.45"/>
+        <Effect value="AP_AnnihilatorSplashSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ImmortalMelee">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="1.25"/>
+        <Period value="1.45"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ImmortalShakurasAir">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="ImmortalShakurasAir"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Period value="1.45"/>
+        <Effect value="ImmortalShakurasAir"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ImmortalShakurasAntiAirMissileDummyWeapon">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Hidden" value="1"/>
+        <TargetFilters value="Air,Visible;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireCallForHelpFilters value="-;Player,Ally,Neutral,Enemy"/>
+        <MinScanRange value="6"/>
+        <Range value="6"/>
+        <Period value="5"/>
+        <Effect value="AP_ImmortalShakurasAntiAirMissilesDummyWeapon"/>
+        <LegacyOptions index="FaceTargetWhileInCooldown" value="0"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ImmortalShakurasGround">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Period value="1.5"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ImmortalTaldarim">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_ImmortalTaldarimWeaponDamage"/>
+        <DisplayAttackCount value="16"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="3.75"/>
+        <Effect value="AP_ImmortalTaldarimWeaponRandomLarge"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_PhaseDisruptersAir">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Disabled" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_PhaseDisruptors"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="1.45"/>
+        <Effect value="AP_PhaseDisruptors"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_PhaseDisruptors">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_PhaseDisruptors"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="1.45"/>
+        <Effect value="AP_ImmortalSplashSet"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_PhaseDisruptorsStrafe">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_PhaseDisruptorsStrafeDamage"/>
+        <DisplayName value="Weapon/Name/PhaseDisruptors"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Marker Link="Weapon/PhaseDisruptors"/>
+        <Cost>
+            <Cooldown Link="Weapon/PhaseDisruptors"/>
+        </Cost>
+        <Period value="1.45"/>
+        <Effect value="AP_ImmortalSplashStrafeSet"/>
+        <LegacyOptions index="LockTurretWhileFiring" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
 </Catalog>

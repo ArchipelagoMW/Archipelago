@@ -4248,4 +4248,221 @@
         <Pitch value="8.000000,8.000000"/>
         <Volume value="-5.000000,-5.000000"/>
     </CSound>
+    <CSound id="AP_Annihilator_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Annihilator_Attack00"/>
+        <AssetArray TemplateParam="Annihilator_Attack01"/>
+        <AssetArray TemplateParam="Annihilator_Attack02"/>
+        <AssetArray TemplateParam="Annihilator_Attack03"/>
+        <AssetArray TemplateParam="Annihilator_Attack04"/>
+        <AssetArray TemplateParam="Annihilator_Attack05"/>
+        <AssetArray TemplateParam="Annihilator_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Annihilator_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall9.wav" Pitch="-3.000000,3.000000"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Annihilator_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Immortal\Immortal_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Immortal\Immortal_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Immortal\Immortal_AttackLaunch2.wav"/>
+        <DupeMaximumMethod value="Replace"/>
+        <Volume value="-1.940000,-1.940000"/>
+    </CSound>
+    <CSound id="AP_Annihilator_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="Annihilator_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Annihilator_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="Annihilator_Pissed00"/>
+        <AssetArray TemplateParam="Annihilator_Pissed01"/>
+        <AssetArray TemplateParam="Annihilator_Pissed02"/>
+        <AssetArray TemplateParam="Annihilator_Pissed03"/>
+        <AssetArray TemplateParam="Annihilator_Pissed04"/>
+        <AssetArray TemplateParam="Annihilator_Pissed05"/>
+        <AssetArray TemplateParam="Annihilator_Pissed06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Annihilator_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="Annihilator_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Annihilator_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Annihilator_What00"/>
+        <AssetArray TemplateParam="Annihilator_What01"/>
+        <AssetArray TemplateParam="Annihilator_What02"/>
+        <AssetArray TemplateParam="Annihilator_What03"/>
+        <AssetArray TemplateParam="Annihilator_What04"/>
+        <AssetArray TemplateParam="Annihilator_What05"/>
+        <AssetArray TemplateParam="Annihilator_What06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Annihilator_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Annihilator_Yes00"/>
+        <AssetArray TemplateParam="Annihilator_Yes01"/>
+        <AssetArray TemplateParam="Annihilator_Yes02"/>
+        <AssetArray TemplateParam="Annihilator_Yes03"/>
+        <AssetArray TemplateParam="Annihilator_Yes04"/>
+        <AssetArray TemplateParam="Annihilator_Yes05"/>
+        <AssetArray TemplateParam="Annihilator_Yes06"/>
+        <AssetArray TemplateParam="Annihilator_Yes07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_ImmortalTaldarim_ScatterCannon_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_Impact01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_Impact02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_Impact03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_Impact04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_Impact05_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_Impact06_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_Impact07_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupePrioritization value="Oldest"/>
+        <OverlapTimeDelta value="150"/>
+        <Pitch value="-3.000000,1.000000"/>
+        <PlayDelay value="0,250"/>
+        <Volume value="-6.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_ImmortalTaldarim_ScatterCannon_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_LaunchAttack01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_LaunchAttack02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_LaunchAttack03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_LaunchAttack04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_LaunchAttack05_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Vanguard_ScatterCannon_LaunchAttack06_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupePrioritization value="Oldest"/>
+        <OverlapTimeDelta value="160"/>
+        <Pitch value="-0.500000,0.500000"/>
+        <PlayDelay value="0,150"/>
+        <Volume value="-1.940000,-1.940000"/>
+    </CSound>
+    <CSound id="AP_Vanguard_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Vanguard_Attack00"/>
+        <AssetArray TemplateParam="Vanguard_Attack01"/>
+        <AssetArray TemplateParam="Vanguard_Attack02"/>
+        <AssetArray TemplateParam="Vanguard_Attack03"/>
+        <AssetArray TemplateParam="Vanguard_Attack04"/>
+        <AssetArray TemplateParam="Vanguard_Attack05"/>
+        <AssetArray TemplateParam="Vanguard_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Vanguard_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="Vanguard_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="0.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Vanguard_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="Vanguard_Pissed00"/>
+        <AssetArray TemplateParam="Vanguard_Pissed01"/>
+        <AssetArray TemplateParam="Vanguard_Pissed02"/>
+        <AssetArray TemplateParam="Vanguard_Pissed03"/>
+        <AssetArray TemplateParam="Vanguard_Pissed04"/>
+        <AssetArray TemplateParam="Vanguard_Pissed05"/>
+        <AssetArray TemplateParam="Vanguard_Pissed06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Vanguard_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="Vanguard_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_Vanguard_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Vanguard_What00"/>
+        <AssetArray TemplateParam="Vanguard_What01"/>
+        <AssetArray TemplateParam="Vanguard_What02"/>
+        <AssetArray TemplateParam="Vanguard_What03"/>
+        <AssetArray TemplateParam="Vanguard_What04"/>
+        <AssetArray TemplateParam="Vanguard_What05"/>
+        <AssetArray TemplateParam="Vanguard_What06"/>
+        <AssetArray TemplateParam="Vanguard_What07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Vanguard_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Vanguard_Yes00"/>
+        <AssetArray TemplateParam="Vanguard_Yes01"/>
+        <AssetArray TemplateParam="Vanguard_Yes02"/>
+        <AssetArray TemplateParam="Vanguard_Yes03"/>
+        <AssetArray TemplateParam="Vanguard_Yes04"/>
+        <AssetArray TemplateParam="Vanguard_Yes05"/>
+        <AssetArray TemplateParam="Vanguard_Yes06"/>
+        <AssetArray TemplateParam="Vanguard_Yes07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ImmortalShakuras_ShadowCannon_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_AttackLaunch01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_AttackLaunch02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_AttackLaunch03_1ch.wav" Weight="17" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_AttackLaunch04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_AttackLaunch05_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_AttackLaunch06_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_AttackLaunch07_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_AttackLaunch08_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Volume value="-1.940000,-1.940000"/>
+        <Pitch value="-6.000000,-5.000000"/>
+        <DupeDestroyCount value="8"/>
+        <DupeHistoryCount value="8"/>
+        <DupeMuteCount value="8"/>
+    </CSound>
+    <CSound id="AP_Scout_AirAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackImpact3.wav"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_ImmortalShakuras_ShadowCannon_AttackImpact" parent="Protoss_ExplosionSmall">
+        <AssetArray index="0" File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_Impact01_1ch.wav" Pitch="0.000000,0.000000" FacialGroup=""/>
+        <AssetArray index="1" File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_Impact02_1ch.wav" Pitch="0.000000,0.000000" FacialGroup=""/>
+        <AssetArray index="2" File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_Impact03_1ch.wav" Pitch="0.000000,0.000000" FacialGroup=""/>
+        <AssetArray index="3" File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_Impact04_1ch.wav" Pitch="0.000000,0.000000" FacialGroup=""/>
+        <AssetArray index="4" File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_Impact05_1ch.wav" Pitch="0.000000,0.000000" FacialGroup=""/>
+        <AssetArray index="5" File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_Impact06_1ch.wav" Pitch="0.000000,0.000000" FacialGroup=""/>
+        <AssetArray index="6" File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_Impact07_1ch.wav" Pitch="0.000000,0.000000" FacialGroup=""/>
+        <AssetArray index="7" File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_Impact08_1ch.wav" Pitch="0.000000,0.000000" FacialGroup=""/>
+        <AssetArray index="8" File="AP\Assets\Sounds\ImmortalShakuras_ShadowCannon_Impact09_1ch.wav" Pitch="0.000000,0.000000" FacialGroup=""/>
+        <AssetArray index="9" removed="1"/>
+        <Pitch value="-4.000000,0.000000"/>
+        <Volume value="-2.000000,-1.000000"/>
+        <DupeDestroyCount value="4"/>
+        <DupeHistoryCount value="4"/>
+        <DupeMuteCount value="6"/>
+    </CSound>
 </Catalog>

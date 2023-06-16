@@ -398,6 +398,63 @@
         <Find value="1"/>
         <Value value="AP_HaveHotSViciousGlaive"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack11Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="11"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack13Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="13"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack15Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="15"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack3Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="3"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack5Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="5"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack7Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="7"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveImmortalTaldarimMissileSpeedStack9Plus">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="9"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitFilters id="AP_ImmortalShakurasShadowCannonTargetFilters">
+        <WhichUnit Effect="AP_ImmortalShakurasShadowCannonTargetingCP"/>
+        <Filters value="-;Stasis,Dead,Hidden,Invulnerable"/>
+    </CValidatorUnitFilters>
+    <CValidatorCombine id="AP_ImmortalShakurasShadowCannonValidators">
+        <Type value="And"/>
+        <CombineArray value="CasterIsNotHidden"/>
+        <CombineArray value="CasterNotDead"/>
+        <CombineArray value="AP_CasterNotStunned"/>
+        <CombineArray value="AP_ImmortalShakurasShadowCannonTargetFilters"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_CasterNotStunned">
+        <WhichUnit Value="Caster"/>
+        <Filters value="-;Stunned"/>
+    </CValidatorUnitFilters>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>
@@ -573,6 +630,23 @@
         <Value value="AP_BroodLordCocoon"/>
         <Find value="0"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="IsImmortal">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsImmortalAiur">
+        <Value value="AP_ImmortalAiur"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsImmortalShakuras">
+        <Value value="AP_ImmortalShakuras"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsImmortalTaldarim">
+        <Value value="AP_ImmortalTaldarim"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsNotImmortal">
+        <CombineArray value="IsImmortal"/>
+        <Negate value="1"/>
+    </CValidatorCombine>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <Negate value="1"/>
@@ -1467,6 +1541,26 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="AP_MutaliskOutOfCombat2"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_StasisTargetIsImmortal">
+        <!-- FIXME: Verify this! -->
+        <WhichUnit Effect="CreateStasisCocoonController"/>
+        <Value value="AP_Immortal"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_StasisTargetIsImmortalAiur">
+        <!-- FIXME: Verify this! -->
+        <WhichUnit Effect="CreateStasisCocoonController"/>
+        <Value value="AP_ImmortalAiur"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_StasisTargetIsImmortalShakuras">
+        <!-- FIXME: Verify this! -->
+        <WhichUnit Effect="CreateStasisCocoonController"/>
+        <Value value="AP_ImmortalShakuras"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_StasisTargetIsImmortalTaldarim">
+        <!-- FIXME: Verify this! -->
+        <WhichUnit Effect="CreateStasisCocoonController"/>
+        <Value value="AP_ImmortalTaldarim"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
         <!-- Override -->
         <Type value="And"/>
@@ -2165,4 +2259,19 @@
         <CombineArray value="NotWarpPrism"/>
         <CombineArray value="NotThor"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_UseImmortalRevive">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_UseImmortalRevive"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveVoidImmortalWeaponSplash">
+        <Value value="AP_HaveVoidImmortalWeaponSplash"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareField id="AP_TargetRadiusLE0Dot125">
+        <Compare value="LE"/>
+        <Field value="Radius"/>
+        <Value value="0.125"/>
+    </CValidatorUnitCompareField>
 </Catalog>

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CAttachMethodPattern id="AP_AMPatternImmortalShakuras">
+        <Keyword value="Weapon"/>
+        <Base value="::RollingIndex"/>
+        <Driver value="AP_ImmortalShakurasShadowCannonLM"/>
+    </CAttachMethodPattern>
+    <CAttachMethodPattern id="AP_AMPatternImmortalTaldarim">
+        <Keyword value="Weapon"/>
+        <Base value="::RollingIndex"/>
+        <Driver value="AP_ImmortalTaldarimWeaponLM"/>
+    </CAttachMethodPattern>
     <CAttachMethodPattern id="AP_AMPatternDuskWingBanshee">
         <Keyword value="Weapon"/>
         <Driver value="AP_DuskWingBansheeLaunchMissile"/>

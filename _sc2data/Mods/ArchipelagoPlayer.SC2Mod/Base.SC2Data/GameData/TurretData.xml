@@ -133,4 +133,11 @@
             <ChanceArray index="Turn" value="0"/>
         </Fidget>
     </CTurret>
+    <CTurret id="AP_Immortal">
+        <Idle value="FollowMovement"/>
+        <YawArc value="360"/>
+        <YawRate value="720"/>
+        <YawIdleRate value="360"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
 </Catalog>

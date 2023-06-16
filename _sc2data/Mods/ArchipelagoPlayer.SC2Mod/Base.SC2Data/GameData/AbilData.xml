@@ -3592,6 +3592,45 @@
         </InfoArray>
         <Alert value="MorphComplete_Zerg"/>
     </CAbilTrain>
+    <CAbilEffectInstant id="AP_ImmortalOverload">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ImmortalOverloadAB"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="60"/>
+        </Cost>
+        <AutoCastRange value="1"/>
+        <AutoCastValidatorArray value="CasterShieldsLT1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ImmortalOverload"/>
+    </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_ImmortalShakurasShadowCannon">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <PrepEffect value="AP_ImmortalShakurasShadowCannonInitialDisableAttackAB"/>
+        <Effect index="0" value="AP_ImmortalShakurasShadowCannonTargetingCP"/>
+        <Cost>
+            <Cooldown TimeUse="45"/>
+        </Cost>
+        <TargetFilters value="-;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="13"/>
+        <Arc value="360"/>
+        <PrepTime value="0.0625"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ImmortalShakurasShadowCannon"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_ImmortalBarrierBase">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ImmortalBarrierBaseAB"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="60"/>
+        </Cost>
+        <AutoCastRange value="1"/>
+        <AutoCastValidatorArray value="CasterShieldsLT1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ImmortalBarrierBase"/>
+    </CAbilEffectInstant>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -4178,4 +4217,49 @@
         <AINotifyEffect value="FaceEmbrace"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_FaceEmbrace"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_VoidMPImmortalReviveDeath">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Immortal" Requirements="AP_UseImmortalRevive"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="RallyReset" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_VoidMPImmortalReviveCorpse">
+            <SectionArray index="Stats">
+                <EffectArray index="Finish" value="AP_VoidMPImmortalReviveDeadSet"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_VoidMPImmortalReviveRebuild">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Immortal"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <Flags index="IgnoreFood" value="1"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="Rally" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Score="1" Unit="AP_Immortal">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Collide">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="30"/>
+                <EffectArray index="Finish" value="AP_VoidMPImmortalReviveSet"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
 </Catalog>

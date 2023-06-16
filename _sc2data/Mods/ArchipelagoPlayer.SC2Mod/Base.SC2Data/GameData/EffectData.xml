@@ -6718,7 +6718,392 @@
         <Visibility value="Visible"/>
         <Amount value="5"/>
     </CEffectDamage>
-    <CEffectSet id="ReleaseInterceptorsReleaseSet2">
+    <CEffectDamage id="AP_AnnihilatorParticleDisruptors">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="30"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_AnnihilatorSplashDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker Link="Effect/PhaseDisruptors"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="6"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="4"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_AnnihilatorSplashSearch">
+        <ValidatorArray value="AP_HaveVoidImmortalWeaponSplash"/>
+        <EditorCategories value=""/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_AnnihilatorSplashDamage"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_AnnihilatorSplashSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_AnnihilatorParticleDisruptors"/>
+        <EffectArray value="AP_AnnihilatorSplashSearch"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_ImmortalMelee">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="30"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_ImmortalOverloadAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ImmortalOverload"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_ImmortalShakurasAir">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="30"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_ImmortalShakurasAntiAirMissilesCP">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <FinalEffect value="AP_ImmortalShakurasAntiAirMissilesFinalSet"/>
+        <PeriodCount value="6"/>
+        <PeriodicEffectArray value="AP_ImmortalShakurasAntiAirMissilesLM"/>
+        <PeriodicPeriodArray value="0.125"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_ImmortalShakurasAntiAirMissilesDamage" parent="DU_WEAP">
+        <ValidatorArray value="NotHidden"/>
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Armored" value="5"/>
+        <Kind value="Ranged"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_ImmortalShakurasAntiAirMissilesDisableAttackAB">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ImmortalShakurasAntiAirMissileDisableAttack"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_ImmortalShakurasAntiAirMissilesDisableAttackRB">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ImmortalShakurasAntiAirMissileDisableAttack"/>
+    </CEffectRemoveBehavior>
+    <CEffectDamage id="AP_ImmortalShakurasAntiAirMissilesDummyWeapon">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_ImmortalShakurasAntiAirMissilesFinalSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_ImmortalShakurasAntiAirMissilesTurretClear"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_ImmortalShakurasAntiAirMissilesLM">
+        <ValidatorArray index="0" value="NotHidden"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_ImmortalShakurasAntiAirMissilesDamage"/>
+        <AmmoUnit value="AP_ImmortalShakurasAntiAirMissile"/>
+        <Movers Link="AP_TornadoMissileWeaponClose" IfRangeLTE="6"/>
+        <Movers Link="AP_TornadoMissileWeapon" IfRangeLTE="20"/>
+    </CEffectLaunchMissile>
+    <CEffectModifyUnit id="AP_ImmortalShakurasAntiAirMissilesTurretClear">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Action="ClearTarget" Turret="Immortal"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_ImmortalShakurasAntiAirMissilesTurretLock">
+        <ValidatorArray value="AP_NotLockingOn"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Turret="Immortal" AimCompleteEffect="AP_ImmortalShakurasAntiAirMissilesCP">
+            <Target Value="TargetUnit"/>
+            <Flags index="Tracking" value="1"/>
+        </ModifyTurret>
+    </CEffectModifyUnit>
+    <CEffectDamage id="AP_ImmortalShakurasGround">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="15"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_ImmortalShakurasShadowCannonAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ImmortalShakurasShadowCannon"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_ImmortalShakurasShadowCannonCP">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <FinalEffect value="AP_ImmortalShakurasShadowCannonRB"/>
+        <PeriodCount value="8"/>
+        <PeriodicValidator value="AP_ImmortalShakurasShadowCannonValidators"/>
+        <PeriodicEffectArray value="AP_ImmortalShakurasShadowCannonLM"/>
+        <PeriodicPeriodArray value="0.3332"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_ImmortalShakurasShadowCannonDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="25"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+        <SearchFlags index="OffsetAreaByAngle" value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_ImmortalShakurasShadowCannonInitialDisableAttackAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ImmortalShakurasShadowCannonInitialDisableAttack"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_ImmortalShakurasShadowCannonInitialSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ImmortalShakurasShadowCannonAB"/>
+        <EffectArray value="AP_ImmortalShakurasShadowCannonTurret"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_ImmortalShakurasShadowCannonLM">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Effect="AP_ImmortalShakurasShadowCannonTargetingCP"/>
+        <ImpactEffect value="AP_ImmortalShakurasShadowCannonDamage"/>
+        <AmmoUnit value="AP_ImmortalShakurasShadowCannonMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectRemoveBehavior id="AP_ImmortalShakurasShadowCannonRB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ImmortalShakurasShadowCannon"/>
+    </CEffectRemoveBehavior>
+    <CEffectCreatePersistent id="AP_ImmortalShakurasShadowCannonTargetingCP">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <InitialEffect value="AP_ImmortalShakurasShadowCannonAB"/>
+    </CEffectCreatePersistent>
+    <CEffectModifyUnit id="AP_ImmortalShakurasShadowCannonTurret">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Turret="AP_Immortal">
+            <Target Effect="AP_ImmortalShakurasShadowCannonTargetingCP" Value="TargetUnit"/>
+            <Flags index="Tracking" value="1"/>
+        </ModifyTurret>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_ImmortalShakurasShadowCannonTurretClear">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyTurret Action="ClearTarget" Turret="AP_Immortal"/>
+    </CEffectModifyUnit>
+    <CEffectDamage id="AP_ImmortalSplashDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker Link="Effect/PhaseDisruptors"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="6"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="4"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_ImmortalSplashSearch">
+        <ValidatorArray value="AP_HaveVoidImmortalWeaponSplash"/>
+        <EditorCategories value=""/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_ImmortalSplashDamage"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_ImmortalSplashSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_PhaseDisruptors"/>
+        <EffectArray value="AP_ImmortalSplashSearch"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_ImmortalSplashStrafeDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker Link="Effect/PhaseDisruptors"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="6"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="4"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_ImmortalSplashStrafeSearch">
+        <ValidatorArray value="AP_HaveVoidImmortalWeaponSplash"/>
+        <EditorCategories value=""/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_ImmortalSplashStrafeDamage"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_ImmortalSplashStrafeSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_PhaseDisruptorsStrafeDamage"/>
+        <EffectArray value="AP_ImmortalSplashStrafeSearch"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_ImmortalTaldarimMissileSpeedStackRB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_ImmortalTaldarimMissileSpeedStack"/>
+        <Count value="16"/>
+    </CEffectRemoveBehavior>
+    <CEffectSwitch id="AP_ImmortalTaldarimMissileSpeedStackSwitch">
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="AP_HaveImmortalTaldarimMissileSpeedStack15Plus" Effect="AP_ImmortalTaldarimMissileSpeedStackTransfer7"/>
+        <CaseArray Validator="AP_HaveImmortalTaldarimMissileSpeedStack13Plus" Effect="AP_ImmortalTaldarimMissileSpeedStackTransfer6"/>
+        <CaseArray Validator="AP_HaveImmortalTaldarimMissileSpeedStack11Plus" Effect="AP_ImmortalTaldarimMissileSpeedStackTransfer5"/>
+        <CaseArray Validator="AP_HaveImmortalTaldarimMissileSpeedStack9Plus" Effect="AP_ImmortalTaldarimMissileSpeedStackTransfer4"/>
+        <CaseArray Validator="AP_HaveImmortalTaldarimMissileSpeedStack7Plus" Effect="AP_ImmortalTaldarimMissileSpeedStackTransfer3"/>
+        <CaseArray Validator="AP_HaveImmortalTaldarimMissileSpeedStack5Plus" Effect="AP_ImmortalTaldarimMissileSpeedStackTransfer2"/>
+        <CaseArray Validator="AP_HaveImmortalTaldarimMissileSpeedStack3Plus" Effect="AP_ImmortalTaldarimMissileSpeedStackTransfer1"/>
+    </CEffectSwitch>
+    <CEffectApplyBehavior id="AP_ImmortalTaldarimMissileSpeedStackTransfer1">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack1"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ImmortalTaldarimMissileSpeedStackTransfer2">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack2"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ImmortalTaldarimMissileSpeedStackTransfer3">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack3"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ImmortalTaldarimMissileSpeedStackTransfer4">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack4"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ImmortalTaldarimMissileSpeedStackTransfer5">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack5"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ImmortalTaldarimMissileSpeedStackTransfer6">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack6"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ImmortalTaldarimMissileSpeedStackTransfer7">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ImmortalTaldarimMissileSpeedStack7"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_ImmortalTaldarimWeaponDamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Armored" value="7"/>
+        <Amount value="8"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_ImmortalTaldarimWeaponDamageSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ImmortalTaldarimWeaponDamage"/>
+        <EffectArray value="AP_ImmortalTaldarimWeaponDamage"/>
+        <EffectArray value="AP_ImmortalTaldarimWeaponDamage"/>
+        <EffectArray value="AP_ImmortalTaldarimWeaponDamage"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_ImmortalTaldarimWeaponLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="AP_ImmortalTaldarimWeaponSearch"/>
+        <AmmoUnit value="AP_ImmortalTaldarimWeaponMissile"/>
+        <Movers Link="AP_ImmortalTaldarimWeaponMover" IfRangeLTE="500"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_ImmortalTaldarimWeaponLMNoSearch">
+        <ValidatorArray value="AP_TargetRadiusLE0Dot125"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_ImmortalTaldarimWeaponDamage"/>
+        <AmmoUnit value="AP_ImmortalTaldarimWeaponMissile"/>
+        <Movers Link="ImmortalTaldarimWeaponMover" IfRangeLTE="500"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_ImmortalTaldarimWeaponLMSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ImmortalTaldarimWeaponLM"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_ImmortalTaldarimWeaponRandomLarge">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <InitialEffect value="AP_ImmortalTaldarimWeaponLMNoSearch"/>
+        <ExpireEffect value="AP_ImmortalTaldarimMissileSpeedStackRB"/>
+        <FinalEffect value="AP_ImmortalTaldarimMissileSpeedStackRB"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="AP_ImmortalTaldarimWeaponLMSet"/>
+        <PeriodicOffsetArray value="-0.75,0,0"/>
+        <PeriodicOffsetArray value="0.75,0,0"/>
+        <PeriodicOffsetArray value="0,-0.75,0"/>
+        <PeriodicOffsetArray value="0,0.75,0"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_ImmortalTaldarimWeaponSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <IncludeArray Effect="AP_ImmortalTaldarimWeaponRandomLarge" Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.6" Effect="AP_ImmortalTaldarimWeaponDamageSet"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_PhaseDisruptors">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="30"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_PhaseDisruptorsStrafeDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="30"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectIssueOrder id="AP_VoidMPImmortalReviveDeadIssueOrder">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_VoidMPImmortalReviveDeath"/>
+        <CmdFlags index="Preempt" value="1"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_VoidMPImmortalReviveApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidMPImmortalRevive"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_VoidMPImmortalReviveRemoveBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_VoidMPImmortalRevive"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_ImmortalBarrierBaseAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_ImmortalBarrierBase"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_ReleaseInterceptorsReleaseSet">
         <EditorCategories value="Race:Protoss"/>
         <EffectArray value="AP_ReleaseInterceptors"/>
         <EffectArray value="AP_ReleaseInterceptorsMoveOrder"/>
@@ -7133,7 +7518,6 @@
     <CEffectLaunchMissile id="AP_GlaiveWurm">
         <EditorCategories value="Race:Terran"/>
         <ImpactEffect value="AP_GlaiveWurmS1"/>
-        <AmmoUnit value="AP_GlaiveWurmWeapon"/>
     </CEffectLaunchMissile>
     <CEffectEnumArea id="AP_GlaiveWurmE1">
         <!-- Sundering Glave no longer reduces bounces -->
@@ -7183,32 +7567,27 @@
         <ValidatorArray value="TargetNotChangeling"/>
         <EditorCategories value="Race:Zerg"/>
         <ImpactEffect value="AP_GlaiveWurmS2"/>
-        <AmmoUnit value="AP_GlaiveWurmM2Weapon"/>
     </CEffectLaunchMissile>
     <CEffectLaunchMissile id="AP_GlaiveWurmM3">
         <ValidatorArray value="noMarkers"/>
         <ValidatorArray value="TargetNotChangeling"/>
         <EditorCategories value="Race:Zerg"/>
         <ImpactEffect value="AP_GlaiveWurmS3"/>
-        <AmmoUnit value="AP_GlaiveWurmM3Weapon"/>
     </CEffectLaunchMissile>
     <CEffectLaunchMissile id="AP_GlaiveWurmM4">
         <ValidatorArray value="noMarkers"/>
         <EditorCategories value="Race:Zerg"/>
         <ImpactEffect value="AP_GlaiveWurmS4"/>
-        <AmmoUnit value="AP_GlaiveWurmM4Weapon"/>
     </CEffectLaunchMissile>
     <CEffectLaunchMissile id="AP_GlaiveWurmM5">
         <ValidatorArray value="noMarkers"/>
         <EditorCategories value="Race:Zerg"/>
         <ImpactEffect value="AP_GlaiveWurmS5"/>
-        <AmmoUnit value="AP_GlaiveWurmM5Weapon"/>
     </CEffectLaunchMissile>
     <CEffectLaunchMissile id="AP_GlaiveWurmM6">
         <ValidatorArray value="noMarkers"/>
         <EditorCategories value="Race:Zerg"/>
         <ImpactEffect value="AP_GlaiveWurmU6"/>
-        <AmmoUnit value="AP_GlaiveWurmM6Weapon"/>
     </CEffectLaunchMissile>
     <CEffectSet id="AP_GlaiveWurmS1">
         <EditorCategories value="Race:Zerg"/>

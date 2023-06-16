@@ -3601,11 +3601,11 @@
         <Flags index="UpgradeCheat" value="0"/>
         <InfoTooltipPriority value="2"/>
         <ScoreResult value="BuildOrder"/>
-<!--        <EffectArray Operation="Set" Reference="Button,Phoenix,Tooltip" Value="Button/Tooltip/PhoenixAiur"/>-->
-<!--        <EffectArray Operation="Set" Reference="Button,Phoenix,AlertTooltip" Value="Button/Tooltip/PhoenixAiur"/>-->
-<!--        <EffectArray Operation="Set" Reference="Actor,TechTreePhoenix,UnitIcon" Value="Assets\Textures\btn-unit-protoss-phoenix.dds"/>-->
-<!--        <EffectArray Operation="Set" Reference="Unit,TechTreePhoenix,Name" Value="Unit/Name/PhoenixAiur"/>-->
-<!--        <EffectArray Operation="Set" Reference="Unit,TechTreePhoenix,Description" Value="Button/Tooltip/PhoenixAiur"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Button,Phoenix,Tooltip" Value="Button/Tooltip/PhoenixAiur"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Button,Phoenix,AlertTooltip" Value="Button/Tooltip/PhoenixAiur"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Actor,TechTreePhoenix,UnitIcon" Value="Assets\Textures\btn-unit-protoss-phoenix.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,TechTreePhoenix,Name" Value="Unit/Name/PhoenixAiur"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,TechTreePhoenix,Description" Value="Button/Tooltip/PhoenixAiur"/>-->
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_PhoenixAiur"/>
     </CUpgrade>
@@ -3651,5 +3651,34 @@
         <EffectArray Reference="Effect,AP_GlaiveWurmE5,AreaArray[0].Radius" Value="1"/>
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Mutalisk"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ImmortalBarrier">
+        <Icon value="Assets\Textures\btn-ability-protoss-invulnerabilityshield.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Immortal"/>
+    </CUpgrade>
+    <CUpgrade id="ImmortalRevive2">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-immortalityprotocol.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Immortal"/>
+    </CUpgrade>
+    <CUpgrade id="IncreasedRange2">
+        <Flags index="UpgradeCheat" value="0"/>
+        <Icon value="Assets\Textures\aoe_splatterran1c.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Weapon,PhaseDisruptors,Range" Value="2"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Immortal"/>
     </CUpgrade>
 </Catalog>

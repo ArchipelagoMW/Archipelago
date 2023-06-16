@@ -582,6 +582,57 @@
         <HostSiteOps Ops="SOpAttachOrigin"/>
         <FogVisibility value="Visible"/>
     </CActorModel>
+    <CActorUnit default="1" id="AP_MutaliskBase" parent="GenericUnitStandard">
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsKillerPhantasm" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Mutalisk_Land"/>
+        <HostSiteOps Ops="AP_SOpBankerMutalisk"/>
+        <DeathArray index="Normal" ModelLink="MutaliskDeath" SoundLink="Mutalisk_Explode"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="AP_Spectre_KillerPhantasmDeath" Name="Hallucination"/>
+        <DeathCustoms>
+            <ActorModel value="AP_MutaliskDeathRagdoll"/>
+            <ModelLink value="MutaliskDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="FireOnMetal"/>
+            <BodySquibs Name="BloodReduced" IsFallback="1"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PortraitModel value="MutaliskPortrait"/>
+        <WalkAnimMoveSpeed value="2"/>
+        <BarOffset value="60"/>
+        <BarWidth value="50"/>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Mutalisk_Ready"/>
+        <SoundArray index="What" value="Mutalisk_What"/>
+        <SoundArray index="Yes" value="Mutalisk_Yes"/>
+        <SoundArray index="Attack" value="Mutalisk_Attack"/>
+        <SoundArray index="Pissed" value="Mutalisk_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
     <CActorModel id="AP_250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
@@ -4350,6 +4401,15 @@
         <Model value="BlindingCloudModelAttachment"/>
         <AutoScaleFactor value="1.000000"/>
     </CActorModel>
+    <CActorAction id="AP_AnnihilatorAttack" parent="GenericAttack" effectAttack="AP_AnnihilatorParticleDisruptors">
+        <On Terms="Signal.*.DarkProtossTest" Send="RefSetFromMsg ::actor.sender ::Sender"/>
+        <On Terms="Signal.*.DarkProtossTest; ValidateUnit AP_NoDarkProtoss" Target="::actor.sender" Send="Signal DarkProtossSwap"/>
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="AP_Annihilator_AttackLaunch"/>
+        <ImpactMap index="None" Model="AP_AnnihilatorAttackImpact" Sound="AP_Annihilator_AttackImpact"/>
+        <ImpactModel value="AP_DarkImmortalTestImpact"/>
+        <ImpactPhysics Name="PhaseDisrupterImpact" MatchKeys="Basic" Physics="ImmortalAttackDeathForce"/>
+    </CActorAction>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -8386,8 +8446,8 @@
     <CActorSound id="AP_GravitonBeamLoop" parent="SoundContinuous">
         <On Terms="Behavior.AP_GravitonBeam.On" Send="Create"/>
         <On Terms="Behavior.AP_GravitonBeam.Off" Send="Destroy"/>
-<!--        <On Terms="Behavior.GravitonBeamUrun.On" Send="Create"/>-->
-<!--        <On Terms="Behavior.GravitonBeamUrun.Off" Send="Destroy"/>-->
+        <!--        <On Terms="Behavior.GravitonBeamUrun.On" Send="Create"/>-->
+        <!--        <On Terms="Behavior.GravitonBeamUrun.Off" Send="Destroy"/>-->
         <On Terms="Behavior.AP_GravitonBeamVoidCampaign.On" Send="Create"/>
         <On Terms="Behavior.AP_GravitonBeamVoidCampaign.Off" Send="Destroy"/>
         <On Terms="Behavior.AP_PhoenixAiurGravitonBeam.On" Send="Create"/>
@@ -8423,8 +8483,8 @@
         <On Terms="Behavior.AP_GravitonBeam.Off" Send="Destroy"/>
         <On Terms="Behavior.AP_GravitonBeamVoidCampaign.On" Send="Create"/>
         <On Terms="Behavior.AP_GravitonBeamVoidCampaign.Off" Send="Destroy"/>
-<!--        <On Terms="Behavior.GravitonBeamUrun.On" Send="Create"/>-->
-<!--        <On Terms="Behavior.GravitonBeamUrun.Off" Send="Destroy"/>-->
+        <!--        <On Terms="Behavior.GravitonBeamUrun.On" Send="Create"/>-->
+        <!--        <On Terms="Behavior.GravitonBeamUrun.Off" Send="Destroy"/>-->
         <On Terms="Behavior.AP_PhoenixAiurGravitonBeam.On" Send="Create"/>
         <On Terms="Behavior.AP_PhoenixAiurGravitonBeam.Off" Send="Destroy"/>
         <Host Subject="_Unit"/>
@@ -8433,13 +8493,13 @@
     </CActorModel>
     <CActorSound id="AP_GravitonBeamStart" parent="SoundOneShot">
         <On Terms="Behavior.AP_GravitonBeam.On" Send="Create"/>
-<!--        <On Terms="Behavior.GravitonBeamUrun.On" Send="Create"/>-->
+        <!--        <On Terms="Behavior.GravitonBeamUrun.On" Send="Create"/>-->
         <On Terms="Behavior.AP_GravitonBeamVoidCampaign.On" Send="Create"/>
         <Sound value="Phoenix_GravitonBeamStart"/>
     </CActorSound>
     <CActorSound id="AP_GravitonBeamStop" parent="SoundOneShot">
         <On Terms="Behavior.AP_GravitonBeam.Off" Send="Create"/>
-<!--        <On Terms="Behavior.GravitonBeamUrun.Off" Send="Create"/>-->
+        <!--        <On Terms="Behavior.GravitonBeamUrun.Off" Send="Create"/>-->
         <On Terms="Behavior.AP_GravitonBeamVoidCampaign.Off" Send="Create"/>
         <Sound value="Phoenix_GravitonBeamEnd"/>
     </CActorSound>
@@ -8637,57 +8697,6 @@
         <TiltAmount value="0.500000"/>
         <AngleRate value="180.000000"/>
     </CActorSiteOpTilter>
-    <CActorUnit default="1" id="AP_MutaliskBase" parent="GenericUnitStandard">
-        <Macros value="PhysicsDeathsSwarmAir"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsKillerPhantasm" Send="DeathCustomize Hallucination"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Mutalisk_Land"/>
-        <HostSiteOps Ops="AP_SOpBankerMutalisk"/>
-        <DeathArray index="Normal" ModelLink="MutaliskDeath" SoundLink="Mutalisk_Explode"/>
-        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="AP_Spectre_KillerPhantasmDeath" Name="Hallucination"/>
-        <DeathCustoms>
-            <ActorModel value="AP_MutaliskDeathRagdoll"/>
-            <ModelLink value="MutaliskDeathRagdoll"/>
-            <Name value="RagdollBasic"/>
-            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
-            <BodySquibs Name="FireOnMetal"/>
-            <BodySquibs Name="BloodReduced" IsFallback="1"/>
-        </DeathCustoms>
-        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
-            <BodySquibs Name="Fire"/>
-        </DeathCustoms>
-        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
-            <BodySquibs Name="Fire"/>
-        </DeathCustoms>
-        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
-            <BodySquibs Name="Acid"/>
-        </DeathCustoms>
-        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
-        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
-        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
-        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
-        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
-        <PortraitModel value="MutaliskPortrait"/>
-        <WalkAnimMoveSpeed value="2"/>
-        <BarOffset value="60"/>
-        <BarWidth value="50"/>
-        <HeroIcon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
-        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level0.dds"/>
-        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
-        <SoundArray index="Ready" value="Mutalisk_Ready"/>
-        <SoundArray index="What" value="Mutalisk_What"/>
-        <SoundArray index="Yes" value="Mutalisk_Yes"/>
-        <SoundArray index="Attack" value="Mutalisk_Attack"/>
-        <SoundArray index="Pissed" value="Mutalisk_Pissed"/>
-        <StatusColors index="Shields">
-            <ColorArray index="0" value="255,0,128,0"/>
-        </StatusColors>
-        <UnitIcon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
-        <VitalColors index="Shields">
-            <ColorArray value="255,0,128,0"/>
-        </VitalColors>
-        <VitalNames index="Shields" value="Vital/ZergShields"/>
-        <WireframeShieldColor value="255,0,128,0"/>
-    </CActorUnit>
     <CActorUnit id="AP_Mutalisk" parent="AP_MutaliskBase" unitName="AP_Mutalisk">
         <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Create AP_MutaliskViper"/>
         <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Destroy"/>
@@ -8709,10 +8718,7 @@
         <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Destroy"/>
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Create AP_MutaliskViper"/>
         <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Destroy"/>
-        <Model value="AP_MutaliskBroodlord"/>
-        <BuildModel value="AP_MutaliskBroodlord"/>
-        <PlacementModel value="AP_MutaliskBroodlord"/>
-        <DeathArray index="Normal" ModelLink="AP_MutaliskBroodlordDeath" SoundLink="Mutalisk_Explode"/>
+        <DeathArray index="Normal" ModelLink="AP_MutaliskBroodlordDeath"/>
         <PortraitModel value="AP_MutaliskBroodlordPortrait"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Zerg-Mutaliskex1a.dds"/>
@@ -8725,10 +8731,7 @@
         </Wireframe>
     </CActorUnit>
     <CActorUnit id="AP_MutaliskViper" parent="AP_MutaliskBase" unitName="AP_MutaliskViper">
-        <Model value="AP_MutaliskViper"/>
-        <BuildModel value="AP_MutaliskViper"/>
-        <PlacementModel value="AP_MutaliskViper"/>
-        <DeathArray index="Normal" ModelLink="AP_MutaliskViperDeath" SoundLink="Mutalisk_Explode"/>
+        <DeathArray index="Normal" ModelLink="AP_MutaliskViperDeath"/>
         <PortraitModel value="AP_MutaliskViperPortrait"/>
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Zerg-Mutaliskex1b.dds"/>
@@ -8798,7 +8801,561 @@
     <CActorMissile id="AP_MutaliskAttackSegment2Missile" parent="GenericAttackMissile" unitName="AP_GlaiveWurmM2Weapon">
         <Model value="GlaiveWurmM2Weapon"/>
     </CActorMissile>
-    <CActorSite id="MutaliskAttackSegment2ImpactSite2">
+    <CActorModel id="AP_DarkImmortalTestImpact" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Target="::Creator" Send="Signal DarkProtossTest"/>
+        <On Terms="Signal.*.DarkProtossSwap" Send="ModelSwap AP_DarkImmortalAttackImpact"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorUnit id="AP_Immortal" parent="GenericUnitBase" unitName="AP_Immortal">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkImmortal"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkImmortal"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Immortal_Land"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="Behavior.AP_ImmortalOverload.On" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Behavior.AP_ImmortalOverload.On" Send="Create AP_Immortal_Barrier_OnSound"/>
+        <On Terms="Behavior.AP_ImmortalOverload.Off" Send="AnimBracketStop Cover"/>
+        <On Terms="Behavior.AP_ImmortalOverload.Off" Send="Create AP_Immortal_Void_BarrierOffSound"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.On" Send="Create AP_Immortal_Barrier_OnSound"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.On" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.Off" Send="Create AP_Immortal_Void_BarrierOffSound"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.Off" Send="AnimBracketStop Cover"/>
+        <Model value="Immortal"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="ImmortalWarpIn"/>
+        <DeathArray index="Normal" ModelLink="ImmortalDeath"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <DeathCustoms ModelLink="DarkImmortalDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="ImmortalDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+            <BodySquibs Name="BloodReduced" Model="ProtossRobotBloodSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowMedium"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <PlacementModel value="ImmortalPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="ImmortalPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleImmortal"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1.25"/>
+        <BarOffset value="80"/>
+        <BarWidth value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Immortal_Ready"/>
+        <SoundArray index="Help" value="Immortal_Help"/>
+        <SoundArray index="What" value="Immortal_What"/>
+        <SoundArray index="Yes" value="ImmortalVoid_Yes"/>
+        <SoundArray index="Attack" value="Immortal_Attack"/>
+        <SoundArray index="Pissed" value="ImmortalVoid_Pissed"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorUnit id="AP_ImmortalBarrier" parent="GenericUnitBase" unitName="AP_ImmortalBarrier">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkImmortal"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkImmortal"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Immortal_Land"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="Behavior.AP_ImmortalOverload.On" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Behavior.AP_ImmortalOverload.On" Send="Create AP_Immortal_Barrier_OnSound"/>
+        <On Terms="Behavior.AP_ImmortalOverload.Off" Send="AnimBracketStop Cover"/>
+        <On Terms="Behavior.AP_ImmortalOverload.Off" Send="Create AP_Immortal_Void_BarrierOffSound"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.On" Send="Create AP_Immortal_Barrier_OnSound"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.On" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.Off" Send="Create AP_Immortal_Void_BarrierOffSound"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.Off" Send="AnimBracketStop Cover"/>
+        <Model value="Immortal"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="ImmortalWarpIn"/>
+        <DeathArray index="Normal" ModelLink="ImmortalDeath"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <DeathCustoms ModelLink="DarkImmortalDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="ImmortalDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+            <BodySquibs Name="BloodReduced" Model="ProtossRobotBloodSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowMedium"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <PlacementModel value="ImmortalPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="ImmortalPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleImmortal"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1.25"/>
+        <BarOffset value="80"/>
+        <BarWidth value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Immortal_Ready"/>
+        <SoundArray index="Help" value="Immortal_Help"/>
+        <SoundArray index="What" value="Immortal_What"/>
+        <SoundArray index="Yes" value="ImmortalVoid_Yes"/>
+        <SoundArray index="Attack" value="Immortal_Attack"/>
+        <SoundArray index="Pissed" value="ImmortalVoid_Pissed"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorUnit id="AP_ImmortalAiur" parent="GenericUnitBase" unitName="AP_ImmortalAiur">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Immortal_Land"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VoidImmortalReviveCorpse" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidImmortalReviveCorpse" Send="Destroy"/>
+        <On Terms="Behavior.AP_ImmortalOverload.On" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Behavior.AP_ImmortalOverload.On" Send="Create AP_Immortal_Barrier_OnSound"/>
+        <On Terms="Behavior.AP_ImmortalOverload.Off" Send="AnimBracketStop Cover"/>
+        <On Terms="Behavior.AP_ImmortalOverload.Off" Send="Create AP_Immortal_Void_BarrierOffSound"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.On" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.On" Send="Create AP_Immortal_Barrier_OnSound"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.Off" Send="AnimBracketStop Cover"/>
+        <On Terms="Behavior.AP_ImmortalBarrierBase.Off" Send="Create AP_Immortal_Void_BarrierOffSound"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_ImmortalAiurWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ImmortalAiurDeath" SoundLink=""/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <PlacementModel value="AP_ImmortalAiurPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="ImmortalPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleImmortal"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1.25"/>
+        <BarOffset value="80"/>
+        <BarWidth value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="Immortal_Birth"/>
+        <SoundArray index="Ready" value="Immortal_Ready"/>
+        <SoundArray index="Help" value="Immortal_Help"/>
+        <SoundArray index="What" value="Immortal_What"/>
+        <SoundArray index="Yes" value="ImmortalVoid_Yes"/>
+        <SoundArray index="Attack" value="Immortal_Attack"/>
+        <SoundArray index="Pissed" value="ImmortalVoid_Pissed"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="AP_ImmortalAttack" parent="GenericAttack" effectAttack="AP_PhaseDisruptors">
+        <On Terms="Signal.*.DarkProtossTest" Send="RefSetFromMsg ::actor.sender ::Sender"/>
+        <On Terms="Signal.*.DarkProtossTest; ValidateUnit AP_NoDarkProtoss" Target="::actor.sender" Send="Signal DarkProtossSwap"/>
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="Immortal_AttackLaunch"/>
+        <ImpactMap index="None" Model="ImmortalAttackImpact" Sound="Immortal_AttackImpact"/>
+        <ImpactModel value="AP_DarkImmortalTestImpact"/>
+        <ImpactPhysics Name="PhaseDisrupterImpact" MatchKeys="Basic" Physics="ImmortalAttackDeathForce"/>
+    </CActorAction>
+    <CActorForceConeRoundedEnd id="AP_ImmortalAttackDeathForce">
+        <Host Subject="_ImpactGuide"/>
+        <HostSiteOps Ops="SOpForwardLaunchGuide SOp2DRotation SOpMoveBy1 SOpMoveDownByDot5"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="26.100000,11.250000"/>
+        <HostEndSiteOps Ops="SOpForwardLaunchGuide SOp2DRotation SOp180 SOpMoveBy1 SOpMoveUpBy1"/>
+        <Angle value="75.000000"/>
+    </CActorForceConeRoundedEnd>
+    <CActorAction id="AP_ImmortalAttackStrafe" parent="GenericAttack" effectAttack="AP_PhaseDisruptorsStrafeDamage">
+        <On Terms="Effect.SplashDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.SplashDamage.Stop; FromEffectTreeDescendant" Send="ActionDamagePhysics"/>
+        <On Terms="Signal.*.DarkProtossTest" Send="RefSetFromMsg ::actor.sender ::Sender"/>
+        <On Terms="Signal.*.DarkProtossTest; ValidateUnit NoDarkProtoss" Target="::actor.sender" Send="Signal DarkProtossSwap"/>
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="Immortal_AttackLaunch"/>
+        <ImpactMap index="None" Model="ImmortalAttackStrafeImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_ImmortalDarkProtossWeaponAttackLaunchModelLeft" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_PhaseDisruptors.Start; ValidatePlayer AP_NoDarkProtoss" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachWeaponLeft"/>
+        <Model value="AP_ImmortalTaldarimWeaponAttackLaunchModel"/>
+    </CActorModel>
+    <CActorModel id="AP_ImmortalDarkProtossWeaponAttackLaunchModelRight" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_PhaseDisruptors.Start; ValidatePlayer AP_NoDarkProtoss" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachWeaponRight"/>
+        <Model value="AP_ImmortalTaldarimWeaponAttackLaunchModel"/>
+    </CActorModel>
+    <CActorModel id="AP_ImmortalOverload" parent="ModelAddition">
+        <Inherits index="BaseModelScale" value="0"/>
+        <Remove Terms="Behavior.AP_ImmortalOverload.On" Send="Create"/>
+        <HostSiteOps Ops="SOpAttachTurret"/>
+        <Model value="ImmortalOverload"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_ImmortalOverloadOffSound" parent="SoundOneShot">
+        <Host Subject="_Selectable"/>
+        <Sound value="Immortal_BarrierOff"/>
+    </CActorSound>
+    <CActorSound id="AP_ImmortalOverloadOnSound" parent="SoundOneShot">
+        <Host Subject="_Selectable"/>
+        <Sound value="Immortal_HardenedShieldImpact"/>
+    </CActorSound>
+    <CActorUnit id="AP_ImmortalShakuras" parent="GenericUnitBase" unitName="AP_ImmortalShakuras">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.AP_AnnihilatorParticleDisruptors.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_AnnihilatorParticleDisruptors.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_AnnihilatorParticleDisruptors.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_AnnihilatorParticleDisruptors.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Effect.AP_ImmortalShakurasShadowCannonLM.Start; ValidateEffect TargetIsAir" Send="AnimPlay Spell Attack,Superior"/>
+        <On Terms="Effect.AP_ImmortalShakurasShadowCannonLM.Start; !ValidateEffect TargetIsAir" Send="AnimPlay Spell Attack"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Attack"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Immortal_Land"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_ImmortalShakurasWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ImmortalShakurasDeath" SoundLink=""/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <PlacementModel value="AP_ImmortalShakurasPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_ImmortalShakurasPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleImmortal"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1.25"/>
+        <BarOffset value="80"/>
+        <BarWidth value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-immortal-nerazim.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="Immortal_Birth"/>
+        <SoundArray index="Ready" value="AP_Annihilator_Ready"/>
+        <SoundArray index="Help" value="AP_Annihilator_Help"/>
+        <SoundArray index="What" value="AP_Annihilator_What"/>
+        <SoundArray index="Yes" value="AP_Annihilator_Yes"/>
+        <SoundArray index="Attack" value="AP_Annihilator_Attack"/>
+        <SoundArray index="Pissed" value="AP_Annihilator_Pissed"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal-Nerazim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-immortal-nerazim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Nerazim-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Nerazim-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Nerazim-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="AP_ImmortalShakurasAirAttack" parent="GenericAttack" effectAttack="AP_ImmortalShakurasAir">
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="Immortal_AttackLaunch"/>
+        <ImpactMap index="None" Model="AP_ImmortalShakurasAirAttackImpact" Sound="Immortal_AttackImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_ImmortalShakurasAntiAirMissilesAttack" parent="GenericAttack" effectImpact="AP_ImmortalShakurasAntiAirMissilesDamage" effectLaunch="AP_ImmortalShakurasAntiAirMissilesLM">
+        <LaunchAttachQuery Methods="AMFilterWeapon AP_AMPatternImmortalShakuras"/>
+        <LaunchAssets Model="TornadoMissileAttackLaunch" Sound="WarHound_Missile_Launch"/>
+        <Missile value="AP_ImmortalShakurasAntiAirMissilesAttackMissile"/>
+        <ImpactMap index="None" Model="AP_ScoutAirLeftAttackImpact" Sound="AP_Scout_AirAttackImpact"/>
+        <ImpactPhysics Name="TornadoMissileImpact" MatchKeys="Basic" Physics="WarhoundMissileAttackForce"/>
+    </CActorAction>
+    <CActorMissile id="AP_ImmortalShakurasAntiAirMissilesAttackMissile" parent="GenericAttackMissile" unitName="AP_ImmortalShakurasAntiAirMissile">
+        <On Terms="ActorCreation" Send="SetTintColor {64,64,192 2.000000}"/>
+        <Model value="AP_PhoenixScoutMissileWeaponLeft"/>
+    </CActorMissile>
+    <CActorAction id="AP_ImmortalShakurasGroundAttack" parent="GenericAttack" effectAttack="AP_ImmortalShakurasGround">
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="Immortal_AttackLaunch"/>
+        <ImpactMap index="None" Model="AP_ImmortalShakurasGroundAttackImpact" Sound="Immortal_AttackImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_ImmortalShakurasShadowCannonAttack" parent="GenericAttack" effectImpact="AP_ImmortalShakurasShadowCannonDamage" effectLaunch="AP_ImmortalShakurasShadowCannonLM">
+        <LaunchAttachQuery Methods="AP_AMPatternImmortalShakuras"/>
+        <LaunchAssets Model="AP_ImmortalShakurasShadowCannonAttackLaunch" Sound="AP_ImmortalShakuras_ShadowCannon_AttackLaunch"/>
+        <Missile value="AP_ImmortalShakurasShadowCannonAttackMissile"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="AP_ImmortalShakurasShadowCannonAttackImpact" Sound="AP_ImmortalShakuras_ShadowCannon_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_ImmortalShakurasShadowCannonAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="AP_ImmortalShakurasShadowCannonMissile"/>
+    <CActorRange id="AP_ImmortalShakurasShadowCannonRange" parent="RangeAbil" abil="AP_ImmortalShakurasShadowCannon">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorModel id="AP_ImmortalStasisHealImpact" parent="ModelAnimationStyleContinuous">
+        <EditorCategories value=""/>
+        <On Terms="Behavior.AP_VoidImmortalStasisHeal.On" Send="Create"/>
+        <On Terms="Behavior.AP_VoidImmortalStasisHeal.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetTintColor {0,255,255 3.000000}"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_ImmortalStasisHealImpact"/>
+    </CActorModel>
+    <CActorModel id="AP_ImmortalSuperCannonsImpactLeft" parent="ModelAnimationStyleContinuous">
+        <EditorCategories value=""/>
+        <On Terms="Behavior.AP_VoidImmortalSuperCannons.On" Send="Create"/>
+        <On Terms="Behavior.AP_VoidImmortalSuperCannons.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetTintColor {0,255,255 3.000000}"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeaponLeft"/>
+        <Model value="AP_ImmortalSuperCannonsImpact"/>
+    </CActorModel>
+    <CActorModel id="AP_ImmortalSuperCannonsImpactRight" parent="ModelAnimationStyleContinuous">
+        <EditorCategories value=""/>
+        <On Terms="Behavior.AP_VoidImmortalSuperCannons.On" Send="Create"/>
+        <On Terms="Behavior.AP_VoidImmortalSuperCannons.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetTintColor {0,255,255 3.000000}"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachWeaponRight"/>
+        <Model value="AP_ImmortalSuperCannonsImpact"/>
+    </CActorModel>
+    <CActorUnit id="AP_ImmortalTaldarim" parent="GenericUnitBase" unitName="AP_ImmortalTaldarim">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.AP_PhaseDisruptors.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.AP_PhaseDisruptors.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.AP_PhaseDisruptors.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.AP_PhaseDisruptors.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Immortal_Land"/>
+        <On Terms="Effect.AP_ImmortalTaldarimWeaponLM.Start" Send="AnimPlay Attack Attack,Superior"/>
+        <On Terms="Effect.AP_ImmortalTaldarimWeaponCP.Stop" Send="AnimClear Attack"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Attack"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_ImmortalTaldarimWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ImmortalTaldarimDeath" SoundLink=""/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <PlacementModel value="AP_ImmortalTaldarimPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_ImmortalTaldarimPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleImmortal"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1.25"/>
+        <BarOffset value="80"/>
+        <BarWidth value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-immortal-taldarim.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="Immortal_Birth"/>
+        <SoundArray index="Ready" value="AP_Vanguard_Ready"/>
+        <SoundArray index="Help" value="AP_Vanguard_Help"/>
+        <SoundArray index="What" value="AP_Vanguard_What"/>
+        <SoundArray index="Yes" value="AP_Vanguard_Yes"/>
+        <SoundArray index="Attack" value="AP_Vanguard_Attack"/>
+        <SoundArray index="Pissed" value="AP_Vanguard_Pissed"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal-Taldarim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-immortal-taldarim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Taldarim-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Taldarim-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Immortal-Taldarim-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="AP_ImmortalTaldarimWeaponAttack" parent="GenericAttack" effectImpact="AP_ImmortalTaldarimWeaponSearch" effectLaunch="AP_ImmortalTaldarimWeaponLM">
+        <LaunchAttachQuery Methods="AP_AMPatternImmortalTaldarim"/>
+        <LaunchAssets Sound="AP_ImmortalTaldarim_ScatterCannon_AttackLaunch"/>
+        <Missile value="AP_ImmortalTaldarimWeaponMissile"/>
+        <ImpactMap index="None" Model="AP_ImmortalTaldarimWeaponImpact" Sound="AP_ImmortalTaldarim_ScatterCannon_AttackImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_ImmortalTaldarimWeaponAttackDirect" parent="GenericAttack" effectImpact="AP_ImmortalTaldarimWeaponDamage" effectLaunch="AP_ImmortalTaldarimWeaponLMNoSearch">
+        <LaunchAttachQuery Methods="AP_AMPatternImmortalTaldarim"/>
+        <LaunchAssets Sound="AP_ImmortalTaldarim_ScatterCannon_AttackLaunch"/>
+        <Missile value="AP_ImmortalTaldarimWeaponMissile"/>
+        <ImpactMap index="None" Model="AP_ImmortalTaldarimWeaponImpact" Sound="AP_ImmortalTaldarim_ScatterCannon_AttackImpact"/>
+    </CActorAction>
+    <CActorForceSphere id="AP_ImmortalTaldarimWeaponAttackImpactForce">
+        <On Terms="Effect.AP_ImmortalTaldarimWeaponSearch.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPoint SOpForwardLaunchGuide SOp2DRotation SOpRandomPointInCircleDot35"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="25.000000,12.000000"/>
+        <Radius value="2.150000,0.200000"/>
+    </CActorForceSphere>
+    <CActorModel id="AP_ImmortalTaldarimWeaponAttackLaunchModelLeft" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ImmortalTaldarimWeaponRandomLarge.Start" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachWeaponLeft SOpPointUp1By1"/>
+        <Model value="AP_ImmortalTaldarimWeaponAttackLaunchModel"/>
+    </CActorModel>
+    <CActorModel id="AP_ImmortalTaldarimWeaponAttackLaunchModelRight" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ImmortalTaldarimWeaponRandomLarge.Start" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachWeaponRight SOpPointUp1By1"/>
+        <Model value="AP_ImmortalTaldarimWeaponAttackLaunchModel"/>
+    </CActorModel>
+    <CActorMissile id="AP_ImmortalTaldarimWeaponMissile" parent="GenericAttackMissileWithDeathAnim" unitName="AP_ImmortalTaldarimWeaponMissile">
+        <On Terms="ActorCreation" Send="Create AP_ImmortalTaldarimWeaponMissileA"/>
+    </CActorMissile>
+    <CActorModel id="AP_ImmortalTaldarimWeaponMissileA" parent="ModelAnimationStyleContinuous">
+        <Model value="AP_ImmortalTaldarimWeaponMissile"/>
+        <Host Subject="_Missile"/>
+        <HostSiteOps Ops="AP_ImmortalTaldarimWeaponMissileAOffset"/>
+    </CActorModel>
+    <CActorSiteOpLocalOffset id="AP_ImmortalTaldarimWeaponMissileAOffset">
+        <LocalOffset value="0.000000,0.000000,0.300000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorTurret id="AP_ImmortalTurret">
+        <On Terms="TurretEnable.AP_Immortal" Send="Create"/>
+    </CActorTurret>
+    <CActorSound id="AP_Immortal_Barrier_OnSound" parent="SoundOneShot">
+        <Sound value="Immortal_BarrierOn"/>
+    </CActorSound>
+    <CActorSound id="AP_Immortal_Land" parent="SoundOneShot">
+        <Sound value="Immortal_Land"/>
+    </CActorSound>
+    <CActorSound id="AP_Immortal_Void_BarrierOffSound" parent="SoundOneShot">
+        <Sound value="Immortal_Void_BarrierOff"/>
+    </CActorSound>
+    <CActorSite id="AP_MutaliskAttackSegment2ImpactSite">
         <HostSiteOps HoldRotation="1"/>
     </CActorSite>
     <CActorAction id="AP_MutaliskAttackSegment2ViciousGlaive" parent="GenericAttack" effectImpact="AP_GlaiveWurmU2" effectLaunch="AP_GlaiveWurmM2">
@@ -8867,16 +9424,16 @@
         <On Terms="UnitDeath.AP_Mutalisk; PassChance 25.000000" Send="Create"/>
         <Sound value="Mutalisk_Death"/>
     </CActorSound>
-    <CActorSite id="MutaliskAttackSegment3ImpactSite2">
+    <CActorSite id="AP_MutaliskAttackSegment3ImpactSite">
         <HostSiteOps HoldRotation="1"/>
     </CActorSite>
-    <CActorSite id="MutaliskAttackSegment4ImpactSite2">
+    <CActorSite id="AP_MutaliskAttackSegment4ImpactSite">
         <HostSiteOps HoldRotation="1"/>
     </CActorSite>
-    <CActorSite id="MutaliskAttackSegment5ImpactSite2">
+    <CActorSite id="AP_MutaliskAttackSegment5ImpactSite">
         <HostSiteOps HoldRotation="1"/>
     </CActorSite>
-    <CActorSite id="MutaliskAttackSegment6ImpactSite2">
+    <CActorSite id="AP_MutaliskAttackSegment6ImpactSite">
         <HostSiteOps HoldRotation="1"/>
     </CActorSite>
     <CActorModel id="AP_MutaliskDeathRagdoll">
@@ -8942,6 +9499,19 @@
     <CActorSound id="AP_Mutalisk_Land" parent="SoundOneShot">
         <Sound value="Mutalisk_Land"/>
     </CActorSound>
+    <CActorSound id="ShieldAbsorbImmortalSound2" parent="SoundOneShot">
+        <On Terms="Behavior.AP_HardenedShield.DamageHandled" Send="Create"/>
+        <Sound value="Immortal_HardenedShieldImpact"/>
+    </CActorSound>
+    <CActorModel id="ShieldAbsorbImmortalViz2" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <Remove Terms="Behavior.HardenedShield.DamageHandled" Send="Create"/>
+        <On Terms="Behavior.AP_HardenedShield.DamageHandled" Send="Create"/>
+        <On Terms="AnimDone" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="ShieldAbsorbImmortalViz"/>
+    </CActorModel>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -13969,4 +14539,84 @@
     <CActorSite id="AP_YoinkVikingGroundTentacleLaunchSite">
         <Host Subject="::scope.AP_YoinkTentacleVikingGround"/>
     </CActorSite>
+    <CActorSound id="AP_VoidMPImmortalReviveFinishSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VoidMPImmortalReviveCorpse" Send="Create"/>
+        <Sound value="ImmortalMP_ReviveFinish"/>
+    </CActorSound>
+    <CActorSound id="AP_VoidMPImmortalReviveLoopSound1" parent="SoundContinuous">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VoidMPImmortalReviveCorpse" Send="Destroy"/>
+        <Sound value="ImmortalMP_ReviveLoop1"/>
+    </CActorSound>
+    <CActorSound id="AP_VoidMPImmortalReviveLoopSound" parent="SoundContinuous">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VoidMPImmortalReviveCorpse" Send="Destroy"/>
+        <Sound value="ImmortalMP_ReviveLoop2"/>
+    </CActorSound>
+    <CActorSound id="AP_VoidMPImmortalReviveStartSound" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="Create"/>
+        <Sound value="ImmortalMP_ReviveStart"/>
+    </CActorSound>
+    <CActorUnit id="AP_VoidMPImmortalReviveWreckage" parent="GenericUnitMorph" unitName="AP_VoidMPImmortalReviveCorpse">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="$Birth 0 -1.000000 -1.000000 30.000000 AsDuration"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="Create AP_VoidMPImmortalReviveWreckageExplosion"/>
+        <Model value="ImmortalWarpIn"/>
+        <DeathArray index="Normal" ModelLink="ProtossMediumUnitDeath" SoundLink="Immortal_Explode"/>
+        <PortraitModel value="ImmortalPortrait"/>
+        <BarOffset value="80"/>
+        <BarWidth value="90"/>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-immortal.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_VoidMPImmortalReviveWreckage"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="Immortal_Ready"/>
+        <SoundArray index="What" value="Immortal_What"/>
+        <SoundArray index="Yes" value="Immortal_Yes"/>
+        <SoundArray index="Attack" value="Immortal_Attack"/>
+        <SoundArray index="Pissed" value="Immortal_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-immortal.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-immortal.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_VoidMPImmortalReviveWreckageAddition1" parent="ModelAnimationStyleContinuous">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VoidMPImmortalReviveCorpse" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <Model value="VoidMPImmortalReviveWreckageAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_VoidMPImmortalReviveWreckageAddition2" parent="ModelAnimationStyleContinuous">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VoidMPImmortalReviveCorpse" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <Model value="VoidMPImmortalReviveWreckageAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_VoidMPImmortalReviveWreckageAddition3" parent="ModelAnimationStyleContinuous">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VoidMPImmortalReviveCorpse" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <Model value="VoidMPImmortalReviveWreckageAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_VoidMPImmortalReviveWreckageAddition4" parent="ModelAnimationStyleContinuous">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VoidMPImmortalReviveCorpse" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <Model value="VoidMPImmortalReviveWreckageAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_VoidMPImmortalReviveWreckageAddition5" parent="ModelAnimationStyleContinuous">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_VoidMPImmortalReviveCorpse" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_VoidMPImmortalReviveCorpse" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <Model value="VoidMPImmortalReviveWreckageAddition"/>
+    </CActorModel>
+    <CActorModel id="AP_VoidMPImmortalReviveWreckageExplosion" parent="ModelAddition">
+        <Remove Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorCreation" Send="AnimPlay FakeDeath Death,02"/>
+        <On Terms="AnimDone; AnimName FakeDeath" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="TimerSet 3.000000 DeathAnimDelay"/>
+        <On Terms="TimerExpired; TimerName DeathAnimDelay" Send="AnimSetDuration FakeDeath 30.000000"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="ImmortalDeath"/>
+    </CActorModel>
 </Catalog>

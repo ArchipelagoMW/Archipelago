@@ -1304,4 +1304,12 @@
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSEngorgedAppendagesCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseImmortalRevive">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeImmortalReviveCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVoidImmortalWeaponSplash">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeVoidImmortalWeaponSplashCompleteOnly"/>
+    </CRequirement>
 </Catalog>

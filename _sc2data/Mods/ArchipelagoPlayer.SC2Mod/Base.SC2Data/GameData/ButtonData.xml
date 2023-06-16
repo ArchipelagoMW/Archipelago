@@ -1751,4 +1751,40 @@
         <AlertIcon value="Assets\Textures\btn-unit-zerg-viper.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_HardenedShield">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-HardenedShields-color.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-HardenedShields-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_HaveBarrier">
+        <Icon value="Assets\Textures\btn-ability-protoss-barrier-upgraded.dds"/>
+        <AlertTooltip value="Button/Tooltip/ResearchBarrier"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-barrier-upgraded.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ImmortalOverload">
+        <Icon value="Assets\Textures\btn-ability-protoss-invulnerabilityshield.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-invulnerabilityshield.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ImmortalShakurasShadowCannon">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-ShadowCannon.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-ShadowCannon.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ImmortalTaldarimScatterCannon">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-ScatterCannon.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-ScatterCannon.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidMPImmortalRevive">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-immortalityprotocol.dds"/>
+        <AlertIcon value="Assets\Textures\btn-techupgrade-terran-immortalityprotocol.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ImmortalBarrierBase">
+        <Icon value="Assets\Textures\btn-ability-protoss-invulnerabilityshield.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-invulnerabilityshield.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

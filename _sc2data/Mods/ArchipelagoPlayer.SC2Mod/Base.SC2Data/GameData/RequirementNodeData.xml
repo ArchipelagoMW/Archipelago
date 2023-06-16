@@ -2281,4 +2281,12 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HotSMutaliskViper" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeImmortalReviveCompleteOnlyTechTreeCheat">
+        <Count Link="AP_ImmortalRevive" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVoidImmortalWeaponSplashCompleteOnly">
+        <!-- Looks like the upgrade only exists as commented out in coop -->
+        <Count Link="AP_VoidImmortalWeaponSplash" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

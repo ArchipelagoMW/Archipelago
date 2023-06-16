@@ -2521,7 +2521,8 @@
     <CBehaviorBuff id="AP_VoidPhoenixPhasingArmor">
         <InfoFlags index="Hidden" value="1"/>
         <EditorCategories value="AbilityorEffectType:Units"/>
-        <DamageResponse Chance="1" Handled="AP_VoidPhoenixPhasingArmorApply">
+        <DamageResponse Handled="AP_VoidPhoenixPhasingArmorApply">
+            <Chance value="1"/>
             <Cost>
                 <Cooldown TimeUse="5"/>
             </Cost>
@@ -2608,5 +2609,122 @@
         <Modification>
             <VitalRegenArray index="Life" value="10"/>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HardenedShield">
+        <Alignment value="Positive"/>
+        <Cost>
+            <Cooldown Link="Immortal Shield"/>
+        </Cost>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-Protoss-HardenedShields.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="CasterShieldsGE1"/>
+        <DamageResponse ClampMaximum="10" Minimum="10">
+            <Kind index="Spell" value="0"/>
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalOverload">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-invulnerabilityshield.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <DamageResponse ModifyFraction="0" ModifyLimit="200" ModifyMinimumDamage="1">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalShakurasAntiAirMissileDisableAttack">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Modification>
+            <StateFlags index="SuppressAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalShakurasShadowCannon">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_ImmortalShakurasShadowCannonValidators"/>
+        <Duration value="2"/>
+        <Period value="0.25"/>
+        <InitialEffect value="AP_ImmortalShakurasShadowCannonTurret"/>
+        <PeriodicEffect value="AP_ImmortalShakurasShadowCannonLM"/>
+        <FinalEffect value="AP_ImmortalShakurasShadowCannonTurretClear"/>
+        <Modification>
+            <StateFlags index="SuppressAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalShakurasShadowCannonInitialDisableAttack">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="0.125"/>
+        <Modification>
+            <StateFlags index="Passive" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalTaldarimMissileSpeedStack1">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification TimeScale="0.833"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalTaldarimMissileSpeedStack2">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification TimeScale="0.714"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalTaldarimMissileSpeedStack3">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification TimeScale="0.625"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalTaldarimMissileSpeedStack4">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification TimeScale="0.555"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalTaldarimMissileSpeedStack5">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification TimeScale="0.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalTaldarimMissileSpeedStack6">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification TimeScale="0.454"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalTaldarimMissileSpeedStack7">
+        <InfoFlags index="Hidden" value="1"/>
+        <Modification TimeScale="0.416"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalTaldarimMissileSpeedStack8">
+        <InfoFlags index="Hidden" value="1"/>
+        <MaxStackCount value="16"/>
+        <Duration value="2"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidMPImmortalRevive">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_UseImmortalRevive"/>
+        <DamageResponse Fatal="1" Handled="AP_VoidMPImmortalReviveDeadIssueOrder" ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidMPImmortalReviveSupressed">
+        <Alignment value="Negative"/>
+        <Cost>
+            <Cooldown TimeStart="180"/>
+        </Cost>
+        <InfoIcon value="Assets\Textures\btn-techupgrade-terran-immortalityprotocol.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="180"/>
+        <InitialEffect value="AP_VoidMPImmortalReviveRemoveBehavior"/>
+        <ExpireEffect value="AP_VoidMPImmortalReviveApplyBehavior"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ImmortalBarrierBase">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-invulnerabilityshield.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <DamageResponse>
+            <Chance value="1"/>
+            <ModifyFraction value="0"/>
+            <ModifyLimit value="100"/>
+            <ModifyMinimumDamage value="1"/>
+        </DamageResponse>
     </CBehaviorBuff>
 </Catalog>

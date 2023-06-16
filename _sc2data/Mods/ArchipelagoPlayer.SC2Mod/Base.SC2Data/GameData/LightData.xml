@@ -312,18 +312,10 @@
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
     <CLight id="AP_RoachVilePortrait">
-        <ToDInfoArray index="0" Id="NoLight" AmbientColor="0.050980,0.054902,0.094118" OperatorHDR="4">
+        <ToDInfoArray index="0" AmbientColor="0.050980,0.054902,0.094118">
             <Param index="HDRExposure" value="1.480000"/>
             <Param index="HDRBloomThreshold" value="1.950000"/>
             <Param index="HDREmisMultiplier" value="3.000000"/>
-            <Param index="HDRGain" value="0.000000"/>
-            <Param index="HDRScale" value="0.000000"/>
-            <Param index="AOOcclusionRadius" value="1.000000"/>
-            <Param index="AONoOcclusion" value="0.900000"/>
-            <Param index="AOOcclusionPower" value="2.000000"/>
-            <Param index="AODetailOcclusionRadius" value="0.010000"/>
-            <Param index="AODetailNoOcclusion" value="0.060000"/>
-            <Param index="AODetailOcclusionPower" value="4.000000"/>
             <DirectionalLight index="Key">
                 <Color value="0.501961,0.501961,1.000000"/>
                 <ColorMultiplier value="0.832000"/>
@@ -677,5 +669,46 @@
             <DirectionalLight index="Back" Color="0.501961,0.501961,1.000000" ColorMultiplier="5.248000" Direction="0.011517,0.219033,0.975650"/>
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
+    </CLight>
+    <CLight id="AP_PortraitNerazimImmortal" parent="default">
+        <ToDInfoArray index="0" Id="AP_PortraitNerazimImmortal" AmbientColor="0.000000,0.000000,0.000000" Colorize="1">
+            <Param index="HDRExposure" value="1.875000"/>
+            <Param index="HDRSpecMultiplier" value="2.000000"/>
+            <Param index="HDREmisMultiplier" value="6.000000"/>
+            <Param index="ColorizationContrast" value="0.900000"/>
+            <Param index="ColorizationHue" value="-0.468000"/>
+            <Param index="ColorizationSaturation" value="0.638000"/>
+            <Param index="ColorizationLightness" value="-0.080000"/>
+            <Param index="ColorizationBlend" value="0.400000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.803922,0.796079,0.996078"/>
+                <ColorMultiplier value="0.250000"/>
+                <SpecularColor value="0.207843,0.639216,0.992157"/>
+                <SpecColorMultiplier value="0.750000"/>
+                <Direction value="-0.017107,0.263824,-0.964419"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.062745,0.113725,0.082353" ColorMultiplier="0.000000"/>
+            <DirectionalLight index="Back" Color="0.227451,0.894118,0.972549" ColorMultiplier="2.344000" Direction="-0.021676,-0.596812,-0.802088"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
+    <CLight id="AP_PortraitTalDarimImmortal" parent="default">
+        <ToDInfoArray index="0" Id="AP_PortraitTalDarimImmortal" AmbientColor="0.000000,0.000000,0.000000" Colorize="1">
+            <Param index="HDRExposure" value="2.075000"/>
+            <Param index="HDRSpecMultiplier" value="2.000000"/>
+            <Param index="ColorizationHue" value="0.024000"/>
+            <Param index="ColorizationSaturation" value="0.786000"/>
+            <Param index="ColorizationLightness" value="-0.480000"/>
+            <Param index="ColorizationBlend" value="0.417000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.509804,0.760784,0.858824"/>
+                <ColorMultiplier value="2.000000"/>
+                <SpecColorMultiplier value="0.500000"/>
+                <Direction value="-0.049811,-0.029882,-0.998312"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" ColorMultiplier="0.000000"/>
+            <DirectionalLight index="Back" Color="0.729412,0.113725,0.113725" ColorMultiplier="1.500000" Direction="0.044508,0.467357,0.882948"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
     </CLight>
 </Catalog>
