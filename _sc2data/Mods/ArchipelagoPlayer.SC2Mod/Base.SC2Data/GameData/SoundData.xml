@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
+    <CActorSound id="AP_Nova_ShotgunAuto_TailsSound" parent="SoundOneShot">
+        <Sound value="PhysicsImpactBase"/>
+        <Layers>
+            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_L"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="-1.000000,-1.000000"/>
+            <PlayDelay value="60,120"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_R"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Sound"/>
+            <Chance value="100"/>
+            <Pitch value="-1.000000,-1.000000"/>
+            <PlayDelay value="60,120"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+    </CActorSound>
     <CSound default="1" id="AP_HoS_ZergAck" parent="HoS_Voice">
         <EditorCategories value="Race:Zerg"/>
     </CSound>
@@ -46,6 +69,14 @@
             <FacialAnim value="^TemplateParam1^"/>
             <FacialGroup value="^TemplateParam1^"/>
             <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound default="1" id="AP_HeroNova_Ack" parent="TerranAck">
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam2^.ogg"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam1^.fxe"/>
         </AssetArrayTemplate>
     </CSound>
     <CSound id="AP_Medic_Attack" parent="TerranAck">
@@ -4203,5 +4234,49 @@
         <DupeMuteCount value="4"/>
         <Pitch value="-1.000000,1.000000"/>
         <Volume value="-8.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_Spell_DisablingCloud_Impact" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Spell_DisablingCloud_Impact_00.wav" Offset="5877,5877" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_DisablingCloud_Impact_01.wav" Offset="19032,19032" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_DisablingCloud_Impact_02.wav" Offset="5671,5671" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_DisablingCloud_Impact_03.wav" Offset="6688,6688" FacialGroup=""/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="1"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Viper_AirAttack_Impact" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Corruptor\Corruptor_AttackImpact0.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\Corruptor\Corruptor_AttackImpact1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\Corruptor\Corruptor_AttackImpact2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Zerg\Corruptor\Corruptor_AttackImpact3.wav" FacialGroup=""/>
+        <Pitch value="6.000000,7.000000"/>
+        <Volume value="-7.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Spell_Consume_Launch" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Spell_Consumption_Launch_00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Consumption_Launch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Consumption_Launch_02.wav" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_ExplosiveGlaiveImpactSound" parent="Combat">
+        <EditorCategories value="Race:Terran"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\Terran_ExplosionSmall9.wav" Pitch="-3.000000,3.000000"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="5"/>
+        <Pitch value="8.000000,8.000000"/>
+        <Volume value="-5.000000,-5.000000"/>
     </CSound>
 </Catalog>

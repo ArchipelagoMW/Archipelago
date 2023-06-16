@@ -2066,11 +2066,9 @@
         <Count Link="AP_NovaArmorStealthSuit" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
     <CRequirementNot id="AP_NotCountUpgradeNovaArmorStealthSuitCompleteOnly">
-        <Flags index="TechTreeCheat" value="0"/>
         <OperandArray index="0" value="AP_CountUpgradeNovaArmorStealthSuitCompleteOnly"/>
     </CRequirementNot>
     <CRequirementAnd id="AP_UseNovaBasicCloak">
-        <Flags index="TechTreeCheat" value="0"/>
         <OperandArray value="AP_CountUpgradeNovaCloakCompleteOnly"/>
         <OperandArray value="AP_NotCountUpgradeNovaArmorStealthSuitCompleteOnly"/>
     </CRequirementAnd>
@@ -2241,5 +2239,46 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Tooltip value=""/>
         <Count Link="AP_VoidPhoenixDoubleGraviton" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitBroodlingEscortQueuedOrBetterAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_BroodlingEscort" State="QueuedOrBetterAtUnit"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitGreaterSpireCompleteOnly291495724TechTreeCheat">
+        <Count Link="AP_GreaterSpire" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementLT id="AP_LTCountUnitBroodlingEscortQueuedOrBetterAtUnit2">
+        <OperandArray index="0" value="AP_CountUnitBroodlingEscortQueuedOrBetterAtUnit"/>
+        <OperandArray index="1" value="2"/>
+    </CRequirementLT>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotsKeneticMitosisCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotsKeneticMitosis" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotsKeneticMitosisCompleteOnlyTechTreeCheat">
+        <Count Link="AP_HotsKeneticMitosis" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSEngorgedAppendagesCompleteOnly">
+        <Count Link="AP_HotSEngorgedAppendages" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSExplosiveGlaiveCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSExplosiveGlaive" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSRapidRegenerationCompleteOnly">
+        <Count Link="AP_HotSRapidRegeneration" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSViciousGlaiveCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSViciousGlaive" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSMutaliskBroodlord" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSMutaliskViperCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSMutaliskViper" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
 </Catalog>

@@ -1297,4 +1297,58 @@
         <Period value="1.1"/>
         <AllowedMovement value="Moving"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_BroodlingStrike">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level0.dds"/>
+        <DisplayEffect value="AP_BroodlingEscortDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9.5"/>
+        <Period value="2.5"/>
+        <Effect value=""/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_NeedleClaws">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="15"/>
+        <Range value="0.1"/>
+        <Period value="0.6455"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_BroodlingEscort">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level0.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <Arc value="360"/>
+        <Period value="10"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ViperAir">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level0.dds"/>
+        <DisplayEffect value="AP_ViperAirDamage"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="1.5"/>
+        <Effect value="AP_ViperAirLaunchMissile"/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_GlaiveWurm">
+        <EditorCategories value="Race:Zerg"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level0.dds"/>
+        <DisplayEffect value="AP_GlaiveWurmU1"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="3"/>
+        <RangeSlop value="2"/>
+        <ArcSlop value="45"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <Period value="1.5246"/>
+        <DamagePoint value="0"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
 </Catalog>

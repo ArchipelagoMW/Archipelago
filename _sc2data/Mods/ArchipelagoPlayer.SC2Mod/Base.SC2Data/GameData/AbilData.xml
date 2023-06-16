@@ -2518,6 +2518,40 @@
         <AcquireAttackers value="1"/>
         <RangeSlop value="2"/>
     </CAbilEffectTarget>
+    <CAbilArmMagazine id="AP_BroodLordHangar">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Flags index="AutoCastOffOwnerLeave" value="0"/>
+        <Flags index="Retarget" value="1"/>
+        <Leash value="12"/>
+        <InfoArray index="Ammo1" Time="2.5" CountStart="2" Manage="Recall" Unit="AP_BroodlingEscort">
+            <Button DefaultButtonFace="Broodling" Requirements="AP_ArmBroodlingEscort"/>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+            <Flags index="External" value="1"/>
+        </InfoArray>
+        <Alert value=""/>
+        <EffectArray index="Death" value="InterceptorFate"/>
+        <EffectArray index="Release" value="AP_KillsToCaster"/>
+        <ExternalAngle value="-149.9853"/>
+        <ExternalAngle value="149.9853"/>
+    </CAbilArmMagazine>
+    <CAbilQueue id="AP_BroodLordQueue2">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
+        <QueueSize value="2"/>
+        <Flags index="Hidden" value="1"/>
+        <Flags index="Passive" value="1"/>
+    </CAbilQueue>
+    <CAbilEffectTarget id="AP_DisablingCloud">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <Range value="9"/>
+        <CursorEffect value="AP_DisablingCloudSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DisablingCloud"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -3481,6 +3515,83 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_MorphToBroodLord">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="BroodLord" State="Restricted" Requirements="AP_HaveGreaterSpire"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <ActorKey value="GuardianAspect"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="Rally" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <Flags index="SuppressMovement" value="1"/>
+        <InfoArray Unit="AP_BroodLordCocoon" RandomDelayMin="0.001" RandomDelayMax="0.001"/>
+        <InfoArray Score="1" Unit="AP_BroodLord">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="33.8332"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Delay" value="33.8332"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="33.8332"/>
+                <EffectArray index="Finish" value="PostMorphHeal"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <AbilClassEnableArray index="CAbilMove" value="1"/>
+        <AbilClassEnableArray index="CAbilStop" value="1"/>
+    </CAbilMorph>
+    <CAbilTrain id="AP_MutaliskMorphToBroodLord">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RefundFraction>
+            <Resource index="Minerals" value="-0.75"/>
+            <Resource index="Vespene" value="-0.75"/>
+            <Resource index="Terrazine" value="-0.75"/>
+            <Resource index="Custom" value="-0.75"/>
+        </RefundFraction>
+        <Activity value="UI/Morphing"/>
+        <ActorKey value="GuardianAspect"/>
+        <Flags index="KillOnFinish" value="1"/>
+        <Flags index="Select" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <MorphUnit value="AP_BroodLordCocoon"/>
+        <Range value="10"/>
+        <InfoArray index="Train1" Time="15" Alert="MorphComplete_Zerg">
+            <Button DefaultButtonFace="BroodLord" State="Restricted" Requirements="AP_HaveGreaterSpireAndHotSBroodlord">
+                <Flags index="ShowInGlossary" value="1"/>
+            </Button>
+            <Unit value="AP_BroodLord"/>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+    </CAbilTrain>
+    <CAbilTrain id="AP_MutaliskMorphToViper">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RefundFraction>
+            <Resource index="Minerals" value="-0.75"/>
+            <Resource index="Vespene" value="-0.75"/>
+            <Resource index="Terrazine" value="-0.75"/>
+            <Resource index="Custom" value="-0.75"/>
+        </RefundFraction>
+        <Activity value="UI/Morphing"/>
+        <ActorKey value="ViperAspect"/>
+        <Flags index="KillOnFinish" value="1"/>
+        <Flags index="Select" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <MorphUnit value="AP_ViperCocoon"/>
+        <Range value="10"/>
+        <InfoArray index="Train1" Time="15" Alert="MorphComplete_Zerg">
+            <Button DefaultButtonFace="BroodLord" State="Restricted" Requirements="AP_HaveGreaterSpireAndHotSViper">
+                <Flags index="ShowInGlossary" value="1"/>
+            </Button>
+            <Unit value="AP_Viper"/>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+    </CAbilTrain>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -4042,4 +4153,29 @@
             <Flags index="ToSelection" value="1"/>
         </CmdButtonArray>
     </CAbilEffectInstant>
+    <CAbilEffectTarget id="AP_ViperConsumption">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <TargetFilters value="Biological;Self,Enemy,Structure,Heroic,Missile,Uncommandable,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
+        <Range value="4"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ViperConsumption"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_Yoink">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_YoinkStartSwitch"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <TargetFilters value="Visible;Self,Structure,Heroic,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <AINotifyEffect value="FaceEmbrace"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_FaceEmbrace"/>
+    </CAbilEffectTarget>
 </Catalog>

@@ -492,6 +492,10 @@
         <EffectArray Operation="Set" Reference="Unit,AP_ThorWreckage,Description" Value="Button/Tooltip/ThorWreckageUpgraded"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_HotsKeneticMitosis">
+        <AffectedUnitArray value="AP_BroodLord"/>
+        <AffectedUnitArray value="AP_Broodling"/>
+    </CUpgrade>
     <CUpgrade id="AP_ThorMorph">
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
@@ -3611,5 +3615,41 @@
         <Race value="Prot"/>
         <ScoreResult value="BuildOrder"/>
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSEngorgedAppendages">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSExplosiveGlaive">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_GlaiveWurm,DisplayEffect" Value="AP_MutaliskExplosiveGlaive"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSMutaliskBroodlord">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Mutalisk,Subtitle" Value="UnitSubtitle/AP_MutaliskBroodLord"/>
+        <AffectedUnitArray value="AP_Mutalisk"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSMutaliskViper">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Mutalisk,Subtitle" Value="UnitSubtitle/AP_MutaliskViper"/>
+        <AffectedUnitArray value="AP_Mutalisk"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSMutaliskBroodlordViper">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Mutalisk,Subtitle" Value="UnitSubtitle/AP_MutaliskBroodlordViper"/>
+        <AffectedUnitArray value="AP_Mutalisk"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSRapidRegeneration">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSViciousGlaive">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Effect,AP_GlaiveWurmE1,AreaArray[0].Radius" Value="1"/>
+        <EffectArray Reference="Effect,AP_GlaiveWurmE2,AreaArray[0].Radius" Value="1"/>
+        <EffectArray Reference="Effect,AP_GlaiveWurmE3,AreaArray[0].Radius" Value="1"/>
+        <EffectArray Reference="Effect,AP_GlaiveWurmE4,AreaArray[0].Radius" Value="1"/>
+        <EffectArray Reference="Effect,AP_GlaiveWurmE5,AreaArray[0].Radius" Value="1"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Mutalisk"/>
     </CUpgrade>
 </Catalog>

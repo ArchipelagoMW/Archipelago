@@ -1717,4 +1717,38 @@
         <Icon value="Assets\Textures\BTN-Ability-Protoss-PhasingArmor.dds"/>
         <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-PhasingArmor.dds"/>
     </CButton>
+    <CButton id="AP_SwarmSeeds">
+        <Icon value="Assets\Textures\btn-ability-zerg-swarmseeds-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_DisablingCloud">
+        <Icon value="Assets\Textures\btn-ability-zerg-blindingcloud.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_FaceEmbrace">
+        <Icon value="Assets\Textures\btn-ability-zerg-abduct.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-abduct.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_ViperConsumption">
+        <Icon value="Assets\Textures\BTN-Ability-Zerg-Consume.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_ExplosiveGlaive">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-explosiveglaive.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MutaliskRapidRegeneration">
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-RapidRegeneration.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_ViciousGlaive">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-viciousglaive.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_Viper">
+        <Icon value="Assets\Textures\btn-unit-zerg-viper.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-viper.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

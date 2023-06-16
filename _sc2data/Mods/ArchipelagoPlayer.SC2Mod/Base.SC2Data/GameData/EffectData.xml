@@ -5634,7 +5634,7 @@
         <Behavior value="AP_YoinkTentacle"/>
     </CEffectApplyBehavior>
     <CEffectCancelOrder id="AP_YoinkCancelOrders">
-        <ValidatorArray value="YoinkCancelOrder"/>
+        <ValidatorArray value="AP_YoinkCancelOrder"/>
         <EditorCategories value="Race:Zerg"/>
         <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
         <Count value="32"/>
@@ -5744,6 +5744,7 @@
         <Abil value="AssaultMode"/>
         <Target Effect="AP_YoinkStartSwitch" Value="TargetUnit"/>
     </CEffectIssueOrder>
+    <!-- Blizzard comment: -->
     <!-- Viking is a troublemaker due to its morph, so we have to setup specific air and ground trees -->
     <!-- Bug where siege mode siege tanks can't be yoinked onto ramps, the fix however makes it possible to stack many, many tanks on top of one another, which can be very, very bad. Fix data is left in but inactive just in case we find a future fix -->
     <!-- This is the general effect tree for everything else -->
@@ -5897,9 +5898,14 @@
     <CEffectSet id="AP_YoinkSet">
         <ValidatorArray value="AP_NoBurrowChargingRevD"/>
         <ValidatorArray value="AP_IsNotMothershipCorePurifyNexus"/>
-        <ValidatorArray value="AP_IsNotRecallingCombine"/>
+        <!-- LotV change; AP Viper is based on HotS -->
+        <!-- ValidatorArray value="AP_IsNotRecallingCombine"/ -->
         <EditorCategories value="Race:Zerg"/>
         <Marker Link="YoinkMarker"/>
+        <!-- HotS change -->
+        <EffectArray value="AP_RemoveRecallingBehavior"/>
+        <EffectArray value="AP_RemoveCoreRecallingBehavior"/>
+        <!-- HotS change end -->
         <EffectArray value="AP_YoinkApplyTentacleBehavior"/>
         <EffectArray value="AP_YoinkCancelOrders"/>
         <EffectArray value="AP_InstantUnburrow"/>
@@ -6001,7 +6007,7 @@
         <Behavior value="AP_PrecursorYoink"/>
     </CEffectApplyBehavior>
     <CEffectSet id="AP_YoinkStartSet">
-        <ValidatorArray value="IsNotMothershipCorePurifyNexus"/>
+        <ValidatorArray value="AP_IsNotMothershipCorePurifyNexus"/>
         <EditorCategories value="Race:Zerg"/>
         <Marker Link="YoinkMarker"/>
         <EffectArray value="AP_YoinkMarkerBehavior"/>
@@ -6891,4 +6897,420 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="AP_VoidPhoenixPhasingArmorBuff"/>
     </CEffectApplyBehavior>
+    <CEffectDamage id="AP_BroodlingEscortDamage" parent="DU_WEAP_MISSILE">
+        <ValidatorArray value="AP_BroodlingEscortFilters"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Effect="AP_BroodlingEscort" Value="TargetUnit"/>
+        <Visibility value="Visible"/>
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_KillsToCaster">
+        <EditorCategories value="Race:Terran"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_NeedleClaws" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <Amount value="4"/>
+    </CEffectDamage>
+    <CEffectSwitch id="AP_BroodlingEscort">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="IsStructure" Effect="AP_BroodlingEscortStructure"/>
+        <CaseDefault value="AP_BroodlingEscortUnitSet"/>
+    </CEffectSwitch>
+    <CEffectCreateUnit id="AP_BroodlingEscortCU">
+        <ValidatorArray value="NotHallucination"/>
+        <EditorCategories value="Race:Zerg"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <SpawnEffect value="AP_BroodlingEscortLaunch"/>
+        <SpawnUnit value="AP_Broodling"/>
+        <SpawnRange value="5"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_BroodlingEscortDamageSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BroodlingEscortDamageUnit"/>
+        <EffectArray value="AP_BroodlingEscortImpactA"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_BroodlingEscortDamageUnit" parent="DU_WEAP_MISSILE">
+        <ValidatorArray value="AP_BroodlingEscortFilters"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_BroodlingEscortFallbackMissile">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <FinishEffect value="AP_BroodlingEscortDamage"/>
+        <Flags index="ValidateWeapon" value="0"/>
+        <Movers Link="AP_BroodLordWeaponRight" IfRangeLTE="500"/>
+        <Movers Link="AP_BroodLordWeaponLeft" IfRangeLTE="500"/>
+        <MoverRollingJump value="1"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_BroodlingEscortImpact">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="RemovePrecursor"/>
+        <EffectArray value="AP_BroodlingEscortImpactTransfer"/>
+        <EffectArray value="AP_BroodlingAttack"/>
+        <EffectArray value="AP_SuicideRemove"/>
+        <EffectArray value="AP_KeneticMitosisSplitBehavior"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_BroodlingEscortImpactA">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnitOrPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <SpawnEffect value="AP_BroodlingEscortLaunchB"/>
+        <SpawnUnit value="AP_Broodling"/>
+        <SpawnRange value="5"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_BroodlingEscortImpactB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="RemovePrecursor"/>
+        <EffectArray value="AP_BroodlingAttack"/>
+        <EffectArray value="AP_SuicideRemove"/>
+    </CEffectSet>
+    <CEffectTransferBehavior id="AP_BroodlingEscortImpactTransfer">
+        <LaunchUnit Effect="AP_BroodlingEscortMissile" Value="Source"/>
+        <ImpactUnit Value="Target"/>
+        <Behavior value="AP_KillsToCaster"/>
+    </CEffectTransferBehavior>
+    <CEffectSet id="AP_BroodlingEscortLaunch">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BroodlingEscortRelease"/>
+        <EffectArray value="AP_BroodlingEscortMissile"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="AP_BroodlingTimedLife"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_BroodlingEscortLaunchA">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_BroodlingEscortDamageUnit"/>
+        <FinishEffect value="AP_BroodlingEscortImpactA"/>
+        <Flags index="ValidateWeapon" value="0"/>
+        <Movers Link="AP_BroodLordWeaponRight" IfRangeLTE="500"/>
+        <Movers Link="AP_BroodLordWeaponLeft" IfRangeLTE="500"/>
+        <MoverRollingJump value="1"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_BroodlingEscortLaunchB">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BroodlingEscortMissileB"/>
+        <EffectArray value="MakePrecursor"/>
+        <EffectArray value="AP_BroodlingTimedLife"/>
+        <EffectArray value="AP_KeneticMitosisSplitBehavior"/>
+        <EffectArray value="AP_BroodlingEscortLaunchBTransfer"/>
+    </CEffectSet>
+    <CEffectTransferBehavior id="AP_BroodlingEscortLaunchBTransfer">
+        <LaunchUnit Effect="AP_BroodlingEscortLaunchA" Value="Source"/>
+        <ImpactUnit Value="Target"/>
+        <Behavior value="AP_KillsToCaster"/>
+    </CEffectTransferBehavior>
+    <CEffectLaunchMissile id="AP_BroodlingEscortMissile">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+        <ImpactEffect value="AP_BroodlingEscortDamage"/>
+        <FinishEffect value="AP_BroodlingEscortImpact"/>
+        <Flags index="ValidateWeapon" value="0"/>
+        <Movers Link="AP_BroodLordWeaponRight" IfRangeLTE="500"/>
+        <Movers Link="AP_BroodLordWeaponLeft" IfRangeLTE="500"/>
+        <MoverRollingJump value="1"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_BroodlingEscortMissileB">
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <FinishEffect value="AP_BroodlingEscortImpactB"/>
+        <AmmoUnit value="AP_BroodLordBWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectReleaseMagazine id="AP_BroodlingEscortRelease">
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectReleaseMagazine>
+    <CEffectSwitch id="AP_BroodlingEscortStructure">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Effect="AP_BroodlingEscortCU" FallThrough="1"/>
+        <CaseDefault value="AP_BroodlingEscortFallbackMissile"/>
+    </CEffectSwitch>
+    <CEffectSet id="AP_BroodlingEscortUnitSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_BroodlingEscortRelease"/>
+        <EffectArray value="AP_BroodlingEscortLaunchA"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_BroodlingAttack">
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="attack"/>
+        <Target Effect="AP_BroodlingEscort" Value="TargetUnitOrPoint"/>
+    </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_BroodlingTimedLife">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_BroodlingFate"/>
+    </CEffectApplyBehavior>
+    <CEffectCreateUnit id="AP_KeneticMitosisSpawn">
+        <ValidatorArray value="NotHallucination"/>
+        <EditorCategories value="Race:Zerg"/>
+        <CreateFlags index="Birth" value="0"/>
+        <CreateFlags index="SetFacing" value="1"/>
+        <SpawnEffect value="AP_KeneticMitosisSplitSet"/>
+        <SpawnUnit value="AP_Broodling"/>
+        <SpawnRange value="5"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_KeneticMitosisSplit">
+        <EffectArray value="AP_KeneticMitosisSpawn"/>
+        <EffectArray value="AP_KeneticMitosisSpawn"/>
+        <EffectArray value="Suicide"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_KeneticMitosisSplitBehavior">
+        <ValidatorArray value="AP_HotSKeneticMitosisResearched"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_KeneticMitosisSplitSet">
+        <EffectArray value="AP_BroodlingTimedLife"/>
+        <EffectArray value="AP_BroodlingAttack"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_DisablingCloud">
+        <EditorCategories value="Race:Zerg"/>
+        <InitialEffect value="AP_DisablingCloudSearch"/>
+        <PeriodCount value="19"/>
+        <PeriodicEffectArray value="AP_DisablingCloudSearch"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_DisablingCloudApplyBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_DisablingCloud"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumTransport id="AP_DisablingCloudIterateTransport">
+        <ValidatorArray value="AP_IsAnyBunker"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Effect value="AP_DisablingCloudApplyBehavior"/>
+    </CEffectEnumTransport>
+    <CEffectEnumArea id="AP_DisablingCloudSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_DisablingCloudSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_DisablingCloudSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_DisablingCloudApplyBehavior"/>
+        <EffectArray value="AP_DisablingCloudIterateTransport"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_RemoveCoreRecallingBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <BehaviorLink value="MothershipCoreRecalling"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_RemoveRecallingBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_YoinkStartCreatePlaceholder"/>
+        <BehaviorLink value="Recalling"/>
+    </CEffectRemoveBehavior>
+    <CEffectDamage id="AP_ViperAirDamage" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <AttributeBonus index="Armored" value="5"/>
+        <Visibility value="Visible"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_ViperAirLaunchMissile">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_ViperAirDamage"/>
+        <AmmoUnit value="AP_ViperAirWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_ViperConsumption">
+        <ValidatorArray value="EnergyNotFullCaster"/>
+        <ValidatorArray value="RequiresZerg"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <PeriodCount value="75"/>
+        <PeriodicEffectArray value="AP_ViperConsumptionDamage"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_ViperConsumptionDamage">
+        <ValidatorArray value="EnergyNotFullCaster"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Amount value="1"/>
+        <LeechFraction index="Energy" value="2"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_GlaiveWurm">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_GlaiveWurmS1"/>
+        <AmmoUnit value="AP_GlaiveWurmWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="AP_GlaiveWurmE1">
+        <!-- Sundering Glave no longer reduces bounces -->
+        <!-- ValidatorArray value="NotHotSExplosiveGlaive"/ -->
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM2"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_GlaiveWurmE2">
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM3"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_GlaiveWurmE3">
+        <ValidatorArray value="AP_HaveHotSViciousGlaive"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM4"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_GlaiveWurmE4">
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM5"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_GlaiveWurmE5">
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM6"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM2">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="TargetNotChangeling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmS2"/>
+        <AmmoUnit value="AP_GlaiveWurmM2Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM3">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="TargetNotChangeling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmS3"/>
+        <AmmoUnit value="AP_GlaiveWurmM3Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM4">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmS4"/>
+        <AmmoUnit value="AP_GlaiveWurmM4Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM5">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmS5"/>
+        <AmmoUnit value="AP_GlaiveWurmM5Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM6">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmU6"/>
+        <AmmoUnit value="AP_GlaiveWurmM6Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_GlaiveWurmS1">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU1"/>
+        <EffectArray value="AP_GlaiveWurmE1"/>
+        <EffectArray value="AP_MutaliskDoubleDamageRB"/>
+        <EffectArray value="AP_MutaliskRapidRegenRB"/>
+        <EffectArray value="AP_MutaliskOutOfCombat2RB"/>
+        <EffectArray value="AP_MutaliskExplosiveGlaive"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GlaiveWurmS2">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU2"/>
+        <EffectArray value="AP_GlaiveWurmE2"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GlaiveWurmS3">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU3"/>
+        <EffectArray value="AP_GlaiveWurmE3"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GlaiveWurmS4">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU4"/>
+        <EffectArray value="AP_GlaiveWurmE4"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GlaiveWurmS5">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU5"/>
+        <EffectArray value="AP_GlaiveWurmE5"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_GlaiveWurmU1" parent="DU_WEAP_MISSILE">
+        <ValidatorArray value="AP_NotHotSExplosiveGlaive"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="9"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU2" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="5"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU3" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="3"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU4" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="3"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU5" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU6" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_MutaliskDoubleDamage">
+        <ValidatorArray value="AP_HaveHotSEngorgedAppendages"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_MutaliskDoubleDamageRB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_MutaliskDoubleDamage"/>
+    </CEffectRemoveBehavior>
+    <CEffectDamage id="AP_MutaliskExplosiveGlaive" parent="DU_WEAP_MISSILE">
+        <ValidatorArray value="AP_HaveHotSExplosiveGlaive"/>
+        <EditorCategories value="Race:Zerg"/>
+        <AttributeBonus index="Armored" value="9"/>
+        <Visibility value="Visible"/>
+        <Amount value="9"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_MutaliskOutOfCombat2AB">
+        <ValidatorArray value="AP_SelfNotMutaliskOutOfCombat2"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_MutaliskOutOfCombat2"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_MutaliskOutOfCombat2RB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_MutaliskOutOfCombat2"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_MutaliskOutOfCombat3Set">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_MutaliskDoubleDamage"/>
+        <EffectArray value="AP_MutaliskRapidRegen"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MutaliskRapidRegen">
+        <ValidatorArray value="AP_HaveHotSRapidRegeneration"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_MutaliskRapidRegenRB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_MutaliskRapidRegen"/>
+    </CEffectRemoveBehavior>
 </Catalog>
