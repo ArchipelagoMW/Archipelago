@@ -974,6 +974,7 @@
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="AP\Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <AffectedUnitArray value="AP_Medivac"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_MedivacCaduceusReactor">
@@ -992,6 +993,7 @@
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,UnitIcon" Value="AP\Assets\Textures\BTN-Unit-Terran-MedivacUpgrade.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,GroupIcon.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Medivac,Wireframe.Image[0]" Value="AP\Assets\Textures\wireframe-terran-medivac-upgrade.dds"/>
+        <AffectedUnitArray value="AP_Medivac"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_CloakDistortionField">
@@ -3400,6 +3402,219 @@
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Stats].DurationArray[Duration]" Value="4.000000"/>
         <EffectArray Operation="Divide" Reference="Abil,AP_WreckingCrewAssaultMode,InfoArray[0].SectionArray[Collide].DurationArray[Delay]" Value="4.000000"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidRayBeamCanCharge">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_VoidRay"/>
+        <!--        <AffectedUnitArray value="VoidRayAiur"/>-->
+        <AffectedUnitArray value="AP_VoidRayTaldarim"/>
+        <AffectedUnitArray value="AP_VoidRayShakuras"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidStoryUnitGlobalUpgrade">
+        <EffectArray Reference="Unit,AP_Zealot,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_ZealotAiur,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_ZealotShakuras,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_ZealotPurifier,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Stalker,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_StalkerShakuras,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_StalkerPurifier,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Dragoon,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Sentry,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_SentryAiur,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_SentryPurifier,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_SentryPhasing,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Replicant,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Adept,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_AdeptPhaseShift,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplar,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarAiur,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarShakuras,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarTaldarim,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_HighTemplar,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarShakuras,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_HighTemplarTaldarim,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Archon,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Immortal,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_ImmortalAiur,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_ImmortalShakuras,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_ImmortalTaldarim,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Colossus,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_ColossusPurifier,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Disruptor,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Reaver,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Phoenix,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_PhoenixAiur,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_PhoenixPurifier,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_CorsairMP,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_VoidRay,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_VoidRayAiur,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_VoidRayShakuras,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_ArbiterMP,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Carrier,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Interceptor,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_CarrierAiur,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_InterceptorAiur,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_CarrierTaldarim,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Tempest,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_TempestPurifier,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Scout,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_WarpPrism,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_WarpPrismPhasing,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_WarpPrismGiant,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_WarpPrismGiantPhasing,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Mothership,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_MothershipCore,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Probe,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Nexus,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Assimilator,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Pylon,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Gateway,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_WarpGate,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Forge,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_ShieldBattery,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_CyberneticsCore,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_PhotonCannon,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_KhaydarinMonolith,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_TemplarArchive,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_Stargate,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_StargateWarp,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_FleetBeacon,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_RoboticsFacility,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_RoboticsFacilityWarp,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_RoboticsBay,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_DarkShrine,ShieldRegenRate" Value="-1"/>
+        <EffectArray Reference="Unit,AP_TwilightCouncil,ShieldRegenRate" Value="-1"/>
+        <AffectedUnitArray value="AP_Zealot"/>
+        <AffectedUnitArray value="AP_ZealotAiur"/>
+        <AffectedUnitArray value="AP_ZealotShakuras"/>
+        <AffectedUnitArray value="AP_ZealotPurifier"/>
+        <AffectedUnitArray value="AP_Stalker"/>
+        <AffectedUnitArray value="AP_StalkerShakuras"/>
+        <AffectedUnitArray value="AP_StalkerPurifier"/>
+        <AffectedUnitArray value="AP_Dragoon"/>
+        <AffectedUnitArray value="AP_Sentry"/>
+        <AffectedUnitArray value="AP_SentryAiur"/>
+        <AffectedUnitArray value="AP_SentryPurifier"/>
+        <AffectedUnitArray value="AP_SentryPhasing"/>
+        <AffectedUnitArray value="AP_Replicant"/>
+        <AffectedUnitArray value="AP_Adept"/>
+        <AffectedUnitArray value="AP_AdeptPhaseShift"/>
+        <AffectedUnitArray value="AP_DarkTemplar"/>
+        <AffectedUnitArray value="AP_DarkTemplarAiur"/>
+        <AffectedUnitArray value="AP_DarkTemplarShakuras"/>
+        <AffectedUnitArray value="AP_DarkTemplarTaldarim"/>
+        <AffectedUnitArray value="AP_HighTemplar"/>
+        <AffectedUnitArray value="AP_HighTemplarShakuras"/>
+        <AffectedUnitArray value="AP_HighTemplarTaldarim"/>
+        <AffectedUnitArray value="AP_Archon"/>
+        <AffectedUnitArray value="AP_Immortal"/>
+        <AffectedUnitArray value="AP_ImmortalAiur"/>
+        <AffectedUnitArray value="AP_ImmortalShakuras"/>
+        <AffectedUnitArray value="AP_ImmortalTaldarim"/>
+        <AffectedUnitArray value="AP_Colossus"/>
+        <AffectedUnitArray value="AP_ColossusPurifier"/>
+        <AffectedUnitArray value="AP_Disruptor"/>
+        <AffectedUnitArray value="AP_Reaver"/>
+        <AffectedUnitArray value="AP_Phoenix"/>
+        <AffectedUnitArray value="AP_PhoenixAiur"/>
+        <AffectedUnitArray value="AP_PhoenixPurifier"/>
+        <AffectedUnitArray value="AP_CorsairMP"/>
+        <AffectedUnitArray value="AP_VoidRay"/>
+        <AffectedUnitArray value="AP_VoidRayAiur"/>
+        <AffectedUnitArray value="AP_VoidRayShakuras"/>
+        <AffectedUnitArray value="AP_ArbiterMP"/>
+        <AffectedUnitArray value="AP_Carrier"/>
+        <AffectedUnitArray value="AP_Interceptor"/>
+        <AffectedUnitArray value="AP_CarrierAiur"/>
+        <AffectedUnitArray value="AP_InterceptorAiur"/>
+        <AffectedUnitArray value="AP_CarrierTaldarim"/>
+        <AffectedUnitArray value="AP_Tempest"/>
+        <AffectedUnitArray value="AP_TempestPurifier"/>
+        <AffectedUnitArray value="AP_Scout"/>
+        <AffectedUnitArray value="AP_ArbiterMP"/>
+        <AffectedUnitArray value="AP_WarpPrism"/>
+        <AffectedUnitArray value="AP_WarpPrismPhasing"/>
+        <AffectedUnitArray value="AP_WarpPrismGiant"/>
+        <AffectedUnitArray value="AP_WarpPrismGiantPhasing"/>
+        <AffectedUnitArray value="AP_Mothership"/>
+        <AffectedUnitArray value="AP_MothershipCore"/>
+        <AffectedUnitArray value="AP_Probe"/>
+        <AffectedUnitArray value="AP_Nexus"/>
+        <AffectedUnitArray value="AP_Assimilator"/>
+        <AffectedUnitArray value="AP_Pylon"/>
+        <AffectedUnitArray value="AP_Gateway"/>
+        <AffectedUnitArray value="AP_WarpGate"/>
+        <AffectedUnitArray value="AP_Forge"/>
+        <AffectedUnitArray value="AP_ShieldBattery"/>
+        <AffectedUnitArray value="AP_CyberneticsCore"/>
+        <AffectedUnitArray value="AP_PhotonCannon"/>
+        <AffectedUnitArray value="AP_KhaydarinMonolith"/>
+        <AffectedUnitArray value="AP_TemplarArchive"/>
+        <AffectedUnitArray value="AP_Stargate"/>
+        <AffectedUnitArray value="AP_StargateWarp"/>
+        <AffectedUnitArray value="AP_FleetBeacon"/>
+        <AffectedUnitArray value="AP_RoboticsFacility"/>
+        <AffectedUnitArray value="AP_RoboticsFacilityWarp"/>
+        <AffectedUnitArray value="AP_RoboticsBay"/>
+        <AffectedUnitArray value="AP_DarkShrine"/>
+        <AffectedUnitArray value="AP_TwilightCouncil"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CarrierLaunchSpeedUpgrade">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-gravitoncatapult.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_InterceptorLaunch,Effect" Value="AP_InterceptorLaunchUpgradedPersistent"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Carrier"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HaveCarrier">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Carrier"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_HaveCarrierBase">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <!--        <EffectArray Operation="Set" Reference="Actor,TechTreeCarrier,UnitIcon" Value="Assets\Textures\btn-unit-protoss-carrier.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,TechTreeCarrier,Name" Value="Unit/Name/Carrier"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,TechTreeCarrier,Description" Value="Button/Tooltip/Carrier"/>-->
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Carrier"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_DarkProtoss">
+        <!-- Stub -->
+    </CUpgrade>
+    <CUpgrade id="AP_PurifierProtoss">
+        <!-- Stub -->
+    </CUpgrade>
+    <CUpgrade id="AP_VoidPhoenixDoubleGraviton">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <ScoreResult value="BuildOrder"/>
+<!--        <EffectArray Operation="Set" Reference="Button,Phoenix,Tooltip" Value="Button/Tooltip/PhoenixAiur"/>-->
+<!--        <EffectArray Operation="Set" Reference="Button,Phoenix,AlertTooltip" Value="Button/Tooltip/PhoenixAiur"/>-->
+<!--        <EffectArray Operation="Set" Reference="Actor,TechTreePhoenix,UnitIcon" Value="Assets\Textures\btn-unit-protoss-phoenix.dds"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreePhoenix,Name" Value="Unit/Name/PhoenixAiur"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreePhoenix,Description" Value="Button/Tooltip/PhoenixAiur"/>-->
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_PhoenixAiur"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidPhoenixGravitonCampaignVersion">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
     </CUpgrade>
     <CUpgrade id="AP_HotSEngorgedAppendages">
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>

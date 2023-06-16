@@ -7964,6 +7964,394 @@
         <Image value="Assets\Textures\MutaliskPortrait_Static.dds"/>
         <Lighting value="MutaliskViperPortrait"/>
     </CModel>
+    <CModel id="AP_VoidRayShakuras" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\VoidRayHero\VoidRayHero.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow08"/>
+        <Radius value="0.750000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow08"/>
+        <UnitGlossaryCamera value="Star2CameraLow08"/>
+    </CModel>
+    <CModel id="AP_VoidRayShakurasDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\VoidRayHeroDeath\VoidRayHeroDeath.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_VoidRayShakurasPlacement">
+        <Model value="Assets\Units\Protoss\VoidRay_Shakuras_Placement\VoidRay_Shakuras_Placement.m3"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+    </CModel>
+    <CModel id="AP_VoidRayShakurasWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\VoidRayHeroWarpIn\VoidRayHeroWarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+    </CModel>
+    <CModel id="AP_VoidRayTalDarimPlacement">
+        <Model value="Assets\Units\Protoss\VoidRay_TalDarim_Placement\VoidRay_TalDarim_Placement.m3"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+    </CModel>
+    <CModel id="AP_VoidRayTaldarim" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\VoidRay_TalDarim\VoidRay_TalDarim.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow08"/>
+        <Radius value="0.750000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow08"/>
+        <UnitGlossaryCamera value="Star2CameraLow08"/>
+    </CModel>
+    <CModel id="AP_VoidRayTaldarimDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\VoidRay_TalDarim_Death\VoidRay_TalDarim_Death.m3"/>
+        <LowQualityModel value="ProtossLargeTaldarimUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_VoidRayTaldarimPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Zerg\DestroyerEx2Portrait\DestroyerEx2Portrait.m3"/>
+        <Image value="Assets\Textures\destroyerportrait_static.dds"/>
+        <Lighting value="AP_DestroyerEx2Portrait"/>
+    </CModel>
+    <CModel id="AP_VoidRayTaldarimWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\VoidRay_TalDarim_WarpIn\VoidRay_TalDarim_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+    </CModel>
+    <CModel id="AP_VoidRayTaldarimAttackBounceBeam" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\BeamBounceMissile\BeamBounceMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="AP_VoidRayTaldarimWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\Destroyer_WarpIn_StarGate\Destroyer_WarpIn_StarGate.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="0.750000"/>
+        <ShadowRadius value="0.882000"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_VoidRayTaldarimAttackBeam" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\VoidRayBeamBounceMissile\VoidRayBeamBounceMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="AP_MedivacUpgrade" parent="Unit" Race="Terran">
+        <Model value="Assets\Units\Terran\MedivacUpgrade\MedivacUpgrade.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.700000,0.700000,0.700000"/>
+        <ScaleMin value="0.700000,0.700000,0.700000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.500000"/>
+        <SelectionRadius value="1.071200"/>
+        <Radius value="0.750000"/>
+        <TechPurchaseCamera value="Star2CameraLow09"/>
+        <UnitGlossaryCamera value="Star2CameraLow09"/>
+        <PlanetPanelCamera value="Star2CameraLow09"/>
+        <ShadowRadius value="1.071200"/>
+    </CModel>
+    <CModel id="AP_CarrierAiur" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\CarrierHero_Ex2\CarrierHero_Ex2.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow11"/>
+        <Radius value="1.375000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="1.718700"/>
+        <ShadowRadius value="1.718700"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow11"/>
+        <UnitGlossaryCamera value="Star2CameraLow11"/>
+    </CModel>
+    <CModel id="AP_CarrierAiurDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\CarrierHero_Ex2_Death\CarrierHero_Ex2_Death.m3"/>
+        <LowQualityModel value="CarrierDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Explosion01"/>
+            <Type value="Sound"/>
+            <Time value="0.200000"/>
+            <Payload value="Protoss_ExplosionSmall"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Explosion02"/>
+            <Type value="Sound"/>
+            <Time value="0.360000"/>
+            <Payload value="Protoss_ExplosionSmall"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Explosion03"/>
+            <Type value="Sound"/>
+            <Time value="0.660000"/>
+            <Payload value="Protoss_ExplosionSmall"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Explosion04"/>
+            <Type value="Sound"/>
+            <Time value="0.800000"/>
+            <Payload value="Protoss_ExplosionSmall"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="FinalExplosion"/>
+            <Type value="Sound"/>
+            <Time value="1.950000"/>
+            <Payload value="Protoss_ExplosionLarge"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Explosion01"/>
+            <Type value="Sound"/>
+            <Time value="0.200000"/>
+            <Payload value="Protoss_ExplosionSmall"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Explosion02"/>
+            <Type value="Sound"/>
+            <Time value="0.360000"/>
+            <Payload value="Protoss_ExplosionSmall"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Explosion03"/>
+            <Type value="Sound"/>
+            <Time value="0.660000"/>
+            <Payload value="Protoss_ExplosionSmall"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Explosion04"/>
+            <Type value="Sound"/>
+            <Time value="0.800000"/>
+            <Payload value="Protoss_ExplosionSmall"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="FinalExplosion"/>
+            <Type value="Sound"/>
+            <Time value="1.460000"/>
+            <Payload value="Protoss_ExplosionLarge"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="FinalExplosion"/>
+            <Type value="Sound"/>
+            <Time value="0.270000"/>
+            <Payload value="Protoss_ExplosionLarge"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_CarrierAiurPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\CarrierHero_Ex2_Placement\CarrierHero_Ex2_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="1.718700"/>
+        <ShadowRadius value="1.718700"/>
+    </CModel>
+    <CModel id="AP_CarrierAiurPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\CarrierPortrait\CarrierPortrait.m3"/>
+    </CModel>
+    <CModel id="AP_CarrierAiurWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\CarrierHero_Ex2_WarpIn\CarrierHero_Ex2_WarpIn.m3"/>
+        <LowQualityModel value="CarrierNerazimWarpInLow"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="1.718700"/>
+        <ShadowRadius value="1.718700"/>
+    </CModel>
+    <CModel id="AP_CarrierAiurWarpInLow" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\ProtossUnitWarpIn\ProtossUnitWarpIn.m3"/>
+        <ScaleMax value="1.900000,1.900000,1.900000"/>
+        <ScaleMin value="1.900000,1.900000,1.900000"/>
+    </CModel>
+    <CModel id="AP_CarrierAiurWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\CarrierHero_Ex2_WarpIn_StarGate\CarrierHero_Ex2_WarpIn_StarGate.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow13"/>
+        <Radius value="1.375000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="1.718700"/>
+        <ShadowRadius value="1.718700"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow13"/>
+        <UnitGlossaryCamera value="Star2CameraLow13"/>
+    </CModel>
+    <CModel id="AP_CarrierPortalDeath" parent="Phoenix">
+        <Model value="Assets\Effects\Protoss\CarrierHero_PortalDeath\CarrierHero_PortalDeath.m3"/>
+        <PlanetPanelCamera value="Star2Camera01"/>
+        <TechPurchaseCamera value="Star2Camera01"/>
+        <UnitGlossaryCamera value="Star2Camera01"/>
+    </CModel>
+    <CModel id="AP_CarrierInterceptorBombWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\PhaseCannonMissile\PhaseCannonMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+    </CModel>
+    <CModel id="AP_CarrierInterceptorBombImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\PhaseCannonMissileImpact\PhaseCannonMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="2.000000,2.000000,1.000000"/>
+        <ScaleMin value="2.000000,2.000000,1.000000"/>
+    </CModel>
+    <CModel id="AP_CarrierRepairDrone" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Carrier_RepairDrone\Carrier_RepairDrone.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow05"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow05"/>
+        <UnitGlossaryCamera value="Star2CameraLow05"/>
+    </CModel>
+    <CModel id="AP_CarrierRepairDroneDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Carrier_RepairDrone_Death\Carrier_RepairDrone_Death.m3"/>
+    </CModel>
+    <CModel id="AP_CarrierRepairDroneHealBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\Sentry_HealingBeam\Sentry_HealingBeam.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_CarrierRepairDroneHealImpact" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\Sentry_HealingBeam_Impact\Sentry_HealingBeam_Impact.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_PhoenixAirAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\PhoenixMissileImpact\PhoenixMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_PhoenixAiur" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Phoenix_Ex2\Phoenix_Ex2.m3"/>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="Air" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 03">
+            <Keys index="Air" value="0"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow05"/>
+        <Radius value="0.750000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.400000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow05"/>
+        <UnitGlossaryCamera value="Star2CameraLow05"/>
+    </CModel>
+    <CModel id="AP_PhoenixAiurDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\PhoenixDeathEx1\PhoenixDeathEx1.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_PhoenixAiurWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\PhoenixWarpIn\PhoenixWarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.400000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+    </CModel>
+    <CModel id="AP_PhoenixPurifier" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Phoenix_Purifier\Phoenix_Purifier.m3"/>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="Air" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 03">
+            <Keys index="Air" value="0"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow05"/>
+        <Radius value="0.750000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.400000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow05"/>
+        <UnitGlossaryCamera value="Star2CameraLow05"/>
+    </CModel>
+    <CModel id="AP_PhoenixPurifierDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Phoenix_Purifier_Death\Phoenix_Purifier_Death.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_PhoenixPurifierPhaseArmorGlaze">
+        <Model value="Assets\Effects\Glaze\Glaze_PhaseArmor\Glaze_PhaseArmor.m3"/>
+    </CModel>
+    <CModel id="AP_PhoenixPurifierPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Phoenix_Purifier_Placement\Phoenix_Purifier_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+    </CModel>
+    <CModel id="AP_PhoenixPurifierPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\PhoenixPortrait_Purifier\PhoenixPortrait_Purifier.m3"/>
+        <Image value="Assets\Textures\purifierphoenixportrait_static.dds"/>
+        <Lighting value="AP_PurifierPhoenixPortrait"/>
+    </CModel>
+    <CModel id="AP_PhoenixPurifierWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\Phoenix_Purifier_WarpIn\Phoenix_Purifier_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.400000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+    </CModel>
     <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
         <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
         <LoopCount value="-1"/>

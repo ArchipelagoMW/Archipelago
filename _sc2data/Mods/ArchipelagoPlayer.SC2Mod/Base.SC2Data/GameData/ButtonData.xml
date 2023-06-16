@@ -1657,6 +1657,66 @@
         <Icon value="Assets\Textures\BTN-Ability-Zerg-NeuralParasite-color.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_VoidRayPrismaticAlignmentBase">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-VoidRayPrismaticAlignment.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-VoidRayPrismaticAlignment.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidRayVoidPrismaticRange">
+        <Icon value="Assets\Textures\btn-ability-protoss-prismaticrange.dds"/>
+        <AlertIcon value="Assets\Textures\btn-missing-kaeo.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidRayVoidDamageBoost">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-VoidRayPrismaticAlignment.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-VoidRayPrismaticAlignment.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidVoidRayBeamBounce">
+        <Icon value="Assets\Textures\btn-ability-protoss-beambounce.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_GravitonCatapult">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-GravitonCatapult.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-GravitonCatapult.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Interceptor">
+        <Icon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_RepairDrones">
+        <Icon value="Assets\Textures\btn-ability-protoss-carrierrepairdrones.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-carrierrepairdrones.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_GravitonBeam">
+        <Icon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_PhoenixAiurGravitonBeam">
+        <Icon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_PhoenixAiurGravitonBeamPassive">
+        <Icon value="Assets\Textures\btn-ability-protoss-dualgravitonbeam.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-dualgravitonbeam.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_GravitonBeamVoidCampaign">
+        <Icon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Hotkey value="Button/Hotkey/GravitonBeam"/>
+        <HotkeyAlias value="GravitonBeam"/>
+    </CButton>
+    <CButton id="AP_VoidPhoenixPhasingArmor">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-PhasingArmor.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-PhasingArmor.dds"/>
+    </CButton>
     <CButton id="AP_SwarmSeeds">
         <Icon value="Assets\Textures\btn-ability-zerg-swarmseeds-color.dds"/>
         <EditorCategories value="Race:Zerg"/>

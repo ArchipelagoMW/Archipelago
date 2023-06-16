@@ -1206,6 +1206,97 @@
         <RandomDelayMin value="0"/>
         <RandomDelayMax value="0"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_VoidRayChargeBeamRange">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel0.dds"/>
+        <DisplayEffect value="AP_VoidRayChargeBeamBaseDamageCharge1"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <RangeSlop value="2"/>
+        <ArcSlop value="39.9902"/>
+        <Period value="0.5"/>
+        <Backswing value="0.75"/>
+        <LegacyOptions index="CanRetargetWhileChanneling" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_VoidRayChargeBeamBounce">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel0.dds"/>
+        <DisplayEffect value="AP_VoidRayChargeBeamBounceDamageCharge1"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <RangeSlop value="2"/>
+        <ArcSlop value="39.9902"/>
+        <Period value="0.5"/>
+        <Backswing value="0.75"/>
+        <LegacyOptions index="CanRetargetWhileChanneling" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_InterceptorAiurLaunch">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <DisplayEffect value="Carrier"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <Period value="0.5"/>
+        <DamagePoint value="0"/>
+        <Backswing value="0"/>
+        <Effect value="AP_InterceptorAiurLaunchPersistent"/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
+    <CWeaponStrafe id="AP_InterceptorBeam">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel0.dds"/>
+        <DisplayEffect value="AP_InterceptorBeamDamage"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="2"/>
+        <TeleportResetRange value="0"/>
+        <Arc value="19.6875"/>
+        <Period value="3"/>
+        <Effect value="AP_InterceptorBeamPersistent"/>
+    </CWeaponStrafe>
+    <CWeaponLegacy id="AP_InterceptorLaunch">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Hidden" value="1"/>
+        <Icon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <DisplayEffect value="Carrier"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <Period value="0.5"/>
+        <DamagePoint value="0"/>
+        <Backswing value="0"/>
+        <Effect value="AP_InterceptorLaunchPersistent"/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_InterceptorsDummy">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <DisplayEffect value="AP_InterceptorBeamDamage"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Visible;Player,Ally,Neutral,Enemy"/>
+        <Range value="8"/>
+        <Arc value="360"/>
+        <Period value="3"/>
+        <Effect value="AP_CarrierInterceptor"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_IonCannons">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel0.dds"/>
+        <DisplayEffect value="AP_IonCannonsU"/>
+        <DisplayAttackCount value="2"/>
+        <TargetFilters value="Air,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <MinScanRange value="4"/>
+        <Arc value="4.9987"/>
+        <ArcSlop value="0"/>
+        <Period value="1.1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
     <CWeaponLegacy id="AP_BroodlingStrike">
         <EditorCategories value="Race:Zerg"/>
         <Icon value="Assets\Textures\btn-upgrade-zerg-airattacks-level0.dds"/>

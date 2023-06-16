@@ -2269,6 +2269,276 @@
             <AbilLinkDisableArray value="AP_TransportMode"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamRangeCounter">
+        <InfoFlags index="Hidden" value="1"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="30"/>
+        <Duration value="5"/>
+        <InitialEffect value="AP_VoidRayChargeBeamRangeCounterCheck"/>
+        <RefreshEffect value="AP_VoidRayChargeBeamRangeCounterCheck"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamCounter">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <MaxStackCount value="30"/>
+        <InitialEffect value="AP_VoidRayChargeBeamCounterCheck"/>
+        <RefreshEffect value="AP_VoidRayChargeBeamCounterCheck"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamRangePhase2">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <Modification WeaponRange="1.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamRangePhase3">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <Modification WeaponRange="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayVoidDamageBoost">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-prismaticbeam.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="10"/>
+        <Modification WeaponRange="3" WeaponScanBonus="3">
+            <DamageDealtAttributeScaled index="Armored" value="6"/>
+            <WeaponArray Link="AP_VoidRayVoid"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamPhase2">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <!--Modification>
+            <DamageDealtUnscaled index="Ranged" value="4"/>
+        </Modification-->
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRayChargeBeamPhase3">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="5"/>
+        <!--Modification>
+            <DamageDealtUnscaled index="Ranged" value="6"/>
+        </Modification-->
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidRaySwarmDamageBoost">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-prismaticbeam.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="20"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierInterceptorBombActive">
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="10"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierInterceptorBombs">
+        <Period value="1"/>
+        <PeriodicEffect value="AP_VoidCarrierInterceptorBombsCP"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierRepairDroneHealController">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <BuffFlags index="Channeled" value="1"/>
+        <FinalEffect value="AP_CarrierRepairDroneHealTargetRB"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierRepairDroneHealTarget">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_NotFullLife"/>
+        <RemoveValidatorArray value="NotHidden"/>
+        <RemoveValidatorArray value="AP_IsMechanical"/>
+        <Period value="0.0625"/>
+        <InitialEffect value="AP_CarrierRepairDroneHealControllerAB"/>
+        <PeriodicEffect value="AP_CarrierRepairDroneHealTarget"/>
+        <FinalEffect value="AP_CarrierRepairDroneHealControllerRB"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CarrierRepairDroneRecall">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="AP_CarrierRepairDroneRecallTeleport"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsCooldown">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="20"/>
+        <Modification>
+            <AbilLinkDisableArray value="AP_HangarQueue5"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsTimedLife" parent="TimedLife">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="60"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="AP_ReleaseInterceptorsLeashSet"/>
+        <InitialEffect value="AP_ReleaseInterceptorsBeaconAB"/>
+        <FinalEffect value="AP_ReleaseInterceptorsBeaconRB"/>
+    </CBehaviorBuff>
+    <CBehaviorWander id="AP_ReleaseInterceptorsWander">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Leash value="1"/>
+        <Range value="2.5"/>
+    </CBehaviorWander>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsWanderDelay">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_ReleaseInterceptorsDestinationNotReached"/>
+        <FinalEffect value="AP_ReleaseInterceptorsPatrolCP"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsBeacon">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <MaxStackCount value="65535"/>
+        <FinalEffect value="AP_ReleaseInterceptorsRemoveBeacon"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ReleaseInterceptorsTimedLifeWarning">
+        <Duration value="50"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DisableEnergyRegen">
+        <InfoFlags index="Hidden" value="1"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <Modification>
+            <VitalRegenArray index="Energy" value="-0.5625"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DisablePhoenixWeapons">
+        <InfoFlags index="Hidden" value="1"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <Modification>
+            <WeaponDisableArray value="AP_IonCannons"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_GravitonBeam">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="0.5"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <StateFlags index="SuppressRadar" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <AbilLinkEnableArray value="TerranBuild"/>
+            <AbilLinkEnableArray value="MorphToSwarmHostMP"/>
+            <AbilLinkEnableArray value="WidowMineUnburrow"/>
+            <AbilLinkEnableArray value="BurrowHotSRaptorUp"/>
+            <AbilLinkEnableArray value="BurrowHotSSwarmlingUp"/>
+            <AbilLinkEnableArray value="BurrowHunterUp"/>
+            <AbilLinkEnableArray value="BurrowHotSSplitterlingBigUp"/>
+            <AbilLinkEnableArray value="BurrowHotSSplitterlingMediumUp"/>
+            <AbilLinkEnableArray value="HotSBurrowVileUp"/>
+            <AbilLinkEnableArray value="BurrowHotSCorpserUp"/>
+            <AbilLinkEnableArray value="BurrowHydraliskLurkerUp"/>
+            <AbilLinkEnableArray value="BurrowHydraliskImpalerUp"/>
+            <AbilLinkEnableArray value="BurrowLurkerMPUp"/>
+            <BehaviorClassDisableArray index="CBehaviorCreepSource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorPowerSource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorResource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorSpawn" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_GravitonBeamHeight">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <BuffFlags index="Channeling" value="1"/>
+        <Modification Height="3.75">
+            <HeightTime index="Start" value="1"/>
+            <HeightTime index="Stop" value="0.25"/>
+            <PlaneDelta index="Ground" value="-1"/>
+            <PlaneDelta index="Air" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_GravitonBeamHeightVoidCampaign">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="10"/>
+        <Modification Height="3.75">
+            <HeightTime index="Start" value="1"/>
+            <HeightTime index="Stop" value="0.25"/>
+            <PlaneDelta index="Ground" value="-1"/>
+            <PlaneDelta index="Air" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_GravitonBeamVoidCampaign">
+        <Name value="Behavior/Name/GravitonBeam"/>
+        <Alignment value="Negative"/>
+        <Cost>
+            <Charge Link="Behavior/GravitonBeam"/>
+            <Cooldown Link="Behavior/GravitonBeam"/>
+        </Cost>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="10"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <ModifyFlags index="SuppressTurning" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+            <StateFlags index="SuppressRadar" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <AbilLinkEnableArray value="TerranBuild"/>
+            <AbilLinkEnableArray value="MorphToSwarmHostMP"/>
+            <AbilLinkEnableArray value="WidowMineUnburrow"/>
+            <AbilLinkEnableArray value="BurrowHotSRaptorUp"/>
+            <AbilLinkEnableArray value="BurrowHotSSwarmlingUp"/>
+            <AbilLinkEnableArray value="BurrowHunterUp"/>
+            <AbilLinkEnableArray value="BurrowHotSSplitterlingBigUp"/>
+            <AbilLinkEnableArray value="BurrowHotSSplitterlingMediumUp"/>
+            <AbilLinkEnableArray value="HotSBurrowVileUp"/>
+            <AbilLinkEnableArray value="BurrowHotSCorpserUp"/>
+            <AbilLinkEnableArray value="BurrowHydraliskLurkerUp"/>
+            <AbilLinkEnableArray value="BurrowHydraliskImpalerUp"/>
+            <AbilLinkEnableArray value="BurrowLurkerMPUp"/>
+            <BehaviorClassDisableArray index="CBehaviorCreepSource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorPowerSource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorResource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorSpawn" value="1"/>
+        </Modification>
+        <DamageResponse>
+            <Cost>
+                <Charge Link="Behavior/GravitonBeam"/>
+                <Cooldown Link="Behavior/GravitonBeam"/>
+            </Cost>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidPhoenixPhasingArmor">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DamageResponse Chance="1" Handled="AP_VoidPhoenixPhasingArmorApply">
+            <Cost>
+                <Cooldown TimeUse="5"/>
+            </Cost>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidPhoenixPhasingArmorBuff">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+        </Modification>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-phasingarmor.dds"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CanUseGravitonDoubleBeam">
+        <!-- Just to tell which units can use the double beam -->
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_KillsToCaster">
         <InfoFlags index="Hidden" value="1"/>
         <KillCredit Value="Caster"/>

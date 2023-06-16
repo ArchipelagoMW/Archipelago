@@ -973,6 +973,16 @@
             <YawPitchRoll value="719.2968"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_CarrierInterceptorBombWeapon" parent="MissileDefault">
+        <MotionPhases index="0">
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="5"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+    </CMoverMissile>
     <CMoverMissile id="AP_ViperAirWeapon">
         <MotionPhases>
             <Driver value="Guidance"/>
