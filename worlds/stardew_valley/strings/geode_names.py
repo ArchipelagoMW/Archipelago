@@ -1,4 +1,4 @@
-class SVGeode:
+class Geode:
     geode = "Geode"
     frozen = "Frozen Geode"
     magma = "Magma Geode"
