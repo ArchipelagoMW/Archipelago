@@ -26,7 +26,8 @@ uw_main                  = "Underground Waterway: main area"
 uw_end                   = "Underground Waterway: end"
 
 castle_center            = "Castle Center"
-cc_main                  = "Castle Center: main area"
+cc_lower                 = "Castle Center: lower floors"
+cc_upper                 = "Castle Center: upper floors"
 cc_crystal               = "Castle Center: big crystal"
 cc_torture_chamber       = "Castle Center: torture chamber"
 cc_library               = "Castle Center: library"
@@ -78,7 +79,8 @@ regions_to_stages = {
     tunnel_end:          tunnel,
     uw_main:             underground_waterway,
     uw_end:              underground_waterway,
-    cc_main:             castle_center,
+    cc_lower:            castle_center,
+    cc_upper:            castle_center,
     cc_crystal:          castle_center,
     cc_torture_chamber:  castle_center,
     cc_library:          castle_center,

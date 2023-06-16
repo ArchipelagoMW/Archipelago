@@ -417,8 +417,9 @@ class CV64World(World):
 
             rom = LocalRom(get_base_rom_path())
 
-            # Figure out the item location bytes
+            # Figure out the item location and Countdown bytes
             active_locations = self.multiworld.get_locations(self.player)
+            countdown_list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
             for loc in active_locations:
                 if loc.item.game == "Castlevania 64" and loc.cv64_loc_type != "event":
@@ -430,10 +431,23 @@ class CV64World(World):
                             elif offsets_to_ids[loc.cv64_rom_offset] > 0x1C:
                                 offsets_to_ids[loc.cv64_rom_offset] -= 0x03
                     else:
-                        if loc.item.classification == ItemClassification.progression:
+                        if loc.item.classification == ItemClassification.progression or \
+                                loc.item.classification == ItemClassification.progression_skip_balancing:
                             offsets_to_ids[loc.cv64_rom_offset] = 0x11
                         else:
                             offsets_to_ids[loc.cv64_rom_offset] = 0x12
+
+                    if loc.address is not None:
+                        if self.multiworld.countdown[self.player].value == 2 or \
+                                (self.multiworld.countdown[self.player].value == 1 and
+                                 (loc.item.classification == ItemClassification.progression or
+                                  loc.item.classification == ItemClassification.progression_skip_balancing)):
+                            if loc.parent_region.name in [RName.villa_maze, RName.villa_crypt]:
+                                countdown_list[13] += 1
+                            elif loc.parent_region.name in [RName.cc_upper, RName.cc_library]:
+                                countdown_list[14] += 1
+                            else:
+                                countdown_list[vanilla_stage_order.index(loc.cv64_stage)] += 1
 
             # Figure out the sub-weapon bytes
             if self.multiworld.sub_weapon_shuffle[self.player].value == 1:
@@ -475,7 +489,7 @@ class CV64World(World):
                         self.active_stage_exits[stage][2]].start_spawn_id
 
             patch_rom(self.multiworld, rom, self.player, offsets_to_ids, self.active_stage_list,
-                      self.active_stage_exits, self.active_warp_list, self.required_s2s, music_list)
+                      self.active_stage_exits, self.active_warp_list, self.required_s2s, music_list, countdown_list)
 
             outfilepname = f'_P{player}'
             outfilepname += f"_{world.player_name[player].replace(' ', '_')}" \

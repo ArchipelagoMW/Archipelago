@@ -260,39 +260,34 @@ give_powerup_stopper = [
 ]
 
 npc_item_hack = [
-    # Hack to make NPC/shelf items show item textboxes when received.
+    # Hack to make NPC items show item textboxes when received (and decrease the Countdown if applicable).
     0x3C098039,  # LUI   T1, 0x8039
-    0x240A0020,  # ADDIU T2, R0, 0x0020
-    0xA12A9BE0,  # SB    T2, 0x9BE0 (T1)
     0x001F5602,  # SRL   T2, RA, 24
     0x240B0080,  # ADDIU T3, R0, 0x0080
-    0x114B0019,  # BEQ   T2, T3, [forward 0x19]
+    0x114B0016,  # BEQ   T2, T3, [forward 0x16]
     0xAFBF0014,  # SW    RA, 0x0014 (SP)
-    0x240A0015,  # ADDIU T2, R0, 0x0015
-    0x15440006,  # BNE   T2, A0, [forward 0x06]
-    0x240B0015,  # ADDIU T3, R0, 0x0015
-    0xA12B9BDF,  # SB    T3, 0x9BDF (T1)
-    0x912C9BF0,  # LBU   T4, 0x9BF0 (T1)
-    0x358C0080,  # ORI   T4, T4, 0x0080
-    0xA12C9BF0,  # SB    T4, 0x9BF0 (T1)
-    0x0804F0BF,  # J     0x8013C2FC
-    0x240A0016,  # ADDIU T2, R0, 0x0016
-    0x15440006,  # BNE   T2, A0, [forward 0x06]
-    0x240B0016,  # ADDIU T3, R0, 0x0016
-    0xA12B9BDF,  # SB    T3, 0x9BDF (T1)
-    0x912C9C18,  # LBU   T4, 0x9C18 (T1)
-    0x358C0080,  # ORI   T4, T4, 0x0080
-    0xA12C9C18,  # SB    T4, 0x9C18 (T1)
-    0x0804F0BF,  # J     0x8013C2FC
     0x240A001A,  # ADDIU T2, R0, 0x001A
     0x15440003,  # BNE   T2, A0, [forward 0x03]
-    0x240B001A,  # ADDIU T3, R0, 0x001A
-    0xA12B9BDF,  # SB    T3, 0x9BDF (T1)
+    0x240B0029,  # ADDIU T3, R0, 0x0029
+    0x10000003,  # B             [forward 0x03]
+    0x240C0002,  # ADDIU T4, R0, 0x0002
+    0x240B0002,  # ADDIU T3, R0, 0x0002
+    0x240C0005,  # ADDIU T4, R0, 0x0005
+    0x012C7021,  # ADDU  T6, T1, T4
+    0x91CA9CA4,  # LBU   T2, 0x9CA4 (T6)
+    0x3C0D8040,  # LUI   T5, 0x8040
+    0x256FFFFF,  # ADDIU T7, T3, 0xFFFF
+    0x01AF6821,  # ADDU  T5, T5, T7
+    0x91B8D71C,  # LBU   T8, 0xD71C (T5)
+    0x29EF0019,  # SLTI  T7, T7, 0x0019
+    0x51E00001,  # BEQZL T7,     [forward 0x01]
+    0x91B8D71F,  # LBU   T8, 0xD71F (T5)
+    0x13000002,  # BEQZ  T8,     [forward 0x02]
+    0x254AFFFF,  # ADDIU T2, T2, 0xFFFF
+    0xA1CA9CA4,  # SB    T2, 0x9CA4 (T6)
     0x0804F0BF,  # J     0x8013C2FC
-    0x240B001F,  # ADDIU T3, R0, 0x001F
-    0x0804F0BF,  # J     0x8013C2FC
     0xA12B9BDF,  # SB    T3, 0x9BDF (T1)
-    0x0804EFFD,  # J     0x8013C2FC
+    0x0804EFFD   # J     0x8013BFF4
 ]
 
 overlay_modifiers = [
@@ -1777,12 +1772,12 @@ countdown_number_displayer = [
 countdown_number_updater = [
     # Updates the Countdown number every frame. Which number in the save file it refers to depends on the map ID.
     0x00010102,  # Map ID offset table start
-    0x02020203,
+    0x02020D03,
     0x04050505,
-    0x05050505,
+    0x0E0E0E05,
     0x07090806,
     0x0C0C000B,
-    0x0C05020A,
+    0x0C050D0A,
     0x00000000,  # Table end
     0x3C088039,  # LUI   T0, 0x8039
     0x91089EE1,  # LBU   T0, 0x9EE1 (T0)
@@ -1796,8 +1791,8 @@ countdown_number_updater = [
     0x01000000,
     0x00000000,
     0x00000000,
-    0x01000001,
     0x01000000,
+    0x01010000,
     0x00000000,
     0x01010101,
     0x01010101,
@@ -1845,5 +1840,26 @@ countdown_number_updater = [
     0x0C0FF59F,  # JAL   0x803FD67C
     0x24050001,  # ADDIU A1, R0, 0x0000
     0x0804DFFA,  # J     0x8013
-    0x3C047FFF   # LUI   A0, 0x7FFFF
+    0x3C047FFF,  # LUI   A0, 0x7FFFF
+    0x00000000,  # NOP
+    0x3C088040,  # LUI   T0, 0x8040
+    0xFD00D6D0,  # SD    R0, 0xD6D0 (T0)
+    0x03E00008   # JR    RA
+]
+
+new_game_extras = [
+    # Upon starting a new game, this will write anything extra to the save file data that it should have at the start.
+    # This currently includes the initial Countdown numbers.
+    0x24080000,  # ADDIU T0, R0, 0x0000
+    0x24090010,  # ADDIU T1, R0, 0x0010
+    0x11090008,  # BEQ   T0, T1, [forward 0x08]
+    0x3C0A8040,  # LUI   T2, 0x8040
+    0x01485021,  # ADDU  T2, T2, T0
+    0x8D4AD818,  # LW    T2, 0xD818 (T2)
+    0x3C0B8039,  # LUI   T3, 0x8039
+    0x01685821,  # ADDU  T3, T3, T0
+    0xAD6A9CA4,  # SW    T2, 0x9CA4 (T3)
+    0x1000FFF8,  # B             [backward 0x08]
+    0x25080004,  # ADDIU T0, T0, 0x0004
+    0x03E00008   # JR    RA
 ]

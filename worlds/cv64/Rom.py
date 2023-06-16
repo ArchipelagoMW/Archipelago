@@ -80,7 +80,7 @@ rom_sub_weapon_flags = {
     0x10C999: 0x40,
     0x10CF74: 0x01,
 
-    0x10CA5A: 0x40FF0E,  # Tunnel
+    0x10CA59: 0x40FF0E,  # Tunnel
     0x10CA6B: 0x80,
     0x10CA60: 0x1000FF05,
     0x10CA70: 0x2000FF05,
@@ -228,7 +228,7 @@ class LocalRom(object):
 
 
 def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active_stage_exits, active_warp_list,
-              required_s2s, music_list):
+              required_s2s, music_list, countdown_list):
     w1 = str(multiworld.special1s_per_warp[player]).zfill(2)
     w2 = str(multiworld.special1s_per_warp[player] * 2).zfill(2)
     w3 = str(multiworld.special1s_per_warp[player] * 3).zfill(2)
@@ -697,19 +697,27 @@ def patch_rom(multiworld, rom, player, offsets_to_ids, active_stage_list, active
 
     # Everything related to the Countdown counter
     if multiworld.countdown[player]:
-        rom.write_int32(0xBFD03C, 0x080FF5BF)  # J 0x803FD6FC
-        rom.write_int32(0xD5D48, 0x080FF4EC)   # J 0x803FD3B0
+        rom.write_int32(0xBFD03C, 0x080FF5BF)    # J 0x803FD6FC
+        rom.write_int32(0xD5D48, 0x080FF4EC)     # J 0x803FD3B0
         rom.write_int32s(0xBFD3B0, Patches.countdown_number_displayer)
         rom.write_int32s(0xBFD6DC, Patches.countdown_number_updater)
-        rom.write_int32(0xBFCE2C, 0x080FF5D2)  # J 0x803FD748
-        rom.write_int32(0xBB168, 0x080FF5F0)   # J 0x803FD7C0
-        rom.write_int32(0xBB1D0, 0x080FF5F7)   # J 0x803FD7DC
-        rom.write_int32(0xBC4A0, 0x080FF5E2)   # J 0x803FD788
-        rom.write_int32(0xBC4C4, 0x080FF5E2)   # J 0x803FD788
+        rom.write_int32(0xBFCE2C, 0x080FF5D2)    # J 0x803FD748
+        rom.write_int32s(0xBB168, [0x080FF5F0,   # J 0x803FD7C0
+                                   0x8E020028])  # LW	V0, 0x0028 (S0)
+        rom.write_int32s(0xBB1D0, [0x080FF5F7,   # J 0x803FD7DC
+                                   0x8E020028])  # LW	V0, 0x0028 (S0)
+        rom.write_int32(0xBC4A0, 0x080FF5E2)     # J 0x803FD788
+        rom.write_int32(0xBC4C4, 0x080FF5E2)     # J 0x803FD788
+        rom.write_int32(0x19844, 0x080FF5FE)     # J 0x803FD7F8
         # If the option is set to "all locations", count it down no matter what the item is.
         if multiworld.countdown[player].value == 2:
-            rom.write_int32s(0xBFD71C, [0x11111111, 0x11111111, 0x11111111, 0x11111111, 0x11111111, 0x11111111,
-                             0x11111111, 0x11111111, 0x11111111, 0x11111111, 0x11111111])
+            rom.write_int32s(0xBFD71C, [0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101,
+                             0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101])
+        rom.write_bytes(0xBFD818, countdown_list)
+
+    # Initial Countdown numbers
+    rom.write_int32(0xAD6A8, 0x080FF60A)  # J	0x803FD828
+    rom.write_int32s(0xBFD828, Patches.new_game_extras)
 
     # Write all the new item and loading zone bytes
     for offset, item_id in offsets_to_ids.items():

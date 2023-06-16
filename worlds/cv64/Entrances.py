@@ -69,12 +69,14 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         EntranceData(RName.uw_end, RName.uw_main, hard_entrance=True),
         EntranceData(RName.uw_end, get_next_stage_start(RName.underground_waterway)),
         # Castle Center
-        EntranceData(RName.cc_main, RName.cc_torture_chamber,
+        EntranceData(RName.cc_lower, RName.cc_torture_chamber,
                      lambda state: (state.has(IName.chamber_key, player))),
-        EntranceData(RName.cc_main, RName.cc_library,
+        EntranceData(RName.cc_lower, RName.cc_upper),
+        EntranceData(RName.cc_upper, RName.cc_lower),
+        EntranceData(RName.cc_lower, RName.cc_library,
                      lambda state: (state.has(IName.magical_nitro, player)
                                     and state.has(IName.mandragora, player))),
-        EntranceData(RName.cc_main, RName.cc_crystal,
+        EntranceData(RName.cc_lower, RName.cc_crystal,
                      lambda state: (state.has(IName.magical_nitro, player, 2)
                                     and state.has(IName.mandragora, player, 2))),
         EntranceData(RName.cc_crystal, RName.cc_elev_top),

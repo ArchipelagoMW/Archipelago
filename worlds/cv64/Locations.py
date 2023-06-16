@@ -9,12 +9,14 @@ class CV64Location(Location):
 
     cv64_rom_offset: int
     cv64_loc_type: str
+    cv64_stage: str
 
     def __init__(self, player: int, name: str = '', address: int = None, parent=None, cv64_rom_offset: int = None,
-                 cv64_loc_type: str = None):
+                 cv64_loc_type: str = None, cv64_stage: str = None):
         super().__init__(player, name, address, parent)
         self.cv64_rom_offset = cv64_rom_offset
         self.cv64_loc_type = cv64_loc_type
+        self.cv64_stage = cv64_stage
 
 
 class LocationData(typing.NamedTuple):
@@ -85,7 +87,7 @@ main_location_table = {
     LName.villala_hallway_stairs:        LocationData(0xC64037, 0x10C927, RName.villa_main),
     LName.villala_bedroom_chairs:        LocationData(0xC64038, 0x83A588, RName.villa_main),
     LName.villala_bedroom_bed:           LocationData(0xC64039, 0x83A593, RName.villa_main),
-    LName.villala_vincent:               LocationData(0xC6403A, 0xBFC203, RName.villa_main, "npc"),
+    LName.villala_vincent:               LocationData(0xC6403A, 0xBFC1BB, RName.villa_main, "npc"),
     LName.villala_slivingroom_table:     LocationData(0xC6403B, 0x83A635, RName.villa_main, "inv"),
     LName.villala_diningroom_roses:      LocationData(0xC6403C, 0xBFC90B, RName.villa_main, "inv"),
     LName.villala_llivingroom_pot_r:     LocationData(0xC6403D, 0x10C90F, RName.villa_main),
@@ -152,53 +154,53 @@ main_location_table = {
     LName.uw_bricks_save:        LocationData(0xC64078, 0x10CB33, RName.uw_main),
     LName.uw_above_skel_ledge:   LocationData(0xC64079, 0x10CB2B, RName.uw_main),
     # Castle Center locations
-    LName.ccb_skel_hallway_ent:          LocationData(0xC6407A, 0x10CB67, RName.cc_main),
-    LName.ccb_skel_hallway_jun:          LocationData(0xC6407B, 0x10CBD7, RName.cc_main),
-    LName.ccb_skel_hallway_tc:           LocationData(0xC6407C, 0x10CB6F, RName.cc_main),
-    LName.ccb_behemoth_l_ff:             LocationData(0xC6407D, 0x10CB77, RName.cc_main),
-    LName.ccb_behemoth_l_mf:             LocationData(0xC6407E, 0x10CBA7, RName.cc_main),
-    LName.ccb_behemoth_l_mr:             LocationData(0xC6407F, 0x10CB7F, RName.cc_main),
-    LName.ccb_behemoth_l_fr:             LocationData(0xC64080, 0x10CBAF, RName.cc_main),
-    LName.ccb_behemoth_r_ff:             LocationData(0xC64081, 0x10CBB7, RName.cc_main),
-    LName.ccb_behemoth_r_mf:             LocationData(0xC64082, 0x10CB87, RName.cc_main),
-    LName.ccb_behemoth_r_mr:             LocationData(0xC64083, 0x10CBBF, RName.cc_main),
-    LName.ccb_behemoth_r_fr:             LocationData(0xC64084, 0x10CB8F, RName.cc_main),
-    LName.ccelv_near_machine:            LocationData(0xC64085, 0x10CBF7, RName.cc_main),
-    LName.ccelv_atop_machine:            LocationData(0xC64086, 0x10CC17, RName.cc_main),
-    LName.ccelv_pipes:                   LocationData(0xC64087, 0x10CC07, RName.cc_main),
-    LName.ccelv_staircase:               LocationData(0xC64088, 0x10CBFF, RName.cc_main),
-    LName.ccff_redcarpet_knight:         LocationData(0xC64089, 0x8C44D9, RName.cc_main, "inv"),
-    LName.ccff_gears_side:               LocationData(0xC6408A, 0x10CC33, RName.cc_main),
-    LName.ccff_gears_mid:                LocationData(0xC6408B, 0x10CC3B, RName.cc_main),
-    LName.ccff_gears_corner:             LocationData(0xC6408C, 0x10CC43, RName.cc_main),
-    LName.ccff_lizard_knight:            LocationData(0xC6408D, 0x8C44E7, RName.cc_main, "inv"),
-    LName.ccff_lizard_pit:               LocationData(0xC6408E, 0x10CC4B, RName.cc_main),
-    LName.ccff_lizard_corner:            LocationData(0xC6408F, 0x10CC53, RName.cc_main),
-    LName.ccll_brokenstairs_floor:       LocationData(0xC64090, 0x10CC8F, RName.cc_main),
-    LName.ccll_brokenstairs_knight:      LocationData(0xC64091, 0x8DF782, RName.cc_main, "inv"),
-    LName.ccll_brokenstairs_save:        LocationData(0xC64092, 0x10CC87, RName.cc_main),
-    LName.ccll_glassknight_l:            LocationData(0xC64093, 0x10CC97, RName.cc_main),
-    LName.ccll_glassknight_r:            LocationData(0xC64094, 0x10CC77, RName.cc_main),
-    LName.ccll_butlers_door:             LocationData(0xC64095, 0x10CC7F, RName.cc_main),
-    LName.ccll_butlers_side:             LocationData(0xC64096, 0x10CC9F, RName.cc_main),
-    LName.ccll_cwhall_butlerflames_past: LocationData(0xC64097, 0x10CCA7, RName.cc_main),
-    LName.ccll_cwhall_flamethrower:      LocationData(0xC64098, 0x8DF580, RName.cc_main, "inv"),
-    LName.ccll_cwhall_cwflames:          LocationData(0xC64099, 0x10CCAF, RName.cc_main),
-    LName.ccll_heinrich:                 LocationData(0xC6409A, 0xBFC20F, RName.cc_main, "npc"),
-    LName.ccia_nitro_crates:             LocationData(0xC6409B, 0x90FCE9, RName.cc_main, "inv"),
-    LName.ccia_nitro_shelf_h:            LocationData(0xC6409C, 0xBFCBBB, RName.cc_main),
-    LName.ccia_stairs_knight:            LocationData(0xC6409D, 0x90FE5C, RName.cc_main, "inv"),
-    LName.ccia_maids_vase:               LocationData(0xC6409E, 0x90FF1D, RName.cc_main, "inv"),
-    LName.ccia_maids_outer:              LocationData(0xC6409F, 0x10CCFF, RName.cc_main),
-    LName.ccia_maids_inner:              LocationData(0xC640A0, 0x10CD07, RName.cc_main),
-    LName.ccia_inventions_maids:         LocationData(0xC640A1, 0x10CCE7, RName.cc_main),
-    LName.ccia_inventions_crusher:       LocationData(0xC640A2, 0x10CCDF, RName.cc_main),
-    LName.ccia_inventions_famicart:      LocationData(0xC640A3, 0x90FBB3, RName.cc_main, "inv"),
-    LName.ccia_inventions_zeppelin:      LocationData(0xC640A4, 0x90FBC0, RName.cc_main),
-    LName.ccia_inventions_round:         LocationData(0xC640A5, 0x90FBA7, RName.cc_main, "inv"),
-    LName.ccia_nitrohall_flamethrower:   LocationData(0xC640A6, 0x90FCDA, RName.cc_main, "inv"),
-    LName.ccia_nitrohall_torch:          LocationData(0xC640A7, 0x10CCD7, RName.cc_main),
-    LName.ccia_nitro_shelf_i:            LocationData(0xC640A8, 0xBFCBB7, RName.cc_main),
+    LName.ccb_skel_hallway_ent:          LocationData(0xC6407A, 0x10CB67, RName.cc_lower),
+    LName.ccb_skel_hallway_jun:          LocationData(0xC6407B, 0x10CBD7, RName.cc_lower),
+    LName.ccb_skel_hallway_tc:           LocationData(0xC6407C, 0x10CB6F, RName.cc_lower),
+    LName.ccb_behemoth_l_ff:             LocationData(0xC6407D, 0x10CB77, RName.cc_lower),
+    LName.ccb_behemoth_l_mf:             LocationData(0xC6407E, 0x10CBA7, RName.cc_lower),
+    LName.ccb_behemoth_l_mr:             LocationData(0xC6407F, 0x10CB7F, RName.cc_lower),
+    LName.ccb_behemoth_l_fr:             LocationData(0xC64080, 0x10CBAF, RName.cc_lower),
+    LName.ccb_behemoth_r_ff:             LocationData(0xC64081, 0x10CBB7, RName.cc_lower),
+    LName.ccb_behemoth_r_mf:             LocationData(0xC64082, 0x10CB87, RName.cc_lower),
+    LName.ccb_behemoth_r_mr:             LocationData(0xC64083, 0x10CBBF, RName.cc_lower),
+    LName.ccb_behemoth_r_fr:             LocationData(0xC64084, 0x10CB8F, RName.cc_lower),
+    LName.ccelv_near_machine:            LocationData(0xC64085, 0x10CBF7, RName.cc_lower),
+    LName.ccelv_atop_machine:            LocationData(0xC64086, 0x10CC17, RName.cc_lower),
+    LName.ccelv_pipes:                   LocationData(0xC64087, 0x10CC07, RName.cc_lower),
+    LName.ccelv_staircase:               LocationData(0xC64088, 0x10CBFF, RName.cc_lower),
+    LName.ccff_redcarpet_knight:         LocationData(0xC64089, 0x8C44D9, RName.cc_lower, "inv"),
+    LName.ccff_gears_side:               LocationData(0xC6408A, 0x10CC33, RName.cc_lower),
+    LName.ccff_gears_mid:                LocationData(0xC6408B, 0x10CC3B, RName.cc_lower),
+    LName.ccff_gears_corner:             LocationData(0xC6408C, 0x10CC43, RName.cc_lower),
+    LName.ccff_lizard_knight:            LocationData(0xC6408D, 0x8C44E7, RName.cc_lower, "inv"),
+    LName.ccff_lizard_pit:               LocationData(0xC6408E, 0x10CC4B, RName.cc_lower),
+    LName.ccff_lizard_corner:            LocationData(0xC6408F, 0x10CC53, RName.cc_lower),
+    LName.ccll_brokenstairs_floor:       LocationData(0xC64090, 0x10CC8F, RName.cc_upper),
+    LName.ccll_brokenstairs_knight:      LocationData(0xC64091, 0x8DF782, RName.cc_upper, "inv"),
+    LName.ccll_brokenstairs_save:        LocationData(0xC64092, 0x10CC87, RName.cc_upper),
+    LName.ccll_glassknight_l:            LocationData(0xC64093, 0x10CC97, RName.cc_upper),
+    LName.ccll_glassknight_r:            LocationData(0xC64094, 0x10CC77, RName.cc_upper),
+    LName.ccll_butlers_door:             LocationData(0xC64095, 0x10CC7F, RName.cc_upper),
+    LName.ccll_butlers_side:             LocationData(0xC64096, 0x10CC9F, RName.cc_upper),
+    LName.ccll_cwhall_butlerflames_past: LocationData(0xC64097, 0x10CCA7, RName.cc_upper),
+    LName.ccll_cwhall_flamethrower:      LocationData(0xC64098, 0x8DF580, RName.cc_upper, "inv"),
+    LName.ccll_cwhall_cwflames:          LocationData(0xC64099, 0x10CCAF, RName.cc_upper),
+    LName.ccll_heinrich:                 LocationData(0xC6409A, 0xBFC1C7, RName.cc_upper, "npc"),
+    LName.ccia_nitro_crates:             LocationData(0xC6409B, 0x90FCE9, RName.cc_upper, "inv"),
+    LName.ccia_nitro_shelf_h:            LocationData(0xC6409C, 0xBFCBBB, RName.cc_upper),
+    LName.ccia_stairs_knight:            LocationData(0xC6409D, 0x90FE5C, RName.cc_upper, "inv"),
+    LName.ccia_maids_vase:               LocationData(0xC6409E, 0x90FF1D, RName.cc_upper, "inv"),
+    LName.ccia_maids_outer:              LocationData(0xC6409F, 0x10CCFF, RName.cc_upper),
+    LName.ccia_maids_inner:              LocationData(0xC640A0, 0x10CD07, RName.cc_upper),
+    LName.ccia_inventions_maids:         LocationData(0xC640A1, 0x10CCE7, RName.cc_upper),
+    LName.ccia_inventions_crusher:       LocationData(0xC640A2, 0x10CCDF, RName.cc_upper),
+    LName.ccia_inventions_famicart:      LocationData(0xC640A3, 0x90FBB3, RName.cc_upper, "inv"),
+    LName.ccia_inventions_zeppelin:      LocationData(0xC640A4, 0x90FBC0, RName.cc_upper),
+    LName.ccia_inventions_round:         LocationData(0xC640A5, 0x90FBA7, RName.cc_upper, "inv"),
+    LName.ccia_nitrohall_flamethrower:   LocationData(0xC640A6, 0x90FCDA, RName.cc_upper, "inv"),
+    LName.ccia_nitrohall_torch:          LocationData(0xC640A7, 0x10CCD7, RName.cc_upper),
+    LName.ccia_nitro_shelf_i:            LocationData(0xC640A8, 0xBFCBB7, RName.cc_upper),
     LName.ccb_mandrag_shelf_l:           LocationData(0xC640A9, 0xBFCB6B, RName.cc_torture_chamber),
     LName.ccb_mandrag_shelf_r:           LocationData(0xC640AA, 0xBFCB67, RName.cc_torture_chamber),
     LName.ccb_torture_rack:              LocationData(0xC640AB, 0x8985E5, RName.cc_torture_chamber, "inv"),
@@ -259,12 +261,12 @@ carrie_only_location_table = {
 }
 
 cc_lizard_generator_table = {
-    LName.ccff_lizard_coffin_nfr: LocationData(0xC640D8, 0x8C450A, RName.cc_main),
-    LName.ccff_lizard_coffin_nmr: LocationData(0xC640D9, 0xBFC98B, RName.cc_main),
-    LName.ccff_lizard_coffin_nml: LocationData(0xC640DA, 0xBFC98F, RName.cc_main),
-    LName.ccff_lizard_coffin_nfl: LocationData(0xC640DB, 0x8C451C, RName.cc_main),
-    LName.ccff_lizard_coffin_fl:  LocationData(0xC640DC, 0x8C44fD, RName.cc_main),
-    LName.ccff_lizard_coffin_fr:  LocationData(0xC640DD, 0x8C44F5, RName.cc_main)
+    LName.ccff_lizard_coffin_nfr: LocationData(0xC640D8, 0x8C450A, RName.cc_lower),
+    LName.ccff_lizard_coffin_nmr: LocationData(0xC640D9, 0xBFC98B, RName.cc_lower),
+    LName.ccff_lizard_coffin_nml: LocationData(0xC640DA, 0xBFC98F, RName.cc_lower),
+    LName.ccff_lizard_coffin_nfl: LocationData(0xC640DB, 0x8C451C, RName.cc_lower),
+    LName.ccff_lizard_coffin_fl:  LocationData(0xC640DC, 0x8C44fD, RName.cc_lower),
+    LName.ccff_lizard_coffin_fr:  LocationData(0xC640DD, 0x8C44F5, RName.cc_lower)
 }
 
 multi_breakable_table = {
@@ -315,18 +317,18 @@ multi_breakable_table = {
     LName.uw_in_skel_ledge2: LocationData(0xC64105, 0x10CB47, RName.uw_main),
     LName.uw_in_skel_ledge3: LocationData(0xC64106, 0x10CB49, RName.uw_main),
     # Castle Center 3HBs
-    LName.ccb_behemoth_crate1: LocationData(0xC64107, 0x10CBDD, RName.cc_main),
-    LName.ccb_behemoth_crate2: LocationData(0xC64108, 0x10CBDF, RName.cc_main),
-    LName.ccb_behemoth_crate3: LocationData(0xC64109, 0x10CBE1, RName.cc_main),
-    LName.ccb_behemoth_crate4: LocationData(0xC6410A, 0x10CBE3, RName.cc_main),
-    LName.ccb_behemoth_crate5: LocationData(0xC6410B, 0x10CBE5, RName.cc_main),
-    LName.ccelv_stand1:        LocationData(0xC6410C, 0x10CC1D, RName.cc_main),
-    LName.ccelv_stand2:        LocationData(0xC6410D, 0x10CC1F, RName.cc_main),
-    LName.ccelv_stand3:        LocationData(0xC6410E, 0x10CC21, RName.cc_main),
-    LName.ccff_lizard_slab1:   LocationData(0xC6410F, 0x10CC61, RName.cc_main),
-    LName.ccff_lizard_slab2:   LocationData(0xC64110, 0x10CC63, RName.cc_main),
-    LName.ccff_lizard_slab3:   LocationData(0xC64111, 0x10CC65, RName.cc_main),
-    LName.ccff_lizard_slab4:   LocationData(0xC64112, 0x10CC67, RName.cc_main),
+    LName.ccb_behemoth_crate1: LocationData(0xC64107, 0x10CBDD, RName.cc_lower),
+    LName.ccb_behemoth_crate2: LocationData(0xC64108, 0x10CBDF, RName.cc_lower),
+    LName.ccb_behemoth_crate3: LocationData(0xC64109, 0x10CBE1, RName.cc_lower),
+    LName.ccb_behemoth_crate4: LocationData(0xC6410A, 0x10CBE3, RName.cc_lower),
+    LName.ccb_behemoth_crate5: LocationData(0xC6410B, 0x10CBE5, RName.cc_lower),
+    LName.ccelv_stand1:        LocationData(0xC6410C, 0x10CC1D, RName.cc_lower),
+    LName.ccelv_stand2:        LocationData(0xC6410D, 0x10CC1F, RName.cc_lower),
+    LName.ccelv_stand3:        LocationData(0xC6410E, 0x10CC21, RName.cc_lower),
+    LName.ccff_lizard_slab1:   LocationData(0xC6410F, 0x10CC61, RName.cc_lower),
+    LName.ccff_lizard_slab2:   LocationData(0xC64110, 0x10CC63, RName.cc_lower),
+    LName.ccff_lizard_slab3:   LocationData(0xC64111, 0x10CC65, RName.cc_lower),
+    LName.ccff_lizard_slab4:   LocationData(0xC64112, 0x10CC67, RName.cc_lower),
     # Tower of Execution 3HBs
     LName.toe_ledge1: LocationData(0xC64113, 0x10CD5D, RName.toe_main),
     LName.toe_ledge2: LocationData(0xC64114, 0x10CD5F, RName.toe_main),
@@ -390,9 +392,9 @@ sub_weapon_table = {
     LName.tunnel_shovel_mdoor_r:        LocationData(0xC64142, 0x10CA77, RName.tunnel_end),
     LName.tunnel_shovel_sdoor_r:        LocationData(0xC64143, 0x10CA7F, RName.tunnel_end),
     # Castle Center sub-weapons
-    LName.ccb_skel_hallway_ba:     LocationData(0xC64144, 0x10CBC7, RName.cc_main),
-    LName.ccelv_switch:            LocationData(0xC64145, 0x10CC0F, RName.cc_main),
-    LName.ccff_lizard_near_knight: LocationData(0xC64146, 0x10CC5B, RName.cc_main),
+    LName.ccb_skel_hallway_ba:     LocationData(0xC64144, 0x10CBC7, RName.cc_lower),
+    LName.ccelv_switch:            LocationData(0xC64145, 0x10CC0F, RName.cc_lower),
+    LName.ccff_lizard_near_knight: LocationData(0xC64146, 0x10CC5B, RName.cc_lower),
     # Duel Tower sub-weapon
     LName.dt_stones_end: LocationData(0xC64147, 0x10CE83, RName.dt_main),
     # Tower of Execution sub-weapon
@@ -498,6 +500,7 @@ def create_locations(world, player: int, active_regions):
 
     for loc, data in location_table.items():
         if data.region in active_regions:
+            stage = RName.regions_to_stages[data.region]
             created_location = CV64Location(player, loc, data.code, active_regions[data.region],
-                                            data.cv64_rom_offset, data.cv64_loc_type)
+                                            data.cv64_rom_offset, data.cv64_loc_type, stage)
             active_regions[data.region].locations.append(created_location)

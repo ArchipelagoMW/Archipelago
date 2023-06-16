@@ -160,8 +160,8 @@ stage_info = {
                                        IName.cure_ampoule: 2}, 2, {},
                                       {}),
 
-    "Castle Center":        CV64Stage(RName.cc_main, None, None, 0x19, 0x00,
-                                      RName.cc_main, 0x0E, 0x03,
+    "Castle Center":        CV64Stage(RName.cc_lower, None, None, 0x19, 0x00,
+                                      RName.cc_lower, 0x0E, 0x03,
                                       RName.cc_elev_top, 0x109CB7, 0x109CB9, 0x109CCF, 0x109CD1, 0x0F, 0x02,
                                       2, [0x104A45, 0x104A4D, 0x104A55, 0x104A5D, 0x104A65, 0x104A6D, 0x104A75],
                                       {IName.magical_nitro: 2,
