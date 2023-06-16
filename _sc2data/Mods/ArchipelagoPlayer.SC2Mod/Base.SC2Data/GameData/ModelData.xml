@@ -8352,8 +8352,4 @@
         <ShadowRadius value="0.882000"/>
         <SquibTypeDefault value="Metal"/>
     </CModel>
-    <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
-        <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
-        <LoopCount value="-1"/>
-    </CSound>
 </Catalog>

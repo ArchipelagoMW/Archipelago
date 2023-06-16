@@ -7445,29 +7445,6 @@
         <ImpactMap index="None" Sound="AP_Nova_Snipe_AttackImpact"/>
     </CActorAction>
     <CActorBeamSimple id="AP_NovaWeaponCanisterRifleSnipeAttackBeam" parent="GenericAttackBeam"/>
-    <CActorSound id="AP_Nova_ShotgunAuto_TailsSound" parent="SoundOneShot">
-        <Sound value="PhysicsImpactBase"/>
-        <Layers>
-            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_L"/>
-            <PitchSource value="Actor"/>
-            <PlayDelaySource value="Actor"/>
-            <VolumeSource value="Sound"/>
-            <Chance value="100"/>
-            <Pitch value="-1.000000,-1.000000"/>
-            <PlayDelay value="60,120"/>
-            <Volume value="-2.000000,-2.000000"/>
-        </Layers>
-        <Layers>
-            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_R"/>
-            <PitchSource value="Actor"/>
-            <PlayDelaySource value="Actor"/>
-            <VolumeSource value="Sound"/>
-            <Chance value="100"/>
-            <Pitch value="-1.000000,-1.000000"/>
-            <PlayDelay value="60,120"/>
-            <Volume value="-2.000000,-2.000000"/>
-        </Layers>
-    </CActorSound>
     <CActorModel id="AP_NovaWeaponHellfireShotgunBlastImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_NovaWeaponHellfireShotgunBlastDamage.Start; At Target" Send="Create"/>
         <Host Subject="_Selectable"/>

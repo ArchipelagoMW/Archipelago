@@ -48,14 +48,6 @@
             <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
         </AssetArrayTemplate>
     </CSound>
-    <CSound default="1" id="AP_HeroNova_Ack" parent="TerranAck">
-        <AssetArrayTemplate>
-            <File value="AP\LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam2^.ogg"/>
-            <FacialAnim value="^TemplateParam1^"/>
-            <FacialGroup value="^TemplateParam1^"/>
-            <FacialFile value="LocalizedData\Sounds\TerranUnitVO\Nova\^TemplateParam1^.fxe"/>
-        </AssetArrayTemplate>
-    </CSound>
     <CSound id="AP_Medic_Attack" parent="TerranAck">
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack00.ogg" FacialAnim="Medic_Attack00"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack01.ogg" FacialAnim="Medic_Attack01"/>
