@@ -1,6 +1,5 @@
 import struct
 from .Options import KirbyFlavorPreset, GooeyFlavorPreset
-from struct import pack
 
 kirby_flavor_presets = {
     1: {

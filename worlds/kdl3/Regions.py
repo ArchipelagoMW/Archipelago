@@ -4,6 +4,7 @@ from worlds.AutoWorld import World
 from .Locations import KDL3Location, location_table, level_consumables
 from .Names import LocationName
 from .Options import BossShuffle
+
 if typing.TYPE_CHECKING:
     from . import KDL3World
 
@@ -54,7 +55,8 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
                 possible_stages.remove(new_stage)
 
             except Exception:
-                raise Exception(f"Invalid connection: {connection.entrance} => {connection.exit} for player {world.player} ({world.multiworld.player_name[world.player]})")
+                raise Exception(
+                    f"Invalid connection: {connection.entrance} => {connection.exit} for player {world.player} ({world.multiworld.player_name[world.player]})")
 
     for level in range(1, 6):
         for stage in range(6):
@@ -117,6 +119,21 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
     return levels
 
 
+def generate_locations_from_stages(stages: typing.List[int], consumables: bool) -> typing.Dict[str, typing.Optional[int]]:
+    locations = dict()
+    for stage in stages[:-1]:
+        locations[location_table[stage]] = stage
+        locations[location_table[stage + 0x100]] = stage + 0x100
+        if consumables:
+            stage_idx = stage & 0xFF
+            if stage_idx in level_consumables:
+                for consumable in level_consumables[stage_idx]:
+                    loc_id = consumable + 0x770300
+                    locations[location_table[loc_id]] = loc_id
+
+    return locations
+
+
 def create_levels(world: World) -> None:
     menu = Region("Menu", world.player, world.multiworld)
     start = Entrance(world.player, "Start Game", menu)
@@ -144,32 +161,21 @@ def create_levels(world: World) -> None:
     else:
         world.player_levels[world.player] = default_levels.copy()
     for level in levels:
-        for stage in world.player_levels[world.player][level]:
-            if not stage & 0x200:
-                levels[level].locations.append(KDL3Location(world.player, location_table[stage], stage, levels[level]))
-                heart_star = stage + 0x100
-                levels[level].locations.append(KDL3Location(world.player, location_table[heart_star],
-                                                            heart_star, levels[level]))
-                if world.multiworld.consumables[world.player]:
-                    stage_idx = stage & 0xFF
-                    if stage_idx in level_consumables:
-                        for consumable in level_consumables[stage_idx]:
-                            loc_id = 0x770300 + consumable
-                            levels[level].locations.append(KDL3Location(world.player,
-                                                                        location_table[loc_id],
-                                                                        loc_id, levels[level]
-                                                                        ))
-    level1.locations.append(KDL3Location(world.player, LocationName.grass_land_whispy, 0x770200, level1))
-    level2.locations.append(KDL3Location(world.player, LocationName.ripple_field_acro, 0x770201, level2))
-    level3.locations.append(KDL3Location(world.player, LocationName.sand_canyon_poncon, 0x770202, level3))
-    level4.locations.append(KDL3Location(world.player, LocationName.cloudy_park_ado, 0x770203, level4))
-    level5.locations.append(KDL3Location(world.player, LocationName.iceberg_dedede, 0x770204, level5))
-    level1.locations.append(KDL3Location(world.player, "Level 1 Boss", None, level1))
-    level2.locations.append(KDL3Location(world.player, "Level 2 Boss", None, level2))
-    level3.locations.append(KDL3Location(world.player, "Level 3 Boss", None, level3))
-    level4.locations.append(KDL3Location(world.player, "Level 4 Boss", None, level4))
-    level5.locations.append(KDL3Location(world.player, "Level 5 Boss", None, level5))
-    level6.locations.append(KDL3Location(world.player, LocationName.goals[world.multiworld.goal[world.player]], None, level6))
+        levels[level].add_locations(generate_locations_from_stages(world.player_levels[world.player][level],
+                                                                   world.multiworld.consumables[world.player]),
+                                    KDL3Location)
+
+    for boss_flag, purification, id, level in zip(["Level 1 Boss", "Level 2 Boss",
+                                                   "Level 3 Boss", "Level 4 Boss", "Level 5 Boss"],
+                                                  [LocationName.grass_land_whispy, LocationName.ripple_field_acro,
+                                                   LocationName.sand_canyon_poncon, LocationName.cloudy_park_ado,
+                                                   LocationName.iceberg_dedede],
+                                                  [0x770200, 0x770201, 0x770202, 0x770203, 0x770204],
+                                                  [level1, level2, level3, level4, level5]):
+        level.add_locations({boss_flag: None, purification: id, }, KDL3Location)
+
+    level6.add_locations({LocationName.goals[world.multiworld.goal[world.player]]: None}, KDL3Location)
+
     tlv2 = Entrance(world.player, "To Level 2", level1)
     level1.exits.append(tlv2)
     tlv2.connect(level2)

@@ -1,4 +1,4 @@
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item
 import typing
 
 

@@ -102,7 +102,6 @@ music_choices = [
     2,  # Boss 1
     3,  # Boss 2 (Unused)
     4,  # Boss 3 (Miniboss)
-    5,  # Star Floating (required)
     7,  # Dedede
     8,  # Heart Star
     9,  # Event 2 (used once)
@@ -829,12 +828,30 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             shuffled_music = music_choices.copy()
             multiworld.per_slot_randoms[player].shuffle(shuffled_music)
             music_map = dict(zip(music_choices, shuffled_music))
+            music_map[5] = multiworld.per_slot_randoms[player].choice(music_choices)
             for room in room_pointers:
                 old_music = rom.read_byte(room+2)
                 rom.write_byte(room + 2, music_map[old_music])
+            for i in range(5):
+                # level themes
+                old_music = rom.read_byte(0x133F2 + i)
+                rom.write_byte(0x133F2 + i, music_map[old_music])
+            # Zero
+            rom.write_byte(0x9AE79, music_map[0x18])
+            # Heart Star success and fail
+            rom.write_byte(0x4A388, music_map[0x08])
+            rom.write_byte(0x4A38D, music_map[0x1D])
         elif multiworld.music_shuffle[player] == 2:
             for room in room_pointers:
                 rom.write_byte(room + 2, multiworld.per_slot_randoms[player].choice(music_choices))
+            for i in range(5):
+                # level themes
+                rom.write_byte(0x133F2 + i, multiworld.per_slot_randoms[player].choice(music_choices))
+            # Zero
+            rom.write_byte(0x9AE79, multiworld.per_slot_randoms[player].choice(music_choices))
+            # Heart Star success and fail
+            rom.write_byte(0x4A388, multiworld.per_slot_randoms[player].choice(music_choices))
+            rom.write_byte(0x4A38D, multiworld.per_slot_randoms[player].choice(music_choices))
 
     # boss requirements
     rom.write_bytes(0x3D000, struct.pack("HHHHH", boss_requirements[0], boss_requirements[1], boss_requirements[2],

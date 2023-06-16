@@ -12,7 +12,7 @@ from .Rules import set_rules
 from .Rom import KDL3DeltaPatch, get_base_rom_path, RomData, patch_rom
 from .Client import KDL3SNIClient
 
-from typing import Dict
+from typing import Dict, TextIO
 import os
 import math
 import threading
@@ -50,7 +50,7 @@ class KDL3World(World):
     required_heart_stars = dict()
     boss_requirements = dict()
     player_levels = dict()
-    topology_present = False
+    stage_shuffle_enabled = False
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -79,7 +79,7 @@ class KDL3World(World):
                                               weights=list(filler_item_weights.values()))[0]
 
     def get_trap_item_name(self) -> str:
-        return self.multiworld.random.choices( ["Gooey Bag", "Slowness", "Eject Ability"],
+        return self.multiworld.random.choices(["Gooey Bag", "Slowness", "Eject Ability"],
                                               weights=[self.multiworld.gooey_trap_weight[self.player],
                                                        self.multiworld.slow_trap_weight[self.player],
                                                        self.multiworld.ability_trap_weight[self.player]])[0]
@@ -113,9 +113,6 @@ class KDL3World(World):
             for i in range(4):
                 requirements.append(self.multiworld.per_slot_randoms[self.player].randint(
                     min(3, required_heart_stars), required_heart_stars))
-            if self.multiworld.strict_bosses[self.player]:
-                requirements.sort()
-            else:
                 self.multiworld.per_slot_randoms[self.player].shuffle(requirements)
         else:
             quotient = required_heart_stars // 5  # since we set the last manually, we can afford imperfect rounding
@@ -133,20 +130,13 @@ class KDL3World(World):
     set_rules = set_rules
 
     def generate_basic(self) -> None:
-        self.topology_present = self.multiworld.stage_shuffle[self.player].value > 0
+        self.stage_shuffle_enabled = self.multiworld.stage_shuffle[self.player].value > 0
         goal = self.multiworld.goal[self.player].value
         goal_location = self.multiworld.get_location(LocationName.goals[goal], self.player)
         goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 1 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 1 Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 2 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 2 Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 3 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 3 Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 4 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 4 Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 5 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 5 Boss Purified", ItemClassification.progression, None, self.player))
+        for level in range(1, 6):
+            self.multiworld.get_location(f"Level {level} Boss", self.player) \
+                .place_locked_item(KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
 
     def generate_output(self, output_directory: str):
@@ -183,8 +173,15 @@ class KDL3World(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        if self.stage_shuffle_enabled:
+            spoiler_handle.write("\nLevel Layout:\n")
+            for level in LocationName.level_names:
+                for stage, i in zip(self.player_levels[self.player][LocationName.level_names[level]], range(1, 7)):
+                    spoiler_handle.write(f"{level} {i}: {location_table[stage].replace(' - Complete', '')}\n")
+
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
-        if self.topology_present:
+        if self.stage_shuffle_enabled:
             regions = {LocationName.level_names[level]: level for level in LocationName.level_names}
             level_hint_data = {}
             for level in self.player_levels[self.player]:

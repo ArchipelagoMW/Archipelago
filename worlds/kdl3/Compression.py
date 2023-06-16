@@ -1,10 +1,8 @@
-"""
-HAL decompression based on exhal by devinacker
-https://github.com/devinacker/exhal
-"""
-
-
 def hal_decompress(comp: bytes) -> bytes:
+    """
+    HAL decompression based on exhal by devinacker
+    https://github.com/devinacker/exhal
+    """
     inpos = 0
 
     input = 0

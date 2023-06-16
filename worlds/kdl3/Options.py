@@ -243,7 +243,7 @@ class GooeyFlavorPreset(Choice):
     option_watermelon = 10
     option_orange = 11
     option_lime = 12
-    #option_lavender = 13
+    option_lavender = 13
     option_custom = 14
     default = 0
 
