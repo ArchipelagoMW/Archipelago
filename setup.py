@@ -74,6 +74,7 @@ apworlds: set = {
     "Links Awakening DX",
     "Super Metroid",
     "SMZ3",
+    "Kirby's Dream Land 3",
 }
 
 
