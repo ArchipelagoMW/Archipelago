@@ -7875,6 +7875,95 @@
         <ShadowRadius value="0.735000"/>
         <SquibTypeDefault value="Flesh"/>
     </CModel>
+    <CModel id="AP_ExplosiveGlaiveImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\ExplosiveGlaiveImpact\ExplosiveGlaiveImpact.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_GlaiveWurmM4Weapon" parent="MissileFX">
+        <Model value="Assets\Effects\Zerg\MutaliskMissile\MutaliskMissile.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_GlaiveWurmM5Weapon" parent="MissileFX">
+        <Model value="Assets\Effects\Zerg\MutaliskMissile\MutaliskMissile.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_GlaiveWurmM6Weapon" parent="MissileFX">
+        <Model value="Assets\Effects\Zerg\MutaliskMissile\MutaliskMissile.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_MutaliskExtraDamageModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\ArcadePlasmaMissile\ArcadePlasmaMissile.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Lighting value=""/>
+    </CModel>
+    <CModel id="AP_MutaliskHealModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\MendBuff\MendBuff.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_ViciouisGlaiveAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\ViciousGlaiveImpact\ViciousGlaiveImpact.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Lighting value="MutaliskAttackSegment1Impact"/>
+    </CModel>
+    <CModel id="AP_Mutalisk" parent="MutaliskBase">
+        <Model value="Assets\Units\Zerg\Mutalisk\Mutalisk.m3"/>
+        <ScaleMax value="0.660000,0.660000,0.660000"/>
+        <ScaleMin value="0.540000,0.540000,0.540000"/>
+    </CModel>
+    <CModel id="AP_MutaliskBroodlord" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\MutaliskEx1A\MutaliskEx1A.m3"/>
+        <AnimBlendTime value="0.300000"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid11"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.350000"/>
+        <SelectionRadius value="0.833200"/>
+        <ShadowRadius value="0.833200"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraMid11"/>
+        <Tipability value="0.750000"/>
+        <UnitGlossaryCamera value="Star2CameraMid11"/>
+    </CModel>
+    <CModel id="AP_MutaliskBroodlordDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\MutaliskEx1ADeath\MutaliskEx1ADeath.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <Variations Number="0" Probability="3"/>
+        <Variations Number="1" Probability="1"/>
+    </CModel>
+    <CModel id="AP_MutaliskBroodlordPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\MutaliskPortrait\MutaliskPortrait.m3"/>
+        <Image value="Assets\Textures\MutaliskPortrait_Static.dds"/>
+        <Lighting value="MutaliskBroodlordPortrait"/>
+    </CModel>
+    <CModel id="AP_MutaliskViper" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\MutaliskEx1B\MutaliskEx1B.m3"/>
+        <AnimBlendTime value="0.300000"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid11"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.350000"/>
+        <SelectionRadius value="0.833200"/>
+        <ShadowRadius value="0.833200"/>
+        <SquibTypeDefault value="Flesh"/>
+        <TechPurchaseCamera value="Star2CameraMid11"/>
+        <Tipability value="0.750000"/>
+        <UnitGlossaryCamera value="Star2CameraMid11"/>
+    </CModel>
+    <CModel id="AP_MutaliskViperDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\MutaliskEx1BDeath\MutaliskEx1BDeath.m3"/>
+        <LowQualityModel value="ZergMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <Variations Number="0" Probability="3"/>
+        <Variations Number="1" Probability="1"/>
+    </CModel>
+    <CModel id="AP_MutaliskViperPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\MutaliskPortrait\MutaliskPortrait.m3"/>
+        <Image value="Assets\Textures\MutaliskPortrait_Static.dds"/>
+        <Lighting value="MutaliskViperPortrait"/>
+    </CModel>
     <CSound id="AP_RavenShredderMissile_Travel_Loop" parent="Combat">
         <AssetArray File="Assets\Sounds\Def_Matrix_Loop_02.ogg" FacialGroup=""/>
         <LoopCount value="-1"/>

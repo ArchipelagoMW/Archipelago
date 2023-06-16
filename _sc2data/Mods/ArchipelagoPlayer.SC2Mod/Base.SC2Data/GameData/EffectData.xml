@@ -6345,4 +6345,187 @@
         <Amount value="1"/>
         <LeechFraction index="Energy" value="2"/>
     </CEffectDamage>
+    <CEffectLaunchMissile id="AP_GlaiveWurm">
+        <EditorCategories value="Race:Terran"/>
+        <ImpactEffect value="AP_GlaiveWurmS1"/>
+        <AmmoUnit value="AP_GlaiveWurmWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="AP_GlaiveWurmE1">
+        <!-- Sundering Glave no longer reduces bounces -->
+        <!-- ValidatorArray value="NotHotSExplosiveGlaive"/ -->
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM2"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_GlaiveWurmE2">
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM3"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_GlaiveWurmE3">
+        <ValidatorArray value="AP_HaveHotSViciousGlaive"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM4"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_GlaiveWurmE4">
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM5"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_GlaiveWurmE5">
+        <EditorCategories value="Race:Zerg"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Visible;Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_GlaiveWurmM6"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM2">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="TargetNotChangeling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmS2"/>
+        <AmmoUnit value="AP_GlaiveWurmM2Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM3">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="TargetNotChangeling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmS3"/>
+        <AmmoUnit value="AP_GlaiveWurmM3Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM4">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmS4"/>
+        <AmmoUnit value="AP_GlaiveWurmM4Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM5">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmS5"/>
+        <AmmoUnit value="AP_GlaiveWurmM5Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_GlaiveWurmM6">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactEffect value="AP_GlaiveWurmU6"/>
+        <AmmoUnit value="AP_GlaiveWurmM6Weapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_GlaiveWurmS1">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU1"/>
+        <EffectArray value="AP_GlaiveWurmE1"/>
+        <EffectArray value="AP_MutaliskDoubleDamageRB"/>
+        <EffectArray value="AP_MutaliskRapidRegenRB"/>
+        <EffectArray value="AP_MutaliskOutOfCombat2RB"/>
+        <EffectArray value="AP_MutaliskExplosiveGlaive"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GlaiveWurmS2">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU2"/>
+        <EffectArray value="AP_GlaiveWurmE2"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GlaiveWurmS3">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU3"/>
+        <EffectArray value="AP_GlaiveWurmE3"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GlaiveWurmS4">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU4"/>
+        <EffectArray value="AP_GlaiveWurmE4"/>
+    </CEffectSet>
+    <CEffectSet id="AP_GlaiveWurmS5">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_GlaiveWurmU5"/>
+        <EffectArray value="AP_GlaiveWurmE5"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_GlaiveWurmU1" parent="DU_WEAP_MISSILE">
+        <ValidatorArray value="AP_NotHotSExplosiveGlaive"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="9"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU2" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="5"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU3" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="3"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU4" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="3"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU5" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_GlaiveWurmU6" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Zerg"/>
+        <Visibility value="Visible"/>
+        <Amount value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_MutaliskDoubleDamage">
+        <ValidatorArray value="AP_HaveHotSEngorgedAppendages"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_MutaliskDoubleDamageRB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_MutaliskDoubleDamage"/>
+    </CEffectRemoveBehavior>
+    <CEffectDamage id="AP_MutaliskExplosiveGlaive" parent="DU_WEAP_MISSILE">
+        <ValidatorArray value="AP_HaveHotSExplosiveGlaive"/>
+        <EditorCategories value="Race:Zerg"/>
+        <AttributeBonus index="Armored" value="9"/>
+        <Visibility value="Visible"/>
+        <Amount value="9"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_MutaliskOutOfCombat2AB">
+        <ValidatorArray value="AP_SelfNotMutaliskOutOfCombat2"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_MutaliskOutOfCombat2"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_MutaliskOutOfCombat2RB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_MutaliskOutOfCombat2"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_MutaliskOutOfCombat3Set">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_MutaliskDoubleDamage"/>
+        <EffectArray value="AP_MutaliskRapidRegen"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_MutaliskRapidRegen">
+        <ValidatorArray value="AP_HaveHotSRapidRegeneration"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_MutaliskRapidRegenRB">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_MutaliskRapidRegen"/>
+    </CEffectRemoveBehavior>
 </Catalog>

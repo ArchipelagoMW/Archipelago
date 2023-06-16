@@ -8,6 +8,14 @@
         <Find value="1"/>
         <Value value="AP_HaveHotSLurker"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSMutaliskViper">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSMutaliskViper"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSMutaliskBroodlord">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSMutaliskBroodlord"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="AP_NotHaveHotSSwarmHostSplitA">
         <CombineArray value="AP_HaveHotSSwarmHostSplitA"/>
         <Negate value="1"/>
@@ -361,6 +369,24 @@
         <Find value="1"/>
         <Value value="AP_HaveHotSKeneticMitosis"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSEngorgedAppendages">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSEngorgedAppendages"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSExplosiveGlaive">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSExplosiveGlaive"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSRapidRegeneration">
+        <Find value="1"/>
+        <Value value="AP_HaveHotSRapidRegeneration"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSViciousGlaive">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSViciousGlaive"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>
@@ -526,6 +552,16 @@
         <Value value="1"/>
         <Behavior value="AP_BroodlingFate"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_NotBroodlord">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_BroodLord"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_NotBroodlordCocoon">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_BroodLordCocoon"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
     <CValidatorCombine id="NotCommandCenter" parent="CValidatorCombine">
         <!-- Override -->
         <Negate value="1"/>
@@ -624,6 +660,24 @@
         <Value value="AP_Dummy"/>
         <Find value="0"/>
     </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_NotHotSExplosiveGlaive">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_HaveHotSExplosiveGlaive"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_NotHotSExplosiveGlaiveAndHaveHotSViciousGlaive">
+        <Type value="And"/>
+        <CombineArray value="AP_NotHotSExplosiveGlaive"/>
+        <CombineArray value="AP_HaveHotSViciousGlaive"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_NotHotSExplosiveGlaiveAndNotHotSViciousGlaive">
+        <Type value="And"/>
+        <CombineArray value="AP_NotHotSExplosiveGlaive"/>
+        <CombineArray value="AP_NotHotSViciousGlaive"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_NotHotSViciousGlaive">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_HaveHotSViciousGlaive"/>
+    </CValidatorPlayerRequirement>
     <CValidatorCombine id="NotWorkerMULE" parent="CValidatorCombine">
         <!-- Overrride -->
         <CombineArray value="IsMULE"/>
@@ -1378,6 +1432,10 @@
         <CombineArray value="AP_TacticalBurrowSwarmHostDown"/>
         <Negate value="1"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_SelfNotMutaliskOutOfCombat2">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_MutaliskOutOfCombat2"/>
+    </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="TechLabNotFactory" parent="CValidatorCombine">
         <!-- Override -->
         <Type value="And"/>

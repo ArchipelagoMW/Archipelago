@@ -888,6 +888,19 @@
             <Wavelength value="6"/>
         </MotionOverlays>
     </CMoverMissile>
+    <CMoverMissile id="AP_GlaiveWurmBounceMissile">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="18.75"/>
+            <ClearanceAcceleration value="75"/>
+            <ActorTracking value="Actual"/>
+            <Outro value="-1"/>
+            <RotationLaunchActorType value="LaunchToTarget"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
     <CMoverMissile id="TossGrenade2">
         <MotionPhases Driver="Ballistic" Gravity="12" FlightTime="0.5"/>
     </CMoverMissile>

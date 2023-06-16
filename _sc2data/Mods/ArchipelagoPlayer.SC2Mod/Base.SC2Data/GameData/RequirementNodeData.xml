@@ -2207,4 +2207,27 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeHotsKeneticMitosisCompleteOnlyTechTreeCheat">
         <Count Link="AP_HotsKeneticMitosis" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSEngorgedAppendagesCompleteOnly">
+        <Count Link="AP_HotSEngorgedAppendages" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSExplosiveGlaiveCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSExplosiveGlaive" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSRapidRegenerationCompleteOnly">
+        <Count Link="AP_HotSRapidRegeneration" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSViciousGlaiveCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSViciousGlaive" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSMutaliskBroodlord" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSMutaliskViperCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSMutaliskViper" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

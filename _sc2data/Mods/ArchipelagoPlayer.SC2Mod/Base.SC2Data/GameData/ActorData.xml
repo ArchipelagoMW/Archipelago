@@ -8036,6 +8036,311 @@
         <TiltAmount value="0.500000"/>
         <AngleRate value="180.000000"/>
     </CActorSiteOpTilter>
+    <CActorUnit default="1" id="AP_MutaliskBase" parent="GenericUnitStandard">
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsKillerPhantasm" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Mutalisk_Land"/>
+        <HostSiteOps Ops="AP_SOpBankerMutalisk"/>
+        <DeathArray index="Normal" ModelLink="MutaliskDeath" SoundLink="Mutalisk_Explode"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="AP_Spectre_KillerPhantasmDeath" Name="Hallucination"/>
+        <DeathCustoms>
+            <ActorModel value="AP_MutaliskDeathRagdoll"/>
+            <ModelLink value="MutaliskDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="FireOnMetal"/>
+            <BodySquibs Name="BloodReduced" IsFallback="1"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PortraitModel value="MutaliskPortrait"/>
+        <WalkAnimMoveSpeed value="2"/>
+        <BarOffset value="60"/>
+        <BarWidth value="50"/>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-flyercarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Mutalisk_Ready"/>
+        <SoundArray index="What" value="Mutalisk_What"/>
+        <SoundArray index="Yes" value="Mutalisk_Yes"/>
+        <SoundArray index="Attack" value="Mutalisk_Attack"/>
+        <SoundArray index="Pissed" value="Mutalisk_Pissed"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorUnit id="AP_Mutalisk" parent="AP_MutaliskBase" unitName="AP_Mutalisk">
+        <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Create AP_MutaliskViper"/>
+        <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Create AP_MutaliskViper"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HotSMutaliskBroodlord.Add" Send="Create AP_MutaliskBroodlord"/>
+        <On Terms="Upgrade.AP_HotSMutaliskBroodlord.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskBroodlord" Send="Create AP_MutaliskBroodlord"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskBroodlord" Send="Destroy"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Mutalisk.dds"/>
+        </GroupIcon>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Mutalisk.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_MutaliskBroodlord" parent="AP_MutaliskBase" unitName="AP_MutaliskBroodlord">
+        <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Create AP_MutaliskViper"/>
+        <On Terms="Upgrade.AP_HotSMutaliskViper.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Create AP_MutaliskViper"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSMutaliskViper" Send="Destroy"/>
+        <Model value="AP_MutaliskBroodlord"/>
+        <BuildModel value="AP_MutaliskBroodlord"/>
+        <PlacementModel value="AP_MutaliskBroodlord"/>
+        <DeathArray index="Normal" ModelLink="AP_MutaliskBroodlordDeath" SoundLink="Mutalisk_Explode"/>
+        <PortraitModel value="AP_MutaliskBroodlordPortrait"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Mutaliskex1a.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-mutalisk-broodlord.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_Mutalisk"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-mutalisk-broodlord.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Mutaliskex1a.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="AP_MutaliskViper" parent="AP_MutaliskBase" unitName="AP_MutaliskViper">
+        <Model value="AP_MutaliskViper"/>
+        <BuildModel value="AP_MutaliskViper"/>
+        <PlacementModel value="AP_MutaliskViper"/>
+        <DeathArray index="Normal" ModelLink="AP_MutaliskViperDeath" SoundLink="Mutalisk_Explode"/>
+        <PortraitModel value="AP_MutaliskViperPortrait"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Mutaliskex1b.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-mutalisk-viper.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_Mutalisk"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-mutalisk-viper.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Mutaliskex1b.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorAction id="AP_MutaliskAttackSegment1" parent="GenericAttack" effectImpact="AP_GlaiveWurmU1" effectLaunch="AP_GlaiveWurm">
+        <On index="6" Terms="Effect.AP_GlaiveWurm.Start; At Caster; ValidateUnit AP_NotHotSExplosiveGlaiveAndNotHotSViciousGlaive" Send="Create"/>
+        <LaunchAssets Sound="Mutalisk_Segment1AttackLaunch"/>
+        <ImpactSite value="AP_MutaliskAttackSegment1ImpactSite"/>
+        <ImpactMap index="None" Model="MutaliskAttackSegment1Impact" Sound="Mutalisk_Segment1AttackImpact"/>
+        <ImpactPhysics Name="GlaveWurmImpact" MatchKeys="Basic" Physics="AP_MutaliskAttackDeathForce"/>
+        <ImpactPhysics Name="GlaveWurmImpactAir" MatchKeys="BasicAir" Physics="AP_MutaliskAttackAirDeathForce"/>
+    </CActorAction>
+    <CActorAction id="AP_MutaliskAttackSegment1ExplosiveGlaive" parent="GenericAttack" effectImpact="AP_MutaliskExplosiveGlaive" effectLaunch="AP_GlaiveWurm">
+        <On index="6" Terms="Effect.AP_GlaiveWurm.Start; At Caster; ValidateUnit AP_HaveHotSExplosiveGlaive" Send="Create"/>
+        <LaunchAssets Sound="Mutalisk_Segment1AttackLaunch"/>
+        <Missile value="AP_MutaliskAttackSegment1Missile"/>
+        <ImpactSite value="AP_MutaliskAttackSegment1ImpactSite"/>
+        <ImpactMap index="None" Model="AP_ExplosiveGlaiveImpact" Sound="AP_ExplosiveGlaiveImpactSound"/>
+    </CActorAction>
+    <CActorMissile id="AP_MutaliskAttackSegment1Missile" parent="GenericAttackMissile" unitName="AP_GlaiveWurmWeapon">
+        <Model value="GlaiveWurmWeapon"/>
+    </CActorMissile>
+    <CActorForceCylinder id="AP_MutaliskAttackAirDeathForce">
+        <HostSiteOps Ops="SOpIncomingMissileDot25 SOpMoveDownByDot5 SOpRandomPointInCircleDot2"/>
+        <Receiver Subject="::Main"/>
+        <Field value="Radial"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="27.000000,12.500000"/>
+        <HostEndSiteOps Ops="SOpIncomingMissileDot25 SOpMoveUpByDot5 SOpRandomPointInCircleDot2"/>
+        <Radius value="1.150000,0.350000"/>
+    </CActorForceCylinder>
+    <CActorForceCylinder id="AP_MutaliskAttackDeathForce">
+        <HostSiteOps Ops="SOpIncomingMissileDot1 SOp2DRotation SOpMoveDownByDot5 SOpRandomPointInCircleDot2"/>
+        <Receiver Subject="::Main"/>
+        <Field value="Radial"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="30.000000,12.500000"/>
+        <HostEndSiteOps Ops="SOpIncomingMissileDot1 SOp2DRotation SOpMoveUpByDot5 SOpRandomPointInCircleDot2"/>
+        <Radius value="1.000000,0.250000"/>
+    </CActorForceCylinder>
+    <CActorSite id="AP_MutaliskAttackSegment1ImpactSite">
+        <HostSiteOps HoldRotation="1"/>
+    </CActorSite>
+    <CActorAction id="AP_MutaliskAttackSegment1ViciousGlaive" parent="GenericAttack" effectImpact="AP_GlaiveWurmU1" effectLaunch="AP_GlaiveWurm">
+        <On index="6" Terms="Effect.AP_GlaiveWurm.Start; At Caster; ValidateUnit AP_NotHotSExplosiveGlaiveAndHaveHotSViciousGlaive" Send="Create"/>
+        <LaunchAssets Sound="Mutalisk_Segment1AttackLaunch"/>
+        <Missile value="AP_MutaliskAttackSegment1Missile"/>
+        <ImpactSite value="AP_MutaliskAttackSegment1ImpactSite"/>
+        <ImpactMap index="None" Model="AP_ViciouisGlaiveAttackImpact" Sound="Mutalisk_Segment1AttackImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_MutaliskAttackSegment2" parent="GenericAttack" effectImpact="AP_GlaiveWurmU2" effectLaunch="AP_GlaiveWurmM2">
+        <On index="6" Terms="Effect.AP_GlaiveWurmM2.Start; At Caster; !ValidateUnit AP_HaveHotSViciousGlaive" Send="Create"/>
+        <LaunchRequest Subject="_ImpactGuide" Actor="Find"/>
+        <LaunchAssets Sound="Mutalisk_Segment2AttackLaunch"/>
+        <ImpactSite value="AP_MutaliskAttackSegment2ImpactSite"/>
+        <ImpactMap index="None" Model="MutaliskAttackSegment2Impact" Sound="Mutalisk_Segment2AttackImpact"/>
+        <ImpactPhysics Name="GlaveWurmImpact" MatchKeys="Basic" Physics="AP_MutaliskAttackDeathForce"/>
+        <ImpactPhysics Name="GlaveWurmImpactAir" MatchKeys="BasicAir" Physics="AP_MutaliskAttackAirDeathForce"/>
+    </CActorAction>
+    <CActorMissile id="AP_MutaliskAttackSegment2Missile" parent="GenericAttackMissile" unitName="AP_GlaiveWurmM2Weapon">
+        <Model value="GlaiveWurmM2Weapon"/>
+    </CActorMissile>
+    <CActorSite id="MutaliskAttackSegment2ImpactSite2">
+        <HostSiteOps HoldRotation="1"/>
+    </CActorSite>
+    <CActorAction id="AP_MutaliskAttackSegment2ViciousGlaive" parent="GenericAttack" effectImpact="AP_GlaiveWurmU2" effectLaunch="AP_GlaiveWurmM2">
+        <On index="6" Terms="Effect.AP_GlaiveWurmM2.Start; At Caster; ValidateUnit AP_HaveHotSViciousGlaive" Send="Create"/>
+        <LaunchRequest Subject="_ImpactGuide" Actor="Find"/>
+        <LaunchAssets Sound="Mutalisk_Segment2AttackLaunch"/>
+        <Missile value="AP_MutaliskAttackSegment2Missile"/>
+        <ImpactSite value="AP_MutaliskAttackSegment2ImpactSite"/>
+        <ImpactMap index="None" Model="AP_ViciouisGlaiveAttackImpact" Sound="Mutalisk_Segment2AttackImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_MutaliskAttackSegment3" parent="GenericAttack" effectImpact="AP_GlaiveWurmU3" effectLaunch="AP_GlaiveWurmM3">
+        <On index="6" Terms="Effect.AP_GlaiveWurmM3.Start; At Caster; !ValidateUnit AP_HaveHotSViciousGlaive" Send="Create"/>
+        <LaunchRequest Subject="AP_MutaliskAttackSegment2ImpactSite" Actor="Find"/>
+        <LaunchAssets Sound="Mutalisk_Segment3AttackLaunch"/>
+        <ImpactSite value="AP_MutaliskAttackSegment3ImpactSite"/>
+        <ImpactMap index="None" Model="MutaliskAttackSegment3Impact" Sound="Mutalisk_Segment3AttackImpact"/>
+        <ImpactPhysics Name="GlaveWurmImpact" MatchKeys="Basic" Physics="AP_MutaliskAttackDeathForce"/>
+        <ImpactPhysics Name="GlaveWurmImpactAir" MatchKeys="BasicAir" Physics="AP_MutaliskAttackAirDeathForce"/>
+    </CActorAction>
+    <CActorMissile id="AP_MutaliskAttackSegment3Missile" parent="GenericAttackMissile" unitName="AP_GlaiveWurmM3Weapon">
+        <Model value="GlaiveWurmM3Weapon"/>
+    </CActorMissile>
+    <CActorAction id="AP_MutaliskAttackSegment3ViciousGlaive" parent="GenericAttack" effectImpact="AP_GlaiveWurmU3" effectLaunch="AP_GlaiveWurmM3">
+        <On index="6" Terms="Effect.AP_GlaiveWurmM3.Start; At Caster; ValidateUnit AP_HaveHotSViciousGlaive" Send="Create"/>
+        <LaunchRequest Subject="_ImpactGuide" Actor="Find"/>
+        <LaunchAssets Sound="Mutalisk_Segment3AttackLaunch"/>
+        <Missile value="AP_MutaliskAttackSegment3Missile"/>
+        <ImpactSite value="AP_MutaliskAttackSegment3ImpactSite"/>
+        <ImpactMap index="None" Model="AP_ViciouisGlaiveAttackImpact" Sound="Mutalisk_Segment3AttackImpact"/>
+    </CActorAction>
+    <CActorAction id="AP_MutaliskAttackSegment4" parent="GenericAttack" effectImpact="AP_GlaiveWurmU4" effectLaunch="AP_GlaiveWurmM4">
+        <LaunchRequest Subject="AP_MutaliskAttackSegment3ImpactSite" Actor="Find"/>
+        <LaunchAssets Sound="Mutalisk_Segment3AttackLaunch"/>
+        <ImpactSite value="AP_MutaliskAttackSegment4ImpactSite"/>
+        <ImpactMap index="None" Model="AP_ViciouisGlaiveAttackImpact" Sound="Mutalisk_Segment3AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_MutaliskAttackSegment4Missile" parent="GenericAttackMissile" unitName="AP_GlaiveWurmM4Weapon"/>
+    <CActorAction id="AP_MutaliskAttackSegment5" parent="GenericAttack" effectImpact="AP_GlaiveWurmU5" effectLaunch="AP_GlaiveWurmM5">
+        <LaunchRequest Subject="AP_MutaliskAttackSegment4ImpactSite" Actor="Find"/>
+        <LaunchAssets Sound="Mutalisk_Segment3AttackLaunch"/>
+        <ImpactSite value="AP_MutaliskAttackSegment5ImpactSite"/>
+        <ImpactMap index="None" Model="AP_ViciouisGlaiveAttackImpact" Sound="Mutalisk_Segment3AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_MutaliskAttackSegment5Missile" parent="GenericAttackMissile" unitName="AP_GlaiveWurmM5Weapon"/>
+    <CActorAction id="AP_MutaliskAttackSegment6" parent="GenericAttack" effectImpact="AP_GlaiveWurmU6" effectLaunch="AP_GlaiveWurmM6">
+        <LaunchRequest Subject="AP_MutaliskAttackSegment5ImpactSite" Actor="Find"/>
+        <LaunchAssets Sound="Mutalisk_Segment3AttackLaunch"/>
+        <ImpactSite value="AP_MutaliskAttackSegment6ImpactSite"/>
+        <ImpactMap index="None" Model="AP_ViciouisGlaiveAttackImpact" Sound="Mutalisk_Segment3AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_MutaliskAttackSegment6Missile" parent="GenericAttackMissile" unitName="AP_GlaiveWurmM6Weapon"/>
+    <CActorModel id="AP_MutaliskExtraDamageModel" parent="ModelAddition">
+        <On Terms="Behavior.AP_MutaliskDoubleDamage.On" Send="Create"/>
+        <On Terms="Behavior.AP_MutaliskDoubleDamage.Off" Send="Destroy"/>
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+    </CActorModel>
+    <CActorModel id="AP_MutaliskHealModel">
+        <On Terms="ActorCreation" Send="$Birth PlayForever"/>
+        <On Terms="Behavior.AP_MutaliskRapidRegen.On" Send="Create"/>
+        <On Terms="Behavior.AP_MutaliskRapidRegen.Off" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorSound id="AP_Mutalisk_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_Mutalisk; PassChance 25.000000" Send="Create"/>
+        <Sound value="Mutalisk_Death"/>
+    </CActorSound>
+    <CActorSite id="MutaliskAttackSegment3ImpactSite2">
+        <HostSiteOps HoldRotation="1"/>
+    </CActorSite>
+    <CActorSite id="MutaliskAttackSegment4ImpactSite2">
+        <HostSiteOps HoldRotation="1"/>
+    </CActorSite>
+    <CActorSite id="MutaliskAttackSegment5ImpactSite2">
+        <HostSiteOps HoldRotation="1"/>
+    </CActorSite>
+    <CActorSite id="MutaliskAttackSegment6ImpactSite2">
+        <HostSiteOps HoldRotation="1"/>
+    </CActorSite>
+    <CActorModel id="AP_MutaliskDeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_MutaliskDeathRagdollDetonationForce"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionFlier"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorForceSphere id="AP_MutaliskDeathRagdollDetonationForce" parent="AP_DeathRagdollDetonationForce">
+        <Receiver Subject="::Main"/>
+        <Magnitude value="15.000000,7.000000"/>
+        <Radius value="1.000000,0.300000"/>
+    </CActorForceSphere>
+    <CActorSiteOpBankerUnit id="AP_SOpBankerMutalisk">
+        <RollMax value="20.000000,5.000000"/>
+        <RollInActivationAngle value="10.000000"/>
+        <RollInArc value="110.000000,20.000000"/>
+        <RollOutDuration value="1.200000,0.400000"/>
+    </CActorSiteOpBankerUnit>
+    <CActorSound id="AP_Mutalisk_Land" parent="SoundOneShot">
+        <Sound value="Mutalisk_Land"/>
+    </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->

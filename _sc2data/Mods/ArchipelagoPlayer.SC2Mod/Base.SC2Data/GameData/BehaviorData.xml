@@ -2303,4 +2303,40 @@
             <AbilClassDisableArray index="CAbilAttack" value="1"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MutaliskDoubleDamage">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_NotBroodlordCocoon"/>
+        <Modification>
+            <DamageDealtFraction index="Spell" value="1"/>
+            <DamageDealtFraction index="Melee" value="1"/>
+            <DamageDealtFraction index="Ranged" value="1"/>
+            <DamageDealtFraction index="Splash" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MutaliskOutOfCombat1">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_NotBroodlord"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="AP_MutaliskOutOfCombat2AB"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MutaliskOutOfCombat2">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_CasterNotInCombatShort"/>
+        <RemoveValidatorArray value="AP_NotBroodlordCocoon"/>
+        <Period value="5"/>
+        <PeriodicEffect value="AP_MutaliskOutOfCombat3Set"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MutaliskRapidRegen">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_CasterNotInCombatShort"/>
+        <RemoveValidatorArray value="AP_NotMaxHP"/>
+        <RemoveValidatorArray value="AP_NotBroodlordCocoon"/>
+        <Modification>
+            <VitalRegenArray index="Life" value="10"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

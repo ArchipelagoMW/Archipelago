@@ -3393,6 +3393,52 @@
         <AbilClassEnableArray index="CAbilMove" value="1"/>
         <AbilClassEnableArray index="CAbilStop" value="1"/>
     </CAbilMorph>
+    <CAbilTrain id="AP_MutaliskMorphToBroodLord">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RefundFraction>
+            <Resource index="Minerals" value="-0.75"/>
+            <Resource index="Vespene" value="-0.75"/>
+            <Resource index="Terrazine" value="-0.75"/>
+            <Resource index="Custom" value="-0.75"/>
+        </RefundFraction>
+        <Activity value="UI/Morphing"/>
+        <ActorKey value="GuardianAspect"/>
+        <Flags index="KillOnFinish" value="1"/>
+        <Flags index="Select" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <MorphUnit value="AP_BroodLordCocoon"/>
+        <Range value="10"/>
+        <InfoArray index="Train1" Time="15" Alert="MorphComplete_Zerg">
+            <Button DefaultButtonFace="BroodLord" State="Restricted" Requirements="AP_HaveGreaterSpireAndHotSBroodlord">
+                <Flags index="ShowInGlossary" value="1"/>
+            </Button>
+            <Unit value="AP_BroodLord"/>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+    </CAbilTrain>
+    <CAbilTrain id="AP_MutaliskMorphToViper">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <RefundFraction>
+            <Resource index="Minerals" value="-0.75"/>
+            <Resource index="Vespene" value="-0.75"/>
+            <Resource index="Terrazine" value="-0.75"/>
+            <Resource index="Custom" value="-0.75"/>
+        </RefundFraction>
+        <Activity value="UI/Morphing"/>
+        <ActorKey value="ViperAspect"/>
+        <Flags index="KillOnFinish" value="1"/>
+        <Flags index="Select" value="1"/>
+        <Flags index="WaitForFood" value="0"/>
+        <MorphUnit value="AP_ViperCocoon"/>
+        <Range value="10"/>
+        <InfoArray index="Train1" Time="15" Alert="MorphComplete_Zerg">
+            <Button DefaultButtonFace="BroodLord" State="Restricted" Requirements="AP_HaveGreaterSpireAndHotSViper">
+                <Flags index="ShowInGlossary" value="1"/>
+            </Button>
+            <Unit value="AP_Viper"/>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+    </CAbilTrain>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

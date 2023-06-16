@@ -8455,6 +8455,158 @@
         <Mover value="AP_BroodLordWeaponRight"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
+    <CUnit id="AP_GlaiveWurmM2Weapon" parent="MISSILE">
+        <Name value="Unit/Name/GlaiveWurmWeapon"/>
+        <Description value="Button/Tooltip/GlaiveWurmWeapon"/>
+        <ReviveType value="GlaiveWurmWeapon"/>
+        <Race value="Zerg"/>
+        <Mover value="AP_GlaiveWurmBounceMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+        <TacticalAI value="GlaiveWurmWeapon"/>
+        <SelectAlias value="GlaiveWurmWeapon"/>
+        <SubgroupAlias value="GlaiveWurmWeapon"/>
+        <AIEvaluateAlias value="GlaiveWurmWeapon"/>
+        <ReviveInfoBase>
+            <Charge Link="GlaiveWurmWeapon/Revive"/>
+            <Cooldown Link="GlaiveWurmWeapon/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_GlaiveWurmM3Weapon" parent="MISSILE">
+        <Name value="Unit/Name/GlaiveWurmWeapon"/>
+        <Description value="Button/Tooltip/GlaiveWurmWeapon"/>
+        <ReviveType value="GlaiveWurmWeapon"/>
+        <Race value="Zerg"/>
+        <Mover value="AP_GlaiveWurmBounceMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+        <TacticalAI value="GlaiveWurmWeapon"/>
+        <SelectAlias value="GlaiveWurmWeapon"/>
+        <SubgroupAlias value="GlaiveWurmWeapon"/>
+        <AIEvaluateAlias value="GlaiveWurmWeapon"/>
+        <ReviveInfoBase>
+            <Charge Link="GlaiveWurmWeapon/Revive"/>
+            <Cooldown Link="GlaiveWurmWeapon/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_GlaiveWurmM4Weapon" parent="MISSILE">
+        <Name value="Unit/Name/GlaiveWurmWeapon"/>
+        <Description value="Button/Tooltip/GlaiveWurmWeapon"/>
+        <ReviveType value="GlaiveWurmWeapon"/>
+        <Race value="Zerg"/>
+        <Mover value="AP_GlaiveWurmBounceMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+        <TacticalAI value="GlaiveWurmWeapon"/>
+        <SelectAlias value="GlaiveWurmWeapon"/>
+        <SubgroupAlias value="GlaiveWurmWeapon"/>
+        <AIEvaluateAlias value="GlaiveWurmWeapon"/>
+        <ReviveInfoBase>
+            <Charge Link="GlaiveWurmWeapon/Revive"/>
+            <Cooldown Link="GlaiveWurmWeapon/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_GlaiveWurmM5Weapon" parent="MISSILE">
+        <Name value="Unit/Name/GlaiveWurmWeapon"/>
+        <Description value="Button/Tooltip/GlaiveWurmWeapon"/>
+        <ReviveType value="GlaiveWurmWeapon"/>
+        <Race value="Zerg"/>
+        <Mover value="AP_GlaiveWurmBounceMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+        <TacticalAI value="GlaiveWurmWeapon"/>
+        <SelectAlias value="GlaiveWurmWeapon"/>
+        <SubgroupAlias value="GlaiveWurmWeapon"/>
+        <AIEvaluateAlias value="GlaiveWurmWeapon"/>
+        <ReviveInfoBase>
+            <Charge Link="GlaiveWurmWeapon/Revive"/>
+            <Cooldown Link="GlaiveWurmWeapon/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_GlaiveWurmM6Weapon" parent="MISSILE">
+        <Name value="Unit/Name/GlaiveWurmWeapon"/>
+        <Description value="Button/Tooltip/GlaiveWurmWeapon"/>
+        <ReviveType value="GlaiveWurmWeapon"/>
+        <Race value="Zerg"/>
+        <Mover value="AP_GlaiveWurmBounceMissile"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+        <TacticalAI value="GlaiveWurmWeapon"/>
+        <SelectAlias value="GlaiveWurmWeapon"/>
+        <SubgroupAlias value="GlaiveWurmWeapon"/>
+        <AIEvaluateAlias value="GlaiveWurmWeapon"/>
+        <ReviveInfoBase>
+            <Charge Link="GlaiveWurmWeapon/Revive"/>
+            <Cooldown Link="GlaiveWurmWeapon/Revive"/>
+        </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_GlaiveWurmWeapon" parent="MISSILE">
+        <Race value="Zerg"/>
+        <Mover value="MissileDefault"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_Mutalisk">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="120"/>
+        <LifeMax value="120"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergAirArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Mover value="Fly"/>
+        <Speed value="3.75"/>
+        <Acceleration value="3.25"/>
+        <StationaryTurningRate value="1499.9414"/>
+        <TurningRate value="1499.9414"/>
+        <Sight value="11"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="100"/>
+        <CostResource index="Vespene" value="100"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="40"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="que1"/>
+        <AbilArray Link="AP_MutaliskMorphToBroodLord"/>
+        <AbilArray Link="AP_MutaliskMorphToViper"/>
+        <BehaviorArray Link="AP_MutaliskOutOfCombat1"/>
+        <WeaponArray Link="AP_GlaiveWurm"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="BroodLord" Type="AbilCmd" AbilCmd="AP_MutaliskMorphToBroodLord,Train1" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_MutaliskRapidRegeneration" Type="Passive" Requirements="AP_HaveHotSRapidRegeneration" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_ExplosiveGlaive" Type="Passive" Requirements="AP_HaveHotSExplosiveGlaive" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_ViciousGlaive" Type="Passive" Requirements="AP_HaveHotSViciousGlaive" Row="1" Column="2"/>
+            <LayoutButtons Face="AP_Viper" Type="AbilCmd" AbilCmd="AP_MutaliskMorphToViper,Train1" Row="2" Column="1"/>
+        </CardLayouts>
+        <ScoreMake value="200"/>
+        <ScoreKill value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="13"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <GlossaryCategory value="Unit/Category/ZergUnits"/>
+        <GlossaryPriority value="130"/>
+        <GlossaryStrongArray value="VikingFighter"/>
+        <GlossaryStrongArray value="BroodLord"/>
+        <GlossaryStrongArray value="VoidRay"/>
+        <GlossaryWeakArray value="Thor"/>
+        <GlossaryWeakArray value="Corruptor"/>
+        <GlossaryWeakArray value="Phoenix"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->
