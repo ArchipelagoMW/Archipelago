@@ -263,7 +263,7 @@ id,name,classification,groups,mod_name
 276,Weather Report,useful,"TV_CHANNEL",
 277,Fortune Teller,useful,"TV_CHANNEL",
 278,Livin' Off The Land,useful,"TV_CHANNEL",
-279,The Queen of Sauce,useful,"TV_CHANNEL",
+279,The Queen of Sauce,progression,"TV_CHANNEL",
 280,Fishing Information Broadcasting Service,useful,"TV_CHANNEL",
 281,Sinister Signal,useful,"TV_CHANNEL",
 282,Dark Talisman,progression,,

@@ -6,6 +6,7 @@ class Ore:
 
 
 class MetalBar:
+    quartz = "Refined Quartz"
     copper = "Copper Bar"
     iron = "Iron Bar"
     gold = "Gold Bar"

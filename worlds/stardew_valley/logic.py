@@ -382,6 +382,7 @@ class StardewLogic:
             "Snow Yam": self.has_season(Season.winter),
             "Soggy Newspaper": self.can_crab_pot(),
             "Solar Essence": self.can_mine_in_the_mines_floor_41_80() | self.can_mine_in_the_skull_cavern(),
+            Machine.solar_panel: self.received("Solar Panel Recipe") & self.has(MetalBar.quartz) & self.has(MetalBar.iron) & self.has(MetalBar.gold),
             "Spaghetti": self.can_spend_money(240),
             "Spice Berry": self.has_season(Season.summer),
             "Spring Onion": self.has_season(Season.spring),
@@ -872,12 +873,12 @@ class StardewLogic:
         return self.can_get_fishing_xp()
 
     def can_cook(self, recipe: CookingRecipe = None) -> StardewRule:
-        cook_rule = self.has_house(1) or self.has_skill_level(Skill.foraging, 9)
+        cook_rule = self.has_house(1) | self.has_skill_level(Skill.foraging, 9)
         if recipe is None:
             return cook_rule
 
         learn_rule = self.can_learn_recipe(recipe.source)
-        ingredients_rule = [self.has(ingredient) for ingredient in recipe.ingredients]
+        ingredients_rule = And([self.has(ingredient) for ingredient in recipe.ingredients])
         return cook_rule & learn_rule & ingredients_rule
 
     def can_learn_recipe(self, source: RecipeSource) -> StardewRule:
