@@ -215,7 +215,11 @@ class Hud(Toggle):
     display_name = "Hud"
 
 class Animals(Toggle):
-    """Replace saving the animals in the escape sequence by a random surprise."""
+    """
+    Replace saving the animals in the escape sequence by a random surprise.
+    Note: This setting is not available when Escape Randomization is enabled, as it is replaced by Animals Challenges
+    (see Escape Randomization help for more information).
+    """
     display_name = "Animals"
 
 class NoMusic(Toggle):

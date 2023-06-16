@@ -40,7 +40,7 @@ class SMCollectionState(metaclass=AutoLogicRegister):
         # for unit tests where MultiWorld is instantiated before worlds
         if hasattr(parent, "state"):
             self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff,
-                                    parent.state.smbm[player].onlyBossLeft, parent.state.smbm[player].lastAP) for player in
+                                    parent.state.smbm[player].onlyBossLeft) for player in
                                         parent.get_game_players("Super Metroid")}
             for player, group in parent.groups.items():
                 if (group["game"] == "Super Metroid"):
@@ -106,7 +106,6 @@ class SMWorld(World):
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         self.locations = {}
-        self.need_comeback_check = True
         if SMWorld.spheres != None:
             SMWorld.spheres = None
         super().__init__(world, player)
@@ -121,7 +120,7 @@ class SMWorld(World):
         Logic.factory('vanilla')
 
         self.variaRando = VariaRandomizer(self.multiworld, get_base_rom_path(), self.player)
-        self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty, lastAP = self.variaRando.args.startLocation)
+        self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
 
         # keeps Nothing items local so no player will ever pickup Nothing
         # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
@@ -180,12 +179,7 @@ class SMWorld(World):
                             item.Type,
                             None if itemClass == 'Boss' else self.item_name_to_id[item.Name], 
                             player=self.player)
-            
-            beamItems = ['Spazer', 'Ice', 'Wave' ,'Plasma']
-            if self.multiworld.doors_colors_rando[self.player].value != 0:
-                if item.Type in beamItems:
-                    self.multiworld.local_items[self.player].value.add(item.Name)
-            
+                        
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
             elif item.Category == 'Nothing':
@@ -220,7 +214,6 @@ class SMWorld(World):
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Mother Brain', self.player)
 
-        ammoItems = ['Missile', 'Super', 'PowerBomb']
         for key, value in locationsDict.items():
             location = self.multiworld.get_location(key, self.player)
             set_available_rule(location, self.player, value.Available)
@@ -228,11 +221,6 @@ class SMWorld(World):
                 add_accessFrom_rule(location, self.player, value.AccessFrom)
             if value.PostAvailable is not None:
                 add_postAvailable_rule(location, self.player, value.PostAvailable)
-
-            if self.multiworld.doors_colors_rando[self.player].value != 0:
-                add_item_rule(location, lambda item:    item.game != self.game or item.type not in ammoItems or 
-                                                        (item.type in ammoItems and \
-                                                        (not item.advancement or (item.advancement and item.player == self.player))))
                 
         for accessPoint in Logic.accessPoints:
             if not accessPoint.Escape:
@@ -307,11 +295,6 @@ class SMWorld(World):
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         state.smbm[self.player].addItem(item.type)
-        if item.location != None and item.location.game == self.game:
-            for entrance in self.multiworld.get_region(item.location.parent_region.name, item.location.player).entrances:
-                if (entrance.parent_region.can_reach(state)):
-                    state.smbm[item.location.player].lastAP = entrance.parent_region.name
-                    break
         return super(SMWorld, self).collect(state, item)
 
     def remove(self, state: CollectionState, item: Item) -> bool:
@@ -415,8 +398,6 @@ class SMWorld(World):
                                     self.variaRando.args.escapeRando if escapeOk else False)
         
         self.variaRando.randoExec.postProcessItemLocs(localItemLocs, self.variaRando.args.hideItems)
-
-        self.need_comeback_check = False
 
     @classmethod
     def stage_post_fill(cls, world):
@@ -894,29 +875,6 @@ class SMLocation(Location):
 
     def __init__(self, player: int, name: str, address=None, parent=None):
         super(SMLocation, self).__init__(player, name, address, parent)
-
-    def can_reach(self, state: CollectionState) -> bool:
-        # self.access_rule computes faster on average, so placing it first for faster abort
-        assert self.parent_region, "Can't reach location without region"
-        return super(SMLocation, self).can_reach(state) and \
-                (not state.multiworld.worlds[self.player].need_comeback_check or \
-                self.can_comeback(state, self.item))
-    
-    def can_comeback(self, state: CollectionState, item):
-        randoExec = state.multiworld.worlds[self.player].variaRando.randoExec
-        randoService = randoExec.setup.services
-
-        comebackCheck = ComebackCheckType.JustComeback        
-        n = 2 if GraphUtils.isStandardStart(randoExec.graphSettings.startAP) else 3
-        # is early game
-        if (len([loc for loc in state.locations_checked if loc.player == self.player]) <= n or randoExec.graphSettings.startAP == state.smbm[self.player].lastAP):
-            comebackCheck = ComebackCheckType.NoCheck
-        container = ItemLocContainer(state.smbm[self.player], [], [])
-        return randoService.fullComebackCheck(  container, 
-                                                state.smbm[self.player].lastAP, 
-                                                ItemManager.Items[item.type] if item is not None and item.player == self.player else None,
-                                                locationsDict[self.name], 
-                                                comebackCheck) 
 
 class SMItem(Item):
     game = "Super Metroid"
