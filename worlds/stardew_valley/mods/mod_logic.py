@@ -1,7 +1,7 @@
 from typing import List
-from ..data.region_data import SVRegion
+from worlds.stardew_valley.strings.region_names import Region
 from .mod_data import ModNames
-from ..data.villagers_data import all_villagers, all_villagers_by_name
+from ..data.villagers_data import all_villagers
 from ..stardew_rule import Count, StardewRule
 from .. import options
 from ..options import StardewOptions
@@ -83,16 +83,16 @@ def can_earn_archaeology_skill_level(who, level: int) -> StardewRule:
 
 def can_earn_cooking_skill_level(who, level: int) -> StardewRule:
     if level >= 6:
-        return who.can_cook() & who.can_fish() & who.can_reach_region(SVRegion.saloon) & \
-                        who.has_building("Coop") & who.has_building("Barn")
+        return who.can_cook() & who.can_fish() & who.can_reach_region(Region.saloon) & \
+               who.has_building("Coop") & who.has_building("Barn")
     else:
         return who.can_cook()
 
 
 def can_earn_binning_skill_level(who, level: int) -> StardewRule:
     if level >= 6:
-        return who.can_reach_region(SVRegion.town) & who.has("Recycling Machine") & \
-                        (who.can_fish() | who.can_crab_pot())
+        return who.can_reach_region(Region.town) & who.has("Recycling Machine") & \
+               (who.can_fish() | who.can_crab_pot())
     else:
-        return who.can_reach_region(SVRegion.town) | (who.has("Recycling Machine") &
-                                                               (who.can_fish() | who.can_crab_pot()))
+        return who.can_reach_region(Region.town) | (who.has("Recycling Machine") &
+                                                    (who.can_fish() | who.can_crab_pot()))

@@ -1,4 +1,4 @@
-class SVRegion:
+class Region:
     menu = "Menu"
     stardew_valley = "Stardew Valley"
     farm_house = "Farmhouse"

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Tuple, Optional, Dict
-from .region_data import SVRegion
+from worlds.stardew_valley.strings.region_names import Region
 from ..mods.mod_data import ModNames
 
 
@@ -22,21 +22,21 @@ class Villager:
                f" Mod: {self.mod_name}"
 
 
-town = (SVRegion.town,)
-beach = (SVRegion.beach,)
-forest = (SVRegion.forest,)
-mountain = (SVRegion.mountain,)
-hospital = (SVRegion.hospital,)
-carpenter = (SVRegion.carpenter,)
-alex_house = (SVRegion.alex_house,)
-elliott_house = (SVRegion.elliott_house,)
-ranch = (SVRegion.ranch,)
-mines = (SVRegion.mines,)
-desert = (SVRegion.desert,)
-oasis = (SVRegion.oasis,)
-sewers = (SVRegion.sewers,)
-island = (SVRegion.island_east,)
-secret_woods = (SVRegion.secret_woods,)
+town = (Region.town,)
+beach = (Region.beach,)
+forest = (Region.forest,)
+mountain = (Region.mountain,)
+hospital = (Region.hospital,)
+carpenter = (Region.carpenter,)
+alex_house = (Region.alex_house,)
+elliott_house = (Region.elliott_house,)
+ranch = (Region.ranch,)
+mines = (Region.mines,)
+desert = (Region.desert,)
+oasis = (Region.oasis,)
+sewers = (Region.sewers,)
+island = (Region.island_east,)
+secret_woods = (Region.secret_woods,)
 
 golden_pumpkin = ("Golden Pumpkin",)
 # magic_rock_candy = ("Magic Rock Candy",)

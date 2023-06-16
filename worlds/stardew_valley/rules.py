@@ -5,11 +5,11 @@ from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from . import options, locations
 from .bundles import Bundle
-from .data.entrance_data import dig_to_mines_floor, SVEntrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance
+from worlds.stardew_valley.strings.entrance_names import dig_to_mines_floor, SVEntrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance
 from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_items, \
     dwarf_scrolls, skeleton_front, \
     skeleton_middle, skeleton_back, all_museum_items_by_name
-from .data.region_data import SVRegion
+from worlds.stardew_valley.strings.region_names import Region
 from .mods.mod_data import ModNames
 from .locations import LocationTags
 from .logic import StardewLogic, And, tool_prices, week_days
@@ -268,7 +268,7 @@ def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
                              has_10_walnut & logic.received("Island Farmhouse"))
     MultiWorldRules.add_rule(multi_world.get_location("Volcano Bridge", player),
                              has_5_walnut & logic.received("Island West Turtle") &
-                             logic.can_reach_region(SVRegion.volcano_floor_10))
+                             logic.can_reach_region(Region.volcano_floor_10))
     MultiWorldRules.add_rule(multi_world.get_location("Volcano Exit Shortcut", player),
                              has_5_walnut & logic.received("Island West Turtle"))
     MultiWorldRules.add_rule(multi_world.get_location("Island Resort", player),
@@ -298,7 +298,7 @@ def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, 
         return
     if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_only:
         return
-    qi_rule = logic.can_reach_region(SVRegion.qi_walnut_room) & logic.has_lived_months(8)
+    qi_rule = logic.can_reach_region(Region.qi_walnut_room) & logic.has_lived_months(8)
     for qi_order in locations.locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
         if qi_order.name in all_location_names:
             order_rule = qi_rule & logic.special_order_rules[qi_order.name]

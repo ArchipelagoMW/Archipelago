@@ -1,18 +1,16 @@
-from dataclasses import dataclass, field
-from ..data.entrance_data import DeepWoodsEntrance, EugeneEntrance, \
+from worlds.stardew_valley.strings.entrance_names import DeepWoodsEntrance, EugeneEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance
-from ..data.region_data import SVRegion, DeepWoodsRegion, EugeneRegion, JasperRegion, \
+from worlds.stardew_valley.strings.region_names import Region, DeepWoodsRegion, EugeneRegion, JasperRegion, \
     AlecRegion, YobaRegion, JunaRegion
 from ..region_classes import RegionData, ConnectionData, RandomizationFlag, ModRegionData
 from .mod_data import ModNames
-from typing import List, Dict
 
 # Making this to reduce clutter from the regions file
 
 # DeepWoods Data
 deep_woods_regions = [
-    RegionData(SVRegion.farm, [DeepWoodsEntrance.use_woods_obelisk]),
-    RegionData(SVRegion.secret_woods, [DeepWoodsEntrance.secret_woods_to_deep_woods]),
+    RegionData(Region.farm, [DeepWoodsEntrance.use_woods_obelisk]),
+    RegionData(Region.secret_woods, [DeepWoodsEntrance.secret_woods_to_deep_woods]),
     RegionData(DeepWoodsRegion.main_lichtung, [DeepWoodsEntrance.deep_woods_house,
                                                DeepWoodsEntrance.deep_woods_depth_10]),
     RegionData(DeepWoodsRegion.abandoned_home),
@@ -38,7 +36,7 @@ deep_woods_entrances = [
 ]
 
 eugene_regions = [
-    RegionData(SVRegion.forest, [EugeneEntrance.forest_to_garden]),
+    RegionData(Region.forest, [EugeneEntrance.forest_to_garden]),
     RegionData(EugeneRegion.eugene_garden, [EugeneEntrance.garden_to_bedroom]),
     RegionData(EugeneRegion.eugene_bedroom)
 ]
@@ -49,7 +47,7 @@ eugene_entrances = [
 ]
 
 jasper_regions = [
-    RegionData(SVRegion.museum, [JasperEntrance.museum_to_bedroom]),
+    RegionData(Region.museum, [JasperEntrance.museum_to_bedroom]),
     RegionData(JasperRegion.jasper_bedroom)
 ]
 
@@ -57,7 +55,7 @@ jasper_entrances = [
     ConnectionData(JasperEntrance.museum_to_bedroom, JasperRegion.jasper_bedroom, flag=RandomizationFlag.BUILDINGS)
 ]
 alec_regions = [
-    RegionData(SVRegion.forest, [AlecEntrance.forest_to_petshop]),
+    RegionData(Region.forest, [AlecEntrance.forest_to_petshop]),
     RegionData(AlecRegion.pet_store, [AlecEntrance.petshop_to_bedroom]),
     RegionData(AlecRegion.alec_bedroom)
 ]
@@ -68,7 +66,7 @@ alec_entrances = [
 ]
 
 yoba_regions = [
-    RegionData(SVRegion.secret_woods, [YobaEntrance.secret_woods_to_clearing]),
+    RegionData(Region.secret_woods, [YobaEntrance.secret_woods_to_clearing]),
     RegionData(YobaRegion.yoba_clearing)
 ]
 
@@ -77,7 +75,7 @@ yoba_entrances = [
 ]
 
 juna_regions = [
-    RegionData(SVRegion.forest, [JunaEntrance.forest_to_juna_cave]),
+    RegionData(Region.forest, [JunaEntrance.forest_to_juna_cave]),
     RegionData(JunaRegion.juna_cave)
 ]
 
