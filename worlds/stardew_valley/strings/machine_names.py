@@ -1,0 +1,15 @@
+class Machine:
+    bee_house = "Bee House"
+    cask = "Cask"
+    charcoal_kiln = "Charcoal Kiln"
+    furnace = "Furnace"
+    geode_crusher = "Geode Crusher"
+    keg = "Keg"
+    lightning_rod = "Lightning Rod"
+    loom = "Loom"
+    preserves_jar = "Preserves Jar"
+    recycler = "Recycler"
+    seed_maker = "Seed Maker"
+    solar_panel = "Solar Panel"
+    cheese_press = "Cheese Press"
+
