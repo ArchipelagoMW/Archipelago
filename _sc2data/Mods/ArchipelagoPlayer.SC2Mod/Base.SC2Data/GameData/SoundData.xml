@@ -1,28 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Catalog>
-    <CActorSound id="AP_Nova_ShotgunAuto_TailsSound" parent="SoundOneShot">
-        <Sound value="PhysicsImpactBase"/>
-        <Layers>
-            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_L"/>
-            <PitchSource value="Actor"/>
-            <PlayDelaySource value="Actor"/>
-            <VolumeSource value="Sound"/>
-            <Chance value="100"/>
-            <Pitch value="-1.000000,-1.000000"/>
-            <PlayDelay value="60,120"/>
-            <Volume value="-2.000000,-2.000000"/>
-        </Layers>
-        <Layers>
-            <Sound value="AP_Nova_AutoShotgun_Blast_Tails_R"/>
-            <PitchSource value="Actor"/>
-            <PlayDelaySource value="Actor"/>
-            <VolumeSource value="Sound"/>
-            <Chance value="100"/>
-            <Pitch value="-1.000000,-1.000000"/>
-            <PlayDelay value="60,120"/>
-            <Volume value="-2.000000,-2.000000"/>
-        </Layers>
-    </CActorSound>
     <CSound default="1" id="AP_HoS_ZergAck" parent="HoS_Voice">
         <EditorCategories value="Race:Zerg"/>
     </CSound>
