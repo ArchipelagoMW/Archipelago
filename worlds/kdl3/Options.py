@@ -162,7 +162,7 @@ class TrapPercentage(Range):
 
 class GooeyTrapPercentage(Range):
     """
-    Percentage of non-required Heart Stars to be converted to trap items (Gooey Bags, Slowness, Eject Ability).
+    Chance that any given trap is a Gooey Bag (spawns Gooey when you receive it).
     """
     display_name = "Gooey Trap Percentage"
     range_start = 0
@@ -171,7 +171,7 @@ class GooeyTrapPercentage(Range):
 
 class SlowTrapPercentage(Range):
     """
-    Percentage of non-required Heart Stars to be converted to trap items (Gooey Bags, Slowness, Eject Ability).
+    Chance that any given trap is Slowness (halves your max speed for 15 seconds when you receive it).
     """
     display_name = "Slowness Trap Percentage"
     range_start = 0
@@ -180,7 +180,7 @@ class SlowTrapPercentage(Range):
 
 class AbilityTrapPercentage(Range):
     """
-    Percentage of traps that are Eject Ability (ejects your ability when you receive it).
+    Chance that any given trap is an Eject Ability (ejects your ability when you receive it).
     """
     display_name = "Ability Trap Percentage"
     range_start = 0
@@ -220,7 +220,8 @@ class KirbyFlavorPreset(Choice):
 
 class KirbyFlavor(OptionDict):
     """
-    A custom color for Kirby.
+    A custom color for Kirby. To use a custom color, set the preset to Custom and then define a dict of keys from "1" to
+    "15", with their values being an HTML hex color.
     """
     default = {}
 
@@ -250,7 +251,8 @@ class GooeyFlavorPreset(Choice):
 
 class GooeyFlavor(OptionDict):
     """
-    A custom color for Gooey.
+    A custom color for Gooey. To use a custom color, set the preset to Custom and then define a dict of keys from "1" to
+    "15", with their values being an HTML hex color.
     """
     default = {}
 
