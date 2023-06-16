@@ -357,24 +357,24 @@ class SMWorld(World):
         first_local_collected_loc = next(itemLoc for itemLoc in SMWorld.spheres if itemLoc.player == self.player)
 
         self.itemLocs = [
-            ItemLocation(ItemManager.Items[itemLoc.item.type
+            ItemLocation(copy.copy(ItemManager.Items[itemLoc.item.type
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                         'ArchipelagoItem'],
+                         'ArchipelagoItem']),
                          locationsDict[itemLoc.name] if itemLoc.game == self.game else locationsDict[first_local_collected_loc.name], itemLoc.item.player, True)
             for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player
         ]
         self.progItemLocs = [
-            ItemLocation(ItemManager.Items[itemLoc.item.type
+            ItemLocation(copy.copy(ItemManager.Items[itemLoc.item.type
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                         'ArchipelagoItem'],
+                         'ArchipelagoItem']),
                          locationsDict[itemLoc.name] if itemLoc.game == self.game else locationsDict[first_local_collected_loc.name], itemLoc.item.player, True)
             for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player and itemLoc.item.advancement
         ]
 
         localItemLocs = [
-            ItemLocation(ItemManager.Items[itemLoc.item.type
+            ItemLocation(copy.copy(ItemManager.Items[itemLoc.item.type
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                         'ArchipelagoItem'],
+                         'ArchipelagoItem']),
                          locationsDict[itemLoc.name], itemLoc.item.player, True)
             for itemLoc in SMWorld.spheres if itemLoc.player == self.player
         ]
