@@ -92,6 +92,7 @@ class StaticLingoItems:
         self.create_item("Nothing", False, False, False, "special")
         self.create_item("Slowness Trap", False, False, True, "special")
         self.create_item("Iceland Trap", False, False, True, "special")
+        self.create_item("Atbash Trap", False, False, True, "special")
 
         for item_name in StaticLingoLogic.PROGRESSIVE_ITEMS:
             self.create_item(item_name, False, True, False, "special")

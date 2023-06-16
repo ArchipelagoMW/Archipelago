@@ -106,14 +106,10 @@ class LingoWorld(World):
                 pool.append(self.create_item("Nothing"))
 
             if traps > 0:
-                slowness = floor(traps * 0.8)
-                iceland = traps - slowness
+                traps_list = ["Slowness Trap", "Iceland Trap", "Atbash Trap"]
 
-                for i in range(0, slowness):
-                    pool.append(self.create_item("Slowness Trap"))
-
-                for i in range(0, iceland):
-                    pool.append(self.create_item("Iceland Trap"))
+                for i in range(0, traps):
+                    pool.append(self.create_item(traps_list[i % len(traps_list)]))
 
         self.multiworld.itempool += pool
 
