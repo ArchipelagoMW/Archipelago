@@ -261,7 +261,7 @@ class StardewLogic:
                            & self.has("Morel") & self.has("Chanterelle"),
             "Lightning Rod": self.has_skill_level("Foraging", 6),
             "Lobster": self.can_crab_pot(),
-            "Loom": self.has_farming_level(7) & self.has("Pine Tar"),
+            "Loom": self.has_farming_level(7) & self.has("Pine Tar") & self.has("Wood") & self.has("Fiber"),
             "Magic Rock Candy": self.can_reach_region(SVRegion.desert) & self.has("Prismatic Shard"),
             "Magma Cap": self.can_reach_region(SVRegion.volcano_floor_5),
             "Magma Geode": self.can_mine_in_the_mines_floor_81_120() |
@@ -381,7 +381,7 @@ class StardewLogic:
             "Survival Burger": self.can_cook() & self.has_skill_level("Foraging", 2) &
                                self.has(["Bread", "Cave Carrot", "Eggplant"]),
             "Sweet Pea": self.has_season("Summer"),
-            "Tapper": self.has_skill_level("Foraging", 3),
+            "Tapper": self.has_skill_level("Foraging", 3) & self.has("Wood") & self.has("Copper Bar"),
             "Tea Bush": self.has_relationship("Caroline", 2),
             "Tea Leaves": self.has_lived_months(1) & self.has("Tea Bush"),
             "Tortilla": self.can_cook() & self.can_spend_money(100) & self.has("Corn"),

@@ -251,7 +251,7 @@ def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
     has_walnut = logic.has_walnut(1).simplify()
     has_5_walnut = logic.has_walnut(5).simplify()
     has_10_walnut = logic.has_walnut(10).simplify()
-    has_20_walnut = logic.has_walnut(10).simplify()
+    has_20_walnut = logic.has_walnut(20).simplify()
     MultiWorldRules.add_rule(multi_world.get_location("Leo's Parrot", player),
                              has_walnut)
     MultiWorldRules.add_rule(multi_world.get_location("Island West Turtle", player),
