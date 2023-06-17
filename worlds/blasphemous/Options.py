@@ -86,14 +86,14 @@ class ReliquaryShuffle(DefaultOnToggle):
 
 
 class CustomItem1(Toggle):
-    """Adds the custom item Boots of Pleading into the item pool, which grants the ability to fall onto spikes and survive.
-    Must have the Boots of Pleading mod installed to connect to a multiworld."""
+    """Adds the custom relic Boots of Pleading into the item pool, which grants the ability to fall onto spikes and survive.
+    Must have the \"Blasphemous-Boots-of-Pleading\" mod installed to connect to a multiworld."""
     display_name = "Boots of Pleading"
 
 
 class CustomItem2(Toggle):
-    """Adds the custom item Purified Hand of the Nun into the item pool, which grants the ability to jump a second time in mid-air.
-    Must have the Purified Hand of the Nun mod installed to connect to a multiworld."""
+    """Adds the custom relic Purified Hand of the Nun into the item pool, which grants the ability to jump a second time in mid-air.
+    Must have the \"Blasphemous-Double-Jump\" mod installed to connect to a multiworld."""
     display_name = "Purified Hand of the Nun"
 
 
