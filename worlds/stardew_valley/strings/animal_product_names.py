@@ -5,3 +5,5 @@ class AnimalProduct:
     brown_egg = "Egg (Brown)"
     large_egg = "Large Egg"
     large_brown_egg = "Large Egg (Brown)"
+    milk = "Milk"
+    large_milk = "Large Milk"

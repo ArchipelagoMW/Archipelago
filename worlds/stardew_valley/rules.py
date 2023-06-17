@@ -5,7 +5,7 @@ from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from . import options, locations
 from .bundles import Bundle
-from worlds.stardew_valley.strings.entrance_names import dig_to_mines_floor, SVEntrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance
+from worlds.stardew_valley.strings.entrance_names import dig_to_mines_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance
 from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_items, \
     dwarf_scrolls, skeleton_front, \
     skeleton_middle, skeleton_back, all_museum_items_by_name
@@ -14,6 +14,7 @@ from .mods.mod_data import ModNames
 from .locations import LocationTags
 from .logic import StardewLogic, And, tool_prices, week_days
 from .options import StardewOptions
+from .strings.tool_names import Tool, Material
 
 
 def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOptions, logic: StardewLogic,
@@ -133,55 +134,57 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
     for floor in range(5, 120 + 5, 5):
         MultiWorldRules.set_rule(multi_world.get_entrance(dig_to_mines_floor(floor), player),
                                  logic.can_mine_to_floor(floor).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_tide_pools, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_tide_pools, player),
                              logic.received("Beach Bridge") | (logic.can_blink()).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_quarry, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_quarry, player),
                              logic.received("Bridge Repair") | (logic.can_blink()).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_secret_woods, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_secret_woods, player),
                              logic.has_tool("Axe", "Iron") | (logic.can_blink()).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_sewers, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.forest_to_sewers, player),
                              logic.has_rusty_key().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.town_to_sewers, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.town_to_sewers, player),
                              logic.has_rusty_key().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.take_bus_to_desert, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.take_bus_to_desert, player),
                              logic.received("Bus Repair").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_skull_cavern, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_skull_cavern, player),
                              logic.received("Skull Key").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mine_to_skull_cavern_floor_100, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mine_to_skull_cavern_floor_100, player),
                              logic.can_mine_perfectly_in_the_skull_cavern().simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.talk_to_mines_dwarf, player),
+                             logic.can_speak_dwarf() & logic.has_tool(Tool.pickaxe, Material.iron))
 
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_desert_obelisk, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_desert_obelisk, player),
                              logic.received("Desert Obelisk").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_island_obelisk, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_island_obelisk, player),
                              logic.received("Island Obelisk").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.use_farm_obelisk, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_farm_obelisk, player),
                              logic.received("Farm Obelisk").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.buy_from_traveling_merchant, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.buy_from_traveling_merchant, player),
                              logic.has_traveling_merchant())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_greenhouse, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_greenhouse, player),
                              logic.received("Greenhouse"))
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_adventurer_guild, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mountain_to_adventurer_guild, player),
                              logic.received("Adventurer's Guild"))
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_railroad, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mountain_to_railroad, player),
                              logic.has_lived_months(2))
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_witch_warp_cave, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_witch_warp_cave, player),
                              logic.received("Dark Talisman") | (logic.can_blink()).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_witch_hut, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_witch_hut, player),
                              (logic.has("Void Mayonnaise") | logic.can_blink()).simplify())
 
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_harvey_room, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_harvey_room, player),
                              logic.has_relationship("Harvey", 2))
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.mountain_to_maru_room, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mountain_to_maru_room, player),
                              logic.has_relationship("Maru", 2))
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_sebastian_room, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_sebastian_room, player),
                              (logic.has_relationship("Sebastian", 2) | logic.can_blink()).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.forest_to_leah_cottage, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.forest_to_leah_cottage, player),
                              logic.has_relationship("Leah", 2))
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_elliott_house, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_elliott_house, player),
                              logic.has_relationship("Elliott", 2))
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_sunroom, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_sunroom, player),
                              logic.has_relationship("Caroline", 2))
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.enter_wizard_basement, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_wizard_basement, player),
                              logic.has_relationship("Wizard", 4))
     if ModNames.alec in world_options[options.Mods]:
         MultiWorldRules.set_rule(multi_world.get_entrance(AlecEntrance.petshop_to_bedroom, player),
@@ -208,41 +211,43 @@ def set_boat_repair_rules(logic: StardewLogic, multi_world, player):
 
 def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
     boat_repaired = logic.received("Boat Repair").simplify()
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.fish_shop_to_boat_tunnel, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.fish_shop_to_boat_tunnel, player),
                              boat_repaired)
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.boat_to_ginger_island, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.boat_to_ginger_island, player),
                              boat_repaired)
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_west, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_south_to_west, player),
                              logic.received("Island West Turtle").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_north, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_south_to_north, player),
                              logic.received("Island North Turtle").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_islandfarmhouse, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_west_to_islandfarmhouse, player),
                              logic.received("Island Farmhouse").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_gourmand_cave, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_west_to_gourmand_cave, player),
                              logic.received("Island Farmhouse").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_north_to_dig_site, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_north_to_dig_site, player),
                              logic.received("Dig Site Bridge").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.talk_to_island_trader, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.talk_to_island_trader, player),
                              logic.received("Island Trader").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_south_to_southeast, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_south_to_southeast, player),
                              logic.received("Island Resort").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_west_to_qi_walnut_room, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_west_to_qi_walnut_room, player),
                              logic.received("Qi Walnut Room").simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.island_north_to_volcano, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_north_to_volcano, player),
                              (logic.can_water(0) | logic.received("Volcano Bridge") |
                               logic.can_blink()).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.volcano_to_secret_beach, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.volcano_to_secret_beach, player),
                              logic.can_water(2).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_5, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.climb_to_volcano_5, player),
                              (logic.can_mine_perfectly() & logic.can_water(1)).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(SVEntrance.climb_to_volcano_10, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.talk_to_volcano_dwarf, player),
+                             logic.can_speak_dwarf())
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.climb_to_volcano_10, player),
                              (logic.can_mine_perfectly() & logic.can_water(1) & logic.received("Volcano Exit Shortcut")).simplify())
-    parrots = [SVEntrance.parrot_express_docks_to_volcano, SVEntrance.parrot_express_jungle_to_volcano,
-               SVEntrance.parrot_express_dig_site_to_volcano, SVEntrance.parrot_express_docks_to_dig_site,
-               SVEntrance.parrot_express_jungle_to_dig_site, SVEntrance.parrot_express_volcano_to_dig_site,
-               SVEntrance.parrot_express_docks_to_jungle, SVEntrance.parrot_express_dig_site_to_jungle,
-               SVEntrance.parrot_express_volcano_to_jungle, SVEntrance.parrot_express_jungle_to_docks,
-               SVEntrance.parrot_express_dig_site_to_docks, SVEntrance.parrot_express_volcano_to_docks]
+    parrots = [Entrance.parrot_express_docks_to_volcano, Entrance.parrot_express_jungle_to_volcano,
+               Entrance.parrot_express_dig_site_to_volcano, Entrance.parrot_express_docks_to_dig_site,
+               Entrance.parrot_express_jungle_to_dig_site, Entrance.parrot_express_volcano_to_dig_site,
+               Entrance.parrot_express_docks_to_jungle, Entrance.parrot_express_dig_site_to_jungle,
+               Entrance.parrot_express_volcano_to_jungle, Entrance.parrot_express_jungle_to_docks,
+               Entrance.parrot_express_dig_site_to_docks, Entrance.parrot_express_volcano_to_docks]
     for parrot in parrots:
         MultiWorldRules.set_rule(multi_world.get_entrance(parrot, player), logic.received("Parrot Express").simplify())
 
@@ -427,19 +432,19 @@ def set_traveling_merchant_rules(logic: StardewLogic, multi_world: MultiWorld, p
 
 def set_arcade_machine_rules(logic: StardewLogic, multi_world: MultiWorld, player: int, world_options):
     if world_options[options.ArcadeMachineLocations] == options.ArcadeMachineLocations.option_full_shuffling:
-        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.play_junimo_kart, player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.play_junimo_kart, player),
                                  (logic.received("Skull Key") & logic.has("Junimo Kart Small Buff")).simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.reach_junimo_kart_2, player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_junimo_kart_2, player),
                                  logic.has("Junimo Kart Medium Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.reach_junimo_kart_3, player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_junimo_kart_3, player),
                                  logic.has("Junimo Kart Big Buff").simplify())
         MultiWorldRules.add_rule(multi_world.get_location("Junimo Kart: Sunset Speedway (Victory)", player),
                                  logic.has("Junimo Kart Max Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.play_journey_of_the_prairie_king, player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.play_journey_of_the_prairie_king, player),
                                  logic.has("JotPK Small Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.reach_jotpk_world_2, player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_jotpk_world_2, player),
                                  logic.has("JotPK Medium Buff").simplify())
-        MultiWorldRules.add_rule(multi_world.get_entrance(SVEntrance.reach_jotpk_world_3, player),
+        MultiWorldRules.add_rule(multi_world.get_entrance(Entrance.reach_jotpk_world_3, player),
                                  logic.has("JotPK Big Buff").simplify())
         MultiWorldRules.add_rule(multi_world.get_location("Journey of the Prairie King Victory", player),
                                  logic.has("JotPK Max Buff").simplify())

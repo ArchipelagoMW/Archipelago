@@ -12,4 +12,5 @@ class Machine:
     seed_maker = "Seed Maker"
     solar_panel = "Solar Panel"
     cheese_press = "Cheese Press"
+    tapper = "Tapper"
 

@@ -10,7 +10,7 @@ def move_to_woods_depth(depth: int) -> str:
     return f"Enter Deep Woods Depth {depth}"
 
 
-class SVEntrance:
+class Entrance:
     to_stardew_valley = "To Stardew Valley"
     to_farmhouse = "To Farmhouse"
     farmhouse_to_farm = "Farmhouse to Farm"
@@ -94,6 +94,7 @@ class SVEntrance:
     enter_skull_cavern = "Skull Cavern Entrance to Skull Cavern"
     mine_to_skull_cavern_floor_25 = dig_to_skull_floor(25)
     mine_to_skull_cavern_floor_100 = dig_to_skull_floor(100)
+    talk_to_mines_dwarf = "Talk to Mines Dwarf"
     dig_to_mines_floor_5 = dig_to_mines_floor(5)
     dig_to_mines_floor_10 = dig_to_mines_floor(10)
     dig_to_mines_floor_15 = dig_to_mines_floor(15)
@@ -136,6 +137,7 @@ class SVEntrance:
     volcano_to_secret_beach = "Volcano River to Secret Beach"
     talk_to_island_trader = "Talk to Island Trader"
     climb_to_volcano_5 = "Climb to Volcano Floor 5"
+    talk_to_volcano_dwarf = "Talk to Volcano Dwarf"
     climb_to_volcano_10 = "Climb to Volcano Floor 10"
     parrot_express_docks_to_volcano = "Parrot Express Docks to Volcano"
     parrot_express_jungle_to_volcano = "Parrot Express Jungle to Volcano"
