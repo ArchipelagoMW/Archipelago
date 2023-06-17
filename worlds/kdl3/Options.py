@@ -1,3 +1,5 @@
+import random
+
 from Options import Option, DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle
 import typing
 from .Names import LocationName
@@ -89,6 +91,20 @@ class BossShuffle(PlandoBosses):
     option_singularity = 3
 
 
+class BossShuffleAllowBB(Choice):
+    """
+    Allow Boss Butch variants of bosses in Boss Shuffle.
+    Enabled: any boss placed will have a 50% chance of being the Boss Butch variant, including bosses not present
+    Enforced: all bosses will be their Boss Butch variant.
+    Boss Butch boss changes are only visual.
+    """
+    auto_display_name = "Allow Boss Butch Bosses"
+    option_disabled = 0
+    option_enabled = 1
+    option_enforced = 2
+    default = 0
+
+
 class StrictBosses(DefaultOnToggle):
     """
     If enabled, one will not be able to move onto the next world until the previous world's boss has been purified.
@@ -160,6 +176,7 @@ class TrapPercentage(Range):
     range_end = 100
     default = 50
 
+
 class GooeyTrapPercentage(Range):
     """
     Chance that any given trap is a Gooey Bag (spawns Gooey when you receive it).
@@ -169,6 +186,7 @@ class GooeyTrapPercentage(Range):
     range_end = 100
     default = 50
 
+
 class SlowTrapPercentage(Range):
     """
     Chance that any given trap is Slowness (halves your max speed for 15 seconds when you receive it).
@@ -177,6 +195,7 @@ class SlowTrapPercentage(Range):
     range_start = 0
     range_end = 100
     default = 50
+
 
 class AbilityTrapPercentage(Range):
     """
@@ -217,6 +236,14 @@ class KirbyFlavorPreset(Choice):
     option_custom = 14
     default = 0
 
+    @classmethod
+    def from_text(cls, text: str) -> Choice:
+        if text == "random":
+            choice_list = list(cls.name_lookup)
+            choice_list.remove(14)
+            return cls(random.choice(choice_list))
+        super().from_text(text)
+
 
 class KirbyFlavor(OptionDict):
     """
@@ -247,6 +274,14 @@ class GooeyFlavorPreset(Choice):
     option_lavender = 13
     option_custom = 14
     default = 0
+
+    @classmethod
+    def from_text(cls, text: str) -> Choice:
+        if text == "random":
+            choice_list = list(cls.name_lookup)
+            choice_list.remove(14)
+            return cls(random.choice(choice_list))
+        super().from_text(text)
 
 
 class GooeyFlavor(OptionDict):
@@ -286,6 +321,7 @@ kdl3_options: typing.Dict[str, type(Option)] = {
     "jumping_target": JumpingTarget,
     "stage_shuffle": LevelShuffle,
     "boss_shuffle": BossShuffle,
+    "allow_bb": BossShuffleAllowBB,
     "strict_bosses": StrictBosses,
     "open_world": OpenWorld,
     "ow_boss_requirement": OpenWorldBossRequirement,

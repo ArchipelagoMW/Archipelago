@@ -47,6 +47,16 @@ level_pointers = {
     0x770202: 0x03C8,
     0x770203: 0x04E0,
     0x770204: 0x06A4,
+    0x770205: 0x06A8,
+}
+
+bb_bosses = {
+    0x770200: 0xED85F1,
+    0x770201: 0xF01360,
+    0x770202: 0xEDA3DF,
+    0x770203: 0xEDC2B9,
+    0x770204: 0xED7C3F,
+    0x770205: 0xEC29D2,
 }
 
 level_sprites = {
@@ -613,7 +623,7 @@ class RomData:
             self.file = bytearray(stream.read())
 
 
-def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, shuffled_levels):
+def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, shuffled_levels, bb_boss_enabled):
     # increase BWRAM by 0x8000
     rom.write_byte(0x7FD8, 0x06)
 
@@ -872,6 +882,10 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             if (i == 0) or (i > 0 and i % 6 != 0):
                 rom.write_bytes(0x3D080 + (level - 1) * 12 + (i * 2),
                                 struct.pack("H", (shuffled_levels[level][i] & 0x00FFFF) % 6))
+
+    for i in range(6):
+        if bb_boss_enabled[i]:
+            rom.write_bytes(0x3F0000 + (level_pointers[0x770200 + i]), struct.pack("I", bb_bosses[0x770200 + i]))
 
     # write jumping goal
     rom.write_bytes(0x94F8, struct.pack("H", multiworld.jumping_target[player]))

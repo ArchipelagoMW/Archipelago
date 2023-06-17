@@ -52,6 +52,7 @@ class KDL3World(World):
     boss_requirements = dict()
     player_levels = dict()
     stage_shuffle_enabled = False
+    boss_butch_bosses = dict()
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -139,6 +140,13 @@ class KDL3World(World):
             self.multiworld.get_location(f"Level {level} Boss", self.player) \
                 .place_locked_item(KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
+        self.boss_butch_bosses[self.player] = [False for _ in range(6)]
+        if self.multiworld.allow_bb[self.player]:
+            for i in range(6):
+                if self.multiworld.allow_bb[self.player] == 1:
+                    self.boss_butch_bosses[self.player][i] = self.multiworld.per_slot_randoms[self.player].choice([True, False])
+                else:
+                    self.boss_butch_bosses[self.player][i] = True
 
     def generate_output(self, output_directory: str):
         rompath = ""
@@ -149,7 +157,8 @@ class KDL3World(World):
             rom = RomData(get_base_rom_path())
             patch_rom(self.multiworld, self.player, rom, self.required_heart_stars[self.player],
                       self.boss_requirements[self.player],
-                      self.player_levels[self.player])
+                      self.player_levels[self.player],
+                      self.boss_butch_bosses[self.player])
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
