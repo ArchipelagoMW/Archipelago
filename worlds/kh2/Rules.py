@@ -1,7 +1,7 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import MultiWorld, CollectionState
-
+from logic import *
 from .Items import exclusionItem_table
 from .Locations import STT_Checks, exclusion_table
 from .Names import LocationName, ItemName, RegionName
@@ -15,6 +15,8 @@ else:
 
 
 # Shamelessly Stolen from Messanger
+
+
 class KH2Rules:
     player: int
     world: KH2World
@@ -81,9 +83,6 @@ class KH2Rules:
             RegionName.Limit:      lambda state: self.limit_form_region_access(state),
             RegionName.Master:     lambda state: self.multi_form_region_access(state),
             RegionName.Final:      lambda state: self.final_form_region_access(state)
-
-            # RegionName.Final:      lambda state: self.drive_form_unlock(state, "Final Form", 1),
-
         }
 
     def lod_unlocked(self, state: CollectionState, Amount) -> bool:
@@ -177,17 +176,106 @@ class KH2Rules:
         return state.has_any(multi_form_region_access, self.player)
 
     def set_kh2_rules(self) -> None:
-        multiworld = self.world.multiworld
-
-        for region in multiworld.get_regions(self.player):
+        world = self.world.multiworld
+        player = self.player
+        for region in world.get_regions(self.player):
             if region.name in self.region_rules:
                 for entrance in region.entrances:
                     entrance.access_rule = self.region_rules[region.name]
-            # for loc in region.locations:
-            #    if loc.name in self.location_rules:
-            #        loc.access_rule = self.location_rules[loc.name]
 
-        multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        self.set_kh2_goal()
+
+        for slot, weapon in exclusion_table["WeaponSlots"].items():
+            add_rule(world.get_location(slot, player), lambda state: state.has(weapon, player))
+
+        #  Forbid Abilities on popups due to game limitations
+        for location in exclusion_table["Popups"]:
+            forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])
+            forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
+
+        for location in STT_Checks:
+            forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
+
+        # Santa's house also breaks with stat ups
+        for location in {LocationName.SantasHouseChristmasTownMap, LocationName.SantasHouseAPBoost}:
+            forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
+
+    def set_kh2_goal(self):
+        if self.world.multiworld.Goal[self.player] == "three_proofs":
+            add_rule(self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
+                     lambda state: state.kh_three_proof_unlocked(self.player))
+            if self.world.multiworld.FinalXemnas[self.player]:
+                self.world.multiworld.completion_condition[self.player] = lambda state: state.kh_victory(self.player)
+            else:
+                self.world.multiworld.completion_condition[self.player] = lambda state: state.kh_three_proof_unlocked(
+                        self.player)
+        # lucky emblem hunt
+        elif self.world.multiworld.Goal[self.player] == "lucky_emblem_hunt":
+            add_rule(self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
+                     lambda state: state.kh_lucky_emblem_unlocked(self.player,
+                                                                  self.world.multiworld.LuckyEmblemsRequired[
+                                                                      self.player].value))
+            if self.world.multiworld.FinalXemnas[self.player]:
+                self.world.multiworld.completion_condition[self.player] = lambda state: state.kh_victory(self.player)
+            else:
+                self.world.multiworld.completion_condition[self.player] = lambda state: state.kh_lucky_emblem_unlocked(
+                        self.player,
+                        self.world.multiworld.LuckyEmblemsRequired[
+                            self.player].value)
+        # hitlist if == 2
+        else:
+            add_rule(self.world.multiworld.get_location(LocationName.FinalXemnas, self.player),
+                     lambda state: state.kh_hitlist(self.player,
+                                                    self.world.multiworld.BountyRequired[self.player].value))
+            if self.world.multiworld.FinalXemnas[self.player]:
+                self.world.multiworld.completion_condition[self.player] = lambda state: state.kh_victory(self.player)
+            else:
+                self.world.multiworld.completion_condition[self.player] = lambda state: state.kh_hitlist(self.player,
+                                                                                                         self.world.multiworld.BountyRequired[
+                                                                                                             self.player].value)
+
+    def kh2_set_count(self, item_name_set: set, state: CollectionState) -> int:
+        """
+        Returns the sum of all the items in the set.
+        """
+        return sum([state.count(item_name, self.player) for item_name in item_name_set if
+                    state.count(item_name, self.player)])
+
+    def kh2_dict_count(self, item_name_to_count: dict, state: CollectionState) -> bool:
+        """
+        simplifies count to a dictionary.
+        """
+        return all([state.count(item_name, self.player) >= item_name_to_count[item_name] for item_name in
+                    item_name_to_count.keys() if state.count(item_name, self.player)])
+
+    def kh2_can_reach_any(self, loc_set: set, state: CollectionState):
+        """
+        Can reach any locations in the set.
+        """
+        return any([self.kh2_can_reach(location, state) for location in
+                    loc_set])
+
+    def kh2_can_reach_all(self, loc_set: set, state: CollectionState):
+        """
+        Can reach all locations in the set.
+        """
+        return all([self.kh2_can_reach(location, state) for location in
+                    loc_set])
+
+    def kh2_can_reach(self, loc: str, state: CollectionState):
+        """
+        Returns bool instead of collection state.
+        """
+        if self.world.multiworld.get_location(loc, self.player).can_reach(state):
+            return True
+        else:
+            return False
+
+    def kh2_has_all(self, items: set, state: CollectionState):
+        return state.has_all(items, self.player)
+
+    def kh2_has_any(self, items: set, state: CollectionState):
+        return state.has_any(items, self.player)
 
 
 class KH2FormRules(KH2Rules):
@@ -270,99 +358,390 @@ class KH2FormRules(KH2Rules):
                         loc.access_rule = self.form_rules[loc.name]
 
 
-def set_rules(world: MultiWorld, player: int):
-    # add_rule(world.get_location(LocationName.RoxasDataMagicBoost, player),
-    #         lambda state: state.kh_dataroxas(player))
-    # add_rule(world.get_location(LocationName.DemyxDataAPBoost, player),
-    #         lambda state: state.kh_datademyx(player))
-    # add_rule(world.get_location(LocationName.SaixDataDefenseBoost, player),
-    #         lambda state: state.kh_datasaix(player))
-    # add_rule(world.get_location(LocationName.XaldinDataDefenseBoost, player),
-    #         lambda state: state.kh_dataxaldin(player))
-    # add_rule(world.get_location(LocationName.XemnasDataPowerBoost, player),
-    #         lambda state: state.kh_dataxemnas(player))
-    # add_rule(world.get_location(LocationName.XigbarDataDefenseBoost, player),
-    #         lambda state: state.kh_dataxigbar(player))
-    # add_rule(world.get_location(LocationName.VexenDataLostIllusion, player),
-    #         lambda state: state.kh_dataaxel(player))
-    # add_rule(world.get_location(LocationName.LuxordDataAPBoost, player),
-    #         lambda state: state.kh_dataluxord(player))
-    #
-    for slot, weapon in exclusion_table["WeaponSlots"].items():
-        add_rule(world.get_location(slot, player), lambda state: state.has(weapon, player))
+class KH2FightRules(KH2Rules):
+    player: int
+    world: KH2World
+    region_rules: Dict[str, Callable[[CollectionState], bool]]
+    location_rules: Dict[str, Callable[[CollectionState], bool]]
 
-    formLogicTable = {
-        ItemName.ValorForm:  [LocationName.Valorlvl4,
-                              LocationName.Valorlvl5,
-                              LocationName.Valorlvl6,
-                              LocationName.Valorlvl7],
-        ItemName.WisdomForm: [LocationName.Wisdomlvl4,
-                              LocationName.Wisdomlvl5,
-                              LocationName.Wisdomlvl6,
-                              LocationName.Wisdomlvl7],
-        ItemName.LimitForm:  [LocationName.Limitlvl4,
-                              LocationName.Limitlvl5,
-                              LocationName.Limitlvl6,
-                              LocationName.Limitlvl7],
-        ItemName.MasterForm: [LocationName.Masterlvl4,
-                              LocationName.Masterlvl5,
-                              LocationName.Masterlvl6,
-                              LocationName.Masterlvl7],
-        ItemName.FinalForm:  [LocationName.Finallvl4,
-                              LocationName.Finallvl5,
-                              LocationName.Finallvl6,
-                              LocationName.Finallvl7]
-    }
+    def __init__(self, world: KH2World) -> None:
+        super().__init__(world)
+        self.fight_logic = self.world.multiworld.FightLogic[self.player].current_key
+        self.player = world.player
+        self.world = world
+        self.final_leveling_access = {
+            LocationName.MemorysSkyscaperMythrilCrystal,
+            LocationName.GrimReaper2,
+            LocationName.Xaldin,
+            LocationName.StormRider,
+            LocationName.SunsetTerraceAbilityRing
+        }
+        self.fight_region_rules = {
+            RegionName.ShanYu:                lambda state: self.get_shan_yu_rules(state),
+            RegionName.AnsemRiku:             lambda state: self.get_ansem_riku_rules(state),
+            RegionName.StormRider:            lambda state: self.get_storm_rider_rules(state),
+            RegionName.DataXigbar:            lambda state: self.get_data_xigbar_rules(state),
+            RegionName.TwinLords:             lambda state: self.get_twin_lords_rules(state),
+            RegionName.GenieJafar:            lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataLexaeus:           lambda state: self.get_data_lexaeus_rules(state),
+            RegionName.OldPete:               lambda state: self.get_old_pete_rules(),
+            RegionName.FuturePete:            lambda state: self.get_future_pete_rules(state),
+            RegionName.Terra:                 lambda state: self.get_terra_rules(state),
+            RegionName.DataMarluxia:          lambda state: self.get_data_marluxia_rules(state),
+            RegionName.Barbosa:               lambda state: self.get_barbosa_rules(state),
+            RegionName.GrimReaper1:           lambda state: self.get_grim_reaper1_rules(state),
+            RegionName.GrimReaper2:           lambda state: self.get_grim_reaper2_rules(state),
+            RegionName.DataLuxord:            lambda state: self.get_data_luxord_rules(state),
+            RegionName.Cerberus:              lambda state: self.get_cerberus_rules(state),
+            RegionName.OlympusPete:           lambda state: self.get_olympus_pete_rules(state),
+            RegionName.Hydra:                 lambda state: self.get_hydra_rules(state),
+            RegionName.Hades:                 lambda state: self.get_hades_rules(state),
+            RegionName.DataZexion:            lambda state: self.get_data_zexion_rules(state),
+            RegionName.Oc_pain_and_panic_cup: lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Oc_cerberus_cup:       lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Oc2_titan_cup:         lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Oc2_gof_cup:           lambda state: self.get_genie_jafar_rules(state),
+            RegionName.HadesCups:             lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Thresholder:           lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Beast:                 lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DarkThorn:             lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Xaldin:                lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataXaldin:            lambda state: self.get_genie_jafar_rules(state),
+            RegionName.HostileProgram:        lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Mcp:                   lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataLarxene:           lambda state: self.get_genie_jafar_rules(state),
+            RegionName.PrisonKeeper:          lambda state: self.get_genie_jafar_rules(state),
+            RegionName.OogieBoogie:           lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Experiment:            lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataVexen:             lambda state: self.get_genie_jafar_rules(state),
+            RegionName.HBDemyx:               lambda state: self.get_genie_jafar_rules(state),
+            RegionName.ThousandHeartless:     lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataDemyx:             lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Sephi:                 lambda state: self.get_genie_jafar_rules(state),
+            RegionName.CorFirstFight:         lambda state: self.get_genie_jafar_rules(state),
+            RegionName.CorSecondFight:        lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Transport:             lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Scar:                  lambda state: self.get_genie_jafar_rules(state),
+            RegionName.GroundShaker:          lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataSaix:              lambda state: self.get_genie_jafar_rules(state),
+            RegionName.TwilightThorn:         lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Axel1:                 lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Axel2:                 lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataRoxas:             lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataAxel:              lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Roxas:                 lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Xigbar:                lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Luxord:                lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Saix:                  lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Xemnas:                lambda state: self.get_genie_jafar_rules(state),
+            RegionName.ArmoredXemnas:         lambda state: self.get_genie_jafar_rules(state),
+            RegionName.ArmoredXemnas2:        lambda state: self.get_genie_jafar_rules(state),
+            RegionName.FinalXemnas:           lambda state: self.get_genie_jafar_rules(state),
+            RegionName.DataXemnas:            lambda state: self.get_genie_jafar_rules(state),
+        }
 
-    for form in formLogicTable:
-        for i in range(4):
-            location = world.get_location(formLogicTable[form][i], player)
-            set_rule(location, lambda state, i=i + 1, form=form: state.kh_amount_of_forms(player, i, form))
+    def set_kh2_fight_rules(self) -> None:
+        world = self.world.multiworld
+        player = self.player
+        for region in world.get_regions(player):
+            if region.name == RegionName.AnsemRiku:
+                for entrance in region.entrances:
+                    entrance.access_rule = self.fight_region_rules[region.name]
 
-    if world.Goal[player] == "three_proofs":
-        add_rule(world.get_location(LocationName.FinalXemnas, player),
-                 lambda state: state.kh_three_proof_unlocked(player))
-        if world.FinalXemnas[player]:
-            world.completion_condition[player] = lambda state: state.kh_victory(player)
-        else:
-            world.completion_condition[player] = lambda state: state.kh_three_proof_unlocked(player)
-    # lucky emblem hunt
-    elif world.Goal[player] == "lucky_emblem_hunt":
-        add_rule(world.get_location(LocationName.FinalXemnas, player),
-                 lambda state: state.kh_lucky_emblem_unlocked(player, world.LuckyEmblemsRequired[player].value))
-        if world.FinalXemnas[player]:
-            world.completion_condition[player] = lambda state: state.kh_victory(player)
-        else:
-            world.completion_condition[player] = lambda state: state.kh_lucky_emblem_unlocked(player,
-                                                                                              world.LuckyEmblemsRequired[
-                                                                                                  player].value)
-    # hitlist if == 2
-    else:
-        add_rule(world.get_location(LocationName.FinalXemnas, player),
-                 lambda state: state.kh_hitlist(player, world.BountyRequired[player].value))
-        if world.FinalXemnas[player]:
-            world.completion_condition[player] = lambda state: state.kh_victory(player)
-        else:
-            world.completion_condition[player] = lambda state: state.kh_hitlist(player,
-                                                                                world.BountyRequired[player].value)
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
 
-    #  Forbid Abilities on popups due to game limitations
-    for location in exclusion_table["Popups"]:
-        forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])
-        forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
+    def get_shan_yu_rules(self, state: CollectionState) -> bool:
+        shan_yu_rules = {
+            "easy":   state.has_all(easy_shan_yu_tools, self.player),
+            "normal": self,
+            "hard":   self,
+        }
+        return shan_yu_rules[self.fight_logic]
 
-    for location in STT_Checks:
-        forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
+    def get_ansem_riku_rules(self, state: CollectionState) -> bool:
+        ansem_riku_rules = {
+            "easy":   self.kh2_has_all(easy_ansem_riku_tools, state),
+            "normal": state.has_all(self.ansem_riku_tools, self.player),
+            "hard":   state.has_all(self.ansem_riku_tools, self.player),
+        }
+        return ansem_riku_rules[self.fight_logic]
 
-    # Santa's house also breaks with stat ups
-    for location in {LocationName.SantasHouseChristmasTownMap, LocationName.SantasHouseAPBoost}:
-        forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
+    def get_storm_rider_rules(self, state: CollectionState) -> bool:
+        storm_rider_rules = {
+            "easy":   self.kh2_has_all(easy_storm_rider_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return storm_rider_rules[self.fight_logic]
 
-    add_rule(world.get_location(LocationName.TransporttoRemembrance, player),
-             lambda state: state.kh_transport(player))
+    def get_data_xigbar_rules(self, state: CollectionState) -> bool:
+        data_xigbar_rules = {
+            "easy":   self.kh2_dict_count(easy_data_xigbar_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
 
-# class KH2EasyRules:
-#    player: int
-#    world: KH2World
-#    region_rules: Dict[str, Callable[[CollectionState], bool]]
-#    location_rules: Dict[str, Callable[[CollectionState], bool]]
+        return data_xigbar_rules[self.fight_logic] and self.kh2_can_reach_any(self.final_leveling_access, state)
+
+    def get_twin_lords_rules(self, state: CollectionState) -> bool:
+        twin_lords_rules = {
+            "easy":   self.kh2_has_all(easy_twin_lords_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return twin_lords_rules[self.fight_logic]
+
+    def get_genie_jafar_rules(self, state: CollectionState) -> bool:
+        genie_jafar_rules = {
+            "easy":   self.kh2_has_all(easy_genie_jafar_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return genie_jafar_rules[self.fight_logic]
+
+    def get_data_lexaeus_rules(self, state: CollectionState) -> bool:
+        data_lexaues_rules = {
+            "easy":   self.kh2_dict_count(easy_data_lexaeus_rules, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return data_lexaues_rules[self.fight_logic]
+
+    @staticmethod
+    def get_old_pete_rules():
+        return True
+
+    def get_future_pete_rules(self, state: CollectionState) -> bool:
+        future_pete_rules = {
+            "easy":   self.kh2_has_all(easy_future_pete_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return future_pete_rules[self.fight_logic]
+
+    def get_data_marluxia_rules(self, state: CollectionState) -> bool:
+        data_marluxia_rules = {
+            "easy":   self.kh2_dict_count(easy_data_marluxia_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return data_marluxia_rules[self.fight_logic]
+
+    def get_terra_rules(self, state: CollectionState) -> bool:
+        terra_rules = {
+            "easy":   self.kh2_dict_count(easy_terra_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return terra_rules[self.fight_logic]
+
+    def get_barbosa_rules(self, state: CollectionState) -> bool:
+        barbosa_rules = {
+            "easy":   self.kh2_has_all(easy_barbosa_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return barbosa_rules[self.fight_logic]
+
+    def get_grim_reaper1_rules(self, state: CollectionState) -> bool:
+        gr1_rules = {
+            "easy":   self.kh2_has_all(easy_gr1_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return gr1_rules[self.fight_logic]
+
+    def get_grim_reaper2_rules(self, state: CollectionState) -> bool:
+        gr2_rules = {
+            "easy":   self.kh2_has_all(easy_gr2_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return gr2_rules[self.fight_logic]
+
+    def get_data_luxord_rules(self, state: CollectionState) -> bool:
+        data_luxord_rules = {
+            "easy":   self.kh2_dict_count(easy_data_luxord_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return data_luxord_rules[self.fight_logic]
+
+    def get_cerberus_rules(self, state: CollectionState) -> bool:
+        cerberus_rules = {
+            "easy":   self.kh2_has_all(easy_cerberus_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return cerberus_rules[self.fight_logic]
+
+    def get_olympus_pete_rules(self, state: CollectionState) -> bool:
+        olympus_pete_rules = {
+            "easy":   self.kh2_has_all(easy_olympus_pete_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return olympus_pete_rules[self.fight_logic]
+
+    def get_hydra_rules(self, state: CollectionState) -> bool:
+        hydra_rules = {
+            "easy":   self.kh2_has_all(easy_hydra_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return hydra_rules[self.fight_logic]
+
+    def get_hades_rules(self, state: CollectionState) -> bool:
+        hades_rules = {
+            "easy":   self.kh2_dict_count(easy_hades_tools, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return hades_rules[self.fight_logic]
+
+    def get_data_zexion_rules(self, state: CollectionState) -> bool:
+        data_zexion_rules = {
+            "easy":   self.kh2_dict_count(easy_data_zexion, state) and self.kh2_can_reach(LocationName.Finallvl7,
+                                                                                          state),
+            "normal": self,
+            "hard":   self,
+        }
+        return data_zexion_rules[self.fight_logic]
+
+    def get_thresholder_rules(self, state: CollectionState) -> bool:
+        thresholder_rules = {
+            "easy":   self.kh2_has_all(easy_thresholder, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return thresholder_rules[self.fight_logic]
+
+    @staticmethod
+    def get_beast_rules():
+        return True
+
+    def get_dark_thorn_rules(self, state: CollectionState) -> bool:
+        dark_thorn_rules = {
+            "easy":   self.kh2_has_all(easy_dark_thorn, state),
+            "normal": self,
+            "hard":   self,
+        }
+        return dark_thorn_rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get__rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]

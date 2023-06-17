@@ -1033,7 +1033,24 @@ def connect_regions(world: MultiWorld, player: int):
     for source, target in KH2RegionConnections.items():
         for region in target:
             connect(world, player, names, source, region)
-
+# cave fight:fire/guard
+# hades escape logic:fire,blizzard,slide dash, base tools
+# windows:chicken little.fire element,base tools
+# chasm of challenges:reflect, blizzard, trinity limit,chicken little
+# living bones: magnet
+# some things for barbosa(PR), chicken little
+# hyneas(magnet,reflect)
+# tt2: reflect,chicken,form, guard,aerial recovery,finising plus,
+# corridors,dancers:chicken little or stitch +demyx tools
+# 1k: guard,once more,limit form,
+# snipers +before: stitch, magnet, finishing leap, base tools, reflect
+# dragoons:stitch, magnet, base tools, reflect
+# oc2 tournament thing: stitch, magnet, base tools, reflera
+# lock,shock and barrel: reflect, base tools
+# carpet section: magnera, reflect, base tools,
+# sp2: reflera, stitch, basse tools, reflera, thundara, fantasia/duck flare,once more.
+# tt3: stitch/chicken little, magnera,reflera,base tools,finishing leap,limit form
+# cor
 
 def connect(world: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
             rule: typing.Optional[typing.Callable] = None):

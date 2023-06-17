@@ -1,13 +1,14 @@
 from BaseClasses import Tutorial, ItemClassification
 import logging
 
+from . import Rules
 from .Items import *
 from .Locations import all_locations, setup_locations, exclusion_table, AllWeaponSlot
 from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
 from .Options import KH2_Options
 from .Regions import create_regions, connect_regions
-from .Rules import set_rules
+#from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
 from .logic import KH2Logic
 
@@ -23,7 +24,6 @@ class KingdomHearts2Web(WebWorld):
     )]
 
 
-# noinspection PyUnresolvedReferences
 class KH2World(World):
     """
     Kingdom Hearts II is an action role-playing game developed and published by Square Enix and released in 2005.
@@ -232,10 +232,13 @@ class KH2World(World):
         """
         Sets the Logic for the Regions and Locations.
         """
-        logic = Rules.KH2Rules(self)
-        formLogic = Rules.KH2FormRules(self)
-        logic.set_kh2_rules()
-        formLogic.set_kh2_form_rules()
+        universal_logic = Rules.KH2Rules(self)
+        form_logic = Rules.KH2FormRules(self)
+        yourmom = Rules.KH2FightRules(self)
+        yourmom.set_kh2_fight_rules()
+        universal_logic.set_kh2_rules()
+        form_logic.set_kh2_form_rules()
+
         # logic = self.multiworld.logic_level[self.player]
         # if logic == Logic.option_normal:
         #    Rules.MessengerRules(self).set_messenger_rules()

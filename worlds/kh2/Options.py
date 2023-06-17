@@ -113,7 +113,13 @@ class Visitlocking(Choice):
 
 
 class FightLogic(Choice):
-    """Placeholder text"""
+    """
+    The level of logic to use when determining what fights in your world are beatable.
+    Easy: Requires the notable tools when you reach the boss in vanilla.
+    Normal: Requires some of the notable tools when you reach the boss in vanilla.
+    Hard: Requires the minimal tools for the archipelago developer to beat the fight.
+    None: Fights don't require any logic and assumed always beatable.
+    """
     display_name = "Fight Logic"
     option_easy = 0
     option_normal = 1
@@ -123,7 +129,7 @@ class FightLogic(Choice):
 
 
 class FinalFormLogic(Choice):
-    """Determines form logic
+    """Determines forcing final form logic
 
     No Light and Darkness: Light and Darkness is not in logic.
     Light And Darkness: Final Forcing with light and darkness is in logic.
