@@ -70,7 +70,21 @@ def level_scaling(multiworld):
                 break
 
             for location in sphere:
-                state.collect(location.item, True, location)
+                if not location.item:
+                    continue
+                if (location.item.game == "Pokemon Red and Blue" and (location.item.name.startswith("Missable ") or
+                        location.item.name.startswith("Static ")) and location.name !=
+                        "Pokemon Tower 6F - Restless Soul"):
+                    # Normally, missable Pokemon (starters, the dojo rewards) are not considered in logic static Pokemon
+                    # are not considered for moves or evolutions, as you could release them and potentially soft lock
+                    # the game. However, for level scaling purposes, we will treat them as not missable or static.
+                    # We would not want someone playing a minimal accessibility Dexsanity game to get what would be
+                    # technically an "out of logic" Mansion Key from selecting Bulbasaur at the beginning of the game
+                    # and end up in the Mansion early and encountering level 67 Pokémon
+                    state.collect(multiworld.worlds[location.item.player].create_item(
+                        location.item.name.split("Missable ")[-1].split("Static ")[-1]), True, location)
+                else:
+                    state.collect(location.item, True, location)
         #print([len([item for item in sphere if item.type == "Item"]) for sphere in spheres])
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
             if multiworld.level_scaling[world.player] == "off":
@@ -111,5 +125,5 @@ def level_scaling(multiworld):
             print([len([item for item in sphere if item.player == world.player and item.type == "Item"]) for sphere in multiworld.get_spheres()])
 
 
-    except Exception as e:
+    except Exception as err:
         breakpoint()

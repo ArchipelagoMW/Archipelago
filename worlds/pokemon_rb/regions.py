@@ -1302,13 +1302,13 @@ mandatory_connections = {
     pair("Safari Zone West", "Safari Zone Center-NW"),
 }
 insanity_mandatory_connections = {
-    pair("Seafoam Islands B1F-NE", "Seafoam Islands 1F"),
-    pair("Seafoam Islands 1F", "Seafoam Islands B1F"),
-    pair("Seafoam Islands B2F-NW", "Seafoam Islands B1F"),
-    pair("Seafoam Islands B3F-SE", "Seafoam Islands B2F-SE"),
-    pair("Seafoam Islands B3F-NE", "Seafoam Islands B2F-NE"),
-    pair("Seafoam Islands B4F", "Seafoam Islands B3F-NE"),
-    pair("Seafoam Islands B4F", "Seafoam Islands B3F"),
+    # pair("Seafoam Islands B1F-NE", "Seafoam Islands 1F"),
+    # pair("Seafoam Islands 1F", "Seafoam Islands B1F"),
+    # pair("Seafoam Islands B2F-NW", "Seafoam Islands B1F"),
+    # pair("Seafoam Islands B3F-SE", "Seafoam Islands B2F-SE"),
+    # pair("Seafoam Islands B3F-NE", "Seafoam Islands B2F-NE"),
+    # pair("Seafoam Islands B4F", "Seafoam Islands B3F-NE"),
+    # pair("Seafoam Islands B4F", "Seafoam Islands B3F"),
     pair("Player's House 1F", "Player's House 2F"),
     pair("Indigo Plateau Lorelei's Room", "Indigo Plateau Lobby-N"),
     pair("Indigo Plateau Bruno's Room", "Indigo Plateau Lorelei's Room"),
@@ -1448,7 +1448,7 @@ mansion_dead_ends = [
 mansion_stair_destinations = [
     "Pokemon Mansion 2F to Pokemon Mansion 1F",
     "Pokemon Mansion 2F to Pokemon Mansion 3F-SW",
-    "Pokemon Mansion 3F to Pokemon Mansion 2F"
+    "Pokemon Mansion 3F to Pokemon Mansion 2F",
     "Pokemon Mansion 1F to Pokemon Mansion 2F"
 ]
 
@@ -1740,7 +1740,6 @@ def create_regions(self):
     connect(multiworld, player, "Cerulean Cave 1F-SE", "Cerulean Cave 1F-Water", lambda state: logic.can_surf(state, player))
     connect(multiworld, player, "Cerulean Cave 1F-SW", "Cerulean Cave 1F-Water", lambda state: logic.can_surf(state, player))
     connect(multiworld, player, "Cerulean Cave 1F-N", "Cerulean Cave 1F-Water", lambda state: logic.can_surf(state, player))
-    connect(multiworld, player, "Cerulean Cave 1F-NW", "Cerulean Cave 1F-Water", lambda state: logic.can_surf(state, player))
     connect(multiworld, player, "Cerulean Cave 1F-NE", "Cerulean Cave 1F-Water", lambda state: logic.can_surf(state, player))
     connect(multiworld, player, "Pokemon Mansion 3F", "Pokemon Mansion 3F-SE", one_way=True)
     connect(multiworld, player, "Silph Co 2F", "Silph Co 2F-NW", lambda state: logic.card_key(state, 2, player))
@@ -1807,12 +1806,13 @@ def create_regions(self):
     connect(multiworld, player, "Victory Road 3F-S", "Victory Road 2F-C", one_way=True)
 
     if multiworld.worlds[player].fly_map != "Pallet Town":
-        connect(multiworld, player, "Menu", multiworld.worlds[player].fly_map, lambda state: logic.can_fly(state, player), one_way=True,
-                name="Fly to " + multiworld.worlds[player].fly_map)
+        connect(multiworld, player, "Menu", multiworld.worlds[player].fly_map,
+                lambda state: logic.can_fly(state, player), one_way=True, name="Free Fly Location")
 
     if multiworld.worlds[player].town_map_fly_map != "Pallet Town":
-        connect(multiworld, player, "Menu", multiworld.worlds[player].town_map_fly_map, lambda state: logic.can_fly(state, player) and state.has("Town Map", player), one_way=True,
-                name="Fly to " + multiworld.worlds[player].town_map_fly_map + " (Town Map)")
+        connect(multiworld, player, "Menu", multiworld.worlds[player].town_map_fly_map,
+                lambda state: logic.can_fly(state, player) and state.has("Town Map", player), one_way=True,
+                name="Town Map Fly Location")
 
     # regions = set(self.multiworld.get_regions(player))
     # regions = {region for region in regions if "Wild" not in region.name and "Grass" not in region.name and "Fishing" not in region.name and "Water" not in region.name}
@@ -1916,7 +1916,6 @@ def create_regions(self):
 
             usable_safe_rooms += insanity_safe_rooms
 
-
         safe_rooms_sample = multiworld.random.sample(usable_safe_rooms, 6)
         pallet_safe_room = safe_rooms_sample[-1]
 
@@ -1954,6 +1953,9 @@ def create_regions(self):
                    2 if i == "Silph Co 7F-NW to Silph Co 11F-W" else 1)
         while warps:
             forced_connections.add((warps.pop(), warps.pop(),))
+
+        # Shuffle Saffron Gym sections, then connect one warp from each section to the next.
+        # Then connect the rest at random.
         warps = multiworld.random.sample(saffron_gym_warps, len(saffron_gym_warps))
         solution = ["SW", "W", "NW", "N", "NE", "E", "SE"]
         multiworld.random.shuffle(solution)
@@ -2175,7 +2177,38 @@ def create_regions(self):
         multiworld.random.shuffle(entrances)
         reachable_entrances = []
 
-        def adds_reachable_locations(entrances_copy, item):
+        relevant_events = [
+            "Boulder Badge",
+            "Cascade Badge",
+            "Thunder Badge",
+            "Rainbow Badge",
+            "Soul Badge",
+            "Marsh Badge",
+            "Volcano Badge",
+            "Earth Badge",
+            "Seafoam Exit Boulder",
+            "Victory Road Boulder",
+            "Silph Co Liberated",
+        ]
+        if multiworld.robbed_house_officer[player]:
+            relevant_events.append("Help Bill")
+        if multiworld.tea[player]:
+            relevant_events.append("Vending Machine Drinks")
+        if multiworld.route_3_condition[player] == "defeat_brock":
+            relevant_events.append("Defeat Brock")
+        elif multiworld.rt_3_condition[player] == "defeat_any_gym":
+            relevant_events += [
+                "Defeat Brock",
+                "Defeat Misty",
+                "Defeat Lt. Surge",
+                "Defeat Erika",
+                "Defeat Koga",
+                "Defeat Sabrina",
+                "Defeat Blaine",
+                "Defeat Viridian Gym Giovanni",
+            ]
+
+        def adds_reachable_entrances(entrances_copy, item):
             test_state = state.copy()
             test_state.collect(item, False)
             return len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
@@ -2188,7 +2221,8 @@ def create_regions(self):
             check_warps.update(region.exits)
             check_warps.remove(e)
             for location in region.locations:
-                if location.item and adds_reachable_locations(entrances_copy, location.item):
+                if location.item and location.item.name in relevant_events and adds_reachable_entrances(entrances_copy,
+                                                                                                        location.item):
                     return False
             while check_warps:
                 warp = check_warps.pop()
@@ -2203,7 +2237,8 @@ def create_regions(self):
                             checked_regions.add(warp.connected_region)
                             check_warps.update(warp.connected_region.exits)
                             for location in warp.connected_region.locations:
-                                if location.item and adds_reachable_locations(entrances_copy, location.item):
+                                if (location.item and location.item.name in relevant_events and
+                                        adds_reachable_entrances(entrances_copy, location.item)):
                                     return False
             x = 1
             return True

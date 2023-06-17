@@ -62,7 +62,7 @@ def cerulean_cave(state, player):
 
 
 def can_pass_guards(state, player):
-    if state.multiworld.tea[player].value:
+    if state.multiworld.tea[player]:
         return state.has("Tea", player)
     else:
         return state.has("Vending Machine Drinks", player)
