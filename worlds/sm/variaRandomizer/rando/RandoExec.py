@@ -66,6 +66,7 @@ class RandoExec(object):
                 self.errorMsg += '; '.join(setup.errorMsgs)
             if self.errorMsg == "":
                 self.errorMsg += "Unable to process settings; "
+            raise Exception(self.errorMsg)
         self.areaGraph.printGraph()
         return container
 
