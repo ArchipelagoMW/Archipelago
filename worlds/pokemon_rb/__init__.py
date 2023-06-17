@@ -271,17 +271,19 @@ class PokemonRedBlueWorld(World):
         advancement_items = [item.name for item in item_pool if item.advancement] \
             + [item.name for item in self.multiworld.precollected_items[self.player] if item.advancement]
         total_advancement_items = len(
+            # The stonesanity items are not checekd for here and instead just always added as the `+ 4`
+            # They will always exist, but if stonesanity is off, then only as events.
+            # We don't want to just add 4 if stonesanity is off while still putting them in this list in case
+            # the player puts stones in their start inventory, in which case they would be double-counted here.
             [item for item in ["Bicycle", "Silph Scope", "Item Finder", "Super Rod", "Good Rod",
                                "Old Rod", "Lift Key", "Card Key", "Town Map", "Coin Case", "S.S. Ticket",
                                "Secret Key", "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key",
                                "Hideout Key", "Card Key 2F", "Card Key 3F", "Card Key 4F", "Card Key 5F",
                                "Card Key 6F", "Card Key 7F", "Card Key 8F", "Card Key 9F", "Card Key 10F",
-                               "Card Key 11F", "Exp. All", "Moon Stone", "Fire Stone", "Thunder Stone", "Water Stone",
-                               "Leaf Stone"] if item in advancement_items])
+                               "Card Key 11F", "Exp. All", "Moon Stone"] if item in advancement_items]) + 4
         if "Progressive Card Key" in advancement_items:
             total_advancement_items += 10
-        if not self.multiworld.stonesanity[self.player]:
-            total_advancement_items += 4
+
         self.multiworld.cerulean_cave_key_items_condition[self.player].total = round((total_advancement_items / 100)
             * self.multiworld.cerulean_cave_key_items_condition[self.player].value)
 

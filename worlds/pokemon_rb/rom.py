@@ -609,7 +609,6 @@ def generate_output(self, output_directory: str):
         data[rom_addresses['Option_Extra_Key_Items_D']] = 1
     data[rom_addresses["Option_Split_Card_Key"]] = self.multiworld.split_card_key[self.player].value
     data[rom_addresses["Option_Blind_Trainers"]] = round(self.multiworld.blind_trainers[self.player].value * 2.55)
-    # data[rom_addresses['Option_Cerulean_Cave_Condition']] = self.multiworld.cerulean_cave_condition[self.player].value
     data[rom_addresses["Option_Cerulean_Cave_Badges"]] = self.multiworld.cerulean_cave_badges_condition[self.player].value
     data[rom_addresses["Option_Cerulean_Cave_Key_Items"]] = self.multiworld.cerulean_cave_key_items_condition[self.player].total
     write_bytes(data, encode_text(str(self.multiworld.cerulean_cave_badges_condition[self.player].value)), rom_addresses["Text_Cerulean_Cave_Badges"])
@@ -617,7 +616,14 @@ def generate_output(self, output_directory: str):
     data[rom_addresses['Option_Encounter_Minimum_Steps']] = self.multiworld.minimum_steps_between_encounters[self.player].value
     data[rom_addresses['Option_Route23_Badges']] = self.multiworld.victory_road_condition[self.player].value
     data[rom_addresses['Option_Victory_Road_Badges']] = self.multiworld.route_22_gate_condition[self.player].value
-    data[rom_addresses['Option_Pokemon_League_Badges']] = self.multiworld.elite_four_condition[self.player].value
+    # data[rom_addresses['Option_Pokemon_League_Badges']] = self.multiworld.elite_four_condition[self.player].value
+    data[rom_addresses['Option_Elite_Four_Pokedex']] = self.multiworld.elite_four_pokedex_condition[self.player].total
+    data[rom_addresses['Option_Elite_Four_Key_Items']] = self.multiworld.elite_four_key_items_condition[self.player].total
+    data[rom_addresses['Option_Elite_Four_Badges']] = self.multiworld.elite_four_badges_condition[self.player].value
+    write_bytes(data, encode_text(str(self.multiworld.elite_four_badges_condition[self.player].value)), rom_addresses["Text_Elite_Four_Badges"])
+    write_bytes(data, encode_text(str(self.multiworld.elite_four_pokedex_condition[self.player].total) + " key items, and"), rom_addresses["Text_Elite_Four_Key_Items"])
+    write_bytes(data, encode_text(str(self.multiworld.elite_four_pokedex_condition[self.player].total) + " #MON owned."), rom_addresses["Text_Elite_Four_Pokedex"])
+
     data[rom_addresses['Option_Viridian_Gym_Badges']] = self.multiworld.viridian_gym_condition[self.player].value
     data[rom_addresses['Option_EXP_Modifier']] = self.multiworld.exp_modifier[self.player].value
     if not self.multiworld.require_item_finder[self.player]:
@@ -755,7 +761,7 @@ def generate_output(self, output_directory: str):
         shop_data = bytearray([0xFE, len(inventory)])
         shop_data += bytearray([item_table[item].id - 172000000 for item in inventory])
         shop_data.append(0xFF)
-        for shop in range(1, 10):
+        for shop in range(1, 11):
             write_bytes(data, shop_data, rom_addresses[f"Shop{shop}"])
     if self.multiworld.stonesanity[self.player]:
         write_bytes(data, bytearray([0xFE, 1, item_table["Poke Doll"].id - 172000000, 0xFF]), rom_addresses[f"Shop_Stones"])

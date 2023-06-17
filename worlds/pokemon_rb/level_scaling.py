@@ -1,4 +1,4 @@
-from BaseClasses import CollectionState, Location
+from BaseClasses import CollectionState
 from .locations import level_name_list, level_list
 
 
@@ -45,12 +45,33 @@ def level_scaling(multiworld):
                         # Assume they will take their one chance to get the trainer to walk out of the way to reach
                         # the item behind them
                         return True
+                    if (("Rock Tunnel 1F - Wild Pokemon" in location.name
+                            and any([multiworld.get_entrance(e, location.player).connected_region.can_reach(state)
+                                     for e in ['Rock Tunnel 1F-NE to Route 10-N',
+                                               'Rock Tunnel 1F-NE to Rock Tunnel B1F-E',
+                                               'Rock Tunnel 1F-NW to Rock Tunnel B1F-E',
+                                               'Rock Tunnel 1F-NW to Rock Tunnel B1F-W',
+                                               'Rock Tunnel 1F-S to Route 10-S',
+                                               'Rock Tunnel 1F-S to Rock Tunnel B1F-W']])) or
+                            ("Rock Tunnel B1F - Wild Pokemon" in location.name and
+                             any([multiworld.get_entrance(e, location.player).connected_region.can_reach(state)
+                                 for e in ['Rock Tunnel B1F-E to Rock Tunnel 1F-NE',
+                                           'Rock Tunnel B1F-E to Rock Tunnel 1F-NW',
+                                           'Rock Tunnel B1F-W to Rock Tunnel 1F-NW',
+                                           'Rock Tunnel B1F-W to Rock Tunnel 1F-S']]))):
+                        # Even if checks in Rock Tunnel are out of logic due to lack of Flash, it is very easy to
+                        # wander in the dark and encounter wild Pokémon, even unintentionally while attempting to
+                        # leave the way you entered. We'll count the wild Pokémon as reachable as soon as the Rock
+                        # Tunnel is reachable, so you don't have an opportunity to catch high level Pokémon early.
+                        # If the connections between Rock Tunnel floors are vanilla, you will still potentially
+                        # have very high level Pokémon in B1F if you reach it out of logic, but that would always
+                        # mean intentionally breaking the logic you picked in your yaml, and may require
+                        # defeating trainers in 1F that would be at the higher levels.
+                        return True
                     return False
                 if reachable():
                     sphere.add(location)
                     parent_region = location.parent_region
-                    if parent_region.name == "Fossil":
-                        parent_region = multiworld.get_region("Mt Moon B2F", location.player)
                     if getattr(parent_region, "distance", None) is None:
                         distance = 0
                     else:
@@ -63,7 +84,6 @@ def level_scaling(multiworld):
             if sphere:
                 for distance in sorted(distances.keys()):
                     spheres.append(distances[distance])
-                # spheres.append(sphere)
                     locations -= distances[distance]
             else:
                 spheres.append(locations)
@@ -85,7 +105,6 @@ def level_scaling(multiworld):
                         location.item.name.split("Missable ")[-1].split("Static ")[-1]), True, location)
                 else:
                     state.collect(location.item, True, location)
-        #print([len([item for item in sphere if item.type == "Item"]) for sphere in spheres])
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
             if multiworld.level_scaling[world.player] == "off":
                 continue
@@ -111,14 +130,11 @@ def level_scaling(multiworld):
                             if (isinstance(party["party_address"], list) and party["party_address"][0] == object[0]) or party["party_address"] == object[0]:
                                 if isinstance(party["level"], int):
                                     party["level"] = level_list_copy.pop(0)
-                                    #print(f"{party['party_address']} - {party['level']}")
                                 else:
                                     party["level"][object[1]] = level_list_copy.pop(0)
-                                    #print(f"{party['party_address']} - {party['level'][object[1]]}")
                                 break
                     else:
                         sphere_objects[object].level = level_list_copy.pop(0)
-                        #print(f"{sphere_objects[object]} - {sphere_objects[object].level}")
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
             world.finished_level_scaling.set()
 

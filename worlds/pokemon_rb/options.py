@@ -317,15 +317,9 @@ class WarpTileShuffle(Toggle):
     """Shuffle the warp tiles in Silph Co and Sabrina's Gym among themselves, separately.
     On Insanity, turning this off means they are mixed into the general door shuffle instead of only being shuffled
     among themselves."""
+    display_name = "Warp Tile Shuffle"
     default = 0
 
-
-class DoorShuffleSeed(FreeText):
-    """If this is set to a valid integer, it will be used as a set random seed for Door Shuffle and Warp Tile Shuffle.
-    If it is set to random, a random seed number will be chosen.
-    If it is set to anything else, it will be used as a group name, and all players using the same group name will
-    have the same random seed."""
-    default = "random"
 
 class PitchBlackRockTunnel(Toggle):
     """Enable absolute darkness in the Rock Tunnel"""
