@@ -1688,7 +1688,7 @@
         <EffectArray Operation="Set" Reference="Button,AP_Repair,Name" Value="Button/Name/DualFusionRepair"/>
         <EffectArray Operation="Set" Reference="Button,AP_Repair,AlertTooltip" Value="Button/Tooltip/DualFusionRepair"/>
         <EffectArray Operation="Set" Reference="Button,AP_Repair,AlertName" Value="Button/Name/DualFusionRepair"/>
-        <EffectArray Operation="Set" Reference="Actor,AP_SCV,UnitIcon" Value="Assets\Textures\BTN-Unit-Terran-SCVFusionWelder.dds"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_SCV,UnitIcon" Value="AP\Assets\Textures\BTN-Unit-Terran-SCVFusionWelder.dds"/>
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_SCV"/>
     </CUpgrade>
@@ -3661,7 +3661,19 @@
         <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
         <AffectedUnitArray value="AP_Immortal"/>
     </CUpgrade>
-    <CUpgrade id="ImmortalRevive2">
+    <CUpgrade id="AP_ExtendedThermalLance">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-extendedthermallance.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="400"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Weapon,AP_ThermalLances,Range" Value="3.000000"/>
+        <EffectArray Reference="Weapon,AP_ThermalLanceAir,Range" Value="3"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Colossus"/>
+    </CUpgrade>
+    <CUpgrade id="AP_ImmortalRevive">
         <Icon value="Assets\Textures\btn-techupgrade-terran-immortalityprotocol.dds"/>
         <Alert value="ResearchComplete"/>
         <Race value="Prot"/>
@@ -3670,14 +3682,14 @@
         <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
         <AffectedUnitArray value="AP_Immortal"/>
     </CUpgrade>
-    <CUpgrade id="IncreasedRange2">
+    <CUpgrade id="AP_IncreasedRange">
         <Flags index="UpgradeCheat" value="0"/>
         <Icon value="Assets\Textures\aoe_splatterran1c.dds"/>
         <Alert value="ResearchComplete"/>
         <Race value="Prot"/>
         <ScoreAmount value="400"/>
         <ScoreResult value="BuildOrder"/>
-        <EffectArray Reference="Weapon,PhaseDisruptors,Range" Value="2"/>
+        <EffectArray Reference="Weapon,AP_PhaseDisruptors,Range" Value="2"/>
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Immortal"/>
     </CUpgrade>

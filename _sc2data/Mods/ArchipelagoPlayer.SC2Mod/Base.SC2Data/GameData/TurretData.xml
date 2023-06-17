@@ -140,4 +140,11 @@
         <YawIdleRate value="360"/>
         <Fidget DelayMax="30" DelayMin="10"/>
     </CTurret>
+    <CTurret id="AP_Colossus">
+        <Idle value="FollowMovement"/>
+        <YawArc value="360"/>
+        <YawRate value="999.8437"/>
+        <YawIdleRate value="90"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
 </Catalog>

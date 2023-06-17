@@ -4465,4 +4465,147 @@
         <DupeHistoryCount value="4"/>
         <DupeMuteCount value="6"/>
     </CSound>
+    <CSound id="AP_ColossusPurifier_Help" parent="ProtossHelp">
+        <AssetArray File="LocalizedData\Sounds\ProtossUnitVO\Executor\Alert_ProtossForcesUnderAttack.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_ColossusPurifier_Pissed" parent="ProtossPissed">
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_Pissed01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_Pissed02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_Pissed03.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_ColossusPurifier_Ready" parent="ProtossReady">
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_Ready01.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_ColossusPurifier_What" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_What01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_What02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_What03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_What04.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_ColossusPurifier_Yes" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_Yes01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_Yes02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_Yes03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_Yes04.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusPurifier_Yes05.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_ColossusTaldarim_Missile_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Impact01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Impact02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Impact03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Impact04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Impact05_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Impact06_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_ColossusTaldarim_Missile_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Launch01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Launch02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Launch03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Launch04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Missile_Launch05_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="6"/>
+        <Pitch value="-2.000000,1.000000"/>
+        <SustainFade index="1" Time="2500"/>
+        <Volume value="-2.200000,-1.200000"/>
+    </CSound>
+    <CSound id="AP_Wrathwalker_Help" parent="ProtossHelp">
+        <AssetArray File="LocalizedData\Sounds\ProtossUnitVO\Executor\Alert_ProtossForcesUnderAttack.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Wrathwalker_Pissed" parent="ProtossPissed">
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_Pissed00.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_Pissed01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_Pissed02.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_Wrathwalker_Ready" parent="ProtossReady">
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_Ready00.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_Wrathwalker_What" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_What00.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_What01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_What02.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_Wrathwalker_Yes" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_Yes00.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_Yes01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Wrathwalker_Yes02.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_ColossusPurifier_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackLaunch01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackLaunch02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackLaunch03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackLaunch04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackLaunch05_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-2.000000,1.000000"/>
+        <SustainFade index="1" Time="2500"/>
+        <Volume value="-5.200000,-5.200000"/>
+    </CSound>
+    <CSound id="AP_ColossusPurifier_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackImpact01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackImpact02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackImpact03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackImpact04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ColossusTaldarim_Beam_AttackImpact05_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-8.000000,-8.000000"/>
+        <PlayDelay value="0,60"/>
+    </CSound>
+    <CSound id="AP_Moebius02_Reactor_Fire_Flare" parent="Ambience_Object">
+        <AssetArray File="Assets\Sounds\Korhal_SkyShield_Fire_FlareUp_02.wav" Volume="2.000000,2.000000" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Korhal_SkyShield_Fire_FlareUp_03.wav" Volume="2.000000,2.000000" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-2.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_VoidShard_UnstableEnergy_LaunchElectricRip" parent="Ambience_Object">
+        <EditorCategories value="Race:Neutral"/>
+        <AssetArray File="Assets\Sounds\2D_Electric_Rip.wav" FacialGroup=""/>
+        <PanLevel value="0.940000"/>
+        <Pitch value="0.000000,2.000000"/>
+        <Spread value="20.000000"/>
+        <Volume value="3.000000,3.000000"/>
+    </CSound>
+    <CSound id="AP_SOASolarLanceLaunch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch05_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch06_1ch.wav" FacialGroup=""/>
+        <Volume value="6.000000,6.000000"/>
+        <VolumeRolloffPoints Distance="18.000000"/>
+        <VolumeRolloffPoints Distance="40.000000" Volume="-96.000000"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="4"/>
+        <SpeakerMix index="LFE" value="0.300000"/>
+        <Spread value="90.000000"/>
+    </CSound>
 </Catalog>

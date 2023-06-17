@@ -1787,4 +1787,18 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-invulnerabilityshield.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_CliffWalk">
+        <Icon value="Assets\Textures\BTN-ability-Protoss-cliffwalk-color.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-ability-Protoss-cliffwalk-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidColossusChargedBlast">
+        <Icon value="Assets\Textures\btn-ability-protoss-chargedblast.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-chargedblast.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidColossusFireBeam">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-FireBeam.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

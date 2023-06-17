@@ -7692,4 +7692,261 @@
         <WhichUnit Value="Caster"/>
         <BehaviorLink value="AP_MutaliskRapidRegen"/>
     </CEffectRemoveBehavior>
+    <CEffectSet id="AP_ColossusPurifierThermalLances">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ColossusPurifierThermalLancesForward"/>
+        <EffectArray value="AP_ColossusPurifierThermalLancesReverse"/>
+        <EffectArray value="AP_ThermalLancesFireBeam"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_ColossusPurifierThermalLancesDamage" parent="DU_WEAP">
+        <!-- This validator doesn't exist in vanilla -->
+        <ValidatorArray value="AP_ColossusPurifierThermalLancesCliffLevel"/>
+        <ValidatorArray value="NotHidden"/>
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Visible"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="20"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_ColossusPurifierThermalLancesDamageDelay">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="0.25"/>
+        <FinalEffect value="AP_ColossusPurifierThermalLancesDamage"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_ColossusPurifierThermalLancesForward">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireDelay value="0.375"/>
+        <ExpireEffect value="AP_ColossusPurifierThermalLancesDamage"/>
+        <PeriodCount value="11"/>
+        <PeriodicEffectArray value="AP_ColossusPurifierThermalLancesSearch"/>
+        <PeriodicOffsetArray value="-1.25,0,0"/>
+        <PeriodicOffsetArray value="-1,0,0"/>
+        <PeriodicOffsetArray value="-0.75,0,0"/>
+        <PeriodicOffsetArray value="-0.5,0,0"/>
+        <PeriodicOffsetArray value="-0.25,0,0"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="0.25,0,0"/>
+        <PeriodicOffsetArray value="0.5,0,0"/>
+        <PeriodicOffsetArray value="0.75,0,0"/>
+        <PeriodicOffsetArray value="1,0,0"/>
+        <PeriodicOffsetArray value="1.25,0,0"/>
+        <PeriodicPeriodArray value="0.0312"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_ColossusPurifierThermalLancesReverse">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireDelay value="0.375"/>
+        <ExpireEffect value="AP_ColossusPurifierThermalLancesDamage"/>
+        <PeriodCount value="11"/>
+        <PeriodicEffectArray value="AP_ColossusPurifierThermalLancesSearchReverse"/>
+        <PeriodicOffsetArray value="1.25,0,0"/>
+        <PeriodicOffsetArray value="1,0,0"/>
+        <PeriodicOffsetArray value="0.75,0,0"/>
+        <PeriodicOffsetArray value="0.5,0,0"/>
+        <PeriodicOffsetArray value="0.25,0,0"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="-0.25,0,0"/>
+        <PeriodicOffsetArray value="-0.5,0,0"/>
+        <PeriodicOffsetArray value="-0.75,0,0"/>
+        <PeriodicOffsetArray value="-1,0,0"/>
+        <PeriodicOffsetArray value="-1.25,0,0"/>
+        <PeriodicPeriodArray value="0.0312"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_ColossusPurifierThermalLancesSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.15" Effect="AP_ColossusPurifierThermalLancesDamageDelay"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_ColossusPurifierThermalLancesSearchReverse">
+        <EditorCategories value="Race:Protoss"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.15" Effect="AP_ColossusPurifierThermalLancesDamageDelay"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_ColossusTaldarimDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Structure" value="75"/>
+        <Kind value="Ranged"/>
+        <Amount value="100"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_ColossusTaldarimLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_ColossusTaldarimDamage"/>
+        <AmmoUnit value="AP_ColossusTaldarimWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_ThermalLances">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ThermalLancesForward"/>
+        <EffectArray value="AP_ThermalLancesReverse"/>
+        <EffectArray value="AP_ThermalLancesFriendlyCP"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_ThermalLancesDamageDelay">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="0.25"/>
+        <FinalEffect value="AP_ThermalLancesMU"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_ThermalLancesE">
+        <EditorCategories value="Race:Protoss"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.15" Effect="AP_ThermalLancesDamageDelay"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_ThermalLancesEReverse">
+        <EditorCategories value="Race:Protoss"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.15" Effect="AP_ThermalLancesDamageDelay"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_ThermalLancesFireBeam">
+        <ValidatorArray value="AP_IsNotLaserTentacle"/>
+        <ValidatorArray value="AP_IsNotVoidCrystal"/>
+        <ValidatorArray value="AP_IsNotOmniaClaw"/>
+        <ValidatorArray value="AP_IsNotAnimaSpike"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <ExpireDelay value="0.375"/>
+        <PeriodCount value="4"/>
+        <PeriodicEffectArray value="AP_ThermalLancesFireBeamCP"/>
+        <PeriodicOffsetArray value="-1.5,0,0"/>
+        <PeriodicOffsetArray value="1.5,0,0"/>
+        <PeriodicOffsetArray value="-0.5,0,0"/>
+        <PeriodicOffsetArray value="0.5,0,0"/>
+        <PeriodicPeriodArray value="0.125"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_ThermalLancesFireBeamAB">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_ThermalLancesFireBeam"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_ThermalLancesFireBeamCP">
+        <EditorCategories value="Race:Protoss"/>
+        <TimeScaleSource Value="Caster"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="AP_ThermalLancesFireBeamSearch"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_ThermalLancesFireBeamDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Hidden"/>
+        <Amount value="10"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_ThermalLancesFireBeamSearch">
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="0.5" Effect="AP_ThermalLancesFireBeamAB"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_ThermalLancesForward">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireDelay value="0.73"/>
+        <ExpireEffect value="AP_ThermalLancesMU"/>
+        <PeriodCount value="11"/>
+        <PeriodicEffectArray value="AP_ThermalLancesE"/>
+        <PeriodicOffsetArray value="-1.25,0,0"/>
+        <PeriodicOffsetArray value="-1,0,0"/>
+        <PeriodicOffsetArray value="-0.75,0,0"/>
+        <PeriodicOffsetArray value="-0.5,0,0"/>
+        <PeriodicOffsetArray value="-0.25,0,0"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="0.25,0,0"/>
+        <PeriodicOffsetArray value="0.5,0,0"/>
+        <PeriodicOffsetArray value="0.75,0,0"/>
+        <PeriodicOffsetArray value="1,0,0"/>
+        <PeriodicOffsetArray value="1.25,0,0"/>
+        <PeriodicPeriodArray value="0.025"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_ThermalLancesFriendlyCP">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireDelay value="0.2"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_ThermalLancesFriendlyDamage"/>
+        <PeriodicEffectArray value="AP_ThermalLancesFriendlyDamage"/>
+        <PeriodicPeriodArray value="0.09"/>
+        <PeriodicPeriodArray value="0.09"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_ThermalLancesFriendlyDamage" parent="DU_WEAP">
+        <Name value="Effect/Name/AP_ThermalLancesMU"/>
+        <!-- Thiv validator doesn't exist in vanilla -->
+        <ValidatorArray value="AP_ThermalLancesCliffLevel"/>
+        <ValidatorArray value="NotHidden"/>
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="FriendlyTarget"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Marker Link="Effect/ThermalLancesMU"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="15"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_ThermalLancesMU" parent="DU_WEAP">
+        <!-- Thiv validator doesn't exist in vanilla -->
+        <ValidatorArray value="ThermalLancesCliffLevel"/>
+        <ValidatorArray value="NotHidden"/>
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="15"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_ThermalLancesReverse">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <ExpireDelay value="0.73"/>
+        <ExpireEffect value="AP_ThermalLancesMU"/>
+        <PeriodCount value="11"/>
+        <PeriodicEffectArray value="AP_ThermalLancesEReverse"/>
+        <PeriodicOffsetArray value="1.25,0,0"/>
+        <PeriodicOffsetArray value="1,0,0"/>
+        <PeriodicOffsetArray value="0.75,0,0"/>
+        <PeriodicOffsetArray value="0.5,0,0"/>
+        <PeriodicOffsetArray value="0.25,0,0"/>
+        <PeriodicOffsetArray value="0,0,0"/>
+        <PeriodicOffsetArray value="-0.25,0,0"/>
+        <PeriodicOffsetArray value="-0.5,0,0"/>
+        <PeriodicOffsetArray value="-0.75,0,0"/>
+        <PeriodicOffsetArray value="-1,0,0"/>
+        <PeriodicOffsetArray value="-1.25,0,0"/>
+        <PeriodicPeriodArray value="0.025"/>
+    </CEffectCreatePersistent>
 </Catalog>

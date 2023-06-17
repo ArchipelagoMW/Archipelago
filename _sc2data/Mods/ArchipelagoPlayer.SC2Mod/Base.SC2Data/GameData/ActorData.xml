@@ -4406,10 +4406,477 @@
         <On Terms="Signal.*.DarkProtossTest; ValidateUnit AP_NoDarkProtoss" Target="::actor.sender" Send="Signal DarkProtossSwap"/>
         <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
         <LaunchAssets Sound="AP_Annihilator_AttackLaunch"/>
-        <ImpactMap index="None" Model="AP_AnnihilatorAttackImpact" Sound="AP_Annihilator_AttackImpact"/>
+        <ImpactMap index="None" Sound="AP_Annihilator_AttackImpact"/>
         <ImpactModel value="AP_DarkImmortalTestImpact"/>
         <ImpactPhysics Name="PhaseDisrupterImpact" MatchKeys="Basic" Physics="ImmortalAttackDeathForce"/>
     </CActorAction>
+    <CActorUnit id="AP_Colossus" parent="GenericUnitBase" unitName="AP_Colossus">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <Remove Terms="WeaponStart.AP_ThermalLances.AttackStart" Send="AnimPlay Attack Stand,Channel,Start"/>
+        <Remove Terms="WeaponStop.AP_ThermalLances.AttackStop" Send="AnimClear Attack"/>
+        <On Terms="WeaponStart.AP_ThermalLances.AttackStart" Send="AnimPlay Attack Stand,Channel,Start"/>
+        <On Terms="WeaponStop.AP_ThermalLances.AttackStop" Send="AnimClear Attack"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundLarge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <!-- TODO: AP_Warp Prism? -->
+        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackLaunchSite" Send="Destroy"/>
+        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackImpactSite" Send="Destroy"/>
+        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeam" Send="Destroy"/>
+        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamImpact" Send="Destroy"/>
+        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackLaunchSiteReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackImpactSiteReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamImpactReverse" Send="Destroy"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Colossus_Land"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkColossus"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkColossus"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsConstructing" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_DarkProtossAndNotUnderConstruction" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_DarkProtossAndUnderConstruction" Send="DeathCustomize Variation0"/>
+        <On Terms="Effect.AP_ThermalLancesForward.Start" Send="AnimBracketStart Attack Stand,Channel,Start Stand,Channel Stand,Channel,End"/>
+        <On Terms="Effect.AP_ThermalLancesForward.Stop" Send="AnimBracketStop Attack"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <Model value="Colossus"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="ColossusWarpIn"/>
+        <DeathArray index="Normal" ModelLink="ColossusDeath"/>
+        <DeathArray index="UnderConstruction" ModelLink="ProtossMediumUnitDeath" SoundLink="Colossus_Explode"/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <DeathCustoms ModelLink="HallucinationColossusDeath" SoundLink="Sentry_HallucinationDeathLarge" Name="Hallucination"/>
+        <DeathCustoms ActorModel="ColossusDeathRagdoll" ModelLink="ColossusDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ModelLink="ProtossMediumUnitDeath" Name="Variation0"/>
+        <DeathCustoms ModelLink="DarkColossusDeath" Name="DarkProtoss"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowLarge"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <PlacementModel value="ColossusPlacement"/>
+        <PortraitModel value="ColossusPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeUp value="2.750000"/>
+            <RangeDown value="0.100000"/>
+            <AttachQuery Methods="AMFilterHardpoint"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeUp value="3.000000"/>
+            <RangeDown value="0.250000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLargeVehicle"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.1445"/>
+        <BarOffset value="250"/>
+        <BarWidth value="140"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Colossus.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-colossus.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Colossus_Ready"/>
+        <SoundArray index="What" value="Colossus_What"/>
+        <SoundArray index="Yes" value="Colossus_Yes"/>
+        <SoundArray index="Pissed" value="Colossus_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-colossus.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Colossus.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Colossus-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Colossus-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Colossus-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_Colossus_Land" parent="SoundOneShot">
+        <Sound value="Colossus_Land"/>
+    </CActorSound>
+    <CActorSite id="AP_ColossusAttackLaunchSite" parent="SiteUNIT">
+        <Aliases value="_LaunchGuide"/>
+        <HostSiteOps Ops="SOpAttachWeapon02"/>
+    </CActorSite>
+    <CActorBeamSimple id="AP_ColossusAttackBeam">
+        <Terms value="Cap 1"/>
+        <On Terms="ActorCreation" Send="Create AP_ColossusAttackBeamImpact"/>
+        <On Terms="ActorCreation" Send="Create AP_ColossusAttackLaunchSound"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Signal.*.Arrival" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Target="AP_ColossusAttackImpactSite" Send="MoverMove"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="Effect.AP_ThermalLancesE.Impact" Send="Create"/>
+        <Model value="ColossusAttackBeam"/>
+        <HostLaunch Subject="AP_ColossusAttackLaunchSite" Scope="Caster" Actor="Create"/>
+        <HostImpact Subject="AP_ColossusAttackImpactSite"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_ColossusAttackLaunchSound" parent="SoundOneShot">
+        <Sound value="Colossus_AttackLaunch"/>
+        <Host Subject="Colossus"/>
+    </CActorSound>
+    <CActorModel id="AP_ColossusAttackBeamImpact">
+        <Model value="ColossusAttackBeamImpact"/>
+        <Host Subject="AP_ColossusAttackImpactSite"/>
+        <Supporter Subject="::Creator"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorCreation" Send="Create AP_ColossusAttackImpactSound"/>
+        <On Terms="SupporterDestruction" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+    </CActorModel>
+    <CActorSound id="AP_ColossusAttackImpactSound" parent="SoundOneShot">
+        <Sound value="Colossus_AttackImpact"/>
+        <Host Subject="::Creator"/>
+    </CActorSound>
+    <CActorBeamSimple id="AP_ColossusAttackBeamReverse">
+        <Terms value="Cap 1"/>
+        <On Terms="ActorCreation" Send="Create AP_ColossusAttackBeamImpactReverse"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Signal.*.Arrival" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Target="AP_ColossusAttackImpactSiteReverse" Send="MoverMove"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="Effect.AP_ThermalLancesEReverse.Impact" Send="Create"/>
+        <Model value="ColossusAttackBeam"/>
+        <HostLaunch Subject="AP_ColossusAttackLaunchSiteReverse" Scope="Caster" Actor="Create"/>
+        <HostImpact Subject="AP_ColossusAttackImpactSiteReverse"/>
+    </CActorBeamSimple>
+    <CActorSite id="AP_ColossusAttackLaunchSiteReverse" parent="SiteUNIT">
+        <Aliases value="_LaunchGuide"/>
+        <HostSiteOps Ops="SOpAttachWeapon03"/>
+    </CActorSite>
+    <CActorModel id="AP_ColossusAttackBeamImpactReverse">
+        <Model value="ColossusAttackBeamImpact"/>
+        <Host Subject="AP_ColossusAttackImpactSiteReverse"/>
+        <Supporter Subject="::Creator"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="SupporterDestruction" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+    </CActorModel>
+    <CActorSiteMover id="AP_ColossusAttackImpactSite">
+        <Terms value="Cap 1"/>
+        <Sharing value="PerEffectTree"/>
+        <On Terms="Effect.AP_ThermalLancesE.Impact" Send="Create"/>
+        <On Terms="Effect.AP_ThermalLancesE.Impact; At Effect" Send="MoverSetDestination2D"/>
+        <On Terms="MoverArrived" Target="AP_ColossusAttackBeam" Send="Signal Arrival"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Acceleration value="40.000000"/>
+        <Deceleration value="40.000000"/>
+        <Speed value="2.000000"/>
+        <SpeedMax value="4.100000"/>
+    </CActorSiteMover>
+    <CActorSiteMover id="AP_ColossusAttackImpactSiteReverse">
+        <Terms value="Cap 1"/>
+        <Sharing value="PerEffectTree"/>
+        <On Terms="Effect.AP_ThermalLancesEReverse.Impact" Send="Create"/>
+        <On Terms="Effect.AP_ThermalLancesEReverse.Impact; At Effect" Send="MoverSetDestination2D"/>
+        <On Terms="MoverArrived" Target="AP_ColossusAttackBeamReverse" Send="Signal Arrival"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Acceleration value="40.000000"/>
+        <Deceleration value="40.000000"/>
+        <Speed value="2.000000"/>
+        <SpeedMax value="4.100000"/>
+    </CActorSiteMover>
+    <CActorAction id="AP_ColossusAttackShieldHitter" parent="AoEAttackShieldHitter" effectHit="AP_ThermalLancesMU">
+        <LaunchRequest Subject="AP_ColossusAttackLaunchSite" Scope="Caster"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+    </CActorAction>
+    <CActorUnit id="AP_ColossusPurifier" parent="GenericUnitBase" unitName="AP_ColossusPurifier">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="Effect.AP_ThermalLancesForward.Start" Send="AnimBracketStart Attack Stand,Channel,Start Stand,Channel Stand,Channel,End"/>
+        <On Terms="Effect.AP_ThermalLancesForward.Stop" Send="AnimBracketStop Attack"/>
+        <!-- TODO: AP_Warp Prism? -->
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackLaunchSite" Send="Destroy"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackImpactSite" Send="Destroy"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeam" Send="Destroy"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamImpact" Send="Destroy"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackLaunchSiteReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackImpactSiteReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamImpactReverse" Send="Destroy"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Colossus_Land"/>
+        <Model value="AP_ColossusPurifier"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="ColossusPurifierWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ColossusPurifierDeath" SoundLink=""/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <DeathCustoms ModelLink="HallucinationColossusDeath" SoundLink="Sentry_HallucinationDeathLarge" Name="Hallucination"/>
+        <PlacementModel value="AP_ColossusPurifierPlacement"/>
+        <PortraitModel value="AP_ColossusPurifierPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeUp value="2.750000"/>
+            <RangeDown value="0.100000"/>
+            <AttachQuery Methods="AMFilterHardpoint"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeUp value="3.000000"/>
+            <RangeDown value="0.250000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLargeVehicle"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.1445"/>
+        <BarOffset value="250"/>
+        <BarWidth value="140"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-purifier.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-colossus-purifier.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_ColossusPurifier_Ready"/>
+        <SoundArray index="Help" value="AP_ColossusPurifier_Help"/>
+        <SoundArray index="What" value="AP_ColossusPurifier_What"/>
+        <SoundArray index="Yes" value="AP_ColossusPurifier_Yes"/>
+        <SoundArray index="Pissed" value="AP_ColossusPurifier_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-colossus-purifier.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-purifier.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-purifier-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-purifier-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-purifier-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorBeamSimple id="AP_ColossusPurifierAttackBeam">
+        <Terms value="Cap 1"/>
+        <On Terms="ActorCreation" Send="Create AP_ColossusPurifierAttackBeamImpact"/>
+        <On Terms="ActorCreation" Send="Create AP_ColossusPurifierAttackLaunchSound"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Signal.*.Arrival" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Target="AP_ColossusPurifierAttackImpactSite" Send="MoverMove"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="Effect.AP_ColossusPurifierThermalLancesSearch.Impact" Send="Create"/>
+        <Model value="AP_ColossusPurifierAttackBeam"/>
+        <HostLaunch Subject="AP_ColossusPurifierAttackLaunchSite" Scope="Caster" Actor="Create"/>
+        <HostImpact Subject="AP_ColossusPurifierAttackImpactSite"/>
+    </CActorBeamSimple>
+    <CActorSite id="AP_ColossusPurifierAttackLaunchSite" parent="SiteUNIT">
+        <Aliases value="_LaunchGuide"/>
+        <HostSiteOps Ops="SOpAttachWeapon02"/>
+    </CActorSite>
+    <CActorSound id="AP_ColossusPurifierAttackLaunchSound" parent="SoundOneShot">
+        <Host Subject="AP_ColossusPurifier"/>
+        <Sound value="AP_ColossusPurifier_AttackLaunch"/>
+        <Layers>
+            <Sound value="AP_SOASolarLanceLaunch"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="2.000000,2.000000"/>
+            <PlayDelay value="200,220"/>
+            <Volume value="-11.000000,-11.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorModel id="AP_ColossusPurifierAttackBeamImpact">
+        <Host Subject="AP_ColossusPurifierAttackImpactSite"/>
+        <Supporter Subject="::Creator"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="ActorCreation" Send="Create AP_ColossusPurifierAttackImpactSound"/>
+        <On Terms="SupporterDestruction" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+    </CActorModel>
+    <CActorSound id="AP_ColossusPurifierAttackImpactSound" parent="SoundOneShot">
+        <Host Subject="AP_ColossusPurifier"/>
+        <Sound value="AP_ColossusPurifier_AttackImpact"/>
+        <Layers>
+            <Sound value="AP_Moebius02_Reactor_Fire_Flare"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="6.000000,6.000000"/>
+            <PlayDelay value="100,150"/>
+            <Volume value="-14.000000,-14.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorBeamSimple id="AP_ColossusPurifierAttackBeamReverse">
+        <Terms value="Cap 1"/>
+        <On Terms="ActorCreation" Send="Create AP_ColossusPurifierAttackBeamImpactReverse"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="Signal.*.Arrival" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Target="AP_ColossusPurifierAttackImpactSiteReverse" Send="MoverMove"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <On Terms="Effect.AP_ColossusPurifierThermalLancesSearchReverse.Impact" Send="Create"/>
+        <Model value="AP_ColossusPurifierAttackBeam"/>
+        <HostLaunch Subject="AP_ColossusPurifierAttackLaunchSiteReverse" Scope="Caster" Actor="Create"/>
+        <HostImpact Subject="AP_ColossusPurifierAttackImpactSiteReverse"/>
+    </CActorBeamSimple>
+    <CActorSite id="AP_ColossusPurifierAttackLaunchSiteReverse" parent="SiteUNIT">
+        <Aliases value="_LaunchGuide"/>
+        <HostSiteOps Ops="SOpAttachWeapon03"/>
+    </CActorSite>
+    <CActorModel id="AP_ColossusPurifierAttackBeamImpactReverse">
+        <Model value="AP_ColossusPurifierAttackBeamImpact"/>
+        <Host Subject="AP_ColossusPurifierAttackImpactSiteReverse"/>
+        <Supporter Subject="::Creator"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On Terms="SupporterDestruction" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+    </CActorModel>
+    <CActorModel id="AP_ColossusPurifierAttackBeamUnitImpact" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_ThermalLancesFireBeam.On" Send="Create"/>
+        <On Terms="Behavior.AP_ThermalLancesFireBeam.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_ColossusPurifierAttackBeamUnitImpact"/>
+        <AutoScaleFactor value="1.000000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorSiteMover id="AP_ColossusPurifierAttackImpactSite">
+        <Terms value="Cap 1"/>
+        <Sharing value="PerEffectTree"/>
+        <On Terms="Effect.AP_ColossusPurifierThermalLancesSearch.Impact" Send="Create"/>
+        <On Terms="Effect.AP_ColossusPurifierThermalLancesSearch.Impact; At Effect" Send="MoverSetDestination2D"/>
+        <On Terms="MoverArrived" Target="AP_ColossusPurifierAttackBeam" Send="Signal Arrival"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Acceleration value="40.000000"/>
+        <Deceleration value="40.000000"/>
+        <Speed value="2.000000"/>
+        <SpeedMax value="4.100000"/>
+    </CActorSiteMover>
+    <CActorSiteMover id="AP_ColossusPurifierAttackImpactSiteReverse">
+        <Terms value="Cap 1"/>
+        <Sharing value="PerEffectTree"/>
+        <On Terms="Effect.AP_ColossusPurifierThermalLancesSearchReverse.Impact" Send="Create"/>
+        <On Terms="Effect.AP_ColossusPurifierThermalLancesSearchReverse.Impact; At Effect" Send="MoverSetDestination2D"/>
+        <On Terms="MoverArrived" Target="AP_ColossusPurifierAttackBeamReverse" Send="Signal Arrival"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Acceleration value="40.000000"/>
+        <Deceleration value="40.000000"/>
+        <Speed value="2.000000"/>
+        <SpeedMax value="4.100000"/>
+    </CActorSiteMover>
+    <CActorAction id="AP_ColossusPurifierAttackShieldHitter" parent="AoEAttackShieldHitter" effectHit="AP_ColossusPurifierThermalLancesDamage">
+        <LaunchRequest Subject="AP_ColossusPurifierAttackLaunchSite" Scope="Caster"/>
+        <ActionFlags index="VictimRevealsAttacker" value="1"/>
+    </CActorAction>
+    <CActorUnit id="AP_ColossusTaldarim" parent="GenericUnitBase" unitName="AP_ColossusTaldarim">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="WeaponStart.AP_ColossusTaldarimChargedBeam.AttackStart" Send="Create AP_ColossusTaldarimChargedMissilePowerUpSound"/>
+        <On Terms="WeaponStart.AP_ColossusTaldarimChargedBeam.AttackStart" Send="Create AP_ColossusTaldarimChargedBeamPowerUpModel"/>
+        <On Terms="WeaponStart.AP_ColossusTaldarimChargedBeam.AttackStart" Send="AnimBracketStart Attack Stand,Channel,Start Stand,Channel Stand,Channel,End"/>
+        <On Terms="Effect.AP_ColossusTaldarimLM.Launch" Send="AnimBracketStop Attack"/>
+        <On Terms="TimerExpired; TimerName BeamDestroy" Target="AP_ColossusTaldarimChargedBeamPowerUpModel" Send="Destroy"/>
+        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusTaldarimAttackBeam" Send="Destroy"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Colossus_Land"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_ColossusTaldarimWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ColossusTaldarimDeath" SoundLink=""/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <DeathCustoms ModelLink="HallucinationColossusDeath" SoundLink="Sentry_HallucinationDeathLarge" Name="Hallucination"/>
+        <PlacementModel value="AP_ColossusTaldarimPlacement"/>
+        <PortraitModel value="AP_ColossusTaldarimPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeUp value="2.750000"/>
+            <RangeDown value="0.100000"/>
+            <AttachQuery Methods="AMFilterHardpoint"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeUp value="3.000000"/>
+            <RangeDown value="0.250000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLargeVehicle"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.1445"/>
+        <BarOffset value="250"/>
+        <BarWidth value="140"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-taldarim.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-colossus-taldarim.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Wrathwalker_Ready"/>
+        <SoundArray index="Help" value="AP_Wrathwalker_Help"/>
+        <SoundArray index="What" value="AP_Wrathwalker_What"/>
+        <SoundArray index="Yes" value="AP_Wrathwalker_Yes"/>
+        <SoundArray index="Pissed" value="AP_Wrathwalker_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-colossus-taldarim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-taldarim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-taldarim-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-taldarim-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-colossus-taldarim-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_ColossusTaldarimChargedBeamPowerUpModel" parent="ModelAnimationStyleOneShot">
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachHead"/>
+    </CActorModel>
+    <CActorSound id="AP_ColossusTaldarimChargedMissilePowerUpSound">
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On index="1" removed="1"/>
+        <On index="2" removed="1"/>
+        <On index="3" removed="1"/>
+        <Host Scope="Target"/>
+        <Layers Sound="AP_VoidShard_UnstableEnergy_LaunchElectricRip">
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-20.000000,-20.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorAction id="AP_ColossusTaldarimAttack" parent="GenericAttack" effectImpact="AP_ColossusTaldarimDamage" effectLaunch="AP_ColossusTaldarimLM">
+        <LaunchAttachQuery Methods="Head"/>
+        <LaunchAssets Sound="AP_ColossusTaldarim_Missile_AttackLaunch"/>
+        <Missile value="AP_ColossusTaldarimAttackMissile"/>
+        <ImpactMap index="None" Model="AP_ColossusTaldarimAttackBeamImpact" Sound="AP_ColossusTaldarim_Missile_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_ColossusTaldarimAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="AP_ColossusTaldarimWeapon"/>
+    <CActorRegionCircle id="AP_ColossusTreeKiller">
+        <On Terms="Effect.AP_ThermalLancesE.Start; At Effect" Send="Create"/>
+        <On Terms="Effect.AP_ThermalLancesEReverse.Start; At Effect" Send="Create"/>
+        <On Terms="ActorCreation" Send="QueryRegion ::Self TreeBurnQuery AgainstCenter"/>
+        <On Terms="Effect.AP_ThermalLancesE.Start; At Effect" Send="Destroy"/>
+        <On Terms="Effect.AP_ThermalLancesEReverse.Start; At Effect" Send="Destroy"/>
+        <Radius value="0.150000"/>
+    </CActorRegionCircle>
+    <CActorTurret id="AP_ColossusTurret">
+        <On Terms="TurretEnable.AP_Colossus" Send="Create"/>
+    </CActorTurret>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -9188,12 +9655,11 @@
     <CActorAction id="AP_ImmortalShakurasAirAttack" parent="GenericAttack" effectAttack="AP_ImmortalShakurasAir">
         <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
         <LaunchAssets Sound="Immortal_AttackLaunch"/>
-        <ImpactMap index="None" Model="AP_ImmortalShakurasAirAttackImpact" Sound="Immortal_AttackImpact"/>
+        <ImpactMap index="None" Sound="Immortal_AttackImpact"/>
     </CActorAction>
     <CActorAction id="AP_ImmortalShakurasAntiAirMissilesAttack" parent="GenericAttack" effectImpact="AP_ImmortalShakurasAntiAirMissilesDamage" effectLaunch="AP_ImmortalShakurasAntiAirMissilesLM">
         <LaunchAttachQuery Methods="AMFilterWeapon AP_AMPatternImmortalShakuras"/>
         <LaunchAssets Model="TornadoMissileAttackLaunch" Sound="WarHound_Missile_Launch"/>
-        <Missile value="AP_ImmortalShakurasAntiAirMissilesAttackMissile"/>
         <ImpactMap index="None" Model="AP_ScoutAirLeftAttackImpact" Sound="AP_Scout_AirAttackImpact"/>
         <ImpactPhysics Name="TornadoMissileImpact" MatchKeys="Basic" Physics="WarhoundMissileAttackForce"/>
     </CActorAction>
@@ -9204,14 +9670,13 @@
     <CActorAction id="AP_ImmortalShakurasGroundAttack" parent="GenericAttack" effectAttack="AP_ImmortalShakurasGround">
         <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
         <LaunchAssets Sound="Immortal_AttackLaunch"/>
-        <ImpactMap index="None" Model="AP_ImmortalShakurasGroundAttackImpact" Sound="Immortal_AttackImpact"/>
+        <ImpactMap index="None" Sound="Immortal_AttackImpact"/>
     </CActorAction>
     <CActorAction id="AP_ImmortalShakurasShadowCannonAttack" parent="GenericAttack" effectImpact="AP_ImmortalShakurasShadowCannonDamage" effectLaunch="AP_ImmortalShakurasShadowCannonLM">
         <LaunchAttachQuery Methods="AP_AMPatternImmortalShakuras"/>
-        <LaunchAssets Model="AP_ImmortalShakurasShadowCannonAttackLaunch" Sound="AP_ImmortalShakuras_ShadowCannon_AttackLaunch"/>
-        <Missile value="AP_ImmortalShakurasShadowCannonAttackMissile"/>
+        <LaunchAssets Sound="AP_ImmortalShakuras_ShadowCannon_AttackLaunch"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
-        <ImpactMap index="None" Model="AP_ImmortalShakurasShadowCannonAttackImpact" Sound="AP_ImmortalShakuras_ShadowCannon_AttackImpact"/>
+        <ImpactMap index="None" Sound="AP_ImmortalShakuras_ShadowCannon_AttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_ImmortalShakurasShadowCannonAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="AP_ImmortalShakurasShadowCannonMissile"/>
     <CActorRange id="AP_ImmortalShakurasShadowCannonRange" parent="RangeAbil" abil="AP_ImmortalShakurasShadowCannon">
@@ -9225,7 +9690,6 @@
         <On Terms="ActorCreation" Send="SetTintColor {0,255,255 3.000000}"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="AP_ImmortalStasisHealImpact"/>
     </CActorModel>
     <CActorModel id="AP_ImmortalSuperCannonsImpactLeft" parent="ModelAnimationStyleContinuous">
         <EditorCategories value=""/>

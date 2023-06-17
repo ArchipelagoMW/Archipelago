@@ -711,4 +711,60 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
     </CLight>
+    <CLight id="AP_PortraitTaldarimColossus" parent="default">
+        <ToDInfoArray index="0">
+            <Id value="Cybros"/>
+            <AmbientColor value="0.282353,0.282353,0.282353"/>
+            <OperatorHDR value="2"/>
+            <Colorize value="1"/>
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRBloomThreshold" value="3.475000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+            <Param index="ShadowPenumbraSize" value="0.093000"/>
+            <DirectionalLight index="Key">
+                <Color value="1.000000,0.549020,0.549020"/>
+                <ColorMultiplier value="1.841000"/>
+                <SpecColorMultiplier value="3.055000"/>
+                <Direction value="0.701542,0.497639,-0.510093"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.184314,0.227451,0.231373" ColorMultiplier="4.074000" Direction="-0.831387,0.437970,0.342020"/>
+            <DirectionalLight index="Back" Color="0.200000,0.231373,0.282353" ColorMultiplier="2.065000" Direction="-0.558844,0.279483,0.780758"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
+    <CLight id="AP_PortraitPurifierColossus" parent="default">
+        <ToDInfoArray index="0">
+            <Id value="Cybros"/>
+            <AmbientColor value="0.282353,0.282353,0.282353"/>
+            <OperatorHDR value="2"/>
+            <Colorize value="1"/>
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRBloomThreshold" value="1.300000"/>
+            <Param index="HDRWhitePoint" value="1.850000"/>
+            <Param index="TerrainSpecularExp" value="11.210000"/>
+            <Param index="TerrainHDRSpecular" value="3.750000"/>
+            <Param index="CreepSpecularExp" value="30.000000"/>
+            <Param index="CreepHDRSpecMultiplier" value="3.000000"/>
+            <Param index="ColorizationContrast" value="1.066000"/>
+            <Param index="ColorizationHue" value="0.001000"/>
+            <Param index="ColorizationBlend" value="0.300000"/>
+            <Param index="ShadowPenumbraSize" value="0.093000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.945098,0.835294,0.603922"/>
+                <ColorMultiplier value="0.331000"/>
+                <SpecColorMultiplier value="3.055000"/>
+                <Direction value="-0.593846,0.343826,-0.727414"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.184314,0.227451,0.231373" ColorMultiplier="2.786000" Direction="0.253995,0.430682,0.866025"/>
+            <DirectionalLight index="Back" Color="0.200000,0.231373,0.282353" ColorMultiplier="2.065000" Direction="-0.558844,0.279483,0.780758"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>

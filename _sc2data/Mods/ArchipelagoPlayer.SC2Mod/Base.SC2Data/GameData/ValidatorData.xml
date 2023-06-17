@@ -2274,4 +2274,34 @@
         <Field value="Radius"/>
         <Value value="0.125"/>
     </CValidatorUnitCompareField>
+    <CValidatorCombine id="AP_DarkProtossAndNotUnderConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_DarkProtossAndUnderConstruction">
+        <Type value="And"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+        <CombineArray value="IsConstructing"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsNotLaserTentacle">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsNotVoidCrystal">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsNotOmniaClaw">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsNotAnimaSpike">
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="CasterIsColossus">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="IsColossus">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
 </Catalog>

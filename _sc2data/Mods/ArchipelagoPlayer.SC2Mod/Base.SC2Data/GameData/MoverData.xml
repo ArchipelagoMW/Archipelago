@@ -1069,4 +1069,15 @@
         <PathMode value="Flying"/>
         <MotionOverlays Type="Revolver" Axis="0.15,0.25,0"/>
     </CMoverMissile>
+    <CMoverMissile id="AP_ColossusTaldarimWeapon">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="18.75"/>
+            <ClearanceAcceleration value="75"/>
+            <Outro value="-1"/>
+            <YawPitchRoll value="719.2968"/>
+        </MotionPhases>
+        <MotionPhases YawPitchRoll="MAX"/>
+    </CMoverMissile>
 </Catalog>
