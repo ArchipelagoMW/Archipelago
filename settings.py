@@ -727,7 +727,8 @@ class Settings(Group):
     def save(self, location: Optional[str] = None) -> None:  # as above
         location = location or self._filename
         assert location, "No file specified"
-        with open(location, "w", encoding="utf-8-sig") as f:  # change to utf-8 once we drop win7 support?
+        # can't use utf-8-sig because it breaks backward compat: pyyaml on Windows with bytes does not strip the BOM
+        with open(location, "w", encoding="utf-8") as f:
             self.dump(f)
         self._filename = location
 
