@@ -7,3 +7,4 @@ class AnimalProduct:
     large_brown_egg = "Large Egg (Brown)"
     milk = "Milk"
     large_milk = "Large Milk"
+    cow_milk = "Cow Milk"

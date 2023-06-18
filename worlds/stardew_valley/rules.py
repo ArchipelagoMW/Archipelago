@@ -229,6 +229,8 @@ def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
                              logic.received("Island Trader").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_south_to_southeast, player),
                              logic.received("Island Resort").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_island_resort, player),
+                             logic.received("Island Resort").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_west_to_qi_walnut_room, player),
                              logic.received("Qi Walnut Room").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_north_to_volcano, player),

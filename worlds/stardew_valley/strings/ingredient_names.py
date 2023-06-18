@@ -3,3 +3,4 @@ class Ingredient:
     sugar = "Sugar"
     oil = "Oil"
     rice = "Rice"
+    vinegar = "Vinegar"

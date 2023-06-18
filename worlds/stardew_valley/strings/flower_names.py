@@ -1,0 +1,2 @@
+class Flower:
+    sunflower = "Sunflower"

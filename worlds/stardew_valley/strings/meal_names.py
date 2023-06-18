@@ -6,6 +6,13 @@ class Meal:
     fried_egg = "Fried Egg"
     hashbrowns = "Hashbrowns"
     pancakes = "Pancakes"
-    ginger_ale = "Ginger Ale"
     ice_cream = "Ice Cream"
     maki_roll = "Maki Roll"
+    miners_treat = "Miner's Treat"
+    omelet = "Omelet"
+    parsnip_soup = "Parsnip Soup"
+
+
+class Beverage:
+    pina_colada = "Piña Colada"
+    ginger_ale = "Ginger Ale"

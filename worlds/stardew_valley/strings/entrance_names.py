@@ -123,6 +123,7 @@ class Entrance:
     island_south_to_north = "Island South to North"
     island_south_to_east = "Island South to East"
     island_south_to_southeast = "Island South to Southeast"
+    use_island_resort = "Use Island Resort"
     island_west_to_islandfarmhouse = "Island West to Island Farmhouse"
     island_west_to_gourmand_cave = "Island West to Gourmand Cave"
     island_west_to_crystals_cave = "Island West to Crystal Cave"

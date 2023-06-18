@@ -4,3 +4,4 @@ class Crop:
     garlic = "Garlic"
     wheat = "Wheat"
     potato = "Potato"
+    corn = "Corn"

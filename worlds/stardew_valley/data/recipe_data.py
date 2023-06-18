@@ -5,9 +5,10 @@ from worlds.stardew_valley.strings.crop_names import Crop
 from worlds.stardew_valley.strings.fish_names import Fish
 from worlds.stardew_valley.strings.forageable_names import Forageable
 from worlds.stardew_valley.strings.ingredient_names import Ingredient
-from worlds.stardew_valley.strings.meal_names import Meal
+from worlds.stardew_valley.strings.meal_names import Meal, Beverage
 from worlds.stardew_valley.strings.region_names import Region
 from worlds.stardew_valley.strings.season_names import Season
+from worlds.stardew_valley.strings.skill_names import Skill
 from worlds.stardew_valley.strings.villager_names import NPC
 
 
@@ -43,6 +44,10 @@ class SkillSource(RecipeSource):
     skill: str
     level: int
 
+    def __init__(self, skill: str, level: int):
+        self.skill = skill
+        self.level = level
+
 
 class ShopSource(RecipeSource):
     region: str
@@ -77,6 +82,11 @@ all_cooking_recipes: List[CookingRecipe] = []
 
 def friendship_recipe(name: str, friend: str, hearts: int, ingredients: Dict[str, int]) -> CookingRecipe:
     source = FriendshipSource(friend, hearts)
+    return create_recipe(name, ingredients, source)
+
+
+def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int]) -> CookingRecipe:
+    source = SkillSource(skill, level)
     return create_recipe(name, ingredients, source)
 
 
@@ -127,6 +137,9 @@ pancakes = queen_of_sauce_recipe(Meal.pancakes, 1, Season.summer, 14,
 
 fried_egg = starter_recipe(Meal.fried_egg, {AnimalProduct.chicken_egg: 1})
 
-ginger_ale = shop_recipe(Meal.ginger_ale, Region.volcano_dwarf_shop, 1000, {Forageable.ginger: 3, Ingredient.sugar: 1})
-ice_cream = friendship_recipe(Meal.ice_cream, NPC.jodi, 7, {AnimalProduct.milk: 1, Ingredient.sugar: 1})
+ginger_ale = shop_recipe(Beverage.ginger_ale, Region.volcano_dwarf_shop, 1000, {Forageable.ginger: 3, Ingredient.sugar: 1})
+ice_cream = friendship_recipe(Meal.ice_cream, NPC.jodi, 7, {AnimalProduct.cow_milk: 1, Ingredient.sugar: 1})
 maki_roll = queen_of_sauce_recipe(Meal.maki_roll, 1, Season.summer, 21, {Fish.any: 1, Fish.seaweed: 1, Ingredient.rice: 1})
+miners_treat = skill_recipe(Meal.miners_treat, Skill.mining, 3, {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.cow_milk: 1})
+omelet = queen_of_sauce_recipe(Meal.omelet, 1, Season.spring, 28, {AnimalProduct.chicken_egg: 1, AnimalProduct.cow_milk: 1})
+parsnip_soup = friendship_recipe(Meal.parsnip_soup, NPC.caroline, 3, {Crop.parsnip: 1, AnimalProduct.cow_milk: 1, Ingredient.vinegar: 1})
