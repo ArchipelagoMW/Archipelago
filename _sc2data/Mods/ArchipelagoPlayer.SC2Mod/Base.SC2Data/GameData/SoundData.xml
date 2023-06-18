@@ -1699,7 +1699,7 @@
         <AssetArray TemplateParam="ValkyrieSCBW@Pissed05"/>
         <AssetArray TemplateParam="ValkyrieSCBW@Pissed06"/>
         <AssetArrayTemplate>
-            <File value="PA\LocalizedData\Sounds\TerranUnitVO\ValkyrieSCBW\^TemplateParam2^.wav"/>
+            <File value="AP\LocalizedData\Sounds\TerranUnitVO\ValkyrieSCBW\^TemplateParam2^.wav"/>
             <FacialAnim value="^TemplateParam1^"/>
             <FacialGroup value="^TemplateParam1^"/>
             <FacialFile value="AP\LocalizedData\Sounds\VO\Terran\^TemplateParam1^.fxe"/>
