@@ -76,7 +76,7 @@ class DashShuffle(Toggle):
 
 
 class WallClimbShuffle(Toggle):
-    """Turns the ability to climb walls with your sword into and item that must be found in the multiworld."""
+    """Turns the ability to climb walls with your sword into an item that must be found in the multiworld."""
     display_name = "Shuffle Wall Climb"
 
 
