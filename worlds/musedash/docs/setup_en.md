@@ -18,9 +18,9 @@
 2. Choose the automated tab, click the select button and browse to `MuseDash.exe`. Then click install.
   - You can find the folder in steam by finding the game in your library, right clicking it and choosing *Manage→Browse Local Files*.
   - If you click the bar at the top telling you your current folder, this will give you a path you can copy. If you paste that into the window popped up by **MelonLoader**, it will automatically go to the same folder.
-3. Run the game once, and wait until you get to the Muse Dash screen before exiting.
+3. Run the game once, and wait until you get to the Muse Dash start screen before exiting.
 4. Download the latest [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) and then extract that into the newly created `/Mods/` folder in MuseDash's install location.
-  - All files must be under the `/Mods/` folder and not a sub folder within `/Mods/`
+  - All files must be under the `/Mods/` folder and not within a sub folder inside of `/Mods/`
 
 If you've successfully installed everything, a button will appear in the bottom right which will allow you to log into an Archipelago server.
 
@@ -34,3 +34,13 @@ If you've successfully installed everything, a button will appear in the bottom 
 1. Launch Muse Dash and get past the intro screen. Click on the button in the bottom right.
 2. Enter in the details for the archipelago game, such as the server address with port (i.e archipelago.gg:38381), username and password.
 3. If entered correctly, the pop-up should disappear and the usual main menu will show. When entering the song select, you should see a limited number of songs.
+
+## Troubleshooting
+
+### No Support Module Loaded
+
+This error occurs when Melon Loader cannot find needed files in order to run mods. There are generally two main sources of this error: a failure to generate the files when the game was first run with Melon Loader, or by a virus scanner is removing the files after generation.
+
+To fix this, first you should remove Melon Loader from Muse Dash. You can do this by deleting the Melon Loader folder within Muse Dash's folder. Afterwards you can follow the installation steps again.
+
+If you continue to run into issues, and are using a virus scanner, you may want to either temporarily turn it off when first running Muse Dash, or whitelist the Muse Dash folder.
