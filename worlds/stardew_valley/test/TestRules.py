@@ -311,3 +311,47 @@ class TestWeaponsLogic(SVTestBase):
             assert not self.world.logic.can_mine_perfectly_in_the_skull_cavern()(self.multiworld.state)
 
         self.remove(item)
+
+
+class TestRecipeLogic(SVTestBase):
+    options = {
+        options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
+        options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
+        options.SeedShuffle.internal_name: options.SeedShuffle.option_shuffled,
+    }
+
+    # I wanted to make a test for different ways to obtain a pizza, but I'm stuck not knowing how to block the immediate purchase from Gus
+    # def test_pizza(self):
+    #     assert self.world.logic.has(Ingredient.wheat_flour)(self.multiworld.state)
+    #     assert self.world.logic.can_spend_money_at(Region.saloon, 150)(self.multiworld.state)
+    #     assert not self.world.logic.has(Meal.pizza)(self.multiworld.state)
+    #
+    #     assert not self.world.logic.can_cook()(self.multiworld.state)
+    #     self.collect(self.world.create_item("Progressive House"))
+    #     assert self.world.logic.can_cook()(self.multiworld.state)
+    #     assert not self.world.logic.has(Meal.pizza)(self.multiworld.state)
+    #
+    #     assert not self.world.logic.has(Seed.tomato)(self.multiworld.state)
+    #     self.collect(self.world.create_item(Seed.tomato))
+    #     assert self.world.logic.has(Seed.tomato)(self.multiworld.state)
+    #     assert not self.world.logic.has(Meal.pizza)(self.multiworld.state)
+    #
+    #     assert not self.world.logic.has(Crop.tomato)(self.multiworld.state)
+    #     self.collect(self.world.create_item(Season.summer))
+    #     assert self.world.logic.has(Crop.tomato)(self.multiworld.state)
+    #     assert not self.world.logic.has(Meal.pizza)(self.multiworld.state)
+    #
+    #     assert not self.world.logic.has(Animal.cow)(self.multiworld.state)
+    #     assert not self.world.logic.has(AnimalProduct.cow_milk)(self.multiworld.state)
+    #     self.collect(self.world.create_item("Progressive Barn"))
+    #     assert self.world.logic.has(Animal.cow)(self.multiworld.state)
+    #     assert self.world.logic.has(AnimalProduct.cow_milk)(self.multiworld.state)
+    #     assert not self.world.logic.has(Meal.pizza)(self.multiworld.state)
+    #
+    #     assert not self.world.logic.has(Machine.cheese_press)(self.multiworld.state)
+    #     assert not self.world.logic.has(ArtisanGood.cheese)(self.multiworld.state)
+    #     self.collect(self.world.create_item(item) for item in ["Farming Level"] * 6)
+    #     self.collect(self.world.create_item(item) for item in ["Progressive Axe"] * 2)
+    #     assert self.world.logic.has(Machine.cheese_press)(self.multiworld.state)
+    #     assert self.world.logic.has(ArtisanGood.cheese)(self.multiworld.state)
+    #     assert self.world.logic.has(Meal.pizza)(self.multiworld.state)

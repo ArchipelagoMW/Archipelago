@@ -1,7 +1,8 @@
 from typing import Dict, List
 
 from worlds.stardew_valley.strings.animal_product_names import AnimalProduct
-from worlds.stardew_valley.strings.crop_names import Crop
+from worlds.stardew_valley.strings.artisan_good_names import ArtisanGood
+from worlds.stardew_valley.strings.crop_names import Fruit, Vegetable
 from worlds.stardew_valley.strings.fish_names import Fish
 from worlds.stardew_valley.strings.forageable_names import Forageable
 from worlds.stardew_valley.strings.ingredient_names import Ingredient
@@ -113,14 +114,14 @@ def create_recipe(name: str, ingredients: Dict[str, int], source: RecipeSource) 
 
 bread = queen_of_sauce_recipe(Meal.bread, 1, Season.summer, 28, {Ingredient.wheat_flour: 1})
 blueberry_tart = friendship_recipe(Meal.blueberry_tart, NPC.pierre, 3,
-                                   {Crop.blueberry: 1,
+                                   {Fruit.blueberry: 1,
                                     Ingredient.wheat_flour: 1,
                                     Ingredient.sugar: 1,
                                     AnimalProduct.any_egg: 1})
 fiddlehead_risotto = queen_of_sauce_recipe(Meal.fiddlehead_risotto, 2, Season.fall, 28,
                                            {Ingredient.oil: 1,
                                             Forageable.fiddlehead_fern: 1,
-                                            Crop.garlic: 1})
+                                            Vegetable.garlic: 1})
 
 complete_breakfast = queen_of_sauce_recipe(Meal.complete_breakfast, 2, Season.spring, 21,
                                            {Meal.fried_egg: 1,
@@ -129,7 +130,7 @@ complete_breakfast = queen_of_sauce_recipe(Meal.complete_breakfast, 2, Season.sp
                                             Meal.pancakes: 1})
 
 hashbrowns = queen_of_sauce_recipe(Meal.hashbrowns, 2, Season.spring, 14,
-                                   {Crop.potato: 1, Ingredient.oil: 1})
+                                   {Vegetable.potato: 1, Ingredient.oil: 1})
 
 pancakes = queen_of_sauce_recipe(Meal.pancakes, 1, Season.summer, 14,
                                  {Ingredient.wheat_flour: 1,
@@ -142,4 +143,26 @@ ice_cream = friendship_recipe(Meal.ice_cream, NPC.jodi, 7, {AnimalProduct.cow_mi
 maki_roll = queen_of_sauce_recipe(Meal.maki_roll, 1, Season.summer, 21, {Fish.any: 1, Fish.seaweed: 1, Ingredient.rice: 1})
 miners_treat = skill_recipe(Meal.miners_treat, Skill.mining, 3, {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.cow_milk: 1})
 omelet = queen_of_sauce_recipe(Meal.omelet, 1, Season.spring, 28, {AnimalProduct.chicken_egg: 1, AnimalProduct.cow_milk: 1})
-parsnip_soup = friendship_recipe(Meal.parsnip_soup, NPC.caroline, 3, {Crop.parsnip: 1, AnimalProduct.cow_milk: 1, Ingredient.vinegar: 1})
+parsnip_soup = friendship_recipe(Meal.parsnip_soup, NPC.caroline, 3, {Vegetable.parsnip: 1, AnimalProduct.cow_milk: 1, Ingredient.vinegar: 1})
+pink_cake = queen_of_sauce_recipe(Meal.pink_cake, 2, Season.summer, 21, {Fruit.melon: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.chicken_egg: 1})
+pizza_ingredients = {Ingredient.wheat_flour: 1, Vegetable.tomato: 1, ArtisanGood.cheese: 1}
+pizza_qos = queen_of_sauce_recipe(Meal.pizza, 2, Season.spring, 7, pizza_ingredients)
+pizza_saloon = shop_recipe(Meal.pizza, Region.saloon, 150, pizza_ingredients)
+pumpkin_pie = queen_of_sauce_recipe(Meal.pumpkin_pie, 1, Season.winter, 21, {Vegetable.pumpkin: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1, AnimalProduct.cow_milk: 1})
+roasted_hazelnuts = queen_of_sauce_recipe(Meal.roasted_hazelnuts, 2, Season.summer, 28, {Forageable.hazelnut: 3})
+salad = friendship_recipe(Meal.salad, NPC.emily, 3, {Forageable.leek: 1, Forageable.dandelion: 1, Ingredient.vinegar: 1})
+spaghetti = friendship_recipe(Meal.spaghetti, NPC.lewis, 3, {Vegetable.tomato: 1, Ingredient.wheat_flour: 1})
+tortilla_ingredients = {Vegetable.corn: 1}
+tortilla_qos = queen_of_sauce_recipe(Meal.tortilla, 1, Season.fall, 7, tortilla_ingredients)
+tortilla_saloon = shop_recipe(Meal.tortilla, Region.saloon, 100, tortilla_ingredients)
+triple_shot_espresso = shop_recipe(Beverage.triple_shot_espresso, Region.saloon, 5000, {Beverage.coffee: 3})
+
+
+
+
+
+
+
+
+
+

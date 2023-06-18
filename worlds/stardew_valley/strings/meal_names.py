@@ -11,8 +11,17 @@ class Meal:
     miners_treat = "Miner's Treat"
     omelet = "Omelet"
     parsnip_soup = "Parsnip Soup"
+    pink_cake = "Pink Cake"
+    pizza = "Pizza"
+    pumpkin_pie = "Pumpkin Pie"
+    roasted_hazelnuts = "Roasted Hazelnuts"
+    salad = "Salad"
+    spaghetti = "Spaghetti"
+    tortilla = "Tortilla"
 
 
 class Beverage:
     pina_colada = "Piña Colada"
     ginger_ale = "Ginger Ale"
+    coffee = "Coffee"
+    triple_shot_espresso = "Triple Shot Espresso"

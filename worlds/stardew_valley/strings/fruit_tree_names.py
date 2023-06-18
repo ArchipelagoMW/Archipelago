@@ -1,14 +1,3 @@
-class Fruit:
-    apple = "Apple"
-    apricot = "Apricot"
-    cherry = "Cherry"
-    orange = "Orange"
-    peach = "Peach"
-    pomegranate = "Pomegranate"
-    banana = "Banana"
-    mango = "Mango"
-
-
 class Sapling:
     apple = "Apple Sapling"
     apricot = "Apricot Sapling"
@@ -18,3 +7,4 @@ class Sapling:
     pomegranate = "Pomegranate Sapling"
     banana = "Banana Sapling"
     mango = "Mango Sapling"
+    tea = "Tea Sapling"

@@ -87,6 +87,13 @@ class TestLogic(unittest.TestCase):
                 assert MISSING_ITEM not in repr(rule)
                 assert rule == False_() or rule(multi_world.state), f"Could not resolve museum rule for {donation} {rule}"
 
+    def test_given_cooking_rule_then_can_be_resolved(self):
+        for cooking_rule in logic.cooking_rules.keys():
+            with self.subTest(msg=cooking_rule):
+                rule = logic.cooking_rules[cooking_rule]
+                assert MISSING_ITEM not in repr(rule)
+                assert rule == False_() or rule(multi_world.state), f"Could not resolve cooking rule for {cooking_rule} {rule}"
+
     def test_given_location_rule_then_can_be_resolved(self):
         for location in multi_world.get_locations(1):
             with self.subTest(msg=location.name):

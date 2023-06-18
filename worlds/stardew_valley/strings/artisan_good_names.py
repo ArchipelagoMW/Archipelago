@@ -4,3 +4,8 @@ class ArtisanGood:
     pine_tar = "Pine Tar"
     maple_syrup = "Maple Syrup"
     truffle_oil = "Truffle Oil"
+    cheese = "Cheese"
+    jelly = "Jelly"
+    pickles = "Pickles"
+    wine = "Wine"
+    juice = "Juice"
