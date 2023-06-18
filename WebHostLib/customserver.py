@@ -18,7 +18,7 @@ from pony.orm import commit, db_session, select
 import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
-from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
+from Utils import restricted_loads, cache_argsless
 from .models import Command, GameDataPackage, Room, db
 
 
