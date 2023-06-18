@@ -4625,7 +4625,6 @@
         <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamReverse" Send="Destroy"/>
         <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamImpactReverse" Send="Destroy"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Colossus_Land"/>
-        <Model value="AP_ColossusPurifier"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="ColossusPurifierWarpIn"/>
         <DeathArray index="Normal" ModelLink="AP_ColossusPurifierDeath" SoundLink=""/>
@@ -4657,11 +4656,6 @@
         </GroupIcon>
         <HeroIcon value="Assets\Textures\btn-unit-protoss-colossus-purifier.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
-        <SoundArray index="Ready" value="AP_ColossusPurifier_Ready"/>
-        <SoundArray index="Help" value="AP_ColossusPurifier_Help"/>
-        <SoundArray index="What" value="AP_ColossusPurifier_What"/>
-        <SoundArray index="Yes" value="AP_ColossusPurifier_Yes"/>
-        <SoundArray index="Pissed" value="AP_ColossusPurifier_Pissed"/>
         <UnitIcon value="Assets\Textures\btn-unit-protoss-colossus-purifier.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\wireframe-protoss-colossus-purifier.dds"/>
@@ -4681,7 +4675,6 @@
         <On Terms="AnimBracketState.*.AfterOpening; AnimName BSD" Target="AP_ColossusPurifierAttackImpactSite" Send="MoverMove"/>
         <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
         <On Terms="Effect.AP_ColossusPurifierThermalLancesSearch.Impact" Send="Create"/>
-        <Model value="AP_ColossusPurifierAttackBeam"/>
         <HostLaunch Subject="AP_ColossusPurifierAttackLaunchSite" Scope="Caster" Actor="Create"/>
         <HostImpact Subject="AP_ColossusPurifierAttackImpactSite"/>
     </CActorBeamSimple>
@@ -4754,7 +4747,6 @@
         <On Terms="Behavior.AP_ThermalLancesFireBeam.Off" Send="AnimBracketStop BSD"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="AP_ColossusPurifierAttackBeamUnitImpact"/>
         <AutoScaleFactor value="1.000000"/>
         <ModelFlags index="AllowHitTest" value="0"/>
     </CActorModel>
@@ -4848,9 +4840,6 @@
     </CActorModel>
     <CActorSound id="AP_ColossusTaldarimChargedMissilePowerUpSound">
         <Flags index="SuppressSaveLoad" value="1"/>
-        <On index="1" removed="1"/>
-        <On index="2" removed="1"/>
-        <On index="3" removed="1"/>
         <Host Scope="Target"/>
         <Layers Sound="AP_VoidShard_UnstableEnergy_LaunchElectricRip">
             <Chance value="100"/>
@@ -4862,7 +4851,6 @@
     <CActorAction id="AP_ColossusTaldarimAttack" parent="GenericAttack" effectImpact="AP_ColossusTaldarimDamage" effectLaunch="AP_ColossusTaldarimLM">
         <LaunchAttachQuery Methods="Head"/>
         <LaunchAssets Sound="AP_ColossusTaldarim_Missile_AttackLaunch"/>
-        <Missile value="AP_ColossusTaldarimAttackMissile"/>
         <ImpactMap index="None" Model="AP_ColossusTaldarimAttackBeamImpact" Sound="AP_ColossusTaldarim_Missile_AttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_ColossusTaldarimAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="AP_ColossusTaldarimWeapon"/>
@@ -9963,6 +9951,64 @@
     <CActorSound id="AP_Mutalisk_Land" parent="SoundOneShot">
         <Sound value="Mutalisk_Land"/>
     </CActorSound>
+    <CActorUnit id="AP_Observer" parent="GenericUnitStandard" unitName="AP_Observer">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <On Terms="Behavior.WarpInEffect15.On" Send="ModelSwap ObserverWarpIn"/>
+        <On Terms="Behavior.WarpInEffect15.On" Send="$Birth"/>
+        <On Terms="Behavior.WarpInEffect15.Off" Send="ModelSwap Observer"/>
+        <On Terms="Behavior.WarpInEffect15.Off" Send="AnimBaselineStart"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Observer_Land"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkObserver"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkObserver"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <Model value="Observer"/>
+        <AnimBlendTime value="1.200000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="ProtossGenericWarpInOut"/>
+        <DeathArray index="Normal" ModelLink="ObserverDeath" SoundLink="Observer_Explode"/>
+        <DeathCustoms ModelLink="ObserverDeathRagdoll" Name="RagdollBasic" PhysicsMatchKeysOrdered="BasicAir,Basic">
+            <BodySquibs Name="Basic" Model="ProtossTinyRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ModelLink="DarkObserverDeath" Name="DarkProtoss"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="Observer"/>
+        <PortraitModel value="ObserverPortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-observer.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Observer_Ready"/>
+        <SoundArray index="What" value="Observer_What"/>
+        <SoundArray index="Yes" value="Observer_Yes"/>
+        <SoundArray index="Pissed" value="Observer_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-observer.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Observer-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
     <CActorSound id="ShieldAbsorbImmortalSound2" parent="SoundOneShot">
         <On Terms="Behavior.AP_HardenedShield.DamageHandled" Send="Create"/>
         <Sound value="Immortal_HardenedShieldImpact"/>

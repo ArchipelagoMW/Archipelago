@@ -2304,4 +2304,15 @@
         <!-- Override -->
         <Type value="SelectAlias"/>
     </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPObserver">
+        <Value value="AP_Observer"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaObserver">
+        <Value value="Observer"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsObserver" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaObserver"/>
+        <CombineArray value="AP_IsAPObserver"/>
+    </CValidatorCombine>
 </Catalog>

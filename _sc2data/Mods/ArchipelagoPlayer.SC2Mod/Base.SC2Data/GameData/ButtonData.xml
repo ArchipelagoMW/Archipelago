@@ -1801,4 +1801,8 @@
         <Icon value="Assets\Textures\BTN-Ability-Protoss-FireBeam.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_PermanentlyCloakedObserver">
+        <Icon value="Assets\Textures\BTN-ability-Protoss-permanentlycloaked-Observer-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>
