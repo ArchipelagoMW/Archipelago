@@ -33,6 +33,7 @@ class Component:
         if component_type == Type.FUNC:
             from Utils import deprecate
             deprecate(f"Launcher Component {self.display_name} is using Type.FUNC Type, which is pending removal.")
+            component_type = Type.MISC
 
         self.type = component_type or \
             Type.CLIENT if 'Client' in display_name else \
