@@ -192,7 +192,7 @@ on a single item. It can be used to reject placement of an item there.
 ### Your World
 
 All code for your world implementation should be placed in a python package in
-the `/worlds` directory. The starting point for the package is `__init.py__`.
+the `/worlds` directory. The starting point for the package is `__init__.py`.
 Conventionally, your world class is placed in that file.
 
 World classes must inherit from the `World` class in `/worlds/AutoWorld.py`,
