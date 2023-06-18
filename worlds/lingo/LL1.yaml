@@ -2629,6 +2629,14 @@
           door: Nines
       BACKSIDE:
         id: Backside Room/Panel_backside_4
+      "834283054":
+        id: Tower Room/Panel_834283054_undaunted
+        colors: orange
+        check: True
+        exclude_reduce: True
+        required_door:
+          room: Number Hunt
+          door: Sixes
       PARANOID:
         id: Backside Room/Panel_paranoid_paranoid
         check: True
@@ -2644,6 +2652,7 @@
         id: Tower Room/Panel_waded_wee_warts_7
         colors: orange
         check: True
+        exclude_reduce: True
     doors:
       Shortcut to The Undeterred:
         id: Count Up Room Area Doors/Door_return_double
