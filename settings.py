@@ -658,7 +658,7 @@ class Settings(Group):
         if key.startswith("_") or key in self.__class__.__dict__:
             # not a group or a hard-coded group
             pass
-        elif not hasattr(super(), key) or isinstance(getattr(super(), key), dict):
+        elif key not in dir(self) or isinstance(super().__getattribute__(key), dict):
             # settings class not loaded yet
             if key not in _world_settings_name_cache:
                 # find world that provides the settings class
