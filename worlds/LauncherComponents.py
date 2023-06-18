@@ -1,14 +1,15 @@
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable
 
-from Utils import local_path, is_windows
+from Utils import local_path
 
 
 class Type(Enum):
     TOOL = auto()
-    FUNC = auto()  # not a real component
+    FUNC = auto()  # not a real component, do not use anymore
     CLIENT = auto()
     ADJUSTER = auto()
+    MISC = FUNC
 
 
 class Component:
@@ -31,9 +32,8 @@ class Component:
         self.cli = cli
         self.type = component_type or \
             None if not display_name else \
-            Type.FUNC if func else \
             Type.CLIENT if 'Client' in display_name else \
-            Type.ADJUSTER if 'Adjuster' in display_name else Type.TOOL
+            Type.ADJUSTER if 'Adjuster' in display_name else Type.MISC
         self.func = func
         self.file_identifier = file_identifier
 
