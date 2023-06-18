@@ -673,7 +673,7 @@ def rules(blasphemousworld):
                         state._blasphemous_can_enemy_bounce(difficulty, enemy)))
     # Doors
     set_rule(world.get_entrance("D01Z04S13[SE]", player),
-        lambda state: state.can_reach(world.get_location("MD: Behind gate to TSC", player), player) or \
+        lambda state: state.has("D01Z04S13[SE]", player) or \
             state._blasphemous_can_dive_laser(difficulty, player) and \
                 (state._blasphemous_can_air_stall(difficulty, player) or \
                     state.has_any({"The Young Mason's Wheel", "Purified Hand of the Nun"}, player) or \

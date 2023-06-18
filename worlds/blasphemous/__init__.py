@@ -247,7 +247,7 @@ class BlasphemousWorld(World):
                 target: Region = self.get_room_from_door(door["OriginalDoor"])
                 exit: Entrance = Entrance(player, door["Id"], parent)
 
-                if not door.get("VisibilityFlags") is None and door["VisibilityFlags"] == 1:
+                if door.get("VisibilityFlags") == 1:
                     set_rule(exit, lambda x: False)
 
                 exit.connect(target)
