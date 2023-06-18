@@ -1156,8 +1156,8 @@
         <AIRebuild Index="4" Value="2"/>
     </ObjectUnit>
     <ObjectUnit Id="151" Position="139,68,0" Rotation="3.1604" Scale="1,1,1" UnitType="RipFieldGenerator" Player="5"/>
-    <ObjectUnit Id="402" Variation="1" Position="124.8698,72.17,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
-    <ObjectUnit Id="87" Variation="1" Position="69.269,24.9616,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="402" Variation="1" Position="124.8698,72.17,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
+    <ObjectUnit Id="87" Variation="1" Position="69.269,24.9616,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="18" Position="49.202,86.3117,0" Rotation="2.753" Scale="1,1,1" UnitType="Scout" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIFlag Index="IsUseable" Value="0"/>
@@ -1398,7 +1398,7 @@
     <ObjectUnit Id="374" Position="11.7395,86.893,0" Rotation="5.4975" Scale="1,1,1" UnitType="Forge" Player="2">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="24" Position="124.8803,73.353,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="24" Position="124.8803,73.353,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="47" Position="98.5,47.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Gateway" Player="4">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -1454,7 +1454,7 @@
     <ObjectUnit Id="625" Position="163.159,89.763,0" Scale="1,1,1" UnitType="NaturalGas">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="85" Variation="1" Position="67.9707,24.7414,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="85" Variation="1" Position="67.9707,24.7414,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="62" Position="130.0874,66.721,0" Rotation="1.5705" Scale="1,1,1" UnitType="Phoenix" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -1479,7 +1479,7 @@
         <AIRebuild Index="3" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="162" Variation="1" Position="93.1516,89.7163,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="162" Variation="1" Position="93.1516,89.7163,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="268" Position="22.9846,67.967,0" Rotation="3.855" Scale="1,1,1" UnitType="Scout" Player="3">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -1498,7 +1498,7 @@
         <AIRebuild Index="4" Value="14"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="329" Position="123.645,72.1618,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="329" Position="123.645,72.1618,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="290" Position="90,51,0" Scale="1,1,1" UnitType="PhotonCannon" Player="4">
         <AIRebuild Index="2" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
@@ -1509,7 +1509,7 @@
         <AIRebuild Index="3" Value="14"/>
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
-    <ObjectUnit Id="167" Variation="1" Position="95.2614,89.9216,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="167" Variation="1" Position="95.2614,89.9216,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="265" Position="146.1394,82.7763,0" Rotation="0.9494" Scale="1,1,1" UnitType="Probe" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -1613,7 +1613,7 @@
     <ObjectUnit Id="223" Position="130.1342,47.2617,0" Scale="1,1,1" UnitType="NaturalGas">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="31" Position="141.6323,34.2663,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="31" Position="141.6323,34.2663,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="116" Variation="4" Position="221,66.5,0" Scale="1,1,1" UnitType="MineralField" Resources="550"/>
     <ObjectUnit Id="415" Position="25,59,0" Rotation="4.6625" Scale="1,1,1" UnitType="RipFieldGenerator" Player="5"/>
     <ObjectUnit Id="90" Position="82.5,57.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="RoboticsFacility" Player="4">
@@ -1629,7 +1629,7 @@
     <ObjectUnit Id="308" Position="184.2954,44.1171,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="241" Variation="1" Position="93.948,88.7658,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="241" Variation="1" Position="93.948,88.7658,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="351" Position="131.5092,42.5498,0" Scale="1,1,1" UnitType="NaturalGas">
         <Flag Index="ForcePlacement" Value="1"/>
     </ObjectUnit>
@@ -1742,7 +1742,7 @@
         <AIRebuild Index="4" Value="14"/>
     </ObjectUnit>
     <ObjectUnit Id="25" Position="217,63,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_SupplyDepot" Player="1"/>
-    <ObjectUnit Id="114" Position="68.1716,25.7363,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="114" Position="68.1716,25.7363,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="178" Variation="5" Position="221,70.5,0" Scale="1,1,1" UnitType="MineralField" Resources="550"/>
     <ObjectUnit Id="375" Position="75.5893,58.9484,0" Rotation="2.4492" Scale="1,1,1" UnitType="VoidRay" Player="4">
         <AIRebuild Index="1" Value="0"/>
@@ -1789,7 +1789,7 @@
         <AIRebuild Index="1" Value="1"/>
         <AIRebuild Index="2" Value="1"/>
     </ObjectUnit>
-    <ObjectUnit Id="64" Variation="1" Position="142.5615,34.137,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="64" Variation="1" Position="142.5615,34.137,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="389" Position="12.9113,53.3632,0" Rotation="1.5295" Scale="1,1,1" UnitType="Scout" Player="2">
         <AIActive Index="1" Value="0"/>
         <AIActive Index="2" Value="0"/>
@@ -1840,7 +1840,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="89" Position="66.8117,24.7363,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="89" Position="66.8117,24.7363,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="50" Position="205.637,37.4633,0" Rotation="3.1713" Scale="1,1,1" UnitType="Zealot" Player="2">
         <AIRebuild Index="1" Value="0"/>
         <AIRebuild Index="2" Value="0"/>
@@ -1975,7 +1975,7 @@
         <AIRebuild Index="4" Value="0"/>
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
-    <ObjectUnit Id="278" Position="142.0895,33.2102,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="278" Position="142.0895,33.2102,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="604" Position="152.6765,40.388,0" Rotation="1.2304" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="184" Position="235.9687,60.9604,0" Rotation="4.7102" Scale="1,1,1" UnitType="AP_Battlecruiser" Player="1"/>
     <ObjectUnit Id="381" Position="41.6997,47.1984,0" Rotation="0.9426" Scale="1,1,1" UnitType="Carrier" Player="3">
@@ -1996,7 +1996,7 @@
         <AIFlag Index="IsUseable" Value="0"/>
     </ObjectUnit>
     <ObjectUnit Id="120" Variation="2" Position="220,74.5,0" Scale="1,1,1" UnitType="MineralField" Resources="650"/>
-    <ObjectUnit Id="289" Variation="1" Position="93.945,91.2043,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="289" Variation="1" Position="93.945,91.2043,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="330" Position="37,63,0" Scale="1,1,1" UnitType="Monolith" Player="2"/>
     <ObjectUnit Id="228" Position="213.5,69.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="AP_CommandCenter" Player="1"/>
     <ObjectUnit Id="394" Position="79,68,0" Rotation="2.3376" Scale="1,1,1" UnitType="RipFieldGenerator" Player="5"/>
@@ -2145,7 +2145,7 @@
     </ObjectUnit>
     <ObjectUnit Id="181" Variation="6" Position="221,73.5,0" Scale="1,1,1" UnitType="MineralField" Resources="599"/>
     <ObjectUnit Id="283" Position="187.7177,41.3784,0" Rotation="0.3476" Scale="1,1,1" UnitType="NaturalMinerals"/>
-    <ObjectUnit Id="222" Variation="1" Position="123.573,73.5083,0" Scale="1,1,1" UnitType="DarkTemplar" Player="7"/>
+    <ObjectUnit Id="222" Variation="1" Position="123.573,73.5083,0" Scale="1,1,1" UnitType="AP_DarkTemplarShakuras" Player="7"/>
     <ObjectUnit Id="639" Position="94.1962,40.1667,0" Rotation="0.3486" Scale="1,1,1" UnitType="NaturalMinerals"/>
     <ObjectUnit Id="309" Position="22.5,62.5,0" Rotation="5.4975" Scale="1,1,1" UnitType="Stargate" Player="3">
         <AIRebuild Index="2" Value="14"/>
