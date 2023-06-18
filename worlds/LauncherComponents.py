@@ -14,7 +14,7 @@ class Type(Enum):
 
 class Component:
     display_name: str
-    type: Optional[Type]
+    type: Type
     script_name: Optional[str]
     frozen_name: Optional[str]
     icon: str  # just the name, no suffix
@@ -23,8 +23,8 @@ class Component:
     file_identifier: Optional[Callable[[str], bool]]
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
-                 cli: bool = False, icon: str = 'icon', component_type: Type = None, func: Optional[Callable] = None,
-                 file_identifier: Optional[Callable[[str], bool]] = None):
+                 cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
+                 func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None):
         self.display_name = display_name
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
