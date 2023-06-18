@@ -6,10 +6,10 @@ from Utils import local_path
 
 class Type(Enum):
     TOOL = auto()
-    FUNC = auto()  # not a real component, do not use anymore
+    MISC = auto()
     CLIENT = auto()
     ADJUSTER = auto()
-    MISC = FUNC
+    FUNC = auto()  # do not use anymore
 
 
 class Component:
@@ -30,8 +30,11 @@ class Component:
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
         self.icon = icon
         self.cli = cli
+        if component_type == Type.FUNC:
+            from Utils import deprecate
+            deprecate(f"Launcher Component {self.display_name} is using Type.FUNC Type, which is pending removal.")
+
         self.type = component_type or \
-            None if not display_name else \
             Type.CLIENT if 'Client' in display_name else \
             Type.ADJUSTER if 'Adjuster' in display_name else Type.MISC
         self.func = func
