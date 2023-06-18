@@ -4865,6 +4865,70 @@
     <CActorTurret id="AP_ColossusTurret">
         <On Terms="TurretEnable.AP_Colossus" Send="Create"/>
     </CActorTurret>
+    <CActorUnit id="AP_Archon" parent="GenericUnitBase" unitName="AP_Archon">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundLarge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Abil.AP_ArchonWarp.Start" Send="AnimBracketStart Merging Stand,Work,Start Stand,Work"/>
+        <On Terms="Abil.AP_ArchonWarp.Stop" Send="AnimBracketStop Merging"/>
+        <On Terms="UnitBirth.*.Normal" Send="AnimPlay Birth Stand,Work,End 0 0.000000"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Target="AP_ArchonAttackBeam" Send="Destroy"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="Abil.attack.ReadyStop" Target="AP_ArchonAttackBeam" Send="Destroy"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <Model value="Archon"/>
+        <BuildModel value="Archon"/>
+        <DeathArray index="Normal" ModelLink="ArchonDeath" SoundLink="Archon_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ProtossMediumUnitDeath" SoundLink="Archon_Explode"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathLarge" Name="Hallucination"/>
+        <PlacementModel value="Archon"/>
+        <PortraitModel value="ArchonPortrait"/>
+        <BarOffset value="120"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Archon.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-archon.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Ready" value="Archon_Ready"/>
+        <SoundArray index="Help" value="Archon_Help"/>
+        <SoundArray index="What" value="Archon_What"/>
+        <SoundArray index="Yes" value="Archon_Yes"/>
+        <SoundArray index="Attack" value="Archon_Attack"/>
+        <SoundArray index="Pissed" value="Archon_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-archon.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Archon.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Archon-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Archon-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Archon-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="AP_ArchonAttack" parent="GenericAttack" effectAttack="AP_PsionicShockwaveDamage">
+        <LaunchAssets Sound="Archon_AttackLaunch"/>
+        <Beam value="AP_ArchonAttackBeam"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance VoidRaySOpForwardLaunch"/>
+        <ImpactMap index="None" Model="" Sound="Archon_AttackImpact"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_ArchonAttackBeam" parent="BeamSimpleAnimationStyleOneShot">
+        <Macros value="ActionTargetTeleportDestroy"/>
+        <Model value="ArchonAttackBeam"/>
+        <Scale value="0.500000"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_Archon_Death" parent="SoundOneShot">
+        <On Terms="UnitDeathCustomize.AP_Archon; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <Sound value="Archon_Death"/>
+    </CActorSound>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->

@@ -7949,4 +7949,18 @@
         <PeriodicOffsetArray value="-1.25,0,0"/>
         <PeriodicPeriodArray value="0.025"/>
     </CEffectCreatePersistent>
+    <CEffectDamage id="AP_PsionicShockwaveDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Biological" value="10"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="20"/>
+        <AreaArray Radius="0.093" Fraction="1"/>
+        <AreaArray Radius="0.4" Fraction="0.5"/>
+        <AreaArray Radius="0.8" Fraction="0.25"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="-;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+    </CEffectDamage>
 </Catalog>

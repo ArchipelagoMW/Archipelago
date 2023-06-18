@@ -214,6 +214,7 @@ Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
 Abil/Name/MercCompoundResearch2=Research
+Abil/Name/AP_Mergeable=Mergeable
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
 Actor/AddonIndicator/AP_TechLab=T
@@ -556,6 +557,7 @@ Button/Name/AP_PerditionTurret=Build Perdition Turret
 Button/Name/AP_PermanentCloakBanshee=Advanced Cross-Spectrum Dampeners
 Button/Name/AP_PermanentlyCloakedGhost=Permanently Cloaked
 Button/Name/AP_PermanentlyCloakedNova=Permanently Cloaked
+Button/Name/AP_PermanentlyCloakedObserver=Permanently Cloaked
 Button/Name/AP_PermanentlyCloakedSpectre=Permanently Cloaked
 Button/Name/AP_PersonalDefensiveMatrix=Ionic Force Field
 Button/Name/AP_PhoenixAiurGravitonBeam=Graviton Beam
@@ -677,7 +679,6 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_PermanentlyCloakedObserver=Permanently Cloaked
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
@@ -918,6 +919,7 @@ Button/Tooltip/AP_NukeArm=Arms the Silo with a Tactical Nuke.<n/><n/>Nukes take 
 Button/Tooltip/AP_NukeCalldown=Calls down a Nuclear Strike at a target location. Nukes take <d time="20"/> to land, but they deal up to 300 (+200 vs. structures) damage to enemies in a large radius.
 Button/Tooltip/AP_NyxClassCloakingModule=Cloak no longer requires energy.
 Button/Tooltip/AP_Obliterate=Deals 200 damage to a single target.
+Button/Tooltip/AP_Observer=Flying spy. Cloak renders the unit invisible to enemies without detection.<n/><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_OcularImplants=Increases Ghost weapon range by 2. Increases sight radius by 3.
 Button/Tooltip/AP_OrbitalCommandFlying=Primary structure. Must land to receive resources, produce units, or use abilities.
 Button/Tooltip/AP_OrbitalCommandUnit=Primary structure. Used to train SCVs and receive gathered resources. Can use the Scanner Sweep ability. Can use the abilities Calldown: MULE and Calldown: Extra Supplies.
@@ -926,6 +928,7 @@ Button/Tooltip/AP_PerditionTurretUnderground=Automated defensive turret. Burrows
 Button/Tooltip/AP_PermanentCloakBanshee=Cloak no longer requires energy.
 Button/Tooltip/AP_PermanentlyCloakedGhost=The Ghost is permanently cloaked.
 Button/Tooltip/AP_PermanentlyCloakedNova=Nova is permanently cloaked.
+Button/Tooltip/AP_PermanentlyCloakedObserver=The Observer is permanently cloaked.
 Button/Tooltip/AP_PermanentlyCloakedSpectre=The Spectre is permanently cloaked.
 Button/Tooltip/AP_PersonalDefensiveMatrix=Provides Nova with a shield that reduces incoming damage to a maximum of <d ref="Behavior,AP_PersonalDefensiveMatrix,DamageResponse.ClampMaximum"/> until <d ref="Behavior,AP_PersonalDefensiveMatrix,Modification.VitalMaxArray[Shields]"/> total damage is absorbed. Shield lasts for <d time="10"/>.
 Button/Tooltip/AP_PhoenixAiur=Aiur Faction<n/>Air superiority starfighter. Can use Graviton Beam on two enemy units simultaneously.<n/><n/><c val="ffff8a">Can attack air units.</c>
@@ -1068,8 +1071,7 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_Observer=Flying spy. Cloak renders the unit invisible to enemies without detection.<n/><n/><c val="FFE303">Detector</c>
-Button/Tooltip/AP_PermanentlyCloakedObserver=The Observer is permanently cloaked.
+Button/Tooltip/AP_Archon=Powerful psionic attacker.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1983,6 +1985,7 @@ Effect/Name/NeuralParasiteDroneRemoveCheck2=Neural Parasite Drone Remove Check
 Effect/Name/NeuralParasiteLaunchMissile2=Neural Parasite (Launch Missile)
 Effect/Name/NeuralParasitePersistent2=Neural Parasite (Create Persistent)
 Effect/Name/NeuralParasitePersistentSet2=Neural Parasite Persistent Set
+Effect/Name/AP_PsionicShockwaveDamage=Psionic Shockwave (Damage)
 Effect/Name/RemoveCoreRecallingBehaviorVikingAir2=Remove Core Recalling Behavior Viking Air
 Effect/Name/RemoveCoreRecallingBehaviorVikingGround2=Remove Core Recalling Behavior Viking Ground
 Effect/Name/RemoveRecallingBehaviorVikingAir2=Remove Recalling Behavior Viking Air
@@ -2148,6 +2151,7 @@ Unit/Name/AP_NovaLockdownMissile=Lockdown Missile
 Unit/Name/AP_NovaPlasmaPuddleSmall=Plasma Puddle
 Unit/Name/AP_NovaWeaponPlasmaBlastNewLaunchMissile=Plasma Surge
 Unit/Name/AP_Nuke=Nuke
+Unit/Name/AP_Observer=Observer
 Unit/Name/AP_OrbitalCommand=Orbital Command
 Unit/Name/AP_OrbitalCommandFlying=Orbital Command
 Unit/Name/AP_PerditionTurret=Perdition Turret
@@ -2229,8 +2233,8 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
+Unit/Name/AP_Archon=Archon
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
-Unit/Name/AP_Observer=Observer
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
@@ -2621,6 +2625,7 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
+Weapon/Name/AP_PsionicShockwave=Psionic Shockwave
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

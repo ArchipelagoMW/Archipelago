@@ -1482,4 +1482,17 @@
         <DamagePoint value="0.0832"/>
         <LegacyOptions index="KeepChanneling" value="1"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_PsionicShockwave">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_PsionicShockwaveDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="2"/>
+        <TeleportResetRange value="0"/>
+        <Cost>
+            <Cooldown Location="Unit"/>
+        </Cost>
+        <Period value="1.754"/>
+        <Effect value="AP_PsionicShockwaveDamage"/>
+    </CWeaponLegacy>
 </Catalog>

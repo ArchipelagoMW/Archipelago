@@ -3631,6 +3631,10 @@
         <AutoCastValidatorArray value="CasterShieldsLT1"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_ImmortalBarrierBase"/>
     </CAbilEffectInstant>
+    <CAbilMergeable id="AP_Mergeable">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Cancelable value="0"/>
+    </CAbilMergeable>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
