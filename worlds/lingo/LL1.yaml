@@ -1592,6 +1592,9 @@
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
+      THE LIBRARY:
+        id: EndPanel/Panel_library
+        check: True
     paintings:
       - id: arrows_painting_11
         orientation: east
