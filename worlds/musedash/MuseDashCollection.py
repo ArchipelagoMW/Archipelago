@@ -19,19 +19,26 @@ class MuseDashCollections:
     song_items: Dict[str, SongData] = {}
     song_locations: Dict[str, int] = {}
 
-    trap_items: Dict[str, int] = {}
+    vfx_trap_items: Dict[str, int] = {
+        "Bad Apple Trap": 1,
+        "Pixelate Trap": 2,
+        "Random Wave Trap": 3,
+        "Shadow Edge Trap": 4,
+        "Chromatic Aberration Trap": 5,
+        "Background Freeze Trap": 6,
+        "Gray Scale Trap": 7,
+    }
 
+    sfx_trap_items: Dict[str, int] = {
+        "Nyaa SFX Trap": 8,
+        "Error SFX Trap": 9,
+    }
 
     def __init__(self, start_item_id: int, items_per_location: int):
         self.MUSIC_SHEET_CODE = start_item_id
 
-        self.trap_items["Bad Apple Trap"] = start_item_id + 1
-        self.trap_items["Pixelate Trap"] = start_item_id + 2
-        self.trap_items["Random Wave Trap"] = start_item_id + 3
-        self.trap_items["Shadow Edge Trap"] = start_item_id + 4
-        self.trap_items["Chromatic Aberration Trap"] = start_item_id + 5
-        self.trap_items["Background Freeze Trap"] = start_item_id + 6
-        self.trap_items["Gray Scale Trap"] = start_item_id + 7
+        self.vfx_trap_items = {k: (v + start_item_id) for (k,v) in self.vfx_trap_items.items()}
+        self.sfx_trap_items = {k: (v + start_item_id) for (k,v) in self.sfx_trap_items.items()}
 
         item_id_index = start_item_id + 50
         location_id_index = start_item_id

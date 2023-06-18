@@ -104,8 +104,8 @@ class AdditionalItemPercentage(Range):
 class MusicSheetCountPercentage(Range):
     """Collecting enough Music Sheets will unlock the goal song needed for completion.
     This option controls how many are in the item pool, based on the total number of songs."""
-    range_start = 5
-    range_end = 35
+    range_start = 10
+    range_end = 40
     default = 20
     display_name = "Music Sheet Percentage"
 
@@ -118,9 +118,23 @@ class MusicSheetWinCountPercentage(Range):
     display_name = "Music Sheets Needed to Win"
 
 
+class TrapTypes(Choice):
+    """This controls the types of traps that can be added to the pool.
+    - VFX Traps consist of visual effects that play over the song. (i.e. Grayscale.)
+    - SFX Traps consist of changing your sfx setting to one possibly more annoying sfx.
+    Traps last the length of a song, or until you die.
+    Note: SFX traps are only available with Just As Planned dlc songs.
+    """
+    display_name = "Available Trap Types"
+    option_None = 0
+    option_SFX = 1
+    option_VFX = 2
+    option_All = 3
+    default = 3
+
+
 class TrapCountPercentage(Range):
-    """This controls how many traps to add into the pool, based the total number of songs.
-     - Traps consist of a visual effect that will get played for the length of a song, or until you die."""
+    """This controls how many traps to add into the pool, based the total number of songs."""
     range_start = 0
     range_end = 35
     default = 15
@@ -152,6 +166,7 @@ musedash_options: Dict[str, type(Option)] = {
     "grade_needed": GradeNeeded,
     "music_sheet_count_percentage": MusicSheetCountPercentage,
     "music_sheet_win_count_percentage": MusicSheetWinCountPercentage,
+    "available_trap_types": TrapTypes,
     "trap_count_percentage": TrapCountPercentage,
     "death_link": DeathLink,
     "include_songs": IncludeSongs,

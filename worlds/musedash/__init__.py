@@ -51,7 +51,7 @@ class MuseDashWorld(World):
         name: data.code for name, data in muse_dash_collection.album_items.items() | muse_dash_collection.song_items.items()
     }
     item_name_to_id[music_sheet_name] = muse_dash_collection.MUSIC_SHEET_CODE
-    for item in muse_dash_collection.trap_items.items():
+    for item in muse_dash_collection.sfx_trap_items.items() | muse_dash_collection.vfx_trap_items.items():
         item_name_to_id[item[0]] = item[1]
 
     location_name_to_id = {
@@ -123,7 +123,11 @@ class MuseDashWorld(World):
             return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
                                      self.muse_dash_collection.MUSIC_SHEET_CODE, self.player)
 
-        trap = self.muse_dash_collection.trap_items.get(name)
+        trap = self.muse_dash_collection.vfx_trap_items.get(name)
+        if trap != None:
+            return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
+
+        trap = self.muse_dash_collection.sfx_trap_items.get(name)
         if trap != None:
             return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
 
@@ -145,13 +149,15 @@ class MuseDashWorld(World):
 
         # Then add all traps
         trap_count = self.get_trap_count()
-        trap_list = list(self.muse_dash_collection.trap_items.items())
-        for _ in range(0, trap_count):
-            index = self.multiworld.random.randrange(0, len(trap_list))
-            choice = trap_list[index]
-            self.multiworld.itempool.append(self.create_item(choice[0]))
+        trap_list = self.get_available_traps()
+        if (len(trap_list) > 0 and trap_count > 0):
+            for _ in range(0, trap_count):
+                index = self.multiworld.random.randrange(0, len(trap_list))
+                choice = trap_list[index]
+                self.multiworld.itempool.append(self.create_item(choice[0]))
 
-        item_count += trap_count
+            item_count += trap_count
+
 
         # Next fill all remaining slots with song items
         needed_item_count = self.location_count
@@ -227,6 +233,19 @@ class MuseDashWorld(World):
                 set_rule(location, lambda state: state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count()))
             else:
                 set_rule(location, lambda state, place=item_name: state.has(place, self.player))
+
+    def get_available_traps(self) -> list:
+        dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
+
+        trap_list = list()
+        if (self.multiworld.available_trap_types[self.player].value & 1 != 0):
+            trap_list += self.muse_dash_collection.vfx_trap_items.items()
+
+        # SFX options are only available under Just as Planned DLC.
+        if (dlc_songs and self.multiworld.available_trap_types[self.player].value & 2 != 0):
+            trap_list += self.muse_dash_collection.sfx_trap_items.items()
+
+        return trap_list
 
     def get_additional_item_percentage(self) -> int:
         trap_count = self.multiworld.trap_count_percentage[self.player].value
