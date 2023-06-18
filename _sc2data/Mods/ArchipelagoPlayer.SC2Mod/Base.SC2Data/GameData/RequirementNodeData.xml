@@ -2289,4 +2289,11 @@
         <Count Link="AP_VoidImmortalWeaponSplash" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeDarkTemplarBlinkUpgradeCompleteOnlyTechTreeCheat">
+        <Count Link="AP_DarkTemplarBlinkUpgrade" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorIsPoweredDarkShrineCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_IsPoweredDarkShrine" State="CompleteOnly"/>
+    </CRequirementCountBehavior>
 </Catalog>

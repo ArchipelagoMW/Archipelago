@@ -7963,4 +7963,254 @@
         <SearchFilters value="-;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <SearchFlags index="OffsetByUnitRadius" value="0"/>
     </CEffectDamage>
+    <CEffectDamage id="AP_AvengerWeapon" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Amount value="45"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectIssueOrder id="AP_DarkTemplarRecallAssignRallyIssueOrder">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_DarkTemplarRecallSet"/>
+        <Abil value="AP_DarkShrineAssignRally"/>
+        <Target Value="CasterUnit"/>
+    </CEffectIssueOrder>
+    <CEffectCreateUnit id="AP_DarkTemplarRecallCreatePrecursor">
+        <EditorCategories value=""/>
+        <CreateFlags index="Precursor" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_DarkTemplarRecallTeleportDummy"/>
+        <SpawnRange value="5"/>
+    </CEffectCreateUnit>
+    <CEffectDamage id="AP_DarkTemplarRecallDestroyPrecusor">
+        <EditorCategories value=""/>
+        <ImpactLocation Effect="AP_DarkTemplarRecallTeleportDummy" Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Death value="Silentkill"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_DarkTemplarRecallDummy"/>
+    <CEffectModifyUnit id="AP_DarkTemplarRecallHeal">
+        <EditorCategories value=""/>
+        <ImpactUnit Value="Caster"/>
+        <VitalArray index="Life">
+            <ChangeFraction value="1"/>
+        </VitalArray>
+        <VitalArray index="Shields">
+            <ChangeFraction value="1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="AP_DarkTemplarRecallSearch">
+        <EditorCategories value=""/>
+        <ImpactLocation Value="TargetUnit"/>
+        <AreaArray MaxCount="1" Radius="500" Effect="AP_DarkTemplarRecallSet"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_DarkTemplarRecallSet">
+        <ValidatorArray value="IsDarkShrine"/>
+        <ValidatorArray value="HasPower"/>
+        <EditorCategories value=""/>
+        <EffectArray value="AP_DarkTemplarRecallCreatePrecursor"/>
+    </CEffectSet>
+    <CEffectTeleport id="AP_DarkTemplarRecallTeleport">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <MinDistance value="0"/>
+        <PlacementAround Value="TargetUnit"/>
+        <TargetLocation Effect="AP_DarkTemplarRecallTeleportDummy" Value="TargetUnit"/>
+    </CEffectTeleport>
+    <CEffectCreatePersistent id="AP_DarkTemplarRecallTeleportDummy">
+        <EditorCategories value=""/>
+        <WhichLocation Value="TargetUnit"/>
+        <InitialEffect value="AP_DarkTemplarRecallingBehaviorSet"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_DarkTemplarRecallingAB">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_DarkTemplarRecalling"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_DarkTemplarRecallingBehaviorSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_DarkTemplarRecallingAB"/>
+        <EffectArray value="AP_DarkTemplarRecentlyRecalledAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_DarkTemplarRecentlyRecalledAB">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_DarkTemplarRecentlyRecalled"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_DarkTemplarShadowFuryControllerAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_DarkTemplarShadowFuryController"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_DarkTemplarShadowFuryDamage">
+        <EditorCategories value=""/>
+        <Amount value="35"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_DarkTemplarShadowFuryFinalDelayAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_DarkTemplarShadowFuryFinalDelay"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_DarkTemplarShadowFuryImpactSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_DarkTemplarShadowFuryTeleportSwitch"/>
+        <EffectArray value="AP_DarkTemplarShadowFuryDamage"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_DarkTemplarShadowFuryPersistent">
+        <ValidatorArray value="AP_ShadowFuryCliffLevelEqual"/>
+        <ValidatorArray value="AP_DarkTemplarShadowFuryTargetsInArea"/>
+        <InitialEffect value="AP_DarkTemplarShadowFuryControllerAB"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_DarkTemplarShadowFurySearch">
+        <EditorCategories value=""/>
+        <LaunchLocation Effect="AP_DarkTemplarShadowFuryPersistent" Value="TargetPoint"/>
+        <ImpactLocation Effect="AP_DarkTemplarShadowFuryPersistent"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,RawResource,HarvestableResource,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts RequestCount="1">
+            <SortArray value="TSVoidDarkTemplarShadowFuryTargeted"/>
+            <SortArray value="TSRandom"/>
+        </TargetSorts>
+        <AreaArray MaxCount="1" Radius="5" Effect="AP_VoidDarkTemplarShadowFurySearchSetAOE"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreatePersistent id="AP_DarkTemplarShadowFuryTeleport1CP">
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_DarkTemplarShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.2,-0.8,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectTeleport id="AP_DarkTemplarShadowFuryTeleport">
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <TargetLocation Value="TargetPoint"/>
+        <TeleportFlags index="TestFog" value="0"/>
+        <TeleportEffect value="AP_DarkTemplarShadowFuryTeleportFacing"/>
+    </CEffectTeleport>
+    <CEffectModifyUnit id="AP_DarkTemplarShadowFuryTeleportFacing">
+        <ImpactUnit Value="Caster"/>
+        <FacingLocation Effect="AP_DarkTemplarShadowFuryImpactSet" Value="TargetUnit"/>
+        <FacingType value="LookAt"/>
+    </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_DarkTemplarShadowFuryTeleport2CP">
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_DarkTemplarShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.3,-1.2,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_DarkTemplarShadowFuryTeleport3CP">
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_DarkTemplarShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.3,-1.7,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_DarkTemplarShadowFuryTeleport4CP">
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_DarkTemplarShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.4,-2.2,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_DarkTemplarShadowFuryTeleport5CP">
+        <OffsetVectorStartLocation Value="SourcePoint"/>
+        <OffsetVectorEndLocation Effect="TargetPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_DarkTemplarShadowFuryTeleport"/>
+        <PeriodicOffsetArray value="0.4,-2.7,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectTeleport id="AP_DarkTemplarShadowFuryTeleportFinal">
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Effect="AP_DarkTemplarShadowFuryPersistent" Value="OriginPoint"/>
+        <PlacementRange value="10"/>
+        <Range value="10"/>
+        <TargetLocation Value="TargetPoint"/>
+        <TeleportFlags index="TestFog" value="0"/>
+        <TeleportEffect value="AP_DarkTemplarShadowFuryRemove"/>
+    </CEffectTeleport>
+    <CEffectRemoveBehavior id="AP_DarkTemplarShadowFuryRemove">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_DarkTemplarShadowFury"/>
+    </CEffectRemoveBehavior>
+    <CEffectCreatePersistent id="AP_DarkTemplarShadowFuryTeleportFinalCP">
+        <EditorCategories value=""/>
+        <WhichLocation Value="OriginPoint"/>
+        <InitialEffect value="AP_DarkTemplarShadowFuryTeleportFinal"/>
+    </CEffectCreatePersistent>
+    <CEffectSwitch id="AP_DarkTemplarShadowFuryTeleportSwitch">
+        <EditorCategories value="Race:Protoss"/>
+        <CaseArray Validator="TargetRadiusGT2Dot5" Effect="AP_DarkTemplarShadowFuryTeleport5CP"/>
+        <CaseArray Validator="TargetRadiusGT1Dot5" Effect="AP_DarkTemplarShadowFuryTeleport4CP"/>
+        <CaseArray Validator="TargetRadiusGT1Dot0" Effect="AP_DarkTemplarShadowFuryTeleport3CP"/>
+        <CaseArray Validator="TargetRadiusGT0Dot5" Effect="AP_DarkTemplarShadowFuryTeleport2CP"/>
+        <CaseDefault value="AP_DarkTemplarShadowFuryTeleport1CP"/>
+    </CEffectSwitch>
+    <CEffectSet id="AP_DarkTemplarTaldarimWeaponSet">
+        <EffectArray value="AP_WarpBlades"/>
+    </CEffectSet>
+    <CEffectSet id="AP_DarkTemplarTeleportSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_DarkTemplarRecallTeleport"/>
+        <EffectArray value="AP_DarkTemplarRecallHeal"/>
+        <EffectArray value="AP_DarkTemplarRecallAssignRallyIssueOrder"/>
+        <EffectArray value="AP_DarkTemplarRecallDestroyPrecusor"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_DarkTemplarVoidStasisAB">
+        <ValidatorArray index="0" value="AP_NotStasis"/>
+        <EditorCategories value=""/>
+        <Behavior value="AP_DarkTemplarVoidStasis"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumTransport id="AP_DarkTemplarVoidStasisIterateTransport">
+        <ValidatorArray value="AP_IsAnyBunker"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Effect value="AP_DarkTemplarVoidStasisAB"/>
+    </CEffectEnumTransport>
+    <CEffectSet id="AP_DarkTemplarVoidStasisSet">
+        <ValidatorArray value="NotFrenzied"/>
+        <EditorCategories value=""/>
+        <EffectArray value="AP_DarkTemplarVoidStasisAB"/>
+        <EffectArray value="AP_DarkTemplarVoidStasisIterateTransport"/>
+    </CEffectSet>
+    <CEffectSet id="AP_VoidDarkTemplarShadowFurySearchSetAOE">
+        <ValidatorArray value="NotLarva"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_VoidDarkTemplarShadowFuryTargetAB"/>
+        <EffectArray value="AP_DarkTemplarShadowFuryImpactSet"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_VoidDarkTemplarShadowFuryTargetAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_VoidDarkTemplarShadowFuryTargeted"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_WarpBlades" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Amount value="45"/>
+        <Death value="Eviscerate"/>
+    </CEffectDamage>
+    <CEffectTeleport id="AP_DarkTemplarBlink">
+        <EditorCategories value="Race:Protoss"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Value="CasterUnit"/>
+        <PlacementRange value="8"/>
+        <Range value="8"/>
+        <WhichUnit Value="Caster"/>
+        <TargetLocation Value="TargetPoint"/>
+        <TeleportFlags index="TestCliff" value="1"/>
+        <ValidatorArray value="AP_CasterNotFungalGrowthed"/>
+        <TeleportEffect value="AP_DarkTemplarBlinkAB"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="AP_DarkTemplarBlinkAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_DarkTemplarBlinkAttackDelay"/>
+    </CEffectApplyBehavior>
 </Catalog>

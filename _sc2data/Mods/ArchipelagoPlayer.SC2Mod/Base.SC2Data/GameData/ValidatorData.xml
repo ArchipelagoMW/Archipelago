@@ -2315,4 +2315,90 @@
         <CombineArray value="AP_IsVanillaObserver"/>
         <CombineArray value="AP_IsAPObserver"/>
     </CValidatorCombine>
+    <CValidatorCombine id="AP_ShadowFuryAutoCast">
+        <CombineArray value="AP_DarkTemplarShadowFuryNotTargetted"/>
+        <CombineArray value="AP_ShadowFuryTargetLifeAndBehaviorCheck"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_DarkTemplarShadowFuryNotTargetted">
+        <Behavior value="AP_VoidDarkTemplarShadowFuryTargeted"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_ShadowFuryTargetLifeAndBehaviorCheck">
+        <Type value="And"/>
+        <CombineArray value="AP_DarkTemplarShadowFuryTargetted"/>
+        <CombineArray value="AP_LifeGT35"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_DarkTemplarShadowFuryTargetted">
+        <Behavior value="AP_VoidDarkTemplarShadowFuryTargeted"/>
+        <Compare value="GT"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareVital id="AP_LifeGT35">
+        <ResultFailed value="TooMuchLife"/>
+        <Compare value="GT"/>
+        <Value value="35"/>
+        <!--Type value="Fraction"/-->
+    </CValidatorUnitCompareVital>
+    <CValidatorCombine id="AP_DarkTemplarVoidStasis">
+        <CombineArray value="AP_HasDetector8"/>
+        <CombineArray value="AP_HasDetector9"/>
+        <CombineArray value="HasDetector10"/>
+        <CombineArray value="HasDetector11"/>
+        <CombineArray value="HasDetector12"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasDetector8">
+        <Behavior value="Detector8"/>
+        <Compare value="GT"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasDetector9">
+        <Behavior value="Detector9"/>
+        <Compare value="GT"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareOrderTargetRange id="AP_DarkTemplarBlinkRangeCheck">
+        <Compare value="GT"/>
+        <AbilLink value="AP_DarkTemplarBlink"/>
+        <Value value="30"/>
+    </CValidatorUnitCompareOrderTargetRange>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterNotAPFungalGrowthed">
+        <ResultFailed value="Error,Error/CantBlinkWhileRooted"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_FungalGrowth"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterNotVanillaFungalGrowthed">
+        <ResultFailed value="Error,Error/CantBlinkWhileRooted"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="FungalGrowth"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_CasterNotFungalGrowthed">
+        <Type value="And"/>
+        <CombineArray value="AP_CasterNotVanillaFungalGrowthed"/>
+        <CombineArray value="AP_CasterNotAPFungalGrowthed"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotRecentlyRecalled">
+        <Behavior value="AP_DarkTemplarRecentlyRecalled"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HasDarkShrine">
+        <Find value="1"/>
+        <Value value="AP_HasPoweredDarkShrine"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorLocationEnumArea id="AP_DarkTemplarShadowFuryTargetsInArea">
+        <AreaArray Compare="GT" Count="0" Radius="5"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,RawResource,HarvestableResource,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <ResultFailed value="LoadAllNoTargetsFound,No Targets Found"/>
+        <WhichLocation Effect="AP_DarkTemplarShadowFuryPersistent"/>
+    </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterHasDarkTemplarShadowFury">
+        <Behavior value="AP_DarkTemplarShadowFury"/>
+        <Compare value="GT"/>
+        <WhichUnit Value="Caster"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorLocationCompareCliffLevel id="AP_ShadowFuryCliffLevelEqual">
+        <ResultFailed value="Error,Error\ShadowFuryCliffLevel"/>
+        <OtherLocation Value="OriginUnit"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorUnitFilters id="AP_NotStasis">
+        <Filters value="-;Stasis"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitType id="IsDarkTemplar">
+        <!-- Override -->
+        <Type value="SelectAlias"/>
+    </CValidatorUnitType>
 </Catalog>

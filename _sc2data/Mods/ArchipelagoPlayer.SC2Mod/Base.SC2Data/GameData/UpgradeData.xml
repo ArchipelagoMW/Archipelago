@@ -3693,4 +3693,27 @@
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Immortal"/>
     </CUpgrade>
+    <CUpgrade id="AP_TemplarArchonDisabledTooltipUpgrade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HighTemplar,Description" Value="Button/Tooltip/HighTemplar"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_DarkTemplar,Description" Value="Button/Tooltip/DarkTemplar"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_HighTemplar"/>
+        <AffectedUnitArray value="AP_DarkTemplar"/>
+    </CUpgrade>
+    <CUpgrade id="AP_TemplarArchonEnabledTooltipUpgrade">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_HighTemplar"/>
+        <AffectedUnitArray value="AP_DarkTemplar"/>
+    </CUpgrade>
+    <CUpgrade id="AP_DarkTemplarBlinkUpgrade">
+        <Icon value="Assets\Textures\btn-ability-protoss-stealth-blink.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_DarkTemplar"/>
+    </CUpgrade>
 </Catalog>

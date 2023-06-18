@@ -1312,4 +1312,12 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeVoidImmortalWeaponSplashCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseDarkTemplarBlink">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeDarkTemplarBlinkUpgradeCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HasPoweredDarkShrine">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Use" Link="AP_CountBehaviorIsPoweredDarkShrineCompleteOnly"/>
+    </CRequirement>
 </Catalog>

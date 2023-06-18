@@ -1996,6 +1996,15 @@
         </InfoArray>
         <CalldownEffect value="AP_Nuke"/>
     </CAbilArmMagazine>
+    <CAbilMerge id="AP_ArchonWarp">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="SelectedUnits" DefaultButtonFace="AWrp" State="Restricted">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="WithTarget" DefaultButtonFace="ArchonWarpTarget" State="Restricted"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Info Unit="AP_Archon" Time="12"/>
+    </CAbilMerge>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
@@ -2551,6 +2560,73 @@
         <Range value="9"/>
         <CursorEffect value="AP_DisablingCloudSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_DisablingCloud"/>
+    </CAbilEffectTarget>
+    <CAbilMerge id="AP_DarkArchonMerge">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="SelectedUnits" DefaultButtonFace="DarkArchonMergeSelection">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="WithTarget" DefaultButtonFace="DarkArchonMergeTarget"/>
+        <Flags index="IgnoreUnitCost" value="1"/>
+        <Info Unit="AP_ShadowArchon" Time="12"/>
+    </CAbilMerge>
+    <CAbilEffectTarget id="AP_DarkTemplarShadowFury">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Effect index="0" value="AP_DarkTemplarShadowFuryPersistent"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="BestUnit" value="0"/>
+        <Cost>
+            <Cooldown TimeUse="15"/>
+        </Cost>
+        <TargetFilters value="Ground;Self,Player,Ally,Neutral,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="5"/>
+        <AutoCastFilters value="Ground,Visible;Player,Ally,Neutral,Structure"/>
+        <AutoCastRange value="4"/>
+        <AutoCastValidatorArray value="CasterNotHoldingPosition"/>
+        <AutoCastValidatorArray value="AP_ShadowFuryAutoCast"/>
+        <UninterruptibleArray index="Wait" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <UninterruptibleArray index="Finish" value="1"/>
+        <UninterruptibleArray index="Bail" value="1"/>
+        <CursorEffect value="AP_DarkTemplarShadowFurySearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidDarkTemplarShadowFury"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_DarkTemplarVoidStasis">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_DarkTemplarVoidStasisSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="15"/>
+        </Cost>
+        <TargetFilters value="Ground;Player,Ally,Heroic,Missile,Stasis,UnderConstruction,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <AutoCastRange value="6"/>
+        <AutoCastValidatorArray value="AP_DarkTemplarVoidStasis"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidStasis"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_DarkTemplarBlink">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Range value="500"/>
+        <!--Blink like Zeratul, Instead of Stalker-->
+        <!--Arc value="360"/-->
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DarkTemplarBlink" Requirements="AP_UseDarkTemplarBlink">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <AbilSetId value="Blnk"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_DarkShrineAssignRally">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Range value="500"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DarkShrineAssignRally"/>
+        <Arc value="360"/>
     </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->

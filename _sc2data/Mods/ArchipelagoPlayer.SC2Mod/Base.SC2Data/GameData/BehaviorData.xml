@@ -7,7 +7,7 @@
     </CEffectModifyUnit>
     <CBehaviorBuff default="1" id="AP_SwarmHostEggAnimationDefault">
         <InfoFlags index="Hidden" value="1"/>
-        <DisableValidatorArray value="NotStasis"/>
+        <DisableValidatorArray value="AP_NotStasis"/>
         <DisableValidatorArray value="NotVortexd"/>
         <DisableValidatorArray value="NotGravitonBeamd"/>
         <DisableValidatorArray value="NotThunderCannond"/>
@@ -841,6 +841,7 @@
             <AbilLinkDisableArray value="MorphZerglingToBaneling"/>
             <AbilLinkDisableArray value="MorphToOverseer"/>
             <AbilLinkDisableArray value="MorphToBroodLord"/>
+            <AbilLinkDisableArray value="AP_ArchonWarp"/>
             <AbilLinkDisableArray value="ArchonWarp"/>
         </Modification>
     </CBehaviorBuff>
@@ -849,7 +850,7 @@
         <EditorCategories value="AbilityorEffectType:Units"/>
         <DisplayDuration index="Self" value="1"/>
         <DisplayDuration index="Ally" value="1"/>
-        <DisableValidatorArray value="NotStasis"/>
+        <DisableValidatorArray value="AP_NotStasis"/>
         <DisableValidatorArray value="NotVortexd"/>
         <DisableValidatorArray value="NotGravitonBeamd"/>
         <DisableValidatorArray value="NotThunderCannond"/>
@@ -2732,5 +2733,132 @@
         <Duration value="0.625"/>
         <Period value="0.5"/>
         <PeriodicEffect value="AP_ThermalLancesFireBeamDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkTemplarRecallToDarkShrine">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_IsNotRecentlyRecalled"/>
+        <DisableValidatorArray value="AP_HasDarkShrine"/>
+        <DamageResponse Fatal="1" Handled="AP_DarkTemplarRecallSearch" ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_IsPoweredDarkShrine">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <Duration value="0.3125"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkTemplarRecalling">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="0.5"/>
+        <ExpireEffect value="AP_DarkTemplarTeleportSet"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="Untargetable" value="1"/>
+        </Modification>
+        <DamageResponse Fatal="1" Handled="AP_DarkTemplarRecallDummy" ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkTemplarShadowFuryController">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_DarkTemplarShadowFuryTargetsInArea"/>
+        <Duration value="1.6"/>
+        <Period value="0.4"/>
+        <PeriodCount value="4"/>
+        <InitialEffect value="AP_DarkTemplarShadowFurySearch"/>
+        <PeriodicEffect value="AP_DarkTemplarShadowFurySearch"/>
+        <FinalEffect value="AP_DarkTemplarShadowFuryFinalDelayAB"/>
+        <Modification>
+            <ModifyFlags index="DisableWeapons" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkTemplarShadowFuryFinalDelay">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="0.3"/>
+        <FinalEffect value="AP_DarkTemplarShadowFuryTeleportFinalCP"/>
+        <Modification>
+            <ModifyFlags index="DisableWeapons" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkTemplarVoidStasis">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-voidstasis.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="10"/>
+        <Modification>
+            <StateFlags index="Stasis" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressCloak" value="1"/>
+            <StateFlags index="SuppressDetection" value="1"/>
+            <StateFlags index="SuppressFoodMade" value="1"/>
+            <StateFlags index="SuppressRadar" value="1"/>
+            <StateFlags index="SuppressTech" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+            <AbilClassDisableArray index="CAbilWarpTrain" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorPowerSource" value="1"/>
+            <BehaviorClassDisableArray index="CBehaviorResource" value="1"/>
+            <BehaviorLinkDisableArray value="SalvageBunker"/>
+            <BehaviorLinkDisableArray value="SalvageShared"/>
+            <BehaviorLinkDisableArray value="SensorTowerRadar"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidDarkTemplarShadowFuryTargeted">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <RemoveValidatorArray value="AP_CasterHasDarkTemplarShadowFury"/>
+        <MaxStackCount value="10"/>
+        <Duration value="3"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkTemplarBlinkAttackDelay">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <Modification>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <AbilCategoriesEnable index="Passive" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorJump id="AP_DarkTemplarShadowHunterJump">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <TriggerHeightDeltaMin value="1.5"/>
+        <TriggerHeightDeltaMax value="4.5"/>
+        <InitiateRangeUp value="0.5"/>
+        <InitiateRangeDown value="0.5"/>
+        <JumpRangeMax value="12"/>
+        <Mover value="CliffJumper"/>
+        <MoverUp value="AP_DarkTemplarJumpUp"/>
+        <MoverDown value="AP_DarkTemplarJumpDown"/>
+        <DurationMoveOut value="0.6"/>
+        <Placeholder value="AP_HotSRaptorPlaceholder"/>
+        <LandAdjustmentUp value="0.75"/>
+        <LandAdjustmentDown value="0.75"/>
+        <LandArrivalRange value="0.05"/>
+        <LandCheckRadius value="5"/>
+        <DurationPostLand value="0.4"/>
+    </CBehaviorJump>
+    <CBehaviorBuff id="AP_DarkTemplarShadowFury">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="0.5"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
     </CBehaviorBuff>
 </Catalog>

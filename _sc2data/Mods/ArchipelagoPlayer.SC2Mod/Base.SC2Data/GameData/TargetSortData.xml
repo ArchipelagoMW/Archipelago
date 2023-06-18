@@ -7,4 +7,8 @@
         <WhichUnit Value="Target"/>
         <Behavior value="AP_NovaWeaponBlazefireBladeShadowFuryTargeted"/>
     </CTargetSortBehaviorCount>
+    <CTargetSortBehaviorCount id="AP_TSVoidDarkTemplarShadowFuryTargeted">
+        <WhichUnit Value="Target"/>
+        <Behavior value="AP_VoidDarkTemplarShadowFuryTargeted"/>
+    </CTargetSortBehaviorCount>
 </Catalog>

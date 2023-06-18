@@ -4914,7 +4914,6 @@
     </CActorUnit>
     <CActorAction id="AP_ArchonAttack" parent="GenericAttack" effectAttack="AP_PsionicShockwaveDamage">
         <LaunchAssets Sound="Archon_AttackLaunch"/>
-        <Beam value="AP_ArchonAttackBeam"/>
         <BeamScope value="Caster"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance VoidRaySOpForwardLaunch"/>
         <ImpactMap index="None" Model="" Sound="Archon_AttackImpact"/>
@@ -4929,6 +4928,10 @@
         <On Terms="UnitDeathCustomize.AP_Archon; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
         <Sound value="Archon_Death"/>
     </CActorSound>
+    <CActorAction id="AvengerAttack2" parent="GenericAttack" effectAttack="AP_AvengerWeapon">
+        <ImpactMap index="None" Model="None" Sound="DarkTemplar_AttackImpact"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -10073,13 +10076,398 @@
             <Image value="Assets\Textures\Wireframe-Protoss-Observer-Shield03.dds"/>
         </WireframeShield>
     </CActorUnit>
-    <CActorSound id="ShieldAbsorbImmortalSound2" parent="SoundOneShot">
+    <CActorUnit id="AP_HotSRaptorPlaceholder" parent="GenericUnitStandard" unitName="AP_HotSRaptorPlaceholder">
+        <Model value="AP_HotSRaptor"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <Aliases value="_UnitSmall"/>
+    </CActorUnit>
+    <CActorUnit id="AP_DarkTemplar" parent="GenericUnitStandard" unitName="AP_DarkTemplar">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="UnitPortrait.*.Customize; ModelVariation 1" Send="PortraitCustomize DarkTemplarPortrait"/>
+        <On Terms="UnitPortrait.*.Customize; ModelVariation 0" Send="PortraitCustomize DarkTemplarPortrait"/>
+        <On Terms="UnitDeathCustomize; ModelVariation 0" Send="DeathCustomize Variation0"/>
+        <On Terms="UnitDeathCustomize; ModelVariation 1" Send="DeathCustomize Variation1"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_DarkTemplar_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
+        <On Terms="Abil.AP_DarkTemplarBlink.TargetApproachStart; ValidateUnit AP_DarkTemplarBlinkRangeCheck; !ScopeContains AP_DarkTemplar_BlinkRangedVO" Send="Create AP_DarkTemplar_BlinkRangedVO"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <Model value="DarkTemplar"/>
+        <AnimBlendTime value="0.250000"/>
+        <ModelFlags index="UseConstSyncSeed" value="1"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="DarkTemplarWarpIn"/>
+        <DeathArray index="Normal" ModelLink="DarkTemplarDeath" SoundLink="DarkTemplar_DeathFX"/>
+        <DeathCustoms ModelLink="DarkTemplarDeath00" Name="Variation0"/>
+        <DeathCustoms ModelLink="DarkTemplarDeath01" Name="Variation1"/>
+        <DeathCustoms ActorModel="DarkTemplarDeathRagdoll" ModelLink="DarkTemplarDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="BloodReduced"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollWithTeamColor" ModelLink="DarkTemplarDeathRagdoll" Name="RagdollSpineCrawlerHurl">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <PlacementModel value="DarkTemplarPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="DarkTemplarPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <AbilSoundArray AbilCmd="DarkTemplarBlink,Execute" Sound="DarkTemplar_BlinkDummyVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00.dds"/>
+        </GroupIcon>
+        <GroupIconVariations Number="0">
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00.dds"/>
+        </GroupIconVariations>
+        <GroupIconVariations Number="1">
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar01.dds"/>
+        </GroupIconVariations>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-darktemplar.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="DarkTemplar_Ready"/>
+        <SoundArray index="Help" value="DarkTemplar_Help"/>
+        <SoundArray index="What" value="DarkTemplar_What"/>
+        <SoundArray index="Yes" value="DarkTemplarVoid_Yes"/>
+        <SoundArray index="Attack" value="DarkTemplar_Attack"/>
+        <SoundArray index="Pissed" value="DarkTemplarVoid_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-darktemplar.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00.dds"/>
+        </Wireframe>
+        <WireframeVariations Number="0">
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00.dds"/>
+        </WireframeVariations>
+        <WireframeVariations Number="1">
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar01.dds"/>
+        </WireframeVariations>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00-Shield03.dds"/>
+        </WireframeShield>
+        <WireframeShieldVariations Number="0">
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00-Shield03.dds"/>
+        </WireframeShieldVariations>
+        <WireframeShieldVariations Number="1">
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar01-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar01-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar01-Shield03.dds"/>
+        </WireframeShieldVariations>
+    </CActorUnit>
+    <CActorSound id="AP_DarkTemplar_BlinkRangedVO" parent="SoundOneShot">
+        <Sound value="DarkTemplar_BlinkRangedVO"/>
+        <Host Subject="_Unit"/>
+    </CActorSound>
+    <CActorSound id="AP_DarkTemplar_Land" parent="SoundOneShot">
+        <Sound value="DarkTemplar_Land"/>
+    </CActorSound>
+    <CActorSound id="AP_Templar_LandSweetener" parent="SoundOneShot"/>
+    <CActorUnit id="AP_DarkTemplarAiur" parent="GenericUnitStandard" unitName="AP_DarkTemplarAiur">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_DarkTemplar_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
+        <On Terms="Behavior.AP_DarkTemplarShadowHunterJump.Launch" Send="Create AP_DarkTemplarShadowHunterJumpLaunch"/>
+        <On Terms="Behavior.AP_DarkTemplarShadowHunterJump.Launch" Send="SetVisibility"/>
+        <On Terms="Behavior.AP_DarkTemplarShadowHunterJump.LandDown" Send="Create AP_DarkTemplarShadowHunterJumpLand"/>
+        <On Terms="Behavior.AP_DarkTemplarShadowHunterJump.LandDownDone" Send="SetVisibility 1"/>
+        <On Terms="Behavior.AP_DarkTemplarShadowHunterJump.LandUp" Send="Create AP_DarkTemplarShadowHunterJumpLand"/>
+        <On Terms="Behavior.AP_DarkTemplarShadowHunterJump.LandUpDone" Send="SetVisibility 1"/>
+        <On Terms="Behavior.AP_DarkTemplarRecalling.On" Send="SetScale 0.500000,0.500000,5.000000 0.500000 RecallScale"/>
+        <On Terms="Behavior.AP_DarkTemplarRecalling.Off" Send="ClearScale 0.000000 RecallScale"/>
+        <AnimBlendTime value="0.250000"/>
+        <ModelFlags index="UseConstSyncSeed" value="1"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_DarkTemplarAiurWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_DarkTemplarAiurDeath" SoundLink="DarkTemplar_DeathFX"/>
+        <PlacementModel value="AP_DarkTemplarAiurPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_DarkTemplarAiurPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <BarOffset value="50"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-aiur.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-darktemplar-aiur.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="DarkTemplar_Birth"/>
+        <SoundArray index="Ready" value="AP_Avenger_Ready"/>
+        <SoundArray index="Help" value="AP_Avenger_Pissed"/>
+        <SoundArray index="What" value="AP_Avenger_What"/>
+        <SoundArray index="Yes" value="AP_Avenger_Yes"/>
+        <SoundArray index="Attack" value="AP_Avenger_Attack"/>
+        <SoundArray index="Pissed" value="AP_Avenger_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-darktemplar-aiur.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-aiur.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-aiur-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-aiur-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-aiur-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_DarkTemplarShadowHunterJumpLaunch" parent="ModelAnimationStyleOneShot">
+        <EditorCategories value=""/>
+        <Model value="AP_ZeratulBlinkOut"/>
+        <Scale value="0.500000"/>
+    </CActorModel>
+    <CActorModel id="AP_DarkTemplarShadowHunterJumpLand" parent="ModelAnimationStyleOneShot">
+        <EditorCategories value=""/>
+        <Model value="AP_ZeratulBlinkIn"/>
+        <Scale value="0.500000"/>
+    </CActorModel>
+    <CActorModel id="AP_DarkTemplarAiurRecallStart" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_DarkTemplarRecallSet.Start" Send="Create"/>
+        <On Terms="Effect.AP_DarkTemplarRecallSet.Start" Send="Create WarpTrainStart"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldPosition="1" HoldRotation="1"/>
+    </CActorModel>
+    <CActorModel id="AP_DarkTemplarAiurRecallStop" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_DarkTemplarRecallTeleport.Stop" Send="Create"/>
+        <On Terms="Effect.AP_DarkTemplarRecallTeleport.Stop" Send="Create WarpTrainStop"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldPosition="1" HoldRotation="1"/>
+    </CActorModel>
+    <CActorAction id="AP_DarkTemplarAttack" parent="GenericAttack" effectAttack="AP_WarpBlades">
+        <ImpactMap index="None" Model="None" Sound="DarkTemplar_AttackImpact"/>
+        <ImpactPhysics>
+            <Name value="AttackPolearm00"/>
+            <MatchKeys value="Basic"/>
+            <AttackModelVariation value="0"/>
+            <AttackAnimProps value="00"/>
+            <Physics value="DarkTemplarAttackDeathForceLateral"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="AttackPolearm01"/>
+            <MatchKeys value="Basic"/>
+            <AttackModelVariation value="0"/>
+            <AttackAnimProps value="01"/>
+            <Physics value="DarkTemplarAttackDeathForceLateral"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="AttackPolearm03"/>
+            <MatchKeys value="Basic"/>
+            <AttackModelVariation value="0"/>
+            <AttackAnimProps value="03"/>
+            <Physics value="DarkTemplarAttackDeathForceOverhead"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="AttackBlade00"/>
+            <MatchKeys value="Basic"/>
+            <AttackModelVariation value="1"/>
+            <AttackAnimProps value="00"/>
+            <Physics value="DarkTemplarAttackDeathForceThrust"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="AttackBlade01"/>
+            <MatchKeys value="Basic"/>
+            <AttackModelVariation value="1"/>
+            <AttackAnimProps value="02"/>
+            <Physics value="DarkTemplarAttackDeathForceLateral"/>
+        </ImpactPhysics>
+        <ImpactPhysics>
+            <Name value="AttackBlade03"/>
+            <MatchKeys value="Basic"/>
+            <AttackModelVariation value="1"/>
+            <AttackAnimProps value="03"/>
+            <Physics value="DarkTemplarAttackDeathForceOverhead"/>
+        </ImpactPhysics>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorModel id="AP_DarkTemplarShadowFuryImpact" parent="ModelAnimationStyleOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Effect.AP_DarkTemplarShadowFuryDamage.Start; At Caster" Send="Create"/>
+<!--        <On Terms="Effect.VorazunShadowFuryDamage.Start; At Caster" Send="Create"/>-->
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenterStationary SOp2DRotation"/>
+        <Model value="AP_DarkTemplarShadowFuryImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_DarkTemplarShadowFurySound" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Effect.AP_DarkTemplarShadowFuryDamage.Start" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="DarkTemplar_AttackLaunch"/>
+    </CActorSound>
+    <CActorUnit id="AP_DarkTemplarShakuras" parent="GenericUnitStandard" unitName="AP_DarkTemplarShakuras">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_DarkTemplar_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
+        <On Terms="Effect.AP_DarkTemplarShadowFuryImpactSet.Start" Send="AnimClear ShadowFury"/>
+        <On Terms="Effect.AP_DarkTemplarShadowFuryImpactSet.Start" Send="AnimPlay ShadowFury Attack,00 0 0.000000 0.000000 0.400000 AsDuration"/>
+        <AnimBlendTime value="0.250000"/>
+        <ModelFlags index="UseConstSyncSeed" value="1"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_DarkTemplarShakurasWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_DarkTemplarShakurasDeath" SoundLink="DarkTemplar_DeathFX"/>
+        <PlacementModel value="AP_DarkTemplarShakurasPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="DarkTemplarPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <AbilSoundArray AbilCmd="AP_DarkTemplarShadowFury,0" Sound="DarkTemplarVoid_ShadowFuryVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-DarkTemplar-Nerazim.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="DarkTemplar_Birth"/>
+        <SoundArray index="Ready" value="DarkTemplar_Ready"/>
+        <SoundArray index="Help" value="DarkTemplar_Help"/>
+        <SoundArray index="What" value="DarkTemplar_What"/>
+        <SoundArray index="Yes" value="DarkTemplarVoid_Yes"/>
+        <SoundArray index="Attack" value="DarkTemplar_Attack"/>
+        <SoundArray index="Pissed" value="DarkTemplarVoid_Pissed"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Protoss-DarkTemplar-Nerazim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkTemplar00-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorUnit id="AP_DarkTemplarTaldarim" parent="GenericUnitStandard" unitName="AP_DarkTemplarTaldarim">
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_DarkTemplar_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
+        <AnimBlendTime value="0.250000"/>
+        <ModelFlags index="UseConstSyncSeed" value="1"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_DarkTemplarTaldarimWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_DarkTemplarTaldarimDeath" SoundLink="DarkTemplar_DeathFX"/>
+        <PlacementModel value="AP_DarkTemplarTaldarimPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_DarkTemplarTaldarimPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <AbilSoundArray AbilCmd="AP_DarkArchonMerge,0" Sound="HighTemplar_ArchonWarpVO"/>
+        <BarOffset value="50"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-taldarim.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-darktemplar-taldarim.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value="DarkTemplar_Birth"/>
+        <SoundArray index="Ready" value="AP_ShadowHunter_Ready"/>
+        <SoundArray index="Help" value="AP_ShadowHunter_Help"/>
+        <SoundArray index="What" value="AP_ShadowHunter_What"/>
+        <SoundArray index="Yes" value="AP_ShadowHunter_Yes"/>
+        <SoundArray index="Attack" value="AP_ShadowHunter_Attack"/>
+        <SoundArray index="Pissed" value="AP_ShadowHunter_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-darktemplar-taldarim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-taldarim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-taldarim-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-taldarim-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-darktemplar-taldarim-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_DarkTemplarVoidStasisImpact" parent="ModelAddition">
+        <Macros value="GlobalLoopMacro"/>
+        <On Terms="Behavior.AP_DarkTemplarVoidStasis.On" Send="Create"/>
+        <On Terms="Behavior.AP_DarkTemplarVoidStasis.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_VoidStatsis"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorSound id="AP_DarkTemplarVoidStasisImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_DarkTemplarVoidStasisSet.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_VoidStasis_Impact"/>
+    </CActorSound>
+    <CActorSound id="AP_DarkTemplarVoidStasisLaunchSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_DarkTemplarVoidStasisSet.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_VoidStasis_Launch"/>
+    </CActorSound>
+    <CActorSimple id="AP_DarkTemplarVoidStasisModelMaterialController">
+        <On Terms="Behavior.AP_DarkTemplarVoidStasis.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.600000 DelayCreation"/>
+        <On Terms="TimerExpired; TimerName DelayCreation" Target="::Main" Send="ModelMaterialApply AP_GlazeVoidStasis"/>
+        <On Terms="Behavior.AP_DarkTemplarVoidStasis.Off" Target="AP_GlazeVoidStasis" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.AP_DarkTemplarVoidStasis.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="_Selectable" Send="AnimSetPausedAll"/>
+        <On Terms="Behavior.AP_DarkTemplarVoidStasis.Off" Target="_Selectable" Send="AnimSetPausedAll 0"/>
+    </CActorSimple>
+    <CActorModelMaterial id="AP_GlazeVoidStasis" parent="GlazeParent">
+        <Model value="GlazeVoidStasis"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModelMaterial>
+    <CActorSound id="AP_DarkTemplar_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_DarkTemplar; PassChance 25.000000" Send="Create"/>
+        <Sound value="DarkTemplar_Death"/>
+    </CActorSound>
+    <CActorSound id="AP_awrpSound" parent="SoundOneShot">
+        <Sound value="HighTemplar_ArchonWarp"/>
+        <On Terms="Abil.AP_ArchonWarp.Start" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_ShieldAbsorbImmortalSound" parent="SoundOneShot">
         <On Terms="Behavior.AP_HardenedShield.DamageHandled" Send="Create"/>
         <Sound value="Immortal_HardenedShieldImpact"/>
     </CActorSound>
-    <CActorModel id="ShieldAbsorbImmortalViz2" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="AP_ShieldAbsorbImmortalViz" parent="ModelAnimationStyleOneShot">
         <Terms value="Cap 1"/>
-        <Remove Terms="Behavior.HardenedShield.DamageHandled" Send="Create"/>
         <On Terms="Behavior.AP_HardenedShield.DamageHandled" Send="Create"/>
         <On Terms="AnimDone" Send="Destroy"/>
         <Host Subject="_Selectable"/>
@@ -15193,4 +15581,18 @@
         <HostSiteOps Ops="SOpAttachOrigin"/>
         <Model value="ImmortalDeath"/>
     </CActorModel>
+    <CActorModel id="AP_VoidDarkTemplarShadowFury" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_DarkTemplarShadowFuryTeleport.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_DarkTemplarShadowFuryTeleportFinal.Start; At Caster" Send="Create"/>
+<!--        <On Terms="Effect.MohandarOmnislashTeleport.Start; At Caster" Send="Create"/>-->
+<!--        <On Terms="Effect.MohandarOmnislashTeleportFinal.Start; At Caster" Send="Create"/>-->
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardTargetPoint" HoldPosition="1" HoldRotation="1"/>
+        <Model value="AP_VoidDarkTemplarShadowFury"/>
+    </CActorModel>
+    <CActorSound id="AP_VoidDarkTemplarShadowFuryLaunchSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_DarkTemplarShadowFuryTeleport.Start" Send="Create"/>
+        <Host Subject="_Target"/>
+        <Sound value="AP_ShadowFuryStrikLaunch"/>
+    </CActorSound>
 </Catalog>

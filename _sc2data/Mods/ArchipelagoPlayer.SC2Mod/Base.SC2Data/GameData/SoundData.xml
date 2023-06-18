@@ -4608,4 +4608,163 @@
         <SpeakerMix index="LFE" value="0.300000"/>
         <Spread value="90.000000"/>
     </CSound>
+    <CSound id="AP_Avenger_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Avenger_Attack00"/>
+        <AssetArray TemplateParam="Avenger_Attack01"/>
+        <AssetArray TemplateParam="Avenger_Attack02"/>
+        <AssetArray TemplateParam="Avenger_Attack03"/>
+        <AssetArray TemplateParam="Avenger_Attack04"/>
+        <AssetArray TemplateParam="Avenger_Attack05"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="0.500000,0.500000"/>
+    </CSound>
+    <CSound id="AP_Avenger_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="Avenger_Pissed00"/>
+        <AssetArray TemplateParam="Avenger_Pissed01"/>
+        <AssetArray TemplateParam="Avenger_Pissed02"/>
+        <AssetArray TemplateParam="Avenger_Pissed03"/>
+        <AssetArray TemplateParam="Avenger_Pissed04"/>
+        <AssetArray TemplateParam="Avenger_Pissed05"/>
+        <AssetArray TemplateParam="Avenger_Pissed06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="0.500000,0.500000"/>
+    </CSound>
+    <CSound id="AP_Avenger_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="Avenger_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="0.500000,0.500000"/>
+    </CSound>
+    <CSound id="AP_Avenger_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Avenger_What00"/>
+        <AssetArray TemplateParam="Avenger_What01"/>
+        <AssetArray TemplateParam="Avenger_What02"/>
+        <AssetArray TemplateParam="Avenger_What03"/>
+        <AssetArray TemplateParam="Avenger_What04"/>
+        <AssetArray TemplateParam="Avenger_What05"/>
+        <AssetArray TemplateParam="Avenger_What06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="0.500000,0.500000"/>
+    </CSound>
+    <CSound id="AP_Avenger_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Avenger_Yes00"/>
+        <AssetArray TemplateParam="Avenger_Yes01"/>
+        <AssetArray TemplateParam="Avenger_Yes02"/>
+        <AssetArray TemplateParam="Avenger_Yes03"/>
+        <AssetArray TemplateParam="Avenger_Yes04"/>
+        <AssetArray TemplateParam="Avenger_Yes05"/>
+        <AssetArray TemplateParam="Avenger_Yes06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="0.500000,0.500000"/>
+    </CSound>
+    <CSound id="AP_ShadowHunter_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="ShadowHunter_Attack00"/>
+        <AssetArray TemplateParam="ShadowHunter_Attack01"/>
+        <AssetArray TemplateParam="ShadowHunter_Attack02"/>
+        <AssetArray TemplateParam="ShadowHunter_Attack03"/>
+        <AssetArray TemplateParam="ShadowHunter_Attack04"/>
+        <AssetArray TemplateParam="ShadowHunter_Attack05"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ShadowHunter_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="ShadowHunter_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="-2.000000,-2.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ShadowHunter_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="ShadowHunter_Pissed00"/>
+        <AssetArray TemplateParam="ShadowHunter_Pissed01"/>
+        <AssetArray TemplateParam="ShadowHunter_Pissed02"/>
+        <AssetArray TemplateParam="ShadowHunter_Pissed03"/>
+        <AssetArray TemplateParam="ShadowHunter_Pissed04"/>
+        <AssetArray TemplateParam="ShadowHunter_Pissed05"/>
+        <AssetArray TemplateParam="ShadowHunter_Pissed06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ShadowHunter_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="ShadowHunter_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ShadowHunter_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="ShadowHunter_What00"/>
+        <AssetArray TemplateParam="ShadowHunter_What01"/>
+        <AssetArray TemplateParam="ShadowHunter_What02"/>
+        <AssetArray TemplateParam="ShadowHunter_What03"/>
+        <AssetArray TemplateParam="ShadowHunter_What04"/>
+        <AssetArray TemplateParam="ShadowHunter_What05"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_ShadowHunter_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="ShadowHunter_Yes00"/>
+        <AssetArray TemplateParam="ShadowHunter_Yes01"/>
+        <AssetArray TemplateParam="ShadowHunter_Yes02"/>
+        <AssetArray TemplateParam="ShadowHunter_Yes03"/>
+        <AssetArray TemplateParam="ShadowHunter_Yes04"/>
+        <AssetArray TemplateParam="ShadowHunter_Yes05"/>
+        <AssetArray TemplateParam="ShadowHunter_Yes06"/>
+        <AssetArray TemplateParam="ShadowHunter_Yes07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Pitch value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Templar_LandSweetener" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <Category value="Combat"/>
+        <AssetArray File="Assets\Sounds\Marine_Land00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Marine_Land01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Marine_Land02.wav" FacialGroup=""/>
+        <DupeDestroyCount value="5"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-14.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_VoidStasis_Launch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\ShadowHunter_VoidStasis_06b.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ShadowHunter_VoidStasis_06c.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ShadowHunter_VoidStasis_06d.wav" FacialGroup=""/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_VoidStasis_Impact" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\VoidStasis_Impact_01a.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\VoidStasis_Impact_02a.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\VoidStasis_Impact_03a.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\VoidStasis_Impact_04a.wav" FacialGroup=""/>
+        <OffsetFadeIn Volume="-12.000000"/>
+        <OffsetFadeIn Time="500" Volume="-12.000000"/>
+        <OffsetFadeIn Time="1000"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="6.000000,6.000000"/>
+        <SpeakerMix index="Center" value="2.000000"/>
+    </CSound>
+    <CSound id="AP_ShadowFuryStrikLaunch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\ShadowFuryStrikeLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ShadowFuryStrikeLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ShadowFuryStrikeLaunch03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ShadowFuryStrikeLaunch04.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ShadowFuryStrikeLaunch05.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ShadowFuryStrikeLaunch06.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\ShadowFuryStrikeLaunch07.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
 </Catalog>

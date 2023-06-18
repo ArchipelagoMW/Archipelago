@@ -767,4 +767,38 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
     </CLight>
+    <CLight id="AP_DarkTemplarAiurPortrait" parent="default">
+        <ToDInfoArray index="0" Id="AP_DarkTemplarAiurPortrait" AmbientColor="0.101961,0.019608,0.262745">
+            <Param index="HDRExposure" value="1.500000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDRSpecMultiplier" value="1.500000"/>
+            <Param index="HDREmisMultiplier" value="1.250000"/>
+            <Param index="ColorizationInputHigh" value="0.969000"/>
+            <Param index="ColorizationBrightness" value="0.943000"/>
+            <Param index="ColorizationBlend" value="0.444000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.866667,0.800000,0.956863"/>
+                <ColorMultiplier value="1.000000"/>
+                <SpecColorMultiplier value="1.500000"/>
+                <Direction value="0.765994,-0.151115,-0.624834"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.486275,0.686275,0.984314" ColorMultiplier="2.500000" Direction="-0.097942,0.500602,0.860120"/>
+            <DirectionalLight index="Back" Color="0.666667,0.847059,0.984314" ColorMultiplier="8.000000" Direction="-0.758761,-0.532871,-0.374607"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
+    <CLight id="AP_DarkTemplarTaldarimPortrait" parent="default">
+        <ToDInfoArray index="0" Id="AP_ZealotShakurasPortrait" AmbientColor="0.129412,0.121569,0.188235" OperatorHDR="3">
+            <Param index="HDRExposure" value="1.475000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.647059,0.709804,0.992157"/>
+                <ColorMultiplier value="1.000000"/>
+                <SpecColorMultiplier value="1.100000"/>
+                <Direction value="0.353133,0.481613,-0.802088"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" ColorMultiplier="0.661000" Direction="-0.828419,0.536134,-0.162121"/>
+            <DirectionalLight index="Back" ColorMultiplier="2.000000" Direction="-0.871120,-0.275165,0.406737"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>

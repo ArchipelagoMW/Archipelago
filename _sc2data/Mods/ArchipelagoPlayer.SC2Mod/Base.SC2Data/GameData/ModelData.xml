@@ -9364,4 +9364,193 @@
         <Model value="Assets\Effects\Protoss\ColossusTaldarim_Powerup\ColossusTaldarim_Powerup.m3"/>
         <EditorCategories value="Race:Protoss"/>
     </CModel>
+    <CModel id="AP_DarkTemplarAiur" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkTemplar_Aiur\DarkTemplar_Aiur.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\DarkTemplar_01_SwarmAnims\DarkTemplar_01_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <SquibTypeDefault value="LightArmor"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarAiurDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkTemplar_Aiur_Death\DarkTemplar_Aiur_Death.m3"/>
+        <LowQualityModel value="ProtossSpiritDeathLow"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarAiurPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkTemplar_Aiur_Placement\DarkTemplar_Aiur_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarAiurPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\DarkTemplar_Aiur_Portrait\DarkTemplar_Aiur_Portrait.m3"/>
+        <Image value="Assets\Textures\avengerportrait_static.dds"/>
+        <Lighting value="AP_DarkTemplarAiurPortrait"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarAiurRecallStart" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\DarkTemplarAiurWarpOut\DarkTemplarAiurWarpOut.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarAiurRecallStop" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\DarkTemplarAiurWarpIn\DarkTemplarAiurWarpIn.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarAiurWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\DarkTemplar_Aiur_WarpIn\DarkTemplar_Aiur_WarpIn.m3"/>
+        <LowQualityModel value="DarkTemplarWarpInLow"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarShakuras" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkTemplar\DarkTemplar_00.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\DarkTemplar_01_SwarmAnims\DarkTemplar_01_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <SquibTypeDefault value="LightArmor"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarShakurasDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkTemplarDeath\DarkTemplarDeath_00.m3"/>
+        <LowQualityModel value="ProtossSpiritDeathLow"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarShakurasPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkTemplar_Aiur_Placement\DarkTemplar_Aiur_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarShakurasWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\DarkTemplarWarpIn\DarkTemplarWarpIn_00.m3"/>
+        <LowQualityModel value="DarkTemplarWarpInLow"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarTaldarim" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkTemplar_TalDarim\DarkTemplar_TalDarim.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\DarkTemplar_00_SwarmAnims\DarkTemplar_00_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <SquibTypeDefault value="LightArmor"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarTaldarimDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkTemplar_TalDarim_Death\DarkTemplar_TalDarim_Death.m3"/>
+        <LowQualityModel value="AP_ProtossSpiritTaldarimDeathLow"/>
+    </CModel>
+    <CModel id="AP_ProtossSpiritTaldarimDeathLow" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\ProtossSpirit_Taldarim_Death\ProtossSpirit_Taldarim_Death_Low.m3"/>
+        <SelectionRadius value="0.270200"/>
+        <ShadowRadius value="0.270200"/>
+        <Flags index="TeenSafe" value="1"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarTaldarimPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkTemplar_Taldarim_Placement\DarkTemplar_Taldarim_Placement.m3"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarTaldarimPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\DarkTemplar_TalDarim_Portrait\DarkTemplar_TalDarim_Portrait.m3"/>
+        <Image value="Assets\Textures\shadowhunterportrait_static.dds"/>
+        <Lighting value="AP_DarkTemplarTaldarimPortrait"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarTaldarimWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\DarkTemplar_Taldarim_WarpIn\DarkTemplar_Taldarim_WarpIn.m3"/>
+        <LowQualityModel value="DarkTemplarWarpInLow"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_HotSRaptor" parent="Unit" Race="Zerg">
+        <ScaleMax value="0.770000,0.770000,0.770000"/>
+        <ScaleMin value="0.770000,0.770000,0.770000"/>
+        <Model value="Assets\Units\Zerg\ZerglingEx1A\ZerglingEx1A.m3"/>
+        <RequiredAnims value="Assets\Units\Zerg\Zergling_SwarmAnims\Zergling_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.441400"/>
+        <Tipability value="0.750000"/>
+        <TipabilityWidth value="0.400000"/>
+        <TipabilityLength value="0.400000"/>
+        <AttachProps Id="Ref_Weapon Left">
+            <Keys index="Weapon" value="1"/>
+            <Keys index="Work" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon Right">
+            <!-- This is currently here to prevent two launches per zergling attack. -->
+            <Keys index="Weapon" value="1"/>
+        </AttachProps>
+        <SquibTypeDefault value="Flesh"/>
+        <Radius value="0.300000"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <ShadowRadius value="0.441400"/>
+    </CModel>
+    <CModel id="AP_ZeratulBlinkOut" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\ZeratulBlinkOut\ZeratulBlinkOut.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ZeratulBlinkIn" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\ZeratulBlinkIn\ZeratulBlinkIn.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_VoidStatsis" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\VoidStasis\VoidStasis.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_VoidDarkTemplarShadowFury" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\ShadowFury\ShadowFury.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_VoidDarkTemplarShadowFuryImpact" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\ShadowFury_Impact\ShadowFury_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_DarkTemplarShadowFuryImpact">
+        <Model value="Assets\Effects\Protoss\ShadowFury_Impact\ShadowFury_Impact.m3"/>
+    </CModel>
 </Catalog>

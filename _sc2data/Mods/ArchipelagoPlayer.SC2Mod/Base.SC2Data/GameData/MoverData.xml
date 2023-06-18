@@ -1080,4 +1080,26 @@
         </MotionPhases>
         <MotionPhases YawPitchRoll="MAX"/>
     </CMoverMissile>
+    <CMoverMissile id="AP_DarkTemplarJumpUp">
+        <PathMode value="Jumper"/>
+        <MotionPhases>
+            <Driver value="AdaptableParabola"/>
+            <MinSpeed value="10"/>
+            <MaxSpeed value="10"/>
+            <ActorTracking value="Actual"/>
+            <AdaptableParabolaIsUpright value="1"/>
+            <AdaptableParabolaClearance value="0.5,0.5"/>
+        </MotionPhases>
+    </CMoverMissile>
+    <CMoverMissile id="AP_DarkTemplarJumpDown">
+        <PathMode value="Jumper"/>
+        <MotionPhases>
+            <Driver value="AdaptableParabola"/>
+            <MinSpeed value="10"/>
+            <MaxSpeed value="10"/>
+            <ActorTracking value="Actual"/>
+            <AdaptableParabolaIsUpright value="1"/>
+            <AdaptableParabolaClearance value="0.5,0.5"/>
+        </MotionPhases>
+    </CMoverMissile>
 </Catalog>

@@ -1805,4 +1805,31 @@
         <Icon value="Assets\Textures\BTN-ability-Protoss-permanentlycloaked-Observer-color.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_AWrp">
+        <Icon value="Assets\Textures\btn-unit-protoss-archon.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-archon.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_DarkTemplarRecall">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-RecallOnDeath.dds"/>
+    </CButton>
+    <CButton id="AP_PermanentlyCloaked">
+        <Icon value="Assets\Textures\BTN-ability-Protoss-permanentlycloaked-darktemplar-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidDarkTemplarShadowFury">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-ShadowFury.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidStasis">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-VoidStasis.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-VoidStasis.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_DarkShrineAssignRally">
+        <Icon value="Assets\Textures\btn-ability-terran-setrallypoint.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-setrallypoint.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>
