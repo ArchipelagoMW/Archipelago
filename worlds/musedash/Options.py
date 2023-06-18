@@ -127,8 +127,8 @@ class TrapTypes(Choice):
     """
     display_name = "Available Trap Types"
     option_None = 0
-    option_SFX = 1
-    option_VFX = 2
+    option_VFX = 1
+    option_SFX = 2
     option_All = 3
     default = 3
 
