@@ -1999,6 +1999,10 @@
         <Find value="1"/>
         <Value value="AP_HaveMultiTaskMAFServosLiberator"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosHellion">
+        <Find value="1"/>
+        <Value value="AP_HaveMultiTaskMAFServosHellion"/>
+    </CValidatorPlayerRequirement>
     <CValidatorPlayerRequirement id="AP_HaveMultiTaskMAFServosSiegeTank">
         <Find value="1"/>
         <Value value="AP_HaveMultiTaskMAFServosSiegeTank"/>

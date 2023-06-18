@@ -2177,6 +2177,10 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MultiTaskMAFServosLiberator" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeMultiTaskMAFServosHellionCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_MultiTaskMAFServosHellion" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeMultiTaskMAFServosSiegeTankCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_MultiTaskMAFServosSiegeTank" State="CompleteOnly"/>

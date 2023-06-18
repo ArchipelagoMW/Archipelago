@@ -1222,6 +1222,10 @@
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeMultiTaskMAFServosLiberatorCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveMultiTaskMAFServosHellion">
+        <EditorCategories value="Race:Terran,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeMultiTaskMAFServosHellionCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_HaveMultiTaskMAFServosSiegeTank">
         <EditorCategories value="Race:Terran,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeMultiTaskMAFServosSiegeTankCompleteOnly"/>
