@@ -33,10 +33,10 @@ add it at the root folder of your game (e.g. "SteamLibrary\steamapps\common\DARK
 ## Joining a MultiWorld Game
 
 1. Run Steam in offline mode, both to avoid being banned and to prevent Steam from updating the game files
-1. Launch Dark Souls III
-2. Type in "/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME}" in the "Windows Command Prompt" that opened
-3. Once connected, create a new game, choose a class and wait for the others before starting
-4. You can quit and launch at anytime during a game
+2. Launch Dark Souls III
+3. Type in "/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME}" in the "Windows Command Prompt" that opened
+4. Once connected, create a new game, choose a class and wait for the others before starting
+5. You can quit and launch at anytime during a game
 
 ## Where do I get a config file?
 
