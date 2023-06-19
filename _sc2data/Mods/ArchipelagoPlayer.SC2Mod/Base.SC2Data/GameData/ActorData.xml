@@ -14372,6 +14372,7 @@
     </CActorUnit>
     <CActorModel id="AP_TechReactorBuild" parent="TerranBuildingBuildSmall"/>
     <CActorUnit id="AP_Reactor" parent="AP_ReactorBase" unitName="AP_Reactor">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_TechReactor" Send="Destroy"/>
         <Model value="Reactor"/>
     </CActorUnit>
     <CActorModel id="AP_ReactorBuild" parent="TerranBuildingBuildSmall">
