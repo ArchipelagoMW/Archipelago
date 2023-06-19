@@ -43,6 +43,8 @@ class RaftWorld(World):
     data_version = 2
     required_client_version = (0, 3, 4)
 
+    raft_frequencyItems = []
+
     def create_items(self):
         minRPSpecified = self.multiworld.minimum_resource_pack_amount[self.player].value
         maxRPSpecified = self.multiworld.maximum_resource_pack_amount[self.player].value
@@ -52,6 +54,8 @@ class RaftWorld(World):
         pool = []
         for item in item_table:
             raft_item = self.create_item_replaceAsNecessary(item["name"])
+            if "Frequency" in item["name"]:
+                self.raft_frequencyItems.append(raft_item)
             pool.append(raft_item)
 
         extraItemNamePool = []
@@ -129,7 +133,7 @@ class RaftWorld(World):
         return super(RaftWorld, self).collect_item(state, item, remove)
 
     def pre_fill(self):
-        if self.multiworld.island_frequency_locations[self.player] == 0:
+        if self.multiworld.island_frequency_locations[self.player] == 0: # Vanilla
             self.setLocationItem("Radio Tower Frequency to Vasagatan", "Vasagatan Frequency")
             self.setLocationItem("Vasagatan Frequency to Balboa", "Balboa Island Frequency")
             self.setLocationItem("Relay Station quest", "Caravan Island Frequency")
@@ -137,7 +141,7 @@ class RaftWorld(World):
             self.setLocationItem("Tangaroa Frequency to Varuna Point", "Varuna Point Frequency")
             self.setLocationItem("Varuna Point Frequency to Temperance", "Temperance Frequency")
             self.setLocationItem("Temperance Frequency to Utopia", "Utopia Frequency")
-        elif self.multiworld.island_frequency_locations[self.player] == 1:
+        elif self.multiworld.island_frequency_locations[self.player] == 1: # Random on island
             self.setLocationItemFromRegion("RadioTower", "Vasagatan Frequency")
             self.setLocationItemFromRegion("Vasagatan", "Balboa Island Frequency")
             self.setLocationItemFromRegion("BalboaIsland", "Caravan Island Frequency")
@@ -173,9 +177,9 @@ class RaftWorld(World):
                 else:
                     currentLocation = availableLocationList[0] # Utopia (only one left in list)
                 availableLocationList.remove(currentLocation)
-                if self.multiworld.island_frequency_locations[self.player] == 2:
+                if self.multiworld.island_frequency_locations[self.player] == 2: # Random island order
                     self.setLocationItem(locationToVanillaFrequencyLocationMap[previousLocation], locationToFrequencyItemMap[currentLocation])
-                elif self.multiworld.island_frequency_locations[self.player] == 3:
+                elif self.multiworld.island_frequency_locations[self.player] == 3: # Random on island random order
                     self.setLocationItemFromRegion(previousLocation, locationToFrequencyItemMap[currentLocation])
                 previousLocation = currentLocation
 
@@ -184,12 +188,14 @@ class RaftWorld(World):
             RaftItem("Victory", ItemClassification.progression, None, player=self.player))
     
     def setLocationItem(self, location: str, itemName: str):
-        itemToUse = next(filter(lambda itm: itm.name == itemName, self.multiworld.itempool))
+        itemToUse = next(filter(lambda itm: itm.name == itemName, self.raft_frequencyItems))
+        self.raft_frequencyItems.remove(itemToUse)
         self.multiworld.itempool.remove(itemToUse)
         self.multiworld.get_location(location, self.player).place_locked_item(itemToUse)
     
     def setLocationItemFromRegion(self, region: str, itemName: str):
-        itemToUse = next(filter(lambda itm: itm.name == itemName, self.multiworld.itempool))
+        itemToUse = next(filter(lambda itm: itm.name == itemName, self.raft_frequencyItems))
+        self.raft_frequencyItems.remove(itemToUse)
         self.multiworld.itempool.remove(itemToUse)
         location = random.choice(list(loc for loc in location_table if loc["region"] == region))
         self.multiworld.get_location(location["name"], self.player).place_locked_item(itemToUse)
