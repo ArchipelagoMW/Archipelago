@@ -155,10 +155,10 @@ def run_gui():
         container: ContainerLayout
         grid: GridLayout
 
-        _tools = {c.display_name: c for c in components if c.type == Type.TOOL and isfile(get_exe(c)[-1])}
-        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT and isfile(get_exe(c)[-1])}
-        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER and isfile(get_exe(c)[-1])}
-        _funcs = {c.display_name: c for c in components if c.type == Type.FUNC}
+        _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
+        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
+        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
+        _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
 
         def __init__(self, ctx=None):
             self.title = self.base_title
@@ -199,7 +199,7 @@ def run_gui():
                     button_layout.add_widget(button)
 
             for (tool, client) in itertools.zip_longest(itertools.chain(
-                    self._tools.items(), self._funcs.items(), self._adjusters.items()), self._clients.items()):
+                    self._tools.items(), self._miscs.items(), self._adjusters.items()), self._clients.items()):
                 # column 1
                 if tool:
                     build_button(tool[1])
@@ -215,7 +215,7 @@ def run_gui():
 
         @staticmethod
         def component_action(button):
-            if button.component.type == Type.FUNC:
+            if button.component.func:
                 button.component.func()
             else:
                 launch(get_exe(button.component), button.component.cli)
