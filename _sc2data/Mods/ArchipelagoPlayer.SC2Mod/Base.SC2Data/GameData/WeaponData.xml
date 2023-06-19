@@ -1527,4 +1527,35 @@
         <DamagePoint value="0.361"/>
         <Backswing value="1.333"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_AscendantWeapon">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_AscendantWeaponDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <Period value="1.754"/>
+        <Effect value="AP_AscendantWeaponLM"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HighTemplarWeapon">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_HighTemplarWeaponDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <Period value="1.754"/>
+        <Effect value="AP_HighTemplarWeaponLM"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HighTemplarFakeWeapon">
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-building-protoss-photoncannon.dds"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="8"/>
+        <Period value="5"/>
+        <ChaseFilters value="-;Neutral,Enemy"/>
+        <AcquireCallForHelpFilters value="-;Player,Ally,Neutral,Enemy"/>
+        <DisplayEffect value="AP_HighTemplarWeaponDamage"/>
+        <Effect value="AP_HighTemplarWeapon"/>
+    </CWeaponLegacy>
 </Catalog>

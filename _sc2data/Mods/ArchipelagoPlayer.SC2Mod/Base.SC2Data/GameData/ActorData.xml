@@ -4928,6 +4928,47 @@
         <On Terms="UnitDeathCustomize.AP_Archon; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
         <Sound value="Archon_Death"/>
     </CActorSound>
+    <CActorAction id="AP_AscendantAttack" parent="GenericAttack" effectImpact="AP_AscendantWeaponDamage" effectLaunch="AP_AscendantWeaponLM">
+        <LaunchSiteOps Ops="SOpAttachCenter SOpMoveByDot15"/>
+        <LaunchAssets Sound="AP_Karass_AttackLaunch"/>
+        <Missile value="AP_AscendantAttackMissile"/>
+        <ImpactMap index="None" Model="AP_AscendantAttackImpact" Sound="AP_Karass_AttackImpact"/>
+        <ImpactPhysics Name="AscendantPsiBlastImpact" MatchKeys="Basic" Physics="AP_AscendantPsiBlastDeathImpactForce"/>
+    </CActorAction>
+    <CActorForceSphere id="AP_AscendantPsiBlastDeathImpactForce">
+        <Receiver Subject="::Main"/>
+        <HostSiteOps Ops="SOpIncomingMissileDot25 SOpRotVariancerForward15"/>
+        <Magnitude value="20.000000,5.000000"/>
+        <Radius value="0.500000,0.250000"/>
+        <Field value="Directional"/>
+        <Direction value="Forward"/>
+        <Duration value="0.250000"/>
+    </CActorForceSphere>
+    <CActorMissile id="AP_AscendantAttackMissile" parent="GenericAttackMissile" unitName="AP_AscendantWeapon"/>
+    <CActorAction id="AscendantSacrificeDummy1Attack2" parent="GenericAttack" effectImpact="AP_AscendantSacrificeLM1ImpactDummy" effectLaunch="AP_AscendantSacrificeLM1">
+        <LaunchSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
+        <Missile value="AP_AscendantSacrificeDummy1AttackMissile"/>
+        <ImpactSiteOps Ops="SOpAttachCenter"/>
+        <ImpactMap index="None" Model="AP_AscendantSacrificeDummy1AttackImpact"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorMissile id="AP_AscendantSacrificeDummy1AttackMissile" parent="GenericAttackMissile" unitName="AP_AscendantSacrificeWeapon1"/>
+    <CActorAction id="AP_AscendantSacrificeDummy2Attack" parent="GenericAttack" effectImpact="AP_AscendantSacrificeLM2ImpactDummy" effectLaunch="AP_AscendantSacrificeLM2">
+        <LaunchSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
+        <Missile value="AP_AscendantSacrificeDummy2AttackMissile"/>
+        <ImpactSiteOps Ops="SOpAttachCenter"/>
+        <ImpactMap index="None" Model="AP_AscendantSacrificeDummy2AttackImpact"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorMissile id="AP_AscendantSacrificeDummy2AttackMissile" parent="GenericAttackMissile" unitName="AP_AscendantSacrificeWeapon2"/>
+    <CActorAction id="AP_AscendantSacrificeDummy3Attack" parent="GenericAttack" effectImpact="AP_AscendantSacrificeLM3ImpactDummy" effectLaunch="AP_AscendantSacrificeLM3">
+        <LaunchSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
+        <Missile value="AscendantSacrificeDummy3AttackMissile2"/>
+        <ImpactSiteOps Ops="SOpAttachCenter"/>
+        <ImpactMap index="None" Model="AP_AscendantSacrificeDummy3AttackImpact"/>
+        <ShieldFlashType value="None"/>
+    </CActorAction>
+    <CActorMissile id="AscendantSacrificeDummy3AttackMissile2" parent="GenericAttackMissile" unitName="AP_AscendantSacrificeWeapon3"/>
     <CActorAction id="AvengerAttack2" parent="GenericAttack" effectAttack="AP_AvengerWeapon">
         <ImpactMap index="None" Model="None" Sound="DarkTemplar_AttackImpact"/>
         <ShieldFlashType value="Header"/>
@@ -10319,10 +10360,9 @@
     <CActorModel id="AP_DarkTemplarShadowFuryImpact" parent="ModelAnimationStyleOneShot">
         <EditorCategories value=""/>
         <On Terms="Effect.AP_DarkTemplarShadowFuryDamage.Start; At Caster" Send="Create"/>
-<!--        <On Terms="Effect.VorazunShadowFuryDamage.Start; At Caster" Send="Create"/>-->
+        <!--        <On Terms="Effect.VorazunShadowFuryDamage.Start; At Caster" Send="Create"/>-->
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenterStationary SOp2DRotation"/>
-        <Model value="AP_DarkTemplarShadowFuryImpact"/>
     </CActorModel>
     <CActorSound id="AP_DarkTemplarShadowFurySound" parent="SoundOneShot">
         <EditorCategories value=""/>
@@ -10473,6 +10513,460 @@
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
         <Model value="ShieldAbsorbImmortalViz"/>
+    </CActorModel>
+    <CActorModel id="AP_FeedbackImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_Feedback.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="FeedbackImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_FeedbackImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_Feedback.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_Obelisk_ArgusLinkImpact"/>
+    </CActorSound>
+    <CActorModel id="AP_FeedbackLaunch" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_Feedback.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="FeedbackLaunch"/>
+    </CActorModel>
+    <CActorSound id="AP_FeedbackLaunchSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_Feedback.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_Obelisk_ArgusLinkLaunch"/>
+    </CActorSound>
+    <CActorModel id="AP_HighArchonPsiStormImpact" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Behavior.AP_HighArchonPsiStorm.Start" Send="Create"/>
+        <On Terms="Behavior.AP_HighArchonPsiStorm.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <AutoScaleFactor value="0.750000"/>
+    </CActorModel>
+    <CActorModel id="AP_HighArchonPsiStormModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.AP_HighArchonPsiStormPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_HighArchonPsiStormPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Scale value="1.300000"/>
+    </CActorModel>
+    <CActorSound id="AP_HighArchonPsiStormSound" parent="SoundContinuous">
+        <On Terms="Effect.AP_HighArchonPsiStormPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_HighArchonPsiStormPersistent.Stop" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Sound value="HighTemplar_PsionicStormLaunch"/>
+    </CActorSound>
+    <CActorUnit id="AP_HighArchonTemplar" parent="GenericUnitStandard" unitName="AP_HighArchonTemplar">
+        <Aliases value="_UnitSmall"/>
+        <On Terms="Abil.AP_PsiStorm.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_PhaseShift.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_Feedback.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_PlasmaSurge.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_Vortex.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_TemporalRift.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="WeaponStart.HighTemplarWeapon.AttackStart" Send="$Spell,A"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.200000 Shadow"/>
+        <On Terms="TimerExpired; TimerName Shadow; IsStatus ShadowCreate 1; !ModelIsLowQuality" Send="Create AP_HighTemplarShadow"/>
+        <On Terms="TimerExpired; TimerName Shadow" Send="TimerSet 0.200000 Shadow"/>
+        <On Terms="UnitMovementUpdate.*.Stand" Send="StatusSet ShadowCreate 0"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="StatusSet ShadowCreate 1"/>
+        <On Terms="ActorCreation" Send="StatusSet ShadowCreate 0"/>
+        <On Terms="Abil.HighArchonPsiStorm.SourceCastStart" Send="AnimPlay A A"/>
+        <AnimBlendTime value="0.450000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="HighTemplarWarpIn"/>
+        <DeathArray index="Normal" ModelLink="HighTemplarDeath" SoundLink="HighTemplar_DeathFX"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <PlacementModel value="HighTemplarPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="HighTemplarPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <AbilSoundArray AbilCmd="AP_PsiStorm,Execute" Sound="HighTemplar_PsionicStormVO"/>
+        <AbilSoundArray AbilCmd="AP_ArchonWarp,SelectedUnits" Sound="HighTemplar_ArchonWarpVO"/>
+        <AbilSoundArray AbilCmd="AP_TemporalRift,Execute" Sound="HighTemplar_Attack"/>
+        <BarOffset value="70"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SelectAbilCmd value="PsiStorm,Execute"/>
+        <SoundArray index="Ready" value="AP_HighTemplarVoid_Ready"/>
+        <SoundArray index="Help" value="AP_HighTemplarVoid_Help"/>
+        <SoundArray index="What" value="AP_HighTemplarVoid_What"/>
+        <SoundArray index="Yes" value="AP_HighTemplarVoid_Yes"/>
+        <SoundArray index="Attack" value="AP_HighTemplarVoid_Attack"/>
+        <SoundArray index="Pissed" value="AP_HighTemplarVoid_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_HighTemplarShadow" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Model value="HighTemplarShadow"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary SOp2DRotation"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.400000 ShadowFade"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,0,128 0.800000"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000 0.400000"/>
+        <On Terms="TimerExpired; TimerName ShadowFade" Send="SetOpacity 0.000000 0.400000"/>
+        <Inherits index="CloakEffect" value="1"/>
+    </CActorModel>
+    <CActorUnit id="AP_HighTemplar" parent="GenericUnitStandard" unitName="AP_HighTemplar">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="Abil.AP_PsiStorm.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_PhaseShift.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_Feedback.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_PlasmaSurge.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_Vortex.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_TemporalRift.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.200000 Shadow"/>
+        <On Terms="TimerExpired; TimerName Shadow; IsStatus ShadowCreate 1; !Option Model Low" Send="Create AP_HighTemplarShadow"/>
+        <On Terms="TimerExpired; TimerName Shadow" Send="TimerSet 0.200000 Shadow"/>
+        <On Terms="UnitMovementUpdate.*.Stand" Send="StatusSet ShadowCreate 0"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="StatusSet ShadowCreate 1"/>
+        <On Terms="ActorCreation" Send="StatusSet ShadowCreate 0"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkHighTemplar"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkHighTemplar"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_HighTemplar_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="WeaponStart.AP_HighTemplarWeapon.AttackStart" Send="$Spell,A"/>
+        <On Terms="Abil.AP_VoidHighTemplarMindBlast.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_VoidHighTemplarPsiOrb.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasSeveredCordsUpgrade" Send="ModelSwap AP_HighTemplarNoCords"/>
+        <On Terms="Upgrade.AP_SeveredCords.Add" Send="ModelSwap AP_HighTemplarNoCords"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasSeveredCordsUpgrade" Send="DeathCustomize Variation19"/>
+        <Model value="HighTemplar"/>
+        <AnimBlendTime value="0.450000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="HighTemplarWarpIn"/>
+        <DeathArray index="Normal" ModelLink="HighTemplarDeath" SoundLink="HighTemplar_DeathFX"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <DeathCustoms ModelLink="DarkHighTemplarDeath" Name="DarkProtoss"/>
+        <DeathCustoms ActorModel="HighTemplarDeathRagdoll" ModelLink="HighTemplarDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="BloodReduced"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollWithTeamColor" ModelLink="HighTemplarDeathRagdoll" Name="RagdollSpineCrawlerHurl">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <DeathCustoms ModelLink="HighTemplar_NoCords_Death" Name="Variation19"/>
+        <PlacementModel value="HighTemplarPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="HighTemplarPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <AbilSoundArray AbilCmd="AP_PsiStorm,0" Sound="HighTemplar_PsionicStormVO"/>
+        <AbilSoundArray AbilCmd="AP_ArchonWarp,0" Sound="HighTemplar_ArchonWarpVO"/>
+        <AbilSoundArray AbilCmd="TemporalRift,Execute" Sound="HighTemplar_Attack"/>
+        <AbilSoundArray AbilCmd="AP_ArchonAdvancedMerge,0" Sound="HighTemplar_ArchonWarpVO"/>
+        <BarOffset value="70"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SelectAbilCmd value="PsiStorm,Execute"/>
+        <SoundArray index="Ready" value="AP_HighTemplarVoid_Ready"/>
+        <SoundArray index="Help" value="AP_HighTemplarVoid_Help"/>
+        <SoundArray index="What" value="AP_HighTemplarVoid_What"/>
+        <SoundArray index="Yes" value="AP_HighTemplarVoid_Yes"/>
+        <SoundArray index="Attack" value="AP_HighTemplarVoid_Attack"/>
+        <SoundArray index="Pissed" value="AP_HighTemplarVoid_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_HighTemplar_Land" parent="SoundOneShot">
+        <Sound value="HighTemplar_Land"/>
+    </CActorSound>
+    <CActorAction id="AP_HighTemplarAttack" parent="GenericAttack" effectImpact="AP_HighTemplarWeaponDamage" effectLaunch="AP_HighTemplarWeaponLM">
+        <LaunchSiteOps Ops="SOpAttachCenter SOpMoveByDot15"/>
+        <LaunchAssets Sound="AP_Ascendant_Launch"/>
+        <Missile value="AP_HighTemplarAttackMissile"/>
+        <ImpactMap index="None" Model="HighTemplarAttackImpact" Sound="AP_Ascendant_Impact"/>
+        <ImpactPhysics Name="HighTemplarPsiBlastImpact" MatchKeys="Basic" Physics="AP_HighTemplarPsiBlastDeathImpactForce"/>
+    </CActorAction>
+    <CActorForceSphere id="AP_HighTemplarPsiBlastDeathImpactForce">
+        <Receiver Subject="::Main"/>
+        <HostSiteOps Ops="SOpIncomingMissileDot25 SOpRotVariancerForward15"/>
+        <Magnitude value="20.000000,5.000000"/>
+        <Radius value="0.500000,0.250000"/>
+        <Field value="Directional"/>
+        <Direction value="Forward"/>
+        <Duration value="0.250000"/>
+    </CActorForceSphere>
+    <CActorMissile id="AP_HighTemplarAttackMissile" parent="GenericAttackMissile" unitName="AP_HighTemplarWeapon">
+        <Model value="HighTemplarWeapon"/>
+    </CActorMissile>
+    <CActorSound id="AP_HighTemplarPsiPStormImpactSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_PsiStorm.On" Send="Create"/>
+        <Sound value="HighTemplar_PsionicStormImpact"/>
+    </CActorSound>
+    <CActorModel id="AP_HighTemplarPsiStormImpact" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Behavior.AP_PsiStorm.On" Send="Create"/>
+        <On Terms="Behavior.AP_PsiStorm.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="HighTemplarPsiStormImpact"/>
+        <AutoScaleFactor value="0.750000"/>
+    </CActorModel>
+    <CActorModel id="AP_HighTemplarPsiStormModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.AP_PsiStormPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_PsiStormPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveVoidHighTemplarPsiStormFilter" Send="SetTintColor 0,255,0"/>
+        <On Terms="Effect.AP_PsiStormShakurasPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_PsiStormShakurasPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="HighTemplarPsiStormModel"/>
+        <Scale value="1.300000"/>
+    </CActorModel>
+    <CActorSound id="AP_HighTemplarPsiStormSound" parent="SoundContinuous">
+        <On Terms="Effect.AP_PsiStormPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_PsiStormPersistent.Stop" Send="Destroy"/>
+        <On Terms="Effect.AP_PsiStormShakurasPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_PsiStormShakurasPersistent.Stop" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Sound value="HighTemplar_PsionicStormLaunch"/>
+    </CActorSound>
+    <CActorUnit id="AP_HighTemplarShakuras" parent="GenericUnitStandard" unitName="AP_HighTemplarShakuras">
+        <Aliases value="_UnitSmall"/>
+        <On Terms="Abil.AP_PsiStorm.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_PhaseShift.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_Feedback.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_PlasmaSurge.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_Vortex.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_TemporalRift.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.200000 Shadow"/>
+        <On Terms="TimerExpired; TimerName Shadow; IsStatus ShadowCreate 1; !ModelIsLowQuality" Send="Create AP_HighTemplarShakurasShadow"/>
+        <On Terms="TimerExpired; TimerName Shadow" Send="TimerSet 0.200000 Shadow"/>
+        <On Terms="UnitMovementUpdate.*.Stand" Send="StatusSet ShadowCreate 0"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="StatusSet ShadowCreate 1"/>
+        <On Terms="ActorCreation" Send="StatusSet ShadowCreate 0"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_HighTemplar_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
+        <On Terms="Abil.PsiStormShakuras.SourceCastStart" Send="AnimPlay A A"/>
+        <AnimBlendTime value="0.450000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_HighTemplarShakurasWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_HighTemplarShakurasDeath" SoundLink="HighTemplar_DeathFX"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <PlacementModel value="AP_HighTemplarShakurasPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_HighTemplarShakurasPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <AbilSoundArray AbilCmd="PsiStorm,Execute" Sound="HighTemplar_PsionicStormVO"/>
+        <AbilSoundArray AbilCmd="ArchonWarp,SelectedUnits" Sound="HighTemplar_ArchonWarpVO"/>
+        <AbilSoundArray AbilCmd="TemporalRift,Execute" Sound="HighTemplar_Attack"/>
+        <BarOffset value="70"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SelectAbilCmd value="PsiStorm,Execute"/>
+        <SoundArray index="Birth" value="HighTemplar_Birth"/>
+        <SoundArray index="Ready" value="HighTemplar_Ready"/>
+        <SoundArray index="Help" value="HighTemplar_Help"/>
+        <SoundArray index="What" value="HighTemplar_What"/>
+        <SoundArray index="Yes" value="HighTemplar_Yes"/>
+        <SoundArray index="Attack" value="HighTemplar_Attack"/>
+        <SoundArray index="Pissed" value="HighTemplar_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-HighTemplar-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_HighTemplarShakurasShadow" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Model value="HighTemplarShadow"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary SOp2DRotation"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.400000 ShadowFade"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,0,0"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,0,128 0.800000"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000 0.400000"/>
+        <On Terms="TimerExpired; TimerName ShadowFade" Send="SetOpacity 0.000000 0.400000"/>
+    </CActorModel>
+    <CActorUnit id="AP_HighTemplarTaldarim" parent="GenericUnitStandard" unitName="AP_HighTemplarTaldarim">
+        <Aliases value="_UnitSmall"/>
+        <On Terms="Abil.AP_PsiStorm.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_PhaseShift.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_Feedback.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_PlasmaSurge.SourceCastStart" Send="AnimPlay B B"/>
+        <On Terms="Abil.AP_Vortex.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_TemporalRift.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_VoidHighTemplarMindBlast.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_VoidHighTemplarPsiOrb.SourceCastStart" Send="AnimPlay A A"/>
+        <On Terms="Abil.AP_AscendantSacrifice.SourceCastStart" Send="AnimPlay B Spell,B"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="WeaponStart.AP_AscendantWeapon.AttackStart" Send="$Spell,A"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.200000 Shadow"/>
+        <On Terms="TimerExpired; TimerName Shadow; IsStatus ShadowCreate 1; !ModelIsLowQuality" Send="Create AP_HighTemplarTaldarimShadow"/>
+        <On Terms="TimerExpired; TimerName Shadow" Send="TimerSet 0.200000 Shadow"/>
+        <On Terms="UnitMovementUpdate.*.Stand" Send="StatusSet ShadowCreate 0"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="StatusSet ShadowCreate 1"/>
+        <On Terms="ActorCreation" Send="StatusSet ShadowCreate 0"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_HighTemplar_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
+        <AnimBlendTime value="0.450000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_HighTemplarTaldarimWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_HighTemplarTaldarimDeath" SoundLink="AP_Ascendant_Death_Fx" VoiceLink="AP_Ascendant_Death"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <PlacementModel value="AP_HighTemplarTaldarimPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_HighTemplarTaldarimPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <AbilSoundArray AbilCmd="PsiStorm,Execute" Sound="HighTemplar_PsionicStormVO"/>
+        <AbilSoundArray AbilCmd="ArchonWarp,SelectedUnits" Sound="HighTemplar_ArchonWarpVO"/>
+        <AbilSoundArray AbilCmd="AP_TemporalRift,0" Sound="HighTemplar_Attack"/>
+        <BarOffset value="70"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-hightemplar-taldarim.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-hightemplar-taldarim.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SelectAbilCmd value="PsiStorm,Execute"/>
+        <SoundArray index="Birth" value="HighTemplar_Birth"/>
+        <SoundArray index="Ready" value="AP_Ascendant_Ready"/>
+        <SoundArray index="Help" value="AP_Ascendant_What"/>
+        <SoundArray index="What" value="AP_Ascendant_What"/>
+        <SoundArray index="Yes" value="AP_Ascendant_Yes"/>
+        <SoundArray index="Attack" value="AP_Ascendant_Attack"/>
+        <SoundArray index="Pissed" value="AP_Ascendant_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-hightemplar-taldarim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-hightemplar-taldarim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-hightemplar-taldarim-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-hightemplar-taldarim-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-hightemplar-taldarim-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_HighTemplarTaldarimShadow" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Model value="HighTemplarShadow"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary SOp2DRotation"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.400000 ShadowFade"/>
+        <On Terms="ActorCreation" Send="SetTintColor 0,0,128 0.800000"/>
+        <On Terms="ActorCreation" Send="SetOpacity"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000 0.400000"/>
+        <On Terms="TimerExpired; TimerName ShadowFade" Send="SetOpacity 0.000000 0.400000"/>
+        <Inherits index="CloakEffect" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_HighTemplar_Death" parent="SoundOneShot">
+        <On Terms="UnitDeathCustomize.AP_HighTemplar; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <On Terms="UnitDeathCustomize.AP_HighTemplarAir; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <On Terms="UnitDeathCustomize.AP_HighTemplarShakuras; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <On Terms="UnitDeathCustomize.AP_HighTemplarShakuras; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <On Terms="UnitDeathCustomize.AP_HighTemplarShakuras; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <Sound value="HighTemplar_Death"/>
+    </CActorSound>
+    <CActorSplat id="AP_PsiStormShakurasCursorSplat" parent="ProtossCursorSplat" abil="AP_PsiStormShakuras">
+        <Model value="PsiStormCursorSplat"/>
+    </CActorSplat>
+    <CActorRange id="AP_PsiStormShakurasRange" parent="RangeAbil" abil="AP_PsiStormShakuras">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSplat id="AP_HighArchonPsiStormCursorSplat" parent="ProtossCursorSplat" abil="AP_HighArchonPsiStorm">
+        <Model value="PsiStormCursorSplat"/>
+    </CActorSplat>
+    <CActorRange id="AP_HighArchonPsiStormRange" parent="RangeAbil" abil="AP_HighArchonPsiStorm">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSplat id="AP_PsiStormCursorSplat" parent="ProtossCursorSplat" abil="AP_PsiStorm">
+        <Model value="PsiStormCursorSplat"/>
+    </CActorSplat>
+    <CActorRange id="AP_PsiStormRange" parent="RangeAbil" abil="AP_PsiStorm"/>
+    <CActorRange id="AP_FeedbackRange" parent="RangeAbil" abil="AP_Feedback"/>
+    <CActorSplat id="AP_VoidHighTemplarPsiOrbCursorSplat" parent="ProtossCursorSplat" abil="AP_VoidHighTemplarPsiOrb">
+        <Model value="AP_VoidHighTemplarPsiOrbCursorSplat"/>
+    </CActorSplat>
+    <CActorRange id="AP_VoidHighTemplarPsiOrbRange" parent="RangeAbil" abil="AP_VoidHighTemplarPsiOrb"/>
+    <CActorQuad id="AP_VoidHighTemplarPsiOrbAttackGuide" parent="ZergGuideVisualQuadDown" abil="AP_VoidHighTemplarPsiOrb">
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Height value="13.000000"/>
+        <Width value="10.000000"/>
+        <LaunchActor value="AP_ProtossGuideVisualQuadLargeLaunch"/>
+        <CenterActor value="AP_ProtossGuideVisualQuadLargeCenter"/>
+        <ImpactActor value="AP_ProtossGuideVisualQuadLargeImpact"/>
+    </CActorQuad>
+    <CActorModel id="AP_ProtossGuideVisualQuadLargeLaunch" parent="GuideVisualQuadModel">
+        <Model value="ProtossAOEStretchLineLargeStart"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <Remove Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+    </CActorModel>
+    <CActorModel id="AP_ProtossGuideVisualQuadLargeCenter" parent="GuideVisualQuadModel">
+        <Model value="ProtossAOEStretchLineLargeMid"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <Remove Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+    </CActorModel>
+    <CActorModel id="AP_ProtossGuideVisualQuadLargeImpact" parent="GuideVisualQuadModel">
+        <Model value="ProtossAOEStretchLineLargeEnd"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <Remove Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
     </CActorModel>
     <CActorUnit id="Thor">
         <!-- Override -->
@@ -11661,8 +12155,8 @@
         <!-- Torrasque model takes over Noxious -->
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Create AP_UltraliskTorrasque"/>
         <On Terms="Upgrade.AP_HotSTorrasque.Add" Send="Destroy"/>
-        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSTorrasque" Send="Destroy"/>
         <On Terms="ActorCreation; ValidateUnit AP_HaveHotSTorrasque" Send="Create AP_UltraliskTorrasque"/>
+        <On Terms="ActorCreation; ValidateUnit AP_HaveHotSTorrasque" Send="Destroy"/>
         <Model value="AP_HotSNoxious"/>
         <BuildModel value="AP_HotSNoxious"/>
         <DeathArray index="Normal" ModelLink="AP_UltraliskEx1ADeath"/>
@@ -15584,15 +16078,59 @@
     <CActorModel id="AP_VoidDarkTemplarShadowFury" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_DarkTemplarShadowFuryTeleport.Start; At Caster" Send="Create"/>
         <On Terms="Effect.AP_DarkTemplarShadowFuryTeleportFinal.Start; At Caster" Send="Create"/>
-<!--        <On Terms="Effect.MohandarOmnislashTeleport.Start; At Caster" Send="Create"/>-->
-<!--        <On Terms="Effect.MohandarOmnislashTeleportFinal.Start; At Caster" Send="Create"/>-->
+        <!--        <On Terms="Effect.MohandarOmnislashTeleport.Start; At Caster" Send="Create"/>-->
+        <!--        <On Terms="Effect.MohandarOmnislashTeleportFinal.Start; At Caster" Send="Create"/>-->
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachCenter SOpForwardTargetPoint" HoldPosition="1" HoldRotation="1"/>
-        <Model value="AP_VoidDarkTemplarShadowFury"/>
     </CActorModel>
     <CActorSound id="AP_VoidDarkTemplarShadowFuryLaunchSound" parent="SoundOneShot">
         <On Terms="Effect.AP_DarkTemplarShadowFuryTeleport.Start" Send="Create"/>
         <Host Subject="_Target"/>
         <Sound value="AP_ShadowFuryStrikLaunch"/>
     </CActorSound>
+    <CActorSound id="AP_VoidHighTemplarMindBlastImpactSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_VoidHighTemplarMindBlastDamage.Start; At Target" Send="Create"/>
+        <Sound value="AP_HighTemplar_MindBlast_Impact"/>
+    </CActorSound>
+    <CActorModel id="AP_VoidHighTemplarMindBlastModel" parent="ModelAnimationStyleOneShot">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Effect.AP_VoidHighTemplarMindBlastDamage.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_VoidHighTemplarMindBlastExplosion"/>
+        <AutoScaleFactor value="1.500000"/>
+    </CActorModel>
+    <CActorAction id="AP_VoidHighTemplarPsiOrbAttack" parent="GenericAttack" effectImpact="AP_VoidHighTemplarPsiOrbDestroyPersistent" effectLaunch="AP_VoidHighTemplarPsiOrbLaunchMissile">
+        <EditorCategories value=""/>
+        <LaunchAssets Sound="AP_HighTemplar_PsionicOrbLaunch"/>
+        <Missile value="AP_VoidHighTemplarPsiOrbMissile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow AP_AlarakPsiOrbImpactOffset"/>
+        <ImpactMap index="None" Model="AP_VoidHighTemplarPsiOrbFinalImpactModel" Sound="AP_HighTemplar_PsionicOrbImpact"/>
+        <ImpactModel value="AP_VoidHighTemplarPsiOrbAttackImpactModel"/>
+    </CActorAction>
+    <CActorSiteOpLocalOffset id="AP_AlarakPsiOrbImpactOffset">
+        <LocalOffset value="0.000000,0.000000,1.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorModel id="AP_VoidHighTemplarPsiOrbAttackImpactModel">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD {} {} Death ContentPlayOnce 0.200000 AsTimeScale"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorBeamSimple id="AP_VoidHighTemplarPsiOrbBeam" parent="BeamSimpleAnimationStyleOneShot">
+        <On Terms="ActorCreation" Send="TimerSet 1.000000 Death"/>
+        <On Terms="TimerExpired; TimerName Death" Send="AnimBracketStop BSD"/>
+        <Scale value="0.500000"/>
+    </CActorBeamSimple>
+    <CActorAction id="AP_VoidHighTemplarPsiOrbBeamAttack" parent="GenericAttack" effectAttack="AP_VoidHighTemplarPsiOrbDamage">
+        <EditorCategories value=""/>
+        <Beam value="AP_VoidHighTemplarPsiOrbBeam"/>
+        <ImpactMap index="None" Sound="AP_HighTemplar_PsionicOrbBeamImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_VoidHighTemplarPsiOrbMissile" parent="GenericAttackMissile" unitName="AP_VoidHighTemplarPsiOrbMissile">
+        <Macros value="GlobalLoopMacro"/>
+    </CActorMissile>
 </Catalog>

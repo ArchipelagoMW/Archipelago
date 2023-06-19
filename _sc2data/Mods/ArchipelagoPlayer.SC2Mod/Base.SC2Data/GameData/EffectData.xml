@@ -8213,4 +8213,311 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="AP_DarkTemplarBlinkAttackDelay"/>
     </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_AscendantSacrifice">
+        <ValidatorArray value="EnergyNotFullCaster"/>
+        <ValidatorArray value="TargetLifeGreaterThanOrEqualTo2"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <PeriodCount value="19"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeLM1"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeLM2"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeLM3"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage25"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage25"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage25"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage25"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage25"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage25"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage25"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage5"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage5"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage5"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage5"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage"/>
+        <PeriodicEffectArray value="AP_AscendantSacrificeDamage"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_AscendantSacrificeDamage">
+        <ValidatorArray value="EnergyNotFullCaster"/>
+        <ValidatorArray value="AP_TargetLifeGreaterThan1"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="NoVitalAbsorbShields" value="1"/>
+        <Amount value="1"/>
+        <LeechFraction index="Energy" value="2"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_AscendantSacrificeDamage25">
+        <ValidatorArray value="AP_AscendantSacrificeCasterEnergyLE175"/>
+        <ValidatorArray value="AP_AscendantSacrificeTargetLifeGT25"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="NoVitalAbsorbShields" value="1"/>
+        <Amount value="25"/>
+        <LeechFraction index="Energy" value="2"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_AscendantSacrificeDamage5">
+        <ValidatorArray value="AP_AscendantSacrificeCasterEnergyLE195"/>
+        <ValidatorArray value="AP_AscendantSacrificeTargetLifeGT5"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="NoVitalAbsorbShields" value="1"/>
+        <Amount value="5"/>
+        <LeechFraction index="Energy" value="2"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_AscendantSacrificeLM1">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetUnit"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_AscendantSacrificeLM1ImpactDummy"/>
+        <AmmoUnit value="AP_AscendantSacrificeWeapon1"/>
+    </CEffectLaunchMissile>
+    <CEffectModifyUnit id="AP_AscendantSacrificeLM1ImpactDummy"/>
+    <CEffectLaunchMissile id="AP_AscendantSacrificeLM2">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetUnit"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_AscendantSacrificeLM2ImpactDummy"/>
+        <AmmoUnit value="AP_AscendantSacrificeWeapon2"/>
+    </CEffectLaunchMissile>
+    <CEffectModifyUnit id="AP_AscendantSacrificeLM2ImpactDummy"/>
+    <CEffectLaunchMissile id="AP_AscendantSacrificeLM3">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetUnit"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_AscendantSacrificeLM3ImpactDummy"/>
+        <AmmoUnit value="AP_AscendantSacrificeWeapon3"/>
+    </CEffectLaunchMissile>
+    <CEffectModifyUnit id="AP_AscendantSacrificeLM3ImpactDummy"/>
+    <CEffectSet id="AP_AscendantWeapon">
+        <EffectArray value="AP_AscendantWeaponDamage"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_AscendantWeaponDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <Amount value="9"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_AscendantWeaponLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_AscendantWeapon"/>
+        <AmmoUnit value="AP_AscendantWeapon"/>
+        <Movers Link="AP_AscendantWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_Feedback">
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Notification" value="1"/>
+        <VitalFractionCurrent index="Energy" value="1"/>
+        <Death value="Blast"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="AP_FeedbackEnergyLoss">
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Protoss"/>
+        <VitalArray index="Energy">
+            <ChangeFraction value="-1"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectSet id="AP_FeedbackSet">
+        <ValidatorArray value="NotStructureTarget"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_Feedback"/>
+        <EffectArray value="AP_FeedbackEnergyLoss"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_HighArchonPsiStormApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_HighArchonPsiStorm"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_HighArchonPsiStormDamage">
+        <ValidatorArray value="PsiStormUTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Hidden"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_HighArchonPsiStormDamageInitial">
+        <ValidatorArray value="PsiStormUTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_HighArchonPsiStormPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <InitialEffect value="AP_HighArchonPsiStormSearchSet"/>
+        <PeriodCount value="6"/>
+        <PeriodicEffectArray value="AP_HighArchonPsiStormSearchSet"/>
+        <PeriodicPeriodArray value="0.5712"/>
+        <AINotifyEffect value="AP_HighArchonPsiStormSearch"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_HighArchonPsiStormSearchSet">
+        <EffectArray value="AP_HighArchonPsiStormSearch"/>
+        <EffectArray value="AP_HighArchonPsiStormFriendlySearch"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_HighArchonPsiStormFriendlySearch">
+        <EditorCategories value="Race:Protoss"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <SearchFilters value="-;Neutral,Enemy,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.3" Effect="AP_HighArchonPsiStormHeal"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectCreateHealer id="AP_HighArchonPsiStormHeal">
+        <Flags index="Channeled" value="0"/>
+        <PeriodCount value="2"/>
+        <PeriodicPeriod value="0.25"/>
+        <RechargeVital value="Shields"/>
+        <RechargeVitalRate value="14.2968"/>
+    </CEffectCreateHealer>
+    <CEffectEnumArea id="AP_HighArchonPsiStormSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.3" Effect="AP_HighArchonPsiStormApplyBehavior"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_HighTemplarWeapon">
+        <EffectArray value="AP_HighTemplarWeaponDamage"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_HighTemplarWeaponDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <Amount value="9"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_HighTemplarWeaponLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_HighTemplarWeapon"/>
+        <AmmoUnit value="AP_HighTemplarWeapon"/>
+        <Movers Link="AP_HighTemplarWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="AP_PsiStormApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_PsiStorm"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_PsiStormDamage">
+        <ValidatorArray value="PsiStormUTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Hidden"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_PsiStormDamageInitial">
+        <ValidatorArray value="PsiStormUTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_PsiStormPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <InitialEffect value="AP_PsiStormSearch"/>
+        <PeriodCount value="6"/>
+        <PeriodicEffectArray value="AP_PsiStormSearch"/>
+        <PeriodicPeriodArray value="0.5712"/>
+        <AINotifyEffect value="AP_PsiStormSearch"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_PsiStormSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_PsiStormApplyBehavior"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_PsiStormShakurasImpactSet">
+        <EffectArray value="AP_PsiStormApplyBehavior"/>
+        <EffectArray value="AP_PsiStormCrippleAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_PsiStormCrippleAB">
+        <ValidatorArray value="AP_CasterIsHighTemplarShakuras"/>
+        <ValidatorArray value="NotStructure"/>
+        <Behavior value="AP_VoidHighTemplarPsiStormCripple"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_PsiStormShakurasPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <InitialEffect value="AP_PsiStormShakurasSearch"/>
+        <PeriodCount value="6"/>
+        <PeriodicEffectArray value="AP_PsiStormShakurasSearch"/>
+        <PeriodicPeriodArray value="0.5712"/>
+        <AINotifyEffect value="AP_PsiStormShakurasSearch"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_PsiStormShakurasSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <AINotifyFlags index="HurtFriend" value="1"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_PsiStormShakurasImpactSet"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_VoidHighTemplarMindBlastDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="200"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_VoidHighTemplarPsiOrbAB">
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_VoidHighTemplarPsiOrb"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_VoidHighTemplarPsiOrbDamage">
+        <EditorCategories value=""/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectDestroyPersistent id="AP_VoidHighTemplarPsiOrbDestroyPersistent">
+        <EditorCategories value=""/>
+        <WhichLocation Value="TargetPoint"/>
+        <Effect value="AP_VoidHighTemplarPsiOrbPersistent"/>
+        <Count value="1"/>
+        <Radius value="1"/>
+    </CEffectDestroyPersistent>
+    <CEffectCreatePersistent id="AP_VoidHighTemplarPsiOrbPersistent">
+        <EditorCategories value=""/>
+        <WhichLocation Value="SourceUnit"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <PeriodicEffectArray value="AP_VoidHighTemplarPsiOrbSearch"/>
+        <PeriodicPeriodArray value="0.5"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_VoidHighTemplarPsiOrbInitialPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="SourcePoint"/>
+        <InitialEffect value="AP_VoidHighTemplarPsiOrbLaunchMissile"/>
+        <InitialOffset value="0,-13,0"/>
+        <PeriodCount value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_VoidHighTemplarPsiOrbLaunchMissile">
+        <EditorCategories value=""/>
+        <ImpactLocation Value="TargetPoint"/>
+        <LaunchEffect value="AP_VoidHighTemplarPsiOrbAB"/>
+        <ImpactEffect value="AP_VoidHighTemplarPsiOrbSet"/>
+        <AmmoUnit value="AP_VoidHighTemplarPsiOrbMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectEnumArea id="AP_VoidHighTemplarPsiOrbSearch">
+        <EditorCategories value=""/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSRandom"/>
+        </TargetSorts>
+        <AreaArray Radius="5" Effect="AP_VoidHighTemplarPsiOrbDamage"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_VoidHighTemplarPsiOrbSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_VoidHighTemplarPsiOrbDestroyPersistent"/>
+    </CEffectSet>
 </Catalog>
