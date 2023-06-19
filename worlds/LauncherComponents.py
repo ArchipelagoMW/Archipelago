@@ -1,19 +1,21 @@
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable
 
-from Utils import local_path, is_windows
+from Utils import local_path
 
 
 class Type(Enum):
     TOOL = auto()
-    FUNC = auto()  # not a real component
+    MISC = auto()
     CLIENT = auto()
     ADJUSTER = auto()
+    FUNC = auto()  # do not use anymore
+    HIDDEN = auto()
 
 
 class Component:
     display_name: str
-    type: Optional[Type]
+    type: Type
     script_name: Optional[str]
     frozen_name: Optional[str]
     icon: str  # just the name, no suffix
@@ -22,18 +24,21 @@ class Component:
     file_identifier: Optional[Callable[[str], bool]]
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
-                 cli: bool = False, icon: str = 'icon', component_type: Type = None, func: Optional[Callable] = None,
-                 file_identifier: Optional[Callable[[str], bool]] = None):
+                 cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
+                 func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None):
         self.display_name = display_name
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
         self.icon = icon
         self.cli = cli
-        self.type = component_type or \
-            None if not display_name else \
-            Type.FUNC if func else \
-            Type.CLIENT if 'Client' in display_name else \
-            Type.ADJUSTER if 'Adjuster' in display_name else Type.TOOL
+        if component_type == Type.FUNC:
+            from Utils import deprecate
+            deprecate(f"Launcher Component {self.display_name} is using Type.FUNC Type, which is pending removal.")
+            component_type = Type.MISC
+
+        self.type = component_type or (
+            Type.CLIENT if "Client" in display_name else
+            Type.ADJUSTER if "Adjuster" in display_name else Type.MISC)
         self.func = func
         self.file_identifier = file_identifier
 
@@ -60,7 +65,7 @@ class SuffixIdentifier:
 
 components: List[Component] = [
     # Launcher
-    Component('', 'Launcher'),
+    Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
     # Core
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
