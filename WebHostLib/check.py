@@ -1,7 +1,8 @@
 import zipfile
 from typing import *
 
-from flask import request, flash, redirect, url_for, render_template, Markup
+from flask import request, flash, redirect, url_for, render_template
+from markupsafe import Markup
 
 from WebHostLib import app
 
