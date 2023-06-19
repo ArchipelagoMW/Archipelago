@@ -7,8 +7,8 @@ import random
 import string
 import urllib.parse
 import urllib.request
-from collections import Counter, ChainMap
-from typing import Dict, Tuple, Callable, Any, Union
+from collections import ChainMap, Counter
+from typing import Any, Callable, Dict, Tuple, Union
 
 import ModuleUpdate
 
@@ -53,6 +53,8 @@ def mystery_argparse():
                         help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
     parser.add_argument('--plando', default=defaults["plando_options"],
                         help='List of options that can be set manually. Can be combined, for example "bosses, items"')
+    parser.add_argument("--skip_prog_balancing", action="store_true",
+                        help="Skip progression balancing step during generation.")
     args = parser.parse_args()
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
@@ -140,6 +142,7 @@ def main(args=None, callback=ERmain):
     erargs.race = args.race
     erargs.outputname = seed_name
     erargs.outputpath = args.outputpath
+    erargs.skip_prog_balancing = args.skip_prog_balancing
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.samesettings else None)
