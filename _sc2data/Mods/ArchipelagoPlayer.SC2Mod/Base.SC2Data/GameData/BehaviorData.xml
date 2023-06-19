@@ -2916,4 +2916,13 @@
         <Modification LifeArmorBonus="-5" ShieldArmorBonus="-5"/>
         <Alignment value="Negative"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkTemplarRecentlyRecalled">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="60"/>
+        <Alignment value="Negative"/>
+        <Cost>
+            <Cooldown TimeStart="60"/>
+        </Cost>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-recallondeath.dds"/>
+    </CBehaviorBuff>
 </Catalog>
