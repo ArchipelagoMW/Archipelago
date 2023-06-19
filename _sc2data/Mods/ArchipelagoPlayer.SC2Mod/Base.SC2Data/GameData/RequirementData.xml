@@ -1324,6 +1324,14 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Use" Link="AP_CountBehaviorIsPoweredDarkShrineCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_UseSeveredCords">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeSeveredCordsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveVoidHighTemplarPsiStormFilter">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeVoidHighTemplarPsiStormFilterCompleteOnly"/>
+    </CRequirement>
     <CRequirement id="AP_HaveHotSBanelingCorrosiveBile">
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSBanelingCorrosiveBileCompleteOnly"/>

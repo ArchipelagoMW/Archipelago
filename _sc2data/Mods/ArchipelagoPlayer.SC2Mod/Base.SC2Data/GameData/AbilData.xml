@@ -2005,6 +2005,27 @@
         <Flags index="IgnoreUnitCost" value="1"/>
         <Info Unit="AP_Archon" Time="12"/>
     </CAbilMerge>
+    <CAbilMerge id="AP_ArchonAdvancedMerge">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="SelectedUnits" DefaultButtonFace="AWrp" State="Restricted">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="WithTarget" DefaultButtonFace="ArchonWarpTarget" State="Restricted"/>
+        <!-- This unit is commented out in Void and looks like a stub in coop -->
+        <Info Unit="AP_ArchonAdvanced" Time="3">
+            <Resource index="Minerals" value="-175"/>
+            <Resource index="Vespene" value="-275"/>
+        </Info>
+    </CAbilMerge>
+    <CAbilEffectTarget id="AP_AscendantSacrifice">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Cost>
+            <Cooldown Location="Unit" TimeUse="10"/>
+        </Cost>
+        <TargetFilters value="-;Self,Enemy,Structure,Heroic,Missile,Uncommandable,Stasis,Dead,Hidden,Hallucination,Invulnerable"/>
+        <Range value="4"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_AscendantSacrifice"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
@@ -3837,6 +3858,63 @@
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Cancelable value="0"/>
     </CAbilMergeable>
+    <CAbilEffectTarget id="AP_Feedback">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_FeedbackSet"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <TargetFilters value="CanHaveEnergy,Visible,HasEnergy;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="9"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Feedback"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_PsiStorm">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_PsiStormPersistent"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown TimeUse="2"/>
+        </Cost>
+        <Range value="9"/>
+        <CastOutroTime value="0.5"/>
+        <CursorEffect value="AP_PsiStormSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PsiStorm"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_HighArchonPsiStorm">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_HighArchonPsiStormPersistent"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown TimeUse="2"/>
+        </Cost>
+        <Range value="11"/>
+        <CastOutroTime value="0.5"/>
+        <CursorEffect value="AP_HighArchonPsiStormSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PsiStorm"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_PsiStormShakuras">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_PsiStormShakurasPersistent"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown TimeUse="2"/>
+        </Cost>
+        <Range value="9"/>
+        <CastOutroTime value="0.5"/>
+        <CursorEffect value="AP_PsiStormShakurasSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_CripplingPsionicStorm"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -4468,6 +4546,45 @@
             </SectionArray>
         </InfoArray>
     </CAbilMorph>
+    <CAbilEffectTarget id="AP_TemporalRift">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <!-- Looks like the Effect doesn't exist -->
+        <Effect index="0" value="AP_TemporalRiftCreatePersistent"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown Link="AP_TemporalRiftTemporalRift"/>
+        </Cost>
+        <Range value="9"/>
+        <Arc value="360"/>
+        <!-- Looks like the Effect doesn't exist -->
+        <CursorEffect value="AP_TemporalRiftUnitSearchArea"/>
+        <AINotifyEffect value="AP_TemporalRiftCreatePersistent"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TemporalRift"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_VoidHighTemplarMindBlast">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Effect index="0" value="AP_VoidHighTemplarMindBlastDamage"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown TimeUse="8"/>
+        </Cost>
+        <TargetFilters value="Visible;Player,Ally,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <Range value="13"/>
+        <AINotifyEffect value="AP_VoidHighTemplarMindBlastDamage"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidHighTemplarMindBlast"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_VoidHighTemplarPsiOrb">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Effect index="0" value="AP_VoidHighTemplarPsiOrbInitialPersistent"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="2"/>
+        </Cost>
+        <Range value="13"/>
+        <UninterruptibleArray index="Prep" value="1"/>
+        <UninterruptibleArray index="Cast" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidHighTemplarPsiOrb"/>
+    </CAbilEffectTarget>
     <CAbilBehavior id="AP_VolatileBurstBuilding">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <CmdButtonArray index="On" DefaultButtonFace="AP_DisableBuildingAttack">

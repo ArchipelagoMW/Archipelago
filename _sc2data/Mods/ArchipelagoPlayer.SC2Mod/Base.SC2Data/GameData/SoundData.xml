@@ -4767,6 +4767,279 @@
         <Pitch value="-1.000000,1.000000"/>
         <Volume value="-3.000000,-3.000000"/>
     </CSound>
+    <CSound default="1" id="AP_ProtossDeath" parent="Death">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.wav"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
+    <CSound id="AP_Ascendant_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Ascendant_Attack00"/>
+        <AssetArray TemplateParam="Ascendant_Attack01"/>
+        <AssetArray TemplateParam="Ascendant_Attack02"/>
+        <AssetArray TemplateParam="Ascendant_Attack03"/>
+        <AssetArray TemplateParam="Ascendant_Attack04"/>
+        <AssetArray TemplateParam="Ascendant_Attack05"/>
+        <AssetArray TemplateParam="Ascendant_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Ascendant_Death" parent="AP_ProtossDeath">
+        <AssetArray TemplateParam="Ascendant_Death00"/>
+        <AssetArray TemplateParam="Ascendant_Death01"/>
+        <AssetArray TemplateParam="Ascendant_Death02"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Ascendant_Death_Fx" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\HighTemplarTaldarim_Death_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\HighTemplarTaldarim_Death_02.wav" FacialGroup=""/>
+        <!-- The following are part of liberty.sc2mod -->
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Death_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Death_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Death_05.wav" FacialGroup=""/>
+        <DupeDestroyCount value="4"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <SustainFade index="1" Time="1000"/>
+        <Volume value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Ascendant_Impact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Impact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Impact_04.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Ascendant_Launch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Launch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Launch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Launch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\HighTemplar_Taldarim_Launch_04.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+        <Volume value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Ascendant_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="Ascendant_Pissed00"/>
+        <AssetArray TemplateParam="Ascendant_Pissed01"/>
+        <AssetArray TemplateParam="Ascendant_Pissed02"/>
+        <AssetArray TemplateParam="Ascendant_Pissed03"/>
+        <AssetArray TemplateParam="Ascendant_Pissed04"/>
+        <AssetArray TemplateParam="Ascendant_Pissed05"/>
+        <AssetArray TemplateParam="Ascendant_Pissed06"/>
+        <AssetArray TemplateParam="Ascendant_Pissed07"/>
+        <AssetArray TemplateParam="Ascendant_Pissed08"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Ascendant_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="Ascendant_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Ascendant_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Ascendant_What00"/>
+        <AssetArray TemplateParam="Ascendant_What01"/>
+        <AssetArray TemplateParam="Ascendant_What02"/>
+        <AssetArray TemplateParam="Ascendant_What03"/>
+        <AssetArray TemplateParam="Ascendant_What04"/>
+        <AssetArray TemplateParam="Ascendant_What05"/>
+        <AssetArray TemplateParam="Ascendant_What06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Ascendant_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Ascendant_Yes00"/>
+        <AssetArray TemplateParam="Ascendant_Yes01"/>
+        <AssetArray TemplateParam="Ascendant_Yes02"/>
+        <AssetArray TemplateParam="Ascendant_Yes03"/>
+        <AssetArray TemplateParam="Ascendant_Yes04"/>
+        <AssetArray TemplateParam="Ascendant_Yes05"/>
+        <AssetArray TemplateParam="Ascendant_Yes06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_HighTemplarVoid_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="HighTemplarVoid_Attack00"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Attack01"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Attack02"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Attack03"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Attack04"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Attack05"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_HighTemplarVoid_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="HighTemplarVoid_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="4.000000,4.000000"/>
+    </CSound>
+    <CSound id="AP_HighTemplarVoid_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="HighTemplarVoid_Pissed00"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Pissed01"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Pissed02"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Pissed03"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Pissed04"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Pissed05"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Pissed06"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Pissed07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_HighTemplarVoid_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="HighTemplarVoid_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="5.000000,5.000000"/>
+    </CSound>
+    <CSound id="AP_HighTemplarVoid_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="HighTemplarVoid_What00"/>
+        <AssetArray TemplateParam="HighTemplarVoid_What01"/>
+        <AssetArray TemplateParam="HighTemplarVoid_What02"/>
+        <AssetArray TemplateParam="HighTemplarVoid_What03"/>
+        <AssetArray TemplateParam="HighTemplarVoid_What04"/>
+        <AssetArray TemplateParam="HighTemplarVoid_What05"/>
+        <AssetArray TemplateParam="HighTemplarVoid_What06"/>
+        <AssetArray TemplateParam="HighTemplarVoid_What07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_HighTemplarVoid_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="HighTemplarVoid_Yes00"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Yes01"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Yes02"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Yes03"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Yes04"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Yes05"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Yes06"/>
+        <AssetArray TemplateParam="HighTemplarVoid_Yes07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_Karass_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackImpact3.wav"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-7.500000,-7.500000"/>
+    </CSound>
+    <CSound id="AP_Karass_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackLaunch2.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackLaunch3.wav"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-12.000000,-12.000000"/>
+    </CSound>
+    <CSound id="AP_Obelisk_ArgusLinkImpact" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Obelisk\Obelisk_ArgusLinkImpact0.wav"/>
+    </CSound>
+    <CSound id="AP_Obelisk_ArgusLinkLaunch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Obelisk\Obelisk_ArgusLinkLaunch0.wav"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_HighTemplar_PsionicOrbLaunch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Launch_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Launch_02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Launch_02f.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Launch_04.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Launch_05.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Launch_06.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Launch_07.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Launch_08.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-4.000000,-2.000000"/>
+        <DupePrioritization value="Oldest"/>
+    </CSound>
+    <CSound id="AP_HighTemplar_MindBlast_Impact" parent="Spell">
+        <AssetArray File="AP\Assets\Sounds\Ascendant_MindBlast_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Ascendant_MindBlast_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Ascendant_MindBlast_Impact_04a.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Ascendant_MindBlast_Impact_05.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Ascendant_MindBlast_Impact_06a.wav" FacialGroup=""/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-4.000000,-2.000000"/>
+        <Volume value="-3.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_HighTemplar_PsionicOrbBeamImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Electric_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Electric_02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Electric_03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Electric_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Electric_Impact_02.wav" FacialGroup=""/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-8.000000,-6.000000"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupePrioritization value="Oldest"/>
+    </CSound>
+    <CSound id="AP_HighTemplar_PsionicOrbImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Impact_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Impact_02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Impact_03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Impact_04.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Impact_05.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Impact_06.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Impact_07.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\PsionicOrb_Impact_08.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-6.000000,-4.000000"/>
+        <DupePrioritization value="Oldest"/>
+    </CSound>
+    <CSound id="AP_Ascendant_SacrificeMissile" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\AscendantSacrifice_Missile_01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\AscendantSacrifice_Missile_02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\AscendantSacrifice_Missile_03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\AscendantSacrifice_Missile_04.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\AscendantSacrifice_Missile_05.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\AscendantSacrifice_Missile_06.wav" FacialGroup=""/>
+        <DupeDestroyCount value="4"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <SustainFade index="1" Time="1000"/>
+        <Volume value="-3.000000,-2.000000"/>
+        <DopplerLevel value="5.000000"/>
+        <PositionRandomOffset value="5.000000,0.000000,0.000000"/>
+        <PositionRandomOffsetPower value="0.500000"/>
+    </CSound>
+    <CSound id="AP_Ascendant_Death_Fx_Missile" parent="Protoss_DeathFX">
+        <AssetArray index="0" File="AP\Assets\Sounds\HighTemplarTaldarim_Death_Missile_01.wav" FacialGroup=""/>
+        <AssetArray index="1" File="AP\Assets\Sounds\HighTemplarTaldarim_Death_Missile_02.wav" FacialGroup=""/>
+        <AssetArray index="2" File="AP\Assets\Sounds\HighTemplarTaldarim_Death_Missile_03.wav" FacialGroup=""/>
+        <Category value="Combat"/>
+        <SustainFade index="1" Time="1000"/>
+        <Volume value="0.000000,1.000000"/>
+    </CSound>
     <CSound id="AP_HotSSplitterlingMedium_Attack" parent="Voice">
         <EditorCategories value="Race:Zerg"/>
         <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack0.ogg"/>

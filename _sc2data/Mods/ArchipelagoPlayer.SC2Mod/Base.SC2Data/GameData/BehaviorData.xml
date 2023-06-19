@@ -2861,6 +2861,70 @@
             <StateFlags index="Stun" value="1"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DamageDisablesAttackHighTemplar">
+        <InfoFlags index="Hidden" value="1"/>
+        <DisableValidatorArray value="CasterNotInCombat"/>
+        <Modification>
+            <WeaponEnableArray value="AP_HighTemplarFakeWeapon"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HighArchonPsiStorm">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-psistorm.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <MaxStackCount value="65535"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="0.6665"/>
+        <Period value="0.571"/>
+        <InitialEffect value="AP_HighArchonPsiStormDamageInitial"/>
+        <PeriodicEffect value="AP_HighArchonPsiStormDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PsiStorm">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-psistorm.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="0.6665"/>
+        <Period value="0.571"/>
+        <InitialEffect value="AP_PsiStormDamageInitial"/>
+        <PeriodicEffect value="AP_PsiStormDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidHighTemplarCloak">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Modification MoveSpeedMultiplier="1.2">
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidHighTemplarPsiOrb">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Period value="0.5"/>
+        <PeriodicEffect value="AP_VoidHighTemplarPsiOrbSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidHighTemplarPsiStormCripple">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-shieldbattery-color.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_HasCripple"/>
+        <BuffFlags index="UpdateDurationWhileDisabled" value="1"/>
+        <Duration value="10"/>
+        <Modification LifeArmorBonus="-5" ShieldArmorBonus="-5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_HighTemplarCripple">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-shieldbattery-color.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Modification LifeArmorBonus="-5" ShieldArmorBonus="-5"/>
+        <Alignment value="Negative"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkTemplarRecentlyRecalled">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Duration value="60"/>
+        <Alignment value="Negative"/>
+        <Cost>
+            <Cooldown TimeStart="60"/>
+        </Cost>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-recallondeath.dds"/>
+    </CBehaviorBuff>
     <CBehaviorBuff id="AP_BanelingExplode">
         <Alignment value="Positive"/>
         <InfoFlags index="Hidden" value="1"/>

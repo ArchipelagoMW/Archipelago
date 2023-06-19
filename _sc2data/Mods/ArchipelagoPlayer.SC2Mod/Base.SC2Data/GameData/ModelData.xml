@@ -9551,6 +9551,236 @@
     <CModel id="AP_DarkTemplarShadowFuryImpact">
         <Model value="Assets\Effects\Protoss\ShadowFury_Impact\ShadowFury_Impact.m3"/>
     </CModel>
+    <CModel id="AP_AscendantAttackImpact" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_AgonizingBlast_Impact\HighTemplarTaldarim_AgonizingBlast_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_AscendantSacrificeDummy1AttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_Sacrifice_Impact\HighTemplarTaldarim_Sacrifice_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_AscendantSacrificeDummy2AttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_Sacrifice_Impact\HighTemplarTaldarim_Sacrifice_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_AscendantSacrificeDummy3AttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_Sacrifice_Impact\HighTemplarTaldarim_Sacrifice_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_AscendantSacrificeWeapon1" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_Sacrifice_Missile\HighTemplarTaldarim_Sacrifice_Missile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="AP_Ascendant_SacrificeMissile"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="AP_Ascendant_SacrificeMissile"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_AscendantSacrificeWeapon2" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_Sacrifice_Missile\HighTemplarTaldarim_Sacrifice_Missile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="AP_Ascendant_SacrificeMissile"/>
+            <Type value="Sound"/>
+            <Time value="0.008000"/>
+            <Payload value="AP_Ascendant_SacrificeMissile"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_AscendantSacrificeWeapon3" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_Sacrifice_Missile\HighTemplarTaldarim_Sacrifice_Missile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="AP_Ascendant_SacrificeMissile"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="AP_Ascendant_SacrificeMissile"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_AscendantWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_AgonizingBlast\HighTemplarTaldarim_AgonizingBlast.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_HighArchonPsiStormImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\PsiStormImpact\PsiStormImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Radius value="1.000000"/>
+    </CModel>
+    <CModel id="AP_HighArchonPsiStormModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\PsiStorm\PsiStorm.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <RadiusLoose value="1.000000"/>
+        <ScaleMax value="1.200000,1.200000,1.200000"/>
+        <ScaleMin value="1.200000,1.200000,1.200000"/>
+    </CModel>
+    <CModel id="AP_HighArchonTemplar" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\HighTemplar\HighTemplar.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\HighTemplar_SwarmAnims\HighTemplar_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh05"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <SquibTypeDefault value="LightArmor"/>
+        <TechPurchaseCamera value="Star2CameraHigh05"/>
+        <TextureDeclares Prefix="templar_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+        </TextureDeclares>
+        <UnitGlossaryCamera value="Star2CameraHigh05"/>
+    </CModel>
+    <CModel id="AP_HighTemplarShakuras" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\HighTemplar\HighTemplar.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\HighTemplar_SwarmAnims\HighTemplar_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh05"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <SquibTypeDefault value="LightArmor"/>
+        <TechPurchaseCamera value="Star2CameraHigh05"/>
+        <UnitGlossaryCamera value="Star2CameraHigh05"/>
+    </CModel>
+    <CModel id="AP_HighTemplarShakurasDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\HighTemplarDeath\HighTemplarDeath.m3"/>
+        <LowQualityModel value="ProtossSpiritDeathLow"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.625000"/>
+        <ShadowRadius value="0.625000"/>
+    </CModel>
+    <CModel id="AP_HighTemplarShakurasPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\HighTemplarPlacement\HighTemplarPlacement.m3"/>
+        <Lighting value="HighTemplar"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_HighTemplarShakurasPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\HighTemplarPortrait\HighTemplarPortrait.m3"/>
+    </CModel>
+    <CModel id="AP_HighTemplarShakurasWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\HighTemplarWarpIn\HighTemplarWarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SelectionRadius value="0.526100"/>
+        <ShadowRadius value="0.526100"/>
+    </CModel>
+    <CModel id="AP_HighTemplarTaldarim" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\HighTemplar_TaldarimEx3\HighTemplar_TaldarimEx3.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\HighTemplar_SwarmAnims\HighTemplar_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh05"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <SquibTypeDefault value="LightArmor"/>
+        <TechPurchaseCamera value="Star2CameraHigh05"/>
+        <UnitGlossaryCamera value="Star2CameraHigh05"/>
+    </CModel>
+    <CModel id="AP_HighTemplarTaldarimDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\HighTemplar_Taldarim_Death\HighTemplar_Taldarim_Death.m3"/>
+        <LowQualityModel value="ProtossSpiritTaldarimDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="AP_Ascendant_Death_Fx_Missile"/>
+            <Type value="Sound"/>
+            <Time value="0.208000"/>
+            <Payload value="AP_Ascendant_Death_Fx_Missile"/>
+        </Events>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.625000"/>
+        <ShadowRadius value="0.625000"/>
+    </CModel>
+    <CModel id="AP_HighTemplarTaldarimPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\HighTemplarTaldarim_Placement\HighTemplarTaldarim_Placement.m3"/>
+        <Lighting value="HighTemplar"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SelectionRadius value="0.588100"/>
+        <ShadowRadius value="0.588100"/>
+    </CModel>
+    <CModel id="AP_HighTemplarTaldarimPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\HighTemplar_TalDarim_Portrait\HighTemplar_TalDarim_Portrait.m3"/>
+        <Flags index="Download" value="1"/>
+        <Image value="Assets\Textures\taldarimhightemplarportrait_static.dds"/>
+        <Lighting value="AP_PortraitTalDarim_HighTemplar"/>
+    </CModel>
+    <CModel id="AP_HighTemplarTaldarimWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\HighTemplarTaldarim_WarpIn\HighTemplarTaldarim_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SelectionRadius value="0.526100"/>
+        <ShadowRadius value="0.526100"/>
+    </CModel>
+    <CModel id="AP_HighTemplarWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\AdeptSoulMissile\AdeptSoulMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_VoidHighTemplarMindBlastExplosion" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_MindBlast\HighTemplarTaldarim_MindBlast.m3"/>
+        <SelectionRadius value="0.200000"/>
+        <ShadowRadius value="0.200000"/>
+    </CModel>
+    <CModel id="AP_VoidHighTemplarPsiOrbBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_PsionicOrb_Beam\HighTemplarTaldarim_PsionicOrb_Beam.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
+    <CModel id="AP_VoidHighTemplarPsiOrbFinalImpactModel">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_PsionicOrb_Impact\HighTemplarTaldarim_PsionicOrb_Impact.m3"/>
+    </CModel>
+    <CModel id="AP_VoidHighTemplarPsiOrbMissile" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\HighTemplarTaldarim_PsionicOrb_Missile\HighTemplarTaldarim_PsionicOrb_Missile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_HighTemplarNoCords" parent="Unit" Race="Protoss">
+        <Occlusion value="Show"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.950000,0.950000,0.950000"/>
+        <ScaleMin value="0.950000,0.950000,0.950000"/>
+        <SquibTypeDefault value="LightArmor"/>
+        <TechPurchaseCamera value="Star2CameraHigh05"/>
+        <UnitGlossaryCamera value="Star2CameraHigh05"/>
+        <PlanetPanelCamera value="Star2CameraHigh05"/>
+        <SelectionRadius value="0.375000"/>
+        <ShadowRadius value="0.375000"/>
+        <RequiredAnims value="Assets\Units\Protoss\HighTemplar_SwarmAnims\HighTemplar_SwarmAnims.m3a"/>
+        <TextureDeclares Prefix="templar_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+        </TextureDeclares>
+        <Model value="Assets\Units\Protoss\HighTemplar_NoCords\HighTemplar_NoCords.m3"/>
+    </CModel>
+    <CModel id="AP_HighTemplar_NoNerveCordsPortrait" parent="Portrait" Race="Protoss">
+        <Image value="Assets\Textures\HighTemplarNoNerveCordPortrait_static.dds"/>
+        <Lighting value="HighTemplarPortrait"/>
+    </CModel>
+    <CModel id="AP_VoidHighTemplarPsiOrbCursorSplat" parent="UI">
+        <Model value="Assets\UI\Cursors\ProtossCursor1\ProtossCursor1.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.250000,0.250000,0.250000"/>
+        <ScaleMin value="0.250000,0.250000,0.250000"/>
+        <SelectionRadius value="2.500000"/>
+        <ShadowRadius value="2.500000"/>
+    </CModel>
     <CModel id="AP_Baneling" parent="BanelingBase">
         <Model value="Assets\Units\Zerg\BanelingEx1\BanelingEx1.m3"/>
         <ScaleMax value="0.880000,0.880000,0.880000"/>

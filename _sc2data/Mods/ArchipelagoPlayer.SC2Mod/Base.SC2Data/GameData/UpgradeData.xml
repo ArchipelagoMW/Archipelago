@@ -3716,6 +3716,66 @@
         <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
         <AffectedUnitArray value="AP_DarkTemplar"/>
     </CUpgrade>
+    <CUpgrade id="AP_SeveredCords">
+        <EffectArray Operation="Set" Reference="Actor,AP_Zealot,PlacementModel" Value="AP_ZealotNoCordsPlacement"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Zealot,PortraitModel" Value="AP_Zealot_NoNerveCordsPortrait"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_HighTemplar,PortraitModel" Value="AP_HighTemplar_NoNerveCordsPortrait"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_ZealotAiur,PortraitModel" Value="AP_Aiur_ZealotEx2_NoNerveCordsPortrait"/>
+        <AffectedUnitArray value="AP_Zealot"/>
+        <AffectedUnitArray value="AP_HighTemplar"/>
+        <AffectedUnitArray value="AP_ZealotAiur"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidHighTemplarArchonAdvanced">
+        <InfoTooltipPriority value="2"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_HighTemplar"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidHighTemplarCloak">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,Name" Value="Button/Name/HighTemplarShakuras"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,Tooltip" Value="Button/Tooltip/HighTemplarShakuras"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,AlertIcon" Value="Assets\Textures\btn-unit-protoss-archon.dds"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,Icon" Value="Assets\Textures\btn-unit-protoss-darkarchon.dds"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,AlertTooltip" Value="Button/Tooltip/HighTemplarShakuras"/>
+<!--        <EffectArray Operation="Set" Reference="Actor,TechTreeHighTemplar,UnitIcon" Value="Assets\Textures\btn-unit-protoss-archon.dds"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeHighTemplar,Name" Value="Unit/Name/DarkArchon"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeHighTemplar,Description" Value="Button/Tooltip/HighTemplarShakuras"/>-->
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_HighTemplar"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidHighTemplarTerazine">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,Name" Value="Button/Name/HighTemplarTaldarim"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,Tooltip" Value="Button/Tooltip/HighTemplarTaldarim"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,Icon" Value="Assets\Textures\btn-unit-protoss-hightemplar-taldarim.dds"/>
+<!--        <EffectArray Operation="Set" Reference="Actor,TechTreeHighTemplar,UnitIcon" Value="Assets\Textures\btn-unit-protoss-hightemplar-taldarim.dds"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeHighTemplar,Name" Value="Unit/Name/HighTemplarTaldarim"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeHighTemplar,Description" Value="Button/Tooltip/HighTemplarTaldarim"/>-->
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_HighTemplar"/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidHighTemplarTwilightMessiah">
+        <Flags index="UpgradeCheat" value="0"/>
+        <InfoTooltipPriority value="2"/>
+        <Race value="Protoss"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,Name" Value="Button/Name/HighTemplarAiur"/>
+        <EffectArray Operation="Set" Reference="Button,AP_HighTemplar,Tooltip" Value="Button/Tooltip/HighTemplarAiur"/>
+<!--        <EffectArray Operation="Set" Reference="Actor,TechTreeHighTemplar,UnitIcon" Value="Assets\Textures\btn-unit-protoss-hightemplar.dds"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeHighTemplar,Name" Value="Unit/Name/HighArchonTemplar"/>-->
+<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeHighTemplar,Description" Value="Button/Tooltip/HighTemplarAiur"/>-->
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_HighTemplar"/>
+        <AffectedUnitArray value="AP_HighArchonTemplar"/>
+    </CUpgrade>
     <CUpgrade id="AP_BanelingBurrowMove">
         <InfoTooltipPriority value="1"/>
         <Alert value="ResearchComplete"/>

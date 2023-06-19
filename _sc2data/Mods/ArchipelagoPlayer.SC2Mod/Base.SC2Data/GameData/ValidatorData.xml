@@ -2501,4 +2501,48 @@
         <!-- Override -->
         <Type value="SelectAlias"/>
     </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HasSeveredCordsUpgrade">
+        <Find value="1"/>
+        <Value value="AP_UseSeveredCords"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveVoidHighTemplarPsiStormFilter">
+        <Value value="AP_HaveVoidHighTemplarPsiStormFilter"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_DontHaveVoidHighTemplarPsiStormFilter">
+        <Value value="AP_HaveVoidHighTemplarPsiStormFilter"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareVital id="AP_TargetLifeGreaterThan1">
+        <Compare value="GT"/>
+        <Value value="1"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_AscendantSacrificeCasterEnergyLE175">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LE"/>
+        <Value value="175"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_AscendantSacrificeTargetLifeGT25">
+        <Compare value="GT"/>
+        <Value value="25"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_AscendantSacrificeCasterEnergyLE195">
+        <WhichUnit Value="Caster"/>
+        <Compare value="LE"/>
+        <Value value="195"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_AscendantSacrificeTargetLifeGT5">
+        <Compare value="GT"/>
+        <Value value="5"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasCripple">
+        <Behavior value="AP_HighTemplarCripple"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_CasterIsHighTemplarShakuras">
+        <WhichUnit Value="Caster"/>
+        <Value value="AP_HighTemplarShakuras"/>
+    </CValidatorUnitType>
 </Catalog>

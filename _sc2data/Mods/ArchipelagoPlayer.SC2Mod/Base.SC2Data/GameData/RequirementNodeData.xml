@@ -2305,6 +2305,15 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_IsPoweredDarkShrine" State="CompleteOnly"/>
     </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSeveredCordsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SeveredCords" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVoidHighTemplarPsiStormFilterCompleteOnly">
+        <!-- This upgrade only exists in coop and is commented out -->
+        <Count Link="AP_VoidHighTemplarPsiStormFilter" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSBanelingHealCompleteOnly">
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_HotSBanelingHeal" State="CompleteOnly"/>
