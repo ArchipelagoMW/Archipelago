@@ -73,10 +73,15 @@ class RaftWorld(World):
                 dupeItemPool = item_table.copy()
                 # Remove frequencies if necessary
                 if self.multiworld.island_frequency_locations[self.player].value != 5: # Not completely random locations
+                    # If we let frequencies stay in with progressive-frequencies, the progressive-frequency item
+                    # will be included 7 times. This is a massive flood of progressive-frequency items, so we
+                    # instead add progressive-frequency as its own item a smaller amount of times to prevent
+                    # flooding the duplicate item pool with them.
                     if self.multiworld.island_frequency_locations[self.player].value == 4:
                         # Progressives are not in item_pool, need to create faux item for duplicate item pool
                         # This can still be filtered out later by duplicate_items setting
-                        dupeItemPool.append({ "name": "progressive-frequency", "progression": True }) # Progressive frequencies need to be duped
+                        dupeItemPool.append({ "name": "progressive-frequency", "progression": True }) # Progressive frequencies need to be included
+                        dupeItemPool.append({ "name": "progressive-frequency", "progression": True }) # Double up for volume increase
                     # Always remove non-progressive Frequency items
                     dupeItemPool = (itm for itm in dupeItemPool if "Frequency" not in itm["name"])
                 
