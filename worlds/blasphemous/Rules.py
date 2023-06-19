@@ -21,7 +21,7 @@ class BlasphemousLogic(LogicMixin):
         return self.has("Charged Skill", player, 3)
 
     def _blasphemous_can_air_stall(self, logic, player):
-        return self.has("Ranged Skill", player) if logic.value > 0 else False
+        return self.has("Ranged Skill", player) if logic.value >= 1 else False
     
     def _blasphemous_can_dawn_jump(self, logic, player):
         return self.has_all({"Brilliant Heart of Dawn", "Dash Ability"}, player) if logic.value >= 1 else False
@@ -872,7 +872,7 @@ def rules(blasphemousworld):
                     state.has_all({"Linen of Golden Thread", "Purified Hand of the Nun"}, player))
     set_rule(world.get_entrance("D01Z05S25[EchoesE]", player),
         lambda state: state.has("D01Z05S25[EchoesW]", player))
-    set_rule(world.get_entrance("D01Z05S25[EchoesE]", player),
+    add_rule(world.get_entrance("D01Z05S25[EchoesE]", player),
         lambda state: (state.has("D01Z05S25[EchoesW]", player) and \
             (state.has("Blood Perpetuated in Sand", player) or \
                 state._blasphemous_can_cross_gap(difficulty, player, 8))) or \

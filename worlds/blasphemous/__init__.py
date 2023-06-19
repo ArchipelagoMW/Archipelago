@@ -120,6 +120,12 @@ class BlasphemousWorld(World):
         ]
 
         skipped_items = []
+        junk: int = 0
+
+        for item, count in world.start_inventory[player].value.items():
+            for _ in range(count):
+                skipped_items.append(item)
+                junk += 1
 
         skipped_items.extend(unrandomized_dict.values())
 
@@ -170,6 +176,9 @@ class BlasphemousWorld(World):
             else:
                 for i in range(count):
                     pool.append(self.create_item(item["name"]))
+
+        for _ in range(junk):
+            pool.append(self.create_item(self.get_filler_item_name()))
 
         world.itempool += pool
 
@@ -229,13 +238,6 @@ class BlasphemousWorld(World):
         menu.exits.append(ent2)
 
         for door in door_table:
-            reg: Region = self.get_room_from_door(door["Id"])
-            event = BlasphemousLocation(player, door["Id"], None, reg)
-            event.show_in_spoiler = False
-            event.place_locked_item(self.create_event(door["Id"]))
-            add_rule(event, lambda state: state.can_reach(self.get_connected_door(door["Id"])), player)
-            reg.locations.append(event)
-
             if door.get("OriginalDoor") is None:
                 continue
             else:
@@ -277,10 +279,13 @@ class BlasphemousWorld(World):
             event.place_locked_item(self.create_event(e))
             reg.locations.append(event)
 
-        #for r in room_table:
-        #    regio = world.get_region(r, player)
-        #    print(f'Door: {regio.name}\nEntrances: {regio.entrances}\nExits: {regio.exits}\n\n')
-        #print(world.get_region("D07Z01S03", player).name, world.get_region("D07Z01S03", player).entrances)
+        for door in door_table:
+            reg: Region = self.get_room_from_door(self.door_connections[door["Id"]])
+            event = BlasphemousLocation(player, door["Id"], None, reg)
+            event.show_in_spoiler = False
+            event.place_locked_item(self.create_event(door["Id"]))
+            add_rule(event, lambda state: state.can_reach(self.get_connected_door(door["Id"])), player)
+            reg.locations.append(event)
         
         victory = Location(player, "His Holiness Escribar", None, world.get_region("D07Z01S03", player))
         victory.place_locked_item(self.create_event("Victory"))

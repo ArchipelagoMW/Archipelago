@@ -1,4 +1,4 @@
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink
+from Options import Choice, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool
 
 
 class PrieDieuWarp(DefaultOnToggle):
@@ -157,5 +157,6 @@ blasphemous_options = {
     "enemy_randomizer": EnemyRando,
     "enemy_groups": EnemyGroups,
     "enemy_scaling": EnemyScaling,
-    "death_link": BlasphemousDeathLink
+    "death_link": BlasphemousDeathLink,
+    "start_inventory": StartInventoryPool
 }
