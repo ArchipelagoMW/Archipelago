@@ -20,7 +20,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=6.14.7'
+    requirement = 'cx-Freeze==6.14.9'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -157,11 +157,22 @@ build_arch = build_platform.split('-')[-1] if '-' in build_platform else platfor
 
 
 # see Launcher.py on how to add scripts to setup.py
+def resolve_icon(icon_name: str):
+    base_path = icon_paths[icon_name]
+    if is_windows:
+        path, extension = os.path.splitext(base_path)
+        ico_file = path + ".ico"
+        assert os.path.exists(ico_file), f"ico counterpart of {base_path} should exist."
+        return ico_file
+    else:
+        return base_path
+
+
 exes = [
     cx_Freeze.Executable(
         script=f'{c.script_name}.py',
         target_name=c.frozen_name + (".exe" if is_windows else ""),
-        icon=icon_paths[c.icon],
+        icon=resolve_icon(c.icon),
         base="Win32GUI" if is_windows and not c.cli else None
     ) for c in components if c.script_name and c.frozen_name
 ]

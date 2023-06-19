@@ -12,6 +12,7 @@ Scroll down to components= to add components to the launcher as well as setup.py
 import argparse
 import itertools
 import logging
+import multiprocessing
 import shlex
 import subprocess
 import sys
@@ -149,7 +150,7 @@ def launch(exe, in_terminal=False):
 
 def run_gui():
     from kvui import App, ContainerLayout, GridLayout, Button, Label
-    from kivy.uix.image import Image
+    from kivy.uix.image import AsyncImage
     from kivy.uix.relativelayout import RelativeLayout
 
     class Launcher(App):
@@ -157,10 +158,10 @@ def run_gui():
         container: ContainerLayout
         grid: GridLayout
 
-        _tools = {c.display_name: c for c in components if c.type == Type.TOOL and isfile(get_exe(c)[-1])}
-        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT and isfile(get_exe(c)[-1])}
-        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER and isfile(get_exe(c)[-1])}
-        _funcs = {c.display_name: c for c in components if c.type == Type.FUNC}
+        _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
+        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
+        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
+        _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
 
         def __init__(self, ctx=None):
             self.title = self.base_title
@@ -191,7 +192,8 @@ def run_gui():
                 button.component = component
                 button.bind(on_release=self.component_action)
                 if component.icon != "icon":
-                    image = Image(source=icon_paths[component.icon], size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    image = AsyncImage(source=icon_paths[component.icon],
+                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
                     box_layout = RelativeLayout()
                     box_layout.add_widget(button)
                     box_layout.add_widget(image)
@@ -200,7 +202,7 @@ def run_gui():
                     button_layout.add_widget(button)
 
             for (tool, client) in itertools.zip_longest(itertools.chain(
-                    self._tools.items(), self._funcs.items(), self._adjusters.items()), self._clients.items()):
+                    self._tools.items(), self._miscs.items(), self._adjusters.items()), self._clients.items()):
                 # column 1
                 if tool:
                     build_button(tool[1])
@@ -216,7 +218,7 @@ def run_gui():
 
         @staticmethod
         def component_action(button):
-            if button.component.type == Type.FUNC:
+            if button.component.func:
                 button.component.func()
             else:
                 launch(get_exe(button.component), button.component.cli)
@@ -258,6 +260,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
 if __name__ == '__main__':
     init_logging('Launcher')
+    multiprocessing.freeze_support()
     parser = argparse.ArgumentParser(description='Archipelago Launcher')
     parser.add_argument('Patch|Game|Component', type=str, nargs='?',
                         help="Pass either a patch file, a generated game or the name of a component to run.")
