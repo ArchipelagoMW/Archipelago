@@ -9394,7 +9394,6 @@
     <CModel id="AP_DarkTemplarAiurPortrait" parent="Portrait" Race="Protoss">
         <Model value="Assets\Portraits\Protoss\DarkTemplar_Aiur_Portrait\DarkTemplar_Aiur_Portrait.m3"/>
         <Image value="Assets\Textures\avengerportrait_static.dds"/>
-        <Lighting value="AP_DarkTemplarAiurPortrait"/>
     </CModel>
     <CModel id="AP_DarkTemplarAiurRecallStart" parent="OneShotSpellFX">
         <Model value="Assets\Effects\Protoss\DarkTemplarAiurWarpOut\DarkTemplarAiurWarpOut.m3"/>
@@ -9493,7 +9492,6 @@
     <CModel id="AP_DarkTemplarTaldarimPortrait" parent="Portrait" Race="Protoss">
         <Model value="Assets\Portraits\Protoss\DarkTemplar_TalDarim_Portrait\DarkTemplar_TalDarim_Portrait.m3"/>
         <Image value="Assets\Textures\shadowhunterportrait_static.dds"/>
-        <Lighting value="AP_DarkTemplarTaldarimPortrait"/>
     </CModel>
     <CModel id="AP_DarkTemplarTaldarimWarpIn" parent="OneShotSpellFX">
         <Model value="Assets\Units\Protoss\DarkTemplar_Taldarim_WarpIn\DarkTemplar_Taldarim_WarpIn.m3"/>
@@ -9552,5 +9550,131 @@
     </CModel>
     <CModel id="AP_DarkTemplarShadowFuryImpact">
         <Model value="Assets\Effects\Protoss\ShadowFury_Impact\ShadowFury_Impact.m3"/>
+    </CModel>
+    <CModel id="AP_Baneling" parent="BanelingBase">
+        <Model value="Assets\Units\Zerg\BanelingEx1\BanelingEx1.m3"/>
+        <ScaleMax value="0.880000,0.880000,0.880000"/>
+        <ScaleMin value="0.720000,0.720000,0.720000"/>
+    </CModel>
+    <CModel id="AP_BanelingCorrosiveExplosion" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Zerg\BanelingEx1DeathCorrosive\BanelingEx1DeathCorrosive.m3"/>
+        <LowQualityModel value="BanelingDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Flags index="TeenSafe" value="1"/>
+    </CModel>
+    <CModel id="AP_BanelingRuptureExplosion" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Zerg\BanelingEx1DeathRupture\BanelingEx1DeathRupture.m3"/>
+        <LowQualityModel value="AP_BanelingDeathLowHotSRupture"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Flags index="TeenSafe" value="1"/>
+        <ScaleMax value="1.333330,1.333330,1.333330"/>
+        <ScaleMin value="1.333330,1.333330,1.333330"/>
+    </CModel>
+    <CModel id="AP_CorrosiveBileImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\CorrosiveBileImpact\CorrosiveBileImpact.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CModel>
+    <CModel id="AP_HotSSplitterlingMedium" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\Splitterling\Splitterling.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid04"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.600000,0.600000,0.600000"/>
+        <ScaleMin value="0.600000,0.600000,0.600000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.200000"/>
+        <SelectionRadius value="0.468700"/>
+        <ShadowRadius value="0.468700"/>
+        <TechPurchaseCamera value="Star2CameraMid04"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.600000"/>
+        <TipabilityWidth value="0.600000"/>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+    </CModel>
+    <CModel id="AP_SplitterlingMediumCorrosiveExplosion" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Zerg\BanelingEx1DeathCorrosive\BanelingEx1DeathCorrosive.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Flags index="TeenSafe" value="1"/>
+        <ScaleMax value="0.666666,0.666666,0.666666"/>
+        <ScaleMin value="0.666666,0.666666,0.666666"/>
+    </CModel>
+    <CModel id="AP_SplitterlingMediumRuptureExplosion" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Zerg\SplitterlingDeathRupture\SplitterlingDeathRupture.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Flags index="TeenSafe" value="1"/>
+        <ScaleMax value="1.333330,1.333330,1.333330"/>
+        <ScaleMin value="1.333330,1.333330,1.333330"/>
+    </CModel>
+    <CModel id="AP_SplitterlingPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\BanelingPortrait\BanelingPortrait.m3"/>
+        <Image value="Assets\Textures\BanelingPortrait_Static.dds"/>
+    </CModel>
+    <CModel id="AP_SplitterlingSmallDeath" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\SplitterlingDeath\SplitterlingDeath.m3"/>
+        <LowQualityModel value="BanelingDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_BanelingDeathLowHotSRupture" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\BanelingDeath\BanelingDeath_Low.m3"/>
+        <Lighting value="BanelingDeathLow"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="1.450000,1.450000,1.450000"/>
+        <ScaleMin value="1.450000,1.450000,1.450000"/>
+    </CModel>
+    <CModel id="AP_HotSSplitterlingBig" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\BanelingEx1A\BanelingEx1A.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid04"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionRadius value="0.468700"/>
+        <ShadowRadius value="0.468700"/>
+        <TechPurchaseCamera value="Star2CameraMid04"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.600000"/>
+        <TipabilityWidth value="0.600000"/>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+    </CModel>
+    <CModel id="AP_Hunter" parent="Unit" Race="Zerg">
+        <Model value="Assets\Units\Zerg\BanelingEx1B\BanelingEx1B.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid04"/>
+        <Radius value="0.400000"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionRadius value="0.468700"/>
+        <ShadowRadius value="0.468700"/>
+        <TechPurchaseCamera value="Star2CameraMid04"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.600000"/>
+        <TipabilityWidth value="0.600000"/>
+        <UnitGlossaryCamera value="Star2CameraMid04"/>
+    </CModel>
+    <CModel id="AP_HunterCorrosiveExplosion" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Zerg\BanelingEx1BDeathCorrosive\BanelingEx1BDeathCorrosive.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Flags index="TeenSafe" value="1"/>
+    </CModel>
+    <CModel id="AP_HunterDeath" parent="UnitDeath">
+        <Model value="Assets\Units\Zerg\BanelingEx1BDeath\BanelingEx1BDeath.m3"/>
+        <LowQualityModel value="AP_HunterDeathLow"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HunterDeathLow" parent="UnitDeath" Race="Zerg">
+        <Model value="Assets\Units\Zerg\BanelingEx1BDeath\BanelingEx1BDeath_Low.m3"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_HunterPortrait" parent="Portrait" Race="Zerg">
+        <Model value="Assets\Portraits\Zerg\BanelingPortrait\BanelingPortrait.m3"/>
+        <Image value="Assets\Textures\BanelingPortrait_Static.dds"/>
+        <Lighting value="AP_HunterPortrait"/>
+    </CModel>
+    <CModel id="AP_HunterRuptureExplosion" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Zerg\BanelingEx1BDeathRupture\BanelingEx1BDeathRupture.m3"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Flags index="TeenSafe" value="1"/>
+        <ScaleMax value="1.333330,1.333330,1.333330"/>
+        <ScaleMin value="1.333330,1.333330,1.333330"/>
     </CModel>
 </Catalog>

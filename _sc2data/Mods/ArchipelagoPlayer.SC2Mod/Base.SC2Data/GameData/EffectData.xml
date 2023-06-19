@@ -8213,4 +8213,281 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="AP_DarkTemplarBlinkAttackDelay"/>
     </CEffectApplyBehavior>
+    <CEffectIssueOrder id="AP_CopyBuildingAttackOrder">
+        <ValidatorArray value="AP_HaveVolatileBurstBuilding"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Abil value="AP_VolatileBurstBuilding"/>
+    </CEffectIssueOrder>
+    <CEffectModifyUnit id="AP_CopyOrders">
+        <ModifyFlags index="CopyAutoCast" value="1"/>
+        <CopyOrderCount value="32"/>
+    </CEffectModifyUnit>
+    <CEffectSet id="AP_HotSBanelingDeathExplodeLargeSet">
+        <EffectArray value="AP_HotSRemoveBanelingExplodeLargeDeathBehavior"/>
+        <EffectArray value="AP_HotSBanelingSplitterling"/>
+        <EffectArray value="AP_HotSBanelingExplodeLargeSearchAll"/>
+        <EffectArray value="AP_HotSBanelingExplodeLargeHealSearchAll"/>
+        <EffectArray value="AP_SuicideDelay"/>
+    </CEffectSet>
+    <CEffectSet id="AP_HotSBanelingDeathExplodeSmallSet">
+        <EffectArray value="AP_HotSRemoveBanelingExplodeSmallDeathBehavior"/>
+        <EffectArray value="AP_HotSBanelingExplodeSmallSearchAll"/>
+        <EffectArray value="AP_HotSBanelingExplodeSmallHealSearchAll"/>
+        <EffectArray value="AP_SuicideDelay"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_HotSBanelingExplodeLargeDirect" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AttributeBonus index="Structure" value="40"/>
+        <Kind value="Splash"/>
+        <Amount value="40"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_HotSBanelingExplodeLargeFriendlySet">
+        <EffectArray value="AP_HotSRemoveBanelingExplodeLargeDeathBehavior"/>
+        <EffectArray value="AP_HotSBanelingSplitterling"/>
+        <EffectArray value="AP_HotSBanelingHealLargeDirect"/>
+        <EffectArray value="AP_HotSBanelingExplodeLargeSearch"/>
+        <EffectArray value="AP_HotSBanelingExplodeLargeHealSearch"/>
+        <EffectArray value="AP_SuicideDelay"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_HotSBanelingExplodeLargeHealSearch">
+        <ValidatorArray value="AP_HaveHotSBanelingHeal"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground,Visible;Enemy,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.2" Effect="AP_HotSBanelingExplodeLargeHealSearchHeal"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_HotSBanelingExplodeLargeHealSearchAll">
+        <ValidatorArray value="AP_HaveHotSBanelingHeal"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <SearchFilters value="Ground,Visible;Enemy,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.2" Effect="AP_HotSBanelingExplodeLargeHealSearchHeal"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectModifyUnit id="AP_HotSBanelingExplodeLargeHealSearchHeal">
+        <ValidatorArray value="IsNotConstructing"/>
+        <EditorCategories value="Race:Zerg"/>
+        <VitalArray index="Life">
+            <Change value="40"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="AP_HotSBanelingExplodeLargeSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.2" Effect="AP_HotSBanelingExplodeLargeSearchDamage"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_HotSBanelingExplodeLargeSearchAll">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <SearchFilters value="Ground;Player,Ally,Neutral,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.2" Effect="AP_HotSBanelingExplodeLargeSearchDamage"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_HotSBanelingExplodeLargeSearchDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <AttributeBonus index="Structure" value="40"/>
+        <Kind value="Splash"/>
+        <Amount value="40"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_HotSBanelingExplodeLargeSet">
+        <EffectArray value="AP_HotSRemoveBanelingExplodeLargeDeathBehavior"/>
+        <EffectArray value="AP_HotSBanelingSplitterling"/>
+        <EffectArray value="AP_HotSBanelingExplodeLargeDirect"/>
+        <EffectArray value="AP_HotSBanelingExplodeLargeSearch"/>
+        <EffectArray value="AP_HotSBanelingExplodeLargeHealSearch"/>
+        <EffectArray value="AP_SuicideDelay"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_HotSBanelingExplodeLargeTarget">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="AP_FriendlyTargetAndHealUpgradeAndIsConstructing" Effect="AP_HotSBanelingHealerDummy"/>
+        <CaseArray Validator="AP_FriendlyTargetAndHealUpgradeAndTargetFullLife" Effect="AP_HotSBanelingHealerDummy"/>
+        <CaseArray Validator="AP_FriendlyTargetAndHealUpgrade" Effect="AP_HotSBanelingExplodeLargeFriendlySet"/>
+        <CaseDefault value="AP_HotSBanelingExplodeLargeSet"/>
+    </CEffectSwitch>
+    <CEffectDamage id="AP_HotSBanelingExplodeSmallDirect" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <AttributeBonus index="Structure" value="5"/>
+        <Kind value="Splash"/>
+        <Amount value="5"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_HotSBanelingExplodeSmallFriendlySet">
+        <EffectArray value="AP_HotSRemoveBanelingExplodeSmallDeathBehavior"/>
+        <EffectArray value="AP_HotSBanelingHealSmallDirect"/>
+        <EffectArray value="AP_HotSBanelingExplodeSmallSearch"/>
+        <EffectArray value="AP_HotSBanelingExplodeSmallHealSearch"/>
+        <EffectArray value="AP_SuicideDelay"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_HotSBanelingExplodeSmallHealSearch">
+        <ValidatorArray value="AP_HaveHotSBanelingHeal"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground,Visible;Enemy,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.2" Effect="AP_HotSBanelingExplodeSmallHealSearchHeal"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_HotSBanelingExplodeSmallHealSearchAll">
+        <ValidatorArray value="AP_HaveHotSBanelingHeal"/>
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <SearchFilters value="Ground,Visible;Enemy,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.2" Effect="AP_HotSBanelingExplodeSmallHealSearchHeal"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectModifyUnit id="AP_HotSBanelingExplodeSmallHealSearchHeal">
+        <ValidatorArray value="IsNotConstructing"/>
+        <EditorCategories value="Race:Zerg"/>
+        <VitalArray index="Life">
+            <Change value="5"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="AP_HotSBanelingExplodeSmallSearch">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.2" Effect="AP_HotSBanelingExplodeSmallSearchDamage"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_HotSBanelingExplodeSmallSearchAll">
+        <EditorCategories value="Race:Zerg"/>
+        <ImpactLocation Value="SourceUnit"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.2" Effect="AP_HotSBanelingExplodeSmallSearchDamage"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectDamage id="AP_HotSBanelingExplodeSmallSearchDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <AttributeBonus index="Structure" value="5"/>
+        <Kind value="Splash"/>
+        <Amount value="5"/>
+        <Death value="Disintegrate"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_HotSBanelingExplodeSmallSet">
+        <EffectArray value="AP_HotSRemoveBanelingExplodeSmallDeathBehavior"/>
+        <EffectArray value="AP_HotSBanelingExplodeSmallDirect"/>
+        <EffectArray value="AP_HotSBanelingExplodeSmallSearch"/>
+        <EffectArray value="AP_HotSBanelingExplodeSmallHealSearch"/>
+        <EffectArray value="AP_SuicideDelay"/>
+    </CEffectSet>
+    <CEffectSwitch id="AP_HotSBanelingExplodeSmallTarget">
+        <EditorCategories value="Race:Zerg"/>
+        <CaseArray Validator="AP_FriendlyTargetAndHealUpgradeAndIsConstructing" Effect="AP_HotSBanelingHealerDummy"/>
+        <CaseArray Validator="AP_FriendlyTargetAndHealUpgradeAndTargetFullLife" Effect="AP_HotSBanelingHealerDummy"/>
+        <CaseArray Validator="AP_FriendlyTargetAndHealUpgrade" Effect="AP_HotSBanelingExplodeSmallFriendlySet"/>
+        <CaseDefault value="AP_HotSBanelingExplodeSmallSet"/>
+    </CEffectSwitch>
+    <CEffectModifyUnit id="AP_HotSBanelingHealLargeDirect">
+        <EditorCategories value="Race:Zerg"/>
+        <VitalArray index="Life">
+            <Change value="40"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_HotSBanelingHealSmallDirect">
+        <EditorCategories value="Race:Zerg"/>
+        <VitalArray index="Life">
+            <Change value="5"/>
+        </VitalArray>
+    </CEffectModifyUnit>
+    <CEffectIssueOrder id="AP_HotSBanelingHealerDummy">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="stop"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
+    <CEffectCreateUnit id="AP_HotSBanelingSplitterling">
+        <ValidatorArray value="AP_HaveHotSSplitterling"/>
+        <EditorCategories value="Race:Zerg"/>
+        <WhichLocation Value="SourceUnitOrPoint"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="SelectControlGroups" value="1"/>
+        <SpawnOwner Value="Source"/>
+        <SpawnEffect value="AP_HotSBanelingSplitterlingSet"/>
+        <SpawnUnit value="AP_HotSSplitterlingMedium"/>
+        <SpawnCount value="2"/>
+        <SpawnRange value="0.5"/>
+        <SelectUnit Value="CasterOuter"/>
+    </CEffectCreateUnit>
+    <CEffectSet id="AP_HotSBanelingSplitterlingSet">
+        <EditorCategories value="Race:Zerg"/>
+        <EffectArray value="AP_CopyOrders"/>
+        <EffectArray value="AP_CopyBuildingAttackOrder"/>
+        <EffectArray value="AP_HotSBanelingSplitterlingSetAB"/>
+        <EffectArray value="AP_HotSBanelingSplitterlingTimedLife"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_HotSBanelingSplitterlingSetAB">
+        <EditorCategories value="Race:Zerg"/>
+        <Behavior value="AP_SplitterlingBirthHeight"/>
+    </CEffectApplyBehavior>
+    <CEffectTransferBehavior id="AP_HotSBanelingSplitterlingTimedLife">
+        <ValidatorArray value="AP_HasSplitterlingHiddenBuff"/>
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchUnit Value="Source"/>
+        <ImpactUnit Value="Target"/>
+        <Behavior value="AP_KerriganBanelingTimedLife"/>
+        <Copy value="1"/>
+    </CEffectTransferBehavior>
+    <CEffectRemoveBehavior id="AP_HotSRemoveBanelingExplodeLargeDeathBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_BanelingExplode"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_HotSRemoveBanelingExplodeSmallDeathBehavior">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_BanelingExplodeSmall"/>
+    </CEffectRemoveBehavior>
+    <CEffectCreatePersistent id="AP_SuicideDelay">
+        <EditorCategories value="Race:Zerg"/>
+        <ExpireDelay value="0.0625"/>
+        <FinalEffect value="Suicide"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_HunterLaunchDisable">
+        <EditorCategories value="Race:Zerg"/>
+        <WhichUnit Value="Caster"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_HunterLaunchLandDummy"/>
+    <CEffectLaunchMissile id="AP_HunterVolatileBurstLaunchMissile">
+        <ValidatorArray index="0" value="CasterNotHoldingPosition"/>
+        <ValidatorArray value="AP_HunterCliffCompare"/>
+        <EditorCategories value="Race:Zerg"/>
+        <LaunchLocation Value="CasterUnit"/>
+        <ImpactEffect value="AP_HunterLaunchDisable"/>
+        <InterruptEffect value="AP_HunterLaunchLandDummy"/>
+        <Flags index="2D" value="1"/>
+        <Flags index="Placement" value="1"/>
+        <Flags index="PlacementIgnoreCliffTest" value="1"/>
+        <Flags index="PlacementOriginSideOfFootprints" value="1"/>
+        <PlacementRange value="3"/>
+        <Movers Link="AP_HotSHunterMissile"/>
+        <DeathType value="Unknown"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_VolatileBurstU" parent="DU_WEAP">
+        <EditorCategories value="Race:Zerg"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <Kind value="Splash"/>
+        <KindSplash value="Splash"/>
+        <Amount value="40"/>
+        <Death value="Disintegrate"/>
+        <AreaArray Radius="2.2" Fraction="1"/>
+        <ExcludeArray Value="Outer"/>
+        <SearchFilters value="Ground;Player,Ally,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
 </Catalog>

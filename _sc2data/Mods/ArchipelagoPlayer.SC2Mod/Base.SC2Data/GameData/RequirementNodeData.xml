@@ -7,6 +7,11 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CombatShield" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSSplitterlingCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSSplitter" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
     <CRequirementNot id="AP_NotCountUpgradeHotSHaveSwarmHostSplitACompleteOnly">
         <OperandArray index="0" value="AP_CountUpgradeHotSHaveSwarmHostSplitACompleteOnly"/>
     </CRequirementNot>
@@ -2300,4 +2305,26 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_IsPoweredDarkShrine" State="CompleteOnly"/>
     </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSBanelingHealCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSBanelingHeal" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCentrificalHooksCompleteOnlyTechTreeCheat">
+        <Count Link="AP_CentrificalHooks" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSBanelingCorrosiveBileCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_HotSBanelingCorrosiveBile" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHunterCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSHunter" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotsRuptureCompleteOnly">
+        <Count Link="AP_HotSRupture" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeBanelingBurrowMoveCompleteOnlyTechTreeCheat">
+        <Count Link="AP_BanelingBurrowMove" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

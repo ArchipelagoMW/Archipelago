@@ -1832,4 +1832,56 @@
         <AlertIcon value="Assets\Textures\btn-ability-terran-setrallypoint.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_BanelingCorrosiveBile">
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-CorrosiveAcid.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Zerg-CorrosiveAcid.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_BanelingHeal">
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-RegenerativeBile.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Zerg-RegenerativeBile.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_DisableBuildingAttack">
+        <Icon value="Assets\Textures\btn-ability-zerg-explode-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-explode-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_DisableBuildingAttackSplitterling">
+        <Icon value="Assets\Textures\btn-ability-zerg-explode-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-explode-color.dds"/>
+        <Hotkey value="Button/Hotkey/AP_DisableBuildingAttack"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_EnableBuildingAttack">
+        <Icon value="Assets\Textures\btn-ability-zerg-attackstructure-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-attackstructure-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_EnableBuildingAttackSplitterling">
+        <Icon value="Assets\Textures\btn-ability-zerg-attackstructure-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-attackstructure-color.dds"/>
+        <Hotkey value="Button/Hotkey/AP_EnableBuildingAttack"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_RuptureUpgrade">
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-Rupture.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Zerg-Rupture.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_BanelingHealSmall">
+        <Icon value="Assets\Textures\BTN-Upgrade-Zerg-RegenerativeBile.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Zerg-RegenerativeBile.dds"/>
+        <EditorCategories value="Race:Terran"/>
+    </CButton>
+    <CButton id="AP_BanelingSplitterlingSplitPassive">
+        <Icon value="Assets\Textures\BTN-Unit-Zerg-Splitterling.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Unit-Zerg-Splitterling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HunterCliffJumper">
+        <Icon value="Assets\Textures\btn-ability-zerg-cliffjump-baneling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-cliffjump-baneling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

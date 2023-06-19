@@ -1,5 +1,6 @@
 ﻿Abil/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Abil/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
+Abil/Name/AP_ArchonWarp=Archon Merge
 Abil/Name/AP_ArmSiloWithNuke=Arm Magazine (Nuke)
 Abil/Name/AP_ArmoryResearch=Research (Armory)
 Abil/Name/AP_AssaultMode=Assault Mode
@@ -20,7 +21,11 @@ Abil/Name/AP_BuildRailGunTurret=Place Railgun Turret
 Abil/Name/AP_BuildinProgressNonCancellable=Build in Progress Non Cancellable
 Abil/Name/AP_BunkerStop=Stop
 Abil/Name/AP_BunkerTransport=Load-Unload (Bunker)
+Abil/Name/AP_BurrowBanelingDown=Burrow (Baneling)
+Abil/Name/AP_BurrowBanelingUp=Unburrow (Baneling)
 Abil/Name/AP_BurrowChargeRevD=Burrow Charge Rev D
+Abil/Name/AP_BurrowHotSSplitterlingMediumDown=Burrow (Splitter, Medium)
+Abil/Name/AP_BurrowHotSSplitterlingMediumUp=Unburrow (Splitter, Medium)
 Abil/Name/AP_BurrowHydraliskDown=Burrow (Hydralisk)
 Abil/Name/AP_BurrowHydraliskUp=Unburrow (Hydralisk)
 Abil/Name/AP_BurrowImpaler=Burrow (Impaler)
@@ -44,6 +49,9 @@ Abil/Name/AP_CommandCenterLiftOff=Lift Off (Command Center)
 Abil/Name/AP_CommandCenterTrain=Train (Command Center)
 Abil/Name/AP_CommandCenterTransport=Load-Unload (Command Center)
 Abil/Name/AP_D8Charge=G-4 Charge
+Abil/Name/AP_DarkArchonMerge=Dark Archon Merge
+Abil/Name/AP_DarkTemplarShadowFury=Shadow Fury
+Abil/Name/AP_DarkTemplarVoidStasis=Void Stasis
 Abil/Name/AP_DefensiveMatrix=Defensive Matrix
 Abil/Name/AP_DisablingCloud=Disabling Cloud
 Abil/Name/AP_DropToSupplyDepot=Drop To Supply Depot
@@ -53,6 +61,10 @@ Abil/Name/AP_DukesRevengeYamato=Yamato Gun
 Abil/Name/AP_DuskWingBansheeCloakingField=Cloaking Field
 Abil/Name/AP_EMP=EMP
 Abil/Name/AP_EngineeringBayResearch=Research (Engineering Bay)
+Abil/Name/AP_Explode=Explode
+Abil/Name/AP_ExplodeHeal=Explode Heal
+Abil/Name/AP_ExplodeHealSmall=Explode Heal Small
+Abil/Name/AP_ExplodeSmall=Explode Small
 Abil/Name/AP_FactoryAddOns=AddOns
 Abil/Name/AP_FactoryLand=Land
 Abil/Name/AP_FactoryLiftOff=Lift Off
@@ -198,6 +210,7 @@ Abil/Name/AP_ViperConsumption=Consumption
 Abil/Name/AP_VoidMPImmortalReviveDeath=Void MPImmortal Revive Death
 Abil/Name/AP_VoidMPImmortalReviveRebuild=Void MPImmortal Revive Rebuild
 Abil/Name/AP_VoidRayVoidDamageBoost=Prismatic Alignment
+Abil/Name/AP_VolatileBurstBuilding=Volatile Burst Building
 Abil/Name/AP_VultureQueue3=Make Spider Mine Queue
 Abil/Name/AP_VultureSpiderMineBurrow=Spider Mine Burrow
 Abil/Name/AP_VultureSpiderMineUnburrow=Spider Mine Unburrow
@@ -214,13 +227,10 @@ Abil/Name/AP_burrowedStop=Stop
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
-Abil/Name/AP_ArchonWarp=Archon Merge
-Abil/Name/AP_DarkArchonMerge=Dark Archon Merge
-Abil/Name/AP_DarkTemplarShadowFury=Shadow Fury
-Abil/Name/AP_DarkTemplarVoidStasis=Void Stasis
 Abil/Name/MercCompoundResearch2=Research
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
+Abil/Name/AP_burrowedBanelingStop=Stop
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -233,6 +243,7 @@ Behavior/Name/AP_BileDucts=Bile Ducts
 Behavior/Name/AP_BurstCapacitorsDamageBuff=Burst Capacitors
 Behavior/Name/AP_CarrierInterceptorBombs=Carrier Interceptor Bombs
 Behavior/Name/AP_CarrierRepairDroneRecall=Carrier Repair Drone Recall
+Behavior/Name/AP_DarkTemplarVoidStasis=Void Stasis
 Behavior/Name/AP_DefensiveMatrix=Defensive Matrix
 Behavior/Name/AP_DisablingCloud=Disabling Cloud
 Behavior/Name/AP_EMPDecloak=EMP Decloak
@@ -304,12 +315,12 @@ Behavior/Name/AP_VoidMPImmortalReviveSupressed=Immortal Revive Supressed
 Behavior/Name/AP_VoidPhoenixPhasingArmorBuff=Phasing Armor
 Behavior/Name/AP_VoidRayVoidDamageBoost=Prismatic Alignment
 Behavior/Name/AP_WraithCloak=Cloak
-Behavior/Name/AP_DarkTemplarVoidStasis=Void Stasis
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_BansheeCloak=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_BansheeCloakCrossSpectrumDampeners=This unit is cloaked and will only be revealed by detectors or effects.
+Behavior/Tooltip/AP_DarkTemplarVoidStasis=This unit or structure cannot move, attack, or be damaged.
 Behavior/Tooltip/AP_DefensiveMatrix=While active, the Defensive Matrix blocks all incoming damage, up to a maximum of 200.
 Behavior/Tooltip/AP_DisablingCloud=This unit is slowed and cannot attack or use energy-based abilities.
 Behavior/Tooltip/AP_EMPDecloak=Target was recently hit by an EMP Round, making it unable to cloak for a short duration.
@@ -357,10 +368,10 @@ Behavior/Tooltip/AP_VileAcidSlowFlatAmountStructure=Attack speeds are slowed.
 Behavior/Tooltip/AP_ViperConsumeStructure=A Viper is consuming this structure to increase its energy.
 Behavior/Tooltip/AP_VoidPhoenixPhasingArmorBuff=This unit is immune to damage.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
-Behavior/Tooltip/AP_DarkTemplarVoidStasis=This unit or structure cannot move, attack, or be damaged.
 Behavior/Tooltip/GhostHoldFireB2=This unit will not attack enemy units unless ordered to do so.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
+Button/Name/AP_AWrp=Archon Merge
 Button/Name/AP_AberrationTowering=Towering
 Button/Name/AP_AblativeScales=Kinetic Foam
 Button/Name/AP_AdvancedHealingAI=Advanced Healing AI
@@ -374,6 +385,10 @@ Button/Name/AP_ArmorpiercingMode=High Impact Payload
 Button/Name/AP_Armory=Build Armory
 Button/Name/AP_AttackChampions=Attack
 Button/Name/AP_AutomatedRefinery=Build Automated Refinery
+Button/Name/AP_BanelingCorrosiveBile=Corrosive Acid
+Button/Name/AP_BanelingHeal=Regenerative Acid
+Button/Name/AP_BanelingHealSmall=Regenerative Acid
+Button/Name/AP_BanelingSplitterlingSplitPassive=Division
 Button/Name/AP_Banshee=Build Banshee
 Button/Name/AP_Barracks=Build Barracks
 Button/Name/AP_Battlecruiser=Build Battlecruiser
@@ -418,14 +433,19 @@ Button/Name/AP_CycloneRapidFireLaunchers=Rapid Fire Launchers
 Button/Name/AP_CycloneResearchLockOnAir=Research Mag-Field Accelerator
 Button/Name/AP_CycloneResearchLockOnDamageUpgrade=Research Mag-Field Accelerator
 Button/Name/AP_D8Charge=G-4 Cluster Bombs
+Button/Name/AP_DarkTemplarRecall=Emergency Recall
 Button/Name/AP_DefensiveMatrix=Defensive Matrix
 Button/Name/AP_DeploySpiderMines=Deploy Spider Mines
 Button/Name/AP_DeploySpiderMinesRaven=Deploy Spider Mines
 Button/Name/AP_Diamondback=Build Diamondback
+Button/Name/AP_DisableBuildingAttack=Disable Structure Attack
+Button/Name/AP_DisableBuildingAttackSplitterling=Disable Structure Attack
 Button/Name/AP_DisablingCloud=Disabling Cloud
 Button/Name/AP_DisplacementField=Displacement Field
 Button/Name/AP_DrillClaws=Drilling Claws
 Button/Name/AP_EMP=EMP Round
+Button/Name/AP_EnableBuildingAttack=Enable Structure Attack
+Button/Name/AP_EnableBuildingAttackSplitterling=Enable Structure Attack
 Button/Name/AP_EngineeringBay=Build Engineering Bay
 Button/Name/AP_ExplosiveGlaive=Sundering Glave
 Button/Name/AP_ExplosiveMode=Explosive Payload
@@ -475,6 +495,7 @@ Button/Name/AP_HiveMindEmulator=Build Hive Mind Emulator
 Button/Name/AP_HotSPressurizedGlands=Pressurized Glands
 Button/Name/AP_HotSRoachDamage=Hydriodic Bile
 Button/Name/AP_HotSRoachShield=Adaptive Plating
+Button/Name/AP_HunterCliffJumper=Cliff Jumper
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
 Button/Name/AP_HydraliskFrenzy=Frenzy
 Button/Name/AP_Hyperjump=Tactical Jump
@@ -561,6 +582,7 @@ Button/Name/AP_Obliterate=Psionic Lash
 Button/Name/AP_OcularImplants=Ocular Implants
 Button/Name/AP_PerditionTurret=Build Perdition Turret
 Button/Name/AP_PermanentCloakBanshee=Advanced Cross-Spectrum Dampeners
+Button/Name/AP_PermanentlyCloaked=Permanently Cloaked
 Button/Name/AP_PermanentlyCloakedGhost=Permanently Cloaked
 Button/Name/AP_PermanentlyCloakedNova=Permanently Cloaked
 Button/Name/AP_PermanentlyCloakedObserver=Permanently Cloaked
@@ -592,6 +614,7 @@ Button/Name/AP_ResearchMagFieldLaunchers=Research Mag-Field Launchers
 Button/Name/AP_ResearchSpiderMinesSC1=Research Spider Mines
 Button/Name/AP_RetributionField=Lightning Field
 Button/Name/AP_RipwaveMissiles=Ripwave Missiles
+Button/Name/AP_RuptureUpgrade=Rupture
 Button/Name/AP_Scan=Scanner Sweep
 Button/Name/AP_SensorTower=Build Sensor Tower
 Button/Name/AP_ShapedBlast=Shaped Blast
@@ -668,10 +691,12 @@ Button/Name/AP_Viper=Morph to Viper
 Button/Name/AP_ViperConsumption=Consumption
 Button/Name/AP_VoidColossusChargedBlast=Charged Blast
 Button/Name/AP_VoidColossusFireBeam=Fire Beam
+Button/Name/AP_VoidDarkTemplarShadowFury=Shadow Fury
 Button/Name/AP_VoidMPImmortalRevive=Immortal Revive
 Button/Name/AP_VoidPhoenixPhasingArmor=Phasing Armor
 Button/Name/AP_VoidRayPrismaticAlignmentBase=Prismatic Alignment
 Button/Name/AP_VoidRayVoidPrismaticRange=Prismatic Range
+Button/Name/AP_VoidStasis=Void Stasis
 Button/Name/AP_VoidVoidRayBeamBounce=Destruction Beam
 Button/Name/AP_Vulture=Build Vulture
 Button/Name/AP_WeaponsFree=Weapons Free
@@ -685,14 +710,9 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_AWrp=Archon Merge
-Button/Name/AP_DarkTemplarRecall=Emergency Recall
-Button/Name/AP_PermanentlyCloaked=Permanently Cloaked
-Button/Name/AP_PermanentlyCloaked=Permanently Cloaked
-Button/Name/AP_VoidDarkTemplarShadowFury=Shadow Fury
-Button/Name/AP_VoidStasis=Void Stasis
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
+Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
 Button/Tooltip/AP_AdvancedHealingAI=The Medivac can heal two targets at once.
@@ -712,6 +732,12 @@ Button/Tooltip/AP_AutomatedRefineryTextKicker10=<s val="Kicker_Refinery">+10</s>
 Button/Tooltip/AP_AutomatedRefineryTextKicker4=<s val="Kicker_Refinery">+4 </s><IMG path="Assets\Textures\icon-gas-terran.dds" height="28" width="28"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker5=<s val="Kicker_Refinery">+5</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
 Button/Tooltip/AP_AutomatedRefineryTextKicker8=<s val="Kicker_Refinery">+8</s><IMG path="Assets\Textures\icon-gas-terran.dds" height="32" width="32"/>
+Button/Tooltip/AP_Baneling=Suicide unit. Does damage over a small area on death. <n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_BanelingCocoon=This cocoon contains a Zergling that is morphing into a Baneling.
+Button/Tooltip/AP_BanelingCorrosiveBile=Increases base attack damage against primary target by 100%. Splash damage remains the same.
+Button/Tooltip/AP_BanelingHeal=In addition to dealing normal damage, Baneling explosions also heal nearby friendly units and structures.
+Button/Tooltip/AP_BanelingHealSmall=In addition to dealing normal damage, Baneling explosions also heal nearby friendly units and structures.
+Button/Tooltip/AP_BanelingSplitterlingSplitPassive=Splits into two smaller Baneling Spawn upon death or eruption.
 Button/Tooltip/AP_Banshee=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Barracks=Infantry production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Marines<n/>- Bunkers from SCVs
 Button/Tooltip/AP_BarracksFlying=Barracks must land to start unit production.
@@ -767,17 +793,26 @@ Button/Tooltip/AP_CycloneRapidFireLaunchers=Improves the Lock On ability to fire
 Button/Tooltip/AP_CycloneResearchLockOnAir=Allows the Cyclone's Typhoon Missile Pods and Lock On ability to target air units.
 Button/Tooltip/AP_CycloneResearchLockOnDamageUpgrade=Increases <c val="ffff8a">Cyclone</c> Lock On damage. Deals 600 over <d ref="Effect,AP_LockOnCP,PeriodCount * Effect,AP_LockOnCP,PeriodicPeriodArray[0]"/> seconds to ground and flying targets.
 Button/Tooltip/AP_D8Charge=Timed explosive that does heavy area damage.
+Button/Tooltip/AP_DarkTemplar=Deadly warrior-assassin. Permanently cloaked. <n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_DarkTemplarAiur=Aiur Faction<n/>Deadly warrior-assassin. Permanently cloaked. Can use Recall on Death.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_DarkTemplarRecall=The Avenger is automatically recalled to a Dark Shrine with full shields and life upon taking fatal damage. This effect cannot occur more than once every <d ref="Behavior,AP_DarkTemplarRecentlyRecalled,Cost.Cooldown.TimeStart"/> seconds.
+Button/Tooltip/AP_DarkTemplarShakuras=Nerazim Faction<n/>Deadly warrior-assassin. Permanently cloaked. Can use Shadow Fury.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_DarkTemplarTaldarim=Tal'darim Faction<n/>Deadly warrior-assassin. Permanently cloaked. Can use Void Stasis.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_DefensiveMatrix=Surrounds the Battlecruiser with a shield that can absorb <d ref="Behavior,AP_DefensiveMatrix,Modification.VitalMaxArray[1]"/> damage. Ability can only be used once every <d ref="Abil,AP_DefensiveMatrix,Cost[0].Cooldown.TimeUse"/> seconds.
 Button/Tooltip/AP_DeploySpiderMines=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy <c val="FFE303">Detectors</c>.
 Button/Tooltip/AP_DeploySpiderMinesRaven=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy <c val="FFE303">Detectors</c>.
 Button/Tooltip/AP_DevilDog=Specialized anti-infantry attacker.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Diamondback=Fast, high-damage hovertank. Rail Gun can fire while the Diamondback is moving.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_DisableBuildingAttack=Prevents Banelings from automatically targeting structures. Banelings can still be explicitly ordered to attack structures.<n/><n/>Banelings deal <d ref="(Effect,AP_HotSBanelingExplodeLargeDirect,Amount) + (Effect,AP_HotSBanelingExplodeLargeDirect,AttributeBonus[Structure])"/> damage to structures.
+Button/Tooltip/AP_DisableBuildingAttackSplitterling=Prevents Banelings from automatically targeting structures. Banelings can still be explicitly ordered to attack structures.<n/><n/>Banelings deal <d ref="(Effect,AP_HotSBanelingExplodeSmallDirect,Amount) + (Effect,AP_HotSBanelingExplodeSmallDirect,AttributeBonus[Structure])"/> damage to structures.
 Button/Tooltip/AP_DisablingCloud=Creates a cloud that slows movement speed and prevents enemy units and structures from attacking and using energy-based abilities. Lasts for <d ref="(Effect,DisablingCloud,PeriodCount + 1) * Effect,DisablingCloud,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_DisplacementField=A detected Wraith evades 20% of incoming attacks while cloaked.
 Button/Tooltip/AP_DrillClaws=This unit burrows faster.
 Button/Tooltip/AP_DukesRevenge=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_DuskWing=Tactical-strike aircraft.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_EMP=Creates an electromagnetic pulse that does 100 damage to shields and drains all energy from units in the targeted area. Cloaked units hit by EMP are revealed for a short time.
+Button/Tooltip/AP_EnableBuildingAttack=Allows Banelings to automatically target structures.<n/><n/>Banelings deal <d ref="(Effect,AP_HotSBanelingExplodeLargeDirect,Amount) + (Effect,AP_HotSBanelingExplodeLargeDirect,AttributeBonus[Structure])"/> damage to structures.
+Button/Tooltip/AP_EnableBuildingAttackSplitterling=Allows Banelings to automatically target structures.<n/><n/>Banelings deal <d ref="(Effect,AP_HotSBanelingExplodeSmallDirect,Amount) + (Effect,AP_HotSBanelingExplodeSmallDirect,AttributeBonus[Structure])"/> damage to structures.
 Button/Tooltip/AP_EngineeringBay=Contains upgrades for Terran infantry units. Enables the construction of Terran defensive structures.
 Button/Tooltip/AP_ExplosiveGlaive=Mutalisk gains +9 damage vs. armored units. Attacks no longer bounce to additional targets.
 Button/Tooltip/AP_ExplosiveMode=Arms the Thor's Javelin missile launchers. Javelin missiles deal splash damage to nearby air units and additional damage vs. light units.
@@ -833,6 +868,8 @@ Button/Tooltip/AP_HiveMindEmulator=Defensive structure. Can permanently Mind Con
 Button/Tooltip/AP_HotSPressurizedGlands=Locusts can attack both ground and air units.
 Button/Tooltip/AP_HotSRoachDamage=Roach gains +<d ref="Upgrade,AP_HotSRoachDamage,EffectArray[0].Value / Effect,AP_AcidSalivaU"/> damage vs. light units.
 Button/Tooltip/AP_HotSRoachShield=Roach gains +<d ref="Behavior,AP_RoachShield,Modification[0].LifeArmorBonus"/> armor when life is under 50%.
+Button/Tooltip/AP_HotSSplitterlingMedium=Suicide unit. Deals damage over a small area upon death. <n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_HunterCliffJumper=This unit can jump up and down cliffs.
 Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
 Button/Tooltip/AP_Hydralisk=High-damage ranged unit.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Button/Tooltip/AP_HydraliskFrenzy=Attack speed increased by 50% for <d ref="Behavior,AP_HydraliskFrenzy,Duration"/> seconds.
@@ -939,6 +976,7 @@ Button/Tooltip/AP_OrbitalCommandUnit=Primary structure. Used to train SCVs and r
 Button/Tooltip/AP_PerditionTurret=Automated defensive turret. Burrows when there are no enemies nearby.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_PerditionTurretUnderground=Automated defensive turret. Burrows when there are no enemies nearby.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_PermanentCloakBanshee=Cloak no longer requires energy.
+Button/Tooltip/AP_PermanentlyCloaked=This unit is permanently cloaked.
 Button/Tooltip/AP_PermanentlyCloakedGhost=The Ghost is permanently cloaked.
 Button/Tooltip/AP_PermanentlyCloakedNova=Nova is permanently cloaked.
 Button/Tooltip/AP_PermanentlyCloakedObserver=The Observer is permanently cloaked.
@@ -976,6 +1014,7 @@ Button/Tooltip/AP_ResearchSpiderMinesSC1=Enables the Vulture to carry Spider Min
 Button/Tooltip/AP_RetributionField=The Predator unleashes a deadly field of electricity each time it attacks. Deals 20 damage.
 Button/Tooltip/AP_RipwaveMissiles=Viking missiles deal area damage.
 Button/Tooltip/AP_Roach=Assault unit. Regenerates life quickly when burrowed.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_RuptureUpgrade=Blast radius increased by 50%.
 Button/Tooltip/AP_SCV=Basic worker unit. Can gather resources, build Terran structures, and repair.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_Scan=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
 Button/Tooltip/AP_ScienceVessel=Aerial support unit. Can use Irradiate and Nano-Repair abilities.<n/><n/><c val="FFE303">Detector</c>
@@ -1065,11 +1104,13 @@ Button/Tooltip/AP_ViperCocoon=This cocoon contains a Mutalisk that is morphing i
 Button/Tooltip/AP_ViperConsumption=Drains up to 75 life from a friendly Zerg unit and gives the Viper 2 energy for each point of life drained.
 Button/Tooltip/AP_VoidColossusChargedBlast=Attacks a single unit or structure for heavy damage. Can attack while moving. Deals bonus damage to structures.
 Button/Tooltip/AP_VoidColossusFireBeam=Attacks set fire to the ground, dealing an additional <d ref="Effect,AP_ThermalLancesFireBeamDamage,Amount*Effect,AP_ThermalLancesFireBeamCP,PeriodCount"/> damage to enemy ground units in the area over <d ref="Effect,AP_ThermalLancesFireBeamCP,PeriodCount*Effect,AP_ThermalLancesFireBeamCP,PeriodicPeriodArray[0]"/> seconds.
+Button/Tooltip/AP_VoidDarkTemplarShadowFury=Jump from target to target, dealing <d ref="Effect,AP_DarkTemplarShadowFuryDamage,Amount"/> damage with each jump. Hits <d ref="Behavior,AP_DarkTemplarShadowFuryController,PeriodCount+1"/> times.
 Button/Tooltip/AP_VoidPhoenixPhasingArmor=Prevents the Mirage from taking damage for <d ref="Behavior,AP_VoidPhoenixPhasingArmorBuff,Duration"/> seconds after being attacked. Cannot occur more than once every <d ref="Behavior,AP_VoidPhoenixPhasingArmor,DamageResponse.Cost.Cooldown.TimeUse"/> seconds.
 Button/Tooltip/AP_VoidRayPrismaticAlignmentBase=Increases damage dealt by the Void Ray as it continues to attack, up to a maximum of +<d ref="Effect,AP_VoidRayVoidEnhancedDamage,AttributeBonus[Armored]"/> damage to Armored units and structures.
 Button/Tooltip/AP_VoidRayShakuras=Nerazim Faction<n/>Surgical strike craft. Has Prismatic Alignment and Prismatic Range abilities.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_VoidRayTaldarim=Tal'darim Faction<n/>Area assault craft. Can use Destruction Beam to attack multiple units.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_VoidRayVoidPrismaticRange=Increases the range of the Void Ray's Prismatic Beam as it continues to attack, up to a maximum of +<d ref="Behavior,AP_VoidRayChargeBeamRangePhase3,Modification.WeaponRange"/> range.
+Button/Tooltip/AP_VoidStasis=Disables the target's attacks, abilities, movement, detection, production and tech for <d ref="Behavior,AP_DarkTemplarVoidStasis,Duration"/> seconds. Units and structures in stasis cannot be attacked or affected by abilities.<n/><n/><c val="#ColorAttackInfo">Can target ground units and structures.</c>
 Button/Tooltip/AP_VoidVoidRayBeamBounce=Prismatic Beam splits and deals damage to additional nearby targets as the Destroyer continues to attack, up to a maximum of 3 additional targets.
 Button/Tooltip/AP_Vulture=Fast skirmish unit. Can use the Spider Mine ability.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_WarPig=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
@@ -1084,15 +1125,6 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_DarkTemplar=Deadly warrior-assassin. Permanently cloaked. <n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_DarkTemplarAiur=Aiur Faction<n/>Deadly warrior-assassin. Permanently cloaked. Can use Recall on Death.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_DarkTemplarRecall=The Avenger is automatically recalled to a Dark Shrine with full shields and life upon taking fatal damage. This effect cannot occur more than once every <d ref="Behavior,AP_DarkTemplarRecentlyRecalled,Cost.Cooldown.TimeStart"/> seconds.
-Button/Tooltip/AP_DarkTemplarShakuras=Nerazim Faction<n/>Deadly warrior-assassin. Permanently cloaked. Can use Shadow Fury.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_DarkTemplarTaldarim=Tal'darim Faction<n/>Deadly warrior-assassin. Permanently cloaked. Can use Void Stasis.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_PermanentlyCloaked=This unit is permanently cloaked.
-Button/Tooltip/AP_VoidDarkTemplarShadowFury=Jump from target to target, dealing <d ref="Effect,AP_DarkTemplarShadowFuryDamage,Amount"/> damage with each jump. Hits <d ref="Behavior,AP_DarkTemplarShadowFuryController,PeriodCount+1"/> times.
-Button/Tooltip/AP_VoidStasis=Disables the target's attacks, abilities, movement, detection, production and tech for <d ref="Behavior,AP_DarkTemplarVoidStasis,Duration"/> seconds. Units and structures in stasis cannot be attacked or affected by abilities.<n/><n/><c val="#ColorAttackInfo">Can target ground units and structures.</c>
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1222,6 +1254,8 @@ Effect/Name/AP_ColossusPurifierThermalLancesForward=Colossus Taldarim Thermal La
 Effect/Name/AP_ColossusPurifierThermalLancesReverse=Colossus Taldarim Thermal Lances Reverse
 Effect/Name/AP_ColossusPurifierThermalLancesSearch=Colossus Taldarim Thermal Lances Search
 Effect/Name/AP_ColossusPurifierThermalLancesSearchReverse=Colossus Taldarim Thermal Lances Search Reverse
+Effect/Name/AP_CopyBuildingAttackOrder=Copy Building Attack Order
+Effect/Name/AP_CopyOrders=Copy Orders
 Effect/Name/AP_CorpserRemoveBehavior=Corpser Remove Behavior
 Effect/Name/AP_CorpserSet=Corpser Set
 Effect/Name/AP_CrucioShockCannonBlast=Crucio Shock Cannon Blast
@@ -1275,6 +1309,28 @@ Effect/Name/AP_DRBattlecruiserGLM=ATS Launch Missile
 Effect/Name/AP_DRBattlecruiserGU=ATS Damage
 Effect/Name/AP_DRCannonsA=Cannons
 Effect/Name/AP_DRCannonsG=Cannons
+Effect/Name/AP_DarkTemplarRecallCreatePrecursor=Dark Templar Recall Create Precursor
+Effect/Name/AP_DarkTemplarRecallDestroyPrecusor=Dark Templar Recall Destroy Precusor
+Effect/Name/AP_DarkTemplarRecallHeal=Dark Templar Recall Heal
+Effect/Name/AP_DarkTemplarRecallSearch=Dark Templar Recall Search
+Effect/Name/AP_DarkTemplarRecallSet=Dark Templar Recall Set
+Effect/Name/AP_DarkTemplarRecallTeleport=Dark Templar Recall Teleport
+Effect/Name/AP_DarkTemplarRecallTeleportDummy=Dark Templar Recall Teleport Dummy
+Effect/Name/AP_DarkTemplarRecallingAB=Dark Templar Recalling
+Effect/Name/AP_DarkTemplarRecallingBehaviorSet=Dark Templar Recalling Behavior Set
+Effect/Name/AP_DarkTemplarRecentlyRecalledAB=Dark Templar Recently Recalled
+Effect/Name/AP_DarkTemplarShadowFuryDamage=Dark Templar Shadow Fury Damage
+Effect/Name/AP_DarkTemplarShadowFuryImpactSet=Dark Templar Shadow Fury Impact Set
+Effect/Name/AP_DarkTemplarShadowFuryPersistent=Dark Templar Shadow Fury Persistent
+Effect/Name/AP_DarkTemplarShadowFurySearch=Dark Templar Shadow Fury Search
+Effect/Name/AP_DarkTemplarShadowFuryTeleport=Dark Templar Shadow Fury Teleport
+Effect/Name/AP_DarkTemplarShadowFuryTeleportFinal=Dark Templar Shadow Fury Teleport Final
+Effect/Name/AP_DarkTemplarShadowFuryTeleportFinalCP=Dark Templar Shadow Fury Teleport Final CP
+Effect/Name/AP_DarkTemplarTaldarimWeaponSet=Dark Templar Taldarim Weapon Set
+Effect/Name/AP_DarkTemplarTeleportSet=Dark Templar Teleport Set
+Effect/Name/AP_DarkTemplarVoidStasisAB=Dark Templar Void Stasis AB
+Effect/Name/AP_DarkTemplarVoidStasisIterateTransport=Dark Templar Void Stasis Iterate Transport
+Effect/Name/AP_DarkTemplarVoidStasisSet=Dark Templar Void Stasis Set
 Effect/Name/AP_DefensiveMatrixApplyBehavior=Defensive Matrix Apply Behavior
 Effect/Name/AP_DefensiveMatrixApplyDummyBehavior=Defensive Matrix Apply Dummy Behavior
 Effect/Name/AP_DefensiveMatrixModifyUnit=Defensive Matrix Modify Unit
@@ -1387,12 +1443,45 @@ Effect/Name/AP_HeroNukeDamage=Hero Nuke Damage
 Effect/Name/AP_HeroNukeDetonate=Hero Nuke Detonate
 Effect/Name/AP_HeroNukePersistent=Hero Nuke Persistent
 Effect/Name/AP_HeroNukeSuicide=Hero Nuke Suicide
+Effect/Name/AP_HotSBanelingDeathExplodeLargeSet=Hot SBaneling Death Explode Large Set
+Effect/Name/AP_HotSBanelingDeathExplodeSmallSet=Hot SBaneling Death Explode Small Set
+Effect/Name/AP_HotSBanelingExplodeLargeDirect=Hot SBaneling Explode Large Direct
+Effect/Name/AP_HotSBanelingExplodeLargeFriendlySet=Hot SBaneling Explode Large Friendly Set
+Effect/Name/AP_HotSBanelingExplodeLargeHealSearch=Hot SBaneling Explode Large Heal Search
+Effect/Name/AP_HotSBanelingExplodeLargeHealSearchAll=Hot SBaneling Explode Large Heal Search All
+Effect/Name/AP_HotSBanelingExplodeLargeHealSearchHeal=Hot SBaneling Explode Large Heal Search Heal
+Effect/Name/AP_HotSBanelingExplodeLargeSearch=Hot SBaneling Explode Large Search
+Effect/Name/AP_HotSBanelingExplodeLargeSearchAll=Hot SBaneling Explode Large Search All
+Effect/Name/AP_HotSBanelingExplodeLargeSearchDamage=Hot SBaneling Explode Large Search Damage
+Effect/Name/AP_HotSBanelingExplodeLargeSet=Hot SBaneling Explode Large Set
+Effect/Name/AP_HotSBanelingExplodeLargeTarget=Hot SBaneling Explode Large Target
+Effect/Name/AP_HotSBanelingExplodeSmallDirect=Hot SBaneling Explode Small Direct
+Effect/Name/AP_HotSBanelingExplodeSmallFriendlySet=Hot SBaneling Explode Small Friendly Set
+Effect/Name/AP_HotSBanelingExplodeSmallHealSearch=Hot SBaneling Explode Small Heal Search
+Effect/Name/AP_HotSBanelingExplodeSmallHealSearchAll=Hot SBaneling Explode Small Heal Search All
+Effect/Name/AP_HotSBanelingExplodeSmallHealSearchHeal=Hot SBaneling Explode Small Heal Search Heal
+Effect/Name/AP_HotSBanelingExplodeSmallSearch=Hot SBaneling Explode Small Search
+Effect/Name/AP_HotSBanelingExplodeSmallSearchAll=Hot SBaneling Explode Small Search All
+Effect/Name/AP_HotSBanelingExplodeSmallSearchDamage=Hot SBaneling Explode Small Search Damage
+Effect/Name/AP_HotSBanelingExplodeSmallSet=Hot SBaneling Explode Small Set
+Effect/Name/AP_HotSBanelingExplodeSmallTarget=Hot SBaneling Explode Small Target
+Effect/Name/AP_HotSBanelingHealLargeDirect=Hot SBaneling Heal Large Direct
+Effect/Name/AP_HotSBanelingHealSmallDirect=Hot SBaneling Heal Small Direct
+Effect/Name/AP_HotSBanelingHealerDummy=HotS Baneling Healer Dummy
+Effect/Name/AP_HotSBanelingSplitterling=Hot SBaneling Splitterling
+Effect/Name/AP_HotSBanelingSplitterlingSet=Hot SBaneling Splitterling Set
+Effect/Name/AP_HotSBanelingSplitterlingSetAB=Hot SBaneling Splitterling Set AB
+Effect/Name/AP_HotSBanelingSplitterlingTimedLife=HotSBanelingSplitterlingTimedLife
+Effect/Name/AP_HotSRemoveBanelingExplodeLargeDeathBehavior=Hot SRemove Baneling Explode Large Death Behavior
+Effect/Name/AP_HotSRemoveBanelingExplodeSmallDeathBehavior=Hot SRemove Baneling Explode Small Death Behavior
 Effect/Name/AP_HotSUltraliskKaiserBlades=Hot SUltralisk Kaiser Blades
 Effect/Name/AP_HotSUltraliskKaiserBladesDamage=Hot SUltralisk Kaiser Blades Damage
 Effect/Name/AP_HotSUltraliskKaiserBladesSearch=Hot SUltralisk Kaiser Blades Search
 Effect/Name/AP_HotSUltraliskKaiserBladesSecondaryDamage=Hot SUltralisk Kaiser Blades Secondary Damage
 Effect/Name/AP_HotSUltraliskKaiserBladesSecondaryDamageSet=Hot SUltralisk Kaiser Blades Secondary Damage Set
 Effect/Name/AP_HotSUltraliskKaiserBladesSecondaryUpgradeDamage=Hot SUltralisk Kaiser Blades Secondary Upgrade Damage
+Effect/Name/AP_HunterLaunchDisable=Hunter Launch Disable
+Effect/Name/AP_HunterVolatileBurstLaunchMissile=Hunter Volatile Burst Launch Missile
 Effect/Name/AP_HurricaneMissile=Hurricane Missile
 Effect/Name/AP_HurricaneMissileBurstPersistent=Hurricane Missile Burst Persistent
 Effect/Name/AP_HurricaneMissileDamage=Hurricane Missile Damage
@@ -1802,6 +1891,7 @@ Effect/Name/AP_SpectreWeaponsFree=Spectre Weapons Free
 Effect/Name/AP_SpiderMineInvulnerable=Spider Mine Invulnerable
 Effect/Name/AP_SpiderMineVulnerable=Spider Mine Vulnerable
 Effect/Name/AP_Stimpack=Stim Pack (Apply Buff)
+Effect/Name/AP_SuicideDelay=Suicide Delay
 Effect/Name/AP_SuicideRemove=Suicide Remove
 Effect/Name/AP_SuperStimpackNovaAB=Super Stimpack Nova
 Effect/Name/AP_SuperStimpackNovaMU=Super Stimpack Nova
@@ -1877,6 +1967,7 @@ Effect/Name/AP_ViperAirLaunchMissile=Viper Air Launch Missile
 Effect/Name/AP_ViperConsumption=Viper Consumption
 Effect/Name/AP_ViperConsumptionDamage=Viper Consumption Damage
 Effect/Name/AP_VoidCarrierInterceptorBombsCP=Void Carrier Interceptor Bombs
+Effect/Name/AP_VoidDarkTemplarShadowFuryTargetAB=Void Dark Templar Shadow Fury Target
 Effect/Name/AP_VoidPhoenixDoubleGravitonPeriodicSet=Void Phoenix Double Graviton Periodic Set
 Effect/Name/AP_VoidPhoenixDoubleGravitonPersistent=Void Phoenix Double Graviton Persistent
 Effect/Name/AP_VoidPhoenixDoubleGravitonSearch=Void Phoenix Double Graviton Search
@@ -1916,11 +2007,13 @@ Effect/Name/AP_VoidRayChargeBeamRangePhase2AB=Void Ray Charge Beam Range Phase2 
 Effect/Name/AP_VoidRayChargeBeamRangePhase2RB=Void Ray Charge Beam Range Phase2 RB
 Effect/Name/AP_VoidRayChargeBeamRangePhase3AB=Void Ray Charge Beam Range Phase3 AB
 Effect/Name/AP_VoidRayVoidDamageBoost=Void Ray Void Damage Boost
+Effect/Name/AP_VolatileBurstU=Volatile Burst
 Effect/Name/AP_Vulture=Fragmentation Grenade (Missile)
 Effect/Name/AP_VultureSpiderMineBurrowOrder=Spider Mine (Burrow Order)
 Effect/Name/AP_VultureSpiderMinesDamage=Spider Mines (Damage)
 Effect/Name/AP_VultureSpiderMinesSet=Spider Mines (Set)
 Effect/Name/AP_VultureU=Fragmentation Grenade (Damage)
+Effect/Name/AP_WarpBlades=Warp Blades
 Effect/Name/AP_WidowMineApplyAnimation=WidowMineApplyAnimation
 Effect/Name/AP_WidowMineAttack=Widow Mine Attack
 Effect/Name/AP_WidowMineDelayRemoveAB=Widow Mine Delay Remove AB
@@ -1998,28 +2091,6 @@ Effect/Name/AP_YoinkStartSetVikingGround=Yoink Start Set Viking Ground
 Effect/Name/AP_heal=Heal
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
-Effect/Name/AP_DarkTemplarRecallCreatePrecursor=Dark Templar Recall Create Precursor
-Effect/Name/AP_DarkTemplarRecallDestroyPrecusor=Dark Templar Recall Destroy Precusor
-Effect/Name/AP_DarkTemplarRecallHeal=Dark Templar Recall Heal
-Effect/Name/AP_DarkTemplarRecallSearch=Dark Templar Recall Search
-Effect/Name/AP_DarkTemplarRecallSet=Dark Templar Recall Set
-Effect/Name/AP_DarkTemplarRecallTeleport=Dark Templar Recall Teleport
-Effect/Name/AP_DarkTemplarRecallTeleportDummy=Dark Templar Recall Teleport Dummy
-Effect/Name/AP_DarkTemplarRecallingAB=Dark Templar Recalling
-Effect/Name/AP_DarkTemplarRecallingBehaviorSet=Dark Templar Recalling Behavior Set
-Effect/Name/AP_DarkTemplarRecentlyRecalledAB=Dark Templar Recently Recalled
-Effect/Name/AP_DarkTemplarShadowFuryDamage=Dark Templar Shadow Fury Damage
-Effect/Name/AP_DarkTemplarShadowFuryImpactSet=Dark Templar Shadow Fury Impact Set
-Effect/Name/AP_DarkTemplarShadowFuryPersistent=Dark Templar Shadow Fury Persistent
-Effect/Name/AP_DarkTemplarShadowFurySearch=Dark Templar Shadow Fury Search
-Effect/Name/AP_DarkTemplarShadowFuryTeleport=Dark Templar Shadow Fury Teleport
-Effect/Name/AP_DarkTemplarShadowFuryTeleportFinal=Dark Templar Shadow Fury Teleport Final
-Effect/Name/AP_DarkTemplarShadowFuryTeleportFinalCP=Dark Templar Shadow Fury Teleport Final CP
-Effect/Name/AP_DarkTemplarTaldarimWeaponSet=Dark Templar Taldarim Weapon Set
-Effect/Name/AP_DarkTemplarTeleportSet=Dark Templar Teleport Set
-Effect/Name/AP_DarkTemplarVoidStasisAB=Dark Templar Void Stasis AB
-Effect/Name/AP_DarkTemplarVoidStasisIterateTransport=Dark Templar Void Stasis Iterate Transport
-Effect/Name/AP_DarkTemplarVoidStasisSet=Dark Templar Void Stasis Set
 Effect/Name/GravitonBeamUnburrow2=Anti Gravity
 Effect/Name/GravitonBeamUnburrowCancel2=Anti Gravity
 Effect/Name/Kill2=Kill
@@ -2033,8 +2104,6 @@ Effect/Name/RemoveCoreRecallingBehaviorVikingAir2=Remove Core Recalling Behavior
 Effect/Name/RemoveCoreRecallingBehaviorVikingGround2=Remove Core Recalling Behavior Viking Ground
 Effect/Name/RemoveRecallingBehaviorVikingAir2=Remove Recalling Behavior Viking Air
 Effect/Name/RemoveRecallingBehaviorVikingGround2=Remove Recalling Behavior Viking Ground
-Effect/Name/AP_VoidDarkTemplarShadowFuryTargetAB=Void Dark Templar Shadow Fury Target
-Effect/Name/AP_WarpBlades=Warp Blades
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
 Error/AP_SwarmHostBurrowed=Must Root to attack.
@@ -2076,6 +2145,8 @@ Unit/Name/AP_AutoTurretReleaseWeapon=Auto Turret Release Weapon
 Unit/Name/AP_AutomatedRefinery=Automated Refinery
 Unit/Name/AP_AutomatedRefineryRich=Automated Refinery
 Unit/Name/AP_BacklashRocketsLMWeapon=Backlash Rockets
+Unit/Name/AP_Baneling=Baneling
+Unit/Name/AP_BanelingCocoon=Baneling Cocoon
 Unit/Name/AP_Banshee=Banshee
 Unit/Name/AP_Barracks=Barracks
 Unit/Name/AP_BarracksTechReactor=Tech Reactor
@@ -2103,6 +2174,10 @@ Unit/Name/AP_D8ClusterBomb=G-4 Clusterbomb
 Unit/Name/AP_D8ClusterBombWeapon=G-4 Cluster Bomb Weapon
 Unit/Name/AP_DRBattlecruiserALMWeapon=Duke's Revenge Battlecruiser Air Weapon
 Unit/Name/AP_DRBattlecruiserGLMWeapon=Duke's Revenge Battlecruiser Ground Weapon
+Unit/Name/AP_DarkTemplar=Dark Templar
+Unit/Name/AP_DarkTemplarAiur=Avenger
+Unit/Name/AP_DarkTemplarShakuras=Dark Templar
+Unit/Name/AP_DarkTemplarTaldarim=Blood Hunter
 Unit/Name/AP_DevilDog=Devil Dog
 Unit/Name/AP_Diamondback=Diamondback
 Unit/Name/AP_DukesRevenge=Jackson's Revenge
@@ -2133,7 +2208,10 @@ Unit/Name/AP_HelsAngelFighterWeapon=Hel's Angels (Fighter Weapon)
 Unit/Name/AP_Hercules=Hercules
 Unit/Name/AP_HeroNuke=Available Nuke
 Unit/Name/AP_HiveMindEmulator=Hive Mind Emulator
+Unit/Name/AP_HotSHunter=Baneling
 Unit/Name/AP_HotSNoxious=Ultralisk
+Unit/Name/AP_HotSSplitterlingBig=Baneling
+Unit/Name/AP_HotSSplitterlingMedium=Baneling Spawn
 Unit/Name/AP_HotSTorrasque=Ultralisk
 Unit/Name/AP_HunterSeekerWeapon=Seeker
 Unit/Name/AP_HurricaneMissileLeft=Hurricane Missile Left
@@ -2279,14 +2357,13 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
-Unit/Name/AP_DarkTemplar=Dark Templar
-Unit/Name/AP_DarkTemplarAiur=Avenger
-Unit/Name/AP_DarkTemplarShakuras=Dark Templar
-Unit/Name/AP_DarkTemplarTaldarim=Blood Hunter
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
+UnitSubtitle/AP_HotSHunter=Hunter Strain
+UnitSubtitle/AP_HotSHunterSplitter=Hunter + Splitter
+UnitSubtitle/AP_HotSSplitter=Splitter Strain
 UnitSubtitle/AP_HydraliskImpaler=Impaler Strain
 UnitSubtitle/AP_HydraliskLurker=Lurker Strain
 UnitSubtitle/AP_HydraliskLurkerImpaler=Lurker + Impaler
@@ -2310,6 +2387,7 @@ Upgrade/Name/AP_AresClassWeaponsSystemViking=Phobos-Class Weapons System
 Upgrade/Name/AP_ArmorPiercingRockets=Armor Piercing Rockets
 Upgrade/Name/AP_AutoHarvester=Automated Refinery
 Upgrade/Name/AP_AuxiliaryMedBots=Auxiliary Med-Bots
+Upgrade/Name/AP_BanelingBurrowMove=Tunneling Jaws
 Upgrade/Name/AP_BansheeCloak=Cloaking Field
 Upgrade/Name/AP_BansheeCloakedDamage=Cloaked Damage
 Upgrade/Name/AP_BaseTerranInfantryArmors=Terran Infantry Armors
@@ -2332,6 +2410,7 @@ Upgrade/Name/AP_BurstCapacitors=Burst Capacitors
 Upgrade/Name/AP_CampaignJotunBoosters=Jotun Boosters
 Upgrade/Name/AP_CarrierLaunchSpeedUpgrade=Graviton Catapult
 Upgrade/Name/AP_CellularReactors=Cellular Reactors
+Upgrade/Name/AP_CentrificalHooks=Centrifugal Hooks
 Upgrade/Name/AP_CerberusMines=Cerberus Mine
 Upgrade/Name/AP_ChitinousPlating=Chitinous Plating
 Upgrade/Name/AP_CloakDistortionField=Displacement Field
@@ -2375,6 +2454,8 @@ Upgrade/Name/AP_HireKelmorianMinersPH=Hire War Pigs PH
 Upgrade/Name/AP_HireSiegeBreakersPH=Hire Siege Breakers PH
 Upgrade/Name/AP_HireSpartanCompanyPH=Hire Spartan Company PH
 Upgrade/Name/AP_HiveMindEmulator=Hive Mind Emulator
+Upgrade/Name/AP_HotSBanelingCorrosiveBile=Corrosive Acid
+Upgrade/Name/AP_HotSBanelingHeal=Hot SBaneling Heal
 Upgrade/Name/AP_HotSBurrowSwarmHost=Burrow
 Upgrade/Name/AP_HotSBurstingGlands=Bursting Glands
 Upgrade/Name/AP_HotSChitinousPlating=HotS Chitinous Plating
@@ -2387,6 +2468,8 @@ Upgrade/Name/AP_HotSHardenedCarapace=HotS Hardened Carapace
 Upgrade/Name/AP_HotSHaveSwarmHostSplitA=Hot SHave Swarm Host Split
 Upgrade/Name/AP_HotSHaveSwarmHostSplitAB=HotS Have Swarm Host Split A+B
 Upgrade/Name/AP_HotSHaveSwarmHostSplitB=Hot SHave Swarm Host Split
+Upgrade/Name/AP_HotSHunter=Hot SHunter
+Upgrade/Name/AP_HotSHunterSplitter=Hot SHunter Splitter
 Upgrade/Name/AP_HotSHydraliskFrenzy=Hot SHydralisk Frenzy
 Upgrade/Name/AP_HotSHydraliskHealth=Ancillary Carapace
 Upgrade/Name/AP_HotSImpaler=HotS Impaler
@@ -2403,10 +2486,13 @@ Upgrade/Name/AP_HotSOrganicCarapace=HotS Organic Carapace
 Upgrade/Name/AP_HotSParalyticSpines=HotS Paralytic Spines
 Upgrade/Name/AP_HotSPressurizedGlands=Hot SPressurized Glands
 Upgrade/Name/AP_HotSRapidIncubation=Rapid Incubation
+Upgrade/Name/AP_HotSRapidMetamorph=Rapid Metamorph
 Upgrade/Name/AP_HotSRapidRegeneration=Rapid Regeneration
 Upgrade/Name/AP_HotSRapidRegenerationRoach=Hot SRapid Regeneration Roach
 Upgrade/Name/AP_HotSRoachHealth=Hot SRoach Health
 Upgrade/Name/AP_HotSRoachSpeed=Hot SRoach Speed
+Upgrade/Name/AP_HotSRupture=Hot SRupture
+Upgrade/Name/AP_HotSSplitter=Hot SSplitter
 Upgrade/Name/AP_HotSTissueAssimilation=Tissue Assimilation
 Upgrade/Name/AP_HotSTorrasque=Hot STorrasque
 Upgrade/Name/AP_HotSTunnelingClaws=Tunneling Claws
@@ -2564,6 +2650,7 @@ Weapon/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
 Weapon/Name/AP_AnnihilatorParticleDisruptors=Particle Disruptors
 Weapon/Name/AP_ArcliteShockCannon=Arclite Shock Cannon
 Weapon/Name/AP_AutoTurret=12mm Gauss Cannon
+Weapon/Name/AP_AvengerWeapon=Psionic Scythe
 Weapon/Name/AP_BacklashRockets=Backlash Rockets
 Weapon/Name/AP_BroodlingEscort=Broodling Escort
 Weapon/Name/AP_BroodlingStrike=Broodling Strike
@@ -2581,6 +2668,7 @@ Weapon/Name/AP_DRBattlecruiserFakeG=ATG Laser Battery
 Weapon/Name/AP_DRBattlecruiserG=ATS Laser Battery
 Weapon/Name/AP_DRCannonsA=Revenger Cannons
 Weapon/Name/AP_DRCannonsG=Revenger Cannons
+Weapon/Name/AP_DarkTemplarTaldarim=Bane Blades
 Weapon/Name/AP_DevilDogFlameThrower=Firestorm Flamethrower
 Weapon/Name/AP_Diamondback=Eviscerator Rail Gun
 Weapon/Name/AP_DuskWingBanshee=Screecher Missiles
@@ -2596,6 +2684,14 @@ Weapon/Name/AP_HailstormMissilePods=Hellstorm Missile Pods
 Weapon/Name/AP_HammerSecurity=The Mediator
 Weapon/Name/AP_HellionTank=Napalm Spray
 Weapon/Name/AP_HiveMindEmulator=Hive Mind Emulator
+Weapon/Name/AP_HotSBanelingDummy=Volatile Burst
+Weapon/Name/AP_HotSBanelingDummySmall=Volatile Burst
+Weapon/Name/AP_HotSBanelingExplode=HotS Baneling Explode
+Weapon/Name/AP_HotSBanelingExplodeBuilding=HotS Baneling Explode Building
+Weapon/Name/AP_HotSBanelingExplodeBuildingSmall=HotS Baneling Explode Building Small
+Weapon/Name/AP_HotSBanelingExplodeSmall=HotS Baneling Explode Small
+Weapon/Name/AP_HotSBanelingLaunch=HotS Baneling Launch
+Weapon/Name/AP_HotSBanelingLaunchBuilding=HotS Baneling Launch Building
 Weapon/Name/AP_HydraliskMelee=Melee
 Weapon/Name/AP_ImmortalMelee=Phase Disruptor
 Weapon/Name/AP_ImmortalShakurasAntiAirMissileDummyWeapon=Anti Air Missile Dummy Weapon
@@ -2670,15 +2766,12 @@ Weapon/Name/AP_VoidRayChargeBeamBounce=Destruction Beam
 Weapon/Name/AP_VoidRayChargeBeamRange=Prismatic Beam
 Weapon/Name/AP_Vulture=Fragmentation Grenade
 Weapon/Name/AP_VultureSpiderMines=Spider Mines
+Weapon/Name/AP_WarpBlades=Warp Blades
 Weapon/Name/AP_WidowMineDummy=Detonate
 Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_WarpBlades=Warp Blades
-Weapon/Name/AP_WarpBlades=Warp Blades
-Weapon/Name/AP_AvengerWeapon=Psionic Scythe
-Weapon/Name/AP_DarkTemplarTaldarim=Bane Blades
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

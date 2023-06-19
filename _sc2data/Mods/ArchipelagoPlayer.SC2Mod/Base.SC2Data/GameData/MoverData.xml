@@ -1102,4 +1102,70 @@
             <AdaptableParabolaClearance value="0.5,0.5"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_HotSHunterMissile">
+        <Flags index="RestoreHeight" value="1"/>
+        <MotionPhases>
+            <Driver value="AdaptableParabola"/>
+            <MinSpeed value="10"/>
+            <MaxSpeed value="10"/>
+            <ActorTracking value="Actual"/>
+            <Outro value="-0.5,-0.1"/>
+            <AdaptableParabolaIsUpright value="1"/>
+            <AdaptableParabolaClearance value="3,0.1"/>
+            <AdaptableParabolaDistances index="Launch" value="1"/>
+            <AdaptableParabolaDistances index="PreApex" value="0.3"/>
+            <AdaptableParabolaDistances index="PostApex" value="0.3"/>
+            <AdaptableParabolaDistances index="Land" value="1"/>
+            <AdaptableParabolaAccels index="Launch" value="0"/>
+            <AdaptableParabolaAccels index="Ascent" value="0"/>
+            <AdaptableParabolaAccels index="Apex" value="0"/>
+            <AdaptableParabolaAccels index="Descent" value="0"/>
+            <AdaptableParabolaAccels index="Land" value="0"/>
+        </MotionPhases>
+        <MotionPhases Driver="Guidance" MaxSpeed="40" YawPitchRoll="MAX"/>
+    </CMoverMissile>
+    <CMoverMissile id="AP_HunterJumpDown">
+        <PathMode value="Jumper"/>
+        <MotionPhases>
+            <Driver value="AdaptableParabola"/>
+            <Acceleration value="5"/>
+            <Speed value="1"/>
+            <MinSpeed value="6"/>
+            <MaxSpeed value="12"/>
+            <ActorTracking value="Actual"/>
+            <AdaptableParabolaIsUpright value="1"/>
+            <AdaptableParabolaClearance value="0.5,0.5"/>
+            <AdaptableParabolaDistances index="Launch" value="2"/>
+            <AdaptableParabolaDistances index="PreApex" value="0.9"/>
+            <AdaptableParabolaDistances index="PostApex" value="0.1"/>
+            <AdaptableParabolaDistances index="Land" value="3"/>
+            <AdaptableParabolaAccels index="Launch" value="5"/>
+            <AdaptableParabolaAccels index="Ascent" value="1"/>
+            <AdaptableParabolaAccels index="Apex" value="-13"/>
+            <AdaptableParabolaAccels index="Descent" value="17"/>
+            <AdaptableParabolaAccels index="Land" value="17"/>
+        </MotionPhases>
+    </CMoverMissile>
+    <CMoverMissile id="AP_HunterJumpUp">
+        <PathMode value="Jumper"/>
+        <MotionPhases>
+            <Driver value="AdaptableParabola"/>
+            <Acceleration value="5"/>
+            <Speed value="1"/>
+            <MinSpeed value="6"/>
+            <MaxSpeed value="12"/>
+            <ActorTracking value="Actual"/>
+            <AdaptableParabolaIsUpright value="1"/>
+            <AdaptableParabolaClearance value="0.75,0.5"/>
+            <AdaptableParabolaDistances index="Launch" value="2"/>
+            <AdaptableParabolaDistances index="PreApex" value="0.9"/>
+            <AdaptableParabolaDistances index="PostApex" value="0.1"/>
+            <AdaptableParabolaDistances index="Land" value="3"/>
+            <AdaptableParabolaAccels index="Launch" value="10"/>
+            <AdaptableParabolaAccels index="Ascent" value="1"/>
+            <AdaptableParabolaAccels index="Apex" value="-20"/>
+            <AdaptableParabolaAccels index="Descent" value="17"/>
+            <AdaptableParabolaAccels index="Land" value="17"/>
+        </MotionPhases>
+    </CMoverMissile>
 </Catalog>

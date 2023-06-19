@@ -455,6 +455,102 @@
         <WhichUnit Value="Caster"/>
         <Filters value="-;Stunned"/>
     </CValidatorUnitFilters>
+    <CValidatorPlayerRequirement id="AP_CentrificalHooksResearched">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveCentrificalHooks"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_FriendlyTargetAndHealUpgrade">
+        <Type value="And"/>
+        <CombineArray value="FriendlyTarget"/>
+        <CombineArray value="AP_HaveHotSBanelingHeal"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_FriendlyTargetAndHealUpgradeAndIsConstructing">
+        <Type value="And"/>
+        <CombineArray value="IsConstructing"/>
+        <CombineArray value="FriendlyTarget"/>
+        <CombineArray value="AP_HaveHotSBanelingHeal"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_FriendlyTargetAndHealUpgradeAndTargetFullLife">
+        <Type value="And"/>
+        <CombineArray value="TargetLifeFull"/>
+        <CombineArray value="FriendlyTarget"/>
+        <CombineArray value="AP_HaveHotSBanelingHeal"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasSplitterlingHiddenBuff">
+        <WhichUnit Value="Source"/>
+        <Value value="1"/>
+        <Behavior value="AP_BanelingTimedLifeHiddenBuff"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveHotSBanelingHeal">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSBanelingHeal"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSCorrosiveBile">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSBanelingCorrosiveBile"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_HaveHotSCorrosiveBileAndNotStructure">
+        <Type value="And"/>
+        <CombineArray value="AP_HaveHotSCorrosiveBile"/>
+        <CombineArray value="NotStructure"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveHotSHunter">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSHunter"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSRupture">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSRupture"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveHotSSplitterling">
+        <WhichPlayer Value="Caster"/>
+        <Find value="1"/>
+        <Value value="AP_HaveHotSSplitterling"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveVolatileBurstBuilding">
+        <WhichUnit Value="Caster"/>
+        <Value value="1"/>
+        <Behavior value="AP_VolatileBurstBuilding"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_HunterCliffCompare">
+        <CombineArray value="AP_HunterCliffCheckEqualLevel"/>
+        <CombineArray value="AP_HunterCliffCompare12"/>
+        <CombineArray value="AP_HunterCliffCheckCasterLevel2"/>
+        <CombineArray value="AP_HunterCliffCompare32"/>
+    </CValidatorCombine>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckCasterLevel1">
+        <WhichLocation Value="CasterPoint"/>
+        <Value value="1"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckCasterLevel2">
+        <WhichLocation Value="CasterPoint"/>
+        <Value value="2"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckCasterLevel3">
+        <WhichLocation Value="CasterPoint"/>
+        <Value value="3"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckEqualLevel">
+        <OtherLocation Value="CasterPoint"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorLocationCompareCliffLevel id="AP_HunterCliffCheckTargetLevel2">
+        <Value value="2"/>
+    </CValidatorLocationCompareCliffLevel>
+    <CValidatorCombine id="AP_HunterCliffCompare12">
+        <Type value="And"/>
+        <CombineArray value="AP_HunterCliffCheckCasterLevel1"/>
+        <CombineArray value="AP_HunterCliffCheckTargetLevel2"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_HunterCliffCompare32">
+        <Type value="And"/>
+        <CombineArray value="AP_HunterCliffCheckCasterLevel3"/>
+        <CombineArray value="HunterCliffCheckTargetLevel2"/>
+    </CValidatorCombine>
     <CValidatorCombine id="IsArmory" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaArmory"/>

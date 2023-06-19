@@ -10001,7 +10001,7 @@
         <AbilArray Link="ProgressRally"/>
         <AbilArray Link="BuildInProgress"/>
         <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
-<!--        <BehaviorArray Link="VoidDetectorRadar"/>-->
+        <!--        <BehaviorArray Link="VoidDetectorRadar"/>-->
         <BehaviorArray Link="AP_DarkTemplarRecallToDarkShrine"/>
         <WeaponArray Link="AP_AvengerWeapon"/>
         <CardLayouts>
@@ -10098,7 +10098,7 @@
         <AbilArray Link="AP_ArchonWarp"/>
         <AbilArray Link="AP_DarkTemplarShadowFury"/>
         <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
-<!--        <BehaviorArray Link="VoidDetectorRadar"/>-->
+        <!--        <BehaviorArray Link="VoidDetectorRadar"/>-->
         <WeaponArray Link="AP_WarpBlades"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -10186,7 +10186,7 @@
         <AbilArray Link="ProgressRally"/>
         <AbilArray Link="AP_DarkTemplarVoidStasis"/>
         <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
-<!--        <BehaviorArray Link="VoidDetectorRadar"/>-->
+        <!--        <BehaviorArray Link="VoidDetectorRadar"/>-->
         <WeaponArray Link="AP_DarkTemplarTaldarim"/>
         <CardLayouts>
             <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
@@ -10224,6 +10224,400 @@
             <Charge Link="DarkTemplar/Revive"/>
             <Cooldown Link="DarkTemplar/Revive"/>
         </ReviveInfoBase>
+    </CUnit>
+    <CUnit id="AP_Baneling">
+        <DeathRevealRadius value="3"/>
+        <Facing value="45"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AISplash" value="1"/>
+        <FlagArray index="AIHighPrioTarget" value="1"/>
+        <FlagArray index="AIFleeDamageDisabled" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="30"/>
+        <LifeMax value="30"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Speed value="2.9531"/>
+        <SpeedMultiplierCreep value="1.3"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="8"/>
+        <Food value="-0.5"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="15"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="30"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_BurrowBanelingDown"/>
+        <AbilArray/>
+        <AbilArray Link="AP_VolatileBurstBuilding"/>
+        <AbilArray Link="AP_ExplodeHeal"/>
+        <BehaviorArray Link="AP_BanelingExplode"/>
+        <BehaviorArray Link="AP_HotSHunterJump"/>
+        <WeaponArray Link="AP_HotSBanelingExplode"/>
+        <WeaponArray Link="AP_HotSBanelingExplodeBuilding"/>
+        <WeaponArray Link="AP_HotSBanelingLaunch"/>
+        <WeaponArray Link="AP_HotSBanelingLaunchBuilding"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Row="0" Column="0"/>
+            <LayoutButtons Row="0" Column="0"/>
+            <LayoutButtons Face="AP_HunterCliffJumper" Type="Passive" Requirements="AP_HaveHotSHunter" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_BanelingSplitterlingSplitPassive" Type="Passive" Requirements="AP_HaveHotSSplitterling" Row="2" Column="3"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="BurrowDown" Type="AbilCmd" AbilCmd="AP_BurrowBanelingDown,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="Explode" Type="AbilCmd" AbilCmd="AP_ExplodeHeal,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_EnableBuildingAttack" Type="AbilCmd" AbilCmd="AP_VolatileBurstBuilding,On" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_DisableBuildingAttack" Type="AbilCmd" AbilCmd="AP_VolatileBurstBuilding,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_BanelingCorrosiveBile" Type="Passive" Requirements="AP_HaveHotSBanelingCorrosiveBile" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_BanelingHeal" Type="Passive" Requirements="AP_HaveHotSBanelingHeal" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_RuptureUpgrade" Type="Passive" Requirements="AP_HaveHotSRupture" Row="1" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <InnerRadius value="0.375"/>
+        <CargoOverlapFilters value="-;Player,Ally,Neutral,Structure"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="50"/>
+        <ScoreKill value="75"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="16"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="Baneling"/>
+        <TacticalAIThink value="AIThinkBaneling"/>
+        <AIEvalFactor value="3"/>
+        <EquipmentArray Weapon="AP_HotSBanelingDummy"/>
+        <GlossaryCategory value="Unit/Category/ZergUnits"/>
+        <GlossaryPriority value="60"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <GlossaryWeakArray value="Roach"/>
+        <GlossaryWeakArray value="Stalker"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+    </CUnit>
+    <CUnit id="AP_BanelingBurrowed">
+        <Name value="Unit/Name/AP_Baneling"/>
+        <Description value="Button/Tooltip/AP_Baneling"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="Buried" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="30"/>
+        <LifeMax value="30"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Mover value="Burrowed"/>
+        <Sight value="8"/>
+        <Food value="-0.5"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="15"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="20"/>
+        <AbilArray Link="AP_Explode"/>
+        <AbilArray Link="AP_BurrowBanelingUp"/>
+        <AbilArray Link="AP_VolatileBurstBuilding"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_burrowedBanelingStop"/>
+        <BehaviorArray Link="AP_BanelingExplode"/>
+        <!-- BehaviorArray Link="BurrowCracks"/ -->
+        <CardLayouts>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons>
+                <Face value="StopRoachBurrowed"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_burrowedBanelingStop,Stop"/>
+                <Requirements value="AP_HasBanelingBurrowedMovement"/>
+                <Row value="0"/>
+                <Column value="1"/>
+            </LayoutButtons>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="BurrowUp" Type="AbilCmd" AbilCmd="AP_BurrowBanelingUp,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="Explode" Type="AbilCmd" AbilCmd="AP_Explode,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_HunterCliffJumper" Type="Passive" Requirements="AP_HaveHotSHunter" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_BanelingSplitterlingSplitPassive" Type="Passive" Requirements="AP_HaveHotSSplitterling" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_BanelingCorrosiveBile" Type="Passive" Requirements="AP_HaveHotSBanelingCorrosiveBile" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_BanelingHeal" Type="Passive" Requirements="AP_HaveHotSBanelingHeal" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_RuptureUpgrade" Type="Passive" Requirements="AP_HaveHotSRupture" Row="1" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <InnerRadius value="0.375"/>
+        <ScoreKill value="75"/>
+        <SubgroupPriority value="16"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="BanelingBurrowed"/>
+        <TacticalAIThink value="AIThinkBaneling"/>
+        <LeaderAlias value="AP_Baneling"/>
+        <HotkeyAlias value="AP_Baneling"/>
+        <EquipmentArray Weapon="AP_HotSBanelingDummy"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+        <AIEvaluateAlias value="AP_Baneling"/>
+        <Acceleration value="1000"/>
+        <SpeedMultiplierCreep value="1.3"/>
+    </CUnit>
+    <CUnit id="AP_BanelingCocoon">
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="50"/>
+        <LifeMax value="50"/>
+        <LifeArmor value="2"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <Speed value="2.5"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="5"/>
+        <Food value="-0.5"/>
+        <CostResource index="Minerals" value="50"/>
+        <CostResource index="Vespene" value="25"/>
+        <AttackTargetPriority value="10"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="25"/>
+        <AbilArray Link="que1"/>
+        <AbilArray Link="Rally"/>
+        <CardLayouts>
+            <LayoutButtons Face="CancelCocoonMorph" Type="AbilCmd" AbilCmd="que1,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <InnerRadius value="0.375"/>
+        <ScoreKill value="75"/>
+        <SubgroupPriority value="1"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAI value="BanelingEgg"/>
+    </CUnit>
+    <CUnit id="AP_HotSHunterPlaceholder" parent="PLACEHOLDER">
+        <Subtitle value="UnitSubtitle/AP_HotSHunter"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Collide index="Structure" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="10"/>
+        <Radius value="0.375"/>
+        <SeparationRadius value="0.375"/>
+        <MinimapRadius value="0.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <LeaderAlias value=""/>
+        <HotkeyAlias value=""/>
+    </CUnit>
+    <CUnit id="AP_HotSSplitterlingMedium">
+        <Subtitle value="UnitSubtitle/AP_HotSSplitterling"/>
+        <DeathRevealRadius value="3"/>
+        <Facing value="45"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="AISplash" value="1"/>
+        <FlagArray index="AIHighPrioTarget" value="1"/>
+        <FlagArray index="AIFleeDamageDisabled" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="20"/>
+        <LifeMax value="20"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Speed value="2.9531"/>
+        <SpeedMultiplierCreep value="1.3"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="8"/>
+        <Food value="-0.25"/>
+        <CostCategory value="Army"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="30"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_BurrowHotSSplitterlingMediumDown"/>
+        <AbilArray Link="AP_VolatileBurstBuilding"/>
+        <AbilArray Link="AP_ExplodeHealSmall"/>
+        <BehaviorArray Link="AP_BanelingExplodeSmall"/>
+        <BehaviorArray Link="AP_HotSHunterJump"/>
+        <WeaponArray Link="AP_HotSBanelingExplodeSmall"/>
+        <WeaponArray Link="AP_HotSBanelingExplodeBuildingSmall"/>
+        <WeaponArray Link="AP_HotSBanelingLaunchSmall"/>
+        <WeaponArray Link="AP_HotSBanelingLaunchBuildingSmall"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_HunterCliffJumper" Type="Passive" Requirements="AP_HaveHotSHunter" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_BanelingSplitterlingSplitPassive" Type="Passive" Requirements="AP_HaveHotSSplitterling" Row="2" Column="3"/>
+            <LayoutButtons Face="Explode" Type="AbilCmd" AbilCmd="AP_ExplodeHealSmall,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="BurrowDown" Type="AbilCmd" AbilCmd="AP_BurrowHotSSplitterlingMediumDown,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_EnableBuildingAttackSplitterling" Type="AbilCmd" AbilCmd="AP_VolatileBurstBuilding,On" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_DisableBuildingAttackSplitterling" Type="AbilCmd" AbilCmd="AP_VolatileBurstBuilding,Off" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_BanelingCorrosiveBile" Type="Passive" Requirements="AP_HaveHotSBanelingCorrosiveBile" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_BanelingHealSmall" Type="Passive" Requirements="AP_HaveHotSBanelingHeal" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_RuptureUpgrade" Type="Passive" Requirements="AP_HaveHotSRupture" Row="1" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.3125"/>
+        <SeparationRadius value="0.3125"/>
+        <InnerRadius value="0.3125"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="150"/>
+        <ScoreKill value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="16"/>
+        <MinimapRadius value="0.3125"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAIThink value="AIThinkBaneling"/>
+        <AIEvalFactor value="3"/>
+        <HotkeyAlias value="AP_Baneling"/>
+        <SelectAlias value="AP_Baneling"/>
+        <SubgroupAlias value="AP_Baneling"/>
+        <EquipmentArray Weapon="AP_HotSBanelingDummySmall"/>
+        <GlossaryCategory value="Unit/Category/ZergUnits"/>
+        <GlossaryPriority value="62"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryWeakArray value="Thor"/>
+        <GlossaryWeakArray value="Stalker"/>
+        <GlossaryWeakArray value="Roach"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+    </CUnit>
+    <CUnit id="AP_HotSSplitterlingMediumBurrowed">
+        <Name value="Unit/Name/AP_HotSSplitterlingMedium"/>
+        <Subtitle value="UnitSubtitle/AP_HotSSplitterling"/>
+        <Description value="Button/Tooltip/AP_HotSSplitterlingMedium"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="Cloaked" value="1"/>
+        <FlagArray index="Buried" value="1"/>
+        <FlagArray index="AIThreatGround" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="20"/>
+        <LifeMax value="20"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergGroundArmor"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ZergWildMutation"/>
+        <Mover value="Burrowed"/>
+        <Sight value="8"/>
+        <Food value="-0.25"/>
+        <CostCategory value="Army"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="20"/>
+        <AbilArray Link="AP_ExplodeSmall"/>
+        <AbilArray Link="AP_BurrowHotSSplitterlingMediumUp"/>
+        <AbilArray Link="AP_VolatileBurstBuilding"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_burrowedBanelingStop"/>
+        <BehaviorArray Link="AP_BanelingExplodeSmall"/>
+        <CardLayouts>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons>
+                <Face value="StopRoachBurrowed"/>
+                <Type value="AbilCmd"/>
+                <AbilCmd value="AP_burrowedBanelingStop,Stop"/>
+                <Requirements value="AP_HasBanelingBurrowedMovement"/>
+                <Row value="0"/>
+                <Column value="1"/>
+            </LayoutButtons>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="BurrowUp" Type="AbilCmd" AbilCmd="AP_BurrowHotSSplitterlingMediumUp,Execute" Row="2" Column="4"/>
+            <LayoutButtons Face="Explode" Type="AbilCmd" AbilCmd="AP_ExplodeSmall,Execute" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_HunterCliffJumper" Type="Passive" Requirements="AP_HaveHotSHunter" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_BanelingSplitterlingSplitPassive" Type="Passive" Requirements="AP_HaveHotSSplitterling" Row="2" Column="3"/>
+            <LayoutButtons Face="AP_BanelingCorrosiveBile" Type="Passive" Requirements="AP_HaveHotSBanelingCorrosiveBile" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_BanelingHeal" Type="Passive" Requirements="AP_HaveHotSBanelingHeal" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_RuptureUpgrade" Type="Passive" Requirements="AP_HaveHotSRupture" Row="1" Column="2"/>
+        </CardLayouts>
+        <Radius value="0.3125"/>
+        <SeparationRadius value="0.3125"/>
+        <InnerRadius value="0.3125"/>
+        <ScoreKill value="300"/>
+        <SubgroupPriority value="16"/>
+        <MinimapRadius value="0.3125"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <TacticalAIThink value="AIThinkBaneling"/>
+        <LeaderAlias value="AP_HotSSplitterlingMedium"/>
+        <HotkeyAlias value="AP_Baneling"/>
+        <SelectAlias value="AP_BanelingBurrowed"/>
+        <SubgroupAlias value="AP_BanelingBurrowed"/>
+        <EquipmentArray Weapon="AP_HotSBanelingDummySmall"/>
+        <KillDisplay value="Always"/>
+        <RankDisplay value="Always"/>
+        <Acceleration value="1000"/>
+        <SpeedMultiplierCreep value="1.3"/>
     </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->

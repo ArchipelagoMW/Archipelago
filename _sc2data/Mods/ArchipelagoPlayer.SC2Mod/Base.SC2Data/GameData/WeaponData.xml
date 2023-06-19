@@ -1527,4 +1527,174 @@
         <DamagePoint value="0.361"/>
         <Backswing value="1.333"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingExplode">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeLargeDirect"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireScanFilters value="-;Structure"/>
+        <Range value="0.25"/>
+        <Period value="0.2"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_HotSBanelingExplodeLargeTarget"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingExplodeBuilding">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeLargeDirect"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.25"/>
+        <Period value="0.2"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_HotSBanelingExplodeLargeTarget"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingExplodeBuildingSmall">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeSmallDirect"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.25"/>
+        <Period value="0.2"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_HotSBanelingExplodeSmallTarget"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingExplodeSmall">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeSmallDirect"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireScanFilters value="-;Structure"/>
+        <Range value="0.25"/>
+        <Period value="0.2"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_HotSBanelingExplodeSmallTarget"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingDummy">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-banelingspooge.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeLargeDirect"/>
+        <TargetFilters value="Ground,Visible;Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.25"/>
+        <Cost>
+            <Cooldown Link="Weapon/AP_HotSBanelingExplode"/>
+        </Cost>
+        <Period value="0.2"/>
+        <DamagePoint value="0"/>
+        <Effect value=""/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingDummySmall">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-banelingspooge.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeSmallDirect"/>
+        <TargetFilters value="Ground,Visible;Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.25"/>
+        <Cost>
+            <Cooldown Link="Weapon/AP_HotSBanelingExplode"/>
+        </Cost>
+        <Period value="0.2"/>
+        <DamagePoint value="0"/>
+        <Effect value=""/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingLaunch">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeLargeDirect"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireScanFilters value="-;Structure"/>
+        <Range value="6"/>
+        <MinimumRange value="1"/>
+        <Period value="1"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_HunterVolatileBurstLaunchMissile"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingLaunchBuilding">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeLargeDirect"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <MinimumRange value="1"/>
+        <Period value="1"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_HunterVolatileBurstLaunchMissile"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingLaunchSmall">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeSmallDirect"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireScanFilters value="-;Structure"/>
+        <Range value="6"/>
+        <MinimumRange value="1"/>
+        <Period value="1"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_HunterVolatileBurstLaunchMissile"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_HotSBanelingLaunchBuildingSmall">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Disabled" value="1"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <DisplayEffect value="AP_HotSBanelingExplodeSmallDirect"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <MinimumRange value="1"/>
+        <Period value="1"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_HunterVolatileBurstLaunchMissile"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
 </Catalog>
