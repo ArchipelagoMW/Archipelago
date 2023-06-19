@@ -2,7 +2,7 @@ from typing import List
 from worlds.stardew_valley.strings.region_names import Region
 from .mod_data import ModNames
 from ..data.villagers_data import all_villagers
-from ..stardew_rule import Count, StardewRule
+from ..stardew_rule import Count, StardewRule, True_
 from .. import options
 from ..options import StardewOptions
 
@@ -38,7 +38,7 @@ def can_earn_mod_skill_level(logic, skill: str, level: int) -> StardewRule:
         return can_earn_cooking_skill_level(logic, level)
     if ModNames.binning_skill in logic.options[options.Mods] and skill == ModSkill.binning:
         return can_earn_binning_skill_level(logic, level)
-    return logic.True_()
+    return True_()
 
 
 def can_earn_luck_skill_level(who, level: int) -> StardewRule:
