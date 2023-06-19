@@ -10,6 +10,7 @@ class Type(Enum):
     CLIENT = auto()
     ADJUSTER = auto()
     FUNC = auto()  # do not use anymore
+    HIDDEN = auto()
 
 
 class Component:
@@ -35,9 +36,9 @@ class Component:
             deprecate(f"Launcher Component {self.display_name} is using Type.FUNC Type, which is pending removal.")
             component_type = Type.MISC
 
-        self.type = component_type or \
-            Type.CLIENT if 'Client' in display_name else \
-            Type.ADJUSTER if 'Adjuster' in display_name else Type.MISC
+        self.type = component_type or (
+            Type.CLIENT if "Client" in display_name else
+            Type.ADJUSTER if "Adjuster" in display_name else Type.MISC)
         self.func = func
         self.file_identifier = file_identifier
 
@@ -64,7 +65,7 @@ class SuffixIdentifier:
 
 components: List[Component] = [
     # Launcher
-    Component('', 'Launcher'),
+    Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
     # Core
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
