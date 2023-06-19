@@ -466,32 +466,29 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     for option_key, option in Options.common_options.items():
         setattr(ret, option_key, option.from_any(get_choice(option_key, weights, option.default)))
 
-    if ret.game in AutoWorldRegister.world_types:
-        for option_key, option in world_type.option_definitions.items():
+    for option_key, option in world_type.option_definitions.items():
+        handle_option(ret, game_weights, option_key, option, plando_options)
+    for option_key, option in Options.per_game_common_options.items():
+        # skip setting this option if already set from common_options, defaulting to root option
+        if option_key not in world_type.option_definitions and \
+                (option_key not in Options.common_options or option_key in game_weights):
             handle_option(ret, game_weights, option_key, option, plando_options)
-        for option_key, option in Options.per_game_common_options.items():
-            # skip setting this option if already set from common_options, defaulting to root option
-            if option_key not in world_type.option_definitions and \
-                    (option_key not in Options.common_options or option_key in game_weights):
-                handle_option(ret, game_weights, option_key, option, plando_options)
-        if PlandoOptions.items in plando_options:
-            ret.plando_items = game_weights.get("plando_items", [])
-        if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
-            # bad hardcoded behavior to make this work for now
-            ret.plando_connections = []
-            if PlandoOptions.connections in plando_options:
-                options = game_weights.get("plando_connections", [])
-                for placement in options:
-                    if roll_percentage(get_choice("percentage", placement, 100)):
-                        ret.plando_connections.append(PlandoConnection(
-                            get_choice("entrance", placement),
-                            get_choice("exit", placement),
-                            get_choice("direction", placement)
-                        ))
-        elif ret.game == "A Link to the Past":
-            roll_alttp_settings(ret, game_weights, plando_options)
-    else:
-        raise Exception(f"Unsupported game {ret.game}")
+    if PlandoOptions.items in plando_options:
+        ret.plando_items = game_weights.get("plando_items", [])
+    if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
+        # bad hardcoded behavior to make this work for now
+        ret.plando_connections = []
+        if PlandoOptions.connections in plando_options:
+            options = game_weights.get("plando_connections", [])
+            for placement in options:
+                if roll_percentage(get_choice("percentage", placement, 100)):
+                    ret.plando_connections.append(PlandoConnection(
+                        get_choice("entrance", placement),
+                        get_choice("exit", placement),
+                        get_choice("direction", placement)
+                    ))
+    elif ret.game == "A Link to the Past":
+        roll_alttp_settings(ret, game_weights, plando_options)
 
     return ret
 
