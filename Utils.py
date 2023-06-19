@@ -785,3 +785,10 @@ def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str]
     task = asyncio.create_task(co, name=name)
     _faf_tasks.add(task)
     task.add_done_callback(_faf_tasks.discard)
+
+
+def deprecate(message: str):
+    if __debug__:
+        raise Exception(message)
+    import warnings
+    warnings.warn(message)
