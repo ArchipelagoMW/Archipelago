@@ -12,9 +12,11 @@ from .data.museum_data import all_museum_items, all_mineral_items, all_artifact_
 from worlds.stardew_valley.strings.region_names import Region
 from .mods.mod_data import ModNames
 from .locations import LocationTags
-from .logic import StardewLogic, And, tool_prices, week_days
+from .logic import StardewLogic, And, tool_upgrade_prices
 from .options import StardewOptions
-from .strings.tool_names import Tool, Material
+from .strings.calendar_names import Weekday
+from .strings.skill_names import ModSkill, Skill
+from .strings.tool_names import Tool, ToolMaterial
 
 
 def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOptions, logic: StardewLogic,
@@ -28,9 +30,9 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     # Those checks do not exist if ToolProgression is vanilla
     if world_options[options.ToolProgression] != options.ToolProgression.option_vanilla:
         MultiWorldRules.add_rule(multi_world.get_location("Purchase Fiberglass Rod", player),
-                                 (logic.has_skill_level("Fishing", 2) & logic.can_spend_money(1800)).simplify())
+                                 (logic.has_skill_level(Skill.fishing, 2) & logic.can_spend_money(1800)).simplify())
         MultiWorldRules.add_rule(multi_world.get_location("Purchase Iridium Rod", player),
-                                 (logic.has_skill_level("Fishing", 6) & logic.can_spend_money(7500)).simplify())
+                                 (logic.has_skill_level(Skill.fishing, 6) & logic.can_spend_money(7500)).simplify())
 
         materials = [None, "Copper", "Iron", "Gold", "Iridium"]
         tool = ["Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can"]
@@ -38,44 +40,13 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
             if previous is None:
                 MultiWorldRules.add_rule(multi_world.get_location(f"{material} {tool} Upgrade", player),
                                          (logic.has(f"{material} Ore") &
-                                          logic.can_spend_money(tool_prices[material])).simplify())
+                                          logic.can_spend_money(tool_upgrade_prices[material])).simplify())
             else:
                 MultiWorldRules.add_rule(multi_world.get_location(f"{material} {tool} Upgrade", player),
                                          (logic.has(f"{material} Ore") & logic.has_tool(tool, previous) &
-                                          logic.can_spend_money(tool_prices[material])).simplify())
+                                          logic.can_spend_money(tool_upgrade_prices[material])).simplify())
 
-    # Skills
-    if world_options[options.SkillProgression] != options.SkillProgression.option_vanilla:
-        for i in range(1, 11):
-            MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Farming", player),
-                                     logic.can_earn_skill_level("Farming", i).simplify())
-            MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Fishing", player),
-                                     logic.can_earn_skill_level("Fishing", i).simplify())
-            MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Foraging", player),
-                                     logic.can_earn_skill_level("Foraging", i).simplify())
-            MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Mining", player),
-                                     logic.can_earn_skill_level("Mining", i).simplify())
-            MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Combat", player),
-                                     logic.can_earn_skill_level("Combat", i).simplify())
-            # Modded Skills
-            if ModNames.luck_skill in world_options[options.Mods]:
-                MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Luck", player),
-                                         logic.can_earn_skill_level("Luck", i).simplify())
-            if ModNames.magic in world_options[options.Mods]:
-                MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Magic", player),
-                                         logic.can_earn_skill_level("Magic", i).simplify())
-            if ModNames.binning_skill in world_options[options.Mods]:
-                MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Binning", player),
-                                         logic.can_earn_skill_level("Binning", i).simplify())
-            if ModNames.cooking_skill in world_options[options.Mods]:
-                MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Cooking", player),
-                                         logic.can_earn_skill_level("Cooking", i).simplify())
-            if ModNames.socializing_skill in world_options[options.Mods]:
-                MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Socializing", player),
-                                         logic.can_earn_skill_level("Socializing", i).simplify())
-            if ModNames.archaeology in world_options[options.Mods]:
-                MultiWorldRules.set_rule(multi_world.get_location(f"Level {i} Archaeology", player),
-                                         logic.can_earn_skill_level("Archaeology", i).simplify())
+    set_skills_rules(logic, multi_world, player, world_options)
 
     # Bundles
     for bundle in current_bundles.values():
@@ -130,6 +101,38 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
     set_deepwoods_rules(logic, multi_world, player, world_options)
 
 
+def set_skills_rules(logic, multi_world, player, world_options):
+    # Skills
+    if world_options[options.SkillProgression] != options.SkillProgression.option_vanilla:
+        for i in range(1, 11):
+            set_skill_rule(logic, multi_world, player, Skill.farming, i)
+            set_skill_rule(logic, multi_world, player, Skill.fishing, i)
+            set_skill_rule(logic, multi_world, player, Skill.foraging, i)
+            set_skill_rule(logic, multi_world, player, Skill.mining, i)
+            set_skill_rule(logic, multi_world, player, Skill.combat, i)
+
+            # Modded Skills
+            if ModNames.luck_skill in world_options[options.Mods]:
+                set_skill_rule(logic, multi_world, player, ModSkill.luck, i)
+            if ModNames.magic in world_options[options.Mods]:
+                set_skill_rule(logic, multi_world, player, ModSkill.magic, i)
+            if ModNames.binning_skill in world_options[options.Mods]:
+                set_skill_rule(logic, multi_world, player, ModSkill.binning, i)
+            if ModNames.cooking_skill in world_options[options.Mods]:
+                set_skill_rule(logic, multi_world, player, ModSkill.cooking, i)
+            if ModNames.socializing_skill in world_options[options.Mods]:
+                set_skill_rule(logic, multi_world, player, ModSkill.socializing, i)
+            if ModNames.archaeology in world_options[options.Mods]:
+                set_skill_rule(logic, multi_world, player, ModSkill.archaeology, i)
+
+
+def set_skill_rule(logic, multi_world, player, skill: str, level: int):
+    location_name = f"Level {level} {skill}"
+    location = multi_world.get_location(location_name, player)
+    rule = logic.can_earn_skill_level(skill, level).simplify()
+    MultiWorldRules.set_rule(location, rule)
+
+
 def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions):
     for floor in range(5, 120 + 5, 5):
         MultiWorldRules.set_rule(multi_world.get_entrance(dig_to_mines_floor(floor), player),
@@ -151,7 +154,7 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mine_to_skull_cavern_floor_100, player),
                              logic.can_mine_perfectly_in_the_skull_cavern().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.talk_to_mines_dwarf, player),
-                             logic.can_speak_dwarf() & logic.has_tool(Tool.pickaxe, Material.iron))
+                             logic.can_speak_dwarf() & logic.has_tool(Tool.pickaxe, ToolMaterial.iron))
 
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_desert_obelisk, player),
                              logic.received("Desert Obelisk").simplify())
@@ -424,7 +427,7 @@ def set_festival_rules(all_location_names: List[str], logic: StardewLogic, multi
 
 
 def set_traveling_merchant_rules(logic: StardewLogic, multi_world: MultiWorld, player: int):
-    for day in week_days:
+    for day in Weekday.all_days:
         item_for_day = f"Traveling Merchant: {day}"
         for i in range(1, 4):
             location_name = f"Traveling Merchant {day} Item {i}"

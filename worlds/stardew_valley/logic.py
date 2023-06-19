@@ -22,9 +22,11 @@ from .strings.animal_names import Animal, coop_animals, barn_animals
 from .strings.animal_product_names import AnimalProduct
 from .strings.artisan_good_names import ArtisanGood
 from .strings.building_names import Building
+from .strings.calendar_names import Weekday
 from .strings.craftable_names import Craftable
 from .strings.crop_names import Fruit, Vegetable, all_fruits, all_vegetables
 from .strings.fertilizer_names import Fertilizer
+from .strings.festival_check_names import FestivalCheck
 from .strings.fish_names import Fish
 from .strings.flower_names import Flower
 from .strings.forageable_names import Forageable
@@ -32,7 +34,7 @@ from .strings.fruit_tree_names import Sapling
 from .strings.generic_names import Generic
 from .strings.geode_names import Geode
 from .strings.ingredient_names import Ingredient
-from .strings.item_names import Item
+from .strings.material_names import Material
 from .strings.machine_names import Machine
 from .strings.meal_names import Meal, Beverage
 from .strings.metal_names import Ore, MetalBar
@@ -42,8 +44,8 @@ from .strings.quest_names import Quest
 from .strings.region_names import Region
 from .strings.season_names import Season
 from .strings.seed_names import Seed
-from .strings.skill_names import Skill
-from .strings.tool_names import Tool, Material
+from .strings.skill_names import Skill, ModSkill
+from .strings.tool_names import Tool, ToolMaterial
 from .strings.tv_channel_names import Channel
 from .strings.villager_names import NPC
 from .strings.wallet_item_names import Wallet
@@ -53,21 +55,20 @@ MONEY_PER_MONTH = 15000
 MISSING_ITEM = "THIS ITEM IS MISSING"
 
 tool_materials = {
-    Material.copper: 1,
-    Material.iron: 2,
-    Material.gold: 3,
-    Material.iridium: 4
+    ToolMaterial.copper: 1,
+    ToolMaterial.iron: 2,
+    ToolMaterial.gold: 3,
+    ToolMaterial.iridium: 4
 }
 
-tool_prices = {
-    Material.copper: 2000,
-    Material.iron: 5000,
-    Material.gold: 10000,
-    Material.iridium: 25000
+tool_upgrade_prices = {
+    ToolMaterial.copper: 2000,
+    ToolMaterial.iron: 5000,
+    ToolMaterial.gold: 10000,
+    ToolMaterial.iridium: 25000
 }
 
-week_days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
+fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west]
 
 @dataclass(frozen=True, repr=False)
 class StardewLogic:
@@ -134,7 +135,7 @@ class StardewLogic:
         })
 
         self.item_rules.update({
-            "Aged Roe": self.has(Machine.preserves_jar) & self.has("Roe"),
+            "Aged Roe": self.can_preserves_jar(AnimalProduct.roe),
             "Algae Soup": self.can_cook() & self.has("Green Algae") & self.has_relationship(NPC.clint, 3),
             AnimalProduct.any_egg: self.has(AnimalProduct.chicken_egg) | self.has("Duck Egg"),
             Fish.any: Or([self.can_catch_fish(fish) for fish in all_fish]),
@@ -142,19 +143,19 @@ class StardewLogic:
             Geode.artifact_trove: self.has(Geode.omni) & self.can_reach_region(Region.desert),
             "Bait": self.has_skill_level(Skill.fishing, 2),
             "Baked Fish": self.has("Sunfish") & self.has("Bream") & self.has(Ingredient.wheat_flour),
-            Fertilizer.basic: (self.has(Item.sap) & self.has_farming_level(1)) | self.has_lived_months(1),
-            Fertilizer.quality: (self.has_farming_level(9) & self.has(Item.sap) & self.has(Fish.any)) | (self.has_year_two() & self.can_spend_money_at(Region.pierre_store, 150)),
+            Fertilizer.basic: (self.has(Material.sap) & self.has_farming_level(1)) | self.has_lived_months(1),
+            Fertilizer.quality: (self.has_farming_level(9) & self.has(Material.sap) & self.has(Fish.any)) | (self.has_year_two() & self.can_spend_money_at(Region.pierre_store, 150)),
             Fertilizer.deluxe: False_(),
             # self.received("Deluxe Fertilizer Recipe") & self.has("Iridium Bar") & self.has(SVItem.sap),
-            Fertilizer.tree: self.has_skill_level(Skill.foraging, 7) & self.has(Item.fiber) & self.has(Item.stone),
+            Fertilizer.tree: self.has_skill_level(Skill.foraging, 7) & self.has(Material.fiber) & self.has(Material.stone),
             Loot.bat_wing: self.can_mine_in_the_mines_floor_41_80() | self.can_mine_in_the_skull_cavern(),
             "Battery Pack": (self.has(Machine.lightning_rod) & self.has_any_season_not_winter()) | self.has(Machine.solar_panel),
             "Bean Hotpot": self.can_cook() & self.has_relationship(NPC.clint, 7) & self.has("Green Bean"),
-            Machine.bee_house: self.has_farming_level(3) & self.has(MetalBar.iron) & self.has(ArtisanGood.maple_syrup) & self.has(Item.coal) & self.has(Item.wood),
+            Machine.bee_house: self.has_farming_level(3) & self.has(MetalBar.iron) & self.has(ArtisanGood.maple_syrup) & self.has(Material.coal) & self.has(Material.wood),
             "Beer": self.can_keg(Vegetable.wheat) | self.can_spend_money_at(Region.saloon, 400),
             "Blackberry": self.has_season(Season.fall),
             "Blackberry Cobbler": self.can_cook() & self.has_season(Season.fall) & self.has_year_two() & self.has("Blackberry") & self.has(Ingredient.sugar) & self.has(Ingredient.wheat_flour),
-            "Bomb": self.has_skill_level(Skill.mining, 6) & self.has(Item.coal) & self.has(Ore.iron),
+            "Bomb": self.has_skill_level(Skill.mining, 6) & self.has(Material.coal) & self.has(Ore.iron),
             "Bone Fragment": self.can_reach_region("Dig Site"),
             "Bouquet": self.has_relationship(Generic.bachelor, 8),
             Meal.bread: self.can_spend_money_at(Region.saloon, 120),
@@ -162,23 +163,23 @@ class StardewLogic:
             "Broken Glasses": self.can_crab_pot(),
             "Bug Meat": self.can_mine_in_the_mines_floor_1_40(),
             "Cactus Fruit": self.can_reach_region(Region.desert),
-            Machine.cask: self.has_house(3) & self.can_reach_region(Region.cellar) & self.has(Item.wood) & self.has(Item.hardwood),
+            Machine.cask: self.has_house(3) & self.can_reach_region(Region.cellar) & self.has(Material.wood) & self.has(Material.hardwood),
             Forageable.cave_carrot: self.can_mine_to_floor(10),
             "Caviar": self.has(Machine.preserves_jar) & self.has("Sturgeon Roe"),
             "Chanterelle": self.has_season(Season.fall) & self.can_reach_region(Region.secret_woods),
-            Machine.cheese_press: self.has_farming_level(6) & self.has(Item.wood) & self.has(Item.stone) & self.has(Item.hardwood) & self.has(MetalBar.copper),
+            Machine.cheese_press: self.has_farming_level(6) & self.has(Material.wood) & self.has(Material.stone) & self.has(Material.hardwood) & self.has(MetalBar.copper),
             ArtisanGood.cheese: (self.has(AnimalProduct.cow_milk) & self.has(Machine.cheese_press)) | (self.can_reach_region(Region.desert) & self.has("Emerald")),
             "Cheese Cauliflower": self.has([ArtisanGood.cheese, "Cauliflower"]) & self.has_relationship(NPC.pam, 3) & self.can_cook(),
-            "Cherry Bomb": self.has_skill_level(Skill.mining, 1) & self.has(Item.coal) & self.has(Ore.copper),
+            "Cherry Bomb": self.has_skill_level(Skill.mining, 1) & self.has(Material.coal) & self.has(Ore.copper),
             "Chicken": self.has_building(Building.coop),
             AnimalProduct.chicken_egg: self.has([AnimalProduct.egg, AnimalProduct.brown_egg, AnimalProduct.large_egg, AnimalProduct.large_brown_egg], 1),
             "Chocolate Cake": self.can_cook() & self.has_season(Season.winter) & self.has(Ingredient.wheat_flour) & self.has(Ingredient.sugar) & self.has(AnimalProduct.any_egg),
             "Chowder": self.can_cook() & self.has_relationship(NPC.willy, 3) & self.has(["Clam", AnimalProduct.cow_milk]),
-            "Clam": True_(),
-            "Clay": True_(),
-            "Cloth": (self.has("Wool") & self.has(Machine.loom)) | (self.can_reach_region(Region.desert) & self.has("Aquamarine")),
-            Item.coal: self.can_mine_in_the_mines_floor_41_80() | self.can_do_panning(),
-            "Cockle": True_(),
+            "Clam": self.can_reach_region(Region.beach),
+            "Clay": self.can_reach_any_region([Region.farm, Region.beach, Region.quarry]) & self.has_tool(Tool.hoe),
+            ArtisanGood.cloth: (self.has(AnimalProduct.wool) & self.has(Machine.loom)) | (self.can_reach_region(Region.desert) & self.has("Aquamarine")),
+            Material.coal: self.can_mine_in_the_mines_floor_41_80() | self.can_do_panning(),
+            "Cockle": self.can_reach_region(Region.beach),
             "Coconut": self.can_reach_region(Region.desert),
             Beverage.coffee: (self.has(Machine.keg) & self.has("Coffee Bean")) | self.has("Coffee Maker") | (self.can_spend_money(300) & self.can_reach_region(Region.saloon)) | self.has("Hot Java Ring"),
             "Coffee Maker": self.received("Coffee Maker"),
@@ -213,7 +214,7 @@ class StardewLogic:
             "Energy Tonic": self.can_reach_region(Region.hospital) & self.can_spend_money(1000),
             "Escargot": self.can_cook() & self.has_relationship(NPC.willy, 5) & self.has("Snail") & self.has(Vegetable.garlic),
             "Farmer's Lunch": self.can_cook() & self.has_farming_level(3) & self.has(Meal.omelet) & self.has(Vegetable.parsnip),
-            Item.fiber: True_(),
+            Material.fiber: True_(),
             Forageable.fiddlehead_fern: self.can_reach_region(Region.secret_woods) & self.has_season(Season.summer),
             "Fishing Chest": self.can_fish_chests(),
             "Fish Taco": self.can_cook() & self.has_relationship(NPC.linus, 7) & self.has("Tuna") & self.has(Meal.tortilla) & self.has("Red Cabbage") & self.has("Mayonnaise"),
@@ -223,19 +224,19 @@ class StardewLogic:
             "Fried Mushroom": self.can_cook() & self.has_relationship(NPC.demetrius, 3) & self.has("Morel") & self.has("Common Mushroom"),
             Geode.frozen: self.can_mine_in_the_mines_floor_41_80(),
             "Fruit Salad": self.can_cook() & self.has_season(Season.fall) & self.has_year_two() & self.has("Blueberry") & self.has(Fruit.melon) & self.has(Fruit.apricot),
-            "Furnace": self.has(Item.stone) & self.has(Ore.copper),
+            Machine.furnace: self.has(Material.stone) & self.has(Ore.copper),
             Geode.geode: self.can_mine_in_the_mines_floor_1_40(),
             "Ginger": self.can_reach_region(Region.island_west),
             "Glazed Yams": self.can_cook() & self.has_season(Season.fall) & self.has("Yam") & self.has(Ingredient.sugar),
-            "Goat Cheese": self.has("Goat Milk") & self.has(Machine.cheese_press),
-            "Goat Milk": self.has(Animal.goat),
+            "Goat Cheese": self.has(AnimalProduct.goat_milk) & self.has(Machine.cheese_press),
+            AnimalProduct.goat_milk: self.has(Animal.goat),
             Animal.goat: self.has_building(Building.big_barn),
             MetalBar.gold: self.can_smelt(Ore.gold),
             Ore.gold: self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern() | self.can_do_panning(),
             "Golden Pumpkin": self.has_season(Season.fall) | self.has(Geode.artifact_trove),
             "Green Algae": self.can_fish(),
             "Green Tea": self.has(Machine.keg) & self.has("Tea Leaves"),
-            Item.hardwood: self.has_tool(Tool.axe, Material.copper) & (self.can_reach_region(Region.secret_woods) | self.can_reach_region(Region.island_south)),
+            Material.hardwood: self.has_tool(Tool.axe, ToolMaterial.copper) & (self.can_reach_region(Region.secret_woods) | self.can_reach_region(Region.island_south)),
             Forageable.hay: self.has_building(Building.silo) & self.has_tool(Tool.scythe),
             Forageable.hazelnut: self.has_season(Season.fall),
             "Holly": self.has_season(Season.winter),
@@ -258,23 +259,23 @@ class StardewLogic:
             "Junimo Kart Medium Buff": self.has_junimo_kart_power_level(4),
             "Junimo Kart Big Buff": self.has_junimo_kart_power_level(6),
             "Junimo Kart Max Buff": self.has_junimo_kart_power_level(8),
-            Machine.keg: self.has_farming_level(8) & self.has(Item.wood) & self.has(MetalBar.iron) & self.has(MetalBar.copper) & self.has(ArtisanGood.oak_resin),
+            Machine.keg: self.has_farming_level(8) & self.has(Material.wood) & self.has(MetalBar.iron) & self.has(MetalBar.copper) & self.has(ArtisanGood.oak_resin),
             AnimalProduct.large_egg: self.has_happy_animal(Animal.chicken),
             AnimalProduct.large_brown_egg: self.has_happy_animal(Animal.chicken),
-            "Large Goat Milk": self.has_happy_animal(Animal.goat),
+            AnimalProduct.large_goat_milk: self.has_happy_animal(Animal.goat),
             AnimalProduct.large_milk: self.has_happy_animal(Animal.cow),
             Forageable.leek: self.has_season(Season.spring),
             "Life Elixir": self.has_skill_level(Skill.combat, 2) & self.has("Red Mushroom") & self.has("Purple Mushroom") & self.has("Morel") & self.has("Chanterelle"),
             Machine.lightning_rod: self.has_skill_level(Skill.foraging, 6) & self.has(MetalBar.iron) & self.has(MetalBar.quartz) & self.has(Loot.bat_wing),
             "Lobster": self.can_crab_pot(),
-            Machine.loom: self.has_farming_level(7) & self.has(Item.wood) & self.has(Item.fiber) & self.has(ArtisanGood.pine_tar),
+            Machine.loom: self.has_farming_level(7) & self.has(Material.wood) & self.has(Material.fiber) & self.has(ArtisanGood.pine_tar),
             "Magic Rock Candy": self.can_reach_region(Region.desert) & self.has("Prismatic Shard"),
             "Magma Cap": self.can_reach_region(Region.volcano_floor_5),
             Geode.magma: self.can_mine_in_the_mines_floor_81_120() | (self.has("Lava Eel") & self.has_building(Building.fish_pond)),
             "Maple Bar": self.can_cook() & self.has_season(Season.summer) & self.has_year_two() & self.has(ArtisanGood.maple_syrup) & self.has(Ingredient.sugar) & self.has(Ingredient.wheat_flour),
             ArtisanGood.maple_syrup: self.has(Machine.tapper),
             "Mayonnaise": self.has("Mayonnaise Machine") & self.has(AnimalProduct.chicken_egg),
-            "Mayonnaise Machine": self.has_farming_level(2) & self.has(Item.wood) & self.has(Item.stone) & self.has("Earth Crystal") & self.has(MetalBar.copper),
+            "Mayonnaise Machine": self.has_farming_level(2) & self.has(Material.wood) & self.has(Material.stone) & self.has("Earth Crystal") & self.has(MetalBar.copper),
             "Mead": self.has(Machine.keg) & self.has(ArtisanGood.honey),
             Craftable.mega_bomb: self.has_skill_level(Skill.mining, 8) & self.has(Ore.gold) & self.has(Loot.solar_essence) & self.has(Loot.void_essence),
             AnimalProduct.milk: self.has_animal(Animal.cow),
@@ -285,12 +286,12 @@ class StardewLogic:
             "Nautilus Shell": self.has_season(Season.winter),
             ArtisanGood.oak_resin: self.has(Machine.tapper),
             Ingredient.oil: self.can_spend_money_at(Region.pierre_store, 200) | (self.has(Machine.oil_maker) & (self.has(Vegetable.corn) | self.has(Flower.sunflower) | self.has(Seed.sunflower))),
-            Machine.oil_maker: self.has_farming_level(8) & self.has(Loot.slime) & self.has(Item.hardwood) & self.has(MetalBar.gold),
+            Machine.oil_maker: self.has_farming_level(8) & self.has(Loot.slime) & self.has(Material.hardwood) & self.has(MetalBar.gold),
             Geode.omni: self.can_mine_in_the_mines_floor_41_80() | self.can_reach_region(Region.desert) | self.can_do_panning() | self.received("Rusty Key") | (self.has("Octopus") & self.has_building(Building.fish_pond)) | self.can_reach_region(Region.volcano_floor_10),
             "Ostrich": self.has_building(Building.barn) & self.has("Ostrich Egg"),
             "Ostrich Egg": self.can_reach_region(Region.island_north),
             "Oyster": True_(),
-            "Pale Ale": self.has(Machine.keg) & self.has("Hops"),
+            ArtisanGood.pale_ale: self.can_keg(Vegetable.hops),
             "Pale Broth": self.can_cook() & self.has_relationship(NPC.marnie, 3) & self.has("White Algae"),
             "Pearl": (self.has("Blobfish") & self.has_building(Building.fish_pond)) | (self.has_lived_months(4) & self.has(Geode.artifact_trove)),
             "Pepper Poppers": self.can_cook() & self.has(ArtisanGood.cheese) & self.has("Hot Pepper") & self.has_relationship(NPC.shane, 3),
@@ -302,15 +303,15 @@ class StardewLogic:
             Meal.pizza: self.can_spend_money_at(Region.saloon, 600),
             "Plum Pudding": self.can_cook() & self.has_season(Season.winter) & self.has("Wild Plum") & self.has(Ingredient.wheat_flour) & self.has(Ingredient.sugar),
             "Poppyseed Muffin": self.can_cook() & self.has_season(Season.winter) & self.has_year_two() & self.has("Poppy") & self.has(Ingredient.wheat_flour) & self.has(Ingredient.sugar),
-            Machine.preserves_jar: self.has_farming_level(4) & self.has(Item.wood) & self.has(Item.stone) & self.has(Item.coal),
+            Machine.preserves_jar: self.has_farming_level(4) & self.has(Material.wood) & self.has(Material.stone) & self.has(Material.coal),
             "Purple Mushroom": self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern(),
             Animal.rabbit: self.has_building(Building.deluxe_coop),
             "Rabbit's Foot": self.has_happy_animal(Animal.rabbit),
             "Radioactive Bar": self.can_smelt("Radioactive Ore"),
             "Radioactive Ore": self.can_mine_perfectly() & self.can_reach_region(Region.qi_walnut_room),
             "Rainbow Shell": self.has_season(Season.summer),
-            "Rain Totem": self.has_skill_level(Skill.foraging, 9) & self.has(Item.hardwood) & self.has(ArtisanGood.truffle_oil) & self.has(ArtisanGood.pine_tar),
-            "Recycling Machine": self.has_skill_level(Skill.fishing, 4) & self.has(Item.wood) & self.has(Item.stone) & self.has(MetalBar.iron),
+            "Rain Totem": self.has_skill_level(Skill.foraging, 9) & self.has(Material.hardwood) & self.has(ArtisanGood.truffle_oil) & self.has(ArtisanGood.pine_tar),
+            "Recycling Machine": self.has_skill_level(Skill.fishing, 4) & self.has(Material.wood) & self.has(Material.stone) & self.has(MetalBar.iron),
             "Red Mushroom": self.can_reach_region(Region.secret_woods) & (self.has_season(Season.summer) | self.has_season(Season.fall)),
             "Red Plate": self.can_cook() & self.has(["Radish", "Red Cabbage"]) & self.has_relationship(NPC.emily, 7),
             "Refined Quartz": self.can_smelt("Quartz") | self.can_smelt("Fire Quartz") |
@@ -321,7 +322,7 @@ class StardewLogic:
                     self.has_building(Building.mill) & self.has(Vegetable.unmilled_rice)),
             "Rice Pudding": self.can_cook() & self.has_relationship(NPC.evelyn, 7) & self.has(AnimalProduct.cow_milk) &
                             self.has(Ingredient.sugar) & self.has(Ingredient.rice),
-            "Roe": self.can_fish() & self.has_building(Building.fish_pond),
+            AnimalProduct.roe: self.can_fish() & self.has_building(Building.fish_pond),
             "Roots Platter": self.can_cook() & self.has_skill_level(Skill.combat, 3) &
                              self.has(Forageable.cave_carrot) & self.has("Winter Root"),
             Meal.salad: self.can_spend_money_at(Region.saloon, 220),
@@ -330,16 +331,16 @@ class StardewLogic:
             "Salmonberry": self.has_season(Season.spring),
             "Salmon Dinner": self.can_cook() & self.has_relationship(NPC.gus, 3) & self.has("Salmon") & self.has(
                 "Amaranth") & self.has("Kale"),
-            Item.sap: self.can_chop_trees(),
+            Material.sap: self.can_chop_trees(),
             "Sashimi": self.can_fish() & self.can_cook() & self.has_relationship(NPC.linus, 3),
-            Craftable.scarecrow: self.has_farming_level(1) & self.has(Item.wood) & self.has(Item.coal) & self.has(Item.fiber),
+            Craftable.scarecrow: self.has_farming_level(1) & self.has(Material.wood) & self.has(Material.coal) & self.has(Material.fiber),
             "Sea Urchin": self.can_reach_region(Region.tide_pools) | self.has_season(Season.summer),
             Fish.seaweed: (self.can_fish() & self.can_reach_region(Region.beach)) | self.can_reach_region(
                 Region.tide_pools),
             Forageable.secret_note: self.received(Wallet.magnifying_glass) & (
                     self.can_chop_trees() | self.can_mine_in_the_mines_floor_1_40()),
-            "Seed Maker": self.has_farming_level(9) & self.has(Item.wood) & self.has(MetalBar.gold) & self.has(
-                Item.coal),
+            "Seed Maker": self.has_farming_level(9) & self.has(Material.wood) & self.has(MetalBar.gold) & self.has(
+                Material.coal),
             Animal.sheep: self.has_building(Building.deluxe_barn),
             "Shrimp": self.can_crab_pot(),
             "Slime": self.can_mine_in_the_mines_floor_1_40(),
@@ -355,10 +356,10 @@ class StardewLogic:
             "Spring Onion": self.has_season(Season.spring),
             "Squid Ink": self.can_mine_in_the_mines_floor_81_120() | (
                     self.has_building(Building.fish_pond) & self.has("Squid")),
-            Craftable.staircase: self.has_skill_level(Skill.mining, 2) & self.has(Item.stone),
+            Craftable.staircase: self.has_skill_level(Skill.mining, 2) & self.has(Material.stone),
             "Stir Fry": self.can_cook() & self.has_season(Season.spring) & self.has(Forageable.cave_carrot) &
                         self.has("Common Mushroom") & self.has("Kale") & self.has(Ingredient.oil),
-            Item.stone: self.has_tool(Tool.pickaxe),
+            Material.stone: self.has_tool(Tool.pickaxe),
             "Stuffing": self.has_season(Season.winter) |
                         (self.can_cook() & self.has_relationship(NPC.pam, 7) & self.has(Meal.bread) &
                          self.has("Cranberries") & self.has(Forageable.hazelnut)),
@@ -368,10 +369,10 @@ class StardewLogic:
             "Survival Burger": self.can_cook() & self.has_skill_level(Skill.foraging, 2) &
                                self.has([Meal.bread, Forageable.cave_carrot, "Eggplant"]),
             "Sweet Pea": self.has_season(Season.summer),
-            Machine.tapper: self.has_skill_level(Skill.foraging, 3) & self.has(Item.wood) & self.has(MetalBar.copper),
+            Machine.tapper: self.has_skill_level(Skill.foraging, 3) & self.has(Material.wood) & self.has(MetalBar.copper),
             "Tea Bush": self.has(Sapling.tea) & self.has_lived_months(1),
             "Tea Leaves": self.has("Tea Bush") & self.has_lived_months(2),
-            Sapling.tea: self.has_relationship(NPC.caroline, 2) & self.has(Item.fiber) & self.has(Item.wood),
+            Sapling.tea: self.has_relationship(NPC.caroline, 2) & self.has(Material.fiber) & self.has(Material.wood),
             "Trash": self.can_crab_pot(),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
             "Tropical Curry": self.received("Island Resort") & self.can_reach_region(Region.island_south) &
@@ -391,11 +392,11 @@ class StardewLogic:
             "White Algae": self.can_fish() & self.can_mine_in_the_mines_floor_1_40(),
             "Wild Horseradish": self.has_season(Season.spring),
             "Wild Plum": self.has_season(Season.fall),
-            "Wilted Bouquet": self.has("Furnace") & self.has("Bouquet") & self.has(Item.coal),
+            "Wilted Bouquet": self.has(Machine.furnace) & self.has("Bouquet") & self.has(Material.coal),
             ArtisanGood.wine: self.has_wine(),
             "Winter Root": self.has_season(Season.winter),
-            Item.wood: self.has_tool(Tool.axe),
-            "Wool": self.has_animal(Animal.rabbit) | self.has_animal(Animal.sheep),
+            Material.wood: self.has_tool(Tool.axe),
+            AnimalProduct.wool: self.has_animal(Animal.rabbit) | self.has_animal(Animal.sheep),
         })
         self.item_rules.update(self.fish_rules)
         self.item_rules.update(self.museum_rules)
@@ -411,29 +412,23 @@ class StardewLogic:
             self.item_rules[recipe] = obtention_rule | cooking_rule
 
         self.building_rules.update({
-            Building.barn: self.can_spend_money(6000) & self.has([Item.wood, Item.stone]),
-            Building.big_barn: self.can_spend_money(12000) & self.has([Item.wood, Item.stone]) & self.has_building(
-                Building.barn),
-            Building.deluxe_barn: self.can_spend_money(25000) & self.has([Item.wood, Item.stone]) & self.has_building(
-                Building.big_barn),
-            Building.coop: self.can_spend_money(4000) & self.has([Item.wood, Item.stone]),
-            Building.big_coop: self.can_spend_money(10000) & self.has([Item.wood, Item.stone]) & self.has_building(
-                Building.coop),
-            Building.deluxe_coop: self.can_spend_money(20000) & self.has([Item.wood, Item.stone]) & self.has_building(
-                Building.big_coop),
-            Building.fish_pond: self.can_spend_money(5000) & self.has([Item.stone, Fish.seaweed, "Green Algae"]),
-            Building.mill: self.can_spend_money(2500) & self.has([Item.stone, Item.wood, "Cloth"]),
-            Building.shed: self.can_spend_money(15000) & self.has(Item.wood),
-            Building.big_shed: self.can_spend_money(20000) & self.has([Item.wood, Item.stone]) & self.has_building(
-                Building.shed),
-            Building.silo: self.can_spend_money(100) & self.has([Item.stone, "Clay", MetalBar.copper]),
-            Building.slime_hutch: self.can_spend_money(10000) & self.has(
-                [Item.stone, "Refined Quartz", MetalBar.iridium]),
-            Building.stable: self.can_spend_money(10000) & self.has([Item.hardwood, MetalBar.iron]),
-            Building.well: self.can_spend_money(1000) & self.has(Item.stone),
-            Building.shipping_bin: self.can_spend_money(250) & self.has(Item.wood),
-            Building.kitchen: self.can_spend_money(10000) & self.has(Item.wood) & self.has_house(0),
-            Building.kids_room: self.can_spend_money(50000) & self.has(Item.hardwood) & self.has_house(1),
+            Building.barn: self.can_spend_money(6000) & self.has([Material.wood, Material.stone]),
+            Building.big_barn: self.can_spend_money(12000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.barn),
+            Building.deluxe_barn: self.can_spend_money(25000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.big_barn),
+            Building.coop: self.can_spend_money(4000) & self.has([Material.wood, Material.stone]),
+            Building.big_coop: self.can_spend_money(10000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.coop),
+            Building.deluxe_coop: self.can_spend_money(20000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.big_coop),
+            Building.fish_pond: self.can_spend_money(5000) & self.has([Material.stone, Fish.seaweed, "Green Algae"]),
+            Building.mill: self.can_spend_money(2500) & self.has([Material.stone, Material.wood, ArtisanGood.cloth]),
+            Building.shed: self.can_spend_money(15000) & self.has(Material.wood),
+            Building.big_shed: self.can_spend_money(20000) & self.has([Material.wood, Material.stone]) & self.has_building(Building.shed),
+            Building.silo: self.can_spend_money(100) & self.has([Material.stone, Material.clay, MetalBar.copper]),
+            Building.slime_hutch: self.can_spend_money(10000) & self.has([Material.stone, MetalBar.quartz, MetalBar.iridium]),
+            Building.stable: self.can_spend_money(10000) & self.has([Material.hardwood, MetalBar.iron]),
+            Building.well: self.can_spend_money(1000) & self.has(Material.stone),
+            Building.shipping_bin: self.can_spend_money(250) & self.has(Material.wood),
+            Building.kitchen: self.can_spend_money(10000) & self.has(Material.wood) & self.has_house(0),
+            Building.kids_room: self.can_spend_money(50000) & self.has(Material.hardwood) & self.has_house(1),
             Building.cellar: self.can_spend_money(100000) & self.has_house(2),
         })
 
@@ -446,7 +441,7 @@ class StardewLogic:
             Quest.advancement: self.can_complete_quest(Quest.getting_started) & self.has(Craftable.scarecrow),
             Quest.archaeology: (self.has_tool(Tool.hoe) | self.can_mine_in_the_mines_floor_1_40() | self.can_fish()) & self.can_reach_region(Region.museum),
             Quest.meet_the_wizard: self.can_reach_region(Region.town) & self.can_reach_region(Region.community_center) & self.can_reach_region(Region.wizard_tower),
-            Quest.forging_ahead: self.has(Ore.copper) & self.has("Furnace"),
+            Quest.forging_ahead: self.has(Ore.copper) & self.has(Machine.furnace),
             Quest.smelting: self.has(MetalBar.copper),
             Quest.initiation: self.can_mine_in_the_mines_floor_1_40(),
             Quest.robins_lost_axe: self.has_season(Season.spring) & self.can_reach_region(Region.forest) & self.can_meet(NPC.robin),
@@ -454,13 +449,13 @@ class StardewLogic:
             Quest.mayors_shorts: self.has_season(Season.summer) & self.can_reach_region(Region.ranch) & (self.has_relationship(NPC.marnie, 2) | (self.can_blink() & self.can_earn_spells())) & self.can_meet(NPC.lewis),
             Quest.blackberry_basket: self.has_season(Season.fall) & self.can_meet(NPC.linus),
             Quest.marnies_request: self.has_relationship(NPC.marnie, 3) & self.has(Forageable.cave_carrot) & self.can_reach_region(Region.ranch),
-            Quest.pam_is_thirsty: self.has_season(Season.summer) & self.has("Pale Ale") & self.can_meet(NPC.pam),
+            Quest.pam_is_thirsty: self.has_season(Season.summer) & self.has(ArtisanGood.pale_ale) & self.can_meet(NPC.pam),
             Quest.a_dark_reagent: self.has_season(Season.winter) & self.has(Loot.void_essence) & self.can_meet(NPC.wizard),
             Quest.cows_delight: self.has_season(Season.fall) & self.has("Amaranth") & self.can_meet(NPC.marnie),
             Quest.the_skull_key: self.received("Skull Key") & self.can_reach_region(Region.skull_cavern_entrance),
             Quest.crop_research: self.has_season(Season.summer) & self.has(Fruit.melon) & self.can_meet(NPC.demetrius),
             Quest.knee_therapy: self.has_season(Season.summer) & self.has("Hot Pepper") & self.can_meet(NPC.george),
-            Quest.robins_request: self.has_season(Season.winter) & self.has(Item.hardwood) & self.can_meet(NPC.robin),
+            Quest.robins_request: self.has_season(Season.winter) & self.has(Material.hardwood) & self.can_meet(NPC.robin),
             Quest.qis_challenge: self.can_mine_in_the_skull_cavern(),
             Quest.the_mysterious_qi: self.can_reach_region(Region.tunnel) & self.has("Battery Pack") & self.can_reach_region(Region.desert) & self.has("Rainbow Shell") & self.has(Vegetable.beet) & self.has(Loot.solar_essence),
             Quest.carving_pumpkins: self.has_season(Season.fall) & self.has(Vegetable.pumpkin) & self.can_meet(NPC.caroline),
@@ -489,59 +484,35 @@ class StardewLogic:
         })
 
         self.festival_rules.update({
-            "Egg Hunt Victory": self.has_season(Season.spring) & self.can_reach_region(
-                Region.town) & self.can_win_egg_hunt(),
-            "Egg Festival: Strawberry Seeds": self.has_season(Season.spring) & self.can_reach_region(
-                Region.town) & self.can_spend_money(1000),
-            "Dance with someone": self.has_season(Season.spring) & self.can_reach_region(
-                Region.forest) & self.has_relationship(Generic.bachelor, 4),
-            "Rarecrow #5 (Woman)": self.has_season(Season.spring) & self.can_reach_region(
-                Region.forest) & self.can_spend_money(2500),
-            "Luau Soup": self.has_season(Season.summer) & self.can_reach_region(
-                Region.beach) & self.can_succeed_luau_soup(),
-            "Dance of the Moonlight Jellies": self.has_season(Season.summer) & self.can_reach_region(Region.beach),
-            "Smashing Stone": self.has_season(Season.fall) & self.can_reach_region(Region.town),
-            "Grange Display": self.has_season(Season.fall) & self.can_reach_region(
-                Region.town) & self.can_succeed_grange_display(),
-            "Rarecrow #1 (Turnip Head)": self.has_season(Season.fall) & self.can_reach_region(Region.town),
-            # only cost star tokens
-            "Fair Stardrop": self.has_season(Season.fall) & self.can_reach_region(Region.town),  # only cost star tokens
-            "Spirit's Eve Maze": self.has_season(Season.fall) & self.can_reach_region(Region.town),
-            "Rarecrow #2 (Witch)": self.has_season(Season.fall) & self.can_reach_region(
-                Region.town) & self.can_spend_money(5000),
-            "Win Fishing Competition": self.has_season(Season.winter) & self.can_reach_region(
-                Region.forest) & self.can_win_fishing_competition(),
-            "Rarecrow #4 (Snowman)": self.has_season(Season.winter) & self.can_reach_region(
-                Region.forest) & self.can_spend_money(5000),
-            "Mermaid Pearl": self.has_season(Season.winter) & self.can_reach_region(Region.beach),
-            "Cone Hat": self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(
-                2500),
-            "Iridium Fireplace": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.can_spend_money(15000),
-            "Rarecrow #7 (Tanuki)": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.can_spend_money(5000) & self.can_find_museum_artifacts(20),
-            "Rarecrow #8 (Tribal Mask)": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.can_spend_money(5000) & self.can_find_museum_items(40),
-            "Lupini: Red Eagle": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.can_spend_money(1200),
-            "Lupini: Portrait Of A Mermaid": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.can_spend_money(1200),
-            "Lupini: Solar Kingdom": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.can_spend_money(1200),
-            "Lupini: Clouds": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.has_year_two() & self.can_spend_money(1200),
-            "Lupini: 1000 Years From Now": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.has_year_two() & self.can_spend_money(1200),
-            "Lupini: Three Trees": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.has_year_two() & self.can_spend_money(1200),
-            "Lupini: The Serpent": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.has_year_three() & self.can_spend_money(1200),
-            "Lupini: 'Tropical Fish #173'": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.has_year_three() & self.can_spend_money(1200),
-            "Lupini: Land Of Clay": self.has_season(Season.winter) & self.can_reach_region(
-                Region.beach) & self.has_year_three() & self.can_spend_money(1200),
-            "Secret Santa": self.has_season(Season.winter) & self.can_reach_region(
-                Region.town) & self.has_any_universal_love(),
+            FestivalCheck.egg_hunt: self.has_season(Season.spring) & self.can_reach_region(Region.town) & self.can_win_egg_hunt(),
+            FestivalCheck.strawberry_seeds: self.has_season(Season.spring) & self.can_reach_region(Region.town) & self.can_spend_money(1000),
+            FestivalCheck.dance: self.has_season(Season.spring) & self.can_reach_region(Region.forest) & self.has_relationship(Generic.bachelor, 4),
+            FestivalCheck.rarecrow_5: self.has_season(Season.spring) & self.can_reach_region(Region.forest) & self.can_spend_money(2500),
+            FestivalCheck.luau_soup: self.has_season(Season.summer) & self.can_reach_region(Region.beach) & self.can_succeed_luau_soup(),
+            FestivalCheck.moonlight_jellies: self.has_season(Season.summer) & self.can_reach_region(Region.beach),
+            FestivalCheck.smashing_stone: self.has_season(Season.fall) & self.can_reach_region(Region.town),
+            FestivalCheck.grange_display: self.has_season(Season.fall) & self.can_reach_region(Region.town) & self.can_succeed_grange_display(),
+            FestivalCheck.rarecrow_1: self.has_season(Season.fall) & self.can_reach_region(Region.town),  # only cost star tokens
+            FestivalCheck.fair_stardrop: self.has_season(Season.fall) & self.can_reach_region(Region.town),  # only cost star tokens
+            FestivalCheck.spirit_eve_maze: self.has_season(Season.fall) & self.can_reach_region(Region.town),
+            FestivalCheck.rarecrow_2: self.has_season(Season.fall) & self.can_reach_region(Region.town) & self.can_spend_money(5000),
+            FestivalCheck.fishing_competition: self.has_season(Season.winter) & self.can_reach_region(Region.forest) & self.can_win_fishing_competition(),
+            FestivalCheck.rarecrow_4: self.has_season(Season.winter) & self.can_reach_region(Region.forest) & self.can_spend_money(5000),
+            FestivalCheck.mermaid_pearl: self.has_season(Season.winter) & self.can_reach_region(Region.beach),
+            FestivalCheck.cone_hat: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(2500),
+            FestivalCheck.iridium_fireplace: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(15000),
+            FestivalCheck.rarecrow_7: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_artifacts(20),
+            FestivalCheck.rarecrow_8: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(5000) & self.can_find_museum_items(40),
+            FestivalCheck.lupini_red_eagle: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
+            FestivalCheck.lupini_portrait_mermaid: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
+            FestivalCheck.lupini_solar_kingdom: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.can_spend_money(1200),
+            FestivalCheck.lupini_clouds: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_two() & self.can_spend_money(1200),
+            FestivalCheck.lupini_1000_years: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_two() & self.can_spend_money(1200),
+            FestivalCheck.lupini_three_trees: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_two() & self.can_spend_money(1200),
+            FestivalCheck.lupini_the_serpent: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_three() & self.can_spend_money(1200),
+            FestivalCheck.lupini_tropical_fish: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_three() & self.can_spend_money(1200),
+            FestivalCheck.lupini_land_of_clay: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_three() & self.can_spend_money(1200),
+            FestivalCheck.secret_santa: self.has_season(Season.winter) & self.can_reach_region(Region.town) & self.has_any_universal_love(),
         })
 
         self.special_order_rules.update({
@@ -552,7 +523,7 @@ class StardewLogic:
             "Biome Balance": self.can_fish_perfectly(),
             "Rock Rejuvenation": self.has("Ruby") & self.has("Topaz") & self.has("Emerald") &
                                  self.has("Jade") & self.has("Amethyst") & self.has_relationship(NPC.emily, 4) &
-                                 self.has("Cloth") & self.can_reach_region(Region.haley_house),
+                                 self.has(ArtisanGood.cloth) & self.can_reach_region(Region.haley_house),
             "Gifts for George": self.has_season(Season.spring) & self.has(Forageable.leek),
             "Fragments of the past": self.can_reach_region("Dig Site"),
             "Gus' Famous Omelet": self.has(AnimalProduct.any_egg),
@@ -560,7 +531,7 @@ class StardewLogic:
             "Community Cleanup": self.can_crab_pot(),
             "The Strong Stuff": self.can_keg(Vegetable.potato),
             "Pierre's Prime Produce": self.can_farm_perfectly(),
-            "Robin's Project": self.can_chop_perfectly() & self.has(Item.hardwood),
+            "Robin's Project": self.can_chop_perfectly() & self.has(Material.hardwood),
             "Robin's Resource Rush": self.can_chop_perfectly() & self.has(Fertilizer.tree) & self.can_mine_perfectly(),
             "Juicy Bugs Wanted!": self.has("Bug Meat"),
             "Tropical Fish": self.has("Stingray") & self.has("Blue Discus") & self.has("Lionfish"),
@@ -651,40 +622,43 @@ class StardewLogic:
     def can_spend_money_at(self, region: str, amount: int) -> StardewRule:
         return self.can_reach_region(region) & self.can_spend_money(amount)
 
-    def has_tool(self, tool: str, material: str = Material.basic) -> StardewRule:
-        if material == Material.basic or tool == Tool.scythe:
+    def has_tool(self, tool: str, material: str = ToolMaterial.basic) -> StardewRule:
+        if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()
 
         if self.options[options.ToolProgression] == options.ToolProgression.option_progressive:
             return self.received(f"Progressive {tool}", count=tool_materials[material])
 
-        return self.has(f"{material} Bar") & self.can_spend_money(tool_prices[material])
+        return self.has(f"{material} Bar") & self.can_spend_money(tool_upgrade_prices[material])
 
     def can_earn_skill_level(self, skill: str, level: int) -> StardewRule:
-        if level == 0:
+        if level <= 0:
             return True_()
 
-        tool_rule = True_()
-        if skill == Skill.fishing:
-            tool_rule = self.can_get_fishing_xp()
-        if skill == Skill.farming and level >= 6:
-            tool_rule = self.has_tool(Tool.hoe, Material.iron) & self.can_water(2)
-        if skill == Skill.foraging and level >= 6:
-            tool_rule = self.has_tool(Tool.axe, Material.iron) | self.can_use_clear_debris_instead_of_tool_level(3)
-        if skill == Skill.mining and level >= 6:
-            tool_rule = self.has_tool(Tool.pickaxe, Material.iron) | self.can_use_clear_debris_instead_of_tool_level(3)
-        if skill == Skill.combat:
-            if level >= 6:
-                tool_rule = self.can_do_combat_at_level(Performance.good)
-            else:
-                tool_rule = self.can_do_combat_at_level(Performance.basic)
-        tool_rule = can_earn_mod_skill_level(self, skill, level, tool_rule)
-
+        tool_level = (level - 1) // 2
+        tool_material = ToolMaterial.tiers[tool_level]
         months = max(1, level - 1)
-        return self.has_lived_months(months) & tool_rule
+        months_rule = self.has_lived_months(months)
+        previous_level_rule = self.has_skill_level(skill, level - 1)
+
+        if skill == Skill.fishing:
+            xp_rule = self.can_get_fishing_xp() & self.has_tool(Tool.fishing_rod, ToolMaterial.tiers[max(tool_level, 3)])
+        elif skill == Skill.farming:
+            xp_rule = self.can_get_farming_xp() & self.has_tool(Tool.hoe, tool_material) & self.can_water(tool_level)
+        elif skill == Skill.foraging:
+            xp_rule = self.can_get_foraging_xp() & self.has_tool(Tool.axe, tool_material) | self.can_use_clear_debris_instead_of_tool_level(tool_level)
+        elif skill == Skill.mining:
+            xp_rule = self.can_get_mining_xp() & self.has_tool(Tool.pickaxe, tool_material) | self.can_use_clear_debris_instead_of_tool_level(tool_level)
+        elif skill == Skill.combat:
+            combat_tier = Performance.tiers[tool_level]
+            xp_rule = self.can_get_combat_xp() & self.can_do_combat_at_level(combat_tier)
+        else:
+            xp_rule = can_earn_mod_skill_level(self, skill, level)
+
+        return previous_level_rule & months_rule & xp_rule
 
     def has_skill_level(self, skill: str, level: int) -> StardewRule:
-        if level == 0:
+        if level <= 0:
             return True_()
 
         if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
@@ -751,6 +725,28 @@ class StardewLogic:
     def can_complete_quest(self, quest: str) -> StardewRule:
         return Has(quest, self.quest_rules)
 
+    def can_get_farming_xp(self) -> StardewRule:
+        crop_rules = []
+        for crop in all_crops:
+            crop_rules.append(self.can_grow_crop(crop))
+        return Or(crop_rules)
+
+    def can_get_foraging_xp(self) -> StardewRule:
+        tool_rule = self.has_tool(Tool.axe)
+        tree_rule = self.can_reach_region(Region.forest) & self.has_any_season_not_winter()
+        stump_rule = self.can_reach_region(Region.secret_woods) & self.has_tool(Tool.axe, ToolMaterial.copper)
+        return tool_rule & (tree_rule | stump_rule)
+
+    def can_get_mining_xp(self) -> StardewRule:
+        tool_rule = self.has_tool(Tool.pickaxe)
+        stone_rule = self.can_reach_any_region([Region.mines_floor_5, Region.quarry, Region.skull_cavern_25, Region.volcano_floor_5])
+        return tool_rule & stone_rule
+
+    def can_get_combat_xp(self) -> StardewRule:
+        tool_rule = self.has_any_weapon()
+        enemy_rule = self.can_reach_any_region([Region.mines_floor_5, Region.skull_cavern_25, Region.volcano_floor_5])
+        return tool_rule & enemy_rule
+
     def can_get_fishing_xp(self) -> StardewRule:
         if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
             return self.can_fish() | self.can_crab_pot()
@@ -762,11 +758,12 @@ class StardewLogic:
         if difficulty <= 40:
             skill_required = 0
         skill_rule = self.has_skill_level(Skill.fishing, skill_required)
+        region_rule = self.can_reach_any_region(fishing_regions)
         number_fishing_rod_required = 1 if difficulty < 50 else 2
         if self.options[options.ToolProgression] == options.ToolProgression.option_progressive:
-            return self.received("Progressive Fishing Rod", number_fishing_rod_required) & skill_rule
+            return self.received("Progressive Fishing Rod", number_fishing_rod_required) & skill_rule & region_rule
 
-        return skill_rule
+        return skill_rule & region_rule
 
     def has_max_fishing(self) -> StardewRule:
         skill_rule = self.has_skill_level(Skill.fishing, 10)
@@ -811,8 +808,9 @@ class StardewLogic:
         season_rule = self.has_any_season(crop.farm_growth_seasons)
         seed_rule = self.has(crop.seed.name)
         farm_rule = self.can_reach_region(Region.farm) & season_rule
+        tool_rule = self.has_tool(Tool.hoe) & self.has_tool(Tool.watering_can)
         region_rule = farm_rule | self.can_reach_region(Region.greenhouse) | self.can_reach_region(Region.island_west)
-        return seed_rule & region_rule
+        return seed_rule & region_rule & tool_rule
 
     def can_plant_and_grow_item(self, seasons: Union[str, Iterable[str]]) -> StardewRule:
         if isinstance(seasons, str):
@@ -879,16 +877,21 @@ class StardewLogic:
         return self.received(channel) & tv_rule
 
     def can_smelt(self, item: str) -> StardewRule:
-        return self.has("Furnace") & self.has(item)
+        return self.has(Machine.furnace) & self.has(item)
 
     def can_do_panning(self, item: str = Generic.any) -> StardewRule:
         return self.received("Glittering Boulder Removed")
 
-    def can_crab_pot(self) -> StardewRule:
+    def can_crab_pot(self, region: str = Generic.any) -> StardewRule:
+        crab_pot_rule = True_()
         if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
-            return self.has("Crab Pot")
+            crab_pot_rule = self.has("Crab Pot")
 
-        return True_()
+        if region != Generic.any:
+            return crab_pot_rule & self.can_reach_region(region)
+
+        water_region_rules = self.can_reach_any_region(fishing_regions)
+        return crab_pot_rule & water_region_rules
 
     # Regions
     def can_mine_in_the_mines_floor_1_40(self) -> StardewRule:
@@ -912,7 +915,7 @@ class StardewLogic:
                 self.can_reach_region(Region.skull_cavern))
 
     def can_farm_perfectly(self) -> StardewRule:
-        tool_rule = self.has_tool(Tool.hoe, Material.iridium) & self.can_water(4)
+        tool_rule = self.has_tool(Tool.hoe, ToolMaterial.iridium) & self.can_water(4)
         return tool_rule & self.has_farming_level(10)
 
     def can_fish_perfectly(self) -> StardewRule:
@@ -923,8 +926,8 @@ class StardewLogic:
         return self.has_tool(Tool.axe) & self.can_reach_region(Region.forest)
 
     def can_chop_perfectly(self) -> StardewRule:
-        magic_rule = (self.can_use_clear_debris_instead_of_tool_level(3)) & self.has_skill_level("Magic", 10)
-        tool_rule = self.has_tool(Tool.axe, Material.iridium)
+        magic_rule = (self.can_use_clear_debris_instead_of_tool_level(3)) & self.has_skill_level(ModSkill.magic, 10)
+        tool_rule = self.has_tool(Tool.axe, ToolMaterial.iridium)
         foraging_rule = self.has_skill_level(Skill.foraging, 10)
         region_rule = self.can_reach_region(Region.forest)
         return region_rule & ((tool_rule & foraging_rule) | magic_rule)
@@ -1003,7 +1006,7 @@ class StardewLogic:
         return self.has_junimo_kart_power_level(8)
 
     def has_traveling_merchant(self, tier: int = 1):
-        traveling_merchant_days = [f"Traveling Merchant: {day}" for day in week_days]
+        traveling_merchant_days = [f"Traveling Merchant: {day}" for day in Weekday.all_days]
         return self.received(traveling_merchant_days, tier)
 
     def can_get_married(self) -> StardewRule:
@@ -1309,7 +1312,7 @@ class StardewLogic:
         eligible_kegables = ["Ancient Fruit", Fruit.apple, Fruit.banana, "Coconut", "Crystal Fruit", Fruit.mango,
                              Fruit.melon, Fruit.orange, Fruit.peach, "Pineapple", Fruit.pomegranate, "Rhubarb",
                              "Starfruit", "Strawberry", "Cactus Fruit",
-                             Fruit.cherry, "Cranberries", "Grape", "Spice Berry", "Wild Plum", "Hops", Vegetable.wheat]
+                             Fruit.cherry, "Cranberries", "Grape", "Spice Berry", "Wild Plum", Vegetable.hops, Vegetable.wheat]
         keg_rules = [self.can_keg(kegable) for kegable in eligible_kegables]
         aged_rule = [self.can_age(rule, "Iridium") for rule in keg_rules]
         # There are a few other valid items but I don't feel like coding them all
@@ -1462,7 +1465,7 @@ class StardewLogic:
             return reach_entire_island
         gems = ["Amethyst", "Aquamarine", "Emerald", "Ruby", "Topaz"]
         return reach_entire_island & self.has(Fruit.banana) & self.has(gems) & self.can_mine_perfectly() & \
-               self.can_fish_perfectly() & self.has("Flute Block")
+               self.can_fish_perfectly() & self.has("Flute Block") & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic)
 
     def has_everything(self, all_progression_items: Set[str]) -> StardewRule:
         all_regions = [region.name for region in vanilla_regions]
@@ -1498,7 +1501,7 @@ class StardewLogic:
     def can_reach_woods_depth(self, depth: int) -> StardewRule:
         rules = []
         if depth > 10:
-            rules.append(self.has("Cherry Bomb") | self.has_tool(Tool.axe, Material.iridium))
+            rules.append(self.has("Cherry Bomb") | self.has_tool(Tool.axe, ToolMaterial.iridium))
         if depth > 30:
             rules.append(self.received("Woods Obelisk"))
         if depth > 50:
@@ -1583,15 +1586,9 @@ class StardewLogic:
             return self.has_galaxy_weapon() | self.has_amazing_spells()
 
     def can_water(self, level: int) -> StardewRule:
-        watering_can_dict = {
-            0: Material.basic,
-            1: Material.copper,
-            2: Material.iron,
-            3: Material.gold,
-            4: Material.iridium
-        }
-        return self.has_tool(Tool.watering_can, watering_can_dict[level]) | \
-               (self.received("Spell: Water") & self.can_earn_spells() & self.has_skill_level("Magic", level))
+        tool_rule = self.has_tool(Tool.watering_can, ToolMaterial.tiers[level])
+        spell_rule = (self.received("Spell: Water") & self.can_earn_spells() & self.has_skill_level(ModSkill.magic, level))
+        return tool_rule | spell_rule
 
     def can_use_clear_debris_instead_of_tool_level(self, level: int) -> StardewRule:
         if ModNames.magic not in self.options[options.Mods]:

@@ -8,3 +8,8 @@ class AnimalProduct:
     milk = "Milk"
     large_milk = "Large Milk"
     cow_milk = "Cow Milk"
+    wool = "Wool"
+    roe = "Roe"
+    goat_milk = "Goat Milk"
+    large_goat_milk = "Large Goat Milk"
+

@@ -7,6 +7,7 @@ from .. import options
 from ..options import StardewOptions
 
 # Attempt to inject new methods into logic that can be easily commented out.
+from ..strings.skill_names import ModSkill
 
 
 def append_mod_skill_level(skills_items: List[str], world_options: StardewOptions):
@@ -24,29 +25,20 @@ def append_mod_skill_level(skills_items: List[str], world_options: StardewOption
         skills_items.append("Cooking Level")
 
 
-def can_earn_mod_skill_level(who, skill: str, level: int, tool_rule: StardewRule) -> StardewRule:
-    mod_tool_rule = tool_rule
-    if ModNames.luck_skill in who.options[options.Mods]:
-        if skill == "Luck":
-            mod_tool_rule = can_earn_luck_skill_level(who, level)
-    if ModNames.magic in who.options[options.Mods]:
-        if skill == "Magic":
-            mod_tool_rule = can_earn_magic_skill_level(who, level)
-    if ModNames.socializing_skill in who.options[options.Mods]:
-        if skill == "Socializing":
-            mod_tool_rule = can_earn_socializing_skill_level(who, level)
-    if ModNames.archaeology in who.options[options.Mods]:
-        if skill == "Archaeology":
-            mod_tool_rule = can_earn_archaeology_skill_level(who, level)
-    if ModNames.cooking_skill in who.options[options.Mods]:
-        if skill == "Cooking":
-            mod_tool_rule = can_earn_cooking_skill_level(who, level)
-    if ModNames.binning_skill in who.options[options.Mods]:
-        if skill == "Binning":
-            mod_tool_rule = can_earn_binning_skill_level(who, level)
-    if mod_tool_rule != tool_rule:
-        return mod_tool_rule
-    return tool_rule
+def can_earn_mod_skill_level(logic, skill: str, level: int) -> StardewRule:
+    if ModNames.luck_skill in logic.options[options.Mods] and skill == ModSkill.luck:
+        return can_earn_luck_skill_level(logic, level)
+    if ModNames.magic in logic.options[options.Mods] and skill == ModSkill.magic:
+        return can_earn_magic_skill_level(logic, level)
+    if ModNames.socializing_skill in logic.options[options.Mods] and skill == ModSkill.socializing:
+        return can_earn_socializing_skill_level(logic, level)
+    if ModNames.archaeology in logic.options[options.Mods] and skill == ModSkill.archaeology:
+        return can_earn_archaeology_skill_level(logic, level)
+    if ModNames.cooking_skill in logic.options[options.Mods] and skill == ModSkill.cooking:
+        return can_earn_cooking_skill_level(logic, level)
+    if ModNames.binning_skill in logic.options[options.Mods] and skill == ModSkill.binning:
+        return can_earn_binning_skill_level(logic, level)
+    return logic.True_()
 
 
 def can_earn_luck_skill_level(who, level: int) -> StardewRule:

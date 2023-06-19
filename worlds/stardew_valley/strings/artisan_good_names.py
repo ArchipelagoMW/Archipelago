@@ -9,3 +9,5 @@ class ArtisanGood:
     pickles = "Pickles"
     wine = "Wine"
     juice = "Juice"
+    cloth = "Cloth"
+    pale_ale = "Pale Ale"

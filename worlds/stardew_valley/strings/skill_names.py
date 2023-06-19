@@ -11,3 +11,5 @@ class ModSkill:
     binning = "Binning"
     archaeology = "Archaeology"
     cooking = "Cooking"
+    magic = "Magic"
+    socializing = "Socializing"

@@ -37,3 +37,4 @@ class Vegetable:
     pumpkin = veggie("Pumpkin")
     unmilled_rice = veggie("Unmilled Rice")
     beet = veggie("Beet")
+    hops = veggie("Hops")

@@ -161,9 +161,11 @@ class TestModEntranceRando(unittest.TestCase):
 
                 for connection in final_connections:
                     if flag in connection.flag:
-                        self.assertIn(connection.name, randomized_connections,
+                        connection_in_randomized = connection.name in randomized_connections
+                        reverse_in_randomized = connection.reverse in randomized_connections
+                        self.assertTrue(connection_in_randomized,
                                       f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
-                        self.assertIn(connection.reverse, randomized_connections,
+                        self.assertTrue(reverse_in_randomized,
                                       f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
