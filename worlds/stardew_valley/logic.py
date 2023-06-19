@@ -1022,10 +1022,10 @@ class StardewLogic:
         if self.options[options.Friendsanity] == options.Friendsanity.option_none:
             return self.can_earn_relationship(npc, hearts)
         if npc not in all_villagers_by_name:
-            if npc == "Pet":
+            if npc == NPC.pet:
                 if self.options[options.Friendsanity] == options.Friendsanity.option_bachelors:
                     return self.can_befriend_pet(hearts)
-                return self.received_hearts("Pet", hearts)
+                return self.received_hearts(NPC.pet, hearts)
             if npc == Generic.any or npc == Generic.bachelor:
                 possible_friends = []
                 for name in all_villagers_by_name:
@@ -1092,23 +1092,28 @@ class StardewLogic:
         return simplified_rules
 
     def can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:
-        if npc == "Pet":
-            return self.can_befriend_pet(hearts)
-        if npc == NPC.wizard and ModNames.magic in self.options[options.Mods]:
-            return self.can_meet(npc) & self.has_lived_months(hearts)
-        if npc in all_villagers_by_name:
+        if hearts <= 0:
+            return True_()
+
+        heart_size: int = self.options[options.FriendsanityHeartSize]
+        previous_heart = hearts - heart_size
+        previous_heart_rule = self.has_relationship(npc, previous_heart)
+
+        if npc == NPC.pet:
+            earn_rule = self.can_befriend_pet(hearts)
+        elif npc == NPC.wizard and ModNames.magic in self.options[options.Mods]:
+            earn_rule = self.can_meet(npc) & self.has_lived_months(hearts)
+        elif npc in all_villagers_by_name:
             if not self.npc_is_in_current_slot(npc):
-                return True_()
+                return previous_heart_rule
             villager = all_villagers_by_name[npc]
-            option1 = self.has_season(villager.birthday) & self.has(villager.gifts) & self.has_lived_months(1)
-            option2 = self.has_season(villager.birthday) & self.has(villager.gifts, 1) & self.has_lived_months(
-                hearts // 3)
-            option3 = (self.has_season(villager.birthday) | self.has(villager.gifts, 1)) & self.has_lived_months(
-                hearts // 2)
-            option4 = self.has_lived_months(hearts)
-            return self.can_meet(npc) & (option1 | option2 | option3 | option4)
+            rule_if_birthday = self.has_season(villager.birthday) & self.has(villager.gifts) & self.has_lived_months(hearts // 2)
+            rule_if_not_birthday = self.has_lived_months(hearts)
+            earn_rule = self.can_meet(npc) & (rule_if_birthday | rule_if_not_birthday)
         else:
-            return self.has_lived_months(min(hearts // 2, 8))
+            earn_rule = self.has_lived_months(min(hearts // 2, 8))
+
+        return previous_heart_rule & earn_rule
 
     def can_befriend_pet(self, hearts: int):
         if hearts == 0:
