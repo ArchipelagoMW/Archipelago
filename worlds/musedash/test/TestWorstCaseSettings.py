@@ -6,6 +6,7 @@ from . import MuseDashTestBase
 
 class WorstCaseHighDifficulty(MuseDashTestBase):
     options = {
+        "starting_song_count": 10,
         "allow_just_as_planned_dlc_songs": False,
         "streamer_mode_enabled": True,
         "song_difficulty_mode": 6,
@@ -15,6 +16,7 @@ class WorstCaseHighDifficulty(MuseDashTestBase):
 
 class WorstCaseMidDifficulty(MuseDashTestBase):
     options = {
+        "starting_song_count": 10,
         "allow_just_as_planned_dlc_songs": False,
         "streamer_mode_enabled": True,
         "song_difficulty_mode": 6,
@@ -24,6 +26,7 @@ class WorstCaseMidDifficulty(MuseDashTestBase):
 
 class WorstCaseLowDifficulty(MuseDashTestBase):
     options = {
+        "starting_song_count": 10,
         "allow_just_as_planned_dlc_songs": False,
         "streamer_mode_enabled": True,
         "song_difficulty_mode": 6,
