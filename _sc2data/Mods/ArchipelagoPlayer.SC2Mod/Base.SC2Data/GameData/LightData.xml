@@ -827,4 +827,21 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
     </CLight>
+    <CLight id="AP_PortraitPurifierStalker" parent="default">
+        <ToDInfoArray index="0" Id="PortraitPurifierStalker" AmbientColor="0.113725,0.050980,0.027451">
+            <Param index="HDRExposure" value="2.500000"/>
+            <Param index="HDRBloomThreshold" value="0.500000"/>
+            <Param index="ColorizationBlend" value="0.141000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.803922,0.827451,0.847059"/>
+                <ColorMultiplier value="1.125000"/>
+                <SpecularColor value="0.949020,0.866667,0.811765"/>
+                <SpecColorMultiplier value="2.000000"/>
+                <Direction value="-0.365874,0.221756,-0.903859"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.992157,0.337255,0.219608" ColorMultiplier="1.500000" Direction="0.568403,-0.689529,-0.448851"/>
+            <DirectionalLight index="Back" Color="0.913726,0.454902,0.039216" ColorMultiplier="0.000000" Direction="-0.797985,-0.517425,0.309017"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>

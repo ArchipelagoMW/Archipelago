@@ -2449,4 +2449,9 @@
         <WhichUnit Value="Caster"/>
         <Value value="AP_HighTemplarShakuras"/>
     </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HaveVoidStalkerMultishot">
+        <Value value="AP_HaveVoidStalkerMultishot"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

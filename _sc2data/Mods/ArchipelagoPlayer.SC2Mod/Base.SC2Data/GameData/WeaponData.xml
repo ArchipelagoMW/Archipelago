@@ -1558,4 +1558,23 @@
         <DisplayEffect value="AP_HighTemplarWeaponDamage"/>
         <Effect value="AP_HighTemplarWeapon"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_ParticleDisruptors">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_ParticleDisruptorsU"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="6"/>
+        <Period value="1.44"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_VoidStalkerRailgunWeapon">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <Period value="1.44"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
 </Catalog>

@@ -8520,4 +8520,90 @@
         <EditorCategories value=""/>
         <EffectArray value="AP_VoidHighTemplarPsiOrbDestroyPersistent"/>
     </CEffectSet>
+    <CEffectTeleport id="AP_Blink">
+        <ValidatorArray value="CasterNotFungalGrowthed"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Value="CasterUnit"/>
+        <PlacementRange value="8"/>
+        <Range value="8"/>
+        <TargetLocation Value="TargetPoint"/>
+        <TeleportFlags index="TestCliff" value="1"/>
+    </CEffectTeleport>
+    <CEffectLaunchMissile id="AP_ParticleDisruptors">
+        <!-- This validator doesn't exist in vanilla -->
+        <ValidatorArray index="0" value="AP_StalkerTargetFilters"/>
+        <ValidatorArray value=""/>
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_StalkerEntropyLanceSearchSet"/>
+        <AmmoUnit value="AP_StalkerWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_ParticleDisruptorsU" parent="DU_WEAP_MISSILE">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Armored" value="4"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_StalkerEntropyLanceSearch">
+        <ValidatorArray value="AP_HaveVoidStalkerMultishot"/>
+        <EditorCategories value=""/>
+        <ExcludeArray Effect="AP_StalkerEntropyLanceSearchSet" Value="Target"/>
+        <SearchFilters value="Visible;Self,Player,Ally,Neutral,Missile,Item,Stasis,Hidden,Invulnerable"/>
+        <AreaArray MaxCount="1" Radius="3" Effect="AP_StalkerEntropyLanceSecondaryLM"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_StalkerEntropyLanceSearchSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_ParticleDisruptorsU"/>
+        <EffectArray value="AP_StalkerEntropyLanceSearch"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_StalkerEntropyLanceSecondaryDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="3"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="8"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+        <SearchFlags index="OffsetAreaByAngle" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_StalkerEntropyLanceSecondaryLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_StalkerEntropyLanceSecondaryDamage"/>
+        <AmmoUnit value="AP_StalkerSecondaryWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_VoidStalkerRailgunWeapon">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <AttributeBonus index="Armored" value="4"/>
+        <ArmorReduction value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="10"/>
+        <Death value="Blast"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+        <SearchFlags index="OffsetByUnitRadius" value="1"/>
+        <SearchFlags index="OffsetAreaByAngle" value="1"/>
+    </CEffectDamage>
+    <CEffectTeleport id="AP_VoidStalkerBlinkShieldRestore" parent="AP_Blink">
+        <!--TeleportEffect value="VoidStalkerShakurasBlinkSet"/-->
+        <TeleportEffect value="AP_VoidStalkerBlinkApplyRestore"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="AP_VoidStalkerBlinkApplyRestore">
+        <!--ValidatorArray index="0" value="HaveVoidStalkerBlinkShieldRestore"/-->
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_VoidStalkerBlinkShieldRestore"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_VoidStalkerBlinkRestoreModifyUnit">
+        <EditorCategories value=""/>
+        <ImpactUnit Value="Caster"/>
+        <VitalArray index="Shields" Change="1"/>
+    </CEffectModifyUnit>
+    <CEffectTeleport id="AP_VoidStalkerBlinkMultiple" parent="AP_Blink">
+        <!--TeleportEffect value="VoidStalkerPurifierBlinkSet"/-->
+    </CEffectTeleport>
 </Catalog>

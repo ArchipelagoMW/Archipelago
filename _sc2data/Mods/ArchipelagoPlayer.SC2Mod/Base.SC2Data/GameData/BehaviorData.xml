@@ -2925,4 +2925,12 @@
         </Cost>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-recallondeath.dds"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidStalkerBlinkShieldRestore">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <Period value="0.125"/>
+        <PeriodicEffect value="AP_VoidStalkerBlinkRestoreModifyUnit"/>
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-stealth-blink.dds"/>
+    </CBehaviorBuff>
 </Catalog>

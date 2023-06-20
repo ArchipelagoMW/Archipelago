@@ -1204,4 +1204,5 @@
         </MotionPhases>
         <MotionPhases YawPitchRoll="MAX"/>
     </CMoverMissile>
+    <CMoverMissile id="AP_StalkerSecondaryWeapon" parent="MissileDefault"/>
 </Catalog>

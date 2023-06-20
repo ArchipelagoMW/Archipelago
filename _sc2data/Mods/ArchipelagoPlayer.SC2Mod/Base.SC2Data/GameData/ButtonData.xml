@@ -1859,13 +1859,6 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-psistorm-color.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
-    <CButton id="AP_HighArchonPsiStorm">
-        <Icon value="Assets\Textures\btn-ability-protoss-psistorm-color.dds"/>
-        <AlertIcon value="Assets\Textures\btn-ability-protoss-psistorm-color.dds"/>
-        <EditorCategories value="Race:Protoss"/>
-        <Tooltip value="Button/Tooltip/AP_PsiStorm"/>
-        <AlertTooltip value="Button/Tooltip/AP_PsiStorm"/>
-    </CButton>
     <CButton id="AP_VoidHighTemplarCloak">
         <Icon value="Assets\Textures\btn-ability-protoss-permanentlycloaked-darktemplar.dds"/>
         <EditorCategories value="Race:Protoss"/>
@@ -1886,5 +1879,22 @@
         <Icon value="Assets\Textures\btn-ability-protoss-feedback-color.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-protoss-feedback-color.dds"/>
         <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Blink">
+        <Icon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_StalkerBlinkMultiple">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-BlinkCharges.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-BlinkCharges.dds"/>
+    </CButton>
+    <CButton id="AP_StalkerBlinkShieldRestoreBase">
+        <Icon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
+    </CButton>
+    <CButton id="AP_BlinkShieldRestoreUpgrade">
+        <Icon value="Assets\Textures\btn-ability-protoss-blinkshieldrestore.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-blinkshieldrestore.dds"/>
     </CButton>
 </Catalog>

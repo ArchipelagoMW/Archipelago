@@ -48,6 +48,15 @@
             <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
         </AssetArrayTemplate>
     </CSound>
+    <CSound default="1" id="AP_ProtossDeath" parent="Death">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArrayTemplate>
+            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.wav"/>
+            <FacialAnim value="^TemplateParam1^"/>
+            <FacialGroup value="^TemplateParam1^"/>
+            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
+        </AssetArrayTemplate>
+    </CSound>
     <CSound id="AP_Medic_Attack" parent="TerranAck">
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack00.ogg" FacialAnim="Medic_Attack00"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack01.ogg" FacialAnim="Medic_Attack01"/>
@@ -4767,15 +4776,6 @@
         <Pitch value="-1.000000,1.000000"/>
         <Volume value="-3.000000,-3.000000"/>
     </CSound>
-    <CSound default="1" id="AP_ProtossDeath" parent="Death">
-        <EditorCategories value="Race:Protoss"/>
-        <AssetArrayTemplate>
-            <File value="AP\LocalizedData\Sounds\VO\Protoss\^TemplateParam2^.wav"/>
-            <FacialAnim value="^TemplateParam1^"/>
-            <FacialGroup value="^TemplateParam1^"/>
-            <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
-        </AssetArrayTemplate>
-    </CSound>
     <CSound id="AP_Ascendant_Attack" parent="AP_ProtossAck_Void">
         <AssetArray TemplateParam="Ascendant_Attack00"/>
         <AssetArray TemplateParam="Ascendant_Attack01"/>
@@ -5039,5 +5039,54 @@
         <Category value="Combat"/>
         <SustainFade index="1" Time="1000"/>
         <Volume value="0.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Instigator_Attack" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Instigator_Attack01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Attack02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Attack03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Yes01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Yes02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Yes03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Yes04.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Instigator_BlinkMultipleVO" parent="ProtossAck_Void">
+        <AssetArray File="Assets\Sounds\Swarm_Silent.wav" FacialGroup=""/>
+        <Chance value="0"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Instigator_Help" parent="ProtossHelp">
+        <AssetArray File="LocalizedData\Sounds\ProtossUnitVO\Executor\Alert_ProtossForcesUnderAttack.ogg" FacialGroup=""/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Instigator_Pissed" parent="ProtossPissed">
+        <AssetArray File="AP\Assets\Sounds\Instigator_Pissed01.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Instigator_Ready" parent="ProtossReady">
+        <AssetArray File="AP\Assets\Sounds\Instigator_Ready01.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Instigator_What" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Instigator_What01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_What02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_What03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_What04.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Instigator_Yes" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Instigator_Yes01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Yes02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Yes03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Yes04.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Attack02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Attack03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Instigator_Attack01.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
     </CSound>
 </Catalog>

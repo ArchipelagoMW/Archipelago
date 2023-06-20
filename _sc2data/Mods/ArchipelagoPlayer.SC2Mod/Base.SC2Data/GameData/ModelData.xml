@@ -9781,4 +9781,301 @@
         <SelectionRadius value="2.500000"/>
         <ShadowRadius value="2.500000"/>
     </CModel>
+    <CModel id="AP_BlinkMultipleOriginModel" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\Stalker_Purifier_BlinkOut\Stalker_Purifier_BlinkOut.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.690000,0.690000,0.690000"/>
+        <ScaleMin value="0.690000,0.690000,0.690000"/>
+        <SelectionRadius value="0.833200"/>
+        <ShadowRadius value="0.833200"/>
+    </CModel>
+    <CModel id="AP_BlinkMultipleStopModel" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\Stalker_Purifier_BlinkIn\Stalker_Purifier_BlinkIn.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_StalkerPurifier" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Stalker_Purifier\Stalker_Purifier.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Stalker_SwarmAnims\Stalker_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh10"/>
+        <Radius value="0.850000"/>
+        <ScaleMax value="0.690000,0.690000,0.690000"/>
+        <ScaleMin value="0.690000,0.690000,0.690000"/>
+        <SelectionRadius value="1.087000"/>
+        <ShadowRadius value="1.087000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraHigh10"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.800000"/>
+        <UnitGlossaryCamera value="Star2CameraHigh10"/>
+    </CModel>
+    <CModel id="AP_StalkerPurifierDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Stalker_Purifier_Death\Stalker_Purifier_Death.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.250000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.250000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.250000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.250000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Stalker_Explode_Legs_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.193000"/>
+            <Payload value="Stalker_Explode_Legs_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Stalker_Explode_Legs_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.692000"/>
+            <Payload value="Stalker_Explode_Legs_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Stalker_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode_Var"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Stalker_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode_Var"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Stalker_Explode_Fall_Start"/>
+            <Type value="Sound"/>
+            <Payload value="Stalker_Explode_Fall_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Stalker_Explode_Fall_Body"/>
+            <Type value="Sound"/>
+            <Time value="0.206000"/>
+            <Payload value="Stalker_Explode_Fall_Body"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Stalker_Explode_Fall_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.602000"/>
+            <Payload value="Stalker_Explode_Fall_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Stalker_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode_Var"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Stalker_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Stalker_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_StalkerPurifierPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\StalkerPlacement\StalkerPlacement.m3"/>
+        <Lighting value="Stalker"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.690000,0.690000,0.690000"/>
+        <ScaleMin value="0.690000,0.690000,0.690000"/>
+        <SelectionRadius value="0.941600"/>
+        <ShadowRadius value="0.941600"/>
+    </CModel>
+    <CModel id="AP_StalkerPurifierPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\Stalker_Purifier_Portrait\Stalker_Purifier_Portrait.m3"/>
+        <Image value="Assets\Textures\purifierstalkerportrait_static.dds"/>
+        <Lighting value="AP_PortraitPurifierStalker"/>
+    </CModel>
+    <CModel id="AP_StalkerPurifierWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\StalkerWarpIn\StalkerWarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.690000,0.690000,0.690000"/>
+        <ScaleMin value="0.690000,0.690000,0.690000"/>
+        <SelectionRadius value="0.724600"/>
+        <ShadowRadius value="0.724600"/>
+    </CModel>
+    <CModel id="AP_StalkerShakuras" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Stalker\Stalker.m3"/>
+        <RequiredAnims value="Assets\Units\Protoss\Stalker_SwarmAnims\Stalker_SwarmAnims.m3a"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraHigh10"/>
+        <Radius value="0.850000"/>
+        <ScaleMax value="0.690000,0.690000,0.690000"/>
+        <ScaleMin value="0.690000,0.690000,0.690000"/>
+        <SelectionRadius value="1.087000"/>
+        <ShadowRadius value="1.087000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraHigh10"/>
+        <Tipability value="0.750000"/>
+        <TipabilityLength value="0.800000"/>
+        <TipabilityWidth value="0.800000"/>
+        <UnitGlossaryCamera value="Star2CameraHigh10"/>
+    </CModel>
+    <CModel id="AP_StalkerShakurasDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\StalkerDeathEx1\StalkerDeathEx1.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.250000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.250000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.250000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.250000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Stalker_Explode_Legs_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.193000"/>
+            <Payload value="Stalker_Explode_Legs_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Stalker_Explode_Legs_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.692000"/>
+            <Payload value="Stalker_Explode_Legs_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Stalker_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode_Var"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Stalker_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode_Var"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Stalker_Explode_Fall_Start"/>
+            <Type value="Sound"/>
+            <Payload value="Stalker_Explode_Fall_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Stalker_Explode_Fall_Body"/>
+            <Type value="Sound"/>
+            <Time value="0.206000"/>
+            <Payload value="Stalker_Explode_Fall_Body"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Stalker_Explode_Fall_Impact"/>
+            <Type value="Sound"/>
+            <Time value="0.602000"/>
+            <Payload value="Stalker_Explode_Fall_Impact"/>
+        </Events>
+        <Events>
+            <Anim value="Death,03"/>
+            <Name value="Stalker_Explode_Var"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode_Var"/>
+        </Events>
+        <Events>
+            <Anim value="Death,01"/>
+            <Name value="Stalker_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode"/>
+        </Events>
+        <Events>
+            <Anim value="Death,02"/>
+            <Name value="Stalker_Explode"/>
+            <Type value="Sound"/>
+            <Time value="0.010000"/>
+            <Payload value="Stalker_Explode"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_StalkerShakurasPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\StalkerPlacement\StalkerPlacement.m3"/>
+        <Lighting value="Stalker"/>
+        <Occlusion value="Show"/>
+        <Radius value="-1.000000"/>
+        <ScaleMax value="0.690000,0.690000,0.690000"/>
+        <ScaleMin value="0.690000,0.690000,0.690000"/>
+        <SelectionRadius value="0.941600"/>
+        <ShadowRadius value="0.941600"/>
+    </CModel>
+    <CModel id="AP_StalkerShakurasWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\StalkerWarpIn\StalkerWarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.690000,0.690000,0.690000"/>
+        <ScaleMin value="0.690000,0.690000,0.690000"/>
+        <SelectionRadius value="0.724600"/>
+        <ShadowRadius value="0.724600"/>
+    </CModel>
+    <CModel id="AP_StalkerSecondaryWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\ZeratulMissileBeams\ZeratulMissileBeams.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
 </Catalog>

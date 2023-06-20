@@ -1332,4 +1332,8 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeVoidHighTemplarPsiStormFilterCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveVoidStalkerMultishot">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeVoidStalkerMultishotCompleteOnly"/>
+    </CRequirement>
 </Catalog>

@@ -2309,4 +2309,9 @@
         <Count Link="AP_VoidHighTemplarPsiStormFilter" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVoidStalkerMultishotCompleteOnly">
+        <!-- This upgrade only exists in coop and is commented out -->
+        <Count Link="AP_VoidStalkerMultishot" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>
