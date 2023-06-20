@@ -636,21 +636,18 @@
     <CActorUnit default="1" id="AP_BanelingBase" parent="GenericBurrowerStandard">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
-        <Macros value="ZergBurrowStandardAnimMacro"/>
+        <Macros value="ZergBurrowMobileAnimMacro"/>
         <Macros value="ZergSmallBurrowEffects"/>
         <Macros value="TerrainSquibAnimations"/>
         <AcceptedHostedPropTransfers index="Scale" value="0"/>
         <Remove Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Send="DeathCustomize AntiGravGeneric"/>
         <Remove Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
-        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowMoveEffect"/>
-        <On Terms="UnitMovementUpdate.AP_BanelingBurrowed.Stand" Target="BurrowMoveEffect" Send="AnimPlay Main Stand PlayForever"/>
-        <On Terms="UnitMovementUpdate.AP_BanelingBurrowed.Walk" Target="BurrowMoveEffect" Send="AnimPlay Main Walk PlayForever"/>
-        <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
-        <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>
-        <On Terms="Upgrade.AP_CentrificalHooks.Add" Send="AnimGroupApply Superior"/>
-        <On Terms="Upgrade.AP_CentrificalHooks.Add" Send="SetWalkAnimMoveSpeed 3"/>
-        <On Terms="Upgrade.AP_CentrificalHooks.Remove" Send="AnimGroupRemove Superior"/>
-        <On Terms="Upgrade.AP_CentrificalHooks.Remove" Send="SetWalkAnimMoveSpeed 2"/>
+        <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched; !AnimPlayingName Burrow" Send="AnimGroupApply Superior"/>
+        <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched; !AnimPlayingName Burrow" Send="SetWalkAnimMoveSpeed 3"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Add; !AnimPlayingName Burrow" Send="AnimGroupApply Superior"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Add; !AnimPlayingName Burrow" Send="SetWalkAnimMoveSpeed 3"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Remove; !AnimPlayingName Burrow" Send="AnimGroupRemove Superior"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Remove; !AnimPlayingName Burrow" Send="SetWalkAnimMoveSpeed 2"/>
         <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Baneling; MorphTo AP_BanelingBurrowed" Send="AnimClear Burrow"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed" Send="AnimBracketStop Burrow"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed" Send="AnimClear Burrow"/>
@@ -661,6 +658,10 @@
         <On Terms="UnitBirth.AP_Baneling" Send="TerrainSquibActivateGroup RippleStandard"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed" Send="TerrainSquibActivateGroup RippleStandard"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingBurrowed; MorphFrom AP_Baneling" Send="TerrainSquibDeactivate"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed; ValidateUnit AP_CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed; ValidateUnit AP_CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingBurrowed; MorphFrom AP_Baneling; ValidateUnit AP_CentrificalHooksResearched" Send="AnimGroupRemove Superior"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingBurrowed; MorphFrom AP_Baneling; ValidateUnit AP_CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 2"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Baneling_Land"/>
         <On Terms="WeaponStart.AP_HotSBanelingExplode.AttackStart" Send="StatusSet DeathSuicide 1"/>
         <On Terms="WeaponStart.AP_HotSBanelingExplodeBuilding.AttackStart" Send="StatusSet DeathSuicide 1"/>
@@ -5029,8 +5030,7 @@
     <CActorAction id="AP_AscendantAttack" parent="GenericAttack" effectImpact="AP_AscendantWeaponDamage" effectLaunch="AP_AscendantWeaponLM">
         <LaunchSiteOps Ops="SOpAttachCenter SOpMoveByDot15"/>
         <LaunchAssets Sound="AP_Karass_AttackLaunch"/>
-        <Missile value="AP_AscendantAttackMissile"/>
-        <ImpactMap index="None" Model="AP_AscendantAttackImpact" Sound="AP_Karass_AttackImpact"/>
+        <ImpactMap index="None" Sound="AP_Karass_AttackImpact"/>
         <ImpactPhysics Name="AscendantPsiBlastImpact" MatchKeys="Basic" Physics="AP_AscendantPsiBlastDeathImpactForce"/>
     </CActorAction>
     <CActorForceSphere id="AP_AscendantPsiBlastDeathImpactForce">
@@ -5053,9 +5053,7 @@
     <CActorMissile id="AP_AscendantSacrificeDummy1AttackMissile" parent="GenericAttackMissile" unitName="AP_AscendantSacrificeWeapon1"/>
     <CActorAction id="AP_AscendantSacrificeDummy2Attack" parent="GenericAttack" effectImpact="AP_AscendantSacrificeLM2ImpactDummy" effectLaunch="AP_AscendantSacrificeLM2">
         <LaunchSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
-        <Missile value="AP_AscendantSacrificeDummy2AttackMissile"/>
         <ImpactSiteOps Ops="SOpAttachCenter"/>
-        <ImpactMap index="None" Model="AP_AscendantSacrificeDummy2AttackImpact"/>
         <ShieldFlashType value="None"/>
     </CActorAction>
     <CActorMissile id="AP_AscendantSacrificeDummy2AttackMissile" parent="GenericAttackMissile" unitName="AP_AscendantSacrificeWeapon2"/>
@@ -5063,7 +5061,6 @@
         <LaunchSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
         <Missile value="AscendantSacrificeDummy3AttackMissile2"/>
         <ImpactSiteOps Ops="SOpAttachCenter"/>
-        <ImpactMap index="None" Model="AP_AscendantSacrificeDummy3AttackImpact"/>
         <ShieldFlashType value="None"/>
     </CActorAction>
     <CActorMissile id="AscendantSacrificeDummy3AttackMissile2" parent="GenericAttackMissile" unitName="AP_AscendantSacrificeWeapon3"/>
@@ -10953,7 +10950,6 @@
     <CActorAction id="AP_HighTemplarAttack" parent="GenericAttack" effectImpact="AP_HighTemplarWeaponDamage" effectLaunch="AP_HighTemplarWeaponLM">
         <LaunchSiteOps Ops="SOpAttachCenter SOpMoveByDot15"/>
         <LaunchAssets Sound="AP_Ascendant_Launch"/>
-        <Missile value="AP_HighTemplarAttackMissile"/>
         <ImpactMap index="None" Model="HighTemplarAttackImpact" Sound="AP_Ascendant_Impact"/>
         <ImpactPhysics Name="HighTemplarPsiBlastImpact" MatchKeys="Basic" Physics="AP_HighTemplarPsiBlastDeathImpactForce"/>
     </CActorAction>
@@ -11222,9 +11218,6 @@
         <AcceptedHostedPropTransfers index="Scale" value="0"/>
         <Remove Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Send="DeathCustomize AntiGravGeneric"/>
         <Remove Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
-        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowMoveEffect"/>
-        <On Terms="UnitMovementUpdate.AP_HotSSplitterlingMediumBurrowed.Stand" Target="BurrowMoveEffect" Send="AnimPlay Main Stand PlayForever"/>
-        <On Terms="UnitMovementUpdate.AP_HotSSplitterlingMediumBurrowed.Walk" Target="BurrowMoveEffect" Send="AnimPlay Main Walk PlayForever"/>
         <On Terms="UnitMovementUpdate.AP_HotSSplitterling.Walk" Send="AnimClear Birth"/>
         <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
         <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>
