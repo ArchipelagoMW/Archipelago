@@ -43,8 +43,6 @@ class RaftWorld(World):
     data_version = 2
     required_client_version = (0, 3, 4)
 
-    raft_frequencyItemsPerPlayer = {}
-
     def create_items(self):
         minRPSpecified = self.multiworld.minimum_resource_pack_amount[self.player].value
         maxRPSpecified = self.multiworld.maximum_resource_pack_amount[self.player].value
@@ -59,7 +57,9 @@ class RaftWorld(World):
                 frequencyItems.append(raft_item)
             pool.append(raft_item)
         if self.multiworld.island_frequency_locations[self.player].value <= 3:
-            self.raft_frequencyItemsPerPlayer[self.player] = frequencyItems
+            if not hasattr(self.multiworld, "raft_frequencyItemsPerPlayer"):
+                self.multiworld.raft_frequencyItemsPerPlayer = {}
+            self.multiworld.raft_frequencyItemsPerPlayer[self.player] = frequencyItems
 
         extraItemNamePool = []
         extras = len(location_table) - len(item_table) - 1 # Victory takes up 1 unaccounted-for slot
@@ -201,14 +201,14 @@ class RaftWorld(World):
             RaftItem("Victory", ItemClassification.progression, None, player=self.player))
     
     def setLocationItem(self, location: str, itemName: str):
-        itemToUse = next(filter(lambda itm: itm.name == itemName, self.raft_frequencyItemsPerPlayer[self.player]))
-        self.raft_frequencyItemsPerPlayer[self.player].remove(itemToUse)
+        itemToUse = next(filter(lambda itm: itm.name == itemName, self.multiworld.raft_frequencyItemsPerPlayer[self.player]))
+        self.multiworld.raft_frequencyItemsPerPlayer[self.player].remove(itemToUse)
         self.multiworld.itempool.remove(itemToUse)
         self.multiworld.get_location(location, self.player).place_locked_item(itemToUse)
     
     def setLocationItemFromRegion(self, region: str, itemName: str):
-        itemToUse = next(filter(lambda itm: itm.name == itemName, self.raft_frequencyItemsPerPlayer[self.player]))
-        self.raft_frequencyItemsPerPlayer[self.player].remove(itemToUse)
+        itemToUse = next(filter(lambda itm: itm.name == itemName, self.multiworld.raft_frequencyItemsPerPlayer[self.player]))
+        self.multiworld.raft_frequencyItemsPerPlayer[self.player].remove(itemToUse)
         self.multiworld.itempool.remove(itemToUse)
         location = random.choice(list(loc for loc in location_table if loc["region"] == region))
         self.multiworld.get_location(location["name"], self.player).place_locked_item(itemToUse)
