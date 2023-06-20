@@ -11198,7 +11198,7 @@
         <Inherits index="Visibility" value="1"/>
         <On Terms="Effect.AP_HotSBanelingExplodeLargeDirect.Start; At Target; ValidateEffect AP_HaveHotSCorrosiveBileAndNotStructure" Send="Create"/>
         <On Terms="Effect.AP_HotSBanelingExplodeSmallDirect.Start; At Target; ValidateEffect AP_HaveHotSCorrosiveBileAndNotStructure" Send="Create"/>
-        <On Terms="ActorCreation; ValidateEffect AP_HaveHotSHunter" Send="ModelSwap CorrosiveBileImpactB"/>
+        <On Terms="ActorCreation; ValidateEffect AP_HaveHotSHunter" Send="ModelSwap AP_CorrosiveBileImpactB"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachCenter" HoldRotation="1"/>
         <AutoScaleFactor value="0.800000"/>
