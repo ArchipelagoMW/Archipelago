@@ -6,3 +6,4 @@ class Seed:
     garlic = "Garlic Seeds"
     pineapple = "Pineapple Seeds"
     taro = "Taro Tuber"
+    coffee = "Coffee Bean"

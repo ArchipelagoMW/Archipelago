@@ -17,4 +17,7 @@ class Machine:
     solar_panel = "Solar Panel"
     tapper = "Tapper"
     worm_bin = "Worm Bin"
+    coffee_maker = "Coffee Maker"
+    crab_pot = "Crab Pot"
+    ostrich_incubator = "Ostrich Incubator"
 

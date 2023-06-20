@@ -26,3 +26,4 @@ class Beverage:
     ginger_ale = "Ginger Ale"
     coffee = "Coffee"
     triple_shot_espresso = "Triple Shot Espresso"
+    beer = "Beer"

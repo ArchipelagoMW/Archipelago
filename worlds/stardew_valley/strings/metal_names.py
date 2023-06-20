@@ -3,6 +3,7 @@ class Ore:
     iron = "Iron Ore"
     gold = "Gold Ore"
     iridium = "Iridium Ore"
+    radioactive = "Radioactive Bar"
 
 
 class MetalBar:
@@ -11,6 +12,7 @@ class MetalBar:
     iron = "Iron Bar"
     gold = "Gold Bar"
     iridium = "Iridium Bar"
+    radioactive = "Radioactive Ore"
 
 
 class Mineral:
@@ -20,6 +22,14 @@ class Mineral:
     ruby = "Ruby"
     emerald = "Emerald"
     amethyst = "Amethyst"
+
+
+class Artifact:
+    a = "a"
+
+
+class Fossil:
+    bone_fragment = "Bone Fragment"
 
 
 

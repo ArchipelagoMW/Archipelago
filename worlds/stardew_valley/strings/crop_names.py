@@ -29,21 +29,26 @@ class Fruit:
     strawberry = fruity("Strawberry")
     starfruit = fruity("Starfruit")
     rhubarb = fruity("Rhubarb")
+    grape = fruity("Grape")
+    cranberries = fruity("Cranberries")
 
 
 class Vegetable:
     any = "Any Vegetable"
     parsnip = veggie("Parsnip")
     garlic = veggie("Garlic")
-    wheat = veggie("Wheat")
+    wheat = "Wheat"
     potato = veggie("Potato")
     corn = veggie("Corn")
     tomato = veggie("Tomato")
     pumpkin = veggie("Pumpkin")
     unmilled_rice = veggie("Unmilled Rice")
     beet = veggie("Beet")
-    hops = veggie("Hops")
+    hops = "Hops"
     cauliflower = veggie("Cauliflower")
     amaranth = veggie("Amaranth")
     kale = veggie("Kale")
     artichoke = veggie("Artichoke")
+    tea_leaves = "Tea Leaves"
+    eggplant = veggie("Eggplant")
+    green_bean = veggie("Green Bean")

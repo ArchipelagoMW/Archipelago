@@ -18,3 +18,6 @@ class ArtisanGood:
     duck_mayonnaise = "Duck Mayonnaise"
     dinosaur_mayonnaise = "Dinosaur Mayonnaise"
     void_mayonnaise = "Void Mayonnaise"
+    caviar = "Caviar"
+    green_tea = "Green Tea"
+    mead = "Mead"

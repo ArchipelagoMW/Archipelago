@@ -6,7 +6,7 @@ from worlds.stardew_valley.strings.crop_names import Fruit, Vegetable
 from worlds.stardew_valley.strings.fish_names import Fish, WaterItem
 from worlds.stardew_valley.strings.forageable_names import Forageable
 from worlds.stardew_valley.strings.ingredient_names import Ingredient
-from worlds.stardew_valley.strings.meal_names import Meal, Beverage
+from worlds.stardew_valley.strings.food_names import Meal, Beverage
 from worlds.stardew_valley.strings.region_names import Region
 from worlds.stardew_valley.strings.season_names import Season
 from worlds.stardew_valley.strings.skill_names import Skill
