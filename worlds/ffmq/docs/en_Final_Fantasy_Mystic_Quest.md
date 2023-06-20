@@ -19,7 +19,7 @@ the items from brown boxes.
 
 Any of the items which can be shuffled may also be placed into another player's world.
 
-## What does another world's item look like in Super Metroid?
+## What does another world's item look like in Final Fantasy Mystic Quest?
 
 For locations that are originally boxes or chests, they will appear as a box if the item in it is categorized as a
 filler item, and a chest if it contains a useful or advancement item. Trap items may randomly appear as a box or chest.
