@@ -1,4 +1,7 @@
 from typing import Iterable
+import re
+
+from Utils import int32_as_bytes
 
 from .data import data
 
@@ -62,6 +65,9 @@ def encode_string(string: str) -> bytearray:
 def decode_string(string_data: Iterable[int]):
     string = ""
     for code in string_data:
+        if code == 0xFF:
+            break
+
         if code in character_decoding_map:
             string += character_decoding_map[code]
         else:
@@ -84,3 +90,64 @@ def bool_array_to_int(bool_array):
     binary_string = "".join(["1" if bit else "0" for bit in reversed(bool_array)])
     num = int(binary_string, 2)
     return num
+
+
+_substruct_order_maps = [
+    [0, 1, 2, 3], [0, 1, 3, 2], [0, 2, 1, 3], [0, 3, 1, 2],
+    [0, 2, 3, 1], [0, 3, 2, 1], [1, 0, 2, 3], [1, 0, 3, 2],
+    [2, 0, 1, 3], [3, 0, 1, 2], [2, 0, 3, 1], [3, 0, 2, 1],
+    [1, 2, 0, 3], [1, 3, 0, 2], [2, 1, 0, 3], [3, 1, 0, 2],
+    [2, 3, 0, 1], [3, 2, 0, 1], [1, 2, 3, 0], [1, 3, 2, 0],
+    [2, 1, 3, 0], [3, 1, 2, 0], [2, 3, 1, 0], [3, 2, 1, 0]
+]
+
+def decrypt_substruct(substruct_data: Iterable[int], key: int):
+    decrypted_data = bytearray()
+    for i in range(int(len(substruct_data) / 4)):
+        decrypted_data.extend(int32_as_bytes(int.from_bytes(substruct_data[(i * 4) : (i * 4) + 4], 'little') ^ key))
+
+    return decrypted_data
+
+
+def decode_pokemon_data(pokemon_data: Iterable[int]):
+    personality = int.from_bytes(pokemon_data[0:4], 'little')
+    tid = int.from_bytes(pokemon_data[4:8], 'little')
+
+    substruct_order = _substruct_order_maps[personality % 24]
+    substructs = []
+    for i in substruct_order:
+        substructs.append(pokemon_data[32 + (i * 12) : 32 + (i * 12) + 12])
+
+    decrypted_substructs = [decrypt_substruct(substruct, personality ^ tid) for substruct in substructs]
+
+    iv_ability_info = int.from_bytes(decrypted_substructs[3][4:8], 'little')
+    met_info = int.from_bytes(decrypted_substructs[3][2:4], 'little')
+
+    return {
+        "personality": personality,
+        "nickname": decode_string(pokemon_data[8:18]),
+        "species": int.from_bytes(decrypted_substructs[0][0:2], 'little'),
+        "item": int.from_bytes(decrypted_substructs[0][2:4], 'little'),
+        "experience": int.from_bytes(decrypted_substructs[0][4:8], 'little'),
+        "ability": iv_ability_info >> 31,
+        "ivs": [(iv_ability_info >> (i * 4)) & 0x0F for i in range(6)],
+        "evs": list(decrypted_substructs[2][0:6]),
+        "condition": list(decrypted_substructs[2][6:12]),
+        "pokerus": decrypted_substructs[3][0],
+        "location_met": decrypted_substructs[3][1],
+        "level_met": met_info & 0b0000000001111111,
+        "game": (met_info & 0b0000011110000000) >> 7,
+        "ball": (met_info & 0b0111100000000000) >> 11,
+        "moves": [
+            [
+                int.from_bytes(decrypted_substructs[1][(i * 2) : (i * 2) + 2], 'little'),
+                decrypted_substructs[1][8 + i],
+                (decrypted_substructs[0][8] & (0b00000011 << (i * 2))) >> (i * 2)
+            ] for i in range(4)
+        ],
+        "trainer": {
+            "name": decode_string(pokemon_data[20:27]),
+            "id": tid,
+            "female": (met_info & 0b1000000000000000) != 0,
+        }
+    }
