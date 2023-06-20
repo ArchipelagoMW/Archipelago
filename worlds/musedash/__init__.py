@@ -68,13 +68,31 @@ class MuseDashWorld(World):
     def generate_early(self):
         dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
         streamer_mode = self.multiworld.streamer_mode_enabled[self.player]
+        (lower_diff_threshold, higher_diff_threshold) = self.get_difficulty_range()
 
-        diff_threshold = self.get_difficulty_range()
+        # The minimum amount of songs to make an ok rando would be Starting Songs + Reward for each + Goal song.
+        # Note: The worst settings still allow 25 songs (Streamer Mode + No DLC). And this max requires 21 songs. (10 * 2 + 1)
+        minimum_song_count = self.multiworld.starting_song_count[self.player] * 2 + 1
 
-        available_song_keys = self.muse_dash_collection.get_songs_with_settings(dlc_songs, streamer_mode, diff_threshold[0], diff_threshold[1])
-        available_song_keys = self.handle_plando(available_song_keys)
+        final_song_list = None
+        while True:
+            # In most cases this should only need to run once
+            available_song_keys = self.muse_dash_collection.get_songs_with_settings(dlc_songs, streamer_mode, lower_diff_threshold, higher_diff_threshold)
+            available_song_keys = self.handle_plando(available_song_keys)
 
-        self.create_song_pool(available_song_keys)
+            if len(available_song_keys) >= minimum_song_count:
+                final_song_list = available_song_keys
+                break
+
+            # If the above fails, we want to adjust the difficulty thresholds. We mostly want to make things easier rather than harder.
+            if lower_diff_threshold <= 1 and higher_diff_threshold >= 11:
+                raise Exception("Failed to find enough songs, even with maximum difficulty thresholds. Something went catastrophically wrong.")
+            elif lower_diff_threshold <= 1:
+                higher_diff_threshold += 1
+            else:
+                lower_diff_threshold -= 1
+
+        self.create_song_pool(final_song_list)
 
         for song in self.starting_songs:
             self.multiworld.push_precollected(self.create_item(song))
@@ -91,14 +109,9 @@ class MuseDashWorld(World):
 
     # Todo: Update this to list[str] when python 3.8 stops being used
     def create_song_pool(self, available_song_keys: list):
-        # Needs Starting Songs + Victory Song + At least 1 intermediary song
-        total_available_songs = len(available_song_keys)
         startingSongCount = self.multiworld.starting_song_count[self.player]
-        if (total_available_songs < startingSongCount + 2):
-            raise Exception("Not enough songs available to satify the starting song count.")
 
         self.multiworld.random.shuffle(available_song_keys)
-
         self.victory_song_name = available_song_keys.pop()
 
         for _ in range(0, startingSongCount):
@@ -270,7 +283,8 @@ class MuseDashWorld(World):
     def get_difficulty_range(self) -> list:
         difficulty_mode = self.multiworld.song_difficulty_mode[self.player]
 
-        difficulty_bounds = [1, 12]
+        # Valid difficulties are between 1 and 11. But make it 0 to 12 for safety
+        difficulty_bounds = [0, 12]
         if difficulty_mode == 1:
             difficulty_bounds[1] = 3
         elif difficulty_mode == 2:

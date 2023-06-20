@@ -27,9 +27,9 @@ class DifficultyRanges(MuseDashTestBase):
 
         #auto ranges
         difficulty_choice.value = 0
-        test_range(muse_dash_world.get_difficulty_range(), 1, 12)
+        test_range(muse_dash_world.get_difficulty_range(), 0, 12)
         difficulty_choice.value = 1
-        test_range(muse_dash_world.get_difficulty_range(), 1, 3)
+        test_range(muse_dash_world.get_difficulty_range(), 0, 3)
         difficulty_choice.value = 2
         test_range(muse_dash_world.get_difficulty_range(), 4, 5)
         difficulty_choice.value = 3
