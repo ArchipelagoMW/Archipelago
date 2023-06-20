@@ -64,8 +64,8 @@ class StartingWeapon(Choice):
 
 
 class ProgressiveGear(Toggle):
-    display_name = "Progressive Gear"
     """Pieces of gear are always acquired from weakest to strongest in a set."""
+    display_name = "Progressive Gear"
 
 
 class EnemiesDensity(Choice):
@@ -79,6 +79,7 @@ class EnemiesDensity(Choice):
 
 
 class EnemyScaling(Choice):
+    """Superclass for enemy scaling options."""
     option_quarter = 0
     option_half = 1
     option_three_quarter = 2

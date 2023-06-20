@@ -109,7 +109,7 @@ class FFMQWorld(World):
 
     def extend_hint_information(self, hint_data):
         hint_data[self.player] = {}
-        if True: #self.multiworld.map_shuffle[self.player]:
+        if self.multiworld.map_shuffle[self.player]:
             for subregion in ["Subregion Foresta", "Subregion Aquaria", "Subregion Frozen Fields", "Subregion Fireburg",
                               "Subregion Volcano Battlefield", "Subregion Windia", "Subregion Mac's Ship",
                               "Subregion Doom Castle"]:
@@ -117,7 +117,9 @@ class FFMQWorld(World):
                 # exits = region.exits
                 for location in region.locations:
                     if location.address:
-                        hint_data[self.player][location.address] = subregion.split("Subregion ")[-1]
+                        hint_data[self.player][location.address] = (subregion.split("Subregion ")[-1]
+                                                                    + (" Region" if subregion !=
+                                                                       "Subregion Volcano Battlefield" else ""))
                 for overworld_spot in region.exits:
                     if ("Subregion" in overworld_spot.connected_region.name or
                             overworld_spot.name == "Overworld - Mac Ship Doom" or "Focus Tower" in overworld_spot.name

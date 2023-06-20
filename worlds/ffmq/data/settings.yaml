@@ -107,7 +107,7 @@ Final Fantasy Mystic Quest:
     DarkKingOnly: 0
   doom_castle_shortcut:
     true: 0
-    false: 1
+    false: 0
   sky_coin_mode:
     Standard: 0
     StartWith: 0
@@ -121,7 +121,7 @@ Final Fantasy Mystic Quest:
     RandomWide: 0
   enable_spoilers:
     true: 0
-    false: 1
+    false: 0
   progressive_formations:
     Disabled: 0
     RegionsStrict: 0

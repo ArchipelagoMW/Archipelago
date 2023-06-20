@@ -35,7 +35,7 @@ def generate_output(self, output_directory):
                                    "item_name": location.item.name})
 
     def cc(option):
-        return option.current_key.title().replace("_", "")
+        return option.current_key.title().replace("_", "").replace("OverworldAndDungeons", "OverworldDungeons")
 
     def tf(option):
         return True if option else False
@@ -81,7 +81,6 @@ def generate_output(self, output_directory):
         options["Final Fantasy Mystic Quest"][option][data] = 1
 
     rom_name = f'MQ{__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed_name:11}'[:21]
-    #rom_name.extend([0] * (21 - len(self.rom_name)))
     self.rom_name = bytearray(rom_name,
                               'utf8')
     self.rom_name_available_event.set()

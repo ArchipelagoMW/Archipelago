@@ -78,7 +78,7 @@ def create_regions(self):
     dark_king_room.locations.append(dark_king)
 
     connection = Entrance(self.player, f"Enter Overworld", menu_region)
-    connection.connect(self.multiworld.get_region("Subregion Foresta", self.player))
+    connection.connect(self.multiworld.get_region("Overworld", self.player))
     menu_region.exits.append(connection)
 
     for region in self.multiworld.get_regions(self.player):
