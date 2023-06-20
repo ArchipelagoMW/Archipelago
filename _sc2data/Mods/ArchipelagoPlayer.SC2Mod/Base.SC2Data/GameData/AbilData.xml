@@ -927,6 +927,7 @@
         <Cost>
             <Vital index="Energy" value="25"/>
         </Cost>
+        <AbilSetId value="Clok"/>
         <BehaviorArray value="AP_SpectreCloaking"/>
     </CAbilBehavior>
     <CAbilEffectInstant id="AP_SpectreHoldFire">
