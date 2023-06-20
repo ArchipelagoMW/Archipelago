@@ -1,4 +1,5 @@
-from worlds.AutoWorld import World
+from worlds.AutoWorld import World, WebWorld
+from BaseClasses import Tutorial
 from .Regions import create_regions, location_table, set_rules, rooms, non_dead_end_crest_rooms,\
     non_dead_end_crest_warps
 from .Items import item_table, item_groups, create_items, FFMQItem, fillers
@@ -9,6 +10,17 @@ import base64
 import threading
 import requests
 import yaml
+
+
+class FFMQWebWorld(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Final Fantasy Mystic Quest with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Alchav"]
+    )]
 
 
 class FFMQWorld(World):
