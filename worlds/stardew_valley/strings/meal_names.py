@@ -18,6 +18,7 @@ class Meal:
     salad = "Salad"
     spaghetti = "Spaghetti"
     tortilla = "Tortilla"
+    algae_soup = "Algae Soup"
 
 
 class Beverage:

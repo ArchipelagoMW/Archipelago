@@ -4,3 +4,5 @@ class Seed:
     melon = "Melon Seeds"
     wheat = "Wheat Seeds"
     garlic = "Garlic Seeds"
+    pineapple = "Pineapple Seeds"
+    taro = "Taro Tuber"

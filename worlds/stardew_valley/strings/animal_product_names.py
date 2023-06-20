@@ -12,4 +12,9 @@ class AnimalProduct:
     roe = "Roe"
     goat_milk = "Goat Milk"
     large_goat_milk = "Large Goat Milk"
+    pearl = "Pearl"
+    duck_egg = "Duck Egg"
+    duck_feather = "Duck Feather"
+    void_egg = "Void Egg"
+    truffle = "Truffle"
 

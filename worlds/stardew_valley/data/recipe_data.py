@@ -3,7 +3,7 @@ from typing import Dict, List
 from worlds.stardew_valley.strings.animal_product_names import AnimalProduct
 from worlds.stardew_valley.strings.artisan_good_names import ArtisanGood
 from worlds.stardew_valley.strings.crop_names import Fruit, Vegetable
-from worlds.stardew_valley.strings.fish_names import Fish
+from worlds.stardew_valley.strings.fish_names import Fish, WaterItem
 from worlds.stardew_valley.strings.forageable_names import Forageable
 from worlds.stardew_valley.strings.ingredient_names import Ingredient
 from worlds.stardew_valley.strings.meal_names import Meal, Beverage
@@ -140,7 +140,7 @@ fried_egg = starter_recipe(Meal.fried_egg, {AnimalProduct.chicken_egg: 1})
 
 ginger_ale = shop_recipe(Beverage.ginger_ale, Region.volcano_dwarf_shop, 1000, {Forageable.ginger: 3, Ingredient.sugar: 1})
 ice_cream = friendship_recipe(Meal.ice_cream, NPC.jodi, 7, {AnimalProduct.cow_milk: 1, Ingredient.sugar: 1})
-maki_roll = queen_of_sauce_recipe(Meal.maki_roll, 1, Season.summer, 21, {Fish.any: 1, Fish.seaweed: 1, Ingredient.rice: 1})
+maki_roll = queen_of_sauce_recipe(Meal.maki_roll, 1, Season.summer, 21, {Fish.any: 1, WaterItem.seaweed: 1, Ingredient.rice: 1})
 miners_treat = skill_recipe(Meal.miners_treat, Skill.mining, 3, {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.cow_milk: 1})
 omelet = queen_of_sauce_recipe(Meal.omelet, 1, Season.spring, 28, {AnimalProduct.chicken_egg: 1, AnimalProduct.cow_milk: 1})
 parsnip_soup = friendship_recipe(Meal.parsnip_soup, NPC.caroline, 3, {Vegetable.parsnip: 1, AnimalProduct.cow_milk: 1, Ingredient.vinegar: 1})
@@ -156,6 +156,7 @@ tortilla_ingredients = {Vegetable.corn: 1}
 tortilla_qos = queen_of_sauce_recipe(Meal.tortilla, 1, Season.fall, 7, tortilla_ingredients)
 tortilla_saloon = shop_recipe(Meal.tortilla, Region.saloon, 100, tortilla_ingredients)
 triple_shot_espresso = shop_recipe(Beverage.triple_shot_espresso, Region.saloon, 5000, {Beverage.coffee: 3})
+algae_soup = friendship_recipe(Meal.algae_soup, NPC.clint, 3, {WaterItem.green_algae: 4})
 
 
 

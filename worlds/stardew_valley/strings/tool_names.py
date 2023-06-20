@@ -20,3 +20,12 @@ class ToolMaterial:
              2: iron,
              3: gold,
              4: iridium}
+
+
+class APTool:
+    pickaxe = f"Progressive {Tool.pickaxe}"
+    axe = f"Progressive {Tool.axe}"
+    hoe = f"Progressive {Tool.hoe}"
+    watering_can = f"Progressive {Tool.watering_can}"
+    trash_can = f"Progressive {Tool.trash_can}"
+    fishing_rod = f"Progressive {Tool.fishing_rod}"

@@ -24,6 +24,11 @@ class Fruit:
     pomegranate = fruity("Pomegranate")
     banana = fruity("Banana")
     mango = fruity("Mango")
+    pineapple = fruity("Pineapple")
+    ancient_fruit = fruity("Ancient Fruit")
+    strawberry = fruity("Strawberry")
+    starfruit = fruity("Starfruit")
+    rhubarb = fruity("Rhubarb")
 
 
 class Vegetable:
@@ -38,3 +43,7 @@ class Vegetable:
     unmilled_rice = veggie("Unmilled Rice")
     beet = veggie("Beet")
     hops = veggie("Hops")
+    cauliflower = veggie("Cauliflower")
+    amaranth = veggie("Amaranth")
+    kale = veggie("Kale")
+    artichoke = veggie("Artichoke")
