@@ -636,13 +636,15 @@
     <CActorUnit default="1" id="AP_BanelingBase" parent="GenericBurrowerStandard">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
-        <!-- Macros value="ZergBurrowStandardAnimMacro"/ -->
-        <Macros value="ZergBurrowMobileAnimMacro"/>
+        <Macros value="ZergBurrowStandardAnimMacro"/>
         <Macros value="ZergSmallBurrowEffects"/>
         <Macros value="TerrainSquibAnimations"/>
         <AcceptedHostedPropTransfers index="Scale" value="0"/>
         <Remove Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Send="DeathCustomize AntiGravGeneric"/>
         <Remove Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowMoveEffect"/>
+        <On Terms="UnitMovementUpdate.AP_BanelingBurrowed.Stand" Target="BurrowMoveEffect" Send="AnimPlay Main Stand PlayForever"/>
+        <On Terms="UnitMovementUpdate.AP_BanelingBurrowed.Walk" Target="BurrowMoveEffect" Send="AnimPlay Main Walk PlayForever"/>
         <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
         <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>
         <On Terms="Upgrade.AP_CentrificalHooks.Add" Send="AnimGroupApply Superior"/>
@@ -11214,13 +11216,15 @@
     <CActorUnit id="AP_HotSSplitterlingMedium" parent="GenericBurrowerStandard" unitName="AP_HotSSplitterlingMedium">
         <Aliases value="_UnitSmall"/>
         <Macros value="UnloadDropAnim"/>
-        <!-- Macros value="ZergBurrowStandardAnimMacro"/ -->
-        <Macros value="ZergBurrowMobileAnimMacro"/>
+        <Macros value="ZergBurrowStandardAnimMacro"/>
         <Macros value="ZergSmallBurrowEffects"/>
         <Macros value="TerrainSquibAnimations"/>
         <AcceptedHostedPropTransfers index="Scale" value="0"/>
         <Remove Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Send="DeathCustomize AntiGravGeneric"/>
         <Remove Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown" Send="Create BurrowMoveEffect"/>
+        <On Terms="UnitMovementUpdate.AP_HotSSplitterlingMediumBurrowed.Stand" Target="BurrowMoveEffect" Send="AnimPlay Main Stand PlayForever"/>
+        <On Terms="UnitMovementUpdate.AP_HotSSplitterlingMediumBurrowed.Walk" Target="BurrowMoveEffect" Send="AnimPlay Main Walk PlayForever"/>
         <On Terms="UnitMovementUpdate.AP_HotSSplitterling.Walk" Send="AnimClear Birth"/>
         <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
         <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>

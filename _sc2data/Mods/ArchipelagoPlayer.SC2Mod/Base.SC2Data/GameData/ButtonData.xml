@@ -1847,13 +1847,6 @@
         <AlertIcon value="Assets\Textures\btn-upgrade-artanis-healingpsionicstorm.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
-    <CButton id="AP_HighArchonPsiStorm">
-        <Tooltip value="Button/Tooltip/PsiStorm"/>
-        <Icon value="Assets\Textures\btn-ability-protoss-psistorm-color.dds"/>
-        <AlertTooltip value="Button/Tooltip/PsiStorm"/>
-        <AlertIcon value="Assets\Textures\btn-ability-protoss-psistorm-color.dds"/>
-        <EditorCategories value="Race:Protoss"/>
-    </CButton>
     <CButton id="AP_PsiStorm">
         <Icon value="Assets\Textures\btn-ability-protoss-psistorm-color.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-protoss-psistorm-color.dds"/>
