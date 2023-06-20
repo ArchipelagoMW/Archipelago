@@ -311,6 +311,7 @@ class BlasphemousWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
         locations = []
+        doors: Dict[str, str] = {}
 
         world = self.multiworld
         player = self.player
@@ -363,6 +364,7 @@ class BlasphemousWorld(World):
     
         slot_data = {
             "locations": locations,
+            "doors": doors,
             "cfg": config,
             "ending": world.ending[self.player].value,
             "death_link": bool(world.death_link[self.player].value)
