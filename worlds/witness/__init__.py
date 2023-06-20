@@ -62,11 +62,11 @@ class WitnessWorld(World):
             'item_id_to_door_hexes': self.static_items.ITEM_ID_TO_DOOR_HEX_ALL,
             'door_hexes_in_the_pool': self.items.DOORS,
             'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME,
-            'disabled_panels': self.player_logic.COMPLETELY_DISABLED_CHECKS,
+            'disabled_panels': list(self.player_logic.COMPLETELY_DISABLED_CHECKS),
             'log_ids_to_hints': self.log_ids_to_hints,
             'progressive_item_lists': self.items.MULTI_LISTS_BY_CODE,
             'obelisk_side_id_to_EPs': self.static_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
-            'precompleted_puzzles': {int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS},
+            'precompleted_puzzles': [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
             'entity_to_name': self.static_logic.ENTITY_ID_TO_NAME,
         }
 
