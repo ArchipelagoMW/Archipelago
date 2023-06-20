@@ -9898,7 +9898,6 @@
     <CModel id="AP_HunterPortrait" parent="Portrait" Race="Zerg">
         <Model value="Assets\Portraits\Zerg\BanelingPortrait\BanelingPortrait.m3"/>
         <Image value="Assets\Textures\BanelingPortrait_Static.dds"/>
-        <Lighting value="AP_HunterPortrait"/>
     </CModel>
     <CModel id="AP_HunterRuptureExplosion" parent="OneShotSpellFX">
         <Model value="Assets\Units\Zerg\BanelingEx1BDeathRupture\BanelingEx1BDeathRupture.m3"/>
@@ -9906,5 +9905,9 @@
         <Flags index="TeenSafe" value="1"/>
         <ScaleMax value="1.333330,1.333330,1.333330"/>
         <ScaleMin value="1.333330,1.333330,1.333330"/>
+    </CModel>
+    <CModel id="AP_CorrosiveBileImpactB" parent="ImpactFX">
+        <Model value="Assets\Effects\Zerg\CorrosiveBileImpactB\CorrosiveBileImpactB.m3"/>
+        <EditorCategories value="Race:Zerg"/>
     </CModel>
 </Catalog>

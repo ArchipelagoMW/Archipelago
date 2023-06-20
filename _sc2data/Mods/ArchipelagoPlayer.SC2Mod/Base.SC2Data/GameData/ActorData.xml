@@ -5105,7 +5105,6 @@
         <HighlightTooltip value="Unit/Name/AP_Baneling"/>
     </CActorUnit>
     <CActorForceSphere id="AP_BanelingAttackForce">
-        <On Terms="Effect.VolatileBurstU.Start; At Caster" Send="Create"/>
         <On Terms="ActorCreation" Send="Create AP_BanelingAttackForceUp"/>
         <On Terms="Effect.AP_HotSBanelingExplodeLargeSearch.Start; At Caster" Send="Create"/>
         <On Terms="Effect.AP_HotSBanelingExplodeLargeSearchAll.Start; At Caster" Send="Create"/>
@@ -5173,7 +5172,7 @@
         <On Terms="AbilMorph.*.Start; MorphFrom AP_BanelingCocoon" Send="$Death"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingCocoon" Send="Destroy"/>
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
-        <On Terms="ActorCreation" Send="Create CocoonCancelOrCocoonComplete"/>
+        <On Terms="ActorCreation" Send="Create AP_CocoonCancelOrCocoonComplete"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
         <Model value="BanelingCocoon"/>
@@ -5196,6 +5195,9 @@
     </CActorSound>
     <CActorSound id="AP_Baneling_Land" parent="SoundOneShot">
         <Sound value="Baneling_Land"/>
+    </CActorSound>
+    <CActorSound id="AP_CocoonCancelOrCocoonComplete" parent="SoundOneShot">
+        <Sound value="CocoonCancelOrCocoonComplete"/>
     </CActorSound>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
@@ -7082,7 +7084,7 @@
         <On Terms="AbilMorph.*.Start; MorphFrom AP_HydraliskLurkerEgg" Send="$Death"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_HydraliskLurkerEgg" Send="Destroy"/>
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
-        <On Terms="ActorCreation" Send="Create CocoonCancelOrCocoonComplete"/>
+        <On Terms="ActorCreation" Send="Create AP_CocoonCancelOrCocoonComplete"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
     </CActorModel>
@@ -11293,18 +11295,18 @@
         <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth" HoldRotation="1"/>
         <Model value="AP_MendBuff"/>
     </CActorModel>
-    <CActorModel id="HunterJumpDustModel2" parent="ModelAnimationStyleOneShot">
+    <CActorModel id="AP_HunterJumpDustModel" parent="ModelAnimationStyleOneShot">
         <FogVisibility value="Visible"/>
-        <On Terms="Behavior.HotSHunterJump.LandUp" Send="Create"/>
-        <On Terms="Behavior.HotSHunterJump.LandDown" Send="Create"/>
+        <On Terms="Behavior.AP_HotSHunterJump.LandUp" Send="Create"/>
+        <On Terms="Behavior.AP_HotSHunterJump.LandDown" Send="Create"/>
         <On Terms="Effect.AP_HunterLaunchDisable.Start; At Caster" Send="Create"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpShadow" HoldPosition="1" HoldRotation="1"/>
         <Model value="JumpLandDust"/>
         <AutoScaleFactor value="1.000000"/>
     </CActorModel>
-    <CActorSound id="HunterJumpLaunchSound2" parent="SoundOneShot">
-        <On Terms="Behavior.HotSHunterJump.Launch" Send="Create"/>
+    <CActorSound id="AP_HunterJumpLaunchSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_HotSHunterJump.Launch" Send="Create"/>
         <On Terms="Effect.AP_HunterVolatileBurstLaunchMissile.Start" Send="Create"/>
         <Sound value="AP_BanelingHunter_JumpLaunch"/>
     </CActorSound>
