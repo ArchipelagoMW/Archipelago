@@ -105,7 +105,7 @@ class MuseDashWorld(World):
             self.starting_songs.append(available_song_keys.pop())
 
         for _ in range(0, self.multiworld.additional_song_count[self.player]):
-            if (len(available_song_keys) <= 0):
+            if len(available_song_keys) <= 0:
                 break
 
             self.included_songs.append(available_song_keys.pop())
@@ -115,11 +115,11 @@ class MuseDashWorld(World):
         self.location_count = floor(self.location_count * location_multiplier)
 
         minimum_location_count = len(self.included_songs) + self.get_music_sheet_count()
-        if (self.location_count < minimum_location_count):
+        if self.location_count < minimum_location_count:
             self.location_count = minimum_location_count
 
     def create_item(self, name: str) -> Item:
-        if (name == self.music_sheet_name):
+        if name == self.music_sheet_name:
             return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
                                      self.muse_dash_collection.MUSIC_SHEET_CODE, self.player)
 
@@ -150,7 +150,7 @@ class MuseDashWorld(World):
         # Then add all traps
         trap_count = self.get_trap_count()
         trap_list = self.get_available_traps()
-        if (len(trap_list) > 0 and trap_count > 0):
+        if len(trap_list) > 0 and trap_count > 0:
             for _ in range(0, trap_count):
                 index = self.multiworld.random.randrange(0, len(trap_list))
                 choice = trap_list[index]
@@ -158,12 +158,11 @@ class MuseDashWorld(World):
 
             item_count += trap_count
 
-
         # Next fill all remaining slots with song items
         needed_item_count = self.location_count
         while (item_count < needed_item_count):
             # If we have more items needed than keys, just iterate the list and add them all
-            if (len(song_keys_in_pool) <= needed_item_count - item_count):
+            if len(song_keys_in_pool) <= needed_item_count - item_count:
                 for key in song_keys_in_pool:
                     self.multiworld.itempool.append(self.create_item(key))
 
@@ -214,7 +213,7 @@ class MuseDashWorld(World):
             region.locations.append(MuseDashLocation(self.player, location_name,
                 self.muse_dash_collection.song_locations[location_name], region))
 
-            if (i < two_item_location_count):
+            if i < two_item_location_count:
                 location_name = name + "-1"
                 region.locations.append(MuseDashLocation(self.player, location_name,
                     self.muse_dash_collection.song_locations[location_name], region))
@@ -229,7 +228,7 @@ class MuseDashWorld(World):
 
         for location in self.multiworld.get_locations(self.player):
             item_name = location.name[0:(len(location.name) - 2)]
-            if (item_name == self.victory_song_name):
+            if item_name == self.victory_song_name:
                 set_rule(location, lambda state: state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count()))
             else:
                 set_rule(location, lambda state, place=item_name: state.has(place, self.player))
@@ -238,11 +237,11 @@ class MuseDashWorld(World):
         dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
 
         trap_list = list()
-        if (self.multiworld.available_trap_types[self.player].value & 1 != 0):
+        if self.multiworld.available_trap_types[self.player].value & 1 != 0:
             trap_list += self.muse_dash_collection.vfx_trap_items.items()
 
         # SFX options are only available under Just as Planned DLC.
-        if (dlc_songs and self.multiworld.available_trap_types[self.player].value & 2 != 0):
+        if dlc_songs and self.multiworld.available_trap_types[self.player].value & 2 != 0:
             trap_list += self.muse_dash_collection.sfx_trap_items.items()
 
         return trap_list
