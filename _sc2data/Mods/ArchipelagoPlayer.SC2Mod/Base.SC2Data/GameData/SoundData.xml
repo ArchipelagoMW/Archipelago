@@ -5089,4 +5089,104 @@
         <Pitch value="-0.300000,0.000000"/>
         <Volume value="-6.000000,-6.000000"/>
     </CSound>
+    <CSound id="AP_HotSSplitterlingMedium_Attack" parent="Voice">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack4.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack5.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack6.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack7.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack8.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Attack9.ogg"/>
+        <Flags index="Download" value="0"/>
+        <Pitch value="2.000000,3.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_HotSSplitterlingMedium_Help" parent="Alert">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Help0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Help1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Help2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Help3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Help4.ogg"/>
+        <Flags index="VariationFallback" value="0"/>
+        <Mode value="3DWorld"/>
+        <Pitch value="2.000000,3.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_HotSSplitterlingMedium_Movement" parent="Movement">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Movement0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Movement1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Movement2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Movement3.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Movement4.wav"/>
+        <DupeDestroyCount value="4"/>
+        <Pitch value="2.000000,3.000000"/>
+        <SustainFade/>
+        <SustainFade Time="400" Volume="-96.000000"/>
+        <Volume value="-2.000000,1.000000"/>
+        <VolumeRolloffFadeBlend value="Logarithmic"/>
+    </CSound>
+    <CSound id="AP_HotSSplitterlingMedium_Pissed" parent="Pissed">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What4.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What5.ogg"/>
+        <Pitch value="2.000000,3.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_HotSSplitterlingMedium_Ready" parent="Ready">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Ready0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Ready1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Ready2.ogg"/>
+        <Pitch value="2.000000,3.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_HotSSplitterlingMedium_What" parent="Voice">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What4.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_What5.ogg"/>
+        <Pitch value="2.000000,3.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_HotSSplitterlingMedium_Yes" parent="Voice">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes0.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes1.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes2.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes3.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes4.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes5.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes6.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes7.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes8.ogg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Baneling\Baneling_Yes9.ogg"/>
+        <Pitch value="2.000000,3.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_BanelingHunter_JumpLaunch" parent="Spell">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee0.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee1.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee2.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee3.wav"/>
+        <AssetArray File="Assets\Sounds\Zerg\Roach\Roach_AttackLaunchMelee4.wav"/>
+        <Category value="Combat"/>
+        <DupeDestroyCount value="4"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="3.000000,6.000000"/>
+        <Volume value="-15.000000,-12.000000"/>
+    </CSound>
 </Catalog>

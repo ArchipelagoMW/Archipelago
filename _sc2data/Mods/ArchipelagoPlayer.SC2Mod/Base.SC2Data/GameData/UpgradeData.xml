@@ -3804,4 +3804,105 @@
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Stalker"/>
     </CUpgrade>
+    <CUpgrade id="AP_BanelingBurrowMove">
+        <InfoTooltipPriority value="1"/>
+        <Alert value="ResearchComplete"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_BanelingBurrowed,Speed" Value="2.000000"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HotSSplitterlingMediumBurrowed,Speed" Value="2.000000"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Baneling"/>
+        <AffectedUnitArray value="AP_BanelingBurrowed"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMedium"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMediumBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_CentrificalHooks">
+        <Flags index="TechTreeCheat" value="1"/>
+        <InfoTooltipPriority value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-zerg-centrifugalhooks.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Zerg"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_HotSSplitterlingMedium,Speed" Value="0.453100"/>
+        <EffectArray Reference="Unit,AP_Baneling,Speed" Value="0.453100"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Baneling"/>
+        <AffectedUnitArray value="AP_BanelingBurrowed"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMedium"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMediumBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSBanelingCorrosiveBile">
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeLargeDirect,Amount" Value="40"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeLargeDirect,AttributeBonus[Structure]" Value="40"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeSmallDirect,Amount" Value="5"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeSmallDirect,AttributeBonus[Structure]" Value="5"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSBanelingHeal">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSRapidMetamorph">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Subtract" Reference="Abil,AP_MorphZerglingToBaneling,InfoArray[Train1].Time" Value="8.000000"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_Baneling,CostResource[Vespene]" Value="15"/>
+        <EffectArray Operation="Subtract" Reference="Unit,AP_BanelingBurrowed,CostResource[Vespene]" Value="15"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Baneling"/>
+        <AffectedUnitArray value="AP_BanelingBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSRupture">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeLargeSearch,AreaArray[0].Radius" Value="1.1"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeLargeSearchAll,AreaArray[0].Radius" Value="1.1"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeLargeHealSearch,AreaArray[0].Radius" Value="1.1"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeLargeHealSearchAll,AreaArray[0].Radius" Value="1.1"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeSmallSearch,AreaArray[0].Radius" Value="1.1"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeSmallSearchAll,AreaArray[0].Radius" Value="1.1"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeSmallHealSearch,AreaArray[0].Radius" Value="1.1"/>
+        <EffectArray Reference="Effect,AP_HotSBanelingExplodeSmallHealSearchAll,AreaArray[0].Radius" Value="1.1"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Baneling"/>
+        <AffectedUnitArray value="AP_BanelingBurrowed"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHunter">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HotSBanelingLaunch,Options[Disabled]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_HotSBanelingLaunchSmall,Options[Disabled]" Value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Baneling,Subtitle" Value="UnitSubtitle/AP_HotSHunter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_BanelingBurrowed,Subtitle" Value="UnitSubtitle/AP_HotSHunter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HotSSplitterlingMedium,Subtitle" Value="UnitSubtitle/AP_HotSHunter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HotSSplitterlingMediumBurrowed,Subtitle" Value="UnitSubtitle/AP_HotSHunter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Baneling,Mover" Value="CliffJumper"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HotSSplitterlingMedium,Mover" Value="CliffJumper"/>
+        <AffectedUnitArray value="AP_Baneling"/>
+        <AffectedUnitArray value="AP_BanelingBurrowed"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMedium"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMediumBurrowed"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSSplitter">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Baneling,Subtitle" Value="UnitSubtitle/AP_HotSSplitter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_BanelingBurrowed,Subtitle" Value="UnitSubtitle/AP_HotSSplitter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HotSSplitterlingMedium,Subtitle" Value="UnitSubtitle/AP_HotSSplitter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HotSSplitterlingMediumBurrowed,Subtitle" Value="UnitSubtitle/AP_HotSSplitter"/>
+        <AffectedUnitArray value="AP_Baneling"/>
+        <AffectedUnitArray value="AP_BanelingBurrowed"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMedium"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMediumBurrowed"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHunterSplitter">
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Baneling,Subtitle" Value="UnitSubtitle/AP_HotSHunterSplitter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_BanelingBurrowed,Subtitle" Value="UnitSubtitle/AP_HotSHunterSplitter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HotSSplitterlingMedium,Subtitle" Value="UnitSubtitle/AP_HotSHunterSplitter"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_HotSSplitterlingMediumBurrowed,Subtitle" Value="UnitSubtitle/AP_HotSHunterSplitter"/>
+        <AffectedUnitArray value="AP_Baneling"/>
+        <AffectedUnitArray value="AP_BanelingBurrowed"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMedium"/>
+        <AffectedUnitArray value="AP_HotSSplitterlingMediumBurrowed"/>
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
 </Catalog>

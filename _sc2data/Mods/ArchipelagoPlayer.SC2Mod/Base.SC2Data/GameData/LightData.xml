@@ -312,10 +312,18 @@
         <EditorCategories value="LightGroup:PortraitsUnitsTerran"/>
     </CLight>
     <CLight id="AP_RoachVilePortrait">
-        <ToDInfoArray index="0" AmbientColor="0.050980,0.054902,0.094118">
+        <ToDInfoArray index="0" Id="NoLight" AmbientColor="0.050980,0.054902,0.094118" OperatorHDR="4">
             <Param index="HDRExposure" value="1.480000"/>
             <Param index="HDRBloomThreshold" value="1.950000"/>
             <Param index="HDREmisMultiplier" value="3.000000"/>
+            <Param index="HDRGain" value="0.000000"/>
+            <Param index="HDRScale" value="0.000000"/>
+            <Param index="AOOcclusionRadius" value="1.000000"/>
+            <Param index="AONoOcclusion" value="0.900000"/>
+            <Param index="AOOcclusionPower" value="2.000000"/>
+            <Param index="AODetailOcclusionRadius" value="0.010000"/>
+            <Param index="AODetailNoOcclusion" value="0.060000"/>
+            <Param index="AODetailOcclusionPower" value="4.000000"/>
             <DirectionalLight index="Key">
                 <Color value="0.501961,0.501961,1.000000"/>
                 <ColorMultiplier value="0.832000"/>
@@ -826,6 +834,56 @@
             <DirectionalLight index="Back" Color="0.156863,0.505882,0.690196" ColorMultiplier="1.000000" Direction="-0.585935,0.595628,0.549460"/>
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
+    <CLight id="AP_SplitterlingPortrait" parent="default">
+        <ToDInfoArray index="0" Id="NoLight" AmbientColor="0.031373,0.105882,0.035294" OperatorHDR="4">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDREmisMultiplier" value="3.000000"/>
+            <Param index="HDRGain" value="0.000000"/>
+            <Param index="HDRScale" value="0.000000"/>
+            <Param index="AOOcclusionRadius" value="1.000000"/>
+            <Param index="AONoOcclusion" value="0.900000"/>
+            <Param index="AOOcclusionPower" value="2.000000"/>
+            <Param index="AODetailOcclusionRadius" value="0.010000"/>
+            <Param index="AODetailNoOcclusion" value="0.060000"/>
+            <Param index="AODetailOcclusionPower" value="4.000000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.607843,1.000000,0.788235"/>
+                <ColorMultiplier value="1.641000"/>
+                <SpecularColor value="0.800000,1.000000,0.874510"/>
+                <SpecColorMultiplier value="1.202000"/>
+                <Direction value="0.471741,0.553707,-0.686199"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="1.000000,0.592157,0.219608" ColorMultiplier="2.089000" Direction="-0.594586,0.244221,-0.766044"/>
+            <DirectionalLight index="Back" Color="0.501961,1.000000,0.501961" ColorMultiplier="0.525000" Direction="-0.048897,0.840372,0.539800"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
+    </CLight>
+    <CLight id="AP_HunterPortrait" parent="default">
+        <ToDInfoArray index="0" Id="NoLight" AmbientColor="0.050980,0.054902,0.094118" OperatorHDR="4">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDREmisMultiplier" value="3.000000"/>
+            <Param index="HDRGain" value="0.000000"/>
+            <Param index="HDRScale" value="0.000000"/>
+            <Param index="AOOcclusionRadius" value="1.000000"/>
+            <Param index="AONoOcclusion" value="0.900000"/>
+            <Param index="AOOcclusionPower" value="2.000000"/>
+            <Param index="AODetailOcclusionRadius" value="0.010000"/>
+            <Param index="AODetailNoOcclusion" value="0.060000"/>
+            <Param index="AODetailOcclusionPower" value="4.000000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.490196,0.462745,1.000000"/>
+                <ColorMultiplier value="1.972000"/>
+                <SpecularColor value="0.819608,0.819608,1.000000"/>
+                <SpecColorMultiplier value="1.303000"/>
+                <Direction value="0.617583,0.622996,-0.480071"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.000000,1.000000,1.000000" ColorMultiplier="1.000000" Direction="-0.641914,0.544575,-0.539800"/>
+            <DirectionalLight index="Back" Color="0.494118,0.231373,1.000000" ColorMultiplier="1.396000" Direction="-0.034016,0.351342,0.935629"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsZerg"/>
     </CLight>
     <CLight id="AP_PortraitPurifierStalker" parent="default">
         <ToDInfoArray index="0" Id="PortraitPurifierStalker" AmbientColor="0.113725,0.050980,0.027451">

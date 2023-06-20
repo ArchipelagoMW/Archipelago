@@ -633,6 +633,105 @@
         <VitalNames index="Shields" value="Vital/ZergShields"/>
         <WireframeShieldColor value="255,0,128,0"/>
     </CActorUnit>
+    <CActorUnit default="1" id="AP_BanelingBase" parent="GenericBurrowerStandard">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="ZergBurrowMobileAnimMacro"/>
+        <Macros value="ZergSmallBurrowEffects"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <Remove Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Send="DeathCustomize AntiGravGeneric"/>
+        <Remove Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
+        <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched; !AnimPlayingName Burrow" Send="AnimGroupApply Superior"/>
+        <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched; !AnimPlayingName Burrow" Send="SetWalkAnimMoveSpeed 3"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Add; !AnimPlayingName Burrow" Send="AnimGroupApply Superior"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Add; !AnimPlayingName Burrow" Send="SetWalkAnimMoveSpeed 3"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Remove; !AnimPlayingName Burrow" Send="AnimGroupRemove Superior"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Remove; !AnimPlayingName Burrow" Send="SetWalkAnimMoveSpeed 2"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Baneling; MorphTo AP_BanelingBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="Abil.AP_Explode.SourceCastStart" Send="StatusSet DeathSuicide 1"/>
+        <On Terms="UnitDeathCustomize; IsStatus DeathSuicide 0" Send="Create AP_BanelingDeathNormalSound"/>
+        <On Terms="UnitDeathCustomize; IsStatus DeathSuicide 1" Send="Create AP_BanelingDeathSuicideSound"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="UnitBirth.AP_Baneling" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingBurrowed; MorphFrom AP_Baneling" Send="TerrainSquibDeactivate"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed; ValidateUnit AP_CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingBurrowed; ValidateUnit AP_CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingBurrowed; MorphFrom AP_Baneling; ValidateUnit AP_CentrificalHooksResearched" Send="AnimGroupRemove Superior"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingBurrowed; MorphFrom AP_Baneling; ValidateUnit AP_CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 2"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Baneling_Land"/>
+        <On Terms="WeaponStart.AP_HotSBanelingExplode.AttackStart" Send="StatusSet DeathSuicide 1"/>
+        <On Terms="WeaponStart.AP_HotSBanelingExplodeBuilding.AttackStart" Send="StatusSet DeathSuicide 1"/>
+        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveHotSRupture" Send="DeathCustomize Variation1"/>
+        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveHotSCorrosiveBile" Send="DeathCustomize Variation2"/>
+        <On Terms="Behavior.AP_KerriganBanelingTimedLife.On" Send="SetStatusBarOn 1 Duration"/>
+        <On Terms="ActorCreation" Send="StatusSet Moving 0"/>
+        <On Terms="UnitMovementUpdate.AP_Baneling.Stand" Send="StatusSet Moving 0"/>
+        <On Terms="UnitMovementUpdate.AP_Baneling.Walk" Send="StatusSet Moving 1"/>
+        <On Terms="Behavior.AP_HotSHunterJump.Launch" Send="AnimBracketStart Jump Jump,Start Jump Jump,End ClosingFull"/>
+        <On Terms="Behavior.AP_HotSHunterJump.LandDown" Send="TimerSet 0.200000 LandDownDelay"/>
+        <On Terms="Behavior.AP_HotSHunterJump.LandDown" Send="TimerSet 0.550000 LandAnimDelay"/>
+        <On Terms="TimerExpired; TimerName LandDownDelay" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_GravitonBeamHeight.Off" Send="AnimBracketStop Jump"/>
+        <On Terms="Behavior.AP_HotSHunterJump.LandUp" Send="TimerSet 0.100000 LandUpDelay"/>
+        <On Terms="Behavior.AP_HotSHunterJump.LandUp" Send="TimerSet 0.450000 LandAnimDelay"/>
+        <On Terms="TimerExpired; TimerName LandUpDelay" Send="AnimBracketStop Jump"/>
+        <On Terms="TimerExpired; TimerName LandAnimDelay; IsStatus Moving 0" Send="AnimClear Jump"/>
+        <On Terms="Effect.AP_HunterVolatileBurstLaunchMissile.Start; At Caster" Send="AnimBracketStart Jump Jump,Start Jump Jump,End"/>
+        <On Terms="Effect.AP_HunterLaunchDisable.Start; At Caster" Send="AnimBracketStop Jump"/>
+        <On Terms="Effect.AP_HunterLaunchLandDummy.Start; At Caster" Send="AnimBracketStop Jump"/>
+        <On Terms="UnitMovementUpdate.AP_BanelingBurrowed.Stand" Send="Create AP_BanelingBurrowedSplat"/>
+        <On Terms="UnitMovementUpdate.AP_BanelingBurrowed.Walk" Target="AP_BanelingBurrowedSplat" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; AbilKey BurrowDown; ValidatePlayer AP_HaveHotSHunter" Send="Create BurrowDownMedium"/>
+        <Model value="AP_Baneling"/>
+        <BuildModel value="AP_Baneling"/>
+        <PlacementModel value="AP_Baneling"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="BanelingDeath" SoundLink=""/>
+        <DeathCustoms ModelLink="AP_BanelingRuptureExplosion" Name="Variation1"/>
+        <DeathCustoms ModelLink="AP_BanelingCorrosiveExplosion" Name="Variation2"/>
+        <PortraitModel value="BanelingPortrait"/>
+        <TerrainSquibs>
+            <GroupName value="RippleStandard"/>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleSmall"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2"/>
+        <BarOffset value="35"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Baneling.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="Ready" value="Baneling_Ready"/>
+        <SoundArray index="Help" value="Baneling_Help"/>
+        <SoundArray index="What" value="Baneling_What"/>
+        <SoundArray index="Yes" value="Baneling_Yes"/>
+        <SoundArray index="Attack" value="Baneling_Attack"/>
+        <SoundArray index="Pissed" value="Baneling_Pissed"/>
+        <SoundArray index="Movement" value="Baneling_Movement"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Baneling.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
     <CActorModel id="AP_250mmStrikeCannonsImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_250mmStrikeCannonsDamage.Start; At Target" Send="Create"/>
         <HostSiteOps Ops="SOpShadow ThorBarrageVariance"/>
@@ -5028,6 +5127,137 @@
     <CActorRange id="AP_NovaArmorBlinkSuitBlink_Range" parent="RangeAbil" abil="AP_NovaArmorBlinkSuitBlink">
         <Abil Link="AP_BlinkDummy"/>
     </CActorRange>
+    <CActorUnit id="AP_Baneling" parent="AP_BanelingBase" unitName="AP_Baneling">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingCocoon" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Baneling; MorphFrom AP_BanelingCocoon" Send="$Birth 0 0.000000"/>
+        <On Terms="Upgrade.AP_HotSHunter.Add" Send="Create AP_HotSHunter"/>
+        <On Terms="Upgrade.AP_HotSHunter.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSHunter" Send="Create AP_HotSHunter"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSHunter" Send="Destroy"/>
+        <On Terms="Upgrade.AP_HotsSplitterling.Add" Send="Create AP_HotSSplitterlingBig"/>
+        <On Terms="Upgrade.AP_HotsSplitterling.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSplitterling" Send="Create AP_HotSSplitterlingBig"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSSplitterling" Send="Destroy"/>
+    </CActorUnit>
+    <CActorMissile id="AP_HotSHunter" parent="AP_BanelingBase" unitName="AP_HotSHunter">
+        <Model value="AP_Hunter"/>
+        <BuildModel value="AP_Hunter"/>
+        <PlacementModel value="AP_Hunter"/>
+        <DeathArray index="Normal" ModelLink="AP_HunterDeath"/>
+        <DeathCustoms ModelLink="AP_HunterRuptureExplosion" Name="Variation1"/>
+        <DeathCustoms ModelLink="AP_HunterCorrosiveExplosion" Name="Variation2"/>
+        <PortraitModel value="AP_HunterPortrait"/>
+        <HeroIcon value="Assets\Textures\btn-unit-zerg-baneling-hunter.dds"/>
+        <HighlightTooltip value="Unit/Name/AP_Baneling"/>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-baneling-hunter.dds"/>
+    </CActorMissile>
+    <CActorUnit id="AP_HotSSplitterlingBig" parent="AP_BanelingBase" unitName="AP_HotSSplitterlingBig">
+        <On Terms="Upgrade.AP_HotSHunter.Add" Send="Create AP_HotSHunter"/>
+        <On Terms="Upgrade.AP_HotSHunter.Add" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSHunter" Send="Create AP_HotSHunter"/>
+        <On Terms="ActorCreation; ValidatePlayer AP_HaveHotSHunter" Send="Destroy"/>
+        <Model value="AP_HotSSplitterlingBig"/>
+        <BuildModel value="AP_HotSSplitterlingBig"/>
+        <PlacementModel value="AP_HotSSplitterlingBig"/>
+        <DeathArray index="Normal" ModelLink="AP_SplitterlingMainDeath" SoundLink="BanelingDeathNormalSound"/>
+        <PortraitModel value="AP_SplitterlingPortrait"/>
+        <HighlightTooltip value="Unit/Name/AP_Baneling"/>
+    </CActorUnit>
+    <CActorForceSphere id="AP_BanelingAttackForce">
+        <On Terms="ActorCreation" Send="Create AP_BanelingAttackForceUp"/>
+        <On Terms="Effect.AP_HotSBanelingExplodeLargeSearch.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_HotSBanelingExplodeLargeSearchAll.Start; At Caster" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow SOpRandomPointInCircleDot25"/>
+        <Duration value="0.300000"/>
+        <Magnitude value="16.000000,8.000000"/>
+        <Radius value="2.100000,0.300000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_BanelingAttackForceUp">
+        <HostSiteOps Ops="SOpShadow SOpRotVariancerUp35"/>
+        <Field value="Directional"/>
+        <Duration value="0.500000"/>
+        <Magnitude value="15.000000,5.000000"/>
+        <Radius value="1.900000,0.300000"/>
+    </CActorForceSphere>
+    <CActorSplat id="AP_BanelingBurrowedSplat" parent="BurrowedSplat" unitName="AP_Baneling"/>
+    <CActorUnit id="AP_BanelingCocoon" parent="GenericUnitMorph" unitName="AP_BanelingCocoon">
+        <Aliases value="_UnitSmall"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingCocoon; MorphFrom AP_Zergling" Send="AnimBaselineStop"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingCocoon; MorphFrom AP_Zergling" Send="$Birth 0 0.000000 -1.000000 0.000000"/>
+        <On Terms="AnimDone; AnimName Birth" Send="AnimBaselineStart"/>
+        <HostSiteOps Ops="SOpRotVariancerForward30"/>
+        <Model value="BanelingCocoon"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="BanelingCocoon"/>
+        <DeathArray index="Normal" ModelLink="BanelingCocoonDeath" SoundLink="BanelingEgg_Explode"/>
+        <PlacementModel value="BanelingCocoon"/>
+        <PortraitModel value="BanelingCocoonPortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-BanelingEgg.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\Wireframe-Zerg-BanelingEgg.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <SoundArray index="What" value="Egg_What"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\Wireframe-Zerg-BanelingEgg.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-BanelingEgg.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorSound id="AP_BanelingCocoonBirth" parent="SoundOneShot">
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingCocoon; MorphFrom AP_Zergling" Send="Create"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_BanelingCocoon; MorphFrom AP_Zergling" Send="Destroy"/>
+        <Sound value="BanelingEgg_Creation"/>
+    </CActorSound>
+    <CActorModel id="AP_BanelingCocoonDeath">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="BanelingCocoonDeath"/>
+    </CActorModel>
+    <CActorModel id="AP_BanelingCocoonHatch">
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_BanelingCocoon" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_BanelingCocoon" Send="$Death"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_BanelingCocoon" Send="Destroy"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="Create AP_CocoonCancelOrCocoonComplete"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="BanelingCocoon"/>
+    </CActorModel>
+    <CActorSound id="AP_BanelingDeathNormalSound" parent="SoundOneShot">
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <Host Subject="::Creator"/>
+        <Sound value="Baneling_Death"/>
+        <SoundFlags index="UpdateVisibility" value="0"/>
+    </CActorSound>
+    <CActorSound id="AP_BanelingDeathSuicideSound" parent="SoundOneShot">
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <Host Subject="::Creator"/>
+        <Sound value="Baneling_Suicide"/>
+        <SoundFlags index="UpdateVisibility" value="0"/>
+    </CActorSound>
+    <CActorSound id="AP_BanelingEgg_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_BanelingCocoon; PassChance 25.000000" Send="Create"/>
+        <Sound value="BanelingEgg_Death"/>
+    </CActorSound>
+    <CActorSound id="AP_Baneling_Land" parent="SoundOneShot">
+        <Sound value="Baneling_Land"/>
+    </CActorSound>
+    <CActorSound id="AP_CocoonCancelOrCocoonComplete" parent="SoundOneShot">
+        <Sound value="CocoonCancelOrCocoonComplete"/>
+    </CActorSound>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -6913,7 +7143,7 @@
         <On Terms="AbilMorph.*.Start; MorphFrom AP_HydraliskLurkerEgg" Send="$Death"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_HydraliskLurkerEgg" Send="Destroy"/>
         <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
-        <On Terms="ActorCreation" Send="Create CocoonCancelOrCocoonComplete"/>
+        <On Terms="ActorCreation" Send="Create AP_CocoonCancelOrCocoonComplete"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
     </CActorModel>
@@ -11237,6 +11467,123 @@
             <Image value="Assets\Textures\Wireframe-Protoss-Stalker-Shield03.dds"/>
         </WireframeShield>
     </CActorUnit>
+    <CActorModel id="AP_CorrosiveBileImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_HotSBanelingExplodeLargeDirect.Start; At Target; ValidateEffect AP_HaveHotSCorrosiveBileAndNotStructure" Send="Create"/>
+        <On Terms="Effect.AP_HotSBanelingExplodeSmallDirect.Start; At Target; ValidateEffect AP_HaveHotSCorrosiveBileAndNotStructure" Send="Create"/>
+        <On Terms="ActorCreation; ValidateEffect AP_HaveHotSHunter" Send="ModelSwap AP_CorrosiveBileImpactB"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldRotation="1"/>
+        <AutoScaleFactor value="0.800000"/>
+    </CActorModel>
+    <CActorUnit id="AP_HotSHunterPlaceholder" parent="GenericUnitStandardNoAutoSoundLinks" unitName="AP_HotSHunterPlaceholder">
+        <Model value="Hunter"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+    </CActorUnit>
+    <CActorUnit id="AP_HotSSplitterlingMedium" parent="GenericBurrowerStandard" unitName="AP_HotSSplitterlingMedium">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="ZergBurrowStandardAnimMacro"/>
+        <Macros value="ZergSmallBurrowEffects"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <Remove Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Send="DeathCustomize AntiGravGeneric"/>
+        <Remove Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
+        <On Terms="UnitMovementUpdate.AP_HotSSplitterling.Walk" Send="AnimClear Birth"/>
+        <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
+        <On Terms="ActorCreation; ValidateUnit AP_CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Add" Send="AnimGroupApply Superior"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Add" Send="SetWalkAnimMoveSpeed 3"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Remove" Send="AnimGroupRemove Superior"/>
+        <On Terms="Upgrade.AP_CentrificalHooks.Remove" Send="SetWalkAnimMoveSpeed 2"/>
+        <On Terms="WeaponStart.AP_HotSBanelingExplodeSmall.AttackStart" Send="StatusSet DeathSuicide 1"/>
+        <On Terms="WeaponStart.AP_HotSBanelingExplodeBuildingSmall.AttackStart" Send="StatusSet DeathSuicide 1"/>
+        <On Terms="UnitDeathCustomize; IsStatus DeathSuicide 0" Send="Create AP_BanelingDeathNormalSound"/>
+        <On Terms="UnitDeathCustomize; IsStatus DeathSuicide 1" Send="Create AP_BanelingDeathSuicideSound"/>
+        <On Terms="UnitBirth.AP_HotSSplitterlingMedium" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HotSSplitterlingMedium" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HotSSplitterlingMediumBurrowed" Send="TerrainSquibDeactivate"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_HotSSplitterlingMedium; MorphTo AP_HotSSplitterlingMediumBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HotSSplitterlingMedium; MorphFrom AP_HotSSplitterlingMediumBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_HotSSplitterlingMedium; MorphFrom AP_HotSSplitterlingMediumBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveHotSRupture" Send="DeathCustomize Variation1"/>
+        <On Terms="UnitDeathCustomize; ValidatePlayer AP_HaveHotSCorrosiveBile" Send="DeathCustomize Variation2"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Baneling_Land"/>
+        <On Terms="UnitMovementUpdate.AP_HotSSplitterlingMediumBurrowed.Stand" Send="Create AP_HotSSplitterlingMediumBurrowedSplat"/>
+        <On Terms="UnitMovementUpdate.AP_HotSSplitterlingMediumBurrowed.Walk" Target="AP_HotSSplitterlingMediumBurrowedSplat" Send="Destroy"/>
+        <DeathArray index="Normal" ModelLink="AP_SplitterlingSmallDeath" SoundLink="BanelingDeathNormalSound"/>
+        <DeathCustoms ModelLink="AP_SplitterlingMediumRuptureExplosion" Name="Variation1"/>
+        <DeathCustoms ModelLink="AP_SplitterlingMediumCorrosiveExplosion" Name="Variation2"/>
+        <PortraitModel value="AP_SplitterlingPortrait"/>
+        <TerrainSquibs>
+            <GroupName value="RippleStandard"/>
+            <MovementDistance value="0.250000,0.250000"/>
+            <IdlePeriod value="0.200000,0.400000"/>
+            <RangeUp value="1.000000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleTiny"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2"/>
+        <BarOffset value="35"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-splitterling.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level0.dds"/>
+        <ShieldArmorIcon value="Assets\Textures\btn-upgrade-zerg-swarmfrenzy.dds"/>
+        <StatusColors index="Shields">
+            <ColorArray index="0" value="255,0,128,0"/>
+        </StatusColors>
+        <UnitIcon value="Assets\Textures\btn-unit-zerg-splitterling.dds"/>
+        <VitalColors index="Shields">
+            <ColorArray value="255,0,128,0"/>
+        </VitalColors>
+        <VitalNames index="Shields" value="Vital/ZergShields"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-splitterling.dds"/>
+        </Wireframe>
+        <WireframeShieldColor value="255,0,128,0"/>
+    </CActorUnit>
+    <CActorSplat id="AP_HotSSplitterlingMediumBurrowedSplat" parent="BurrowedSplat" unitName="AP_HotSSplitterlingMedium"/>
+    <CActorModel id="AP_RegenerativeBileBuff" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_HotSBanelingExplodeLargeHealSearchHeal.Start; At Target; !ValidateUnit AP_HaveHotSHunter" Send="Create"/>
+        <On Terms="Effect.AP_HotSBanelingExplodeSmallHealSearchHeal.Start; At Target; !ValidateUnit AP_HaveHotSHunter" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth" HoldRotation="1"/>
+        <Model value="AP_MendBuff"/>
+    </CActorModel>
+    <CActorModel id="AP_RegenerativeBileBuffB" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_HotSBanelingExplodeLargeHealSearchHeal.Start; At Target; ValidatePlayer AP_HaveHotSHunter" Send="Create"/>
+        <On Terms="Effect.AP_HotSBanelingExplodeSmallHealSearchHeal.Start; At Target; ValidatePlayer AP_HaveHotSHunter" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardNorth" HoldRotation="1"/>
+        <Model value="AP_MendBuff"/>
+    </CActorModel>
+    <CActorModel id="AP_HunterJumpDustModel" parent="ModelAnimationStyleOneShot">
+        <FogVisibility value="Visible"/>
+        <On Terms="Behavior.AP_HotSHunterJump.LandUp" Send="Create"/>
+        <On Terms="Behavior.AP_HotSHunterJump.LandDown" Send="Create"/>
+        <On Terms="Effect.AP_HunterLaunchDisable.Start; At Caster" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpShadow" HoldPosition="1" HoldRotation="1"/>
+        <Model value="JumpLandDust"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorSound id="AP_HunterJumpLaunchSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_HotSHunterJump.Launch" Send="Create"/>
+        <On Terms="Effect.AP_HunterVolatileBurstLaunchMissile.Start" Send="Create"/>
+        <Sound value="AP_BanelingHunter_JumpLaunch"/>
+    </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->

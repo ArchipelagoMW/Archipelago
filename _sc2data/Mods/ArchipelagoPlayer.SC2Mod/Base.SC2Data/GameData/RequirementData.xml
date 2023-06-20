@@ -1336,4 +1336,32 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeVoidStalkerMultishotCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHotSBanelingCorrosiveBile">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSBanelingCorrosiveBileCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSBanelingHeal">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSBanelingHealCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSRupture">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotsRuptureCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveCentrificalHooks">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeCentrificalHooksCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSHunter">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHunterCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSSplitterling">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSSplitterlingCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HasBanelingBurrowedMovement">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeBanelingBurrowMoveCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>
