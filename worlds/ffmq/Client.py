@@ -41,6 +41,7 @@ NPC_CHECKS = {
 
 }
 
+
 def get_flag(data, flag):
     byte = int(flag / 8)
     bit = int(0x80 / (2 ** (flag % 8)))
@@ -85,7 +86,7 @@ class FFMQClient(SNIClient):
             return
 
         if not ctx.finished_game:
-            if completed_game[0] & 0x80:
+            if completed_game[0] & 0x80 and game_flags[30] & 0x18:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
 

@@ -1,4 +1,4 @@
-from Options import Choice, Range, Toggle
+from Options import Choice, FreeText, Toggle
 
 
 class Logic(Choice):
@@ -190,6 +190,15 @@ class CrestShuffle(Toggle):
     display_name = "Crest Shuffle"
 
 
+class MapShuffleSeed(FreeText):
+    """If this is a number, it will be used as a set seed number for Map, Crest, and Battlefield Reward shuffles.
+    If this is "random" the seed will be chosen randomly. If it is any other text, it will be used as a seed group name.
+    All players using the same seed group name will get the same shuffle results, as long as their Map Shuffle,
+    Crest Shuffle, and Shuffle Battlefield Rewards settings are the same."""
+    display_name = "Map Shuffle Seed"
+    default = "random"
+
+
 class LevelingCurve(Choice):
     """Adjust the level gain rate."""
     display_name = "Leveling Curve"
@@ -251,9 +260,8 @@ option_definitions = {
     "tweak_frustrating_dungeons": TweakFrustratingDungeons,
     "map_shuffle": MapShuffle,
     "crest_shuffle": CrestShuffle,
-    "leveling_curve": LevelingCurve,
     "shuffle_battlefield_rewards": ShuffleBattlefieldRewards,
+    "map_shuffle_seed": MapShuffleSeed,
+    "leveling_curve": LevelingCurve,
     "battlefields_battles_quantities": BattlefieldsBattlesQuantities,
-
-
 }

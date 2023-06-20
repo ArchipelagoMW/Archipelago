@@ -64,6 +64,7 @@ item_table = {
     "Bomb": ItemData(41, ItemClassification.progression, ["Weapons", "Bombs"]),
     "Jumbo Bomb": ItemData(42, ItemClassification.progression_skip_balancing, ["Weapons", "Bombs"]),
     "Mega Grenade": ItemData(43, ItemClassification.progression, ["Weapons", "Bombs"]),
+    # Ally-only equipment does nothing when received, no reason to put them in the datapackage
     #"Morning Star": ItemData(44, ItemClassification.progression, ["Weapons"]),
     #"Bow Of Grace": ItemData(45, ItemClassification.progression, ["Weapons"]),
     #"Ninja Star": ItemData(46, ItemClassification.progression, ["Weapons"]),
@@ -90,21 +91,24 @@ item_table = {
     "Magic Ring": ItemData(62, ItemClassification.useful, ["Accessories"]),
     "Cupid Locket": ItemData(63, ItemClassification.useful, ["Accessories"]),
 
-
-    "54 XP": ItemData(96, ItemClassification.filler, data_name="Xp54"),
-    "99 XP": ItemData(97, ItemClassification.filler, data_name="Xp99"),
-    "540 XP": ItemData(98, ItemClassification.filler, data_name="Xp540"),
-    "744 XP": ItemData(99, ItemClassification.filler, data_name="Xp744"),
-    "816 XP": ItemData(100, ItemClassification.filler, data_name="Xp816"),
-    "1068 XP": ItemData(101, ItemClassification.filler, data_name="Xp1068"),
-    "1200 XP": ItemData(102, ItemClassification.filler, data_name="Xp1200"),
-    "2700 XP": ItemData(103, ItemClassification.filler, data_name="Xp2700"),
-    "2808 XP": ItemData(104, ItemClassification.filler, data_name="Xp2808"),
-    "150 Gp": ItemData(105, ItemClassification.filler, data_name="Gp150"),
-    "300 Gp": ItemData(106, ItemClassification.filler, data_name="Gp300"),
-    "600 Gp": ItemData(107, ItemClassification.filler, data_name="Gp600"),
-    "900 Gp": ItemData(108, ItemClassification.filler, data_name="Gp900"),
-    "1200 Gp": ItemData(109, ItemClassification.filler, data_name="Gp1200"),
+    # these are understood by FFMQR and I could place these if I want, but it's easier to just let FFMQR
+    # place them. I want an option to make shuffle battlefield rewards NOT color-code the battlefields,
+    # and then I would make the non-item reward battlefields into AP checks and these would be put into those as
+    # the item for AP. But there is no such option right now.
+    # "54 XP": ItemData(96, ItemClassification.filler, data_name="Xp54"),
+    # "99 XP": ItemData(97, ItemClassification.filler, data_name="Xp99"),
+    # "540 XP": ItemData(98, ItemClassification.filler, data_name="Xp540"),
+    # "744 XP": ItemData(99, ItemClassification.filler, data_name="Xp744"),
+    # "816 XP": ItemData(100, ItemClassification.filler, data_name="Xp816"),
+    # "1068 XP": ItemData(101, ItemClassification.filler, data_name="Xp1068"),
+    # "1200 XP": ItemData(102, ItemClassification.filler, data_name="Xp1200"),
+    # "2700 XP": ItemData(103, ItemClassification.filler, data_name="Xp2700"),
+    # "2808 XP": ItemData(104, ItemClassification.filler, data_name="Xp2808"),
+    # "150 Gp": ItemData(105, ItemClassification.filler, data_name="Gp150"),
+    # "300 Gp": ItemData(106, ItemClassification.filler, data_name="Gp300"),
+    # "600 Gp": ItemData(107, ItemClassification.filler, data_name="Gp600"),
+    # "900 Gp": ItemData(108, ItemClassification.filler, data_name="Gp900"),
+    # "1200 Gp": ItemData(109, ItemClassification.filler, data_name="Gp1200"),
 
 
     "Bomb Refill": ItemData(221, ItemClassification.filler, ["Refills"]),
@@ -223,8 +227,6 @@ def create_items(self) -> None:
             if starting_weapon in self.item_name_groups[item_group]:
                 starting_weapon = prog_map[item_group]
                 break
-        else:
-            raise Exception(f"Failed to convert {starting_weapon} to a Progressive item")
     self.multiworld.push_precollected(self.create_item(starting_weapon))
     self.multiworld.push_precollected(self.create_item("Steel Armor"))
     if self.multiworld.sky_coin_mode[self.player] == "start_with":
@@ -240,8 +242,6 @@ def create_items(self) -> None:
                 if item_name in self.item_name_groups[item_group]:
                     item_name = prog_map[item_group]
                     break
-            else:
-                raise Exception(f"Failed to convert {starting_weapon} to a Progressive item")
         if item_name == "Sky Coin":
             if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
                 for _ in range(40):
@@ -256,29 +256,16 @@ def create_items(self) -> None:
             return
         if self.multiworld.logic[self.player] != "friendly" and item_name in ("Magic Mirror", "Mask"):
             i.classification = ItemClassification.useful
+        if (self.multiworld.logic[self.player] == "expert" and self.multiworld.map_shuffle[self.player] == "none" and
+                item_name == "Exit Book"):
+            i.classification = ItemClassification.progression
         items.append(i)
 
     for item_group in ("Key Items", "Spells", "Armors", "Helms", "Shields", "Accessories", "Weapons"):
         for item in self.item_name_groups[item_group]:
             add_item(item)
 
-    # x = [0, 0]
-    # for item in items:
-    #     if item.useful:
-    #         x[0] += 1
-    #     elif item.advancement:
-    #         x[1] += 1
-    #
-    # print(x)
-
     if self.multiworld.brown_boxes[self.player] == "include":
-        # fillers = filler_counts.copy()
-        # if self.multiworld.sky_coin_mode[self.player] == "shattered":
-        #     fillers["Cure Potion"] -= 12
-        #     fillers["Heal Potion"] -= 10
-        #     fillers["Seed"] -= 4
-        #     fillers["Bomb Refill"] -= 4
-        #     fillers["Projectile Refill"] -= 10
         filler_items = []
         for item, count in fillers.items():
             filler_items += [self.create_item(item) for _ in range(count)]
@@ -287,28 +274,13 @@ def create_items(self) -> None:
             filler_items = filler_items[39:]
         items += filler_items
 
-
     self.multiworld.itempool += items
 
-    if True or len(self.multiworld.player_ids) > 1:
-        # swept_state = self.multiworld.state.copy()
-        # swept_state.sweep_for_events()
-        # locations = [location for location in self.multiworld.get_reachable_locations(swept_state, self.player)
-        #              if location.address]
-        # sphere_1_size = ((100 / (251 if self.multiworld.brown_boxes[self.player] == "include" else 80))
-        #                  * len(locations))
+    if len(self.multiworld.player_ids) > 1:
         early_choices = ["Sand Coin", "River Coin"]
-        # if self.multiworld.starting_weapon[self.player] != "bomb":
-        #     if self.multiworld.progressive_gear[self.player]:
-        #         early_choices.append("Progressive Bomb")
-        #     else:
-        #         early_choices.append(self.multiworld.choice(["Bomb", "Jumbo Bomb", "Mega Grenade"]))
         early_item = self.multiworld.random.choice(early_choices)
         self.multiworld.early_items[self.player][early_item] = 1
-        # if "Coin" not in early_item:
-        #     self.multiworld.worlds[self.player].post_early_coin = self.create_item(self.multiworld.random.choice(
-        #         ["Sand Coin", "River Coin"]))
-        #     items.remove(self.multiworld.worlds[self.player].post_early_coin)
+
 
 class FFMQItem(Item):
     game = "Final Fantasy Mystic Quest"
