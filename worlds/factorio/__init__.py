@@ -6,7 +6,7 @@ import typing
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type
+from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
@@ -20,10 +20,8 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
 
 
 def launch_client():
-    import multiprocessing
     from .Client import launch
-    process = multiprocessing.Process(target=launch)
-    process.start()
+    launch_subprocess(launch, name="FactorioClient")
 
 
 components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
