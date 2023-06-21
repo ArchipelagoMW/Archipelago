@@ -44,6 +44,8 @@ class FFMQWorld(World):
     create_regions = create_regions
     set_rules = set_rules
 
+    web = FFMQWebWorld
+
     def __init__(self, world, player: int):
         self.rom_name_available_event = threading.Event()
         self.rom_name = None
