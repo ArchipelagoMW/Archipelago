@@ -41,10 +41,13 @@ class BlasphemousWorld(World):
     item_name_groups = group_table
     option_definitions = blasphemous_options
 
-    start_room: str = "D17Z01S01"
-    door_connections: Dict[str, str] = {}
-
     required_client_version = (0, 4, 2)
+
+
+    def __init__(self, multiworld, player):
+        super(BlasphemousWorld, self).__init__(multiworld, player)
+        self.start_room: str = "D17Z01S01"
+        self.door_connections: Dict[str, str] = {}
 
 
     def set_rules(self):
