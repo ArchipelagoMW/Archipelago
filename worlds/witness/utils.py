@@ -241,6 +241,11 @@ def get_vanilla_logic():
     return get_adjustment_file("WitnessLogicVanilla.txt")
 
 
+@cache_argsless
+def get_items():
+    return get_adjustment_file("WitnessItems.txt")
+
+
 def get_logic_file(filepath: str):
     if filepath == "WitnessLogic.txt":
         return get_sigma_normal_logic()

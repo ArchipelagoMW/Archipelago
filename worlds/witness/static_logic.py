@@ -1,6 +1,6 @@
 import os
 
-from .utils import define_new_region, parse_lambda, lazy, get_logic_file
+from .utils import define_new_region, parse_lambda, lazy, get_logic_file, get_items
 
 
 class StaticWitnessLogicObj:
@@ -162,48 +162,45 @@ class StaticWitnessLogic:
         Parses currently defined items from WitnessItems.txt
         """
 
-        path = os.path.join(os.path.dirname(__file__), "WitnessItems.txt")
-        with open(path, "r", encoding="utf-8") as file:
-            current_set = self.ALL_SYMBOL_ITEMS
+        lines = get_items()
+        current_set = self.ALL_SYMBOL_ITEMS
 
-            for line in file.readlines():
-                line = line.strip()
+        for line in lines:
+            if line == "Progression:":
+                current_set = self.ALL_SYMBOL_ITEMS
+                continue
+            if line == "Boosts:":
+                current_set = self.ALL_BOOSTS
+                continue
+            if line == "Traps:":
+                current_set = self.ALL_TRAPS
+                continue
+            if line == "Usefuls:":
+                current_set = self.ALL_USEFULS
+                continue
+            if line == "Doors:":
+                current_set = self.ALL_DOOR_ITEMS
+                continue
+            if line == "":
+                continue
 
-                if line == "Progression:":
-                    current_set = self.ALL_SYMBOL_ITEMS
-                    continue
-                if line == "Boosts:":
-                    current_set = self.ALL_BOOSTS
-                    continue
-                if line == "Traps:":
-                    current_set = self.ALL_TRAPS
-                    continue
-                if line == "Usefuls:":
-                    current_set = self.ALL_USEFULS
-                    continue
-                if line == "Doors:":
-                    current_set = self.ALL_DOOR_ITEMS
-                    continue
-                if line == "":
-                    continue
+            line_split = line.split(" - ")
 
-                line_split = line.split(" - ")
-
-                if current_set is self.ALL_USEFULS:
-                    current_set.add((line_split[1], int(line_split[0]), line_split[2] == "True"))
-                elif current_set is self.ALL_DOOR_ITEMS:
-                    new_door = (line_split[1], int(line_split[0]), frozenset(line_split[2].split(",")))
-                    current_set.add(new_door)
-                    self.ALL_DOOR_ITEMS_AS_DICT[line_split[1]] = new_door
-                else:
-                    if len(line_split) > 2:
-                        progressive_items = line_split[2].split(",")
-                        for i, value in enumerate(progressive_items):
-                            self.ITEMS_TO_PROGRESSIVE[value] = line_split[1]
-                        self.PROGRESSIVE_TO_ITEMS[line_split[1]] = progressive_items
-                        current_set.add((line_split[1], int(line_split[0])))
-                        continue
+            if current_set is self.ALL_USEFULS:
+                current_set.add((line_split[1], int(line_split[0]), line_split[2] == "True"))
+            elif current_set is self.ALL_DOOR_ITEMS:
+                new_door = (line_split[1], int(line_split[0]), frozenset(line_split[2].split(",")))
+                current_set.add(new_door)
+                self.ALL_DOOR_ITEMS_AS_DICT[line_split[1]] = new_door
+            else:
+                if len(line_split) > 2:
+                    progressive_items = line_split[2].split(",")
+                    for i, value in enumerate(progressive_items):
+                        self.ITEMS_TO_PROGRESSIVE[value] = line_split[1]
+                    self.PROGRESSIVE_TO_ITEMS[line_split[1]] = progressive_items
                     current_set.add((line_split[1], int(line_split[0])))
+                    continue
+                current_set.add((line_split[1], int(line_split[0])))
 
     @lazy
     def sigma_expert(self) -> StaticWitnessLogicObj:
