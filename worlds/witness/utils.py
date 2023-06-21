@@ -5,6 +5,7 @@ from typing import *
 from fractions import Fraction
 from pkgutil import get_data
 
+
 def make_warning_string(any_j: bool, any_u: bool, any_d: bool, all_j: bool, all_u: bool, all_d: bool) -> str:
     warning_string = ""
 
