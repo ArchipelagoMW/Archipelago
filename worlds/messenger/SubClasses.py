@@ -24,15 +24,13 @@ class MessengerRegion(Region):
         if self.name == "The Shop":
             if self.multiworld.goal[self.player] > Goal.option_open_music_box:
                 self.locations.append(MessengerLocation("Shop Chest", self, None))
-            if self.multiworld.shop_shuffle[self.player]:
-                self.locations += [MessengerShopLocation(f"The Shop - {shop_loc}", self,
-                                                         name_to_id[f"The Shop - {shop_loc}"])
-                                   for shop_loc in SHOP_ITEMS]
-                self.locations += [MessengerShopLocation(figurine, self, name_to_id[figurine])
-                                   for figurine in FIGURINES]
+            self.locations += [MessengerShopLocation(f"The Shop - {shop_loc}", self,
+                                                     name_to_id[f"The Shop - {shop_loc}"])
+                               for shop_loc in SHOP_ITEMS]
+            self.locations += [MessengerShopLocation(figurine, self, name_to_id[figurine])
+                               for figurine in FIGURINES]
         elif self.name == "Tower HQ":
-            if self.multiworld.shop_shuffle[self.player]:
-                self.locations.append(MessengerLocation("Money Wrench", self, name_to_id["Money Wrench"]))
+            self.locations.append(MessengerLocation("Money Wrench", self, name_to_id["Money Wrench"]))
         if self.multiworld.shuffle_seals[self.player] and self.name in SEALS:
             self.locations += [MessengerLocation(seal_loc, self, name_to_id[seal_loc])
                                for seal_loc in SEALS[self.name]]
@@ -84,7 +82,7 @@ class MessengerItem(Item):
             item_class = ItemClassification.useful
         else:
             item_class = ItemClassification.filler
-        if count:
+        if count >= 100:
             item_class = ItemClassification.progression_skip_balancing
         super().__init__(name, item_class, item_id, player)
 
