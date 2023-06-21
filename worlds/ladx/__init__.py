@@ -1,6 +1,5 @@
 import binascii
 import bsdiff4
-import itertools
 import os
 import pkgutil
 import tempfile
@@ -12,7 +11,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Common import *
 from .Items import (DungeonItemData, DungeonItemType, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items,
-                    links_awakening_items_by_name)
+                    links_awakening_items_by_name, ItemName)
 from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.logic import Logic as LAXDRLogic
@@ -28,6 +27,7 @@ from .Options import links_awakening_options, DungeonItemShuffle
 from .Rom import LADXDeltaPatch
 
 DEVELOPER_MODE = False
+
 
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
@@ -45,7 +45,7 @@ class LinksAwakeningWorld(World):
     After a previous adventure, Link is stranded on Koholint Island, full of mystery and familiar faces.
     Gather the 8 Instruments of the Sirens to wake the Wind Fish, so that Link can go home!
     """
-    game: str = LINKS_AWAKENING # name of the game/world
+    game = LINKS_AWAKENING  # name of the game/world
     web = LinksAwakeningWebWorld()
     
     option_definitions = links_awakening_options  # options the player can set
@@ -82,6 +82,14 @@ class LinksAwakeningWorld(World):
 
     player_options = None
 
+    rupees = {
+        ItemName.RUPEES_20: 0,
+        ItemName.RUPEES_50: 0,
+        ItemName.RUPEES_100: 100,
+        ItemName.RUPEES_200: 200,
+        ItemName.RUPEES_500: 500,
+    }
+
     def convert_ap_options_to_ladxr_logic(self):
         self.player_options = {
             option: getattr(self.multiworld, option)[self.player] for option in self.option_definitions
@@ -94,7 +102,6 @@ class LinksAwakeningWorld(World):
         world_setup.randomize(self.laxdr_options, self.multiworld.random)
         self.ladxr_logic = LAXDRLogic(configuration_options=self.laxdr_options, world_setup=world_setup)
         self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.laxdr_options, self.multiworld.random).toDict()
-
 
     def create_regions(self) -> None:
         # Initialize
@@ -401,9 +408,6 @@ class LinksAwakeningWorld(World):
         
         return "TRADING_ITEM_LETTER"
 
-
-
-
     def generate_output(self, output_directory: str):
         # copy items back to locations
         for r in self.multiworld.get_regions(self.player):
@@ -464,9 +468,8 @@ class LinksAwakeningWorld(World):
             bsdiff4.file_patch_inplace(out_path, title_patch.name)
             os.unlink(title_patch.name)
 
-
         patch = LADXDeltaPatch(os.path.splitext(out_path)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
-                                player_name=self.multiworld.player_name[self.player], patched_path=out_path)
+                               player_name=self.multiworld.player_name[self.player], patched_path=out_path)
         patch.write()
         if not DEVELOPER_MODE:
             os.unlink(out_path)
@@ -476,3 +479,19 @@ class LinksAwakeningWorld(World):
 
     def modify_multidata(self, multidata: dict):
         multidata["connect_names"][binascii.hexlify(self.multi_key).decode()] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+
+    def collect(self, state, item: Item) -> bool:
+        change = super().collect(state, item)
+        if change:
+            rupees = self.rupees.get(item.name, 0)
+            state.prog_items["RUPEES", item.player] += rupees
+
+        return change
+
+    def remove(self, state, item: Item) -> bool:
+        change = super().remove(state, item)
+        if change:
+            rupees = self.rupees.get(item.name, 0)
+            state.prog_items["RUPEES", item.player] -= rupees
+
+        return change

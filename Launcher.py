@@ -11,6 +11,7 @@ Scroll down to components= to add components to the launcher as well as setup.py
 
 import argparse
 import itertools
+import logging
 import multiprocessing
 import shlex
 import subprocess
@@ -55,7 +56,7 @@ def open_patch():
     except Exception as e:
         messagebox('Error', str(e), error=True)
     else:
-        file, _, component = identify(filename)
+        file, component = identify(filename)
         if file and component:
             launch([*get_exe(component), file], component.cli)
 
@@ -96,11 +97,13 @@ components.extend([
 
 def identify(path: Union[None, str]):
     if path is None:
-        return None, None, None
+        return None, None
     for component in components:
         if component.handles_file(path):
-            return path, component.script_name, component
-    return (None, None, None) if '/' in path or '\\' in path else (None, path, None)
+            return path,  component
+        elif path == component.display_name or path == component.script_name:
+            return None, component
+    return None, None
 
 
 def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
@@ -155,10 +158,10 @@ def run_gui():
         container: ContainerLayout
         grid: GridLayout
 
-        _tools = {c.display_name: c for c in components if c.type == Type.TOOL and isfile(get_exe(c)[-1])}
-        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT and isfile(get_exe(c)[-1])}
-        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER and isfile(get_exe(c)[-1])}
-        _funcs = {c.display_name: c for c in components if c.type == Type.FUNC}
+        _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
+        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
+        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
+        _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
 
         def __init__(self, ctx=None):
             self.title = self.base_title
@@ -199,7 +202,7 @@ def run_gui():
                     button_layout.add_widget(button)
 
             for (tool, client) in itertools.zip_longest(itertools.chain(
-                    self._tools.items(), self._funcs.items(), self._adjusters.items()), self._clients.items()):
+                    self._tools.items(), self._miscs.items(), self._adjusters.items()), self._clients.items()):
                 # column 1
                 if tool:
                     build_button(tool[1])
@@ -215,12 +218,21 @@ def run_gui():
 
         @staticmethod
         def component_action(button):
-            if button.component.type == Type.FUNC:
+            if button.component.func:
                 button.component.func()
             else:
                 launch(get_exe(button.component), button.component.cli)
 
     Launcher().run()
+
+
+def run_component(component: Component, *args):
+    if component.func:
+        component.func(*args)
+    elif component.script_name:
+        subprocess.run([*get_exe(component.script_name), *args])
+    else:
+        logging.warning(f"Component {component} does not appear to be executable.")
 
 
 def main(args: Optional[Union[argparse.Namespace, dict]] = None):
@@ -230,16 +242,18 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         args = {}
 
     if "Patch|Game|Component" in args:
-        file, component, _ = identify(args["Patch|Game|Component"])
+        file, component = identify(args["Patch|Game|Component"])
         if file:
             args['file'] = file
         if component:
             args['component'] = component
+        if not component:
+            logging.warning(f"Could not identify Component responsible for {args['Patch|Game|Component']}")
 
     if 'file' in args:
-        subprocess.run([*get_exe(args['component']), args['file'], *args['args']])
+        run_component(args["component"], args["file"], *args["args"])
     elif 'component' in args:
-        subprocess.run([*get_exe(args['component']), *args['args']])
+        run_component(args["component"], *args["args"])
     else:
         run_gui()
 

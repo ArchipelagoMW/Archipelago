@@ -82,8 +82,7 @@ first time launching, you may be prompted to allow it to communicate through the
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit.
+    - Look in the Archipelago folder for `/SNI/lua/`.
 6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of 
 the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
 
@@ -97,8 +96,7 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
 3. Click on the Tools menu and click on **Lua Console**
 4. Click Script -> Open Script...
 5. Select the `Connector.lua` file you downloaded above
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
+    - Look in the Archipelago folder for `/SNI/lua/`.
 
 
 ##### RetroArch 1.10.1 or newer
