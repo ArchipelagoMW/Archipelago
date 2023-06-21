@@ -255,12 +255,6 @@ class BlasphemousWorld(World):
                 exit.connect(target)
                 parent.exits.append(exit)
 
-        #keys = list(self.door_connections.keys())
-        #keys.sort()
-        #sorted_dict = {i: self.door_connections[i] for i in keys}
-        #for d1, d2 in sorted_dict.items():
-        #    print(f"{d1} -> {d2}")
-
         for loc in location_table:
             if not world.boots_of_pleading[player] and loc["name"] == "BotSS: 2nd meeting with Redento":
                 continue
