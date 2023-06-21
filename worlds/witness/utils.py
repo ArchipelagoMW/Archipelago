@@ -106,7 +106,7 @@ def define_new_region(region_string):
     region_obj = {
         "name": region_name,
         "shortName": region_name_simple,
-        "panels": set()
+        "panels": list()
     }
     return region_obj, options
 
