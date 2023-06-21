@@ -31,6 +31,7 @@ class Fruit:
     rhubarb = fruity("Rhubarb")
     grape = fruity("Grape")
     cranberries = fruity("Cranberries")
+    hot_pepper = fruity("Hot Pepper")
 
 
 class Vegetable:
@@ -52,3 +53,7 @@ class Vegetable:
     tea_leaves = "Tea Leaves"
     eggplant = veggie("Eggplant")
     green_bean = veggie("Green Bean")
+    red_cabbage = veggie("Red Cabbage")
+    yam = veggie("Yam")
+    radish = veggie("Radish")
+    taro_root = veggie("Taro Root")

@@ -33,6 +33,9 @@ class Fish:
     periwinkly = "Periwinkle"
     shrimp = "Shrimp"
     snail = "Snail"
+    tuna = "Tuna"
+    eel = "Eel"
+    salmon = "Salmon"
 
 
 class WaterItem:

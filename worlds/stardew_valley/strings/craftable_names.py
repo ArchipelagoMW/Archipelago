@@ -7,6 +7,7 @@ class Craftable:
     scarecrow = "Scarecrow"
     rain_totem = "Rain Totem"
     flute_block = "Flute Block"
+    life_elixir = "Life Elixir"
 
 
 

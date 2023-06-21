@@ -20,4 +20,5 @@ class AnimalProduct:
     sturgeon_roe = "Sturgeon Roe"
     ostrich_egg = "Ostrich Egg"
     dinosaur_egg = "Dinosaur Egg"
+    squid_ink = "Squid Ink"
 
