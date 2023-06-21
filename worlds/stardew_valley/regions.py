@@ -227,7 +227,7 @@ vanilla_connections = [
     ConnectionData(Entrance.mountain_to_tent, Region.tent,
                    flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.mountain_to_carpenter_shop, Region.carpenter,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
+                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.mountain_to_maru_room, Region.maru_room,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.enter_sebastian_room, Region.sebastian_room, flag=RandomizationFlag.BUILDINGS),

@@ -8,6 +8,7 @@ from . import options, data
 from .data.fish_data import legendary_fish, special_fish, all_fish
 from .data.museum_data import all_museum_items
 from .data.villagers_data import all_villagers
+from .strings.festival_check_names import FestivalCheck
 
 LOCATION_CODE_OFFSET = 717000
 
@@ -213,41 +214,42 @@ def extend_festival_locations(randomized_locations: List[LocationData], festival
     if festival_option == options.FestivalLocations.option_disabled:
         return
 
-    randomized_locations.append(location_table["Egg Hunt Victory"])
-    randomized_locations.append(location_table["Egg Festival: Strawberry Seeds"])
-    randomized_locations.append(location_table["Dance with someone"])
-    randomized_locations.append(location_table["Rarecrow #5 (Woman)"])
-    randomized_locations.append(location_table["Luau Soup"])
-    randomized_locations.append(location_table["Dance of the Moonlight Jellies"])
-    randomized_locations.append(location_table["Smashing Stone"])
-    randomized_locations.append(location_table["Grange Display"])
-    randomized_locations.append(location_table["Rarecrow #1 (Turnip Head)"])
-    randomized_locations.append(location_table["Fair Stardrop"])
-    randomized_locations.append(location_table["Spirit's Eve Maze"])
-    randomized_locations.append(location_table["Rarecrow #2 (Witch)"])
-    randomized_locations.append(location_table["Win Fishing Competition"])
-    randomized_locations.append(location_table["Rarecrow #4 (Snowman)"])
-    randomized_locations.append(location_table["Mermaid Pearl"])
-    randomized_locations.append(location_table["Rarecrow #7 (Tanuki)"])
-    randomized_locations.append(location_table["Rarecrow #8 (Tribal Mask)"])
-    randomized_locations.append(location_table["Secret Santa"])
-    randomized_locations.append(location_table["Lupini: Red Eagle"])
-    randomized_locations.append(location_table["Lupini: Portrait Of A Mermaid"])
-    randomized_locations.append(location_table["Lupini: Solar Kingdom"])
+    randomized_locations.append(location_table[FestivalCheck.egg_hunt])
+    randomized_locations.append(location_table[FestivalCheck.strawberry_seeds])
+    randomized_locations.append(location_table[FestivalCheck.dance])
+    randomized_locations.append(location_table[FestivalCheck.rarecrow_5])
+    randomized_locations.append(location_table[FestivalCheck.luau_soup])
+    randomized_locations.append(location_table[FestivalCheck.moonlight_jellies])
+    randomized_locations.append(location_table[FestivalCheck.smashing_stone])
+    randomized_locations.append(location_table[FestivalCheck.grange_display])
+    randomized_locations.append(location_table[FestivalCheck.rarecrow_1])
+    randomized_locations.append(location_table[FestivalCheck.fair_stardrop])
+    randomized_locations.append(location_table[FestivalCheck.spirit_eve_maze])
+    randomized_locations.append(location_table[FestivalCheck.rarecrow_2])
+    randomized_locations.append(location_table[FestivalCheck.fishing_competition])
+    randomized_locations.append(location_table[FestivalCheck.rarecrow_4])
+    randomized_locations.append(location_table[FestivalCheck.mermaid_pearl])
+    randomized_locations.append(location_table[FestivalCheck.rarecrow_7])
+    randomized_locations.append(location_table[FestivalCheck.rarecrow_8])
+    randomized_locations.append(location_table[FestivalCheck.secret_santa])
+    randomized_locations.append(location_table[FestivalCheck.legend_of_the_winter_star])
+    randomized_locations.append(location_table[FestivalCheck.lupini_red_eagle])
+    randomized_locations.append(location_table[FestivalCheck.lupini_portrait_mermaid])
+    randomized_locations.append(location_table[FestivalCheck.lupini_solar_kingdom])
     extend_hard_festival_locations(randomized_locations, festival_option)
 
 
 def extend_hard_festival_locations(randomized_locations, festival_option: int):
     if festival_option != options.FestivalLocations.option_hard:
         return
-    randomized_locations.append(location_table["Cone Hat"])
-    randomized_locations.append(location_table["Iridium Fireplace"])
-    randomized_locations.append(location_table["Lupini: Clouds"])
-    randomized_locations.append(location_table["Lupini: 1000 Years From Now"])
-    randomized_locations.append(location_table["Lupini: Three Trees"])
-    randomized_locations.append(location_table["Lupini: The Serpent"])
-    randomized_locations.append(location_table["Lupini: 'Tropical Fish #173'"])
-    randomized_locations.append(location_table["Lupini: Land Of Clay"])
+    randomized_locations.append(location_table[FestivalCheck.cone_hat])
+    randomized_locations.append(location_table[FestivalCheck.iridium_fireplace])
+    randomized_locations.append(location_table[FestivalCheck.lupini_clouds])
+    randomized_locations.append(location_table[FestivalCheck.lupini_1000_years])
+    randomized_locations.append(location_table[FestivalCheck.lupini_three_trees])
+    randomized_locations.append(location_table[FestivalCheck.lupini_the_serpent])
+    randomized_locations.append(location_table[FestivalCheck.lupini_tropical_fish])
+    randomized_locations.append(location_table[FestivalCheck.lupini_land_of_clay])
 
 
 def extend_special_order_locations(randomized_locations: List[LocationData], world_options):

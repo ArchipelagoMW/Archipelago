@@ -25,6 +25,7 @@ class FestivalCheck:
     rarecrow_7 = "Rarecrow #7 (Tanuki)"
     rarecrow_8 = "Rarecrow #8 (Tribal Mask)"
     secret_santa = "Secret Santa"
+    legend_of_the_winter_star = "The Legend of the Winter Star"
     smashing_stone = "Smashing Stone"
     spirit_eve_maze = "Spirit's Eve Maze"
     strawberry_seeds = "Egg Festival: Strawberry Seeds"

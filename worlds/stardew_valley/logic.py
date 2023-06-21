@@ -465,6 +465,7 @@ class StardewLogic:
             FestivalCheck.lupini_tropical_fish: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_three() & self.can_spend_money(1200),
             FestivalCheck.lupini_land_of_clay: self.has_season(Season.winter) & self.can_reach_region(Region.beach) & self.has_year_three() & self.can_spend_money(1200),
             FestivalCheck.secret_santa: self.has_season(Season.winter) & self.can_reach_region(Region.town) & self.has_any_universal_love(),
+            FestivalCheck.legend_of_the_winter_star: self.has_season(Season.winter) & self.can_reach_region(Region.town),
         })
 
         self.special_order_rules.update({
@@ -1041,7 +1042,7 @@ class StardewLogic:
             if not self.npc_is_in_current_slot(npc):
                 continue
             villager = all_villagers_by_name[npc]
-            gift_rule = self.has(villager.gifts)
+            gift_rule = self.has_any_universal_love()
             meet_rule = self.can_meet(npc)
             rules.append(meet_rule & gift_rule)
         loved_gifts_rules = And(rules)
@@ -1064,7 +1065,7 @@ class StardewLogic:
             if not self.npc_is_in_current_slot(npc):
                 return previous_heart_rule
             villager = all_villagers_by_name[npc]
-            rule_if_birthday = self.has_season(villager.birthday) & self.has(villager.gifts) & self.has_lived_months(hearts // 2)
+            rule_if_birthday = self.has_season(villager.birthday) & self.has_any_universal_love() & self.has_lived_months(hearts // 2)
             rule_if_not_birthday = self.has_lived_months(hearts)
             earn_rule = self.can_meet(npc) & (rule_if_birthday | rule_if_not_birthday)
         else:
