@@ -1,13 +1,12 @@
-import random
 from random import Random
-from typing import Dict, TYPE_CHECKING, NamedTuple, List, Tuple
+from typing import Dict, TYPE_CHECKING, NamedTuple, Tuple, List
 
 if TYPE_CHECKING:
     from . import MessengerWorld
 else:
     MessengerWorld = object
 
-PROG_SHOP_ITEMS = [
+PROG_SHOP_ITEMS: List[str] = [
     "Path of Resilience",
     "Meditation",
     "Strike of the Ninja",
@@ -16,7 +15,7 @@ PROG_SHOP_ITEMS = [
     "Aerobatics Warrior",
 ]
 
-USEFUL_SHOP_ITEMS = [
+USEFUL_SHOP_ITEMS: List[str] = [
     "Karuta Plates",
     "Serendipitous Bodies",
     "Kusari Jacket",
@@ -56,20 +55,20 @@ SHOP_ITEMS: Dict[str, ShopData] = {
     "Focused Power Sense":  ShopData("POWER_SEAL_WORLD_MAP", 300, 600),
 }
 
-FIGURINES = {
-    "Green Kappa Figurine": ShopData("GREEN_KAPPA", 100, 500, 450),
-    "Blue Kappa Figurine":  ShopData("BLUE_KAPPA", 100, 500, 450),
-    "Ountarde Figurine":    ShopData("OUNTARDE", 100, 500, 450),
-    "Red Kappa Figurine":   ShopData("RED_KAPPA", 100, 500, 450),
-    "Demon King Figurine":  ShopData("DEMON_KING", 600, 2000, 2000),
-    "Quillshroom Figurine": ShopData("QUILLSHROOM", 100, 500, 450),
+FIGURINES: Dict[str, ShopData] = {
+    "Green Kappa Figurine":         ShopData("GREEN_KAPPA", 100, 500, 450),
+    "Blue Kappa Figurine":          ShopData("BLUE_KAPPA", 100, 500, 450),
+    "Ountarde Figurine":            ShopData("OUNTARDE", 100, 500, 450),
+    "Red Kappa Figurine":           ShopData("RED_KAPPA", 100, 500, 450),
+    "Demon King Figurine":          ShopData("DEMON_KING", 600, 2000, 2000),
+    "Quillshroom Figurine":         ShopData("QUILLSHROOM", 100, 500, 450),
     "Jumping Quillshroom Figurine": ShopData("JUMPING_QUILLSHROOM", 100, 500, 450),
-    "Scurubu Figurine":     ShopData("SCURUBU", 100, 500, 450),
-    "Jumping Scurubu Figurine": ShopData("JUMPING_SCURUBU", 100, 500, 450),
-    "Wallaxer Figurine":    ShopData("WALLAXER", 100, 500, 450),
-    "Barmath'azel Figurine":ShopData("BARMATHAZEL", 600, 2000, 2000),
-    "Queen of Quills Figurine": ShopData("QUEEN_OF_QUILLS", 400, 1000, 2000),
-    "Demon Hive Figurine":  ShopData("DEMON_HIVE", 100, 500, 450),
+    "Scurubu Figurine":             ShopData("SCURUBU", 100, 500, 450),
+    "Jumping Scurubu Figurine":     ShopData("JUMPING_SCURUBU", 100, 500, 450),
+    "Wallaxer Figurine":            ShopData("WALLAXER", 100, 500, 450),
+    "Barmath'azel Figurine":        ShopData("BARMATHAZEL", 600, 2000, 2000),
+    "Queen of Quills Figurine":     ShopData("QUEEN_OF_QUILLS", 400, 1000, 2000),
+    "Demon Hive Figurine":          ShopData("DEMON_HIVE", 100, 500, 450),
 }
 
 
@@ -88,15 +87,14 @@ def shuffle_shop_prices(world: MessengerWorld) -> Tuple[Dict[str, int], Dict[str
         else:
             shop_prices[item] = price
 
-    remaining_slots = [item for item in [*SHOP_ITEMS, *FIGURINES] if item not in [*shop_prices, *figurine_prices]]
-    if remaining_slots:
-        for shop_item in remaining_slots:
-            shop_data = SHOP_ITEMS.get(shop_item, FIGURINES.get(shop_item))
-            price = local_random.randint(shop_data.min_price, shop_data.max_price)
-            adjusted_price = min(int(price * shop_price_mod / 100), 5000)
-            if "Figurine" in shop_item:
-                figurine_prices[shop_item] = adjusted_price
-            else:
-                shop_prices[shop_item] = adjusted_price
+    remaining_slots = [item for item in [*SHOP_ITEMS, *FIGURINES] if item not in shop_price_planned.value]
+    for shop_item in remaining_slots:
+        shop_data = SHOP_ITEMS.get(shop_item, FIGURINES.get(shop_item))
+        price = local_random.randint(shop_data.min_price, shop_data.max_price)
+        adjusted_price = min(int(price * shop_price_mod / 100), 5000)
+        if "Figurine" in shop_item:
+            figurine_prices[shop_item] = adjusted_price
+        else:
+            shop_prices[shop_item] = adjusted_price
 
     return shop_prices, figurine_prices

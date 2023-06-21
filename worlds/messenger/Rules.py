@@ -4,6 +4,7 @@ from BaseClasses import CollectionState, MultiWorld
 from worlds.generic.Rules import set_rule, allow_self_locking_items, add_rule
 from .Options import MessengerAccessibility, Goal
 from .Constants import NOTES, PHOBEKINS
+from .SubClasses import MessengerShopLocation
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -32,7 +33,7 @@ class MessengerRules:
                                                (self.has_dart(state) or self.can_dboost(state)),
             "Underworld": self.has_tabi,
             "Riviere Turquoise": lambda state: self.has_dart(state) or
-                                               (self.has_wingsuit(state) and self.destroys_projectiles(state)),
+                                               (self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player) and self.can_dboost(state),
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
@@ -58,7 +59,7 @@ class MessengerRules:
             "Searing Crags - Key of Strength": lambda state: state.has("Power Thistle", self.player),
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": self.has_dart,
-            "Glacial Peak Seal - Projectile Spike Pit": self.destroys_projectiles,
+            "Glacial Peak Seal - Projectile Spike Pit": self.can_destroy_projectiles,
             # cloud ruins
             "Cloud Ruins Seal - Ghost Pit": self.has_dart,
             # tower of time
@@ -85,7 +86,7 @@ class MessengerRules:
             "Elemental Skylands Seal - Air": self.has_wingsuit,
             "Elemental Skylands Seal - Water": lambda state: self.has_dart(state) and
                                                              state.has("Currents Master", self.player),
-            "Elemental Skylands Seal - Fire": lambda state: self.has_dart(state) and self.destroys_projectiles(state),
+            "Elemental Skylands Seal - Fire": lambda state: self.has_dart(state) and self.can_destroy_projectiles(state),
             "Earth Mega Shard": self.has_dart,
             "Water Mega Shard": self.has_dart,
             # corrupted future
@@ -112,7 +113,7 @@ class MessengerRules:
     def has_enough_seals(self, state: CollectionState) -> bool:
         return not self.world.required_seals or state.has("Power Seal", self.player, self.world.required_seals)
 
-    def destroys_projectiles(self, state: CollectionState) -> bool:
+    def can_destroy_projectiles(self, state: CollectionState) -> bool:
         return state.has("Strike of the Ninja", self.player)
 
     def can_dboost(self, state: CollectionState) -> bool:
@@ -128,13 +129,8 @@ class MessengerRules:
 
     def can_shop(self, state: CollectionState) -> bool:
         prices = self.world.shop_prices
-        most_expensive = 0
-        loc = "Demon's Bane"
-        for slot, price in prices.items():
-            if price > most_expensive:
-                most_expensive = price
-                loc = slot
-        return state.can_reach(f"The Shop - {loc}", "Location", self.player)
+        most_expensive_loc = max(prices, key=prices.get)
+        return state.can_reach(f"The Shop - {most_expensive_loc}", "Location", self.player)
 
     def set_messenger_rules(self) -> None:
         multiworld = self.world.multiworld
@@ -147,7 +143,6 @@ class MessengerRules:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
             if region.name == "The Shop":
-                from worlds.messenger.SubClasses import MessengerShopLocation
                 for loc in [location for location in region.locations if isinstance(location, MessengerShopLocation)]:
                     loc.access_rule = loc.can_afford
         if multiworld.goal[self.player] == Goal.option_power_seal_hunt:
@@ -172,9 +167,9 @@ class MessengerHardRules(MessengerRules):
             "Bamboo Creek": self.has_vertical,
             "Riviere Turquoise": self.true,
             "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player),
-            "Searing Crags Upper": lambda state: self.destroys_projectiles(state) or self.has_windmill(state)
+            "Searing Crags Upper": lambda state: self.can_destroy_projectiles(state) or self.has_windmill(state)
                                                  or self.has_vertical(state),
-            "Glacial Peak": lambda state: self.destroys_projectiles(state) or self.has_windmill(state)
+            "Glacial Peak": lambda state: self.can_destroy_projectiles(state) or self.has_windmill(state)
                                           or self.has_vertical(state),
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) or
                                                 self.has_windmill(state) or
@@ -184,9 +179,9 @@ class MessengerHardRules(MessengerRules):
         self.location_rules.update({
             "Howling Grotto Seal - Windy Saws and Balls": self.true,
             "Searing Crags Seal - Triple Ball Spinner": self.true,
-            "Searing Crags Seal - Raining Rocks": lambda state: self.has_vertical(state) or self.destroys_projectiles(state),
-            "Searing Crags Seal - Rhythm Rocks": lambda state: self.has_vertical(state) or self.destroys_projectiles(state),
-            "Searing Crags - Power Thistle": lambda state: self.has_vertical(state) or self.destroys_projectiles(state),
+            "Searing Crags Seal - Raining Rocks": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
+            "Searing Crags Seal - Rhythm Rocks": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
+            "Searing Crags - Power Thistle": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
             "Glacial Peak Seal - Ice Climbers": self.has_vertical,
             "Glacial Peak Seal - Projectile Spike Pit": self.true,
             "Cloud Ruins Seal - Ghost Pit": self.true,
@@ -196,7 +191,7 @@ class MessengerHardRules(MessengerRules):
                                                              or self.has_windmill(state),
             "Elemental Skylands Seal - Fire": lambda state: (self.has_dart(state) or self.can_dboost(state)
                                                              or self.has_windmill(state)) and
-                                                            self.destroys_projectiles(state),
+                                                            self.can_destroy_projectiles(state),
             "Earth Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
             "Water Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
         })
@@ -251,7 +246,7 @@ class MessengerOOBRules(MessengerRules):
             "Tower of Time Seal - Time Waster": self.has_dart,
             "Shop Chest": self.has_enough_seals
         }
-        
+
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
         self.world.multiworld.completion_condition[self.player] = lambda state: True

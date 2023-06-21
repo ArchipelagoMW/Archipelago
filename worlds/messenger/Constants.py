@@ -65,7 +65,7 @@ ALL_ITEMS = [
     "Moon Crest",
     *PHOBEKINS,
     "Power Seal",
-    *FILLER.keys(),
+    *FILLER,
     *SHOP_ITEMS,
     *FIGURINES,
     "Money Wrench",

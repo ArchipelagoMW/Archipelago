@@ -8,7 +8,7 @@ class AccessTest(MessengerTestBase):
     }
 
     def testTabi(self) -> None:
-        """locations that hard require the Ninja Tabi"""
+        """locations that hard require the Lightfoot Tabi"""
         locations = [
             "Searing Crags - Pyro", "Underworld - Key of Chaos", "Underworld Seal - Sharp and Windy Climb",
             "Underworld Seal - Spike Wall", "Underworld Seal - Fireball Wave", "Underworld Seal - Rising Fanta",
@@ -103,8 +103,8 @@ class AccessTest(MessengerTestBase):
         items = [["Ruxxtin's Amulet"]]
         self.assertAccessDependency(locations, items)
 
-    def testBottle(self) -> None:
-        """Elemental Skylands and Corrupted Future require the Fairy Bottle"""
+    def testFirefly(self) -> None:
+        """Elemental Skylands and Corrupted Future require the Magic Firefly"""
         locations = [
             "Elemental Skylands - Key of Symbiosis", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Fire",
             "Elemental Skylands Seal - Water", "Corrupted Future - Key of Courage", "Earth Mega Shard",

@@ -41,8 +41,8 @@
    * **The game is limited to alphanumerical characters and `-` so when entering the host name replace `.` with ` `.**
    * This defaults to `archipelago.gg` and does not need to be manually changed if connecting to a game hosted on the
    website.
-   * If using a name that cannot be entered in the in game menus, there is a config file in the game directory. When
-   using this, all connection information must be entered in the file. 
+   * If using a name that cannot be entered in the in game menus, there is a config file (APConfig.toml) in the game
+   directory. When using this, all connection information must be entered in the file. 
 5. Select the `Connect to Archipelago` button
 6. Navigate to save file selection
 7. Select a new valid randomizer save

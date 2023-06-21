@@ -23,22 +23,21 @@ class MessengerRegion(Region):
             self.locations.append(MessengerLocation(loc, self, name_to_id.get(loc, None)))
         if self.name == "The Shop":
             if self.multiworld.goal[self.player] > Goal.option_open_music_box:
-                self.locations.append(MessengerLocation("Shop Chest", self, name_to_id.get("Shop Chest")))
+                self.locations.append(MessengerLocation("Shop Chest", self, None))
             if self.multiworld.shop_shuffle[self.player]:
                 self.locations += [MessengerShopLocation(f"The Shop - {shop_loc}", self,
-                                                         name_to_id.get(f"The Shop - {shop_loc}", None))
+                                                         name_to_id[f"The Shop - {shop_loc}"])
                                    for shop_loc in SHOP_ITEMS]
-                self.locations += [MessengerShopLocation(figurine, self, name_to_id.get(figurine, None))
+                self.locations += [MessengerShopLocation(figurine, self, name_to_id[figurine])
                                    for figurine in FIGURINES]
         elif self.name == "Tower HQ":
             if self.multiworld.shop_shuffle[self.player]:
-                self.locations.append(MessengerLocation("Money Wrench", self, name_to_id.get("Money Wrench")))
-        # putting some dumb special case for searing crags and ToT so i can split them into 2 regions
+                self.locations.append(MessengerLocation("Money Wrench", self, name_to_id["Money Wrench"]))
         if self.multiworld.shuffle_seals[self.player] and self.name in SEALS:
-            self.locations += [MessengerLocation(seal_loc, self, name_to_id.get(seal_loc, None))
+            self.locations += [MessengerLocation(seal_loc, self, name_to_id[seal_loc])
                                for seal_loc in SEALS[self.name]]
         if self.multiworld.shuffle_shards[self.player] and self.name in MEGA_SHARDS:
-            self.locations += [MessengerLocation(shard, self, name_to_id.get(shard, None))
+            self.locations += [MessengerLocation(shard, self, name_to_id[shard])
                                for shard in MEGA_SHARDS[self.name]]
 
     def add_exits(self, exits: Set[str]) -> None:
@@ -68,7 +67,7 @@ class MessengerShopLocation(MessengerLocation):
         cost = self.cost() * 2
         if cost >= 1000:
             cost *= 2
-        can_afford = state.has("Shards", self.player, cost) or state.has("Shards", self.player, world.total_shards)
+        can_afford = state.has("Shards", self.player, min(cost, world.total_shards))
         if "Figurine" in self.name:
             return state.has("Money Wrench", self.player) and can_afford
         return can_afford
@@ -85,7 +84,7 @@ class MessengerItem(Item):
             item_class = ItemClassification.useful
         else:
             item_class = ItemClassification.filler
-        if count >= 100:
+        if count:
             item_class = ItemClassification.progression_skip_balancing
         super().__init__(name, item_class, item_id, player)
 

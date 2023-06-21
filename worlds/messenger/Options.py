@@ -13,7 +13,7 @@ class MessengerAccessibility(Accessibility):
 class Logic(Choice):
     """
     The level of logic to use when determining what locations in your world are accessible.
-    
+
     Normal: can require damage boosts, but otherwise approachable for someone who has beaten the game.
     Hard: has leashing, normal clips, time warps and turtle boosting in logic.
     OoB: places everything with the minimum amount of rules possible. Expect to do OoB. Not guaranteed completable.

@@ -77,7 +77,7 @@ class HardLogicTest(MessengerTestBase):
 
 class NoLogicTest(MessengerTestBase):
     options = {
-        "logic_level": "oob"
+        "logic_level": "oob",
     }
 
     def testAccess(self) -> None:

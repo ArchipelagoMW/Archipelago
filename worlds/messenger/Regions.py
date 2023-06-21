@@ -28,7 +28,6 @@ REGIONS: Dict[str, List[str]] = {
     "Corrupted Future": ["Corrupted Future - Key of Courage"],
     "Music Box": ["Rescue Phantom"],
 }
-"""seal locations have the region in their name and may not need to be created so skip them here"""
 
 SEALS: Dict[str, List[str]] = {
     "Ninja Village": ["Ninja Village Seal - Tree House"],

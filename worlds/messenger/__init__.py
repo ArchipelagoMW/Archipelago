@@ -49,8 +49,8 @@ class MessengerWorld(World):
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(ALL_ITEMS, base_offset)}
-    seal_locs = [seal for region in SEALS for seal in SEALS[region]]
-    mega_shard_locs = [shard for region in MEGA_SHARDS for shard in MEGA_SHARDS[region]]
+    seal_locs = [seal for seals in SEALS.values() for seal in seals]
+    mega_shard_locs = [shard for shards in MEGA_SHARDS.values() for shard in shards]
     shop_locs = [f"The Shop - {shop_loc}" for shop_loc in SHOP_ITEMS]
     location_name_to_id = {location: location_id
                            for location_id, location in
@@ -75,7 +75,7 @@ class MessengerWorld(World):
     shop_prices: Dict[str, int]
     figurine_prices: Dict[str, int]
 
-    def __init__(self, multiworld, player):
+    def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.total_shards = 0
 
@@ -179,16 +179,13 @@ class MessengerWorld(World):
             self.multiworld.logic_level[self.player] > Logic.option_normal
         count = 0
         if "Time Shard " in name:
-            count = int(name.split(" ")[-1].strip("()"))
+            count = int(name.strip("Time Shard ()"))
             self.total_shards += count if count >= 100 else 0
         return MessengerItem(name, self.player, item_id, override_prog, count)
 
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
         if item.advancement and "Time Shard" in item.name:
-            if item.name == "Time Shard":
-                shard_count = 1
-            else:
-                shard_count = int(item.name.split(" ")[-1].strip("()"))
+            shard_count = int(item.name.strip("Time Shard ()"))
             if remove:
                 shard_count = -shard_count
             state.prog_items["Shards", self.player] += shard_count
