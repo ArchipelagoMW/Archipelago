@@ -143,7 +143,7 @@ def set_rules(self) -> None:
         process_rules(self.multiworld.get_entrance("Overworld - Ice Pyramid", self.player),
                       ["MagicMirror"])
         process_rules(self.multiworld.get_entrance("Overworld - Volcano", self.player),
-                      ["GasMask"])
+                      ["Mask"])
         if self.multiworld.map_shuffle[self.player] in ("none", "overworld"):
             process_rules(self.multiworld.get_entrance("Overworld - Bone Dungeon", self.player),
                           ["Bomb"])
