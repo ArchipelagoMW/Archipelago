@@ -76,7 +76,6 @@ non_apworlds: set = {
     "Kingdom Hearts 2",
     "Lufia II Ancient Cave",
     "Meritous",
-    "Noita",
     "Ocarina of Time",
     "Overcooked! 2",
     "Pokemon Red and Blue",
