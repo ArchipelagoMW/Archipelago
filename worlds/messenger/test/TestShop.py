@@ -43,6 +43,22 @@ class ShopCostTest(MessengerTestBase):
         self.assertAccessDependency(locations, items)
 
 
+class ShopCostMinTest(ShopCostTest):
+    options = {
+        "shop_price": "random",
+        "shuffle_seals": "false",
+    }
+    
+    def testDBoost(self) -> None:
+        pass
+    
+    def testCurrents(self) -> None:
+        pass
+    
+    def testStrike(self) -> None:
+        pass
+
+
 class PlandoTest(MessengerTestBase):
     options = {
         "shop_shuffle": "true",
