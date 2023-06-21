@@ -71,7 +71,8 @@ host.yaml at your SNI folder.
 
 ## Optional: Git
 
-[Git](https://git-scm.com) is required to install the Zilliandomizer package. This will be required to generate seeds that include a Zillion world.
+[Git](https://git-scm.com) is required to install some of the packages that Archipelago depends on.
+It may be possible to run Archipelago from source without it, at your own risk.
 
 It is also generally recommended to have Git installed and understand how to use it, especially if you're thinking about contributing.
 Git will allow you to keep your copy of the repository updated without having to redownload the .zip manually.
