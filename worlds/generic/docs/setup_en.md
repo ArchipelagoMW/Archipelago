@@ -9,22 +9,22 @@ general overview; for more specific steps, reference the relevant game's [setup 
 The most recent public release of Archipelago can be found on the GitHub Releases page:
 [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases).
 
-Run the exe file, and after accepting the license agreement you will be prompted on which components you would like to
+Run the exe file, and after accepting the license agreement you will be asked which components you would like to
 install.
 
 The generator allows you to generate multiworld games on your computer. The ROM setups are required if anyone in the
 game that you generate wants to play any of those games as they are needed to generate the relevant patch files. If you
 do not own the game, uncheck the relevant box. If you gain the game later, the installer can be run again to install and
-setup new components.
+set up new components.
 
 The server will allow you to host the multiworld on your machine. Hosting on your machine requires forwarding the port
 you are hosting on. The default port for Archipelago is `38281`. If you are unsure how to do this there are plenty of
 other guides on the internet that will be more suited to your hardware.
 
-The `Clients` are what are used to connect your game to the multiworld. If the game/games you plan to play are available
-here go ahead and install these as well. If the game you choose to play is supported by Archipelago but not listed in
-the installation check the setup guide for that game. Installing a client for a ROM based game requires you to have a
-legally obtained ROM for that game as well.
+The `Clients` are what are used to connect your game to the multiworld. If the game you plan to play is available
+here, go ahead and install its client as well. If the game you choose to play is supported by Archipelago but not listed
+in the installation, check the setup guide for that game. Installing a client for a ROM based game requires you to have
+a legally obtained ROM for that game as well.
 
 ## Generating a game
 
@@ -39,9 +39,9 @@ validity of your YAML file you may check the file by uploading it to the check p
 
 ### Creating a YAML
 
-YAML files may be generated on the Archipelago website by visiting the games page and clicking the "Settings Page" link
-under any game. Clicking "Export Settings" in a game's settings page will download the YAML to your system. Games
-page: [Archipelago Games List](/games)
+YAML files may be generated on the Archipelago website by visiting the [games page](/games) and clicking the
+"Settings Page" link under the relevant game. Clicking "Export Settings" in a game's settings page will download the
+YAML to your system.
 
 In a multiworld there must be one YAML per world. Any number of players can play on each world using either the game's
 native coop system or using Archipelago's coop support. Each world will hold one slot in the multiworld and will have a
@@ -76,8 +76,8 @@ relevant information to the session including the spoiler if one was generated.
 ### Generating a multiplayer game
 
 Archipelago is a multi-game multiworld architecture, so any number of players and any number of games may be used to
-generate. Of note, the website currently limits to a maximum player count of 30. If you would like to generate a game
-larger than that, it must be done on the local installation. Generally, it is better to generate locally to free server
+generate. Of note, the website currently has a maximum generated player count of 30. If you would like to generate a game
+larger than that, it must be done on a local installation. Generally, it is better to generate locally to free server
 resources, and host the resulting multiworld on the website.
 
 #### Gather All Player YAMLs
@@ -102,10 +102,9 @@ created, the number of players, the spoiler (if one was created) and all rooms c
 
 #### On your local installation
 
-It is possible to roll the multiworld locally, using a local Archipelago installation. This is done by entering the
-installation directory of the Archipelago installation (usually C:\ProgramData\Archipelago) and placing each YAML file
-in the `Players` folder. If the folder does not exist then it can be created manually. The files here should not be
-compressed.
+It is possible to generate the multiworld locally, using a local Archipelago installation. This is done by entering the
+Archipelago installation folder (usually C:\ProgramData\Archipelago) and placing each YAML file in the `Players` folder.
+If the folder does not exist then it can be created manually. The files here should not be compressed.
 
 After filling the `Players` folder, the `ArchipelagoGenerate.exe` program should be run in order to generate a
 multiworld. The output of this process is placed in the `output` folder (usually named something like `AP_XXXXX.zip`).
@@ -118,13 +117,13 @@ auto-release, plando support, or setting a password.
 All of these settings, plus other options, may be changed by modifying the `host.yaml` file in the Archipelago
 installation folder. The settings chosen here are baked into the `.archipelago` file that gets output with the other
 files after generation so if rolling locally ensure this file is edited to your liking **before** rolling the seed. This
-file is overridden when running the Archipelago Installation software. If you have changed settings in this file, and
+file is overwritten when running the Archipelago Installation software. If you have changed settings in this file, and
 would like to retain them, you may rename the file to `options.yaml`.
 
 ## Hosting an Archipelago Server
 
 When a multiworld seed is generated, the multidata will be output as a `.archipelago`. If the game was generated locally,
-A compressed folder will be in `/output` and will contain the `.archipelago`, the spoiler, and any relevant files for the
+a compressed folder will be in `/output` and will contain the `.archipelago`, the spoiler, and any relevant files for the
 generated games.
 
 ### Hosting on the website
@@ -134,13 +133,13 @@ page that can be linked to the other players, so they can all see the connection
 connect to the multiworld. Simply click on the url in the title bar, copy the link, and send it to your friends. The
 person who created the room becomes the "owner" of the room, and as such has access to the server console. Clearing
 cookies will remove access to this console, and there is no way to regain it. If a server password was set when
-generating the multiworld game, server admin priveleges may be gained by entering `!admin <password>` from the
+generating the multiworld game, server admin privileges may be gained by entering `!admin <password>` from the
 `ArchipelagoTextClient.exe`.
 
 #### The room page
 
 ![Screenshot of Room Page](/static/generated/docs/Archipelago/example_room.png)
-1. Host Name
+1. Server/Host Name
 2. Port
 3. Slot Name
 4. Download link for data files
@@ -153,7 +152,7 @@ to create a new room page and server for your game.
 
 #### From a locally generated game
 
-After generating a game, a compressed folder will be output to the `/output` directory. Go to the
+After generating a game, a compressed folder will be output to the `/output` folder. Go to the
 [Archipelago Host Game Page](/uploads), click on `Upload File`, navigate to your Archipelago installation, and select
 the generated folder. This will create a new seed page using the information from this folder.
 
@@ -175,9 +174,10 @@ For connecting from the game to the server, the connection info is needed for an
 data files will usually contain the connection info within these files, when hosted on the Archipelago website. If the
 information needs to be entered manually, it is usually comprised of four different sections.
 
-* `Host Name` is the domain or IP address of the server. If the game is being hosted on the main Archipelago website
-this will be `archipelago.gg`. If the game is being hosted on your own local machine `localhost` will work. If the game
-is being hosted on another person's computer then you enter that person's public IP address.
+* `Server`, `Server Name` or `Host Name` are all used interchangeably as the domain or IP address of the server. If the
+game is being hosted on the main Archipelago website this will be `archipelago.gg`. If the game is being hosted on your
+own local machine `localhost` will work. If the game is being hosted on another person's computer then you enter that
+person's public IP address.
 * `Port` is which port on the domain or IP address the game is being hosted on. On the website room pages, this is
 displayed as `archipelago.gg:<port>`. Most clients will accept that information being entered directly as is. If the
 information needs to be entered separately, then the port is the sequence of numbers after the `:`, and the `:` does
@@ -185,7 +185,7 @@ not need to be entered. If a game is being hosted from the `ArchipelagoServer.ex
 be changed in the `host.yaml`.
 * `Slot Name` is the name of your player slot that you are connecting to. This is the same as the name that was set
 when creating your [YAML file](#creating-a-yaml). If the game is hosted on the website, this is also displayed on the
-room page. The name is caps sensitive.
+room page. The name is case-sensitive.
 * `Password` is the password set by the host in order to join the multiworld. By default, this will be empty and is almost
-never required, but is possible to be set when generating the game. Generally, leave this field blank when it exists,
-unless you know that a password was set, and what the password is.
+never required, but one can be set when generating the game. Generally, leave this field blank when it exists,
+unless you know that a password was set, and what that password is.
