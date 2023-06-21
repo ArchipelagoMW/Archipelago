@@ -81,7 +81,6 @@ non_apworlds: set = {
     "Overcooked! 2",
     "Pokemon Red and Blue",
     "Raft",
-    "Risk of Rain 2",
     "Secret of Evermore",
     "Slay the Spire",
     "Starcraft 2 Wings of Liberty",
