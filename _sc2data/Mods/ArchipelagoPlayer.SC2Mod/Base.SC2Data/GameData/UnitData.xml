@@ -2121,9 +2121,9 @@
             </LayoutButtons>
             <LayoutButtons Face="AP_NovaMultiTaskMAFServos" Type="Passive" Requirements="AP_HaveMultiTaskMAFServosThor" Row="1" Column="1"/>
         </CardLayouts>
-        <Radius value="1.375"/>
+        <Radius value="1"/>
         <SeparationRadius value="1"/>
-        <InnerRadius value="0.8125"/>
+        <InnerRadius value="1"/>
         <CargoSize value="8"/>
         <ScoreMake value="500"/>
         <ScoreKill value="500"/>
