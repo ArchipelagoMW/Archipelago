@@ -270,6 +270,7 @@ def extend_walnut_purchase_locations(randomized_locations: List[LocationData], w
     randomized_locations.append(location_table["Repair Ticket Machine"])
     randomized_locations.append(location_table["Repair Boat Hull"])
     randomized_locations.append(location_table["Repair Boat Anchor"])
+    randomized_locations.append(location_table["Open Professor Snail Cave"])
     randomized_locations.extend(locations_by_tag[LocationTags.WALNUT_PURCHASE])
 
 

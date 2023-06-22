@@ -20,6 +20,7 @@ from .regions import vanilla_regions
 from .stardew_rule import False_, Reach, Or, True_, Received, Count, And, Has, TotalReceived, StardewRule
 from .strings.animal_names import Animal, coop_animals, barn_animals
 from .strings.animal_product_names import AnimalProduct
+from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.building_names import Building, ModBuilding
 from .strings.calendar_names import Weekday
@@ -469,7 +470,7 @@ class StardewLogic:
         })
 
         self.special_order_rules.update({
-            "Island Ingredients": self.can_reach_region(Region.island_west) & self.can_farm_perfectly() &
+            "Island Ingredients": self.has_island_transport() & self.can_farm_perfectly() &
                                   self.has(Vegetable.taro_root) & self.has(Fruit.pineapple) & self.has(Forageable.ginger),
             "Cave Patrol": self.can_mine_perfectly() & self.can_mine_to_floor(120),
             "Aquatic Overpopulation": self.can_fish_perfectly(),
@@ -487,7 +488,7 @@ class StardewLogic:
             "Robin's Project": self.can_chop_perfectly() & self.has(Material.hardwood),
             "Robin's Resource Rush": self.can_chop_perfectly() & self.has(Fertilizer.tree) & self.can_mine_perfectly(),
             "Juicy Bugs Wanted!": self.has(Loot.bug_meat),
-            "Tropical Fish": self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
+            "Tropical Fish": self.has_island_transport() & self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
             "A Curious Substance": self.can_mine_perfectly() & self.can_mine_to_floor(80),
             "Prismatic Jelly": self.can_mine_perfectly() & self.can_mine_to_floor(40),
             "Qi's Crop": self.can_farm_perfectly() & self.can_reach_region(Region.greenhouse) &
@@ -1151,6 +1152,9 @@ class StardewLogic:
                                self.has_rusty_key(),  # Rusty key not expected
                                ]
         return Count(12, rules_worth_a_point)
+
+    def has_island_transport(self) -> StardewRule:
+        return self.received(Transportation.island_obelisk) | self.received(Transportation.boat_repair)
 
     def has_any_weapon(self) -> StardewRule:
         return self.has_decent_weapon() | self.received(item.name for item in all_items if Group.WEAPON in item.groups)

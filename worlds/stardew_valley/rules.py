@@ -14,9 +14,16 @@ from .mods.mod_data import ModNames
 from .locations import LocationTags
 from .logic import StardewLogic, And, tool_upgrade_prices
 from .options import StardewOptions
+from .strings.ap_names.transport_names import Transportation
+from .strings.artisan_good_names import ArtisanGood
 from .strings.calendar_names import Weekday
+from .strings.craftable_names import Craftable
+from .strings.material_names import Material
+from .strings.metal_names import MetalBar
 from .strings.skill_names import ModSkill, Skill
 from .strings.tool_names import Tool, ToolMaterial
+from .strings.villager_names import NPC, ModNPC
+from .strings.wallet_item_names import Wallet
 
 
 def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOptions, logic: StardewLogic,
@@ -35,7 +42,7 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
                                  (logic.has_skill_level(Skill.fishing, 6) & logic.can_spend_money(7500)).simplify())
 
         materials = [None, "Copper", "Iron", "Gold", "Iridium"]
-        tool = ["Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can"]
+        tool = [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.watering_can]
         for (previous, material), tool in itertools.product(zip(materials[:4], materials[1:]), tool):
             if previous is None:
                 MultiWorldRules.add_rule(multi_world.get_location(f"{material} {tool} Upgrade", player),
@@ -142,7 +149,7 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_quarry, player),
                              logic.received("Bridge Repair") | (logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_secret_woods, player),
-                             logic.has_tool("Axe", "Iron") | (logic.can_blink()).simplify())
+                             logic.has_tool(Tool.axe, "Iron") | (logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.forest_to_sewers, player),
                              logic.has_rusty_key().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.town_to_sewers, player),
@@ -150,18 +157,18 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.take_bus_to_desert, player),
                              logic.received("Bus Repair").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_skull_cavern, player),
-                             logic.received("Skull Key").simplify())
+                             logic.received(Wallet.skull_key).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mine_to_skull_cavern_floor_100, player),
                              logic.can_mine_perfectly_in_the_skull_cavern().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.talk_to_mines_dwarf, player),
                              logic.can_speak_dwarf() & logic.has_tool(Tool.pickaxe, ToolMaterial.iron))
 
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_desert_obelisk, player),
-                             logic.received("Desert Obelisk").simplify())
+                             logic.received(Transportation.desert_obelisk).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_island_obelisk, player),
-                             logic.received("Island Obelisk").simplify())
+                             logic.received(Transportation.island_obelisk).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.use_farm_obelisk, player),
-                             logic.received("Farm Obelisk").simplify())
+                             logic.received(Transportation.farm_obelisk).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.buy_from_traveling_merchant, player),
                              logic.has_traveling_merchant())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_greenhouse, player),
@@ -171,27 +178,29 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mountain_to_railroad, player),
                              logic.has_lived_months(2))
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_witch_warp_cave, player),
-                             logic.received("Dark Talisman") | (logic.can_blink()).simplify())
+                             logic.received(Wallet.dark_talisman) | (logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_witch_hut, player),
-                             (logic.has("Void Mayonnaise") | logic.can_blink()).simplify())
+                             (logic.has(ArtisanGood.void_mayonnaise) | logic.can_blink()).simplify())
 
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_harvey_room, player),
-                             logic.has_relationship("Harvey", 2))
+                             logic.has_relationship(NPC.harvey, 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mountain_to_maru_room, player),
-                             logic.has_relationship("Maru", 2))
+                             logic.has_relationship(NPC.maru, 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_sebastian_room, player),
-                             (logic.has_relationship("Sebastian", 2) | logic.can_blink()).simplify())
+                             (logic.has_relationship(NPC.sebastian, 2) | logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.forest_to_leah_cottage, player),
-                             logic.has_relationship("Leah", 2))
+                             logic.has_relationship(NPC.leah, 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_elliott_house, player),
-                             logic.has_relationship("Elliott", 2))
+                             logic.has_relationship(NPC.elliott, 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_sunroom, player),
-                             logic.has_relationship("Caroline", 2))
+                             logic.has_relationship(NPC.caroline, 2))
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_wizard_basement, player),
-                             logic.has_relationship("Wizard", 4))
+                             logic.has_relationship(NPC.wizard, 4))
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.mountain_to_leo_treehouse, player),
+                             logic.has_relationship(NPC.leo, 6) & logic.can_reach_region(Region.island_south))
     if ModNames.alec in world_options[options.Mods]:
         MultiWorldRules.set_rule(multi_world.get_entrance(AlecEntrance.petshop_to_bedroom, player),
-                                 (logic.has_relationship("Alec", 2) | logic.can_blink()).simplify())
+                                 (logic.has_relationship(ModNPC.alec, 2) | logic.can_blink()).simplify())
 
 
 def set_ginger_island_rules(logic: StardewLogic, multi_world, player, world_options: StardewOptions):
@@ -201,19 +210,21 @@ def set_ginger_island_rules(logic: StardewLogic, multi_world, player, world_opti
 
     set_boat_repair_rules(logic, multi_world, player)
     set_island_parrot_rules(logic, multi_world, player)
+    MultiWorldRules.add_rule(multi_world.get_location("Open Professor Snail Cave", player),
+                             logic.has(Craftable.cherry_bomb).simplify())
 
 
 def set_boat_repair_rules(logic: StardewLogic, multi_world, player):
     MultiWorldRules.add_rule(multi_world.get_location("Repair Boat Hull", player),
-                             logic.has("Hardwood").simplify())
+                             logic.has(Material.hardwood).simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Repair Boat Anchor", player),
-                             logic.has("Iridium Bar").simplify())
+                             logic.has(MetalBar.iridium).simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Repair Ticket Machine", player),
-                             logic.has("Battery Pack").simplify())
+                             logic.has(ArtisanGood.battery_pack).simplify())
 
 
 def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
-    boat_repaired = logic.received("Boat Repair").simplify()
+    boat_repaired = logic.received(Transportation.boat_repair).simplify()
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.fish_shop_to_boat_tunnel, player),
                              boat_repaired)
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.boat_to_ginger_island, player),
@@ -228,6 +239,8 @@ def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
                              logic.received("Island Farmhouse").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_north_to_dig_site, player),
                              logic.received("Dig Site Bridge").simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.dig_site_to_professor_snail_cave, player),
+                             logic.received("Open Professor Snail Cave").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.talk_to_island_trader, player),
                              logic.received("Island Trader").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_south_to_southeast, player),
@@ -254,7 +267,7 @@ def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
                Entrance.parrot_express_volcano_to_jungle, Entrance.parrot_express_jungle_to_docks,
                Entrance.parrot_express_dig_site_to_docks, Entrance.parrot_express_volcano_to_docks]
     for parrot in parrots:
-        MultiWorldRules.set_rule(multi_world.get_entrance(parrot, player), logic.received("Parrot Express").simplify())
+        MultiWorldRules.set_rule(multi_world.get_entrance(parrot, player), logic.received(Transportation.parrot_express).simplify())
 
 
 def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
@@ -270,7 +283,7 @@ def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
                              has_20_walnut)
     MultiWorldRules.add_rule(multi_world.get_location("Island Mailbox", player),
                              has_5_walnut & logic.received("Island Farmhouse"))
-    MultiWorldRules.add_rule(multi_world.get_location("Farm Obelisk", player),
+    MultiWorldRules.add_rule(multi_world.get_location(Transportation.farm_obelisk, player),
                              has_20_walnut & logic.received("Island Mailbox"))
     MultiWorldRules.add_rule(multi_world.get_location("Dig Site Bridge", player),
                              has_10_walnut & logic.received("Island West Turtle"))
@@ -283,7 +296,7 @@ def set_island_parrot_rules(logic: StardewLogic, multi_world, player):
                              has_5_walnut & logic.received("Island West Turtle"))
     MultiWorldRules.add_rule(multi_world.get_location("Island Resort", player),
                              has_20_walnut & logic.received("Island Farmhouse"))
-    MultiWorldRules.add_rule(multi_world.get_location("Parrot Express", player),
+    MultiWorldRules.add_rule(multi_world.get_location(Transportation.parrot_express, player),
                              has_10_walnut)
 
 
@@ -320,16 +333,16 @@ def set_help_wanted_quests_rules(logic: StardewLogic, multi_world, player, world
     for i in range(0, desired_number_help_wanted):
         prefix = "Help Wanted:"
         delivery = "Item Delivery"
-        rule = logic.received("Month End", i)
+        rule = logic.has_lived_months(i).simplify()
         fishing_rule = rule & logic.can_fish()
         slay_rule = rule & logic.can_do_combat_at_level("Basic")
         item_delivery_index = (i * 4) + 1
         for j in range(item_delivery_index, item_delivery_index + 4):
             location_name = f"{prefix} {delivery} {j}"
-            MultiWorldRules.set_rule(multi_world.get_location(location_name, player), rule.simplify())
+            MultiWorldRules.set_rule(multi_world.get_location(location_name, player), rule)
 
         MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Gathering {i + 1}", player),
-                                 rule.simplify())
+                                 rule)
         MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Fishing {i + 1}", player),
                                  fishing_rule.simplify())
         MultiWorldRules.set_rule(multi_world.get_location(f"{prefix} Slay Monsters {i + 1}", player),
@@ -473,9 +486,9 @@ def set_friendsanity_rules(all_location_names: List[str], logic: StardewLogic, m
 def set_deepwoods_rules(logic: StardewLogic, multi_world: MultiWorld, player: int, world_options: StardewOptions):
     if ModNames.deepwoods in world_options[options.Mods]:
         MultiWorldRules.add_rule(multi_world.get_location("Breaking Up Deep Woods Gingerbread House", player),
-                                 logic.has_tool("Axe", "Gold") & logic.can_reach_woods_depth(50).simplify())
+                                 logic.has_tool(Tool.axe, "Gold") & logic.can_reach_woods_depth(50).simplify())
         MultiWorldRules.add_rule(multi_world.get_location("Chop Down a Deep Woods Iridium Tree", player),
-                                 logic.has_tool("Axe", "Iridium").simplify())
+                                 logic.has_tool(Tool.axe, "Iridium").simplify())
         for depth in {10, 30, 50, 70, 90, 100}:
             MultiWorldRules.set_rule(multi_world.get_entrance(move_to_woods_depth(depth), player),
                                      logic.can_reach_woods_depth(depth).simplify())
