@@ -543,7 +543,7 @@ class LinksAwakeningContext(CommonContext):
         if self.client.tracker is not None and self.locations_info is not None:
             for check in checks:
                 player = self.locations_info[check].player
-                if player == self.slot:
+                if player != self.slot:
                     name = self.location_names[check]
                     meta = self.check_name_to_metadata_map[name]
                     check = self.client.tracker.get_check_from_meta(meta=meta)
