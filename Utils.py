@@ -549,6 +549,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.removeHandler(handler)
         handler.close()
     root_logger.setLevel(loglevel)
+    logging.getLogger("websockets").setLevel(loglevel)  # make sure level is applied for websockets
     if "a" not in write_mode:
         name += f"_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}"
     file_handler = logging.FileHandler(
@@ -784,3 +785,10 @@ def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str]
     task = asyncio.create_task(co, name=name)
     _faf_tasks.add(task)
     task.add_done_callback(_faf_tasks.discard)
+
+
+def deprecate(message: str):
+    if __debug__:
+        raise Exception(message)
+    import warnings
+    warnings.warn(message)
