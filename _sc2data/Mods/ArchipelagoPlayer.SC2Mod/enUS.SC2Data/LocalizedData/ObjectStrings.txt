@@ -1557,7 +1557,6 @@ Behavior/Name/AP_MutaliskRapidRegen=Mutalisk Rapid Regen
 Behavior/Name/AP_NovaAlreadyDominated=Already Dominated
 Behavior/Name/AP_NovaArmorStealthSuit=NovaArmorStealthSuit
 Behavior/Name/AP_NovaDefensiveDroneTimedLife=Timed Life
-Behavior/Name/AP_NovaHelmetGhostVisorDetector=NovaHelmetGhostVisorDetector
 Behavior/Name/AP_NovaHolographicDecoy=NovaHolographicDecoy
 Behavior/Name/AP_NovaHolographicDecoyTimedLife=Nova Holographic Decoy Timed Life
 Behavior/Name/AP_NovaJumpJetRegen=NovaJumpJetRegen
