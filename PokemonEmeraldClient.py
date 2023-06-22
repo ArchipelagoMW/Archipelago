@@ -2,7 +2,7 @@ import asyncio
 import json
 import os
 import subprocess
-from typing import Optional, Dict, Set, Tuple
+from typing import Optional, Dict, Set, Tuple, List
 import zipfile
 
 import bsdiff4
@@ -14,6 +14,8 @@ from Utils import async_start, init_logging, get_options
 from worlds.pokemon_emerald.data import data, config
 from worlds.pokemon_emerald.rom import PokemonEmeraldDeltaPatch
 from worlds.pokemon_emerald.options import Goal
+from worlds.pokemon_emerald.pokemon import national_id_to_species_id_map
+from worlds.pokemon_emerald.util import decode_pokemon_data, encode_pokemon_data
 
 
 GBA_SOCKET_PORT = 43053
@@ -55,6 +57,38 @@ TRACKER_EVENT_FLAGS = [
 
 
 class GBACommandProcessor(ClientCommandProcessor):
+    def _cmd_tradelist(self):
+        if isinstance(self.ctx, GBAContext):
+            logger.info("Available Trades:")
+            for i in range(10):
+                if self.ctx.available_trades[i] is not None:
+                    trade = self.ctx.available_trades[i]
+                    logger.info(f"Trade Slot {i}: {trade['trainer']['name']}'s {trade['nickname']} the {data.species[national_id_to_species_id_map[trade['species']]].label}")
+                else:
+                    logger.info(f"Trade Slot {i}: Empty")
+
+
+    def _cmd_trade(self, trade_slot: int):
+        if isinstance(self.ctx, GBAContext):
+            self.ctx.send_msgs([{
+                "cmd": "Set",
+                "key": "pokemon_trades",
+                "default": {i: "null" for i in range(10)},
+                "want_reply": True,
+                "operations": [{
+                    "operation": "update",
+                    "value": {
+                        trade_slot: decode_pokemon_data(self.ctx.current_trade_pokemon) if self.ctx.current_trade_pokemon[19] == 3 else "null"
+                    }
+                }]
+            }])
+
+            if self.ctx.available_trades[trade_slot] is not None:
+                self.ctx.received_trade_pokemon = self.ctx.available_trades[trade_slot]
+            else:
+                self.ctx.received_trade_pokemon = bytearray([0 for _ in range(80)])
+
+
     def _cmd_gba(self):
         """Check GBA Connection State"""
         if isinstance(self.ctx, GBAContext):
@@ -72,6 +106,9 @@ class GBAContext(CommonContext):
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
     goal_flag: int = IS_CHAMPION_FLAG
+    available_trades: Dict[int, Optional[Dict]]
+    current_trade_pokemon: bytearray
+    received_trade_pokemon: Optional[bytearray]
 
 
     def __init__(self, server_address: Optional[str], password: Optional[str]):
@@ -81,6 +118,9 @@ class GBAContext(CommonContext):
         self.gba_push_pull_task = None
         self.local_checked_locations = set()
         self.local_set_events = {event_name: False for event_name in TRACKER_EVENT_FLAGS}
+        self.available_trades = {}
+        self.current_trade_pokemon = bytearray([0 for _ in range(80)])
+        self.received_trade_pokemon = None
 
 
     async def server_auth(self, password_requested: bool = False):
@@ -88,7 +128,7 @@ class GBAContext(CommonContext):
             await super(GBAContext, self).server_auth(password_requested)
         if self.auth is None:
             self.awaiting_rom = True
-            logger.info('Awaiting connection to GBA to get Player information')
+            logger.info("Awaiting connection to GBA to get Player information")
             return
         await self.send_connect()
 
@@ -104,8 +144,8 @@ class GBAContext(CommonContext):
 
 
     def on_package(self, cmd, args):
-        if cmd == 'Connected':
-            slot_data = args.get('slot_data', None)
+        if cmd == "Connected":
+            slot_data = args.get("slot_data", None)
             if slot_data is not None:
                 if slot_data["goal"] == Goal.option_champion:
                     self.goal_flag = IS_CHAMPION_FLAG
@@ -114,13 +154,25 @@ class GBAContext(CommonContext):
                 elif slot_data["goal"] == Goal.option_norman:
                     self.goal_flag = DEFEATED_NORMAN_FLAG
 
+            self.send_msgs([{
+                "cmd": "SetNotify",
+                "keys": ["pokemon_trades"]
+            }])
+        elif cmd == "SetReply":
+            if args.get("key", None) == "pokemon_trades":
+                self.available_trades = {trade_slot: json.loads(pokemon) for trade_slot, pokemon in args.get("value", {}).items()}
+
 
 def create_payload(ctx: GBAContext):
-    payload = json.dumps({
+    payload = {
         "items": [[item.item - config["ap_offset"], item.flags & 1] for item in ctx.items_received]
-    })
+    }
 
-    return payload
+    if ctx.received_trade_pokemon is not None:
+        payload["received_trade_pokemon"] = list(ctx.received_trade_pokemon)
+        ctx.received_trade_pokemon = None
+
+    return json.dumps(payload)
 
 
 async def handle_read_data(gba_data, ctx: GBAContext):
@@ -182,6 +234,9 @@ async def handle_read_data(gba_data, ctx: GBAContext):
                 "operations": [{"operation": "replace", "value": event_bitfield}]
             }])
             ctx.local_set_events = local_set_events
+
+    if "current_trade_pokemon" in gba_data:
+        ctx.current_trade_pokemon = bytearray(gba_data["current_trade_pokemon"])
 
 
 async def gba_send_receive_task(ctx: GBAContext):

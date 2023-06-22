@@ -32,6 +32,7 @@ local iwram_start = 0x3000000
 local ewram_start = 0x2000000
 
 local last_received_item_index_offset = 0x3778
+local trade_pokemon_offset = 0x377A
 local flags_offset = 0x1450
 local flags_size = 0x12C
 
@@ -73,6 +74,11 @@ function process_data (data)
     if (data["items"] ~= nil) then
         received_items = data["items"]
     end
+
+    if (data["received_trade_pokemon"] ~= nil) then
+        local save_block_address = memory.read_u32_le(save_block_ptr_address, "IWRAM") - ewram_start
+        memory.write_bytes_as_array(save_block_address + trade_pokemon_offset, data["received_trade_pokemon"], "EWRAM")
+    end
 end
 
 -- Try to fill the received item struct with the next item
@@ -110,6 +116,9 @@ function create_message ()
 
         local flag_bytes = memory.read_bytes_as_array(save_block_address + flags_offset, flags_size, "EWRAM")
         data["flag_bytes"] = flag_bytes
+
+        local current_trade_pokemon = memory.read_bytes_as_array(save_block_address + trade_pokemon_offset, "EWRAM")
+        data["current_trade_pokemon"] = current_trade_pokemon
     end
 
     return json.encode(data).."\n"

@@ -1,5 +1,5 @@
 import json
-from typing import Iterable, Optional
+from typing import Iterable, Optional, Dict, Any
 
 from Utils import int16_as_bytes, int32_as_bytes
 
@@ -162,69 +162,67 @@ def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
     })
 
 
-def encode_pokemon_data(pokemon_json: str) -> bytearray:
-    pokemon = json.loads(pokemon_json)
-
+def encode_pokemon_data(pokemon_json: Dict[str, Any]) -> bytearray:
     substructs = [bytearray([0 for _ in range(12)]) for _ in range(4)]
 
     # Substruct type 0
-    for i, byte in enumerate(int16_as_bytes(national_id_to_species_id_map[pokemon["species"]])):
+    for i, byte in enumerate(int16_as_bytes(national_id_to_species_id_map[pokemon_json["species"]])):
         substructs[0][0 + i] = byte
 
     # Held item, 2 bytes
 
-    for i, byte in enumerate(int32_as_bytes(pokemon["experience"])):
+    for i, byte in enumerate(int32_as_bytes(pokemon_json["experience"])):
         substructs[0][4 + i] = byte
 
-    for i, move_info in enumerate(pokemon["moves"]):
+    for i, move_info in enumerate(pokemon_json["moves"]):
         substructs[0][8] |= ((move_info[2] & 0b11) << (2 * i))
 
     # Friendship, 1 byte
 
     # Substruct type 1
-    for i, move_info in enumerate(pokemon["moves"]):
+    for i, move_info in enumerate(pokemon_json["moves"]):
         for j, byte in enumerate(int16_as_bytes(move_info[0])):
             substructs[1][(i * 2) + j] = byte
         substructs[1][8 + i] = move_info[1]
 
     # Substruct type 2
-    for i, ev in enumerate(pokemon["evs"]):
+    for i, ev in enumerate(pokemon_json["evs"]):
         substructs[2][0 + i] = ev
 
-    for i, condition in enumerate(pokemon["conditions"]):
+    for i, condition in enumerate(pokemon_json["conditions"]):
         substructs[2][6 + i] = condition
 
     # Substruct type 3
-    substructs[3][0] = pokemon["pokerus"]
-    substructs[3][1] = pokemon["location_met"]
+    substructs[3][0] = pokemon_json["pokerus"]
+    substructs[3][1] = pokemon_json["location_met"]
 
-    origin = pokemon["level_met"] | (pokemon["game"] << 7) | (pokemon["ball"] << 11)
-    origin |= (1 << 15) if pokemon["trainer"]["female"] else 0
+    origin = pokemon_json["level_met"] | (pokemon_json["game"] << 7) | (pokemon_json["ball"] << 11)
+    origin |= (1 << 15) if pokemon_json["trainer"]["female"] else 0
     for i, byte in enumerate(int16_as_bytes(origin)):
         substructs[3][2 + i] = byte
 
     iv_ability_info = 0
-    for i, iv in enumerate(pokemon["ivs"]):
+    for i, iv in enumerate(pokemon_json["ivs"]):
         iv_ability_info |= iv << (i * 5)
-    iv_ability_info |= 1 << 31 if pokemon["ability"] == 1 else 0
+    iv_ability_info |= 1 << 31 if pokemon_json["ability"] == 1 else 0
     for i, byte in enumerate(int32_as_bytes(iv_ability_info)):
         substructs[3][4 + i] = byte
 
     # Main data
     pokemon_data = bytearray([0 for _ in range(80)])
-    for i, byte in enumerate(int32_as_bytes(pokemon["personality"])):
+    for i, byte in enumerate(int32_as_bytes(pokemon_json["personality"])):
         pokemon_data[0 + i] = byte
 
-    for i, byte in enumerate(int32_as_bytes(pokemon["trainer"]["id"])):
+    for i, byte in enumerate(int32_as_bytes(pokemon_json["trainer"]["id"])):
         pokemon_data[4 + i] = byte
 
-    for i, byte in enumerate(encode_string(pokemon["nickname"], 10)):
+    for i, byte in enumerate(encode_string(pokemon_json["nickname"], 10)):
         pokemon_data[8 + i] = byte
 
     pokemon_data[18] = 2 # Language = English
     pokemon_data[19] = 0b00000010 # Flags for Bad Egg, Has Species, Is Egg, padding bits (low to high)
 
-    for i, byte in enumerate(encode_string(pokemon["trainer"]["name"], 7)):
+    for i, byte in enumerate(encode_string(pokemon_json["trainer"]["name"], 7)):
         pokemon_data[20 + i] = byte
 
     # Markings, 1 byte
@@ -239,12 +237,12 @@ def encode_pokemon_data(pokemon_json: str) -> bytearray:
 
     # Separator, 2 bytes
 
-    substruct_order = [_substruct_order_maps[pokemon["personality"] % 24].index(n) for n in [0, 1, 2, 3]]
+    substruct_order = [_substruct_order_maps[pokemon_json["personality"] % 24].index(n) for n in [0, 1, 2, 3]]
     encrypted_substructs = [None for _ in range(4)]
-    encrypted_substructs[0] = _encrypt_or_decrypt_substruct(substructs[substruct_order[0]], pokemon["personality"] ^ pokemon["trainer"]["id"])
-    encrypted_substructs[1] = _encrypt_or_decrypt_substruct(substructs[substruct_order[1]], pokemon["personality"] ^ pokemon["trainer"]["id"])
-    encrypted_substructs[2] = _encrypt_or_decrypt_substruct(substructs[substruct_order[2]], pokemon["personality"] ^ pokemon["trainer"]["id"])
-    encrypted_substructs[3] = _encrypt_or_decrypt_substruct(substructs[substruct_order[3]], pokemon["personality"] ^ pokemon["trainer"]["id"])
+    encrypted_substructs[0] = _encrypt_or_decrypt_substruct(substructs[substruct_order[0]], pokemon_json["personality"] ^ pokemon_json["trainer"]["id"])
+    encrypted_substructs[1] = _encrypt_or_decrypt_substruct(substructs[substruct_order[1]], pokemon_json["personality"] ^ pokemon_json["trainer"]["id"])
+    encrypted_substructs[2] = _encrypt_or_decrypt_substruct(substructs[substruct_order[2]], pokemon_json["personality"] ^ pokemon_json["trainer"]["id"])
+    encrypted_substructs[3] = _encrypt_or_decrypt_substruct(substructs[substruct_order[3]], pokemon_json["personality"] ^ pokemon_json["trainer"]["id"])
 
     for i in range(4):
         for j in range(12):
