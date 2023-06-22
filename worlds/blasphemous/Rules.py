@@ -1,5 +1,5 @@
 from worlds.generic.Rules import set_rule, add_rule
-from ..AutoWorld import LogicMixin
+from worlds.AutoWorld import LogicMixin
 
 
 class BlasphemousLogic(LogicMixin):

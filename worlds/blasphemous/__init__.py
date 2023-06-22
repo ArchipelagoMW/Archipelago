@@ -1,10 +1,10 @@
 from typing import Dict, List, Set, Any
 from collections import Counter
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 from .Items import base_id, item_table, group_table, tears_set, reliquary_set, event_table
 from .Locations import location_table
-from .Rooms import room_table, door_table, DoorDict
+from .Rooms import room_table, door_table
 from .Rules import rules
 from worlds.generic.Rules import set_rule, add_rule
 from .Options import blasphemous_options
