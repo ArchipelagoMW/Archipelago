@@ -91,6 +91,9 @@ _legendary_pokemon = frozenset({
 })
 
 
+national_id_to_species_id_map = {species.national_dex_number: i for i, species in enumerate(data.species) if species is not None}
+
+
 def get_random_species(
         random: Random,
         candidates: List[Optional[SpeciesData]],

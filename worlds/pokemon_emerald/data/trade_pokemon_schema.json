@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Pokemon",
+  "type": "object",
+  "properties": {
+    "nickname": {
+      "description": "The pokemon's nickname",
+      "type": "string",
+      "minLength": 1
+    },
+    "personality": {
+      "description": "The pokemon's 32-bit personality value",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "species": {
+      "description": "The national dex id of the pokemon species",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1010
+    },
+    "experience": {
+      "description": "The current total EXP",
+      "type": "integer",
+      "minimum": 0
+    },
+    "ability": {
+      "description": "The value of the ability byte (probably 0 or 1, but I'm unsure at the time of writing how Hidden Abilities work)",
+      "type": "integer"
+    },
+    "ivs": {
+      "description": "The 6 IVs of the pokemon",
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 31
+      },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "evs": {
+      "description": "The 6 EVs of the pokemon",
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 255
+      },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "condition": {
+      "description": "The 6 condition or contest stats of the pokemon",
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 255
+      },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "pokerus": {
+      "description": "The value of the pokerus status byte",
+      "type": "integer",
+      "minimum": 0
+    },
+    "game": {
+      "description": "The id of the game the pokemon originated in",
+      "type": "integer",
+      "minimum": 0
+    },
+    "location_met": {
+      "description": "The location id for where the pokemon was met",
+      "type": "integer",
+      "minimum": 0
+    },
+    "level_met": {
+      "description": "The level the pokemon was met at",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "ball": {
+      "description": "The type of poke ball the pokemon was caught in",
+      "type": "integer",
+      "minimum": 0
+    },
+    "moves": {
+      "description": "The move id, PP, and PP Ups used for each move slot",
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [
+          {
+            "description": "The move id",
+            "type": "number",
+            "minimum": 0
+          },
+          {
+            "description": "The move's max PP",
+            "type": "number",
+            "minimum": 1
+          },
+          {
+            "description": "The number of times a PP Up has been used on this move",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 3
+          }
+        ],
+        "minLength": 4,
+        "maxLength": 4
+      }
+    },
+    "trainer": {
+      "description": "Original trainer info",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The original trainer's name",
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "description": "The original trainer's 32-bit ID (includes secret id as higher order bytes)",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "female": {
+          "description": "Whether the original trainer is female",
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "required": ["nickname", "species", "experience", "ivs", "evs", "moves"]
+}

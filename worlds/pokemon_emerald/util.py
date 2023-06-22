@@ -1,9 +1,9 @@
 from typing import Iterable
-import re
 
 from Utils import int32_as_bytes
 
 from .data import data
+from .pokemon import national_id_to_species_id_map
 
 
 character_decoding_map = {
@@ -126,7 +126,7 @@ def decode_pokemon_data(pokemon_data: Iterable[int]):
     return {
         "personality": personality,
         "nickname": decode_string(pokemon_data[8:18]),
-        "species": int.from_bytes(decrypted_substructs[0][0:2], 'little'),
+        "species": data.species[int.from_bytes(decrypted_substructs[0][0:2], 'little')].national_dex_number,
         "item": int.from_bytes(decrypted_substructs[0][2:4], 'little'),
         "experience": int.from_bytes(decrypted_substructs[0][4:8], 'little'),
         "ability": iv_ability_info >> 31,
