@@ -1,6 +1,7 @@
-from typing import Iterable
+import json
+from typing import Iterable, Optional
 
-from Utils import int32_as_bytes
+from Utils import int16_as_bytes, int32_as_bytes
 
 from .data import data
 from .pokemon import national_id_to_species_id_map
@@ -51,9 +52,16 @@ valid_name_characters = {
 }
 
 
-def encode_string(string: str) -> bytearray:
+def encode_string(string: str, length: Optional[int] = None) -> bytearray:
     arr = []
-    for char in string:
+    length = len(string) if length is None else length
+
+    for i in range(length):
+        if i >= len(string):
+            arr.append(0xFF)
+            continue
+
+        char = string[i]
         if char in character_encoding_map:
             arr.append(character_encoding_map[char])
         else:
@@ -101,38 +109,39 @@ _substruct_order_maps = [
     [2, 1, 3, 0], [3, 1, 2, 0], [2, 3, 1, 0], [3, 2, 1, 0]
 ]
 
-def decrypt_substruct(substruct_data: Iterable[int], key: int):
-    decrypted_data = bytearray()
+
+def _encrypt_or_decrypt_substruct(substruct_data: Iterable[int], key: int):
+    modified_data = bytearray()
     for i in range(int(len(substruct_data) / 4)):
-        decrypted_data.extend(int32_as_bytes(int.from_bytes(substruct_data[(i * 4) : (i * 4) + 4], 'little') ^ key))
+        modified_data.extend(int32_as_bytes(int.from_bytes(substruct_data[i * 4 : (i + 1) * 4], 'little') ^ key))
 
-    return decrypted_data
+    return modified_data
 
 
-def decode_pokemon_data(pokemon_data: Iterable[int]):
+def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
     personality = int.from_bytes(pokemon_data[0:4], 'little')
     tid = int.from_bytes(pokemon_data[4:8], 'little')
 
     substruct_order = _substruct_order_maps[personality % 24]
     substructs = []
     for i in substruct_order:
-        substructs.append(pokemon_data[32 + (i * 12) : 32 + (i * 12) + 12])
+        substructs.append(pokemon_data[32 + (i * 12) : 32 + ((i + 1) * 12)])
 
-    decrypted_substructs = [decrypt_substruct(substruct, personality ^ tid) for substruct in substructs]
+    decrypted_substructs = [_encrypt_or_decrypt_substruct(substruct, personality ^ tid) for substruct in substructs]
 
     iv_ability_info = int.from_bytes(decrypted_substructs[3][4:8], 'little')
     met_info = int.from_bytes(decrypted_substructs[3][2:4], 'little')
 
-    return {
+    return json.dumps({
         "personality": personality,
         "nickname": decode_string(pokemon_data[8:18]),
         "species": data.species[int.from_bytes(decrypted_substructs[0][0:2], 'little')].national_dex_number,
         "item": int.from_bytes(decrypted_substructs[0][2:4], 'little'),
         "experience": int.from_bytes(decrypted_substructs[0][4:8], 'little'),
         "ability": iv_ability_info >> 31,
-        "ivs": [(iv_ability_info >> (i * 4)) & 0x0F for i in range(6)],
+        "ivs": [(iv_ability_info >> (i * 5)) & 0x1F for i in range(6)],
         "evs": list(decrypted_substructs[2][0:6]),
-        "condition": list(decrypted_substructs[2][6:12]),
+        "conditions": list(decrypted_substructs[2][6:12]),
         "pokerus": decrypted_substructs[3][0],
         "location_met": decrypted_substructs[3][1],
         "level_met": met_info & 0b0000000001111111,
@@ -140,7 +149,7 @@ def decode_pokemon_data(pokemon_data: Iterable[int]):
         "ball": (met_info & 0b0111100000000000) >> 11,
         "moves": [
             [
-                int.from_bytes(decrypted_substructs[1][(i * 2) : (i * 2) + 2], 'little'),
+                int.from_bytes(decrypted_substructs[1][i * 2 : (i + 1) * 2], 'little'),
                 decrypted_substructs[1][8 + i],
                 (decrypted_substructs[0][8] & (0b00000011 << (i * 2))) >> (i * 2)
             ] for i in range(4)
@@ -150,4 +159,95 @@ def decode_pokemon_data(pokemon_data: Iterable[int]):
             "id": tid,
             "female": (met_info & 0b1000000000000000) != 0,
         }
-    }
+    })
+
+
+def encode_pokemon_data(pokemon_json: str) -> bytearray:
+    pokemon = json.loads(pokemon_json)
+
+    substructs = [bytearray([0 for _ in range(12)]) for _ in range(4)]
+
+    # Substruct type 0
+    for i, byte in enumerate(int16_as_bytes(national_id_to_species_id_map[pokemon["species"]])):
+        substructs[0][0 + i] = byte
+
+    # Held item, 2 bytes
+
+    for i, byte in enumerate(int32_as_bytes(pokemon["experience"])):
+        substructs[0][4 + i] = byte
+
+    for i, move_info in enumerate(pokemon["moves"]):
+        substructs[0][8] |= ((move_info[2] & 0b11) << (2 * i))
+
+    # Friendship, 1 byte
+
+    # Substruct type 1
+    for i, move_info in enumerate(pokemon["moves"]):
+        for j, byte in enumerate(int16_as_bytes(move_info[0])):
+            substructs[1][(i * 2) + j] = byte
+        substructs[1][8 + i] = move_info[1]
+
+    # Substruct type 2
+    for i, ev in enumerate(pokemon["evs"]):
+        substructs[2][0 + i] = ev
+
+    for i, condition in enumerate(pokemon["conditions"]):
+        substructs[2][6 + i] = condition
+
+    # Substruct type 3
+    substructs[3][0] = pokemon["pokerus"]
+    substructs[3][1] = pokemon["location_met"]
+
+    origin = pokemon["level_met"] | (pokemon["game"] << 7) | (pokemon["ball"] << 11)
+    origin |= (1 << 15) if pokemon["trainer"]["female"] else 0
+    for i, byte in enumerate(int16_as_bytes(origin)):
+        substructs[3][2 + i] = byte
+
+    iv_ability_info = 0
+    for i, iv in enumerate(pokemon["ivs"]):
+        iv_ability_info |= iv << (i * 5)
+    iv_ability_info |= 1 << 31 if pokemon["ability"] == 1 else 0
+    for i, byte in enumerate(int32_as_bytes(iv_ability_info)):
+        substructs[3][4 + i] = byte
+
+    # Main data
+    pokemon_data = bytearray([0 for _ in range(80)])
+    for i, byte in enumerate(int32_as_bytes(pokemon["personality"])):
+        pokemon_data[0 + i] = byte
+
+    for i, byte in enumerate(int32_as_bytes(pokemon["trainer"]["id"])):
+        pokemon_data[4 + i] = byte
+
+    for i, byte in enumerate(encode_string(pokemon["nickname"], 10)):
+        pokemon_data[8 + i] = byte
+
+    pokemon_data[18] = 2 # Language = English
+    pokemon_data[19] = 0b00000010 # Flags for Bad Egg, Has Species, Is Egg, padding bits (low to high)
+
+    for i, byte in enumerate(encode_string(pokemon["trainer"]["name"], 7)):
+        pokemon_data[20 + i] = byte
+
+    # Markings, 1 byte
+
+    checksum = 0
+    for i in range(4):
+        for j in range(6):
+            checksum += int.from_bytes(substructs[i][j * 2 : (j + 1) * 2], 'little')
+    checksum &= 0xFFFF
+    for i, byte in enumerate(int16_as_bytes(checksum)):
+        pokemon_data[28 + i] = byte
+
+    # Separator, 2 bytes
+
+    substruct_order = [_substruct_order_maps[pokemon["personality"] % 24].index(n) for n in [0, 1, 2, 3]]
+    encrypted_substructs = [None for _ in range(4)]
+    encrypted_substructs[0] = _encrypt_or_decrypt_substruct(substructs[substruct_order[0]], pokemon["personality"] ^ pokemon["trainer"]["id"])
+    encrypted_substructs[1] = _encrypt_or_decrypt_substruct(substructs[substruct_order[1]], pokemon["personality"] ^ pokemon["trainer"]["id"])
+    encrypted_substructs[2] = _encrypt_or_decrypt_substruct(substructs[substruct_order[2]], pokemon["personality"] ^ pokemon["trainer"]["id"])
+    encrypted_substructs[3] = _encrypt_or_decrypt_substruct(substructs[substruct_order[3]], pokemon["personality"] ^ pokemon["trainer"]["id"])
+
+    for i in range(4):
+        for j in range(12):
+            pokemon_data[32 + (i * 12) + j] = encrypted_substructs[i][j]
+
+    return pokemon_data

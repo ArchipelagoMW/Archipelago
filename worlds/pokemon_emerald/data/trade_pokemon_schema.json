@@ -51,7 +51,7 @@
       "minItems": 6,
       "maxItems": 6
     },
-    "condition": {
+    "conditions": {
       "description": "The 6 condition or contest stats of the pokemon",
       "type": "array",
       "items": {
