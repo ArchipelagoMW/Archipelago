@@ -41,10 +41,10 @@ local save_block_ptr_address = 0x5D8C              -- gSaveBlock1Ptr
 local cb2_address = 0x22C0 + 4                     -- gMain + offset
 
 -- EWRAM Addresses
-local archipelago_received_item_address = 0x3A028  -- gArchipelagoReceivedItem
+local archipelago_received_item_address = 0x3A02C  -- gArchipelagoReceivedItem
 
 -- ROM addresses
-local slot_name_address = 0x59A00C                 -- gArchipelagoInfo
+local slot_name_address = 0x59A3CC                 -- gArchipelagoInfo
 
 -- Bus addresses
 local cb2_overworld_func_address = 0x808605C + 1   -- CB2_Overworld + 1
@@ -117,7 +117,7 @@ function create_message ()
         local flag_bytes = memory.read_bytes_as_array(save_block_address + flags_offset, flags_size, "EWRAM")
         data["flag_bytes"] = flag_bytes
 
-        local current_trade_pokemon = memory.read_bytes_as_array(save_block_address + trade_pokemon_offset, "EWRAM")
+        local current_trade_pokemon = memory.read_bytes_as_array(save_block_address + trade_pokemon_offset, 80, "EWRAM")
         data["current_trade_pokemon"] = current_trade_pokemon
     end
 
