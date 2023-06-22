@@ -438,6 +438,8 @@ class LinksAwakeningContext(CommonContext):
     # TODO: does this need to re-read on reset?
     found_checks = []
     last_resend = time.time()
+    # TODO We could also just reset the dict to contain checks which should never be collected
+    collected_checks = {}
 
     magpie_enabled = False
     magpie = None
@@ -541,22 +543,33 @@ class LinksAwakeningContext(CommonContext):
         if self.client.tracker is not None and self.locations_info is not None:
             for check in checks:
                 player = self.locations_info[check].player
-                # TODO We should also only do this if we haven't already done it, and reset this dict when needed
-                # TODO We could also just reset the dict to contain checks which should never be collected
                 if player == self.slot:
                     name = self.location_names[check]
                     meta = self.check_name_to_metadata_map[name]
                     check = self.client.tracker.get_check_from_meta(meta=meta)
-                    if check is not None:
+                    if check is not None and check.address not in self.collected_checks:
                         # TODO Need to do this one at a time, wait for a response
                         high, low = divmod(check.address, 0x100)
                         self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
                                                          bytes=[high, low, check.mask])
+                        self.collected_checks[check.address] = True
 
     async def get_location_checks_from_server(self, checks: typing.List[int]):
         return await self.send_msgs([{"cmd": "LocationScouts", "locations": checks}])
 
     item_id_lookup = get_locations_to_id()
+
+    async def reset_game_loop(self):
+        """
+        Reset anything needed for the game loop to begin again.
+        """
+        # TODO: cancel all client tasks
+        logger.info("(Re)Starting game loop")
+        self.found_checks.clear()
+        self.collected_checks = {}
+        await self.client.wait_for_retroarch_connection()
+        self.client.reset_auth()
+        await self.client.wait_and_init_tracker()
 
     async def run_game_loop(self):
         def on_item_get(ladxr_checks):
@@ -578,12 +591,7 @@ class LinksAwakeningContext(CommonContext):
 
         while True:
             try:
-                # TODO: cancel all client tasks
-                logger.info("(Re)Starting game loop")
-                self.found_checks.clear()
-                await self.client.wait_for_retroarch_connection()
-                self.client.reset_auth()
-                await self.client.wait_and_init_tracker()
+                await self.reset_game_loop()
 
                 while True:
                     await self.client.main_tick(on_item_get, victory, deathlink)
