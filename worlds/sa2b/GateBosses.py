@@ -84,7 +84,7 @@ def get_boss_rush_bosses(multiworld, player: int):
 
     if multiworld.boss_rush_shuffle[player] == 0:
         boss_list_o = list(range(0, 16))
-        boss_list_s = boss_list_o.copy()
+        boss_list_s = [5, 2, 0, 10, 8, 4, 3, 1, 6, 13, 7, 11, 9, 15, 14, 12]
 
         return dict(zip(boss_list_o, boss_list_s))
     elif multiworld.boss_rush_shuffle[player] == 1:
