@@ -2341,4 +2341,14 @@
         <Count Link="AP_VoidStalkerMultishot" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountBehavior id="AP_CountBehaviorSOAPylonWeaponCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_SOAPylonWeapon" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSOAMatrixOverloadCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_SOAMatrixOverload" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

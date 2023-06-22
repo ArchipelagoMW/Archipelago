@@ -5189,4 +5189,52 @@
         <Pitch value="3.000000,6.000000"/>
         <Volume value="-15.000000,-12.000000"/>
     </CSound>
+    <CSound id="AP_SOAMatrixOverloadOff" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_Off01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_Off02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_Off03_1ch.wav" FacialGroup=""/>
+        <Chance value="0"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="0.000000,0.500000"/>
+        <Volume value="-27.000000,-27.000000"/>
+        <VolumeRolloffPoints Distance="18.000000"/>
+        <VolumeRolloffPoints Distance="40.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_SOAMatrixOverloadOn" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_On01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_On02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_On03_1ch.wav" FacialGroup=""/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="0.000000,0.500000"/>
+        <Volume value="-24.000000,-24.000000"/>
+        <VolumeRolloffPoints Distance="18.000000"/>
+        <VolumeRolloffPoints Distance="40.000000" Volume="-96.000000"/>
+    </CSound>
+    <CSound id="AP_SOAPylonWeaponAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Archon\Archon_AttackLaunch0.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\Archon\Archon_AttackLaunch1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\Archon\Archon_AttackLaunch2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\Archon\Archon_AttackLaunch3.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\Archon\Archon_AttackLaunch4.wav" FacialGroup=""/>
+        <Volume value="4.000000,4.000000"/>
+    </CSound>
+    <CSound id="AP_SOAPylonWeaponAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Archon\Archon_AttackImpact0.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\Archon\Archon_AttackImpact1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\Archon\Archon_AttackImpact2.wav" FacialGroup=""/>
+        <Volume value="-3.000000,-3.000000"/>
+        <Flags index="VariationFallback" value="0"/>
+    </CSound>
+    <CSound id="AP_SOAPylonWeaponChargeSound" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\VoidRay\VoidRay_WeaponLoop.wav" FacialGroup=""/>
+        <LoopCount value="-1"/>
+        <Pitch value="-5.000000,-5.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
 </Catalog>

@@ -2907,13 +2907,17 @@
         <DisableValidatorArray value="AP_HasCripple"/>
         <BuffFlags index="UpdateDurationWhileDisabled" value="1"/>
         <Duration value="10"/>
-        <Modification LifeArmorBonus="-5" ShieldArmorBonus="-5"/>
+        <Modification ShieldArmorBonus="-5">
+            <LifeArmorBonus value="-5"/>
+        </Modification>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_HighTemplarCripple">
         <InfoIcon value="Assets\Textures\btn-ability-protoss-shieldbattery-color.dds"/>
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <Duration value="10"/>
-        <Modification LifeArmorBonus="-5" ShieldArmorBonus="-5"/>
+        <Modification ShieldArmorBonus="-5">
+            <LifeArmorBonus value="-5"/>
+        </Modification>
         <Alignment value="Negative"/>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_DarkTemplarRecentlyRecalled">
@@ -2999,8 +3003,8 @@
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
         <Duration value="2"/>
         <!-- Modification -->
-            <!-- WeaponDisableArray value="HunterVolatileBurst"/ -->
-            <!-- WeaponDisableArray value="HunterVolatileBurstBuilding"/ -->
+        <!-- WeaponDisableArray value="HunterVolatileBurst"/ -->
+        <!-- WeaponDisableArray value="HunterVolatileBurstBuilding"/ -->
         <!-- /Modification -->
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_KerriganBanelingTimedLife" parent="TimedLife">
@@ -3028,9 +3032,54 @@
         <Requirements value="AP_HaveHotSHunter"/>
         <Modification>
             <WeaponEnableArray value="AP_HotSBanelingLaunchBuilding"/>
-            <WeaponDisableArray value="AP_HotSBanelingLaunch"/>
             <WeaponEnableArray value="AP_HotSBanelingLaunchBuildingSmall"/>
+            <WeaponDisableArray value="AP_HotSBanelingLaunch"/>
             <WeaponDisableArray value="AP_HotSBanelingLaunchSmall"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MatrixOverload">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-SpearOfAdun-MatrixOverload.dds"/>
+        <DisableValidatorArray value="AP_HaveSOAMatrixOverload"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <TimeScaleSource Value="Global"/>
+        <Period value="2"/>
+        <PeriodicEffect value="AP_MatrixOverloadSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MatrixOverloadTarget">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-SpearOfAdun-MatrixOverload.dds"/>
+        <DisableValidatorArray value="NotUnderConstruction"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="15"/>
+        <Modification MoveSpeedMultiplier="1.25" AttackSpeedMultiplier="1.15"/>
+    </CBehaviorBuff>
+    <CBehaviorPowerSource id="AP_PowerSource">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Radius value="6.5"/>
+        <CliffLevelFlags index="Higher" value="0"/>
+        <PowerLink value="PowerSource"/>
+    </CBehaviorPowerSource>
+    <CBehaviorBuff id="AP_SOAPylonWeapon">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-purify.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Duration value="30"/>
+        <Modification>
+            <VitalMaxArray index="Shields" value="500"/>
+            <WeaponArray Link="AP_SOAPylonWeapon"/>
+        </Modification>
+        <RefreshEffect value="AP_SOAPylonWeaponShieldRestore"/>
+    </CBehaviorBuff>
+    <CBehaviorPowerSource id="AP_PowerSourceFast">
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <PowerLevel value="2"/>
+        <Radius value="6.5"/>
+        <CliffLevelFlags index="Higher" value="0"/>
+        <PowerLink value="PowerSource"/>
+    </CBehaviorPowerSource>
 </Catalog>

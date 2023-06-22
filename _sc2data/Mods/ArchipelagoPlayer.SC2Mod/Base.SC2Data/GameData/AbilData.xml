@@ -4663,4 +4663,14 @@
         <CmdButtonArray index="Cheer" DefaultButtonFace=""/>
         <CmdButtonArray index="Dance" DefaultButtonFace=""/>
     </CAbilStop>
+    <CAbilAttack id="AP_attackProtossPylon">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <TargetMessage value="Abil/TargetMessage/attack"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AttackBuilding" Requirements="AP_HaveSOAPylonWeaponBuff"/>
+        <MinAttackSpeedMultiplier value="0.25"/>
+        <MaxAttackSpeedMultiplier value="128"/>
+    </CAbilAttack>
+    <CAbilStop id="AP_stopProtossPylon">
+        <CmdButtonArray index="Stop" Requirements="AP_HaveSOAPylonWeaponBuff"/>
+    </CAbilStop>
 </Catalog>

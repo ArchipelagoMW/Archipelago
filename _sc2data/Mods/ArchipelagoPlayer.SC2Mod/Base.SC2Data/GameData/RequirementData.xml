@@ -1364,4 +1364,12 @@
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeBanelingBurrowMoveCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HaveSOAPylonWeaponBuff">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorSOAPylonWeaponCompleteOnlyAtUnit"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSOAMatrixOverload">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAMatrixOverloadCompleteOnly"/>
+    </CRequirement>
 </Catalog>

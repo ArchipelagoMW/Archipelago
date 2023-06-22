@@ -16,6 +16,9 @@ Abil/Name/AP_BarracksTechLabMorph=Tech Lab Morph (Barracks)
 Abil/Name/AP_BarracksTechLabResearch=Tech Lab Research (Barracks)
 Abil/Name/AP_BarracksTechReactorMorph=Barracks Tech Reactor Morph
 Abil/Name/AP_BarracksTrain=Train
+Abil/Name/AP_Blink=Blink
+Abil/Name/AP_BlinkMultiple=Blink Multiple
+Abil/Name/AP_BlinkShieldRestore=Blink Shield Restore
 Abil/Name/AP_BroodLordHangar=Brood Lord Hangar
 Abil/Name/AP_BroodLordQueue2=Brood Lord Queue2
 Abil/Name/AP_BuildAutoTurret=Place Auto Turret
@@ -236,12 +239,11 @@ Abil/Name/AP_burrowedStop=Stop
 Abil/Name/AP_heal=Heal
 Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
-Abil/Name/AP_Blink=Blink
-Abil/Name/AP_BlinkMultiple=Blink Multiple
-Abil/Name/AP_BlinkShieldRestore=Blink Shield Restore
 Abil/Name/MercCompoundResearch2=Research
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
+Abil/Name/AP_attackProtossPylon=attack Protoss Pylon
+Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -328,8 +330,9 @@ Behavior/Name/AP_VoidHighTemplarPsiStormCripple=Cripple
 Behavior/Name/AP_VoidMPImmortalReviveSupressed=Immortal Revive Supressed
 Behavior/Name/AP_VoidPhoenixPhasingArmorBuff=Phasing Armor
 Behavior/Name/AP_VoidRayVoidDamageBoost=Prismatic Alignment
-Behavior/Name/AP_WraithCloak=Cloak
 Behavior/Name/AP_VoidStalkerBlinkShieldRestore=Shadow Regeneration
+Behavior/Name/AP_WraithCloak=Cloak
+Behavior/Name/AP_MatrixOverloadTarget=Matrix Overload
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
@@ -385,8 +388,9 @@ Behavior/Tooltip/AP_VileAcidSlowFlatAmountHeroic=Attack and movement speeds are 
 Behavior/Tooltip/AP_VileAcidSlowFlatAmountStructure=Attack speeds are slowed.
 Behavior/Tooltip/AP_ViperConsumeStructure=A Viper is consuming this structure to increase its energy.
 Behavior/Tooltip/AP_VoidPhoenixPhasingArmorBuff=This unit is immune to damage.
-Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
 Behavior/Tooltip/AP_VoidStalkerBlinkShieldRestore=This unit is regenerating shields.
+Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
+Behavior/Tooltip/AP_MatrixOverloadTarget=This unit's movement and attack speed has been increased.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AWrp=Archon Merge
@@ -412,6 +416,8 @@ Button/Name/AP_Banshee=Build Banshee
 Button/Name/AP_Barracks=Build Barracks
 Button/Name/AP_Battlecruiser=Build Battlecruiser
 Button/Name/AP_BioMechanicalHeal=Bio-Mechanical Repair
+Button/Name/AP_Blink=Blink
+Button/Name/AP_BlinkShieldRestoreUpgrade=Phase Reactor
 Button/Name/AP_BuildAutoTurret=Build Auto-Turret
 Button/Name/AP_BuildCyclone=Build Cyclone
 Button/Name/AP_BuildFortifiedBunker=Build Fortified Bunker
@@ -660,6 +666,8 @@ Button/Name/AP_SpectreWeaponsFree=Weapons Free
 Button/Name/AP_SpiderMine=Deploy Spider Mine
 Button/Name/AP_SpiderMineReplenish=Replenish Spider Mine
 Button/Name/AP_StabilizerMedPacks=Stabilizer Medpacks
+Button/Name/AP_StalkerBlinkMultiple=Blink
+Button/Name/AP_StalkerBlinkShieldRestoreBase=Blink
 Button/Name/AP_Starport=Build Starport
 Button/Name/AP_StimRedirect=Use Stimpack
 Button/Name/AP_StopPlanetaryFortress=Stop
@@ -738,10 +746,7 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_Blink=Blink
-Button/Name/AP_StalkerBlinkMultiple=Blink
-Button/Name/AP_StalkerBlinkShieldRestoreBase=Blink
-Button/Name/AP_BlinkShieldRestoreUpgrade=Phase Reactor
+Button/Name/AP_MatrixOverload=Matrix Overload
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -776,6 +781,8 @@ Button/Tooltip/AP_Barracks=Infantry production facility. <n/><n/><c val="ffff8a"
 Button/Tooltip/AP_BarracksFlying=Barracks must land to start unit production.
 Button/Tooltip/AP_Battlecruiser=Powerful warship.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_BioMechanicalHeal=Heals a friendly biological or mechanical unit.<n/><n/><c val="f078ff">Heals <d ref="Effect,AP_HealingDroneHeal,RechargeVitalRate[0]"/> life per second.</c>
+Button/Tooltip/AP_Blink=Teleports the Stalker to a nearby target location. Ability can only be used once every <d ref="Abil,AP_Blink,Cost[0].Cooldown.TimeUse"/> seconds.
+Button/Tooltip/AP_BlinkShieldRestoreUpgrade=Allows the Stalker's Blink ability to restore <d ref="Effect,AP_VoidStalkerBlinkRestoreModifyUnit,VitalArray[Shields].Change*(Behavior,AP_VoidStalkerBlinkShieldRestore,Duration/Behavior,AP_VoidStalkerBlinkShieldRestore,Period)"/> shields over <d time="5"/> after use.
 Button/Tooltip/AP_BroodLord=Flying heavy-assault unit. Shoots Broodlings at its target. A Broodling is a small creature that can attack ground units.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_BroodLordCocoon=This cocoon contains a Mutalisk that is morphing into a Brood Lord.
 Button/Tooltip/AP_Broodling=Fast melee creature that will last for a short duration.<n/><n/><c val="ffff8a">Can attack ground units.</c>
@@ -1082,6 +1089,11 @@ Button/Tooltip/AP_SpectreWeaponsFree=Orders selected units to fire at will. They
 Button/Tooltip/AP_SpiderMine=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.
 Button/Tooltip/AP_SpiderMineReplenish=Constructs a new Spider Mine to replace those used.<n/><n/>A Vulture can only carry 3 Spider Mines at a time.
 Button/Tooltip/AP_StabilizerMedPacks=Increases Medic heal speed. Reduces the amount of energy required for each heal.
+Button/Tooltip/AP_Stalker=Ranged attack strider. Can use Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_StalkerBlinkMultiple=Teleports the Stalker to a nearby target location. Ability regains a charge every <d ref="Abil,AP_BlinkMultiple,Cost[0].Charge.TimeUse"/> seconds. Can store a maximum of 3 charges.
+Button/Tooltip/AP_StalkerBlinkShieldRestoreBase=Teleports the Stalker to a nearby target location. Ability can only be used once every <d ref="Abil,AP_Blink,Cost[0].Cooldown.TimeUse"/> seconds.
+Button/Tooltip/AP_StalkerPurifier=Purifier Faction<n/>Ranged support strider. Can store multiple Blink charges.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_StalkerShakuras=Nerazim Faction<n/>Ranged attack strider. Shields are restored after using Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Button/Tooltip/AP_Starport=Air-unit production facility. <n/><n/><c val="ffff8a">Enables:</c><n/>- Vikings<n/>- Medivacs
 Button/Tooltip/AP_StarportFlying=Starport must land to start unit production.
 Button/Tooltip/AP_StimRedirect=Orders Marines inside of the Bunker to use Stimpacks. They will take damage and have increased attack speed as normal.
@@ -1169,13 +1181,8 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_Blink=Teleports the Stalker to a nearby target location. Ability can only be used once every <d ref="Abil,AP_Blink,Cost[0].Cooldown.TimeUse"/> seconds.
-Button/Tooltip/AP_Stalker=Ranged attack strider. Can use Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_StalkerBlinkMultiple=Teleports the Stalker to a nearby target location. Ability regains a charge every <d ref="Abil,AP_BlinkMultiple,Cost[0].Charge.TimeUse"/> seconds. Can store a maximum of 3 charges.
-Button/Tooltip/AP_StalkerPurifier=Purifier Faction<n/>Ranged support strider. Can store multiple Blink charges.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_StalkerShakuras=Nerazim Faction<n/>Ranged attack strider. Shields are restored after using Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_StalkerBlinkShieldRestoreBase=Teleports the Stalker to a nearby target location. Ability can only be used once every <d ref="Abil,AP_Blink,Cost[0].Cooldown.TimeUse"/> seconds.
-Button/Tooltip/AP_BlinkShieldRestoreUpgrade=Allows the Stalker's Blink ability to restore <d ref="Effect,AP_VoidStalkerBlinkRestoreModifyUnit,VitalArray[Shields].Change*(Behavior,AP_VoidStalkerBlinkShieldRestore,Duration/Behavior,AP_VoidStalkerBlinkShieldRestore,Period)"/> shields over <d time="5"/> after use.
+Button/Tooltip/AP_MatrixOverload=All friendly units gain <d ref="Behavior,AP_MatrixOverloadTarget,Modification.MoveSpeedMultiplier*100-100"/>% movement speed and <d ref="Behavior,AP_MatrixOverloadTarget,Modification.AttackSpeedMultiplier*100-100"/>% attack speed within Pylon power fields. Effect lasts for up to <d ref="Behavior,AP_MatrixOverloadTarget,Duration"/> seconds after leaving.<n/><n/><c val="ffff8a">Passive ability.</c>
+Button/Tooltip/AP_Pylon=Provides supply.<n/>Supply allows you to warp in more units.<n/>Creates power for nearby structures.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1219,6 +1226,7 @@ Effect/Name/AP_BacklashRocketsLM=Backlash Rockets
 Effect/Name/AP_BacklashRocketsU=Backlash Rockets
 Effect/Name/AP_BileDuctsApplyBehavior=Bile Ducts Apply Behavior
 Effect/Name/AP_BileDuctsDamage=Bile Ducts Damage
+Effect/Name/AP_Blink=NovaArmorBlinkSuitBlinkTeleport
 Effect/Name/AP_BroodlingAttack=Broodling Attack
 Effect/Name/AP_BroodlingEscort=Broodling Escort
 Effect/Name/AP_BroodlingEscortCU=Broodling Escort CU
@@ -1838,6 +1846,8 @@ Effect/Name/AP_Obliterate=Obliterate
 Effect/Name/AP_P38ScytheGuassPistol=P-38 Scythe Guass Pistol
 Effect/Name/AP_P38ScytheGuassPistolBurst=P-38 Scythe Guass Pistol
 Effect/Name/AP_ParalyticSpines=Paralytic Spines
+Effect/Name/AP_ParticleDisruptors=Entropy Lance (LM)
+Effect/Name/AP_ParticleDisruptorsU=Entropy Lance (Damage)
 Effect/Name/AP_PerditionTurretBurrowOrder=Perdition Turret Burrow Order
 Effect/Name/AP_PerditionTurretFlameThrowerCreatePersistent=Perdition Turret Flame Thrower (Create Persistent)
 Effect/Name/AP_PerditionTurretFlameThrowerDamage=Perdition Turret Flame Thrower (Damage)
@@ -1962,6 +1972,10 @@ Effect/Name/AP_SpectreNukeSuicide=Spectre Nuke Suicide
 Effect/Name/AP_SpectreWeaponsFree=Spectre Weapons Free
 Effect/Name/AP_SpiderMineInvulnerable=Spider Mine Invulnerable
 Effect/Name/AP_SpiderMineVulnerable=Spider Mine Vulnerable
+Effect/Name/AP_StalkerEntropyLanceSearch=Stalker - Entropy Lance (Search)
+Effect/Name/AP_StalkerEntropyLanceSearchSet=Stalker - Entropy Lance (Impact Set)
+Effect/Name/AP_StalkerEntropyLanceSecondaryDamage=Entropy Lance Secondary Damage
+Effect/Name/AP_StalkerEntropyLanceSecondaryLM=Entropy Lance Secondary LM
 Effect/Name/AP_Stimpack=Stim Pack (Apply Buff)
 Effect/Name/AP_SuicideDelay=Suicide Delay
 Effect/Name/AP_SuicideRemove=Suicide Remove
@@ -2086,6 +2100,7 @@ Effect/Name/AP_VoidRayChargeBeamRangePhase2AB=Void Ray Charge Beam Range Phase2 
 Effect/Name/AP_VoidRayChargeBeamRangePhase2RB=Void Ray Charge Beam Range Phase2 RB
 Effect/Name/AP_VoidRayChargeBeamRangePhase3AB=Void Ray Charge Beam Range Phase3 AB
 Effect/Name/AP_VoidRayVoidDamageBoost=Void Ray Void Damage Boost
+Effect/Name/AP_VoidStalkerRailgunWeapon=Void Stalker Railgun Weapon
 Effect/Name/AP_VolatileBurstU=Volatile Burst
 Effect/Name/AP_Vulture=Fragmentation Grenade (Missile)
 Effect/Name/AP_VultureSpiderMineBurrowOrder=Spider Mine (Burrow Order)
@@ -2170,27 +2185,21 @@ Effect/Name/AP_YoinkStartSetVikingGround=Yoink Start Set Viking Ground
 Effect/Name/AP_heal=Heal
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
-Effect/Name/AP_Blink=NovaArmorBlinkSuitBlinkTeleport
 Effect/Name/GravitonBeamUnburrow2=Anti Gravity
 Effect/Name/GravitonBeamUnburrowCancel2=Anti Gravity
 Effect/Name/Kill2=Kill
+Effect/Name/AP_MatrixOverloadAB=Matrix Overload
+Effect/Name/AP_MatrixOverloadSearch=Matrix Overload Search
 Effect/Name/NeuralParasiteApplyTimedLife2=Neural Parasite
 Effect/Name/NeuralParasiteDroneCheck2=Neural Parasite Drone Check
 Effect/Name/NeuralParasiteDroneRemoveCheck2=Neural Parasite Drone Remove Check
 Effect/Name/NeuralParasiteLaunchMissile2=Neural Parasite (Launch Missile)
 Effect/Name/NeuralParasitePersistent2=Neural Parasite (Create Persistent)
 Effect/Name/NeuralParasitePersistentSet2=Neural Parasite Persistent Set
-Effect/Name/AP_ParticleDisruptors=Entropy Lance (LM)
-Effect/Name/AP_ParticleDisruptorsU=Entropy Lance (Damage)
 Effect/Name/RemoveCoreRecallingBehaviorVikingAir2=Remove Core Recalling Behavior Viking Air
 Effect/Name/RemoveCoreRecallingBehaviorVikingGround2=Remove Core Recalling Behavior Viking Ground
 Effect/Name/RemoveRecallingBehaviorVikingAir2=Remove Recalling Behavior Viking Air
 Effect/Name/RemoveRecallingBehaviorVikingGround2=Remove Recalling Behavior Viking Ground
-Effect/Name/AP_StalkerEntropyLanceSearch=Stalker - Entropy Lance (Search)
-Effect/Name/AP_StalkerEntropyLanceSearchSet=Stalker - Entropy Lance (Impact Set)
-Effect/Name/AP_StalkerEntropyLanceSecondaryDamage=Entropy Lance Secondary Damage
-Effect/Name/AP_StalkerEntropyLanceSecondaryLM=Entropy Lance Secondary LM
-Effect/Name/AP_VoidStalkerRailgunWeapon=Void Stalker Railgun Weapon
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
 Error/AP_SwarmHostBurrowed=Must Root to attack.
@@ -2409,6 +2418,11 @@ Unit/Name/AP_Spectre=Spectre
 Unit/Name/AP_SpectreNuke=Spectre Nuke
 Unit/Name/AP_SpectreShadowClone=Spectre Shadow
 Unit/Name/AP_SpiderMine=Spider Mine
+Unit/Name/AP_Stalker=Stalker
+Unit/Name/AP_StalkerPurifier=Instigator
+Unit/Name/AP_StalkerSecondaryWeapon=Stalker Secondary Weapon
+Unit/Name/AP_StalkerShakuras=Stalker
+Unit/Name/AP_StalkerWeapon=Stalker
 Unit/Name/AP_Starport=Starport
 Unit/Name/AP_StarportTechReactor=Tech Reactor
 Unit/Name/AP_SupplyDepot=Supply Depot
@@ -2455,12 +2469,8 @@ Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
+Unit/Name/AP_Pylon=Pylon
 Unit/Name/SpectreAP_Nuke=Spectre Nuke
-Unit/Name/AP_Stalker=Stalker
-Unit/Name/AP_StalkerPurifier=Instigator
-Unit/Name/AP_StalkerSecondaryWeapon=Stalker Secondary Weapon
-Unit/Name/AP_StalkerShakuras=Stalker
-Unit/Name/AP_StalkerWeapon=Stalker
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
@@ -2507,6 +2517,7 @@ Upgrade/Name/AP_BaseTerranVehicleWeaponsUltraCapacitors=Terran Vehicle Weapons U
 Upgrade/Name/AP_BattlecruiserBehemothReactor=Behemoth Reactor
 Upgrade/Name/AP_BattlecruiserEnableSpecializations=Weapon Refit
 Upgrade/Name/AP_BearclawNozzles=Incinerator Gauntlets
+Upgrade/Name/AP_BlinkTech=Blink
 Upgrade/Name/AP_Burrow=Burrow
 Upgrade/Name/AP_BurstCapacitors=Burst Capacitors
 Upgrade/Name/AP_CampaignJotunBoosters=Jotun Boosters
@@ -2683,6 +2694,7 @@ Upgrade/Name/AP_SiegeTankShapedBlast=Shaped Blast
 Upgrade/Name/AP_SiegeTech=Siege Tech
 Upgrade/Name/AP_SpectreTooltipUpgrade=Spectre Tooltip Upgrade
 Upgrade/Name/AP_StabilizerMedPacks=Stabilizer Medpacks
+Upgrade/Name/AP_StalkerExtraBlinkRange=Stalker Extra Blink Range
 Upgrade/Name/AP_Stimpack=Stimpack
 Upgrade/Name/AP_SuperStimpackNova=Super Stimpack Nova
 Upgrade/Name/AP_SupplyDepotDrop=Calldown: Supply Depot
@@ -2742,15 +2754,13 @@ Upgrade/Name/AP_VoidHighTemplarTerazine=Void High Templar Ascendant
 Upgrade/Name/AP_VoidHighTemplarTwilightMessiah=Void High Templar Twilight Messiah
 Upgrade/Name/AP_VoidPhoenixDoubleGraviton=Void Phoenix Double Graviton
 Upgrade/Name/AP_VoidRayBeamCanCharge=Void Ray - Beam Can Charge
+Upgrade/Name/AP_VoidStalkerBlinkShieldRestore=Void Stalker Blink Shield Restore
 Upgrade/Name/AP_VoidStoryUnitGlobalUpgrade=Void Story Unit Global Upgrade
 Upgrade/Name/AP_VultureAutoRepair=Auto-Repair
 Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
 Upgrade/Name/BlackOps2=Black Ops
-Upgrade/Name/AP_BlinkTech=Blink
-Upgrade/Name/AP_StalkerExtraBlinkRange=Stalker Extra Blink Range
-Upgrade/Name/AP_VoidStalkerBlinkShieldRestore=Void Stalker Blink Shield Restore
 Upgrade/Name/VoidStoryUnitGlobalUpgrade2=Void Story Unit Global Upgrade
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
@@ -2841,6 +2851,7 @@ Weapon/Name/AP_NovaWeaponHellfireShotgun=Hellfire Shotgun
 Weapon/Name/AP_NovaWeaponPlasmaRifle=Plasma Rifle
 Weapon/Name/AP_NovaWeaponPsiBlade=Monomolecular Blade
 Weapon/Name/AP_P38ScytheGuassPistol=P-45 Gauss Pistol
+Weapon/Name/AP_ParticleDisruptors=Particle Disruptors
 Weapon/Name/AP_PerditionTurretFlamethrower=Perdition Turret Flamethrower
 Weapon/Name/AP_PhaseDisruptersAir=Phase Disruptors (Air)
 Weapon/Name/AP_PhaseDisruptors=Phase Disruptors
@@ -2877,6 +2888,7 @@ Weapon/Name/AP_ValkyrieSCBWWeapon=H.A.L.O. Cluster Rockets
 Weapon/Name/AP_ViperAir=Acid Spores
 Weapon/Name/AP_VoidRayChargeBeamBounce=Destruction Beam
 Weapon/Name/AP_VoidRayChargeBeamRange=Prismatic Beam
+Weapon/Name/AP_VoidStalkerRailgunWeapon=Purifier Rail Gun
 Weapon/Name/AP_Vulture=Fragmentation Grenade
 Weapon/Name/AP_VultureSpiderMines=Spider Mines
 Weapon/Name/AP_WarpBlades=Warp Blades
@@ -2885,8 +2897,6 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_ParticleDisruptors=Particle Disruptors
-Weapon/Name/AP_VoidStalkerRailgunWeapon=Purifier Rail Gun
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

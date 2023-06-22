@@ -147,4 +147,18 @@
         <YawIdleRate value="90"/>
         <Fidget DelayMax="30" DelayMin="10"/>
     </CTurret>
+    <CTurret id="AP_PylonCrystalRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="27.9492"/>
+        <YawIdleRate value="27.9492"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
+    <CTurret id="AP_PylonRingRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="54.8437"/>
+        <YawIdleRate value="54.8437"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
 </Catalog>

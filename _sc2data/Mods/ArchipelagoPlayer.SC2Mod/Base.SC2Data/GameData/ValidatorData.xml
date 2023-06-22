@@ -2550,4 +2550,24 @@
         <Find value="1"/>
         <ResultNoPlayer value="Error"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoMatrixOverloadTarget">
+        <Behavior value="AP_MatrixOverloadTarget"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitType id="AP_IsVanillaPylon">
+        <Value value="Pylon"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPPylon">
+        <Value value="AP_Pylon"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsPylon" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaPylon"/>
+        <CombineArray value="AP_IsAPPylon"/>
+        <ResultFailed value="CantTargetThatUnit"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveSOAMatrixOverload">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveSOAMatrixOverload"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

@@ -1949,4 +1949,9 @@
         <AlertIcon value="Assets\Textures\btn-ability-zerg-cliffjump-baneling.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_MatrixOverload">
+        <Icon value="Assets\Textures\btn-ability-spearofadun-matrixoverload.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-spearofadun-matrixoverload.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

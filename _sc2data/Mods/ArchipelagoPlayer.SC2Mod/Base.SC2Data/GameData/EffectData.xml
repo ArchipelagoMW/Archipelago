@@ -8601,7 +8601,9 @@
     <CEffectModifyUnit id="AP_VoidStalkerBlinkRestoreModifyUnit">
         <EditorCategories value=""/>
         <ImpactUnit Value="Caster"/>
-        <VitalArray index="Shields" Change="1"/>
+        <VitalArray index="Shields">
+            <Change value="1"/>
+        </VitalArray>
     </CEffectModifyUnit>
     <CEffectTeleport id="AP_VoidStalkerBlinkMultiple" parent="AP_Blink">
         <!--TeleportEffect value="VoidStalkerPurifierBlinkSet"/-->
@@ -8883,4 +8885,39 @@
         <ExcludeArray Value="Outer"/>
         <SearchFilters value="Ground;Player,Ally,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
     </CEffectDamage>
+    <CEffectApplyBehavior id="AP_MatrixOverloadAB">
+        <ValidatorArray value="IsNotEggUnit"/>
+        <ValidatorArray value="NotLarva"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_MatrixOverloadTarget"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_MatrixOverloadDummyCheck">
+        <ValidatorArray value="AP_NoMatrixOverloadTarget"/>
+        <ValidatorArray value="IsNotEggUnit"/>
+        <ValidatorArray value="NotLarva"/>
+    </CEffectModifyUnit>
+    <CEffectEnumArea id="AP_MatrixOverloadSearch">
+        <SearchFilters value="-;Self,Ally,Neutral,Enemy,Structure,Worker,Missile,Item,Uncommandable,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="6" Effect="AP_MatrixOverloadSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_MatrixOverloadSet">
+        <EffectArray value="AP_MatrixOverloadDummyCheck"/>
+        <EffectArray value="AP_MatrixOverloadAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_SOAPylonWeaponAB">
+        <ValidatorArray index="0" value="IsPylon"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_SOAPylonWeapon"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_SOAPylonWeaponDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <Amount value="50"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="AP_SOAPylonWeaponShieldRestore">
+        <EditorCategories value="Race:Protoss"/>
+        <VitalArray index="Shields" Change="800"/>
+    </CEffectModifyUnit>
 </Catalog>

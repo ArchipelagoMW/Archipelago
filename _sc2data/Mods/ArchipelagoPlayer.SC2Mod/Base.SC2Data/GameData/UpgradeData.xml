@@ -3905,4 +3905,8 @@
         <AffectedUnitArray value="AP_HotSSplitterlingMediumBurrowed"/>
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_SOAMatrixOverload">
+        <AffectedUnitArray value="AP_Pylon"/>
+        <Flags index="UpgradeCheat" value="0"/>
+    </CUpgrade>
 </Catalog>
