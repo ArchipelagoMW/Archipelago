@@ -28,7 +28,7 @@ There are also traps, if you want to enable them:
 The rest of checks are either score bonuses, or simply nothing.
 
 ## What is considered a location check in Bumper Stickers?
-Every task completed sends a check. The exception is Treasure Bumpers and Bonus Boosters; every single one sends one check, whether or not it completes a task.
+Every step of a task completed sends a check. Every Treasure Bumper and Bonus Booster will also send a check, whether or not it completes a task.
 
 ## When the player receives an item, what happens?
 A notification will briefly appear at the bottom of the screen informing you of what you have received.
