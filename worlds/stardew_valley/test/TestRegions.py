@@ -27,12 +27,12 @@ class TestRegions(unittest.TestCase):
 class TestEntranceRando(unittest.TestCase):
 
     def test_entrance_randomization(self):
-        #for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
-        #                     (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
-        #                     (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
-        option = options.EntranceRandomization.option_buildings
-        flag = RandomizationFlag.BUILDINGS
-        for i in range(0, 100000):
+        for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
+                             (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
+                             (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
+            # option = options.EntranceRandomization.option_buildings
+            # flag = RandomizationFlag.BUILDINGS
+            # for i in range(0, 100000):
             seed = random.randrange(sys.maxsize)
             with self.subTest(flag=flag, msg=f"Seed: {seed}"):
                 rand = random.Random(seed)
