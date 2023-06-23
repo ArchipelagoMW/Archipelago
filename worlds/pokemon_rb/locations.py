@@ -1,7 +1,7 @@
 
 from BaseClasses import Location
 from .rom_addresses import rom_addresses
-import worlds.pokemon_rb.poke_data as poke_data
+from . import poke_data
 loc_id_start = 172000000
 
 
@@ -119,7 +119,7 @@ location_data = [
                  EventFlag(984)),
     LocationData("Pewter Museum 1F-E", "Scientist", "Old Amber", rom_addresses["Event_Museum"], EventFlag(105)),
     LocationData("Pewter Gym", "Brock TM", "TM34 Bide", rom_addresses["Event_Pewter_Gym"], EventFlag(118)),
-    LocationData("Cerulean Bicycle Shop", "", "Bicycle", rom_addresses["Event_Bicycle_Shop"], EventFlag(192)),
+    LocationData("Cerulean Bicycle Shop", "", "Bicycle", [rom_addresses["Event_Bicycle_Shop"], rom_addresses["Bike_Shop_Item_Display"]], EventFlag(192)),
     LocationData("Cerulean Gym", "Misty TM", "TM11 Bubble Beam", rom_addresses["Event_Cerulean_Gym"],
                  EventFlag(190)),
     LocationData("Route 24", "Nugget Bridge", "Nugget", rom_addresses["Event_Nugget_Bridge"], EventFlag(1344)),
@@ -2051,7 +2051,8 @@ location_data = [
                  event=True, type="Static Pokemon", level=15),
     LocationData("Route 4 Pokemon Center", "Pokemon For Sale", "Magikarp", rom_addresses["Gift_Magikarp"], None,
                  event=True, type="Static Pokemon", level=5),
-    # Currently all Fossil Pokemon's levels are set from the same byte in-game, so they are handled in a hacky way
+
+    # Currently, all Fossil Pokemon's levels are set from the same byte in-game, so they are handled in a hacky way
     # as a Trainer Party
     LocationData("Cinnabar Lab Fossil Room", "Old Amber Pokemon", "Aerodactyl", rom_addresses["Gift_Aerodactyl"], None,
                  event=True, type="Static Pokemon"),

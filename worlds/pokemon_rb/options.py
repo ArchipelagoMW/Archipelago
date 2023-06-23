@@ -1,5 +1,4 @@
-
-from Options import Toggle, Choice, Range, SpecialRange, TextChoice, DeathLink, FreeText
+from Options import Toggle, Choice, Range, SpecialRange, TextChoice, DeathLink
 
 
 class GameVersion(Choice):
@@ -35,13 +34,33 @@ class Goal(Choice):
     default = 0
 
 
-class EliteFourCondition(Range):
+class EliteFourBadgesCondition(Range):
     """Number of badges required to challenge the Elite Four once the Indigo Plateau has been reached.
     Your rival will reveal the amount needed on the first Route 22 battle (after turning in Oak's Parcel)."""
-    display_name = "Elite Four Condition"
+    display_name = "Elite Four Badges Condition"
     range_start = 0
     range_end = 8
     default = 8
+
+
+class EliteFourKeyItemsCondition(Range):
+    """Percentage of available key items (not counting items you can lose) required to challenge the Elite Four. Does
+    not count HMs. Evolution stones and Exp. All are key items in Archipelago."""
+    display_name = "Elite Four Key Items Condition"
+    range_start = 0
+    range_end = 100
+    default = 0
+    total = 0
+
+
+class EliteFourPokedexCondition(Range):
+    """Percentage of logically-reachable Pokemon that must be registered as "owned" in the Pokedex in order to
+    challenge the Elite Four."""
+    display_name = "Elite Four Pokedex Condition"
+    range_start = 0
+    range_end = 100
+    default = 0
+    total = 0
 
 
 class VictoryRoadCondition(Range):
@@ -291,11 +310,7 @@ class DoorShuffle(Choice):
     option_simple = 1
     option_full = 2
     option_insanity = 3
-    # I've left the code in for this option, but it is such a terrible option, often putting almost the entire game in
-    # sphere 1, and requiring a large number of save-warps, so I've disabled it for now. It is there if someone
-    # running from source wants to torture themselves by turning it on, but I personally don't want to play in any
-    # multiworlds where this is played. Perhaps I will come up with a solution to tweak this to make it more viable in
-    # the future.
+    # Disabled for now, has issues with elevators that need to be resolved
     # option_decoupled = 4
     default = 0
 
@@ -321,12 +336,6 @@ class WarpTileShuffle(Toggle):
     default = 0
 
 
-class PitchBlackRockTunnel(Toggle):
-    """Enable absolute darkness in the Rock Tunnel"""
-    display_name = "Pitch Black Rock Tunnel"
-    default = 0
-
-
 class RandomizeRockTunnel(Toggle):
     """Randomize the layout of Rock Tunnel.
     If Insanity Door Shuffle is on, this will cause only the main entrances to Rock Tunnel to be shuffled."""
@@ -335,7 +344,7 @@ class RandomizeRockTunnel(Toggle):
 
 
 class DarkRockTunnelLogic(Toggle):
-    """Logically require Flash to traverse the Rock Tunnel."""
+    """Logically require Flash to traverse the Rock Tunnel, so you are never forced to traverse it in the dark."""
     display_name = "Dark Rock Tunnel Logic"
     default = 1
 
@@ -680,7 +689,7 @@ class RandomizeTypeChart(Choice):
 
 
 class NormalMatchups(Range):
-    """If 'randomize' is chosen for randomize_type_chart, this will be the weight for neutral matchups.
+    """If 'randomize' is chosen for Randomize Type Chart, this will be the weight for neutral matchups.
     No effect if 'chaos' is chosen"""
     display_name = "Normal Matchups"
     default = 143
@@ -689,7 +698,7 @@ class NormalMatchups(Range):
 
 
 class SuperEffectiveMatchups(Range):
-    """If 'randomize' is chosen for randomize_type_chart, this will be the weight for super effective matchups.
+    """If 'randomize' is chosen for Randomize Type Chart, this will be the weight for super effective matchups.
     No effect if 'chaos' is chosen"""
     display_name = "Super Effective Matchups"
     default = 38
@@ -698,7 +707,7 @@ class SuperEffectiveMatchups(Range):
 
 
 class NotVeryEffectiveMatchups(Range):
-    """If 'randomize' is chosen for randomize_type_chart, this will be the weight for not very effective matchups.
+    """If 'randomize' is chosen for Randomize Type Chart, this will be the weight for not very effective matchups.
     No effect if 'chaos' is chosen"""
     display_name = "Not Very Effective Matchups"
     default = 38
@@ -707,7 +716,7 @@ class NotVeryEffectiveMatchups(Range):
 
 
 class ImmunityMatchups(Range):
-    """If 'randomize' is chosen for randomize_type_chart, this will be the exact number of immunities.
+    """If 'randomize' is chosen for Randomize Type Chart, this will be the exact number of immunities.
     No effect if 'chaos' is chosen"""
     display_name = "Immunity Matchups"
     default = 6
@@ -716,7 +725,7 @@ class ImmunityMatchups(Range):
 
 
 class SafariZoneNormalBattles(Toggle):
-    """Change the Safari Zone to have standard wild pokemon battles."""
+    """Change the Safari Zone to have standard wild Pokemon battles."""
     display_name = "Safari Zone Normal Battles"
     default = 0
 
@@ -745,7 +754,7 @@ class BetterShops(Choice):
 
 
 class MasterBallPrice(Range):
-    """Price for Master Balls. Can only be bought if better_shops is set to add_master_ball, but this will affect the
+    """Price for Master Balls. Can only be bought if Better Shops is set to Add Master Ball, but this will affect the
     sell price regardless. Vanilla is 0"""
     display_name = "Master Ball Price"
     range_end = 999999
@@ -840,7 +849,9 @@ pokemon_rb_options = {
     "trainer_name": TrainerName,
     "rival_name": RivalName,
     #"goal": Goal,
-    "elite_four_condition": EliteFourCondition,
+    "elite_four_badges_condition": EliteFourBadgesCondition,
+    "elite_four_key_items_condition": EliteFourKeyItemsCondition,
+    "elite_four_pokedex_condition": EliteFourPokedexCondition,
     "victory_road_condition": VictoryRoadCondition,
     "route_22_gate_condition": Route22GateCondition,
     "viridian_gym_condition": ViridianGymCondition,
@@ -873,7 +884,6 @@ pokemon_rb_options = {
     "stonesanity": Stonesanity,
     "door_shuffle": DoorShuffle,
     "warp_tile_shuffle": WarpTileShuffle,
-    "pitch_black_rock_tunnel": PitchBlackRockTunnel,
     "randomize_rock_tunnel": RandomizeRockTunnel,
     "dark_rock_tunnel_logic": DarkRockTunnelLogic,
     "free_fly_location": FreeFlyLocation,

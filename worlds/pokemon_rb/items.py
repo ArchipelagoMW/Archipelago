@@ -15,7 +15,7 @@ item_table = {
     "Town Map": ItemData(5, ItemClassification.progression_skip_balancing, ["Unique", "Key Items"]),
     "Bicycle": ItemData(6, ItemClassification.progression, ["Unique", "Key Items"]),
     # "Flippers": ItemData(7, ItemClassification.progression),
-    #"Safari Ball": ItemData(8, ItemClassification.filler),
+    # "Safari Ball": ItemData(8, ItemClassification.filler),
     "Pokedex": ItemData(9, ItemClassification.progression, []), # ["Unique", "Key Items"]),
     "Moon Stone": ItemData(10, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones"]),
     "Antidote": ItemData(11, ItemClassification.filler, ["Consumables"]),

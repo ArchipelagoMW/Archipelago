@@ -1,5 +1,5 @@
 from copy import deepcopy
-import worlds.pokemon_rb.poke_data as poke_data
+from . import poke_data
 from .locations import location_data
 
 
@@ -96,50 +96,14 @@ def process_trainer_data(self):
                                                               self.multiworld.random)
 
 
-def x(self, data, random):
-    return
-    mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
-                 or self.multiworld.trainer_legendaries[self.player].value]
-    address = rom_addresses["Trainer_Data"]
-    while address < rom_addresses["Trainer_Data_End"]:
-        if data[address] == 255:
-            mode = 1
-        else:
-            mode = 0
-        while True:
-            address += 1
-            if data[address] == 0:
-                address += 1
-                break
-            address += mode
-            mon = None
-            for i in range(1, 4):
-                for l in ["A", "B", "C", "D", "E", "F", "G", "H"]:
-                    if rom_addresses[f"Rival_Starter{i}_{l}"] == address:
-                        mon = " ".join(self.multiworld.get_location(f"Oak's Lab - Starter {i}",
-                                                                    self.player).item.name.split()[1:])
-                        if l in ["D", "E", "F", "G", "H"] and mon in poke_data.evolves_to:
-                            mon = poke_data.evolves_to[mon]
-                        if l in ["F", "G", "H"] and mon in poke_data.evolves_to:
-                            mon = poke_data.evolves_to[mon]
-            if mon is None and self.multiworld.randomize_trainer_parties[self.player].value:
-                mon = poke_data.id_to_mon[data[address]]
-                mon = randomize_pokemon(self, mon, mons_list,
-                                        self.multiworld.randomize_trainer_parties[self.player].value, random)
-            if mon is not None:
-                data[address] = poke_data.pokemon_data[mon]["id"]
-
-
-def process_static_pokemon(self):
+def process_pokemon_locations(self):
     starter_slots = deepcopy([location for location in location_data if location.type == "Starter Pokemon"])
     legendary_slots = deepcopy([location for location in location_data if location.type == "Legendary Pokemon"])
     static_slots = deepcopy([location for location in location_data if location.type in
                     ["Static Pokemon", "Missable Pokemon"]])
     legendary_mons = deepcopy([slot.original_item for slot in legendary_slots])
 
-    tower_6F_mons = set()
-    for i in range(1, 11):
-        tower_6F_mons.add(self.multiworld.get_location(f"Pokemon Tower 6F - Wild Pokemon - {i}", self.player).item.name)
+    placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
 
     mons_list = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon
                  or self.multiworld.randomize_legendary_pokemon[self.player].value == 3]
@@ -151,7 +115,9 @@ def process_static_pokemon(self):
         self.multiworld.random.shuffle(legendary_mons)
         for slot in legendary_slots:
             location = self.multiworld.get_location(slot.name, self.player)
-            location.place_locked_item(self.create_item("Static " + legendary_mons.pop()))
+            mon = legendary_mons.pop()
+            location.place_locked_item(self.create_item("Static " + mon))
+            placed_mons[mon] += 1
     elif self.multiworld.randomize_legendary_pokemon[self.player] == "static":
         static_slots = static_slots + legendary_slots
         self.multiworld.random.shuffle(static_slots)
@@ -180,10 +146,9 @@ def process_static_pokemon(self):
             mon = self.create_item(slot_type + " " +
                                    randomize_pokemon(self, slot.original_item, mons_list, randomize_type,
                                                      self.multiworld.random))
-            while location.name == "Pokemon Tower 6F - Restless Soul" and mon in tower_6F_mons:
-                mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
-                                                                           randomize_type, self.multiworld.random))
             location.place_locked_item(mon)
+            if slot_type != "Missable":
+                placed_mons[mon.name.replace("Static ", "")] += 1
 
     chosen_mons = set()
     for slot in starter_slots:
@@ -201,15 +166,11 @@ def process_static_pokemon(self):
             chosen_mons.add(mon.name)
             location.place_locked_item(mon)
 
-
-def process_wild_pokemon(self):
-
     encounter_slots_master = get_encounter_slots(self)
     encounter_slots = encounter_slots_master.copy()
 
-    placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
     zone_mapping = {}
-    if self.multiworld.randomize_wild_pokemon[self.player].value:
+    if self.multiworld.randomize_wild_pokemon[self.player]:
         mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
                      or self.multiworld.randomize_legendary_pokemon[self.player].value == 3]
         self.multiworld.random.shuffle(encounter_slots)
@@ -225,10 +186,13 @@ def process_wild_pokemon(self):
             else:
                 mon = randomize_pokemon(self, original_mon, mons_list,
                                         self.multiworld.randomize_wild_pokemon[self.player].value, self.multiworld.random)
-            # if static Pokemon are not randomized, we make sure nothing on Pokemon Tower 6F is a Marowak
-            # if static Pokemon are randomized we deal with that during static encounter randomization
-            while (self.multiworld.randomize_static_pokemon[self.player].value == 0 and mon == "Marowak"
-                   and "Pokemon Tower 6F" in slot.name):
+            #
+            while ("Pokemon Tower 6F" in slot.name and
+                   self.multiworld.get_location("Pokemon Tower 6F - Restless Soul", self.player).item.name
+                   == f"Missable {mon}"):
+                # If you're fighting the Pokémon defined as the Restless Soul, and you're on the 6th floor of the tower,
+                # the battle is treates as the Restless Soul battle and you cannot catch it. So, prevent any wild mons
+                # from being the same species as the Restless Soul.
                 # to account for the possibility that only one ground type Pokemon exists, match only stats for this fix
                 mon = randomize_pokemon(self, original_mon, mons_list, 2, self.multiworld.random)
             placed_mons[mon] += 1
@@ -242,10 +206,10 @@ def process_wild_pokemon(self):
         mons_to_add = []
         remaining_pokemon = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and
                              (pokemon not in poke_data.legendary_pokemon or self.multiworld.randomize_legendary_pokemon[self.player].value == 3)]
-        if self.multiworld.catch_em_all[self.player].value == 1:
+        if self.multiworld.catch_em_all[self.player] == "first_stage":
             mons_to_add = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and
-                            (pokemon not in poke_data.legendary_pokemon or self.multiworld.randomize_legendary_pokemon[self.player].value == 3)]
-        elif self.multiworld.catch_em_all[self.player].value == 2:
+                           (pokemon not in poke_data.legendary_pokemon or self.multiworld.randomize_legendary_pokemon[self.player].value == 3)]
+        elif self.multiworld.catch_em_all[self.player] == "all_pokemon":
             mons_to_add = remaining_pokemon.copy()
         logic_needed_mons = max(self.multiworld.oaks_aide_rt_2[self.player].value,
                                 self.multiworld.oaks_aide_rt_11[self.player].value,

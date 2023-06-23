@@ -1,42 +1,43 @@
-import worlds.pokemon_rb.poke_data as poke_data
+from . import poke_data
 
 
 def can_surf(state, player):
-    return (((state.has("HM03 Surf", player) and can_learn_hm(state, "10000", player))
+    return (((state.has("HM03 Surf", player) and can_learn_hm(state, "Surf", player))
              or state.has("Flippers", player)) and (state.has("Soul Badge", player) or
              state.has(state.multiworld.worlds[player].extra_badges.get("Surf"), player)
              or state.multiworld.badges_needed_for_hm_moves[player].value == 0))
 
 
 def can_cut(state, player):
-    return ((state.has("HM01 Cut", player) and can_learn_hm(state, "100", player) or state.has("Master Sword", player))
+    return ((state.has("HM01 Cut", player) and can_learn_hm(state, "Cut", player) or state.has("Master Sword", player))
              and (state.has("Cascade Badge", player) or
              state.has(state.multiworld.worlds[player].extra_badges.get("Cut"), player) or
              state.multiworld.badges_needed_for_hm_moves[player].value == 0))
 
 
 def can_fly(state, player):
-    return (((state.has("HM02 Fly", player) and can_learn_hm(state, "1000", player)) or state.has("Flute", player)) and
+    return (((state.has("HM02 Fly", player) and can_learn_hm(state, "Fly", player)) or state.has("Flute", player)) and
            (state.has("Thunder Badge", player) or state.has(state.multiworld.worlds[player].extra_badges.get("Fly"), player)
             or state.multiworld.badges_needed_for_hm_moves[player].value == 0))
 
 
 def can_strength(state, player):
-    return ((state.has("HM04 Strength", player) and can_learn_hm(state, "100000", player)) or
+    return ((state.has("HM04 Strength", player) and can_learn_hm(state, "Strength", player)) or
             state.has("Titan's Mitt", player)) and (state.has("Rainbow Badge", player) or
             state.has(state.multiworld.worlds[player].extra_badges.get("Strength"), player)
             or state.multiworld.badges_needed_for_hm_moves[player].value == 0)
 
 
 def can_flash(state, player):
-    return (((state.has("HM05 Flash", player) and can_learn_hm(state, "1000000", player)) or state.has("Lamp", player))
+    return (((state.has("HM05 Flash", player) and can_learn_hm(state, "Flash", player)) or state.has("Lamp", player))
              and (state.has("Boulder Badge", player) or state.has(state.multiworld.worlds[player].extra_badges.get("Flash"),
              player) or state.multiworld.badges_needed_for_hm_moves[player].value == 0))
 
 
 def can_learn_hm(state, move, player):
     for pokemon, data in state.multiworld.worlds[player].local_poke_data.items():
-        if state.has(pokemon, player) and data["tms"][6] & int(move, 2):
+        if state.has(pokemon, player) and data["tms"][6] & 1 << (["Cut", "Fly", "Surf", "Strength",
+                                                                  "Flash"].index(move) + 2):
             return True
     return False
 
@@ -45,10 +46,7 @@ def can_get_hidden_items(state, player):
     return state.has("Item Finder", player) or not state.multiworld.require_item_finder[player].value
 
 
-def cerulean_cave(state, player):
-    badges = len([item for item in
-                  ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge", "Marsh Badge",
-                   "Volcano Badge", "Earth Badge"] if state.has(item, player)])
+def has_key_items(state, count, player):
     key_items = (len([item for item in ["Bicycle", "Silph Scope", "Item Finder", "Super Rod", "Good Rod",
                                         "Old Rod", "Lift Key", "Card Key", "Town Map", "Coin Case", "S.S. Ticket",
                                         "Secret Key", "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key",
@@ -57,8 +55,7 @@ def cerulean_cave(state, player):
                                         "Card Key 11F", "Exp. All", "Fire Stone", "Thunder Stone", "Water Stone",
                                         "Leaf Stone"] if state.has(item, player)])
                  + min(state.count("Progressive Card Key", player), 10))
-    return (badges >= state.multiworld.cerulean_cave_badges_condition[player].value
-            and key_items >= state.multiworld.cerulean_cave_key_items_condition[player].total)
+    return key_items >= count
 
 
 def can_pass_guards(state, player):

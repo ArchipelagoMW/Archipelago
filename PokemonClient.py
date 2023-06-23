@@ -72,6 +72,8 @@ class GBContext(CommonContext):
         self.items_handling = 0b001
         self.sent_release = False
         self.sent_collect = False
+        self.bike_shop_hint = False
+        self.fossil_hint = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -153,6 +155,15 @@ async def parse_locations(data: List, ctx: GBContext):
                     locations.append(loc_id)
             elif flags[flag_type][location_bytes_bits[loc_id]['byte']] & 1 << location_bytes_bits[loc_id]['bit']:
                 locations.append(loc_id)
+    if flags["EventFlag"][280] & 16 and not ctx.bike_shop_hint:
+        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [172000014], "create_as_hint": 2}])
+        ctx.bike_shop_hint = True
+    if 172000043 in ctx.checked_locations and not ctx.fossil_hint:
+        ctx.fossil_hint = True
+        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [172000044], "create_as_hint": 2}])
+    elif 172000044 in ctx.checked_locations and not ctx.fossil_hint:
+        ctx.fossil_hint = True
+        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [172000043], "create_as_hint": 2}])
     if flags["EventFlag"][280] & 1 and not ctx.finished_game:
         await ctx.send_msgs([
                     {"cmd": "StatusUpdate",

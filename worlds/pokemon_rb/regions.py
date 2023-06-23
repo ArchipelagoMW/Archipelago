@@ -2,8 +2,8 @@
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType, ItemClassification
 from .items import item_table
 from .locations import location_data, PokemonRBLocation
-import worlds.pokemon_rb.logic as logic
-import worlds.pokemon_rb.poke_data as poke_data
+from . import logic
+from . import poke_data
 
 map_ids = {
     "Pallet Town": 0x00,
@@ -1720,7 +1720,7 @@ def create_regions(self):
     connect(multiworld, player, "Celadon Game Corner", "Celadon Game Corner-Hidden Stairs", lambda state: (not state.multiworld.extra_key_items[player]) or state.has("Hideout Key", player), one_way=True)
     connect(multiworld, player, "Celadon Game Corner-Hidden Stairs", "Celadon Game Corner", one_way=True)
     connect(multiworld, player, "Rocket Hideout B1F-SE", "Rocket Hideout B1F", one_way=True)
-    connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N", lambda state: logic.has_badges(state, state.multiworld.elite_four_condition[player], player)) # and logic.has_pokemon(state, 151, player))
+    connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N", lambda state: logic.has_badges(state, state.multiworld.elite_four_badges_condition[player].value, player) and logic.has_pokemon(state, state.multiworld.elite_four_pokedex_condition[player].total, player) and logic.has_key_items(state, state.multiworld.elite_four_key_items_condition[player].total, player))
     connect(multiworld, player, "Pokemon Mansion 3F", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SW", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 3F-Wild", one_way=True)
@@ -1778,7 +1778,9 @@ def create_regions(self):
     connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-4F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
     connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-5F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
     connect(multiworld, player, "Route 23-N", "Indigo Plateau")
-    connect(multiworld, player, "Cerulean City-Water", "Cerulean City-Cave", lambda state: logic.cerulean_cave(state, player) and logic.can_surf(state, player))
+    connect(multiworld, player, "Cerulean City-Water", "Cerulean City-Cave", lambda state:
+        logic.has_badges(state, self.multiworld.cerulean_cave_badges_condition[player].value, player) and
+        logic.has_key_items(state, self.multiworld.cerulean_cave_key_items_condition[player].total, player) and logic.can_surf(state, player))
 
     # access to any part of a city will enable flying to the Pokemon Center!
     connect(multiworld, player, "Cerulean City-Cave", "Cerulean City", lambda state: logic.can_fly(state, player), one_way=True)
@@ -2145,28 +2147,26 @@ def create_regions(self):
             entrances.remove(loop_out_interiors[1][1])
         if not multiworld.badgesanity[player]:
             badges = []
-            placed_locs = []
+            badge_locs = []
             for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
                           "Marsh Badge", "Volcano Badge", "Earth Badge"]:
                 badges.append(self.create_item(badge))
             for loc in ["Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize", "Vermilion Gym - Lt. Surge Prize",
                         "Celadon Gym - Erika Prize", "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
                         "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]:
-                placed_locs.append(multiworld.get_location(loc, player))
+                badge_locs.append(multiworld.get_location(loc, player))
             multiworld.random.shuffle(badges)
-            for badge, loc in zip(badges, placed_locs):
-                loc.item = badge
-                print(f"{loc.name} - {badge.name}")
-                loc.event = True
-        else:
-            placed_locs = []
+            for badge, loc in zip(badges, badge_locs):
+                loc.place_locked_item(badge)
+
+        placed_events = []
 
         for location in location_data:
             if location.event and location.type == "Item":
                 loc = multiworld.get_location(location.name, player)
                 loc.item = self.create_item(location.original_item)
                 loc.event = True
-                placed_locs.append(loc)
+                placed_events.append(loc)
 
         state = multiworld.state.copy()
         for item, data in item_table.items():
@@ -2196,7 +2196,7 @@ def create_regions(self):
             relevant_events.append("Vending Machine Drinks")
         if multiworld.route_3_condition[player] == "defeat_brock":
             relevant_events.append("Defeat Brock")
-        elif multiworld.rt_3_condition[player] == "defeat_any_gym":
+        elif multiworld.route_3_condition[player] == "defeat_any_gym":
             relevant_events += [
                 "Defeat Brock",
                 "Defeat Misty",
@@ -2228,22 +2228,21 @@ def create_regions(self):
                 warp = check_warps.pop()
                 warp = warp
                 if warp not in reachable_entrances:
-                    # confirm warp is in entrances list to ensure it's not a loop-out interior
-                    if warp.connected_region is None and warp in entrances_copy:
-                        return False
-                    elif (isinstance(warp, PokemonRBWarp) and ("Rock Tunnel" not in warp.name or
-                            logic.rock_tunnel(state, player))) or warp.access_rule(state):
-                        if warp.connected_region and warp.connected_region not in checked_regions:
-                            checked_regions.add(warp.connected_region)
-                            check_warps.update(warp.connected_region.exits)
-                            for location in warp.connected_region.locations:
-                                if (location.item and location.item.name in relevant_events and
-                                        adds_reachable_entrances(entrances_copy, location.item)):
-                                    return False
-            x = 1
+                    if "Rock Tunnel" not in warp.name or logic.rock_tunnel(state, player):
+                        # confirm warp is in entrances list to ensure it's not a loop-out interior
+                        if warp.connected_region is None and warp in entrances_copy:
+                            return False
+                        elif (isinstance(warp, PokemonRBWarp) and ("Rock Tunnel" not in warp.name or
+                                logic.rock_tunnel(state, player))) or warp.access_rule(state):
+                            if warp.connected_region and warp.connected_region not in checked_regions:
+                                checked_regions.add(warp.connected_region)
+                                check_warps.update(warp.connected_region.exits)
+                                for location in warp.connected_region.locations:
+                                    if (location.item and location.item.name in relevant_events and
+                                            adds_reachable_entrances(entrances_copy, location.item)):
+                                        return False
             return True
 
-        # placement_order = 1
         starting_entrances = len(entrances)
         dc_connected = []
         while entrances:
@@ -2251,17 +2250,11 @@ def create_regions(self):
             state.sweep_for_events(player=player)
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
                                    entrance.parent_region.can_reach(state)]
-            # for entrance in reachable_entrances:
-            #     if not entrance.placement_order:
-            #         entrance.placement_order = placement_order
-            # placement_order += 1
-            #print(len(reachable_entrances))
             assert reachable_entrances, \
                 "Ran out of reachable entrances in Pokemon Red and Blue door shuffle"
             multiworld.random.shuffle(entrances)
             if multiworld.door_shuffle[player] == "decoupled" and len(entrances) == 1:
                 entrances += dc_connected
-                print(f"Final zip")
                 entrances[-1].connect(entrances[0])
                 while len(entrances) > 1:
                     entrances.pop(0).connect(entrances[0])
@@ -2281,11 +2274,11 @@ def create_regions(self):
                         "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
                 elif len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity" else 8) and len(
                         entrances) <= (starting_entrances - 3):
-                    print("Dead End")
+                    # print("Dead End")
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
                                    dead_end(entrances_copy, e) else 1)
                 else:
-                    print("Not Dead End")
+                    # print("Not Dead End")
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 1 if
                                    dead_end(entrances_copy, e) else 2)
                 if multiworld.door_shuffle[player] == "full":
@@ -2293,13 +2286,6 @@ def create_regions(self):
                     entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
                 assert entrances[0] in reachable_entrances, \
                     "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
-            # if multiworld.door_shuffle[player] == "insanity" and len(entrances) == len(reachable_entrances):
-            #     print("all entrances reachable")
-            #     # entrances.sort(key=lambda e: e.placement_order)
-            #     # multiworld.random.shuffle(entrances)
-            #     entrance_a = entrances.pop(0)
-            #     entrance_b = entrances.pop(0)
-            # else:
             if (multiworld.door_shuffle[player] == "decoupled" and len(reachable_entrances) > 8 and len(entrances)
                     <= (starting_entrances - 3)):
                 entrance_b = entrances.pop(1)
@@ -2312,11 +2298,13 @@ def create_regions(self):
                 dc_connected.append(entrance_a)
             else:
                 entrance_b.connect(entrance_a)
-            print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
+            # print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
 
-        for loc in placed_locs:
+        # So that we don't crash when trying to place these later
+        for loc in placed_events:
             loc.item = None
             loc.event = False
+
         if multiworld.door_shuffle[player] == "full":
             for pair in loop_out_interiors:
                 pair[1].connected_region = pair[0].connected_region
