@@ -1222,7 +1222,8 @@ def rules(blasphemousworld):
     # D02Z02S14 (Graveyard of the Peaks)
     # Items
     set_rule(world.get_location("GotP: Amanecida of the Bejeweled Arrow", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Graveyard", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Graveyard", difficulty, player) and \
+            state.has("Wall Climb Ability", player))
     # Doors
     set_rule(world.get_entrance("D02Z02S14[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -1902,9 +1903,14 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D04Z02S02[NE]", player),
-        lambda state: state._blasphemous_upwarp_skips_allowed(difficulty) and \
-            (state.has("Purified Hand of the Nun", player) or \
-                state._blasphemous_can_enemy_upslash(difficulty, enemy, player)))
+        lambda state: (state.has("Purified Hand of the Nun", player) and \
+            state._blasphemous_upwarp_skips_allowed(difficulty)) or \
+                (state.has("Purified Hand of the Nun", player) and \
+                    state._blasphemous_can_enemy_upslash(difficulty, enemy, player)) or \
+                        (state._blasphemous_can_enemy_upslash(difficulty, enemy, player) and \
+                            state._blasphemous_upward_skips_allowed(difficulty) and \
+                                (state.has("Wall Climb Ability", player) or \
+                                    state.has("D04Z02S02[N]", player))))
     set_rule(world.get_entrance("D04Z02S02[N]", player),
         lambda state: state.has("D04Z02S02[NE]", player) or \
             state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
@@ -2029,7 +2035,9 @@ def rules(blasphemousworld):
     # D04Z04S01 (All the Tears of the Sea)
     # Items
     set_rule(world.get_location("AtTotS: Miriam's gift", player),
-        lambda state: state._blasphemous_miriam(blasphemousworld, player))
+        lambda state: state._blasphemous_miriam(blasphemousworld, player) and \
+            state.has("Dash Ability", player) and \
+                state.has("Wall Climb Ability", player))
     # No doors
 
 
