@@ -32,7 +32,7 @@ local iwram_start = 0x3000000
 local ewram_start = 0x2000000
 
 local last_received_item_index_offset = 0x3778
-local trade_pokemon_offset = 0x377A
+local trade_pokemon_offset = 0x377C
 local flags_offset = 0x1450
 local flags_size = 0x12C
 
