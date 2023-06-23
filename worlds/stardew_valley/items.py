@@ -290,6 +290,8 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, items: List[I
 def create_stardrops(item_factory: StardewItemFactory, items: List[Item], world_options: StardewOptions):
     items.append(item_factory("Stardrop"))  # The Mines level 100
     items.append(item_factory("Stardrop"))  # Old Master Cannoli
+    if world_options[options.Fishsanity] != options.Fishsanity.option_none:
+        items.append(item_factory("Stardrop"))  #Master Angler Stardrop
     if ModNames.deepwoods in world_options[options.Mods]:
         items.append(item_factory("Stardrop"))  # Petting the Unicorn
 

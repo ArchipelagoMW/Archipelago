@@ -343,6 +343,9 @@ class Fishsanity(Choice):
     option_randomized = 3
     alias_random_selection = option_randomized
     option_all = 4
+    option_exclude_legendaries = 5
+    option_exclude_hard_fish = 6
+    option_only_easy_fish= 7
 
 
 class Museumsanity(Choice):

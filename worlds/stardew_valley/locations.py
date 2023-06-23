@@ -147,7 +147,6 @@ def extend_help_wanted_quests(randomized_locations: List[LocationData], desired_
 
 def extend_fishsanity_locations(randomized_locations: List[LocationData], world_options, random: Random):
     prefix = "Fishsanity: "
-    include_ginger_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
     if world_options[options.Fishsanity] == options.Fishsanity.option_none:
         return
     elif world_options[options.Fishsanity] == options.Fishsanity.option_legendaries:
@@ -156,12 +155,20 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], world_
         randomized_locations.extend(location_table[f"{prefix}{special.name}"] for special in special_fish)
     elif world_options[options.Fishsanity] == options.Fishsanity.option_randomized:
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if random.random() < 0.4]
-        randomized_locations.extend(location for location in fish_locations
-                                    if include_ginger_island or LocationTags.GINGER_ISLAND not in location.tags)
+        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
     elif world_options[options.Fishsanity] == options.Fishsanity.option_all:
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish]
-        randomized_locations.extend(location for location in fish_locations
-                                    if include_ginger_island or LocationTags.GINGER_ISLAND not in location.tags)
+        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_exclude_legendaries:
+        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if fish not in legendary_fish]
+        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_exclude_hard_fish:
+        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if fish.difficulty < 80]
+        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
+    elif world_options[options.Fishsanity] == options.Fishsanity.option_only_easy_fish:
+        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in all_fish if fish.difficulty < 50]
+        randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
+
 
 
 def extend_museumsanity_locations(randomized_locations: List[LocationData], museumsanity: int, random: Random):
@@ -257,8 +264,7 @@ def extend_special_order_locations(randomized_locations: List[LocationData], wor
         return
 
     include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
-    board_locations = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]
-                       if include_island or LocationTags.GINGER_ISLAND not in location.tags]
+    board_locations = filter_ginger_island(world_options, locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
     randomized_locations.extend(board_locations)
     if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi and include_island:
         randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_QI])
@@ -323,3 +329,7 @@ def create_locations(location_collector: StardewLocationCollector,
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
+
+def filter_ginger_island(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
+    include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
+    return [location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags]
