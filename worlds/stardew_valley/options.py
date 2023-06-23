@@ -333,6 +333,9 @@ class Fishsanity(Choice):
     Special: A curated selection of strong fish are checks
     Randomized: A random selection of fish are checks
     All: Every single fish in the game is a location that contains an item. Pairs well with the Master Angler Goal
+    Exclude Legendaries: Every fish except legendaries
+    Exclude Hard Fish: Every fish under difficulty 80
+    Only Easy Fish: Every fish under difficulty 50
     """
     internal_name = "fishsanity"
     display_name = "Fishsanity"
@@ -345,7 +348,7 @@ class Fishsanity(Choice):
     option_all = 4
     option_exclude_legendaries = 5
     option_exclude_hard_fish = 6
-    option_only_easy_fish= 7
+    option_only_easy_fish = 7
 
 
 class Museumsanity(Choice):
