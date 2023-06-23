@@ -216,7 +216,7 @@ class StardewLogic:
             Animal.goat: self.can_buy_animal(Animal.goat),
             MetalBar.gold: self.can_smelt(Ore.gold),
             Ore.gold: self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern() | self.can_do_panning(),
-            Geode.golden_coconut = self.can_reach_region(Region.island_north),
+            Geode.golden_coconut: self.can_reach_region(Region.island_north),
             Gift.golden_pumpkin: self.has_season(Season.fall) | self.has(Geode.artifact_trove),
             WaterItem.green_algae: self.can_fish_in_freshwater(),
             ArtisanGood.green_tea: self.can_keg(Vegetable.tea_leaves),
