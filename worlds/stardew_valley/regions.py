@@ -222,10 +222,10 @@ vanilla_connections = [
     ConnectionData(Entrance.forest_to_leah_cottage, Region.leah_house,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.enter_secret_woods, Region.secret_woods),
-    ConnectionData(Entrance.forest_to_sewers, Region.sewers),
+    ConnectionData(Entrance.forest_to_sewers, Region.sewers, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(Entrance.buy_from_traveling_merchant, Region.traveling_cart),
-    ConnectionData(Entrance.town_to_sewers, Region.sewers),
-    ConnectionData(Entrance.enter_mutant_bug_lair, Region.mutant_bug_lair),
+    ConnectionData(Entrance.town_to_sewers, Region.sewers, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(Entrance.enter_mutant_bug_lair, Region.mutant_bug_lair, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(Entrance.mountain_to_railroad, Region.railroad),
     ConnectionData(Entrance.mountain_to_tent, Region.tent,
                    flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
@@ -469,7 +469,7 @@ def randomize_connections(random: Random, world_options: StardewOptions, regions
     randomized_connections = randomize_chosen_connections(connections_to_randomize, destination_pool)
     add_non_randomized_connections(final_connections, connections_to_randomize, randomized_connections)
 
-    swap_connections_until_valid(regions_by_name, connections_by_name, randomized_connections, random)
+    swap_connections_until_valid(regions_by_name, connections_by_name, randomized_connections, connections_to_randomize, random)
     randomized_connections_for_generation = create_connections_for_generation(randomized_connections)
     randomized_data_for_mod = create_data_for_mod(randomized_connections, connections_to_randomize)
 
@@ -525,14 +525,14 @@ def add_non_randomized_connections(connections, connections_to_randomize: List[C
         randomized_connections[connection] = connection
 
 
-def swap_connections_until_valid(regions_by_name, connections_by_name,
-                                 randomized_connections: Dict[ConnectionData, ConnectionData], random: Random):
+def swap_connections_until_valid(regions_by_name, connections_by_name, randomized_connections: Dict[ConnectionData, ConnectionData],
+                                 connections_to_randomize: List[ConnectionData], random: Random):
     while True:
         reachable_regions, unreachable_regions = find_reachable_regions(regions_by_name, connections_by_name, randomized_connections)
         if not unreachable_regions:
             return randomized_connections
         swap_one_connection(regions_by_name, connections_by_name, randomized_connections, reachable_regions,
-                            unreachable_regions, random)
+                            unreachable_regions, connections_to_randomize, random)
 
 
 def find_reachable_regions(regions_by_name, connections_by_name,
@@ -556,18 +556,20 @@ def find_reachable_regions(regions_by_name, connections_by_name,
     return reachable_regions, unreachable_regions
 
 
-def swap_one_connection(regions_by_name, connections_by_name,
-                        randomized_connections: Dict[ConnectionData, ConnectionData],
-                        reachable_regions: Set[str], unreachable_regions: Set[str], random: Random):
+def swap_one_connection(regions_by_name, connections_by_name,randomized_connections: Dict[ConnectionData, ConnectionData],
+                        reachable_regions: Set[str], unreachable_regions: Set[str],
+                        connections_to_randomize: List[ConnectionData], random: Random):
     randomized_connections_already_shuffled = {connection: randomized_connections[connection]
                                                for connection in randomized_connections
                                                if connection != randomized_connections[connection]}
-    unreachable_regions_leading_somewhere = tuple([region for region in unreachable_regions
+    unreachable_regions_names_leading_somewhere = tuple([region for region in unreachable_regions
                                                    if len(regions_by_name[region].exits) > 0])
-    chosen_unreachable_region_name = random.choice(unreachable_regions_leading_somewhere)
-    chosen_unreachable_region = regions_by_name[chosen_unreachable_region_name]
-    chosen_unreachable_entrance_name = random.choice(chosen_unreachable_region.exits)
-    chosen_unreachable_entrance = connections_by_name[chosen_unreachable_entrance_name]
+    unreachable_regions_leading_somewhere = [regions_by_name[region_name] for region_name in unreachable_regions_names_leading_somewhere]
+    unreachable_regions_exits_names = [exit_name for region in unreachable_regions_leading_somewhere for exit_name in region.exits]
+    unreachable_connections = [connections_by_name[exit_name] for exit_name in unreachable_regions_exits_names]
+    unreachable_connections_that_can_be_randomized = [connection for connection in unreachable_connections if connection in connections_to_randomize]
+
+    chosen_unreachable_entrance = random.choice(unreachable_connections_that_can_be_randomized)
 
     chosen_reachable_entrance = None
     while chosen_reachable_entrance is None or chosen_reachable_entrance not in randomized_connections_already_shuffled:

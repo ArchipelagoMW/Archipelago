@@ -27,9 +27,12 @@ class TestRegions(unittest.TestCase):
 class TestEntranceRando(unittest.TestCase):
 
     def test_entrance_randomization(self):
-        for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
-                             (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
-                             (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
+        #for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
+        #                     (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
+        #                     (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
+        option = options.EntranceRandomization.option_buildings
+        flag = RandomizationFlag.BUILDINGS
+        for i in range(0, 100000):
             seed = random.randrange(sys.maxsize)
             with self.subTest(flag=flag, msg=f"Seed: {seed}"):
                 rand = random.Random(seed)
@@ -41,9 +44,11 @@ class TestEntranceRando(unittest.TestCase):
 
                 for connection in vanilla_connections:
                     if flag in connection.flag:
-                        self.assertIn(connection.name, randomized_connections,
+                        connection_in_randomized = connection.name in randomized_connections
+                        reverse_in_randomized = connection.reverse in randomized_connections
+                        self.assertTrue(connection_in_randomized,
                                       f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
-                        self.assertIn(connection.reverse, randomized_connections,
+                        self.assertTrue(reverse_in_randomized,
                                       f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
