@@ -431,6 +431,9 @@ class StardewLogic:
             Quest.grannys_gift: self.has_season(Season.spring) & self.has(Forageable.leek) & self.can_meet(NPC.evelyn),
             Quest.exotic_spirits: self.has_season(Season.winter) & self.has(Forageable.coconut) & self.can_meet(NPC.gus),
             Quest.catch_a_lingcod: self.has_season(Season.winter) & self.has("Lingcod") & self.can_meet(NPC.willy),
+            Quest.dark_talisman: self.has_rusty_key() & self.can_reach_region(Region.railroad) & self.can_meet(NPC.krobus) & self.can_reach_region(Region.mutant_bug_lair),
+            Quest.goblin_problem: self.can_reach_region(Region.witch_swamp) & self.has(ArtisanGood.void_mayonnaise),
+            Quest.magic_ink: self.can_reach_region(Region.witch_hut) & self.can_meet(NPC.wizard),
             Quest.the_pirates_wife: self.can_reach_region(Region.island_west) & self.can_meet(NPC.kent) &
                                     self.can_meet(NPC.gus) & self.can_meet(NPC.sandy) & self.can_meet(NPC.george) &
                                     self.can_meet(NPC.wizard) & self.can_meet(NPC.willy),

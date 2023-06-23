@@ -45,4 +45,7 @@ class Quest:
     exotic_spirits = "Exotic Spirits"
     catch_a_lingcod = "Catch a Lingcod"
     the_pirates_wife = "The Pirate's Wife"
+    dark_talisman = "Dark Talisman"
+    goblin_problem = "Goblin Problem"
+    magic_ink = "Magic Ink"
     
