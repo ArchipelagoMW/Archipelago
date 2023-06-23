@@ -410,7 +410,7 @@ class StardewLogic:
             Quest.knee_therapy: self.has_season(Season.summer) & self.has(Fruit.hot_pepper) & self.can_meet(NPC.george),
             Quest.robins_request: self.has_season(Season.winter) & self.has(Material.hardwood) & self.can_meet(NPC.robin),
             Quest.qis_challenge: self.can_mine_in_the_skull_cavern(),
-            Quest.the_mysterious_qi: self.can_reach_region(Region.tunnel) & self.has(ArtisanGood.battery_pack) & self.can_reach_region(Region.desert) & self.has(Forageable.rainbow_shell) & self.has(Vegetable.beet) & self.has(Loot.solar_essence),
+            Quest.the_mysterious_qi: self.can_reach_region(Region.bus_tunnel) & self.has(ArtisanGood.battery_pack) & self.can_reach_region(Region.desert) & self.has(Forageable.rainbow_shell) & self.has(Vegetable.beet) & self.has(Loot.solar_essence),
             Quest.carving_pumpkins: self.has_season(Season.fall) & self.has(Vegetable.pumpkin) & self.can_meet(NPC.caroline),
             Quest.a_winter_mystery: self.has_season(Season.winter) & self.can_reach_region(Region.town),
             Quest.strange_note: self.has(Forageable.secret_note) & self.can_reach_region(Region.secret_woods) & self.has(ArtisanGood.maple_syrup),
