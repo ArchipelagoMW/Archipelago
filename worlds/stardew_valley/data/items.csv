@@ -267,6 +267,7 @@ id,name,classification,groups,mod_name
 280,Fishing Information Broadcasting Service,useful,"TV_CHANNEL",
 281,Sinister Signal,useful,"TV_CHANNEL",
 282,Dark Talisman,progression,,
+283,Ostrich Incubator Recipe,progression,"GINGER_ISLAND",
 4001,Burnt,trap,TRAP,
 4002,Darkness,trap,TRAP,
 4003,Frozen,trap,TRAP,
@@ -549,6 +550,7 @@ id,name,classification,groups,mod_name
 5262,Slime Incubator,useful,"RESOURCE_PACK",
 5263,Slime Egg-Press,useful,"RESOURCE_PACK",
 5264,Crystalarium,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5265,Ostrich Incubator,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 10001,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
 10002,Magic Level,progression,SKILL_LEVEL_UP,Magic
 10003,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill

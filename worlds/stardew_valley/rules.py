@@ -212,6 +212,8 @@ def set_ginger_island_rules(logic: StardewLogic, multi_world, player, world_opti
     set_island_parrot_rules(logic, multi_world, player)
     MultiWorldRules.add_rule(multi_world.get_location("Open Professor Snail Cave", player),
                              logic.has(Craftable.cherry_bomb).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Complete Island Field Office", player),
+                             logic.can_complete_field_office().simplify())
 
 
 def set_boat_repair_rules(logic: StardewLogic, multi_world, player):

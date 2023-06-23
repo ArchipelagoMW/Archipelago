@@ -170,6 +170,7 @@ class StardewLogic:
             Craftable.cherry_bomb: self.has_skill_level(Skill.mining, 1) & self.has(Material.coal) & self.has(Ore.copper),
             Animal.chicken: self.can_buy_animal(Animal.chicken),
             AnimalProduct.chicken_egg: self.has([AnimalProduct.egg, AnimalProduct.brown_egg, AnimalProduct.large_egg, AnimalProduct.large_brown_egg], 1),
+            Material.cinder_shard: self.can_reach_region(Region.volcano_floor_5),
             WaterItem.clam: self.can_forage(Generic.any, Region.beach),
             Material.clay: self.can_reach_any_region([Region.farm, Region.beach, Region.quarry]) & self.has_tool(Tool.hoe),
             ArtisanGood.cloth: (self.has(AnimalProduct.wool) & self.has(Machine.loom)) | (self.can_reach_region(Region.desert) & self.has(Mineral.aquamarine)),
@@ -215,6 +216,7 @@ class StardewLogic:
             Animal.goat: self.can_buy_animal(Animal.goat),
             MetalBar.gold: self.can_smelt(Ore.gold),
             Ore.gold: self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern() | self.can_do_panning(),
+            Geode.golden_coconut = self.can_reach_region(Region.island_north),
             Gift.golden_pumpkin: self.has_season(Season.fall) | self.has(Geode.artifact_trove),
             WaterItem.green_algae: self.can_fish_in_freshwater(),
             ArtisanGood.green_tea: self.can_keg(Vegetable.tea_leaves),
@@ -271,7 +273,7 @@ class StardewLogic:
             Geode.omni: self.can_mine_in_the_mines_floor_41_80() | self.can_reach_region(Region.desert) | self.can_do_panning() | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.has_building(Building.fish_pond)) | self.can_reach_region(Region.volcano_floor_10),
             Animal.ostrich: self.has_building(Building.barn) & self.has(AnimalProduct.ostrich_egg) & self.has(Machine.ostrich_incubator),
             AnimalProduct.ostrich_egg: self.can_forage(Generic.any, Region.island_north, True),
-            Machine.ostrich_incubator: self.has_walnut(60), # placeholder for finishing the island
+            Machine.ostrich_incubator: self.received("Ostrich Incubator Recipe") & self.has(Fossil.bone_fragment) & self.has(Material.hardwood) & self.has(Material.cinder_shard),
             Fish.oyster: True_(),
             ArtisanGood.pale_ale: self.can_keg(Vegetable.hops),
             Gift.pearl: (self.has(Fish.blobfish) & self.has_building(Building.fish_pond)) | self.has(Geode.artifact_trove),
@@ -1121,6 +1123,20 @@ class StardewLogic:
             return self.has(Fertilizer.quality)
         if tier >= 3:
             return self.has(Fertilizer.deluxe)
+
+    def can_complete_field_office(self) -> StardewRule:
+        field_office = self.can_reach_region(Region.field_office)
+        professor_snail = self.received("Open Professor Snail Cave")
+        dig_site = self.can_reach_region(Region.dig_site)
+        tools = self.has_tool(Tool.pickaxe) & self.has_tool(Tool.hoe) & self.has_tool(Tool.scythe)
+        leg_and_snake_skull = dig_site
+        ribs_and_spine = self.can_reach_region(Region.island_south)
+        skull = self.can_open_geode(Geode.golden_coconut)
+        tail = self.can_do_panning() & dig_site
+        frog = self.can_reach_region(Region.island_east)
+        bat = self.can_reach_region(Region.volcano_floor_5)
+        snake_vertebrae = self.can_reach_region(Region.island_west)
+        return field_office & professor_snail & tools & leg_and_snake_skull & ribs_and_spine & skull & tail & frog & bat & snake_vertebrae
 
     def can_complete_community_center(self) -> StardewRule:
         return (self.can_reach_location("Complete Crafts Room") &
