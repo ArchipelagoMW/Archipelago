@@ -349,6 +349,10 @@ class PokemonRedBlueWorld(World):
         while True:
             intervene_move = None
             test_state = self.multiworld.get_all_state(False)
+            if (not self.multiworld.badgesanity[self.player] and self.multiworld.door_shuffle[self.player] in
+                    ("none", "simple")):
+                for badge in ["Cascade Badge", "Thunder Badge", "Soul Badge", "Rainbow Badge", "Boulder Badge"]:
+                    test_state.collect(self.create_item(badge))
             if not logic.can_surf(test_state, self.player):
                 intervene_move = "Surf"
             elif not logic.can_strength(test_state, self.player):
@@ -377,9 +381,6 @@ class PokemonRedBlueWorld(World):
                     ("none", "simple") and [self.fly_map, self.town_map_fly_map] != ["Pallet Town", "Pallet Town"]):
                 intervene_move = "Fly"
             if intervene_move:
-                # if not self.multiworld.badgesanity[self.player]:
-                #     test_state.collect(self.create_item(["Cascade Badge", "Thunder Badge", "Soul Badge",
-                #                        "Rainbow Badge", "Boulder Badge"][poke_data.hm_moves.index(intervene_move)]))
                 if intervene_move == last_intervene:
                     raise Exception(f"Caught in infinite loop attempting to ensure {intervene_move} is available to player {self.player}")
                 intervene(intervene_move, test_state)
