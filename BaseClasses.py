@@ -575,10 +575,10 @@ class MultiWorld():
 
         def location_condition(location: Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
-            if (location.player in players["minimal"] or (location.player in players["items"] and location.item.player in
-                    players["minimal"])):
-                return False
-            return True
+            if location.player in players["locations"] or (location.item and location.item.player not in
+                                                           players["minimal"]):
+                return True
+            return False
 
         def location_relevant(location: Location):
             """Determine if this location is relevant to sweep."""
