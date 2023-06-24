@@ -70,9 +70,10 @@ class MuseDashWorld(World):
         streamer_mode = self.multiworld.streamer_mode_enabled[self.player]
         (lower_diff_threshold, higher_diff_threshold) = self.get_difficulty_range()
 
-        # The minimum amount of songs to make an ok rando would be Starting Songs + Reward for each + Goal song.
+        # The minimum amount of songs to make an ok rando would be Starting Songs + 10 interim songs + Goal song.
+        # - Interim songs being equal to max starting song count.
         # Note: The worst settings still allow 25 songs (Streamer Mode + No DLC). And this max requires 21 songs. (10 * 2 + 1)
-        minimum_song_count = self.multiworld.starting_song_count[self.player] * 2 + 1
+        minimum_song_count = self.multiworld.starting_song_count[self.player] + 11
 
         final_song_list = None
         while True:
