@@ -58,6 +58,13 @@ move_names = {
     if constant_name.startswith("MOVE_") and constant_name not in {"MOVE_UNAVAILABLE"}
 }
 
+item_names = {
+    constant_value: constant_name[5:]
+    for constant_name, constant_value
+    in data.constants.items()
+    if constant_name.startswith("ITEM_")
+}
+
 
 def encode_string(string: str, length: Optional[int] = None) -> bytearray:
     arr = []
@@ -143,7 +150,7 @@ def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
         "personality": personality,
         "nickname": decode_string(pokemon_data[8:18]),
         "species": data.species[int.from_bytes(decrypted_substructs[0][0:2], 'little')].national_dex_number,
-        "item": int.from_bytes(decrypted_substructs[0][2:4], 'little'),
+        "item": item_names[int.from_bytes(decrypted_substructs[0][2:4], 'little')],
         "experience": int.from_bytes(decrypted_substructs[0][4:8], 'little'),
         "ability": iv_ability_info >> 31,
         "ivs": [(iv_ability_info >> (i * 5)) & 0x1F for i in range(6)],
@@ -176,7 +183,8 @@ def encode_pokemon_data(pokemon_json: Dict[str, Any]) -> bytearray:
     for i, byte in enumerate(int16_as_bytes(national_id_to_species_id_map[pokemon_json["species"]])):
         substructs[0][0 + i] = byte
 
-    # Held item, 2 bytes
+    for i, byte in enumerate(int16_as_bytes(data.constants["ITEM_" + pokemon_json["item"]])):
+        substructs[0][2 + i] = byte
 
     for i, byte in enumerate(int32_as_bytes(pokemon_json["experience"])):
         substructs[0][4 + i] = byte
