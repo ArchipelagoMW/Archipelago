@@ -181,6 +181,8 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
                              logic.received(Wallet.dark_talisman) | (logic.can_blink()).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_witch_hut, player),
                              (logic.has(ArtisanGood.void_mayonnaise) | logic.can_blink()).simplify())
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_mutant_bug_lair, player),
+                             (logic.has_rusty_key() & logic.can_reach_region(Region.railroad) & logic.can_meet(NPC.krobus).simplify()))
 
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_harvey_room, player),
                              logic.has_relationship(NPC.harvey, 2))
