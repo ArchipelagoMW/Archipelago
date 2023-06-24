@@ -80,6 +80,7 @@ You can download the latest release of Git at [The downloads page on the Git web
 
 Beyond that, there are also graphical interfaces for Git that make it more accessible.
 For repositories on Github (such as this one), [Github Desktop](https://desktop.github.com) is one such option.
+PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests
 
