@@ -57,7 +57,17 @@ TRACKER_EVENT_FLAGS = [
 
 
 class GBACommandProcessor(ClientCommandProcessor):
+    def _cmd_tradehelp(self):
+        self.output("""Trading:
+    You can transfer pokemon between games using the /trade command.
+    To send or receive pokemon in your game, you must go to the middle receptionist on the top floor of any pokemon center. You can give them a pokemon to be swapped with something on the server.
+    Use /tradelist to see the currently available pokemon on the server. Then use /trade <slot> to swap the pokemon you gave to the receptionist with the one in the slot you chose.
+    You can then retrieve the traded pokemon from the receptionist.
+    It is not necessary to send a pokemon for one you receive, nor is it necessary to receive a pokemon for one you send.""")
+
+
     def _cmd_tradelist(self):
+        """List pokemon available to trade"""
         if isinstance(self.ctx, GBAContext):
             if self.ctx.slot is None:
                 self.output("You don't appear to be connected yet.")
@@ -81,7 +91,12 @@ class GBACommandProcessor(ClientCommandProcessor):
 
 
     def _cmd_trade(self, trade_slot: str):
+        """Swap the pokemon you have stored for trading with the one in <trade_slot>"""
         if isinstance(self.ctx, GBAContext):
+            trade_slot_int = int(trade_slot)
+            if trade_slot_int not in range(0, 10):
+                self.output("You must specify a number 0-9 corresponding to a trade slot")
+
             if self.ctx.slot is None:
                 self.output("You don't appear to be connected yet.")
                 return
