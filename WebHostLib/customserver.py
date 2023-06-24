@@ -169,13 +169,11 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
         ctx.init_save()
         ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
         try:
-            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
-                                          ping_interval=None, ssl=ssl_context)
+            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
 
             await ctx.server
         except Exception:  # likely port in use - in windows this is OSError, but I didn't check the others
-            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ping_timeout=None,
-                                          ping_interval=None, ssl=ssl_context)
+            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
 
             await ctx.server
         port = 0

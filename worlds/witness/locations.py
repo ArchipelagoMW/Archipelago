@@ -463,10 +463,6 @@ class WitnessPlayerLocations:
         self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
         self.CHECK_LOCATIONS = StaticWitnessLocations.GENERAL_LOCATIONS.copy()
 
-        if get_option_value(world, player, "puzzle_randomization") == 1:
-            self.CHECK_LOCATIONS.remove("Keep Pressure Plates 4")
-            self.CHECK_LOCATIONS.add("Keep Pressure Plates 2")
-
         doors = get_option_value(world, player, "shuffle_doors") >= 2
         earlyutm = is_option_enabled(world, player, "early_secret_area")
         victory = get_option_value(world, player, "victory_condition")
