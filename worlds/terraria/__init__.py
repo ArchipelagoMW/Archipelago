@@ -21,6 +21,8 @@ from .Checks import (
     hammers,
     mech_bosses,
     progression,
+    armor_minions,
+    accessory_minions,
 )
 from .Options import options
 
@@ -51,7 +53,7 @@ class TerrariaWorld(World):
     # data_version is used to signal that items, locations or their names
     # changed. Set this to 0 during development so other games' clients do not
     # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 1
+    data_version = 2
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
@@ -249,11 +251,30 @@ class TerrariaWorld(World):
             elif condition == "mech_boss":
                 if type(arg) is not int:
                     raise Exception("@mech_boss requires an integer argument")
+
                 boss_count = 0
                 for boss in mech_bosses:
                     if state.has(boss, self.player):
                         boss_count += 1
                         if boss_count >= arg:
+                            return sign
+
+                return not sign
+            elif condition == "minions":
+                if type(arg) is not int:
+                    raise Exception("@minions requires an integer argument")
+
+                minion_count = 1
+                for armor, minions in armor_minions.items():
+                    if state.has(armor, self.player) and minions + 1 > minion_count:
+                        minion_count = minions + 1
+                        if minion_count >= arg:
+                            return sign
+
+                for accessory, minions in accessory_minions.items():
+                    if state.has(accessory, self.player):
+                        minion_count += minions
+                        if minion_count >= arg:
                             return sign
 
                 return not sign

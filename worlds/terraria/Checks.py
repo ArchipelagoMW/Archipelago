@@ -169,7 +169,14 @@ def validate_conditions(
             if condition not in rule_indices:
                 raise Exception(f"location `{condition}` in `{rule}` is not defined")
         elif type == COND_FN:
-            if condition not in {"npc", "calamity", "pickaxe", "hammer", "mech_boss"}:
+            if condition not in {
+                "npc",
+                "calamity",
+                "pickaxe",
+                "hammer",
+                "mech_boss",
+                "minions",
+            }:
                 raise Exception(f"function `{condition}` in `{rule}` is not defined")
         elif type == COND_GROUP:
             _, conditions = condition
@@ -273,6 +280,8 @@ def read_data():  # -> (
     mech_bosses = []
     final_boss_loc = []
     final_bosses = []
+    armor_minions = {}
+    accessory_minions = {}
 
     progression = set()
 
@@ -537,6 +546,12 @@ def read_data():  # -> (
                 final_bosses.append(flags["Item"] or f"Post-{name}")
                 final_boss_loc.append(name)
 
+            if (minions := flags.get("ArmorMinions")) is not None:
+                armor_minions[name] = minions
+
+            if (minions := flags.get("Minions")) is not None:
+                accessory_minions[name] = minions
+
         if goal:
             if goal in goal_indices:
                 raise Exception(
@@ -682,6 +697,8 @@ def read_data():  # -> (
         mech_bosses,
         final_bosses,
         progression,
+        armor_minions,
+        accessory_minions,
     )
 
 
@@ -699,4 +716,6 @@ def read_data():  # -> (
     mech_bosses,
     final_bosses,
     progression,
+    armor_minions,
+    accessory_minions,
 ) = read_data()

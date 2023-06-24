@@ -1,3 +1,5 @@
+// TODO Calamity minions
+
 // Starting gear
 Copper Shortsword;
 Guide;                              Npc;
@@ -95,6 +97,7 @@ Stinger;
 Jungle Spores;
 Vine;
 Blade of Grass;                     ;                                           Stinger & Jungle Spores & Vine;
+Summoning Potion;                   Minions(1);
 
 // Underworld
 It's Getting Hot in Here;           Achievement;
@@ -178,8 +181,10 @@ Where's My Honey?;                  Achievement;
 Queen Bee;                          Location | Item;
 Bee Keeper;                         ;                                           #Queen Bee;
 Bee Wax;                            ;                                           #Queen Bee;
-Not the Bees!;                      Achievement;                                #Queen Bee & Bee Wax;
+Bee Armor;                          ArmorMinions(2);                            Bee Wax;
+Not the Bees!;                      Achievement;                                #Queen Bee & Bee Armor;
 Witch Doctor;                       Npc;                                        Queen Bee;
+Pygmy Necklace;                     Minions(1);                                 Witch Doctor;
 
 // Calamity Evil Boss
 Calamity Evil Boss;                 Calamity | Location | Item;
@@ -194,6 +199,7 @@ Clothier;                           Npc;                                        
 Dungeon;                            ;                                           Skeletron;
 Dungeon Heist;                      Achievement;                                Dungeon;
 Bone;                               ;                                           Dungeon | (@calamity & #Skeletron);
+Bewitching Table;                   Minions(1);                                 Dungeon;
 Mechanic;                           ;                                           Dungeon;
 Wire;                               ;                                           Mechanic;
 Decryption Computer;                Calamity;                                   Mysterious Circuitry & Dubious Plating & Wire;
@@ -215,6 +221,8 @@ Wall of Flesh;                      Location | Item(Hardmode);                  
 Pwnhammer;                          Hammer(80);                                 #Wall of Flesh;
 Wizard;                             Npc;                                        Wall of Flesh;
 Tax Collector;                      Npc;                                        Purification Powder & Wall of Flesh;
+Spider Fangs;                       ;                                           Wall of Flesh;
+Spider Armor;                       ArmorMinions(3);                            Spider Fangs;
 Altar;                              ;                                           Wall of Flesh & @hammer(80);
 Begone, Evil!;                      Achievement;                                Altar;
 Cobalt Ore;                         ;                                           ((~@calamity & Altar) | (@calamity & Wall of Flesh)) & @pickaxe(100);
@@ -264,6 +272,7 @@ Adamantite Ore;                     ;                                           
 Hardmode Forge;                     ;                                           Hardmode Anvil & Adamantite Ore & Hellforge;
 Adamantite Bar;                     ;                                           Hardmode Forge & Adamantite Ore;
 Adamantite Pickaxe;                 Pickaxe(180);                               Hardmode Anvil & Adamantite Bar;
+Forbidden Armor;                    ArmorMinions(2);                            Hardmode Anvil & Adamantite Bar & Forbidden Fragment;
 Aquatic Scourge;                    Calamity | Location | Item;
 The Twins;                          Location | Item | Mech Boss;                (@calamity | Hardmode Anvil) & Soul of Light;
 Brimstone Elemental;                Calamity | Location | Item;                 Soul of Night & Essence of Havoc & Unholy Core;
@@ -285,7 +294,7 @@ Hydraulic Volt Crusher;             Calamity;                                   
 Life Fruit;                         ;                                           (@mech_boss(1) & Wall of Flesh) | (@calamity & (Living Shard | Wall of Flesh));
 Get a Life;                         Achievement;                                Life Fruit;
 Topped Off;                         Achievement;                                Life Fruit;
-Old One's Army Tier 2;              Location | Item;                            #Old One's Army Tier 1 & (@mech_boss(1) | #Old One's Army Tier 3); // TODO Check
+Old One's Army Tier 2;              Location | Item;                            #Old One's Army Tier 1 & (@mech_boss(1) | #Old One's Army Tier 3);
 
 // Brimstone Elemental
 Infernal Suevite;                   Calamity;                                   @pickaxe(150) | Brimstone Elemental;
@@ -306,6 +315,7 @@ Inferna Cutter;                     Calamity;                                   
 Buckets of Bolts;                   Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime;
 Mecha Mayhem;                       Achievement;                                #The Twins & #The Destroyer & #Skeletron Prime;
 Hallowed Bar;                       ;                                           (#The Twins | #The Destroyer | #Skeletron Prime) & (~@calamity | @mech_boss(3)); // Can't count on Hallowed Ore, since the player may be in prehardmode (TODO Check this)
+Hallowed Armor;                     ArmorMinions(3);                            Hardmode Anvil & Hallowed Bar;
 Excalibur;                          ;                                           Hardmode Anvil & Hallowed Bar;
 Pickaxe Axe;                        Pickaxe(200);                               Hardmode Anvil & Hallowed Bar & Soul of Fright & Soul of Might & Soul of Sight;
 Drax Attax;                         Achievement;                                Pickaxe Axe;
@@ -328,6 +338,9 @@ Ashes of Calamity;                  Calamity;                                   
 The Axe;                            Hammer(100);                                #Plantera;
 Seedler;                            ;                                           #Plantera;
 Living Shard;                       Calamity;                                   #Plantera;
+Tiki Armor;                         ArmorMinions(4);                            Witch Doctor & Wall of Flesh & Plantera;
+Hercules Beetle;                    ;                                           Witch Doctor & Wall of Flesh & Plantera;
+You and What Army?;                 Achievement;                                @minions(8);
 Cyborg;                             Npc;                                        Plantera;
 Autohammer;                         ;                                           Truffle & Plantera;
 Shroomite Bar;                      ;                                           Autohammer & Chlorophyte Bar;
@@ -400,7 +413,10 @@ Duke Fishron;                       Location | Item;                            
 
 // Pumpkin Moon
 Pumpkin Moon;                       ;                                           Hardmode Anvil & Pumpkin & Ectoplasm & (@calamity | Hallowed Bar);
+Spooky Armor;                       ArmorMinions(4);                            Pumpkin Moon;
 Mourning Wood;                      Location | Item;                            Pumpkin Moon;
+Necromantic Scroll;                 Minions(1);                                 Mourning Wood;
+Papyrus Scarab;                     Minions(1);                                 Tinkerer's Workshop & Hercules Beetle & Necromantic Scroll;
 Pumpking;                           Location | Item;                            Pumpkin Moon;
 The Horseman's Blade;               ;                                           #Pumpking;
 Baleful Harvest;                    Achievement;                                Pumpkin Moon;
@@ -454,11 +470,11 @@ Luminite Bar;                       ;                                           
 Luminite Hamaxe;                    Hammer(100);                                Ancient Manipulator & Fragment & Luminite Bar;
 Luminite Pickaxe;                   Pickaxe(225);                               Ancient Manipulator & Fragment & Luminite Bar;
 Genesis Pickaxe;                    Calamity | Pickaxe(225);                    Ancient Manipulator & Meld Construct & Luminite Bar;
+Stardust Armor;                     ArmorMinions(5);                            Ancient Manipulator & Fragment & Luminite Bar;
 Terrarian;                          ;                                           #Moon Lord;
 Sick Throw;                         Achievement;                                Terrarian;
 Meowmere;                           ;                                           #Moon Lord;
 Star Wrath;                         ;                                           #Moon Lord;
-You and What Army?;                 Achievement;                                Ancient Manipulator & Fragment & Luminite Bar & Witch Doctor & (#Mourning Wood | Dungeon);
 Exodium Cluster;                    Calamity;                                   Moon Lord & @pickaxe(225);
 Normality Relocator;                Calamity;                                   Ancient Manipulator & Rod of Discord & Exodium Cluster & Fragment;
 Unholy Essence;                     Calamity;                                   Moon Lord | #Providence, the Profaned Goddess;
