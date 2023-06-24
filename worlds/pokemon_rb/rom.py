@@ -213,9 +213,9 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Option_Fix_Combat_Bugs_Heal_Effect"] + 1] = 5  # 5 bytes ahead
 
     if self.multiworld.poke_doll_skip[self.player] == "in_logic":
-        data[rom_addresses["Option_Silph_Scope_Fix"]] = 0x00      # nop
-        data[rom_addresses["Option_Silph_Scope_Fix"] + 1] = 0x00  # nop
-        data[rom_addresses["Option_Silph_Scope_Fix"] + 2] = 0x00  # nop
+        data[rom_addresses["Option_Silph_Scope_Skip"]] = 0x00      # nop
+        data[rom_addresses["Option_Silph_Scope_Skip"] + 1] = 0x00  # nop
+        data[rom_addresses["Option_Silph_Scope_Skip"] + 2] = 0x00  # nop
 
     if self.multiworld.bicycle_gate_skips[self.player] == "patched":
         data[rom_addresses["Option_Route_16_Gate_Fix"]] = 0x00     # nop

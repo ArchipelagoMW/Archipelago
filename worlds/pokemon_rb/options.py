@@ -132,6 +132,18 @@ class SecondFossilCheckCondition(Range):
     default = 3
 
 
+class FossilCheckItemTypes(Choice):
+    """The two fossil checks always contain items for your own game. Here, you can choose what types of items can
+    appear. Key Items means only advancement items can appear. Unique means key items or TMs may appear. No Key Items
+    means no advancement items may appear."""
+    display_name = "Fossil Check Item Types"
+    option_any = 0
+    option_key_items = 1
+    option_unique_items = 2
+    option_no_key_items = 3
+    default = 0
+
+
 class BadgeSanity(Toggle):
     """Shuffle gym badges into the general item pool. If turned off, badges will be shuffled across the 8 gyms."""
     display_name = "Badgesanity"
@@ -282,9 +294,11 @@ class DexSanity(SpecialRange):
     default = 0
     range_start = 0
     range_end = 100
+    alias_false = 0
+    alias_true = 100
     special_range_names = {
-        "off": 0,
-        "on": 100
+        "false": 0,
+        "true": 100
     }
 
 
@@ -860,6 +874,7 @@ pokemon_rb_options = {
     "route_3_condition": Route3Condition,
     "robbed_house_officer": RobbedHouseOfficer,
     "second_fossil_check_condition": SecondFossilCheckCondition,
+    "fossil_check_item_types": FossilCheckItemTypes,
     "exp_all": ExpAll,
     "old_man": OldMan,
     "badgesanity": BadgeSanity,

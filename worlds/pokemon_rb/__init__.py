@@ -282,10 +282,10 @@ class PokemonRedBlueWorld(World):
         if "Progressive Card Key" in advancement_items:
             total_advancement_items += 10
 
-        self.multiworld.cerulean_cave_key_items_condition[self.player].total = round((total_advancement_items / 100)
+        self.multiworld.cerulean_cave_key_items_condition[self.player].total = int((total_advancement_items / 100)
             * self.multiworld.cerulean_cave_key_items_condition[self.player].value)
 
-        self.multiworld.elite_four_key_items_condition[self.player].total = round((total_advancement_items / 100)
+        self.multiworld.elite_four_key_items_condition[self.player].total = int((total_advancement_items / 100)
             * self.multiworld.elite_four_key_items_condition[self.player].value)
 
 
@@ -349,17 +349,17 @@ class PokemonRedBlueWorld(World):
         while True:
             intervene_move = None
             test_state = self.multiworld.get_all_state(False)
-            if (not self.multiworld.badgesanity[self.player] and self.multiworld.door_shuffle[self.player] in
-                    ("none", "simple")):
-                for badge in ["Cascade Badge", "Thunder Badge", "Soul Badge", "Rainbow Badge", "Boulder Badge"]:
-                    test_state.collect(self.create_item(badge))
-            if not logic.can_surf(test_state, self.player):
+            # if (not self.multiworld.badgesanity[self.player] and self.multiworld.door_shuffle[self.player] in
+            #         ("off", "simple")):
+            #     for badge in ["Cascade Badge", "Thunder Badge", "Soul Badge", "Rainbow Badge", "Boulder Badge"]:
+            #         test_state.collect(self.create_item(badge))
+            if not logic.can_learn_hm(test_state, "Surf", self.player):
                 intervene_move = "Surf"
-            elif not logic.can_strength(test_state, self.player):
+            elif not logic.can_learn_hm(test_state, "Strength", self.player):
                 intervene_move = "Strength"
             # cut may not be needed if accessibility is minimal, unless you need all 8 badges and badgesanity is off,
             # as you will require cut to access celadon gyn
-            elif ((not logic.can_cut(test_state, self.player)) and
+            elif ((not logic.can_learn_hm(test_state, "Cut", self.player)) and
                     (self.multiworld.accessibility[self.player] != "minimal" or ((not
                     self.multiworld.badgesanity[self.player]) and max(
                     self.multiworld.elite_four_badges_condition[self.player],
@@ -367,7 +367,7 @@ class PokemonRedBlueWorld(World):
                     self.multiworld.victory_road_condition[self.player])
                     > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")))):
                 intervene_move = "Cut"
-            elif ((not logic.can_flash(test_state, self.player)) and self.multiworld.dark_rock_tunnel_logic[self.player]
+            elif ((not logic.can_learn_hm(test_state, "Flash", self.player)) and self.multiworld.dark_rock_tunnel_logic[self.player]
                     and (((self.multiworld.accessibility[self.player] != "minimal" and
                     (self.multiworld.trainersanity[self.player] or self.multiworld.extra_key_items[self.player])) or
                     self.multiworld.door_shuffle[self.player]))):
@@ -376,9 +376,9 @@ class PokemonRedBlueWorld(World):
             # as reachable, and if on no door shuffle or simple, fly is simply never necessary.
             # We only intervene if a Pokémon is able to learn fly but none are reachable, as that would have been
             # considered in door shuffle.
-            elif ((not logic.can_fly(test_state, self.player)) and logic.can_learn_hm(test_state, "Fly", self.player)
+            elif ((not logic.can_learn_hm(test_state, "Fly", self.player)) and logic.can_learn_hm(test_state, "Fly", self.player)
                     and self.multiworld.door_shuffle[self.player] not in
-                    ("none", "simple") and [self.fly_map, self.town_map_fly_map] != ["Pallet Town", "Pallet Town"]):
+                    ("off", "simple") and [self.fly_map, self.town_map_fly_map] != ["Pallet Town", "Pallet Town"]):
                 intervene_move = "Fly"
             if intervene_move:
                 if intervene_move == last_intervene:
@@ -423,14 +423,17 @@ class PokemonRedBlueWorld(World):
         if self.multiworld.old_man[self.player] == "early_parcel":
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
             if self.multiworld.dexsanity[self.player]:
-                for location in [self.multiworld.get_location(f"Pokedex - {mon}", self.player)
-                                 for mon in poke_data.pokemon_data.keys()]:
-                    add_item_rule(location, lambda item: item.name != "Oak's Parcel" or item.player != self.player)
+                for mon in poke_data.pokemon_data:
+                    try:
+                        location = self.multiworld.get_location(f"Pokedex - {mon}", self.player)
+                        add_item_rule(location, lambda item: item.name != "Oak's Parcel" or item.player != self.player)
+                    except KeyError:
+                        pass
 
         if not self.multiworld.badgesanity[self.player]:
             self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
             # Door Shuffle options besides Simple place badges during door shuffling
-            if not self.multiworld.door_shuffle[self.player] not in ("none", "simple"):
+            if not self.multiworld.door_shuffle[self.player] not in ("off", "simple"):
                 for _ in range(5):
                     badges = []
                     badgelocs = []
@@ -461,10 +464,19 @@ class PokemonRedBlueWorld(World):
         locs = {self.multiworld.get_location("Fossil - Choice A", self.player),
                 self.multiworld.get_location("Fossil - Choice B", self.player)}
 
+        for loc in locs:
+            if self.multiworld.fossil_check_item_types[self.player] == "key_items":
+                add_item_rule(loc, lambda i: i.advancement)
+            elif self.multiworld.fossil_check_item_types[self.player] == "unique_items":
+                add_item_rule(loc, lambda i: i.name in item_groups["Unique"])
+            elif self.multiworld.fossil_check_item_types[self.player] == "no_key_items":
+                add_item_rule(loc, lambda i: not i.advancement)
+
         for mon in ([" ".join(self.multiworld.get_location(
                 f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
                 + [" ".join(self.multiworld.get_location(
-                f"Saffron Fighting Dojo - Gift {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 3)]):
+                f"Saffron Fighting Dojo - Gift {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 3)]
+                + ["Vaporeon", "Jolteon", "Flareon"]):
             try:
                 loc = self.multiworld.get_location(f"Pokedex - {mon}", self.player)
                 if loc.item is None:

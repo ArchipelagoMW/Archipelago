@@ -770,7 +770,7 @@ location_data = [
                    inclusion=dexsanity) for (mon, i, ball) in zip(poke_data.pokemon_data.keys(), range(0, 152),
                                                                   ["Poke Ball", "Great Ball", "Ultra Ball"] * 51)],
 
-    LocationData("Silph Co 1F", "Receptionist", "Card Key 2F", rom_addresses["Event_SKC1F"], EventFlag(0x1c0),inclusion=split_card_key),
+    LocationData("Silph Co 1F", "Receptionist", "Card Key 2F", rom_addresses["Event_SKC1F"], EventFlag(0x1c0), inclusion=split_card_key),
     LocationData("Silph Co 4F-W", "Hostage", "Card Key 4F", rom_addresses["Event_SKC4F"], EventFlag(0x1c1), inclusion=split_card_key),
     LocationData("Silph Co 5F", "Hostage", "Card Key 5F", rom_addresses["Event_SKC5F"], EventFlag(0x1c2), inclusion=split_card_key),
     LocationData("Silph Co 6F", "Hostage", "Card Key 6F", rom_addresses["Event_SKC6F"], EventFlag(0x1c3), inclusion=split_card_key),
