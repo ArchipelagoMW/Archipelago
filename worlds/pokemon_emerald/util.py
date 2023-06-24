@@ -51,6 +51,13 @@ valid_name_characters = {
     "u", "v", "w", "x", "y", "z"
 }
 
+move_names = {
+    constant_value: constant_name[5:]
+    for constant_name, constant_value
+    in data.constants.items()
+    if constant_name.startswith("MOVE_") and constant_name not in {"MOVE_UNAVAILABLE"}
+}
+
 
 def encode_string(string: str, length: Optional[int] = None) -> bytearray:
     arr = []
@@ -149,7 +156,7 @@ def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
         "ball": (met_info & 0b0111100000000000) >> 11,
         "moves": [
             [
-                int.from_bytes(decrypted_substructs[1][i * 2 : (i + 1) * 2], 'little'),
+                move_names[int.from_bytes(decrypted_substructs[1][i * 2 : (i + 1) * 2], 'little')],
                 decrypted_substructs[1][8 + i],
                 (decrypted_substructs[0][8] & (0b00000011 << (i * 2))) >> (i * 2)
             ] for i in range(4)
@@ -181,7 +188,7 @@ def encode_pokemon_data(pokemon_json: Dict[str, Any]) -> bytearray:
 
     # Substruct type 1
     for i, move_info in enumerate(pokemon_json["moves"]):
-        for j, byte in enumerate(int16_as_bytes(move_info[0])):
+        for j, byte in enumerate(int16_as_bytes(data.constants["MOVE_" + move_info[0]])):
             substructs[1][(i * 2) + j] = byte
         substructs[1][8 + i] = move_info[1]
 
