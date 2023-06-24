@@ -1343,7 +1343,7 @@ door_table: List[DoorDict] = [
 		"Id": "D02Z01S02[NE]",
 		"Direction": 2,
 		"OriginalDoor": "D02Z01S09[W]",
-		"Logic": "D02Z01S02[NE] || (D02Z01S02[NW] || wallClimb || doubleJump) && (canWalkOnRoot || canCrossGap10)"
+		"Logic": "D02Z01S02[NE] || (doubleJump && canEnemyBounce) || (D02Z01S02[NW] || wallClimb || doubleJump) && (canWalkOnRoot || canCrossGap10)"
 	},
 	{
 		"Id": "D02Z01S02[]",
@@ -1429,7 +1429,7 @@ door_table: List[DoorDict] = [
 		"Id": "D02Z01S09[-CherubsR]",
 		"Direction": 6,
 		"OriginalDoor": "D02Z01S01[CherubsR]",
-		"Logic": "linen && (canWalkOnRoot || canCrossGap10)"
+		"Logic": "linen && (canWalkOnRoot || canCrossGap2 || canEnemyBounce && canAirStall)"
 	},
 	
 	{
@@ -1513,7 +1513,7 @@ door_table: List[DoorDict] = [
 		"Id": "D02Z02S04[W]",
 		"Direction": 1,
 		"OriginalDoor": "D02Z02S09[E]",
-		"Logic": "D02Z02S04[NE] || D02Z02S04[W] || D02Z02S04[E] && dash || D02Z02S04[SE] && wallClimb"
+		"Logic": "D02Z02S04[NE] || D02Z02S04[W] || D02Z02S04[E] && dash || D02Z02S04[SE] && (wallClimb || doubleJump && canEnemyUpslash)"
 	},
 	{
 		"Id": "D02Z02S04[SE]",
@@ -1531,7 +1531,7 @@ door_table: List[DoorDict] = [
 		"Id": "D02Z02S04[NE]",
 		"Direction": 2,
 		"OriginalDoor": "D02Z02S05[W]",
-		"Logic": "D02Z02S04[NE] || ((D02Z02S04[W] || D02Z02S04[E] && dash) && (doubleJump || wallClimb)) || (wallClimb && D02Z02S04[SE])"
+		"Logic": "D02Z02S04[NE] || ((D02Z02S04[W] || D02Z02S04[E] && dash) && (doubleJump || wallClimb)) || (D02Z02S04[SE] && (wallClimb || doubleJump && canEnemyUpslash))"
 	},
 	{
 		"Id": "D02Z02S04[-CherubsL]",
@@ -1548,7 +1548,8 @@ door_table: List[DoorDict] = [
 		"Id": "D02Z02S05[W]",
 		"Direction": 1,
 		"OriginalDoor": "D02Z02S04[NE]",
-		"VisibilityFlags": 1
+		"VisibilityFlags": 65,
+		"Logic": "D02Z02S05[W] || doubleJump && canEnemyBounce"
 	},
 	{
 		"Id": "D02Z02S05[SE]",
@@ -2114,14 +2115,14 @@ door_table: List[DoorDict] = [
 		"Id": "D03Z02S01[W]",
 		"Direction": 1,
 		"OriginalDoor": "D03Z02S02[E]",
-		"Logic": "D03Z02S01[W] || wallClimb"
+		"Logic": "D03Z02S01[W] || wallClimb || doubleJump && canEnemyBounce"
 	},
 	{
 		"Id": "D03Z02S01[N]",
 		"Direction": 0,
 		"OriginalDoor": "D03Z01S03[SE]",
 		"Type": 1,
-		"Logic": "D03Z02S01[N] || wallClimb || canCrossGap8"
+		"Logic": "D03Z02S01[N] || wallClimb || doubleJump"
 	},
 	{
 		"Id": "D03Z02S01[Cherubs]",
@@ -2132,13 +2133,13 @@ door_table: List[DoorDict] = [
 		"Id": "D03Z02S02[W]",
 		"Direction": 1,
 		"OriginalDoor": "D03Z02S10[E]",
-		"Logic": "D03Z02S02[W] || D03Z02S02[CherubsL] || doubleJump && (D03Z02S02[E] || D03Z02S02[CherubsR] || wallClimb)"
+		"Logic": "D03Z02S02[W] || D03Z02S02[CherubsL] || doubleJump && (D03Z02S02[E] || D03Z02S02[CherubsR] || wallClimb || canEnemyBounce)"
 	},
 	{
 		"Id": "D03Z02S02[E]",
 		"Direction": 2,
 		"OriginalDoor": "D03Z02S01[W]",
-		"Logic": "D03Z02S02[E] || wallClimb"
+		"Logic": "D03Z02S02[E] || wallClimb || doubleJump && canEnemyBounce"
 	},
 	{
 		"Id": "D03Z02S02[S]",
@@ -2349,7 +2350,7 @@ door_table: List[DoorDict] = [
 		"Id": "D03Z02S11[W]",
 		"Direction": 1,
 		"OriginalDoor": "D03Z02S05[E]",
-		"Logic": "D03Z02S11[W] || dash && (doubleJump || wallClimb)"
+		"Logic": "D03Z02S11[W] || dash && (doubleJump || wallClimb || canCrossGap2)"
 	},
 	{
 		"Id": "D03Z02S11[E]",
@@ -2826,8 +2827,8 @@ door_table: List[DoorDict] = [
 		"Id": "D04Z02S02[NE]",
 		"Direction": 2,
 		"OriginalDoor": "D04Z02S15[W]",
-		"VisibilityFlags": 17,
-		"Logic": "D04Z02S02[NE] || upwarpSkipsAllowed && (doubleJump || canEnemyUpslash)"
+		"VisibilityFlags": 49,
+		"Logic": "D04Z02S02[NE] || (doubleJump && upwarpSkipsAllowed) || (doubleJump && canEnemyUpslash) || (canEnemyUpslash && upwarpSkipsAllowed && (wallClimb || D04Z02S02[N]))"
 	},
 	{
 		"Id": "D04Z02S02[N]",
@@ -3070,7 +3071,7 @@ door_table: List[DoorDict] = [
 		"Id": "D04Z02S20[Redento]",
 		"Direction": 4,
 		"OriginalDoor": "D04BZ02S01[Redento]",
-		"Logic": "redentoRooms >= 5 && knots >= 1 && limestones >= 3"
+		"Logic": "redentoRooms >= 5"
 	},
 	{
 		"Id": "D04Z02S21[W]",
@@ -5372,16 +5373,16 @@ door_table: List[DoorDict] = [
 		"Direction": 1,
 		"OriginalDoor": "D20Z01S13[E]",
 		"Type": 1,
-		"VisibilityFlags": 15,
+		"VisibilityFlags": 5,
 		"RequiredDoors": [ "D20Z02S11[E]" ],
-		"Logic": "D20Z02S11[NW] || D20Z02S11[E] || doubleJump || canBreakTirana"
+		"Logic": "D20Z02S11[NW] || mourningSkipAllowed && (doubleJump || canBreakTirana || D20Z02S11[E])"
 	},
 	{
 		"Id": "D20Z02S11[E]",
 		"Direction": 2,
 		"OriginalDoor": "D20Z02S10[W]",
-		"VisibilityFlags": 13,
-		"Logic": "D20Z02S11[E] || doubleJump || canBreakTirana || mourningSkipAllowed && D20Z02S11[NW] && canCrossGap5"
+		"VisibilityFlags": 5,
+		"Logic": "D20Z02S11[E] || mourningSkipAllowed && (doubleJump || canBreakTirana || D20Z02S11[NW] && canCrossGap5)"
 	},
 	{
 		"Id": "D20Z02S12[W]",

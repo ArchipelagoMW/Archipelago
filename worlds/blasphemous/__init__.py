@@ -277,7 +277,7 @@ class BlasphemousWorld(World):
             reg.locations.append(event)
 
         for door in door_table:
-            reg: Region = self.get_room_from_door(self.door_connections[door["Id"]])
+            reg: Region = self.get_room_from_door(door["Id"])
             event = BlasphemousLocation(player, door["Id"], None, reg)
             event.show_in_spoiler = False
             event.place_locked_item(self.create_event(door["Id"]))
