@@ -400,6 +400,14 @@ ck_cube = "Castle Keep: Dracula's floating cube"
 ck_flame_l = "Castle Keep: Left Dracula door flame"
 ck_flame_r = "Castle Keep: Right Dracula door flame"
 
+renon1 = "Renon's shop: Roast Chicken purchase"
+renon2 = "Renon's shop: Roast Beef purchase"
+renon3 = "Renon's shop: Healing Kit purchase"
+renon4 = "Renon's shop: Purifying purchase"
+renon5 = "Renon's shop: Cure Ampoule purchase"
+renon6 = "Renon's shop: Sun Card purchase"
+renon7 = "Renon's shop: Moon Card purchase"
+
 the_end = "Dracula"
 
 forest_boss_one = "Forest of Silence: King Skeleton 1"

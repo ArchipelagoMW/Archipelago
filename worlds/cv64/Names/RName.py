@@ -61,6 +61,8 @@ castle_keep              = "Castle Keep"
 ck_main                  = "Castle Keep: exterior"
 ck_drac_chamber          = "Castle Keep: Dracula's chamber"
 
+renon                    = "Renon's shop"
+
 regions_to_stages = {
     forest_start:        forest_of_silence,
     forest_mid:          forest_of_silence,
@@ -98,5 +100,6 @@ regions_to_stages = {
     ct_middle:           clock_tower,
     ct_end:              clock_tower,
     ck_main:             castle_keep,
+    renon:               None,
     ck_drac_chamber:     castle_keep
 }

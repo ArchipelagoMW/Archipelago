@@ -137,6 +137,20 @@ class LizardGeneratorItems(Toggle):
     display_name = "Lizard-man Generator Items"
 
 
+class Shopsanity(Toggle):
+    """Adds 7 one-time purchases from Renon's shop into the location pool. After buying an item from a slot, it will
+    revert back to whatever it is in the vanilla game."""
+    display_name = "Shopsanity"
+
+
+class ShopPricesTotal(Range):
+    """The total sum of every randomized shop price added together. Set to -1 to not randomize prices."""
+    range_start = -1
+    range_end = 99999
+    default = 8200
+    display_name = "Shop Prices Total"
+
+
 class RenonFightCondition(Choice):
     """Sets the condition on which the Renon fight will trigger.
     Vanilla = after spending more than 30,000 gold in his shop."""
@@ -256,6 +270,8 @@ cv64_options: Dict[str, Option] = {
     "multi_hit_breakables": MultiHitBreakables,
     "empty_breakables": EmptyBreakables,
     "lizard_generator_items": LizardGeneratorItems,
+    "shopsanity": Shopsanity,
+    "shop_prices_total": ShopPricesTotal,
     "renon_fight_condition": RenonFightCondition,
     "vincent_fight_condition": VincentFightCondition,
     "bad_ending_condition": BadEndingCondition,

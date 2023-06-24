@@ -14,7 +14,7 @@ class EntranceData(typing.NamedTuple):
     carrie_entrance: bool = False
 
 
-def create_entrances(multiworld, player: int, active_stage_exits, active_warp_list, required_special2s, active_regions):
+def create_entrances(multiworld, player: int, active_stage_exits, active_warp_list, active_regions):
     def get_prev_stage_start(source_stage):
         if source_stage in active_stage_exits:
             if active_stage_exits[source_stage][0] != "Menu":
@@ -45,6 +45,7 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         # Villa
         EntranceData(RName.villa_start, RName.villa_main),
         EntranceData(RName.villa_main, RName.villa_start, hard_entrance=True, carrie_entrance=True),
+        EntranceData(RName.villa_main, RName.renon),
         EntranceData(RName.villa_main, RName.villa_storeroom,
                      lambda state: state.has(IName.storeroom_key, player)),
         EntranceData(RName.villa_main, RName.villa_archives,
@@ -63,9 +64,12 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         EntranceData(RName.villa_crypt, get_alt_stage_start(RName.villa)),
         # Tunnel
         EntranceData(RName.tunnel_start, RName.tunnel_end),
+        EntranceData(RName.tunnel_start, RName.renon),
+        EntranceData(RName.tunnel_end, RName.renon),
         EntranceData(RName.tunnel_end, get_next_stage_start(RName.tunnel)),
         # Underground Waterway
         EntranceData(RName.uw_main, RName.uw_end),
+        EntranceData(RName.uw_main, RName.renon),
         EntranceData(RName.uw_end, RName.uw_main, hard_entrance=True),
         EntranceData(RName.uw_end, get_next_stage_start(RName.underground_waterway)),
         # Castle Center
@@ -73,9 +77,10 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
                      lambda state: (state.has(IName.chamber_key, player))),
         EntranceData(RName.cc_lower, RName.cc_upper),
         EntranceData(RName.cc_upper, RName.cc_lower),
-        EntranceData(RName.cc_lower, RName.cc_library,
+        EntranceData(RName.cc_upper, RName.cc_library,
                      lambda state: (state.has(IName.magical_nitro, player)
                                     and state.has(IName.mandragora, player))),
+        EntranceData(RName.cc_upper, RName.renon),
         EntranceData(RName.cc_lower, RName.cc_crystal,
                      lambda state: (state.has(IName.magical_nitro, player, 2)
                                     and state.has(IName.mandragora, player, 2))),
@@ -106,6 +111,7 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         EntranceData(RName.tosor_main, get_next_stage_start(RName.tower_of_sorcery)),
         # Room of Clocks
         EntranceData(RName.roc_main, get_next_stage_start(RName.room_of_clocks)),
+        EntranceData(RName.roc_main, RName.renon),
         # Clock Tower
         EntranceData(RName.ct_start, RName.ct_middle,
                      lambda state: state.has(IName.clocktower_key_one, player)),
@@ -115,6 +121,7 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
                      lambda state: state.has(IName.clocktower_key_two, player)),
         EntranceData(RName.ct_end, RName.ct_middle,
                      lambda state: state.has(IName.clocktower_key_two, player)),
+        EntranceData(RName.ct_end, RName.renon),
         EntranceData(RName.ct_end, get_next_stage_start(RName.clock_tower),
                      lambda state: state.has(IName.clocktower_key_three, player)),
         # Castle Keep
@@ -143,10 +150,29 @@ def create_entrances(multiworld, player: int, active_stage_exits, active_warp_li
         entrance_not_too_hard: bool = multiworld.hard_logic[player].value == 1 or data.hard_entrance is False
         doable_as_pref_char: bool = multiworld.carrie_logic[player].value == 1 or data.carrie_entrance is False
         rule_not_too_easy: bool = multiworld.hard_logic[player].value == 0 or data.easy_rule is False
+        shopsanity_check: bool = multiworld.shopsanity[player].value == 1 or data.target_region != RName.renon
 
-        if entrance_not_too_hard and doable_as_pref_char and data.parent_region in active_regions:
+        if entrance_not_too_hard and doable_as_pref_char and shopsanity_check and data.parent_region in active_regions:
             created_entrance = Entrance(player, data.target_region, active_regions[data.parent_region])
             if data.rule and rule_not_too_easy:
                 created_entrance.access_rule = data.rule
+            if data.target_region == RName.renon and multiworld.shop_prices_total[player] != 0:
+                # Make sure there are any farm-able regions accessible before expecting players to farm money.
+                created_entrance.access_rule = lambda state: \
+                    any([state.can_reach(RName.forest_start, "Region", player),
+                         state.can_reach(RName.forest_mid, "Region", player),
+                         state.can_reach(RName.cw_start, "Region", player),
+                         state.can_reach(RName.cw_ltower, "Region", player),
+                         state.can_reach(RName.villa_main, "Region", player),
+                         state.can_reach(RName.villa_maze, "Region", player),
+                         state.can_reach(RName.tunnel_start, "Region", player),
+                         state.can_reach(RName.tunnel_end, "Region", player),
+                         state.can_reach(RName.uw_main, "Region", player),
+                         state.can_reach(RName.cc_lower, "Region", player),
+                         state.can_reach(RName.cc_upper, "Region", player),
+                         state.can_reach(RName.cc_elev_top, "Region", player),
+                         state.can_reach(RName.tosor_main, "Region", player),
+                         state.can_reach(RName.ct_middle, "Region", player),
+                         state.can_reach(RName.ct_end, "Region", player)])
             created_entrance.connect(active_regions[data.target_region])
             active_regions[data.parent_region].exits.append(created_entrance)

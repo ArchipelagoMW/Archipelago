@@ -136,10 +136,12 @@ class CV64World(World):
             if stage in self.active_stage_list or stage is None:
                 active_regions[name] = Region(name, self.player, self.multiworld)
 
+        if self.multiworld.shopsanity[self.player]:
+            active_regions[RName.renon] = Region(RName.renon, self.player, self.multiworld)
+
         create_locations(self.multiworld, self.player, active_regions)
 
-        create_entrances(self.multiworld, self.player, self.active_stage_exits, self.active_warp_list,
-                         self.required_s2s, active_regions)
+        create_entrances(self.multiworld, self.player, self.active_stage_exits, self.active_warp_list, active_regions)
 
         # Set up the regions correctly
         for region in active_regions:
@@ -226,6 +228,16 @@ class CV64World(World):
             item_counts["tier2_junk_counts"][IName.powerup] += 1
             item_counts["tier2_junk_counts"][IName.sun_card] += 1
             add_tier1_junk(4)
+
+        # Put in Renon's shop items if applicable
+        if self.multiworld.shopsanity[self.player]:
+            item_counts["tier2_junk_counts"][IName.roast_chicken] += 1
+            item_counts["tier2_junk_counts"][IName.roast_beef] += 1
+            item_counts["tier2_junk_counts"][IName.healing_kit] += 1
+            item_counts["tier2_junk_counts"][IName.purifying] += 1
+            item_counts["tier2_junk_counts"][IName.cure_ampoule] += 1
+            item_counts["tier2_junk_counts"][IName.sun_card] += 1
+            item_counts["tier2_junk_counts"][IName.moon_card] += 1
 
         # Determine the S1 count
         item_counts["special_counts"][IName.special_one] = self.multiworld.total_special1s[self.player].value
@@ -437,7 +449,7 @@ class CV64World(World):
                         else:
                             offsets_to_ids[loc.cv64_rom_offset] = 0x12
 
-                    if loc.address is not None:
+                    if loc.address is not None and loc.cv64_stage is not None:
                         if self.multiworld.countdown[self.player].value == 2 or \
                                 (self.multiworld.countdown[self.player].value == 1 and
                                  (loc.item.classification == ItemClassification.progression or

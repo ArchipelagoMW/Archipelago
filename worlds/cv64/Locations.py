@@ -426,6 +426,16 @@ empty_breakables_table = {
     LName.roc_exit:   LocationData(0xC64159, 0x10CF9B, RName.roc_main),
 }
 
+renon_shop_table = {
+    LName.renon1: LocationData(0xC6415A, 0x10CF9B, RName.renon),
+    LName.renon2: LocationData(0xC6415B, 0x10CF9B, RName.renon),
+    LName.renon3: LocationData(0xC6415C, 0x10CF9B, RName.renon),
+    LName.renon4: LocationData(0xC6415D, 0x10CF9B, RName.renon),
+    LName.renon5: LocationData(0xC6415E, 0x10CF9B, RName.renon),
+    LName.renon6: LocationData(0xC6415F, 0x10CF9B, RName.renon),
+    LName.renon7: LocationData(0xC64160, 0x10CF9B, RName.renon),
+}
+
 boss_table = {
     LName.forest_boss_one:       LocationData(None, 0x000000, RName.forest_start, "event"),
     LName.forest_boss_two:       LocationData(None, 0x000000, RName.forest_start, "event"),
@@ -460,7 +470,8 @@ all_locations = {
     **multi_breakable_table,
     **multi_sub_weapon_table,
     **sub_weapon_table,
-    **empty_breakables_table
+    **empty_breakables_table,
+    **renon_shop_table
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {id: name for name, _ in all_locations.items()}
@@ -497,6 +508,9 @@ def create_locations(world, player: int, active_regions):
 
     if world.sub_weapon_shuffle[player].value > 1:
         location_table.update({**sub_weapon_table})
+
+    if world.shopsanity[player].value:
+        location_table.update({**renon_shop_table})
 
     for loc, data in location_table.items():
         if data.region in active_regions:
