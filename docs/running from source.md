@@ -75,8 +75,6 @@ host.yaml at your SNI folder.
 It may be possible to run Archipelago from source without it, at your own risk.
 
 It is also generally recommended to have Git installed and understand how to use it, especially if you're thinking about contributing.
-Git will allow you to keep your copy of the repository updated without having to redownload the .zip manually.
-It lets you manage branches or forks of the repository with ease, and it will be all but required to submit your changes via a pull request.
 
 You can download the latest release of Git at [The downloads page on the Git website](https://git-scm.com/downloads).
 
