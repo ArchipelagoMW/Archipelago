@@ -196,7 +196,7 @@ class BlasphemousWorld(World):
             self.place_items_from_set(thorn_set, "Thorn Upgrade")
 
         if world.start_wheel[player]:
-            world.get_location("BotSS: Beginning gift", player)\
+            world.get_location("Beginning gift", player)\
                 .place_locked_item(self.create_item("The Young Mason's Wheel"))
 
         if not world.skill_randomizer[player]:

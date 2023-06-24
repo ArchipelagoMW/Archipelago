@@ -167,9 +167,6 @@ location_table: List[LocationDict] = [
         'room': "D08Z01S02"},
 
     # Brotherhood of the Silent Sorrow
-    {'name': "BotSS: Beginning gift",
-        'game_id': "QI106",
-        'room': "D17Z01S01"},
     {'name': "BotSS: Starting room Child of Moonlight",
         'game_id': "RESCUED_CHERUB_06",
         'room': "D17Z01S01"},
@@ -861,6 +858,9 @@ location_table: List[LocationDict] = [
         'room': "D02Z01S01"},
 
     # Various
+    {'name': "Beginning gift",
+        'game_id': "QI106",
+        'room': "Misc"},
     {'name': "Second red candle",
         'game_id': "RB18",
         'room': "Misc"},

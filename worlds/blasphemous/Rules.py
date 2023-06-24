@@ -941,10 +941,13 @@ def rules(blasphemousworld):
                 state._blasphemous_can_walk_on_root(player) and \
                     state._blasphemous_can_cross_gap(difficulty, player, 5)))
     set_rule(world.get_entrance("D02Z01S02[NE]", player),
-        lambda state: (state.has("D02Z01S02[NW]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)) and \
-                (state._blasphemous_can_walk_on_root(player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 10)))
+        lambda state: (state.has("Purified Hand of the Nun", player) and \
+            state._blasphemous_can_enemy_bounce(difficulty, enemy)) or \
+                (state.has("D02Z01S02[NW]", player) or \
+                    state.has("Wall Climb Ability", player) or \
+                        state.has("Purified Hand of the Nun", player)) and \
+                            (state._blasphemous_can_walk_on_root(player) or \
+                                state._blasphemous_can_cross_gap(difficulty, player, 10)))
     set_rule(world.get_entrance("D02Z01S02[]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
@@ -1027,14 +1030,18 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("WOTW: Upper east statue", player),
         lambda state: state._blasphemous_can_walk_on_root(player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 11))
+            state._blasphemous_can_cross_gap(difficulty, player, 11) or \
+                state.has("Purified Hand of the Nun", player) and \
+                    state._blasphemous_can_enemy_bounce(difficulty, enemy))
     # Doors
     set_rule(world.get_entrance("D02Z01S09[-CherubsL]", player),
         lambda state: state.has("Linen of Golden Thread", player))
     set_rule(world.get_entrance("D02Z01S09[-CherubsR]", player),
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state._blasphemous_can_walk_on_root(player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 10)))
+                state._blasphemous_can_cross_gap(difficulty, player, 2) or \
+                    state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
+                        state._blasphemous_can_air_stall(difficulty, player)))
 
 
     # D02Z02S01 (Graveyard of the Peaks)
@@ -1126,32 +1133,42 @@ def rules(blasphemousworld):
             ((state.has("D02Z02S04[W]", player) or \
                 state.has("D02Z02S04[E]", player) and \
                     state.has("Dash Ability", player)) and \
-                        state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)) or \
-                            (state.has("Wall Climb Ability", player) and \
-                                state.has("D02Z02S04[SE]", player)))
+                        (state.has("Purified Hand of the Nun", player) or \
+                            state.has("Wall Climb Ability", player))) or \
+                                (state.has("D02Z02S04[SE]", player) and \
+                                    (state.has("Wall Climb Ability", player) or \
+                                        state.has("Purified Hand of the Nun", player) and \
+                                            state._blasphemous_can_enemy_upslash(difficulty, enemy, player))))
     set_rule(world.get_location("GotP: West shaft Child of Moonlight", player),
         lambda state: (state.has("D02Z02S04[NE]", player) or \
             state.has("D02Z02S04[W]", player) or \
                 state.has("D02Z02S04[E]", player) and \
                     state.has("Dash Ability", player) or \
                         state.has("D02Z02S04[SE]", player) and \
-                            state.has("Wall Climb Ability", player)) and \
-                                (state.has_all({"Blood Perpetuated in Sand", "Dash Ability"}, player) or \
-                                    state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Cantina of the Blue Rose"}, player) or \
-                                        state._blasphemous_aubade(player)) or \
-                                            (state.has("D02Z02S04[NE]", player) or \
-                                                state.has("D02Z02S04[W]", player) or \
-                                                    state.has("D02Z02S04[E]", player) and \
-                                                        state.has("Dash Ability", player) or \
-                                                            state.has("D02Z02S04[SE]", player)) and \
-                                                                state._blasphemous_pillar(player))
+                            (state.has("Wall Climb Ability", player) or \
+                                state.has("Purified Hand of the Nun", player) and \
+                                    state._blasphemous_can_enemy_upslash(difficulty, enemy, player))) and \
+                                        (state.has("Blood Perpetuated in Sand", player) and \
+                                            state.has("Dash Ability", player) or \
+                                                state.has("Purified Hand of the Nun", player) and \
+                                                    state._blasphemous_can_enemy_bounce(difficulty, enemy) or \
+                                                        state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Cantina of the Blue Rose"}, player) or \
+                                                            state._blasphemous_aubade(player)) or \
+                                                                (state.has("D02Z02S04[NE]", player) or \
+                                                                    state.has("D02Z02S04[W]", player) or \
+                                                                        state.has("D02Z02S04[E]", player) and \
+                                                                            state.has("Dash Ability", player) or \
+                                                                                state.has("D02Z02S04[SE]", player)) and \
+                                                                                    state._blasphemous_pillar(player))
     # Doors
     set_rule(world.get_entrance("D02Z02S04[W]", player),
         lambda state: state.has("D02Z02S04[NE]", player) or \
             state.has("D02Z02S04[E]", player) and \
                 state.has("Dash Ability", player) or \
                     state.has("D02Z02S04[SE]", player) and \
-                        state.has("Wall Climb Ability", player))
+                        (state.has("Wall Climb Ability", player) or \
+                            state.has("Purified Hand of the Nun", player) and \
+                                state._blasphemous_can_enemy_upslash(difficulty, enemy, player)))
     set_rule(world.get_entrance("D02Z02S04[SE]", player),
         lambda state: state.has("D02Z02S04[NE]", player) or \
             state.has("D02Z02S04[W]", player) or \
@@ -1162,7 +1179,9 @@ def rules(blasphemousworld):
                 state.has("Dash Ability", player)) and \
                     state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)) or \
                         (state.has("D02Z02S04[SE]", player) and \
-                            state.has("Wall Climb Ability", player)))
+                            (state.has("Wall Climb Ability", player) or \
+                                state.has("Purified Hand of the Nun", player) and \
+                                    state._blasphemous_can_enemy_upslash(difficulty, enemy, player))))
     set_rule(world.get_entrance("D02Z02S04[-CherubsL]", player),
         lambda state: state.has("Linen of Golden Thread", player) and \
             (state.has("D02Z02S04[NE]", player) or \
@@ -1177,6 +1196,9 @@ def rules(blasphemousworld):
         lambda state: state.has("D02Z02S05[NW]", player) or \
             state.has("Wall Climb Ability", player))
     # Doors
+    set_rule(world.get_entrance("D02Z02S05[W]", player),
+        lambda state: state.has("Purified Hand of the Nun", player) and \
+            state._blasphemous_can_enemy_bounce(difficulty, enemy))
     set_rule(world.get_entrance("D02Z02S05[E]", player),
         lambda state: state.has("D02Z02S05[NW]", player) or \
             state.has("D02Z02S05[E]", player) or \
@@ -1421,16 +1443,18 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("Jondo: Upper east chest", player),
         lambda state: state.has("D03Z02S01[Cherubs]", player) or \
-            (state.has("D03Z02S01[W]", player) and \
-                state._blasphemous_can_cross_gap(difficulty, player, 8)) or \
-                    state._blasphemous_can_climb_on_root(player) or \
-                        state._blasphemous_can_cross_gap(difficulty, player, 9))
+            state._blasphemous_can_climb_on_root(player) or \
+                state._blasphemous_can_cross_gap(difficulty, player, 8) or \
+                    state.has("Purified Hand of the Nun", player) and \
+                        state._blasphemous_can_enemy_bounce(difficulty, enemy))
     # Doors
     set_rule(world.get_entrance("D03Z02S01[W]", player),
-        lambda state: state.has("Wall Climb Ability", player))
+        lambda state: state.has("Wall Climb Ability", player) or \
+            state.has("Purified Hand of the Nun", player) and \
+                state._blasphemous_can_enemy_bounce(difficulty, enemy))
     set_rule(world.get_entrance("D03Z02S01[N]", player),
         lambda state: state.has("Wall Climb Ability", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 8))
+            state.has("Purified Hand of the Nun", player))
 
 
     # D03Z02S02 (Jondo)
@@ -1911,7 +1935,7 @@ def rules(blasphemousworld):
                 (state.has("Purified Hand of the Nun", player) and \
                     state._blasphemous_can_enemy_upslash(difficulty, enemy, player)) or \
                         (state._blasphemous_can_enemy_upslash(difficulty, enemy, player) and \
-                            state._blasphemous_upward_skips_allowed(difficulty) and \
+                            state._blasphemous_upwarp_skips_allowed(difficulty) and \
                                 (state.has("Wall Climb Ability", player) or \
                                     state.has("D04Z02S02[N]", player))))
     set_rule(world.get_entrance("D04Z02S02[N]", player),
@@ -3001,7 +3025,7 @@ def rules(blasphemousworld):
         lambda state: state.has("D17Z01S01[Cherubs1]", player) or \
             state.has("Taranto to my Sister", player) or \
                 (state._blasphemous_can_climb_on_root(player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 10)) and \
+                    state._blasphemous_can_cross_gap(difficulty, player, 9)) and \
                         (state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun", "Debla of the Lights", "Verdiales of the Forsaken Hamlet", "Cloistered Ruby"}, player) or \
                             state._blasphemous_tirana(player)))
 
@@ -3115,8 +3139,7 @@ def rules(blasphemousworld):
             state.has_all({"Dash Ability", "Wall Climb Ability"}, player))
     # Doors
     set_rule(world.get_entrance("D17BZ02S01[FrontR]", player),
-        lambda state: state.has("D17BZ02S01[FrontR]", player) or \
-            state.has_all({"Dash Ability", "Wall Climb Ability"}, player))
+        lambda state: state.has_all({"Dash Ability", "Wall Climb Ability"}, player))
 
 
     # D20Z01S04 (Echoes of Salt)
@@ -3202,15 +3225,16 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D20Z02S11[NW]", player),
         lambda state: state.has("D20Z02S11[E]", player))
     set_rule(world.get_entrance("D20Z02S11[NW]", player),
-        lambda state: state.has("D20Z02S11[E]", player) or \
-            state.has("Purified Hand of the Nun", player) or \
-                state._blasphemous_can_break_tirana(difficulty, player))
+        lambda state: state._blasphemous_mourning_skips_allowed(difficulty) and \
+            (state.has("Purified Hand of the Nun", player) or \
+                state._blasphemous_can_break_tirana(difficulty, player) or \
+                    state.has("D20Z02S11[E]", player)))
     set_rule(world.get_entrance("D20Z02S11[E]", player),
-        lambda state: state.has("Purified Hand of the Nun", player) or \
-            state._blasphemous_can_break_tirana(difficulty, player) or \
-                state._blasphemous_mourning_skips_allowed(difficulty) and \
+        lambda state: state._blasphemous_mourning_skips_allowed(difficulty) and \
+            (state.has("Purified Hand of the Nun", player) or \
+                state._blasphemous_can_break_tirana(difficulty, player) or \
                     state.has("D20Z02S11[NW]", player) and \
-                        state._blasphemous_can_cross_gap(difficulty, player, 5))
+                        state._blasphemous_can_cross_gap(difficulty, player, 5)))
     
 
     # Misc Items
