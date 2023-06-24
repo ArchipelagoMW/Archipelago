@@ -78,7 +78,7 @@ It is also generally recommended to have Git installed and understand how to use
 Git will allow you to keep your copy of the repository updated without having to redownload the .zip manually.
 It lets you manage branches or forks of the repository with ease, and it will be all but required to submit your changes via a pull request.
 
-You can download the latest release of Git at [The downloads page on the Git website]https://git-scm.com/downloads).
+You can download the latest release of Git at [The downloads page on the Git website](https://git-scm.com/downloads).
 
 Beyond that, there are also graphical interfaces for Git that make it more accessible.
 For repositories on Github (such as this one), [Github Desktop](https://desktop.github.com) is one such option.
