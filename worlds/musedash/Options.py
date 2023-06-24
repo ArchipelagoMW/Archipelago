@@ -142,8 +142,11 @@ class TrapCountPercentage(Range):
 
 
 class IncludeSongs(ItemSet):
-    """Any song listed here will be included as part of the seed.
-    - If you want these songs immediately, use start_inventory."""
+    """Any song listed here will be guaranteed to be included as part of the seed.
+    - Difficulty options will be skipped for these songs.
+    - In the event of there being too many included songs, songs will be randomly chosen from the list without regard for difficulty.
+    - If you want these songs immediately, use start_inventory instead.
+    """
     verify_item_name = True
     display_name = "Include Songs"
 

@@ -73,7 +73,7 @@ class MuseDashWorld(World):
         # The minimum amount of songs to make an ok rando would be Starting Songs + 10 interim songs + Goal song.
         # - Interim songs being equal to max starting song count.
         # Note: The worst settings still allow 25 songs (Streamer Mode + No DLC). And this max requires 21 songs. (10 * 2 + 1)
-        minimum_song_count = self.multiworld.starting_song_count[self.player] + 11
+        starter_song_count = self.multiworld.starting_song_count[self.player].value
 
         final_song_list = None
         while True:
@@ -81,7 +81,8 @@ class MuseDashWorld(World):
             available_song_keys = self.muse_dash_collection.get_songs_with_settings(dlc_songs, streamer_mode, lower_diff_threshold, higher_diff_threshold)
             available_song_keys = self.handle_plando(available_song_keys)
 
-            if len(available_song_keys) >= minimum_song_count:
+            count_needed_for_start = max(0, len(self.starting_songs) - starter_song_count)
+            if len(available_song_keys) + len(self.included_songs) >= count_needed_for_start + 11:
                 final_song_list = available_song_keys
                 break
 
@@ -110,19 +111,45 @@ class MuseDashWorld(World):
 
     # Todo: Update this to list[str] when python 3.8 stops being used
     def create_song_pool(self, available_song_keys: list):
-        startingSongCount = self.multiworld.starting_song_count[self.player]
+        starting_song_count = self.multiworld.starting_song_count[self.player].value
+        additional_song_count = self.multiworld.additional_song_count[self.player].value
 
         self.multiworld.random.shuffle(available_song_keys)
-        self.victory_song_name = available_song_keys.pop()
 
-        for _ in range(0, startingSongCount):
-            self.starting_songs.append(available_song_keys.pop())
+        # First, we must double check if the player has included too many guaranteed songs
+        included_song_count = len(self.included_songs)
+        if included_song_count > additional_song_count:
+            # If so, we want to thin the list, thus let's get the goal song and starter songs while we are at it.
+            self.multiworld.random.shuffle(self.included_songs)
+            self.victory_song_name = self.included_songs.pop()
+            while len(self.included_songs) > additional_song_count:
+                next_song = self.included_songs.pop()
+                if len(self.starting_songs) < starting_song_count:
+                    self.starting_songs.append(next_song)
+        else:
+            # If not, choose a random victory song from the available songs
+            chosen_song = self.multiworld.random.randrange(0, len(available_song_keys) + included_song_count)
+            if chosen_song < included_song_count:
+                self.victory_song_name = self.included_songs[chosen_song]
+                del self.included_songs[chosen_song]
+            else:
+                self.victory_song_name = available_song_keys[chosen_song - included_song_count]
+                del available_song_keys[chosen_song - included_song_count]
 
-        for _ in range(0, self.multiworld.additional_song_count[self.player]):
-            if len(available_song_keys) <= 0:
-                break
+        # Next, make sure the starting songs are fufilled
+        if len(self.starting_songs) < starting_song_count:
+            for _ in range(len(self.starting_songs), starting_song_count):
+                if len(available_song_keys) > 0:
+                    self.starting_songs.append(available_song_keys.pop())
+                else:
+                    self.starting_songs.append(self.included_songs.pop())
 
-            self.included_songs.append(available_song_keys.pop())
+        # Then attempt to fufill any remaining songs for interim songs
+        if len(self.included_songs) < additional_song_count:
+            for _ in range(len(self.included_songs), self.multiworld.additional_song_count[self.player]):
+                if len(available_song_keys) <= 0:
+                    break
+                self.included_songs.append(available_song_keys.pop())
 
         self.location_count = len(self.starting_songs) + len(self.included_songs)
         location_multiplier = 1 + (self.get_additional_item_percentage() / 100.0)
@@ -138,15 +165,15 @@ class MuseDashWorld(World):
                                      self.muse_dash_collection.MUSIC_SHEET_CODE, self.player)
 
         trap = self.muse_dash_collection.vfx_trap_items.get(name)
-        if trap != None:
+        if trap:
             return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
 
         trap = self.muse_dash_collection.sfx_trap_items.get(name)
-        if trap != None:
+        if trap:
             return MuseDashFixedItem(name, ItemClassification.trap, trap, self.player)
 
         song = self.muse_dash_collection.song_items.get(name)
-        if song != None:
+        if song:
             return MuseDashSongItem(name, self.player, song)
 
         return MuseDashFixedItem(name, ItemClassification.filler, None, self.player)
