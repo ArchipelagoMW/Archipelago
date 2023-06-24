@@ -82,20 +82,25 @@ class GBACommandProcessor(ClientCommandProcessor):
 
             self.output("Available Trades:")
             for i in range(10):
-                trade_slot = str(i)
-                if self.ctx.available_trades[trade_slot] is not None:
-                    trade = self.ctx.available_trades[trade_slot]
-                    self.output(f"    Trade Slot {trade_slot}: {trade['trainer']['name']}'s {trade['nickname']} the {data.species[national_id_to_species_id_map[trade['species']]].label}")
+                if self.ctx.available_trades[i] is not None:
+                    trade = self.ctx.available_trades[i]
+                    self.output(f"    Trade Slot {i}: {trade['trainer']['name']}'s {trade['nickname']} the {data.species[national_id_to_species_id_map[trade['species']]].label}")
                 else:
-                    self.output(f"    Trade Slot {trade_slot}: Empty")
+                    self.output(f"    Trade Slot {i}: Empty")
 
 
-    def _cmd_trade(self, trade_slot: str):
+    def _cmd_trade(self, trade_slot_str: str):
         """Swap the pokemon you have stored for trading with the one in <trade_slot>"""
         if isinstance(self.ctx, GBAContext):
-            trade_slot_int = int(trade_slot)
-            if trade_slot_int not in range(0, 10):
+            try:
+                trade_slot = int(trade_slot_str)
+            except ValueError:
                 self.output("You must specify a number 0-9 corresponding to a trade slot")
+                return
+
+            if trade_slot not in range(0, 10):
+                self.output("You must specify a number 0-9 corresponding to a trade slot")
+                return
 
             if self.ctx.slot is None:
                 self.output("You don't appear to be connected yet.")
@@ -104,9 +109,9 @@ class GBACommandProcessor(ClientCommandProcessor):
             if self.ctx.current_trade_pokemon[19] == 2:
                 local_mon = json.loads(decode_pokemon_data(self.ctx.current_trade_pokemon))
                 if self.ctx.available_trades[trade_slot] is not None:
-                    self.output(f"Trading {local_mon['nickname']} with {self.ctx.available_trades[trade_slot]['nickname']}")
+                    self.output(f"Traded {local_mon['nickname']} with {self.ctx.available_trades[trade_slot]['nickname']}")
                 else:
-                    self.output(f"Sending {local_mon['nickname']} to trade slot {trade_slot}")
+                    self.output(f"Sent {local_mon['nickname']} to trade slot {trade_slot}")
             else:
                 if self.ctx.available_trades[trade_slot] is not None:
                     self.output(f"Received {self.ctx.available_trades[trade_slot]['nickname']}")
@@ -139,7 +144,7 @@ class GBAContext(CommonContext):
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
     goal_flag: int = IS_CHAMPION_FLAG
-    available_trades: Dict[str, Optional[Dict]]
+    available_trades: Dict[int, Optional[Dict]]
     current_trade_pokemon: bytearray
     received_trade_pokemon: Optional[bytearray]
 
@@ -151,7 +156,7 @@ class GBAContext(CommonContext):
         self.gba_push_pull_task = None
         self.local_checked_locations = set()
         self.local_set_events = {event_name: False for event_name in TRACKER_EVENT_FLAGS}
-        self.available_trades = {str(i): None for i in range(10)}
+        self.available_trades = {i: None for i in range(10)}
         self.current_trade_pokemon = bytearray([0 for _ in range(80)])
         self.received_trade_pokemon = None
 
@@ -190,13 +195,11 @@ class GBAContext(CommonContext):
             async_start(send_set_notify(self))
         elif cmd == "SetReply":
             if args.get("key", None) == "pokemon_trades":
-                self.available_trades = {trade_slot: json.loads(pokemon) for trade_slot, pokemon in args.get("value", {}).items()}
+                self.available_trades.update({int(trade_slot): json.loads(pokemon) for trade_slot, pokemon in args.get("value", {}).items()})
         elif cmd == "Retrieved":
-            available_trades = args.get("keys", {}).get("pokemon_trades", {})
-            if available_trades is None:
-                self.available_trades = {str(i): None for i in range(10)}
-            else:
-                self.available_trades = {trade_slot: json.loads(pokemon) for trade_slot, pokemon in available_trades.items()}
+            available_trades: Optional[Dict] = args.get("keys", {}).get("pokemon_trades", None)
+            if available_trades is not None:
+                self.available_trades.update({int(trade_slot): json.loads(pokemon) for trade_slot, pokemon in available_trades.items()})
 
 
 async def send_set_notify(ctx: GBAContext):
@@ -212,7 +215,7 @@ async def send_set_notify(ctx: GBAContext):
     ])
 
 
-async def send_trade(ctx: GBAContext, trade_slot: str):
+async def send_trade(ctx: GBAContext, trade_slot: int):
     await ctx.send_msgs([{
         "cmd": "Set",
         "key": "pokemon_trades",
