@@ -313,7 +313,8 @@ class BlasphemousLogic(LogicMixin):
             return has_boss_strength("amanecida") and \
                 self.has("D01BZ07S01[Santos]", player) and \
                     self.has("D02Z03S23[E]", player) and \
-                        self.has("D02Z02S14[W]", player)
+                        self.has("D02Z02S14[W]", player) and \
+                            self.has("Wall Climb Ability", player)
         elif boss == "Jondo":
             return has_boss_strength("amanecida") and \
                 self.has("D01BZ07S01[Santos]", player) and \
@@ -1222,8 +1223,7 @@ def rules(blasphemousworld):
     # D02Z02S14 (Graveyard of the Peaks)
     # Items
     set_rule(world.get_location("GotP: Amanecida of the Bejeweled Arrow", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Graveyard", difficulty, player) and \
-            state.has("Wall Climb Ability", player))
+        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Graveyard", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D02Z02S14[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -1441,9 +1441,12 @@ def rules(blasphemousworld):
             state.has("Purified Hand of the Nun", player) and \
                 (state.has("D03Z02S02[E]", player) or \
                     state.has("D03Z02S02[CherubsR]", player) or \
-                        state.has("Wall Climb Ability", player)))
+                        state.has("Wall Climb Ability", player) or \
+                            state._blasphemous_can_enemy_bounce(difficulty, enemy)))
     set_rule(world.get_entrance("D03Z02S02[E]", player),
-        lambda state: state.has("Wall Climb Ability", player))
+        lambda state: state.has("Wall Climb Ability", player) or \
+            state.has("Purified Hand of the Nun", player) and \
+                state._blasphemous_can_enemy_bounce(difficulty, enemy))
     
     # D03Z02S03 (Jondo)
     # No items

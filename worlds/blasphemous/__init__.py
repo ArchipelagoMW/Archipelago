@@ -318,7 +318,7 @@ class BlasphemousWorld(World):
             thorns = False
 
         for loc in world.get_filled_locations(player):
-            if loc.item.classification == ItemClassification.progression_skip_balancing:
+            if loc.item.code == None:
                 continue
             else:
                 data = {
