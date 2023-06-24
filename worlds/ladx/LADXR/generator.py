@@ -2,6 +2,7 @@ import binascii
 import importlib.util
 import importlib.machinery
 import os
+import pkgutil
 
 from .romTables import ROMWithTables
 from . import assembler
@@ -53,15 +54,22 @@ from .patches import multiworld as _
 from .patches import tradeSequence as _
 from . import hints
 
-from .locations.keyLocation import KeyLocation
 from .patches import bank34
 from .utils import formatText
 from ..Options import TrendyGame, Palette
 from .roomEditor import RoomEditor, Object
+from .patches.aesthetics import rgb_to_bin, bin_to_rgb
+
+from .locations.keyLocation import KeyLocation
+
+from ..Options import TrendyGame, Palette, MusicChangeCondition
+
 
 # Function to generate a final rom, this patches the rom with all required patches
-def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
-    rom = ROMWithTables(args.input_filename)
+def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
+    rom_patches = []
+
+    rom = ROMWithTables(args.input_filename, rom_patches)
     rom.player_names = player_names
     pymods = []
     if args.pymod:
@@ -119,7 +127,7 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
     patches.core.easyColorDungeonAccess(rom)
     patches.owl.removeOwlEvents(rom)
     patches.enemies.fixArmosKnightAsMiniboss(rom)
-    patches.bank3e.addBank3E(rom, seed, player_id, player_names)
+    patches.bank3e.addBank3E(rom, auth, player_id, player_names)
     patches.bank3f.addBank3F(rom)
     patches.bank34.addBank34(rom, item_list)
     patches.core.removeGhost(rom)
@@ -181,7 +189,8 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
     # patches.reduceRNG.slowdownThreeOfAKind(rom)
     patches.reduceRNG.fixHorseHeads(rom)
     patches.bomb.onlyDropBombsWhenHaveBombs(rom)
-    # patches.aesthetics.noSwordMusic(rom)
+    if ap_settings['music_change_condition'] == MusicChangeCondition.option_always:
+        patches.aesthetics.noSwordMusic(rom)
     patches.aesthetics.reduceMessageLengths(rom, rnd)
     patches.aesthetics.allowColorDungeonSpritesEverywhere(rom)
     if settings.music == 'random':
@@ -258,9 +267,9 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         mw = None
         if spot.item_owner != spot.location_owner:
             mw = spot.item_owner
-            if mw > 255:
-                # Don't torture the game with higher slot numbers
-                mw = 255
+            if mw > 100:
+                # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
+                mw = 100
         spot.patch(rom, spot.item, multiworld=mw)
     patches.enemies.changeBosses(rom, world_setup.boss_mapping)
     patches.enemies.changeMiniBosses(rom, world_setup.miniboss_mapping)
@@ -269,7 +278,9 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
         patches.core.addFrameCounter(rom, len(item_list))
 
     patches.core.warpHome(rom)  # Needs to be done after setting the start location.
-    patches.titleScreen.setRomInfo(rom, binascii.hexlify(seed).decode("ascii").upper(), settings, player_name, player_id)
+    patches.titleScreen.setRomInfo(rom, auth, seed_name, settings, player_name, player_id)
+    if ap_settings["ap_title_screen"]:
+        patches.titleScreen.setTitleGraphics(rom)
     patches.endscreen.updateEndScreen(rom)
     patches.aesthetics.updateSpriteData(rom)
     if args.doubletrouble:
@@ -362,15 +373,6 @@ def generateRom(args, settings, ap_settings, seed, logic, rnd=None, multiworld=N
                 if x > max:
                     return max
                 return x
-            def bin_to_rgb(word):
-                red   = word & 0b11111
-                word >>= 5
-                green = word & 0b11111
-                word >>= 5
-                blue  = word & 0b11111
-                return (red, green, blue)
-            def rgb_to_bin(r, g, b):
-                return (b << 10) | (g << 5) | r
 
             for address in range(start, end, 2):
                 packed = (rom.banks[bank][address + 1] << 8) | rom.banks[bank][address]
@@ -604,17 +606,11 @@ exit:
 
 
     SEED_LOCATION = 0x0134
-    SEED_SIZE = 10
-
-    # TODO: pass this in
     # Patch over the title
-    assert(len(seed) == SEED_SIZE)
-    gameid = seed + player_id.to_bytes(2, 'big')
-    rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(gameid))
-
+    assert(len(auth) == 12)
+    rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(auth))
 
     for pymod in pymods:
         pymod.postPatch(rom)
-
 
     return rom

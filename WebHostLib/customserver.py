@@ -18,7 +18,7 @@ from pony.orm import commit, db_session, select
 import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
-from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
+from Utils import restricted_loads, cache_argsless
 from .models import Command, GameDataPackage, Room, db
 
 
@@ -94,7 +94,7 @@ class WebHostContext(Context):
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
-        for game in list(multidata["datapackage"]):
+        for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
             if "checksum" in game_data:
                 if self.gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
@@ -102,8 +102,9 @@ class WebHostContext(Context):
                     # games package could be dropped from static data once all rooms embed data package
                     del multidata["datapackage"][game]
                 else:
-                    data = Utils.restricted_loads(GameDataPackage.get(checksum=game_data["checksum"]).data)
-                    game_data_packages[game] = data
+                    row = GameDataPackage.get(checksum=game_data["checksum"])
+                    if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
+                        game_data_packages[game] = Utils.restricted_loads(row.data)
 
         return self._load(multidata, game_data_packages, True)
 
@@ -203,6 +204,11 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     with Locker(room_id):
         try:
             asyncio.run(main())
+        except KeyboardInterrupt:
+            with db_session:
+                room = Room.get(id=room_id)
+                # ensure the Room does not spin up again on its own, minute of safety buffer
+                room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
         except:
             with db_session:
                 room = Room.get(id=room_id)

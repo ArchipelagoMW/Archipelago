@@ -38,10 +38,12 @@ class ExpertLogic(Toggle):
 
 
 class Ending(Choice):
-    """Choose which ending is required to complete the game."""
+    """Choose which ending is required to complete the game.
+    Ending A: Collect all thorn upgrades.
+    Ending C: Collect all thorn upgrades and the Holy Wound of Abnegation."""
     display_name = "Ending"
     option_any_ending = 0
-    option_ending_b = 1
+    option_ending_a = 1
     option_ending_c = 2
     default = 0
 
