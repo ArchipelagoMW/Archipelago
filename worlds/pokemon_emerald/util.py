@@ -184,7 +184,7 @@ def encode_pokemon_data(pokemon_json: Dict[str, Any]) -> bytearray:
     for i, move_info in enumerate(pokemon_json["moves"]):
         substructs[0][8] |= ((move_info[2] & 0b11) << (2 * i))
 
-    # Friendship, 1 byte
+    substructs[0][9] = data.species[national_id_to_species_id_map[pokemon_json["species"]]].friendship
 
     # Substruct type 1
     for i, move_info in enumerate(pokemon_json["moves"]):

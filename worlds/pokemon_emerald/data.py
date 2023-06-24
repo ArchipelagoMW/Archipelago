@@ -188,6 +188,7 @@ class SpeciesData:
     evolutions: List[EvolutionData]
     pre_evolution: Optional[int]
     catch_rate: int
+    friendship: int
     learnset: List[LearnsetMove]
     tm_hm_compatibility: int
     learnset_rom_address: int
@@ -418,6 +419,7 @@ def _init():
             ) for evolution_json in individual_species_json["evolutions"]],
             None,
             individual_species_json["catch_rate"],
+            individual_species_json["friendship"],
             learnset,
             int(individual_species_json["tmhm_learnset"], 16),
             individual_species_json["learnset"]["rom_address"],

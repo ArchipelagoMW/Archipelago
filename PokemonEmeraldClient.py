@@ -178,7 +178,10 @@ class GBAContext(CommonContext):
                 self.available_trades = {trade_slot: json.loads(pokemon) for trade_slot, pokemon in args.get("value", {}).items()}
         elif cmd == "Retrieved":
             available_trades = args.get("keys", {}).get("pokemon_trades", {})
-            self.available_trades = {trade_slot: json.loads(pokemon) for trade_slot, pokemon in available_trades.items()}
+            if available_trades is None:
+                self.available_trades = {str(i): None for i in range(10)}
+            else:
+                self.available_trades = {trade_slot: json.loads(pokemon) for trade_slot, pokemon in available_trades.items()}
 
 
 async def send_set_notify(ctx: GBAContext):
