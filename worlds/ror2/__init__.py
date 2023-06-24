@@ -113,10 +113,10 @@ class RiskOfRainWorld(World):
             }
 
         # remove lunar items from the pool if they're disabled in the yaml unless lunartic is rolled
-        if not self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic:
+        if not (self.multiworld.enable_lunar[self.player] or pool_option == ItemWeights.option_lunartic):
             junk_pool.pop("Lunar Item")
         # remove void items from the pool
-        if not self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void:
+        if not (self.multiworld.dlc_sotv[self.player] or pool_option == ItemWeights.option_void):
             junk_pool.pop("Void Item")
 
         # Generate item pool
