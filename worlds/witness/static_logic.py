@@ -1,14 +1,12 @@
-import os
-
-from .utils import define_new_region, parse_lambda, lazy, get_logic_file, get_items
+from .utils import define_new_region, parse_lambda, lazy, get_items, get_sigma_normal_logic, get_sigma_expert_logic,\
+    get_vanilla_logic
 
 
 class StaticWitnessLogicObj:
-    def read_logic_file(self, file_path="WitnessLogic.txt"):
+    def read_logic_file(self, lines):
         """
         Reads the logic file and does the initial population of data structures
         """
-        lines = get_logic_file(file_path)
 
         current_region = dict()
         counter = 0
@@ -204,15 +202,15 @@ class StaticWitnessLogic:
 
     @lazy
     def sigma_expert(self) -> StaticWitnessLogicObj:
-        return StaticWitnessLogicObj("WitnessLogicExpert.txt")
+        return StaticWitnessLogicObj(get_sigma_expert_logic())
 
     @lazy
     def sigma_normal(self) -> StaticWitnessLogicObj:
-        return StaticWitnessLogicObj("WitnessLogic.txt")
+        return StaticWitnessLogicObj(get_sigma_normal_logic())
 
     @lazy
     def vanilla(self) -> StaticWitnessLogicObj:
-        return StaticWitnessLogicObj("WitnessLogicVanilla.txt")
+        return StaticWitnessLogicObj(get_vanilla_logic())
 
     def __init__(self):
         self.parse_items()
