@@ -177,6 +177,48 @@ def decode_pokemon_data(pokemon_data: Iterable[int]) -> str:
 
 
 def encode_pokemon_data(pokemon_json: Dict[str, Any]) -> bytearray:
+    # Default values to cover for optional or accidentally missed fields
+    default_pokemon = {
+        "nickname": "A",
+        "personality": 0,
+        "species": 1,
+        "item": "NUGGET",
+        "experience": 0,
+        "ability": 0,
+        "ivs": [0, 0, 0, 0, 0, 0],
+        "evs": [0, 0, 0, 0, 0, 0],
+        "conditions": [0, 0, 0, 0, 0, 0],
+        "pokerus": 0,
+        "game": 3,
+        "location_met": 0,
+        "level_met": 1,
+        "ball": 4,
+        "moves": [["TACKLE", 35, 0], ["NONE", 0, 0], ["NONE", 0, 0], ["NONE", 0, 0]]
+    }
+
+    default_trainer = {
+        "name": "A",
+        "id": 0,
+        "female": False
+    }
+
+    pokemon_json = {**default_pokemon, **pokemon_json}
+    pokemon_json["trainer"] = {**default_trainer, **pokemon_json["trainer"]}
+
+    # Cutting string lengths to Emerald sizes
+    pokemon_json["nickname"] = pokemon_json["nickname"][0:10]
+    pokemon_json["trainer"]["name"] = pokemon_json["trainer"]["name"][0:7]
+
+    # Handle data from incompatible games
+    if ("ITEM_" + pokemon_json["item"]) not in data.constants:
+        pokemon_json["item"] = "NUGGET"
+    if pokemon_json["ball"] > 12:
+        pokemon_json["ball"] = 4 # Pokeball
+    if pokemon_json["game"] > 5 and pokemon_json["game"] != 15:
+        pokemon_json["game"] = 3 # Emerald
+        pokemon_json["location_met"] = 0 # Littleroot
+
+
     substructs = [bytearray([0 for _ in range(12)]) for _ in range(4)]
 
     # Substruct type 0
@@ -196,8 +238,13 @@ def encode_pokemon_data(pokemon_json: Dict[str, Any]) -> bytearray:
 
     # Substruct type 1
     for i, move_info in enumerate(pokemon_json["moves"]):
-        for j, byte in enumerate(int16_as_bytes(data.constants["MOVE_" + move_info[0]])):
+        move_name = "MOVE_" + move_info[0]
+        if move_name not in data.constants:
+            move_name = "MOVE_NONE"
+
+        for j, byte in enumerate(int16_as_bytes(data.constants[move_name])):
             substructs[1][(i * 2) + j] = byte
+
         substructs[1][8 + i] = move_info[1]
 
     # Substruct type 2

@@ -89,16 +89,16 @@ class GBACommandProcessor(ClientCommandProcessor):
                     self.output(f"    Trade Slot {i}: Empty")
 
 
-    def _cmd_trade(self, trade_slot_str: str):
+    def _cmd_trade(self, trade_slot: str):
         """Swap the pokemon you have stored for trading with the one in <trade_slot>"""
         if isinstance(self.ctx, GBAContext):
             try:
-                trade_slot = int(trade_slot_str)
+                _trade_slot = int(trade_slot)
             except ValueError:
                 self.output("You must specify a number 0-9 corresponding to a trade slot")
                 return
 
-            if trade_slot not in range(0, 10):
+            if _trade_slot not in range(0, 10):
                 self.output("You must specify a number 0-9 corresponding to a trade slot")
                 return
 
@@ -108,13 +108,13 @@ class GBACommandProcessor(ClientCommandProcessor):
 
             if self.ctx.current_trade_pokemon[19] == 2:
                 local_mon = json.loads(decode_pokemon_data(self.ctx.current_trade_pokemon))
-                if self.ctx.available_trades[trade_slot] is not None:
-                    self.output(f"Traded {local_mon['nickname']} with {self.ctx.available_trades[trade_slot]['nickname']}")
+                if self.ctx.available_trades[_trade_slot] is not None:
+                    self.output(f"Traded {local_mon['nickname']} with {self.ctx.available_trades[_trade_slot]['nickname']}")
                 else:
-                    self.output(f"Sent {local_mon['nickname']} to trade slot {trade_slot}")
+                    self.output(f"Sent {local_mon['nickname']} to trade slot {_trade_slot}")
             else:
-                if self.ctx.available_trades[trade_slot] is not None:
-                    self.output(f"Received {self.ctx.available_trades[trade_slot]['nickname']}")
+                if self.ctx.available_trades[_trade_slot] is not None:
+                    self.output(f"Received {self.ctx.available_trades[_trade_slot]['nickname']}")
                 else:
                     self.output(f"There is no trade to make")
                     return

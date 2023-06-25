@@ -17,8 +17,11 @@
     "species": {
       "description": "The national dex id of the pokemon species",
       "type": "integer",
-      "minimum": 0,
-      "maximum": 1010
+      "minimum": 0
+    },
+    "item": {
+      "description": "The item the pokemon is holding in the format ORAN_BERRY",
+      "type": "string"
     },
     "experience": {
       "description": "The current total EXP",
@@ -26,8 +29,10 @@
       "minimum": 0
     },
     "ability": {
-      "description": "The value of the ability byte (probably 0 or 1, but I'm unsure at the time of writing how Hidden Abilities work)",
-      "type": "integer"
+      "description": "The value of the ability byte",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1
     },
     "ivs": {
       "description": "The 6 IVs of the pokemon",
@@ -70,7 +75,7 @@
     "game": {
       "description": "The id of the game the pokemon originated in",
       "type": "integer",
-      "minimum": 0
+      "minimum": 1
     },
     "location_met": {
       "description": "The location id for where the pokemon was met",
@@ -86,7 +91,7 @@
     "ball": {
       "description": "The type of poke ball the pokemon was caught in",
       "type": "integer",
-      "minimum": 0
+      "minimum": 1
     },
     "moves": {
       "description": "The move id, PP, and PP Ups used for each move slot",
@@ -95,9 +100,8 @@
         "type": "array",
         "prefixItems": [
           {
-            "description": "The move id",
-            "type": "number",
-            "minimum": 0
+            "description": "The move's name in the format DOUBLE_TEAM (use NONE for empty slots)",
+            "type": "string"
           },
           {
             "description": "The move's max PP",
@@ -134,8 +138,9 @@
           "description": "Whether the original trainer is female",
           "type": "boolean"
         }
-      }
+      },
+      "required": ["name", "id"]
     }
   },
-  "required": ["nickname", "species", "experience", "ivs", "evs", "moves"]
+  "required": ["nickname", "personality", "species", "experience", "ivs", "evs", "moves", "trainer"]
 }
