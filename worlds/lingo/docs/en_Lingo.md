@@ -33,8 +33,8 @@ puzzles are also location checks, including the achievement panels for each area
 
 ## What about wall snipes?
 
-"Wall sniping" refers to the fact that you are able to solve puzzles on the other side of opaque walls. This feature is
-not affected by randomization, but you are almost never required to perform a wall snipe. The exceptions to this are:
+"Wall sniping" refers to the fact that you are able to solve puzzles on the other side of opaque walls. This randomizer
+does not change how wall snipes work, and will generally not require the use of wall snipes. The exceptions to this are:
 
 * In the Courtyard, there is a row of four puzzles that say FIRST, SECOND, THIRD, and FOURTH. FOURTH is behind an opaque
   wall, but its existence can be inferred from the others. Solving this puzzle while standing in the Courtyard is in
@@ -56,5 +56,5 @@ not affected by randomization, but you are almost never required to perform a wa
 Any other snipe is considered out of logic. This includes sniping The Bearer's MIDDLE while standing outside The Bold,
 sniping The Colorful without opening all of the color doors, and sniping WELCOME from next to WELCOME BACK.
 
-Because these puzzles are invisible to the player, they are not affected by panel shuffling. Additionally, they are all
-white puzzles, so they are not affected by color shuffling.
+When panel shuffle is enabled, these puzzles are made visible to the player, because it would otherwise be impossible to
+solve them. Thus, when panel shuffle is enabled, no sniping is ever required.
