@@ -10,7 +10,7 @@ from BaseClasses import ItemClassification, MultiWorld, Tutorial, Counter
 from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
 from .data import (PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
     data as emerald_data)
@@ -30,14 +30,12 @@ from .util import int_to_bool_array, bool_array_to_int
 
 
 def launch_client():
-    import multiprocessing
     from .client import launch
-    process = multiprocessing.Process(target=launch)
-    process.start()
+    launch_subprocess(launch, name="PokemonEmeraldClient")
 
 
-components.append(Component('Pokemon Emerald Client', 'PokemonEmeraldClient', component_type=Type.CLIENT,
-                            func=launch_client, file_identifier=SuffixIdentifier('.apemerald')))
+components.append(Component("Pokemon Emerald Client", "PokemonEmeraldClient", component_type=Type.CLIENT,
+                            func=launch_client, file_identifier=SuffixIdentifier(".apemerald")))
 
 
 class PokemonEmeraldWebWorld(WebWorld):

@@ -10,7 +10,6 @@ import Patch
 from Utils import async_start, get_options
 
 from .data import data, config
-from .rom import PokemonEmeraldDeltaPatch
 from .options import Goal
 
 
