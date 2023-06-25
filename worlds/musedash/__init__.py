@@ -201,7 +201,7 @@ class MuseDashWorld(World):
 
         # Next fill all remaining slots with song items
         needed_item_count = self.location_count
-        while (item_count < needed_item_count):
+        while item_count < needed_item_count:
             # If we have more items needed than keys, just iterate the list and add them all
             if len(song_keys_in_pool) <= needed_item_count - item_count:
                 for key in song_keys_in_pool:
