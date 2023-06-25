@@ -18,9 +18,11 @@ from worlds.pokemon_emerald.options import Goal
 
 GBA_SOCKET_PORT = 43053
 
-CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart pokemon_emerald_connector.lua"
-CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure pokemon_emerald_connector.lua is running"
-CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart pokemon_emerald_connector.lua"
+EXPECTED_SCRIPT_VERSION = 1
+
+CONNECTION_STATUS_TIMING_OUT = "Connection timing out. Please restart your emulator, then restart connector_pkmn_emerald.lua"
+CONNECTION_STATUS_REFUSED = "Connection refused. Please start your emulator and make sure connector_pkmn_emerald.lua is running"
+CONNECTION_STATUS_RESET = "Connection was reset. Please restart your emulator, then restart connector_pkmn_emerald.lua"
 CONNECTION_STATUS_TENTATIVE = "Initial connection made"
 CONNECTION_STATUS_CONNECTED = "Connected"
 CONNECTION_STATUS_INITIAL = "Connection has not been initiated"
@@ -185,7 +187,7 @@ async def handle_read_data(gba_data, ctx: GBAContext):
 
 
 async def gba_send_receive_task(ctx: GBAContext):
-    logger.info("Starting GBA connector. Use /gba for status information")
+    logger.info("Waiting to connect to GBA. Use /gba for status information")
     while not ctx.exit_event.is_set():
         error_status: Optional[str] = None
 
@@ -235,6 +237,11 @@ async def gba_send_receive_task(ctx: GBAContext):
             try:
                 data_bytes = await asyncio.wait_for(reader.readline(), timeout=5)
                 data_decoded = json.loads(data_bytes.decode())
+
+                if data_decoded["script_version"] != EXPECTED_SCRIPT_VERSION:
+                    logger.warning(f"Your connector script is incompatible with this client. Expected version {EXPECTED_SCRIPT_VERSION}, got {data_decoded['script_version']}.")
+                    break
+
                 async_start(handle_read_data(data_decoded, ctx))
             except TimeoutError:
                 logger.debug("Connection to GBA timed out during read. Reconnecting.")
