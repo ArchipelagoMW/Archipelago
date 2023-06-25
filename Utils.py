@@ -250,7 +250,7 @@ def get_default_options() -> Settings:  # TODO: remove ~2 versions after 0.4.1
     return Settings(None)
 
 
-get_options = get_settings
+get_options = get_settings  # TODO: add a warning ~2 versions after 0.4.1 and remove once all games are ported
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
