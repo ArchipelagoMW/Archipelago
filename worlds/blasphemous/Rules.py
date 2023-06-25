@@ -3235,24 +3235,20 @@ def rules(blasphemousworld):
     # Misc Items
     set_rule(world.get_location("Second red candle", player),
         lambda state: state.has("Bead of Red Wax", player) and \
-            (state.has("D02Z03S06[W]", player) or \
-                state.has("D02Z03S06[S]", player) or \
+            (state.can_reach(world.get_region("D02Z03S06", player), player) or \
                     state.has("D05Z01S02[W]", player)))
     set_rule(world.get_location("Third red candle", player),
         lambda state: state.has("Bead of Red Wax", player) and \
             state.has("D05Z01S02[W]", player) and \
-                (state.has("D02Z03S06[W]", player) or \
-                    state.has("D02Z03S06[S]", player)))
+                state.can_reach(world.get_region("D02Z03S06", player), player))
     set_rule(world.get_location("Second blue candle", player),
         lambda state: state.has("Bead of Blue Wax", player) and \
             (state.has("OpenedBOTSSLadder", player) or \
-                state.has("D01Z04S16[W]", player) or \
-                    state.has("D01Z04S16[E]", player)))
+                state.can_reach(world.get_region("D01Z04S16", player), player)))
     set_rule(world.get_location("Third blue candle", player),
         lambda state: state.has("Bead of Blue Wax", player) and \
             state.has("OpenedBOTSSLadder", player) and \
-                (state.has("D01Z04S16[W]", player) or \
-                    state.has("D01Z04S16[E]", player)))
+                state.can_reach(world.get_region("D01Z04S16", player), player))
     set_rule(world.get_location("Defeat 1 Amanecida", player),
         lambda state: state._blasphemous_amanecida_rooms(blasphemousworld, difficulty, player, 1))
     set_rule(world.get_location("Defeat 2 Amanecidas", player),
