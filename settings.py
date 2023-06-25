@@ -33,7 +33,7 @@ def _update_cache() -> None:
         return
 
     try:
-        from worlds import AutoWorldRegister
+        from worlds.AutoWorld import AutoWorldRegister
         for world in AutoWorldRegister.world_types.values():
             annotation = world.__annotations__.get("settings", None)
             if annotation is None or annotation == "ClassVar[Optional['Group']]":
