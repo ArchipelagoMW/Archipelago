@@ -3798,9 +3798,9 @@
         <EffectArray Operation="Set" Reference="Button,AP_Stalker,Icon" Value="Assets\Textures\btn-unit-protoss-stalker.dds"/>
         <EffectArray Operation="Set" Reference="Button,AP_Stalker,AlertTooltip" Value="Button/Tooltip/StalkerShakuras"/>
         <EffectArray Operation="Set" Reference="Button,AP_Stalker,AlertIcon" Value="Assets\Textures\btn-unit-protoss-stalker.dds"/>
-<!--        <EffectArray Operation="Set" Reference="Actor,TechTreeStalker,UnitIcon" Value="Assets\Textures\btn-unit-protoss-stalker.dds"/>-->
-<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeStalker,Name" Value="Unit/Name/StalkerShakuras"/>-->
-<!--        <EffectArray Operation="Set" Reference="Unit,TechTreeStalker,Description" Value="Button/Tooltip/StalkerShakuras"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Actor,TechTreeStalker,UnitIcon" Value="Assets\Textures\btn-unit-protoss-stalker.dds"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,TechTreeStalker,Name" Value="Unit/Name/StalkerShakuras"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,TechTreeStalker,Description" Value="Button/Tooltip/StalkerShakuras"/>-->
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Stalker"/>
     </CUpgrade>

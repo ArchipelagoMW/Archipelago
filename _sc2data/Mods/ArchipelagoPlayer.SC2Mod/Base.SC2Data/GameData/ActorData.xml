@@ -9945,7 +9945,7 @@
         <On Terms="Effect.SplashDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
         <On Terms="Effect.SplashDamage.Stop; FromEffectTreeDescendant" Send="ActionDamagePhysics"/>
         <On Terms="Signal.*.DarkProtossTest" Send="RefSetFromMsg ::actor.sender ::Sender"/>
-        <On Terms="Signal.*.DarkProtossTest; ValidateUnit NoDarkProtoss" Target="::actor.sender" Send="Signal DarkProtossSwap"/>
+        <On Terms="Signal.*.DarkProtossTest; ValidateUnit AP_NoDarkProtoss" Target="::actor.sender" Send="Signal DarkProtossSwap"/>
         <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
         <LaunchAssets Sound="Immortal_AttackLaunch"/>
         <ImpactMap index="None" Model="ImmortalAttackStrafeImpact"/>
@@ -11611,6 +11611,70 @@
         <IconArcLength value="0.750000"/>
         <Behavior value="AP_PowerSource"/>
     </CActorRange>
+    <CActorUnit id="AP_FleetBeacon" parent="ProtossBuildingEx" unitName="AP_FleetBeacon">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <Macros value="VoidMPUnpoweredAnim"/>
+        <Macros value="QueueAnim"/>
+        <Macros value="GlobalLoopMacro"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById FleetBeaconDarkDiffuse"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById FleetBeaconDarkSpecular"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById FleetBeaconDarkEmissive"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GradRaysGreen"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById FleetBeaconDarkDiffuse"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById FleetBeaconDarkSpecular"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById FleetBeaconDarkEmissive"/>
+        <Remove Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit CasterIsUnpoweredAndNotUnderConstruction" Send="DeathCustomize Variation2"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById FleetBeaconDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById FleetBeaconDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById FleetBeaconDarkEmissive"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById FleetBeaconDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById FleetBeaconDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById FleetBeaconDarkEmissive"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap FleetBeaconTaldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap FleetBeaconTaldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_CasterIsUnpoweredAndNotUnderConstructionAndHasDarkProtoss" Send="DeathCustomize Variation3"/>
+        <Model value="FleetBeacon"/>
+        <ModelFlags index="AutomateGlobalLoops" value="0"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="FleetBeaconBirth"/>
+        <DeathArray index="Normal" ModelLink="FleetBeaconDeath" SoundLink="FleetBeacon_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="FleetBeaconDeathUnderConstruction" SoundLink="FleetBeacon_Explode"/>
+        <DeathCustoms ModelLink="FleetBeaconDeathUnpowered" SoundLink="FleetBeacon_Explode" Name="Variation2"/>
+        <DeathCustoms ModelLink="FleetBeaconTaldarimDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="FleetBeaconTaldarimDeathUnpowered" Name="Variation3"/>
+        <PlacementModel value="FleetBeaconPlacement"/>
+        <PortraitModel value="FleetBeaconPortrait"/>
+        <BarOffset value="130"/>
+        <BarWidth value="135"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-FleetBeacon.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-FleetBeacon.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="FleetBeacon_Ready"/>
+        <SoundArray index="What" value="FleetBeacon_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-FleetBeacon.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-FleetBeacon.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-FleetBeacon-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-FleetBeacon-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-FleetBeacon-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSplat id="AP_FleetBeaconSplat" parent="GenericUnitSplat" unitName="AP_FleetBeacon">
+        <Model value="FleetBeaconSplat"/>
+    </CActorSplat>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -11622,7 +11686,19 @@
         <On Terms="UnitCreation.AP_PsionicAmplifier" Send="Create"/>
         <On Terms="UnitCreation.AP_PhotonCannonTeleportPlaceholder" Send="Create"/>
         <On Terms="UnitCreation.AP_ShieldBattery" Send="Create"/>
-<!--        <On Terms="UnitCreation.ShieldBatteryNerazim" Send="Create"/>-->
+        <!--        <On Terms="UnitCreation.ShieldBatteryNerazim" Send="Create"/>-->
+    </CActorStateMonitor>
+    <CActorStateMonitor id="ProtossFlamesMediumBuilding">
+        <!-- Override -->
+        <!-- Add AP buildings -->
+        <On Terms="UnitCreation.AP_Assimilator" Send="Create"/>
+        <On Terms="UnitCreation.AP_TemplarArchive" Send="Create"/>
+<!--        <On Terms="UnitCreation.AP_TwilightCouncil" Send="Create"/>-->
+        <On Terms="UnitCreation.AP_CyberneticsCore" Send="Create"/>
+        <On Terms="UnitCreation.AP_Forge" Send="Create"/>
+        <On Terms="UnitCreation.AP_RoboticsFacility" Send="Create"/>
+        <On Terms="UnitCreation.AP_Stargate" Send="Create"/>
+        <On Terms="UnitCreation.AP_FleetBeacon" Send="Create"/>
     </CActorStateMonitor>
     <CActorUnit id="AP_Pylon" parent="ProtossBuildingEx" unitName="AP_Pylon">
         <Aliases value="_UnitLarge"/>
@@ -11646,8 +11722,8 @@
         <On Terms="Behavior.AP_SOAProxyPylonVisual.On" Send="AnimPlay BuildEnd Stand,Build,End"/>
         <On Terms="Behavior.AP_SOAProxyPylonVisual.On" Send="AnimSetTime BuildEnd 3.000000"/>
         <On Terms="Effect.AP_MatrixOverloadDummyCheck.Start; At Caster" Send="Create AP_MatrixOverloadPowerSplat"/>
-<!--        <On Terms="Behavior.ConstrictionDisablerDisabledTimeScale.On" Send="AnimSetPausedAll"/>-->
-<!--        <On Terms="Behavior.ConstrictionDisablerDisabledTimeScale.Off" Send="AnimSetPausedAll 0"/>-->
+        <!--        <On Terms="Behavior.ConstrictionDisablerDisabledTimeScale.On" Send="AnimSetPausedAll"/>-->
+        <!--        <On Terms="Behavior.ConstrictionDisablerDisabledTimeScale.Off" Send="AnimSetPausedAll 0"/>-->
         <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap Pylon_Taldarim"/>
         <On Terms="Upgrade.AP_DarkProtoss.Add" Target="AP_PylonSplat" Send="SetVisibility"/>
         <On Terms="Upgrade.AP_DarkProtoss.Add" Target="AP_PylonSplatTaldarim" Send="SetVisibility 1"/>
@@ -11662,8 +11738,7 @@
         <DeathArray index="UnderConstruction" ModelLink="PylonDeathUnderConstruction" SoundLink="Pylon_Explode"/>
         <DeathCustoms ModelLink="PylonXPRDeath" Name="Variation10"/>
         <DeathCustoms ModelLink="ProtossWarpInDeath" SoundLink="Pylon_Explode" Name="Variation11"/>
-        <DeathCustoms ModelLink="Pylon_Taldarim_Death" Name="DarkProtoss"/>
-        <DeathActorModel value="PylonDeath"/>
+        <DeathCustoms ModelLink="Pylon_Taldarim_Death" Name="DarkProtoss"/> 
         <PlacementModel value="PylonPlacement"/>
         <PlacementSound value="Protoss_BuildingPlacementSmall"/>
         <PlacementActorModel value="PylonPlacementModel"/>
@@ -11805,7 +11880,6 @@
     <CActorBeamSimple id="AP_SOAPylonWeaponCharge" parent="ModelAnimationStyleContinuous">
         <On Terms="Behavior.AP_SOAPylonWeapon.On" Send="Create"/>
         <On Terms="Behavior.AP_SOAPylonWeapon.Off" Send="AnimBracketStop BSD"/>
-        <Model value="AP_SOAPylonWeaponCharge"/>
         <HostLaunch Subject="_Unit"/>
         <HostLaunchSiteOps Ops="SOpAttachOrigin"/>
         <HostImpact Subject="_Unit"/>
@@ -11814,7 +11888,6 @@
     <CActorSound id="AP_SOAPylonWeaponChargeSound" parent="SoundContinuous">
         <On Terms="Behavior.AP_SOAPylonWeapon.On" Send="Create"/>
         <On Terms="Behavior.AP_SOAPylonWeapon.Off" Send="Destroy"/>
-        <Sound value="AP_SOAPylonWeaponChargeSound"/>
     </CActorSound>
     <CActorModel id="AP_MatrixOverloadPowerSplat">
         <Inherits index="Visibility" value="1"/>

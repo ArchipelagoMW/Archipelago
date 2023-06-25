@@ -2570,4 +2570,10 @@
         <Find value="1"/>
         <Value value="AP_HaveSOAMatrixOverload"/>
     </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_CasterIsUnpoweredAndNotUnderConstructionAndHasDarkProtoss">
+        <Type value="And"/>
+        <CombineArray value="HasNoPower"/>
+        <CombineArray value="IsNotConstructing"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+    </CValidatorCombine>
 </Catalog>
