@@ -543,6 +543,9 @@ class LinksAwakeningContext(CommonContext):
 
 
     async def mark_locations_as_checked(self):
+        # Don't allow collecting an item until you've got your first check
+        if not self.client.tracker.has_start_item():
+            return
         checks = list(self.checked_locations)
         await self.get_location_checks_from_server(checks=checks)
         if self.client.tracker is not None and self.locations_info is not None and self.client.gameboy is not None\
@@ -565,6 +568,8 @@ class LinksAwakeningContext(CommonContext):
                             high, low = divmod(check.address, 0x100)
                             self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
                                                              bytes=[high, low, check.mask])
+                            logger.info("Collecting check " + name)
+
             self.examine_collected_checks = False
 
     async def get_location_checks_from_server(self, checks: typing.List[int]):
