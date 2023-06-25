@@ -85,7 +85,6 @@ non_apworlds: set = {
     "Starcraft 2 Wings of Liberty",
     "Sudoku",
     "Super Mario 64",
-    "The Legend of Zelda",
     "The Witness",
     "VVVVVV",
     "Wargroove",
