@@ -69,9 +69,3 @@ class OriBlindForest(World):
         return Item(name,
                     ItemClassification.progression if not name.startswith("EX") else ItemClassification.filler,
                     item_table[name], self.player)
-
-
-class OriBlindForestLogic(LogicMixin):
-    def _oribf_has_all(self, items: Set[str], player:int):
-        return all(self.prog_items[item, player] if type(item) == str
-                   else self.prog_items[item[0], player] >= item[1] for item in items)
