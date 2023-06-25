@@ -588,6 +588,8 @@ def read_data():  # -> (
             or "Pickaxe" in flags
             or "Hammer" in flags
             or "Mech Boss" in flags
+            or "Minions" in flags
+            or "ArmorMinions" in flags
         ):
             progression.add(loc_to_item[name])
             prog = True
