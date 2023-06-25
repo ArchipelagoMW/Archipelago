@@ -1012,7 +1012,7 @@ def set_default_rules(multiworld: MultiWorld, player: int):
     )
     set_rule(
         multiworld.get_entrance("REGION_EVER_GRANDE_CITY/SOUTH -> REGION_EVER_GRANDE_CITY/SEA", player),
-        lambda state: can_surf(state) and can_waterfall(state)
+        can_surf
     )
 
     # Victory Road
