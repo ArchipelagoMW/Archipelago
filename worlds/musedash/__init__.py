@@ -72,7 +72,7 @@ class MuseDashWorld(World):
 
         # The minimum amount of songs to make an ok rando would be Starting Songs + 10 interim songs + Goal song.
         # - Interim songs being equal to max starting song count.
-        # Note: The worst settings still allow 25 songs (Streamer Mode + No DLC). And this max requires 21 songs. (10 * 2 + 1)
+        # Note: The worst settings still allow 25 songs (Streamer Mode + No DLC). And this max requires 21 songs. (10 + 10 + 1)
         starter_song_count = self.multiworld.starting_song_count[self.player].value
 
         final_song_list = None
@@ -81,7 +81,7 @@ class MuseDashWorld(World):
             available_song_keys = self.muse_dash_collection.get_songs_with_settings(dlc_songs, streamer_mode, lower_diff_threshold, higher_diff_threshold)
             available_song_keys = self.handle_plando(available_song_keys)
 
-            count_needed_for_start = max(0, len(self.starting_songs) - starter_song_count)
+            count_needed_for_start = max(0, starter_song_count - len(self.starting_songs))
             if len(available_song_keys) + len(self.included_songs) >= count_needed_for_start + 11:
                 final_song_list = available_song_keys
                 break
