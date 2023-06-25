@@ -25,7 +25,7 @@ CHESTS_PER_SPHERE: int = 5
 
 
 class L2ACSettings(settings.Group):
-    class RomFile(settings.SNESROMPath):
+    class RomFile(settings.SNESRomPath):
         """File name of the US rom"""
         description = "Lufia II ROM File"
         copy_to = "Lufia II - Rise of the Sinistrals (USA).sfc"

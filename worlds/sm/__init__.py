@@ -37,7 +37,7 @@ from .variaRandomizer.graph.graph_utils import GraphUtils
 
 
 class SMSettings(settings.Group):
-    class RomFile(settings.SNESROMPath):
+    class RomFile(settings.SNESRomPath):
         """File name of the v1.0 J rom"""
         description = "Super Metroid (JU) ROM"
         copy_to = "Super Metroid (JU).sfc"

@@ -148,7 +148,7 @@ class SoEWebWorld(WebWorld):
 
 
 class SoESettings(settings.Group):
-    class RomFile(settings.SNESROMPath):
+    class RomFile(settings.SNESRomPath):
         """File name of the SoE US ROM"""
         description = "Secret of Evermore (USA) ROM"
         copy_to = "Secret of Evermore (USA).sfc"

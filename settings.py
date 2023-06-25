@@ -424,7 +424,7 @@ class OptionalLocalFolderPath(LocalFolderPath):
     required = False
 
 
-class SNESROMPath(UserFilePath):
+class SNESRomPath(UserFilePath):
     # Special UserFilePath that ignores an optional header when validating
 
     @classmethod

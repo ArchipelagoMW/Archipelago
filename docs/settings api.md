@@ -57,14 +57,16 @@ In case of paths they will automatically be read as absolute file paths. No need
 import settings
 from worlds.AutoWorld import World
 
+
 class MyGameSettings(settings.Group):
-    class RomFile(settings.SNESROMPath):
+    class RomFile(settings.SNESRomPath):
         """Description that is put into host.yaml"""
         description = "My Game US v1.0 ROM File"  # displayed in the file browser
         copy_to = "MyGame.sfc"  # instead of storing the path, copy to AP dir
         md5s = ["..."]
 
     rom_file: RomFile = RomFile("MyGame.sfc")  # definition and default value
+
 
 class MyGameWorld(World):
     ...
@@ -162,7 +164,7 @@ Same as [LocalFilePath](#LocalFilePath), but for a folder instead of a file.
 Same as UserFilePath, UserFolderPath, LocalFilePath, LocalFolderPath but does not open a file browser if missing.
 
 
-### SNESROMPath
+### SNESRomPath
 
 Specialized [UserFilePath](#UserFilePath) that ignores an optional 512 byte header when validating.
 

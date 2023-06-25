@@ -19,7 +19,7 @@ from .Rom import LocalRom, patch_rom, get_base_rom_path, SMWDeltaPatch
 
 
 class SMWSettings(settings.Group):
-    class RomFile(settings.SNESROMPath):
+    class RomFile(settings.SNESRomPath):
         """File name of the SMW US rom"""
         description = "Super Mario World (USA) ROM File"
         copy_to = "Super Mario World (USA).sfc"

@@ -31,7 +31,7 @@ extras_list = sum(difficulties['normal'].extras[0:5], [])
 
 
 class ALTTPSettings(settings.Group):
-    class RomFile(settings.SNESROMPath):
+    class RomFile(settings.SNESRomPath):
         """File name of the v1.0 J rom"""
         description = "ALTTP v1.0 J ROM File"
         copy_to = "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc"
