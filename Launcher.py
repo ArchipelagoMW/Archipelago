@@ -260,7 +260,8 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
 if __name__ == '__main__':
     init_logging('Launcher')
-    multiprocessing.freeze_support()
+    Utils.freeze_support()
+    multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(description='Archipelago Launcher')
     parser.add_argument('Patch|Game|Component', type=str, nargs='?',
                         help="Pass either a patch file, a generated game or the name of a component to run.")
