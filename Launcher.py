@@ -225,7 +225,7 @@ def run_gui():
 
         def _stop(self, *largs):
             # ran into what appears to be https://groups.google.com/g/kivy-users/c/saWDLoYCSZ4 with PyCharm.
-            # Closing the window explicitly cleanes it up.
+            # Closing the window explicitly cleans it up.
             self.root_window.close()
             super()._stop(*largs)
 
