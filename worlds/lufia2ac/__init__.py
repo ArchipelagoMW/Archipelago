@@ -2,7 +2,6 @@ import base64
 import itertools
 import os
 import settings
-import typing
 
 from enum import IntFlag
 from random import Random
@@ -58,7 +57,7 @@ class L2ACWorld(World):
     web: ClassVar[WebWorld] = L2ACWeb()
 
     option_definitions: ClassVar[Dict[str, AssembleOptions]] = get_type_hints(L2ACOptions)
-    settings: typing.ClassVar[L2ACSettings]
+    settings: ClassVar[L2ACSettings]
     item_name_to_id: ClassVar[Dict[str, int]] = l2ac_item_name_to_id
     location_name_to_id: ClassVar[Dict[str, int]] = l2ac_location_name_to_id
     item_name_groups: ClassVar[Dict[str, Set[str]]] = {
