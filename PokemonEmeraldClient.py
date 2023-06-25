@@ -84,7 +84,13 @@ class GBACommandProcessor(ClientCommandProcessor):
             for i in range(10):
                 if self.ctx.available_trades[i] is not None:
                     trade = self.ctx.available_trades[i]
-                    self.output(f"    Trade Slot {i}: {trade['trainer']['name']}'s {trade['nickname']} the {data.species[national_id_to_species_id_map[trade['species']]].label}")
+
+                    if trade["species"] not in national_id_to_species_id_map:
+                        species_name = "????? (Cannot Trade)"
+                    else:
+                        species_name = data.species[national_id_to_species_id_map[trade['species']]].label
+
+                    self.output(f"    Trade Slot {i}: {trade['trainer']['name']}'s {trade['nickname']} the {species_name}")
                 else:
                     self.output(f"    Trade Slot {i}: Empty")
 
@@ -106,23 +112,27 @@ class GBACommandProcessor(ClientCommandProcessor):
                 self.output("You don't appear to be connected yet.")
                 return
 
-            if self.ctx.current_trade_pokemon[19] == 2:
-                local_mon = json.loads(decode_pokemon_data(self.ctx.current_trade_pokemon))
-                if self.ctx.available_trades[_trade_slot] is not None:
-                    self.output(f"Traded {local_mon['nickname']} with {self.ctx.available_trades[_trade_slot]['nickname']}")
+
+            if self.ctx.available_trades[_trade_slot] is not None:
+                if self.ctx.available_trades[_trade_slot]["species"] not in national_id_to_species_id_map:
+                    self.output("That species does not exist in this game; you cannot acquire it.")
+                    return
+
+                if self.ctx.current_trade_pokemon[19] == 2:
+                    self.output(f"Traded {json.loads(decode_pokemon_data(self.ctx.current_trade_pokemon))['nickname']} with {self.ctx.available_trades[_trade_slot]['nickname']}")
                 else:
-                    self.output(f"Sent {local_mon['nickname']} to trade slot {_trade_slot}")
-            else:
-                if self.ctx.available_trades[_trade_slot] is not None:
                     self.output(f"Received {self.ctx.available_trades[_trade_slot]['nickname']}")
+            else:
+                if self.ctx.current_trade_pokemon[19] == 2:
+                    self.output(f"Sent {json.loads(decode_pokemon_data(self.ctx.current_trade_pokemon))['nickname']} to trade slot {_trade_slot}")
                 else:
                     self.output(f"There is no trade to make")
                     return
 
-            async_start(send_trade(self.ctx, trade_slot))
+            async_start(send_trade(self.ctx, _trade_slot))
 
-            if self.ctx.available_trades[trade_slot] is not None:
-                self.ctx.received_trade_pokemon = encode_pokemon_data(self.ctx.available_trades[trade_slot])
+            if self.ctx.available_trades[_trade_slot] is not None:
+                self.ctx.received_trade_pokemon = encode_pokemon_data(self.ctx.available_trades[_trade_slot])
             else:
                 self.ctx.received_trade_pokemon = bytearray([0 for _ in range(80)])
 

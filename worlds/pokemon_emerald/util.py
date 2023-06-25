@@ -210,6 +210,8 @@ def encode_pokemon_data(pokemon_json: Dict[str, Any]) -> bytearray:
     pokemon_json["trainer"]["name"] = pokemon_json["trainer"]["name"][0:7]
 
     # Handle data from incompatible games
+    if pokemon_json["species"] > 387:
+        pokemon_json["species"] = 201 # Unown
     if ("ITEM_" + pokemon_json["item"]) not in data.constants:
         pokemon_json["item"] = "NUGGET"
     if pokemon_json["ball"] > 12:
