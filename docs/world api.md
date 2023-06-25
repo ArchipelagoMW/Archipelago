@@ -361,17 +361,21 @@ from worlds.AutoWorld import World
 from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
 from Utils import get_options, output_path
 
+
 class MyGameItem(Item):  # or from Items import MyGameItem
     game = "My Game"  # name of the game/world this item is from
+
 
 class MyGameLocation(Location):  # or from Locations import MyGameLocation
     game = "My Game"  # name of the game/world this location is in
 
+
 class MyGameSettings(settings.Group):
-    class RomFile(settings.SNESROMPath):
+    class RomFile(settings.SNESRomPath):
         """Insert help text for host.yaml here."""
 
     rom_file: RomFile = RomFile("MyGame.sfc")
+
 
 class MyGameWorld(World):
     """Insert description of the world/game here."""
