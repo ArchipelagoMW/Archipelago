@@ -391,26 +391,22 @@ class BlasphemousLogic(LogicMixin):
         elif number == 2:
             return (self.has("D03Z01S03[W]", player) or \
                 self.has("D03Z01S03[SW]", player)) and \
-                    (self.has("D17Z01S04[N]", player) or \
-                        self.has("D17Z01S04[FrontR]", player))
+                    self.has("OpenedBOTSSLadder", player)
         elif number == 3:
             return (self.has("D03Z01S03[W]", player) or \
                 self.has("D03Z01S03[SW]", player)) and \
-                    (self.has("D17Z01S04[N]", player) or \
-                        self.has("D17Z01S04[FrontR]", player)) and \
+                    self.has("OpenedBOTSSLadder", player) and \
                             self.can_reach(world.multiworld.get_region("D01Z03S06", player))
         elif number == 4:
             return (self.has("D03Z01S03[W]", player) or \
                 self.has("D03Z01S03[SW]", player)) and \
-                    (self.has("D17Z01S04[N]", player) or \
-                        self.has("D17Z01S04[FrontR]", player)) and \
+                    self.has("OpenedBOTSSLadder", player) and \
                             self.can_reach(world.multiworld.get_region("D01Z03S06", player)) and \
                                 self.can_reach(world.multiworld.get_region("D04Z01S04", player))
         elif number == 5:
             return (self.has("D03Z01S03[W]", player) or \
                 self.has("D03Z01S03[SW]", player)) and \
-                    (self.has("D17Z01S04[N]", player) or \
-                        self.has("D17Z01S04[FrontR]", player)) and \
+                    self.has("OpenedBOTSSLadder", player) and \
                             self.can_reach(world.multiworld.get_region("D01Z03S06", player)) and \
                                 self.can_reach(world.multiworld.get_region("D04Z01S04", player)) and \
                                     self.can_reach(world.multiworld.get_region("D04Z02S20", player)) and \
@@ -674,11 +670,10 @@ def rules(blasphemousworld):
                         state._blasphemous_can_enemy_bounce(difficulty, enemy)))
     # Doors
     set_rule(world.get_entrance("D01Z04S13[SE]", player),
-        lambda state: state.has("D01Z04S13[SE]", player) or \
-            state._blasphemous_can_dive_laser(difficulty, player) and \
-                (state._blasphemous_can_air_stall(difficulty, player) or \
-                    state.has_any({"The Young Mason's Wheel", "Purified Hand of the Nun"}, player) or \
-                        state._blasphemous_can_enemy_bounce(difficulty, enemy)))
+        lambda state: state._blasphemous_can_dive_laser(difficulty, player) and \
+            (state._blasphemous_can_air_stall(difficulty, player) or \
+                state.has_any({"The Young Mason's Wheel", "Purified Hand of the Nun"}, player) or \
+                    state._blasphemous_can_enemy_bounce(difficulty, enemy)))
 
 
     # D01Z04S14 (Mercy Dreams)
@@ -3250,16 +3245,14 @@ def rules(blasphemousworld):
                     state.has("D02Z03S06[S]", player)))
     set_rule(world.get_location("Second blue candle", player),
         lambda state: state.has("Bead of Blue Wax", player) and \
-            (state.has("D17Z01S04[N]", player) or \
-                state.has("D17Z01S04[FrontR]", player) or \
-                    state.has("D01Z04S16[W]", player) or \
-                        state.has("D01Z04S16[E]", player)))
+            (state.has("OpenedBOTSSLadder", player) or \
+                state.has("D01Z04S16[W]", player) or \
+                    state.has("D01Z04S16[E]", player)))
     set_rule(world.get_location("Third blue candle", player),
         lambda state: state.has("Bead of Blue Wax", player) and \
-            (state.has("D17Z01S04[N]", player) or \
-                state.has("D17Z01S04[FrontR]", player)) and \
-                    (state.has("D01Z04S16[W]", player) or \
-                        state.has("D01Z04S16[E]", player)))
+            state.has("OpenedBOTSSLadder", player) and \
+                (state.has("D01Z04S16[W]", player) or \
+                    state.has("D01Z04S16[E]", player)))
     set_rule(world.get_location("Defeat 1 Amanecida", player),
         lambda state: state._blasphemous_amanecida_rooms(blasphemousworld, difficulty, player, 1))
     set_rule(world.get_location("Defeat 2 Amanecidas", player),
