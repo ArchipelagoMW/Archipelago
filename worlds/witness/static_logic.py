@@ -9,7 +9,6 @@ class StaticWitnessLogicObj:
         """
 
         current_region = dict()
-        counter = 0
 
         for line in lines:
             if line == "":
