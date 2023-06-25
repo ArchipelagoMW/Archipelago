@@ -58,7 +58,7 @@ def launch_subprocess(func: Callable, name: str = None, close_launcher: bool = T
         if app:
             app = cast(App, app)
             # ran into what appears to be https://groups.google.com/g/kivy-users/c/saWDLoYCSZ4 with PyCharm.
-            # Closing the window explicitly cleanes it up.
+            # Closing the window explicitly cleans it up.
             app.root_window.close()
             app.stop()
             process.daemon = False
