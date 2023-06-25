@@ -123,6 +123,7 @@ class RiskOfRainWorld(World):
         itempool: List = []
         # Add revive items for the player
         itempool += ["Dio's Best Friend"] * self.total_revivals
+        itempool += ["Beads of Fealty"]
 
         for env_name, _ in environments_pool.items():
             itempool += [env_name]
@@ -205,7 +206,7 @@ class RiskOfRainWorld(World):
     def create_item(self, name: str) -> Item:
         item_id = item_table[name]
         classification = ItemClassification.filler
-        if name == "Dio's Best Friend":
+        if name in {"Dio's Best Friend", "Beads of Fealty"}:
             classification = ItemClassification.progression
         elif name in {"Legendary Item", "Boss Item"}:
             classification = ItemClassification.useful

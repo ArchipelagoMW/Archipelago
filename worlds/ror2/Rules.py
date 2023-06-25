@@ -145,6 +145,7 @@ def set_rules(multiworld: MultiWorld, player: int) -> None:
         has_entrance_access_rule(multiworld, f"Hidden Realm: Bazaar Between Time", "Void Fields", player)
         has_entrance_access_rule(multiworld, f"Stage_5", "Commencement", player)
         has_entrance_access_rule(multiworld, f"Stage_5", "Hidden Realm: A Moment, Fractured", player)
+        has_entrance_access_rule(multiworld, "Beads of Fealty", "Hidden Realm: A Moment, Whole", player)
         if multiworld.dlc_sotv[player]:
             has_entrance_access_rule(multiworld, f"Stage_5", "Void Locus", player)
             has_entrance_access_rule(multiworld, f"Void Locus", "The Planetarium", player)
