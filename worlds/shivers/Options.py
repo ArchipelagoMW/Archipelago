@@ -4,8 +4,10 @@ from BaseClasses import MultiWorld
 
 
 class LobbyAccess(Choice):
-    """Normal places keys need to access the lobby into the item pool normally. Early places the keys as early.
-    Local places the keys locally."""
+    """Chooses how keys needed to reach the lobby are placed.
+    - Normal: Keys are placed anywhere
+    - Early: Keys are placed early 
+    - Local: Keys are placed locally"""
     display_name = "Lobby Access"
     option_normal = 0
     option_early = 1

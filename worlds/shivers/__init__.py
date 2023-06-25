@@ -43,10 +43,6 @@ class ShiversWorld(World):
         loc.place_locked_item(self.create_event_item(event_name))
         region.locations.append(loc)
 
-
-
-    
-
     def create_regions(self):
         # Create regions
         for region_name, exits in Constants.region_info["regions"]:
@@ -100,9 +96,6 @@ class ShiversWorld(World):
             self.multiworld.local_early_items[self.player]["Key for Underground Lake Room"] = 1
             self.multiworld.local_early_items[self.player]["Key for Office Elevator"] = 1
             self.multiworld.local_early_items[self.player]["Key for Lobby"] = 1
-
-        
-
 
     #Prefills event storage locations with duplicate pots
     def pre_fill(self) -> None:
