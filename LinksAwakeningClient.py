@@ -429,6 +429,7 @@ def create_task_log_exception(awaitable) -> asyncio.Task:
 
 
 class LinksAwakeningContext(CommonContext):
+    collected_blacklist = []
     tags = {"AP"}
     game = "Links Awakening DX"
     items_handling = 0b101
@@ -453,6 +454,7 @@ class LinksAwakeningContext(CommonContext):
             self.magpie = MagpieBridge()
         # The set of check names to iternal meta ids
         self.check_name_to_metadata_map = {str(v): k for k, v in checkMetadataTable.items()}
+        self.examine_collected_checks = True
         super().__init__(server_address, password)
 
     def run_gui(self) -> None:
@@ -529,30 +531,41 @@ class LinksAwakeningContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
-            checks = args["checked_locations"]
+            self.examine_collected_checks = True
         # TODO - use watcher_event
         elif cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], args["index"]):
                 self.client.recvd_checks[index] = item
-        elif cmd != "RoomInfo":
-            pass
+        elif cmd == "RoomUpdate":
+            if len(args["checked_locations"]) > 0:
+                self.examine_collected_checks = True
+
+
 
     async def mark_locations_as_checked(self):
         checks = list(self.checked_locations)
         await self.get_location_checks_from_server(checks=checks)
-        if self.client.tracker is not None and self.locations_info is not None:
+        if self.client.tracker is not None and self.locations_info is not None and self.client.gameboy is not None\
+                and len(self.locations_info) > 0:
             for check in checks:
-                player = self.locations_info[check].player
-                if player != self.slot:
-                    name = self.location_names[check]
-                    meta = self.check_name_to_metadata_map[name]
-                    check = self.client.tracker.get_check_from_meta(meta=meta)
-                    if check is not None and check.address not in self.collected_checks:
-                        # TODO Need to do this one at a time, wait for a response
-                        high, low = divmod(check.address, 0x100)
-                        self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
-                                                         bytes=[high, low, check.mask])
-                        self.collected_checks[check.address] = True
+                if check in self.locations_info:
+                    player = self.locations_info[check].player
+                    if player != self.slot:
+                        name = self.location_names[check]
+                        meta = self.check_name_to_metadata_map[name]
+                        check = self.client.tracker.get_check_from_meta(meta=meta)
+                        if check is not None and check.address in self.client.tracker.remaining_checks \
+                                and check.address not in self.collected_blacklist:
+                            status = (await self.client.gameboy.async_read_memory_safe(
+                                LAClientConstants.wLinkStatusBits))[0]
+                            while not (await self.client.is_victory()) and status & 1 == 1:
+                                time.sleep(0.1)
+                                status = (await self.client.gameboy.async_read_memory_safe(
+                                    LAClientConstants.wLinkStatusBits))[0]
+                            high, low = divmod(check.address, 0x100)
+                            self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
+                                                             bytes=[high, low, check.mask])
+            self.examine_collected_checks = False
 
     async def get_location_checks_from_server(self, checks: typing.List[int]):
         return await self.send_msgs([{"cmd": "LocationScouts", "locations": checks}])
@@ -566,10 +579,10 @@ class LinksAwakeningContext(CommonContext):
         # TODO: cancel all client tasks
         logger.info("(Re)Starting game loop")
         self.found_checks.clear()
-        self.collected_checks = {}
         await self.client.wait_for_retroarch_connection()
         self.client.reset_auth()
         await self.client.wait_and_init_tracker()
+        self.examine_collected_checks = True
 
     async def run_game_loop(self):
         def on_item_get(ladxr_checks):
@@ -600,7 +613,8 @@ class LinksAwakeningContext(CommonContext):
                     if self.last_resend + 5.0 < now:
                         self.last_resend = now
                         await self.send_checks()
-                        await self.mark_locations_as_checked()
+                        if self.examine_collected_checks:
+                            await self.mark_locations_as_checked()
                     if self.magpie_enabled:
                         self.magpie.set_checks(self.client.tracker.all_checks)
                         await self.magpie.set_item_tracker(self.client.item_tracker)
