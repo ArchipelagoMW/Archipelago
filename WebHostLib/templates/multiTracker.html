@@ -50,7 +50,9 @@
                                     {% block custom_table_row scoped %}
                                     {# implement this block in game-specific multi trackers #}
                                     {% endblock %}
-                                    <td class="center-column">{{ checks["Total"] }}/{{ checks_in_area[player]["Total"] }}</td>
+                                    <td class="center-column" data-sort="{{ checks["Total"] }}">
+                                      {{ checks["Total"] }}/{{ checks_in_area[player]["Total"] }}
+                                    </td>
                                     <td class="center-column">{{ percent_total_checks_done[team][player] }}</td>
                                     <td>{{ {0: "Disconnected", 5: "Connected", 10: "Ready", 20: "Playing",
                                             30: "Goal Completed"}.get(states[team, player], "Unknown State") }}</td>
