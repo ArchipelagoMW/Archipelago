@@ -1,5 +1,6 @@
+import weakref
 from enum import Enum, auto
-from typing import Optional, Callable, List, Iterable, cast
+from typing import Optional, Callable, List, Iterable
 
 from Utils import local_path
 
@@ -48,21 +49,14 @@ class Component:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.display_name})"
 
-def launch_subprocess(func: Callable, name: str = None, close_launcher = True):
-    import multiprocessing
-    process = multiprocessing.Process(target=func, name=name, daemon=True)
+processes = weakref.WeakSet()
 
-    if close_launcher:
-        from kivy.app import App
-        app = App.get_running_app()
-        if app:
-            app = cast(App, app)
-            # ran into what appears to be https://groups.google.com/g/kivy-users/c/saWDLoYCSZ4 with PyCharm.
-            # Closing the window explicitly cleanes it up.
-            app.root_window.close()
-            app.stop()
-            process.daemon = False
+def launch_subprocess(func: Callable, name: str = None):
+    global processes
+    import multiprocessing
+    process = multiprocessing.Process(target=func, name=name)
     process.start()
+    processes.add(process)
 
 class SuffixIdentifier:
     suffixes: Iterable[str]
