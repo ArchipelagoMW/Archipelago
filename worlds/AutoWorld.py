@@ -224,7 +224,7 @@ class World(metaclass=AutoWorldRegister):
 
     settings_key: ClassVar[str]
     """name of the section in host.yaml for world-specific settings, will default to {folder}_options"""
-    settings: ClassVar[Optional["Group"]] = None
+    settings: ClassVar[Optional["Group"]]
     """loaded settings from host.yaml"""
 
     zip_path: ClassVar[Optional[pathlib.Path]] = None
@@ -235,6 +235,11 @@ class World(metaclass=AutoWorldRegister):
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.multiworld = multiworld
         self.player = player
+
+    def __getattr__(self, item: str) -> Any:
+        if item == "settings":
+            return self.__class__.settings
+        raise AttributeError
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
