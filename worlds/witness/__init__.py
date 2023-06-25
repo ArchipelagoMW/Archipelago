@@ -62,11 +62,11 @@ class WitnessWorld(World):
             'item_id_to_door_hexes': self.static_items.ITEM_ID_TO_DOOR_HEX_ALL,
             'door_hexes_in_the_pool': self.items.DOORS,
             'symbols_not_in_the_game': self.items.SYMBOLS_NOT_IN_THE_GAME,
-            'disabled_panels': self.player_logic.COMPLETELY_DISABLED_CHECKS,
+            'disabled_panels': list(self.player_logic.COMPLETELY_DISABLED_CHECKS),
             'log_ids_to_hints': self.log_ids_to_hints,
             'progressive_item_lists': self.items.MULTI_LISTS_BY_CODE,
             'obelisk_side_id_to_EPs': self.static_logic.OBELISK_SIDE_ID_TO_EP_HEXES,
-            'precompleted_puzzles': {int(h, 16) for h in self.player_logic.PRECOMPLETED_LOCATIONS},
+            'precompleted_puzzles': [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
             'entity_to_name': self.static_logic.ENTITY_ID_TO_NAME,
         }
 
@@ -143,14 +143,19 @@ class WitnessWorld(World):
 
         for v in self.multiworld.plando_items[self.player]:
             if v.get("from_pool", True):
-                plandoed_items.update({self.items_by_name[i] for i in v.get("items", dict()).keys()
-                                       if i in self.items_by_name})
-                if "item" in v and v["item"] in self.items_by_name:
-                    plandoed_items.add(self.items_by_name[v["item"]])
+                for item_key in {"item", "items"}:
+                    if item_key in v:
+                        if type(v[item_key]) is str:
+                            plandoed_items.add(v[item_key])
+                        elif type(v[item_key]) is dict:
+                            plandoed_items.update(item for item, weight in v[item_key].items() if weight)
+                        else:
+                            # Other type of iterable
+                            plandoed_items.update(v[item_key])
 
         for symbol in self.items.GOOD_ITEMS:
             item = self.items_by_name[symbol]
-            if item in pool and item not in plandoed_items:
+            if item in pool and symbol not in plandoed_items:
                 # for now, any item that is mentioned in any plando option, even if it's a list of items, is ineligible.
                 # Hopefully, in the future, plando gets resolved before create_items.
                 # I could also partially resolve lists myself, but this could introduce errors if not done carefully.
@@ -255,7 +260,7 @@ class WitnessWorld(World):
 
             self.multiworld.per_slot_randoms[self.player].shuffle(audio_logs)
 
-            duplicates = len(audio_logs) // hint_amount
+            duplicates = min(3, len(audio_logs) // hint_amount)
 
             for _ in range(0, hint_amount):
                 hint = generated_hints.pop(0)
