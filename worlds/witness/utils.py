@@ -252,5 +252,5 @@ def get_logic_file(filepath: str):
     if filepath == "WitnessLogicExpert.txt":
         return get_sigma_expert_logic()
     if filepath == "WitnessLogicVanilla.txt":
-        return get_vanilla_logic
+        return get_vanilla_logic()
     return get_adjustment_file(filepath)
