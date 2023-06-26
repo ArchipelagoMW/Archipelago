@@ -46,7 +46,7 @@ class ZeldaCommandProcessor(ClientCommandProcessor):
             logger.info(f"NES Status: {self.ctx.nes_status}")
 
     def _cmd_toggle_msgs(self):
-        """Toggle displaying messages in bizhawk"""
+        """Toggle displaying messages in EmuHawk"""
         global DISPLAY_MSGS
         DISPLAY_MSGS = not DISPLAY_MSGS
         logger.info(f"Messages are now {'enabled' if DISPLAY_MSGS else 'disabled'}")

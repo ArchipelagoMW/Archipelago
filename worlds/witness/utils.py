@@ -3,7 +3,7 @@ from Utils import cache_argsless
 from itertools import accumulate
 from typing import *
 from fractions import Fraction
-from collections import Counter
+from pkgutil import get_data
 
 
 def make_warning_string(any_j: bool, any_u: bool, any_d: bool, all_j: bool, all_u: bool, all_d: bool) -> str:
@@ -106,7 +106,7 @@ def define_new_region(region_string):
     region_obj = {
         "name": region_name,
         "shortName": region_name_simple,
-        "panels": set()
+        "panels": list()
     }
     return region_obj, options
 
@@ -142,10 +142,8 @@ class lazy(object):
 
 
 def get_adjustment_file(adjustment_file):
-    path = os.path.join(os.path.dirname(__file__), adjustment_file)
-
-    with open(path) as f:
-        return [line.strip() for line in f.readlines()]
+    data = get_data(__name__, adjustment_file).decode('utf-8')
+    return [line.strip() for line in data.split("\n")]
 
 
 @cache_argsless
@@ -226,3 +224,33 @@ def get_ep_no_mountain():
 @cache_argsless
 def get_ep_no_videos():
     return get_adjustment_file("settings/EP_Shuffle/EP_Videos.txt")
+
+
+@cache_argsless
+def get_sigma_normal_logic():
+    return get_adjustment_file("WitnessLogic.txt")
+
+
+@cache_argsless
+def get_sigma_expert_logic():
+    return get_adjustment_file("WitnessLogicExpert.txt")
+
+
+@cache_argsless
+def get_vanilla_logic():
+    return get_adjustment_file("WitnessLogicVanilla.txt")
+
+
+@cache_argsless
+def get_items():
+    return get_adjustment_file("WitnessItems.txt")
+
+
+def get_logic_file(filepath: str):
+    if filepath == "WitnessLogic.txt":
+        return get_sigma_normal_logic()
+    if filepath == "WitnessLogicExpert.txt":
+        return get_sigma_expert_logic()
+    if filepath == "WitnessLogicVanilla.txt":
+        return get_vanilla_logic()
+    return get_adjustment_file(filepath)
