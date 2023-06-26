@@ -268,6 +268,8 @@ id,name,classification,groups,mod_name
 281,Sinister Signal,useful,"TV_CHANNEL",
 282,Dark Talisman,progression,,
 283,Ostrich Incubator Recipe,progression,"GINGER_ISLAND",
+284,Cute Baby,progression,"BABY",
+285,Ugly Baby,progression,"BABY",
 4001,Burnt,trap,TRAP,
 4002,Darkness,trap,TRAP,
 4003,Frozen,trap,TRAP,

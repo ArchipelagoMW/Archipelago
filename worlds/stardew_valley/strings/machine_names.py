@@ -11,7 +11,6 @@ class Machine:
     mayonnaise_machine = "Mayonnaise Machine"
     oil_maker = "Oil Maker"
     preserves_jar = "Preserves Jar"
-    recycler = "Recycler"
     recycling_machine = "Recycling Machine"
     seed_maker = "Seed Maker"
     solar_panel = "Solar Panel"

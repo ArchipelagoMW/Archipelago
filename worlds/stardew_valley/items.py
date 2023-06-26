@@ -59,6 +59,7 @@ class Group(enum.Enum):
     RESOURCE_PACK_USEFUL = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
+    BABY = enum.auto()
     GINGER_ISLAND = enum.auto()
     WALNUT_PURCHASE = enum.auto()
     TV_CHANNEL = enum.auto()
@@ -189,6 +190,7 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     items.extend(create_seeds(item_factory, world_options))
     create_friendsanity_items(item_factory, world_options, items)
     items.extend(create_festival_rewards(item_factory, world_options))
+    create_babies(item_factory, random, items)
     items.extend(create_special_order_board_rewards(item_factory, world_options))
     items.extend(create_special_order_qi_rewards(item_factory, world_options))
     items.extend(create_walnut_purchase_rewards(item_factory, world_options))
@@ -338,6 +340,13 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
         for heart in range(1, 6):
             if heart % heart_size == 0 or heart == 5:
                 items.append(item_factory(f"Pet <3"))
+
+
+def create_babies(item_factory: StardewItemFactory, random: Random, items: List[Item]):
+    baby_items = [item for item in items_by_group[Group.BABY]]
+    for i in range(2):
+        chosen_baby = random.choice(baby_items)
+        items.append(item_factory(chosen_baby))
 
 
 def create_arcade_machine_items(item_factory: StardewItemFactory, world_options: StardewOptions,

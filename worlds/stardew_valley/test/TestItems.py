@@ -1,14 +1,17 @@
 import itertools
 import math
+import sys
 import unittest
-
+import random
+from typing import Set
 
 from BaseClasses import ItemClassification, MultiWorld
+from . import setup_solo_multiworld, SVTestBase
 from .. import ItemData, StardewValleyWorld
 from ..items import Group, item_table
 
 
-class TestItems(unittest.TestCase):
+class TestItems(SVTestBase):
     def test_can_create_item_of_resource_pack(self):
         item_name = "Resource Pack: 500 Money"
 
@@ -27,3 +30,16 @@ class TestItems(unittest.TestCase):
 
         assert item_with_lowest_id.code >= 717000
         assert item_with_highest_id.code < 737000
+
+    def test_babies_come_in_all_shapes_and_sizes(self):
+        baby_permutations = set()
+        for attempt_number in range(50):
+            if len(baby_permutations) >= 4:
+                print(f"Already got all 4 baby permutations, breaking early [{attempt_number} generations]")
+                break
+            seed = random.randrange(sys.maxsize)
+            multiworld = setup_solo_multiworld(seed=seed)
+            baby_items = [item for item in multiworld.get_items() if "Baby" in item.name]
+            self.assertEqual(len(baby_items), 2)
+            baby_permutations.add(f"{baby_items[0]} - {baby_items[1]}")
+        self.assertEqual(len(baby_permutations), 4)

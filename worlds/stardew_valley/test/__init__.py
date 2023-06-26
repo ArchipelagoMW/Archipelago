@@ -65,7 +65,7 @@ def setup_solo_multiworld(test_options=None, seed=None,
         test_options = {}
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
-    frozen_options = frozenset(test_options.items())
+    frozen_options = frozenset(test_options.items()).union({seed})
     if frozen_options in _cache:
         return _cache[frozen_options]
 

@@ -102,6 +102,10 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
                              logic.has("Sweet Gem Berry").simplify())
     MultiWorldRules.add_rule(multi_world.get_location("Galaxy Sword Shrine", player),
                              logic.has("Prismatic Shard").simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Have a Baby", player),
+                             logic.can_reproduce(1).simplify())
+    MultiWorldRules.add_rule(multi_world.get_location("Have Another Baby", player),
+                             logic.can_reproduce(2).simplify())
 
     set_traveling_merchant_rules(logic, multi_world, player)
     set_arcade_machine_rules(logic, multi_world, player, world_options)

@@ -192,7 +192,7 @@ class StardewValleyWorld(World):
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_full_house:
             self.create_event_location(location_table["Full House"],
-                                       self.logic.can_have_two_children().simplify(),
+                                       (self.logic.has_children(2) & self.logic.can_reproduce()).simplify(),
                                        "Victory")
         elif self.options[options.Goal] == options.Goal.option_greatest_walnut_hunter:
             self.create_event_location(location_table["Greatest Walnut Hunter"],

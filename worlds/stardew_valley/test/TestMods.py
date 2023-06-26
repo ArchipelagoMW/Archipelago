@@ -108,6 +108,7 @@ class TestBaseItemGeneration(SVTestBase):
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(footwear.name for footwear in items.items_by_group[Group.FOOTWEAR])
+        items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
         progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
                              and item.name not in items_to_ignore]
@@ -131,6 +132,7 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.SEASON])
         items_to_ignore.extend(weapon.name for weapon in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(footwear.name for footwear in items.items_by_group[Group.FOOTWEAR])
+        items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
         progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
                              and item.name not in items_to_ignore]

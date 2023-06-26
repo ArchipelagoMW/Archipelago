@@ -977,8 +977,16 @@ class StardewLogic:
     def can_get_married(self) -> StardewRule:
         return self.has_relationship(Generic.bachelor, 10) & self.has(Gift.mermaid_pendant)
 
-    def can_have_two_children(self) -> StardewRule:
-        return self.can_get_married() & self.has_house(2) & self.has_relationship(Generic.bachelor, 12)
+    def has_children(self, number_children: int) -> StardewRule:
+        if number_children <= 0:
+            return True_()
+        possible_kids = ["Cute Baby", "Ugly Baby"]
+        return self.received(possible_kids, number_children) & self.has_house(2)
+
+    def can_reproduce(self, number_children: int = 1) -> StardewRule:
+        if number_children <= 0:
+            return True_()
+        return self.can_get_married() & self.has_house(2) & self.has_relationship(Generic.bachelor, 12) & self.has_children(number_children - 1)
 
     def has_relationship(self, npc: str, hearts: int = 1) -> StardewRule:
         if hearts <= 0:
