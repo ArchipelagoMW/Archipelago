@@ -186,6 +186,9 @@ adventure_options:
   # Set this to true to display item received messages in Emuhawk
   display_msgs: true
 
-
+ffmq_options:
+  api_urls:
+    - "https://ffmqrapi.azurewebsites.net/"
+    - "http://ap.jalchavware.com/"
 
 

@@ -1,3 +1,4 @@
+import Utils
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial
 from .Regions import create_regions, location_table, set_rules, rooms, non_dead_end_crest_rooms,\
@@ -10,6 +11,7 @@ import base64
 import threading
 import requests
 import yaml
+
 
 
 class FFMQWebWorld(WebWorld):
@@ -81,13 +83,24 @@ class FFMQWorld(World):
             crest_shuffle = self.multiworld.crest_shuffle[self.player].current_key
             battlefield_shuffle = self.multiworld.shuffle_battlefield_rewards[self.player].current_key
 
-            url = f"https://ffmqrapi.azurewebsites.net/GenerateRooms?s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}"
-            response = requests.get(url)
-            if response.ok:
-                self.rooms = yaml.load(response.text, yaml.Loader)
+            api_urls = Utils.get_options()["ffmq_options"].get("api_urls", None)
+
+            if not api_urls:
+                raise Exception("No FFMQR API URLs specified in host.yaml")
+            errors = []
+            for api_url in api_urls:
+                response = requests.get(api_url +
+                                        f"GenerateRooms?s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}")
+                if response.ok:
+                    self.rooms = yaml.load(response.text, yaml.Loader)
+                    break
+                else:
+                    errors.append([api_url, response])
             else:
-                raise Exception(f"Got error {response.status_code} {response.reason} {response.text} from trying to "
-                                f"fetch map shuffle data for FFMQ player {self.player}")
+                error_text = f"Failed to fetch map shuffle data for FFMQ player {self.player}"
+                for error in errors:
+                    error_text += f"\n{error[0]} - got error {error[1].status_code} {error[1].reason} {error[1].text}"
+                raise Exception(error_text)
         else:
             self.rooms = rooms
 
