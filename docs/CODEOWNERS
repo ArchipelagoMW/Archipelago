@@ -1,0 +1,135 @@
+# Archipelago World Code Owners / Maintainers File
+#
+# This file is used to notate who the current "owners" or "maintainers" of any currently merged world folder. For any
+# pull requests that modify contents of these worlds, a code owner must approve the PR in addition to a core maintainer.
+# This is not to be used for files/folders outside the /world folder, those will always need sign off from a core
+# maintainer.
+
+# A Link to the Past
+/worlds/alttp/ @Berserker66
+
+# ArchipIDLE
+/worlds/archipidle/ @LegendaryLinux
+
+# Sudoku (BK Sudoku)
+/worlds/bk_sudoku/ @Jarno458
+
+# Blasphemous
+/worlds/blasphemous/ @TRPG0
+
+# ChecksFinder
+/worlds/checksfinder/ @jonloveslegos
+
+# Clique
+/worlds/clique/ @ThePhar
+
+# Dark Souls III
+/worlds/dark_souls_3/ @Marechal-L
+
+# Donkey Kong Country 3
+/worlds/dkc3/ @PoryGone
+
+# DLCQuest
+/worlds/dlcquest @axe-y @agilbert1412
+
+# Factorio
+/worlds/factorio/ @Berserker66
+
+# Final Fantasy
+/worlds/ff1/ @jtoyoda
+
+# Hollow Knight
+/worlds/hk/ @dewiniaid
+
+# Hylics 2
+/worlds/hylics2/ @TRPG0
+
+# Kingdom Hearts 2
+/worlds/kh2/ @JaredWeakStrike
+
+# Links Awakening DX
+/worlds/ladx/ @zig-for
+
+# Lufia II Ancient Cave
+/worlds/lufia2ac/ @el-u
+
+# Meritous
+/worlds/meritous/ @FelicitusNeko
+
+# The Messenger
+/worlds/messenger/ @alwaysintreble
+
+# Minecraft
+/worlds/minecraft @KonoTyran @espeon65536
+
+# Noita
+/worlds/noita @ScipioWright @heinermann
+
+# Ocarina of Time
+/worlds/oot/ @espeon65536
+
+# Ori and the Blind Forest
+/worlds/oribf/ #Unmaintained
+
+# Overcooked! 2
+/worlds/overcooked2/ @toasterparty
+
+# Pokemon Red and Blue
+/worlds/pokemon_rb/ @Alchav
+
+# Raft
+/worlds/raft/ @SunnyBat
+
+# Rogue Legacy
+/worlds/rogue_legacy/ @ThePhar
+
+# Risk of Rain 2
+/worlds/ror2/ @kindasneaki
+
+# Sonic Adventure 2 Battle
+/worlds/sa2b @PoryGone @RaspberrySpace
+
+# Starcraft 2 Wings of Liberty
+/worlds/sc2wol/ @Ziktofel
+
+# Super Metroid
+/worlds/sm/ @lordlou
+
+# Super Mario 64
+/worlds/sm64ex/ @N00byKing
+
+# Super Mario World
+/worlds/smw/ @PoryGone
+
+# SMZ3
+/worlds/smz3/ @lordlou
+
+# Secret of Evermore
+/worlds/soe/ @black-sliver
+
+# Slay the Spire
+/worlds/spire/ @KonoTyran
+
+# Stardew Valley
+/worlds/stardew_valley @Jouramie @agilbert1412
+
+# Subnautica
+/worlds/subnautica/ @Berserker66
+
+# Timespinner
+/worlds/timespinner/ @Jarno458
+
+# The Legend of Zelda (1)
+/worlds/tloz @Rosalie-A @t3hf1gm3nt
+
+# VVVVVV
+/worlds/v6/ @N00byKing
+
+# Wargroove
+/worlds/wargroove/ @FlySniper
+
+# The Witness
+/worlds/witness/ @NewSoupVi
+
+# Zillion
+/worlds/zillion/ @beauxq
