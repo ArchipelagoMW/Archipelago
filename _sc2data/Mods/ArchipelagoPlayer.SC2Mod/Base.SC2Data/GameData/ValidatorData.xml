@@ -2601,9 +2601,13 @@
     <CValidatorCombine id="TimewarpProduction">
         <!-- Override -->
         <CombineArray value="AP_IsStargateWarp"/>
+        <CombineArray value="AP_IsRoboticsFacilityWarp"/>
     </CValidatorCombine>
     <CValidatorUnitType id="AP_IsStargateWarp">
         <Value value="AP_StargateWarp"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsRoboticsFacilityWarp">
+        <Value value="AP_RoboticsFacilityWarp"/>
     </CValidatorUnitType>
     <CValidatorUnitType id="AP_IsVanillaStargate">
         <Value value="Stargate"/>
@@ -2615,5 +2619,16 @@
         <!-- Override -->
         <CombineArray value="AP_IsVanillaStargate"/>
         <CombineArray value="AP_IsAPStargate"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaRoboticsFacility">
+        <Value value="RoboticsFacility"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPRoboticsFacility">
+        <Value value="AP_RoboticsFacility"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsRoboticsFacility" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaRoboticsFacility"/>
+        <CombineArray value="AP_IsAPRoboticsFacility"/>
     </CValidatorCombine>
 </Catalog>
