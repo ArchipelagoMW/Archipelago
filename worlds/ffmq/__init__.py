@@ -44,7 +44,7 @@ class FFMQWorld(World):
     create_regions = create_regions
     set_rules = set_rules
 
-    web = FFMQWebWorld
+    web = FFMQWebWorld()
 
     def __init__(self, world, player: int):
         self.rom_name_available_event = threading.Event()
@@ -124,16 +124,16 @@ class FFMQWorld(World):
     def extend_hint_information(self, hint_data):
         hint_data[self.player] = {}
         if self.multiworld.map_shuffle[self.player]:
+            single_location_regions = ["Subregion Volcano Battlefield", "Subregion Mac's Ship", "Subregion Doom Castle"]
             for subregion in ["Subregion Foresta", "Subregion Aquaria", "Subregion Frozen Fields", "Subregion Fireburg",
                               "Subregion Volcano Battlefield", "Subregion Windia", "Subregion Mac's Ship",
                               "Subregion Doom Castle"]:
                 region = self.multiworld.get_region(subregion, self.player)
-                # exits = region.exits
                 for location in region.locations:
-                    if location.address:
+                    if location.address and self.multiworld.map_shuffle[self.player] != "dungeons":
                         hint_data[self.player][location.address] = (subregion.split("Subregion ")[-1]
-                                                                    + (" Region" if subregion !=
-                                                                       "Subregion Volcano Battlefield" else ""))
+                                                                    + (" Region" if subregion not in
+                                                                       single_location_regions else ""))
                 for overworld_spot in region.exits:
                     if ("Subregion" in overworld_spot.connected_region.name or
                             overworld_spot.name == "Overworld - Mac Ship Doom" or "Focus Tower" in overworld_spot.name
@@ -144,14 +144,22 @@ class FFMQWorld(World):
                     while exits:
                         exit_check = exits.pop()
                         if (exit_check.connected_region not in checked_regions and "Subregion" not in
-                                exit_check.connected_region.name and (exit_check.name not in
-                                non_dead_end_crest_warps or exit_check.connected_region.name not in
-                                non_dead_end_crest_rooms)):
+                                exit_check.connected_region.name):
                             checked_regions.add(exit_check.connected_region)
                             exits.extend(exit_check.connected_region.exits)
                             for location in exit_check.connected_region.locations:
                                 if location.address:
+                                    hint = []
+                                    if self.multiworld.map_shuffle[self.player] != "dungeons":
+                                        hint.append((subregion.split("Subregion ")[-1] + (" Region" if subregion not
+                                                    in single_location_regions else "")))
+                                    if self.multiworld.map_shuffle[self.player] != "overworld" and subregion not in \
+                                            ("Subregion Mac's Ship", "Subregion Doom Castle"):
+                                        hint.append(overworld_spot.name.split("Overworld - ")[-1].replace("Pazuzu",
+                                            "Pazuzu's"))
+                                    hint = " - ".join(hint)
                                     if location.address in hint_data[self.player]:
-                                        print("dupe")
-                                    hint_data[self.player][location.address] = \
-                                        overworld_spot.name.split("Overworld - ")[-1].replace("Pazuzu", "Pazuzu's")
+                                        hint_data[self.player][location.address] += f"/{hint}"
+                                    else:
+                                        hint_data[self.player][location.address] = hint
+
