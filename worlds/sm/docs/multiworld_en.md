@@ -8,7 +8,7 @@
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
         - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-        - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
+        - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
         - RetroArch 1.10.1 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
@@ -94,16 +94,16 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
 
 ##### BizHawk
 
-1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following these
-   menu options:  
-   `Config --> Cores --> SNES --> BSNES`  
-   Once you have changed the loaded core, you must restart BizHawk.
+1. Ensure you have the BSNES core loaded. This is done with the main menubar, under:
+    - (≤ 2.8) `Config` 〉 `Cores` 〉 `SNES` 〉 `BSNES`
+    - (≥ 2.9) `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`
 2. Load your ROM file if it hasn't already been loaded.
-3. Click on the Tools menu and click on **Lua Console**
-4. Click the Open Folder icon that says `Open Script` via the tooltip on mouse hover, or click the Script Menu then `Open Script...`, or press `Ctrl-O`.
-5. Select the `Connector.lua` file included with your client
+   If you changed your core preference after loading the ROM, don't forget to reload it (default hotkey: Ctrl+R).
+3. Drag+drop the `Connector.lua` file included with your client onto the main EmuHawk window.
     - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
       emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
+    - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `Connector.lua`
+      with the file picker.
 
 ##### RetroArch 1.10.1 or newer
 
