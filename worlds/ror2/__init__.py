@@ -128,7 +128,6 @@ class RiskOfRainWorld(World):
         for env_name, _ in environments_pool.items():
             itempool += [env_name]
 
-        # precollected environments are popped from the pool so counting like this is valid
         nonjunk_item_count = len(itempool)
         if self.multiworld.goal[self.player] == "classic":
             # classic mode
