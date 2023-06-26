@@ -90,11 +90,6 @@ def set_rules(multiworld, player):
         "Silph Co 5F - Hostage": lambda state: logic.card_key(state, 5, player),
         "Silph Co 7F - Hostage": lambda state: logic.card_key(state, 7, player),
 
-        "Saffron Fighting Dojo - Blackbelt 1": lambda state: logic.dojo(state, player),
-        "Saffron Fighting Dojo - Blackbelt 2": lambda state: logic.dojo(state, player),
-        "Saffron Fighting Dojo - Blackbelt 3": lambda state: logic.dojo(state, player),
-        "Saffron Fighting Dojo - Blackbelt 4": lambda state: logic.dojo(state, player),
-
         "Route 2 Trade House - Marcel Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
         "Underground Path Route 5 - Spot Trade": lambda state: state.can_reach("Route 24 - Wild Pokemon - 6", "Location", player),
         "Route 11 Gate 2F - Terry Trade": lambda state: state.can_reach("Safari Zone Center - Wild Pokemon - 5", "Location", player),

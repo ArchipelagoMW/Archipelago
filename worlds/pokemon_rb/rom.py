@@ -93,12 +93,12 @@ def write_quizzes(self, data, random):
         elif q == 5:
             i = 8
             while not a and i in [1, 8]:
-                i = random.randint(0, 99999999)
+                i = random.randint(0, int("99999999"[random.randint(0, 7):]))
             return encode_text(f"There are {i}<LINE>certified #MON<CONT>LEAGUE BADGEs?<DONE>")
         elif q == 6:
             i = 2
             while not a and i in [1, 2]:
-                i = random.randint(0, 99)
+                i = random.randint(0, random.choice(9, 99))
             return encode_text(f"POLIWAG evolves {i}<LINE>times?<DONE>")
         elif q == 7:
             entity = "Motor Carrier"
@@ -107,11 +107,84 @@ def write_quizzes(self, data, random):
             return encode_text("Title 49 of the<LINE>U.S. Code of<CONT>Federal<CONT>Regulations part<CONT>397.67 states"
                                f"<CONT>that the<CONT>{entity}<CONT>is responsible<CONT>for planning<CONT>routes when"
                                "<CONT>hazardous<CONT>materials are<CONT>transported?<DONE>")
+        elif q == 8:
+            mon = random.choice(list(poke_data.evolution_levels.keys()))
+            level = poke_data.evolution_levels[mon]
+            if not a:
+                level += random.choice(range(1, 6)) * random.choice((-1, 1))
+            return encode_text(f"{mon} evolves<LINE>at level {level}?<DONE>")
+        elif q == 9:
+            move = random.choice(list(self.local_move_data.keys()))
+            actual_type = self.local_move_data[move]["type"]
+            question_type = actual_type
+            while question_type == actual_type and not a:
+                question_type = random.choice(list(poke_data.type_ids.keys()))
+            return encode_text(f"{move} is<LINE>{question_type} type?<DONE>")
+        elif q == 10:
+            mon = random.choice(list(poke_data.pokemon_data.keys()))
+            actual_type = self.local_poke_data[mon][random.choice(("type1", "type2"))]
+            question_type = actual_type
+            while question_type in [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]] and not a:
+                question_type = random.choice(list(poke_data.type_ids.keys()))
+            return encode_text(f"{mon} is<LINE>{question_type} type?<DONE>")
+        elif q == 11:
+            equation = ""
+            while "*" not in equation:
+                equation = f"{random.randint(0, 9)} {random.choice(['+', '-', '*'])} {random.randint(0, 9)} {random.choice(['+', '-', '*'])} {random.randint(0, 9)} {random.choice(['+', '-', '*'])} {random.randint(0, 9)}"
+            result = eval(equation)
+            question_result = result
+            if not a:
+                modifiers = random.sample(range(3), 3)
+                for modifier in modifiers:
+                    question_result = eval(equation[:modifier * 4] + "(" + equation[modifier * 4:(modifier * 4) + 5]
+                                           + ")" + equation[5 + (modifier * 4):])
+                    if question_result != result:
+                        break
+                else:
+                    question_result += random.choice(range(1, 6)) * random.choice((-1, 1))
 
-    answers = [random.randint(0, 1), random.randint(0, 1), random.randint(0, 1),
-               random.randint(0, 1), random.randint(0, 1), random.randint(0, 1)]
+            return encode_text(f"{equation}<LINE>= {question_result}?<DONE>")
+        elif q == 12:
+            route = random.choice((12, 16))
+            actual_mon = self.multiworld.get_location(f"Route {route} - Sleeping Pokemon",
+                                                      self.player).item.name.split("Static ")[1]
+            question_mon = actual_mon
+            while question_mon == actual_mon and not a:
+                question_mon = random.choice(list(poke_data.pokemon_data.keys()))
+            return encode_text(f"{question_mon} was<LINE>sleeping on route<CONT>{route}?<DONE>")
+        elif q == 13:
+            type1 = random.choice(list(poke_data.type_ids.keys()))
+            type2 = random.choice(list(poke_data.type_ids.keys()))
+            eff_msgs = ["super effective<CONT>", "no ", "not very<CONT>effective<CONT>", "normal "]
+            for matchup in self.type_chart:
+                if matchup[0] == type1 and matchup[1] == type2:
+                    if matchup[2] > 10:
+                        eff = eff_msgs[0]
+                    elif matchup[2] == 0:
+                        eff = eff_msgs[1]
+                    elif matchup[2] < 10:
+                        eff = eff_msgs[2]
+                    else:
+                        eff = eff_msgs[3]
+                    break
+            else:
+                eff = eff_msgs[3]
+            if not a:
+                eff_msgs.remove(eff)
+                eff = random.choice(eff_msgs)
+            return encode_text(f"{type1} deals<LINE>{eff}damage to<CONT>{type2} type?<DONE>")
+        elif q == 14:
+            fossil_level = self.multiworld.get_location("Fossil Level - Trainer Parties",
+                                                        self.player).party_data[0]['level']
+            if not a:
+                fossil_level += random.choice((-5, 5))
+            return encode_text(f"Fossil #MON<LINE>revive at level<CONT>{fossil_level}?<DONE>")
 
-    questions = random.sample((range(0, 8)), 6)
+    answers = [random.randint(0, 1) for _ in range(6)]
+
+    answers = [1] * 6
+
+    questions = random.sample((range(8, 15)), 6)
     question_texts = []
     for i, question in enumerate(questions):
         question_texts.append(get_quiz(question, answers[i]))
@@ -201,8 +274,6 @@ def generate_output(self, output_directory: str):
     if self.multiworld.fix_combat_bugs[self.player]:
         data[rom_addresses["Option_Fix_Combat_Bugs"]] = 1
         data[rom_addresses["Option_Fix_Combat_Bugs_Focus_Energy"]] = 0x28  # jr z
-        # this bug soft locks the game, so I am fixing it always
-        #data[rom_addresses["Option_Fix_Combat_Bugs_Substitute"]] = 0x28  # jr z
         data[rom_addresses["Option_Fix_Combat_Bugs_HP_Drain_Dream_Eater"]] = 0x1A  # ld a, (de)
         data[rom_addresses["Option_Fix_Combat_Bugs_PP_Restore"]] = 0xe6  # and a, direct
         data[rom_addresses["Option_Fix_Combat_Bugs_PP_Restore"] + 1] = 0b0011111
@@ -211,6 +282,7 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Option_Fix_Combat_Bugs_Dig_Fly"]] = 0b10001100
         data[rom_addresses["Option_Fix_Combat_Bugs_Heal_Effect"]] = 0x20  # jr nz,
         data[rom_addresses["Option_Fix_Combat_Bugs_Heal_Effect"] + 1] = 5  # 5 bytes ahead
+        data[rom_addresses["Option_Fix_Combat_Bugs_Heal_Stat_Modifiers"]] = 1
 
     if self.multiworld.poke_doll_skip[self.player] == "in_logic":
         data[rom_addresses["Option_Silph_Scope_Skip"]] = 0x00      # nop
@@ -264,6 +336,7 @@ def generate_output(self, output_directory: str):
     write_bytes(data, encode_text(str(self.multiworld.elite_four_badges_condition[self.player].value)), rom_addresses["Text_Elite_Four_Badges"])
     write_bytes(data, encode_text(str(self.multiworld.elite_four_key_items_condition[self.player].total) + " key items, and"), rom_addresses["Text_Elite_Four_Key_Items"])
     write_bytes(data, encode_text(str(self.multiworld.elite_four_pokedex_condition[self.player].total) + " #MON"), rom_addresses["Text_Elite_Four_Pokedex"])
+    write_bytes(data, encode_text(str(self.total_key_items), length=2), rom_addresses["Trainer_Screen_Total_Key_Items"])
 
     data[rom_addresses['Option_Viridian_Gym_Badges']] = self.multiworld.viridian_gym_condition[self.player].value
     data[rom_addresses['Option_EXP_Modifier']] = self.multiworld.exp_modifier[self.player].value
@@ -312,7 +385,6 @@ def generate_output(self, output_directory: str):
     write_bytes(data, encode_text(
         " ".join(self.multiworld.get_location("Route 4 Pokemon Center - Pokemon For Sale", self.player).item.name.upper().split()[1:])),
                 rom_addresses["Text_Magikarp_Salesman"])
-    write_quizzes(self, data, random)
 
     if self.multiworld.badges_needed_for_hm_moves[self.player].value == 0:
         for hm_move in poke_data.hm_moves:
@@ -466,6 +538,8 @@ def generate_output(self, output_directory: str):
     write_bytes(data, self.multiworld.player_name[self.player].encode(), 0xFFF0)
 
     self.finished_level_scaling.wait()
+
+    write_quizzes(self, data, random)
 
     for location in self.multiworld.get_locations():
         if location.player != self.player:

@@ -54,6 +54,7 @@ class PokemonRedBlueWorld(World):
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
+        self.total_key_items = None
         self.fly_map = None
         self.fly_map_code = None
         self.town_map_fly_map = None
@@ -104,7 +105,7 @@ class PokemonRedBlueWorld(World):
 
         if self.multiworld.key_items_only[self.player]:
             self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
-            self.multiworld.dexsanity[self.player] = self.multiworld.dexsanity[self.player].from_text("off")
+            self.multiworld.dexsanity[self.player] = self.multiworld.dexsanity[self.player].from_text("false")
             self.multiworld.randomize_hidden_items[self.player] = \
                 self.multiworld.randomize_hidden_items[self.player].from_text("off")
 
@@ -268,7 +269,7 @@ class PokemonRedBlueWorld(World):
         self.multiworld.random.shuffle(item_pool)
         advancement_items = [item.name for item in item_pool if item.advancement] \
             + [item.name for item in self.multiworld.precollected_items[self.player] if item.advancement]
-        total_advancement_items = len(
+        self.total_key_items = len(
             # The stonesanity items are not checekd for here and instead just always added as the `+ 4`
             # They will always exist, but if stonesanity is off, then only as events.
             # We don't want to just add 4 if stonesanity is off while still putting them in this list in case
@@ -280,16 +281,16 @@ class PokemonRedBlueWorld(World):
                                "Card Key 6F", "Card Key 7F", "Card Key 8F", "Card Key 9F", "Card Key 10F",
                                "Card Key 11F", "Exp. All", "Moon Stone"] if item in advancement_items]) + 4
         if "Progressive Card Key" in advancement_items:
-            total_advancement_items += 10
+            self.total_key_items += 10
 
-        self.multiworld.cerulean_cave_key_items_condition[self.player].total = int((total_advancement_items / 100)
+        self.multiworld.cerulean_cave_key_items_condition[self.player].total = int((self.total_key_items / 100)
             * self.multiworld.cerulean_cave_key_items_condition[self.player].value)
 
-        self.multiworld.elite_four_key_items_condition[self.player].total = int((total_advancement_items / 100)
+        self.multiworld.elite_four_key_items_condition[self.player].total = int((self.total_key_items / 100)
             * self.multiworld.elite_four_key_items_condition[self.player].value)
-
-
+        
         self.multiworld.itempool += item_pool
+        
 
     def pre_fill(self) -> None:
         process_pokemon_locations(self)
@@ -440,8 +441,9 @@ class PokemonRedBlueWorld(World):
                     for badge in ["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Soul Badge",
                                   "Marsh Badge", "Volcano Badge", "Earth Badge"]:
                         badges.append(self.create_item(badge))
-                    for loc in ["Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize", "Vermilion Gym - Lt. Surge Prize",
-                                "Celadon Gym - Erika Prize", "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
+                    for loc in ["Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
+                                "Vermilion Gym - Lt. Surge Prize", "Celadon Gym - Erika Prize",
+                                "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
                                 "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]:
                         badgelocs.append(self.multiworld.get_location(loc, self.player))
                     state = self.multiworld.get_all_state(False)
@@ -517,6 +519,20 @@ class PokemonRedBlueWorld(World):
         for mon in poke_data.pokemon_data:
             if all_state.has(mon, self.player) or all_state.has(f"Static {mon}", self.player):
                 reachable_mons.add(mon)
+
+        # The large number of wild Pokemon can make sweeping for events time-consuming, and is especially bad in
+        # the spoiler playthrough calculation because it removes each advancement item one at a time to verify
+        # if the game is beatable without it. We go through each zone and flag any duplicates as useful.
+        # Especially with area 1-to-1 mapping or vanilla wild Pokémon, this should cut down on time wasted a lot.
+        # for region in self.multiworld.get_regions(self.player):
+        #     region_mons = set()
+        #     for location in region.locations:
+        #         if "Wild Pokemon" in location.name:
+        #             if location.item.name in region_mons:
+        #                 location.item.classification = ItemClassification.useful
+        #             else:
+        #                 region_mons.add(location.item.name)
+
         self.multiworld.elite_four_pokedex_condition[self.player].total = \
             int((len(reachable_mons) / 100) * self.multiworld.elite_four_pokedex_condition[self.player].value)
 
@@ -566,6 +582,12 @@ class PokemonRedBlueWorld(World):
             while len(locations) > 10:
                 location = locations.pop()
                 location.progress_type = LocationProgressType.EXCLUDED
+
+        if self.multiworld.key_items_only[self.player]:
+            locations = [location for location in self.multiworld.get_unfilled_locations(self.player) if
+                         location.progress_type == LocationProgressType.DEFAULT]
+            for location in self.multiworld.random.sample(locations, int(len(locations) / 2)):
+                location.progress_type = LocationProgressType.PRIORITY
 
     def create_regions(self):
         if (self.multiworld.old_man[self.player] == "vanilla" or

@@ -1205,6 +1205,17 @@ tm_moves = [
     'Thunder Wave', 'Psywave', 'Explosion', 'Rock Slide', 'Tri Attack', 'Substitute'
 ]
 
+evolution_levels = {
+    'Bulbasaur': 16, 'Ivysaur': 32, 'Charmander': 16, 'Charmeleon': 36, 'Squirtle': 16, 'Wartortle': 36, 'Caterpie': 7,
+    'Metapod': 10, 'Weedle': 7, 'Kakuna': 10, 'Pidgey': 18, 'Pidgeotto': 36, 'Rattata': 20, 'Spearow': 20, 'Ekans': 22,
+    'Sandshrew': 22, 'Nidoran F': 16, 'Nidoran M': 16, 'Zubat': 22, 'Oddish': 21, 'Paras': 24, 'Venonat': 31,
+    'Diglett': 26, 'Meowth': 28, 'Psyduck': 33, 'Mankey': 28, 'Poliwag': 25, 'Abra': 16, 'Kadabra': 35, 'Machop': 28,
+    'Machoke': 35, 'Bellsprout': 21, 'Tentacool': 30, 'Geodude': 25, 'Graveler': 35, 'Ponyta': 40, 'Slowpoke': 37,
+    'Magnemite': 30, 'Doduo': 31, 'Seel': 34, 'Grimer': 38, 'Gastly': 25, 'Haunter': 35, 'Drowzee': 26, 'Krabby': 28,
+    'Voltorb': 30, 'Cubone': 28, 'Koffing': 35, 'Rhyhorn': 42, 'Horsea': 32, 'Goldeen': 33, 'Magikarp': 33,
+    'Omanyte': 40, 'Kabuto': 40, 'Dratini': 30, 'Dragonair': 55
+}
+
 
 first_stage_pokemon = [pokemon for pokemon in pokemon_data.keys() if pokemon not in evolves_from]
 legendary_pokemon = ["Articuno", "Zapdos", "Moltres", "Mewtwo", "Mew"]

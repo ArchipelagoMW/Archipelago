@@ -100,7 +100,9 @@ def process_move_data(self):
         for move, data in self.local_move_data.items():
             if move == "No Move":
                 continue
-            data["type"] = self.multiworld.random.choice(list(poke_data.type_ids))
+            # The chance of randomized moves choosing a normal type move is high, so we want to retain having a higher
+            # rate of normal type moves
+            data["type"] = self.multiworld.random.choice(list(poke_data.type_ids) + (["Normal"] * 4))
 
     if self.multiworld.move_balancing[self.player]:
         self.local_move_data["Sing"]["accuracy"] = 30
@@ -317,6 +319,8 @@ def process_pokemon_data(self):
             else:
                 bit = roll_tm_compat(tm_move)
             if bit:
+                if tm_move == "Strength":
+                    print(mon)
                 mon_data["tms"][int(flag / 8)] |= 1 << (flag % 8)
             else:
                 mon_data["tms"][int(flag / 8)] &= ~(1 << (flag % 8))

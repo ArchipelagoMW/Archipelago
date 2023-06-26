@@ -32,6 +32,7 @@ fossil scientist. This may require reviving a number of fossils, depending on yo
 * Pokémon that evolve by trading can also evolve by reaching level 35.
 * Evolution stones are reusable key items.
 * Much of the dialogue throughout the game has been removed or shortened.
+* The Pokédex shows which HMs can be learned by any Pokémon registered as seen.
 * HM moves can be overwritten if you have the HM for it in your bag.
 * The NPC on the left behind the Celadon Game Corner counter will sell 1500 coins at once instead of giving information
 about the Prize Corner.

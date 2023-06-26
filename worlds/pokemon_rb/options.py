@@ -195,7 +195,8 @@ class RandomizePokedex(Choice):
 
 class KeyItemsOnly(Toggle):
     """Shuffle only Key Items. This overrides Randomize Hidden Items, Trainersanity, and Dexsanity.
-    May have high generation failure rates for solo games or small multiworlds."""
+    Randomly sets half of the non-excluded, non-priority locations in your game to be Priority Locations.
+    May have high generation failure rates for solo games or small multiworlds, especially with Door Shuffle."""
     display_name = "Key Items Only"
     default = 0
 
@@ -278,7 +279,8 @@ class RequirePokedex(Toggle):
 
 class AllPokemonSeen(Toggle):
     """Start with all Pokemon "seen" in your Pokedex. This allows you to see where Pokemon can be encountered in the
-    wild. Pokemon found by fishing or in the Cerulean Cave are not displayed."""
+    wild. Pokemon found by fishing or in the Cerulean Cave are not displayed.
+    The Pokedex also shows which HMs can be learned by Pokemon registered as seen."""
     default = 0
     display_name = "All Pokemon Seen"
 
@@ -294,8 +296,6 @@ class DexSanity(SpecialRange):
     default = 0
     range_start = 0
     range_end = 100
-    alias_false = 0
-    alias_true = 100
     special_range_names = {
         "false": 0,
         "true": 100

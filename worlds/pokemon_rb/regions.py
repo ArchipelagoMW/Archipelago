@@ -1452,6 +1452,12 @@ mansion_stair_destinations = [
     "Pokemon Mansion 1F to Pokemon Mansion 2F"
 ]
 
+unreachable_outdoor_entrances = [
+    "Route 4-C to Mt Moon B1F-NE",
+    "Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House",
+    "Cerulean City-Badge House Backyard to Cerulean Badge House"
+]
+
 #
 # for region in warp_data:
 #     for entrance in warp_data[region]:
@@ -1712,7 +1718,7 @@ def create_regions(self):
     connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B3F-SE", lambda state: logic.can_strength(state, player) and state.has("Seafoam Exit Boulder", player, 6))
     connect(multiworld, player, "Viridian City", "Viridian City-N", lambda state: state.has("Oak's Parcel", player) or state.multiworld.old_man[player].value == 2 or logic.can_cut(state, player))
     connect(multiworld, player, "Route 11", "Route 11-C", lambda state: logic.can_strength(state, player) or not state.multiworld.extra_strength_boulders[player])
-    connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-G", lambda state: state.has("Secret Key", player) and logic.cinnabar_gym(state, player))
+    connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-G", lambda state: state.has("Secret Key", player))
     connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-M", lambda state: state.has("Mansion Key", player) or not state.multiworld.extra_key_items[player].value)
     connect(multiworld, player, "Route 21", "Cinnabar Island", lambda state: logic.can_surf(state, player))
     connect(multiworld, player, "Pallet Town", "Route 21", lambda state: logic.can_surf(state, player))
@@ -1793,6 +1799,8 @@ def create_regions(self):
     connect(multiworld, player, "Celadon City-G", "Celadon City", lambda state: logic.can_fly(state, player), one_way=True)
     connect(multiworld, player, "Vermilion City-G", "Vermilion City", lambda state: logic.can_fly(state, player), one_way=True)
     connect(multiworld, player, "Vermilion City-Dock", "Vermilion City", lambda state: logic.can_fly(state, player), one_way=True)
+    connect(multiworld, player, "Cinnabar Island-G", "Cinnabar Island", lambda state: logic.can_fly(state, player), one_way=True)
+    connect(multiworld, player, "Cinnabar Island-M", "Cinnabar Island", lambda state: logic.can_fly(state, player), one_way=True)
 
     # drops
     connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F", one_way=True)
@@ -1816,26 +1824,6 @@ def create_regions(self):
                 lambda state: logic.can_fly(state, player) and state.has("Town Map", player), one_way=True,
                 name="Town Map Fly Location")
 
-    # regions = set(self.multiworld.get_regions(player))
-    # regions = {region for region in regions if "Wild" not in region.name and "Grass" not in region.name and "Fishing" not in region.name and "Water" not in region.name}
-    # while regions:
-    #     region = regions.pop()
-    #     rset = {region}
-    #     rset.update({e.connected_region for e in region.exits if e.connected_region in regions})
-    #     rset.update({e.parent_region for e in region.entrances if e.parent_region in regions})
-    #     rc = rset.copy()
-    #     #rset.update(rc)
-    #     while rc:
-    #         x = rc.pop()
-    #         rset.add(x)
-    #         rc.update({e.connected_region for e in x.exits if e.connected_region not in rset and e.connected_region in regions})
-    #         rc.update({e.parent_region for e in x.entrances if e.parent_region not in rset and e.parent_region in regions})
-    #         # rset.update({e.connected_region for e in x.exits})
-    #         # rset.update({e.parent_region for e in x.entrances})
-    #     print(rset)
-    #     regions -= rset
-
-    # if multiworld.door_shuffle[player]:
     entrances = []
     for region_name, region_entrances in warp_data.items():
         for entrance_data in region_entrances:
@@ -1942,7 +1930,9 @@ def create_regions(self):
             for a, b in zip(multiworld.random.sample(pokemon_center_entrances, 12), pokemon_centers):
                 forced_connections.add((a, b))
             # Ensure a Pokemart is available at the beginning of the game
-            if "Pokemart" not in pallet_safe_room:
+            if multiworld.key_items_only[player] and pallet_safe_room != "Viridian Pokemart to Viridian City":
+                forced_connections.add((multiworld.random.choice(initial_doors), "Viridian Pokemart to Viridian City"))
+            elif "Pokemart" not in pallet_safe_room:
                 forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(
                     [mart for mart in pokemarts if mart not in safe_rooms_sample])))
 
@@ -2156,6 +2146,8 @@ def create_regions(self):
                         "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]:
                 badge_locs.append(multiworld.get_location(loc, player))
             multiworld.random.shuffle(badges)
+            while badges[3].name == "Cascade Badge" and multiworld.badges_needed_for_hm_moves[player] == "on":
+                multiworld.random.shuffle(badges)
             for badge, loc in zip(badges, badge_locs):
                 loc.place_locked_item(badge)
 
@@ -2261,6 +2253,11 @@ def create_regions(self):
                 break
             if multiworld.door_shuffle[player] == "full" or len(entrances) != len(reachable_entrances):
                 entrances.sort(key=lambda e: e.name not in entrance_only)
+
+                if len(entrances) < 48 and multiworld.door_shuffle[player] == "full":
+                    # Prevent a situation where the only remaining outdoor entrances are ones that cannot be reached
+                    # except by connecting directly to it.
+                    entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
                 # entrances list is empty while it's being sorted, must pass a copy to iterate through
                 entrances_copy = entrances.copy()
                 if multiworld.door_shuffle[player] == "decoupled":
@@ -2274,11 +2271,11 @@ def create_regions(self):
                         "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
                 elif len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity" else 8) and len(
                         entrances) <= (starting_entrances - 3):
-                    # print("Dead End")
+                    print("Dead End")
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
                                    dead_end(entrances_copy, e) else 1)
                 else:
-                    # print("Not Dead End")
+                    print("Not Dead End")
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 1 if
                                    dead_end(entrances_copy, e) else 2)
                 if multiworld.door_shuffle[player] == "full":
@@ -2298,7 +2295,7 @@ def create_regions(self):
                 dc_connected.append(entrance_a)
             else:
                 entrance_b.connect(entrance_a)
-            # print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
+            print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
 
         # So that we don't crash when trying to place these later
         for loc in placed_events:
@@ -2315,7 +2312,7 @@ def create_regions(self):
             checked_regions = {region}
 
             def check_region(region_to_check):
-                if outdoor_map(region_to_check.name):
+                if outdoor_map(region_to_check.name) or "Safari Zone" in region_to_check.name:
                     return True
                 for entrance in region_to_check.entrances:
                     if entrance.parent_region not in checked_regions:
@@ -2327,9 +2324,8 @@ def create_regions(self):
                             return x
                 return None
 
-            if region.name.split("-")[0] not in map_ids or outdoor_map(region.name):
+            if region.name.split("-")[0] not in map_ids or outdoor_map(region.name) or "Safari Zone" in region.name:
                 region.entrance_hint = None
-                # print(region.name)
             else:
                 region.entrance_hint = check_region(region)
 

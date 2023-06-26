@@ -91,18 +91,6 @@ def fossil_checks(state, count, player):
         [item for item in ["Dome Fossil", "Helix Fossil", "Old Amber"] if state.has(item, player)]) >= count)
 
 
-def cinnabar_gym(state, player):
-    # ensures higher level Pokémon are obtainable before Cinnabar Gym is in logic
-    return ((state.multiworld.old_man[player] != "vanilla") or (not state.multiworld.extra_key_items[player]) or
-            state.has("Mansion Key", player) or state.has("Oak's Parcel", player) or can_surf(state, player))
-
-
-def dojo(state, player):
-    # ensures higher level Pokémon are obtainable before Fighting Dojo is in logic
-    return (can_pass_guards(state, player) or state.has("Oak's Parcel", player) or
-            can_surf(state, player))
-
-
 def card_key(state, floor, player):
     return state.has(f"Card Key {floor}F", player) or state.has("Card Key", player) or \
            state.has("Progressive Card Key", player, floor - 1)
