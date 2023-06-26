@@ -2351,4 +2351,15 @@
         <Tooltip value=""/>
         <Count Link="AP_SOAMatrixOverload" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeGameTimeGreaterthan5SecondsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_GameTimeGreaterthan5Seconds" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSOAWarpTechCompleteOnly">
+        <Count Link="AP_SOAWarpTech" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitFleetBeaconCompleteOnlyTechTreeCheat">
+        <Count Link="AP_FleetBeacon" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

@@ -3082,4 +3082,37 @@
         <CliffLevelFlags index="Higher" value="0"/>
         <PowerLink value="PowerSource"/>
     </CBehaviorPowerSource>
+    <CBehaviorBuff id="AP_StargateWarpMorphInstant">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <!-- This Requirement doesn't exist, only the same-named Validator-->
+        <Requirements value="AP_GameTimeGreaterthan5SecondsandHaveSOAWarpTech"/>
+        <RemoveValidatorArray value="AP_GameTimeGreaterthan5Seconds"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_StargateWarpMorphInstant"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOASuperChrono">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-chronoboost.dds"/>
+        <BehaviorCategories index="Fast" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="20"/>
+        <Modification TimeScale="10">
+            <WeaponArray Link="AP_MothershipCoreWeaponSurgeSwitch" Turret="AP_Nexus"/>
+            <WeaponEnableArray value="AP_MothershipCoreWeaponSurgeSwitch"/>
+            <WeaponDisableArray value="AP_MothershipCoreWeapon"/>
+        </Modification>
+        <!--VitalRegenArray index="Energy" value="-0.1992"/-->
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ProdigalEngineerProductionTarget">
+        <Alignment value="Positive"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="2"/>
+        <Modification TimeScale="10"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-prodigalengineer.dds"/>
+        <DisableValidatorArray value="HasPower"/>
+    </CBehaviorBuff>
 </Catalog>

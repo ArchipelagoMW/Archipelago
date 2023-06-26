@@ -1372,4 +1372,15 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSOAMatrixOverloadCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_GameTimeGreaterthan5Seconds">
+        <NodeArray index="Use" Link="AP_CountUpgradeGameTimeGreaterthan5SecondsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSOAWarpTech">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAWarpTechCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveFleetBeacon">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitFleetBeaconCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

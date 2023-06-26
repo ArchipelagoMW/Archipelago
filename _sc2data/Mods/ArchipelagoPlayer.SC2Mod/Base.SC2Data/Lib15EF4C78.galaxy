@@ -478,6 +478,39 @@ void lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Init () {
     TriggerAddEventUnitCreated(lib15EF4C78_gt_AP_Player_setHolodecoyWeapon, null, null, null);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Trigger: Set5SecondsMark
+//--------------------------------------------------------------------------------------------------
+bool lib15EF4C78_gt_Set5SecondsMark_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_currentPlayer;
+
+    // Automatic Variable Declarations
+    playergroup autoEC3833D4_g;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    autoEC3833D4_g = PlayerGroupAll();
+    lv_currentPlayer = -1;
+    while (true) {
+        lv_currentPlayer = PlayerGroupNextPlayer(autoEC3833D4_g, lv_currentPlayer);
+        if (lv_currentPlayer < 0) { break; }
+        libNtve_gf_SetUpgradeLevelForPlayer(lv_currentPlayer, "AP_GameTimeGreaterthan5Seconds", 1);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib15EF4C78_gt_Set5SecondsMark_Init () {
+    lib15EF4C78_gt_Set5SecondsMark = TriggerCreate("lib15EF4C78_gt_Set5SecondsMark_Func");
+    TriggerAddEventTimeElapsed(lib15EF4C78_gt_Set5SecondsMark, 5.0, c_timeGame);
+}
+
 void lib15EF4C78_InitTriggers () {
     lib15EF4C78_gt_ArchipelagoPlayerHandlersConstructor_Init();
     lib15EF4C78_gt_ReactorswaptoAP_Barracks_Init();
@@ -496,6 +529,7 @@ void lib15EF4C78_InitTriggers () {
     lib15EF4C78_gt_TechReactorswaptoAP_Factory_Init();
     lib15EF4C78_gt_TechReactorswaptoAP_Starport_Init();
     lib15EF4C78_gt_AP_Player_setHolodecoyWeapon_Init();
+    lib15EF4C78_gt_Set5SecondsMark_Init();
 }
 
 //--------------------------------------------------------------------------------------------------

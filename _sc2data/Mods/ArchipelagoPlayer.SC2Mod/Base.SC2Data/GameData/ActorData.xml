@@ -3933,7 +3933,7 @@
         <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkCarrier"/>
         <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkCarrier"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create Carrier_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Carrier_Land"/>
         <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
         <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
         <On Terms="Behavior.WarpInEffect.On; !ValidateUnit AP_NoDarkProtoss" Send="ModelSwap CarrierWarpInStargate"/>
@@ -9373,18 +9373,21 @@
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
         <ImpactPhysics Name="IonCannonImpact" MatchKeys="Basic" Physics="PhoenixAttackDeathForce"/>
     </CActorAction>
+    <CActorSound id="AP_Phoenix_Land" parent="SoundOneShot">
+        <Sound value="Phoenix_Land"/>
+    </CActorSound>
     <CActorUnit id="AP_PhoenixAiur" parent="GenericUnitBase" unitName="AP_PhoenixAiur">
         <Aliases value="_UnitLarge"/>
         <On Terms="Effect.AP_GravitonBeam.Start; At Source" Send="$Spell PlayForever"/>
         <On Terms="Effect.AP_GravitonBeam.Stop; At Source" Send="AnimClear Spell"/>
         <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
         <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create Phoenix_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Phoenix_Land"/>
         <On Terms="Behavior.AP_VoidPhoenixPhasingArmorBuff.On" Send="SetOpacity 0.100000"/>
         <On Terms="Behavior.AP_VoidPhoenixPhasingArmorBuff.Off" Send="SetOpacity 1.000000"/>
         <On Terms="Behavior.WarpInEffect15.On" Send="ModelSwap PhoenixWarpInStargate"/>
         <On Terms="Behavior.WarpInEffect15.On" Send="$Spell"/>
-        <On Terms="AnimDone; AnimName Spell" Send="ModelSwap PhoenixAiur"/>
+        <On Terms="AnimDone; AnimName Spell" Send="ModelSwap AP_PhoenixAiur"/>
         <On Terms="AnimDone; AnimName Spell" Send="AnimClear Spell"/>
         <HostSiteOps Ops="SOpBankerPhoenix"/>
         <AnimBlendTime value="0.450000"/>
@@ -9393,7 +9396,7 @@
         <BuildModel value="AP_PhoenixAiurWarpIn"/>
         <DeathArray index="Normal" ModelLink="AP_PhoenixAiurDeath" SoundLink="Phoenix_Explode"/>
         <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
-        <PlacementModel value="PhoenixPlacement"/>
+        <PlacementModel value="AP_PhoenixPlacement"/>
         <PortraitModel value="PhoenixPortrait"/>
         <AbilSoundArray AbilCmd="GravitonBeam.Execute" Sound="Phoenix_GravitonBeamVO"/>
         <BarOffset value="50"/>
@@ -11693,7 +11696,7 @@
         <!-- Add AP buildings -->
         <On Terms="UnitCreation.AP_Assimilator" Send="Create"/>
         <On Terms="UnitCreation.AP_TemplarArchive" Send="Create"/>
-<!--        <On Terms="UnitCreation.AP_TwilightCouncil" Send="Create"/>-->
+        <!--        <On Terms="UnitCreation.AP_TwilightCouncil" Send="Create"/>-->
         <On Terms="UnitCreation.AP_CyberneticsCore" Send="Create"/>
         <On Terms="UnitCreation.AP_Forge" Send="Create"/>
         <On Terms="UnitCreation.AP_RoboticsFacility" Send="Create"/>
@@ -11738,7 +11741,7 @@
         <DeathArray index="UnderConstruction" ModelLink="PylonDeathUnderConstruction" SoundLink="Pylon_Explode"/>
         <DeathCustoms ModelLink="PylonXPRDeath" Name="Variation10"/>
         <DeathCustoms ModelLink="ProtossWarpInDeath" SoundLink="Pylon_Explode" Name="Variation11"/>
-        <DeathCustoms ModelLink="Pylon_Taldarim_Death" Name="DarkProtoss"/> 
+        <DeathCustoms ModelLink="Pylon_Taldarim_Death" Name="DarkProtoss"/>
         <PlacementModel value="PylonPlacement"/>
         <PlacementSound value="Protoss_BuildingPlacementSmall"/>
         <PlacementActorModel value="PylonPlacementModel"/>
@@ -11899,6 +11902,360 @@
         <HostSiteOps Ops="SOpShadow"/>
         <Model value="AP_SOAMatrixOverloadPowerSplat"/>
     </CActorModel>
+    <CActorUnit id="AP_Stargate" parent="ProtossBuildingEx" unitName="AP_Stargate">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <Macros value="VoidMPUnpoweredAnim"/>
+        <Macros value="QueueAnim"/>
+        <Macros value="GlobalLoopMacro"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById StargateDarkDiffuse"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById StargateDarkSpecular"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById StargateDarkEmissive"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PulseGreen"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GradRaysGreen"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById TronSquareGreen"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById StargateDarkDiffuse"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById StargateDarkSpecular"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById StargateDarkEmissive"/>
+        <Remove Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PulseGreen"/>
+        <Remove Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GradRaysGreen"/>
+        <Remove Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById TronSquareGreen"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit CasterIsUnpoweredAndNotUnderConstruction" Send="DeathCustomize Variation2"/>
+        <On Terms="ActorCreation" Send="StatusSet WarpingIn 0"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Phoenix; !ValidateUnit HasNoPower" Send="Create PhoenixWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Phoenix" Send="StatusSet WarpingIn 1"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 1" Send="Create PhoenixWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="PhoenixWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="PhoenixWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="PhoenixWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_VoidRay; !ValidateUnit HasNoPower" Send="Create VoidRayWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_VoidRay" Send="StatusSet WarpingIn 2"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 2" Send="Create VoidRayWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="VoidRayWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="VoidRayWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="VoidRayWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Carrier; !ValidateUnit HasNoPower" Send="Create CarrierWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Carrier" Send="StatusSet WarpingIn 3"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 3" Send="Create CarrierWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="CarrierWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="CarrierWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="CarrierWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Send="StatusSet WarpingIn 0"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Send="StatusSet WarpingIn 0"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Oracle; !ValidateUnit HasNoPower" Send="Create OracleWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Oracle" Send="StatusSet WarpingIn 5"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 5" Send="Create OracleWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="OracleWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="OracleWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="OracleWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Tempest; !ValidateUnit HasNoPower" Send="Create TempestWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Tempest" Send="StatusSet WarpingIn 6"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 6" Send="Create TempestWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="TempestWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="TempestWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="TempestWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Scout; !ValidateUnit HasNoPower" Send="Create ScoutWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_Scout" Send="StatusSet WarpingIn 4"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 4" Send="Create ScoutWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="ScoutWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="ScoutWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="ScoutWarpInStargate" Send="Destroy"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById StargateDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById StargateDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById StargateDarkEmissive"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PulseGreen"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById TronSquareGreen"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById StargateDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById StargateDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById StargateDarkEmissive"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PulseGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById TronSquareGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Stargate; MorphTo AP_StargateWarp" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_StargateWarp; MorphTo AP_Stargate" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove Work"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_PhoenixAiur; !ValidateUnit HasNoPower" Send="Create AP_PhoenixAiurWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_PhoenixAiur" Send="StatusSet WarpingIn 8"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 8" Send="Create AP_PhoenixAiurWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_PhoenixAiurWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_PhoenixAiurWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_PhoenixAiurWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_CorsairMP; !ValidateUnit HasNoPower" Send="Create AP_CorsairMPWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_CorsairMP" Send="StatusSet WarpingIn 9"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 9" Send="Create AP_CorsairMPWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_CorsairMPWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_CorsairMPWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_CorsairMPWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_VoidRayShakuras; !ValidateUnit HasNoPower" Send="Create AP_VoidRayShakurasWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_VoidRayShakuras" Send="StatusSet WarpingIn 10"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 10" Send="Create AP_VoidRayShakurasWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_VoidRayShakurasWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_VoidRayShakurasWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_VoidRayShakurasWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_VoidRayTaldarim; !ValidateUnit HasNoPower" Send="Create AP_VoidRayTaldarimWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_VoidRayTaldarim" Send="StatusSet WarpingIn 10"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 10" Send="Create AP_VoidRayTaldarimWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_VoidRayTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_VoidRayTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_VoidRayTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_SOAMothershipv4; !ValidateUnit HasNoPower" Send="Create AP_MothershipTaldarimWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_SOAMothershipv4" Send="StatusSet WarpingIn 10"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 10" Send="Create AP_MothershipTaldarimWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_MothershipTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_MothershipTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_MothershipTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_VoidRayAiur; !ValidateUnit HasNoPower" Send="Create AP_VoidRayAiurWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_VoidRayAiur" Send="StatusSet WarpingIn 11"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 11" Send="Create AP_VoidRayAiurWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_VoidRayAiurWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_VoidRayAiurWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_VoidRayAiurWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_ArbiterMP; !ValidateUnit HasNoPower" Send="Create AP_ArbiterMPWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_ArbiterMP" Send="StatusSet WarpingIn 12"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 12" Send="Create AP_ArbiterMPWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_ArbiterMPWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_ArbiterMPWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_ArbiterMPWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_CarrierAiur; !ValidateUnit HasNoPower" Send="Create AP_CarrierAiurWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_CarrierAiur" Send="StatusSet WarpingIn 13"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 13" Send="Create AP_CarrierAiurWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_CarrierAiurWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_CarrierAiurWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_CarrierAiurWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_CarrierTaldarim; !ValidateUnit HasNoPower" Send="Create AP_CarrierTaldarimWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_CarrierTaldarim" Send="StatusSet WarpingIn 14"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 14" Send="Create AP_CarrierTaldarimWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_CarrierTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_CarrierTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_CarrierTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_TempestPurifier; !ValidateUnit HasNoPower" Send="Create AP_TempestPurifierWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_TempestPurifier" Send="StatusSet WarpingIn 13"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 13" Send="Create AP_TempestPurifierWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_CarrierTaldarimWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_TempestPurifierWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_TempestPurifierWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_PhoenixPurifier; !ValidateUnit HasNoPower" Send="Create AP_PhoenixPurifierWarpInStargate"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Start; AbilTrainProduced AP_PhoenixPurifier" Send="StatusSet WarpingIn 8"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Stop; Level 0; IsStatus WarpingIn 8" Send="Create AP_PhoenixPurifierWarpInStargate"/>
+        <On Terms="BehaviorLevel.PowerUserQueue.Start; Level 0" Target="AP_PhoenixPurifierWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Cancel" Target="AP_PhoenixPurifierWarpInStargate" Send="Destroy"/>
+        <On Terms="AbilTrain.AP_StargateTrain.Finish" Target="AP_PhoenixPurifierWarpInStargate" Send="Destroy"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap StargateTaldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap StargateTaldarim 255 PreventAllDynamicTextureTransfers"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_CasterIsUnpoweredAndNotUnderConstructionAndHasDarkProtoss" Send="DeathCustomize Variation3"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.On" Send="AnimSetTimeScale ::Baseline 0.200000"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.Off" Send="AnimSetTimeScale ::Baseline 1.000000"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.On" Send="AnimSetTimeScale GL_BSD 0.200000"/>
+        <On Terms="Behavior.AP_ProdigalEngineerProductionTarget.Off" Send="AnimSetTimeScale GL_BSD 1.000000"/>
+        <Model value="Stargate"/>
+        <ModelFlags index="AutomateGlobalLoops" value="0"/>
+        <BuildModel value="StargateBirth"/>
+        <DeathArray index="Normal" ModelLink="StargateDeath" SoundLink="Stargate_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="StargateDeathUnderConstruction" SoundLink="Stargate_Explode"/>
+        <DeathCustoms ModelLink="StargateDeathUnpowered" SoundLink="Stargate_Explode" Name="Variation2"/>
+        <DeathCustoms ModelLink="StargateTaldarimDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="StargateTaldarimDeathUnpowered" Name="Variation3"/>
+        <DeathActorModel value="StargateDeath"/>
+        <PlacementModel value="StargatePlacement"/>
+        <PortraitModel value="StargatePortrait"/>
+        <BarOffset value="170"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Stargate.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-Stargate.dds"/>
+        <SoundArray index="Ready" value="Stargate_Ready"/>
+        <SoundArray index="What" value="Stargate_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-Stargate.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Stargate.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-StarGate-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-StarGate-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-StarGate-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_PhoenixAiurWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_CorsairMPWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_VoidRayShakurasWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_VoidRayTaldarimWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_VoidRayAiurWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_ArbiterMPWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_MothershipTaldarimWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_TempestPurifierWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_CarrierAiurWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_CarrierTaldarimWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_ArbiterWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_PhoenixPurifierWarpInStargate" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+    </CActorModel>
+    <CActorSplat id="AP_StargateSplat" parent="GenericUnitSplat" unitName="AP_Stargate">
+        <Model value="StargateSplat"/>
+    </CActorSplat>
+    <CActorUnit id="AP_StargateWarp" parent="ProtossBuilding" unitName="AP_StargateWarp">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="GlobalLoopMacro"/>
+        <Macros value="UnpoweredAnim"/>
+        <Macros value="QueueAnim"/>
+        <Macros value="BuildingFlattenTerrainMacro"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit CasterIsUnpoweredAndNotUnderConstruction" Send="DeathCustomize Variation2"/>
+        <On Terms="ActorCreation" Send="AnimGroupRemove Unpowered Instant"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_StargateWarp; MorphTo AP_Stargate" Send="AnimPlay Morph Stand,Work,End 0 5.000000 -1.000000 10.000000 AsDuration"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_StargateWarp; MorphTo AP_Stargate" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Stargate; MorphTo AP_StargateWarp" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Stargate; MorphTo AP_StargateWarp" Send="AnimPlay Morph Work,Start 0 -1.000000 -1.000000 5.000000 AsDuration"/>
+        <On Terms="AnimDone; AnimName Morph" Send="AnimPlay Morph Stand 0 -1.000000 5.000000"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_Stargate; MorphTo AP_StargateWarp" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Stargate; MorphTo AP_StargateWarp; ValidateUnit AP_HaveProdigalEngineer" Send="AnimSetTimeScale GL_BSD 0.200000"/>
+        <Model value="AP_StargateWarp"/>
+        <ModelFlags index="AutomateGlobalLoops" value="0"/>
+        <EventDataSound Name="BuildingWarpIn" Actor="UnitSound" Sound="Protoss_BuildingWarpIn"/>
+        <BuildModel value="WarpStargateBirth"/>
+        <DeathArray index="Normal" ModelLink="StargatewarpDeath" SoundLink="Stargate_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ProtossWarpInDeath" SoundLink="Stargate_Explode"/>
+        <DeathCustoms ModelLink="StargateWarpDeathUnpowered" SoundLink="Stargate_Explode" Name="Variation2"/>
+        <PlacementModel value="StargatePlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacement"/>
+        <PortraitModel value="ExecutorPortrait"/>
+        <BarOffset value="170"/>
+        <BarWidth value="160"/>
+        <CooldownDisplay value="AP_StargateWarpTrain,Train1"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-StarWarpGate.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Building-Protoss-StarWarpGate.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
+        <SoundArray index="Ready" value="StargateWarp_Ready"/>
+        <SoundArray index="What" value="StargateWarp_What"/>
+        <SoundArray index="Construction" value="Protoss_ConstructionWhat"/>
+        <UnitIcon value="Assets\Textures\BTN-Building-Protoss-StarWarpGate.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-StarWarpGate.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-StarWarpGate-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-StarWarpGate-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-StarWarpGate-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSplat id="AP_StargateWarpSplat" parent="GenericUnitSplat" unitName="AP_StargateWarp">
+        <Model value="AP_StargateWarpSplat"/>
+    </CActorSplat>
+    <CActorModel id="AP_WarpInVoid">
+        <Model value="WarpInVoid"/>
+        <On Terms="Abil.AP_StargateWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
+    </CActorModel>
+    <CActorProgress id="ProtossWarpIn">
+        <!-- Override -->
+        <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
+    </CActorProgress>
+    <CActorModel id="WarpTrainModel">
+        <!-- Override -->
+        <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_StargateWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
+    </CActorModel>
+    <CActorSound id="WarpTrainStart">
+        <!-- Override -->
+        <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="WarpTrainLoop">
+        <!-- Override -->
+        <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_StargateWarpTrain.TargetStop" Send="Destroy"/>
+    </CActorSound>
+    <CActorSound id="WarpTrainStop">
+        <!-- Override -->
+        <On Terms="Abil.AP_StargateWarpTrain.TargetStop" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_StargateMorphToStargateWarp" parent="SoundOneShot">
+        <Sound value="Gateway_MorphToWarpgate"/>
+        <On Terms="Abil.AP_UpgradeToStargateWarp.Start" Send="Create"/>
+        <On Terms="AbilMorph.AP_UpgradeToStargateWarp.Pause" Send="SoundSetPaused 1"/>
+        <On Terms="AbilMorph.AP_UpgradeToStargateWarp.Resume" Send="SoundSetPaused"/>
+    </CActorSound>
+    <CActorSound id="AP_StargateWarpMorphToStargate" parent="SoundOneShot">
+        <Sound value="WarpGate_MorphToGateway"/>
+        <On Terms="Abil.AP_MorphBackToStargate.Start" Send="Create"/>
+        <On Terms="AbilMorph.AP_MorphBackToStargate.Pause" Send="SoundSetPaused 1"/>
+        <On Terms="AbilMorph.AP_MorphBackToStargate.Resume" Send="SoundSetPaused"/>
+    </CActorSound>
     <CActorUnit id="Thor">
         <!-- Override -->
         <!-- Just make it aware about AP_Medivac and AP_Hercules -->
@@ -16376,9 +16733,12 @@
         <HostSiteOps Ops="SOpAttachWeapon07"/>
         <Model value="VoidRayChargeBase"/>
     </CActorModel>
+    <CActorSound id="AP_VoidRay_Land" parent="SoundOneShot">
+        <Sound value="VoidRay_Land"/>
+    </CActorSound>
     <CActorUnit id="AP_VoidRayShakuras" parent="GenericUnitBase" unitName="AP_VoidRayShakuras">
         <Aliases value="_UnitLarge"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create VoidRay_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_VoidRay_Land"/>
         <On Terms="ActorCreation" Send="StatusSet WeaponAnim 0"/>
         <On Terms="ActorCreation" Send="StatusSet WeaponAttacking 0"/>
         <On Terms="ActorCreation" Send="StatusSet WeaponEnhanced 0"/>

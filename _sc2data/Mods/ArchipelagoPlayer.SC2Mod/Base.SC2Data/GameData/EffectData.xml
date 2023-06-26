@@ -8918,6 +8918,13 @@
     </CEffectDamage>
     <CEffectModifyUnit id="AP_SOAPylonWeaponShieldRestore">
         <EditorCategories value="Race:Protoss"/>
-        <VitalArray index="Shields" Change="800"/>
+        <VitalArray index="Shields">
+            <Change value="800"/>
+        </VitalArray>
     </CEffectModifyUnit>
+    <CEffectIssueOrder id="AP_StargateWarpMorphInstant">
+        <WhichUnit Value="Source"/>
+        <Abil value="AP_UpgradeToStargateWarpInstant"/>
+        <Player Value="Source"/>
+    </CEffectIssueOrder>
 </Catalog>

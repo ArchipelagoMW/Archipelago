@@ -3973,6 +3973,60 @@
         <CursorEffect value="AP_PsiStormShakurasSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_CripplingPsionicStorm"/>
     </CAbilEffectTarget>
+    <CAbilTrain id="AP_StargateTrain">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Warping"/>
+        <InfoArray index="Train1" Time="35" Effect="WarpInEffect15">
+            <Button DefaultButtonFace="AP_PhoenixAiur" State="Restricted"/>
+            <Unit value="AP_PhoenixAiur"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="60" Effect="WarpInEffect">
+            <Button DefaultButtonFace="AP_VoidRayShakuras" State="Restricted"/>
+            <Unit value="AP_VoidRayShakuras"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="120" Effect="WarpInEffect">
+            <Button DefaultButtonFace="AP_CarrierAiur" State="Restricted" Requirements="AP_HaveFleetBeacon"/>
+            <Unit value="AP_CarrierAiur"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilWarpTrain id="AP_StargateWarpTrain">
+        <InfoArray index="Train1" Time="5" Unit="AP_PhoenixAiur">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="28"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_PhoenixAiur" State="Restricted"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="5" Unit="AP_VoidRayShakuras">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="48"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_VoidRayShakuras" State="Restricted"/>
+        </InfoArray>
+        <InfoArray index="Train7" Time="5" Unit="AP_CarrierAiur">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="96"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_CarrierAiur" State="Restricted" Requirements="AP_HaveFleetBeacon"/>
+        </InfoArray>
+    </CAbilWarpTrain>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -4673,4 +4727,67 @@
     <CAbilStop id="AP_stopProtossPylon">
         <CmdButtonArray index="Stop" Requirements="AP_HaveSOAPylonWeaponBuff"/>
     </CAbilStop>
+    <CAbilMorph id="AP_UpgradeToStargateWarp">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_UpgradeToStargateWarp" Requirements="AP_HaveSOAWarpTech"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_StargateWarp">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="10"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="AP_TransformationComplete"/>
+        <Activity value="UI/AP_Transforming"/>
+        <ProgressButton value="AP_UpgradeToStargateWarp"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_MorphBackToStargate">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <Alert value="AP_TransformationComplete"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MorphBackToStargate"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_Stargate">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="10"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+        </InfoArray>
+        <Activity value="UI/AP_Transforming"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToStargateWarpInstant">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_UpgradeToStargateWarp" Requirements="AP_HaveSOAWarpTech"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_StargateWarp"/>
+        <Alert value="AP_TransformationComplete"/>
+        <Activity value="UI/AP_Transforming"/>
+        <ProgressButton value="AP_UpgradeToStargateWarp"/>
+    </CAbilMorph>
 </Catalog>

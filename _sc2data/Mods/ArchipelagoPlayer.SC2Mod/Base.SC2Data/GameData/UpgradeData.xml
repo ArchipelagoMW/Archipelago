@@ -3909,4 +3909,12 @@
         <AffectedUnitArray value="AP_Pylon"/>
         <Flags index="UpgradeCheat" value="0"/>
     </CUpgrade>
+    <CUpgrade id="AP_SOAWarpTech">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_SoACaster"/>
+        <AffectedUnitArray value="AP_WarpGate"/>
+        <AffectedUnitArray value="AP_Stargate"/>
+        <AffectedUnitArray value="AP_RoboticsFacility"/>
+    </CUpgrade>
+    <CUpgrade id="AP_GameTimeGreaterthan5Seconds"/>
 </Catalog>

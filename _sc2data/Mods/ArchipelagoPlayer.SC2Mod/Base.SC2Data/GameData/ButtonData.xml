@@ -1954,4 +1954,43 @@
         <AlertIcon value="Assets\Textures\btn-ability-spearofadun-matrixoverload.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_MorphBackToStargate">
+        <Icon value="Assets\Textures\btn-building-protoss-stargate.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-stargate.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_SOAWarpTech">
+        <Icon value="Assets\Textures\btn-ability-spearofadun-warpharmonization.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-spearofadun-warpharmonization.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_UpgradeToStargateWarp">
+        <Icon value="Assets\Textures\BTN-Building-Protoss-StarWarpGate.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Building-Protoss-StarWarpGate.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_PhoenixAiur">
+        <Icon value="Assets\Textures\btn-unit-protoss-phoenix.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-phoenix.dds"/>
+        <Hotkey value="Button/Hotkey/Phoenix"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Phoenix"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_VoidRayShakuras">
+        <Icon value="Assets\Textures\BTN-Unit-Protoss-VoidRay-Nerazim.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Unit-Protoss-VoidRay-Nerazim.dds"/>
+        <Hotkey value="Button/Hotkey/VoidRay"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="VoidRay"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_CarrierAiur">
+        <Icon value="Assets\Textures\btn-unit-protoss-carrier.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-carrier.dds"/>
+        <Hotkey value="Button/Hotkey/Carrier"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Carrier"/>
+        <Universal value="1"/>
+    </CButton>
 </Catalog>

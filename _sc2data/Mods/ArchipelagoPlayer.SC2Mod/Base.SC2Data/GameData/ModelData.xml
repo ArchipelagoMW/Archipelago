@@ -10226,4 +10226,133 @@
         <ScaleMax value="0.900000,0.900000,0.900000"/>
         <ScaleMin value="0.900000,0.900000,0.900000"/>
     </CModel>
+    <CModel id="AP_PhoenixAiurWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\PhoenixWarpInStargate\PhoenixWarpInStargate.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.400000"/>
+        <SelectionRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <AttachProps Id="Ref_Weapon 01">
+            <Keys index="Air" value="0"/>
+        </AttachProps>
+        <AttachProps Id="Ref_Weapon 03">
+            <Keys index="Air" value="0"/>
+        </AttachProps>
+        <Radius value="0.750000"/>
+        <ShadowRadius value="0.882000"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_CorsairMPWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\Corsair_WarpIn_StarGate\Corsair_WarpIn_StarGate.m3"/>
+    </CModel>
+    <CModel id="AP_VoidRayShakurasWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\VoidRay_Shakuras_WarpIn_StarGate\VoidRay_Shakuras_WarpIn_StarGate.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="0.750000"/>
+        <ShadowRadius value="0.882000"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_VoidRayAiurWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\VoidRayWarpInStargate\VoidRayWarpInStargate.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="0.750000"/>
+        <ShadowRadius value="0.882000"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ArbiterMPWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\Arbiter_WarpIn_StarGate\Arbiter_WarpIn_StarGate.m3"/>
+        <Occlusion value="Show"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <SelectionRadius value="0.666500"/>
+        <ShadowRadius value="0.666500"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="0.750000"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_MothershipTaldarimWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\Mothership_Taldarim_WarpIn_StarGate\Mothership_Taldarim_WarpIn_StarGate.m3"/>
+        <Occlusion value="Show"/>
+        <!--SelectionOffset value="0.000000,0.000000,-0.750000"/-->
+        <SelectionRadius value="3.333000"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="2.000000"/>
+        <ShadowRadius value="3.333000"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.250000,0.250000,0.250000"/>
+        <ScaleMin value="0.250000,0.250000,0.250000"/>
+        <PlanetPanelCamera value="Star2CameraLow20"/>
+        <TechPurchaseCamera value="Star2CameraLow20"/>
+        <TechPurchaseSpeed value="0.050000"/>
+        <UnitGlossaryCamera value="Star2CameraLow20"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\Tempest_Purifier_WarpIn_StarGate\Tempest_Purifier_WarpIn_StarGate.m3"/>
+        <Occlusion value="Show"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="1.000000"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="1.000000"/>
+        <ShadowRadius value="1.000000"/>
+    </CModel>
+    <CModel id="AP_CarrierTaldarimWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\Carrier_Taldarim_WarpIn_StarGate\Carrier_Taldarim_WarpIn_StarGate.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="1.718700"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="1.375000"/>
+        <TechPurchaseCamera value="Star2CameraLow13"/>
+        <UnitGlossaryCamera value="Star2CameraLow13"/>
+        <PlanetPanelCamera value="Star2CameraLow13"/>
+        <ShadowRadius value="1.718700"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_PhoenixPurifierWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\Phoenix_Purifier_WarpIn_StarGate\Phoenix_Purifier_WarpIn_StarGate.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.400000"/>
+        <SelectionRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="0.750000"/>
+        <ShadowRadius value="0.882000"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_StargateWarpSplat" parent="Splat">
+        <Model value="Assets\Splats\Splat_Stargate\Splat_Stargate.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+    </CModel>
+    <CModel id="AP_StargateWarp" parent="Building" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\StarWarpGate\StarWarpGate.m3"/>
+        <ScaleMax value="0.800000,0.800000,0.800000"/>
+        <ScaleMin value="0.800000,0.800000,0.800000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="2.500000"/>
+        <SquibTypeDefault value="Metal"/>
+        <Radius value="2.000000"/>
+        <ShadowRadius value="2.500000"/>
+    </CModel>
+    <CModel id="AP_PhoenixPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Phoenix_Purifier_Placement\Phoenix_Purifier_Placement.m3"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <Occlusion value="Show"/>
+    </CModel>
 </Catalog>

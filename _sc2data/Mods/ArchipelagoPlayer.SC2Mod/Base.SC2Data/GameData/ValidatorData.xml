@@ -2576,4 +2576,26 @@
         <CombineArray value="IsNotConstructing"/>
         <CombineArray value="AP_NoDarkProtoss"/>
     </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsChronoSurged">
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+        <Value value="1"/>
+        <Behavior value="AP_SOASuperChrono"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HaveProdigalEngineer">
+        <Compare value="GT"/>
+        <Behavior value="AP_ProdigalEngineerProductionTarget"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_GameTimeGreaterthan5SecondsandHaveSOAWarpTech">
+        <CombineArray value="AP_HaveSOAWarpTech"/>
+        <CombineArray value="AP_GameTimeGreaterthan5Seconds"/>
+    </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_GameTimeGreaterthan5Seconds">
+        <Value value="AP_GameTimeGreaterthan5Seconds"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveSOAWarpTech">
+        <Value value="AP_HaveSOAWarpTech"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
 </Catalog>
