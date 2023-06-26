@@ -23,19 +23,13 @@ class KeyPieces(Range):
     display_name = "Key Piece Amount"
     default = 5
     range_start = 1
-    range_end = 14
+    range_end = 10
 
 
 class KeyHunt(Toggle):
     """Adds Key Pieces to the item pool, you need all of them to enter the last corridor."""
     display_name = "Key Piece Hunt"
     default = 0
-
-
-class ProgressivePlot(Toggle):
-    """Makes the plot items progressive."""
-    display_name = "Progressive Plot"
-    default = 1
 
 
 class ProgressiveArmor(Toggle):
@@ -68,12 +62,6 @@ class RandomizeLove(Toggle):
     default = 0
 
 
-class RandomizeAreas(Toggle):
-    """Randomizes the order each major area of the game."""
-    display_name = "Randomize Area Order"
-    default = 0
-
-
 class RandomizeStats(Toggle):
     """Makes each stat increase from LV a separate item. GENOCIDE ONLY!
     Warning: This tends to spam chat with sending out checks."""
@@ -81,17 +69,22 @@ class RandomizeStats(Toggle):
     default = 0
 
 
+class RandoBattleOptions(Toggle):
+    """Turns the ITEM button in battle into an item you have to receive."""
+    display_name = "Randomize Item Button"
+    default = 0
+
+
 undertale_options: typing.Dict[str, type(Option)] = {
     "route_required":                           RouteRequired,
-    "prog_plot":                                ProgressivePlot,
     "key_hunt":                                 KeyHunt,
     "key_pieces":                               KeyPieces,
     "rando_love":                               RandomizeLove,
     "rando_stats":                              RandomizeStats,
-    "rando_area":                               RandomizeAreas,
     "temy_include":                             IncludeTemy,
     "no_equips":                                NoEquips,
     "only_flakes":                              OnlyFlakes,
     "prog_armor":                               ProgressiveArmor,
     "prog_weapons":                             ProgressiveWeapons,
+    "rando_item_button":                     RandoBattleOptions,
 }

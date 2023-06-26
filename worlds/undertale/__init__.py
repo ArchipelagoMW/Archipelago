@@ -1,16 +1,22 @@
-import os
-import sys
-
 from .Items import UndertaleItem, item_table, required_armor, required_weapons, non_key_items, key_items, \
     junk_weights_all, plot_items, junk_weights_neutral, junk_weights_pacifist, junk_weights_genocide
 from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
-from .Regions import undertale_regions, link_undertale_areas, randomized_connections
+from .Regions import undertale_regions, link_undertale_areas
 from .Rules import set_rules, set_completion_rules
 from worlds.generic.Rules import exclusion_rules
 from BaseClasses import Region, Entrance, Tutorial, Item
 from .Options import undertale_options
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components
+from worlds.LauncherComponents import Component, components, Type
+from multiprocessing import Process
+
+
+def run_client():
+    print('running undertale client')
+    from UndertaleClient import main  # lazy import
+    p = Process(target=main)
+    p.start()
+
 
 components.append(Component("Undertale Client", "UndertaleClient"))
 
@@ -62,15 +68,14 @@ class UndertaleWorld(World):
             "no_equips": bool(self.multiworld.no_equips[self.player].value),
             "key_hunt": bool(self.multiworld.key_hunt[self.player].value),
             "key_pieces": self.multiworld.key_pieces[self.player].value,
-            "prog_plot": bool(self.multiworld.prog_plot[self.player].value),
             "rando_love": bool(self.multiworld.rando_love[self.player].value),
-            "rando_area": bool(self.multiworld.rando_area[self.player].value),
             "rando_stats": bool(self.multiworld.rando_stats[self.player].value),
             "prog_armor": bool(self.multiworld.prog_armor[self.player].value),
-            "prog_weapons": bool(self.multiworld.prog_weapons[self.player].value)
+            "prog_weapons": bool(self.multiworld.prog_weapons[self.player].value),
+            "rando_item_button": bool(self.multiworld.rando_item_button[self.player].value)
         }
 
-    def generate_basic(self):
+    def create_items(self):
         self.multiworld.get_location("Undyne Date", self.player).place_locked_item(self.create_item("Undyne Date"))
         self.multiworld.get_location("Alphys Date", self.player).place_locked_item(self.create_item("Alphys Date"))
         self.multiworld.get_location("Papyrus Date", self.player).place_locked_item(self.create_item("Papyrus Date"))
@@ -95,6 +100,16 @@ class UndertaleWorld(World):
             itempool += [name] * num
         for name, num in non_key_items.items():
             itempool += [name] * num
+        if self.multiworld.rando_item_button[self.player]:
+            itempool += ["ITEM"]
+        else:
+            self.multiworld.push_precollected(self.create_item("ITEM"))
+        self.multiworld.push_precollected(self.create_item("FIGHT"))
+        self.multiworld.push_precollected(self.create_item("ACT"))
+        chosen_key_start = self.multiworld.per_slot_randoms[self.player].choice(["Ruins Key", "Snowdin Key", "Waterfall Key", "Hotland Key"])
+        self.multiworld.push_precollected(self.create_item(chosen_key_start))
+        itempool.remove(chosen_key_start)
+        self.multiworld.push_precollected(self.create_item("MERCY"))
         if self.multiworld.route_required[self.player] == "genocide":
             itempool = [item for item in itempool if item != "Popato Chisps" and item != "Stained Apron" and
                         item != "Nice Cream" and item != "Hot Cat" and item != "Hot Dog...?" and item != "Punch Card"]
@@ -109,9 +124,6 @@ class UndertaleWorld(World):
             itempool.remove("Fish")
             itempool.remove("DT Extractor")
             itempool.remove("Hush Puppy")
-        if self.multiworld.route_required[self.player] == "genocide":
-            itempool.remove("Cooking Set")
-            itempool.remove("Microphone")
         if self.multiworld.key_hunt[self.player]:
             itempool += ["Key Piece"] * self.multiworld.key_pieces[self.player].value
         else:
@@ -125,8 +137,6 @@ class UndertaleWorld(World):
                 (self.multiworld.route_required[self.player] != "genocide" and
                  self.multiworld.route_required[self.player] != "all_routes"):
             itempool = [item for item in itempool if not (item == "ATK Up" or item == "DEF Up" or item == "HP Up")]
-        if self.multiworld.prog_plot[self.player]:
-            itempool = [item if item not in plot_items else "Progressive Plot" for item in itempool]
         if self.multiworld.temy_include[self.player]:
             itempool += ["temy armor"]
         if self.multiworld.no_equips[self.player]:
@@ -210,9 +220,6 @@ class UndertaleWorld(World):
                 option.value = False
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
-        for (exit, region) in randomized_connections:
-            slot_data[exit] = self.multiworld.get_entrance(exit, self.player).connected_region.name
-            slot_data[region] = self.multiworld.get_region(region, self.player).entrances[0].name
         return slot_data
 
     def create_item(self, name: str) -> Item:

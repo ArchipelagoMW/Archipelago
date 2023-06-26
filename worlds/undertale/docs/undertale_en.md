@@ -8,8 +8,7 @@
 
 ### First time setup
 
-Start the Undertale client, and in the bottom text box, input `/auto_patch (Input your Steam directory here)` (Your
-steam directory is usually at `C:\Program Files\Steam`, but it can be different, you can more easily find the directory
+Start the Undertale client, and in the bottom text box, input `/auto_patch (Input your Undertale install directory here)` (It is usually located at `C:\Program Files\Steam\steamapps\Undertale`, but it can be different, you can more easily find the directory
 by opening the Undertale directory through Steam), it will then make an Undertale folder that will be created in the
 Archipelago install location. That contains the version of Undertale you will use for Archipelago. (You will need to
 redo this step when updating Archipelago.)

@@ -1,17 +1,11 @@
 from __future__ import annotations
 import os
-import logging
 import asyncio
-import urllib.parse
-import sys
 import typing
 import bsdiff4
 import shutil
 
 import Utils
-
-if __name__ == "__main__":
-    Utils.init_logging("UndertaleClient", exception_logger="Client")
 
 from NetUtils import NetworkItem, ClientStatus
 from worlds import undertale
@@ -19,6 +13,7 @@ from MultiServer import mark_raw
 from CommonClient import CommonContext, server_loop, \
     gui_enabled, ClientCommandProcessor, get_base_parser
 from Utils import async_start
+
 
 class UndertaleCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx):
@@ -33,6 +28,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_patch(self):
         """Patch the game."""
         if isinstance(self.ctx, UndertaleContext):
+            os.makedirs(name=os.getcwd() + "\\Undertale", exist_ok=True)
             self.ctx.patch_game()
             self.output("Patched.")
 
@@ -40,7 +36,10 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
     def _cmd_auto_patch(self, steaminstall: typing.Optional[str] = None):
         """Patch the game automatically."""
         if isinstance(self.ctx, UndertaleContext):
+            os.makedirs(name=os.getcwd() + "\\Undertale", exist_ok=True)
             tempInstall = steaminstall
+            if not os.path.isfile(os.path.join(tempInstall, "data.win")):
+                tempInstall = None
             if tempInstall is None:
                 tempInstall = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"
                 if not os.path.exists("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"):
@@ -49,7 +48,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
                 tempInstall = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"
                 if not os.path.exists("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"):
                     tempInstall = "C:\\Program Files\\Steam\\steamapps\\common\\Undertale"
-            if not os.path.exists(tempInstall) or not os.path.exists(tempInstall):
+            if not os.path.exists(tempInstall) or not os.path.exists(tempInstall) or not os.path.isfile(os.path.join(tempInstall, "data.win")):
                 self.output("ERROR: Cannot find Undertale. Please rerun the command with the correct folder."
                             " command. \"/auto_patch (Steam directory)\".")
             else:
@@ -124,10 +123,10 @@ class UndertaleContext(CommonContext):
         self.finished_game = False
         for root, dirs, files in os.walk(path):
             for file in files:
-                if "check" in file or "scout" in file:
+                if "check.spot" == file or "scout" == file:
                     os.remove(os.path.join(root, file))
                 elif file.endswith((".item", ".victory", ".route", ".playerspot", ".mad", 
-                                            ".youDied", ".LV", ".mine", ".flag", ".hint", ".spot")):
+                                            ".youDied", ".LV", ".mine", ".flag", ".hint")):
                     os.remove(os.path.join(root, file))
 
     async def connect(self, address: typing.Optional[str] = None):
@@ -226,54 +225,24 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
         filename = f"{ctx.route}.route"
         with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
             f.close()
-        for ss in ctx.checked_locations:
-            filename = f"check {ss-12000}.spot"
-            with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-                f.close()
-        filename = f"area0"
-        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-            f.write(to_room_name(args["slot_data"]["Old Home Exit"]))
-            f.close()
-        filename = f"area1"
-        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-            f.write(to_room_name(args["slot_data"]["Snowdin Town Exit"]))
-            f.close()
-        filename = f"area2"
-        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-            f.write(to_room_name(args["slot_data"]["Waterfall Exit"]))
-            f.close()
-        filename = f"area3"
-        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-            f.write(to_room_name(args["slot_data"]["Hotland Exit"]))
-            f.close()
-        filename = f"area0.back"
-        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-            f.write(to_room_name(args["slot_data"]["Snowdin Forest"]))
-            f.close()
-        filename = f"area1.back"
-        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-            f.write(to_room_name(args["slot_data"]["Waterfall"]))
-            f.close()
-        filename = f"area2.back"
-        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-            f.write(to_room_name(args["slot_data"]["Hotland"]))
-            f.close()
-        filename = f"area3.back"
-        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-            f.write(to_room_name(args["slot_data"]["Core"]))
+        filename = f"check.spot"
+        with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
+            for ss in ctx.checked_locations:
+                f.write(str(ss-12000)+"\n")
             f.close()
     elif cmd == "LocationInfo":
-        locationid = args["locations"][0].location
-        filename = f"{str(locationid-12000)}.hint"
-        with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-            toDraw = ""
-            for i in range(20):
-                if i < len(str(ctx.item_names[args["locations"][0].item])):
-                    toDraw += str(ctx.item_names[args["locations"][0].item])[i]
-                else:
-                    break
-            f.write(toDraw)
-            f.close()
+        for l in args["locations"]:
+            locationid = l.location
+            filename = f"{str(locationid-12000)}.hint"
+            with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
+                toDraw = ""
+                for i in range(20):
+                    if i < len(str(ctx.item_names[l.item])):
+                        toDraw += str(ctx.item_names[l.item])[i]
+                    else:
+                        break
+                f.write(toDraw)
+                f.close()
     elif cmd == "Retrieved":
         if str(ctx.slot)+" RoutesDone neutral" in args["keys"]:
             if args["keys"][str(ctx.slot)+" RoutesDone neutral"] is not None:
@@ -382,15 +351,16 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
 
     elif cmd == "RoomUpdate":
         if "checked_locations" in args:
-            for ss in ctx.checked_locations:
-                filename = f"check {ss-12000}.spot"
-                with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-                    f.close()
+            filename = f"check.spot"
+            with open(os.path.join(ctx.save_game_folder, filename), "a") as f:
+                for ss in ctx.checked_locations:
+                    f.write(str(ss-12000)+"\n")
+                f.close()
 
     elif cmd == "Bounced":
         tags = args.get("tags", [])
         if "Online" in tags:
-            data = args.get("data", [])
+            data = args.get("worlds/undertale/data", {})
             if data["player"] != ctx.slot and data["player"] is not None:
                 filename = f"FRISK" + str(data["player"]) + ".playerspot"
                 with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
@@ -405,7 +375,7 @@ async def multi_watcher(ctx: UndertaleContext):
         for root, dirs, files in os.walk(path):
             for file in files:
                 if "spots.mine" in file and "Online" in ctx.tags:
-                    with open(root + "/" + file) as mine:
+                    with open(root + "/" + file, "r") as mine:
                         this_x = mine.readline()
                         this_y = mine.readline()
                         this_room = mine.readline()
@@ -446,15 +416,22 @@ async def game_watcher(ctx: UndertaleContext):
                 if "DontBeMad.mad" in file and "DeathLink" in ctx.tags:
                     os.remove(root+"/"+file)
                     await ctx.send_death()
-                if "scout." in file:
-                    if ctx.server_locations.__contains__(int(file.split(".")[1])+12000):
-                        await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [int(file.split(".")[1])+12000],
-                                              "create_as_hint": int(2)}])
+                if "scout" == file:
+                    sending = []
+                    with open(root+"/"+file, "r") as f:
+                        lines = f.readlines()
+                        for l in lines:
+                            if ctx.server_locations.__contains__(int(l)+12000):
+                                sending = sending + [int(l)+12000]
+                    await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
+                                                      "create_as_hint": int(2)}])
                     os.remove(root+"/"+file)
-                if "check " in file:
-                    st = file.split("check ", -1)[1]
-                    st = st.split(".spot", -1)[0]
-                    sending = sending+[(int(st))+12000]
+                if "check.spot" in file:
+                    sending = []
+                    with open(root+"/"+file, "r") as f:
+                        lines = f.readlines()
+                        for l in lines:
+                            sending = sending+[(int(l))+12000]
                     message = [{"cmd": "LocationChecks", "locations": sending}]
                     await ctx.send_msgs(message)
                 if "victory" in file and str(ctx.route) in file:
@@ -488,11 +465,11 @@ async def game_watcher(ctx: UndertaleContext):
         await asyncio.sleep(0.1)
 
 
-if __name__ == "__main__":
+def main():
+    Utils.init_logging("UndertaleClient", exception_logger="Client")
 
-    async def main(args):
-        ctx = UndertaleContext(args.connect, args.password)
-        ctx.auth = args.name
+    async def _main():
+        ctx = UndertaleContext(None, None)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         asyncio.create_task(
             game_watcher(ctx), name="UndertaleProgressionWatcher")
@@ -509,21 +486,13 @@ if __name__ == "__main__":
 
     import colorama
 
-    parser = get_base_parser(description="Undertale Client, for text interfacing.")
-    parser.add_argument("--name", default=None, help="Slot Name to connect as.")
-    parser.add_argument("url", nargs="?", help="Archipelago connection url")
-
-    args = parser.parse_args()
-
-    if args.url:
-        url = urllib.parse.urlparse(args.url)
-        args.connect = url.netloc
-        if url.username:
-            args.name = urllib.parse.unquote(url.username)
-        if url.password:
-            args.password = urllib.parse.unquote(url.password)
-
     colorama.init()
 
-    asyncio.run(main(args))
+    asyncio.run(_main())
     colorama.deinit()
+
+
+if __name__ == "__main__":
+    parser = get_base_parser(description="Undertale Client, for text interfacing.")
+    args = parser.parse_args()
+    main()
