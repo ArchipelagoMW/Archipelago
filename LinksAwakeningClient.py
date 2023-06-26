@@ -378,10 +378,11 @@ class LinksAwakeningClient():
     async def is_victory(self):
         return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
 
-    async def main_tick(self, item_get_cb, win_cb, deathlink_cb):
+    async def main_tick(self, item_get_cb, win_cb, deathlink_cb, collect_cb):
         await self.tracker.readChecks(item_get_cb)
         await self.item_tracker.readItems()
         await self.gps_tracker.read_location()
+        await collect_cb()
 
         next_index = self.gameboy.read_memory(LAClientConstants.wRecvIndex)[0]
         if next_index != self.last_index:
@@ -544,7 +545,7 @@ class LinksAwakeningContext(CommonContext):
 
     async def mark_locations_as_checked(self):
         # Don't allow collecting an item until you've got your first check
-        if not self.client.tracker.has_start_item():
+        if not self.client.tracker.has_start_item() or not self.examine_collected_checks:
             return
         checks = list(self.checked_locations)
         await self.get_location_checks_from_server(checks=checks)
@@ -608,6 +609,9 @@ class LinksAwakeningContext(CommonContext):
         async def deathlink():
             await self.send_deathlink()
 
+        async def collect():
+            await self.mark_locations_as_checked()
+
         if self.magpie_enabled:
             self.magpie_task = asyncio.create_task(self.magpie.serve())
         
@@ -619,14 +623,12 @@ class LinksAwakeningContext(CommonContext):
                 await self.reset_game_loop()
 
                 while True:
-                    await self.client.main_tick(on_item_get, victory, deathlink)
+                    await self.client.main_tick(on_item_get, victory, deathlink, collect)
                     await asyncio.sleep(0.1)
                     now = time.time()
                     if self.last_resend + 5.0 < now:
                         self.last_resend = now
                         await self.send_checks()
-                        if self.examine_collected_checks:
-                            await self.mark_locations_as_checked()
                     if self.magpie_enabled:
                         self.magpie.set_checks(self.client.tracker.all_checks)
                         await self.magpie.set_item_tracker(self.client.item_tracker)
