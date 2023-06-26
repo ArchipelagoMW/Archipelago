@@ -1383,4 +1383,8 @@
         <EditorCategories value="Race:Protoss,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountUnitFleetBeaconCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HaveRoboticsBay">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitRoboticsBayCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
 </Catalog>

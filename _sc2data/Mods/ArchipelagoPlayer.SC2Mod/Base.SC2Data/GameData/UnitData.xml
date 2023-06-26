@@ -11841,7 +11841,159 @@
         <GlossaryPriority value="219"/>
         <HotkeyCategory value="Unit/Category/ProtossUnits"/>
     </CUnit>
-    <CUnit id="SpectreAP_Nuke">
+    <CUnit id="AP_RoboticsFacility">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="450"/>
+        <LifeMax value="450"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossBuildingPlating"/>
+        <ShieldsStart value="450"/>
+        <ShieldsMax value="450"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="200"/>
+        <CostResource index="Vespene" value="100"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5"/>
+        <AbilArray Link="AP_RoboticsFacilityTrain"/>
+        <AbilArray Link="Rally"/>
+        <AbilArray Link="AP_UpgradeToRoboticsFacilityWarp"/>
+        <AbilArray Link="AP_UpgradeToRoboticsFacilityWarpInstant"/>
+        <BehaviorArray Link="PowerUserQueue"/>
+        <BehaviorArray Link="AP_RoboticsFacilityWarpMorphInstant"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_ColossusPurifier" Type="AbilCmd" AbilCmd="AP_RoboticsFacilityTrain,2" Row="0" Column="2"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="Rally,Rally1" Row="1" Column="4"/>
+            <LayoutButtons Face="AP_ImmortalAiur" Type="AbilCmd" AbilCmd="AP_RoboticsFacilityTrain,3" Row="0" Column="1"/>
+            <!--            <LayoutButtons Face="AP_Reaver" Type="AbilCmd" AbilCmd="AP_RoboticsFacilityTrain,4" Row="0" Column="1"/>-->
+            <LayoutButtons Face="WarpinDisruptionWard" Type="AbilCmd" AbilCmd="AP_RoboticsFacilityTrain,18" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_UpgradeToRoboticsFacilityWarp" Type="AbilCmd" AbilCmd="AP_UpgradeToRoboticsFacilityWarp,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SOAWarpTech" Type="Passive" Requirements="AP_HaveSOAWarpTech" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_Observer" Type="AbilCmd" AbilCmd="AP_RoboticsFacilityTrain,1" Row="1" Column="0"/>
+        </CardLayouts>
+        <Radius value="1.5"/>
+        <SeparationRadius value="1.5"/>
+        <Footprint value="Footprint3x3Contour"/>
+        <PlacementFootprint value="Footprint3x3"/>
+        <ScoreMake value="300"/>
+        <ScoreKill value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TacticalAI value="RoboticsFacility"/>
+        <TechAliasArray value="Alias_RoboticsFacility"/>
+        <GlossaryPriority value="211"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+        <TechTreeProducedUnitArray value="RoboticsFacilityWarp"/>
+        <TechTreeProducedUnitArray value="TechTreeImmortal"/>
+        <TechTreeProducedUnitArray value="TechTreeColossus"/>
+    </CUnit>
+    <CUnit id="AP_RoboticsFacilityWarp">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="450"/>
+        <LifeMax value="450"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossBuildingPlating"/>
+        <ShieldsStart value="450"/>
+        <ShieldsMax value="450"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="200"/>
+        <CostResource index="Vespene" value="100"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="AP_RoboticsFacilityWarpTrain"/>
+        <AbilArray Link="RoboticsFacilityWarpTrainAI"/>
+        <AbilArray Link="AP_MorphBackToRoboticsFacility"/>
+        <BehaviorArray Link="PowerUserQueue"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_ImmortalAiur" Type="AbilCmd" AbilCmd="AP_RoboticsFacilityWarpTrain,3" Row="0" Column="1"/>
+            <LayoutButtons Face="AP_ColossusPurifier" Type="AbilCmd" AbilCmd="AP_RoboticsFacilityWarpTrain,2" Row="0" Column="2"/>
+            <!--            <LayoutButtons Face="AP_Reaver" Type="AbilCmd" AbilCmd="AP_RoboticsFacilityWarpTrain,4" Row="0" Column="1"/>-->
+            <LayoutButtons Face="AP_SOAWarpTech" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_MorphBackToRoboticsFacility" Type="AbilCmd" AbilCmd="AP_MorphBackToRoboticsFacility,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_Observer" Type="AbilCmd" AbilCmd="AP_RoboticsFacilityWarpTrain,1" Row="1" Column="0"/>
+        </CardLayouts>
+        <Radius value="1.5"/>
+        <SeparationRadius value="1.5"/>
+        <Footprint value="Footprint3x3Contour"/>
+        <PlacementFootprint value="Footprint3x3"/>
+        <ScoreMake value="300"/>
+        <ScoreKill value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TechAliasArray value="Alias_RoboticsFacility"/>
+        <GlossaryPriority value="10"/>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
+        <TechTreeProducedUnitArray value="Observer"/>
+        <TechTreeProducedUnitArray value="WarpPrism"/>
+        <TechTreeProducedUnitArray value="Immortal"/>
+        <TechTreeProducedUnitArray value="Colossus"/>
+        <TechTreeProducedUnitArray value="Reaver"/>
+    </CUnit>
+    <CUnit id="AP_SpectreNuke">
         <Race value="Terr"/>
         <FlagArray index="Uncommandable" value="1"/>
         <FlagArray index="Unselectable" value="1"/>
@@ -12492,7 +12644,7 @@
             <LayoutButtons Face="AP_PhoenixAiur" Type="AbilCmd" AbilCmd="AP_StargateWarpTrain,0" Row="0" Column="0"/>
             <LayoutButtons Face="AP_VoidRayShakuras" Type="AbilCmd" AbilCmd="AP_StargateWarpTrain,3" Row="0" Column="1"/>
             <LayoutButtons Face="AP_CarrierAiur" Type="AbilCmd" AbilCmd="AP_StargateWarpTrain,6" Row="0" Column="2"/>
-            <LayoutButtons Face="SOAWarpTech" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_SOAWarpTech" Type="Passive" Row="2" Column="2"/>
             <LayoutButtons Face="AP_MorphBackToStargate" Type="AbilCmd" AbilCmd="AP_MorphBackToStargate,Execute" Row="2" Column="1"/>
         </CardLayouts>
         <Radius value="1.75"/>

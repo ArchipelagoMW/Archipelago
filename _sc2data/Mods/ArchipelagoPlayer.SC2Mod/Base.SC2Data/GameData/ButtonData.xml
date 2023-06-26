@@ -1993,4 +1993,69 @@
         <HotkeyAlias value="Carrier"/>
         <Universal value="1"/>
     </CButton>
+    <CButton id="AP_Colossus">
+        <Icon value="Assets\Textures\btn-unit-protoss-colossus.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-colossus.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ColossusPurifier">
+        <Icon value="Assets\Textures\btn-unit-protoss-colossus-purifier.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-colossus-purifier.dds"/>
+        <Hotkey value="Button/Hotkey/Colossus"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Colossus"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_ColossusTaldarim">
+        <Icon value="Assets\Textures\btn-unit-protoss-colossus-taldarim.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-colossus-taldarim.dds"/>
+        <Hotkey value="Button/Hotkey/Colossus"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Colossus"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_Immortal">
+        <Icon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ImmortalAiur">
+        <Icon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <Hotkey value="Button/Hotkey/Immortal"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Immortal"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_ImmortalTaldarim">
+        <Icon value="Assets\Textures\btn-unit-protoss-immortal-taldarim.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-immortal-taldarim.dds"/>
+        <Hotkey value="Button/Hotkey/Immortal"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Immortal"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_MorphBackToRoboticsFacility">
+        <Icon value="Assets\Textures\btn-building-protoss-roboticsfacility.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-protoss-roboticsfacility.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Observer">
+        <Icon value="Assets\Textures\btn-unit-protoss-observer.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-observer.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_Reaver">
+        <Icon value="Assets\Textures\btn-unit-protoss-reaver.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-reaver.dds"/>
+        <Hotkey value="Button/Hotkey/Colossus"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="Colossus"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_UpgradeToRoboticsFacilityWarp">
+        <Icon value="Assets\Textures\BTN-Building-Protoss-RoboticsWarpFacility.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Building-Protoss-RoboticsWarpFacility.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

@@ -2921,7 +2921,7 @@
     <CAbilArmMagazine id="AP_SpectreNukeSiloArmMagazine">
         <EditorCategories value="Race:Terran,AbilityorEffectType:Structures"/>
         <Launch value="ReleaseAtSource"/>
-        <InfoArray index="Ammo2" Time="60" Unit="SpectreAP_Nuke">
+        <InfoArray index="Ammo2" Time="60" Unit="AP_SpectreNuke">
             <Button DefaultButtonFace="AP_SpectreNukeArm" Requirements="AP_SpectreTrainNuke"/>
         </InfoArray>
         <CalldownEffect value="AP_SpectreNuke"/>
@@ -4031,6 +4031,99 @@
             <Button DefaultButtonFace="AP_CarrierAiur" State="Restricted" Requirements="AP_HaveFleetBeacon"/>
         </InfoArray>
     </CAbilWarpTrain>
+    <CAbilMorph id="AP_MorphBackToRoboticsFacility">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_MorphBackToRoboticsFacility"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_RoboticsFacility">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="10"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="AP_TransformationComplete"/>
+        <Activity value="UI/AP_Transforming"/>
+    </CAbilMorph>
+    <CAbilTrain id="AP_RoboticsFacilityTrain">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Warping"/>
+<!--        <InfoArray index="Train1" Time="50" Effect="WarpInEffect15">-->
+<!--            <Button DefaultButtonFace="WarpPrism" State="Restricted"/>-->
+<!--            <Unit value="AP_WarpPrism"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train2" Time="30" Effect="WarpInEffect15">
+            <Button DefaultButtonFace="Observer" State="Restricted"/>
+            <Unit value="AP_Observer"/>
+        </InfoArray>
+        <InfoArray index="Train3" Time="75">
+            <Button DefaultButtonFace="AP_ColossusPurifier" State="Restricted" Requirements="AP_HaveRoboticsBay"/>
+            <Unit value="AP_ColossusPurifier"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="55">
+            <Button DefaultButtonFace="AP_ImmortalAiur" State="Restricted"/>
+            <Unit value="AP_ImmortalAiur"/>
+        </InfoArray>
+    </CAbilTrain>
+    <CAbilWarpTrain id="AP_RoboticsFacilityWarpTrain">
+<!--        <InfoArray index="Train1" Time="5" Unit="AP_WarpPrism">-->
+<!--            <Charge>-->
+<!--                <CountMax value="1"/>-->
+<!--                <CountStart value="1"/>-->
+<!--                <CountUse value="1"/>-->
+<!--                <Link value="WarpGateTrain"/>-->
+<!--                <TimeStart value="30"/>-->
+<!--                <TimeUse value="40"/>-->
+<!--                <Flags index="EnableChargeTimeQueuing" value="1"/>-->
+<!--            </Charge>-->
+<!--            <Button DefaultButtonFace="WarpPrism" State="Restricted"/>-->
+<!--        </InfoArray>-->
+        <InfoArray index="Train2" Time="5" Unit="AP_Observer">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="30"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Button DefaultButtonFace="Observer" State="Restricted"/>
+        </InfoArray>
+        <InfoArray index="Train3" Time="5" Unit="AP_ColossusPurifier">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="60"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_ColossusPurifier" State="Restricted" Requirements="AP_HaveRoboticsBay"/>
+        </InfoArray>
+        <InfoArray index="Train4" Time="5" Unit="AP_ImmortalAiur">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="44"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_ImmortalAiur" State="Restricted"/>
+        </InfoArray>
+    </CAbilWarpTrain>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -4793,5 +4886,45 @@
         <Alert value="AP_TransformationComplete"/>
         <Activity value="UI/AP_Transforming"/>
         <ProgressButton value="AP_UpgradeToStargateWarp"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToRoboticsFacilityWarp">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_UpgradeToRoboticsFacilityWarp" Requirements="AP_HaveSOAWarpTech"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_RoboticsFacilityWarp">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="10"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="10"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="AP_TransformationComplete"/>
+        <Activity value="UI/AP_Transforming"/>
+        <ProgressButton value="AP_UpgradeToRoboticsFacilityWarp"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToRoboticsFacilityWarpInstant">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_UpgradeToRoboticsFacilityWarp" Requirements="AP_HaveSOAWarpTech"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="Birth" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Unit="AP_RoboticsFacilityWarp"/>
+        <Alert value="AP_TransformationComplete"/>
+        <Activity value="UI/AP_Transforming"/>
+        <ProgressButton value="AP_UpgradeToRoboticsFacilityWarp"/>
     </CAbilMorph>
 </Catalog>

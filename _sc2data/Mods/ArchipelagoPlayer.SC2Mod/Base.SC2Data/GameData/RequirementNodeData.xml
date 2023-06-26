@@ -2362,4 +2362,7 @@
     <CRequirementCountUnit id="AP_CountUnitFleetBeaconCompleteOnlyTechTreeCheat">
         <Count Link="AP_FleetBeacon" State="CompleteOnly"/>
     </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitRoboticsBayCompleteOnlyTechTreeCheat">
+        <Count Link="AP_RoboticsBay" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

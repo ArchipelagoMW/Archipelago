@@ -3115,4 +3115,14 @@
         <InfoIcon value="Assets\Textures\btn-ability-protoss-prodigalengineer.dds"/>
         <DisableValidatorArray value="HasPower"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_RoboticsFacilityWarpMorphInstant">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <!-- This Requirement doesn't exist, only the same-named Validator-->
+        <Requirements value="AP_GameTimeGreaterthan5SecondsandHaveSOAWarpTech"/>
+        <RemoveValidatorArray value="AP_GameTimeGreaterthan5Seconds"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Duration value="0.1"/>
+        <ExpireEffect value="AP_RoboticsFacilityWarpMorphInstant"/>
+    </CBehaviorBuff>
 </Catalog>

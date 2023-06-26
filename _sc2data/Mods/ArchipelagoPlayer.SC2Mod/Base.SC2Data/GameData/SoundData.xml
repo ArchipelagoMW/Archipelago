@@ -5237,4 +5237,14 @@
         <Pitch value="-5.000000,-5.000000"/>
         <Volume value="-6.000000,-6.000000"/>
     </CSound>
+    <CSound id="AP_RoboticsFacilityWarp_Ready" parent="Ready">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\RoboticsFacility\RoboticsFacility_What.ogg"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_RoboticsFacilityWarp_What" parent="Voice">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\RoboticsFacility\RoboticsFacility_What.ogg"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
 </Catalog>

@@ -10355,4 +10355,56 @@
         <ScaleMin value="0.850000,0.850000,0.850000"/>
         <Occlusion value="Show"/>
     </CModel>
+    <CModel id="AP_RoboticsFacilityWarp" parent="Building" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\RoboticsWarpFacility\RoboticsWarpFacility.m3"/>
+        <Radius value="1.500000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionLayer value="2"/>
+        <SelectionRadius value="1.666500"/>
+        <ShadowRadius value="1.666500"/>
+        <SquibTypeDefault value="Metal"/>
+    </CModel>
+    <CModel id="AP_RoboticsFacilityWarpBirth" parent="RoboticsFacilityBase">
+        <Model value="Assets\Buildings\Protoss\RoboticsFacilityWarpIn\RoboticsFacilityWarpIn.m3"/>
+        <Events>
+            <Anim value="Stand,Build,End"/>
+            <Name value="BuildingWarpIn"/>
+            <Type value="Sound"/>
+            <Time value="1.000000"/>
+        </Events>
+        <Lighting value="RoboticsFacility"/>
+    </CModel>
+    <CModel id="AP_RoboticsFacilityWarpDeath" parent="BuildingDeath" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\RoboticsWarpFacility_Death\RoboticsWarpFacility_Death.m3"/>
+        <LowQualityModel value="ProtossBuildingDeathLow"/>
+    </CModel>
+    <CModel id="AP_RoboticsFacilityWarpDeathUnpowered" parent="BuildingDeath" Race="Protoss">
+        <Model value="Assets\Buildings\Protoss\RoboticsFacilityDeathUnpowered\RoboticsFacilityDeathUnpowered.m3"/>
+        <LowQualityModel value="ProtossBuildingDeathLow"/>
+    </CModel>
+    <CModel id="AP_RoboticsFacilityWarpSplat" parent="Splat">
+        <Model value="Assets\Splats\Splat_RoboticsFacility\Splat_RoboticsFacility.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+    </CModel>
+    <CModel id="AP_ProtossGenericWarpInOut" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\Protoss_Generic_WarpOut\Protoss_Generic_WarpOut.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_ColossusPurifierWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Colossus_Purifier_WarpIn\Colossus_Purifier_WarpIn.m3"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <EditorCategories value="Race:Protoss"/>
+        <LowQualityModel value="ColossusWarpInLow"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
 </Catalog>
