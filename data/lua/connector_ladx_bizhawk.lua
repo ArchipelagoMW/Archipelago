@@ -43,11 +43,11 @@
 
 
 local socket = require("socket")
-local udp = socket.udp()
+local udp = socket.socket.udp()
+require('common')
 
 udp:setsockname('127.0.0.1', 55355)
 udp:settimeout(0)
-
 
 while true do
     -- Attempt to lessen the CPU load by only polling the UDP socket every x frames.
@@ -97,6 +97,7 @@ while true do
             end
         elseif command == "READ_CORE_MEMORY" then
             local _, address, length = string.match(data, "(%S+) (%S+) (%S+)")
+            address = stripPrefix(address, "0x")
             address = tonumber(address, 16)
             length = tonumber(length)
 
@@ -116,12 +117,14 @@ while true do
             udp:sendto(reply, msg_or_ip, port_or_nil)
         elseif command == "WRITE_CORE_MEMORY" then
             local _, address = string.match(data, "(%S+) (%S+)")
+            address = stripPrefix(address, "0x")
             address = tonumber(address, 16)
 
             local to_write = {}
             local i = 1
             for byte_str in string.gmatch(data, "%S+") do
                 if i > 2 then
+                    byte_str = stripPrefix(byte_str, "0x")
                     table.insert(to_write, tonumber(byte_str, 16))
                 end
                 i = i + 1
