@@ -43,4 +43,4 @@ jobs:
         check_hidden: true
         ignore_words_file: .codespellignore
         skip: "./.git,*.bin,*.ips,*.asm,*requirements.txt,*.png,*.jpg,*.svg*.ico,*.bsdiff4,*.zspr,*.apsprite,\
-          *_de.md,*_es.md,*_fr.md,*.pl,*.min.js,./worlds/smz3/TotalSMZ3/Text/Scripts/*"
+          *_de.md,*_es.md,*_fr.md,*_sv.md,*.pl,*.min.js,./worlds/smz3/TotalSMZ3/Text/Scripts/*"
