@@ -586,7 +586,7 @@
   - target_room: 195
     entrance: 13
     teleporter: [13, 0]
-    access: ["SkyCoin"]
+    access: ["SkyCoin", "FlamerusRex", "IceGolem", "DualheadHydra", "Pazuzu"]
   - target_room: 5
     entrance: 15
     teleporter: [15, 0]
@@ -1062,6 +1062,11 @@
   - name: "Bone Dungeon B2 - Tristam's Treasure Chest"
     object_id: 0x04
     type: "Chest"
+    access: []
+  - name: "Flamerus Rex"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["FlamerusRex"]
     access: []
   links:
   - target_room: 37
@@ -3611,6 +3616,11 @@
     object_id: 0x1A
     type: "Chest"
     access: []
+  - name: "Pazuzu"
+    object_id: 0
+    type: "Trigger"
+    on_trigger: ["Pazuzu"]
+    access: ["Pazuzu2FLock", "Pazuzu4FLock", "Pazuzu6FLock", "Pazuzu1F", "Pazuzu2F", "Pazuzu3F", "Pazuzu4F", "Pazuzu5F", "Pazuzu6F"]
   links:
   - target_room: 178
     access: ["DragonClaw"]
