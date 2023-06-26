@@ -5,6 +5,9 @@
 # This is not to be used for files/folders outside the /world folder, those will always need sign off from a core
 # maintainer. All usernames must be GitHub usernames (and are case sensitive).
 
+# Adventure
+/worlds/adventure/ @JusticePS
+
 # A Link to the Past
 /worlds/alttp/ @Berserker66
 
