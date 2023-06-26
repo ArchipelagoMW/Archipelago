@@ -119,53 +119,53 @@ class BlasphemousLogic(LogicMixin):
                 self._blasphemous_can_dawn_jump(logic, player) and \
                     self._blasphemous_can_air_stall(logic, player)
     
-    def _blasphemous_can_ride_albero_elevator(self, world, player):
+    def _blasphemous_can_ride_albero_elevator(self, player):
         return self.has("D02Z02S11[NW]", player) or \
             self.has("D02Z02S11[NE]", player) or \
                 self.has("D02Z02S11[W]", player) or \
                     self.has("D02Z02S11[E]", player) or \
                         self.has("D02Z02S11[SE]", player)
         
-    def _blasphemous_opened_dc_gate_w(self, world, player):
+    def _blasphemous_opened_dc_gate_w(self, player):
         return self.has("D01Z05S24[W]", player) or \
             self.has("D01Z05S24[E]", player)
     
-    def _blasphemous_opened_dc_gate_e(self, world, player):
+    def _blasphemous_opened_dc_gate_e(self, player):
         return self.has("D01Z05S12[W]", player) or \
             self.has("D01Z05S12[E]", player)
     
-    def _blasphemous_opened_dc_ladder(self, world, player):
+    def _blasphemous_opened_dc_ladder(self, player):
         return self.has("D01Z05S20[W]", player) or \
             self.has("D01Z05S20[N]", player)
     
-    def _blasphemous_opened_wotw_cave(self, world, player):
+    def _blasphemous_opened_wotw_cave(self, player):
         return self.has("D02Z01S06[E]", player) or \
             self.has("Wall Climb Ability", player) and \
                 (self.has("D02Z01S06[W]", player) or \
                     self.has("D02Z01S06[Cherubs]", player))
     
-    def _blasphemous_rode_gotp_elevator(self, world, player):
+    def _blasphemous_rode_gotp_elevator(self, player):
         return self.has("D02Z02S11[NW]", player) or \
             self.has("D02Z02S11[NE]", player) or \
                 self.has("D02Z02S11[W]", player) or \
                     self.has("D02Z02S11[E]", player) or \
                         self.has("D02Z02S11[SE]", player)
     
-    def _blasphemous_opened_convent_ladder(self, world, player):
+    def _blasphemous_opened_convent_ladder(self, player):
         return self.has("D02Z03S11[S]", player) or \
             self.has("D02Z03S11[W]", player) or \
                 self.has("D02Z03S11[NW]", player) or \
                     self.has("D02Z03S11[E]", player) or \
                         self.has("D02Z03S11[NE]", player)
     
-    def _blasphemous_broke_jondo_bell_w(self, world, player):
+    def _blasphemous_broke_jondo_bell_w(self, player):
         return self.has("D03Z02S09[S]", player) or \
             self.has("D03Z02S09[W]", player) and \
                 self.has("Dash Ability", player) or \
                     self.has("D03Z02S09[N]", player) or \
                         self.has("D03Z02S09[Cherubs]", player)
     
-    def _blasphemous_broke_jondo_bell_e(self, world, logic, enemy, player):
+    def _blasphemous_broke_jondo_bell_e(self, logic, enemy, player):
         return self.has("D03Z02S05[S]", player) or \
             self.has("D03Z02S05[E]", player) or \
                 self.has("D03Z02S05[W]", player) and \
@@ -173,32 +173,32 @@ class BlasphemousLogic(LogicMixin):
                         self._blasphemous_can_enemy_bounce(logic, enemy) and \
                             self._blasphemous_can_cross_gap(logic, player, 3))
     
-    def _blasphemous_opened_mom_ladder(self, world, player):
+    def _blasphemous_opened_mom_ladder(self, player):
         return self.has("D04Z02S06[NW]", player) or \
             self.has("D04Z02S06[NE]", player) or \
                 self.has("D04Z02S06[N]", player) or \
                     self.has("D04Z02S06[S]", player)
     
-    def _blasphemous_opened_tsc_gate(self, world, player):
+    def _blasphemous_opened_tsc_gate(self, player):
         return self.has("D05Z02S11[W]", player) or \
             self.has("D05Z02S11[Cherubs]", player)
     
-    def _blasphemous_opened_ar_ladder(self, world, player):
+    def _blasphemous_opened_ar_ladder(self, player):
         return self.has("D06Z01S23[Sword]", player) or \
             self.has("D06Z01S23[E]", player) or \
                 self.has("D06Z01S23[S]", player) or \
                     self.has("D06Z01S23[Cherubs]", player)
     
-    def _blasphemous_broke_bottc_statue(self, world, player):
+    def _blasphemous_broke_bottc_statue(self, player):
         return self.has("D08Z01S02[NE]", player) or \
             self.has("D08Z01S02[SE]", player)
     
-    def _blasphemous_opened_wothp_gate(self, world, player):
+    def _blasphemous_opened_wothp_gate(self, player):
         return self.has("D09Z01S05[W]", player) or \
             self.has("D09Z01S05[SE]", player) or \
                 self.has("D09Z01S05[NE]", player)
 
-    def _blasphemous_opened_botss_ladder(self, world, player):
+    def _blasphemous_opened_botss_ladder(self, player):
         return self.has("D17Z01S04[N]", player) or \
             self.has("D17Z01S04[FrontR]", player)
     
@@ -218,7 +218,7 @@ class BlasphemousLogic(LogicMixin):
         return False
 
     
-    def _blasphemous_can_beat_boss(self, world, boss: str, logic, player):
+    def _blasphemous_can_beat_boss(self, boss: str, logic, player):
         def has_boss_strength(name: str) -> bool:
             silver: int = self.count("Quicksilver", player) if self.has("D01Z05S27[E]", player) else 0
             flasks: int = self.count("Empty Bile Flask", player) if \
@@ -344,7 +344,7 @@ class BlasphemousLogic(LogicMixin):
         elif boss == "Legionary":
             return has_boss_strength("legionary")
         
-    def _blasphemous_guilt_rooms(self, world, player, number: int):
+    def _blasphemous_guilt_rooms(self, player, number: int):
         total: int = 0
 
         if self.has("D01Z04S17[W]", player):
@@ -364,7 +364,7 @@ class BlasphemousLogic(LogicMixin):
 
         return True if total >= number else False
 
-    def _blasphemous_sword_rooms(self, world, player, number: int):
+    def _blasphemous_sword_rooms(self, player, number: int):
         total: int = 0
 
         if self.has("D01Z02S06[W]", player) or self.has("D01Z02S06[E]", player):
@@ -414,7 +414,7 @@ class BlasphemousLogic(LogicMixin):
                                             self.has("Knot of Rosary Rope", player) and \
                                                 self.has("D17Z01S09[E]", player)
 
-    def _blasphemous_miriam(self, world, player):
+    def _blasphemous_miriam(self, player):
         return self.has("D02Z03S24[E]", player) and \
             self.has("D03Z03S19[E]", player) and \
                 self.has("D04Z04S02[W]", player) and \
@@ -424,18 +424,18 @@ class BlasphemousLogic(LogicMixin):
     def _blasphemous_amanecida_rooms(self, world, logic, player, number: int):
         total: int = 0
 
-        if self._blasphemous_can_beat_boss(world, "Graveyard", logic, player):
+        if self._blasphemous_can_beat_boss("Graveyard", logic, player):
             total += 1
-        if self._blasphemous_can_beat_boss(world, "Jondo", logic, player):
+        if self._blasphemous_can_beat_boss("Jondo", logic, player):
             total += 1
-        if self._blasphemous_can_beat_boss(world, "Patio", logic, player):
+        if self._blasphemous_can_beat_boss("Patio", logic, player):
             total += 1
-        if self._blasphemous_can_beat_boss(world, "Wall", logic, player):
+        if self._blasphemous_can_beat_boss("Wall", logic, player):
             total += 1
 
         return True if total >= number else False
     
-    def _blasphemous_chalice_rooms(self, world, player, number: int):
+    def _blasphemous_chalice_rooms(self, player, number: int):
         total: int = 0
 
         if self.has("D03Z01S01[W]", player) or self.has("D03Z01S01[NE]", player) or self.has("D03Z01S01[S]", player):
@@ -505,12 +505,12 @@ def rules(blasphemousworld):
         lambda state: state.has_group("tirso", player, 6))
     set_rule(world.get_location("Albero: Tirso's final reward", player),
         lambda state: state.has_group("tirso", player, 6) and \
-            state._blasphemous_can_beat_boss(blasphemousworld, "Mercy", difficulty, player) and \
-                state._blasphemous_can_beat_boss(blasphemousworld, "Convent", difficulty, player) and \
-                    state._blasphemous_can_beat_boss(blasphemousworld, "Grievance", difficulty, player) and \
-                        state._blasphemous_can_beat_boss(blasphemousworld, "Mothers", difficulty, player) and \
-                            state._blasphemous_can_beat_boss(blasphemousworld, "Canvases", difficulty, player) and \
-                                state._blasphemous_can_beat_boss(blasphemousworld, "Prison", difficulty, player))
+            state._blasphemous_can_beat_boss("Mercy", difficulty, player) and \
+                state._blasphemous_can_beat_boss("Convent", difficulty, player) and \
+                    state._blasphemous_can_beat_boss("Grievance", difficulty, player) and \
+                        state._blasphemous_can_beat_boss("Mothers", difficulty, player) and \
+                            state._blasphemous_can_beat_boss("Canvases", difficulty, player) and \
+                                state._blasphemous_can_beat_boss("Prison", difficulty, player))
     # No doors
 
 
@@ -543,9 +543,9 @@ def rules(blasphemousworld):
                     state.has("D02Z02S11[E]", player) or \
                         state.has("D02Z02S11[SE]", player))
     set_rule(world.get_entrance("D01Z02S03[church]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Mercy", difficulty, player) or \
-            state._blasphemous_can_beat_boss(blasphemousworld, "Convent", difficulty, player) or \
-                state._blasphemous_can_beat_boss(blasphemousworld, "Grievance", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Mercy", difficulty, player) or \
+            state._blasphemous_can_beat_boss("Convent", difficulty, player) or \
+                state._blasphemous_can_beat_boss("Grievance", difficulty, player))
 
 
     # D01BZ04S01 (Albero: Inside church)
@@ -590,7 +590,7 @@ def rules(blasphemousworld):
     # D01BZ08S01 (Isidora)
     # Items
     set_rule(world.get_location("Ossuary: Isidora, Voice of the Dead", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Ossuary", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Ossuary", difficulty, player))
     # No doors
 
 
@@ -716,12 +716,12 @@ def rules(blasphemousworld):
     # D01Z04S18 (Ten Piedad)
     # Items
     set_rule(world.get_location("MD: Ten Piedad", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Mercy", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Mercy", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D01Z04S18[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Mercy", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Mercy", difficulty, player))
     set_rule(world.get_entrance("D01Z04S18[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Mercy", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Mercy", difficulty, player))
 
 
     # D01Z05S02 (Desecrated Cistern)
@@ -758,7 +758,7 @@ def rules(blasphemousworld):
     # D01Z05S12 (Desecrated Cistern)
     # Event
     set_rule(world.get_location("OpenedDCGateE", player),
-        lambda state: state._blasphemous_opened_dc_gate_e(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_dc_gate_e(player))
 
 
     # D01Z05S13 (Desecrated Cistern)
@@ -797,7 +797,7 @@ def rules(blasphemousworld):
     # D01Z05S20 (Desecrated Cistern)
     # Event
     set_rule(world.get_location("OpenedDCLadder", player),
-        lambda state: state._blasphemous_opened_dc_ladder(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_dc_ladder(player))
 
 
     # D01Z05S21 (Desecrated Cistern)
@@ -811,14 +811,14 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D01Z05S23[W]", player),
-        lambda state: state._blasphemous_chalice_rooms(blasphemousworld, player, 3) and \
+        lambda state: state._blasphemous_chalice_rooms(player, 3) and \
             state.has("Chalice of Inverted Verses", player))
     
 
     # D01Z05S24 (Desecrated Cistern)
     # Event
     set_rule(world.get_location("OpenedDCGateW", player),
-        lambda state: state._blasphemous_opened_dc_gate_w(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_dc_gate_w(player))
 
 
     # D01Z05S25 (Desecrated Cistern)
@@ -1011,7 +1011,7 @@ def rules(blasphemousworld):
         lambda state: state.has("Wall Climb Ability", player))
     # Event
     set_rule(world.get_location("OpenedWOTWCave", player),
-        lambda state: state._blasphemous_opened_wotw_cave(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_wotw_cave(player))
 
 
     # D02Z01S08 (Where Olive Trees Wither)
@@ -1240,7 +1240,7 @@ def rules(blasphemousworld):
     # D02Z02S14 (Graveyard of the Peaks)
     # Items
     set_rule(world.get_location("GotP: Amanecida of the Bejeweled Arrow", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Graveyard", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Graveyard", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D02Z02S14[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -1305,7 +1305,7 @@ def rules(blasphemousworld):
     # D02Z03S11 (Convent of Our Lady of the Charred Visage)
     # Event
     set_rule(world.get_location("OpenedConventLadder", player),
-        lambda state: state._blasphemous_opened_convent_ladder(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_convent_ladder(player))
 
 
     # D02Z03S12 (Convent of Our Lady of the Charred Visage)
@@ -1330,12 +1330,12 @@ def rules(blasphemousworld):
     # D02Z03S20 (Convent of Our Lady of the Charred Visage)
     # Items
     set_rule(world.get_location("CoOLotCV: Our Lady of the Charred Visage", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Convent", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Convent", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D02Z03S20[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Convent", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Convent", difficulty, player))
     set_rule(world.get_entrance("D02Z03S20[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Convent", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Convent", difficulty, player))
 
 
     # D02Z03S21 (Convent of Our Lady of the Charred Visage)
@@ -1379,7 +1379,7 @@ def rules(blasphemousworld):
             state.has("D03Z01S03[SW]", player) or \
                 state._blasphemous_can_cross_gap(difficulty, player, 9))
     set_rule(world.get_location("MotED: Amanecida of the Golden Blades", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Jondo", difficulty, player) and \
+        lambda state: state._blasphemous_can_beat_boss("Jondo", difficulty, player) and \
             (state.has("D03Z01S03[W]", player) or \
                 state.has("D03Z01S03[SW]", player) or \
                     state._blasphemous_can_cross_gap(difficulty, player, 9)))
@@ -1423,15 +1423,15 @@ def rules(blasphemousworld):
     # D03Z01S06 (Mountains of the Endless Dusk)
     # Items
     set_rule(world.get_location("MotED: Perpetva", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Perpetua", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Perpetua", difficulty, player))
     set_rule(world.get_location("MotED: Egg hatching", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Perpetua", difficulty, player) and \
+        lambda state: state._blasphemous_can_beat_boss("Perpetua", difficulty, player) and \
             state.has("Egg of Deformity", player))
     # Doors
     set_rule(world.get_entrance("D03Z01S06[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Perpetua", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Perpetua", difficulty, player))
     set_rule(world.get_entrance("D03Z01S06[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Perpetua", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Perpetua", difficulty, player))
 
 
     # D03Z02S01 (Jondo)
@@ -1588,7 +1588,7 @@ def rules(blasphemousworld):
                     state._blasphemous_can_cross_gap(difficulty, player, 3)))
     # Event
     set_rule(world.get_location("BrokeJondoBellE", player),
-        lambda state: state._blasphemous_broke_jondo_bell_e(blasphemousworld, difficulty, enemy, player))
+        lambda state: state._blasphemous_broke_jondo_bell_e(difficulty, enemy, player))
 
 
     # D03Z02S07 (Jondo)
@@ -1628,7 +1628,7 @@ def rules(blasphemousworld):
                 state.has("Dash Ability", player))
     # Event
     set_rule(world.get_location("BrokeJondoBellW", player),
-        lambda state: state._blasphemous_broke_jondo_bell_w(blasphemousworld, player))
+        lambda state: state._blasphemous_broke_jondo_bell_w(player))
 
 
     # D03Z02S10 (Jondo)
@@ -1827,12 +1827,12 @@ def rules(blasphemousworld):
     # D03Z03S15 (Grievance Ascends)
     # Items
     set_rule(world.get_location("GA: Tres Angustias", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Grievance", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Grievance", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D03Z03S15[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Grievance", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Grievance", difficulty, player))
     set_rule(world.get_entrance("D03Z03S15[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Grievance", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Grievance", difficulty, player))
 
 
     # D04Z01S01 (Patio of the Silent Steps)
@@ -1984,7 +1984,7 @@ def rules(blasphemousworld):
         lambda state: state.has("Linen of Golden Thread", player))
     # Event
     set_rule(world.get_location("OpenedMOMLadder", player),
-        lambda state: state._blasphemous_opened_mom_ladder(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_mom_ladder(player))
 
 
     # D04Z02S07 (Mother of Mothers)
@@ -2032,12 +2032,12 @@ def rules(blasphemousworld):
     # D04Z02S22 (Mother of Mothers)
     # Items
     set_rule(world.get_location("MoM: Melquiades, The Exhumed Archbishop", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Mothers", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Mothers", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D04Z02S22[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Mothers", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Mothers", difficulty, player))
     set_rule(world.get_entrance("D04Z02S22[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Mothers", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Mothers", difficulty, player))
 
 
     # D04BZ02S01 (Mother of Mothers - Redento)
@@ -2057,7 +2057,7 @@ def rules(blasphemousworld):
     # D04Z04S01 (All the Tears of the Sea)
     # Items
     set_rule(world.get_location("AtTotS: Miriam's gift", player),
-        lambda state: state._blasphemous_miriam(blasphemousworld, player) and \
+        lambda state: state._blasphemous_miriam(player) and \
             state.has("Dash Ability", player) and \
                 state.has("Wall Climb Ability", player))
     # No doors
@@ -2181,7 +2181,7 @@ def rules(blasphemousworld):
     # D05Z02S11 (The Sleeping Canvases)
     # Event
     set_rule(world.get_location("OpenedTSCGate", player),
-        lambda state: state._blasphemous_opened_tsc_gate(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_tsc_gate(player))
 
 
     # D05Z02S13 (The Sleeping Canvases)
@@ -2194,12 +2194,12 @@ def rules(blasphemousworld):
     # D05Z02S14 (The Sleeping Canvases)
     # Items
     set_rule(world.get_location("TSC: Exposito, Scion of Abjuration", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Canvases", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Canvases", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D05Z02S14[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Canvases", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Canvases", difficulty, player))
     set_rule(world.get_entrance("D05Z02S14[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Canvases", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Canvases", difficulty, player))
 
 
     # D05Z02S15 (The Sleeping Canvases)
@@ -2324,12 +2324,12 @@ def rules(blasphemousworld):
     # D06Z01S03 (Archcathedral Rooftops)
     # Items
     set_rule(world.get_location("AR: First soldier fight", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Legionary", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D06Z01S03[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Legionary", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player))
     set_rule(world.get_entrance("D06Z01S03[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Legionary", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player))
 
 
     # D06Z01S04 (Archcathedral Rooftops)
@@ -2380,18 +2380,18 @@ def rules(blasphemousworld):
     # D06Z01S06 (Archcathedral Rooftops)
     # Items
     set_rule(world.get_location("AR: Second soldier fight", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Legionary", difficulty, player) and \
+        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player) and \
             (state.has("D06Z01S06[WW]", player) or \
                 state.has("D06Z01S06[E]", player)))
     # Doors
     set_rule(world.get_entrance("D06Z01S06[WW]", player),
         lambda state: state.has("D06Z01S06[E]", player))
     add_rule(world.get_entrance("D06Z01S06[WW]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Legionary", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player))
     set_rule(world.get_entrance("D06Z01S06[E]", player),
         lambda state: state.has("D06Z01S06[WW]", player))
     add_rule(world.get_entrance("D06Z01S06[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Legionary", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player))
     set_rule(world.get_entrance("D06Z01S06[W]", player),
         lambda state: state.has("D06Z01S06[EE]", player))
     set_rule(world.get_entrance("D06Z01S06[EE]", player),
@@ -2578,46 +2578,46 @@ def rules(blasphemousworld):
     # D06Z01S21 (Archcathedral Rooftops)
     # Items
     set_rule(world.get_location("AR: Third soldier fight", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Legionary", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D06Z01S21[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Legionary", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player))
     set_rule(world.get_entrance("D06Z01S21[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Legionary", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player))
     
 
     # D06Z01S23 (Archcathedral Rooftops)
     # Event
     set_rule(world.get_location("OpenedARLadder", player),
-        lambda state: state._blasphemous_opened_ar_ladder(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_ar_ladder(player))
 
 
     # D06Z01S25 (Archcathedral Rooftops)
     # Items
     set_rule(world.get_location("AR: Crisanta of the Wrapped Agony", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Rooftops", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Rooftops", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D06Z01S25[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Rooftops", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Rooftops", difficulty, player))
     set_rule(world.get_entrance("D06Z01S25[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Rooftops", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Rooftops", difficulty, player))
 
 
     # D08Z01S01 (Bridge of the Three Cavalries)
     # Items
     set_rule(world.get_location("BotTC: Esdras, of the Anointed Legion", player),
         lambda state: state.has_group("wounds", player, 3) and \
-            state._blasphemous_can_beat_boss(blasphemousworld, "Bridge", difficulty, player))
+            state._blasphemous_can_beat_boss("Bridge", difficulty, player))
     set_rule(world.get_location("BotTC: Esdras' gift", player),
         lambda state: state.has_group("wounds", player, 3) and \
-            state._blasphemous_can_beat_boss(blasphemousworld, "Bridge", difficulty, player))
+            state._blasphemous_can_beat_boss("Bridge", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D08Z01S01[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Bridge", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Bridge", difficulty, player))
     set_rule(world.get_entrance("D08Z01S01[E]", player),
         lambda state: state.has_group("wounds", player, 3) and \
             (state.has("D08Z01S01[Cherubs]", player) or \
-                state._blasphemous_can_beat_boss(blasphemousworld, "Bridge", difficulty, player)))
+                state._blasphemous_can_beat_boss("Bridge", difficulty, player)))
 
 
     # D08Z01S02 (Bridge of the Three Cavalries)
@@ -2627,7 +2627,7 @@ def rules(blasphemousworld):
         lambda state: state.has("Linen of Golden Thread", player))
     # Event
     set_rule(world.get_location("BrokeBOTTCStatue", player),
-        lambda state: state._blasphemous_broke_bottc_statue(blasphemousworld, player))
+        lambda state: state._blasphemous_broke_bottc_statue(player))
 
 
     # D08Z02S03 (Ferrous Tree)
@@ -2654,18 +2654,18 @@ def rules(blasphemousworld):
     # D08Z03S03 (Hall of the Dawning)
     # Items
     set_rule(world.get_location("HotD: Laudes, the First of the Amanecidas", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Hall", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Hall", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D08Z03S03[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Hall", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Hall", difficulty, player))
     set_rule(world.get_entrance("D08Z03S03[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Hall", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Hall", difficulty, player))
 
 
     # D09Z01S01 (Wall of the Holy Prohibitions)
     # Items
     set_rule(world.get_location("WotHP: Amanecida of the Molten Thorn", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Wall", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Wall", difficulty, player))
     # No doors
 
 
@@ -2766,17 +2766,17 @@ def rules(blasphemousworld):
     # D09Z01S03 (Wall of the Holy Prohibitions)
     # Items
     set_rule(world.get_location("WotHP: Quirce, Returned By The Flames", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Prison", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Prison", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D09Z01S03[W]", player),
         lambda state: state.has("D09Z01S03[N]", player) and \
-            state._blasphemous_can_beat_boss(blasphemousworld, "Prison", difficulty, player))
+            state._blasphemous_can_beat_boss("Prison", difficulty, player))
     
 
     # D09Z01S05 (Wall of the Holy Prohibitions)
     # Event
     set_rule(world.get_location("OpenedWOTHPGate", player),
-        lambda state: state._blasphemous_opened_wothp_gate(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_wothp_gate(player))
 
 
     # D09Z01S06 (Wall of the Holy Prohibitions)
@@ -3059,7 +3059,7 @@ def rules(blasphemousworld):
         lambda state: state.has("D17Z01S04[N]", player))
     # Event
     set_rule(world.get_location("OpenedBOTSSLadder", player),
-        lambda state: state._blasphemous_opened_botss_ladder(blasphemousworld, player))
+        lambda state: state._blasphemous_opened_botss_ladder(player))
 
 
     # D17Z01S05 (Brotherhood of the Silent Sorrow)
@@ -3079,12 +3079,12 @@ def rules(blasphemousworld):
     # D17Z01S11 (Brotherhood of the Silent Sorrow)
     # Items
     set_rule(world.get_location("BotSS: Warden of the Silent Sorrow", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Brotherhood", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Brotherhood", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D17Z01S11[W]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Brotherhood", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Brotherhood", difficulty, player))
     set_rule(world.get_entrance("D17Z01S11[E]", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Brotherhood", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Brotherhood", difficulty, player))
 
 
     # D17Z01S14 (Brotherhood of the Silent Sorrow)
@@ -3119,10 +3119,10 @@ def rules(blasphemousworld):
     # D17Z01S15 (Brotherhood of the Silent Sorrow)
     # Items
     set_rule(world.get_location("BotSS: Esdras' final gift", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Bridge", difficulty, player) and \
+        lambda state: state._blasphemous_can_beat_boss("Bridge", difficulty, player) and \
             state.has_group("wounds", player, 3))
     set_rule(world.get_location("BotSS: Crisanta's gift", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Rooftops", difficulty, player) and \
+        lambda state: state._blasphemous_can_beat_boss("Rooftops", difficulty, player) and \
             state.has("Apodictic Heart of Mea Culpa", player))
     # No doors
 
@@ -3208,9 +3208,9 @@ def rules(blasphemousworld):
     # D20Z02S08 (Mourning and Havoc)
     # Items
     set_rule(world.get_location("MaH: Sierpes", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Mourning", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Mourning", difficulty, player))
     set_rule(world.get_location("MaH: Sierpes' eye", player),
-        lambda state: state._blasphemous_can_beat_boss(blasphemousworld, "Mourning", difficulty, player))
+        lambda state: state._blasphemous_can_beat_boss("Mourning", difficulty, player))
     # No doors
 
 
@@ -3261,73 +3261,73 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_amanecida_rooms(blasphemousworld, difficulty, player, 4))
     set_rule(world.get_location("Confessor Dungeon 1 main", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 1))
+            state._blasphemous_guilt_rooms(player, 1))
     set_rule(world.get_location("Confessor Dungeon 2 main", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 2))
+            state._blasphemous_guilt_rooms(player, 2))
     set_rule(world.get_location("Confessor Dungeon 3 main", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 3))
+            state._blasphemous_guilt_rooms(player, 3))
     set_rule(world.get_location("Confessor Dungeon 4 main", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 4))
+            state._blasphemous_guilt_rooms(player, 4))
     set_rule(world.get_location("Confessor Dungeon 5 main", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 5))
+            state._blasphemous_guilt_rooms(player, 5))
     set_rule(world.get_location("Confessor Dungeon 6 main", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 6))
+            state._blasphemous_guilt_rooms(player, 6))
     set_rule(world.get_location("Confessor Dungeon 7 main", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 7))
+            state._blasphemous_guilt_rooms(player, 7))
     set_rule(world.get_location("Confessor Dungeon 1 extra", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 1))
+            state._blasphemous_guilt_rooms(player, 1))
     set_rule(world.get_location("Confessor Dungeon 2 extra", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 2))
+            state._blasphemous_guilt_rooms(player, 2))
     set_rule(world.get_location("Confessor Dungeon 3 extra", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 3))
+            state._blasphemous_guilt_rooms(player, 3))
     set_rule(world.get_location("Confessor Dungeon 4 extra", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 4))
+            state._blasphemous_guilt_rooms(player, 4))
     set_rule(world.get_location("Confessor Dungeon 5 extra", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 5))
+            state._blasphemous_guilt_rooms(player, 5))
     set_rule(world.get_location("Confessor Dungeon 6 extra", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 6))
+            state._blasphemous_guilt_rooms(player, 6))
     set_rule(world.get_location("Confessor Dungeon 7 extra", player),
         lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(blasphemousworld, player, 7))
+            state._blasphemous_guilt_rooms(player, 7))
     set_rule(world.get_location("Skill 1, Tier 1", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 1))
+        lambda state: state._blasphemous_sword_rooms(player, 1))
     set_rule(world.get_location("Skill 1, Tier 2", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 2))
+        lambda state: state._blasphemous_sword_rooms(player, 2))
     set_rule(world.get_location("Skill 1, Tier 3", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 4))
+        lambda state: state._blasphemous_sword_rooms(player, 4))
     set_rule(world.get_location("Skill 2, Tier 1", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 1))
+        lambda state: state._blasphemous_sword_rooms(player, 1))
     set_rule(world.get_location("Skill 2, Tier 2", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 3))
+        lambda state: state._blasphemous_sword_rooms(player, 3))
     set_rule(world.get_location("Skill 2, Tier 3", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 6))
+        lambda state: state._blasphemous_sword_rooms(player, 6))
     set_rule(world.get_location("Skill 3, Tier 1", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 2))
+        lambda state: state._blasphemous_sword_rooms(player, 2))
     set_rule(world.get_location("Skill 3, Tier 2", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 5))
+        lambda state: state._blasphemous_sword_rooms(player, 5))
     set_rule(world.get_location("Skill 3, Tier 3", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 7))
+        lambda state: state._blasphemous_sword_rooms(player, 7))
     set_rule(world.get_location("Skill 4, Tier 1", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 1))
+        lambda state: state._blasphemous_sword_rooms(player, 1))
     set_rule(world.get_location("Skill 4, Tier 2", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 3))
+        lambda state: state._blasphemous_sword_rooms(player, 3))
     set_rule(world.get_location("Skill 4, Tier 3", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 6))
+        lambda state: state._blasphemous_sword_rooms(player, 6))
     set_rule(world.get_location("Skill 5, Tier 1", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 1))
+        lambda state: state._blasphemous_sword_rooms(player, 1))
     set_rule(world.get_location("Skill 5, Tier 2", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 2))
+        lambda state: state._blasphemous_sword_rooms(player, 2))
     set_rule(world.get_location("Skill 5, Tier 3", player),
-        lambda state: state._blasphemous_sword_rooms(blasphemousworld, player, 4))
+        lambda state: state._blasphemous_sword_rooms(player, 4))
