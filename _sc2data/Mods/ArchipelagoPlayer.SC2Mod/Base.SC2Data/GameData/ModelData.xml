@@ -10407,4 +10407,13 @@
         <SelectionRadius value="0.555400"/>
         <ShadowRadius value="0.555400"/>
     </CModel>
+    <CModel id="AP_StargatewarpDeath" parent="BuildingDeath" Race="Protoss">
+        <LowQualityModel value="ProtossBuildingDeathLow"/>
+        <Model value="Assets\Buildings\Protoss\StarWarpGate_Death\StarWarpGate_Death.m3"/>
+    </CModel>
+    <CModel id="AP_StargateWarpDeathUnpowered" parent="UnitDeath">
+        <Model value="Assets\Buildings\Protoss\StargateDeathUnpowered\StargateDeathUnpowered.m3"/>
+        <LowQualityModel value="ProtossBuildingDeathLow"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
 </Catalog>

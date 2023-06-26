@@ -11715,7 +11715,6 @@
         <DeathArray index="Normal" ModelLink="CyberneticsCoreDeath" SoundLink="CyberneticsCore_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="CyberneticsCoreDeathUnderConstruction" SoundLink="CyberneticsCore_Explode"/>
         <DeathCustoms ModelLink="CyberneticsCoreTaldarimDeath" Name="DarkProtoss"/>
-        <DeathActorModel value="CyberneticsCoreDeath"/>
         <PlacementModel value="CyberneticsCorePlacement"/>
         <PortraitModel value="CyberneticsCorePortrait"/>
         <BarOffset value="140"/>
@@ -12129,7 +12128,6 @@
         <DeathCustoms ModelLink="StargateDeathUnpowered" SoundLink="Stargate_Explode" Name="Variation2"/>
         <DeathCustoms ModelLink="StargateTaldarimDeath" Name="DarkProtoss"/>
         <DeathCustoms ModelLink="StargateTaldarimDeathUnpowered" Name="Variation3"/>
-        <DeathActorModel value="StargateDeath"/>
         <PlacementModel value="StargatePlacement"/>
         <PortraitModel value="StargatePortrait"/>
         <BarOffset value="170"/>
@@ -12256,9 +12254,9 @@
         <ModelFlags index="AutomateGlobalLoops" value="0"/>
         <EventDataSound Name="BuildingWarpIn" Actor="UnitSound" Sound="Protoss_BuildingWarpIn"/>
         <BuildModel value="WarpStargateBirth"/>
-        <DeathArray index="Normal" ModelLink="StargatewarpDeath" SoundLink="Stargate_Explode"/>
+        <DeathArray index="Normal" ModelLink="AP_StargatewarpDeath" SoundLink="Stargate_Explode"/>
         <DeathArray index="UnderConstruction" ModelLink="ProtossWarpInDeath" SoundLink="Stargate_Explode"/>
-        <DeathCustoms ModelLink="StargateWarpDeathUnpowered" SoundLink="Stargate_Explode" Name="Variation2"/>
+        <DeathCustoms ModelLink="AP_StargateWarpDeathUnpowered" SoundLink="Stargate_Explode" Name="Variation2"/>
         <PlacementModel value="StargatePlacement"/>
         <PlacementSound value="Protoss_BuildingPlacement"/>
         <PortraitModel value="ExecutorPortrait"/>
@@ -12330,7 +12328,7 @@
             <Image value="Assets\Textures\Wireframe-Protoss-RoboticsSupportBay-Shield03.dds"/>
         </WireframeShield>
     </CActorUnit>
-    <CActorSplat id="RoboticsBaySplat2" parent="GenericUnitSplat" unitName="AP_RoboticsBay">
+    <CActorSplat id="AP_RoboticsBaySplat" parent="GenericUnitSplat" unitName="AP_RoboticsBay">
         <Model value="RoboticsBaySplat"/>
     </CActorSplat>
     <CActorUnit id="AP_RoboticsFacility" parent="ProtossBuildingEx" unitName="AP_RoboticsFacility">
@@ -12388,7 +12386,6 @@
         <DeathCustoms ModelLink="RoboticsFacilityConstructionDeath" SoundLink="RoboticsFacilty_Explode" Name="Variation9"/>
         <DeathCustoms ModelLink="RoboticsFacilityTaldarimDeath" Name="DarkProtoss"/>
         <DeathCustoms ModelLink="RoboticsFacilityTaldarimDeathUnpowered" Name="Variation3"/>
-        <DeathActorModel value="RoboticsFacilityDeath"/>
         <PlacementModel value="RoboticsFacilityPlacement"/>
         <PortraitModel value="RoboticsFacilityPortrait"/>
         <BarOffset value="110"/>
