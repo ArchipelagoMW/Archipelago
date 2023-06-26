@@ -12292,6 +12292,45 @@
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
     </CActorProgress>
+    <CActorUnit id="AP_RoboticsBay" parent="ProtossBuildingEx" unitName="AP_RoboticsBay">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <Macros value="VoidMPUnpoweredAnim"/>
+        <Macros value="QueueAnim"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit CasterIsUnpoweredAndNotUnderConstruction" Send="DeathCustomize Variation2"/>
+        <Model value="RoboticsBay"/>
+        <AnimBlendTime value="1.000000"/>
+        <CreepHeightClass value="Smaller"/>
+        <BuildModel value="RoboticsBayBirth"/>
+        <DeathArray index="Normal" ModelLink="RoboticsBayDeath" SoundLink="NullCircuit_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="RoboticsBayDeathUnderConstruction" SoundLink="NullCircuit_Explode"/>
+        <DeathCustoms ModelLink="RoboticsBayDeathUnpowered" SoundLink="NullCircuit_Explode" Name="Variation2"/>
+        <EditorModel value="RoboticsBay"/>
+        <PlacementModel value="RoboticsBayPlacement"/>
+        <PortraitModel value="RoboticsBayPortrait"/>
+        <BarOffset value="130"/>
+        <BarWidth value="135"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-RoboticsSupportBay.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-roboticssupportbay.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="RoboticsBay_Ready"/>
+        <SoundArray index="What" value="RoboticsBay_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-roboticssupportbay.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-RoboticsSupportBay.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-RoboticsSupportBay-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-RoboticsSupportBay-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-RoboticsSupportBay-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSplat id="RoboticsBaySplat2" parent="GenericUnitSplat" unitName="AP_RoboticsBay">
+        <Model value="RoboticsBaySplat"/>
+    </CActorSplat>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
