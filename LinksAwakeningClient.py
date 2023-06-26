@@ -28,7 +28,7 @@ from worlds.ladx.GpsTracker import GpsTracker
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
-from worlds.ladx.Tracker import LocationTracker, MagpieBridge, Check
+from worlds.ladx.Tracker import LocationTracker, MagpieBridge
 
 class GameboyException(Exception):
     pass
@@ -440,8 +440,6 @@ class LinksAwakeningContext(CommonContext):
     # TODO: does this need to re-read on reset?
     found_checks = []
     last_resend = time.time()
-    # TODO We could also just reset the dict to contain checks which should never be collected
-    collected_checks = {}
 
     magpie_enabled = False
     magpie = None
@@ -455,6 +453,7 @@ class LinksAwakeningContext(CommonContext):
             self.magpie = MagpieBridge()
         # The set of check names to iternal meta ids
         self.check_name_to_metadata_map = {str(v): k for k, v in checkMetadataTable.items()}
+        # When this is set to True, the main loop will attempt to send collected checks to the game
         self.examine_collected_checks = True
         super().__init__(server_address, password)
 
