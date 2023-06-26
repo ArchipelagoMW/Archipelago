@@ -5,6 +5,7 @@ A world maintainer is a person responsible for a world or part of a world in Arc
 If a world author does not want to take on the responsibilities of a world maintainer, they can release their world as
 an unofficial [APWorld](/docs/apworld%20specification.md) or maintain their own fork instead.
 
+All current world maintainers are listed in the [CODEOWNERS](/docs/CODEOWNERS) document.
 
 ## Responsibilities
 
@@ -26,7 +27,8 @@ Unless these are shared between multiple people, we expect the following from ea
 ### Adding a World
 
 When we merge your world into the core Archipelago repository, you automatically become world maintainer unless you
-nominate someone else (i.e. there are multiple devs).
+nominate someone else (i.e. there are multiple devs). You can define who is allowed to approve changes to your world
+in the [CODEOWNERS](/docs/CODEOWNERS) document.
 
 ### Getting Voted
 
@@ -36,12 +38,12 @@ For a vote to pass, the majority of participating core maintainers must vote in 
 The time limit is 1 week, but can end early if the majority is reached earlier.
 Voting shall be conducted on Discord in #archipelago-dev.
 
-
 ## Dropping out
 
 ### Resigning
 
-A world maintainer can resign. If no new maintainer steps up and gets voted, the world becomes unmaintained.
+A world maintainer can resign and have their username removed from the [CODEOWNERS](/docs/CODEOWNERS) document. If no
+new maintainer steps up and gets voted, the world becomes unmaintained.
 
 ### Getting Voted out
 
@@ -52,7 +54,6 @@ The time limit is 2 weeks, but can end early if the majority is reached earlier 
 made their case or was pinged and has been unreachable for more than 2 weeks already.
 Voting shall be conducted on Discord in #archipelago-dev. Commits that are a direct result of the voting shall include
 date, voting members and final result in the commit message.
-
 
 ## Handling of Unmaintained Worlds
 

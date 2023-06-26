@@ -3,7 +3,7 @@
 # This file is used to notate who the current "owners" or "maintainers" of any currently merged world folder. For any
 # pull requests that modify contents of these worlds, a code owner must approve the PR in addition to a core maintainer.
 # This is not to be used for files/folders outside the /world folder, those will always need sign off from a core
-# maintainer.
+# maintainer. All usernames must be GitHub usernames (and are case sensitive).
 
 # A Link to the Past
 /worlds/alttp/ @Berserker66
