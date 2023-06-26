@@ -168,8 +168,7 @@ def process_pokemon_data(self):
                     else:
                         mon_data[stat] = 10
                         total_stats -= 10
-                if total_stats < 0:
-                    print(mon)
+                assert total_stats >= 0, f"Error distributing stats for {mon} for player {self.player}"
                 dist = [self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
                         self.multiworld.random.randint(1, 101) / 100, self.multiworld.random.randint(1, 101) / 100,
                         self.multiworld.random.randint(1, 101) / 100]
@@ -319,8 +318,6 @@ def process_pokemon_data(self):
             else:
                 bit = roll_tm_compat(tm_move)
             if bit:
-                if tm_move == "Strength":
-                    print(mon)
                 mon_data["tms"][int(flag / 8)] |= 1 << (flag % 8)
             else:
                 mon_data["tms"][int(flag / 8)] &= ~(1 << (flag % 8))

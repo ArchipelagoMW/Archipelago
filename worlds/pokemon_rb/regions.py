@@ -2271,11 +2271,9 @@ def create_regions(self):
                         "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
                 elif len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity" else 8) and len(
                         entrances) <= (starting_entrances - 3):
-                    print("Dead End")
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
                                    dead_end(entrances_copy, e) else 1)
                 else:
-                    print("Not Dead End")
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 1 if
                                    dead_end(entrances_copy, e) else 2)
                 if multiworld.door_shuffle[player] == "full":
@@ -2295,7 +2293,6 @@ def create_regions(self):
                 dc_connected.append(entrance_a)
             else:
                 entrance_b.connect(entrance_a)
-            print(f"Connected {entrance_a.parent_region.name} to {entrance_b.parent_region.name}")
 
         # So that we don't crash when trying to place these later
         for loc in placed_events:
