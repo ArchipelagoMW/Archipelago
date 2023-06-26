@@ -1,0 +1,46 @@
+name: Codespell
+
+on:
+  push:
+    paths:
+      - '**.csv'
+      - '**.html'
+      - '**.json'
+      - '**.js'
+      - '**.ini'
+      - '**.iss'
+      - '**.py'
+      - '**.txt'
+      - '**.yaml'
+      - '**.yml'
+      - '.codespellignore'
+      - '!**requirements.txt'
+  pull_request:
+    paths:
+      - '**.csv'
+      - '**.html'
+      - '**.json'
+      - '**.js'
+      - '**.ini'
+      - '**.iss'
+      - '**.py'
+      - '**.txt'
+      - '**.yaml'
+      - '**.yml'
+      - '.codespellignore'
+      - '!**requirements.txt'
+
+jobs:
+  codespell:
+    runs-on: ubuntu-latest
+    name: Find typos
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: codespell-project/actions-codespell@v1
+      with:
+        check_filenames: true
+        check_hidden: true
+        ignore_words_file: .codespellignore
+        skip: "./.git,*.bin,*.ips,*.asm,*requirements.txt,*.png,*.jpg,*.svg*.ico,*.bsdiff4,*.zspr,*.apsprite,\
+          *_de.md,*_es.md,*_fr.md,*.pl,*.min.js,./worlds/smz3/TotalSMZ3/Text/Scripts/*"
