@@ -2598,4 +2598,22 @@
         <Find value="1"/>
         <ResultNoPlayer value="Error"/>
     </CValidatorPlayerRequirement>
+    <CValidatorCombine id="TimewarpProduction">
+        <!-- Override -->
+        <CombineArray value="AP_IsStargateWarp"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsStargateWarp">
+        <Value value="AP_StargateWarp"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsVanillaStargate">
+        <Value value="Stargate"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPStargate">
+        <Value value="AP_Stargate"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsStargate" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaStargate"/>
+        <CombineArray value="AP_IsAPStargate"/>
+    </CValidatorCombine>
 </Catalog>
