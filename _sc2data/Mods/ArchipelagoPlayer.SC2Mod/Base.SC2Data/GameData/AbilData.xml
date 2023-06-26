@@ -2833,6 +2833,10 @@
         </Cost>
         <CmdButtonArray index="Execute" DefaultButtonFace="Explode"/>
     </CAbilEffectInstant>
+    <CAbilResearch id="AP_CyberneticsCoreResearch">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <!-- TODO: Protoss Air weapon/armor upgrades -->
+    </CAbilResearch>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
