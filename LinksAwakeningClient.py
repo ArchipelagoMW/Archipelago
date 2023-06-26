@@ -548,23 +548,30 @@ class LinksAwakeningContext(CommonContext):
             return
         checks = list(self.checked_locations)
         await self.get_location_checks_from_server(checks=checks)
+        # A bunch of checks to make sure things are initialized
         if self.client.tracker is not None and self.locations_info is not None and self.client.gameboy is not None\
                 and len(self.locations_info) > 0:
             for check in checks:
                 if check in self.locations_info:
                     player = self.locations_info[check].player
+                    # Make sure the item isn't a local item. Don't want to soft-lock the player.
                     if player != self.slot:
                         name = self.location_names[check]
                         meta = self.check_name_to_metadata_map[name]
                         check = self.client.tracker.get_check_from_meta(meta=meta)
+                        # If the check hasn't been collected yet, and should be
                         if check is not None and check.address in self.client.tracker.remaining_checks \
                                 and check.address not in self.collected_blacklist:
+                            # Read to make sure the game has finished processing the last sent collection
                             status = (await self.client.gameboy.async_read_memory_safe(
-                                LAClientConstants.wLinkStatusBits))[0]
-                            while not (await self.client.is_victory()) and status & 1 == 1:
+                                LAClientConstants.wLinkCollectCheckValue))[0]
+                            # If not spin until either it has, or the game is won
+                            while (not (await self.client.is_victory())) and status != 0:
                                 time.sleep(0.1)
                                 status = (await self.client.gameboy.async_read_memory_safe(
-                                    LAClientConstants.wLinkStatusBits))[0]
+                                    LAClientConstants.wLinkCollectCheckValue))[0]
+                            # Split the check's memory address into high and low bytes, and send it to the game along
+                            # with the mask to apply
                             high, low = divmod(check.address, 0x100)
                             self.client.gameboy.write_memory(address=LAClientConstants.wLinkCollectCheckHigh,
                                                              bytes=[high, low, check.mask])
