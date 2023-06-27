@@ -70,10 +70,9 @@ including the exclamation point.
   names such as Factorio.
 - `!hint <item name>` Tells you at which location in whose game your Item is. Note you need to have checked some
   locations to earn a hint. You can check how many you have by just running `!hint`
-- `!forfeit` If you didn't turn on auto-forfeit or if you allowed forfeiting prior to goal completion. Remember that "
-  forfeiting" actually means sending out your remaining items in your world.
-- `!collect` Grants you all the remaining checks in your world. Can only be used after your goal is complete or when you
-  have forfeited.
+- `!release` If you didn't turn on auto-release or if you allowed releasing prior to goal completion. Remember that "
+  releasing" actually means sending out your remaining items in your world.
+- `!collect` Grants you all the remaining checks in your world. Typically used after goal completion.
 
 #### Host only (on Archipelago.gg or in your server console)
 
@@ -87,9 +86,9 @@ including the exclamation point.
 - `/exit` Shutdown the server
 - `/alias <player name> <alias name>` Assign a player an alias.
 - `/collect <player name>` Send out any items remaining in the multiworld belonging to the given player.
-- `/forfeit <player name>` Forfeits someone regardless of settings and game completion status
-- `/allow_forfeit <player name>` Allows the given player to use the `!forfeit` command.
-- `/forbid_forfeit <player name>` Bars the given player from using the `!forfeit` command.
+- `/release <player name>` Releases someone regardless of settings and game completion status
+- `/allow_release <player name>` Allows the given player to use the `!release` command.
+- `/forbid_release <player name>` Bars the given player from using the `!release` command.
 - `/send <player name> <item name>` Grants the given player the specified item.
 - `/send_multiple <amount> <player name> <item name>` Grants the given player the stated amount of the specified item.
 - `/send_location <player name> <location name>` Send out the given location for the specified player as if the player checked it

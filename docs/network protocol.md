@@ -9,7 +9,7 @@ These steps should be followed in order to establish a gameplay connection with 
 5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
 6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
 7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
-8. Server sends [Print](#Print) to all players to notify them of the new client connection.
+8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of the new client connection.
 
 In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
@@ -20,12 +20,13 @@ There are also a number of community-supported libraries available that implemen
 | Python                        | [Archipelago CommonClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/CommonClient.py) |                                                                                 |
 |                               | [Archipelago SNIClient](https://github.com/ArchipelagoMW/Archipelago/blob/main/SNIClient.py)       | For Super Nintendo Game Support; Utilizes [SNI](https://github.com/alttpo/sni). |
 | JVM (Java / Kotlin)           | [Archipelago.MultiClient.Java](https://github.com/ArchipelagoMW/Archipelago.MultiClient.Java)      |                                                                                 |
-| .NET (C# / C++ / F# / VB.NET) | [Archipelago.MultiClient.Net](https://www.nuget.org/packages/Archipelago.MultiClient.Net)          |                                                                                 |
+| .NET (C# / F# / VB.NET)       | [Archipelago.MultiClient.Net](https://www.nuget.org/packages/Archipelago.MultiClient.Net)          |                                                                                 |
 | C++                           | [apclientpp](https://github.com/black-sliver/apclientpp)                                           | header-only                                                                     |
 |                               | [APCpp](https://github.com/N00byKing/APCpp)                                                        | CMake                                                                           |
 | JavaScript / TypeScript       | [archipelago.js](https://www.npmjs.com/package/archipelago.js)                                     | Browser and Node.js Supported                                                   |
 | Haxe                          | [hxArchipelago](https://lib.haxe.org/p/hxArchipelago)                                              |                                                                                 |
 | Rust                          | [ArchipelagoRS](https://github.com/ryanisaacg/archipelago_rs)                                      |                                                                                 |
+| Lua                           | [lua-apclientpp](https://github.com/black-sliver/lua-apclientpp)                                   |                                                                                 |
 
 ## Synchronizing Items
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
@@ -54,7 +55,6 @@ These packets are are sent from the multiworld server to the client. They are no
 * [ReceivedItems](#ReceivedItems)
 * [LocationInfo](#LocationInfo)
 * [RoomUpdate](#RoomUpdate)
-* [Print](#Print)
 * [PrintJSON](#PrintJSON)
 * [DataPackage](#DataPackage)
 * [Bounced](#Bounced)
@@ -65,27 +65,29 @@ These packets are are sent from the multiworld server to the client. They are no
 ### RoomInfo
 Sent to clients when they connect to an Archipelago server.
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| version | [NetworkVersion](#NetworkVersion) | Object denoting the version of Archipelago which the server is running. |
-| tags | list\[str\] | Denotes special features or capabilities that the sender is capable of. Example: `WebHost` |
-| password | bool | Denoted whether a password is required to join this room.|
-| permissions | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "forfeit", "collect" and "remaining". |
-| hint_cost | int | The amount of points it costs to receive a hint from the server. |
-| location_check_points | int | The amount of hint points you receive per item/location check completed. ||
-| games | list\[str\] | List of games present in this multiworld. |
-| datapackage_versions | dict\[str, int\] | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). |
-| seed_name | str | uniquely identifying name of this generation |
-| time | float | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce. |
+| Name                  | Type                                          | Notes                                                                                                                                                                                                                                 |
+|-----------------------|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| version               | [NetworkVersion](#NetworkVersion)             | Object denoting the version of Archipelago which the server is running.                                                                                                                                                               |
+| generator_version     | [NetworkVersion](#NetworkVersion)             | Object denoting the version of Archipelago which generated the multiworld.                                                                                                                                                            |
+| tags                  | list\[str\]                                   | Denotes special features or capabilities that the sender is capable of. Example: `WebHost`                                                                                                                                            |
+| password              | bool                                          | Denoted whether a password is required to join this room.                                                                                                                                                                             |
+| permissions           | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
+| hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                                          |
+| location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                                              |
+| games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                                             |
+| datapackage_versions  | dict\[str, int\]                              | Data versions of the individual games' data packages the server will send. Used to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents). **Deprecated. Use `datapackage_checksums` instead.** |
+| datapackage_checksums | dict[str, str]                                | Checksum hash of the individual games' data packages the server will send. Used by newer clients to decide which games' caches are outdated. See [Data Package Contents](#Data-Package-Contents) for more information.                | 
+| seed_name             | str                                           | Uniquely identifying name of this generation                                                                                                                                                                                          |
+| time                  | float                                         | Unix time stamp of "now". Send for time synchronization if wanted for things like the DeathLink Bounce.                                                                                                                               |
 
-#### forfeit
-Dictates what is allowed when it comes to a player forfeiting their run. A forfeit is an action which distributes the rest of the items in a player's run to those other players awaiting them.
+#### release
+Dictates what is allowed when it comes to a player releasing their run. A release is an action which distributes the rest of the items in a player's run to those other players awaiting them.
 
 * `auto`: Distributes a player's items to other players when they complete their goal.
-* `enabled`: Denotes that players may forfeit at any time in the game.
+* `enabled`: Denotes that players may release at any time in the game.
 * `auto-enabled`: Both of the above options together.
-* `disabled`: All forfeit modes disabled.
-* `goal`: Allows for manual use of forfeit command once a player completes their goal. (Disabled until goal completion)
+* `disabled`: All release modes disabled.
+* `goal`: Allows for manual use of release command once a player completes their goal. (Disabled until goal completion)
 
 #### collect
 Dictates what is allowed when it comes to a player collecting their run. A collect is an action which sends the rest of the items in a player's run.
@@ -107,8 +109,8 @@ Dictates what is allowed when it comes to a player querying the items remaining 
 ### ConnectionRefused
 Sent to clients when the server refuses connection. This is sent during the initial connection handshake.
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
+| Name   | Type        | Notes                                                                                                                                                  |
+|--------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | errors | list\[str\] | Optional. When provided, should contain any one of: `InvalidSlot`, `InvalidGame`, `IncompatibleVersion`, `InvalidPassword`, or `InvalidItemsHandling`. |
 
 InvalidSlot indicates that the sent 'name' field did not match any auth entry on the server.
@@ -128,7 +130,8 @@ Sent to clients when the connection handshake is successfully completed.
 | missing_locations | list\[int\]                              | Contains ids of remaining locations that need to be checked. Useful for trackers, among other things.                                               |
 | checked_locations | list\[int\]                              | Contains ids of all locations that have been checked. Useful for trackers, among other things. Location ids are in the range of ± 2<sup>53</sup>-1. |
 | slot_data         | dict\[str, any\]                         | Contains a json object for slot related data, differs per game. Empty if not required. Not present if slot_data in [Connect](#Connect) is false.    |
-| slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information                                                                                         |
+| slot_info         | dict\[int, [NetworkSlot](#NetworkSlot)\] | maps each slot to a [NetworkSlot](#NetworkSlot) information.                                                                                        |
+| hint_points       | int                                      | Number of hint points that the current player has.                                                                                                  |
 
 ### ReceivedItems
 Sent to clients when they receive an item.
@@ -146,49 +149,57 @@ Sent to clients to acknowledge a received [LocationScouts](#LocationScouts) pack
 | locations | list\[[NetworkItem](#NetworkItem)\] | Contains list of item(s) in the location(s) scouted. |
 
 ### RoomUpdate
-Sent when there is a need to update information about the present game session. Generally useful for async games.
-Once authenticated (received Connected), this may also contain data from Connected.
+Sent when there is a need to update information about the present game session.
 #### Arguments
-The arguments for RoomUpdate are identical to [RoomInfo](#RoomInfo) barring:
+RoomUpdate may contain the same arguments from [RoomInfo](#RoomInfo) and, once authenticated, arguments from
+[Connected](#Connected) with the following exceptions:
 
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| hint_points | int | New argument. The client's current hint points. |
-| players | list\[[NetworkPlayer](#NetworkPlayer)\] | Send in the event of an alias rename. Always sends all players, whether connected or not. |
-| checked_locations | list\[int\] | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
-| missing_locations | list\[int\] | Should never be sent as an update, if needed is the inverse of checked_locations. |
+| Name              | Type                                    | Notes                                                                                                                 |
+|-------------------|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| players           | list\[[NetworkPlayer](#NetworkPlayer)\] | Sent in the event of an alias rename. Always sends all players, whether connected or not.                             |
+| checked_locations | list\[int\]                             | May be a partial update, containing new locations that were checked, especially from a coop partner in the same slot. |
+| missing_locations | -                                       | Never sent in this packet. If needed, it is the inverse of `checked_locations`.                                       |
 
 All arguments for this packet are optional, only changes are sent.
 
-### Print
-Sent to clients purely to display a message to the player. 
-* *Deprecation warning: clients that connect with version 0.3.5 or higher will nolonger recieve Print packets, instead all messsages are send as [PrintJSON](#PrintJSON)*
-#### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| text | str | Message to display to player. |
-
 ### PrintJSON
-Sent to clients purely to display a message to the player. This packet differs from [Print](#Print) in that the data being sent with this packet allows for more configurable or specific messaging.
+Sent to clients purely to display a message to the player. While various message types provide additional arguments, clients only need to evaluate the `data` argument to construct the human-readable message text. All other arguments may be ignored safely.
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| data | list\[[JSONMessagePart](#JSONMessagePart)\] | Type of this part of the message. |
-| type | str | May be present to indicate the [PrintJsonType](#PrintJsonType) of this message. |
-| receiving | int | Is present if type is Hint or ItemSend and marks the destination player's ID. |
-| item | [NetworkItem](#NetworkItem) | Is present if type is Hint or ItemSend and marks the source player id, location id, item id and item flags. |
-| found | bool | Is present if type is Hint, denotes whether the location hinted for was checked. |
-| countdown | int | Is present if type is `Countdown`, denotes the amount of seconds remaining on the countdown. |
+| Name | Type | Message Types | Contents |
+| ---- | ---- | ------------- | -------- |
+| data | list\[[JSONMessagePart](#JSONMessagePart)\] | (all) | Textual content of this message |
+| type | str | (any) | [PrintJsonType](#PrintJsonType) of this message (optional) |
+| receiving | int | ItemSend, ItemCheat, Hint | Destination player's ID |
+| item | [NetworkItem](#NetworkItem) | ItemSend, ItemCheat, Hint | Source player's ID, location ID, item ID and item flags |
+| found | bool | Hint | Whether the location hinted for was checked |
+| team | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect, ItemCheat | Team of the triggering player |
+| slot | int | Join, Part, Chat, TagsChanged, Goal, Release, Collect | Slot of the triggering player |
+| message | str | Chat, ServerChat | Original chat message without sender prefix |
+| tags | list\[str\] | Join, TagsChanged | Tags of the triggering player |
+| countdown | int | Countdown | Amount of seconds remaining on the countdown |
 
-##### PrintJsonType
-PrintJsonType indicates the type of [PrintJson](#PrintJson) packet, different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown type the data's list\[[JSONMessagePart](#JSONMessagePart)\] should still be printed as normal. 
+#### PrintJsonType
+PrintJsonType indicates the type of a [PrintJSON](#PrintJSON) packet. Different types can be handled differently by the client and can also contain additional arguments. When receiving an unknown or missing type, the `data`'s list\[[JSONMessagePart](#JSONMessagePart)\] should still be displayed to the player as normal text.
 
 Currently defined types are:
-| Type | Notes |
-| ---- | ----- |
-| ItemSend | The message is in response to a player receiving an item. |
-| Hint | The message is in response to a player hinting. |
-| Countdown | The message contains information about the current server Countdown. |
+
+| Type | Subject |
+| ---- | ------- |
+| ItemSend | A player received an item. |
+| ItemCheat | A player used the `!getitem` command. |
+| Hint | A player hinted. |
+| Join | A player connected. |
+| Part | A player disconnected. |
+| Chat | A player sent a chat message. |
+| ServerChat | The server broadcasted a message. |
+| Tutorial | The client has triggered a tutorial message, such as when first connecting. |
+| TagsChanged | A player changed their tags. |
+| CommandResult | Someone (usually the client) entered an `!` command. |
+| AdminCommandResult | The client entered an `!admin` command. |
+| Goal | A player reached their goal. |
+| Release | A player released the remaining items in their world. |
+| Collect | A player collected the remaining items for their world. |
+| Countdown | The current server countdown has progressed. |
 
 ### DataPackage
 Sent to clients to provide what is known as a 'data package' which contains information to enable a client to most easily communicate with the Archipelago server. Contents include things like location id to name mappings, among others; see [Data Package Contents](#Data-Package-Contents) for more info.
@@ -411,6 +422,9 @@ The following operations can be applied to a datastorage key
 | xor | Applies a bitwise Exclusive OR to the current value of the key with `value`. |
 | left_shift | Applies a bitwise left-shift to the current value of the key by `value`. |
 | right_shift | Applies a bitwise right-shift to the current value of the key by `value`. |
+| remove | List only: removes the first instance of `value` found in the list. |
+| pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. |
+| update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
 
 ### SetNotify
 Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.
@@ -543,12 +557,16 @@ Color options:
 `flags` contains the [NetworkItem](#NetworkItem) flags that belong to the item
 
 ### Client States
-An enumeration containing the possible client states that may be used to inform the server in [StatusUpdate](#StatusUpdate).
+An enumeration containing the possible client states that may be used to inform
+the server in [StatusUpdate](#StatusUpdate). The MultiServer automatically sets
+the client state to `ClientStatus.CLIENT_CONNECTED` on the first active connection
+to a slot.
 
 ```python
 import enum
 class ClientStatus(enum.IntEnum):
     CLIENT_UNKNOWN = 0
+    CLIENT_CONNECTED = 5
     CLIENT_READY = 10
     CLIENT_PLAYING = 20
     CLIENT_GOAL = 30
@@ -596,7 +614,7 @@ class Permission(enum.IntEnum):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
-    auto = 0b110  # 6, forces use after goal completion, only works for forfeit and collect
+    auto = 0b110  # 6, forces use after goal completion, only works for release and collect
     auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
 ```
 
@@ -633,11 +651,12 @@ Note:
 #### GameData
 GameData is a **dict** but contains these keys and values. It's broken out into another "type" for ease of documentation.
 
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| item_name_to_id | dict[str, int] | Mapping of all item names to their respective ID. |
-| location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID. |
-| version | int | Version number of this game's data |
+| Name                | Type           | Notes                                                                                                                         |
+|---------------------|----------------|-------------------------------------------------------------------------------------------------------------------------------|
+| item_name_to_id     | dict[str, int] | Mapping of all item names to their respective ID.                                                                             |
+| location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID.                                                                         |
+| version             | int            | Version number of this game's data. Deprecated. Used by older clients to request an updated datapackage if cache is outdated. |
+| checksum            | str            | A checksum hash of this game's data.                                                                                          |
 
 ### Tags
 Tags are represented as a list of strings, the common Client tags follow:

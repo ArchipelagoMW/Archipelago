@@ -56,7 +56,9 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Connect to a snes. Optionally include network address of a snes to connect to,
         otherwise show available devices; and a SNES device number if more than one SNES is detected.
         Examples: "/snes", "/snes 1", "/snes localhost:23074 1" """
-
+        if self.ctx.snes_state in {SNESState.SNES_ATTACHED, SNESState.SNES_CONNECTED, SNESState.SNES_CONNECTING}:
+            self.output("Already connected to SNES. Disconnecting first.")
+            self._cmd_snes_close()
         return self.connect_to_snes(snes_options)
 
     def connect_to_snes(self, snes_options: str = "") -> bool:
@@ -84,7 +86,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Close connection to a currently connected snes"""
         self.ctx.snes_reconnect_address = None
         self.ctx.cancel_snes_autoreconnect()
-        if self.ctx.snes_socket is not None and not self.ctx.snes_socket.closed:
+        if self.ctx.snes_socket and not self.ctx.snes_socket.closed:
             async_start(self.ctx.snes_socket.close())
             return True
         else:
@@ -113,8 +115,8 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
 
 class SNIContext(CommonContext):
     command_processor: typing.Type[SNIClientCommandProcessor] = SNIClientCommandProcessor
-    game = None  # set in validate_rom
-    items_handling = None  # set in game_watcher
+    game: typing.Optional[str] = None  # set in validate_rom
+    items_handling: typing.Optional[int] = None  # set in game_watcher
     snes_connect_task: "typing.Optional[asyncio.Task[None]]" = None
     snes_autoreconnect_task: typing.Optional["asyncio.Task[None]"] = None
 
@@ -313,7 +315,7 @@ def launch_sni() -> None:
             f"please start it yourself if it is not running")
 
 
-async def _snes_connect(ctx: SNIContext, address: str) -> WebSocketClientProtocol:
+async def _snes_connect(ctx: SNIContext, address: str, retry: bool = True) -> WebSocketClientProtocol:
     address = f"ws://{address}" if "://" not in address else address
     snes_logger.info("Connecting to SNI at %s ..." % address)
     seen_problems: typing.Set[str] = set()
@@ -334,6 +336,8 @@ async def _snes_connect(ctx: SNIContext, address: str) -> WebSocketClientProtoco
             await asyncio.sleep(1)
         else:
             return snes_socket
+        if not retry:
+            break
 
 
 class SNESRequest(typing.TypedDict):
@@ -442,7 +446,8 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
         recv_task = asyncio.create_task(snes_recv_loop(ctx))
 
     except Exception as e:
-        if recv_task is not None:
+        ctx.snes_state = SNESState.SNES_DISCONNECTED
+        if task_alive(recv_task):
             if not ctx.snes_socket.closed:
                 await ctx.snes_socket.close()
         else:
@@ -450,15 +455,9 @@ async def snes_connect(ctx: SNIContext, address: str, deviceIndex: int = -1) -> 
                 if not ctx.snes_socket.closed:
                     await ctx.snes_socket.close()
                 ctx.snes_socket = None
-            ctx.snes_state = SNESState.SNES_DISCONNECTED
-        if not ctx.snes_reconnect_address:
-            snes_logger.error("Error connecting to snes (%s)" % e)
-        else:
-            snes_logger.error(f"Error connecting to snes, retrying in {_global_snes_reconnect_delay} seconds")
-            assert ctx.snes_autoreconnect_task is None
-            ctx.snes_autoreconnect_task = asyncio.create_task(snes_autoreconnect(ctx), name="snes auto-reconnect")
+        snes_logger.error(f"Error connecting to snes ({e}), retrying in {_global_snes_reconnect_delay} seconds")
+        ctx.snes_autoreconnect_task = asyncio.create_task(snes_autoreconnect(ctx), name="snes auto-reconnect")
         _global_snes_reconnect_delay *= 2
-
     else:
         _global_snes_reconnect_delay = ctx.starting_reconnect_delay
         snes_logger.info(f"Attached to {device}")
@@ -471,10 +470,17 @@ async def snes_disconnect(ctx: SNIContext) -> None:
         ctx.snes_socket = None
 
 
+def task_alive(task: typing.Optional[asyncio.Task]) -> bool:
+    if task:
+        return not task.done()
+    return False
+
+
 async def snes_autoreconnect(ctx: SNIContext) -> None:
     await asyncio.sleep(_global_snes_reconnect_delay)
-    if ctx.snes_reconnect_address and not ctx.snes_socket and not ctx.snes_connect_task:
-        ctx.snes_connect_task = asyncio.create_task(snes_connect(ctx, ctx.snes_reconnect_address), name="SNES Connect")
+    if not ctx.snes_socket and not task_alive(ctx.snes_connect_task):
+        address = ctx.snes_reconnect_address if ctx.snes_reconnect_address else ctx.snes_address
+        ctx.snes_connect_task = asyncio.create_task(snes_connect(ctx, address), name="SNES Connect")
 
 
 async def snes_recv_loop(ctx: SNIContext) -> None:
@@ -680,6 +686,8 @@ async def main() -> None:
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
             import webbrowser
+            async_start(run_game(romfile))
+            await _snes_connect(SNIContext(args.snes, args.connect, args.password), args.snes, False)
             webbrowser.open(f"http://www.evermizer.com/apclient/#server={meta['server']}")
             logging.info("Starting Evermizer Client in your Browser...")
             import time

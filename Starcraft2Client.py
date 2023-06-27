@@ -10,6 +10,8 @@ import re
 import sys
 import typing
 import queue
+import zipfile
+import io
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -23,11 +25,10 @@ logger = logging.getLogger("Client")
 sc2_logger = logging.getLogger("Starcraft2")
 
 import nest_asyncio
-import sc2
-from sc2.bot_ai import BotAI
-from sc2.data import Race
-from sc2.main import run_game
-from sc2.player import Bot
+from worlds._sc2common import bot
+from worlds._sc2common.bot.data import Race
+from worlds._sc2common.bot.main import run_game
+from worlds._sc2common.bot.player import Bot
 from worlds.sc2wol import SC2WoLWorld
 from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
@@ -50,9 +51,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
         options = difficulty.split()
         num_options = len(options)
-        difficulty_choice = options[0].lower()
 
         if num_options > 0:
+            difficulty_choice = options[0].lower()
             if difficulty_choice == "casual":
                 self.ctx.difficulty_override = 0
             elif difficulty_choice == "normal":
@@ -69,7 +70,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             return True
 
         else:
-            self.output("Difficulty needs to be specified in the command.")
+            if self.ctx.difficulty == -1:
+                self.output("Please connect to a seed before checking difficulty.")
+            else:
+                self.output("Current difficulty: " + ["Casual", "Normal", "Hard", "Brutal"][self.ctx.difficulty])
+            self.output("To change the difficulty, add the name of the difficulty after the command.")
             return False
 
     def _cmd_disable_mission_check(self) -> bool:
@@ -120,9 +125,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             sc2_logger.warning("When using set_path, you must type the path to your SC2 install directory.")
         return False
 
-    def _cmd_download_data(self, force: bool = False) -> bool:
+    def _cmd_download_data(self) -> bool:
         """Download the most recent release of the necessary files for playing SC2 with
-        Archipelago. force should be True or False. force=True will overwrite your files."""
+        Archipelago. Will overwrite existing files."""
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
@@ -132,11 +137,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             current_ver = None
 
-        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData', current_version=current_ver, force_download=force)
+        tempzip, version = download_latest_release_zip('TheCondor07', 'Starcraft2ArchipelagoData',
+                                                       current_version=current_ver, force_download=True)
 
         if tempzip != '':
             try:
-                import zipfile
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
                 sc2_logger.info(f"Download complete. Version {version} installed.")
                 with open(os.environ["SC2PATH"]+"ArchipelagoSC2Version.txt", "w") as f:
@@ -195,12 +200,16 @@ class SC2Context(CommonContext):
             self.build_location_to_mission_mapping()
 
             # Looks for the required maps and mods for SC2. Runs check_game_install_path.
-            is_mod_installed_correctly()
+            maps_present = is_mod_installed_correctly()
             if os.path.exists(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt"):
                 with open(os.environ["SC2PATH"] + "ArchipelagoSC2Version.txt", "r") as f:
                     current_ver = f.read()
                 if is_mod_update_available("TheCondor07", "Starcraft2ArchipelagoData", current_ver):
                     sc2_logger.info("NOTICE: Update for required files found. Run /download_data to install.")
+            elif maps_present:
+                sc2_logger.warning("NOTICE: Your map files may be outdated (version number not found). "
+                                   "Run /download_data to update them.")
+
 
     def on_print_json(self, args: dict):
         # goes to this world
@@ -229,8 +238,6 @@ class SC2Context(CommonContext):
         from kivy.uix.button import Button
         from kivy.uix.floatlayout import FloatLayout
         from kivy.properties import StringProperty
-
-        import Utils
 
         class HoverableButton(HoverBehavior, Button):
             pass
@@ -534,11 +541,11 @@ async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
     with DllDirectory(None):
-        run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
+        run_game(bot.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
                                                                 name="Archipelago", fullscreen=True)], realtime=True)
 
 
-class ArchipelagoBot(sc2.bot_ai.BotAI):
+class ArchipelagoBot(bot.bot_ai.BotAI):
     game_running: bool = False
     mission_completed: bool = False
     boni: typing.List[bool]
@@ -857,7 +864,7 @@ def check_game_install_path() -> bool:
         documentspath = buf.value
         einfo = str(documentspath / Path("StarCraft II\\ExecuteInfo.txt"))
     else:
-        einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
+        einfo = str(bot.paths.get_home() / Path(bot.paths.USERPATH[bot.paths.PF]))
 
     # Check if the file exists.
     if os.path.isfile(einfo):
@@ -873,7 +880,7 @@ def check_game_install_path() -> bool:
                                    f"try again.")
                 return False
             if os.path.exists(base):
-                executable = sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
+                executable = bot.paths.latest_executeble(Path(base).expanduser() / "Versions")
 
                 # Finally, check the path for an actual executable.
                 # If we find one, great. Set up the SC2PATH.
@@ -1003,7 +1010,7 @@ def download_latest_release_zip(owner: str, repo: str, current_version: str = No
     download_url = r1.json()["assets"][0]["browser_download_url"]
 
     r2 = requests.get(download_url, headers=headers)
-    if r2.status_code == 200:
+    if r2.status_code == 200 and zipfile.is_zipfile(io.BytesIO(r2.content)):
         with open(f"{repo}.zip", "wb") as fh:
             fh.write(r2.content)
         sc2_logger.info(f"Successfully downloaded {repo}.zip.")

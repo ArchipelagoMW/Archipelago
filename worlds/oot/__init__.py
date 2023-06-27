@@ -29,7 +29,7 @@ from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 
 from Utils import get_options
-from BaseClasses import MultiWorld, CollectionState, RegionType, Tutorial, LocationProgressType
+from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
 from Options import Range, Toggle, VerifyKeys
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
@@ -85,7 +85,16 @@ class OOTWeb(WebWorld):
         setup.authors
     )
 
-    tutorials = [setup, setup_es]
+    setup_fr = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["TheLynk"]
+    )
+
+    tutorials = [setup, setup_es, setup_fr]
 
 
 class OOTWorld(World):
@@ -109,7 +118,7 @@ class OOTWorld(World):
 
     data_version = 3
 
-    required_client_version = (0, 3, 6)
+    required_client_version = (0, 4, 0)
 
     item_name_groups = {
         # internal groups
@@ -120,14 +129,14 @@ class OOTWorld(World):
             "Water Medallion", "Shadow Medallion", "Spirit Medallion",
             "Kokiri Emerald", "Goron Ruby", "Zora Sapphire"},
         "logic_bottles": {"Bottle", "Bottle with Milk", "Deliver Letter",
-            "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", 
-            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", 
+            "Sell Big Poe", "Bottle with Red Potion", "Bottle with Green Potion",
+            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish",
             "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
 
         # hint groups
         "Bottles": {"Bottle", "Bottle with Milk", "Rutos Letter",
-            "Bottle with Big Poe", "Bottle with Red Potion", "Bottle with Green Potion", 
-            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish", 
+            "Bottle with Big Poe", "Bottle with Red Potion", "Bottle with Green Potion",
+            "Bottle with Blue Potion", "Bottle with Fairy", "Bottle with Fish",
             "Bottle with Blue Fire", "Bottle with Bugs", "Bottle with Poe"},
         "Adult Trade Item": {"Pocket Egg", "Pocket Cucco", "Odd Mushroom",
             "Odd Potion", "Poachers Saw", "Broken Sword", "Prescription",
@@ -140,7 +149,7 @@ class OOTWorld(World):
         super(OOTWorld, self).__init__(world, player)
 
     @classmethod
-    def stage_assert_generate(cls, world: MultiWorld):
+    def stage_assert_generate(cls, multiworld: MultiWorld):
         rom = Rom(file=get_options()['oot_options']['rom_file'])
 
     def generate_early(self):
@@ -171,12 +180,13 @@ class OOTWorld(World):
         # ER and glitched logic are not compatible; glitched takes priority
         if self.logic_rules == 'glitched':
             self.shuffle_interior_entrances = 'off'
+            self.shuffle_dungeon_entrances = 'off'
+            self.spawn_positions = 'off'
+            self.shuffle_bosses = 'off'
             self.shuffle_grotto_entrances = False
-            self.shuffle_dungeon_entrances = False
             self.shuffle_overworld_entrances = False
             self.owl_drops = False
             self.warp_songs = False
-            self.spawn_positions = 'off'
 
         # Fix spawn positions option
         new_sp = []
@@ -196,6 +206,17 @@ class OOTWorld(World):
         # Ganon boss key should not be in itempool in triforce hunt
         if self.triforce_hunt:
             self.shuffle_ganon_bosskey = 'triforce'
+
+        # Force itempool to higher settings if it doesn't have enough hearts
+        max_required_hearts = 3
+        if self.bridge == 'hearts':
+            max_required_hearts = max(max_required_hearts, self.bridge_hearts)
+        if self.shuffle_ganon_bosskey == 'hearts':
+            max_required_hearts = max(max_required_hearts, self.ganon_bosskey_hearts)
+        if max_required_hearts > 3 and self.item_pool_value == 'minimal':
+            self.item_pool_value = 'scarce'
+        if max_required_hearts > 12 and self.item_pool_value == 'scarce':
+            self.item_pool_value = 'balanced'
 
         # If songs/keys locked to own world by settings, add them to local_items
         local_types = []
@@ -283,8 +304,17 @@ class OOTWorld(World):
         self.shuffle_special_dungeon_entrances = self.shuffle_dungeon_entrances == 'all'
         self.shuffle_dungeon_entrances = self.shuffle_dungeon_entrances != 'off'
         self.ensure_tod_access = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances or self.spawn_positions
-        self.entrance_shuffle = (self.shuffle_interior_entrances != 'off') or self.shuffle_grotto_entrances or self.shuffle_dungeon_entrances or \
-                                self.shuffle_overworld_entrances or self.owl_drops or self.warp_songs or self.spawn_positions
+        self.entrance_shuffle = (
+            self.shuffle_interior_entrances != 'off'
+            or self.shuffle_bosses != 'off'
+            or self.shuffle_dungeon_entrances
+            or self.shuffle_special_dungeon_entrances
+            or self.spawn_positions
+            or self.shuffle_grotto_entrances
+            or self.shuffle_overworld_entrances
+            or self.owl_drops
+            or self.warp_songs
+        )
         self.disable_trade_revert = (self.shuffle_interior_entrances != 'off') or self.shuffle_overworld_entrances
         self.shuffle_special_interior_entrances = self.shuffle_interior_entrances == 'all'
 
@@ -317,13 +347,14 @@ class OOTWorld(World):
 
         # Determine which dungeons are MQ. Not compatible with glitched logic.
         mq_dungeons = set()
+        all_dungeons = [d['name'] for d in dungeon_table]
         if self.logic_rules != 'glitched':
             if self.mq_dungeons_mode == 'mq':
-                mq_dungeons = dungeon_table.keys()
+                mq_dungeons = all_dungeons
             elif self.mq_dungeons_mode == 'specific':
                 mq_dungeons = self.mq_dungeons_specific
             elif self.mq_dungeons_mode == 'count':
-                mq_dungeons = self.multiworld.random.sample(dungeon_table, self.mq_dungeons_count)
+                mq_dungeons = self.multiworld.random.sample(all_dungeons, self.mq_dungeons_count)
         else:
             self.mq_dungeons_mode = 'count'
             self.mq_dungeons_count = 0
@@ -342,7 +373,7 @@ class OOTWorld(World):
             elif self.dungeon_shortcuts_choice == 'all':
                 self.dungeon_shortcuts = set(shortcut_dungeons)
             elif self.dungeon_shortcuts_choice == 'random':
-                self.dungeon_shortcuts = self.multiworld.random.sample(shortcut_dungeons, 
+                self.dungeon_shortcuts = self.multiworld.random.sample(shortcut_dungeons,
                     self.multiworld.random.randint(0, len(shortcut_dungeons)))
             # == 'choice', leave as previous
         else:
@@ -431,8 +462,7 @@ class OOTWorld(World):
         region_json = read_json(file_path)
 
         for region in region_json:
-            new_region = OOTRegion(region['region_name'], RegionType.Generic, None, self.player)
-            new_region.multiworld = self.multiworld
+            new_region = OOTRegion(region['region_name'], self.player, self.multiworld)
             if 'pretty_name' in region:
                 new_region.pretty_name = region['pretty_name']
             if 'font_color' in region:
@@ -441,6 +471,7 @@ class OOTWorld(World):
                 new_region.scene = region['scene']
             if 'dungeon' in region:
                 new_region.dungeon = region['dungeon']
+                new_region.set_hint_data(region['dungeon'])
             if 'is_boss_room' in region:
                 new_region.is_boss_room = region['is_boss_room']
             if 'hint' in region:
@@ -601,7 +632,7 @@ class OOTWorld(World):
             world_type = 'Glitched World'
         overworld_data_path = data_path(world_type, 'Overworld.json')
         bosses_data_path = data_path(world_type, 'Bosses.json')
-        menu = OOTRegion('Menu', None, None, self.player)
+        menu = OOTRegion('Menu', self.player, self.multiworld)
         start = OOTEntrance(self.player, self.multiworld, 'New Game', menu)
         menu.exits.append(start)
         self.multiworld.regions.append(menu)
@@ -817,9 +848,9 @@ class OOTWorld(World):
         # Place shop items
         # fast fill will fail because there is some logic on the shop items. we'll gather them up and place the shop items
         if self.shopsanity != 'off':
-            shop_prog = list(filter(lambda item: item.player == self.player and item.type == 'Shop' 
+            shop_prog = list(filter(lambda item: item.player == self.player and item.type == 'Shop'
                 and item.advancement, self.multiworld.itempool))
-            shop_junk = list(filter(lambda item: item.player == self.player and item.type == 'Shop' 
+            shop_junk = list(filter(lambda item: item.player == self.player and item.type == 'Shop'
                 and not item.advancement, self.multiworld.itempool))
             shop_locations = list(
                 filter(lambda location: location.type == 'Shop' and location.name not in self.shop_prices,
@@ -842,10 +873,13 @@ class OOTWorld(World):
         impa = self.multiworld.get_location("Song from Impa", self.player)
         if self.shuffle_child_trade == 'skip_child_zelda':
             if impa.item is None:
-                item_to_place = self.multiworld.random.choice(
-                    list(item for item in self.multiworld.itempool if item.player == self.player))
+                candidate_items = list(item for item in self.multiworld.itempool if item.player == self.player)
+                if candidate_items:
+                    item_to_place = self.multiworld.random.choice(candidate_items)
+                    self.multiworld.itempool.remove(item_to_place)
+                else:
+                    item_to_place = self.create_item("Recovery Heart")
                 impa.place_locked_item(item_to_place)
-                self.multiworld.itempool.remove(item_to_place)
             # Give items to startinventory
             self.multiworld.push_precollected(impa.item)
             self.multiworld.push_precollected(self.create_item("Zeldas Letter"))
@@ -936,10 +970,10 @@ class OOTWorld(World):
             trap_location_ids = [loc.address for loc in self.get_locations() if loc.item.trap]
             self.trap_appearances = {}
             for loc_id in trap_location_ids:
-                self.trap_appearances[loc_id] = self.create_item(self.multiworld.slot_seeds[self.player].choice(self.fake_items).name)
+                self.trap_appearances[loc_id] = self.create_item(self.multiworld.per_slot_randoms[self.player].choice(self.fake_items).name)
 
             # Seed hint RNG, used for ganon text lines also
-            self.hint_rng = self.multiworld.slot_seeds[self.player]
+            self.hint_rng = self.multiworld.per_slot_randoms[self.player]
 
             outfile_name = self.multiworld.get_out_file_name_base(self.player)
             rom = Rom(file=get_options()['oot_options']['rom_file'])
@@ -1003,7 +1037,7 @@ class OOTWorld(World):
             for player in barren_hint_players:
                 items_by_region[player] = {}
                 for r in multiworld.worlds[player].regions:
-                    items_by_region[player][r.hint_text] = {'dungeon': False, 'weight': 0, 'is_barren': True}
+                    items_by_region[player][r._hint_text] = {'dungeon': False, 'weight': 0, 'is_barren': True}
                 for d in multiworld.worlds[player].dungeons:
                     items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'is_barren': True}
                 del (items_by_region[player]["Link's pocket"])
@@ -1092,7 +1126,7 @@ class OOTWorld(World):
         # If it's in a dungeon, scan all the entrances for all the regions in the dungeon.
         #   This should terminate on the first region anyway, but we scan everything to be safe.
         # If it's one of the special cases, go one level deeper.
-        # If it's a boss room, go one level deeper to the boss door region, which is in a dungeon. 
+        # If it's a boss room, go one level deeper to the boss door region, which is in a dungeon.
         # Otherwise return None.
         def get_entrance_to_region(region):
             special_case_regions = {
@@ -1124,7 +1158,7 @@ class OOTWorld(World):
                             er_hint_data[self.player][location.address] = main_entrance.name
                             logger.debug(f"Set {location.name} hint data to {main_entrance.name}")
 
-    # Key ring handling: 
+    # Key ring handling:
     # Key rings are multiple items glued together into one, so we need to give
     # the appropriate number of keys in the collection state when they are
     # picked up.
@@ -1269,6 +1303,13 @@ def gather_locations(multiworld: MultiWorld,
         'HideoutSmallKey': 'shuffle_hideoutkeys',
         'GanonBossKey': 'shuffle_ganon_bosskey',
     }
+
+    # Special handling for atypical item types
+    if item_type == 'HideoutSmallKey':
+        dungeon = 'Thieves Hideout'
+    elif item_type == 'GanonBossKey':
+        dungeon = 'Ganons Castle'
+
     if isinstance(players, int):
         players = {players}
     fill_opts = {p: getattr(multiworld.worlds[p], type_to_setting[item_type]) for p in players}

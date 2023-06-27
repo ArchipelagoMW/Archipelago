@@ -6,7 +6,7 @@ from json import JSONEncoder, JSONDecoder
 
 import websockets
 
-from Utils import Version
+from Utils import ByValue, Version
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -20,7 +20,7 @@ class JSONMessagePart(typing.TypedDict, total=False):
     flags: int
 
 
-class ClientStatus(enum.IntEnum):
+class ClientStatus(ByValue, enum.IntEnum):
     CLIENT_UNKNOWN = 0
     CLIENT_CONNECTED = 5
     CLIENT_READY = 10
@@ -28,22 +28,22 @@ class ClientStatus(enum.IntEnum):
     CLIENT_GOAL = 30
 
 
-class SlotType(enum.IntFlag):
+class SlotType(ByValue, enum.IntFlag):
     spectator = 0b00
     player = 0b01
     group = 0b10
 
     @property
     def always_goal(self) -> bool:
-        """Mark this slot has having reached its goal instantly."""
+        """Mark this slot as having reached its goal instantly."""
         return self.value != 0b01
 
 
-class Permission(enum.IntFlag):
+class Permission(ByValue, enum.IntFlag):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
-    auto = 0b110  # 6, forces use after goal completion, only works for forfeit
+    auto = 0b110  # 6, forces use after goal completion, only works for release
     auto_enabled = 0b111  # 7, forces use after goal completion, allows manual use any time
 
     @staticmethod

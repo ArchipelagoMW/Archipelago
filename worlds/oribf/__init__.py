@@ -1,18 +1,19 @@
 from typing import Set
 
-from ..AutoWorld import World, LogicMixin
+from worlds.AutoWorld import World
 from .Items import item_table, default_pool
 from .Locations import lookup_name_to_id
 from .Rules import set_rules, location_rules
 from .Regions import locations_by_region, connectors
 from .Options import options
-from BaseClasses import Region, Item, Location, RegionType, Entrance, ItemClassification
+from BaseClasses import Region, Item, Location, Entrance, ItemClassification
 
 
 class OriBlindForest(World):
     game: str = "Ori and the Blind Forest"
 
     topology_present = True
+    data_version = 1
 
     item_name_to_id = item_table
     location_name_to_id = lookup_name_to_id
@@ -31,7 +32,7 @@ class OriBlindForest(World):
     set_rules = set_rules
 
     def create_region(self, name: str):
-        return Region(name, RegionType.Generic, name, self.player, self.multiworld)
+        return Region(name, self.player, self.multiworld)
 
     def create_regions(self):
         world = self.multiworld
@@ -68,9 +69,3 @@ class OriBlindForest(World):
         return Item(name,
                     ItemClassification.progression if not name.startswith("EX") else ItemClassification.filler,
                     item_table[name], self.player)
-
-
-class OriBlindForestLogic(LogicMixin):
-    def _oribf_has_all(self, items: Set[str], player:int):
-        return all(self.prog_items[item, player] if type(item) == str
-                   else self.prog_items[item[0], player] >= item[1] for item in items)

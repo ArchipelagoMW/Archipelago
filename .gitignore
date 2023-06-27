@@ -8,6 +8,7 @@
 *.apm3
 *.apmc
 *.apz5
+*.aptloz
 *.pyc
 *.pyd
 *.sfc
@@ -25,7 +26,9 @@
 *multisave
 *.archipelago
 *.apsave
+*.BIN
 
+setups
 build
 bundle/components.wxs
 dist
@@ -50,6 +53,8 @@ Output Logs/
 /Archipelago.zip
 /setup.ini
 /installdelete.iss
+/data/user.kv
+/datapackage
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -137,6 +142,7 @@ ENV/
 env.bak/
 venv.bak/
 .code-workspace
+shell.nix
 
 # Spyder project settings
 .spyderproject
@@ -166,9 +172,13 @@ cython_debug/
 jdk*/
 minecraft*/
 minecraft_versions.json
+!worlds/minecraft/
 
 # pyenv
 .python-version
+
+#undertale stuff
+/Undertale/
 
 # OS General Files
 .DS_Store

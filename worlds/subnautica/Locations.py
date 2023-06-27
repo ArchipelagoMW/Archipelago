@@ -140,7 +140,7 @@ location_table: Dict[int, LocationDict] = {
             'need_laser_cutter': False,
             'position': {'x': -664.4, 'y': -97.8, 'z': -8.0}},
     33029: {'can_slip_through': False,
-            'name': 'Grassy Plateaus West Wreck - Databox',
+            'name': 'Grassy Plateaus Southwest Wreck - Databox',
             'need_laser_cutter': True,
             'position': {'x': -421.4, 'y': -107.8, 'z': -266.5}},
     33030: {'can_slip_through': False,
@@ -571,9 +571,3 @@ location_table: Dict[int, LocationDict] = {
             'need_laser_cutter': False,
             'position': {'x': 83.2, 'y': -276.4, 'z': -345.5}},
 }
-if False:  # turn to True to export for Subnautica mod
-    payload = {location_id: location_data["position"] for location_id, location_data in location_table.items()}
-    import json
-
-    with open("locations.json", "w") as f:
-        json.dump(payload, f)

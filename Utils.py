@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import typing
 import builtins
 import os
@@ -12,7 +13,7 @@ import io
 import collections
 import importlib
 import logging
-from typing import BinaryIO, ClassVar, Coroutine, Optional, Set
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
 
 from yaml import load, load_all, dump, SafeLoader
 
@@ -37,8 +38,11 @@ class Version(typing.NamedTuple):
     minor: int
     build: int
 
+    def as_simple_string(self) -> str:
+        return ".".join(str(item) for item in self)
 
-__version__ = "0.3.7"
+
+__version__ = "0.4.1"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -87,7 +91,10 @@ def is_frozen() -> bool:
 
 
 def local_path(*path: str) -> str:
-    """Returns path to a file in the local Archipelago installation or source."""
+    """
+    Returns path to a file in the local Archipelago installation or source.
+    This might be read-only and user_path should be used instead for ROMs, configuration, etc.
+    """
     if hasattr(local_path, 'cached_path'):
         pass
     elif is_frozen():
@@ -140,6 +147,17 @@ def user_path(*path: str) -> str:
                 shutil.copy2(local_path(fn), user_path(fn))
 
     return os.path.join(user_path.cached_path, *path)
+
+
+def cache_path(*path: str) -> str:
+    """Returns path to a file in the user's Archipelago cache directory."""
+    if hasattr(cache_path, "cached_path"):
+        pass
+    else:
+        import platformdirs
+        cache_path.cached_path = platformdirs.user_cache_dir("Archipelago", False)
+
+    return os.path.join(cache_path.cached_path, *path)
 
 
 def output_path(*path: str) -> str:
@@ -195,11 +213,11 @@ def get_public_ipv4() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         # noinspection PyBroadException
         try:
-            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx).read().decode("utf8").strip()
+            ip = urllib.request.urlopen("https://v4.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
         except Exception:
             logging.exception(e)
             pass  # we could be offline, in a local game, so no point in erroring out
@@ -213,7 +231,7 @@ def get_public_ipv6() -> str:
     ip = socket.gethostbyname(socket.gethostname())
     ctx = get_cert_none_ssl_context()
     try:
-        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx).read().decode("utf8").strip()
+        ip = urllib.request.urlopen("https://v6.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
     except Exception as e:
         logging.exception(e)
         pass  # we could be offline, in a local game, or ipv6 may not be available
@@ -247,6 +265,9 @@ def get_default_options() -> OptionsType:
         },
         "lttp_options": {
             "rom_file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
+        },
+        "ladx_options": {
+            "rom_file": "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc",
         },
         "server_options": {
             "host": None,
@@ -309,6 +330,20 @@ def get_default_options() -> OptionsType:
         },
         "lufia2ac_options": {
             "rom_file": "Lufia II - Rise of the Sinistrals (USA).sfc",
+        },
+        "tloz_options": {
+            "rom_file": "Legend of Zelda, The (U) (PRG0) [!].nes",
+            "rom_start": True,
+            "display_msgs": True,
+        },
+        "wargroove_options": {
+            "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
+        },
+        "adventure_options": {
+            "rom_file": "ADVNTURE.BIN",
+            "display_msgs": True,
+            "rom_start": True,
+            "rom_args": ""
         },
     }
     return options
@@ -377,6 +412,45 @@ def persistent_load() -> typing.Dict[str, dict]:
     return storage
 
 
+def get_file_safe_name(name: str) -> str:
+    return "".join(c for c in name if c not in '<>:"/\\|?*')
+
+
+def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) -> Dict[str, Any]:
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        path = cache_path("datapackage", get_file_safe_name(game), f"{checksum}.json")
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8-sig") as f:
+                    return json.load(f)
+            except Exception as e:
+                logging.debug(f"Could not load data package: {e}")
+
+    # fall back to old cache
+    cache = persistent_load().get("datapackage", {}).get("games", {}).get(game, {})
+    if cache.get("checksum") == checksum:
+        return cache
+
+    # cache does not match
+    return {}
+
+
+def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> None:
+    checksum = data.get("checksum")
+    if checksum and game:
+        if checksum != get_file_safe_name(checksum):
+            raise ValueError(f"Bad symbols in checksum: {checksum}")
+        game_folder = cache_path("datapackage", get_file_safe_name(game))
+        os.makedirs(game_folder, exist_ok=True)
+        try:
+            with open(os.path.join(game_folder, f"{checksum}.json"), "w", encoding="utf-8-sig") as f:
+                json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+        except Exception as e:
+            logging.debug(f"Could not store data package: {e}")
+
+
 def get_adjuster_settings(game_name: str) -> typing.Dict[str, typing.Any]:
     adjuster_settings = persistent_load().get("adjuster", {}).get(game_name, {})
     return adjuster_settings
@@ -434,6 +508,15 @@ def restricted_loads(s):
     return RestrictedUnpickler(io.BytesIO(s)).load()
 
 
+class ByValue:
+    """
+    Mixin for enums to pickle value instead of name (restores pre-3.11 behavior). Use as left-most parent.
+    See https://github.com/python/cpython/pull/26658 for why this exists.
+    """
+    def __reduce_ex__(self, prot):
+        return self.__class__, (self._value_, )
+
+
 class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
     default_factory: typing.Callable[[typing.Any], typing.Any]
@@ -466,6 +549,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.removeHandler(handler)
         handler.close()
     root_logger.setLevel(loglevel)
+    logging.getLogger("websockets").setLevel(loglevel)  # make sure level is applied for websockets
     if "a" not in write_mode:
         name += f"_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}"
     file_handler = logging.FileHandler(
@@ -505,7 +589,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
                     except Exception as e:
                         logging.exception(e)
                     else:
-                        logging.info(f"Deleted old logfile {file.path}")
+                        logging.debug(f"Deleted old logfile {file.path}")
     import threading
     threading.Thread(target=_cleanup, name="LogCleaner").start()
     import platform
@@ -662,7 +746,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
 
 def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
-    def sorter(element: str) -> str:
+    def sorter(element: Union[str, Dict[str, Any]]) -> str:
+        if (not isinstance(element, str)):
+            element = element["title"]
+
         parts = element.split(maxsplit=1)
         if parts[0].lower() in ignore:
             return parts[1].lower()
@@ -698,3 +785,57 @@ def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str]
     task = asyncio.create_task(co, name=name)
     _faf_tasks.add(task)
     task.add_done_callback(_faf_tasks.discard)
+
+
+def deprecate(message: str):
+    if __debug__:
+        raise Exception(message)
+    import warnings
+    warnings.warn(message)
+
+def _extend_freeze_support() -> None:
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
+    # upstream issue: https://github.com/python/cpython/issues/76327
+    # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
+    import multiprocessing
+    import multiprocessing.spawn
+
+    def _freeze_support() -> None:
+        """Minimal freeze_support. Only apply this if frozen."""
+        from subprocess import _args_from_interpreter_flags
+
+        # Prevent `spawn` from trying to read `__main__` in from the main script
+        multiprocessing.process.ORIGINAL_DIR = None
+
+        # Handle the first process that MP will create
+        if (
+            len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
+                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
+                'from multiprocessing.resource_tracker import main',  # Py>=3.8
+                'from multiprocessing.forkserver import main'
+            )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
+        ):
+            exec(sys.argv[-1])
+            sys.exit()
+
+        # Handle the second process that MP will create
+        if multiprocessing.spawn.is_forking(sys.argv):
+            kwargs = {}
+            for arg in sys.argv[2:]:
+                name, value = arg.split('=')
+                if value == 'None':
+                    kwargs[name] = None
+                else:
+                    kwargs[name] = int(value)
+            multiprocessing.spawn.spawn_main(**kwargs)
+            sys.exit()
+
+    if not is_windows and is_frozen():
+        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+
+
+def freeze_support() -> None:
+    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    import multiprocessing
+    _extend_freeze_support()
+    multiprocessing.freeze_support()

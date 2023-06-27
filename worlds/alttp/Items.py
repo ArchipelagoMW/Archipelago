@@ -2,6 +2,7 @@ import typing
 
 from BaseClasses import ItemClassification as IC
 
+
 def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
@@ -20,7 +21,7 @@ def GetBeemizerItem(world, player: int, item):
 
 
 # should be replaced with direct world.create_item(item) call in the future
-def ItemFactory(items, player: int):
+def ItemFactory(items: typing.Union[str, typing.Iterable[str]], player: int):
     from worlds.alttp import ALTTPWorld
     world = ALTTPWorld(None, player)
     ret = []

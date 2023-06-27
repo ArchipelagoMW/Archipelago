@@ -1,7 +1,8 @@
 import zipfile
 from typing import *
 
-from flask import request, flash, redirect, url_for, render_template, Markup
+from flask import request, flash, redirect, url_for, render_template
+from markupsafe import Markup
 
 from WebHostLib import app
 
@@ -12,7 +13,7 @@ def allowed_file(filename):
     return filename.endswith(('.txt', ".yaml", ".zip"))
 
 
-from Generate import roll_settings, PlandoSettings
+from Generate import roll_settings, PlandoOptions
 from Utils import parse_yamls
 
 
@@ -52,11 +53,12 @@ def get_yaml_data(file) -> Union[Dict[str, str], str, Markup]:
 
                 if any(file.filename.endswith(".archipelago") for file in infolist):
                     return Markup("Error: Your .zip file contains an .archipelago file. "
-                                 'Did you mean to <a href="/uploads">host a game</a>?')
+                                  'Did you mean to <a href="/uploads">host a game</a>?')
 
                 for file in infolist:
                     if file.filename.endswith(banned_zip_contents):
-                        return "Uploaded data contained a rom file, which is likely to contain copyrighted material. Your file was deleted."
+                        return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
+                               "Your file was deleted."
                     elif file.filename.endswith((".yaml", ".json", ".yml", ".txt")):
                         options[file.filename] = zfile.open(file, "r").read()
         else:
@@ -69,7 +71,7 @@ def get_yaml_data(file) -> Union[Dict[str, str], str, Markup]:
 def roll_options(options: Dict[str, Union[dict, str]],
                  plando_options: Set[str] = frozenset({"bosses", "items", "connections", "texts"})) -> \
         Tuple[Dict[str, Union[str, bool]], Dict[str, dict]]:
-    plando_options = PlandoSettings.from_set(set(plando_options))
+    plando_options = PlandoOptions.from_set(set(plando_options))
     results = {}
     rolled_results = {}
     for filename, text in options.items():
@@ -90,7 +92,7 @@ def roll_options(options: Dict[str, Union[dict, str]],
                         rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
                                                                               plando_options=plando_options)
             except Exception as e:
-                results[filename] = f"Failed to generate mystery in {filename}: {e}"
+                results[filename] = f"Failed to generate options in {filename}: {e}"
             else:
                 results[filename] = True
     return results, rolled_results
