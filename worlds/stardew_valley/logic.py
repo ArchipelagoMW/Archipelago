@@ -26,7 +26,7 @@ from .strings.animal_names import Animal, coop_animals, barn_animals
 from .strings.animal_product_names import AnimalProduct
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
-from .strings.building_names import Building, ModBuilding
+from .strings.building_names import Building
 from .strings.calendar_names import Weekday
 from .strings.craftable_names import Craftable
 from .strings.crop_names import Fruit, Vegetable, all_fruits, all_vegetables
@@ -268,6 +268,7 @@ class StardewLogic:
             Craftable.mega_bomb: self.has_skill_level(Skill.mining, 8) & self.has(Ore.gold) & self.has(Loot.solar_essence) & self.has(Loot.void_essence),
             Gift.mermaid_pendant: self.can_reach_region(Region.tide_pools) & self.has_relationship(Generic.bachelor, 10) & self.has_house(1) & self.has(Craftable.rain_totem),
             AnimalProduct.milk: self.has_animal(Animal.cow),
+            Craftable.monster_musk: self.has_prismatic_jelly_reward_access() & self.has(Loot.slime) & self.has(Loot.bat_wing),
             Forageable.morel: self.can_forage(Season.spring, Region.secret_woods),
             "Muscle Remedy": self.can_reach_region(Region.hospital) & self.can_spend_money(1000),
             Fish.mussel: self.can_forage(Generic.any, Region.beach) or self.has(Fish.mussel_node),
@@ -276,6 +277,7 @@ class StardewLogic:
             ArtisanGood.oak_resin: self.has(Machine.tapper),
             Ingredient.oil: self.can_spend_money_at(Region.pierre_store, 200) | (self.has(Machine.oil_maker) & (self.has(Vegetable.corn) | self.has(Flower.sunflower) | self.has(Seed.sunflower))),
             Machine.oil_maker: self.has_farming_level(8) & self.has(Loot.slime) & self.has(Material.hardwood) & self.has(MetalBar.gold),
+            Craftable.oil_of_garlic: (self.has_skill_level(Skill.combat, 6) & self.has(Vegetable.garlic) & self.has(Ingredient.oil)) | (self.can_reach_region(Region.mines_dwarf_shop)),
             Geode.omni: self.can_mine_in_the_mines_floor_41_80() | self.can_reach_region(Region.desert) | self.can_do_panning() | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.has_building(Building.fish_pond)) | self.can_reach_region(Region.volcano_floor_10),
             Animal.ostrich: self.has_building(Building.barn) & self.has(AnimalProduct.ostrich_egg) & self.has(Machine.ostrich_incubator),
             AnimalProduct.ostrich_egg: self.can_forage(Generic.any, Region.island_north, True),
@@ -332,6 +334,7 @@ class StardewLogic:
             AnimalProduct.squid_ink: self.can_mine_in_the_mines_floor_81_120() | (self.has_building(Building.fish_pond) & self.has(Fish.squid)),
             Craftable.staircase: self.has_skill_level(Skill.mining, 2) & self.has(Material.stone),
             Material.stone: self.has_tool(Tool.pickaxe),
+            Meal.strange_bun: self.has_relationship(NPC.shane, 7) & self.has(Ingredient.wheat_flour) & self.has(WaterItem.periwinkle) & self.has(ArtisanGood.void_mayonnaise),
             AnimalProduct.sturgeon_roe: self.has(Fish.sturgeon) & self.has_building(Building.fish_pond),
             Ingredient.sugar: self.can_spend_money_at(Region.pierre_store, 100) | (
                     self.has_building(Building.mill) & self.has(Vegetable.beet)),
@@ -409,7 +412,8 @@ class StardewLogic:
             Quest.initiation: self.can_mine_in_the_mines_floor_1_40(),
             Quest.robins_lost_axe: self.has_season(Season.spring) & self.can_reach_region(Region.forest) & self.can_meet(NPC.robin),
             Quest.jodis_request: self.has_season(Season.spring) & self.has(Vegetable.cauliflower) & self.can_meet(NPC.jodi),
-            Quest.mayors_shorts: self.has_season(Season.summer) & self.can_reach_region(Region.ranch) & (self.has_relationship(NPC.marnie, 2) | (self.can_blink() & self.can_earn_spells())) & self.can_meet(NPC.lewis),
+            Quest.mayors_shorts: self.has_season(Season.summer) & self.can_reach_region(Region.ranch) &
+                                 (self.has_relationship(NPC.marnie, 2) | (magic.can_blink(self))) & self.can_meet(NPC.lewis),
             Quest.blackberry_basket: self.has_season(Season.fall) & self.can_meet(NPC.linus),
             Quest.marnies_request: self.has_relationship(NPC.marnie, 3) & self.has(Forageable.cave_carrot) & self.can_reach_region(Region.ranch),
             Quest.pam_is_thirsty: self.has_season(Season.summer) & self.has(ArtisanGood.pale_ale) & self.can_meet(NPC.pam),
@@ -880,7 +884,7 @@ class StardewLogic:
         return self.can_reach_region(Region.mines_floor_85)
 
     def can_mine_in_the_skull_cavern(self) -> StardewRule:
-        return (self.can_progress_in_the_mines_from_floor(120) &
+        return (self.received("Skull Key") &
                 self.can_reach_region(Region.skull_cavern))
 
     def can_mine_perfectly(self) -> StardewRule:
@@ -962,6 +966,40 @@ class StardewLogic:
                  self.can_progress_in_the_mines_from_floor(previous_elevator)) |
                 (self.has_mine_elevator_to_floor(previous_previous_elevator) &
                  self.can_progress_easily_in_the_mines_from_floor(previous_previous_elevator)))
+
+    def can_progress_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
+        tier = int(floor / 50)
+        rules = []
+        weapon_rule = self.has_great_weapon()
+        rules.append(weapon_rule)
+        rules.append(self.can_cook())
+        if self.options[options.ToolProgression] == options.ToolProgression.option_progressive:
+            rules.append(self.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
+        if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
+            combat_tier = min(10, max(0, tier * 2 + 6))
+            rules.append(self.has_skill_level(Skill.combat, combat_tier))
+        return And(rules)
+
+    def can_progress_easily_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
+        tier = int(floor / 50) + 1
+        rules = []
+        weapon_rule = self.has_great_weapon()
+        rules.append(weapon_rule)
+        rules.append(self.can_cook())
+        if self.options[options.ToolProgression] == options.ToolProgression.option_progressive:
+            rules.append(self.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
+        if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
+            combat_tier = min(10, max(0, tier * 2 + 6))
+            rules.append(self.has_skill_level(Skill.combat, combat_tier))
+        return And(rules)
+
+    def can_mine_to_skull_cavern_floor(self, floor: int) -> StardewRule:
+        previous_elevator = max(floor - 25, 0)
+        previous_previous_elevator = max(floor - 50, 0)
+        return ((has_skull_cavern_elevator_to_floor(self, previous_elevator) &
+                 self.can_progress_in_the_skull_cavern_from_floor(previous_elevator)) |
+                (has_skull_cavern_elevator_to_floor(self, previous_previous_elevator) &
+                 self.can_progress_easily_in_the_skull_cavern_from_floor(previous_previous_elevator)))
 
     def has_jotpk_power_level(self, power_level: int) -> StardewRule:
         if self.options[options.ArcadeMachineLocations] != options.ArcadeMachineLocations.option_full_shuffling:
@@ -1540,7 +1578,8 @@ class StardewLogic:
         spell_rule = (self.received(MagicSpell.water) & magic.can_use_altar(self) & self.has_skill_level(ModSkill.magic, level))
         return tool_rule | spell_rule
 
-    def can_use_clear_debris_instead_of_tool_level(self, level: int) -> StardewRule:
-        if ModNames.magic not in self.options[options.Mods]:
-            return False_()
-        return self.received("Spell: Clear Debris") & self.can_earn_spells() & self.received("Magic Level", level)
+    def has_prismatic_jelly_reward_access(self) -> StardewRule:
+        if self.options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
+            return self.can_complete_special_order("Prismatic Jelly")
+        return self.received("Monster Musk Recipe")
+

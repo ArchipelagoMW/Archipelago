@@ -17,7 +17,7 @@ mod_list = ["DeepWoods", "Tractor Mod", "Bigger Backpack",
             "Cooking Skill", "Binning Skill", "Juna - Roommate NPC",
             "Professor Jasper Thomas", "Alec Revisited", "Custom NPC - Yoba", "Custom NPC Eugene",
             "'Prophet' Wellwick", "Mister Ginger (cat npc)", "Shiko - New Custom NPC", "Delores - Custom NPC",
-            "Ayeisha - The Postal Worker (Custom NPC)"]
+            "Ayeisha - The Postal Worker (Custom NPC)", "Custom NPC - Riley", "Skull Cavern Elevator"]
 
 
 def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: SVTestBase, multiworld: MultiWorld):
