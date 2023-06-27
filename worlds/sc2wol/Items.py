@@ -152,14 +152,13 @@ item_table = {
 basic_units = {
     'Marine',
     'Marauder',
-    'Firebat',
+    'Goliath',
     'Hellion',
     'Vulture'
 }
 
 advanced_basic_units = basic_units.union({
     'Reaper',
-    'Goliath',
     'Diamondback',
     'Viking'
 })

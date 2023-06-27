@@ -2,7 +2,7 @@
 
 ## Nota importante
 
-Al usar el cliente y bizhawk, esta guia solo es aplicable en Windows.
+Al usar el cliente y BizHawk, esta guia solo es aplicable en Windows.
 
 ## Software Requerido
 
@@ -11,13 +11,13 @@ Al usar el cliente y bizhawk, esta guia solo es aplicable en Windows.
 
 ## Instala emulador y cliente
 
-Descarga el fichero getBizhawk.ps1 del enlace anterior. Colocalo en la carpeta donde desees instalar el emulador, haz
+Descarga el fichero getBizHawk.ps1 del enlace anterior. Colocalo en la carpeta donde desees instalar el emulador, haz
 click derecho en él y selecciona "Ejecutar con PowerShell". Esto descargará todas las dependencias necesarias para el
 emulador. Puede tardar un rato.
 
-Es recomendable asociar la extensión de las roms de N64 (\*.n64) al bizhawk que hemos instalado anteriormente. Para
+Es recomendable asociar la extensión de las roms de N64 (\*.n64) al BizHawk que hemos instalado anteriormente. Para
 hacerlo simplemente debemos buscar alguna rom de n64 que tengamos, hacer click derecho, seleccionar "Abrir con...",
-desplegar la lista y buscar la opción "Buscar otra aplicación", navegar hasta el directorio de bizhawk y seleccionar
+desplegar la lista y buscar la opción "Buscar otra aplicación", navegar hasta el directorio de BizHawk y seleccionar
 EmuHawk.exe
 
 Situa el fichero ootMulti.lua del enlace anterior en la carpeta "lua" del emulador recien instalado.
