@@ -59,10 +59,10 @@ for it. The groups you can use for The Messenger are:
 * After reaching ninja village a teleport option is added to the menu to reach it quickly
 * Toggle Windmill Shuriken button is added to option menu once the item is received
 * The mod option menu will also have a hint item button, as well as a release and collect button that are all placed when
-the player fulfills the necessary conditions.
+  the player fulfills the necessary conditions.
 * After running the game with the mod, a config file (APConfig.toml) will be generated in your game folder that can be
-used to modify certain settings such as text size and color. This can also be used to specify a player name that can't
-be entered in game.
+  used to modify certain settings such as text size and color. This can also be used to specify a player name that can't
+  be entered in game.
 
 ## Known issues
 * Ruxxtin Coffin cutscene will sometimes not play correctly, but will still reward the item

@@ -168,4 +168,3 @@ class ItemsAccessTest(MessengerTestBase):
                 item = self.get_item_by_name(item_name)
                 with self.subTest("Fulfills Accessibility", location=loc, item=item_name):
                     self.assertTrue(self.multiworld.get_location(loc, self.player).can_fill(self.multiworld.state, item, True))
-

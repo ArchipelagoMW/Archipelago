@@ -48,13 +48,13 @@ class ShopCostMinTest(ShopCostTest):
         "shop_price": "random",
         "shuffle_seals": "false",
     }
-    
+
     def testDBoost(self) -> None:
         pass
-    
+
     def testCurrents(self) -> None:
         pass
-    
+
     def testStrike(self) -> None:
         pass
 
