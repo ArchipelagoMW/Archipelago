@@ -265,7 +265,7 @@ def set_island_entrances_rules(logic: StardewLogic, multi_world, player):
                              logic.received("Qi Walnut Room").simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.island_north_to_volcano, player),
                              (logic.can_water(0) | logic.received("Volcano Bridge") |
-                              logic.can_blink()).simplify())
+                              magic.can_blink(logic)).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.volcano_to_secret_beach, player),
                              logic.can_water(2).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.climb_to_volcano_5, player),
