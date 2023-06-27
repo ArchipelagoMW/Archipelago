@@ -43,6 +43,8 @@ class StaticWitnessLocations:
         "Desert Light Room 3",
         "Desert Pond Room 5",
         "Desert Flood Room 6",
+        "Desert Final Hexagonal",
+        "Desert Final Bent 3",
         "Desert Laser Panel",
 
         "Quarry Stoneworks Lower Row 6",
@@ -61,7 +63,13 @@ class StaticWitnessLocations:
         "Shadows Near 5",
         "Shadows Laser Panel",
 
+        "Keep Hedge Maze 1",
+        "Keep Hedge Maze 2",
+        "Keep Hedge Maze 3",
         "Keep Hedge Maze 4",
+        "Keep Pressure Plates 1",
+        "Keep Pressure Plates 2",
+        "Keep Pressure Plates 3",
         "Keep Pressure Plates 4",
         "Keep Discard",
         "Keep Laser Panel Hedges",
@@ -454,10 +462,6 @@ class WitnessPlayerLocations:
 
         self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
         self.CHECK_LOCATIONS = StaticWitnessLocations.GENERAL_LOCATIONS.copy()
-
-        if get_option_value(world, player, "puzzle_randomization") == 1:
-            self.CHECK_LOCATIONS.remove("Keep Pressure Plates 4")
-            self.CHECK_LOCATIONS.add("Keep Pressure Plates 2")
 
         doors = get_option_value(world, player, "shuffle_doors") >= 2
         earlyutm = is_option_enabled(world, player, "early_secret_area")

@@ -2,35 +2,35 @@
 
 ## Important
 
-As we are using Bizhawk, this guide is only applicable to Windows and Linux systems.
+As we are using BizHawk, this guide is only applicable to Windows and Linux systems.
 
 ## Required Software
 
-- Bizhawk: [Bizhawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
+- BizHawk: [BizHawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
   - Version 2.3.1 and later are supported. Version 2.7 is recommended for stability.
-  - Detailed installation instructions for Bizhawk can be found at the above link.
+  - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
   (select `Adventure Client` during installation).
 - An Adventure NTSC ROM file. The Archipelago community cannot provide these.
 
-## Configuring Bizhawk
+## Configuring BizHawk
 
-Once Bizhawk has been installed, open Bizhawk and change the following settings:
+Once BizHawk has been installed, open EmuHawk and change the following settings:
 
-- Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". Then restart Bizhawk. This is required for the Lua script to function correctly.
+- (≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
+  "Lua+LuaInterface". Then restart EmuHawk. This is required for the Lua script to function correctly.
   **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of Bizhawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
+  **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
   **"NLua+KopiLua" until this step is done.**
 - Under Config > Customize, check the "Run in background" box. This will prevent disconnecting from the client while
-BizHawk is running in the background.
+EmuHawk is running in the background.
 
-- It is recommended that you provide a path to BizHawk in your host.yaml for Adventure so the client can start it automatically
-- At the same time, you can set an option to automatically load the adventure_connector.lua script when launching BizHawk
+- It is recommended that you provide a path to EmuHawk in your host.yaml for Adventure so the client can start it automatically
+- At the same time, you can set an option to automatically load the connector_adventure.lua script when launching EmuHawk
 from AdventureClient.
 Default Windows install example:
-```rom_args: "--lua=C:/ProgramData/Archipelago/data/lua/ADVENTURE/adventure_connector.lua"```
+```rom_args: "--lua=C:/ProgramData/Archipelago/data/lua/connector_adventure.lua"```
 
 ## Configuring your YAML file
 
@@ -63,11 +63,10 @@ path as recommended).
 
 ### Connect to the Multiserver
 
-Once both the client and the emulator are started, you must connect them. Within the emulator click on the "Tools"
-menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua script.
-
-Navigate to your Archipelago install folder and open `data/lua/ADVENTURE/adventure_connector.lua`, if it is not
-configured to do this automatically.
+Once both the client and the emulator are started, you must connect them, assuming you didn't set it up to be automatic.
+Navigate to your Archipelago install folder, then to `data/lua`, and drag+drop the `connector_adventure.lua` script onto
+the main EmuHawk window. (You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate
+to `connector_adventure.lua` with the file picker.)
 
 To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)

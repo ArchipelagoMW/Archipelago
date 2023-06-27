@@ -44,6 +44,8 @@ Currently, the following games are supported:
 * Clique
 * Adventure
 * DLC Quest
+* Noita
+* Undertale
 * Bumper Stickers
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).

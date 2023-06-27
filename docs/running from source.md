@@ -69,6 +69,19 @@ It should be dropped as "SNI" into the root folder of the project. Alternatively
 host.yaml at your SNI folder.
 
 
+## Optional: Git
+
+[Git](https://git-scm.com) is required to install some of the packages that Archipelago depends on.
+It may be possible to run Archipelago from source without it, at your own risk.
+
+It is also generally recommended to have Git installed and understand how to use it, especially if you're thinking about contributing.
+
+You can download the latest release of Git at [The downloads page on the Git website](https://git-scm.com/downloads).
+
+Beyond that, there are also graphical interfaces for Git that make it more accessible.
+For repositories on Github (such as this one), [Github Desktop](https://desktop.github.com) is one such option.
+PyCharm has a built-in version control integration that supports Git.
+
 ## Running tests
 
 Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.

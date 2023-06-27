@@ -20,7 +20,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze>=6.14.7'
+    requirement = 'cx-Freeze==6.14.9'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -60,20 +60,34 @@ from Utils import version_tuple, is_windows, is_linux
 
 
 # On  Python < 3.10 LogicMixin is not currently supported.
-apworlds: set = {
-    "Subnautica",
-    "Factorio",
-    "Rogue Legacy",
-    "Sonic Adventure 2 Battle",
-    "Donkey Kong Country 3",
-    "Super Mario World",
-    "Stardew Valley",
-    "Timespinner",
-    "Minecraft",
-    "The Messenger",
-    "Links Awakening DX",
-    "Super Metroid",
-    "SMZ3",
+non_apworlds: set = {
+    "A Link to the Past",
+    "Adventure",
+    "ArchipIDLE",
+    "Archipelago",
+    "Blasphemous",
+    "ChecksFinder",
+    "Clique",
+    "DLCQuest",
+    "Dark Souls III",
+    "Final Fantasy",
+    "Hollow Knight",
+    "Hylics 2",
+    "Kingdom Hearts 2",
+    "Lufia II Ancient Cave",
+    "Meritous",
+    "Ocarina of Time",
+    "Overcooked! 2",
+    "Pokemon Red and Blue",
+    "Raft",
+    "Secret of Evermore",
+    "Slay the Spire",
+    "Starcraft 2 Wings of Liberty",
+    "Sudoku",
+    "Super Mario 64",
+    "VVVVVV",
+    "Wargroove",
+    "Zillion",
 }
 
 
@@ -157,11 +171,22 @@ build_arch = build_platform.split('-')[-1] if '-' in build_platform else platfor
 
 
 # see Launcher.py on how to add scripts to setup.py
+def resolve_icon(icon_name: str):
+    base_path = icon_paths[icon_name]
+    if is_windows:
+        path, extension = os.path.splitext(base_path)
+        ico_file = path + ".ico"
+        assert os.path.exists(ico_file), f"ico counterpart of {base_path} should exist."
+        return ico_file
+    else:
+        return base_path
+
+
 exes = [
     cx_Freeze.Executable(
         script=f'{c.script_name}.py',
         target_name=c.frozen_name + (".exe" if is_windows else ""),
-        icon=icon_paths[c.icon],
+        icon=resolve_icon(c.icon),
         base="Win32GUI" if is_windows and not c.cli else None
     ) for c in components if c.script_name and c.frozen_name
 ]
@@ -309,17 +334,14 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                         dirs_exist_ok=True)
 
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
-        from WebHostLib.options import create
-        create()
+        from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
-        assert not apworlds - set(AutoWorldRegister.world_types), "Unknown world designated for .apworld"
+        assert not non_apworlds - set(AutoWorldRegister.world_types), \
+            f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: typing.List[str] = []
+        generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
         for worldname, worldtype in AutoWorldRegister.world_types.items():
-            if not worldtype.hidden:
-                file_name = worldname+".yaml"
-                shutil.copyfile(os.path.join("WebHostLib", "static", "generated", "configs", file_name),
-                                self.buildfolder / "Players" / "Templates" / file_name)
-            if worldname in apworlds:
+            if worldname not in non_apworlds:
                 file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
                 world_directory = self.libfolder / "worlds" / file_name
                 # this method creates an apworld that cannot be moved to a different OS or minor python version,

@@ -20,6 +20,8 @@ from worlds.alttp.Shops import FillDisabledShopSlots
 from worlds.alttp.SubClasses import LTTPRegionType
 from worlds.generic.Rules import exclusion_rules, locality_rules
 
+__all__ = ["main"]
+
 ordered_areas = (
     'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
     'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
@@ -165,19 +167,24 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for count in items.values():
                 new_items.append(player_world.create_filler())
         target: int = sum(sum(items.values()) for items in depletion_pool.values())
-        for item in world.itempool:
+        for i, item in enumerate(world.itempool):
             if depletion_pool[item.player].get(item.name, 0):
                 target -= 1
                 depletion_pool[item.player][item.name] -= 1
                 # quick abort if we have found all items
                 if not target:
+                    new_items.extend(world.itempool[i+1:])
                     break
             else:
                 new_items.append(item)
-        for player, remaining_items in depletion_pool.items():
-            if remaining_items:
-                raise Exception(f"{world.get_player_name(player)}"
-                                f" is trying to remove items from their pool that don't exist: {remaining_items}")
+
+        # leftovers?
+        if target:
+            for player, remaining_items in depletion_pool.items():
+                remaining_items = {name: count for name, count in remaining_items.items() if count}
+                if remaining_items:
+                    raise Exception(f"{world.get_player_name(player)}"
+                                    f" is trying to remove items from their pool that don't exist: {remaining_items}")
         world.itempool[:] = new_items
 
     # temporary home for item links, should be moved out of Main
@@ -278,8 +285,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, 'post_fill')
 
-    if world.players > 1:
+    if world.players > 1 and not args.skip_prog_balancing:
         balance_multiworld_progression(world)
+    else:
+        logger.info("Progression balancing skipped.")
 
     logger.info(f'Beginning output...')
 
