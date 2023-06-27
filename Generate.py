@@ -12,6 +12,8 @@ import urllib.parse
 import urllib.request
 from collections import ChainMap, Counter
 from typing import Any, Callable, Dict, Tuple, Union
+import tkinter.messagebox as message
+from traceback import format_exception_only, format_exception
 
 import ModuleUpdate
 
@@ -646,8 +648,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
 
 
 def parsing_failure_gui(type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
-    import tkinter.messagebox as message
-    from traceback import format_exception_only, format_exception
     exception_text = format_exception(type, value, traceback.tb_next, 0)
     error_message = "".join(exception_text[0])
     error_message += "" if len(exception_text) <= 1 else f"\n{format_exception_only(type, value)[0]}"
@@ -656,8 +656,6 @@ def parsing_failure_gui(type: typing.Type[BaseException], value: BaseException, 
 
 
 def failure_gui(type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
-    import tkinter.messagebox as message
-    from traceback import format_exception
     exception_text = f"Please attach log from {Utils.local_path('logs')}\nand all used player files in a bug report."
     if type is FileNotFoundError:
         exception_text = format_exception(type, value, traceback.tb_next, 0)[0]
