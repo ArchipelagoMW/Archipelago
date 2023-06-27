@@ -25,11 +25,10 @@ logger = logging.getLogger("Client")
 sc2_logger = logging.getLogger("Starcraft2")
 
 import nest_asyncio
-import sc2
-from sc2.bot_ai import BotAI
-from sc2.data import Race
-from sc2.main import run_game
-from sc2.player import Bot
+from worlds._sc2common import bot
+from worlds._sc2common.bot.data import Race
+from worlds._sc2common.bot.main import run_game
+from worlds._sc2common.bot.player import Bot
 from worlds.sc2wol import SC2WoLWorld
 from worlds.sc2wol.Items import lookup_id_to_name, item_table, ItemData, type_flaggroups
 from worlds.sc2wol.Locations import SC2WOL_LOC_ID_OFFSET
@@ -52,9 +51,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         """Overrides the current difficulty set for the seed.  Takes the argument casual, normal, hard, or brutal"""
         options = difficulty.split()
         num_options = len(options)
-        difficulty_choice = options[0].lower()
 
         if num_options > 0:
+            difficulty_choice = options[0].lower()
             if difficulty_choice == "casual":
                 self.ctx.difficulty_override = 0
             elif difficulty_choice == "normal":
@@ -71,7 +70,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             return True
 
         else:
-            self.output("Difficulty needs to be specified in the command.")
+            if self.ctx.difficulty == -1:
+                self.output("Please connect to a seed before checking difficulty.")
+            else:
+                self.output("Current difficulty: " + ["Casual", "Normal", "Hard", "Brutal"][self.ctx.difficulty])
+            self.output("To change the difficulty, add the name of the difficulty after the command.")
             return False
 
     def _cmd_disable_mission_check(self) -> bool:
@@ -235,8 +238,6 @@ class SC2Context(CommonContext):
         from kivy.uix.button import Button
         from kivy.uix.floatlayout import FloatLayout
         from kivy.properties import StringProperty
-
-        import Utils
 
         class HoverableButton(HoverBehavior, Button):
             pass
@@ -540,11 +541,11 @@ async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id]}. If game does not launch check log file for errors.")
 
     with DllDirectory(None):
-        run_game(sc2.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
+        run_game(bot.maps.get(maps_table[mission_id - 1]), [Bot(Race.Terran, ArchipelagoBot(ctx, mission_id),
                                                                 name="Archipelago", fullscreen=True)], realtime=True)
 
 
-class ArchipelagoBot(sc2.bot_ai.BotAI):
+class ArchipelagoBot(bot.bot_ai.BotAI):
     game_running: bool = False
     mission_completed: bool = False
     boni: typing.List[bool]
@@ -863,7 +864,7 @@ def check_game_install_path() -> bool:
         documentspath = buf.value
         einfo = str(documentspath / Path("StarCraft II\\ExecuteInfo.txt"))
     else:
-        einfo = str(sc2.paths.get_home() / Path(sc2.paths.USERPATH[sc2.paths.PF]))
+        einfo = str(bot.paths.get_home() / Path(bot.paths.USERPATH[bot.paths.PF]))
 
     # Check if the file exists.
     if os.path.isfile(einfo):
@@ -879,7 +880,7 @@ def check_game_install_path() -> bool:
                                    f"try again.")
                 return False
             if os.path.exists(base):
-                executable = sc2.paths.latest_executeble(Path(base).expanduser() / "Versions")
+                executable = bot.paths.latest_executeble(Path(base).expanduser() / "Versions")
 
                 # Finally, check the path for an actual executable.
                 # If we find one, great. Set up the SC2PATH.

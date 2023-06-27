@@ -158,7 +158,7 @@ class Dialog:
             value = Dialog.letters.get(c, None)
             return value if value else [ 0xFF ]
 
-        #region letter bytes lookup
+        #regions letter bytes lookup
 
     letters = {
         ' ' : [ 0x4F ],

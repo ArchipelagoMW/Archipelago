@@ -8,7 +8,7 @@ class TestImplemented(unittest.TestCase):
     def testCompletionCondition(self):
         """Ensure a completion condition is set that has requirements."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            if not world_type.hidden and game_name not in {"ArchipIDLE", "Sudoku"}:
+            if not world_type.hidden and game_name not in {"Sudoku"}:
                 with self.subTest(game_name):
                     multiworld = setup_solo_multiworld(world_type)
                     self.assertFalse(multiworld.completion_condition[1](multiworld.state))

@@ -1,7 +1,7 @@
 from typing import Dict, Union, List
 from BaseClasses import MultiWorld
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Option, OptionDict, OptionList
-from schema import Schema, And, Optional
+from schema import Schema, And, Optional, Or
 
 
 class StartWithJewelryBox(Toggle):
@@ -308,47 +308,44 @@ class RisingTides(Toggle):
     display_name = "Rising Tides"
 
 
+def rising_tide_option(location: str, with_save_point_option: bool = False) -> Dict[Optional, Or]:
+    if with_save_point_option:
+        return {
+            Optional(location): Or(
+                And({
+                    Optional("Dry"): And(int, lambda n: n >= 0),
+                    Optional("Flooded"): And(int, lambda n: n >= 0),
+                    Optional("FloodedWithSavePointAvailable"): And(int, lambda n: n >= 0)
+                }, lambda d: any(v > 0 for v in d.values())),
+                "Dry",
+                "Flooded",
+                "FloodedWithSavePointAvailable")
+        }
+    else:
+        return {
+            Optional(location): Or(
+                And({
+                    Optional("Dry"): And(int, lambda n: n >= 0),
+                    Optional("Flooded"): And(int, lambda n: n >= 0)
+                }, lambda d: any(v > 0 for v in d.values())),
+                "Dry",
+                "Flooded")
+        }
+
+
 class RisingTidesOverrides(OptionDict):
     """Odds for specific areas to be flooded or drained, only has effect when RisingTides is on.
     Areas that are not specified will roll with the default 33% chance of getting flooded or drained"""
     schema = Schema({
-        Optional("Xarion"): { 
-            "Dry": And(int, lambda n: n >= 0), 
-            "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("Maw"): { 
-            "Dry": And(int, lambda n: n >= 0), 
-            "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("AncientPyramidShaft"): { 
-            "Dry": And(int, lambda n: n >= 0), 
-            "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("Sandman"): { 
-            "Dry": And(int, lambda n: n >= 0), 
-            "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("CastleMoat"): { 
-            "Dry": And(int, lambda n: n >= 0), 
-            "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("CastleBasement"): { 
-            "Dry": And(int, lambda n: n >= 0), 
-            "FloodedWithSavePointAvailable": And(int, lambda n: n >= 0), 
-            "Flooded": And(int, lambda n: n >= 0) 
-        },
-        Optional("CastleCourtyard"): { 
-            "Dry": And(int, lambda n: n >= 0), 
-            "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("LakeDesolation"): { 
-            "Dry": And(int, lambda n: n >= 0), 
-            "Flooded": And(int, lambda n: n >= 0)
-        },
-        Optional("LakeSerene"): { 
-            "Dry": And(int, lambda n: n >= 0), 
-            "Flooded": And(int, lambda n: n >= 0)
-        }
+        **rising_tide_option("Xarion"),
+        **rising_tide_option("Maw"),
+        **rising_tide_option("AncientPyramidShaft"),
+        **rising_tide_option("Sandman"),
+        **rising_tide_option("CastleMoat"),
+        **rising_tide_option("CastleBasement", with_save_point_option=True),
+        **rising_tide_option("CastleCourtyard"),
+        **rising_tide_option("LakeDesolation"),
+        **rising_tide_option("LakeSerene")
     })
     display_name = "Rising Tides Overrides"
     default = {
@@ -360,7 +357,7 @@ class RisingTidesOverrides(OptionDict):
         "CastleBasement": { "Dry": 66, "Flooded": 17, "FloodedWithSavePointAvailable": 17 },
         "CastleCourtyard": { "Dry": 67, "Flooded": 33 },
         "LakeDesolation": { "Dry": 67, "Flooded": 33 },
-        "LakeSerene": { "Dry": 67, "Flooded": 33 },
+        "LakeSerene": { "Dry": 33, "Flooded": 67 },
     }
 
 

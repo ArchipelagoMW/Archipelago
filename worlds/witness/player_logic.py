@@ -40,7 +40,7 @@ class WitnessPlayerLogic:
         Panels outside of the same region will still be checked manually.
         """
 
-        if panel_hex in self.COMPLETELY_DISABLED_CHECKS:
+        if panel_hex in self.COMPLETELY_DISABLED_CHECKS or panel_hex in self.PRECOMPLETED_LOCATIONS:
             return frozenset()
 
         check_obj = self.REFERENCE_LOGIC.CHECKS_BY_HEX[panel_hex]
@@ -296,21 +296,21 @@ class WitnessPlayerLogic:
         elif get_option_value(world, player, "shuffle_EPs") == 1:  # Individual EPs
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
-        else:  # Obelisk Sides
-            yaml_disabled_eps = []
+        yaml_disabled_eps = []
 
-            for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
-                if yaml_disabled_location not in StaticWitnessLogic.CHECKS_BY_NAME:
-                    continue
+        for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
+            if yaml_disabled_location not in StaticWitnessLogic.CHECKS_BY_NAME:
+                continue
 
-                loc_obj = StaticWitnessLogic.CHECKS_BY_NAME[yaml_disabled_location]
+            loc_obj = StaticWitnessLogic.CHECKS_BY_NAME[yaml_disabled_location]
 
-                if loc_obj["panelType"] != "EP":
-                    continue
-
+            if loc_obj["panelType"] == "EP" and get_option_value(world, player, "shuffle_EPs") == 2:
                 yaml_disabled_eps.append(loc_obj["checkHex"])
 
-            adjustment_linesets_in_order.append(["Precompleted Locations:"] + yaml_disabled_eps)
+            if loc_obj["panelType"] in {"EP", "General"}:
+                self.EXCLUDED_LOCATIONS.add(loc_obj["checkHex"])
+
+        adjustment_linesets_in_order.append(["Precompleted Locations:"] + yaml_disabled_eps)
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
@@ -430,10 +430,10 @@ class WitnessPlayerLogic:
         self.ALWAYS_EVENT_HEX_CODES = set()
         self.COMPLETELY_DISABLED_CHECKS = set()
         self.PRECOMPLETED_LOCATIONS = set()
+        self.EXCLUDED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION = "0x0356B"
         self.EVENT_ITEM_NAMES = {
-            "0x01A0F": "Keep Laser Panel (Hedge Mazes) Activates",
             "0x09D9B": "Monastery Shutters Open",
             "0x193A6": "Monastery Laser Panel Activates",
             "0x00037": "Monastery Branch Panels Activate",
@@ -442,8 +442,11 @@ class WitnessPlayerLogic:
             "0x00139": "Keep Hedges 1 Knowledge",
             "0x019DC": "Keep Hedges 2 Knowledge",
             "0x019E7": "Keep Hedges 3 Knowledge",
-            "0x01D3F": "Keep Laser Panel (Pressure Plates) Activates",
-            "0x01BE9": "Keep Laser Panel (Pressure Plates) Activates - Expert",
+            "0x01A0F": "Keep Hedges 4 Knowledge",
+            "0x033EA": "Pressure Plates 1 Knowledge",
+            "0x01BE9": "Pressure Plates 2 Knowledge",
+            "0x01CD3": "Pressure Plates 3 Knowledge",
+            "0x01D3F": "Pressure Plates 4 Knowledge",
             "0x09F7F": "Mountain Access",
             "0x0367C": "Quarry Laser Stoneworks Requirement Met",
             "0x009A1": "Swamp Between Bridges Far 1 Activates",
@@ -492,11 +495,9 @@ class WitnessPlayerLogic:
             "0x17D02": "Windmill Blades Spinning",
             "0x0A0C9": "Cargo Box EP completable",
             "0x09E39": "Pink Light Bridge Extended",
-            "0x01CD3": "Pressure Plates 3 EP available",
             "0x17CC4": "Rails EP available",
             "0x2896A": "Bridge Underside EP available",
             "0x00064": "First Tunnel EP visible",
-            "0x033EA": "Pressure Plates 1 EP available",
             "0x03553": "Tutorial Video EPs availble",
             "0x17C79": "Bunker Door EP available",
             "0x275FF": "Stoneworks Light EPs available",

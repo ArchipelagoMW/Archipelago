@@ -1,10 +1,10 @@
 import copy
 import random
-from logic.logic import Logic
-from utils.parameters import Knows
-from graph.location import locationsDict
-from rom.rom import snes_to_pc
-import utils.log
+from ..logic.logic import Logic
+from ..utils.parameters import Knows
+from ..graph.location import locationsDict
+from ..rom.rom import snes_to_pc
+from ..utils import log
 
 # order expected by ROM patches
 graphAreas = [
@@ -89,7 +89,7 @@ def getAccessPoint(apName, apList=None):
     return next(ap for ap in apList if ap.Name == apName)
 
 class GraphUtils:
-    log = utils.log.get('GraphUtils')
+    log = log.get('GraphUtils')
 
     def getStartAccessPointNames():
         return [ap.Name for ap in Logic.accessPoints if ap.Start is not None]
@@ -238,7 +238,10 @@ class GraphUtils:
         for ap in unusedAPs:
             transitions.append((ap.Name, ap.Name))
 
-    def createMinimizerTransitions(startApName, locLimit):
+    # crateria can be forced in corner cases
+    def createMinimizerTransitions(startApName, locLimit, forcedAreas=None):
+        if forcedAreas is None:
+            forcedAreas = []
         if startApName == 'Ceres':
             startApName = 'Landing Site'
         startAp = getAccessPoint(startApName)
@@ -249,7 +252,10 @@ class GraphUtils:
             return len([loc for loc in locList if locsPredicate(loc) == True and not loc.SolveArea.endswith(" Boss") and not loc.isBoss()])
         availAreas = list(sorted({ap.GraphArea for ap in Logic.accessPoints if ap.GraphArea != startAp.GraphArea and getNLocs(lambda loc: loc.GraphArea == ap.GraphArea) > 0}))
         areas = [startAp.GraphArea]
+        if startAp.GraphArea in forcedAreas:
+            forcedAreas.remove(startAp.GraphArea)
         GraphUtils.log.debug("availAreas: {}".format(availAreas))
+        GraphUtils.log.debug("forcedAreas: {}".format(forcedAreas))
         GraphUtils.log.debug("areas: {}".format(areas))
         inBossCheck = lambda ap: ap.Boss and ap.Name.endswith("In")
         nLocs = 0
@@ -260,22 +266,27 @@ class GraphUtils:
         def openTransitions():
             nonlocal areas, inBossCheck, usedAPs
             return GraphUtils.getAPs(lambda ap: ap.GraphArea in areas and not ap.isInternal() and not inBossCheck(ap) and not ap in usedAPs)
-        while nLocs < locLimit or len(openTransitions()) < trLimit:
+        while nLocs < locLimit or len(openTransitions()) < trLimit or len(forcedAreas) > 0:
             GraphUtils.log.debug("openTransitions="+str([ap.Name for ap in openTransitions()]))
             fromAreas = availAreas
-            if nLocs >= locLimit:
+            if len(openTransitions()) <= 1: # dont' get stuck by adding dead ends
+                GraphUtils.log.debug("avoid being stuck")
+                fromAreas = [area for area in fromAreas if len(GraphUtils.getAPs(lambda ap: ap.GraphArea == area and not ap.isInternal())) > 1]
+            elif len(forcedAreas) > 0: # no risk to get stuck, we can pick a forced area if necessary
+                GraphUtils.log.debug("add forced area")
+                fromAreas = forcedAreas
+            elif nLocs >= locLimit: # we just need transitions, avoid adding a huge area
                 GraphUtils.log.debug("not enough open transitions")
-                # we just need transitions, avoid adding a huge area
                 fromAreas = []
                 n = trLimit - len(openTransitions())
                 while len(fromAreas) == 0:
                     fromAreas = [area for area in availAreas if len(GraphUtils.getAPs(lambda ap: not ap.isInternal())) > n]
                     n -= 1
-                minLocs = min([getNLocs(lambda loc: loc.GraphArea == area) for area in fromAreas])
+                    minLocs = min([getNLocs(lambda loc: loc.GraphArea == area) for area in fromAreas])
                 fromAreas = [area for area in fromAreas if getNLocs(lambda loc: loc.GraphArea == area) == minLocs]
-            elif len(openTransitions()) <= 1: # dont' get stuck by adding dead ends
-                fromAreas = [area for area in fromAreas if len(GraphUtils.getAPs(lambda ap: ap.GraphArea == area and not ap.isInternal())) > 1]
             nextArea = random.choice(fromAreas)
+            if nextArea in forcedAreas:
+                forcedAreas.remove(nextArea)
             GraphUtils.log.debug("nextArea="+str(nextArea))
             apCheck = lambda ap: not ap.isInternal() and not inBossCheck(ap) and ap not in usedAPs
             possibleSources = GraphUtils.getAPs(lambda ap: ap.GraphArea in areas and apCheck(ap))
@@ -399,18 +410,37 @@ class GraphUtils:
     def escapeAnimalsTransitions(graph, possibleTargets, firstEscape):
         n = len(possibleTargets)
         assert (n < 4 and firstEscape is not None) or (n <= 4 and firstEscape is None), "Invalid possibleTargets list: " + str(possibleTargets)
-        # first get our list of 4 entries for escape patch
+        GraphUtils.log.debug("escapeAnimalsTransitions. possibleTargets="+str(possibleTargets)+", firstEscape="+str(firstEscape))
         if n >= 1:
-            # get actual animals: pick one of the remaining targets
-            animalsAccess = possibleTargets.pop()
-            graph.EscapeAttributes['Animals'] = animalsAccess
-            # we now have at most 3 targets left, fill up to fill cycling 4 targets for animals suprise
-            possibleTargets.append('Climb Bottom Left')
+            # complete possibleTargets. we need at least 2: one to
+            # hide the animals in, and one to connect the vanilla
+            # animals door to
+            if not any(t[1].Name == 'Climb Bottom Left' for t in graph.InterAreaTransitions):
+                # add standard Climb if not already in graph: it can be in Crateria-less minimizer + Disabled Tourian case
+                possibleTargets.append('Climb Bottom Left')
+            # make the escape possibilities loop by adding back the first escape
             if firstEscape is not None:
                 possibleTargets.append(firstEscape)
             poss = possibleTargets[:]
             while len(possibleTargets) < 4:
                 possibleTargets.append(poss.pop(random.randint(0, len(poss)-1)))
+        n = len(possibleTargets)
+        # check if we can both hide the animals and connect the vanilla animals door to a cycling escape
+        if n >= 2:
+            # get actual animals: pick the first of the remaining targets (will contain a map room AP)
+            animalsAccess = possibleTargets.pop(0)
+            graph.EscapeAttributes['Animals'] = animalsAccess
+            # poss will contain the remaining map room AP(s) + optional AP(s) added above, to
+            # get the cycling 4 escapes from vanilla animals room
+            poss = possibleTargets[:]
+            GraphUtils.log.debug("escapeAnimalsTransitions. poss="+str(poss))
+            while len(possibleTargets) < 4:
+                if len(poss) > 1:
+                    possibleTargets.append(poss.pop(random.randint(0, len(poss)-1)))
+                else:
+                    # no more possible variety, spam the last possible escape
+                    possibleTargets.append(poss[0])
+
         else:
             # failsafe: if not enough targets left, abort and do vanilla animals
             animalsAccess = 'Flyway Right'

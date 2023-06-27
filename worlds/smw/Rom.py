@@ -945,7 +945,7 @@ def patch_rom(world, rom, player, active_level_dict):
     rom.write_byte(0x01BFA7, world.swap_donut_gh_exits[player].value)
 
 
-    from Main import __version__
+    from Utils import __version__
     rom.name = bytearray(f'SMW{__version__.replace(".", "")[0:3]}_{player}_{world.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
@@ -971,5 +971,5 @@ def get_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = options["smw_options"]["rom_file"]
     if not os.path.exists(file_name):
-        file_name = Utils.local_path(file_name)
+        file_name = Utils.user_path(file_name)
     return file_name

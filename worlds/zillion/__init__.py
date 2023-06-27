@@ -2,13 +2,12 @@ from collections import deque, Counter
 from contextlib import redirect_stdout
 import functools
 import threading
-from typing import Any, Dict, List, Set, Tuple, Optional, cast
+from typing import Any, Dict, List, Literal, Set, Tuple, Optional, cast
 import os
 import logging
 
 from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
-from Options import AssembleOptions
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionStartChar, zillion_options, validate
@@ -48,17 +47,17 @@ class ZillionWorld(World):
     game = "Zillion"
     web = ZillionWebWorld()
 
-    option_definitions: Dict[str, AssembleOptions] = zillion_options
-    topology_present: bool = True  # indicate if world type has any meaningful layout/pathing
+    option_definitions = zillion_options
+    topology_present = True  # indicate if world type has any meaningful layout/pathing
 
     # map names to their IDs
-    item_name_to_id: Dict[str, int] = _item_name_to_id
-    location_name_to_id: Dict[str, int] = _loc_name_to_id
+    item_name_to_id = _item_name_to_id
+    location_name_to_id = _loc_name_to_id
 
     # increment this every time something in your world's names/id mappings changes.
     # While this is set to 0 in *any* AutoWorld, the entire DataPackage is considered in testing mode and will be
     # retrieved by clients on every connection.
-    data_version: int = 1
+    data_version = 1
 
     logger: logging.Logger
 
@@ -148,6 +147,16 @@ class ZillionWorld(World):
         self.my_locations = []
 
         self.zz_system.randomizer.place_canister_gun_reqs()
+        # low probability that place_canister_gun_reqs() results in empty 1st sphere
+        # testing code to force low probability event:
+        # for zz_room_name in ["r01c2", "r02c0", "r02c7", "r03c5"]:
+        #     for zz_loc in self.zz_system.randomizer.regions[zz_room_name].locations:
+        #         zz_loc.req.gun = 2
+        if len(self.zz_system.randomizer.get_locations(Req(gun=1, jump=1))) == 0:
+            self.logger.info("Zillion avoided rare empty 1st sphere.")
+            for zz_loc in self.zz_system.randomizer.regions["r03c5"].locations:
+                zz_loc.req.gun = 1
+            assert len(self.zz_system.randomizer.get_locations(Req(gun=1, jump=1))) != 0
 
         start = self.zz_system.randomizer.regions['start']
 
@@ -250,13 +259,13 @@ class ZillionWorld(World):
             if group["game"] == "Zillion":
                 assert "item_pool" in group
                 item_pool = group["item_pool"]
-                to_stay = "JJ"
+                to_stay: Literal['Apple', 'Champ', 'JJ'] = "JJ"
                 if "JJ" in item_pool:
                     assert "players" in group
                     group_players = group["players"]
                     start_chars = cast(Dict[int, ZillionStartChar], getattr(multiworld, "start_char"))
                     players_start_chars = [
-                        (player, start_chars[player].get_current_option_name())
+                        (player, start_chars[player].current_option_name)
                         for player in group_players
                     ]
                     start_char_counts = Counter(sc for _, sc in players_start_chars)

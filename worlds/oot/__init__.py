@@ -85,7 +85,16 @@ class OOTWeb(WebWorld):
         setup.authors
     )
 
-    tutorials = [setup, setup_es]
+    setup_fr = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["TheLynk"]
+    )
+
+    tutorials = [setup, setup_es, setup_fr]
 
 
 class OOTWorld(World):
@@ -109,7 +118,7 @@ class OOTWorld(World):
 
     data_version = 3
 
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 4, 0)
 
     item_name_groups = {
         # internal groups

@@ -111,8 +111,8 @@ World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
 Special locations with ID `None` can hold events.
 
 Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED`.
-The Fill algorithm will fill priority first, giving higher chance of it being
-required, and not place progression or useful items in excluded locations.
+The Fill algorithm will force progression items to be placed at priority locations, giving a higher chance of them being
+required, and will prevent progression and useful items from being placed at excluded locations.
 
 ### Items
 
@@ -192,7 +192,7 @@ on a single item. It can be used to reject placement of an item there.
 ### Your World
 
 All code for your world implementation should be placed in a python package in
-the `/worlds` directory. The starting point for the package is `__init.py__`.
+the `/worlds` directory. The starting point for the package is `__init__.py`.
 Conventionally, your world class is placed in that file.
 
 World classes must inherit from the `World` class in `/worlds/AutoWorld.py`,
@@ -364,14 +364,9 @@ class MyGameLocation(Location):  # or from Locations import MyGameLocation
 
 class MyGameWorld(World):
     """Insert description of the world/game here."""
-    game: str = "My Game"  # name of the game/world
+    game = "My Game"  # name of the game/world
     option_definitions = mygame_options  # options the player can set
-    topology_present: bool = True  # show path to required location checks in spoiler
-
-    # data_version is used to signal that items, locations or their names
-    # changed. Set this to 0 during development so other games' clients do not
-    # cache any texts, then increase by 1 for each release that makes changes.
-    data_version = 0
+    topology_present = True  # show path to required location checks in spoiler
 
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a propery.
