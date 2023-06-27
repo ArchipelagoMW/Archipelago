@@ -8007,7 +8007,7 @@
     </CEffectEnumArea>
     <CEffectSet id="AP_DarkTemplarRecallSet">
         <ValidatorArray value="IsDarkShrine"/>
-        <ValidatorArray value="HasPower"/>
+        <ValidatorArray value="AP_HasPower"/>
         <EditorCategories value=""/>
         <EffectArray value="AP_DarkTemplarRecallCreatePrecursor"/>
     </CEffectSet>
@@ -8932,4 +8932,11 @@
         <Abil value="AP_UpgradeToRoboticsFacilityWarpInstant"/>
         <Player Value="Source"/>
     </CEffectIssueOrder>
+    <CEffectModifyUnit id="AP_DarkShrineAssignRally">
+        <RallyUnit Value="Caster"/>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="AP_ReapplyingDarkShrineRecallBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_IsPoweredDarkShrine"/>
+    </CEffectApplyBehavior>
 </Catalog>

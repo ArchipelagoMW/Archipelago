@@ -2631,4 +2631,29 @@
         <CombineArray value="AP_IsVanillaRoboticsFacility"/>
         <CombineArray value="AP_IsAPRoboticsFacility"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_HaveSOARadar">
+        <Value value="AP_HaveSOARadar"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsVanillaDarkShrine">
+        <Value value="DarkShrine"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPDarkShrine">
+        <Value value="AP_DarkShrine"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsDarkShrine" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaDarkShrine"/>
+        <CombineArray value="AP_IsAPDarkShrine"/>
+    </CValidatorCombine>
+    <CValidatorUnitComparePowerUserLevel id="AP_HasPower">
+        <Value value="1"/>
+        <Compare value="GE"/>
+    </CValidatorUnitComparePowerUserLevel>
+    <CValidatorUnitComparePowerUserLevel id="AP_CasterHasPower">
+        <Value value="1"/>
+        <WhichUnit Value="Caster"/>
+        <Compare value="GE"/>
+    </CValidatorUnitComparePowerUserLevel>
 </Catalog>

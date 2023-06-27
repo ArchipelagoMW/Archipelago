@@ -2365,4 +2365,8 @@
     <CRequirementCountUnit id="AP_CountUnitRoboticsBayCompleteOnlyTechTreeCheat">
         <Count Link="AP_RoboticsBay" State="CompleteOnly"/>
     </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSOARadarCompleteOnly">
+        <Count Link="AP_SOARadar" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

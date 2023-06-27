@@ -1387,4 +1387,8 @@
         <EditorCategories value="Race:Protoss,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_CountUnitRoboticsBayCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HaveSOARadar">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOARadarCompleteOnly"/>
+    </CRequirement>
 </Catalog>

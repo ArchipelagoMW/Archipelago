@@ -11746,6 +11746,66 @@
     <CActorSplat id="AP_CyberneticsCoreSplat" parent="GenericUnitSplat" unitName="AP_CyberneticsCore">
         <Model value="CyberneticsCoreSplat"/>
     </CActorSplat>
+    <CActorUnit id="AP_DarkShrine" parent="ProtossBuildingEx" unitName="AP_DarkShrine">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <Macros value="VoidMPUnpoweredAnim"/>
+        <Macros value="QueueAnim"/>
+        <Macros value="GlobalLoopMacro"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById DarkShrineDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById DarkShrineDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById DarkShrineDarkEmissive"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GlowGreen"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PylonDarkEmissive"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById DarkShrineDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById DarkShrineDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById DarkShrineDarkEmissive"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GlowGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkDiffuse"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkSpecular"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PylonDarkEmissive"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkShrineTaldarim"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkShrineTaldarim"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <Model value="DarkShrine"/>
+        <AnimBlendTime value="0.750000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="0"/>
+        <BuildModel value="DarkShrineBirth"/>
+        <DeathArray index="Normal" ModelLink="DarkShrineDeath" SoundLink="DarkShrine_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="DarkShrineDeathUnderConstruction" SoundLink="DarkShrine_Explode"/>
+        <DeathCustoms ModelLink="DarkShrineTaldarimDeath" Name="DarkProtoss"/>
+        <PlacementModel value="DarkShrinePlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="DarkShrinePortrait"/>
+        <BarOffset value="180"/>
+        <BarWidth value="85"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkShrine.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-DarkShrine.dds"/>
+        <SoundArray index="Ready" value="DarkShrine_Ready"/>
+        <SoundArray index="What" value="DarkShrine_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-DarkShrine.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkShrine.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkShrine-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkShrine-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-DarkShrine-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSplat id="AP_DarkShrineSplat" parent="GenericUnitSplat" unitName="AP_DarkShrine">
+        <Model value="DarkShrineSplat"/>
+    </CActorSplat>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -12449,8 +12509,6 @@
         <HeroIcon value="Assets\Textures\BTN-Building-Protoss-RoboticsWarpFacility.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
         <NameOffset value="110"/>
-        <SoundArray index="Ready" value="AP_RoboticsFacilityWarp_Ready"/>
-        <SoundArray index="What" value="AP_RoboticsFacilityWarp_What"/>
         <SoundArray index="Construction" value="Protoss_ConstructionWhat"/>
         <UnitFlags index="ShowBlobShadow" value="0"/>
         <UnitIcon value="Assets\Textures\BTN-Building-Protoss-RoboticsWarpFacility.dds"/>

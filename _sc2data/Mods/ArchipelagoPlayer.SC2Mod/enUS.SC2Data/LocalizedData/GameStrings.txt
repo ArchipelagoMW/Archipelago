@@ -116,6 +116,7 @@ Abil/Name/AP_MedivacTransport=Load-Unload (Medivac)
 Abil/Name/AP_Mergeable=Mergeable
 Abil/Name/AP_MindControl=Mind Control
 Abil/Name/AP_MissilePods=Hurricane Missile Pods
+Abil/Name/AP_MorphBackToRoboticsFacility=Morph Back To Robotics Facility
 Abil/Name/AP_MorphHydraliskToLurker=Morph Hydralisk To Lurker
 Abil/Name/AP_MorphRoachToImpaler=Morph Roach to Primal Lurker
 Abil/Name/AP_MorphToBroodLord=Morph (Corruptor - > Brood Lord)
@@ -167,6 +168,8 @@ Abil/Name/AP_RallyCommand=Command Center - Rally
 Abil/Name/AP_ReactorMorph=Nuclear Reactor Morph
 Abil/Name/AP_RefineryToAutomatedRefinery=Refinery To Automated Refinery
 Abil/Name/AP_Repair=Repair
+Abil/Name/AP_RoboticsFacilityTrain=Train (Robotics Facility)
+Abil/Name/AP_RoboticsFacilityWarpTrain=Robotics Facility Warp Train
 Abil/Name/AP_RogueGhostCloak=Cloak
 Abil/Name/AP_SCVHarvest=Gather (SCV)
 Abil/Name/AP_SalvageBunker=Bunker
@@ -218,6 +221,8 @@ Abil/Name/AP_UnburrowImpaler=Unburrow (Impaler)
 Abil/Name/AP_Unsiege=Unsiege
 Abil/Name/AP_UpgradeToOrbital=Morph Building (COCE -> Orbital Command)
 Abil/Name/AP_UpgradeToPlanetaryFortress=Morph Building (COCE -> Planetary Fortress)
+Abil/Name/AP_UpgradeToRoboticsFacilityWarp=Upgrade To Robotics Facility Warp
+Abil/Name/AP_UpgradeToRoboticsFacilityWarpInstant=Upgrade To Robotics Facility Warp Instant
 Abil/Name/AP_UpgradeToStargateWarp=Upgrade To Stargate Warp
 Abil/Name/AP_UpgradeToStargateWarpInstant=Upgrade To Stargate Warp Instant
 Abil/Name/AP_ViperConsumption=Consumption
@@ -247,13 +252,10 @@ Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
 Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
 Abil/Name/MercCompoundResearch2=Research
-Abil/Name/AP_MorphBackToRoboticsFacility=Morph Back To Robotics Facility
-Abil/Name/AP_RoboticsFacilityTrain=Train (Robotics Facility)
-Abil/Name/AP_RoboticsFacilityWarpTrain=Robotics Facility Warp Train
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
-Abil/Name/AP_UpgradeToRoboticsFacilityWarp=Upgrade To Robotics Facility Warp
-Abil/Name/AP_UpgradeToRoboticsFacilityWarpInstant=Upgrade To Robotics Facility Warp Instant
+Abil/Name/AP_attackProtossBuilding=attack Protoss Building
+Abil/Name/AP_stopProtossBuilding=stop Protoss Building
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -344,6 +346,7 @@ Behavior/Name/AP_VoidPhoenixPhasingArmorBuff=Phasing Armor
 Behavior/Name/AP_VoidRayVoidDamageBoost=Prismatic Alignment
 Behavior/Name/AP_VoidStalkerBlinkShieldRestore=Shadow Regeneration
 Behavior/Name/AP_WraithCloak=Cloak
+Behavior/Name/AP_DarkTemplarRecentlyRecalled=Recently Recalled
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
@@ -402,6 +405,7 @@ Behavior/Tooltip/AP_ViperConsumeStructure=A Viper is consuming this structure to
 Behavior/Tooltip/AP_VoidPhoenixPhasingArmorBuff=This unit is immune to damage.
 Behavior/Tooltip/AP_VoidStalkerBlinkShieldRestore=This unit is regenerating shields.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
+Behavior/Tooltip/AP_DarkTemplarRecentlyRecalled=This unit has been recently recalled to a Dark Shrine and cannot be recalled again.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AWrp=Archon Merge
@@ -455,6 +459,9 @@ Button/Name/AP_CloakOnLiberator=Cloak
 Button/Name/AP_CloakOnPredator=Cloak On Predator
 Button/Name/AP_CloakOnReaper=Permanently Cloaked
 Button/Name/AP_CloakOnSpectre=Cloak
+Button/Name/AP_Colossus=Warp In Colossus
+Button/Name/AP_ColossusPurifier=Warp in Colossus
+Button/Name/AP_ColossusTaldarim=Warp in Wrathwalker
 Button/Name/AP_CombatDrugs=Combat Drugs
 Button/Name/AP_CombatShield=Combat Shield
 Button/Name/AP_CommandCenter=Build Command Center
@@ -540,9 +547,12 @@ Button/Name/AP_HunterCliffJumper=Cliff Jumper
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
 Button/Name/AP_HydraliskFrenzy=Frenzy
 Button/Name/AP_Hyperjump=Tactical Jump
+Button/Name/AP_Immortal=Warp In Immortal
+Button/Name/AP_ImmortalAiur=Warp in Immortal
 Button/Name/AP_ImmortalBarrierBase=Barrier
 Button/Name/AP_ImmortalOverload=Barrier
 Button/Name/AP_ImmortalShakurasShadowCannon=Shadow Cannon
+Button/Name/AP_ImmortalTaldarim=Warp in Vanguard
 Button/Name/AP_ImmortalTaldarimScatterCannon=Scatter Cannon
 Button/Name/AP_ImmortalityProtocol=Immortality Protocol
 Button/Name/AP_Impaler=Morph to Impaler
@@ -581,6 +591,7 @@ Button/Name/AP_MindControl=Mind Control
 Button/Name/AP_MissilePods=Missile Pods
 Button/Name/AP_MissileTurret=Build Missile Turret
 Button/Name/AP_MonarchBlades=Monarch Blades
+Button/Name/AP_MorphBackToRoboticsFacility=Transform to Robotics Facility
 Button/Name/AP_MorphBackToStargate=Transform to Stargate
 Button/Name/AP_MorphToHellion=Hellion Mode
 Button/Name/AP_MorphToHellionTank=Hellbat Mode
@@ -622,6 +633,7 @@ Button/Name/AP_NukeArm=Arm Silo with Nuke
 Button/Name/AP_NukeCalldown=Tac Nuke Strike
 Button/Name/AP_NyxClassCloakingModule=Nyx-Class Cloaking Module
 Button/Name/AP_Obliterate=Psionic Lash
+Button/Name/AP_Observer=Warp In Observer
 Button/Name/AP_OcularImplants=Ocular Implants
 Button/Name/AP_PerditionTurret=Build Perdition Turret
 Button/Name/AP_PermanentCloakBanshee=Advanced Cross-Spectrum Dampeners
@@ -650,6 +662,7 @@ Button/Name/AP_RavenScramblerMissile=Interference Matrix
 Button/Name/AP_RavenShredderMissile=Anti-Armor Missile
 Button/Name/AP_Reactor=Build Reactor
 Button/Name/AP_Reaper=Train Reaper
+Button/Name/AP_Reaver=Reaver
 Button/Name/AP_Refinery=Build Refinery
 Button/Name/AP_ReinforcedSuperstructure=Titanium Housing
 Button/Name/AP_RepairDrones=Repair Drones
@@ -731,6 +744,7 @@ Button/Name/AP_U238Rounds=U-238 Rounds
 Button/Name/AP_UltraliskWeaponCooldown=Ultralisk Weapon Cooldown
 Button/Name/AP_UltrasonicPulse=Ultrasonic Pulse
 Button/Name/AP_UpgradeToPlanetaryFortress=Upgrade to Planetary Fortress
+Button/Name/AP_UpgradeToRoboticsFacilityWarp=Transform to Warp Robotics Facility
 Button/Name/AP_UpgradeToStargateWarp=Transform to Warp Stargate
 Button/Name/AP_ValkyrieSCBW=Build Valkyrie
 Button/Name/AP_ViciousGlaive=Vicious Glave
@@ -764,17 +778,7 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_Colossus=Warp In Colossus
-Button/Name/AP_ColossusPurifier=Warp in Colossus
-Button/Name/AP_ColossusTaldarim=Warp in Wrathwalker
-Button/Name/AP_Immortal=Warp In Immortal
-Button/Name/AP_ImmortalAiur=Warp in Immortal
-Button/Name/AP_ImmortalTaldarim=Warp in Vanguard
-Button/Name/AP_MorphBackToRoboticsFacility=Transform to Robotics Facility
-Button/Name/AP_Observer=Warp In Observer
-Button/Name/AP_Reaver=Reaver
-Button/Name/AP_SOAWarpTech=Warp Harmonization
-Button/Name/AP_UpgradeToRoboticsFacilityWarp=Transform to Warp Robotics Facility
+Button/Name/AP_DarkShrineAssignRally=Rally
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -951,7 +955,7 @@ Button/Tooltip/AP_Hydralisk=High-damage ranged unit.<n/><n/><c val="ffff8a">Can 
 Button/Tooltip/AP_HydraliskFrenzy=Attack speed increased by 50% for <d ref="Behavior,AP_HydraliskFrenzy,Duration"/> seconds.
 Button/Tooltip/AP_HydraliskLurkerEgg=This cocoon contains a Hydralisk that is morphing into a Lurker.
 Button/Tooltip/AP_Hyperjump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
-Button/Tooltip/AP_Immortal=Assault strider. Has shields that deflect high-damage attacks.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_Immortal=Assault strider. Can use Barrier to absorb damage.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ImmortalAiur=Aiur Faction<n/>Assault strider. Can use Barrier to absorb damage.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
 Button/Tooltip/AP_ImmortalBarrier=Assault strider. Can use Barrier to absorb damage.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ImmortalBarrierBase=Absorbs up to <d ref="Behavior,AP_ImmortalBarrierBase,DamageResponse.ModifyLimit"/> damage. Lasts for <d ref="Behavior,AP_ImmortalBarrierBase,Duration"/> seconds.
@@ -1004,6 +1008,7 @@ Button/Tooltip/AP_MindControl=Permanently converts targeted Zerg unit to player 
 Button/Tooltip/AP_MissilePods=Missile Pods deal <d ref="Effect,AP_HurricaneMissileDamage,Amount * Effect,AP_HurricaneMissileDamagePersistent,PeriodCount"/> (+<d ref="Effect,AP_HurricaneMissileDamage,AttributeBonus[0] * Effect,AP_HurricaneMissileDamagePersistent,PeriodCount"/> vs. light) damage to air units in target area.
 Button/Tooltip/AP_MissileTurret=Primary anti-air defensive structure. <n/><n/><c val="#ColorAttackInfo">Can attack air units.</c><n/><c val="FFE303">Detector</c>
 Button/Tooltip/AP_MonarchBlades=Splash damage of Ultralisk attacks increased to <d ref="Effect,AP_HotSUltraliskKaiserBladesSecondaryUpgradeDamage,Amount"/>.
+Button/Tooltip/AP_MorphBackToRoboticsFacility=Transforms this Warp Robotics Facility back to a Robotics Facility.
 Button/Tooltip/AP_MorphBackToStargate=Transforms this Warp Stargate back to a Stargate.
 Button/Tooltip/AP_MorphToHellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire. Can transform into a close range combat unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_MorphToHellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -1084,6 +1089,7 @@ Button/Tooltip/AP_RavenScramblerMissile=Disables a target unit rendering it unab
 Button/Tooltip/AP_RavenShredderMissile=Deploys a missile which pursues the target unit and, upon contact, reduces the armor and shield armor of affected units by <d ref="-1*Behavior,AP_RavenShredderMissileArmorReductionUISubtruct,Modification.LifeArmorBonus"/> for <d ref="Behavior,AP_RavenShredderMissileArmorReductionUISubtruct,Duration"/> seconds.
 Button/Tooltip/AP_Reactor=Allows 2 units to be created simultaneously.
 Button/Tooltip/AP_Reaper=Raider. Capable of jumping up and down cliffs. Throws explosive mines.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_Reaver=Aiur Faction<n/>Area damage siege unit. Builds and launches Scarabs for high burst damage.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_Refinery=Built over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/AP_RefineryRich=Built over a Vespene Geyser to allow harvesting of vespene gas.
 Button/Tooltip/AP_ReinforcedSuperstructure=Increases Missile Turret life by 75.
@@ -1095,6 +1101,8 @@ Button/Tooltip/AP_RetributionField=The Predator unleashes a deadly field of elec
 Button/Tooltip/AP_RipwaveMissiles=Viking missiles deal area damage.
 Button/Tooltip/AP_Roach=Assault unit. Regenerates life quickly when burrowed.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_RoboticsBay=Colossus tech structure.
+Button/Tooltip/AP_RoboticsFacility=Warps in Protoss robotic units.
+Button/Tooltip/AP_RoboticsFacilityWarp=Warps in Protoss robotic units.
 Button/Tooltip/AP_RuptureUpgrade=Blast radius increased by 50%.
 Button/Tooltip/AP_SCV=Basic worker unit. Can gather resources, build Terran structures, and repair.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SOAWarpTech=Stargates and Robotics Facilities can transform to utilize Warp In technology. Warp In cooldowns are 20% faster than original build times.<n/><n/><c val="ffff8a">Passive ability.</c>
@@ -1183,6 +1191,7 @@ Button/Tooltip/AP_U238Rounds=Increases Reaper range by 1. Adds an additional +3 
 Button/Tooltip/AP_Ultralisk=Heavy assault unit. Has an area-damage cleave attack.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_UltrasonicPulse=Stuns enemy units in target area for a short time.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
 Button/Tooltip/AP_UpgradeToPlanetaryFortress=Adds a powerful turret, and increases armor. Removes Lift Off, Scanner Sweep, and MULE abilities.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/AP_UpgradeToRoboticsFacilityWarp=Upgrades this Robotics Facility to a Warp Robotics Facility, allowing it to warp in units to any location powered by a Pylon.
 Button/Tooltip/AP_UpgradeToStargateWarp=Upgrades this Stargate to a Warp Stargate, allowing it to warp in units to any location powered by a Pylon.
 Button/Tooltip/AP_ValkyrieSCBW=Advanced anti-aircraft fighter. Able to use cluster missiles that deal area damage to air targets.<n/><n/><c val="#ColorAttackInfo">Can attack air units.</c>
 Button/Tooltip/AP_ViciousGlaive=Attacks bounce three additional times, hitting up to six targets. Bounces also travel farther.
@@ -1219,19 +1228,8 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_Colossus=Powerful battle strider. Can walk up and down cliffs. Attacks incinerate multiple enemies at once.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_ColossusPurifier=Purifier Faction<n/>Battle strider with a powerful area attack. Can walk up and down cliffs. Attacks set fire to the ground, dealing extra damage to enemies over time.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_ColossusTaldarim=Tal'darim Faction<n/>Battle strider with a powerful single target attack. Can walk up and down cliffs.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_Immortal=Assault strider. Can use Barrier to absorb damage.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_ImmortalAiur=Aiur Faction<n/>Assault strider. Can use Barrier to absorb damage.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
-Button/Tooltip/AP_ImmortalTaldarim=Tal'darim Faction<n/>Assault Strider. Attacks deal damage in an area around target enemy unit.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_MorphBackToRoboticsFacility=Transforms this Warp Robotics Facility back to a Robotics Facility.
-Button/Tooltip/AP_Observer=Flying spy. Cloak renders the unit invisible to enemies without detection.<n/><n/><c val="FFE303">Detector</c>
-Button/Tooltip/AP_Reaver=Aiur Faction<n/>Area damage siege unit. Builds and launches Scarabs for high burst damage.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_RoboticsFacility=Warps in Protoss robotic units.
-Button/Tooltip/AP_RoboticsFacilityWarp=Warps in Protoss robotic units.
-Button/Tooltip/AP_SOAWarpTech=Stargates and Robotics Facilities can transform to utilize Warp In technology. Warp In cooldowns are 20% faster than original build times.<n/><n/><c val="ffff8a">Passive ability.</c>
-Button/Tooltip/AP_UpgradeToRoboticsFacilityWarp=Upgrades this Robotics Facility to a Warp Robotics Facility, allowing it to warp in units to any location powered by a Pylon.
+Button/Tooltip/AP_DarkShrine=Dark Templar tech structure.
+Button/Tooltip/AP_DarkShrineAssignRally=Sends recalled Avengers to the designated point.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1993,6 +1991,7 @@ Effect/Name/AP_RoachVileCorpserAcidSalivaSet=Roach Vile Corpser Acid Saliva Set
 Effect/Name/AP_RoachlingFate=Roachling Fate
 Effect/Name/AP_RoachlingNeedleClawsDamage=Roachling Needle Claws Damage
 Effect/Name/AP_RoachlingNeedleClawsSet=Roachling Needle Claws Set
+Effect/Name/AP_RoboticsFacilityWarpMorphInstant=Robotics Facility Warp Morph Instant
 Effect/Name/AP_SalvageBunker=Bunker
 Effect/Name/AP_ScreecherMissilesCarpetBombDamage=Screecher Missiles (Carpet Bomb Damage)
 Effect/Name/AP_ScreecherMissilesCarpetBombSearchArea=Screecher Missiles (Carpet Bomb Search Area)
@@ -2246,11 +2245,11 @@ Effect/Name/NeuralParasiteDroneRemoveCheck2=Neural Parasite Drone Remove Check
 Effect/Name/NeuralParasiteLaunchMissile2=Neural Parasite (Launch Missile)
 Effect/Name/NeuralParasitePersistent2=Neural Parasite (Create Persistent)
 Effect/Name/NeuralParasitePersistentSet2=Neural Parasite Persistent Set
+Effect/Name/AP_ReapplyingDarkShrineRecallBehavior=Reapplying Dark Shrine Recall Behavior
 Effect/Name/RemoveCoreRecallingBehaviorVikingAir2=Remove Core Recalling Behavior Viking Air
 Effect/Name/RemoveCoreRecallingBehaviorVikingGround2=Remove Core Recalling Behavior Viking Ground
 Effect/Name/RemoveRecallingBehaviorVikingAir2=Remove Recalling Behavior Viking Air
 Effect/Name/RemoveRecallingBehaviorVikingGround2=Remove Recalling Behavior Viking Ground
-Effect/Name/AP_RoboticsFacilityWarpMorphInstant=Robotics Facility Warp Morph Instant
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
 Error/AP_SwarmHostBurrowed=Must Root to attack.
@@ -2461,6 +2460,8 @@ Unit/Name/AP_RoachCorpserAcidSalivaWeapon=Roach Corpser Acid Saliva Weapon
 Unit/Name/AP_RoachVileAcidSalivaWeapon=Roach Vile Acid Saliva Weapon
 Unit/Name/AP_Roachling=Roachling
 Unit/Name/AP_RoboticsBay=Robotics Bay
+Unit/Name/AP_RoboticsFacility=Robotics Facility
+Unit/Name/AP_RoboticsFacilityWarp=Warp Robotics Facility
 Unit/Name/AP_SCV=SCV
 Unit/Name/AP_ScienceVessel=Science Vessel
 Unit/Name/AP_SensorTower=Sensor Tower
@@ -2526,10 +2527,8 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
+Unit/Name/AP_DarkShrine=Dark Shrine
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
-Unit/Name/AP_RoboticsFacility=Robotics Facility
-Unit/Name/AP_RoboticsFacilityWarp=Warp Robotics Facility
-Unit/Name/AP_SpectreNuke=Spectre Nuke
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
