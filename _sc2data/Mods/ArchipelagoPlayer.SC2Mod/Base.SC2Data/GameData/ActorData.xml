@@ -12534,6 +12534,65 @@
         <On Terms="AbilMorph.AP_MorphBackToRoboticsFacility.Pause" Send="SoundSetPaused 1"/>
         <On Terms="AbilMorph.AP_MorphBackToRoboticsFacility.Resume" Send="SoundSetPaused"/>
     </CActorSound>
+    <CActorUnit id="AP_TemplarArchive" parent="ProtossBuildingEx" unitName="AP_TemplarArchive">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <Macros value="VoidMPUnpoweredAnim"/>
+        <Macros value="QueueAnim"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById TemplarArchivesDarkDiffuse"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById TemplarArchivesDarkSpecular"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById TemplarArchivesDarkEmissive"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GlowGreen"/>
+        <Remove Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GradRaysGreen"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById TemplarArchivesDarkDiffuse"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById TemplarArchivesDarkSpecular"/>
+        <Remove Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById TemplarArchivesDarkEmissive"/>
+        <Remove Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GlowGreen"/>
+        <Remove Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById TemplarArchivesDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById TemplarArchivesDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById TemplarArchivesDarkEmissive"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GlowGreen"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById TemplarArchivesDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById TemplarArchivesDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById TemplarArchivesDarkEmissive"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GlowGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap TemplarArchives_Taldarim 255 PreventAllDynamicTextureTransfers"/>
+        <Model value="TemplarArchive"/>
+        <CreepHeightClass value="Small"/>
+        <BuildModel value="TemplarArchiveBirth"/>
+        <DeathArray index="Normal" ModelLink="TemplarArchiveDeath" SoundLink="TemplarArchive_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="TemplarArchiveDeathUnderConstruction" SoundLink="TemplarArchive_Explode"/>
+        <PlacementModel value="TemplarArchivePlacement"/>
+        <PortraitModel value="TemplarArchivePortrait"/>
+        <BarOffset value="135"/>
+        <BarWidth value="135"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-TemplarArchives.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-templararchives.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="TemplarArchive_Ready"/>
+        <SoundArray index="What" value="TemplarArchive_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-templararchives.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-TemplarArchives.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-TemplarArchives-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-TemplarArchives-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-TemplarArchives-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSplat id="AP_TemplarArchivesSplat" parent="GenericUnitSplat" unitName="AP_TemplarArchive">
+        <Model value="TemplarArchiveSplat"/>
+    </CActorSplat>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
