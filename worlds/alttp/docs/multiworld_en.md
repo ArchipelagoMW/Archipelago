@@ -31,16 +31,6 @@ but it is not supported.**
     5. Browse for your emulator's `.exe` file and click **Open**. This file should be located inside the folder you
        extracted in step one.
 
-## Generating a MultiWorld Game
-
-1. Navigate to the [Player Settings](/games/A%20Link%20to%20the%20Past/player-settings) page, configure your options,
-   and click the "Export Settings" button.
-   - For instructions on how to generate an Archipelago game with the settings file, refer to the
-[Archipelago Web Guide](/tutorial/Archipelago/using_website/en).
-   - If you manually edit your config file, you can verify it with our [YAML Validator](/mysterycheck).
-
-## Joining a MultiWorld Game
-
 ### Obtain your patch file and create your ROM
 
 When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
