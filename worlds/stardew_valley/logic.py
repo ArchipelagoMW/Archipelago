@@ -628,7 +628,7 @@ class StardewLogic:
         return self.has_skill_level(Skill.farming, level)
 
     def has_total_skill_level(self, level: int, allow_modded_skills: bool = False) -> StardewRule:
-        if level == 0:
+        if level <= 0:
             return True_()
 
         if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
@@ -1088,7 +1088,7 @@ class StardewLogic:
         return previous_heart_rule & earn_rule
 
     def can_befriend_pet(self, hearts: int):
-        if hearts == 0:
+        if hearts <= 0:
             return True_()
         points = hearts * 200
         points_per_month = 12 * 14
