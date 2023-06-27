@@ -8,7 +8,7 @@ from . import setup_solo_multiworld
 from .TestOptions import basic_checks, SVTestBase
 from .. import options, locations, items, Group, ItemClassification, StardewOptions
 from ..regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
-from ..items import item_table
+from ..items import item_table, items_by_group
 from ..locations import location_table, LocationTags
 from ..options import stardew_valley_option_classes, Mods, EntranceRandomization
 
