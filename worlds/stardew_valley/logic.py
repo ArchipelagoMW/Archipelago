@@ -51,6 +51,8 @@ from .strings.region_names import Region
 from .strings.season_names import Season
 from .strings.seed_names import Seed
 from .strings.skill_names import Skill, ModSkill
+from .strings.special_order_names import SpecialOrder
+from .strings.spells import MagicSpell
 from .strings.tool_names import Tool, ToolMaterial, APTool
 from .strings.tv_channel_names import Channel
 from .strings.villager_names import NPC
@@ -483,41 +485,41 @@ class StardewLogic:
         })
 
         self.special_order_rules.update({
-            "Island Ingredients": self.has_island_transport() & self.can_farm_perfectly() &
+            SpecialOrder.island_ingredients: self.has_island_transport() & self.can_farm_perfectly() &
                                   self.has(Vegetable.taro_root) & self.has(Fruit.pineapple) & self.has(Forageable.ginger),
-            "Cave Patrol": self.can_mine_perfectly() & self.can_mine_to_floor(120),
-            "Aquatic Overpopulation": self.can_fish_perfectly(),
-            "Biome Balance": self.can_fish_perfectly(),
-            "Rock Rejuvenation": self.has(Mineral.ruby) & self.has(Mineral.topaz) & self.has(Mineral.emerald) &
+            SpecialOrder.cave_patrol: self.can_mine_perfectly() & self.can_mine_to_floor(120),
+            SpecialOrder.aquatic_overpopulation: self.can_fish_perfectly(),
+            SpecialOrder.biome_balance: self.can_fish_perfectly(),
+            SpecialOrder.rock_rejuivenation: self.has(Mineral.ruby) & self.has(Mineral.topaz) & self.has(Mineral.emerald) &
                                  self.has(Mineral.jade) & self.has(Mineral.amethyst) & self.has_relationship(NPC.emily, 4) &
                                  self.has(ArtisanGood.cloth) & self.can_reach_region(Region.haley_house),
-            "Gifts for George": self.has_season(Season.spring) & self.has(Forageable.leek),
-            "Fragments of the past": self.can_reach_region(Region.dig_site),
-            "Gus' Famous Omelet": self.has(AnimalProduct.any_egg),
-            "Crop Order": self.can_farm_perfectly(),
-            "Community Cleanup": self.can_crab_pot(),
-            "The Strong Stuff": self.can_keg(Vegetable.potato),
-            "Pierre's Prime Produce": self.can_farm_perfectly(),
-            "Robin's Project": self.can_chop_perfectly() & self.has(Material.hardwood),
-            "Robin's Resource Rush": self.can_chop_perfectly() & self.has(Fertilizer.tree) & self.can_mine_perfectly(),
-            "Juicy Bugs Wanted!": self.has(Loot.bug_meat),
-            "Tropical Fish": self.has_island_transport() & self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
-            "A Curious Substance": self.can_mine_perfectly() & self.can_mine_to_floor(80),
-            "Prismatic Jelly": self.can_mine_perfectly() & self.can_mine_to_floor(40),
-            "Qi's Crop": self.can_farm_perfectly() & self.can_reach_region(Region.greenhouse) &
+            SpecialOrder.gifts_for_george: self.has_season(Season.spring) & self.has(Forageable.leek),
+            SpecialOrder.fragments_of_the_past: self.can_reach_region(Region.dig_site),
+            SpecialOrder.gus_famous_omelet: self.has(AnimalProduct.any_egg),
+            SpecialOrder.crop_order: self.can_farm_perfectly(),
+            SpecialOrder.community_cleanup: self.can_crab_pot(),
+            SpecialOrder.the_strong_stuff: self.can_keg(Vegetable.potato),
+            SpecialOrder.pierres_prime_produce: self.can_farm_perfectly(),
+            SpecialOrder.robins_project: self.can_chop_perfectly() & self.has(Material.hardwood),
+            SpecialOrder.robins_resource_rush: self.can_chop_perfectly() & self.has(Fertilizer.tree) & self.can_mine_perfectly(),
+            SpecialOrder.juicy_bugs_wanted_yum: self.has(Loot.bug_meat),
+            SpecialOrder.tropical_fish: self.has_island_transport() & self.has(Fish.stingray) & self.has(Fish.blue_discus) & self.has(Fish.lionfish),
+            SpecialOrder.a_curious_substance: self.can_mine_perfectly() & self.can_mine_to_floor(80),
+            SpecialOrder.prismatic_jelly: self.can_mine_perfectly() & self.can_mine_to_floor(40),
+            SpecialOrder.qis_crop: self.can_farm_perfectly() & self.can_reach_region(Region.greenhouse) &
                          self.can_reach_region(Region.island_west) & self.has_total_skill_level(50) &
                          self.has(Machine.seed_maker),
-            "Let's Play A Game": self.has_junimo_kart_max_level(),
-            "Four Precious Stones": self.has_lived_months(MAX_MONTHS) & self.has("Prismatic Shard") &
+            SpecialOrder.lets_play_a_game: self.has_junimo_kart_max_level(),
+            SpecialOrder.four_precious_stones: self.has_lived_months(MAX_MONTHS) & self.has("Prismatic Shard") &
                                     self.can_mine_perfectly_in_the_skull_cavern(),
-            "Qi's Hungry Challenge": self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
-            "Qi's Cuisine": self.can_cook() & self.can_spend_money(250000),
-            "Qi's Kindness": self.can_give_loved_gifts_to_everyone(),
-            "Extended Family": self.can_fish_perfectly() & self.has(Fish.angler) & self.has(Fish.glacierfish) &
+            SpecialOrder.qis_hungry_challenge: self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
+            SpecialOrder.qis_cuisine: self.can_cook() & self.can_spend_money(250000),
+            SpecialOrder.qis_kindness: self.can_give_loved_gifts_to_everyone(),
+            SpecialOrder.extended_family: self.can_fish_perfectly() & self.has(Fish.angler) & self.has(Fish.glacierfish) &
                                self.has(Fish.crimsonfish) & self.has(Fish.mutant_carp) & self.has(Fish.legend),
-            "Danger In The Deep": self.can_mine_perfectly() & self.has_mine_elevator_to_floor(120),
-            "Skull Cavern Invasion": self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
-            "Qi's Prismatic Grange": self.has(Loot.bug_meat) & self.can_spend_money(80000), # All colors can be bought except purple
+            SpecialOrder.danger_in_the_deep: self.can_mine_perfectly() & self.has_mine_elevator_to_floor(120),
+            SpecialOrder.skull_cavern_invasion: self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
+            SpecialOrder.qis_prismatic_grange: self.has(Loot.bug_meat) & self.can_spend_money(80000), # All colors can be bought except purple
         })
 
         self.special_order_rules.update(modded_special_orders(self, self.options))

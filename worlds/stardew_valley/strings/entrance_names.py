@@ -95,7 +95,13 @@ class Entrance:
     enter_skull_cavern_entrance = "Desert to Skull Cavern Entrance"
     enter_skull_cavern = "Skull Cavern Entrance to Skull Cavern"
     mine_to_skull_cavern_floor_25 = dig_to_skull_floor(25)
+    mine_to_skull_cavern_floor_50 = dig_to_skull_floor(50)
+    mine_to_skull_cavern_floor_75 = dig_to_skull_floor(75)
     mine_to_skull_cavern_floor_100 = dig_to_skull_floor(100)
+    mine_to_skull_cavern_floor_125 = dig_to_skull_floor(125)
+    mine_to_skull_cavern_floor_150 = dig_to_skull_floor(150)
+    mine_to_skull_cavern_floor_175 = dig_to_skull_floor(175)
+    mine_to_skull_cavern_floor_200 = dig_to_skull_floor(200)
     talk_to_mines_dwarf = "Talk to Mines Dwarf"
     dig_to_mines_floor_5 = dig_to_mines_floor(5)
     dig_to_mines_floor_10 = dig_to_mines_floor(10)
@@ -164,10 +170,15 @@ class DeepWoodsEntrance:
     secret_woods_to_deep_woods = "Woods to Deep Woods"
     use_woods_obelisk = "Use Woods Obelisk"
     deep_woods_house = "Deep Woods to Deep Woods House"
+    deep_woods_depth_1 = move_to_woods_depth(1)
     deep_woods_depth_10 = move_to_woods_depth(10)
+    deep_woods_depth_20 = move_to_woods_depth(20)
     deep_woods_depth_30 = move_to_woods_depth(30)
+    deep_woods_depth_40 = move_to_woods_depth(40)
     deep_woods_depth_50 = move_to_woods_depth(50)
+    deep_woods_depth_60 = move_to_woods_depth(60)
     deep_woods_depth_70 = move_to_woods_depth(70)
+    deep_woods_depth_80 = move_to_woods_depth(80)
     deep_woods_depth_90 = move_to_woods_depth(90)
     deep_woods_depth_100 = move_to_woods_depth(100)
 
@@ -175,6 +186,10 @@ class DeepWoodsEntrance:
 class EugeneEntrance:
     forest_to_garden = "Forest to Eugene's Garden"
     garden_to_bedroom = "Eugene's Garden to Eugene's Bedroom"
+
+
+class MagicEntrance:
+    store_to_altar = "Pierre's General Store to Magic Altar"
 
 
 class JasperEntrance:
@@ -192,4 +207,12 @@ class YobaEntrance:
 
 class JunaEntrance:
     forest_to_juna_cave = "Forest to Juna's Cave"
+
+
+class AyeishaEntrance:
+    bus_stop_to_mail_van = "Bus Stop to Ayeisha's Mail Van"
+
+
+class RileyEntrance:
+    town_to_riley = "Town to Riley's House"
 

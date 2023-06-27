@@ -56,7 +56,13 @@ class Region:
     shipwreck = "Shipwreck"
     qi_walnut_room = "Qi's Walnut Room"
     skull_cavern_25 = "Skull Cavern Floor 25"
+    skull_cavern_50 = "Skull Cavern Floor 50"
+    skull_cavern_75 = "Skull Cavern Floor 75"
     skull_cavern_100 = "Skull Cavern Floor 100"
+    skull_cavern_125 = "Skull Cavern Floor 125"
+    skull_cavern_150 = "Skull Cavern Floor 150"
+    skull_cavern_175 = "Skull Cavern Floor 175"
+    skull_cavern_200 = "Skull Cavern Floor 200"
     hospital = "Hospital"
     carpenter = "Carpenter Shop"
     alex_house = "Alex's House"
@@ -129,10 +135,15 @@ class Region:
 class DeepWoodsRegion:
     main_lichtung = "Entrance to the Deep Woods"
     abandoned_home = "Abandoned Home in Deep Woods"
+    woods_obelisk_menu = "Woods Obelisk Menu"
     floor_10 = "The Deep Woods Depth 10"
+    floor_20 = "The Deep Woods Depth 20"
     floor_30 = "The Deep Woods Depth 30"
+    floor_40 = "The Deep Woods Depth 40"
     floor_50 = "The Deep Woods Depth 50"
+    floor_60 = "The Deep Woods Depth 60"
     floor_70 = "The Deep Woods Depth 70"
+    floor_80 = "The Deep Woods Depth 80"
     floor_90 = "The Deep Woods Depth 90"
     floor_100 = "The Deep Woods Depth 100"
 
@@ -140,6 +151,10 @@ class DeepWoodsRegion:
 class EugeneRegion:
     eugene_garden = "Eugene's Garden"
     eugene_bedroom = "Eugene's Bedroom"
+
+
+class MagicRegion:
+    altar = "Magic Altar"
 
 
 class JasperRegion:
@@ -157,3 +172,11 @@ class YobaRegion:
 
 class JunaRegion:
     juna_cave = "Juna's Cave"
+
+
+class AyeishaRegion:
+    mail_van = "Ayeisha's Mail Van"
+
+
+class RileyRegion:
+    riley_house = "Riley's House"

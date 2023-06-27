@@ -47,6 +47,7 @@ class WaterItem:
     coral = "Coral"
     nautilus_shell = "Nautilus Shell"
     sea_urchin = "Sea Urchin"
+    periwinkle = "Periwinkle"
 
 
 class Trash:

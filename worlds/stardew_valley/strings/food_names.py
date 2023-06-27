@@ -51,6 +51,7 @@ class Meal:
     salmon_dinner = "Salmon Dinner"
     sashimi = "Sashimi"
     stir_fry = "Stir Fry"
+    strange_bun = "Strange Bun"
     stuffing = "Stuffing"
     survival_burger = "Survival Burger"
     tropical_curry = "Tropical Curry"
@@ -63,3 +64,4 @@ class Beverage:
     coffee = "Coffee"
     triple_shot_espresso = "Triple Shot Espresso"
     beer = "Beer"
+    joja_cola = "Joja Cola"

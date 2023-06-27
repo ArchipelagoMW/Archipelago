@@ -43,6 +43,7 @@ class ModNPC:
     jasper = "Jasper"
     juna = "Juna"
     mr_ginger = "Mr. Ginger"
+    riley = "Riley"
     shiko = "Shiko"
     wellwick = "Wellwick"
     yoba = "Yoba"

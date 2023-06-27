@@ -8,6 +8,8 @@ class Craftable:
     rain_totem = "Rain Totem"
     flute_block = "Flute Block"
     life_elixir = "Life Elixir"
+    monster_musk = "Monster Musk"
+    oil_of_garlic = "Oil of Garlic"
 
 
 
