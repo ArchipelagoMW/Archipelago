@@ -213,7 +213,7 @@ async def gba_send_receive_task(ctx: GBAContext):
             writer.write(b"\n")
 
             if error_status:
-                ctx.gb_status = error_status
+                ctx.gba_status = error_status
                 logger.info("Lost connection to GBA and attempting to reconnect. Use /gba for status updates")
             elif ctx.gba_status == CONNECTION_STATUS_TENTATIVE:
                 logger.info("Connected to GBA")
