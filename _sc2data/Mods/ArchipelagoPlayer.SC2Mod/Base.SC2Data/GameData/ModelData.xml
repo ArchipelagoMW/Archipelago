@@ -10416,4 +10416,16 @@
         <LowQualityModel value="ProtossBuildingDeathLow"/>
         <EditorCategories value="Race:Protoss"/>
     </CModel>
+    <CModel id="AP_PhotonCannonBlastWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\PhaseCannonMissile\PhaseCannonMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="2.000000,2.000000,2.000000"/>
+        <ScaleMin value="2.000000,2.000000,2.000000"/>
+    </CModel>
+    <CModel id="AP_PhotonCannonBlastAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\PhaseCannonMissileImpact\PhaseCannonMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="2.000000,2.000000,2.000000"/>
+        <ScaleMin value="2.000000,2.000000,2.000000"/>
+    </CModel>
 </Catalog>

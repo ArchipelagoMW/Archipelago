@@ -1391,4 +1391,8 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSOARadarCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveSOAPhotonCannon">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeSOAPhotonCannonCompleteOnly"/>
+    </CRequirement>
 </Catalog>

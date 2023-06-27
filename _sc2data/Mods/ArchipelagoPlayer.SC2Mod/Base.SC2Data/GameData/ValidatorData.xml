@@ -2656,4 +2656,17 @@
         <WhichUnit Value="Caster"/>
         <Compare value="GE"/>
     </CValidatorUnitComparePowerUserLevel>
+    <CValidatorUnitCompareVital id="AP_PhotonCannonTeleportTargetLifeSmaller">
+        <OtherUnit Value="Caster"/>
+        <Compare value="LE"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorUnitCompareVital id="AP_PhotonCannonTeleportTargetLifeGreater">
+        <OtherUnit Value="Caster"/>
+        <Compare value="GE"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorPlayerRequirement id="AP_HaveSOAPhotonCannon">
+        <Value value="AP_HaveSOAPhotonCannon"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

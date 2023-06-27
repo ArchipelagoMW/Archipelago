@@ -3918,4 +3918,8 @@
     </CUpgrade>
     <CUpgrade id="AP_GameTimeGreaterthan5Seconds"/>
     <CUpgrade id="AP_SOARadar"/>
+    <CUpgrade id="AP_SOAPhotonCannon">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_SoACaster"/>
+    </CUpgrade>
 </Catalog>

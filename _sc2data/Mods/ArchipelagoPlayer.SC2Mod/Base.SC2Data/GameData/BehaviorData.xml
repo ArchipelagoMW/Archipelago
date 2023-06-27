@@ -3132,4 +3132,33 @@
         <Period value="0.25"/>
         <PeriodicEffect value="AP_ReapplyingDarkShrineRecallBehavior"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PhaseCannonInitialStun">
+        <BehaviorCategories index="Invulnerable" value="1"/>
+        <BehaviorCategories index="Stun" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="1.5"/>
+        <Modification>
+            <ModifyFlags index="DisableWeapons" value="1"/>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+        </Modification>
+        <InfoFlags index="Hidden" value="1"/>
+        <ExpireEffect value="AP_PhaseCannonTimedLife"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PhaseCannonTimedLife" parent="TimedLife">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="30"/>
+        <Modification>
+            <StateFlags index="SuppressFoodUsed" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PhotonCannonTeleportCaster">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <Duration value="5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PhotonCannonDetectRange">
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
 </Catalog>

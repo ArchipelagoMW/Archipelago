@@ -2839,11 +2839,6 @@
     </CAbilResearch>
     <CAbilRally id="AP_DarkShrineRally">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
-        <CmdButtonArray index="Rally1"/>
-        <CmdButtonArray index="Rally2"/>
-        <CmdButtonArray index="Rally3"/>
-        <CmdButtonArray index="Rally4"/>
-        <InfoArray index="0"/>
         <InfoArray SetOnGround="0">
             <SetValidators value="Failure"/>
         </InfoArray>
@@ -4141,6 +4136,32 @@
             <Button DefaultButtonFace="AP_ImmortalAiur" State="Restricted"/>
         </InfoArray>
     </CAbilWarpTrain>
+    <CAbilEffectTarget id="AP_PhaseCannon">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_PhaseCannon"/>
+        <Flags index="RangeUseCasterRadius" value="0"/>
+        <Cost>
+            <Charge Link="Abil/AP_SpawnPhaseCannon"/>
+            <Cooldown Link="SpawnPhaseCannonSpawnAP_PhaseCannon" Location="Unit" TimeUse="10"/>
+        </Cost>
+        <Placeholder value="AP_PhotonCannon"/>
+        <Range value="8"/>
+        <AINotifyEffect value="AP_PhaseCannon"/>
+        <ProducedUnitArray value="AP_PhotonCannon"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PhaseCannon"/>
+        <PlaceUnit value="AP_PhotonCannon"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_PhotonCannonBlast">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PhotonCannonBlast" Requirements="AP_HaveSOAPhotonCannon"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Effect index="0" value="AP_PhotonCannonBlastLM"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

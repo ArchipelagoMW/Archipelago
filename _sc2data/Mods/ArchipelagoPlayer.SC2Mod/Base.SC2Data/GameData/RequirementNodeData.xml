@@ -2369,4 +2369,8 @@
         <Count Link="AP_SOARadar" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSOAPhotonCannonCompleteOnly">
+        <Count Link="AP_SOAPhotonCannon" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

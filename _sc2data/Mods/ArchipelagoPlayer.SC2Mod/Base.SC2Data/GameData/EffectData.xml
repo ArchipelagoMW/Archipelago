@@ -8939,4 +8939,85 @@
         <EditorCategories value="Race:Protoss"/>
         <Behavior value="AP_IsPoweredDarkShrine"/>
     </CEffectApplyBehavior>
+    <CEffectLaunchMissile id="AP_PhotonCannonLM">
+        <ValidatorArray index="0" value="PhotonCannonTargetFilters"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_PhotonCannonU"/>
+        <AmmoUnit value="AP_PhotonCannonWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_PhotonCannonU" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectCreateUnit id="AP_PhaseCannon">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetPoint"/>
+        <CreateFlags index="Birth" value="0"/>
+        <!--CreateFlags index="PlacementIgnoreBlockers" value="1"/-->
+        <CreateFlags index="ProvideFood" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_PhaseCannonInitialStun"/>
+        <SpawnUnit value="AP_PhotonCannon"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="AP_PhaseCannonInitialStun">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_PhaseCannonTimedLife">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_PhotonCannonTeleportBuildStartCP">
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_PhotonCannonTeleportMatchLifeWithCasterStartSet"/>
+        <PeriodicEffectArray value="AP_PhotonCannonTeleportMatchLifeCP"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <WhichLocation Value="TargetUnit"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_PhotonCannonTeleportMatchLifeWithCasterStartSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_PhotonCannonTeleportCasterStartAB"/>
+        <EffectArray value="AP_PhotonCannonTeleportMatchLifeWithCasterStart"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_PhotonCannonTeleportCasterStartAB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_PhotonCannonTeleportCaster"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_PhotonCannonTeleportMatchLifeWithCasterStart">
+        <LaunchUnit Value="Target"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyFlags index="Copy" value="1"/>
+    </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_PhotonCannonTeleportMatchLifeCP">
+        <PeriodCount value="77"/>
+        <PeriodicEffectArray value="AP_PhotonCannonTeleportMatchLifeSet"/>
+        <PeriodicPeriodArray value="0.0625"/>
+        <WhichLocation Value="TargetUnit"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_PhotonCannonTeleportMatchLifeSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_PhotonCannonTeleportMatchLifeWithTarget"/>
+        <EffectArray value="AP_PhotonCannonTeleportMatchLifeWithCaster"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_PhotonCannonTeleportMatchLifeWithTarget">
+        <LaunchUnit Value="Caster"/>
+        <ModifyFlags index="Copy" value="1"/>
+        <ValidatorArray value="AP_PhotonCannonTeleportTargetLifeSmaller"/>
+    </CEffectModifyUnit>
+    <CEffectModifyUnit id="AP_PhotonCannonTeleportMatchLifeWithCaster">
+        <LaunchUnit Value="Target"/>
+        <ImpactUnit Value="Caster"/>
+        <ModifyFlags index="Copy" value="1"/>
+        <ValidatorArray value="AP_PhotonCannonTeleportTargetLifeGreater"/>
+    </CEffectModifyUnit>
+    <CEffectLaunchMissile id="AP_PhotonCannonBlastLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_PhotonCannonBlastDamage"/>
+        <AmmoUnit value="AP_PhotonCannonBlastWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_PhotonCannonBlastDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <Amount value="150"/>
+    </CEffectDamage>
 </Catalog>

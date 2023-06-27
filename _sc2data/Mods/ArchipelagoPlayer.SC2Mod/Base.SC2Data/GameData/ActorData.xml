@@ -11806,6 +11806,139 @@
     <CActorSplat id="AP_DarkShrineSplat" parent="GenericUnitSplat" unitName="AP_DarkShrine">
         <Model value="DarkShrineSplat"/>
     </CActorSplat>
+    <CActorUnit id="AP_PhotonCannon" parent="ProtossBuildingEx" unitName="AP_PhotonCannon">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="ProtossBuildingPowerUp"/>
+        <Macros value="VoidMPUnpoweredAnim"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit CasterIsUnpoweredAndNotUnderConstruction" Send="DeathCustomize Variation2"/>
+        <On Terms="ActorCreation" Send="Create AP_PhotonCannonTurretLookAt"/>
+        <On Terms="Abil.attack.ReadyStart" Target="AP_PhotonCannonTurretLookAt" Send="LookAtEngage"/>
+        <On Terms="Abil.attack.ReadyStop" Target="AP_PhotonCannonTurretLookAt" Send="LookAtDisengage"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PhotonCannonDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PhotonCannonDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PhotonCannonDarkEmissive"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PhotonCannonBaseDarkDiffuse"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PhotonCannonBaseDarkSpecular"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById PhotonCannonBaseDarkEmissive"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById LazerBoltGreen"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById TronSquareGreen"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="TextureSelectById WarpLineGreen"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PhotonCannonDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PhotonCannonDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PhotonCannonDarkEmissive"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PhotonCannonBaseDarkDiffuse"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PhotonCannonBaseDarkSpecular"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById PhotonCannonBaseDarkEmissive"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById LazerBoltGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById GradRaysGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById TronSquareGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById WarpLineGreen"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_PhotonCannon" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphFrom AP_PhotonCannon" Send="Destroy"/>
+        <!-- Actor PhotonCannonTeleportOutModel doesn't exist in vanilla and its model is commented out -->
+        <On Terms="Effect.AP_PhotonCannonTeleportBuildStartCP.Start; At Caster" Send="Create AP_PhotonCannonTeleportOutModel"/>
+        <On Terms="Effect.AP_PhotonCannonTeleportBuildFinishSet.Start; At Caster" Target="AP_PhotonCannonTeleportOutModel" Send="Destroy"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap PhotonCannonTaldarim"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap PhotonCannonTaldarim"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_CasterIsUnpoweredAndNotUnderConstructionAndHasDarkProtoss" Send="DeathCustomize Variation3"/>
+        <On Terms="Behavior.AP_PhaseCannonInitialStun.On" Send="ModelSwap PhotonCannonBirth"/>
+        <On Terms="Behavior.AP_PhaseCannonInitialStun.On" Send="AnimPlay Birth Stand,Build,End"/>
+        <On Terms="Behavior.AP_PhaseCannonInitialStun.On" Send="AnimSetTime Birth 5.000000"/>
+        <On Terms="Behavior.AP_PhaseCannonInitialStun.On" Send="AnimSetTimeScale Birth 2.000000"/>
+        <On Terms="AnimDone; AnimPlaying Birth" Send="ModelSwap PhotonCannon"/>
+        <On Terms="AnimDone; AnimPlaying Birth" Send="AnimPlay Creation Stand,Unpowered,End"/>
+        <On Terms="AnimDone; AnimPlaying Birth" Send="AnimSetTimeScale Creation 2.000000"/>
+        <Model value="PhotonCannon"/>
+        <CreepHeightClass value="Tiny"/>
+        <BuildModel value="PhotonCannonBirth"/>
+        <DeathArray index="Normal" ModelLink="PhotonCannonDeath" SoundLink="PhotonCannon_Explode"/>
+        <DeathArray index="Timeout" AnimProps="Birth" ModelLink="PhaseCannonWarpOut"/>
+        <DeathArray index="UnderConstruction" ModelLink="PhotonCannonDeathUnderConstruction" SoundLink="PhotonCannon_Explode"/>
+        <DeathCustoms ModelLink="PhotonCannonDeathUnpowered" SoundLink="PhotonCannon_Explode" Name="Variation2"/>
+        <DeathCustoms ModelLink="PhotonCannonTaldarimDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="PhotonCannonTaldarimDeathUnpowered" Name="Variation3"/>
+        <PlacementModel value="PhotonCannonPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PlacementActorModel value="PhotonCannonPlacementModel"/>
+        <PortraitModel value="PhotonCannonPortrait"/>
+        <BarOffset value="60"/>
+        <BarWidth value="75"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-PhotonCannon.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-PhotonCannon.dds"/>
+        <SoundArray index="Ready" value="PhotonCannon_Ready"/>
+        <SoundArray index="What" value="PhotonCannon_What"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-PhotonCannon.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-PhotonCannon.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-PhotonCannon-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-PhotonCannon-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-PhotonCannon-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorLookAt id="AP_PhotonCannonTurretLookAt" parent="UnitTurret">
+        <Types Id="DefaultLookAtTurret">
+            <Start Group="Turret_Right" Weight="1" Time="250"/>
+            <Stop Group="Turret_Right" Weight="1" Time="250"/>
+        </Types>
+    </CActorLookAt>
+    <CActorAction id="AP_PhotonCannonAttack" parent="GenericAttack" effectImpact="AP_PhotonCannonU" effectLaunch="AP_PhotonCannonLM">
+        <LaunchAssets Sound="PhotonCannon_AttackLaunch"/>
+        <Missile value="AP_PhotonCannonAttackMissile"/>
+        <ImpactMap index="None" Model="PhotonCannonAttackImpact" Sound="PhotonCannon_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ImpactPhysics Name="PhotonCannonImpact" MatchKeys="Basic" Physics="PhotonCannonAttackDeathForce"/>
+    </CActorAction>
+    <CActorForceCylinder id="AP_PhotonCannonAttackDeathForce">
+        <HostSiteOps Ops="SOpIncomingMissileDot25"/>
+        <Receiver Subject="::Main"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="17.000000,12.000000"/>
+        <HostEndSiteOps Ops="SOpIncomingMissileDot25 SOpMoveBy1Dot5"/>
+        <Radius value="0.500000"/>
+    </CActorForceCylinder>
+    <CActorMissile id="AP_PhotonCannonAttackMissile" parent="GenericAttackMissile" unitName="AP_PhotonCannonWeapon">
+        <On Terms="UnitBirth" Send="AnimSetTimeScaleAbsolute Lifetime 1.000000"/>
+        <Model value="PhotonCannonWeapon"/>
+    </CActorMissile>
+    <CActorAction id="AP_PhotonCannonBlastAttack" parent="GenericAttack" effectImpact="AP_PhotonCannonBlastDamage" effectLaunch="AP_PhotonCannonBlastLM">
+        <LaunchAssets Sound="PhotonCannon_AttackLaunch"/>
+        <Missile value="PhotonCannonBlastAttackMissile"/>
+        <ImpactMap index="None" Model="AP_PhotonCannonBlastAttackImpact" Sound="PhotonCannon_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_PhotonCannonBlastAttackMissile" parent="GenericAttackMissile" unitName="PhotonCannonBlastWeapon">
+        <On Terms="UnitBirth" Send="AnimSetTimeScaleAbsolute Lifetime 1.000000"/>
+    </CActorMissile>
+    <CActorRange id="AP_PhotonCannonBlastRange" parent="RangeAbil" abil="AP_PhotonCannonBlast">
+        <Abil Link=""/>
+        <Range value="9.000000"/>
+    </CActorRange>
+    <CActorRange id="AP_PhotonCannonDetectRange">
+        <On Terms="Behavior.AP_PhotonCannonDetectRange.On" Send="Create"/>
+        <On Terms="BehaviorLevel.PowerUserBaseDefenseSmall.Start; Level 0" Send="SetVisibility"/>
+        <On Terms="BehaviorLevel.PowerUserBaseDefenseSmall.Stop; Level 0" Send="SetVisibility 1"/>
+        <On Terms="Behavior.AP_PhotonCannonDetectRange.Off" Send="Destroy"/>
+        <Behavior value="Detector11"/>
+        <Icon value="Assets\Textures\btn-status-detector.dds"/>
+    </CActorRange>
+    <CActorRange id="AP_PhotonCannonProtectRange" parent="RangeWeapon" weapon="AP_PhotonCannon">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSplat id="AP_PhotonCannonSplat" parent="GenericUnitSplat" unitName="AP_PhotonCannon">
+        <Model value="PhotonCannonSplat"/>
+    </CActorSplat>
+    <CActorTurret id="AP_PhotonCannonTurret"/>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
