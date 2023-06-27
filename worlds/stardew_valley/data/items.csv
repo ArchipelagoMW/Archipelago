@@ -582,6 +582,7 @@ id,name,classification,groups,mod_name
 10027,Spell: Lucksteal,useful,MAGIC_SPELL,Magic
 10028,Spell: Spirit,progression,MAGIC_SPELL,Magic
 10029,Spell: Rewind,useful,MAGIC_SPELL,Magic
+10030,Mana Drain,trap,TRAP,Magic
 10101,Juna <3,progression,FRIENDSANITY,Juna - Roommate NPC
 10102,Jasper <3,progression,FRIENDSANITY,Professor Jasper Thomas
 10103,Alec <3,progression,FRIENDSANITY,Alec Revisited
@@ -592,3 +593,6 @@ id,name,classification,groups,mod_name
 10108,Shiko <3,progression,FRIENDSANITY,Shiko - New Custom NPC
 10109,Delores <3,progression,FRIENDSANITY,Delores - Custom NPC
 10110,Ayeisha <3,progression,FRIENDSANITY,Ayeisha - The Postal Worker (Custom NPC)
+10111,Riley <3,progression,FRIENDSANITY,Custom NPC - Riley
+10301,Progressive Wood Obelisk Sigils,progression,,DeepWoods
+10302,Progressive Skull Cavern Elevator,progression,,Skull Cavern Elevator

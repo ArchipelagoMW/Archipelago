@@ -75,31 +75,31 @@ id,region,name,tags,mod_name
 211,The Mines - Floor 120,The Mines Floor 120 Treasure,"MANDATORY,THE_MINES_TREASURE",
 212,Quarry Mine,Grim Reaper statue,MANDATORY,
 213,The Mines,The Mines Entrance Cutscene,MANDATORY,
-214,The Mines - Floor 5,Floor 5 Elevator,THE_MINES_ELEVATOR,
-215,The Mines - Floor 10,Floor 10 Elevator,THE_MINES_ELEVATOR,
-216,The Mines - Floor 15,Floor 15 Elevator,THE_MINES_ELEVATOR,
-217,The Mines - Floor 20,Floor 20 Elevator,THE_MINES_ELEVATOR,
-218,The Mines - Floor 25,Floor 25 Elevator,THE_MINES_ELEVATOR,
-219,The Mines - Floor 30,Floor 30 Elevator,THE_MINES_ELEVATOR,
-220,The Mines - Floor 35,Floor 35 Elevator,THE_MINES_ELEVATOR,
-221,The Mines - Floor 40,Floor 40 Elevator,THE_MINES_ELEVATOR,
-222,The Mines - Floor 45,Floor 45 Elevator,THE_MINES_ELEVATOR,
-223,The Mines - Floor 50,Floor 50 Elevator,THE_MINES_ELEVATOR,
-224,The Mines - Floor 55,Floor 55 Elevator,THE_MINES_ELEVATOR,
-225,The Mines - Floor 60,Floor 60 Elevator,THE_MINES_ELEVATOR,
-226,The Mines - Floor 65,Floor 65 Elevator,THE_MINES_ELEVATOR,
-227,The Mines - Floor 70,Floor 70 Elevator,THE_MINES_ELEVATOR,
-228,The Mines - Floor 75,Floor 75 Elevator,THE_MINES_ELEVATOR,
-229,The Mines - Floor 80,Floor 80 Elevator,THE_MINES_ELEVATOR,
-230,The Mines - Floor 85,Floor 85 Elevator,THE_MINES_ELEVATOR,
-231,The Mines - Floor 90,Floor 90 Elevator,THE_MINES_ELEVATOR,
-232,The Mines - Floor 95,Floor 95 Elevator,THE_MINES_ELEVATOR,
-233,The Mines - Floor 100,Floor 100 Elevator,THE_MINES_ELEVATOR,
-234,The Mines - Floor 105,Floor 105 Elevator,THE_MINES_ELEVATOR,
-235,The Mines - Floor 110,Floor 110 Elevator,THE_MINES_ELEVATOR,
-236,The Mines - Floor 115,Floor 115 Elevator,THE_MINES_ELEVATOR,
-237,The Mines - Floor 120,Floor 120 Elevator,THE_MINES_ELEVATOR,
-251,Volcano - Floor 10,Volcano Caldera Treasure,"MANDATORY,GINGER_ISLAND",
+214,The Mines - Floor 5,Floor 5 Elevator,ELEVATOR,
+215,The Mines - Floor 10,Floor 10 Elevator,ELEVATOR,
+216,The Mines - Floor 15,Floor 15 Elevator,ELEVATOR,
+217,The Mines - Floor 20,Floor 20 Elevator,ELEVATOR,
+218,The Mines - Floor 25,Floor 25 Elevator,ELEVATOR,
+219,The Mines - Floor 30,Floor 30 Elevator,ELEVATOR,
+220,The Mines - Floor 35,Floor 35 Elevator,ELEVATOR,
+221,The Mines - Floor 40,Floor 40 Elevator,ELEVATOR,
+222,The Mines - Floor 45,Floor 45 Elevator,ELEVATOR,
+223,The Mines - Floor 50,Floor 50 Elevator,ELEVATOR,
+224,The Mines - Floor 55,Floor 55 Elevator,ELEVATOR,
+225,The Mines - Floor 60,Floor 60 Elevator,ELEVATOR,
+226,The Mines - Floor 65,Floor 65 Elevator,ELEVATOR,
+227,The Mines - Floor 70,Floor 70 Elevator,ELEVATOR,
+228,The Mines - Floor 75,Floor 75 Elevator,ELEVATOR,
+229,The Mines - Floor 80,Floor 80 Elevator,ELEVATOR,
+230,The Mines - Floor 85,Floor 85 Elevator,ELEVATOR,
+231,The Mines - Floor 90,Floor 90 Elevator,ELEVATOR,
+232,The Mines - Floor 95,Floor 95 Elevator,ELEVATOR,
+233,The Mines - Floor 100,Floor 100 Elevator,ELEVATOR,
+234,The Mines - Floor 105,Floor 105 Elevator,ELEVATOR,
+235,The Mines - Floor 110,Floor 110 Elevator,ELEVATOR,
+236,The Mines - Floor 115,Floor 115 Elevator,ELEVATOR,
+237,The Mines - Floor 120,Floor 120 Elevator,ELEVATOR,
+238,Volcano - Floor 10,Volcano Caldera Treasure,"MANDATORY,GINGER_ISLAND",
 301,Stardew Valley,Level 1 Farming,"FARMING_LEVEL,SKILL_LEVEL",
 302,Stardew Valley,Level 2 Farming,"FARMING_LEVEL,SKILL_LEVEL",
 303,Stardew Valley,Level 3 Farming,"FARMING_LEVEL,SKILL_LEVEL",
@@ -1190,15 +1190,54 @@ id,region,name,tags,mod_name
 6118,Forest,Friendsanity: Juna 4 <3,FRIENDSANITY,Juna - Roommate NPC
 6119,Forest,Friendsanity: Juna 5 <3,FRIENDSANITY,Juna - Roommate NPC
 6120,Forest,Friendsanity: Juna 6 <3,FRIENDSANITY,Juna - Roommate NPC
-7001,Forest,Friendsanity: Juna 7 <3,FRIENDSANITY,Juna - Roommate NPC
-7002,Forest,Friendsanity: Juna 8 <3,FRIENDSANITY,Juna - Roommate NPC
-7003,Forest,Friendsanity: Juna 9 <3,FRIENDSANITY,Juna - Roommate NPC
-7004,Forest,Friendsanity: Juna 10 <3,FRIENDSANITY,Juna - Roommate NPC
-7005,Pierre's General Store,Premium Pack,BACKPACK,Bigger Backpack
-7006,Carpenter Shop,Tractor Garage Blueprint,BUILDING_BLUEPRINT,Tractor Mod
-7007,The Deep Woods Depth 100,Pet the Deep Woods Unicorn,MANDATORY,DeepWoods
-7008,The Deep Woods Depth 50,Breaking Up Deep Woods Gingerbread House,MANDATORY,DeepWoods
-7009,The Deep Woods Depth 50,Drinking From Deep Woods Fountain,MANDATORY,DeepWoods
-7010,The Deep Woods Depth 100,Deep Woods Treasure Chest,MANDATORY,DeepWoods
-7011,The Deep Woods Depth 100,Deep Woods Trash Bin,MANDATORY,DeepWoods
-7012,The Deep Woods Depth 50,Chop Down a Deep Woods Iridium Tree,MANDATORY,DeepWoods
+6121,Forest,Friendsanity: Juna 7 <3,FRIENDSANITY,Juna - Roommate NPC
+6122,Forest,Friendsanity: Juna 8 <3,FRIENDSANITY,Juna - Roommate NPC
+6123,Forest,Friendsanity: Juna 9 <3,FRIENDSANITY,Juna - Roommate NPC
+6124,Forest,Friendsanity: Juna 10 <3,FRIENDSANITY,Juna - Roommate NPC
+6125,Town,Friendsanity: Riley 1 <3,FRIENDSANITY,Custom NPC - Riley
+6126,Town,Friendsanity: Riley 2 <3,FRIENDSANITY,Custom NPC - Riley
+6127,Town,Friendsanity: Riley 3 <3,FRIENDSANITY,Custom NPC - Riley
+6128,Town,Friendsanity: Riley 4 <3,FRIENDSANITY,Custom NPC - Riley
+6129,Town,Friendsanity: Riley 5 <3,FRIENDSANITY,Custom NPC - Riley
+6130,Town,Friendsanity: Riley 6 <3,FRIENDSANITY,Custom NPC - Riley
+6131,Town,Friendsanity: Riley 7 <3,FRIENDSANITY,Custom NPC - Riley
+6132,Town,Friendsanity: Riley 8 <3,FRIENDSANITY,Custom NPC - Riley
+6133,Town,Friendsanity: Riley 9 <3,FRIENDSANITY,Custom NPC - Riley
+6134,Town,Friendsanity: Riley 10 <3,FRIENDSANITY,Custom NPC - Riley
+6135,Town,Friendsanity: Riley 11 <3,FRIENDSANITY,Custom NPC - Riley
+6136,Town,Friendsanity: Riley 12 <3,FRIENDSANITY,Custom NPC - Riley
+6137,Town,Friendsanity: Riley 13 <3,FRIENDSANITY,Custom NPC - Riley
+6138,Town,Friendsanity: Riley 14 <3,FRIENDSANITY,Custom NPC - Riley
+7001,Pierre's General Store,Premium Pack,BACKPACK,Bigger Backpack
+7002,Carpenter Shop,Tractor Garage Blueprint,BUILDING_BLUEPRINT,Tractor Mod
+7003,The Deep Woods Depth 100,Pet the Deep Woods Unicorn,MANDATORY,DeepWoods
+7004,The Deep Woods Depth 50,Breaking Up Deep Woods Gingerbread House,MANDATORY,DeepWoods
+7005,The Deep Woods Depth 50,Drinking From Deep Woods Fountain,MANDATORY,DeepWoods
+7006,The Deep Woods Depth 100,Deep Woods Treasure Chest,MANDATORY,DeepWoods
+7007,The Deep Woods Depth 100,Deep Woods Trash Bin,MANDATORY,DeepWoods
+7008,The Deep Woods Depth 50,Chop Down a Deep Woods Iridium Tree,MANDATORY,DeepWoods
+7009,The Deep Woods Depth 10,The Deep Woods: Depth 10,ELEVATOR,DeepWoods
+7010,The Deep Woods Depth 20,The Deep Woods: Depth 20,ELEVATOR,DeepWoods
+7011,The Deep Woods Depth 30,The Deep Woods: Depth 30,ELEVATOR,DeepWoods
+7012,The Deep Woods Depth 40,The Deep Woods: Depth 40,ELEVATOR,DeepWoods
+7013,The Deep Woods Depth 50,The Deep Woods: Depth 50,ELEVATOR,DeepWoods
+7014,The Deep Woods Depth 60,The Deep Woods: Depth 60,ELEVATOR,DeepWoods
+7015,The Deep Woods Depth 70,The Deep Woods: Depth 70,ELEVATOR,DeepWoods
+7016,The Deep Woods Depth 80,The Deep Woods: Depth 80,ELEVATOR,DeepWoods
+7017,The Deep Woods Depth 90,The Deep Woods: Depth 90,ELEVATOR,DeepWoods
+7018,The Deep Woods Depth 100,The Deep Woods: Depth 100,ELEVATOR,DeepWoods
+7019,The Deep Woods Depth 50,Purify an Infested Lichtung,MANDATORY,DeepWoods
+7020,Skull Cavern Floor 25,Skull Cavern: Floor 25,ELEVATOR,Skull Cavern Elevator
+7021,Skull Cavern Floor 50,Skull Cavern: Floor 50,ELEVATOR,Skull Cavern Elevator
+7022,Skull Cavern Floor 75,Skull Cavern: Floor 75,ELEVATOR,Skull Cavern Elevator
+7023,Skull Cavern Floor 100,Skull Cavern: Floor 100,ELEVATOR,Skull Cavern Elevator
+7024,Skull Cavern Floor 125,Skull Cavern: Floor 125,ELEVATOR,Skull Cavern Elevator
+7025,Skull Cavern Floor 150,Skull Cavern: Floor 150,ELEVATOR,Skull Cavern Elevator
+7026,Skull Cavern Floor 175,Skull Cavern: Floor 175,ELEVATOR,Skull Cavern Elevator
+7027,Skull Cavern Floor 200,Skull Cavern: Floor 200,ELEVATOR,Skull Cavern Elevator
+7501,Town,Missing Envelope,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
+7502,Town,Lost Emerald Ring,"MANDATORY,QUEST",Ayeisha - The Postal Worker (Custom NPC)
+7503,Forest,Mr.Ginger's request,"MANDATORY,QUEST",Mister Ginger (cat npc)
+7504,Forest,Juna's Drink Request,"MANDATORY,QUEST",Juna - Roommate NPC
+7505,Forest,Juna's BFF Request,"MANDATORY,QUEST",Juna - Roommate NPC
+7506,Forest,Juna's Monster Mash,SPECIAL_ORDER_BOARD,Juna - Roommate NPC

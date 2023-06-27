@@ -33,7 +33,7 @@ class LocationTags(enum.Enum):
     TRASH_CAN_UPGRADE = enum.auto()
     FISHING_ROD_UPGRADE = enum.auto()
     THE_MINES_TREASURE = enum.auto()
-    THE_MINES_ELEVATOR = enum.auto()
+    ELEVATOR = enum.auto()
     SKILL_LEVEL = enum.auto()
     FARMING_LEVEL = enum.auto()
     FISHING_LEVEL = enum.auto()
@@ -264,7 +264,7 @@ def extend_special_order_locations(randomized_locations: List[LocationData], wor
         return
 
     include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
-    board_locations = filter_ginger_island(world_options, locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
+    board_locations = filter_disabled_locations(world_options, locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
     randomized_locations.extend(board_locations)
     if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_board_qi and include_island:
         randomized_locations.extend(locations_by_tag[LocationTags.SPECIAL_ORDER_QI])
@@ -281,27 +281,36 @@ def extend_walnut_purchase_locations(randomized_locations: List[LocationData], w
     randomized_locations.extend(locations_by_tag[LocationTags.WALNUT_PURCHASE])
 
 
+def extend_mandatory_locations(randomized_locations: List[LocationData], world_options):
+    mandatory_locations = [location for location in locations_by_tag[LocationTags.MANDATORY]]
+    filtered_mandatory_locations = filter_disabled_locations(world_options, mandatory_locations)
+    randomized_locations.extend(filtered_mandatory_locations)
+
+
+def extend_backpack_locations(randomized_locations: List[LocationData], world_options):
+    backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK]]
+    filtered_backpack_locations = filter_modded_locations(world_options, backpack_locations)
+    randomized_locations.extend(filtered_backpack_locations)
+
+
+def extend_elevator_locations(randomized_locations: List[LocationData], world_options):
+    elevator_locations = [location for location in locations_by_tag[LocationTags.ELEVATOR]]
+    filtered_elevator_locations = filter_modded_locations(world_options, elevator_locations)
+    randomized_locations.extend(filtered_elevator_locations)
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      world_options: options.StardewOptions,
                      random: Random):
     randomized_locations = []
 
-    include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
-    for mandatory in locations_by_tag[LocationTags.MANDATORY]:
-        if (mandatory.mod_name is None or mandatory.mod_name in world_options[options.Mods]) \
-                & (include_island or LocationTags.GINGER_ISLAND not in mandatory.tags):
-            randomized_locations.append(location_table[mandatory.name])
-
-    if not world_options[options.BackpackProgression] == options.BackpackProgression.option_vanilla:
-        for backpack in locations_by_tag[LocationTags.BACKPACK]:
-            if backpack.mod_name is None or backpack.mod_name in world_options[options.Mods]:
-                randomized_locations.append(location_table[backpack.name])
+    extend_mandatory_locations(randomized_locations, world_options)
+    extend_backpack_locations(randomized_locations, world_options)
 
     if not world_options[options.ToolProgression] == options.ToolProgression.option_vanilla:
         randomized_locations.extend(locations_by_tag[LocationTags.TOOL_UPGRADE])
 
-    if not world_options[options.TheMinesElevatorsProgression] == options.TheMinesElevatorsProgression.option_vanilla:
-        randomized_locations.extend(locations_by_tag[LocationTags.THE_MINES_ELEVATOR])
+    extend_elevator_locations(randomized_locations, world_options)
 
     if not world_options[options.SkillProgression] == options.SkillProgression.option_vanilla:
         for location in locations_by_tag[LocationTags.SKILL_LEVEL]:
@@ -331,6 +340,19 @@ def create_locations(location_collector: StardewLocationCollector,
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
 
+
 def filter_ginger_island(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
     include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
     return [location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags]
+
+
+def filter_modded_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
+    current_mod_names = world_options[options.Mods]
+    return [location for location in locations if location.mod_name is None or location.mod_name in current_mod_names]
+
+
+def filter_disabled_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
+    include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
+    current_mod_names = world_options[options.Mods]
+    return [location for location in locations if (include_island or LocationTags.GINGER_ISLAND not in location.tags) and
+            (location.mod_name is None or location.mod_name in current_mod_names)]
