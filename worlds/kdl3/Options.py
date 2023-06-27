@@ -15,9 +15,16 @@ class Goal(Choice):
     display_name = "Goal"
     option_zero = 0
     option_boss_butch = 1
-    option_mg5 = 2
+    option_MG5 = 2
     option_jumping = 3
     default = 0
+
+    @classmethod
+    def get_option_name(cls, value) -> str:
+        if cls.auto_display_name and value == 2:
+            return cls.name_lookup[value].upper()
+        else:
+            return cls.name_lookup[value].title().replace("_", " ")
 
 
 class GoalSpeed(Choice):

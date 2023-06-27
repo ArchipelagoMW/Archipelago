@@ -24,11 +24,15 @@ give said Copy Ability. Animal Friends will require leaving the room you are cur
 Under the Zero goal, players must collect enough Heart Stars to purify the five bosses and gain access to the Hyper Zone,
 where Zero can be found and defeated.
 
-Under the Boss Butch goal, players must collect enough Heart Stars to purify the five bosses, defeat Zero in the Hyper Zone,
+Under the Boss Butch goal, players must collect enough Heart Stars to purify the five bosses
 and then complete the Boss Butch game mode accessible from the main menu.
 
-Under the MG5 goal, players must collect enough Heart Stars to purify the five bosses, defeat Zero in the Hyper Zone,
+Under the MG5 goal, players must collect enough Heart Stars to purify the five bosses 
 and then perfect the Super MG5 game mode accessible from the main menu.
 
-Under the Jumping goal, players must collect enough Heart Stars to purify the five bosses, defeat Zero in the Hyper Zone,
+Under the Jumping goal, players must collect enough Heart Stars to purify the five bosses
 and then reach a target score in the Jumping game mode accessible from the main menu.
+
+## Why is EmuHawk resizing itself while I'm playing?
+Kirby's Dream Land 3 changes the SNES's display resolution from 1x to 2x many times during gameplay (particularly in rooms with foreground effects).
+To counter-act this resizing, set SNES -> Options -> "Always use double-size frame buffer".
