@@ -1,7 +1,7 @@
 from BaseClasses import Tutorial, ItemClassification
 import logging
 
-from . import Rules
+from .Rules import *
 from .Items import *
 from .Locations import all_locations, setup_locations, exclusion_table, AllWeaponSlot
 from .Names import ItemName, LocationName
@@ -10,7 +10,7 @@ from .Options import KH2_Options
 from .Regions import create_regions, connect_regions
 #from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
-from .logic import KH2Logic
+
 
 
 class KingdomHearts2Web(WebWorld):

@@ -347,7 +347,7 @@ GoofyAbility_Table = {
 Misc_Table = {
     ItemName.LuckyEmblem: ItemData(0x13011A, 0, 367, 0x3641),  # letter item
     ItemName.Victory:     ItemData(0x13011B, 0, 263, 0x111),
-    ItemName.Bounty:      ItemData(0x13011C, 0, 461, 0, 0),  # Dummy 14
+    ItemName.Bounty:      ItemData(0x13011C, 0, 461, 0x365E),  # Dummy 14
     # ItemName.UniversalKey:ItemData(0x130129,0,365,0x363F,0)#Tournament Poster
 
 }
