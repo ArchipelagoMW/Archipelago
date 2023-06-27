@@ -14,6 +14,7 @@ as Heart Stars, 1-Ups, and Invincibility Candy will be shuffled into the pool fo
 - Completing the given task of a stage and receiving a Heart Star
 - Purifying a boss after acquiring a certain number of Heart Stars
  (indicated by their portrait flashing in the level select)
+- If enabled, 1-Ups and Maxim Tomatoes
 
 ## When the player receives an item, what happens?
 A sound effect will play, and Kirby will immediately receive the effects of that item, such as being able to receive Copy Abilities from enemies that 
@@ -25,3 +26,9 @@ where Zero can be found and defeated.
 
 Under the Boss Butch goal, players must collect enough Heart Stars to purify the five bosses, defeat Zero in the Hyper Zone,
 and then complete the Boss Butch game mode accessible from the main menu.
+
+Under the MG5 goal, players must collect enough Heart Stars to purify the five bosses, defeat Zero in the Hyper Zone,
+and then perfect the Super MG5 game mode accessible from the main menu.
+
+Under the Jumping goal, players must collect enough Heart Stars to purify the five bosses, defeat Zero in the Hyper Zone,
+and then reach a target score in the Jumping game mode accessible from the main menu.

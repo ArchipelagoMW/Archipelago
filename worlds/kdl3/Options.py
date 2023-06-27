@@ -98,7 +98,7 @@ class BossShuffleAllowBB(Choice):
     Enforced: all bosses will be their Boss Butch variant.
     Boss Butch boss changes are only visual.
     """
-    auto_display_name = "Allow Boss Butch Bosses"
+    display_name = "Allow Boss Butch Bosses"
     option_disabled = 0
     option_enabled = 1
     option_enforced = 2
