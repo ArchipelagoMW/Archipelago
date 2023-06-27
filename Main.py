@@ -8,6 +8,7 @@ import time
 import zipfile
 import zlib
 from typing import Dict, List, Optional, Set, Tuple
+import tkinter.messagebox as message
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
@@ -454,5 +455,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for file in os.scandir(temp_dir):
                 zf.write(file.path, arcname=file.name)
 
-    logger.info('Done. Enjoy. Total Time: %s', time.perf_counter() - start)
+    gen_time = time.perf_counter() - start
+    logger.info('Done. Enjoy. Total Time: %s', gen_time)
+    if not __debug__:
+        message.showinfo("Generation Succeeded", f"Done. Enjoy. Total Time: {gen_time}."
+                                                 f"\nOutput to {output_path()}")
     return world
