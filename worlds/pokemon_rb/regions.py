@@ -1508,9 +1508,9 @@ def create_regions(self):
         locations_per_region.setdefault(location.region, [])
         # The check for list is so that we don't try to check the item table with a list as a key
         if location.inclusion(multiworld, player) and (isinstance(location.original_item, list) or
-                not (self.multiworld.key_items_only[self.player] and ((item_table[location.original_item].classification
-                not in (ItemClassification.progression, ItemClassification.progression_skip_balancing,
-                ItemClassification.useful)) or location.original_item.startswith("TM")) and not location.event)):
+                not (self.multiworld.key_items_only[self.player] and item_table[location.original_item].classification
+                not in (ItemClassification.progression, ItemClassification.progression_skip_balancing) and not
+                location.event)):
             locations_per_region[location.region].append(PokemonRBLocation(player, location.name, location.address,
                                                                            location.rom_address, location.type,
                                                                            location.level, location.level_address))
@@ -1877,6 +1877,8 @@ def create_regions(self):
             forced_connections.update(simple_mandatory_connections)
         else:
             usable_safe_rooms += pokemarts
+            if self.multiworld.key_items_only[self.player]:
+                usable_safe_rooms.remove("Viridian Pokemart to Viridian City")
         if multiworld.door_shuffle[player] in ("insanity", "decoupled"):
             forced_connections.update(insanity_mandatory_connections)
             r = multiworld.random.randint(0, 3)
@@ -1930,7 +1932,7 @@ def create_regions(self):
             for a, b in zip(multiworld.random.sample(pokemon_center_entrances, 12), pokemon_centers):
                 forced_connections.add((a, b))
             # Ensure a Pokemart is available at the beginning of the game
-            if multiworld.key_items_only[player] and pallet_safe_room != "Viridian Pokemart to Viridian City":
+            if multiworld.key_items_only[player]:
                 forced_connections.add((multiworld.random.choice(initial_doors), "Viridian Pokemart to Viridian City"))
             elif "Pokemart" not in pallet_safe_room:
                 forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(

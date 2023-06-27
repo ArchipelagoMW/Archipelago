@@ -247,9 +247,7 @@ class PokemonRedBlueWorld(World):
                         <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
                     item = self.create_item(self.select_trap())
 
-            if not location.event and (self.multiworld.key_items_only[self.player] and (item.classification not in
-                                       (ItemClassification.progression, ItemClassification.progression_skip_balancing,
-                                        ItemClassification.useful) or item.name.startswith("TM"))):
+            if self.multiworld.key_items_only[self.player] and (not location.event) and (not item.advancement):
                 continue
 
             if item.name in start_inventory and start_inventory[item.name] > 0 and \
@@ -586,7 +584,7 @@ class PokemonRedBlueWorld(World):
         if self.multiworld.key_items_only[self.player]:
             locations = [location for location in self.multiworld.get_unfilled_locations(self.player) if
                          location.progress_type == LocationProgressType.DEFAULT]
-            for location in self.multiworld.random.sample(locations, int(len(locations) / 2)):
+            for location in locations:
                 location.progress_type = LocationProgressType.PRIORITY
 
     def create_regions(self):

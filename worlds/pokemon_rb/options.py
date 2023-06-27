@@ -185,7 +185,7 @@ class ExpAll(Choice):
 
 
 class RandomizePokedex(Choice):
-    """Randomize the location of the Pokedex, or start with it. It is required to receive items from Oak's Aides."""
+    """Randomize the location of the Pokedex, or start with it."""
     display_name = "Randomize Pokedex"
     option_vanilla = 0
     option_randomize = 1
@@ -195,7 +195,7 @@ class RandomizePokedex(Choice):
 
 class KeyItemsOnly(Toggle):
     """Shuffle only Key Items. This overrides Randomize Hidden Items, Trainersanity, and Dexsanity.
-    Randomly sets half of the non-excluded, non-priority locations in your game to be Priority Locations.
+    Sets all non-excluded locations in your game to Priority Locations.
     May have high generation failure rates for solo games or small multiworlds, especially with Door Shuffle."""
     display_name = "Key Items Only"
     default = 0
