@@ -1,3 +1,4 @@
+import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable
 
@@ -48,10 +49,14 @@ class Component:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.display_name})"
 
+processes = weakref.WeakSet()
+
 def launch_subprocess(func: Callable, name: str = None):
+    global processes
     import multiprocessing
-    process = multiprocessing.Process(target=func, name=name, daemon=True)
+    process = multiprocessing.Process(target=func, name=name)
     process.start()
+    processes.add(process)
 
 class SuffixIdentifier:
     suffixes: Iterable[str]
