@@ -1,4 +1,4 @@
-from .Items import TLNItem, item_table
+from .Items import TLNItem, item_table, item_frequencies
 from .Locations import TLNAdvancement
 from .Regions import tln_regions, link_tln_areas
 from .Rules import set_rules
@@ -12,7 +12,7 @@ class TLNWorld(World):
     Touhou Luna Nights is a Metroidvania title with a heavy emphasis on exploration and action.　 
     Developed by Team Ladybug, creators of multiple fantastic action games thus far.
     """
-    game = "Touhou Luna Nights"
+    game = "TLN"
     option_definitions = tln_options
     topology_present = True
 
@@ -34,12 +34,12 @@ class TLNWorld(World):
     def create_items(self):
         # Generate item pool
         itempool = []
+        pool_counts = item_frequencies.copy()
         # Add all required progression items
-        for name, num in item_table.items():
-            itempool += [name] * num
 
-        # Convert itempool into real items
-        itempool = [item for item in map(lambda name: self.create_item(name), itempool)]
+        for name in item_table.items():
+            for count in range(pool_counts.get(name, 1)):
+                itempool.append(self.create_item(name))
 
         self.multiworld.itempool += itempool
 

@@ -30,8 +30,15 @@ item_table = {
     "Shield Dagger": ItemData(787805, ItemClassification.useful),
     "Bound Knife": ItemData(787805, ItemClassification.useful),
     "Holy Lost Sword": ItemData(787805, ItemClassification.useful),
-    "HP Up": ItemData(787806, (ItemClassification.useful, 5)),
-    "MP Up": ItemData(787807, (ItemClassification.useful, 5)),
-    "Knife Up": ItemData(787808, (ItemClassification.useful, 5)),
-    "Time Up": ItemData(787809, (ItemClassification.useful, 5))
+    "HP Up": ItemData(787806, ItemClassification.useful),
+    "MP Up": ItemData(787807, ItemClassification.useful),
+    "Knife Up": ItemData(787808, ItemClassification.useful),
+    "Time Up": ItemData(787809, ItemClassification.useful),
+}
+
+item_frequencies = {
+    "HP Up": 5,
+    "MP Up": 5,
+    "Knife Up": 5,
+    "Time Up": 5,
 }

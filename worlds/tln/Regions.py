@@ -22,7 +22,7 @@ mandatory_connections = [
     ("Game Start", "Menu"),
     ("Defeat Meiling", "Stage 00"),
     ("Defeat Marisa", "Stage 01"),
-    ("Defeat Patchouli", "Stage 02")
+    ("Defeat Patchouli", "Stage 02"),
     ("Defeat Remilia", "Stage 03"),
     ("Defeat Nitori", "Stage 04"),
     ("Defeat Flandre", "Stage 05"),

@@ -186,6 +186,10 @@ adventure_options:
   # Set this to true to display item received messages in Emuhawk
   display_msgs: true
 
+tln_options:
+  # Locate the Touhou Luna Nights root directory on your system.
+  # This is used by the Touhou Luna Nights client, so it knows where to send communication files to
+  root_directory: "C:/Program Files (x86)/Steam/steamapps/common/Touhou Luna NIghts"
 
 
 
