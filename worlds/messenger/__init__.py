@@ -109,7 +109,7 @@ class MessengerWorld(World):
             precollected_notes_amount = NotesNeeded.range_end - \
                 self.multiworld.notes_needed[self.player] - \
                 (len(NOTES) - len(notes))
-            if precollected_notes_amount > 0:
+            if precollected_notes_amount:
                 for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
                 notes = notes[precollected_notes_amount:]
@@ -150,12 +150,8 @@ class MessengerWorld(World):
             Rules.MessengerOOBRules(self).set_messenger_rules()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        shop_prices = {}
-        for item, price in self.shop_prices.items():
-            shop_prices[SHOP_ITEMS[item].internal_name] = price
-        figure_prices = {}
-        for item, price in self.figurine_prices.items():
-            figure_prices[FIGURINES[item].internal_name] = price
+        shop_prices = {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()}
+        figure_prices = {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()}
 
         return {
             "deathlink": self.multiworld.death_link[self.player].value,
@@ -180,7 +176,8 @@ class MessengerWorld(World):
         count = 0
         if "Time Shard " in name:
             count = int(name.strip("Time Shard ()"))
-            self.total_shards += count if count >= 100 else 0
+            count = count if count >= 100 else 0
+            self.total_shards += count
         return MessengerItem(name, self.player, item_id, override_prog, count)
 
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:

@@ -57,11 +57,11 @@ class MessengerLocation(Location):
 class MessengerShopLocation(MessengerLocation):
     def cost(self) -> int:
         name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
-        world = self.parent_region.multiworld.worlds[self.player]
+        world: MessengerWorld = self.parent_region.multiworld.worlds[self.player]
         return world.shop_prices.get(name, world.figurine_prices.get(name))
 
     def can_afford(self, state: CollectionState) -> bool:
-        world = state.multiworld.worlds[self.player]
+        world: MessengerWorld = state.multiworld.worlds[self.player]
         cost = self.cost() * 2
         if cost >= 1000:
             cost *= 2
@@ -76,13 +76,13 @@ class MessengerItem(Item):
 
     def __init__(self, name: str, player: int, item_id: Optional[int] = None, override_progression: bool = False,
                  count: int = 0) -> None:
-        if item_id is None or override_progression or name in {*NOTES, *PROG_ITEMS, *PHOBEKINS, *PROG_SHOP_ITEMS}:
+        if count:
+            item_class = ItemClassification.progression_skip_balancing
+        elif item_id is None or override_progression or name in {*NOTES, *PROG_ITEMS, *PHOBEKINS, *PROG_SHOP_ITEMS}:
             item_class = ItemClassification.progression
         elif name in {*USEFUL_ITEMS, *USEFUL_SHOP_ITEMS}:
             item_class = ItemClassification.useful
         else:
             item_class = ItemClassification.filler
-        if count >= 100:
-            item_class = ItemClassification.progression_skip_balancing
         super().__init__(name, item_class, item_id, player)
 

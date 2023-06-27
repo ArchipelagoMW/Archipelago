@@ -61,7 +61,6 @@ class ShopCostMinTest(ShopCostTest):
 
 class PlandoTest(MessengerTestBase):
     options = {
-        "shop_shuffle": "true",
         "shop_price_plan": {
             "Karuta Plates": 50,
             "Serendipitous Bodies": {100: 1, 200: 1, 300: 1},
