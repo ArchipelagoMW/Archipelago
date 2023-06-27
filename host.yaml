@@ -136,7 +136,7 @@ tloz_options:
   #             true  for operating system default program
   # Alternatively, a path to a program to open the .nes file with
   rom_start: true
-  # Display message inside of Bizhawk
+  # Display message inside of EmuHawk
   display_msgs: true
 dkc3_options:
   # File name of the DKC3 US rom
@@ -178,8 +178,8 @@ adventure_options:
   # Alternatively, a path to a program to open the .a26 file with (generally EmuHawk for multiworld)
   rom_start: true
   # Optional, additional args passed into rom_start before the .bin file
-  # For example, this can be used to autoload the connector script in BizHawk
-  # (see BizHawk --lua= option)
+  # For example, this can be used to autoload the connector script in EmuHawk
+  # (see EmuHawk --lua= option)
   # Windows example:
   # rom_args: "--lua=C:/ProgramData/Archipelago/data/lua/connector_adventure.lua"
   rom_args: " "
