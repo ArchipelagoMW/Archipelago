@@ -57,7 +57,7 @@ each player is planning on playing their own game then they will each need a YAM
 The easiest way to get started playing an Archipelago generated game, after following the base setup from the game's
 setup guide, is to find the game on the [Archipelago Games List](/games), click on `Settings Page`, set the settings how
 you want to play, and click `Generate Game` at the bottom of the page. This will create a page for the seed, from
-which you can create a room, and then [connect](#connecting).
+which you can create a room, and then [connect](#connecting-to-an-archipelago-server).
 
 If you have downloaded the settings, or have created a settings file manually, this file can be uploaded on the
 [Generation Page](/generate) where you can also set any specific hosting settings.
@@ -130,11 +130,13 @@ generated games.
 
 After a seed page has been created on the website, clicking on `Create Room` will create a new server instance, and a
 page that can be linked to the other players, so they can all see the connection info, obtain their data files, and
-connect to the multiworld. Simply click on the url in the title bar, copy the link, and send it to your friends. The
-person who created the room becomes the "owner" of the room, and as such has access to the server console. Clearing
-cookies will remove access to this console, and there is no way to regain it. If a server password was set when
-generating the multiworld game, server admin privileges may be gained by entering `!admin <password>` from the
-`ArchipelagoTextClient.exe`.
+connect to the multiworld. Simply click on the url in the title bar, copy the link, and send it to your friends. Room
+servers will shut down after 2 hours of inactivity, saving the multiworld progress. By returning to the room page, the
+room server can be started back up, and the multiworld can continue to be played. If the link to the room is lost, the
+creator of the room can find it on their [User Content Page](/user-content). The person who created the room becomes the
+"owner" of the room, and as such has access to the server console. Clearing cookies will remove access to this console,
+and there is no way to regain it. If a server password was set when generating the multiworld game, server admin
+privileges may be gained by entering `!admin <password>` from the `ArchipelagoTextClient.exe`.
 
 #### The room page
 
