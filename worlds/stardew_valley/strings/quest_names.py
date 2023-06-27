@@ -48,4 +48,10 @@ class Quest:
     dark_talisman = "Dark Talisman"
     goblin_problem = "Goblin Problem"
     magic_ink = "Magic Ink"
-    
+
+class ModQuest:
+    MrGinger = "Mr.Ginger's request"
+    AyeishaEnvelope = "Missing Envelope"
+    AyeishaRing = "Lost Emerald Ring"
+    JunaCola = "Juna's Drink Request"
+    JunaSpaghetti = "Juna's BFF Request"

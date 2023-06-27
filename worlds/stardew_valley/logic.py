@@ -13,8 +13,12 @@ from .data.recipe_data import all_cooking_recipes, CookingRecipe, RecipeSource, 
     StarterSource, ShopSource, SkillSource
 from .data.villagers_data import all_villagers_by_name, Villager
 from .items import all_items, Group
+from .mods.logic.buildings import modded_buildings
+from .mods.logic.quests import modded_quests
+from .mods.logic.special_orders import modded_special_orders
+from .mods.logic.skullcavernelevator import has_skull_cavern_elevator_to_floor
 from .mods.mod_data import ModNames
-from .mods.mod_logic import can_earn_mod_skill_level, append_mod_skill_level
+from .mods.logic import magic, skills
 from .options import StardewOptions
 from .regions import vanilla_regions
 from .stardew_rule import False_, Reach, Or, True_, Received, Count, And, Has, TotalReceived, StardewRule
@@ -387,6 +391,8 @@ class StardewLogic:
             Building.cellar: self.can_spend_money(100000) & self.has_house(2),
         })
 
+        self.building_rules.update(modded_buildings(self, self.options))
+
         self.quest_rules.update({
             Quest.introductions: self.can_reach_region(Region.town),
             Quest.how_to_win_friends: self.can_complete_quest(Quest.introductions),
@@ -440,6 +446,8 @@ class StardewLogic:
                                     self.can_meet(NPC.gus) & self.can_meet(NPC.sandy) & self.can_meet(NPC.george) &
                                     self.can_meet(NPC.wizard) & self.can_meet(NPC.willy),
         })
+
+        self.quest_rules.update(modded_quests(self, self.options))
 
         self.festival_rules.update({
             FestivalCheck.egg_hunt: self.has_season(Season.spring) & self.can_reach_region(Region.town) & self.can_win_egg_hunt(),
@@ -512,11 +520,7 @@ class StardewLogic:
             "Qi's Prismatic Grange": self.has(Loot.bug_meat) & self.can_spend_money(80000), # All colors can be bought except purple
         })
 
-        # Mod Building List (For now smh)
-        if ModNames.tractor in self.options[options.Mods]:
-            self.building_rules.update({
-                ModBuilding.tractor_garage: self.can_spend_money(150000) & self.has(MetalBar.iron) &
-                                  self.has(MetalBar.iridium) & self.has(ArtisanGood.battery_pack)})
+        self.special_order_rules.update(modded_special_orders(self, self.options))
 
     def has(self, items: Union[str, (Iterable[str], Sized)], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
@@ -604,14 +608,16 @@ class StardewLogic:
         elif skill == Skill.farming:
             xp_rule = self.can_get_farming_xp() & self.has_tool(Tool.hoe, tool_material) & self.can_water(tool_level)
         elif skill == Skill.foraging:
-            xp_rule = self.can_get_foraging_xp() & self.has_tool(Tool.axe, tool_material) | self.can_use_clear_debris_instead_of_tool_level(tool_level)
+            xp_rule = self.can_get_foraging_xp() & self.has_tool(Tool.axe, tool_material) | \
+                      magic.can_use_clear_debris_instead_of_tool_level(self, tool_level)
         elif skill == Skill.mining:
-            xp_rule = self.can_get_mining_xp() & self.has_tool(Tool.pickaxe, tool_material) | self.can_use_clear_debris_instead_of_tool_level(tool_level)
+            xp_rule = self.can_get_mining_xp() & self.has_tool(Tool.pickaxe, tool_material) | \
+                      magic.can_use_clear_debris_instead_of_tool_level(self, tool_level)
         elif skill == Skill.combat:
             combat_tier = Performance.tiers[tool_level]
             xp_rule = self.can_get_combat_xp() & self.can_do_combat_at_level(combat_tier)
         else:
-            xp_rule = can_earn_mod_skill_level(self, skill, level)
+            xp_rule = skills.can_earn_mod_skill_level(self, skill, level)
 
         return previous_level_rule & months_rule & xp_rule
 
@@ -635,7 +641,7 @@ class StardewLogic:
             skills_items = ["Farming Level", "Mining Level", "Foraging Level",
                             "Fishing Level", "Combat Level"]
             if allow_modded_skills:
-                append_mod_skill_level(skills_items, self.options)
+                skills.append_mod_skill_level(skills_items, self.options)
             return self.received(skills_items, count=level)
 
         months_5_skills = max(1, (level // 5) - 1)
@@ -682,6 +688,9 @@ class StardewLogic:
 
     def can_complete_quest(self, quest: str) -> StardewRule:
         return Has(quest, self.quest_rules)
+
+    def can_complete_special_order(self, specialorder: str) -> StardewRule:
+        return Has(specialorder, self.special_order_rules)
 
     def can_get_farming_xp(self) -> StardewRule:
         crop_rules = []
@@ -891,7 +900,7 @@ class StardewLogic:
         return self.has_tool(Tool.axe) & self.can_reach_region(Region.forest)
 
     def can_chop_perfectly(self) -> StardewRule:
-        magic_rule = (self.can_use_clear_debris_instead_of_tool_level(3)) & self.has_skill_level(ModSkill.magic, 10)
+        magic_rule = (magic.can_use_clear_debris_instead_of_tool_level(self, 3)) & self.has_skill_level(ModSkill.magic, 10)
         tool_rule = self.has_tool(Tool.axe, ToolMaterial.iridium)
         foraging_rule = self.has_skill_level(Skill.foraging, 10)
         region_rule = self.can_reach_region(Region.forest)
@@ -1507,116 +1516,26 @@ class StardewLogic:
             return season_rule & region_rule & self.has_tool(Tool.hoe)
         return season_rule & region_rule
 
-    # Mod Logic definitions until I figure out how to weave this together...
-
-    def can_earn_spell_count(self, spell_count: int):
-        # Player always has an Axe, Pickaxe, and Watering Can, and starts with Magic Missile and Analyze
-        spell_rules = [self.can_reach_region(Region.volcano_floor_10) | self.has_mine_elevator_to_floor(100),
-                       self.can_reach_region(Region.farm),
-                       self.can_reach_region(Region.witch_swamp),
-                       self.has(Craftable.staircase),
-                       self.has(Beverage.coffee),
-                       self.has(Craftable.life_elixir),
-                       self.has("Earth Crystal"),
-                       self.has("Fire Quartz"),
-                       self.can_fish(85) & self.has_mine_elevator_to_floor(60) & self.can_reach_region(Region.mines)
-                       ]
-        # If the player can't even learn magic, you have no spells.
-        if not (self.has_relationship(NPC.wizard, 3) & self.can_reach_region(Region.pierre_store) &
-                self.can_reach_region(Region.wizard_tower)):
-            return False_()
-        return Count(spell_count, spell_rules)
-
-    def can_reach_woods_depth(self, depth: int) -> StardewRule:
-        rules = []
-        if depth > 10:
-            rules.append(self.has(Craftable.cherry_bomb) | self.has_tool(Tool.axe, ToolMaterial.iridium))
-        if depth > 30:
-            rules.append(self.received("Woods Obelisk"))
-        if depth > 50:
-            rules.append(self.can_do_combat_at_level(Performance.great) & self.can_cook())
-        return And(rules)
-
     def npc_is_in_current_slot(self, name: str) -> bool:
         npc = all_villagers_by_name[name]
         mod = npc.mod_name
         return mod is None or mod in self.options[options.Mods]
 
-    # Spell Logic in terms of combat usability (similar to weapons)  Strategy is that if the mod doesn't exist, its
-    # always false and thus doesn't get considered relative to other logic tests.
-
-    def can_earn_spells(self) -> StardewRule:
-        return self.has_relationship(NPC.wizard, 3) & self.can_reach_region(Region.pierre_store) & \
-               self.can_reach_region(Region.wizard_tower)
-
-    def has_any_spell(self) -> StardewRule:
-        if ModNames.magic not in self.options[options.Mods]:
-            return False_()
-        return self.can_earn_spells()
-
-    def has_attack_spell_count(self, count: int) -> StardewRule:
-        attack_spell_rule = [self.received("Spell: Fireball"), self.received(
-            "Spell: Frostbite"), self.received("Spell: Shockwave"), self.received("Spell: Spirit"),
-                             self.received("Spell: Meteor")
-                             ]
-        return Count(count, attack_spell_rule)
-
-    def has_support_spell_count(self, count: int) -> StardewRule:
-        support_spell_rule = [self.can_earn_spells(), self.received("Magic Level", 2)
-                              ]
-        return Count(count, support_spell_rule)
-
-    def has_decent_spells(self) -> StardewRule:
-        if ModNames.magic not in self.options[options.Mods]:
-            return False_()
-        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 2)
-        magic_attack_options_rule = self.has_attack_spell_count(1)
-        return magic_resource_rule & magic_attack_options_rule
-
-    def has_good_spells(self) -> StardewRule:
-        if ModNames.magic not in self.options[options.Mods]:
-            return False_()
-        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 4)
-        magic_attack_options_rule = self.has_attack_spell_count(2)
-        magic_support_options_rule = self.has_support_spell_count(1)
-        return magic_resource_rule & magic_attack_options_rule & magic_support_options_rule
-
-    def has_great_spells(self) -> StardewRule:
-        if ModNames.magic not in self.options[options.Mods]:
-            return False_()
-        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 6)
-        magic_attack_options_rule = self.has_attack_spell_count(3)
-        magic_support_options_rule = self.has_support_spell_count(1)
-        return magic_resource_rule & magic_attack_options_rule & magic_support_options_rule
-
-    def has_amazing_spells(self) -> StardewRule:
-        if ModNames.magic not in self.options[options.Mods]:
-            return False_()
-        magic_resource_rule = self.can_earn_spells() & self.received("Magic Level", 8)
-        magic_attack_options_rule = self.has_attack_spell_count(4)
-        magic_support_options_rule = self.has_support_spell_count(2)
-        return magic_resource_rule & magic_attack_options_rule & magic_support_options_rule
-
-    def can_blink(self) -> StardewRule:
-        if ModNames.magic not in self.options[options.Mods]:
-            return False_()
-        return self.received("Spell: Blink") & self.can_earn_spells()
-
     def can_do_combat_at_level(self, level: str) -> StardewRule:
         if level == Performance.basic:
-            return self.has_any_weapon() | self.has_any_spell()
+            return self.has_any_weapon() | magic.has_any_spell(self)
         if level == Performance.decent:
-            return self.has_decent_weapon() | self.has_decent_spells()
+            return self.has_decent_weapon() | magic.has_decent_spells(self)
         if level == Performance.good:
-            return self.has_good_weapon() | self.has_good_spells()
+            return self.has_good_weapon() | magic.has_good_spells(self)
         if level == Performance.great:
-            return self.has_great_weapon() | self.has_great_spells()
+            return self.has_great_weapon() | magic.has_great_spells(self)
         if level == Performance.galaxy:
-            return self.has_galaxy_weapon() | self.has_amazing_spells()
+            return self.has_galaxy_weapon() | magic.has_amazing_spells(self)
 
     def can_water(self, level: int) -> StardewRule:
         tool_rule = self.has_tool(Tool.watering_can, ToolMaterial.tiers[level])
-        spell_rule = (self.received("Spell: Water") & self.can_earn_spells() & self.has_skill_level(ModSkill.magic, level))
+        spell_rule = (self.received(MagicSpell.water) & magic.can_use_altar(self) & self.has_skill_level(ModSkill.magic, level))
         return tool_rule | spell_rule
 
     def can_use_clear_debris_instead_of_tool_level(self, level: int) -> StardewRule:
