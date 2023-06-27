@@ -1680,6 +1680,8 @@
         <EditorCategories value="Race:Terran,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_CommandCenter"/>
         <AffectedUnitArray value="AP_CommandCenterFlying"/>
+        <AffectedUnitArray value="AP_PlanetaryFortress"/>
+        <AffectedUnitArray value="AP_OrbitalCommand"/>
     </CUpgrade>
     <CUpgrade id="AP_DualFusionWelders">
         <Flags index="UpgradeCheat" value="0"/>

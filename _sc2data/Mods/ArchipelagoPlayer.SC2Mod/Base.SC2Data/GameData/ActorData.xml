@@ -3678,6 +3678,14 @@
         <On Terms="AbilMorph.*.Start; MorphFrom AP_OrbitalCommand; MorphTo AP_OrbitalCommandFlying" Target="TerranPlayerTrophy" Send="Signal DestroyFlag"/>
         <On Terms="AbilMorph.*.Finish; MorphFrom AP_OrbitalCommandFlying; MorphTo AP_OrbitalCommand; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
         <On Terms="UnitBirth.AP_OrbitalCommand; PlayerHasTrophy" Send="Create TerranPlayerTrophy"/>
+        <On Terms="Upgrade.AP_CommandCenterReactor.Add" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="Upgrade.AP_CommandCenterReactor.Add" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.EditorPlaced; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.EditorPlaced; ValidateUnit AP_CommandCenterReactorPurchased" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.Suppressed; ValidateUnit AP_CommandCenterReactorPurchased" Target="AP_CommandCenterReactor" Send="Signal FastBirth"/>
+        <On Terms="UnitBirth.AP_PlanetaryFortress.Normal; ValidateUnit AP_CommandCenterReactorPurchased" Send="Create AP_CommandCenterReactor"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_CommandCenterReactorPurchasedAndNotUnderConstruction" Send="Create AP_CommandCenterReactorDeath"/>
         <Model value="CommandCenter"/>
         <DeathArray index="Normal" ModelLink="OrbitalCommandDeath"/>
         <DeathArray index="UnderConstruction" ModelLink="TerranLargeBuildingDeath"/>
