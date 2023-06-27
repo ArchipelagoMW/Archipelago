@@ -38,8 +38,11 @@ class Version(typing.NamedTuple):
     minor: int
     build: int
 
+    def as_simple_string(self) -> str:
+        return ".".join(str(item) for item in self)
 
-__version__ = "0.3.9"
+
+__version__ = "0.4.1"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -88,7 +91,10 @@ def is_frozen() -> bool:
 
 
 def local_path(*path: str) -> str:
-    """Returns path to a file in the local Archipelago installation or source."""
+    """
+    Returns path to a file in the local Archipelago installation or source.
+    This might be read-only and user_path should be used instead for ROMs, configuration, etc.
+    """
     if hasattr(local_path, 'cached_path'):
         pass
     elif is_frozen():
@@ -148,8 +154,8 @@ def cache_path(*path: str) -> str:
     if hasattr(cache_path, "cached_path"):
         pass
     else:
-        import appdirs
-        cache_path.cached_path = appdirs.user_cache_dir("Archipelago", False)
+        import platformdirs
+        cache_path.cached_path = platformdirs.user_cache_dir("Archipelago", False)
 
     return os.path.join(cache_path.cached_path, *path)
 
@@ -502,6 +508,15 @@ def restricted_loads(s):
     return RestrictedUnpickler(io.BytesIO(s)).load()
 
 
+class ByValue:
+    """
+    Mixin for enums to pickle value instead of name (restores pre-3.11 behavior). Use as left-most parent.
+    See https://github.com/python/cpython/pull/26658 for why this exists.
+    """
+    def __reduce_ex__(self, prot):
+        return self.__class__, (self._value_, )
+
+
 class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
     default_factory: typing.Callable[[typing.Any], typing.Any]
@@ -534,6 +549,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         root_logger.removeHandler(handler)
         handler.close()
     root_logger.setLevel(loglevel)
+    logging.getLogger("websockets").setLevel(loglevel)  # make sure level is applied for websockets
     if "a" not in write_mode:
         name += f"_{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}"
     file_handler = logging.FileHandler(
@@ -769,3 +785,57 @@ def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str]
     task = asyncio.create_task(co, name=name)
     _faf_tasks.add(task)
     task.add_done_callback(_faf_tasks.discard)
+
+
+def deprecate(message: str):
+    if __debug__:
+        raise Exception(message)
+    import warnings
+    warnings.warn(message)
+
+def _extend_freeze_support() -> None:
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
+    # upstream issue: https://github.com/python/cpython/issues/76327
+    # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
+    import multiprocessing
+    import multiprocessing.spawn
+
+    def _freeze_support() -> None:
+        """Minimal freeze_support. Only apply this if frozen."""
+        from subprocess import _args_from_interpreter_flags
+
+        # Prevent `spawn` from trying to read `__main__` in from the main script
+        multiprocessing.process.ORIGINAL_DIR = None
+
+        # Handle the first process that MP will create
+        if (
+            len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
+                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
+                'from multiprocessing.resource_tracker import main',  # Py>=3.8
+                'from multiprocessing.forkserver import main'
+            )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
+        ):
+            exec(sys.argv[-1])
+            sys.exit()
+
+        # Handle the second process that MP will create
+        if multiprocessing.spawn.is_forking(sys.argv):
+            kwargs = {}
+            for arg in sys.argv[2:]:
+                name, value = arg.split('=')
+                if value == 'None':
+                    kwargs[name] = None
+                else:
+                    kwargs[name] = int(value)
+            multiprocessing.spawn.spawn_main(**kwargs)
+            sys.exit()
+
+    if not is_windows and is_frozen():
+        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+
+
+def freeze_support() -> None:
+    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    import multiprocessing
+    _extend_freeze_support()
+    multiprocessing.freeze_support()

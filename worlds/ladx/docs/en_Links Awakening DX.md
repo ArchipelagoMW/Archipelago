@@ -42,6 +42,22 @@ This randomizer is based on (forked from) the wonderful work daid did on LADXR -
 
 The autotracker code for communication with magpie tracker is directly copied from kbranch's repo - https://github.com/kbranch/Magpie/tree/master/autotracking
 
+### Graphics
+
+The following sprite sheets have been included with permission of their respective authors:
+
+* by Madam Materia (https://www.twitch.tv/isabelle_zephyr)
+  * Matty_LA
+* by Linker (https://twitter.com/BenjaminMaksym)
+  * Bowwow
+  * Bunny
+  * Luigi
+  * Mario
+  * Richard
+  * Tarin
+
+Title screen graphics by toomanyteeth✨ (https://instagram.com/toomanyyyteeth)
+
 ## Some tips from LADXR...
 
 <h3>Locations</h3>

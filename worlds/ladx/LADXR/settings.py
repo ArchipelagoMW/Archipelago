@@ -69,15 +69,6 @@ class Setting:
 
 class Settings:
     def __init__(self, ap_options):
-        gfx_options = [('', '', 'Default')]
-        gfx_path = os.path.join("data", "sprites", "ladx")
-        for filename in sorted(os.listdir(gfx_path)):
-            if filename.endswith(".bin") or filename.endswith(".png") or filename.endswith(".bmp"):
-                gfx_options.append((filename, filename + ">", filename[:-4]))
-            if filename.endswith(".bdiff"):
-                gfx_options.append((filename, filename + ">", filename[:-6]))
-
-
         self.__all = [
             Setting('seed', 'Main', '<', 'Seed', placeholder='Leave empty for random seed', default="", multiworld=False,
                 description="""For multiple people to generate the same randomization result, enter the generated seed number here.
@@ -201,7 +192,7 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
             Setting('nagmessages', 'User options', 'S', 'Show nag messages', default=False,
                 description='Enables the nag messages normally shown when touching stones and crystals',
                 aesthetic=True),
-            Setting('gfxmod', 'User options', 'c', 'Graphics', options=gfx_options, default='',
+            Setting('gfxmod', 'User options', 'c', 'Graphics', default='',
                 description='Generally affects at least Link\'s sprite, but can alter any graphics in the game',
                 aesthetic=True),
             Setting('linkspalette', 'User options', 'C', "Link's color",

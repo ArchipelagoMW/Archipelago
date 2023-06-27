@@ -32,13 +32,11 @@ Recommended steps
  * Download and install a "Windows installer (64-bit)" from the [Python download page](https://www.python.org/downloads)
    * **Python 3.11 does not work currently**
 
- * Download and install full Visual Studio from
-   [Visual Studio Downloads](https://visualstudio.microsoft.com/downloads/)
-   or an older "Build Tools for Visual Studio" from
-   [Visual Studio Older Downloads](https://visualstudio.microsoft.com/vs/older-downloads/).
-
-   * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details
-   * This step is optional. Pre-compiled modules are pinned on
+ * **Optional**: Download and install Visual Studio Build Tools from
+   [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+   * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details. 
+     Generally, selecting the box for "Desktop Development with C++" will provide what you need.
+   * Build tools are not required if all modules are installed pre-compiled. Pre-compiled modules are pinned on
      [Discord in #archipelago-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
 
  * It is recommended to use [PyCharm IDE](https://www.jetbrains.com/pycharm/)
@@ -70,6 +68,19 @@ You can get the latest SNI release at [SNI Github releases](https://github.com/a
 It should be dropped as "SNI" into the root folder of the project. Alternatively, you can point the sni setting in
 host.yaml at your SNI folder.
 
+
+## Optional: Git
+
+[Git](https://git-scm.com) is required to install some of the packages that Archipelago depends on.
+It may be possible to run Archipelago from source without it, at your own risk.
+
+It is also generally recommended to have Git installed and understand how to use it, especially if you're thinking about contributing.
+
+You can download the latest release of Git at [The downloads page on the Git website](https://git-scm.com/downloads).
+
+Beyond that, there are also graphical interfaces for Git that make it more accessible.
+For repositories on Github (such as this one), [Github Desktop](https://desktop.github.com) is one such option.
+PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests
 

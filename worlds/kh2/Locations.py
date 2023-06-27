@@ -1157,7 +1157,7 @@ exclusion_table = {
         LocationName.Crit_6,
         LocationName.Crit_7,
     },
-    "Hitlist":       {
+    "Hitlist":       [
         LocationName.XemnasDataPowerBoost,
         LocationName.AxelDataMagicBoost,
         LocationName.RoxasDataMagicBoost,
@@ -1182,7 +1182,7 @@ exclusion_table = {
         LocationName.TransporttoRemembrance,
         LocationName.OrichalcumPlusGoddessofFateCup,
         LocationName.HadesCupTrophyParadoxCups,
-    },
+    ],
     "Cups":          {
         LocationName.ProtectBeltPainandPanicCup,
         LocationName.SerenityGemPainandPanicCup,
@@ -1483,7 +1483,6 @@ exclusion_table = {
         LocationName.OasisMap,
         LocationName.OasisTornPages,
         LocationName.OasisAPBoost,
-        LocationName.StationofSerenityPotion,
         LocationName.StationofCallingPotion,
         LocationName.CentralStationPotion1,
         LocationName.STTCentralStationHiPotion,
