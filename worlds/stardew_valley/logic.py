@@ -884,7 +884,7 @@ class StardewLogic:
         return self.can_reach_region(Region.mines_floor_85)
 
     def can_mine_in_the_skull_cavern(self) -> StardewRule:
-        return (self.received("Skull Key") &
+        return (self.can_progress_in_the_mines_from_floor(120) &
                 self.can_reach_region(Region.skull_cavern))
 
     def can_mine_perfectly(self) -> StardewRule:
