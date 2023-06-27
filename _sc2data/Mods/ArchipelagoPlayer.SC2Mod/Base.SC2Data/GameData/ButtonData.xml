@@ -2058,9 +2058,4 @@
         <AlertIcon value="Assets\Textures\BTN-Building-Protoss-RoboticsWarpFacility.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
-    <CButton id="AP_DarkShrineAssignRally">
-        <Icon value="Assets\Textures\btn-ability-terran-setrallypoint.dds"/>
-        <AlertIcon value="Assets\Textures\btn-ability-terran-setrallypoint.dds"/>
-        <EditorCategories value="Race:Protoss"/>
-    </CButton>
 </Catalog>
