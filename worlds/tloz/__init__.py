@@ -1,8 +1,7 @@
-import logging
 import os
 import threading
-import pkgutil
-from typing import NamedTuple, Union, Dict, Any
+from pkgutil import get_data
+from typing import Dict, Any
 
 import bsdiff4
 
@@ -168,9 +167,8 @@ class TLoZWorld(World):
         # Remove map/compass check so they're always on
         # Removing a bit from the boss roars flags, so we can have more dungeon items. This allows us to
         # go past 0x1F items for dungeon items.
-        base_patch_location = os.path.dirname(__file__) + "/z1_base_patch.bsdiff4"
-        with open(base_patch_location, "rb") as base_patch:
-            rom_data = bsdiff4.patch(rom.read(), base_patch.read())
+        base_patch = get_data(__name__, os.path.join(os.path.dirname(__file__), "z1_base_patch.bsdiff4"))
+        rom_data = bsdiff4.patch(rom.read(), base_patch)
         rom_data = bytearray(rom_data)
         # Set every item to the new nothing value, but keep room flags. Type 2 boss roars should
         # become type 1 boss roars, so we at least keep the sound of roaring where it should be.
@@ -275,8 +273,10 @@ class TLoZWorld(World):
     def modify_multidata(self, multidata: dict):
         import base64
         self.rom_name_available_event.wait()
-        new_name = base64.b64encode(bytes(self.rom_name)).decode()
-        multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+        rom_name = getattr(self, "rom_name", None)
+        if rom_name:
+            new_name = base64.b64encode(bytes(self.rom_name)).decode()
+            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def get_filler_item_name(self) -> str:
         if self.filler_items is None:
