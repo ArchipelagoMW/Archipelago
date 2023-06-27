@@ -1,3 +1,5 @@
+from typing import Set
+
 from worlds.AutoWorld import LogicMixin
 
 
@@ -58,4 +60,11 @@ class YuGiOh06Logic(LogicMixin):
         return (self.has_all(["Messenger of Peace", "Castle of Dark Illusions", "Mystik Wok"], player) or
                 self.has_all(["Mystik Wok", "Barox", "Cyber-Stein", "Poison of the Old Man"], player)) and\
                 self.yugioh06_difficulty(player, 8)
+
+    def yugioh06_has_some(self, items: Set[str], player: int):
+        amount = 0
+        for item in items:
+            if self.has(item, player):
+                amount += 1
+        return amount
 

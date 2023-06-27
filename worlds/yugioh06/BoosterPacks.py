@@ -37,7 +37,11 @@ booster_contents = {
         "Spirit Message 'L'",
         "Fusion Gate",
         "Jowgen the Spiritualist",
-        "Fairy Box"
+        "Fairy Box",
+        "Aqua Spirit",
+        "Rock Spirit",
+        "Spirit of Flames",
+        "Garuda the Wind Spirit"
     },
     "LEGACY OF DARKNESS": {
         "Last Turn",
@@ -84,7 +88,10 @@ booster_contents = {
         "Chaos Emperor Dragon - Envoy of the End",
         "Self-Destruct Button",
         "Manticore of Darkness",
-        "Dimension Fusion"
+        "Dimension Fusion",
+        "Gigantes",
+        "Inferno",
+        "Silpheed"
     },
     "ANCIENT SANCTUARY": {
         "Monster Gate",
@@ -95,7 +102,8 @@ booster_contents = {
     "RISE OF DESTINY": {},
     "FLAMING ETERNITY": {},
     "THE LOST MILLENIUM": {
-        "Ritual"
+        "Ritual",
+        "Megarock Dragon"
     },
     "CYBERNETIC REVOLUTION": {
         "Power Bond",
@@ -120,7 +128,9 @@ booster_contents = {
         "Gate Guardian",
         "Scapegoat"
     },
-    "Fairy Collection": {},
+    "Fairy Collection": {
+        "Silpheed"
+    },
     "Dragon Collection": {
         "Victory D",
         "Chaos Emperor Dragon - Envoy of the End"
@@ -204,14 +214,21 @@ booster_contents = {
         "Polymerization",
         "Ritual",
         "Cyber-Stein",
-        "Scapegoat"
+        "Scapegoat",
+        "Aqua Spirit",
+        "Rock Spirit",
+        "Spirit of Flames",
+        "Garuda the Wind Spirit"
     },
     "Special Summon Collection B": {
         "Monster Gate",
         "Chaos Emperor Dragon - Envoy of the End",
         "Ojama Trio",
         "Dimension Fusion",
-        "Return from the Different Dimension"
+        "Return from the Different Dimension",
+        "Gigantes",
+        "Inferno",
+        "Silpheed"
     },
     "Special Summon Collection C": {
         "Hamon, Lord of Striking Thunder",
@@ -248,14 +265,16 @@ booster_contents = {
     "Direct Damage Collection": {
         "Hamon, Lord of Striking Thunder",
         "Chaos Emperor Dragon - Envoy of the End",
-        "Dark Snake Syndrome"
+        "Dark Snake Syndrome",
+        "Inferno"
     },
     "Direct Attack Collection": {
         "Victory D",
         "Dark Scorpion Combination"
     },
     "Monster Destroy Collection": {
-        "Hamon, Lord of Striking Thunder"
+        "Hamon, Lord of Striking Thunder",
+        "Inferno"
     },
 }
 

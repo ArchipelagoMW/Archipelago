@@ -295,7 +295,9 @@ def set_rules(world):
              lambda state: state.has("Treeborn Frog", player) and state.yugioh06_difficulty(player, 5))
     # TODO: Map out elemental spirits and add something to help
     add_rule(world.get_entrance("TD31 Special Summon C", player),
-             lambda state: state.has("Special Summon Collection B", player) and state.yugioh06_difficulty(player, 7))
+             lambda state: state.yugioh06_has_some(
+                 ["Aqua Spirit", "Rock Spirit", "Spirit of Flames",
+                  "Garuda the Wind Spirit", "Gigantes", "Inferno", "Megarock Dragon", "Silpheed"], player) > 4 and state.yugioh06_difficulty(player, 3))
     # TODO: Merge with LD26
     add_rule(world.get_entrance("TD32 Toon", player),
              lambda state: state.has("Special Monsters A", player) and state.yugioh06_difficulty(player, 7))

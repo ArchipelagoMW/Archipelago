@@ -1,5 +1,5 @@
 import typing
-from Options import Option, Choice, Range
+from Options import Option, Choice, Range, Toggle
 
 
 class StructureDeck(Choice):
@@ -44,10 +44,38 @@ class ThirdTier5CampaignBossChallenges(Range):
     default = 10
 
 
+class StartingMoney(Range):
+    display_name = "Starting Money"
+    range_start = 0
+    range_end = 99999999
+    default = 3000
+
+
+class MoneyRewardMultiplier(Range):
+    display_name = "Money Reward Multiplier"
+    range_start = 1
+    range_end = 255
+    default = 10
+
+
+class NormalizeBoostersPacks(Toggle):
+    display_name = "Normalize Booster Packs"
+
+
+class BoosterPackPrices(Range):
+    display_name = "Booster Pack Prices"
+    range_start = 1
+    range_end = 3000
+
+
 ygo06_options: typing.Dict[str, type(Option)] = {
     "StructureDeck": StructureDeck,
     "Banlist": Banlist,
     "FinalCampaignBossChallenges": FinalCampaignBossChallenges,
     "FourthTier5CampaignBossChallenges": FourthTier5CampaignBossChallenges,
-    "ThirdTier5CampaignBossChallenges": ThirdTier5CampaignBossChallenges
+    "ThirdTier5CampaignBossChallenges": ThirdTier5CampaignBossChallenges,
+    "StartingMoney": StartingMoney,
+    "MoneyRewardMultiplier": MoneyRewardMultiplier,
+    "NormalizeBoostersPacks": NormalizeBoostersPacks,
+    "BoosterPackPrices": BoosterPackPrices
 }

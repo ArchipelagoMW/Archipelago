@@ -5,6 +5,7 @@ import math
 
 import Utils
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
+from .utils import openFile
 from ..AutoWorld import World, WebWorld
 from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, core_booster
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
@@ -16,9 +17,8 @@ from .Rules import set_rules
 from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
 
-from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier
+from ..LauncherComponents import Component, components, Type, SuffixIdentifier
 from .RomValues import structure_deck_selection, banlist_ids
-from ..sm import openFile
 
 
 def launch_client():
@@ -264,6 +264,15 @@ class Yugioh06World(World):
         rom_data[0xeefa] = self.multiworld.ThirdTier5CampaignBossChallenges[self.player].value
         rom_data[0xef10] = self.multiworld.FourthTier5CampaignBossChallenges[self.player].value
         rom_data[0xef22] = self.multiworld.FinalCampaignBossChallenges[self.player].value
+        rom_data[0xf4734:0xf4738] = self.multiworld.StartingMoney[self.player].value.to_bytes(4, 'little')
+        rom_data[0xe70c] = self.multiworld.MoneyRewardMultiplier[self.player]
+        if self.multiworld.NormalizeBoostersPacks[self.player].value:
+            booster_pack_price = self.multiworld.BoosterPackPrices[self.player].value.to_bytes(2, 'little')
+            for booster in range(51):
+                space = booster * 16
+                rom_data[0x1e5e2e8 + space] = booster_pack_price[0]
+                rom_data[0x1e5e2e9 + space] = booster_pack_price[1]
+                rom_data[0x1e5e2ea + space] = 5
         return rom_data
 
     def generate_output(self, output_directory: str):
