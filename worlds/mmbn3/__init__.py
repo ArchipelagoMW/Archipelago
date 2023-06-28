@@ -132,7 +132,7 @@ class MMBN3World(World):
         for item in all_items:
             if item.progression != ItemClassification.filler:
                 freq = self.item_frequencies.get(item.itemName, 1)
-                required_items += [item.itemName] * freq
+                required_items += [item.itemName for _ in range(freq)]
 
         for itemName in required_items:
             self.multiworld.itempool.append(self.create_item(itemName))
@@ -142,7 +142,7 @@ class MMBN3World(World):
         for item in all_items:
             if item.progression == ItemClassification.filler:
                 freq = self.item_frequencies.get(item.itemName, 1)
-                filler_items += [item.itemName] * freq
+                filler_items += [item.itemName for _ in range(freq)]
 
         remaining = len(all_locations) - len(required_items)
         for i in range(remaining):
