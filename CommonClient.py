@@ -23,6 +23,7 @@ from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, \
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
+import ssl
 
 if typing.TYPE_CHECKING:
     import kvui
@@ -31,6 +32,12 @@ logger = logging.getLogger("Client")
 
 # without terminal, we have to use gui mode
 gui_enabled = not sys.stdout or "--nogui" not in sys.argv
+
+
+@Utils.cache_argsless
+def get_ssl_context():
+    import certifi
+    return ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=certifi.where())
 
 
 class ClientCommandProcessor(CommandProcessor):
@@ -157,6 +164,7 @@ class CommonContext:
     disconnected_intentionally: bool = False
     server: typing.Optional[Endpoint] = None
     server_version: Version = Version(0, 0, 0)
+    generator_version: Version = Version(0, 0, 0)
     current_energy_link_value: typing.Optional[int] = None  # to display in UI, gets set by server
 
     last_death_link: float = time.time()  # last send/received death link on AP layer
@@ -260,6 +268,7 @@ class CommonContext:
         self.items_received = []
         self.locations_info = {}
         self.server_version = Version(0, 0, 0)
+        self.generator_version = Version(0, 0, 0)
         self.server = None
         self.server_task = None
         self.hint_cost = None
@@ -587,7 +596,8 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
 
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
-        socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
+        socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None,
+                                          ssl=get_ssl_context() if address.startswith("wss://") else None)
         if ctx.ui is not None:
             ctx.ui.update_address_bar(server_url.netloc)
         ctx.server = Endpoint(socket)
@@ -602,6 +612,7 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
     except websockets.InvalidMessage:
         # probably encrypted
         if address.startswith("ws://"):
+            # try wss
             await server_loop(ctx, "ws" + address[1:])
         else:
             ctx.handle_connection_loss(f"Lost connection to the multiworld server due to InvalidMessage"
@@ -646,11 +657,16 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             logger.info('Room Information:')
             logger.info('--------------------------------')
             version = args["version"]
-            ctx.server_version = tuple(version)
-            version = ".".join(str(item) for item in version)
+            ctx.server_version = Version(*version)
 
-            logger.info(f'Server protocol version: {version}')
-            logger.info("Server protocol tags: " + ", ".join(args["tags"]))
+            if "generator_version" in args:
+                ctx.generator_version = Version(*args["generator_version"])
+                logger.info(f'Server protocol version: {ctx.server_version.as_simple_string()}, '
+                            f'generator version: {ctx.generator_version.as_simple_string()}, '
+                            f'tags: {", ".join(args["tags"])}')
+            else:
+                logger.info(f'Server protocol version: {ctx.server_version.as_simple_string()}, '
+                            f'tags: {", ".join(args["tags"])}')
             if args['password']:
                 logger.info('Password required')
             ctx.update_permissions(args.get("permissions", {}))

@@ -13,14 +13,20 @@ need to create:
 - A new option class with a docstring detailing what the option will do to your user.
 - A `display_name` to be displayed on the webhost.
 - A new entry in the `option_definitions` dict for your World.
-By style and convention, the internal names should be snake_case. If the option supports having multiple sub_options
-such as Choice options, these can be defined with `option_my_sub_option`, where the preceding `option_` is required and
-stripped for users, so will show as `my_sub_option` in yaml files and if `auto_display_name` is True `My Sub Option`
-on the webhost. All options support `random` as a generic option. `random` chooses from any of the available
-values for that option, and is reserved by AP. You can set this as your default value but you cannot define your own
-new `option_random`.
+By style and convention, the internal names should be snake_case.
 
 ### Option Creation
+- If the option supports having multiple sub_options, such as Choice options, these can be defined with
+`option_value1`. Any attributes of the class with a preceding `option_` is added to the class's `options` lookup. The
+`option_` is then stripped for users, so will show as `value1` in yaml files. If `auto_display_name` is True, it will
+display as `Value1` on the webhost.
+- An alternative name can be set for any specific option by setting an alias attribute
+(i.e. `alias_value_1 = option_value1`) which will allow users to use either `value_1` or `value1` in their yaml
+files, and both will resolve as `value1`. This should be used when changing options around, i.e. changing a Toggle to a
+Choice, and defining `alias_true = option_full`.
+- All options support `random` as a generic option. `random` chooses from any of the available values for that option,
+and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+
 As an example, suppose we want an option that lets the user start their game with a sword in their inventory. Let's
 create our option class (with a docstring), give it a `display_name`, and add it to a dictionary that keeps track of our
 options:
