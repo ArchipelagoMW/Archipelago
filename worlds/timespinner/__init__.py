@@ -182,6 +182,12 @@ class TimespinnerWorld(World):
         elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
                 and not self.is_option_enabled("UnchainedKeys"):
             item.classification = ItemClassification.filler
+        elif name in {"Timespinner Gear 1", "Timespinner Gear 2", "Timespinner Gear 3"} \
+                and self.is_option_enabled("DadPercent"):
+            item.classification = ItemClassification.filler
+        elif name == "Timespinner Spindle" and self.is_option_enabled("Inverted") and \
+                not self.is_option_enabled("PresentAccessWithWheelAndSpindle"):
+            item.classification = ItemClassification.filler
 
         return item
 

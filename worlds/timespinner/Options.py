@@ -383,6 +383,10 @@ class Traps(OptionList):
     default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]
 
 
+class PresentAccessWithWheelAndSpindle(Toggle):
+    """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
+    display_name = "PresentAccessWithWheelAndSpindle"
+
 # Some options that are available in the timespinner randomizer arent currently implemented
 timespinner_options: Dict[str, Option] = {
     "StartWithJewelryBox": StartWithJewelryBox,
@@ -419,6 +423,7 @@ timespinner_options: Dict[str, Option] = {
     "UnchainedKeys": UnchainedKeys,
     "TrapChance": TrapChance,
     "Traps": Traps,
+    "PresentAccessWithWheelAndSpindle": PresentAccessWithWheelAndSpindle,
     "DeathLink": DeathLink,
 }
 

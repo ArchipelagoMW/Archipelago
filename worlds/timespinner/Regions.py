@@ -127,7 +127,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     connect(world, player, 'Sealed Caves (Xarion)', 'Sealed Caves (upper)', logic.has_doublejump)
     connect(world, player, 'Sealed Caves (Xarion)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Refugee Camp', 'Forest')
-    #connect(world, player, 'Refugee Camp', 'Library', lambda state: not is_option_enabled(world, player, "Inverted"))
+    connect(world, player, 'Refugee Camp', 'Library', lambda state: is_option_enabled(world, player, "Inverted") and is_option_enabled(world, player, "PresentAccessWithWheelAndSpindle") and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, player))
     connect(world, player, 'Refugee Camp', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Forest', 'Refugee Camp')
     connect(world, player, 'Forest', 'Left Side forest Caves', lambda state: state.has('Talaria Attachment', player) or logic.has_timestop(state))
