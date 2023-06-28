@@ -3161,4 +3161,109 @@
     <CBehaviorBuff id="AP_PhotonCannonDetectRange">
         <InfoFlags index="Hidden" value="1"/>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_GameTime5Seconds">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <ExpireEffect value="AP_GameTimeGreaterthan5Seconds"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NexusDeath">
+        <InfoFlags index="Hidden" value="1"/>
+        <FinalEffect value="AP_NexusDeathSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_NexusInvulnerability">
+        <Alignment value="Positive"/>
+        <DisplayDuration index="Self" value="1"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="20"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOARadar">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-status-radar.dds"/>
+        <DisableValidatorArray value="AP_HaveSOARadar"/>
+        <DisableValidatorArray value="NotUnderConstruction"/>
+        <Modification Radar="45" RadarFilters="-;Neutral,RawResource,HarvestableResource,Missile,Destructible,Buried,Cloaked">
+            <WeaponArray Link="AP_MothershipCoreWeapon" Turret="AP_Nexus"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_TimeWarpController">
+        <InfoFlags index="Hidden" value="1"/>
+        <Period value="0.5"/>
+        <InitialEffect value="AP_TimeWarpControllerABTarget"/>
+        <PeriodicEffect value="AP_TimeWarpControllerIssueOrderSelf"/>
+        <FinalEffect value="AP_TimeWarpControllerRBTarget"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_TimeWarpProduction">
+        <Alignment value="Positive"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+        </Cost>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-chronoboost.dds"/>
+        <BehaviorCategories index="Fast" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <TimeScaleSource Value="Global"/>
+        <Modification TimeScale="1.225" AttackSpeedMultiplier="0.815">
+            <VitalRegenArray index="Energy" value="-0.1015"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_Purify">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-purify.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="60"/>
+        <Modification Detect="0">
+            <WeaponArray Link="AP_MothershipCoreWeapon" Turret="AP_Nexus"/>
+        </Modification>
+        <TimeScaleSource Value="Global"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAGlobalChronoProd">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-chronoboost.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="20"/>
+        <Modification TimeScale="1.5">
+            <VitalRegenArray index="Energy" value="-0.1992"/>
+        </Modification>
+        <BehaviorCategories index="Fast" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAGlobalChronoResearch">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-chronoboost.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="20"/>
+        <Modification TimeScale="1.5">
+            <VitalRegenArray index="Energy" value="-0.1992"/>
+        </Modification>
+        <BehaviorCategories index="Fast" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MothershipCorePurifyNexus">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Modification>
+            <ModifyFlags index="SuppressMoving" value="1"/>
+            <StateFlags index="SuppressEnergyRegen" value="1"/>
+            <AbilLinkDisableArray value="move"/>
+            <!-- TODO: Implement those -->
+            <AbilLinkDisableArray value="AP_MothershipCorePurifyNexus"/>
+            <AbilLinkDisableArray value="AP_MorphToMothership"/>
+            <AbilLinkDisableArray value="AP_MothershipCoreEnergize"/>
+            <AbilLinkDisableArray value="AP_MothershipCoreMassRecall"/>
+            <AbilLinkDisableArray value="AP_MothershipCoreWeapon"/>
+            <WeaponEnableArray value="AP_MothershipCoreWeapon"/>
+            <WeaponDisableArray value="AP_RepulsorCannon"/>
+        </Modification>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
 </Catalog>

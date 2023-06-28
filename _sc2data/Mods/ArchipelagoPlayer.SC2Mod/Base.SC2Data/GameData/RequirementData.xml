@@ -1399,4 +1399,15 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountUpgradeSOAQuatroCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveVoidCasualRallyBlock">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeVoidCasualRallyBlockCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_NotHaveVoidCasualRallyBlock">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_NotCountUpgradeVoidCasualRallyBlockCompleteOnly"/>
+    </CRequirement>
+    <CRequirementNot id="AP_NotCountUpgradeVoidCasualRallyBlockCompleteOnly">
+        <OperandArray index="0" value="AP_CountUpgradeVoidCasualRallyBlockCompleteOnly"/>
+    </CRequirementNot>
 </Catalog>

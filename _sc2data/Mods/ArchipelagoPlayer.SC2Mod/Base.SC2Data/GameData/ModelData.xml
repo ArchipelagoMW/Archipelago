@@ -10428,4 +10428,8 @@
         <ScaleMax value="2.000000,2.000000,2.000000"/>
         <ScaleMin value="2.000000,2.000000,2.000000"/>
     </CModel>
+    <CModel id="AP_NexusInvulnerabilityAttachmentModel" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\TimeBomb\TimeBomb.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
 </Catalog>

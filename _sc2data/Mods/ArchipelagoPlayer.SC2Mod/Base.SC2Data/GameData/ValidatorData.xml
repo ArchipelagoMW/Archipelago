@@ -898,7 +898,7 @@
         <Value value="PlanetaryFortress"/>
     </CValidatorUnitType>
     <CValidatorUnitType id="AP_IsAPPlanetaryFortress">
-        <Value value="PlanetaryFortress"/>
+        <Value value="AP_PlanetaryFortress"/>
     </CValidatorUnitType>
     <CValidatorCombine id="IsPlanetaryFortress" parent="CValidatorCombine">
         <!-- Override -->
@@ -1924,12 +1924,23 @@
         <WhichUnit Effect="AP_YoinkLaunchMissile"/>
         <Filters value="-;Self,Player,Ally"/>
     </CValidatorUnitFilters>
-    <CValidatorUnitCompareBehaviorCount id="AP_IsNotMothershipCorePurifyNexus">
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotVanillaMothershipCorePurifyNexus">
         <ResultFailed value="Error,Error/MothershipCorePurifyNexus"/>
         <Compare value="NE"/>
         <Value value="1"/>
         <Behavior value="MothershipCorePurifyNexus"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotAPMothershipCorePurifyNexus">
+        <ResultFailed value="Error,Error/MothershipCorePurifyNexus"/>
+        <Compare value="NE"/>
+        <Value value="1"/>
+        <Behavior value="AP_MothershipCorePurifyNexus"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_IsNotMothershipCorePurifyNexus">
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotAPMothershipCorePurifyNexus"/>
+        <CombineArray value="AP_IsNotVanillaMothershipCorePurifyNexus"/>
+    </CValidatorCombine>
     <CValidatorUnitFilters id="AP_NotHiddenYoink">
         <WhichUnit Effect="AP_YoinkLaunchMissile"/>
         <Filters value="-;Hidden"/>
@@ -2615,7 +2626,7 @@
     <CValidatorUnitType id="AP_IsAPStargate">
         <Value value="AP_Stargate"/>
     </CValidatorUnitType>
-    <CValidatorCombine id="IsStargate" parent="CValidatorCombine">
+    <CValidatorCombine id="IsStarGate" parent="CValidatorCombine">
         <!-- Override -->
         <CombineArray value="AP_IsVanillaStargate"/>
         <CombineArray value="AP_IsAPStargate"/>
@@ -2674,4 +2685,90 @@
         <Find value="1"/>
         <ResultNoPlayer value="Error"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveVoidCasualRallyBlock">
+        <ResultNoPlayer value="Error"/>
+        <Find value="1"/>
+        <Value value="AP_HaveVoidCasualRallyBlock"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_NotHaveVoidCasualRallyBlock">
+        <ResultNoPlayer value="Error"/>
+        <Value value="AP_NotHaveVoidCasualRallyBlock"/>
+        <Find value="1"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorCombine id="AP_DarkProtossIsConstructing">
+        <Type value="And"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+        <CombineArray value="IsConstructing"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_DarkProtossIsNotConstructing">
+        <Type value="And"/>
+        <CombineArray value="AP_NoDarkProtoss"/>
+        <CombineArray value="IsNotConstructing"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsMothershipCoreAndHasPurifyNexus">
+        <Type value="And"/>
+        <CombineArray value="AP_IsMothershipCore"/>
+        <CombineArray value="AP_HasMothershipCorePurifyNexus"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsMothershipCore">
+        <!-- TODO -->
+        <CombineArray value="AP_NotDummy"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_HasMothershipCorePurifyNexus">
+        <Behavior value="AP_MothershipCorePurifyNexus"/>
+        <Value value="1"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotVanillaChronoBoosted">
+        <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
+        <Behavior value="TimeWarpProduction"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotAPChronoBoosted">
+        <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
+        <Behavior value="AP_TimeWarpProduction"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="IsNotChronoBoosted" parent="CValidatorCombine">
+        <!-- Override -->
+        <ResultFailed value="Error,Error/AP_AlreadyChronoBoosted"/>
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotVanillaChronoBoosted"/>
+        <CombineArray value="AP_IsNotAPChronoBoosted"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_PreviousChronoBoostTargetIsDead">
+        <!-- Used when target of chrono boost is dead, then the caster gets automatically the boost -->
+        <WhichUnit Effect="AP_TimeWarpCP"/>
+        <Filters value="Dead;-"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitType id="AP_IsVanillaCyberneticsCore">
+        <Value value="CyberneticsCore"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPCyberneticsCore">
+        <Value value="AP_CyberneticsCore"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsCyberneticsCore" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaCyberneticsCore"/>
+        <CombineArray value="AP_IsAPCyberneticsCore"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaForge">
+        <Value value="Forge"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPForge">
+        <Value value="AP_Forge"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsForge" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaForge"/>
+        <CombineArray value="AP_IsAPForge"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsVanillaNexus">
+        <Value value="Nexus"/>
+    </CValidatorUnitType>
+    <CValidatorUnitType id="AP_IsAPNexus">
+        <Value value="AP_Nexus"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="IsNexus" parent="CValidatorCombine">
+        <!-- Override -->
+        <CombineArray value="AP_IsVanillaNexus"/>
+        <CombineArray value="AP_IsAPNexus"/>
+    </CValidatorCombine>
 </Catalog>

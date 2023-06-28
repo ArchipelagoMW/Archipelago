@@ -2849,6 +2849,34 @@
             <SetValidators value="Failure"/>
         </InfoArray>
     </CAbilRally>
+    <CAbilWarpTrain id="AP_ChampionWarpTrain">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+<!--        <InfoArray index="Train1" Time="5" Unit="FenixChampion">-->
+<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain1" Location="Player" TimeUse="60"/>-->
+<!--            <Button DefaultButtonFace="WarpInFenixChampion" State="Restricted" Requirements="FenixChampionNotActive"/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Train2" Time="5" Unit="VorazunChampion">-->
+<!--            <Cooldown Location="Player" TimeUse="60"/>-->
+<!--            <Button DefaultButtonFace="WarpInDarkTemplarChampion" State="Restricted" Requirements="VorazunChampionNotActive"/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Train4" Time="5" Unit="AlarakChampion">-->
+<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain4" Location="Player" TimeUse="60"/>-->
+<!--            <Button DefaultButtonFace="WarpInDarkArchonChampion" State="Restricted" Requirements="AlarakChampionNotActive"/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Train6" Time="5" Unit="KaraxChampion">-->
+<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain6" Location="Player" TimeUse="60"/>-->
+<!--            <Button DefaultButtonFace="WarpInVulcanChampion" State="Restricted" Requirements="KaraxChampionNotActive"/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Train7" Time="5" Unit="ArtanisVoid">-->
+<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain7" Location="Player" TimeUse="60"/>-->
+<!--            <Button DefaultButtonFace="WarpInArtanisChampion" State="Restricted" Requirements="ArtanisChampionNotActive"/>-->
+<!--        </InfoArray>-->
+<!--        <InfoArray index="Train8" Time="5" Unit="ZeratulVoidAiur01">-->
+<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain8" Location="Player" TimeUse="60"/>-->
+<!--            <Button DefaultButtonFace="WarpInZeratulChampion" State="Restricted" Requirements="ZeratulChampionEnabledAndNotActive"/>-->
+<!--        </InfoArray>-->
+        <Flags index="WarpTrainersButton" value="0"/>
+    </CAbilWarpTrain>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -4164,6 +4192,67 @@
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
         <!-- TODO: Upgrades -->
     </CAbilResearch>
+    <CAbilEffectTarget id="AP_NexusInvulnerability">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_NexusInvulnerabilityApplyBehavior"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+        </Cost>
+        <TargetFilters value="-;Ally,Neutral,Enemy,Massive,Missile,Stasis,UnderConstruction,Hidden,Invulnerable"/>
+        <Range value="10"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_NexusInvulnerability"/>
+    </CAbilEffectTarget>
+    <CAbilTrain id="AP_NexusTrain">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Warping"/>
+<!--        <InfoArray index="Train1" Time="17">-->
+<!--            <Button DefaultButtonFace="Probe"/>-->
+<!--            <Unit value="Probe"/>-->
+<!--        </InfoArray>-->
+        <Alert value="TrainWorkerComplete"/>
+    </CAbilTrain>
+    <CAbilTrain id="AP_NexusTrainMothership">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Warping"/>
+<!--        <InfoArray index="Train1" Time="160">-->
+<!--            <Button DefaultButtonFace="Mothership" State="Restricted" Requirements="MothershipRequirements"/>-->
+<!--            <Unit value="Mothership"/>-->
+<!--        </InfoArray>-->
+        <Alert value="MothershipComplete"/>
+    </CAbilTrain>
+    <CAbilTrain id="AP_NexusTrainMothershipCore">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Activity value="UI/Warping"/>
+        <Offset value="0,0"/>
+<!--        <InfoArray index="Train1" Time="30">-->
+<!--            <Button DefaultButtonFace="MothershipCore" State="Restricted" Requirements="MothershipCoreRequirements"/>-->
+<!--            <Unit value="MothershipCore"/>-->
+<!--        </InfoArray>-->
+    </CAbilTrain>
+    <CAbilRally id="AP_RallyNexus">
+        <OrderArray index="0">
+            <DisplayType value="Rally"/>
+            <Color value="255,245,140,70"/>
+            <Model value="Assets\UI\Feedback\WayPointRally\WayPointRally.m3"/>
+            <LineTexture value="Assets\Textures\WayPointLine.dds"/>
+        </OrderArray>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <CmdButtonArray index="Rally1" Requirements="AP_NotHaveVoidCasualRallyBlock"/>
+        <CmdButtonArray index="Rally2" DefaultButtonFace="Rally" Requirements="AP_HaveVoidCasualRallyBlock"/>
+        <InfoArray index="0" AllowSetFilters="HarvestableResource;-">
+            <UseValidators value="AP_NotHaveVoidCasualRallyBlock"/>
+        </InfoArray>
+        <InfoArray AllowSetOnGround="0" AllowSetFilters="HarvestableResource;-">
+            <UseValidators value="AP_HaveVoidCasualRallyBlock"/>
+        </InfoArray>
+        <InfoArray AllowSetOnGround="0">
+            <SetValidators value="Failure"/>
+        </InfoArray>
+        <InfoArray AllowSetOnGround="0">
+            <SetValidators value="Failure"/>
+        </InfoArray>
+    </CAbilRally>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -4977,4 +5066,16 @@
     <CAbilStop id="AP_stopProtossBuilding">
         <CmdButtonArray index="Stop" Requirements="AP_HaveSOARadar"/>
     </CAbilStop>
+    <CAbilEffectTarget id="AP_TimeWarp">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Terran"/>
+        <Effect index="0" value="AP_TimeWarpCP"/>
+        <Cost>
+            <Cooldown TimeUse="5"/>
+        </Cost>
+        <TargetFilters value="Structure;Ally,Neutral,Enemy,Missile,Stasis,Dead,Hidden"/>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <AINotifyEffect value="ChronoBoost"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TimeWarp"/>
+    </CAbilEffectTarget>
 </Catalog>

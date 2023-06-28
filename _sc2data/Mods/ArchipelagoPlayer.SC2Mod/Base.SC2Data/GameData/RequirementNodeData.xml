@@ -2377,4 +2377,8 @@
         <Count Link="AP_SOAQuatro" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeVoidCasualRallyBlockCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_VoidCasualRallyBlock" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

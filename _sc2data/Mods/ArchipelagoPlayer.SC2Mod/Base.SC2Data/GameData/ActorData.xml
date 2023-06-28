@@ -12018,6 +12018,130 @@
     <CActorSplat id="AP_ForgeSplat" parent="GenericUnitSplat" unitName="AP_Forge">
         <Model value="ForgeSplat"/>
     </CActorSplat>
+    <CActorModel id="AP_MothershipCorePurifyLight" parent="ModelAnimationStyleContinuous">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_Purify.On" Send="Create"/>
+        <On Terms="Behavior.AP_Purify.Off" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End"/>
+        <On Terms="Behavior.AP_SOARadar.On" Send="Create"/>
+        <On Terms="Behavior.AP_SOARadar.Off" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="MothershipCorePurifyLight"/>
+    </CActorModel>
+    <CActorUnit id="AP_Nexus" parent="ProtossBuildingEx" unitName="AP_Nexus">
+        <Aliases value="_UnitHuge"/>
+        <Aliases value="_SpecialPowerNexus"/>
+        <Macros value="QueueAnim"/>
+        <Macros value="MacroTownhallDeco_Protoss"/>
+        <Macros value="ProtossPlayerDecalMacro"/>
+        <Macros value="SprayHelperMacro"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <Remove Terms="UnitConstruction; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById NexusDarkDiffuse"/>
+        <Remove Terms="UnitConstruction; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById NexusDarkSpecular"/>
+        <Remove Terms="UnitConstruction; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById NexusDarkEmissive"/>
+        <On Terms="UnitBirth.AP_Nexus" Send="Create PlayerLogoDoodadList"/>
+        <On Terms="UnitBirth.AP_Nexus; PlayerHasClanDecal" Send="Create ProtossClanFlag"/>
+        <On Terms="UnitBirth.AP_Nexus; PlayerHasTrophy" Send="Create ProtossPlayerTrophy"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap TZNexus"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap TZNexus"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_DarkProtossIsConstructing" Send="DeathCustomize Variation0"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_DarkProtossIsNotConstructing" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitConstruction; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById NexusDarkDiffuse"/>
+        <On Terms="UnitConstruction; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById NexusDarkSpecular"/>
+        <On Terms="UnitConstruction; ValidateUnit AP_NoDarkProtoss" Send="TextureSelectById NexusDarkEmissive"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <Model value="Nexus"/>
+        <BuildModel value="NexusBirth"/>
+        <DeathArray index="Normal" ModelLink="NexusDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" ModelLink="NexusDeathUnderConstruction" SoundLink="Nexus_Explode"/>
+        <DeathCustoms ModelLink="TZNexusDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="ProtossWarpInDeath" Name="Variation0"/>
+        <PlacementModel value="NexusPlacement"/>
+        <PortraitModel value="NexusPortrait"/>
+        <BarOffset value="160"/>
+        <BarWidth value="200"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Nexus.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-protoss-Nexus.dds"/>
+        <NameOffset value="170"/>
+        <SoundArray index="Ready" value="Nexus_Ready"/>
+        <SoundArray index="What" value="Nexus_What"/>
+        <StatusHarvesterData Text="UI/HarvesterCountMinerals" SearchFilters="HarvestableResource;Player,Ally,Enemy" SearchRadius="8"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-protoss-Nexus.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Nexus.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Nexus-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Nexus-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Nexus-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_NexusInvulnerabilityAttachmentModel" parent="ModelAddition">
+        <On Terms="Behavior.AP_NexusInvulnerability.On" Send="Create"/>
+        <On Terms="Behavior.AP_NexusInvulnerability.Off" Send="AnimBracketStop BSD"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <AutoScaleFactor value="0.180000"/>
+    </CActorModel>
+    <CActorSound id="AP_NexusInvulnerabilityImpactSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_NexusInvulnerability.On" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <Sound value="AP_Nexus_NexusInvulnerabilityImpact"/>
+    </CActorSound>
+    <CActorSound id="AP_NexusInvulnerabilityLaunchSound" parent="SoundOneShot">
+        <On Terms="Abil.AP_NexusInvulnerability.SourceCastStart" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <Sound value="AP_Nexus_NexusInvulnerabilityLaunch"/>
+    </CActorSound>
+    <CActorSimple id="AP_NexusInvulnerabilityOpacity">
+        <On Terms="Behavior.AP_NexusInvulnerability.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetOpacity 0.600000 0.250000 NexusInvulnerability"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetTintColor 100,100,255 0.250000 OneShot NexusInvulnerability"/>
+        <On Terms="Behavior.AP_NexusInvulnerability.Off" Target="_Unit" Send="ClearOpacity 0.250000 NexusInvulnerability"/>
+        <On Terms="Behavior.AP_NexusInvulnerability.Off" Target="_Unit" Send="ClearTintColor 0.250000 NexusInvulnerability"/>
+        <On Terms="Behavior.AP_NexusInvulnerability.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorRange id="AP_NexusInvulnerabilityRange" parent="RangeAbil" abil="AP_NexusInvulnerability">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorRange id="AP_NexusOverchargeRange">
+        <Inherits index="Visibility" value="0"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="Behavior.AP_SOARadar.On" Send="Create"/>
+        <On Terms="Behavior.AP_SOARadar.Off" Send="Destroy"/>
+        <Weapon value="AP_MothershipCoreWeapon"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSplat id="AP_NexusSplat" parent="GenericUnitSplat" unitName="AP_Nexus">
+        <Model value="NexusSplat"/>
+    </CActorSplat>
+    <CActorModel id="AP_ObeliskEffect" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="SetScale 0.300000"/>
+        <On Terms="Behavior.AP_TimeWarpProduction.On" Send="Create"/>
+        <On Terms="BehaviorLevel.AP_TimeWarpProduction.Start" Send="Create"/>
+        <On Terms="BehaviorLevel.AP_TimeWarpProduction.Start" Send="Destroy"/>
+        <On Terms="Behavior.AP_TimeWarpProduction.Off" Send="Destroy"/>
+        <On Terms="Behavior.AP_SOAGlobalChronoProd.On" Send="Create"/>
+        <On Terms="Behavior.AP_SOAGlobalChronoResearch.On" Send="Create"/>
+        <On Terms="Behavior.AP_SOAGlobalChronoProd.Off" Send="Destroy"/>
+        <On Terms="Behavior.AP_SOAGlobalChronoResearch.Off" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <Model value="TimeWarp"/>
+        <AutoScaleFactor value="0.750000"/>
+    </CActorModel>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -12557,7 +12681,11 @@
     <CActorModel id="AP_WarpInVoid">
         <Model value="WarpInVoid"/>
         <On Terms="Abil.AP_StargateWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
+        <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
+        <On Terms="Abil.AP_ChampionWarpTrain.TargetStart" Send="Create"/>
+        <On Terms="Abil.AP_ChampionWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
+
     </CActorModel>
     <CActorProgress id="ProtossWarpIn">
         <!-- Override -->
@@ -12805,6 +12933,36 @@
     <CActorSplat id="AP_TemplarArchivesSplat" parent="GenericUnitSplat" unitName="AP_TemplarArchive">
         <Model value="TemplarArchiveSplat"/>
     </CActorSplat>
+    <CActorRange id="AP_SOARadarNexusRange">
+        <FogVisibility value="Visible"/>
+        <On Terms="Behavior.AP_SOARadar.On" Send="Create"/>
+        <On Terms="Behavior.AP_SOARadar.Off" Send="Destroy"/>
+        <Range value="43.000000"/>
+        <RangeFlags index="Minimap" value="1"/>
+    </CActorRange>
+    <CActorSound id="AP_TimeWarpImpactSound" parent="SoundOneShot">
+        <On Terms="BehaviorLevel.AP_TimeWarpProduction.Start; Level 1" Send="Create"/>
+        <On Terms="BehaviorLevel.AP_SOAGlobalChronoProd.Start; Level 1" Send="Create"/>
+        <On Terms="BehaviorLevel.AP_SOAGlobalChronoResearch.Start; Level 1" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <Sound value="Obelisk_TimeWarpImpact"/>
+    </CActorSound>
+    <CActorModel id="AP_TimeWarpLaunch" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Abil.AP_TimeWarp.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.AP_NexusInvulnerability.SourceCastStart" Send="Create"/>
+        <Model value="TimeWarpLaunch"/>
+    </CActorModel>
+    <CActorSound id="AP_TimeWarpLaunchSound" parent="SoundOneShot">
+        <Sound value="Obelisk_TimeWarpLaunch"/>
+        <On Terms="Abil.AP_TimeWarp.SourceCastStart" Send="Create"/>
+        <Host Subject="_Unit"/>
+    </CActorSound>
+    <CActorMissile id="AP_MothershipCoreWeaponAttackMissile" parent="GenericAttackMissile" unitName="AP_MothershipCoreWeaponWeapon">
+        <On Terms="UnitBirth" Send="AnimSetTimeScaleAbsolute Lifetime 1.000000"/>
+        <Model value="MothershipCoreWeaponWeapon"/>
+    </CActorMissile>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>

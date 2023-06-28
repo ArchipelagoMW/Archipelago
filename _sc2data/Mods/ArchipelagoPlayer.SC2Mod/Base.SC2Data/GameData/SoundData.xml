@@ -5247,4 +5247,19 @@
         <AssetArray File="Assets\Sounds\Protoss\RoboticsFacility\RoboticsFacility_What.ogg"/>
         <Volume value="-3.000000,-3.000000"/>
     </CSound>
+    <CSound id="AP_Nexus_NexusInvulnerabilityImpact" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Nexus\Nexus_ChronoBoostImpact0.wav" Pitch="-2.740000,-2.740000" Volume="-8.910000,-8.910000"/>
+        <AssetArray File="Assets\Sounds\Protoss\Nexus\Nexus_ChronoBoostImpact1.wav" Pitch="-2.740000,-2.740000" Volume="-8.910000,-8.910000"/>
+        <AssetArray File="Assets\Sounds\Protoss\Nexus\Nexus_ChronoBoostImpact2.wav" Pitch="-2.740000,-2.740000" Volume="-8.910000,-8.910000"/>
+        <Flags index="Temporary" value="1"/>
+    </CSound>
+    <CSound id="AP_Nexus_NexusInvulnerabilityLaunch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Nexus\Nexus_ChronoBoostLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Nexus\Nexus_ChronoBoostLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Nexus\Nexus_ChronoBoostLaunch2.wav"/>
+        <Pitch value="-2.000000,2.000000"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
 </Catalog>

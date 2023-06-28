@@ -9020,4 +9020,90 @@
         <Kind value="Ranged"/>
         <Amount value="150"/>
     </CEffectDamage>
+    <CEffectModifyPlayer id="AP_GameTimeGreaterthan5Seconds">
+        <EditorCategories value=""/>
+        <Upgrades Upgrade="AP_GameTimeGreaterthan5Seconds" Count="1"/>
+    </CEffectModifyPlayer>
+    <CEffectDamage id="AP_NexusDeathKillMothershipCore">
+        <ValidatorArray value="AP_IsMothershipCoreAndHasPurifyNexus"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_NexusDeathSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="-;Self,Neutral,Enemy,Missile,Dead,Hidden"/>
+        <AreaArray Radius="3" Effect="AP_NexusDeathKillMothershipCore"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_NexusInvulnerabilityApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_NexusInvulnerability"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_TimeWarpCP">
+        <ValidatorArray value="TimeWarpTargetFilters"/>
+        <ValidatorArray value="TimeWarpViableTargets"/>
+        <ValidatorArray value="IsNotChronoBoosted"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_TimeWarpControllerRBCaster"/>
+        <PeriodicEffectArray value="AP_TimeWarpControllerABCaster"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_TimeWarpControllerABCaster">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_TimeWarpController"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_TimeWarpControllerABTarget">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_TimeWarpCP"/>
+        <Behavior value="AP_TimeWarpProduction"/>
+    </CEffectApplyBehavior>
+    <CEffectIssueOrder id="AP_TimeWarpControllerIssueOrderSelf">
+        <ValidatorArray value="IsNotChronoBoosted"/>
+        <ValidatorArray value="AP_PreviousChronoBoostTargetIsDead"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="TimeWarp"/>
+        <Target Value="CasterUnit"/>
+    </CEffectIssueOrder>
+    <CEffectRemoveBehavior id="AP_TimeWarpControllerRBCaster">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_TimeWarpController"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_TimeWarpControllerRBTarget">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_TimeWarpCP"/>
+        <BehaviorLink value="AP_TimeWarpProduction"/>
+        <Count value="1"/>
+    </CEffectRemoveBehavior>
+    <CEffectLaunchMissile id="AP_MothershipCoreWeaponLM">
+        <ValidatorArray index="0" value="AP_HaveSOARadar"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_MothershipCoreWeaponDamage"/>
+        <AmmoUnit value="AP_MothershipCoreWeaponWeapon"/>
+        <Movers Link="AP_MothershipCoreWeaponWeaponClose" IfRangeLTE="4"/>
+        <Movers Link="AP_MothershipCoreWeaponWeapon" IfRangeLTE="20"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_MothershipCoreWeaponDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_NexusCreateSet">
+        <EffectArray value="AP_NexusChronoBoostIssueOrder"/>
+    </CEffectSet>
+    <CEffectSet id="AP_NexusBirthSet">
+        <EffectArray value="AP_NexusChronoBoostIssueOrder"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_NexusChronoBoostIssueOrder">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="AP_TimeWarp"/>
+        <Target Value="CasterUnit"/>
+    </CEffectIssueOrder>
 </Catalog>

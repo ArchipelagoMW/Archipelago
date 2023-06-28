@@ -3919,7 +3919,10 @@
         <AffectedUnitArray value="AP_RoboticsFacility"/>
     </CUpgrade>
     <CUpgrade id="AP_GameTimeGreaterthan5Seconds"/>
-    <CUpgrade id="AP_SOARadar"/>
+    <CUpgrade id="AP_SOARadar">
+        <EffectArray Operation="Set" Reference="Weapon,AP_MothershipCoreWeapon,Options[Hidden]" Value="0"/>
+        <AffectedUnitArray value="AP_Nexus"/>
+    </CUpgrade>
     <CUpgrade id="AP_SOAPhotonCannon">
         <Flags index="UpgradeCheat" value="0"/>
         <AffectedUnitArray value="AP_SoACaster"/>
@@ -3932,233 +3935,423 @@
         <ScoreResult value="BuildOrder"/>
         <!-- Many faction units are missing -->
         <!-- This shall be a +1 all upgrades. This should be handled by giving 1 level of the base upgrade instead -->
-<!--        <EffectArray Reference="Unit,AP_Probe,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Probe,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Zealot,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Zealot,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Sentry,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Sentry,LifeArmor" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Unit,AP_Stalker,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Stalker,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Immortal,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Immortal,LifeArmor" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Unit,AP_HighTemplar,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_HighTemplar,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_DarkTemplar,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_DarkTemplar,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Archon,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Archon,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Colossus,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Colossus,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Reaver,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Reaver,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Dragoon,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Dragoon,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Disruptor,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Disruptor,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_PsiBlades,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_PsiBlades,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_DisruptionBeam,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_DisruptionBeamDamage,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_ParticleDisruptors,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_ParticleDisruptorsU,Amount" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Weapon,AP_PhaseDisruptors,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_PhaseDisruptors,Amount" Value="2"/>-->
-<!--        <EffectArray Reference="Effect,AP_PhaseDisruptors,AttributeBonus[Armored]" Value="3"/>-->
-<!--        <EffectArray Reference="Weapon,AP_WarpBlades,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_WarpBlades,Amount" Value="5"/>-->
-<!--        <EffectArray Reference="Weapon,AP_PsionicShockwave,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_PsionicShockwaveDamage,Amount" Value="3.000000"/>-->
-<!--        <EffectArray Reference="Weapon,AP_ThermalLances,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_ThermalLancesMU,Amount" Value="2"/>-->
-<!--        <EffectArray Reference="Effect,AP_PsionicShockwaveDamage,AttributeBonus[Biological]" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Effect,AP_ScarabExplodeTargetDamage,Amount" Value="5"/>-->
-<!--        <EffectArray Reference="Effect,AP_ScarabExplodeTargetDamage,AttributeBonus[Structure]" Value="5"/>-->
-<!--        <EffectArray Reference="Weapon,AP_ReaverScarabsLaunch,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_DragoonDamage,Amount" Value="2"/>-->
-<!--        <EffectArray Reference="Weapon,AP_Dragoon,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_DisruptorWeaponDamage,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_DisruptorWeapon,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_HighTemplarWeaponDamage,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_HighTemplarWeapon,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Probe,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Probe,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Zealot,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Zealot,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Sentry,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Sentry,ShieldArmor" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Unit,AP_Stalker,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Stalker,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Immortal,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Immortal,ShieldArmor" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Unit,AP_HighTemplar,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_HighTemplar,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_DarkTemplar,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_DarkTemplar,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Archon,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Archon,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Observer,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Observer,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpPrism,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpPrism,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpPrismPhasing,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpPrismPhasing,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Reaver,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Reaver,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Colossus,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Colossus,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Phoenix,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Phoenix,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_VoidRay,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_VoidRay,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Carrier,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Carrier,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Interceptor,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Interceptor,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Mothership,ShieldArmor" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Unit,AP_Mothership,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Nexus,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Nexus,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Assimilator,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Assimilator,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Pylon,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Pylon,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Gateway,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Gateway,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpGate,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpGate,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Forge,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Forge,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_PhotonCannon,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_PhotonCannon,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_CyberneticsCore,ShieldArmor" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Unit,AP_CyberneticsCore,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_TwilightCouncil,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_TwilightCouncil,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_TemplarArchive,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_TemplarArchive,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_DarkShrine,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_DarkShrine,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_RoboticsFacility,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_RoboticsFacility,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_RoboticsBay,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_RoboticsBay,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Stargate,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Stargate,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_FleetBeacon,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_FleetBeacon,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_MothershipCore,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_MothershipCore,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Oracle,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Oracle,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Tempest,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Tempest,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Dragoon,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Dragoon,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Disruptor,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Disruptor,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_ArbiterMP,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_ArbiterMP,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Scout,ShieldArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Scout,ShieldArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Observer,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Observer,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpPrism,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpPrism,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpPrismPhasing,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_WarpPrismPhasing,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Phoenix,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Phoenix,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_VoidRay,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_VoidRay,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Carrier,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Carrier,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Interceptor,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Interceptor,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Mothership,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Mothership,LifeArmor" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Unit,AP_Tempest,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Tempest,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Oracle,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Oracle,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_MothershipCore,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_MothershipCore,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_ArbiterMP,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_ArbiterMP,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Scout,LifeArmorLevel" Value="1"/>-->
-<!--        <EffectArray Reference="Unit,AP_Scout,LifeArmor" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_IonCannons,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_IonCannonsU,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_PrismaticBeam,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx1,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx2,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx2,AttributeBonus[Armored]" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx3,Amount" Value="2"/>-->
-<!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx3,AttributeBonus[Armored]" Value="2.000000"/>-->
-<!--        <EffectArray Reference="Weapon,AP_VoidRaySwarm,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_VoidRaySwarmDamage,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_VoidRaySwarmEnhancedDamage,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_InterceptorLaunch,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_InterceptorBeam,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_InterceptorBeamDamage,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_InterceptorsDummy,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_MothershipBeam,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_MothershipBeamDamage,Amount" Value="1.000000"/>-->
-<!--        <EffectArray Reference="Weapon,AP_Tempest,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_TempestDamage,Amount" Value="3"/>-->
-<!--        <EffectArray Reference="Weapon,AP_TempestGround,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_TempestDamageGround,Amount" Value="3"/>-->
-<!--        <EffectArray Reference="Weapon,AP_MothershipCoreWeapon,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_MothershipCoreWeaponDamage,Amount" Value="3"/>-->
-<!--        <EffectArray Reference="Weapon,AP_RepulsorCannon,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_MothershipCoreRepulsorCannonDamage,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_ScoutAir,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Weapon,AP_ScoutGround,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_ScoutAirU,Amount" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_ScoutAirU,AttributeBonus[Armored]" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_ScoutGround,Amount" Value="2"/>-->
-<!--        <EffectArray Reference="Weapon,AP_ArbiterMPWeapon,Level" Value="1"/>-->
-<!--        <EffectArray Reference="Effect,AP_ArbiterMPWeaponDamage,Amount" Value="1"/>-->
-<!--        <AffectedUnitArray value="AP_SoACaster"/>-->
-<!--        <AffectedUnitArray value="AP_Archon"/>-->
-<!--        <AffectedUnitArray value="AP_Assimilator"/>-->
-<!--        <AffectedUnitArray value="AP_Carrier"/>-->
-<!--        <AffectedUnitArray value="AP_Colossus"/>-->
-<!--        <AffectedUnitArray value="AP_CyberneticsCore"/>-->
-<!--        <AffectedUnitArray value="AP_DarkTemplar"/>-->
-<!--        <AffectedUnitArray value="AP_Sentry"/>-->
-<!--        <AffectedUnitArray value="AP_FleetBeacon"/>-->
-<!--        <AffectedUnitArray value="AP_Forge"/>-->
-<!--        <AffectedUnitArray value="AP_Gateway"/>-->
-<!--        <AffectedUnitArray value="AP_HighTemplar"/>-->
-<!--        <AffectedUnitArray value="AP_Immortal"/>-->
-<!--        <AffectedUnitArray value="AP_Interceptor"/>-->
-<!--        <AffectedUnitArray value="AP_Mothership"/>-->
-<!--        <AffectedUnitArray value="AP_MothershipCore"/>-->
-<!--        <AffectedUnitArray value="AP_Nexus"/>-->
-<!--        <AffectedUnitArray value="AP_DarkShrine"/>-->
-<!--        <AffectedUnitArray value="AP_Observer"/>-->
-<!--        <AffectedUnitArray value="AP_Oracle"/>-->
-<!--        <AffectedUnitArray value="AP_Phoenix"/>-->
-<!--        <AffectedUnitArray value="AP_PhotonCannon"/>-->
-<!--        <AffectedUnitArray value="AP_Probe"/>-->
-<!--        <AffectedUnitArray value="AP_Pylon"/>-->
-<!--        <AffectedUnitArray value="AP_RoboticsBay"/>-->
-<!--        <AffectedUnitArray value="AP_RoboticsFacility"/>-->
-<!--        <AffectedUnitArray value="AP_Stalker"/>-->
-<!--        <AffectedUnitArray value="AP_Stargate"/>-->
-<!--        <AffectedUnitArray value="AP_Tempest"/>-->
-<!--        <AffectedUnitArray value="AP_TemplarArchive"/>-->
-<!--        <AffectedUnitArray value="AP_TwilightCouncil"/>-->
-<!--        <AffectedUnitArray value="AP_VoidRay"/>-->
-<!--        <AffectedUnitArray value="AP_WarpGate"/>-->
-<!--        <AffectedUnitArray value="AP_WarpPrismPhasing"/>-->
-<!--        <AffectedUnitArray value="AP_WarpPrism"/>-->
-<!--        <AffectedUnitArray value="AP_Zealot"/>-->
-<!--        <AffectedUnitArray value="AP_Reaver"/>-->
-<!--        <AffectedUnitArray value="AP_Dragoon"/>-->
-<!--        <AffectedUnitArray value="AP_Disruptor"/>-->
-<!--        <AffectedUnitArray value="AP_Reaver"/>-->
-<!--        <AffectedUnitArray value="AP_HighTemplar"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Probe,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Probe,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Zealot,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Zealot,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Sentry,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Sentry,LifeArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Stalker,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Stalker,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Immortal,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Immortal,LifeArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,AP_HighTemplar,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_HighTemplar,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_DarkTemplar,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_DarkTemplar,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Archon,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Archon,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Colossus,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Colossus,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Reaver,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Reaver,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Dragoon,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Dragoon,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Disruptor,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Disruptor,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_PsiBlades,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PsiBlades,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_DisruptionBeam,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_DisruptionBeamDamage,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_ParticleDisruptors,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_ParticleDisruptorsU,Amount" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_PhaseDisruptors,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PhaseDisruptors,Amount" Value="2"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PhaseDisruptors,AttributeBonus[Armored]" Value="3"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_WarpBlades,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_WarpBlades,Amount" Value="5"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_PsionicShockwave,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PsionicShockwaveDamage,Amount" Value="3.000000"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_ThermalLances,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_ThermalLancesMU,Amount" Value="2"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PsionicShockwaveDamage,AttributeBonus[Biological]" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Effect,AP_ScarabExplodeTargetDamage,Amount" Value="5"/>-->
+        <!--        <EffectArray Reference="Effect,AP_ScarabExplodeTargetDamage,AttributeBonus[Structure]" Value="5"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_ReaverScarabsLaunch,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_DragoonDamage,Amount" Value="2"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_Dragoon,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_DisruptorWeaponDamage,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_DisruptorWeapon,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_HighTemplarWeaponDamage,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_HighTemplarWeapon,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Probe,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Probe,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Zealot,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Zealot,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Sentry,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Sentry,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Stalker,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Stalker,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Immortal,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Immortal,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,AP_HighTemplar,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_HighTemplar,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_DarkTemplar,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_DarkTemplar,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Archon,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Archon,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Observer,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Observer,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpPrism,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpPrism,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpPrismPhasing,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpPrismPhasing,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Reaver,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Reaver,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Colossus,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Colossus,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Phoenix,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Phoenix,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_VoidRay,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_VoidRay,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Carrier,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Carrier,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Interceptor,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Interceptor,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Mothership,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Mothership,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Nexus,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Nexus,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Assimilator,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Assimilator,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Pylon,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Pylon,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Gateway,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Gateway,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpGate,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpGate,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Forge,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Forge,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_PhotonCannon,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_PhotonCannon,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_CyberneticsCore,ShieldArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,AP_CyberneticsCore,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_TwilightCouncil,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_TwilightCouncil,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_TemplarArchive,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_TemplarArchive,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_DarkShrine,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_DarkShrine,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_RoboticsFacility,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_RoboticsFacility,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_RoboticsBay,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_RoboticsBay,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Stargate,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Stargate,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_FleetBeacon,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_FleetBeacon,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_MothershipCore,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_MothershipCore,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Oracle,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Oracle,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Tempest,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Tempest,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Dragoon,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Dragoon,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Disruptor,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Disruptor,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_ArbiterMP,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_ArbiterMP,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Scout,ShieldArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Scout,ShieldArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Observer,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Observer,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpPrism,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpPrism,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpPrismPhasing,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_WarpPrismPhasing,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Phoenix,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Phoenix,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_VoidRay,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_VoidRay,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Carrier,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Carrier,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Interceptor,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Interceptor,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Mothership,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Mothership,LifeArmor" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Tempest,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Tempest,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Oracle,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Oracle,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_MothershipCore,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_MothershipCore,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_ArbiterMP,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_ArbiterMP,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Scout,LifeArmorLevel" Value="1"/>-->
+        <!--        <EffectArray Reference="Unit,AP_Scout,LifeArmor" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_IonCannons,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_IonCannonsU,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_PrismaticBeam,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx1,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx2,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx2,AttributeBonus[Armored]" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx3,Amount" Value="2"/>-->
+        <!--        <EffectArray Reference="Effect,AP_PrismaticBeamMUx3,AttributeBonus[Armored]" Value="2.000000"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_VoidRaySwarm,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_VoidRaySwarmDamage,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_VoidRaySwarmEnhancedDamage,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_InterceptorLaunch,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_InterceptorBeam,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_InterceptorBeamDamage,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_InterceptorsDummy,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_MothershipBeam,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_MothershipBeamDamage,Amount" Value="1.000000"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_Tempest,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_TempestDamage,Amount" Value="3"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_TempestGround,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_TempestDamageGround,Amount" Value="3"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_MothershipCoreWeapon,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_MothershipCoreWeaponDamage,Amount" Value="3"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_RepulsorCannon,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_MothershipCoreRepulsorCannonDamage,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_ScoutAir,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_ScoutGround,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_ScoutAirU,Amount" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_ScoutAirU,AttributeBonus[Armored]" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_ScoutGround,Amount" Value="2"/>-->
+        <!--        <EffectArray Reference="Weapon,AP_ArbiterMPWeapon,Level" Value="1"/>-->
+        <!--        <EffectArray Reference="Effect,AP_ArbiterMPWeaponDamage,Amount" Value="1"/>-->
+        <!--        <AffectedUnitArray value="AP_SoACaster"/>-->
+        <!--        <AffectedUnitArray value="AP_Archon"/>-->
+        <!--        <AffectedUnitArray value="AP_Assimilator"/>-->
+        <!--        <AffectedUnitArray value="AP_Carrier"/>-->
+        <!--        <AffectedUnitArray value="AP_Colossus"/>-->
+        <!--        <AffectedUnitArray value="AP_CyberneticsCore"/>-->
+        <!--        <AffectedUnitArray value="AP_DarkTemplar"/>-->
+        <!--        <AffectedUnitArray value="AP_Sentry"/>-->
+        <!--        <AffectedUnitArray value="AP_FleetBeacon"/>-->
+        <!--        <AffectedUnitArray value="AP_Forge"/>-->
+        <!--        <AffectedUnitArray value="AP_Gateway"/>-->
+        <!--        <AffectedUnitArray value="AP_HighTemplar"/>-->
+        <!--        <AffectedUnitArray value="AP_Immortal"/>-->
+        <!--        <AffectedUnitArray value="AP_Interceptor"/>-->
+        <!--        <AffectedUnitArray value="AP_Mothership"/>-->
+        <!--        <AffectedUnitArray value="AP_MothershipCore"/>-->
+        <!--        <AffectedUnitArray value="AP_Nexus"/>-->
+        <!--        <AffectedUnitArray value="AP_DarkShrine"/>-->
+        <!--        <AffectedUnitArray value="AP_Observer"/>-->
+        <!--        <AffectedUnitArray value="AP_Oracle"/>-->
+        <!--        <AffectedUnitArray value="AP_Phoenix"/>-->
+        <!--        <AffectedUnitArray value="AP_PhotonCannon"/>-->
+        <!--        <AffectedUnitArray value="AP_Probe"/>-->
+        <!--        <AffectedUnitArray value="AP_Pylon"/>-->
+        <!--        <AffectedUnitArray value="AP_RoboticsBay"/>-->
+        <!--        <AffectedUnitArray value="AP_RoboticsFacility"/>-->
+        <!--        <AffectedUnitArray value="AP_Stalker"/>-->
+        <!--        <AffectedUnitArray value="AP_Stargate"/>-->
+        <!--        <AffectedUnitArray value="AP_Tempest"/>-->
+        <!--        <AffectedUnitArray value="AP_TemplarArchive"/>-->
+        <!--        <AffectedUnitArray value="AP_TwilightCouncil"/>-->
+        <!--        <AffectedUnitArray value="AP_VoidRay"/>-->
+        <!--        <AffectedUnitArray value="AP_WarpGate"/>-->
+        <!--        <AffectedUnitArray value="AP_WarpPrismPhasing"/>-->
+        <!--        <AffectedUnitArray value="AP_WarpPrism"/>-->
+        <!--        <AffectedUnitArray value="AP_Zealot"/>-->
+        <!--        <AffectedUnitArray value="AP_Reaver"/>-->
+        <!--        <AffectedUnitArray value="AP_Dragoon"/>-->
+        <!--        <AffectedUnitArray value="AP_Disruptor"/>-->
+        <!--        <AffectedUnitArray value="AP_Reaver"/>-->
+        <!--        <AffectedUnitArray value="AP_HighTemplar"/>-->
+    </CUpgrade>
+    <CUpgrade id="AP_SOAEnergy">
+        <!-- 10 energy, O'RLY? -->
+        <EffectArray Reference="Unit,AP_SoACaster,EnergyMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_SoACaster,EnergyStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_HighTemplar,EnergyMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_HighTemplar,EnergyStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_Sentry,EnergyMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_Sentry,EnergyStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_Oracle,EnergyMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_Oracle,EnergyStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_DarkArchon,EnergyMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_DarkArchon,EnergyStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_ArbiterMP,EnergyMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_ArbiterMP,EnergyStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_Nexus,EnergyMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_Nexus,EnergyStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_CorsairMP,EnergyMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_CorsairMP,EnergyStart" Value="10"/>
+        <EffectArray Reference="Unit,AP_ShieldBattery,EnergyMax" Value="10"/>
+        <EffectArray Reference="Unit,AP_ShieldBattery,EnergyStart" Value="10"/>
+        <AffectedUnitArray value="SoACaster"/>
+        <MaxLevel value="5"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SOAShieldRegen">
+        <!-- TODO: Slayer, Supplicant -->
+        <Flags index="UpgradeCheat" value="0"/>
+        <EffectArray Reference="Unit,AP_Nexus,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Assimilator,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Pylon,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Gateway,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_WarpGate,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Forge,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ShieldBattery,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_CyberneticsCore,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_PhotonCannon,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_KhaydarinMonolith,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_TemplarArchive,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Stargate,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_StargateWarp,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_FleetBeacon,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_RoboticsFacility,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_RoboticsFacilityWarp,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_RoboticsBay,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_DarkShrine,ShieldRegenRate" Value=".05"/>
+<!--        <EffectArray Reference="Unit,AP_TwilightCouncil,ShieldRegenRate" Value=".05"/>-->
+        <EffectArray Reference="Unit,AP_Probe,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Zealot,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ZealotAiur,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ZealotPurifier,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ZealotShakuras,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Stalker,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Dragoon,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_StalkerPurifier,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_StalkerShakuras,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Sentry,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_SentryAiur,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_SentryPurifier,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_SentryPhasing,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Replicant,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Adept,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_AdeptPhaseShift,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_HighTemplar,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_HighTemplarShakuras,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_HighTemplarTaldarim,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Archon,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_DarkTemplar,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarAiur,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarShakuras,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_DarkTemplarTaldarim,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Immortal,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ImmortalBarrier,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ImmortalAiur,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ImmortalShakuras,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ImmortalTaldarim,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Colossus,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ColossusPurifier,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Reaver,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Disruptor,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Phoenix,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_PhoenixAiur,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_PhoenixPurifier,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_CorsairMP,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_VoidRay,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_VoidRayAiur,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_VoidRayShakuras,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_ArbiterMP,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Carrier,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_CarrierAiur,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_CarrierTaldarim,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Tempest,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_TempestPurifier,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Interceptor,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_InterceptorAiur,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Oracle,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Observer,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Mothership,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_MothershipCore,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_Scout,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_WarpPrismPhasing,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_WarpPrismGiant,ShieldRegenRate" Value=".05"/>
+        <EffectArray Reference="Unit,AP_WarpPrismGiantPhasing,ShieldRegenRate" Value=".05"/>
+        <AffectedUnitArray value="AP_Nexus"/>
+        <AffectedUnitArray value="AP_Assimilator"/>
+        <AffectedUnitArray value="AP_Pylon"/>
+        <AffectedUnitArray value="AP_Gateway"/>
+        <AffectedUnitArray value="AP_WarpGate"/>
+        <AffectedUnitArray value="AP_Forge"/>
+        <AffectedUnitArray value="AP_ShieldBattery"/>
+        <AffectedUnitArray value="AP_CyberneticsCore"/>
+        <AffectedUnitArray value="AP_PhotonCannon"/>
+        <AffectedUnitArray value="AP_KhaydarinMonolith"/>
+        <AffectedUnitArray value="AP_TemplarArchive"/>
+        <AffectedUnitArray value="AP_Stargate"/>
+        <AffectedUnitArray value="AP_StargateWarp"/>
+        <AffectedUnitArray value="AP_FleetBeacon"/>
+        <AffectedUnitArray value="AP_RoboticsFacility"/>
+        <AffectedUnitArray value="AP_RoboticsFacilityWarp"/>
+        <AffectedUnitArray value="AP_RoboticsBay"/>
+        <AffectedUnitArray value="AP_DarkShrine"/>
+        <AffectedUnitArray value="AP_TwilightCouncil"/>
+        <AffectedUnitArray value="AP_Probe"/>
+        <AffectedUnitArray value="AP_Zealot"/>
+        <AffectedUnitArray value="AP_ZealotAiur"/>
+        <AffectedUnitArray value="AP_ZealotPurifier"/>
+        <AffectedUnitArray value="AP_ZealotShakuras"/>
+        <AffectedUnitArray value="AP_Stalker"/>
+        <AffectedUnitArray value="AP_Dragoon"/>
+        <AffectedUnitArray value="AP_StalkerPurifier"/>
+        <AffectedUnitArray value="AP_StalkerShakuras"/>
+        <AffectedUnitArray value="AP_Sentry"/>
+        <AffectedUnitArray value="AP_SentryAiur"/>
+        <AffectedUnitArray value="AP_SentryPurifier"/>
+        <AffectedUnitArray value="AP_SentryPhasing"/>
+        <AffectedUnitArray value="AP_Replicant"/>
+        <AffectedUnitArray value="AP_Adept"/>
+        <AffectedUnitArray value="AP_AdeptPhaseShift"/>
+        <AffectedUnitArray value="AP_HighTemplar"/>
+        <AffectedUnitArray value="AP_HighTemplarShakuras"/>
+        <AffectedUnitArray value="AP_HighTemplarTaldarim"/>
+        <AffectedUnitArray value="AP_Archon"/>
+        <AffectedUnitArray value="AP_DarkTemplar"/>
+        <AffectedUnitArray value="AP_DarkTemplarAiur"/>
+        <AffectedUnitArray value="AP_DarkTemplarShakuras"/>
+        <AffectedUnitArray value="AP_DarkTemplarTaldarim"/>
+        <AffectedUnitArray value="AP_Immortal"/>
+        <AffectedUnitArray value="AP_ImmortalAiur"/>
+        <AffectedUnitArray value="AP_ImmortalShakuras"/>
+        <AffectedUnitArray value="AP_ImmortalTaldarim"/>
+        <AffectedUnitArray value="AP_Colossus"/>
+        <AffectedUnitArray value="AP_ColossusPurifier"/>
+        <AffectedUnitArray value="AP_Reaver"/>
+        <AffectedUnitArray value="AP_Disruptor"/>
+        <AffectedUnitArray value="AP_Phoenix"/>
+        <AffectedUnitArray value="AP_PhoenixAiur"/>
+        <AffectedUnitArray value="AP_PhoenixPurifier"/>
+        <AffectedUnitArray value="AP_CorsairMP"/>
+        <AffectedUnitArray value="AP_VoidRay"/>
+        <AffectedUnitArray value="AP_VoidRayAiur"/>
+        <AffectedUnitArray value="AP_VoidRayShakuras"/>
+        <AffectedUnitArray value="AP_ArbiterMP"/>
+        <AffectedUnitArray value="AP_Carrier"/>
+        <AffectedUnitArray value="AP_CarrierAiur"/>
+        <AffectedUnitArray value="AP_CarrierTaldarim"/>
+        <AffectedUnitArray value="AP_Tempest"/>
+        <AffectedUnitArray value="AP_TempestPurifier"/>
+        <AffectedUnitArray value="AP_Interceptor"/>
+        <AffectedUnitArray value="AP_InterceptorAiur"/>
+        <AffectedUnitArray value="AP_Oracle"/>
+        <AffectedUnitArray value="AP_Observer"/>
+        <AffectedUnitArray value="AP_Mothership"/>
+        <AffectedUnitArray value="AP_MothershipCore"/>
+        <AffectedUnitArray value="AP_Scout"/>
+        <AffectedUnitArray value="AP_WarpPrismPhasing"/>
+        <AffectedUnitArray value="AP_WarpPrismGiant"/>
+        <AffectedUnitArray value="AP_WarpPrismGiantPhasing"/>
+        <MaxLevel value="5"/>
+    </CUpgrade>
+    <CUpgrade id="AP_SnowVisualMP">
+        <Flags index="UpgradeCheat" value="0"/>
+        <AffectedUnitArray value="AP_CommandCenter"/>
+        <AffectedUnitArray value="AP_CommandCenterFlying"/>
+        <AffectedUnitArray value="AP_Nexus"/>
+        <AffectedUnitArray value="AP_Hatchery"/>
+        <AffectedUnitArray value="AP_XelNagaTower"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidCasualRallyBlock">
+        <AffectedUnitArray value="AP_Nexus"/>
+        <LeaderAlias value=""/>
     </CUpgrade>
 </Catalog>
