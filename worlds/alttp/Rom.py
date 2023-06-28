@@ -1739,7 +1739,7 @@ def write_custom_shops(rom, world, player):
             replacement_price_data = get_price_data(item['replacement_price'], item['replacement_price_type'])
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item['player'] and world.game[item['player']] != "A Link to the Past":  # item not native to ALTTP
-                item_code = get_nonnative_item_sprite(world.worlds[item['player']].create_item(item['item']).code)
+                item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']])
             else:
                 item_code = ItemFactory(item['item'], player).code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro_bow[player]:
