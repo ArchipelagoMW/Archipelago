@@ -1,15 +1,13 @@
-from typing import Set, TYPE_CHECKING, Optional, Dict
+from typing import Set, TYPE_CHECKING, Optional, Dict, cast
 
 from BaseClasses import Region, Location, Item, ItemClassification, Entrance, CollectionState
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
-from .Options import Goal, MessengerOptions
+from .Options import Goal
 from .Regions import REGIONS, SEALS, MEGA_SHARDS
 from .Shop import SHOP_ITEMS, PROG_SHOP_ITEMS, USEFUL_SHOP_ITEMS, FIGURINES
 
 if TYPE_CHECKING:
     from . import MessengerWorld
-else:
-    MessengerWorld = object
 
 
 class MessengerRegion(Region):
@@ -62,11 +60,11 @@ class MessengerLocation(Location):
 class MessengerShopLocation(MessengerLocation):
     def cost(self) -> int:
         name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
-        world: MessengerWorld = self.parent_region.multiworld.worlds[self.player]
+        world: MessengerWorld = cast(MessengerWorld, self.parent_region.multiworld.worlds[self.player])
         return world.shop_prices.get(name, world.figurine_prices.get(name))
 
     def can_afford(self, state: CollectionState) -> bool:
-        world: MessengerWorld = state.multiworld.worlds[self.player]
+        world: MessengerWorld = cast(MessengerWorld, state.multiworld.worlds[self.player])
         cost = self.cost() * 2
         if cost >= 1000:
             cost *= 2
