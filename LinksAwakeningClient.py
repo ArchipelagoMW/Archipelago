@@ -430,7 +430,33 @@ def create_task_log_exception(awaitable) -> asyncio.Task:
 
 
 class LinksAwakeningContext(CommonContext):
-    collected_blacklist = []
+    # Don't allow start check, boss items, bridge to be collected
+    collected_blacklist = {"Tarin's Gift (Mabe Village)",
+                           'Moldorm Heart Container (Tail Cave)',
+                           'Genie Heart Container (Bottle Grotto)',
+                           'Slime Eye Heart Container (Key Cavern)',
+                           "Angler Fish Heart Container (Angler's Tunnel)",
+                           "Slime Eel Heart Container (Catfish's Maw)",
+                           'Facade Heart Container (Face Shrine)',
+                           "Evil Eagle Heart Container (Eagle's Tower)",
+                           'Hot Head Heart Container (Turtle Rock)',
+                           'Kiki (Ukuku Prairie)',
+                           'Tunic Fairy Item 1 (Color Dungeon)',
+                           'Tunic Fairy Item 2 (Color Dungeon)',
+                           'Shop 10 Item (Mabe Village)',
+                           'Three of a Kind Chest (Tail Cave)',
+                           'North Key Room Key (Key Cavern)',
+                           'Tile Arrow Ledge Chest (Key Cavern)',
+                           'Pot Locked Chest (Face Shrine)',
+                           "Beamos Ledge Chest (Eagle's Tower)",
+                           "Three of a Kind, Pit Chest (Eagle's Tower)",
+                           'Lava Arrow Statue Key (Turtle Rock)',
+                           'Upper Small Key (Color Dungeon)',
+                           'Entrance Chest (Color Dungeon)',
+                           'Donut Plains Ledge Dig (Donut Plains)',
+                           'Slime Key Dig (Pothole Field)',
+                           "Peninsula Dig (Martha's Bay)",
+                           'East (Rapids Ride)'}
     tags = {"AP"}
     game = "Links Awakening DX"
     items_handling = 0b101
@@ -446,11 +472,15 @@ class LinksAwakeningContext(CommonContext):
     magpie_task = None
     won = False
 
-    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
+    def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str],
+                 magpie: typing.Optional[bool], collect: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
         if magpie:
             self.magpie_enabled = True
-            self.magpie = MagpieBridge()
+        if collect:
+            self.collect_enabled = True
+        else:
+            self.collect_enabled = False
         # The set of check names to iternal meta ids
         self.check_name_to_metadata_map = {str(v): k for k, v in checkMetadataTable.items()}
         # When this is set to True, the main loop will attempt to send collected checks to the game
@@ -537,14 +567,15 @@ class LinksAwakeningContext(CommonContext):
             for index, item in enumerate(args["items"], args["index"]):
                 self.client.recvd_checks[index] = item
         elif cmd == "RoomUpdate":
-            if len(args["checked_locations"]) > 0:
-                self.examine_collected_checks = True
+            if "checked_locations" in args:
+                if len(args["checked_locations"]) > 0:
+                    self.examine_collected_checks = True
 
 
 
     async def mark_locations_as_checked(self):
         # Don't allow collecting an item until you've got your first check
-        if not self.client.tracker.has_start_item() or not self.examine_collected_checks:
+        if not self.client.tracker.has_start_item() or not self.examine_collected_checks or not self.collect_enabled:
             return
         checks = list(self.checked_locations)
         await self.get_location_checks_from_server(checks=checks)
@@ -561,7 +592,7 @@ class LinksAwakeningContext(CommonContext):
                         check = self.client.tracker.get_check_from_meta(meta=meta)
                         # If the check hasn't been collected yet, and should be
                         if check is not None and check.address in self.client.tracker.remaining_checks \
-                                and check.address not in self.collected_blacklist:
+                                and name not in self.collected_blacklist:
                             # Read to make sure the game has finished processing the last sent collection
                             status = (await self.client.gameboy.async_read_memory_safe(
                                 LAClientConstants.wLinkCollectCheckValue))[0]
@@ -642,6 +673,7 @@ async def main():
     parser = get_base_parser(description="Link's Awakening Client.")
     parser.add_argument("--url", help="Archipelago connection url")
     parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
+    parser.add_argument("--no-collect", dest='collect', default=True, action='store_false', help="Disable check collection")
 
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a .apladx Archipelago Binary Patch file')
@@ -663,7 +695,7 @@ async def main():
         if url.password:
             args.password = urllib.parse.unquote(url.password)
 
-    ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
+    ctx = LinksAwakeningContext(args.connect, args.password, args.magpie, args.collect)
 
     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
