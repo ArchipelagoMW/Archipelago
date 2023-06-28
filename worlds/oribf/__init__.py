@@ -1,6 +1,6 @@
 from typing import Set
 
-from ..AutoWorld import World, LogicMixin
+from worlds.AutoWorld import World
 from .Items import item_table, default_pool
 from .Locations import lookup_name_to_id
 from .Rules import set_rules, location_rules
