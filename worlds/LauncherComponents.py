@@ -1,3 +1,4 @@
+import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable
 
@@ -48,6 +49,14 @@ class Component:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.display_name})"
 
+processes = weakref.WeakSet()
+
+def launch_subprocess(func: Callable, name: str = None):
+    global processes
+    import multiprocessing
+    process = multiprocessing.Process(target=func, name=name)
+    process.start()
+    processes.add(process)
 
 class SuffixIdentifier:
     suffixes: Iterable[str]
@@ -63,6 +72,11 @@ class SuffixIdentifier:
         return False
 
 
+def launch_textclient():
+    import CommonClient
+    launch_subprocess(CommonClient.run_as_textclient, name="TextClient")
+
+
 components: List[Component] = [
     # Launcher
     Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
@@ -70,7 +84,7 @@ components: List[Component] = [
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
     Component('Generate', 'Generate', cli=True),
-    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient'),
+    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
     # SNI
     Component('SNI Client', 'SNIClient',
               file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3',
