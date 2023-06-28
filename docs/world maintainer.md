@@ -43,7 +43,7 @@ Voting shall be conducted on Discord in #archipelago-dev.
 ### Resigning
 
 A world maintainer can resign and have their username removed from the [CODEOWNERS](/docs/CODEOWNERS) document. If no
-new maintainer steps up and gets voted, the world becomes unmaintained.
+new maintainer takes over management of the world, the world becomes unmaintained.
 
 ### Getting Voted out
 
