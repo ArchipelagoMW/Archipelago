@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class MessengerRegion(Region):
     
-    def __init__(self, name: str, world: MessengerWorld) -> None:
+    def __init__(self, name: str, world: "MessengerWorld") -> None:
         super().__init__(name, world.player, world.multiworld)
         self.add_locations(world.location_name_to_id)
         if name == "The Shop" and world.options.goal > Goal.option_open_music_box:
@@ -60,11 +60,11 @@ class MessengerLocation(Location):
 class MessengerShopLocation(MessengerLocation):
     def cost(self) -> int:
         name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
-        world: MessengerWorld = cast(MessengerWorld, self.parent_region.multiworld.worlds[self.player])
+        world: MessengerWorld = cast("MessengerWorld", self.parent_region.multiworld.worlds[self.player])
         return world.shop_prices.get(name, world.figurine_prices.get(name))
 
     def can_afford(self, state: CollectionState) -> bool:
-        world: MessengerWorld = cast(MessengerWorld, state.multiworld.worlds[self.player])
+        world: MessengerWorld = cast("MessengerWorld", state.multiworld.worlds[self.player])
         cost = self.cost() * 2
         if cost >= 1000:
             cost *= 2
