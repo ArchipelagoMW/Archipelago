@@ -471,6 +471,7 @@ class LinksAwakeningContext(CommonContext):
         self.client = LinksAwakeningClient()
         if magpie:
             self.magpie_enabled = True
+            self.magpie = MagpieBridge()
         if collect:
             self.collect_enabled = True
         else:
