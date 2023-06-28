@@ -663,10 +663,16 @@ class PokemonRedBlueWorld(World):
         if (combined_traps > 0 and
                 self.multiworld.random.randint(1, 100) <= self.multiworld.trap_percentage[self.player].value):
             return self.select_trap()
-
+        banned_items = item_groups["Unique"]
+        if (((not self.multiworld.tea[self.player]) or "Saffron City" not in [self.fly_map, self.town_map_fly_map])
+                and (not self.multiworld.door_shuffle[self.player])):
+            # under these conditions, you should never be able to reach the Copycat or Pokémon Tower without being
+            # able to reach the Celadon Department Store, so Poké Dolls would not allow early access to anything
+            banned_items.append("Poke Doll")
+        if not self.multiworld.tea[self.player]:
+            banned_items += item_groups["Vending Machine Drinks"]
         return self.multiworld.random.choice([item for item in item_table if item_table[item].id and item_table[
-            item].classification == ItemClassification.filler and item not in item_groups["Vending Machine Drinks"] +
-                                              item_groups["Unique"]])
+            item].classification == ItemClassification.filler and item not in banned_items])
 
     def select_trap(self):
         if self.traps is None:
