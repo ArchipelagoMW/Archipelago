@@ -879,10 +879,10 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
     # boss requirements
     rom.write_bytes(0x3D000, struct.pack("HHHHH", boss_requirements[0], boss_requirements[1], boss_requirements[2],
                                          boss_requirements[3], boss_requirements[4]))
-    rom.write_byte(0x3D010, multiworld.death_link[player].value)
-    rom.write_byte(0x3D012, multiworld.goal[player].value)
-    rom.write_byte(0x3D014, multiworld.stage_shuffle[player].value)
-    rom.write_byte(0x3D016, multiworld.ow_boss_requirement[player].value)
+    rom.write_byte(0x3D010, multiworld.death_link[player])
+    rom.write_byte(0x3D012, multiworld.goal[player])
+    rom.write_byte(0x3D014, multiworld.stage_shuffle[player])
+    rom.write_byte(0x3D016, multiworld.ow_boss_requirement[player])
     rom.write_bytes(0x3D00A, struct.pack("H", heart_stars_required if multiworld.goal_speed[player] == 1
     else 0xFFFF))
     rom.write_byte(0x3D00C, multiworld.goal_speed[player])

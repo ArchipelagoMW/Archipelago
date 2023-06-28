@@ -91,27 +91,27 @@ class KDL3World(World):
         if self.multiworld.strict_bosses[self.player] and self.multiworld.boss_requirement_random[self.player]:
             logger.warning(f"boss_requirement_random forced to false for player {self.player}" +
                            f" because of strict_bosses set to true")
-            self.multiworld.boss_requirement_random[self.player].value = False
+            self.multiworld.boss_requirement_random[self.player] = False
 
     def create_items(self) -> None:
         itempool = []
         itempool.extend([self.create_item(name) for name in copy_ability_table])
         itempool.extend([self.create_item(name) for name in animal_friend_table])
-        required_percentage = self.multiworld.heart_stars_required[self.player].value / 100.0
+        required_percentage = self.multiworld.heart_stars_required[self.player] / 100.0
         remaining_items = (len(location_table) if self.multiworld.consumables[self.player]
                            else len(location_table) - len(consumable_locations)) - len(itempool)
-        total_heart_stars = self.multiworld.total_heart_stars[self.player].value
+        total_heart_stars = self.multiworld.total_heart_stars[self.player]
         required_heart_stars = max(math.floor(total_heart_stars * required_percentage),
                                    5)  # ensure at least 1 heart star required
         filler_items = total_heart_stars - required_heart_stars
-        filler_amount = math.floor(filler_items * (self.multiworld.filler_percentage[self.player].value / 100.0))
+        filler_amount = math.floor(filler_items * (self.multiworld.filler_percentage[self.player] / 100.0))
         trap_amount = math.floor(filler_amount * (self.multiworld.trap_percentage[self.player] / 100.0))
         filler_amount -= trap_amount
         nonrequired_heart_stars = filler_items - filler_amount - trap_amount
         self.required_heart_stars[self.player] = required_heart_stars
         # handle boss requirements here
         requirements = [required_heart_stars]
-        if self.multiworld.boss_requirement_random[self.player].value:
+        if self.multiworld.boss_requirement_random[self.player]:
             for i in range(4):
                 requirements.append(self.multiworld.per_slot_randoms[self.player].randint(
                     min(3, required_heart_stars), required_heart_stars))
@@ -132,8 +132,8 @@ class KDL3World(World):
     set_rules = set_rules
 
     def generate_basic(self) -> None:
-        self.stage_shuffle_enabled = self.multiworld.stage_shuffle[self.player].value > 0
-        goal = self.multiworld.goal[self.player].value
+        self.stage_shuffle_enabled = self.multiworld.stage_shuffle[self.player] > 0
+        goal = self.multiworld.goal[self.player]
         goal_location = self.multiworld.get_location(LocationName.goals[goal], self.player)
         goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
         for level in range(1, 6):
