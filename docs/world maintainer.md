@@ -21,7 +21,6 @@ Unless these are shared between multiple people, we expect the following from ea
   of development.
 * Let us know of long periods of unavailability.
 
-
 ## Becoming a World Maintainer
 
 ### Adding a World
