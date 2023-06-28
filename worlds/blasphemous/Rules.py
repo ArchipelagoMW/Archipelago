@@ -1,3 +1,4 @@
+from typing import Dict, List, Set
 from worlds.generic.Rules import set_rule, add_rule
 from worlds.AutoWorld import LogicMixin
 
@@ -8,27 +9,35 @@ class BlasphemousLogic(LogicMixin):
 
         return totalFervour
 
+
     def _blasphemous_aubade(self, player):
         return self.has("Aubade of the Nameless Guardian", player) if self._blaphemous_total_fervour(player) >= 90 else False
-    
+
+
     def _blasphemous_tirana(self, player):
         return self.has("Tirana of the Celestial Bastion", player) if self._blaphemous_total_fervour(player) >= 90 else False
-    
+
+
     def _blasphemous_pillar(self, player):
         return self.has_any({"Debla of the Lights", "Taranto to my Sister", "Cloistered Ruby"}, player)
-    
+
+
     def _blasphemous_charge_beam(self, player):
         return self.has("Charged Skill", player, 3)
 
+
     def _blasphemous_can_air_stall(self, logic, player):
         return self.has("Ranged Skill", player) if logic.value >= 1 else False
-    
+
+
     def _blasphemous_can_dawn_jump(self, logic, player):
         return self.has_all({"Brilliant Heart of Dawn", "Dash Ability"}, player) if logic.value >= 1 else False
 
+
     def _blasphemous_can_water_jump(self, player):
         return self.has_any({"Nail Uprooted from Dirt", "Purified Hand of the Nun"}, player)
-    
+
+
     def _blasphemous_can_break_holes(self, player):
         return self.has_any({"Charged Skill", "Dive Skill"}, player) or \
             (self.has("Lunge Skill", player, 3) and \
@@ -36,19 +45,24 @@ class BlasphemousLogic(LogicMixin):
                     self.has_group("prayer", player) or \
                         self._blasphemous_aubade(player) or \
                             self._blasphemous_tirana(player)
-    
+
+
     def _blasphemous_can_break_tirana(self, logic, player):
         return self._blasphemous_tirana(player) if logic.value >= 2 else False
 
+
     def _blasphemous_can_dive_laser(self, logic, player):
         return self.has("Dive Skill", player, 3) if logic.value >= 2 else False
-    
+
+
     def _blasphemous_can_walk_on_root(self, player):
         return self.has("Three Gnarled Tongues", player)
-    
+
+
     def _blasphemous_can_climb_on_root(self, player):
         return self.has_all({"Three Gnarled Tongues", "Wall Climb Ability"}, player)
-    
+
+
     def _blasphemous_can_survive_poison(self, logic, player, number: int):
         if number == 1:
             if logic.value >= 2:
@@ -67,14 +81,17 @@ class BlasphemousLogic(LogicMixin):
                 return self.has_any({"Silvered Lung of Dolphos", "Tiento to your Thorned Hairs"}, player)
             else:
                 return self.has("Silvered Lung of Dolphos", player)
-        
+
+
     def _blasphemous_can_enemy_bounce(self, logic, enemy): # TODO
         return self._blasphemous_enemy_skips_allowed(logic, enemy)
-    
+
+
     def _blasphemous_can_enemy_upslash(self, logic, enemy, player):
         return self.has("Combo Skill", player, 2) and \
             self._blasphemous_enemy_skips_allowed(logic, enemy)
-    
+
+
     def _blasphemous_can_cross_gap(self, logic, player, number: int):
         if number == 1:
             return self.has_any({"Purified Hand of the Nun", "The Young Mason's Wheel"}, player) or \
@@ -118,53 +135,62 @@ class BlasphemousLogic(LogicMixin):
             return self.has("Purified Hand of the Nun", player) and \
                 self._blasphemous_can_dawn_jump(logic, player) and \
                     self._blasphemous_can_air_stall(logic, player)
-    
+
+
     def _blasphemous_can_ride_albero_elevator(self, player):
         return self.has("D02Z02S11[NW]", player) or \
             self.has("D02Z02S11[NE]", player) or \
                 self.has("D02Z02S11[W]", player) or \
                     self.has("D02Z02S11[E]", player) or \
                         self.has("D02Z02S11[SE]", player)
-        
+
+
     def _blasphemous_opened_dc_gate_w(self, player):
         return self.has("D01Z05S24[W]", player) or \
             self.has("D01Z05S24[E]", player)
-    
+
+
     def _blasphemous_opened_dc_gate_e(self, player):
         return self.has("D01Z05S12[W]", player) or \
             self.has("D01Z05S12[E]", player)
-    
+
+
     def _blasphemous_opened_dc_ladder(self, player):
         return self.has("D01Z05S20[W]", player) or \
             self.has("D01Z05S20[N]", player)
-    
+
+
     def _blasphemous_opened_wotw_cave(self, player):
         return self.has("D02Z01S06[E]", player) or \
             self.has("Wall Climb Ability", player) and \
                 (self.has("D02Z01S06[W]", player) or \
                     self.has("D02Z01S06[Cherubs]", player))
-    
+
+
     def _blasphemous_rode_gotp_elevator(self, player):
         return self.has("D02Z02S11[NW]", player) or \
             self.has("D02Z02S11[NE]", player) or \
                 self.has("D02Z02S11[W]", player) or \
                     self.has("D02Z02S11[E]", player) or \
                         self.has("D02Z02S11[SE]", player)
-    
+
+
     def _blasphemous_opened_convent_ladder(self, player):
         return self.has("D02Z03S11[S]", player) or \
             self.has("D02Z03S11[W]", player) or \
                 self.has("D02Z03S11[NW]", player) or \
                     self.has("D02Z03S11[E]", player) or \
                         self.has("D02Z03S11[NE]", player)
-    
+
+
     def _blasphemous_broke_jondo_bell_w(self, player):
         return self.has("D03Z02S09[S]", player) or \
             self.has("D03Z02S09[W]", player) and \
                 self.has("Dash Ability", player) or \
                     self.has("D03Z02S09[N]", player) or \
                         self.has("D03Z02S09[Cherubs]", player)
-    
+
+
     def _blasphemous_broke_jondo_bell_e(self, logic, enemy, player):
         return self.has("D03Z02S05[S]", player) or \
             self.has("D03Z02S05[E]", player) or \
@@ -172,97 +198,94 @@ class BlasphemousLogic(LogicMixin):
                     (self._blasphemous_can_cross_gap(logic, player, 5) or \
                         self._blasphemous_can_enemy_bounce(logic, enemy) and \
                             self._blasphemous_can_cross_gap(logic, player, 3))
-    
+
+
     def _blasphemous_opened_mom_ladder(self, player):
         return self.has("D04Z02S06[NW]", player) or \
             self.has("D04Z02S06[NE]", player) or \
                 self.has("D04Z02S06[N]", player) or \
                     self.has("D04Z02S06[S]", player)
-    
+
+
     def _blasphemous_opened_tsc_gate(self, player):
         return self.has("D05Z02S11[W]", player) or \
             self.has("D05Z02S11[Cherubs]", player)
-    
+
+
     def _blasphemous_opened_ar_ladder(self, player):
         return self.has("D06Z01S23[Sword]", player) or \
             self.has("D06Z01S23[E]", player) or \
                 self.has("D06Z01S23[S]", player) or \
                     self.has("D06Z01S23[Cherubs]", player)
-    
+
+
     def _blasphemous_broke_bottc_statue(self, player):
         return self.has("D08Z01S02[NE]", player) or \
             self.has("D08Z01S02[SE]", player)
-    
+
+
     def _blasphemous_opened_wothp_gate(self, player):
         return self.has("D09Z01S05[W]", player) or \
             self.has("D09Z01S05[SE]", player) or \
                 self.has("D09Z01S05[NE]", player)
 
+
     def _blasphemous_opened_botss_ladder(self, player):
         return self.has("D17Z01S04[N]", player) or \
             self.has("D17Z01S04[FrontR]", player)
-    
+
+
     def _blasphemous_upwarp_skips_allowed(self, logic):
         return True if logic.value >= 2 else False
-        
+
+
     def _blasphemous_mourning_skips_allowed(self, logic):
         return True if logic.value >= 2 else False
-        
+
+
     def _blasphemous_enemy_skips_allowed(self, logic, enemy):
         return True if logic.value >= 2 and enemy.value == 0 else False
-        
+
+
     def _blasphemous_unknown_skips_allowed(self):
         return False
-    
+
+
     def _blasphemous_precise_skips_allowed(self):
         return False
 
-    
+
     def _blasphemous_can_beat_boss(self, boss: str, logic, player):
         def has_boss_strength(name: str) -> bool:
             silver: int = self.count("Quicksilver", player) if self.has("D01Z05S27[E]", player) else 0
             flasks: int = self.count("Empty Bile Flask", player) if \
-                (self.has("D01Z05S18[E]", player) or self.has("D02Z02S09[E]", player) or \
-                self.has("D03Z02S14[E]", player) or self.has("D03Z03S03[SE]", player) or \
-                self.has("D04Z02S13[W]", player) or self.has("D05Z01S12[E]", player) or \
-                self.has("D20Z01S08[W]", player)) else 0
+                self.has_any({"D01Z05S18[E]", "D02Z02S09[E]", "D03Z02S14[E]", "D03Z03S03[SE]", "D04Z02S13[W]", \
+                    "D05Z01S12[E]", "D20Z01S08[W]"}, player) else 0
+            
 
             playerStrength: float = self.count("Life Upgrade", player) * 0.25 / 6 + \
                 self.count("Mea Culpa Upgrade", player) * 0.25 / 7 + self.count("Fervour Upgrade", player) * 0.20 / 6 \
                 + flasks * 0.15 / 8 + silver * 0.15 / 5
             
-            bossStrength: float
+            bosses: Dict[str, int] = {
+                "warden": -0.10,
+                "ten-piedad": 0.05,
+                "charred-visage": 0.20,
+                "tres-angustias": 0.15,
+                "esdras": 0.25,
+                "melquiades": 0.25,
+                "exposito": 0.30,
+                "quirce": 0.35,
+                "crisanta": 0.50,
+                "isidora": 0.70,
+                "sierpes": 0.70,
+                "amanecida": 0.60,
+                "laudes": 0.60,
+                "perpetua": -0.05,
+                "legionary": 0.20
+            }
 
-            if name == "warden":
-                bossStrength = -0.10
-            elif name == "ten-piedad":
-                bossStrength = 0.05
-            elif name == "charred-visage":
-                bossStrength = 0.20
-            elif name == "tres-angustias":
-                bossStrength = 0.15
-            elif name == "esdras":
-                bossStrength = 0.25
-            elif name == "melquiades":
-                bossStrength = 0.25
-            elif name == "exposito":
-                bossStrength = 0.30
-            elif name == "quirce":
-                bossStrength = 0.35
-            elif name == "crisanta":
-                bossStrength = 0.50
-            elif name == "isidora":
-                bossStrength = 0.70
-            elif name == "sierpes":
-                bossStrength = 0.70
-            elif name == "amanecida":
-                bossStrength = 0.60
-            elif name == "laudes":
-                bossStrength = 0.60
-            elif name == "perpetua":
-                bossStrength = -0.05
-            elif name == "legionary":
-                bossStrength = 0.20
+            bossStrength: int = bosses[name]
 
             return playerStrength >= (bossStrength - 0.10 if logic.value >= 2 else (bossStrength if logic.value >= 1 else bossStrength + 0.10))
         
@@ -343,47 +366,40 @@ class BlasphemousLogic(LogicMixin):
             return has_boss_strength("perpetua")
         elif boss == "Legionary":
             return has_boss_strength("legionary")
-        
-    def _blasphemous_guilt_rooms(self, player, number: int):
-        total: int = 0
 
-        if self.has("D01Z04S17[W]", player):
-            total += 1
-        if self.has("D02Z02S06[E]", player):
-            total += 1
-        if self.has("D03Z03S14[W]", player):
-            total += 1
-        if self.has("D04Z02S17[W]", player):
-            total += 1
-        if self.has("D05Z01S17[W]", player):
-            total += 1
-        if self.has("D09Z01S13[E]", player):
-            total += 1
-        if self.has("D17Z01S12[E]", player):
-            total += 1
+
+    def _blasphemous_guilt_rooms(self, player, number: int):
+        doors: List[str] = [
+            "D01Z04S17[W]",
+            "D02Z02S06[E]",
+            "D03Z03S14[W]",
+            "D04Z02S17[W]",
+            "D05Z01S17[W]",
+            "D09Z01S13[E]",
+            "D17Z01S12[E]"
+        ]
+
+        total: int = sum(self.has(item, player) for item in doors)
 
         return True if total >= number else False
+
 
     def _blasphemous_sword_rooms(self, player, number: int):
-        total: int = 0
+        doors: List[Set[str]] = [
+            {"D01Z02S06[W]", "D01Z02S06[E]"},
+            {"D01Z05S24[W]", "D01Z05S24[E]"},
+            {"D02Z03S13[W]"},
+            {"D04Z02S12[W]"},
+            {"D05Z01S13[E]"},
+            {"D06Z01S11[W]"},
+            {"D17Z01S08[E]"}
+        ]
 
-        if self.has("D01Z02S06[W]", player) or self.has("D01Z02S06[E]", player):
-            total += 1
-        if self.has("D01Z05S24[W]", player) or self.has("D01Z05S24[E]", player):
-            total += 1
-        if self.has("D02Z03S13[W]", player):
-            total += 1
-        if self.has("D04Z02S12[W]", player):
-            total += 1
-        if self.has("D05Z01S13[E]", player):
-            total += 1
-        if self.has("D06Z01S11[W]", player):
-            total += 1
-        if self.has("D17Z01S08[E]", player):
-            total += 1
+        total: int = sum(self.has_any(items, player) for items in doors)
 
         return True if total >= number else False
-    
+
+
     def _blasphemous_redento(self, world, player, number: int):
         if number == 1:
             return self.has("D03Z01S03[W]", player) or \
@@ -414,36 +430,32 @@ class BlasphemousLogic(LogicMixin):
                                             self.has("Knot of Rosary Rope", player) and \
                                                 self.has("D17Z01S09[E]", player)
 
-    def _blasphemous_miriam(self, player):
-        return self.has("D02Z03S24[E]", player) and \
-            self.has("D03Z03S19[E]", player) and \
-                self.has("D04Z04S02[W]", player) and \
-                    self.has("D05Z01S24[E]", player) and \
-                        self.has("D06Z01S26[W]", player)
-        
-    def _blasphemous_amanecida_rooms(self, world, logic, player, number: int):
-        total: int = 0
 
-        if self._blasphemous_can_beat_boss("Graveyard", logic, player):
-            total += 1
-        if self._blasphemous_can_beat_boss("Jondo", logic, player):
-            total += 1
-        if self._blasphemous_can_beat_boss("Patio", logic, player):
-            total += 1
-        if self._blasphemous_can_beat_boss("Wall", logic, player):
-            total += 1
+    def _blasphemous_miriam(self, player):
+        return self.has_all({"D02Z03S24[E]", "D03Z03S19[E]", "D04Z04S02[W]", "D05Z01S24[E]", "D06Z01S26[W]"}, player)
+
+
+    def _blasphemous_amanecida_rooms(self, logic, player, number: int):
+        bosses: List[str] = [
+            "Graveyard",
+            "Jondo",
+            "Patio",
+            "Wall"
+        ]
+
+        total = sum(self._blasphemous_can_beat_boss(boss, logic, player) for boss in bosses)
 
         return True if total >= number else False
-    
-    def _blasphemous_chalice_rooms(self, player, number: int):
-        total: int = 0
 
-        if self.has("D03Z01S01[W]", player) or self.has("D03Z01S01[NE]", player) or self.has("D03Z01S01[S]", player):
-            total += 1
-        if self.has("D05Z02S01[W]", player) or self.has("D05Z02S01[E]", player):
-            total += 1
-        if self.has("D09Z01S07[SW]", player) or self.has("D09Z01S07[SE]", player) or self.has("D09Z01S07[W]", player) or self.has("D09Z01S07[E]", player):
-            total += 1
+
+    def _blasphemous_chalice_rooms(self, player, number: int):
+        doors: List[Set[str]] = [
+            {"D03Z01S01[W]", "D03Z01S01[NE]", "D03Z01S01[S]"},
+            {"D05Z02S01[W]", "D05Z02S01[E]"},
+            {"D09Z01S07[SW]", "D09Z01S07[SE]", "D09Z01S07[W]", "D09Z01S07[E]"}
+        ]
+
+        total: int = sum(self.has_any(items, player) for items in doors)
 
         return True if total >= number else False
 
@@ -3250,15 +3262,15 @@ def rules(blasphemousworld):
             state.has("OpenedBOTSSLadder", player) and \
                 state.can_reach(world.get_region("D01Z04S16", player), player))
     set_rule(world.get_location("Defeat 1 Amanecida", player),
-        lambda state: state._blasphemous_amanecida_rooms(blasphemousworld, difficulty, player, 1))
+        lambda state: state._blasphemous_amanecida_rooms(difficulty, player, 1))
     set_rule(world.get_location("Defeat 2 Amanecidas", player),
-        lambda state: state._blasphemous_amanecida_rooms(blasphemousworld, difficulty, player, 2))
+        lambda state: state._blasphemous_amanecida_rooms(difficulty, player, 2))
     set_rule(world.get_location("Defeat 3 Amanecidas", player),
-        lambda state: state._blasphemous_amanecida_rooms(blasphemousworld, difficulty, player, 3))
+        lambda state: state._blasphemous_amanecida_rooms(difficulty, player, 3))
     set_rule(world.get_location("Defeat 4 Amanecidas", player),
-        lambda state: state._blasphemous_amanecida_rooms(blasphemousworld, difficulty, player, 4))
+        lambda state: state._blasphemous_amanecida_rooms(difficulty, player, 4))
     set_rule(world.get_location("Defeat all Amanecidas", player),
-        lambda state: state._blasphemous_amanecida_rooms(blasphemousworld, difficulty, player, 4))
+        lambda state: state._blasphemous_amanecida_rooms(difficulty, player, 4))
     set_rule(world.get_location("Confessor Dungeon 1 main", player),
         lambda state: state.has("Weight of True Guilt", player) and \
             state._blasphemous_guilt_rooms(player, 1))
