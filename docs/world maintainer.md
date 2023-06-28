@@ -19,7 +19,7 @@ Unless these are shared between multiple people, we expect the following from ea
   pull requests. Core maintainers may also ping you if a pull request concerns your world.
 * Test (or have tested) the world on the main branch from time to time, especially during RC (release candidate) phases
   of development.
-* Let us know of long unavailabilities.
+* Let us know of long periods of unavailability.
 
 
 ## Becoming a World Maintainer
