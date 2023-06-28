@@ -1,9 +1,15 @@
+from typing import Set
+
 from .RulesData import location_rules
-from ..generic.Rules import set_rule
-from BaseClasses import Location
+from worlds.generic.Rules import set_rule
+from BaseClasses import Location, CollectionState
 
 
 # TODO: implement Mapstone counting, Open, OpenWorld, connection rules
+
+def oribf_has_all(state: CollectionState, items: Set[str], player:int) -> bool:
+    return all(state.prog_items[item, player] if type(item) == str
+               else state.prog_items[item[0], player] >= item[1] for item in items)
 
 def set_rules(world):
     temp_base_rule(world.multiworld, world.player)
@@ -22,7 +28,7 @@ def add_or_rule_check_first(world, location: str, player: int, conditionsets):
             location.access_rule = tautology
             return
     rule = lambda state, conditionsets=conditionsets: any(
-        state._oribf_has_all(conditionset, player) for conditionset in conditionsets)
+        oribf_has_all(state, conditionset, player) for conditionset in conditionsets)
     if location.access_rule is Location.access_rule:
         location.access_rule = rule
     else:
@@ -31,7 +37,7 @@ def add_or_rule_check_first(world, location: str, player: int, conditionsets):
 
 
 def temp_base_rule(world, player):
-    world.completion_condition[player] = lambda state: state._oribf_has_all(
+    world.completion_condition[player] = lambda state: oribf_has_all(state,
         {"Bash", "ChargeFlame", "ChargeJump", "Climb", "Dash", "DoubleJump", "Glide", "Grenade", "Stomp", "WallJump"},
         player)
 

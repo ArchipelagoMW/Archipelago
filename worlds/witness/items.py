@@ -143,11 +143,11 @@ class WitnessPlayerItems:
         self.PROGRESSION_TABLE = dict()
 
         self.ITEM_ID_TO_DOOR_HEX = dict()
-        self.DOORS = set()
+        self.DOORS = list()
 
         self.PROG_ITEM_AMOUNTS = defaultdict(lambda: 1)
 
-        self.SYMBOLS_NOT_IN_THE_GAME = set()
+        self.SYMBOLS_NOT_IN_THE_GAME = list()
 
         self.EXTRA_AMOUNTS = {
             "Functioning Brain": 1,
@@ -162,7 +162,7 @@ class WitnessPlayerItems:
             if item[0] not in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME:
                 del self.ITEM_TABLE[item[0]]
                 if item in StaticWitnessLogic.ALL_SYMBOL_ITEMS:
-                    self.SYMBOLS_NOT_IN_THE_GAME.add(StaticWitnessItems.ALL_ITEM_TABLE[item[0]].code)
+                    self.SYMBOLS_NOT_IN_THE_GAME.append(StaticWitnessItems.ALL_ITEM_TABLE[item[0]].code)
             else:
                 if item[0] in StaticWitnessLogic.PROGRESSIVE_TO_ITEMS:
                     self.PROG_ITEM_AMOUNTS[item[0]] = len(logic.MULTI_LISTS[item[0]])
@@ -178,7 +178,7 @@ class WitnessPlayerItems:
         for entity_hex, items in logic.DOOR_ITEMS_BY_ID.items():
             entity_hex_int = int(entity_hex, 16)
 
-            self.DOORS.add(entity_hex_int)
+            self.DOORS.append(entity_hex_int)
 
             for item in items:
                 item_id = StaticWitnessItems.ALL_ITEM_TABLE[item].code
