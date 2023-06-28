@@ -1,6 +1,6 @@
 import string
 
-from .Items import RiskOfRainItem, item_table, item_pool_weights, environment_offest
+from .Items import RiskOfRainItem, RiskOfRainItemData, item_table, item_pool_weights, offset
 from .Locations import RiskOfRainLocation, get_classic_item_pickups, item_pickups, orderedstage_location
 from .Rules import set_rules
 from .RoR2Environments import *
@@ -31,12 +31,11 @@ class RiskOfRainWorld(World):
     game: str = "Risk of Rain 2"
     option_definitions = ror2_options
     topology_present = False
-
-    item_name_to_id = item_table
+    item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = item_pickups
 
     data_version = 7
-    required_client_version = (0, 4, 2)
+    required_client_version = (0, 4, 3)
     web = RiskOfWeb()
     total_revivals: int
 
@@ -79,10 +78,10 @@ class RiskOfRainWorld(World):
             if self.multiworld.dlc_sotv[self.player]:
                 environment_available_orderedstages_table = collapse_dict_list_vertical(environment_available_orderedstages_table, environment_sotv_orderedstages_table)
 
-            environments_pool = shift_by_offset(environment_vanilla_table, environment_offest)
+            environments_pool = shift_by_offset(environment_vanilla_table, offset + 700)
 
             if self.multiworld.dlc_sotv[self.player]:
-                environment_offset_table = shift_by_offset(environment_sotv_table, environment_offest)
+                environment_offset_table = shift_by_offset(environment_sotv_table, offset + 700)
                 environments_pool = {**environments_pool, **environment_offset_table}
             environments_to_precollect = 5 if self.multiworld.begin_with_loop[self.player].value else 1
             # percollect environments for each stage (or just stage 1)
@@ -90,6 +89,8 @@ class RiskOfRainWorld(World):
                 unlock = self.multiworld.random.choices(list(environment_available_orderedstages_table[i].keys()), k=1)
                 self.multiworld.push_precollected(self.create_item(unlock[0]))
                 environments_pool.pop(unlock[0])
+        else:
+            item_table["Dio's Best Friend"] = RiskOfRainItemData("Upgrade", 1 + offset, ItemClassification.progression)
 
         # Generate item pool
         itempool: List = []
@@ -215,29 +216,12 @@ class RiskOfRainWorld(World):
             "startWithDio": self.multiworld.start_with_revive[self.player].value,
             "finalStageDeath": self.multiworld.final_stage_death[self.player].value,
             "deathLink": self.multiworld.death_link[self.player].value,
+            "offset": offset
         }
 
     def create_item(self, name: str) -> Item:
-        item_id = item_table[name]
-        classification = ItemClassification.filler
-        if name in {"Dio's Best Friend", "Beads of Fealty"}:
-            classification = ItemClassification.progression
-        elif name in {"Legendary Item", "Boss Item"}:
-            classification = ItemClassification.useful
-        elif name == "Lunar Item":
-            classification = ItemClassification.trap
-
-        # Only check for an item to be a environment unlock if those are known to be in the pool.
-        # This should shave down comparisons.
-
-        elif name in environment_ALL_table.keys():
-            if name in {"Hidden Realm: Bulwark's Ambry", "Hidden Realm: Gilded Coast,"}:
-                classification = ItemClassification.useful
-            else:
-                classification = ItemClassification.progression
-
-        item = RiskOfRainItem(name, classification, item_id, self.player)
-        return item
+        data = item_table[name]
+        return RiskOfRainItem(name, data.item_type, data.code, self.player)
 
 
 def create_events(world: MultiWorld, player: int) -> None:
