@@ -2,7 +2,7 @@ from .Items import TLNItem, item_table, event_table
 from .Locations import TLNAdvancement, tlnLocTable
 from .Regions import tln_regions, link_tln_areas
 from .Rules import set_rules
-from BaseClasses import Region, Entrance, Item
+from BaseClasses import Region, Entrance
 from .Options import tln_options
 from worlds.AutoWorld import World
 
@@ -34,6 +34,7 @@ class TLNWorld(World):
         }
 
     def create_items(self):
+        self.multiworld.get_location("Stage 5: Flandre", self.player).place_locked_item(self.create_event("Defeat Flandre"))
         itempool = []
         for item_name, data in item_table.items():
             itempool += [self.create_item(item_name) for _ in range(0, data.quantity)]
@@ -44,7 +45,7 @@ class TLNWorld(World):
         set_rules(self.multiworld, self.player)
 
     def create_regions(self):
-        def TLNRegion(region_name: str, exits=[]):
+        def TLNRegion(region_name: str, exits):
             ret = Region(region_name, self.player, self.multiworld)
 
             for loc_name, loc_data in tlnLocTable.items():
@@ -52,7 +53,6 @@ class TLNWorld(World):
                     ret.locations += [TLNAdvancement(self.player, loc_name, loc_data.id, ret)]
 
             for exit in exits:
-                logging.info(exit)
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
 
@@ -68,10 +68,6 @@ class TLNWorld(World):
         item_data = item_table[name]
         return TLNItem(name, item_data.classification, item_data.code, self.player)
 
-    # For completing the game
-    def _place_events(self):
-        # Fountain
-        self.multiworld.get_location("Stage 05", self.player).place_locked_item(self.create_event("Defeat Flandre"))
     def create_event(self, name: str) -> TLNItem:
         data = event_table[name]
         return TLNItem(name, data.classification, data.code, self.player)
