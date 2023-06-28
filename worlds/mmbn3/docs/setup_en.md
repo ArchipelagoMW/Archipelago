@@ -45,7 +45,8 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [MegaMan Battle Network 3 Player Settings Page](/games/MMBN3/player-settings)
+You can customize your settings by visiting the 
+[MegaMan Battle Network 3 Player Settings Page](/games/MegaMan%20Battle%20Network%203/player-settings)
 
 ## Joining a MultiWorld Game
 
