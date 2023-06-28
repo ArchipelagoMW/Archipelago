@@ -6,7 +6,7 @@ import typing
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, ItemClassification
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_hints, generate_joke_hints
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations

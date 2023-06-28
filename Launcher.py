@@ -223,6 +223,12 @@ def run_gui():
             else:
                 launch(get_exe(button.component), button.component.cli)
 
+        def _stop(self, *largs):
+            # ran into what appears to be https://groups.google.com/g/kivy-users/c/saWDLoYCSZ4 with PyCharm.
+            # Closing the window explicitly cleans it up.
+            self.root_window.close()
+            super()._stop(*largs)
+
     Launcher().run()
 
 
@@ -260,9 +266,16 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
 if __name__ == '__main__':
     init_logging('Launcher')
-    multiprocessing.freeze_support()
+    Utils.freeze_support()
+    multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(description='Archipelago Launcher')
     parser.add_argument('Patch|Game|Component', type=str, nargs='?',
                         help="Pass either a patch file, a generated game or the name of a component to run.")
     parser.add_argument('args', nargs="*", help="Arguments to pass to component.")
     main(parser.parse_args())
+
+    from worlds.LauncherComponents import processes
+    for process in processes:
+        # we await all child processes to close before we tear down the process host
+        # this makes it feel like each one is its own program, as the Launcher is closed now
+        process.join()

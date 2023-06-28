@@ -60,20 +60,34 @@ from Utils import version_tuple, is_windows, is_linux
 
 
 # On  Python < 3.10 LogicMixin is not currently supported.
-apworlds: set = {
-    "Subnautica",
-    "Factorio",
-    "Rogue Legacy",
-    "Sonic Adventure 2 Battle",
-    "Donkey Kong Country 3",
-    "Super Mario World",
-    "Stardew Valley",
-    "Timespinner",
-    "Minecraft",
-    "The Messenger",
-    "Links Awakening DX",
-    "Super Metroid",
-    "SMZ3",
+non_apworlds: set = {
+    "A Link to the Past",
+    "Adventure",
+    "ArchipIDLE",
+    "Archipelago",
+    "Blasphemous",
+    "ChecksFinder",
+    "Clique",
+    "DLCQuest",
+    "Dark Souls III",
+    "Final Fantasy",
+    "Hollow Knight",
+    "Hylics 2",
+    "Kingdom Hearts 2",
+    "Lufia II Ancient Cave",
+    "Meritous",
+    "Ocarina of Time",
+    "Overcooked! 2",
+    "Pokemon Red and Blue",
+    "Raft",
+    "Secret of Evermore",
+    "Slay the Spire",
+    "Starcraft 2 Wings of Liberty",
+    "Sudoku",
+    "Super Mario 64",
+    "VVVVVV",
+    "Wargroove",
+    "Zillion",
 }
 
 
@@ -322,11 +336,12 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
         from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
-        assert not apworlds - set(AutoWorldRegister.world_types), "Unknown world designated for .apworld"
+        assert not non_apworlds - set(AutoWorldRegister.world_types), \
+            f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: typing.List[str] = []
         generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
         for worldname, worldtype in AutoWorldRegister.world_types.items():
-            if worldname in apworlds:
+            if worldname not in non_apworlds:
                 file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
                 world_directory = self.libfolder / "worlds" / file_name
                 # this method creates an apworld that cannot be moved to a different OS or minor python version,
