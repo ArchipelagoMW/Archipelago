@@ -182,9 +182,9 @@ def write_quizzes(self, data, random):
 
     answers = [random.randint(0, 1) for _ in range(6)]
 
-    answers = [1] * 6
+    # answers = [1] * 6
 
-    questions = random.sample((range(8, 15)), 6)
+    questions = random.sample((range(0, 15)), 6)
     question_texts = []
     for i, question in enumerate(questions):
         question_texts.append(get_quiz(question, answers[i]))

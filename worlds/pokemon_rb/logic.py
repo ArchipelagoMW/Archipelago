@@ -100,6 +100,21 @@ def rock_tunnel(state, player):
     return can_flash(state, player) or not state.multiworld.dark_rock_tunnel_logic[player]
 
 
+def route_3(state, player):
+    if state.multiworld.route_3_condition[player] == "defeat_brock":
+        return state.has("Defeat Brock", player)
+    elif state.multiworld.route_3_condition[player] == "defeat_any_gym":
+        return state.has_any(["Defeat Brock", "Defeat Misty", "Defeat Lt. Surge", "Defeat Erika", "Defeat Koga",
+                              "Defeat Blaine", "Defeat Sabrina", "Defeat Viridian Gym Giovanni"], player)
+    elif state.multiworld.route_3_condition[player] == "boulder_badge":
+        return state.has("Boulder Badge", player)
+    elif state.multiworld.route_3_condition[player] == "any_badge":
+        return state.has_any(["Boulder Badge", "Cascade Badge", "Thunder Badge", "Rainbow Badge", "Marsh Badge",
+                              "Soul Badge", "Volcano Badge", "Earth Badge"], player)
+    # open
+    return True
+
+
 def evolve_level(state, level, player):
     return len([item for item in (
         "Defeat Brock", "Defeat Misty", "Defeat Lt. Surge", "Defeat Erika", "Defeat Koga", "Defeat Blaine",

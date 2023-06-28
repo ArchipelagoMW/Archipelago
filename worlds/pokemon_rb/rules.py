@@ -100,6 +100,8 @@ def set_rules(multiworld, player):
         "Vermilion Trade House - Dux Trade": lambda state: state.can_reach("Route 3 - Wild Pokemon - 2", "Location", player),
         "Cerulean Trade House - Lola Trade": lambda state: state.can_reach("Route 10/Celadon Fishing - Super Rod Pokemon - 1", "Location", player),
 
+        "Route 22 - Trainer Parties": lambda state: state.has("Oak's Parcel", player),
+
         # # Rock Tunnel
         # "Rock Tunnel 1F - PokeManiac": lambda state: logic.rock_tunnel(state, player),
         # "Rock Tunnel 1F - Hiker 1": lambda state: logic.rock_tunnel(state, player),
@@ -160,10 +162,7 @@ def set_rules(multiworld, player):
         "Seafoam Islands B2F - Hidden Item Rock": lambda state: logic.can_get_hidden_items(state, player),
         "Seafoam Islands B3F - Hidden Item Rock": lambda state: logic.can_get_hidden_items(state, player),
         # if you can reach any exit boulders, that means you can drop into the water tunnel and auto-surf
-        "Seafoam Islands B4F - Hidden Item Corner Island": lambda state: (logic.can_get_hidden_items(state, player)
-                                                                          and (logic.can_surf(state, player)
-                                                                               or state.has("Seafoam Exit Boulder",
-                                                                                            player))),
+        "Seafoam Islands B4F - Hidden Item Corner Island": lambda state: logic.can_get_hidden_items(state, player),
         "Pokemon Mansion 1F - Hidden Item Block Near Entrance Carpet": lambda
             state: logic.can_get_hidden_items(state, player),
         "Pokemon Mansion 3F - Hidden Item Behind Burglar": lambda state: logic.can_get_hidden_items(state, player),
