@@ -82,6 +82,7 @@ def open_folder(folder_path):
     else:
         webbrowser.open(folder_path)
 
+
 components.extend([
     # Functions
     Component("Open host.yaml", func=open_host_yaml),
