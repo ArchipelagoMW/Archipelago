@@ -136,7 +136,7 @@ class AreaLayout(Toggle):
 
 class DoorsColorsRando(Toggle):
     """Randomize the color of Red/Green/Yellow doors. Add four new type of doors which require Ice/Wave/Spazer/Plasma
-    beams to open them."""
+    beams to open them. When enabled, will force those beams as local items."""
     display_name = "Doors Colors Rando"
 
 class AllowGreyDoors(Toggle):
@@ -298,7 +298,7 @@ class Objective(OptionList):
 
     Format as a comma-separated list of objective names: ["kill three G4", "collect 75% items"].
     A full list of supported objectives can be found at:
-    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/utils/objectives.py
+    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/variaRandomizer/utils/objectives.py
     """
     display_name = "Objectives"
     default = ["kill all G4"]
