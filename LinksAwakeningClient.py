@@ -436,21 +436,7 @@ class LinksAwakeningContext(CommonContext):
                            'Hot Head Heart Container (Turtle Rock)',
                            'Kiki (Ukuku Prairie)',
                            'Tunic Fairy Item 1 (Color Dungeon)',
-                           'Tunic Fairy Item 2 (Color Dungeon)',
-                           'Shop 10 Item (Mabe Village)',
-                           'Three of a Kind Chest (Tail Cave)',
-                           'North Key Room Key (Key Cavern)',
-                           'Tile Arrow Ledge Chest (Key Cavern)',
-                           'Pot Locked Chest (Face Shrine)',
-                           "Beamos Ledge Chest (Eagle's Tower)",
-                           "Three of a Kind, Pit Chest (Eagle's Tower)",
-                           'Lava Arrow Statue Key (Turtle Rock)',
-                           'Upper Small Key (Color Dungeon)',
-                           'Entrance Chest (Color Dungeon)',
-                           'Donut Plains Ledge Dig (Donut Plains)',
-                           'Slime Key Dig (Pothole Field)',
-                           "Peninsula Dig (Martha's Bay)",
-                           'East (Rapids Ride)'}
+                           'Tunic Fairy Item 2 (Color Dungeon)'}
     tags = {"AP"}
     game = "Links Awakening DX"
     items_handling = 0b101
@@ -586,7 +572,7 @@ class LinksAwakeningContext(CommonContext):
                         meta = self.check_name_to_metadata_map[name]
                         check = self.client.tracker.get_check_from_meta(meta=meta)
                         # If the check hasn't been collected yet, and should be
-                        if check is not None and check.address in self.client.tracker.remaining_checks \
+                        if check is not None and check.id in self.client.tracker.remaining_checks \
                                 and name not in self.collected_blacklist:
                             # Read to make sure the game has finished processing the last sent collection
                             status = (await self.client.gameboy.async_read_memory_safe(

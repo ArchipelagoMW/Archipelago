@@ -118,12 +118,12 @@ class LocationTracker:
                 self.start_check = check
             self.all_checks.append(check)
             self.meta_to_check_dict[check.id] = check
-        self.remaining_checks = {check.address: check for check in self.all_checks}
+        self.remaining_checks = {check.id: check for check in self.all_checks}
         self.gameboy.set_cache_limits(
             lowest_check, highest_check - lowest_check + 1)
 
     def has_start_item(self):
-        return self.start_check.address not in self.remaining_checks.keys()
+        return self.start_check.id not in self.remaining_checks.keys()
 
     async def readChecks(self, cb):
         new_checks = []
@@ -137,7 +137,7 @@ class LocationTracker:
             check.set(list(bytes.values()))
 
             if check.value:
-                self.remaining_checks.pop(check.address, None)
+                self.remaining_checks.pop(check.id, None)
                 new_checks.append(check)
         if new_checks:
             cb(new_checks)
