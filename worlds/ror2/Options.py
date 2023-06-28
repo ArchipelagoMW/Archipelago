@@ -66,7 +66,7 @@ class AltarsPerEnvironment(Range):
 
 class TotalRevivals(Range):
     """Total Percentage of `Dio's Best Friend` item put in the item pool."""
-    display_name = "Total Revives"
+    display_name = "Total Revives as percentage"
     range_start = 0
     range_end = 10
     default = 4
@@ -107,7 +107,10 @@ class StartWithRevive(DefaultOnToggle):
 
 
 class FinalStageDeath(Toggle):
-    """Death on the final boss stage counts as a win."""
+    """The following will count as a win if set to true:
+    Dying in Commencement.
+    Dying in The Planetarium.
+    Obliterating yourself"""
     display_name = "Final Stage Death is Win"
 
 

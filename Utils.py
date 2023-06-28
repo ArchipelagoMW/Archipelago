@@ -785,3 +785,57 @@ def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str]
     task = asyncio.create_task(co, name=name)
     _faf_tasks.add(task)
     task.add_done_callback(_faf_tasks.discard)
+
+
+def deprecate(message: str):
+    if __debug__:
+        raise Exception(message)
+    import warnings
+    warnings.warn(message)
+
+def _extend_freeze_support() -> None:
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
+    # upstream issue: https://github.com/python/cpython/issues/76327
+    # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
+    import multiprocessing
+    import multiprocessing.spawn
+
+    def _freeze_support() -> None:
+        """Minimal freeze_support. Only apply this if frozen."""
+        from subprocess import _args_from_interpreter_flags
+
+        # Prevent `spawn` from trying to read `__main__` in from the main script
+        multiprocessing.process.ORIGINAL_DIR = None
+
+        # Handle the first process that MP will create
+        if (
+            len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
+                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
+                'from multiprocessing.resource_tracker import main',  # Py>=3.8
+                'from multiprocessing.forkserver import main'
+            )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
+        ):
+            exec(sys.argv[-1])
+            sys.exit()
+
+        # Handle the second process that MP will create
+        if multiprocessing.spawn.is_forking(sys.argv):
+            kwargs = {}
+            for arg in sys.argv[2:]:
+                name, value = arg.split('=')
+                if value == 'None':
+                    kwargs[name] = None
+                else:
+                    kwargs[name] = int(value)
+            multiprocessing.spawn.spawn_main(**kwargs)
+            sys.exit()
+
+    if not is_windows and is_frozen():
+        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+
+
+def freeze_support() -> None:
+    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    import multiprocessing
+    _extend_freeze_support()
+    multiprocessing.freeze_support()

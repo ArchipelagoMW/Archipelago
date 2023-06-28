@@ -285,8 +285,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     AutoWorld.call_all(world, 'post_fill')
 
-    if world.players > 1:
+    if world.players > 1 and not args.skip_prog_balancing:
         balance_multiworld_progression(world)
+    else:
+        logger.info("Progression balancing skipped.")
 
     logger.info(f'Beginning output...')
 

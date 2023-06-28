@@ -29,8 +29,10 @@ Explore Mode:
 
 ## What is the goal of Risk of Rain 2 in Archipelago?
 
-Just like in the original game, any way to "beat the game or obliterate" counts as a win. There is a setting that
-if you die while on a final boss stage, that also counts as a win.(You can turn this on in your player settings.)
+Just like in the original game, any way to "beat the game" counts as a win. Alternatively, if you are new to the game and 
+aren't very confident in being able to "beat the game", you can set **Final Stage Death is Win** to true
+(You can turn this on in your player settings.) This will make it so if you die on either Commencement or The Planetarium,
+it will count as your goal, and **Obliterating yourself** will count as well.
 **You do not need to complete all the location checks** to win; any item you don't collect may be released if the 
 server options allow.
 

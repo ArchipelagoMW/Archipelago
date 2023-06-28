@@ -62,8 +62,8 @@ environment_sotv_simulacrum_table: Dict[str, int] = {
 }
 
 environment_sotv_special_table: Dict[str, int] = {
-    "Void Locus":                              45, # voidstage
-    "The Planetarium":                         46, # voidraid
+    "Void Locus":                              46, # voidstage
+    "The Planetarium":                         45, # voidraid
 }
 
 X = TypeVar("X")
