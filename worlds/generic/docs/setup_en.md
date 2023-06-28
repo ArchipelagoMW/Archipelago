@@ -5,7 +5,9 @@ This guide is intended to provide an overview of how to:
 - Generate and host multiworlds
 - Connect to the multiworld after hosting has begun
 
-This is a general overview; for more specific steps, reference the relevant game's [setup guide](/tutorial).
+This is a general overview. For more specific steps, reference the relevant game's [setup guide](/tutorial).
+
+Some steps also assume use of Windows, so may vary with your OS.
 
 ## Installing the Archipelago software
 
