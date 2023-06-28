@@ -1,10 +1,12 @@
-from .Items import TLNItem, item_table, item_frequencies
-from .Locations import TLNAdvancement
+from .Items import TLNItem, item_table
+from .Locations import TLNAdvancement, tlnLocTable
 from .Regions import tln_regions, link_tln_areas
 from .Rules import set_rules
 from BaseClasses import Region, Entrance, Item
 from .Options import tln_options
 from worlds.AutoWorld import World
+
+import logging
 
 
 class TLNWorld(World):
@@ -17,7 +19,7 @@ class TLNWorld(World):
     topology_present = True
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {name: data.id for name, data in tln_regions.items()}
+    location_name_to_id = {name: data.id for name, data in tlnLocTable.items()}
 
     data_version = 5
 
@@ -32,14 +34,9 @@ class TLNWorld(World):
         }
 
     def create_items(self):
-        # Generate item pool
         itempool = []
-        pool_counts = item_frequencies.copy()
-        # Add all required progression items
-
-        for name in item_table.items():
-            for count in range(pool_counts.get(name, 1)):
-                itempool.append(self.create_item(name))
+        for item_name, data in item_table.items():
+            itempool += [self.create_item(item_name) for _ in range(0, data.quantity)]
 
         self.multiworld.itempool += itempool
 
@@ -49,9 +46,7 @@ class TLNWorld(World):
     def create_regions(self):
         def TLNRegion(region_name: str, exits=[]):
             ret = Region(region_name, self.player, self.multiworld)
-            ret.locations = [TLNAdvancement(self.player, loc_name, loc_data.id, ret)
-                             for loc_name, loc_data in tln_regions.items()
-                             if loc_data.region == region_name[self.multiworld[self.player].current_key]]
+
             for exit in exits:
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret
@@ -64,7 +59,6 @@ class TLNWorld(World):
 
         return slot_data
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> TLNItem:
         item_data = item_table[name]
-        item = TLNItem(name, item_data.classification, item_data.code, self.player)
-        return item
+        return TLNItem(name, item_data.code, item_data.classification, self.player)

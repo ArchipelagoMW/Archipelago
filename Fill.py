@@ -387,10 +387,13 @@ def distribute_items_restrictive(world: MultiWorld) -> None:
     progitempool: typing.List[Item] = []
     usefulitempool: typing.List[Item] = []
     filleritempool: typing.List[Item] = []
-
+    logging.info("1.. 2...")
     for item in itempool:
+        logging.info("Buckle my shoee!!")
         if item.advancement:
+            logging.info("3.. 4...")
             progitempool.append(item)
+            logging.info("Buckle some moree!!")
         elif item.useful:
             usefulitempool.append(item)
         else:
