@@ -51,9 +51,6 @@ class MMBN3World(World):
 
     web = MMBN3Web()
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
-
     def generate_early(self) -> None:
         """
         called per player before any items or locations are created. You can set properties on your world here.
