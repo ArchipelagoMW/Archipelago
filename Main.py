@@ -8,13 +8,12 @@ import time
 import zipfile
 import zlib
 from typing import Dict, List, Optional, Set, Tuple
-import tkinter.messagebox as message
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
 from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
 from Options import StartInventoryPool
-from Utils import __version__, get_options, output_path, version_tuple
+from Utils import __version__, get_options, output_path, version_tuple, messagebox
 from worlds import AutoWorld
 from worlds.alttp.Regions import is_main_entrance
 from worlds.alttp.Shops import FillDisabledShopSlots
@@ -458,6 +457,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     gen_time = time.perf_counter() - start
     logger.info('Done. Enjoy. Total Time: %s', gen_time)
     if not __debug__:
-        message.showinfo("Generation Succeeded", f"Done. Enjoy. Total Time: {gen_time}."
-                                                 f"\nOutput to {output_path()}")
+        messagebox("Generation Succeeded", f"Done. Enjoy. Total Time: {gen_time}."
+                                           f"\nOutput to {zipfilename}")
     return world

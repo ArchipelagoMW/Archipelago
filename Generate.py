@@ -12,7 +12,6 @@ import urllib.parse
 import urllib.request
 from collections import ChainMap, Counter
 from typing import Any, Callable, Dict, Tuple, Union
-import tkinter.messagebox as message
 from traceback import format_exception_only, format_exception
 
 import ModuleUpdate
@@ -22,7 +21,7 @@ ModuleUpdate.update()
 import Utils
 from worlds.alttp import Options as LttPOptions
 from worlds.generic import PlandoConnection
-from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_options, user_path
+from Utils import parse_yamls, version_tuple, __version__, tuplize_version, get_options, user_path, messagebox
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from Main import main as ERmain
 from BaseClasses import seeddigits, get_seed, PlandoOptions
@@ -652,7 +651,7 @@ def parsing_failure_gui(type: typing.Type[BaseException], value: BaseException, 
     error_message = "".join(exception_text[0])
     error_message += "" if len(exception_text) <= 1 else f"\n{format_exception_only(type, value)[0]}"
 
-    message.showerror(f"Generation Failed", f"{error_message}")
+    messagebox(f"Generation Failed", f"{error_message}", True)
 
 
 def failure_gui(type: typing.Type[BaseException], value: BaseException, traceback: types.TracebackType) -> None:
@@ -660,7 +659,7 @@ def failure_gui(type: typing.Type[BaseException], value: BaseException, tracebac
     if type is FileNotFoundError:
         exception_text = format_exception(type, value, traceback.tb_next, 0)[0]
     logging.exception("".join(format_exception(type, value, traceback.tb_next)))
-    message.showerror(f"Generation Failed", exception_text)
+    messagebox(f"Generation Failed", exception_text, True)
 
 
 if __name__ == '__main__':
