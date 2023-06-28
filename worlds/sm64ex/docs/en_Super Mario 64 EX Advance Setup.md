@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- Super Mario 64 US Rom (Japanese will work also. Europe and Shindou not supported)
+- Super Mario 64 US/Japanese rom are supported. Europe and Shindou are not supported)
 - Either of: 
   - [sm64pclauncher](https://github.com/N00byKing/sm64pclauncher/releases) or
   - Cloning and building [sm64ex](https://github.com/N00byKing/sm64ex) manually.
@@ -42,8 +42,9 @@ SM64EX will now be compiled. The Launcher will appear to have crashed, but this 
 
 After it's done, the Build list should have another entry titled with what you named the folder in step 7.
 
-NOTE: For some reason, starting the game for the first time always crashes the launcher. Just restart it.
-- If it still crashes, check if you typed the launch options correctly (described in "Joining a MultiWorld Game")
+NOTE: I would recommend building it in a new folder so it doesn't overwrite the working build.
+- For some reason, starting the game for the first time always crashes the launcher. Just restart it.
+- if using the AP version follow the the steps listed here [Archipelago](https://archipelago.gg/tutorial/Super%20Mario%2064/setup/en)
 
 # Manual Compilation (Linux/Windows)
 
