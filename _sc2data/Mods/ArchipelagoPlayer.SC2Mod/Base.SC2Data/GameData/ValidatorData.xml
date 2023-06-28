@@ -2669,4 +2669,9 @@
         <Find value="1"/>
         <ResultNoPlayer value="Error"/>
     </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_HaveSOAQuatro">
+        <Value value="AP_HaveSOAQuatro"/>
+        <Find value="1"/>
+        <ResultNoPlayer value="Error"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

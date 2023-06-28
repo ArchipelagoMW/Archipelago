@@ -2058,4 +2058,58 @@
         <AlertIcon value="Assets\Textures\BTN-Building-Protoss-RoboticsWarpFacility.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_ProtossGroundArmorLevel1">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-GroundArmorLevel1.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-GroundArmorLevel1.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ProtossGroundArmorLevel2">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-GroundArmorLevel2.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-GroundArmorLevel2.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="ProtossGroundArmorLevel1"/>
+    </CButton>
+    <CButton id="AP_ProtossGroundArmorLevel3">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-GroundArmorLevel3.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-GroundArmorLevel3.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="ProtossGroundArmorLevel1"/>
+    </CButton>
+    <CButton id="AP_ProtossGroundWeaponsLevel1">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-GroundWeaponsLevel1.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-GroundWeaponsLevel1.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ProtossGroundWeaponsLevel2">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-GroundWeaponsLevel2.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-GroundWeaponsLevel2.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="ProtossGroundWeaponsLevel1"/>
+    </CButton>
+    <CButton id="AP_ProtossGroundWeaponsLevel3">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-GroundWeaponsLevel3.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-GroundWeaponsLevel3.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="ProtossGroundWeaponsLevel1"/>
+    </CButton>
+    <CButton id="AP_ProtossShieldsLevel1">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-ShieldsLevel1.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-ShieldsLevel1.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ProtossShieldsLevel2">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-ShieldsLevel2.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-ShieldsLevel2.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="ProtossShieldsLevel1"/>
+    </CButton>
+    <CButton id="AP_ProtossShieldsLevel3">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-ShieldsLevel3.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Upgrade-Protoss-ShieldsLevel3.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="ProtossShieldsLevel1"/>
+    </CButton>
+    <CButton id="AP_SOAQuatro">
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel3.dds"/>
+    </CButton>
 </Catalog>

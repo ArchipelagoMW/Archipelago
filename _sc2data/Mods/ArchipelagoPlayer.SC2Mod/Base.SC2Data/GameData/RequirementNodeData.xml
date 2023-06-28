@@ -2373,4 +2373,8 @@
         <Count Link="AP_SOAPhotonCannon" State="CompleteOnly"/>
         <Flags index="TechTreeCheat" value="0"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSOAQuatroCompleteOnly">
+        <Count Link="AP_SOAQuatro" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>
