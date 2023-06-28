@@ -2,7 +2,7 @@ from typing import Set, TYPE_CHECKING, Optional, Dict
 
 from BaseClasses import Region, Location, Item, ItemClassification, Entrance, CollectionState
 from .Constants import NOTES, PROG_ITEMS, PHOBEKINS, USEFUL_ITEMS
-from .Options import Goal
+from .Options import Goal, MessengerOptions
 from .Regions import REGIONS, SEALS, MEGA_SHARDS
 from .Shop import SHOP_ITEMS, PROG_SHOP_ITEMS, USEFUL_SHOP_ITEMS, FIGURINES
 
@@ -13,17 +13,22 @@ else:
 
 
 class MessengerRegion(Region):
+    
     def __init__(self, name: str, world: MessengerWorld) -> None:
         super().__init__(name, world.player, world.multiworld)
-        self.add_locations(self.multiworld.worlds[self.player].location_name_to_id)
+        self.add_locations(world.location_name_to_id)
+        if name == "The Shop" and world.options.goal > Goal.option_open_music_box:
+            self.locations.append(MessengerLocation("Shop Chest", self, None))
+        if world.options.shuffle_seals and name in SEALS:
+            self.create_seal_locs(world.location_name_to_id)
+        if world.options.shuffle_shards and name in MEGA_SHARDS:
+            self.create_shard_locs(world.location_name_to_id)
         world.multiworld.regions.append(self)
 
     def add_locations(self, name_to_id: Dict[str, int]) -> None:
         for loc in REGIONS[self.name]:
             self.locations.append(MessengerLocation(loc, self, name_to_id.get(loc, None)))
         if self.name == "The Shop":
-            if self.multiworld.goal[self.player] > Goal.option_open_music_box:
-                self.locations.append(MessengerLocation("Shop Chest", self, None))
             self.locations += [MessengerShopLocation(f"The Shop - {shop_loc}", self,
                                                      name_to_id[f"The Shop - {shop_loc}"])
                                for shop_loc in SHOP_ITEMS]
@@ -31,12 +36,12 @@ class MessengerRegion(Region):
                                for figurine in FIGURINES]
         elif self.name == "Tower HQ":
             self.locations.append(MessengerLocation("Money Wrench", self, name_to_id["Money Wrench"]))
-        if self.multiworld.shuffle_seals[self.player] and self.name in SEALS:
-            self.locations += [MessengerLocation(seal_loc, self, name_to_id[seal_loc])
-                               for seal_loc in SEALS[self.name]]
-        if self.multiworld.shuffle_shards[self.player] and self.name in MEGA_SHARDS:
-            self.locations += [MessengerLocation(shard, self, name_to_id[shard])
-                               for shard in MEGA_SHARDS[self.name]]
+    
+    def create_seal_locs(self, name_to_id: Dict[str, int]) -> None:
+        self.locations += [MessengerLocation(seal_loc, self, name_to_id[seal_loc]) for seal_loc in SEALS[self.name]]
+    
+    def create_shard_locs(self, name_to_id: Dict[str, int]) -> None:
+        self.locations += [MessengerLocation(shard_loc, self, name_to_id[shard_loc]) for shard_loc in MEGA_SHARDS[self.name]]
 
     def add_exits(self, exits: Set[str]) -> None:
         for exit in exits:
