@@ -35,8 +35,11 @@ item_table = {
     "Holy Lost Sword":      ItemData(787818, ItemClassification.useful),
 
     "HP Up":              ItemData(787819, ItemClassification.useful, 5),
-    "MP Up":              ItemData(787824, ItemClassification.useful, 5),
-    "Knife Up":           ItemData(787829, ItemClassification.useful, 5),
-    "Time Up":            ItemData(787834, ItemClassification.useful, 5),
+    "MP Up":              ItemData(787820, ItemClassification.useful, 5),
+    "Knife Up":           ItemData(787821, ItemClassification.useful, 5),
+    "Time Up":            ItemData(787822, ItemClassification.useful, 5),
 }
 
+event_table = {
+    "Defeat Flandre":      ItemData(None, ItemClassification.progression),
+}
