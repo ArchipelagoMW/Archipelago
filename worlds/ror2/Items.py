@@ -28,7 +28,8 @@ item_table: Dict[str, RiskOfRainItemData] = {
     "Item Scrap, Green":    RiskOfRainItemData("Upgrade", 9 + offset, ItemClassification.filler),
     "Item Scrap, Red":      RiskOfRainItemData("Upgrade", 10 + offset, ItemClassification.filler),
     "Item Scrap, Yellow":   RiskOfRainItemData("Upgrade", 11 + offset, ItemClassification.filler),
-    "Void Item":            RiskOfRainItemData("Upgrade", 12 + offset, ItemClassification.filler)
+    "Void Item":            RiskOfRainItemData("Upgrade", 12 + offset, ItemClassification.filler),
+    "Beads of Fealty":      RiskOfRainItemData("Beads", 13 + offset, ItemClassification.progression)
 }
 
 # 37700 - 37699
