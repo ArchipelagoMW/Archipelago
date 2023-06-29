@@ -28,7 +28,8 @@ class MuseDashWebWorld(WebWorld):
 
 class MuseDashWorld(World):
     """Muse Dash is a rhythm game where you hit objects to the beat of one of 400+ songs.
-    Play through a selection of randomly chosen songs, collecting music sheets until you have enough to play and complete the goal song!"""
+    Play through a selection of randomly chosen songs, collecting music sheets
+    until you have enough to play and complete the goal song!"""
 
     # FUTURE OPTIONS
     # - Album Rando.
@@ -75,7 +76,6 @@ class MuseDashWorld(World):
         # Note: The worst settings still allow 25 songs (Streamer Mode + No DLC). And this max requires 21 songs. (10 + 10 + 1)
         starter_song_count = self.multiworld.starting_song_count[self.player].value
 
-        final_song_list = None
         while True:
             # In most cases this should only need to run once
             available_song_keys = self.muse_dash_collection.get_songs_with_settings(dlc_songs, streamer_mode, lower_diff_threshold, higher_diff_threshold)
@@ -336,5 +336,5 @@ class MuseDashWorld(World):
             "victoryLocation": self.victory_song_name,
             "deathLink": self.multiworld.death_link[self.player].value,
             "musicSheetWinCount": self.get_music_sheet_win_count(),
-            "gradeNeeded" : self.multiworld.grade_needed[self.player].value
+            "gradeNeeded": self.multiworld.grade_needed[self.player].value
         }

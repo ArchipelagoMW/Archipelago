@@ -3,13 +3,13 @@ from Options import Toggle, Option, Range, Choice, DeathLink, ItemSet
 
 
 class AllowJustAsPlannedDLCSongs(Toggle):
-    """Whether or not Just as Planned DLC songs, and all the DLCs along with it, will be included in the randomizer."""
+    """Whether 'Just as Planned DLC' songs, and all the DLCs along with it, will be included in the randomizer."""
     display_name = "Allow Just As Planned DLC Songs"
 
 
 class StreamerModeEnabled(Toggle):
-    """Muse Dash provides an option labeled "Streamer Mode" which removes songs that might trigger copyright issues while streaming.
-    If enabled, only songs available under Streamer Mode will be randomized."""
+    """In Muse Dash, an option named 'Streamer Mode' removes songs which may trigger copyright issues when streaming.
+    If this is enabled, only songs available under Streamer Mode will be available for randomization."""
     display_name = "Streamer Mode Only Songs"
 
 
@@ -34,12 +34,13 @@ class AdditionalSongs(Range):
 
 class DifficultyMode(Choice):
     """Ensures that at any chosen song has at least 1 value falling within these values.
+    - Any: All songs are available
     - Easy: 1, 2 or 3
     - Medium: 4, 5
     - Hard: 6, 7
     - Expert: 8, 9
     - Master: 10+
-    - Any: All songs are available
+    - Manual: Uses the provided minimum and maximum range.
     """
     display_name = "Song Difficulty"
     option_Any = 0
@@ -55,8 +56,8 @@ class DifficultyMode(Choice):
 # Todo: Investigate options to make this non randomizable
 class DifficultyModeOverrideMin(Range):
     """Ensures that 1 difficulty has at least 1 this value or higher per song.
-    - Only available under Difficulty Mode: Custom."""
-    display_name = "Song Difficulty Custom Minimum"
+    - Difficulty Mode must be set to Manual."""
+    display_name = "Manual Difficulty Min"
     range_start = 1
     range_end = 11
     default = 4
@@ -65,8 +66,8 @@ class DifficultyModeOverrideMin(Range):
 # Todo: Investigate options to make this non randomizable
 class DifficultyModeOverrideMax(Range):
     """Ensures that 1 difficulty has at least 1 this value or lower per song.
-    - Only available under Difficulty Mode: Custom."""
-    display_name = "Song Difficulty Custom Maximum"
+    - Difficulty Mode must be set to Manual."""
+    display_name = "Manual Difficulty Max"
     range_start = 1
     range_end = 11
     default = 8
@@ -89,6 +90,7 @@ class GradeNeeded(Choice):
     option_PinkS = 4
     option_SilverS = 5
     default = 0
+
 
 class AdditionalItemPercentage(Range):
     """The percentage of songs that will have 2 items instead of 1 when completing them.
@@ -144,7 +146,7 @@ class TrapCountPercentage(Range):
 class IncludeSongs(ItemSet):
     """Any song listed here will be guaranteed to be included as part of the seed.
     - Difficulty options will be skipped for these songs.
-    - In the event of there being too many included songs, songs will be randomly chosen from the list without regard for difficulty.
+    - If there being too many included songs, songs will be randomly chosen without regard for difficulty.
     - If you want these songs immediately, use start_inventory instead.
     """
     verify_item_name = True

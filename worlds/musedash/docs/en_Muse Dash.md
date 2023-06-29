@@ -1,8 +1,8 @@
 # Muse Dash
 
 ## Quick Links
-- [Setup Guide](../../../../tutorial/Muse%20Dash/setup/en)
-- [Settings Page](../../../../games/Muse%20Dash/player-settings)
+- [Setup Guide](../../../tutorial/Muse%20Dash/setup/en)
+- [Settings Page](../player-settings)
 
 ## What Does Randomization do to this Game?
 - You will be given a number of starting songs. The number of which depends on your settings.

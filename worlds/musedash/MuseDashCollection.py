@@ -11,8 +11,20 @@ class MuseDashCollections:
     """Contains all the data of Muse Dash, loaded from MuseDashData.txt."""
 
     MUSIC_SHEET_CODE: int
-    FREE_ALBUMS = ["Default Music", "Budget Is Burning: Nano Core", "Budget is Burning Vol.1"]
-    DIFF_OVERRIDES = ["MuseDash ka nanika hi", "Rush-Hour", "Find this Month's Featured Playlist", "PeroPero in the Universe", "CHAOS Glitch"]
+
+    FREE_ALBUMS = [
+        "Default Music",
+        "Budget Is Burning: Nano Core",
+        "Budget is Burning Vol.1"
+    ]
+
+    DIFF_OVERRIDES = [
+        "MuseDash ka nanika hi",
+        "Rush-Hour",
+        "Find this Month's Featured Playlist",
+        "PeroPero in the Universe",
+        "CHAOS Glitch"
+    ]
 
     album_items: Dict[str, AlbumData] = {}
     album_locations: Dict[str, int] = {}

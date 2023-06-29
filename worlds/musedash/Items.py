@@ -3,7 +3,7 @@ from BaseClasses import Item, ItemClassification
 
 
 class SongData(NamedTuple):
-    """Special data continer to contain the metadata of each song to make filtering work."""
+    """Special data container to contain the metadata of each song to make filtering work."""
 
     code: Optional[int]
     song_is_free: bool
@@ -15,7 +15,7 @@ class SongData(NamedTuple):
 
 
 class AlbumData(NamedTuple):
-    """Special data continer to contain the metadata of each album to make filtering work. Currently not used."""
+    """Special data container to contain the metadata of each album to make filtering work. Currently not used."""
 
     code: Optional[int]
 
