@@ -104,7 +104,7 @@ components: List[Component] = [
     # Pokémon
     Component('Pokemon Client', 'PokemonClient', file_identifier=SuffixIdentifier('.apred', '.apblue')),
     # TLoZ
-    Component('Zelda 1 Client', 'Zelda1Client'),
+    Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
