@@ -964,6 +964,9 @@ class KH2FightRules(KH2Rules):
         return _rules[self.fight_logic]
 
     def get_prison_keeper_rules(self, state: CollectionState) -> bool:
+        #easy:defensive tool,drive form, party limit
+        #normal:two of those things
+        #hard:one of those things
         _rules = {
             "easy":   self,
             "normal": self,
@@ -972,6 +975,7 @@ class KH2FightRules(KH2Rules):
         return _rules[self.fight_logic]
 
     def get_oogie_boogie_rules(self, state: CollectionState) -> bool:
+        #true
         _rules = {
             "easy":   self,
             "normal": self,
@@ -980,6 +984,9 @@ class KH2FightRules(KH2Rules):
         return _rules[self.fight_logic]
 
     def get_experiment_rules(self, state: CollectionState) -> bool:
+        #easy:drive form,defensive tool,party summon,party limit
+        #normal:3 of those things
+        #hard 2 of those things
         _rules = {
             "easy":   self,
             "normal": self,
@@ -996,6 +1003,9 @@ class KH2FightRules(KH2Rules):
         return _rules[self.fight_logic]
 
     def get_demyx_rules(self, state: CollectionState) -> bool:
+        #defensive option,drive form,party limit
+        #defrnsive option,drive form
+        #defensive option
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1004,6 +1014,9 @@ class KH2FightRules(KH2Rules):
         return _rules[self.fight_logic]
 
     def get_thousand_heartless_rules(self, state: CollectionState) -> bool:
+        #easy:scom,limit form,guard,magnera
+        #normal:limit form,guard
+        #guard
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1012,6 +1025,9 @@ class KH2FightRules(KH2Rules):
         return _rules[self.fight_logic]
 
     def get_data_demyx_rules(self, state: CollectionState) -> bool:
+        #easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom
+        #normal:remove form boost and scom
+        #hard:wisdom 6,relfect,guard,duck flare,fira
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1020,6 +1036,9 @@ class KH2FightRules(KH2Rules):
         return _rules[self.fight_logic]
 
     def get_sephiroth_rules(self, state: CollectionState) -> bool:
+        # easy:both gap closers,limit 5,reflega,donald limit, guard,both 2 groumd finishet
+        # normal:one gap closer,final 5,fira,reflect, donald limit,guard
+        # hard:defensive tool,gap closer
         _rules = {
             "easy":   self,
             "normal": self,
