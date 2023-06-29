@@ -353,7 +353,6 @@ def filter_modded_locations(world_options: options.StardewOptions, locations: Li
 
 
 def filter_disabled_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
-    include_island = world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_false
-    current_mod_names = world_options[options.Mods]
-    return [location for location in locations if (include_island or LocationTags.GINGER_ISLAND not in location.tags) and
-            (location.mod_name is None or location.mod_name in current_mod_names)]
+    locations_first_pass = filter_ginger_island(world_options, locations)
+    locations_second_pass = filter_modded_locations(world_options,locations_first_pass)
+    return locations_second_pass
