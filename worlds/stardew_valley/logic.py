@@ -971,8 +971,10 @@ class StardewLogic:
         tier = floor // 50
         rules = []
         weapon_rule = self.has_great_weapon()
+        mining_rule = self.has_skill_level(Skill.mining, min(10, tier + 5))
         rules.append(weapon_rule)
         rules.append(self.can_cook())
+        rules.append(mining_rule)
         if self.options[options.ToolProgression] == options.ToolProgression.option_progressive:
             rules.append(self.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
         if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
