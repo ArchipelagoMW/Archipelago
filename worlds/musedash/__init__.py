@@ -256,12 +256,12 @@ class MuseDashWorld(World):
             # 2 Locations are defined per song
             location_name = name + "-0"
             region.locations.append(MuseDashLocation(self.player, location_name,
-                self.md_collection.song_locations[location_name], region))
+                                    self.md_collection.song_locations[location_name], region))
 
             if i < two_item_location_count:
                 location_name = name + "-1"
                 region.locations.append(MuseDashLocation(self.player, location_name,
-                    self.md_collection.song_locations[location_name], region))
+                                        self.md_collection.song_locations[location_name], region))
 
             region_exit = Entrance(self.player, name, song_select_region)
             song_select_region.exits.append(region_exit)
@@ -275,7 +275,7 @@ class MuseDashWorld(World):
         for location in self.multiworld.get_locations(self.player):
             item_name = location.name[0:(len(location.name) - 2)]
             if item_name == self.victory_song_name:
-                set_rule(location, lambda state: \
+                set_rule(location, lambda state:
                          state.has(self.music_sheet_name, self.player, self.get_music_sheet_win_count()))
             else:
                 set_rule(location, lambda state, place=item_name: state.has(place, self.player))

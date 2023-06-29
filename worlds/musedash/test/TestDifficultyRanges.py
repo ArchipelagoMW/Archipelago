@@ -10,10 +10,10 @@ class DifficultyRanges(MuseDashTestBase):
 
         def test_range(inputRange, lower, upper):
             assert inputRange[0] == lower and inputRange[1] == upper, f"Output incorrect. Got: {inputRange[0]} to {inputRange[1]}. Expected: {lower} to {upper}"
-            songs = muse_dash_world.muse_dash_collection.get_songs_with_settings(True, False, inputRange[0], inputRange[1])
+            songs = muse_dash_world.md_collection.get_songs_with_settings(True, False, inputRange[0], inputRange[1])
 
             for songKey in songs:
-                song = muse_dash_world.muse_dash_collection.song_items[songKey]
+                song = muse_dash_world.md_collection.song_items[songKey]
                 if (song.easy is not None and inputRange[0] <= song.easy <= inputRange[1]):
                     continue
 
@@ -61,7 +61,7 @@ class DifficultyRanges(MuseDashTestBase):
     def test_songs_have_difficulty(self) -> None:
         muse_dash_world = self.multiworld.worlds[1]
 
-        for song_name in muse_dash_world.muse_dash_collection.DIFF_OVERRIDES:
-            song = muse_dash_world.muse_dash_collection.song_items[song_name]
+        for song_name in muse_dash_world.md_collection.DIFF_OVERRIDES:
+            song = muse_dash_world.md_collection.song_items[song_name]
 
             assert song.easy != None and song.hard != None and song.master != None, f"Song '{song_name}' difficulty not set when it should be."
