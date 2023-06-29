@@ -3,8 +3,8 @@
 -- SPDX-License-Identifier: MIT
 
 -- This script attempts to implement the basic functionality needed in order for
--- the LADXR Archipelago client to be able to talk to BizHawk instead of RetroArch
--- by reproducing the RetroArch API with BizHawk's Lua interface.
+-- the LADXR Archipelago client to be able to talk to EmuHawk instead of RetroArch
+-- by reproducing the RetroArch API with EmuHawk's Lua interface.
 --
 -- RetroArch UDP API: https://github.com/libretro/RetroArch/blob/master/command.c
 --
@@ -16,19 +16,19 @@
 -- commands are supported right now.
 --
 -- USAGE:
---  Load this script in BizHawk ("Tools" -> "Lua Console" -> "Script" -> "Open Script")
+--  Load this script in EmuHawk ("Tools" -> "Lua Console" -> "Script" -> "Open Script", or drag+drop)
 --
 -- All inconsistencies (like missing newlines for some commands) of the RetroArch
 -- UDP API (network_cmd_enable) are reproduced as-is in order for clients written to work with
 -- RetroArch's current API to "just work"(tm).
 --
 -- This script has only been tested on GB(C). If you have made sure it works for N64 or other
--- cores supported by BizHawk, please let me know. Note that GET_STATUS, at the very least, will
+-- cores supported by EmuHawk, please let me know. Note that GET_STATUS, at the very least, will
 -- have to be adjusted.
 --
 --
 -- NOTE:
---  BizHawk's Lua API is very trigger-happy on throwing exceptions.
+--  EmuHawk's Lua API is very trigger-happy on throwing exceptions.
 --  Emulation will continue fine, but the RetroArch API layer will stop working. This
 --  is indicated only by an exception visible in the Lua console, which most players
 --  will probably not have in the foreground.
@@ -82,7 +82,7 @@ while true do
                 -- "GET_STATUS PLAYING game_boy,AP_62468482466172374046_P1_Lonk,crc32=3ecb7b6f"
                 -- CRC32 isn't readily available through the Lua API. We could calculate
                 -- it ourselves, but since LADXR doesn't make use of this field it is
-                -- simply replaced by the hash that BizHawk _does_ make available.
+                -- simply replaced by the hash that EmuHawk _does_ make available.
 
                 udp:sendto(
                     "GET_STATUS " .. status .. " game_boy," ..

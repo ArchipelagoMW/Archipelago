@@ -1,14 +1,16 @@
 import logging
 import time
 import typing
+import uuid
 from logging import Logger
-from typing import Optional
+from typing import Dict, List, Optional
 
 from NetUtils import ClientStatus, NetworkItem
 from worlds.AutoSNIClient import SNIClient
 from .Enemies import enemy_id_to_name
 from .Items import start_id as items_start_id
 from .Locations import start_id as locations_start_id
+from .Options import BlueChestCount
 
 if typing.TYPE_CHECKING:
     from SNIClient import SNIContext
@@ -59,6 +61,18 @@ class L2ACSNIClient(SNIClient):
         if signature != b"ArchipelagoLufia":
             return
 
+        uuid_data: Optional[bytes] = await snes_read(ctx, L2AC_TX_ADDR + 16, 16)
+        if uuid_data is None:
+            return
+
+        coop_uuid: uuid.UUID = uuid.UUID(bytes=uuid_data)
+        if coop_uuid.version != 4:
+            coop_uuid = uuid.uuid4()
+            snes_buffered_write(ctx, L2AC_TX_ADDR + 16, coop_uuid.bytes)
+
+        blue_chests_key: str = f"lufia2ac_blue_chests_checked_T{ctx.team}_P{ctx.slot}"
+        ctx.set_notify(blue_chests_key)
+
         # Goal
         if not ctx.finished_game:
             goal_data: Optional[bytes] = await snes_read(ctx, L2AC_GOAL_ADDR, 10)
@@ -78,29 +92,47 @@ class L2ACSNIClient(SNIClient):
                     await ctx.send_death(f"{player_name} was totally defeated by {enemy_name}.")
 
         # TX
-        tx_data: Optional[bytes] = await snes_read(ctx, L2AC_TX_ADDR, 8)
+        tx_data: Optional[bytes] = await snes_read(ctx, L2AC_TX_ADDR, 12)
         if tx_data is not None:
-            snes_items_sent = int.from_bytes(tx_data[:2], "little")
-            client_items_sent = int.from_bytes(tx_data[2:4], "little")
-            client_ap_items_found = int.from_bytes(tx_data[4:6], "little")
+            snes_blue_chests_checked: int = int.from_bytes(tx_data[:2], "little")
+            snes_ap_items_found: int = int.from_bytes(tx_data[6:8], "little")
+            snes_other_locations_checked: int = int.from_bytes(tx_data[10:12], "little")
 
-            if client_items_sent < snes_items_sent:
-                location_id: int = locations_start_id + client_items_sent
-                location: str = ctx.location_names[location_id]
-                client_items_sent += 1
+            blue_chests_checked: Dict[str, int] = ctx.stored_data.get(blue_chests_key) or {}
+            if blue_chests_checked.get(str(coop_uuid), 0) < snes_blue_chests_checked:
+                blue_chests_checked[str(coop_uuid)] = snes_blue_chests_checked
+                if blue_chests_key in ctx.stored_data:
+                    await ctx.send_msgs([{
+                        "cmd": "Set",
+                        "key": blue_chests_key,
+                        "default": {},
+                        "want_reply": True,
+                        "operations": [{
+                            "operation": "update",
+                            "value": {str(coop_uuid): snes_blue_chests_checked},
+                        }],
+                    }])
 
+            total_blue_chests_checked: int = min(sum(blue_chests_checked.values()), BlueChestCount.range_end)
+            snes_buffered_write(ctx, L2AC_TX_ADDR + 8, total_blue_chests_checked.to_bytes(2, "little"))
+            location_ids: List[int] = [locations_start_id + i for i in range(total_blue_chests_checked)]
+
+            loc_data: Optional[bytes] = await snes_read(ctx, L2AC_TX_ADDR + 32, snes_other_locations_checked * 2)
+            if loc_data is not None:
+                location_ids.extend(locations_start_id + int.from_bytes(loc_data[2 * i:2 * i + 2], "little")
+                                    for i in range(snes_other_locations_checked))
+
+            if new_location_ids := [loc_id for loc_id in location_ids if loc_id not in ctx.locations_checked]:
+                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": new_location_ids}])
+            for location_id in new_location_ids:
                 ctx.locations_checked.add(location_id)
-                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location_id]}])
+                snes_logger.info("%d/%d blue chests" % (
+                    len(list(loc for loc in ctx.locations_checked if not loc & 0x100)),
+                    len(list(loc for loc in ctx.missing_locations | ctx.checked_locations if not loc & 0x100))))
 
-                snes_logger.info("New Check: %s (%d/%d)" % (
-                    location,
-                    len(ctx.locations_checked),
-                    len(ctx.missing_locations) + len(ctx.checked_locations)))
-                snes_buffered_write(ctx, L2AC_TX_ADDR + 2, client_items_sent.to_bytes(2, "little"))
-
-            ap_items_found: int = sum(net_item.player != ctx.slot for net_item in ctx.locations_info.values())
-            if client_ap_items_found < ap_items_found:
-                snes_buffered_write(ctx, L2AC_TX_ADDR + 4, ap_items_found.to_bytes(2, "little"))
+            client_ap_items_found: int = sum(net_item.player != ctx.slot for net_item in ctx.locations_info.values())
+            if client_ap_items_found > snes_ap_items_found:
+                snes_buffered_write(ctx, L2AC_TX_ADDR + 4, client_ap_items_found.to_bytes(2, "little"))
 
         # RX
         rx_data: Optional[bytes] = await snes_read(ctx, L2AC_RX_ADDR, 4)

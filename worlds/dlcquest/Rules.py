@@ -112,7 +112,7 @@ def set_basic_shuffled_items_rules(World_Options, player, world):
 
 
 def set_double_jump_glitchless_rules(World_Options, player, world):
-    if World_Options[Options.FalseDoubleJump] != Options.FalseDoubleJump.option_none:
+    if World_Options[Options.DoubleJumpGlitch] != Options.DoubleJumpGlitch.option_none:
         return
     set_rule(world.get_entrance("Cloud Double Jump", player),
              lambda state: state.has("Double Jump Pack", player))
@@ -121,7 +121,7 @@ def set_double_jump_glitchless_rules(World_Options, player, world):
 
 
 def set_easy_double_jump_glitch_rules(World_Options, player, world):
-    if World_Options[Options.FalseDoubleJump] == Options.FalseDoubleJump.option_all:
+    if World_Options[Options.DoubleJumpGlitch] == Options.DoubleJumpGlitch.option_all:
         return
     set_rule(world.get_entrance("Behind Tree Double Jump", player),
              lambda state: state.has("Double Jump Pack", player))

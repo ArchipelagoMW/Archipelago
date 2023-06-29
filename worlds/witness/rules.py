@@ -10,8 +10,8 @@ from .player_logic import WitnessPlayerLogic
 from .Options import is_option_enabled, get_option_value
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule
+from worlds.AutoWorld import LogicMixin
+from worlds.generic.Rules import set_rule
 
 
 class WitnessLogic(LogicMixin):
@@ -141,14 +141,19 @@ class WitnessLogic(LogicMixin):
                         and self.can_reach("Windmill Interior to Theater", "Entrance", player)
                     )
 
-                    exit_to_town = self.can_reach("Theater to Town", "Entrance", player)
-                    entrance_to_town = (
-                            self.can_reach("Town to Windmill Interior", "Entrance", player)
-                            and self.can_reach("Windmill Interior to Theater", "Entrance", player)
+                    theater_from_town = (
+                        self.can_reach("Town to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Windmill Interior to Theater", "Entrance", player)
+                        or self.can_reach("Theater to Town", "Entrance", player)
                     )
-                    tunnels_to_town = self.can_reach("Tunnels to Town", "Entrance", player)
 
-                    if not (direct_access or (exit_to_town or entrance_to_town) and tunnels_to_town):
+                    tunnels_from_town = (
+                        self.can_reach("Tunnels to Windmill Interior", "Entrance", player)
+                        and self.can_reach("Town to Windmill Interior", "Entrance", player)
+                        or self.can_reach("Tunnels to Town", "Entrance", player)
+                    )
+
+                    if not (direct_access or theater_from_town and tunnels_from_town):
                         valid_option = False
                         break
 
