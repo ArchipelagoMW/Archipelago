@@ -345,6 +345,12 @@ def get_default_options() -> OptionsType:
             "rom_start": True,
             "rom_args": ""
         },
+        "ffmq_options": {
+            "api_urls": [
+                "https://api.ffmqrando.net/",
+                "http://ap.jalchavware.com:5271/"
+            ]
+        }
     }
     return options
 
