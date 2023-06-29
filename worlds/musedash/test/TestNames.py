@@ -8,7 +8,7 @@ class NamesTest(unittest.TestCase):
         collection = MuseDashCollections(0, 1)
         for name in collection.song_items.keys():
             for c in name:
-                # This is taken directly from OoT. This represents probably the minimum set of characters before a game handles their own text.
+                # This is taken directly from OoT. Represents the generally excepted characters.
                 if (0x20 <= ord(c) < 0x7e):
                     continue
 
