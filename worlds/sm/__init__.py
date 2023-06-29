@@ -11,7 +11,6 @@ from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassi
 from Fill import fill_restrictive
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
-\
 logger = logging.getLogger("Super Metroid")
 
 from .Options import sm_options
