@@ -18,6 +18,8 @@ class PreCalculatedWeights:
     flood_courtyard: bool
     flood_lake_desolation: bool
     dry_lake_serene: bool
+    flood_lake_serene_bridge: bool
+    flood_lab: bool
 
     def __init__(self, world: MultiWorld, player: int):
         if world and is_option_enabled(world, player, "RisingTides"):
@@ -32,8 +34,9 @@ class PreCalculatedWeights:
             self.flood_moat, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleMoat")
             self.flood_courtyard, _ = self.roll_flood_setting(world, player, weights_overrrides, "CastleCourtyard")
             self.flood_lake_desolation, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeDesolation")
-            flood_lake_serene, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeSerene")
-            self.dry_lake_serene = not flood_lake_serene 
+            self.dry_lake_serene = not self.roll_flood_setting(world, player, weights_overrrides, "LakeSerene")[0]
+            self.flood_lake_serene_bridge, _ = self.roll_flood_setting(world, player, weights_overrrides, "LakeSereneBridge")
+            self.flood_lab, _ = self.roll_flood_setting(world, player, weights_overrrides, "Lab")
         else:
             self.flood_basement = False
             self.flood_basement_high = False
@@ -45,6 +48,8 @@ class PreCalculatedWeights:
             self.flood_courtyard = False
             self.flood_lake_desolation = False
             self.dry_lake_serene = False 
+            self.flood_lake_serene_bridge = False
+            self.flood_lab = False
 
         self.pyramid_keys_unlock, self.present_key_unlock, self.past_key_unlock, self.time_key_unlock = \
             self.get_pyramid_keys_unlocks(world, player, self.flood_maw)
@@ -57,7 +62,8 @@ class PreCalculatedWeights:
             "GateMilitaryGate",
             "GateSealedCaves",
             "GateSealedSirensCave",
-            "GateLakeDesolation"
+            "GateLakeDesolation",
+            "GateXarion"
         )
 
         past_teleportation_gates: Tuple[str, ...] = (

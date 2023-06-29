@@ -32,7 +32,6 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
         create_region(world, player, locations_per_region, 'The lab (upper)'),
         create_region(world, player, locations_per_region, 'Emperors tower'),
         create_region(world, player, locations_per_region, 'Skeleton Shaft'),
-        create_region(world, player, locations_per_region, 'Sealed Caves (upper)'),
         create_region(world, player, locations_per_region, 'Sealed Caves (Xarion)'),
         create_region(world, player, locations_per_region, 'Refugee Camp'),
         create_region(world, player, locations_per_region, 'Forest'),
@@ -120,17 +119,15 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     connect(world, player, 'The lab (upper)', 'Ancient Pyramid (entrance)', lambda state: state.has_all({'Timespinner Wheel', 'Timespinner Spindle', 'Timespinner Gear 1', 'Timespinner Gear 2', 'Timespinner Gear 3'}, player))
     connect(world, player, 'Emperors tower', 'The lab (upper)')
     connect(world, player, 'Skeleton Shaft', 'Lake desolation')
-    connect(world, player, 'Skeleton Shaft', 'Sealed Caves (upper)', logic.has_keycard_A)
+    connect(world, player, 'Skeleton Shaft', 'Sealed Caves (Xarion)', logic.has_keycard_A)
     connect(world, player, 'Skeleton Shaft', 'Space time continuum', logic.has_teleport)
-    connect(world, player, 'Sealed Caves (upper)', 'Skeleton Shaft')
-    connect(world, player, 'Sealed Caves (upper)', 'Sealed Caves (Xarion)', lambda state: logic.has_teleport(state) or logic.has_doublejump(state))
-    connect(world, player, 'Sealed Caves (Xarion)', 'Sealed Caves (upper)', logic.has_doublejump)
+    connect(world, player, 'Sealed Caves (Xarion)', 'Skeleton Shaft')
     connect(world, player, 'Sealed Caves (Xarion)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Refugee Camp', 'Forest')
     connect(world, player, 'Refugee Camp', 'Library', lambda state: is_option_enabled(world, player, "Inverted") and is_option_enabled(world, player, "PresentAccessWithWheelAndSpindle") and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, player))
     connect(world, player, 'Refugee Camp', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Forest', 'Refugee Camp')
-    connect(world, player, 'Forest', 'Left Side forest Caves', lambda state: state.has('Talaria Attachment', player) or logic.has_timestop(state))
+    connect(world, player, 'Forest', 'Left Side forest Caves', lambda state: state.has('Talaria Attachment', player) or logic.has_timestop(state) or flooded.flood_lake_serene_bridge)
     connect(world, player, 'Forest', 'Caves of Banishment (Sirens)')
     connect(world, player, 'Forest', 'Castle Ramparts')
     connect(world, player, 'Left Side forest Caves', 'Forest')
@@ -173,6 +170,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, precalculated_w
     connect(world, player, 'Space time continuum', 'Varndagroth tower right (lower)', lambda state: logic.can_teleport_to(state, "Present", "GateMilitaryGate"))
     connect(world, player, 'Space time continuum', 'Skeleton Shaft', lambda state: logic.can_teleport_to(state, "Present", "GateSealedCaves"))
     connect(world, player, 'Space time continuum', 'Sealed Caves (Sirens)', lambda state: logic.can_teleport_to(state, "Present", "GateSealedSirensCave"))
+    connect(world, player, 'Space time continuum', 'Sealed Caves (Xarion)', lambda state: logic.can_teleport_to(state, "Present", "GateXarion"))
     connect(world, player, 'Space time continuum', 'Upper Lake Serene', lambda state: logic.can_teleport_to(state, "Past", "GateLakeSereneLeft"))
     connect(world, player, 'Space time continuum', 'Left Side forest Caves', lambda state: logic.can_teleport_to(state, "Past", "GateLakeSereneRight"))
     connect(world, player, 'Space time continuum', 'Refugee Camp', lambda state: logic.can_teleport_to(state, "Past", "GateAccessToPast"))

@@ -39,9 +39,9 @@ class TimespinnerWorld(World):
     option_definitions = timespinner_options
     game = "Timespinner"
     topology_present = True
-    data_version = 11
+    data_version = 12
     web = TimespinnerWebWorld()
-    required_client_version = (0, 3, 7)
+    required_client_version = (0, 4, 1)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_location_datas(None, None, None)}
@@ -111,6 +111,8 @@ class TimespinnerWorld(World):
         slot_data["CastleCourtyard"] = self.precalculated_weights.flood_courtyard
         slot_data["LakeDesolation"] = self.precalculated_weights.flood_lake_desolation
         slot_data["DryLakeSerene"] = self.precalculated_weights.dry_lake_serene
+        slot_data["LakeSereneBridge"] = self.precalculated_weights.flood_lake_serene_bridge
+        slot_data["Lab"] = self.precalculated_weights.flood_lab
 
         return slot_data
 
@@ -148,6 +150,10 @@ class TimespinnerWorld(World):
                 flooded_areas.append("Lake Desolation")
             if not self.precalculated_weights.dry_lake_serene:
                 flooded_areas.append("Lake Serene")
+            if not self.precalculated_weights.flood_lake_serene_bridge:
+                flooded_areas.append("Lake Serene Bridge")
+            if not self.precalculated_weights.flood_lab:
+                flooded_areas.append("Lab")
 
             if len(flooded_areas) == 0:
                 flooded_areas_string: str = "None"
@@ -181,12 +187,6 @@ class TimespinnerWorld(World):
             item.classification = ItemClassification.filler
         elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
                 and not self.is_option_enabled("UnchainedKeys"):
-            item.classification = ItemClassification.filler
-        elif name in {"Timespinner Gear 1", "Timespinner Gear 2", "Timespinner Gear 3"} \
-                and self.is_option_enabled("DadPercent"):
-            item.classification = ItemClassification.filler
-        elif name == "Timespinner Spindle" and self.is_option_enabled("Inverted") and \
-                not self.is_option_enabled("PresentAccessWithWheelAndSpindle"):
             item.classification = ItemClassification.filler
 
         return item
