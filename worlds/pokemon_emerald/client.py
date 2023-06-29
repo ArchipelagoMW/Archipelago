@@ -86,7 +86,7 @@ class GBAContext(CommonContext):
             await super(GBAContext, self).server_auth(password_requested)
         if self.auth is None:
             self.awaiting_rom = True
-            logger.info('Awaiting connection to GBA to get Player information')
+            logger.info("Awaiting connection to GBA to get Player information")
             return
         await self.send_connect()
 
@@ -102,8 +102,8 @@ class GBAContext(CommonContext):
 
 
     def on_package(self, cmd, args):
-        if cmd == 'Connected':
-            slot_data = args.get('slot_data', None)
+        if cmd == "Connected":
+            slot_data = args.get("slot_data", None)
             if slot_data is not None:
                 if slot_data["goal"] == Goal.option_champion:
                     self.goal_flag = IS_CHAMPION_FLAG
