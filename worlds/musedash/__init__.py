@@ -194,8 +194,7 @@ class MuseDashWorld(World):
         if len(trap_list) > 0 and trap_count > 0:
             for _ in range(0, trap_count):
                 index = self.multiworld.random.randrange(0, len(trap_list))
-                choice = trap_list[index]
-                self.multiworld.itempool.append(self.create_item(choice[0]))
+                self.multiworld.itempool.append(self.create_item(trap_list[index]))
 
             item_count += trap_count
 
@@ -279,11 +278,11 @@ class MuseDashWorld(World):
 
         trap_list = list()
         if self.multiworld.available_trap_types[self.player].value & 1 != 0:
-            trap_list += self.muse_dash_collection.vfx_trap_items.items()
+            trap_list += self.muse_dash_collection.vfx_trap_items.keys()
 
         # SFX options are only available under Just as Planned DLC.
         if dlc_songs and self.multiworld.available_trap_types[self.player].value & 2 != 0:
-            trap_list += self.muse_dash_collection.sfx_trap_items.items()
+            trap_list += self.muse_dash_collection.sfx_trap_items.keys()
 
         return trap_list
 
