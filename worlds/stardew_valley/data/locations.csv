@@ -99,7 +99,7 @@ id,region,name,tags,mod_name
 235,The Mines - Floor 110,Floor 110 Elevator,ELEVATOR,
 236,The Mines - Floor 115,Floor 115 Elevator,ELEVATOR,
 237,The Mines - Floor 120,Floor 120 Elevator,ELEVATOR,
-238,Volcano - Floor 10,Volcano Caldera Treasure,"MANDATORY,GINGER_ISLAND",
+251,Volcano - Floor 10,Volcano Caldera Treasure,"MANDATORY,GINGER_ISLAND",
 301,Stardew Valley,Level 1 Farming,"FARMING_LEVEL,SKILL_LEVEL",
 302,Stardew Valley,Level 2 Farming,"FARMING_LEVEL,SKILL_LEVEL",
 303,Stardew Valley,Level 3 Farming,"FARMING_LEVEL,SKILL_LEVEL",
