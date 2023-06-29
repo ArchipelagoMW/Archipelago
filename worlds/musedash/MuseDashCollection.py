@@ -1,5 +1,5 @@
 from .Items import SongData, AlbumData
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 
 def load_text_file(name: str) -> str:
@@ -87,9 +87,9 @@ class MuseDashCollections:
                 location_id_index += 1
 
     def get_songs_with_settings(self, dlc_songs: bool, streamer_mode_active: bool,
-                                    diff_lower: int, diff_higher: int) -> list:
+                                    diff_lower: int, diff_higher: int) -> List[str]:
         """Gets a list of all songs that match the filter settings. Difficulty thresholds are inclusive."""
-        filtered_list = list()
+        filtered_list = []
 
         for songKey, songData in self.song_items.items():
             if not dlc_songs and not songData.song_is_free:

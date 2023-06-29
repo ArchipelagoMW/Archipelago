@@ -1,7 +1,7 @@
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule
 from BaseClasses import Region, Item, ItemClassification, Entrance, Tutorial
-
+from typing import List
 from math import floor
 
 from .Options import musedash_options
@@ -36,7 +36,7 @@ class MuseDashWorld(World):
     # - Support for blacklisting/plando-ing certain songs.
 
     # World Options
-    game: str = "Muse Dash"
+    game = "Muse Dash"
     option_definitions = musedash_options
     topology_present = False
     data_version = 6
@@ -60,8 +60,8 @@ class MuseDashWorld(World):
 
     # Working Data
     victory_song_name: str = ""
-    starting_songs: list  # Todo: Update to list[str] when python 3.8 is no longer used
-    included_songs: list  # Todo: Update to list[str] when python 3.8 is no longer used
+    starting_songs: List[str]
+    included_songs: List[str]
     needed_token_count: int
     location_count: int
 
@@ -99,8 +99,7 @@ class MuseDashWorld(World):
         for song in self.starting_songs:
             self.multiworld.push_precollected(self.create_item(song))
 
-    # Todo: Update this to list[str] when python 3.8 stops being used
-    def handle_plando(self, available_song_keys: list) -> list:
+    def handle_plando(self, available_song_keys: List[str]) -> List[str]:
         start_items = self.multiworld.start_inventory[self.player].value.keys()
         include_songs = self.multiworld.include_songs[self.player].value
         exclude_songs = self.multiworld.exclude_songs[self.player].value
@@ -109,8 +108,7 @@ class MuseDashWorld(World):
         self.included_songs = [s for s in include_songs if (s in self.muse_dash_collection.song_items) and (s not in self.starting_songs)]
         return [s for s in available_song_keys if (s not in start_items) and (s not in include_songs) and (s not in exclude_songs)]
 
-    # Todo: Update this to list[str] when python 3.8 stops being used
-    def create_song_pool(self, available_song_keys: list):
+    def create_song_pool(self, available_song_keys: List[str]):
         starting_song_count = self.multiworld.starting_song_count[self.player].value
         additional_song_count = self.multiworld.additional_song_count[self.player].value
 
@@ -179,7 +177,7 @@ class MuseDashWorld(World):
         return MuseDashFixedItem(name, ItemClassification.filler, None, self.player)
 
     def create_items(self) -> None:
-        song_keys_in_pool = list(self.included_songs)
+        song_keys_in_pool = self.included_songs.copy()
 
         # Note: Item count will be off if plando is involved.
         item_count = self.get_music_sheet_count()
@@ -235,8 +233,8 @@ class MuseDashWorld(World):
         # Doing it in this order ensures that starting songs are first in line to getting 2 locations.
         # Final song is excluded as for the purpose of this rando, it doesn't matter.
 
-        all_selected_locations = list(self.starting_songs)
-        included_song_copy = list(self.included_songs)
+        all_selected_locations = self.starting_songs.copy()
+        included_song_copy = self.included_songs.copy()
 
         self.multiworld.random.shuffle(included_song_copy)
         all_selected_locations.extend(included_song_copy)
@@ -273,10 +271,10 @@ class MuseDashWorld(World):
             else:
                 set_rule(location, lambda state, place=item_name: state.has(place, self.player))
 
-    def get_available_traps(self) -> list:
+    def get_available_traps(self) -> List[str]:
         dlc_songs = self.multiworld.allow_just_as_planned_dlc_songs[self.player]
 
-        trap_list = list()
+        trap_list = []
         if self.multiworld.available_trap_types[self.player].value & 1 != 0:
             trap_list += self.muse_dash_collection.vfx_trap_items.keys()
 
@@ -306,8 +304,7 @@ class MuseDashWorld(World):
         sheet_count = self.get_music_sheet_count()
         return max(1, floor(sheet_count * multiplier))
 
-    # Todo: Update to list[int] when python 3.8 is no longer used.
-    def get_difficulty_range(self) -> list:
+    def get_difficulty_range(self) -> List[int]:
         difficulty_mode = self.multiworld.song_difficulty_mode[self.player]
 
         # Valid difficulties are between 1 and 11. But make it 0 to 12 for safety
