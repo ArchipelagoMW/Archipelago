@@ -45,6 +45,8 @@ Currently, the following games are supported:
 * Adventure
 * DLC Quest
 * Noita
+* Undertale
+* Bumper Stickers
 * Final Fantasy Mystic Quest
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
