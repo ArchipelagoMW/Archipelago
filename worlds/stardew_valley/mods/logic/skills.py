@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from . import magic
 from ...strings.building_names import Building
 from ...strings.geode_names import Geode
@@ -9,23 +9,22 @@ from ...strings.machine_names import Machine
 from ...strings.tool_names import Tool, ToolMaterial
 from ...mods.mod_data import ModNames
 from ...data.villagers_data import all_villagers
-from ...stardew_rule import Count, StardewRule, True_
+from ...stardew_rule import Count, StardewRule, False_
 from ... import options
-from ...options import StardewOptions
 
 
-def append_mod_skill_level(skills_items: List[str], world_options: StardewOptions):
-    if ModNames.luck_skill in world_options[options.Mods]:
+def append_mod_skill_level(skills_items: List[str], active_mods: Union[bool, int, str]):
+    if ModNames.luck_skill in active_mods:
         skills_items.append("Luck Level")
-    if ModNames.socializing_skill in world_options[options.Mods]:
+    if ModNames.socializing_skill in active_mods:
         skills_items.append("Socializing Level")
-    if ModNames.magic in world_options[options.Mods]:
+    if ModNames.magic in active_mods:
         skills_items.append("Magic Level")
-    if ModNames.archaeology in world_options[options.Mods]:
+    if ModNames.archaeology in active_mods:
         skills_items.append("Archaeology Level")
-    if ModNames.binning_skill in world_options[options.Mods]:
+    if ModNames.binning_skill in active_mods:
         skills_items.append("Binning Level")
-    if ModNames.cooking_skill in world_options[options.Mods]:
+    if ModNames.cooking_skill in active_mods:
         skills_items.append("Cooking Level")
 
 
@@ -42,54 +41,54 @@ def can_earn_mod_skill_level(logic, skill: str, level: int) -> StardewRule:
         return can_earn_cooking_skill_level(logic, level)
     if ModNames.binning_skill in logic.options[options.Mods] and skill == ModSkill.binning:
         return can_earn_binning_skill_level(logic, level)
-    return True_()
+    return False_()
 
 
-def can_earn_luck_skill_level(self, level: int) -> StardewRule:
+def can_earn_luck_skill_level(vanilla_logic, level: int) -> StardewRule:
     if level >= 6:
-        return self.can_fish_chests() | self.can_open_geode(Geode.magma)
+        return vanilla_logic.can_fish_chests() | vanilla_logic.can_open_geode(Geode.magma)
     else:
-        return self.can_fish_chests() | self.can_open_geode(Geode.geode)
+        return vanilla_logic.can_fish_chests() | vanilla_logic.can_open_geode(Geode.geode)
 
 
-def can_earn_magic_skill_level(self, level: int) -> StardewRule:
-    spell_count = [self.received(MagicSpell.clear_debris), self.received(MagicSpell.water),
-                   self.received(MagicSpell.blink), self.received(MagicSpell.fireball),
-                   self.received(MagicSpell.frostbite),
-                   self.received(MagicSpell.descend), self.received(MagicSpell.tendrils),
-                   self.received(MagicSpell.shockwave),
-                   self.received(MagicSpell.meteor),
-                   self.received(MagicSpell.spirit)]
-    return magic.can_use_altar(self) & Count(level, spell_count)
+def can_earn_magic_skill_level(vanilla_logic, level: int) -> StardewRule:
+    spell_count = [vanilla_logic.received(MagicSpell.clear_debris), vanilla_logic.received(MagicSpell.water),
+                   vanilla_logic.received(MagicSpell.blink), vanilla_logic.received(MagicSpell.fireball),
+                   vanilla_logic.received(MagicSpell.frostbite),
+                   vanilla_logic.received(MagicSpell.descend), vanilla_logic.received(MagicSpell.tendrils),
+                   vanilla_logic.received(MagicSpell.shockwave),
+                   vanilla_logic.received(MagicSpell.meteor),
+                   vanilla_logic.received(MagicSpell.spirit)]
+    return magic.can_use_altar(vanilla_logic) & Count(level, spell_count)
 
 
-def can_earn_socializing_skill_level(self, level: int) -> StardewRule:
+def can_earn_socializing_skill_level(vanilla_logic, level: int) -> StardewRule:
     villager_count = []
     for villager in all_villagers:
-        if villager.mod_name in self.options[options.Mods] or villager.mod_name is None:
-            villager_count.append(self.can_earn_relationship(villager.name, level))
+        if villager.mod_name in vanilla_logic.options[options.Mods] or villager.mod_name is None:
+            villager_count.append(vanilla_logic.can_earn_relationship(villager.name, level))
     return Count(level * 2, villager_count)
 
 
-def can_earn_archaeology_skill_level(self, level: int) -> StardewRule:
+def can_earn_archaeology_skill_level(vanilla_logic, level: int) -> StardewRule:
     if level >= 6:
-        return self.can_do_panning() | self.has_tool(Tool.hoe, ToolMaterial.gold)
+        return vanilla_logic.can_do_panning() | vanilla_logic.has_tool(Tool.hoe, ToolMaterial.gold)
     else:
-        return self.can_do_panning() | self.has_tool(Tool.hoe, ToolMaterial.basic)
+        return vanilla_logic.can_do_panning() | vanilla_logic.has_tool(Tool.hoe, ToolMaterial.basic)
 
 
-def can_earn_cooking_skill_level(self, level: int) -> StardewRule:
+def can_earn_cooking_skill_level(vanilla_logic, level: int) -> StardewRule:
     if level >= 6:
-        return self.can_cook() & self.can_fish() & self.can_reach_region(Region.saloon) & \
-            self.has_building(Building.coop) & self.has_building(Building.barn)
+        return vanilla_logic.can_cook() & vanilla_logic.can_fish() & vanilla_logic.can_reach_region(Region.saloon) & \
+            vanilla_logic.has_building(Building.coop) & vanilla_logic.has_building(Building.barn)
     else:
-        return self.can_cook()
+        return vanilla_logic.can_cook()
 
 
-def can_earn_binning_skill_level(self, level: int) -> StardewRule:
+def can_earn_binning_skill_level(vanilla_logic, level: int) -> StardewRule:
     if level >= 6:
-        return self.can_reach_region(Region.town) & self.has(Machine.recycling_machine) & \
-            (self.can_fish() | self.can_crab_pot())
+        return vanilla_logic.can_reach_region(Region.town) & vanilla_logic.has(Machine.recycling_machine) & \
+            (vanilla_logic.can_fish() | vanilla_logic.can_crab_pot())
     else:
-        return self.can_reach_region(Region.town) | (self.has(Machine.recycling_machine) &
-                                                     (self.can_fish() | self.can_crab_pot()))
+        return vanilla_logic.can_reach_region(Region.town) | (vanilla_logic.has(Machine.recycling_machine) &
+                                                     (vanilla_logic.can_fish() | vanilla_logic.can_crab_pot()))

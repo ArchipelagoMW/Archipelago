@@ -1,14 +1,13 @@
+from typing import Union
 from ...strings.building_names import ModBuilding
 from ..mod_data import ModNames
 from ...strings.metal_names import MetalBar
-from ...options import StardewOptions
-from ... import options
 
 
-def modded_buildings(self, world_options: StardewOptions):
+def get_modded_building_rules(vanilla_logic, active_mods: Union[bool, int, str]):
     buildings = {}
-    if ModNames.tractor in world_options[options.Mods]:
+    if ModNames.tractor in active_mods:
         buildings.update({
-            ModBuilding.tractor_garage: self.can_spend_money(150000) & self.has(MetalBar.iron) &
-                                        self.has(MetalBar.iridium) & self.has("Battery Pack")})
+            ModBuilding.tractor_garage: vanilla_logic.can_spend_money(150000) & vanilla_logic.has(MetalBar.iron) &
+                                        vanilla_logic.has(MetalBar.iridium) & vanilla_logic.has("Battery Pack")})
     return buildings
