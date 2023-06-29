@@ -10,6 +10,7 @@ from BaseClasses import ItemClassification, MultiWorld, Tutorial, Counter
 from Fill import fill_restrictive
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components
 
 from .data import (PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
     data as emerald_data)
@@ -26,6 +27,17 @@ from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item
     set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import sanity_check
 from .util import int_to_bool_array, bool_array_to_int
+
+
+def launch_client():
+    import multiprocessing
+    from .client import launch
+    process = multiprocessing.Process(target=launch)
+    process.start()
+
+
+components.append(Component('Pokemon Emerald Client', 'PokemonEmeraldClient', component_type=Type.CLIENT,
+                            func=launch_client, file_identifier=SuffixIdentifier('.apemerald')))
 
 
 class PokemonEmeraldWebWorld(WebWorld):
