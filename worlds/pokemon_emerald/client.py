@@ -188,7 +188,7 @@ async def gba_send_receive_task(ctx: GBAContext):
                 logger.debug("Attempting to connect to GBA...")
                 ctx.gba_streams = await asyncio.wait_for(asyncio.open_connection("localhost", GBA_SOCKET_PORT), timeout=10)
                 ctx.gba_status = CONNECTION_STATUS_TENTATIVE
-            except TimeoutError:
+            except asyncio.TimeoutError:
                 logger.debug("Connection to GBA timed out. Retrying.")
                 ctx.gba_status = CONNECTION_STATUS_TIMING_OUT
                 continue
@@ -203,17 +203,10 @@ async def gba_send_receive_task(ctx: GBAContext):
             writer.write(message)
             writer.write(b"\n")
 
-            if error_status:
-                ctx.gb_status = error_status
-                logger.info("Lost connection to GBA and attempting to reconnect. Use /gba for status updates")
-            elif ctx.gba_status == CONNECTION_STATUS_TENTATIVE:
-                logger.info("Connected to GBA")
-                ctx.gba_status = CONNECTION_STATUS_CONNECTED
-
             # Write
             try:
-                await asyncio.wait_for(writer.drain(), timeout=1.5)
-            except TimeoutError:
+                await asyncio.wait_for(writer.drain(), timeout=2)
+            except asyncio.TimeoutError:
                 logger.debug("Connection to GBA timed out. Reconnecting.")
                 error_status = CONNECTION_STATUS_TIMING_OUT
                 writer.close()
@@ -234,7 +227,7 @@ async def gba_send_receive_task(ctx: GBAContext):
                     break
 
                 async_start(handle_read_data(data_decoded, ctx))
-            except TimeoutError:
+            except asyncio.TimeoutError:
                 logger.debug("Connection to GBA timed out during read. Reconnecting.")
                 error_status = CONNECTION_STATUS_TIMING_OUT
                 writer.close()
@@ -244,6 +237,13 @@ async def gba_send_receive_task(ctx: GBAContext):
                 error_status = CONNECTION_STATUS_RESET
                 writer.close()
                 ctx.gba_streams = None
+
+            if error_status:
+                ctx.gba_status = error_status
+                logger.info("Lost connection to GBA and attempting to reconnect. Use /gba for status updates")
+            elif ctx.gba_status == CONNECTION_STATUS_TENTATIVE:
+                logger.info("Connected to GBA")
+                ctx.gba_status = CONNECTION_STATUS_CONNECTED
 
 
 async def run_game(rom_file_path):
