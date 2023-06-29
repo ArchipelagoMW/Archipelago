@@ -109,13 +109,13 @@ class BlueChestCount(Range):
     more for each party member or capsule monster if you have shuffle_party_members/shuffle_capsule_monsters enabled.
     (You will still encounter blue chests in your world after all the multiworld location checks have been exhausted,
     but these chests will then generate items for yourself only.)
-    Supported values: 10 – 75
+    Supported values: 10 – 100
     Default value: 25
     """
 
     display_name = "Blue chest count"
     range_start = 10
-    range_end = 75
+    range_end = 100
     default = 25
 
 
