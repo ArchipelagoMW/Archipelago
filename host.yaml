@@ -188,7 +188,7 @@ adventure_options:
 
 ffmq_options:
   api_urls:
-    - "https://ffmqrapi.azurewebsites.net/"
-    - "http://ap.jalchavware.com/"
+    - "https://api.ffmqrando.net/"
+    - "http://ap.jalchavware.com:5271/"
 
 

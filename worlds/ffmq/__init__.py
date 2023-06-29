@@ -13,7 +13,6 @@ import requests
 import yaml
 
 
-
 class FFMQWebWorld(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -70,39 +69,46 @@ class FFMQWorld(World):
                 (self.multiworld.bosses_scaling_upper[self.player].value,
                  self.multiworld.bosses_scaling_lower[self.player].value)
 
-        if (self.multiworld.map_shuffle[self.player] or self.multiworld.crest_shuffle[self.player] or
-                self.multiworld.crest_shuffle[self.player]):
-            if self.multiworld.map_shuffle_seed[self.player].value.isdigit():
-                self.multiworld.random.seed(int(self.multiworld.map_shuffle_seed[self.player].value))
-            elif self.multiworld.map_shuffle_seed[self.player].value != "random":
-                self.multiworld.random.seed(int(hash(self.multiworld.map_shuffle_seed[self.player].value))
-                                            + int(self.multiworld.seed))
+    @classmethod
+    def stage_generate_early(cls, multiworld):
 
-            seed = hex(self.multiworld.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()
-            map_shuffle = self.multiworld.map_shuffle[self.player].value
-            crest_shuffle = self.multiworld.crest_shuffle[self.player].current_key
-            battlefield_shuffle = self.multiworld.shuffle_battlefield_rewards[self.player].current_key
+        api_urls = Utils.get_options()["ffmq_options"].get("api_urls", None)
 
-            api_urls = Utils.get_options()["ffmq_options"].get("api_urls", None)
+        for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
+            if (world.multiworld.map_shuffle[world.player] or world.multiworld.crest_shuffle[world.player] or
+                    world.multiworld.crest_shuffle[world.player]):
+                if world.multiworld.map_shuffle_seed[world.player].value.isdigit():
+                    multiworld.random.seed(int(world.multiworld.map_shuffle_seed[world.player].value))
+                elif world.multiworld.map_shuffle_seed[world.player].value != "random":
+                    multiworld.random.seed(int(hash(world.multiworld.map_shuffle_seed[world.player].value))
+                                                + int(world.multiworld.seed))
 
-            if not api_urls:
-                raise Exception("No FFMQR API URLs specified in host.yaml")
-            errors = []
-            for api_url in api_urls:
-                response = requests.get(api_url +
-                                        f"GenerateRooms?s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}")
-                if response.ok:
-                    self.rooms = yaml.load(response.text, yaml.Loader)
-                    break
+                seed = hex(multiworld.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()
+                map_shuffle = multiworld.map_shuffle[world.player].value
+                crest_shuffle = multiworld.crest_shuffle[world.player].current_key
+                battlefield_shuffle = multiworld.shuffle_battlefield_rewards[world.player].current_key
+
+                if not api_urls:
+                    raise Exception("No FFMQR API URLs specified in host.yaml")
+
+                errors = []
+                for api_url in api_urls.copy():
+                    response = requests.get(api_url +
+                                            f"GenerateRooms?s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}")
+                    if response.ok:
+                        world.rooms = yaml.load(response.text, yaml.Loader)
+                        break
+                    else:
+                        api_urls.remove(api_url)
+                        errors.append([api_url, response])
                 else:
-                    errors.append([api_url, response])
+                    error_text = f"Failed to fetch map shuffle data for FFMQ player {world.player}"
+                    for error in errors:
+                        error_text += f"\n{error[0]} - got error {error[1].status_code} {error[1].reason} {error[1].text}"
+                    raise Exception(error_text)
+                api_urls.append(api_urls.pop(0))
             else:
-                error_text = f"Failed to fetch map shuffle data for FFMQ player {self.player}"
-                for error in errors:
-                    error_text += f"\n{error[0]} - got error {error[1].status_code} {error[1].reason} {error[1].text}"
-                raise Exception(error_text)
-        else:
-            self.rooms = rooms
+                world.rooms = rooms
 
     def create_item(self, name: str):
         return FFMQItem(name, self.player)
