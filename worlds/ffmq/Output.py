@@ -40,42 +40,40 @@ def generate_output(self, output_directory):
     def tf(option):
         return True if option else False
 
-    # breaking the rules here but this should cut this block of code down to be more readable
-    mw = self.multiworld
-    p = self.player
-
     options = deepcopy(settings_template)
-    options["name"] = mw.player_name[p]
+    options["name"] = self.multiworld.player_name[self.player]
 
     option_writes = {
-                   "enemies_density": cc(mw.enemies_density[p]),
+                   "enemies_density": cc(self.multiworld.enemies_density[self.player]),
                    "chests_shuffle": "Include",
-                   "shuffle_boxes_content": True if mw.brown_boxes[p] == "shuffle" else False,
+                   "shuffle_boxes_content": True if self.multiworld.brown_boxes[self.player] == "shuffle" else False,
                    "npcs_shuffle": "Include",
                    "battlefields_shuffle": "Include",
-                   "logic_options": cc(mw.logic[p]),
-                   "shuffle_enemies_position": tf(mw.shuffle_enemies_position[p]),
-                   "enemies_scaling_lower": cc(mw.enemies_scaling_lower[p]),
-                   "enemies_scaling_upper": cc(mw.enemies_scaling_upper[p]),
-                   "bosses_scaling_lower": cc(mw.bosses_scaling_lower[p]),
-                   "bosses_scaling_upper": cc(mw.bosses_scaling_upper[p]),
-                   "enemizer_attacks": cc(mw.enemizer_attacks[p]),
-                   "leveling_curve": cc(mw.leveling_curve[p]),
-                   "battles_quantity": cc(mw.battlefields_battles_quantities[p]) if
-                                        mw.battlefields_battles_quantities[p].value < 5 else "RandomLow" if
-                                        mw.battlefields_battles_quantities[p].value == 5 else "RandomHigh",
-                   "shuffle_battlefield_rewards": tf(mw.shuffle_battlefield_rewards[p]),
+                   "logic_options": cc(self.multiworld.logic[self.player]),
+                   "shuffle_enemies_position": tf(self.multiworld.shuffle_enemies_position[self.player]),
+                   "enemies_scaling_lower": cc(self.multiworld.enemies_scaling_lower[self.player]),
+                   "enemies_scaling_upper": cc(self.multiworld.enemies_scaling_upper[self.player]),
+                   "bosses_scaling_lower": cc(self.multiworld.bosses_scaling_lower[self.player]),
+                   "bosses_scaling_upper": cc(self.multiworld.bosses_scaling_upper[self.player]),
+                   "enemizer_attacks": cc(self.multiworld.enemizer_attacks[self.player]),
+                   "leveling_curve": cc(self.multiworld.leveling_curve[self.player]),
+                   "battles_quantity": cc(self.multiworld.battlefields_battles_quantities[self.player]) if
+                                          self.multiworld.battlefields_battles_quantities[self.player].value < 5 else
+                                         "RandomLow" if
+                                         self.multiworld.battlefields_battles_quantities[self.player].value == 5 else
+                                         "RandomHigh",
+                   "shuffle_battlefield_rewards": tf(self.multiworld.shuffle_battlefield_rewards[self.player]),
                    "random_starting_weapon": True,
-                   "progressive_gear": tf(mw.progressive_gear[p]),
-                   "tweaked_dungeons": tf(mw.tweak_frustrating_dungeons[p]),
-                   "doom_castle_mode": cc(mw.doom_castle_mode[p]),
-                   "doom_castle_shortcut": tf(mw.doom_castle_shortcut[p]),
-                   "sky_coin_mode": cc(mw.sky_coin_mode[p]),
-                   "sky_coin_fragments_qty": cc(mw.shattered_sky_coin_quantity[p]),
+                   "progressive_gear": tf(self.multiworld.progressive_gear[self.player]),
+                   "tweaked_dungeons": tf(self.multiworld.tweak_frustrating_dungeons[self.player]),
+                   "doom_castle_mode": cc(self.multiworld.doom_castle_mode[self.player]),
+                   "doom_castle_shortcut": tf(self.multiworld.doom_castle_shortcut[self.player]),
+                   "sky_coin_mode": cc(self.multiworld.sky_coin_mode[self.player]),
+                   "sky_coin_fragments_qty": cc(self.multiworld.shattered_sky_coin_quantity[self.player]),
                    "enable_spoilers": False,
-                   "progressive_formations": cc(mw.progressive_formations[p]),
-                   "map_shuffling": cc(mw.map_shuffle[p]),
-                   "crest_shuffle": tf(mw.crest_shuffle[p]),
+                   "progressive_formations": cc(self.multiworld.progressive_formations[self.player]),
+                   "map_shuffling": cc(self.multiworld.map_shuffle[self.player]),
+                   "crest_shuffle": tf(self.multiworld.crest_shuffle[self.player]),
                }
     for option, data in option_writes.items():
         options["Final Fantasy Mystic Quest"][option][data] = 1
@@ -85,8 +83,8 @@ def generate_output(self, output_directory):
                               'utf8')
     self.rom_name_available_event.set()
 
-    setup = {"version": "1.4", "name": mw.player_name[p], "romname": rom_name, "seed":
-             hex(mw.per_slot_randoms[p].randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
+    setup = {"version": "1.4", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
+             hex(self.multiworld.per_slot_randoms[self.player].randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
 
     starting_items = [output_item_name(item) for item in self.multiworld.precollected_items[self.player]]
     if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
