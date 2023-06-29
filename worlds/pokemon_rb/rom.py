@@ -98,7 +98,7 @@ def write_quizzes(self, data, random):
         elif q == 6:
             i = 2
             while not a and i in [1, 2]:
-                i = random.randint(0, random.choice(9, 99))
+                i = random.randint(0, random.choice([9, 99]))
             return encode_text(f"POLIWAG evolves {i}<LINE>times?<DONE>")
         elif q == 7:
             entity = "Motor Carrier"

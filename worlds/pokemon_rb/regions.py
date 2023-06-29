@@ -1820,7 +1820,7 @@ def create_regions(self):
     connect(multiworld, player, "Seafoam Islands B2F-NW", "Seafoam Islands B4F-W", one_way=True)
     connect(multiworld, player, "Seafoam Islands B2F-NE", "Seafoam Islands B4F-W", one_way=True)
     connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B4F", one_way=True)
-    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B4F-W", logic.can_surf(state, player), one_way=True)
+    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B4F-W", lambda state: logic.can_surf(state, player), one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 2F", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 1F-SE", one_way=True)
     connect(multiworld, player, "Victory Road 3F-S", "Victory Road 2F-C", one_way=True)
