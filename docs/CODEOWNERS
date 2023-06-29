@@ -6,6 +6,10 @@
 #
 # All usernames must be GitHub usernames (and are case sensitive).
 
+###################
+## Active Worlds ##
+###################
+
 # Adventure
 /worlds/adventure/ @JusticePS
 
@@ -58,7 +62,8 @@
 /worlds/ladx/ @zig-for
 
 # Lufia II Ancient Cave
-/worlds/lufia2ac/ @el-u @wordfcuk
+/worlds/lufia2ac/ @el-u
+/worlds/lufia2ac/docs @wordfcuk @el-u
 
 # Meritous
 /worlds/meritous/ @FelicitusNeko
@@ -69,6 +74,9 @@
 # Minecraft
 /worlds/minecraft/ @KonoTyran @espeon65536
 
+# MegaMan Battle Network 3
+/worlds/mmbn3/ @digiholic
+
 # Muse Dash
 /worlds/musedash/ @DeamonHunter
 
@@ -77,9 +85,6 @@
 
 # Ocarina of Time
 /worlds/oot/ @espeon65536
-
-# Ori and the Blind Forest
-/worlds/oribf/ #Unmaintained
 
 # Overcooked! 2
 /worlds/overcooked2/ @toasterparty
@@ -146,3 +151,10 @@
 
 # Zillion
 /worlds/zillion/ @beauxq
+
+####################################
+## Unmaintained & Disabled Worlds ##
+####################################
+
+# Ori and the Blind Forest
+# /worlds_disabled/oribf/ # Unmaintained
