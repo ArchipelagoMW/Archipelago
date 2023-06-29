@@ -6618,6 +6618,7 @@
         <On Terms="Behavior.AP_RavenShredderMissileArmorReductionUISubtruct.Off" Send="Destroy"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="RavenShredderMissileAttackImpactDebuff"/>
     </CActorModel>
     <CActorSimple id="AP_RavenShredderMissileTint">
         <Aliases value="_AngryTinter"/>
