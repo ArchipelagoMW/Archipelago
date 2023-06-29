@@ -351,42 +351,39 @@ class SMWorld(World):
         # Another possible solution would be to have a globally accessible list of items in the order in which the get placed in push_item
         # and use the inversed starting from the first progression item.
         if (SMWorld.spheres == None):
-            SMWorld.spheres = [itemLoc for sphere in self.multiworld.get_spheres() for itemLoc in sphere]
-
-        #used to simulate received items
-        first_local_collected_loc = next(itemLoc for itemLoc in SMWorld.spheres if itemLoc.player == self.player)
+            SMWorld.spheres = [itemLoc for sphere in self.multiworld.get_spheres() for itemLoc in sorted(sphere, key=lambda location: location.name)]
 
         self.itemLocs = [
             ItemLocation(copy.copy(ItemManager.Items[itemLoc.item.type
                          if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
                          'ArchipelagoItem']),
-                         locationsDict[itemLoc.name] if itemLoc.game == self.game else locationsDict[first_local_collected_loc.name], itemLoc.item.player, True)
-            for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player
-        ]
-        self.progItemLocs = [
-            ItemLocation(copy.copy(ItemManager.Items[itemLoc.item.type
-                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                         'ArchipelagoItem']),
-                         locationsDict[itemLoc.name] if itemLoc.game == self.game else locationsDict[first_local_collected_loc.name], itemLoc.item.player, True)
-            for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player and itemLoc.item.advancement
+                         copy.copy(locationsDict[itemLoc.name]), itemLoc.item.player, True)
+            for itemLoc in self.multiworld.get_locations(self.player)
         ]
 
-        localItemLocs = [
-            ItemLocation(copy.copy(ItemManager.Items[itemLoc.item.type
-                         if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                         'ArchipelagoItem']),
-                         locationsDict[itemLoc.name], itemLoc.item.player, True)
-            for itemLoc in SMWorld.spheres if itemLoc.player == self.player
-        ]
-    
-        for itemLoc in self.itemLocs:
-            if itemLoc.Item.Class == "Boss":
-                itemLoc.Item.Class = "Minor"
-        for itemLoc in self.progItemLocs:
-            if itemLoc.Item.Class == "Boss":
-                itemLoc.Item.Class = "Minor"
+        escapeTrigger = None
+        if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"]:
+            #used to simulate received items
+            first_local_collected_loc = next(itemLoc for itemLoc in SMWorld.spheres if itemLoc.player == self.player)
 
-        escapeTrigger = (self.itemLocs, self.progItemLocs, 'Full') if self.variaRando.randoExec.randoSettings.restrictions["EscapeTrigger"] else None
+            playerItemsItemLocs =   [
+                                    ItemLocation(copy.copy(ItemManager.Items[
+                                        itemLoc.item.type if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                                        'ArchipelagoItem']),
+                                        copy.copy(locationsDict[itemLoc.name] if itemLoc.game == self.game else
+                                                  locationsDict[first_local_collected_loc.name]), 
+                                        itemLoc.item.player, 
+                                        True)
+                                        for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player
+                                    ]
+            for itemLoc in playerItemsItemLocs:
+                if itemLoc.Item.Class == "Boss":
+                    itemLoc.Item.Class = "Minor"
+
+            playerProgItemsItemLocs = [itemLoc for itemLoc in playerItemsItemLocs if itemLoc.item.advancement]
+
+            escapeTrigger = (playerItemsItemLocs, playerProgItemsItemLocs, 'Full')
+
         escapeOk = self.variaRando.randoExec.graphBuilder.escapeGraph(self.variaRando.container, self.variaRando.randoExec.areaGraph, self.variaRando.randoExec.randoSettings.maxDiff, escapeTrigger)
         if (not escapeOk):
             logger.warning(f"Escape Rando forced to 'Off' for player {self.multiworld.get_player_name(self.player)} because could not find a solution for escape")
@@ -397,7 +394,7 @@ class SMWorld(World):
                                     self.variaRando.args.area, self.variaRando.args.bosses,
                                     self.variaRando.args.escapeRando if escapeOk else False)
         
-        self.variaRando.randoExec.postProcessItemLocs(localItemLocs, self.variaRando.args.hideItems)
+        self.variaRando.randoExec.postProcessItemLocs(self.itemLocs, self.variaRando.args.hideItems)
 
     @classmethod
     def stage_post_fill(cls, world):
