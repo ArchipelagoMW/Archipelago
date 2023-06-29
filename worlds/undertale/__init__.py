@@ -19,6 +19,7 @@ def run_client():
 
 
 components.append(Component("Undertale Client", "UndertaleClient"))
+# components.append(Component("Undertale Client", func=run_client))
 
 
 def data_path(file_name: str):
