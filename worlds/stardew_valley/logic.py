@@ -277,7 +277,7 @@ class StardewLogic:
             ArtisanGood.oak_resin: self.has(Machine.tapper),
             Ingredient.oil: self.can_spend_money_at(Region.pierre_store, 200) | (self.has(Machine.oil_maker) & (self.has(Vegetable.corn) | self.has(Flower.sunflower) | self.has(Seed.sunflower))),
             Machine.oil_maker: self.has_farming_level(8) & self.has(Loot.slime) & self.has(Material.hardwood) & self.has(MetalBar.gold),
-            Craftable.oil_of_garlic: (self.has_skill_level(Skill.combat, 6) & self.has(Vegetable.garlic) & self.has(Ingredient.oil)) | (self.can_spend_money_at(Region.mines_dwarf_shop)),
+            Craftable.oil_of_garlic: (self.has_skill_level(Skill.combat, 6) & self.has(Vegetable.garlic) & self.has(Ingredient.oil)) | (self.can_spend_money_at(Region.mines_dwarf_shop, 3000)),
             Geode.omni: self.can_mine_in_the_mines_floor_41_80() | self.can_reach_region(Region.desert) | self.can_do_panning() | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.has_building(Building.fish_pond)) | self.can_reach_region(Region.volcano_floor_10),
             Animal.ostrich: self.has_building(Building.barn) & self.has(AnimalProduct.ostrich_egg) & self.has(Machine.ostrich_incubator),
             AnimalProduct.ostrich_egg: self.can_forage(Generic.any, Region.island_north, True),
@@ -453,7 +453,7 @@ class StardewLogic:
                                     self.can_meet(NPC.wizard) & self.can_meet(NPC.willy),
         })
 
-        self.quest_rules.update(get_modded_quest_rules(self, self.options))
+        self.quest_rules.update(get_modded_quest_rules(self, self.options[options.Mods]))
 
         self.festival_rules.update({
             FestivalCheck.egg_hunt: self.has_season(Season.spring) & self.can_reach_region(Region.town) & self.can_win_egg_hunt(),
@@ -526,7 +526,7 @@ class StardewLogic:
             SpecialOrder.qis_prismatic_grange: self.has(Loot.bug_meat) & self.can_spend_money(80000), # All colors can be bought except purple
         })
 
-        self.special_order_rules.update(get_modded_special_orders_rules(self, self.options))
+        self.special_order_rules.update(get_modded_special_orders_rules(self, self.options[options.Mods]))
 
     def has(self, items: Union[str, (Iterable[str], Sized)], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
