@@ -5262,4 +5262,158 @@
         <Pitch value="-2.000000,2.000000"/>
         <Volume value="-9.000000,-9.000000"/>
     </CSound>
+    <CSound id="AP_ArbiterMP_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact03.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-9.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_CloakFieldOff" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Mothership\Mothership_CloakOff0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Mothership\Mothership_CloakOff1.wav"/>
+        <DupeDestroyCount value="1"/>
+        <Volume value="-18.000000,-18.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_CloakFieldOn" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Mothership\Mothership_CloakON0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Mothership\Mothership_CloakON1.wav"/>
+        <DupeDestroyCount value="1"/>
+        <Volume value="-18.000000,-18.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_DeathExplosion" parent="Death">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_DeathExplosion00.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_MoveStart" parent="Movement">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_MoveStart00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_MoveStart01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_MoveStart02.wav" FacialGroup=""/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-0.500000,0.500000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_RecallEnd" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Mothership\Mothership_WormholeTransitEnd0.wav"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_RecallStart" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Mothership\Mothership_WormholeTransitStart0.wav"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_StasisFieldOff" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_StasisEnd00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_StasisEnd01.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <Pitch value="-6.000000,-4.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_StasisFieldOn" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_StasisLaunch00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_StasisLaunch1.wav" FacialGroup=""/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_StasisFieldShockwave" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Spell_Entomb_Impact_00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Spell_Entomb_Impact_01.wav" FacialGroup=""/>
+        <DupeDestroyCount value="8"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Spread value="10.000000"/>
+    </CSound>
+    <CSound id="AP_Arbiter_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Arbiter_Attack00"/>
+        <AssetArray TemplateParam="Arbiter_Attack01"/>
+        <AssetArray TemplateParam="Arbiter_Attack02"/>
+        <AssetArray TemplateParam="Arbiter_Attack03"/>
+        <AssetArray TemplateParam="Arbiter_Attack04"/>
+        <AssetArray TemplateParam="Arbiter_Attack05"/>
+        <AssetArray TemplateParam="Arbiter_Attack06"/>
+    </CSound>
+    <CSound id="AP_Arbiter_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="Arbiter_Help00"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Arbiter_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="Arbiter_Pissed00"/>
+        <AssetArray TemplateParam="Arbiter_Pissed01"/>
+        <AssetArray TemplateParam="Arbiter_Pissed02"/>
+        <AssetArray TemplateParam="Arbiter_Pissed03"/>
+        <AssetArray TemplateParam="Arbiter_Pissed04"/>
+        <AssetArray TemplateParam="Arbiter_Pissed05"/>
+        <AssetArray TemplateParam="Arbiter_Pissed06"/>
+    </CSound>
+    <CSound id="AP_Arbiter_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="Arbiter_Ready00"/>
+    </CSound>
+    <CSound id="AP_Arbiter_RecallVO" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Arbiter_Yes00"/>
+        <AssetArray TemplateParam="Arbiter_Yes01"/>
+        <AssetArray TemplateParam="Arbiter_Yes02"/>
+        <AssetArray TemplateParam="Arbiter_Yes03"/>
+        <AssetArray TemplateParam="Arbiter_Yes04"/>
+        <AssetArray TemplateParam="Arbiter_Yes05"/>
+        <AssetArray TemplateParam="Arbiter_Yes06"/>
+        <Chance value="0"/>
+    </CSound>
+    <CSound id="AP_Arbiter_StasisFieldVO" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Arbiter_Yes00"/>
+        <AssetArray TemplateParam="Arbiter_Yes01"/>
+        <AssetArray TemplateParam="Arbiter_Yes02"/>
+        <AssetArray TemplateParam="Arbiter_Yes03"/>
+        <AssetArray TemplateParam="Arbiter_Yes04"/>
+        <AssetArray TemplateParam="Arbiter_Yes05"/>
+        <AssetArray TemplateParam="Arbiter_Yes06"/>
+        <Chance value="25"/>
+    </CSound>
+    <CSound id="AP_Arbiter_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Arbiter_What00"/>
+        <AssetArray TemplateParam="Arbiter_What01"/>
+        <AssetArray TemplateParam="Arbiter_What02"/>
+        <AssetArray TemplateParam="Arbiter_What03"/>
+        <AssetArray TemplateParam="Arbiter_What04"/>
+        <AssetArray TemplateParam="Arbiter_What05"/>
+        <AssetArray TemplateParam="Arbiter_What06"/>
+        <AssetArray TemplateParam="Arbiter_What07"/>
+    </CSound>
+    <CSound id="AP_Arbiter_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Arbiter_Yes00"/>
+        <AssetArray TemplateParam="Arbiter_Yes01"/>
+        <AssetArray TemplateParam="Arbiter_Yes02"/>
+        <AssetArray TemplateParam="Arbiter_Yes03"/>
+        <AssetArray TemplateParam="Arbiter_Yes04"/>
+        <AssetArray TemplateParam="Arbiter_Yes05"/>
+        <AssetArray TemplateParam="Arbiter_Yes06"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_LandSweetener" parent="Land">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_LandSweetener00.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_ArbiterMP_AttackLaunch" parent="Combat">
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackLaunch00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackLaunch03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackLaunch04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\ArbiterMP_AttackLaunch05.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CSound>
 </Catalog>

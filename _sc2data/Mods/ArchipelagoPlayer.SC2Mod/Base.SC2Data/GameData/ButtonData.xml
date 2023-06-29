@@ -2141,4 +2141,18 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-shieldbattery-color.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_ArbiterCloakField">
+        <Icon value="Assets\Textures\btn-ability-protoss-cloakfield-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-cloakfield-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ArbiterMPRecall">
+        <Icon value="Assets\Textures\btn-ability-protoss-recall.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-recall.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_ArbiterMPStasisField">
+        <Icon value="Assets\Textures\btn-ability-protoss-stasisfield.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-stasisfield.dds"/>
+    </CButton>
 </Catalog>

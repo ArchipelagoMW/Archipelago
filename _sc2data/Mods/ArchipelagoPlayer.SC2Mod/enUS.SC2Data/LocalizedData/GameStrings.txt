@@ -49,6 +49,7 @@ Abil/Name/AP_CancelTerrazineHarvest=Cancel Terrazine Harvest
 Abil/Name/AP_CarrierAiurHanger=Carrier Aiur Hanger
 Abil/Name/AP_CarrierHangar=Hangar
 Abil/Name/AP_CarrierRepairDroneHanger=Carrier Repair Drone Hanger
+Abil/Name/AP_ChampionWarpTrain=Champion Warp Train
 Abil/Name/AP_CommandCenterLand=Land (Command Center)
 Abil/Name/AP_CommandCenterLiftOff=Lift Off (Command Center)
 Abil/Name/AP_CommandCenterTrain=Train (Command Center)
@@ -132,6 +133,10 @@ Abil/Name/AP_MutaliskMorphToBroodLord=Mutalisk Morph To Brood Lord
 Abil/Name/AP_MutaliskMorphToViper=Mutalisk Morph To Snake Caster
 Abil/Name/AP_NPSwarm=NP Swarm
 Abil/Name/AP_NanoRepair=Nano Repair
+Abil/Name/AP_NexusInvulnerability=Invulnerability
+Abil/Name/AP_NexusTrain=Train (Nexus)
+Abil/Name/AP_NexusTrainMothership=Train Mothership
+Abil/Name/AP_NexusTrainMothershipCore=Train Mothership Core
 Abil/Name/AP_NovaApolloCloak=Apollo Suit Cloak
 Abil/Name/AP_NovaArmorBlinkSuitBlink=Blink
 Abil/Name/AP_NovaGadgetDefensiveDroneSummon=Defensive Drone
@@ -167,6 +172,7 @@ Abil/Name/AP_PoisonNova=Toxic Blast
 Abil/Name/AP_PsiStorm=Psi Storm
 Abil/Name/AP_PsiStormShakuras=Psi Storm
 Abil/Name/AP_RallyCommand=Command Center - Rally
+Abil/Name/AP_RallyNexus=Nexus - Rally
 Abil/Name/AP_ReactorMorph=Nuclear Reactor Morph
 Abil/Name/AP_RefineryToAutomatedRefinery=Refinery To Automated Refinery
 Abil/Name/AP_Repair=Repair
@@ -213,6 +219,7 @@ Abil/Name/AP_TerranBuild=Build (SCV)
 Abil/Name/AP_TerranBuildDrop=Calldown
 Abil/Name/AP_ThorReborn=Thor Reborn
 Abil/Name/AP_ThorWreckage=Thor Wreckage
+Abil/Name/AP_TimeWarp=Chrono Boost
 Abil/Name/AP_TorrasqueChrysalis=Torrasque Chrysalis
 Abil/Name/AP_TorrasqueCorpse=Torrasque Corpse
 Abil/Name/AP_TrainStarportAdditionalUnits=Train (Starport) - Additional Units
@@ -255,16 +262,11 @@ Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
 Abil/Name/AP_stopProtossBuilding=stop Protoss Building
 Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
-Abil/Name/AP_ChampionWarpTrain=Champion Warp Train
+Abil/Name/AP_ArbiterMPRecall=Recall
+Abil/Name/AP_ArbiterMPStasisField=Stasis Field
 Abil/Name/MercCompoundResearch2=Research
-Abil/Name/AP_NexusInvulnerability=Invulnerability
-Abil/Name/AP_NexusTrain=Train (Nexus)
-Abil/Name/AP_NexusTrainMothership=Train Mothership
-Abil/Name/AP_NexusTrainMothershipCore=Train Mothership Core
-Abil/Name/AP_RallyNexus=Nexus - Rally
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
-Abil/Name/AP_TimeWarp=Chrono Boost
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -306,6 +308,7 @@ Behavior/Name/AP_MindControl=Mind Control
 Behavior/Name/AP_MineDroneCountdown=Widow Mine Detonating
 Behavior/Name/AP_NPSwarm=Parasitic Domination
 Behavior/Name/AP_NeuralParasite=Neural Parasite
+Behavior/Name/AP_NexusInvulnerability=Nexus Invulnerability
 Behavior/Name/AP_NovaApolloCloak=Cloaked
 Behavior/Name/AP_NovaArmorBlinkSuitBlinkCloaked=Cloaked
 Behavior/Name/AP_NovaDomination=Domination
@@ -342,6 +345,7 @@ Behavior/Name/AP_SupplyDepotMorphing=Supply Depot Morphing
 Behavior/Name/AP_SupplyDrop=Supply drop
 Behavior/Name/AP_SwarmGrenade=Swarm Grenade
 Behavior/Name/AP_ThermalLancesFireBeam=Burning
+Behavior/Name/AP_TimeWarpProduction=Chrono Boost
 Behavior/Name/AP_TorrasqueTimerBehavior=Reincarnation Suppressed
 Behavior/Name/AP_UltraliskBurrowChargeStun=Burrow Charge Stun
 Behavior/Name/AP_UltrasonicPulseStun=Ultrasonic Pulse stun
@@ -356,8 +360,8 @@ Behavior/Name/AP_VoidPhoenixPhasingArmorBuff=Phasing Armor
 Behavior/Name/AP_VoidRayVoidDamageBoost=Prismatic Alignment
 Behavior/Name/AP_VoidStalkerBlinkShieldRestore=Shadow Regeneration
 Behavior/Name/AP_WraithCloak=Cloak
-Behavior/Name/AP_NexusInvulnerability=Nexus Invulnerability
-Behavior/Name/AP_TimeWarpProduction=Chrono Boost
+Behavior/Name/AP_ArbiterMPCloakFieldEffect=Cloaking Field
+Behavior/Name/AP_ArbiterMPStasisField=Stasis Field
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
@@ -408,6 +412,7 @@ Behavior/Tooltip/AP_SuperStimNova=Nova's attack and movement speeds are greatly 
 Behavior/Tooltip/AP_SupplyDrop=This Supply Depot is providing an additional 8 supply.
 Behavior/Tooltip/AP_SwarmGrenade=This unit is slowed and cannot attack or use energy-based abilities.
 Behavior/Tooltip/AP_ThermalLancesFireBeam=This unit is taking additional damage over time.
+Behavior/Tooltip/AP_TimeWarpProduction=This structure is in an accelerated state.
 Behavior/Tooltip/AP_TorrasqueTimerBehavior=Cannot revive at this time.
 Behavior/Tooltip/AP_UltraliskBurrowChargeStun=This unit is stunned.
 Behavior/Tooltip/AP_VileAcidSlowFlatAmount=Attack and movement speeds are slowed.
@@ -417,7 +422,7 @@ Behavior/Tooltip/AP_ViperConsumeStructure=A Viper is consuming this structure to
 Behavior/Tooltip/AP_VoidPhoenixPhasingArmorBuff=This unit is immune to damage.
 Behavior/Tooltip/AP_VoidStalkerBlinkShieldRestore=This unit is regenerating shields.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
-Behavior/Tooltip/AP_TimeWarpProduction=This structure is in an accelerated state.
+Behavior/Tooltip/AP_ArbiterMPCloakFieldEffect=This unit is cloaked unless revealed by <c val="FFE303">Detectors</c> or effects.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AWrp=Archon Merge
@@ -610,6 +615,8 @@ Button/Name/AP_MorphToHellion=Hellion Mode
 Button/Name/AP_MorphToHellionTank=Hellbat Mode
 Button/Name/AP_MorphToSwarmHost=Morph to Swarm Host
 Button/Name/AP_MorphToSwarmHostBurrowed=Morph to Swarm Host
+Button/Name/AP_Mothership=Warp In Mothership
+Button/Name/AP_MothershipCore=Warp In Mothership Core
 Button/Name/AP_MoveChampions=Move
 Button/Name/AP_MultiLockTargetingSystem=Multi-Lock Weapons System
 Button/Name/AP_MutaliskRapidRegeneration=Rapid Regeneration
@@ -662,6 +669,7 @@ Button/Name/AP_PhoenixAiurGravitonBeamPassive=Double Graviton Beam
 Button/Name/AP_PlanetaryFortressLoad=Load
 Button/Name/AP_PoisonNova=Toxic Blast
 Button/Name/AP_Predator=Build Predator
+Button/Name/AP_Probe=Warp In Probe
 Button/Name/AP_ProjectileAccelerators=Projectile Accelerators
 Button/Name/AP_ProtossGroundArmorLevel1=Upgrade Ground Armor Level 1
 Button/Name/AP_ProtossGroundArmorLevel2=Upgrade Ground Armor Level 2
@@ -696,6 +704,7 @@ Button/Name/AP_RetributionField=Lightning Field
 Button/Name/AP_RipwaveMissiles=Ripwave Missiles
 Button/Name/AP_RuptureUpgrade=Rupture
 Button/Name/AP_SOAQuatro=Quatro
+Button/Name/AP_SOARadarNexus=Nexus Overcharge
 Button/Name/AP_SOAWarpTech=Warp Harmonization
 Button/Name/AP_Scan=Scanner Sweep
 Button/Name/AP_SensorTower=Build Sensor Tower
@@ -757,6 +766,7 @@ Button/Name/AP_TerranVehicleWeaponsUltraCapacitorsLevel1=Upgrade Vehicle Weapons
 Button/Name/AP_TerranVehicleWeaponsUltraCapacitorsLevel2=Upgrade Vehicle Weapons Level 2
 Button/Name/AP_TerranVehicleWeaponsUltraCapacitorsLevel3=Upgrade Vehicle Weapons Level 3
 Button/Name/AP_Thor=Build Thor
+Button/Name/AP_TimeWarp=Chrono Boost
 Button/Name/AP_TissueAssimilation=Tissue Assimilation
 Button/Name/AP_TorrasqueChrysalis=Reincarnation
 Button/Name/AP_TorrasqueChrysalisFakeTimer=Reincarnation Suppressed
@@ -801,11 +811,9 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_Mothership=Warp In Mothership
-Button/Name/AP_MothershipCore=Warp In Mothership Core
-Button/Name/AP_Probe=Warp In Probe
-Button/Name/AP_SOARadarNexus=Nexus Overcharge
-Button/Name/AP_TimeWarp=Chrono Boost
+Button/Name/AP_ArbiterCloakField=Cloak Field
+Button/Name/AP_ArbiterMPRecall=Recall
+Button/Name/AP_ArbiterMPStasisField=Stasis Field
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1042,6 +1050,8 @@ Button/Tooltip/AP_MorphBackToRoboticsFacility=Transforms this Warp Robotics Faci
 Button/Tooltip/AP_MorphBackToStargate=Transforms this Warp Stargate back to a Stargate.
 Button/Tooltip/AP_MorphToHellion=Fast scout. Has a flame attack that damages all enemy units in its line of fire. Can transform into a close range combat unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_MorphToHellionTank=Close range combat unit. Deals damage in a small frontal cone. Can transform into a fast scout unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_Mothership=Ultimate Protoss vessel. Can use Photon Overcharge, Mass Recall, and Time Warp abilities. Cloaks nearby friendly units and structures.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_MothershipCore=Mobile flying caster. Can use Photon Overcharge, Mass Recall, and Time Warp abilities. Can upgrade into the Mothership.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_MoveChampions=Orders selected units to move to the target area or follow the target unit. Moving units will not engage enemies.
 Button/Tooltip/AP_MultiLockTargetingSystem=The Goliath can target ground and air units simultaneously.
 Button/Tooltip/AP_Mutalisk=Air unit. Bounces its shot to strike multiple targets.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1049,6 +1059,7 @@ Button/Tooltip/AP_MutaliskRapidRegeneration=Mutalisk regenerates life quickly wh
 Button/Tooltip/AP_NPSwarm=Target unit is permanently controlled by the Swarm.
 Button/Tooltip/AP_NanoRepair=Heals a friendly mechanical unit.<n/><n/><c val="f078ff">Heals 3 life per 1 energy.</c>
 Button/Tooltip/AP_NeoSteelFrame=Increases the number of Bunker slots by 2.
+Button/Tooltip/AP_Nexus=Primary structure. Can receive gathered resources. Can use the Chrono Boost ability.<n/><n/><c val="ffff8a">Enables:</c><n/>- Probes
 Button/Tooltip/AP_NovaArmorBlinkSuitBlink=Teleports Nova to a nearby target location. Ability can only be used once every <d ref="Abil,AP_NovaArmorBlinkSuitBlink,Cost[0].Cooldown[0].TimeUse"/> seconds. Nova is cloaked for <d ref="Behavior,AP_NovaArmorBlinkSuitBlinkCloaked,Duration"/> seconds after teleporting.
 Button/Tooltip/AP_NovaArmorJumpSuit=Allows Nova to jump up and down cliffs.
 Button/Tooltip/AP_NovaArmorMoebiusSuit=Psionic amplification suit. Increases both energy regeneration rate and maximum energy.
@@ -1105,6 +1116,7 @@ Button/Tooltip/AP_PlanetaryFortressLoad=Loads nearby SCVs into the Planetary For
 Button/Tooltip/AP_PointDefenseDrone=Uses a laser to shoot down enemy missiles.  <n/>Cannot target special attacks. <n/>Times out after <d ref="Behavior,AP_PointDefenseDroneTimedLife,Duration"/> seconds.<n/><n/><c val="f078ff">Each shot consumes 10 energy.</c>
 Button/Tooltip/AP_PoisonNova=Instantly deals 20 damage to enemy ground units nearby.
 Button/Tooltip/AP_Predator=Anti-infantry specialist that deals area damage with each attack.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_Probe=Basic worker unit. Can gather resources and warp in Protoss structures.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ProjectileAccelerators=Increases the range of all units in the Bunker by 1.
 Button/Tooltip/AP_ProtossGroundArmorLevel1=Upgrades the armor of Protoss ground units.
 Button/Tooltip/AP_ProtossGroundArmorLevel2=Further upgrades the armor of Protoss ground units.
@@ -1146,6 +1158,7 @@ Button/Tooltip/AP_RoboticsFacilityWarp=Warps in Protoss robotic units.
 Button/Tooltip/AP_RuptureUpgrade=Blast radius increased by 50%.
 Button/Tooltip/AP_SCV=Basic worker unit. Can gather resources, build Terran structures, and repair.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SOAQuatro=Your units now begin missions with one level of Weapon, Armor and Shield upgrades. Weapon upgrades increase damage by 10% to 15%.<n/><n/>An additional level of upgrades are now available, allowing units to reach 4 levels of upgrades.<n/><n/><c val="ffff8a">Passive ability.</c>
+Button/Tooltip/AP_SOARadarNexus=The Nexus automatically attacks nearby enemy ground and air units for <d ref="Effect,AP_MothershipCoreWeaponDamage,Amount"/> damage.<n/><n/><c val="ffff8a">Passive ability.</c>
 Button/Tooltip/AP_SOAWarpTech=Stargates and Robotics Facilities can transform to utilize Warp In technology. Warp In cooldowns are 20% faster than original build times.<n/><n/><c val="ffff8a">Passive ability.</c>
 Button/Tooltip/AP_Scan=Reveals an area of the map, detecting cloaked and burrowed units. Lasts <d time="12"/>.
 Button/Tooltip/AP_ScienceVessel=Aerial support unit. Can use Irradiate and Nano-Repair abilities.<n/><n/><c val="FFE303">Detector</c>
@@ -1223,6 +1236,7 @@ Button/Tooltip/AP_TerranVehicleWeaponsUltraCapacitorsLevel2=Further upgrades the
 Button/Tooltip/AP_TerranVehicleWeaponsUltraCapacitorsLevel3=Maximizes the damage dealt by and firing speed of ground vehicles.
 Button/Tooltip/AP_Thor=Heavy assault mech.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_ThorWreckage=Heavy assault mech. Can use 250mm Strike Cannons.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/AP_TimeWarp=Places target structure in a Chrono Boost, causing it to operate <d ref="((Behavior,AP_TimeWarpProduction,Modification.TimeScale) - 1) * 100" precision="1"/>% faster.
 Button/Tooltip/AP_TissueAssimilation=Gains life equal to 40% of all damage dealt from normal attacks.
 Button/Tooltip/AP_TorrasqueChrysalis=Allows the Ultralisk to revive upon death.<n/>Cooldown: <d time="60"/>
 Button/Tooltip/AP_TorrasqueChrysalisFakeTimer=The Ultralisk cannot revive at this time.
@@ -1270,12 +1284,9 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_Mothership=Ultimate Protoss vessel. Can use Photon Overcharge, Mass Recall, and Time Warp abilities. Cloaks nearby friendly units and structures.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
-Button/Tooltip/AP_MothershipCore=Mobile flying caster. Can use Photon Overcharge, Mass Recall, and Time Warp abilities. Can upgrade into the Mothership.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
-Button/Tooltip/AP_Nexus=Primary structure. Can receive gathered resources. Can use the Chrono Boost ability.<n/><n/><c val="ffff8a">Enables:</c><n/>- Probes
-Button/Tooltip/AP_Probe=Basic worker unit. Can gather resources and warp in Protoss structures.<n/><n/><c val="ffff8a">Can attack ground units.</c>
-Button/Tooltip/AP_SOARadarNexus=The Nexus automatically attacks nearby enemy ground and air units for <d ref="Effect,AP_MothershipCoreWeaponDamage,Amount"/> damage.<n/><n/><c val="ffff8a">Passive ability.</c>
-Button/Tooltip/AP_TimeWarp=Places target structure in a Chrono Boost, causing it to operate <d ref="((Behavior,AP_TimeWarpProduction,Modification.TimeScale) - 1) * 100" precision="1"/>% faster.
+Button/Tooltip/AP_ArbiterCloakField=Cloaks friendly units near the Arbiter.
+Button/Tooltip/AP_ArbiterMPRecall=Teleports all friendly units in the target area to the location of the Arbiter.
+Button/Tooltip/AP_ArbiterMPStasisField=Places enemy units in target area into stasis for <d ref="Behavior,AP_ArbiterMPStasisField,Duration"/> seconds. Units in stasis cannot move, attack, be attacked or be affected by abilities.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1535,6 +1546,7 @@ Effect/Name/AP_FungalGrowthSearch=Fungal Growth
 Effect/Name/AP_FungalGrowthSearchDummy=Fungal Growth Search Dummy
 Effect/Name/AP_FungalGrowthSet=Fungal Growth Set
 Effect/Name/AP_FusionCutter=Fusion Cutter (Damage)
+Effect/Name/AP_GameTimeGreaterthan5Seconds=Game Time Greater than 5 Seconds
 Effect/Name/AP_GatherSpecialObjectPersistent=Gather Special Object
 Effect/Name/AP_GatherSpecialObjectRemoveBehavior=Gather Special Object
 Effect/Name/AP_GaussRifle=Guass Rifle
@@ -1879,6 +1891,9 @@ Effect/Name/AP_NeedleSpinesImpactSwitch=Needle Spines Impact Switch
 Effect/Name/AP_NeedleSpinesLaunchMissile=Needle Spines
 Effect/Name/AP_NeuralParasite=Neural Parasite (Apply Behavior Normal)
 Effect/Name/AP_NeuralParasiteLockOnRemove=Neural Parasite Lock On Remove
+Effect/Name/AP_NexusDeathKillMothershipCore=Nexus Death Kill Mothership Core
+Effect/Name/AP_NexusDeathSearch=Nexus Death Search
+Effect/Name/AP_NexusInvulnerabilityApplyBehavior=Nexus Invulnerability Apply Behavior
 Effect/Name/AP_NovaArmorBlinkSuitBlink=NovaArmorBlinkSuitBlink
 Effect/Name/AP_NovaDefensiveDroneTimedLife=NovaDefensiveDroneTimedLife
 Effect/Name/AP_NovaDominationAB=NovaDominationAB
@@ -2283,9 +2298,23 @@ Effect/Name/AP_YoinkStartSet=Yoink Start Set
 Effect/Name/AP_YoinkStartSetVikingAir=Yoink Start Set Viking Air
 Effect/Name/AP_YoinkStartSetVikingGround=Yoink Start Set Viking Ground
 Effect/Name/AP_heal=Heal
+Effect/Name/AP_ArbiterMPCloakingFieldApply=ArbiterMP Cloaking Field (Apply)
+Effect/Name/AP_ArbiterMPCloakingFieldSearch=ArbiterMP Cloaking Field (Search)
+Effect/Name/AP_ArbiterMPRecallApplyPostRecallBehavior=ArbiterMP Recall (Apply Post-Recall Behavior)
+Effect/Name/AP_ArbiterMPRecallApplyPreRecallBehavior=ArbiterMP Recall (Apply Pre-Recall Behavior)
+Effect/Name/AP_ArbiterMPRecallInitialSet=Arbiter MPRecall Initial Set
+Effect/Name/AP_ArbiterMPRecallMagazineIterate=Arbiter MPRecall Magazine Iterate
+Effect/Name/AP_ArbiterMPRecallSearch=ArbiterMP Recall (Search)
+Effect/Name/AP_ArbiterMPRecallSet=ArbiterMP Recall (Set)
+Effect/Name/AP_ArbiterMPRecallTeleport=ArbiterMP Recall (Teleport)
+Effect/Name/AP_ArbiterMPStasisFieldApply=ArbiterMP Stasis Field (Apply)
+Effect/Name/AP_ArbiterMPStasisFieldSearch=ArbiterMP Stasis Field (Search)
+Effect/Name/AP_ArbiterMPStasisFieldSet=ArbiterMP Stasis Field (Set)
+Effect/Name/AP_ArbiterMPStasisFieldTimerApply=ArbiterMP Stasis Field Timer (Apply)
+Effect/Name/AP_ArbiterMPWeaponDamage=Arbiter MPWeapon Damage
+Effect/Name/AP_ArbiterMPWeaponLaunch=Arbiter MPWeapon Launch
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
-Effect/Name/AP_GameTimeGreaterthan5Seconds=Game Time Greater than 5 Seconds
 Effect/Name/GravitonBeamUnburrow2=Anti Gravity
 Effect/Name/GravitonBeamUnburrowCancel2=Anti Gravity
 Effect/Name/Kill2=Kill
@@ -2295,17 +2324,14 @@ Effect/Name/NeuralParasiteDroneRemoveCheck2=Neural Parasite Drone Remove Check
 Effect/Name/NeuralParasiteLaunchMissile2=Neural Parasite (Launch Missile)
 Effect/Name/NeuralParasitePersistent2=Neural Parasite (Create Persistent)
 Effect/Name/NeuralParasitePersistentSet2=Neural Parasite Persistent Set
-Effect/Name/AP_NexusDeathKillMothershipCore=Nexus Death Kill Mothership Core
-Effect/Name/AP_NexusDeathSearch=Nexus Death Search
-Effect/Name/AP_NexusInvulnerabilityApplyBehavior=Nexus Invulnerability Apply Behavior
 Effect/Name/RemoveCoreRecallingBehaviorVikingAir2=Remove Core Recalling Behavior Viking Air
 Effect/Name/RemoveCoreRecallingBehaviorVikingGround2=Remove Core Recalling Behavior Viking Ground
 Effect/Name/RemoveRecallingBehaviorVikingAir2=Remove Recalling Behavior Viking Air
 Effect/Name/RemoveRecallingBehaviorVikingGround2=Remove Recalling Behavior Viking Ground
+Error/AP_AlreadyChronoBoosted=Target is already accelerated
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
 Error/AP_SwarmHostBurrowed=Must Root to attack.
-Error/AP_AlreadyChronoBoosted=Target is already accelerated
 RequirementNode/Tooltip/AP_CountUnitFactoryCompleteOnly=Factory
 RequirementNode/Tooltip/AP_CountUnitFactoryFlyingCompleteOnly=Flying Factory
 RequirementNode/Tooltip/AP_CountUnitGreaterSpireCompleteOnly291495724TechTreeCheat=Mutate Spire into Greater Spire
@@ -2477,6 +2503,7 @@ Unit/Name/AP_Mutalisk=Mutalisk
 Unit/Name/AP_MutaliskBroodlord=Mutalisk
 Unit/Name/AP_MutaliskViper=Mutalisk
 Unit/Name/AP_NPSwarmWeapon=NP Swarm Weapon
+Unit/Name/AP_Nexus=Nexus
 Unit/Name/AP_NovaDefensiveDrone=Defensive Drone
 Unit/Name/AP_NovaDefensiveDroneRelease=Nova Defensive Drone Release
 Unit/Name/AP_NovaGadgetFlashBangGrenadesWeapon=Nova Gadget Flashbang Grenades
@@ -2585,8 +2612,9 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
+Unit/Name/AP_ArbiterMP=Arbiter
+Unit/Name/AP_ArbiterMPWeaponMissile=Arbiter MPWeapon Missile
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
-Unit/Name/AP_Nexus=Nexus
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
@@ -2798,7 +2826,9 @@ Upgrade/Name/AP_RegenerativeBioSteel=Regenerative Bio-Steel
 Upgrade/Name/AP_ReinforcedSuperstructure=Titanium Housing
 Upgrade/Name/AP_RoachCorpser=Roach Corpser
 Upgrade/Name/AP_RoachVile=HotS Roach Vile
+Upgrade/Name/AP_SOAEnergy=SOAEnergy
 Upgrade/Name/AP_SOAQuatro=SOAQuatro
+Upgrade/Name/AP_SOAShieldRegen=SOAShield Regen
 Upgrade/Name/AP_SOAWarpTech=SOAWarp Tech
 Upgrade/Name/AP_ScavengingSystems=Scavenging Systems
 Upgrade/Name/AP_ScienceVessel=Science Vessel
@@ -2866,6 +2896,7 @@ Upgrade/Name/AP_UltraliskBurrowChargeUpgrade=Evolve Burrow Charge
 Upgrade/Name/AP_UltrasonicPulse=Psionic Lash
 Upgrade/Name/AP_VanadiumPlating=Vanadium Plating
 Upgrade/Name/AP_VikingJotunBoosters=Jotun Boosters
+Upgrade/Name/AP_VoidCasualRallyBlock=Void Casual Rally Block
 Upgrade/Name/AP_VoidHighTemplarArchonAdvanced=Void High Templar Archon Advanced
 Upgrade/Name/AP_VoidHighTemplarCloak=Void High Templar Dark Archon
 Upgrade/Name/AP_VoidHighTemplarTerazine=Void High Templar Ascendant
@@ -2879,10 +2910,7 @@ Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
 Upgrade/Name/BlackOps2=Black Ops
-Upgrade/Name/AP_SOAEnergy=SOAEnergy
-Upgrade/Name/AP_SOAShieldRegen=SOAShield Regen
 Upgrade/Name/TempestRangeUpgrade2=Quantum Reactor
-Upgrade/Name/AP_VoidCasualRallyBlock=Void Casual Rally Block
 Upgrade/Name/VoidStoryUnitGlobalUpgrade2=Void Story Unit Global Upgrade
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
@@ -2963,6 +2991,7 @@ Weapon/Name/AP_LocustLaunch=Locust Spawn
 Weapon/Name/AP_LocustMelee=Locust Melee
 Weapon/Name/AP_LongboltMissile=Longbolt Missile
 Weapon/Name/AP_Lurker=Spines
+Weapon/Name/AP_MothershipCoreWeapon=Purify
 Weapon/Name/AP_NeedleClaws=Needle Claws
 Weapon/Name/AP_NeedleSpines=Needle Spines
 Weapon/Name/AP_NovaRavenSeekerMissile=Hunter-Seeker Missile
@@ -3020,7 +3049,7 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_MothershipCoreWeapon=Purify
+Weapon/Name/AP_ArbiterMPWeapon=Warpspace Cannon
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

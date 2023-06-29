@@ -3214,7 +3214,7 @@
         <InfoIcon value="Assets\Textures\btn-ability-protoss-purify.dds"/>
         <EditorCategories value="AbilityorEffectType:Units"/>
         <Duration value="60"/>
-        <Modification Detect="0">
+        <Modification>
             <WeaponArray Link="AP_MothershipCoreWeapon" Turret="AP_Nexus"/>
         </Modification>
         <TimeScaleSource Value="Global"/>
@@ -3265,5 +3265,109 @@
             <WeaponDisableArray value="AP_RepulsorCannon"/>
         </Modification>
         <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ArbiterMPCloakField">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\BTN-Ability-Protoss-CloakField.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <BuffFlags index="DisableWhileUnderConstruction" value="1"/>
+        <Period value="0.2"/>
+        <PeriodicEffect value="AP_ArbiterMPCloakingFieldSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ArbiterMPCloakFieldEffect">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-cloakfield.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="NotMothership"/>
+        <TimeScaleSource Value="Global"/>
+        <Duration value="0.5"/>
+        <Modification>
+            <StateFlags index="Cloak" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ArbiterMPRecalled">
+        <Cost>
+            <Charge Link="Behavior/Recalled"/>
+            <Cooldown Link="Behavior/Recalled"/>
+        </Cost>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+            <AbilClassDisableArray index="CAbilMove" value="1"/>
+            <!-- Allow them un-morph while recalling -->
+            <AbilLinkEnableArray value="AP_LiberatorMorphtoAA"/>
+            <!-- TODO: Verify this -->
+            <AbilLinkEnableArray value="VolatileBurstBuilding"/>
+            <AbilLinkEnableArray value="GhostCloak"/>
+            <AbilLinkEnableArray value="BansheeCloak"/>
+            <AbilLinkEnableArray value="CarrierRepairDroneHanger"/>
+            <AbilLinkEnableArray value="BroodLordHangar"/>
+        </Modification>
+        <DamageResponse>
+            <Cost>
+                <Charge Link="Behavior/Recalled"/>
+                <Cooldown Link="Behavior/Recalled"/>
+            </Cost>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ArbiterMPRecalling">
+        <Cost>
+            <Charge Link="Behavior/Recalling"/>
+            <Cooldown Link="Behavior/Recalling"/>
+        </Cost>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="1"/>
+        <ExpireEffect value="AP_ArbiterMPRecallSet"/>
+        <Modification>
+            <ModifyFlags index="DisableAbils" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="Uncommandable" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+            <AbilClassDisableArray index="CAbilMove" value="1"/>
+            <!-- Allow them un-morph while recalling -->
+            <AbilLinkEnableArray value="AP_LiberatorMorphtoAA"/>
+            <!-- TODO: Verify this -->
+            <AbilLinkEnableArray value="VolatileBurstBuilding"/>
+            <AbilLinkEnableArray value="GhostCloak"/>
+            <AbilLinkEnableArray value="BansheeCloak"/>
+            <AbilLinkEnableArray value="CarrierRepairDroneHanger"/>
+            <AbilLinkEnableArray value="BroodLordHangar"/>
+        </Modification>
+        <DamageResponse>
+            <Cost>
+                <Charge Link="Behavior/Recalling"/>
+                <Cooldown Link="Behavior/Recalling"/>
+            </Cost>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ArbiterMPStasisFieldTimedLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="15"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ArbiterMPStasisField">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-forcefield-color.dds"/>
+        <Duration value="15"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Stasis" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+            <BehaviorLinkDisableArray value="Detector6"/>
+            <BehaviorLinkDisableArray value="Detector7"/>
+            <BehaviorLinkDisableArray value="Detector8"/>
+            <BehaviorLinkDisableArray value="Detector9"/>
+            <BehaviorLinkDisableArray value="Detector10"/>
+            <BehaviorLinkDisableArray value="Detector11"/>
+            <BehaviorLinkDisableArray value="Detector12"/>
+        </Modification>
     </CBehaviorBuff>
 </Catalog>

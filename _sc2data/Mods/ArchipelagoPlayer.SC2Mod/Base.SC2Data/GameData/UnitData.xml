@@ -11567,6 +11567,83 @@
         <Race value="Prot"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
+    <CUnit id="AP_ArbiterMP">
+        <Description value="Button/Tooltip/Arbiter"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="150"/>
+        <LifeMax value="150"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossPlating"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <ShieldsStart value="250"/>
+        <ShieldsMax value="250"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Mover value="Fly"/>
+        <Speed value="2.25"/>
+        <Acceleration value="1.875"/>
+        <StationaryTurningRate value="539.4726"/>
+        <TurningRate value="539.4726"/>
+        <Sight value="9"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-4"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="300"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="350"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="AP_ArbiterMPRecall"/>
+        <AbilArray Link="AP_ArbiterMPStasisField"/>
+        <AbilArray Link="ProgressRally"/>
+        <BehaviorArray Link="AP_ArbiterMPCloakField"/>
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <WeaponArray Link="AP_ArbiterMPWeapon"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_ArbiterMPStasisField" Type="AbilCmd" AbilCmd="AP_ArbiterMPStasisField,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_ArbiterMPRecall" Type="AbilCmd" AbilCmd="AP_ArbiterMPRecall,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_ArbiterCloakField" Type="Passive" Row="2" Column="2"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="ProgressRally,Rally1" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <SubgroupPriority value="30"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="160"/>
+        <GlossaryStrongArray value="SiegeTank"/>
+        <GlossaryStrongArray value="Carrier"/>
+        <GlossaryStrongArray value="BroodLord"/>
+        <GlossaryWeakArray value="Battlecruiser"/>
+        <GlossaryWeakArray value="VikingFighter"/>
+        <GlossaryWeakArray value="Corruptor"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+    </CUnit>
+    <CUnit id="AP_ArbiterMPWeaponMissile" parent="MISSILE">
+        <Race value="Prot"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->

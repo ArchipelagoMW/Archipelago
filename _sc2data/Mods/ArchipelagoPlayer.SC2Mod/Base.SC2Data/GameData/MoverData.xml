@@ -1301,4 +1301,12 @@
             <YawPitchRoll value="719.2968"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_ArbiterMPWeaponMissile">
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="3200"/>
+            <MaxSpeed value="20"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+    </CMoverMissile>
 </Catalog>

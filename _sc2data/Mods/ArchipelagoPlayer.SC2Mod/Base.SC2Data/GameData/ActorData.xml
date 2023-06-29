@@ -5058,6 +5058,152 @@
         <Duration value="0.250000"/>
     </CActorForceSphere>
     <CActorMissile id="AP_AscendantAttackMissile" parent="GenericAttackMissile" unitName="AP_AscendantWeapon"/>
+    <CActorUnit id="AP_ArbiterMP" parent="GenericUnitStandard" unitName="AP_ArbiterMP">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap AP_ArbiterWarpInStargate"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="$Spell"/>
+        <On Terms="Behavior.WarpInEffect.Off" Send="ModelSwap AP_Arbiter"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_ArbiterMP_LandSoundSweetener"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_VoidRay_Land"/>
+        <On Terms="AnimDone; AnimName Spell" Send="ModelSwap ArbiterMP"/>
+        <On Terms="AnimDone; AnimName Spell" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="AnimDone; AnimName Spell" Send="AnimClear Spell"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_ArbiterEX2WarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ArbiterMPDeath" SoundLink="AP_ArbiterMP_DeathExplosion"/>
+        <PlacementModel value="AP_ArbiterEX2Placement"/>
+        <PortraitModel value="AP_ArbiterMPPortrait"/>
+        <AbilSoundArray AbilCmd="AP_ArbiterMPStasisField,0" Sound="AP_Arbiter_StasisFieldVO"/>
+        <AbilSoundArray AbilCmd="AP_ArbiterMPRecall,0" Sound="AP_Arbiter_RecallVO"/>
+        <BarOffset value="40"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-arbiter.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-arbiter.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="AP_Arbiter_Ready"/>
+        <SoundArray index="Help" value="AP_Arbiter_Help"/>
+        <SoundArray index="What" value="AP_Arbiter_What"/>
+        <SoundArray index="Yes" value="AP_Arbiter_Yes"/>
+        <SoundArray index="Attack" value="AP_Arbiter_Attack"/>
+        <SoundArray index="Pissed" value="AP_Arbiter_Pissed"/>
+        <SoundArray index="Movement" value="AP_ArbiterMP_MoveStart"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-arbiter.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-arbiter.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-arbiter-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-arbiter-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-arbiter-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_ArbiterMP_LandSoundSweetener" parent="SoundOneShot">
+        <Sound value="AP_ArbiterMP_LandSweetener"/>
+    </CActorSound>
+    <CActorModel id="AP_ArbiterMPCastModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_ArbiterMPStasisFieldSearch.Start" Send="Create"/>
+    </CActorModel>
+    <CActorRange id="AP_ArbiterMPCloakingFieldRange">
+        <On Terms="SelectionLocalUpdate.AP_ArbiterMP.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_ArbiterMP.Stop" Send="Destroy"/>
+        <Range value="5.000000"/>
+    </CActorRange>
+    <CActorSimple id="AP_ArbiterMPRecallOpacity">
+        <On Terms="Behavior.AP_ArbiterMPRecalling.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetOpacity 0.400000 0.250000 MassRecallOpacity"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetTintColor 100,100,255 0.250000 OneShot MassRecallTint"/>
+        <On Terms="Behavior.AP_ArbiterMPRecalled.Off" Send="TimerSet 0.150000 ClearRecallOpacity"/>
+        <On Terms="Behavior.AP_Yoink.On" Target="_Unit" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="Behavior.AP_Yoink.On" Target="_Unit" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="Behavior.AP_Yoink.On" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName ClearRecallOpacity; ValidateUnit AP_NoRecallingBehaviors" Target="_Unit" Send="ClearOpacity 0.250000 MassRecallOpacity"/>
+        <On Terms="TimerExpired; TimerName ClearRecallOpacity; ValidateUnit AP_NoRecallingBehaviors" Target="_Unit" Send="ClearTintColor 0.250000 MassRecallTint"/>
+        <On Terms="TimerExpired; TimerName ClearRecallOpacity; ValidateUnit AP_NoRecallingBehaviors" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModel id="AP_ArbiterMPRecalledImpact" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Behavior.AP_ArbiterMPRecalled.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <AutoScaleFactor value="0.450000"/>
+    </CActorModel>
+    <CActorSound id="AP_ArbiterMPRecalledImpactSound" parent="SoundOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Behavior.AP_ArbiterMPRecalled.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_ArbiterMP_RecallEnd"/>
+    </CActorSound>
+    <CActorModel id="AP_ArbiterMPRecallingImpact" parent="ModelAnimationStyleOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Behavior.AP_ArbiterMPRecalling.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <AutoScaleFactor value="0.450000"/>
+    </CActorModel>
+    <CActorSound id="AP_ArbiterMPRecallingImpactSound" parent="SoundOneShot">
+        <Terms value="Cap 1"/>
+        <On Terms="Behavior.AP_ArbiterMPRecalling.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_ArbiterMP_RecallStart"/>
+    </CActorSound>
+    <CActorModel id="AP_ArbiterMPStasisFieldImpact" parent="ModelAnimationStyleContinuous">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <EditorCategories value=""/>
+        <On Terms="Behavior.AP_ArbiterMPStasisField.On" Send="Create"/>
+        <On Terms="ActorCreation; ValidateUnit IsColossus" Send="SetScale 1.200000,1.200000,2.500000"/>
+        <On Terms="Behavior.AP_ArbiterMPStasisField.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.AP_ArbiterMPStasisField.On" Target="_Unit" Send="AnimSetPausedAll"/>
+        <On Terms="Behavior.AP_ArbiterMPStasisField.Off" Target="_Unit" Send="AnimSetPausedAll 0"/>
+        <On Terms="ActorCreation; ValidateUnit AP_IsBrutalisk" Send="SetScale 2.000000"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <AutoScaleFactor value="0.900000"/>
+    </CActorModel>
+    <CActorSound id="AP_ArbiterMPStasisFieldImpactSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_ArbiterMPStasisField.On" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_ArbiterMP_StasisFieldOn"/>
+    </CActorSound>
+    <CActorSound id="AP_ArbiterMPStasisFieldOffSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_ArbiterMPStasisField.Off" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <Sound value="AP_ArbiterMP_StasisFieldOff"/>
+    </CActorSound>
+    <CActorAction id="AP_ArbiterMPWeaponAttack" parent="GenericAttack" effectImpact="AP_ArbiterMPWeaponDamage" effectLaunch="AP_ArbiterMPWeaponLaunch">
+        <Missile value="AP_ArbiterMPWeaponMissile"/>
+        <ImpactMap index="None" Model="AP_ArbiterMPWeaponImpact" Sound="AP_ArbiterMP_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_ArbiterMPWeaponMissile" parent="GenericAttackMissile" unitName="AP_ArbiterMPWeaponMissile">
+        <On Terms="ActorCreation" Send="Create AP_ArbiterMP_AttackLaunchSound"/>
+    </CActorMissile>
+    <CActorSound id="AP_ArbiterMP_AttackLaunchSound" parent="SoundOneShot">
+        <Sound value="AP_ArbiterMP_AttackLaunch"/>
+    </CActorSound>
+    <CActorSound id="AP_ArbiterMP_CloakFieldOff" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotWorkerAndNotCloakedAndNotDead"/>
+        <On Terms="Behavior.AP_ArbiterMPCloakFieldEffect.Off" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_ArbiterMP_CloakFieldOn" parent="SoundOneShot">
+        <Terms value="ValidateUnit NotWorkerAndNotCloaked"/>
+        <On Terms="Behavior.AP_ArbiterMPCloakFieldEffect.On" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_ArbiterMP_StasisFieldShockwave" parent="SoundOneShot">
+        <On Terms="Effect.AP_ArbiterMPStasisFieldSearch.Start" Send="Create"/>
+    </CActorSound>
+    <CActorSplat id="AP_ArbiterMPRecallCursorSplat" parent="ProtossCursorSplat" abil="AP_ArbiterMPRecall"/>
+    <CActorRange id="AP_ArbiterMPRecallRange" parent="RangeAbil" abil="AP_ArbiterMPRecall">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorSplat id="AP_ArbiterMPStasisFieldCursorSplat" parent="ProtossCursorSplat" abil="AP_ArbiterMPStasisField"/>
+    <CActorRange id="AP_ArbiterMPStasisFieldRange" parent="RangeAbil" abil="AP_ArbiterMPStasisField">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
     <CActorAction id="AscendantSacrificeDummy1Attack2" parent="GenericAttack" effectImpact="AP_AscendantSacrificeLM1ImpactDummy" effectLaunch="AP_AscendantSacrificeLM1">
         <LaunchSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
         <Missile value="AP_AscendantSacrificeDummy1AttackMissile"/>
@@ -12685,7 +12831,6 @@
         <On Terms="Abil.AP_RoboticsFacilityWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
         <On Terms="Abil.AP_ChampionWarpTrain.TargetStart" Send="Create"/>
         <On Terms="Abil.AP_ChampionWarpTrain.TargetStop" Send="AnimBracketStop BSD"/>
-
     </CActorModel>
     <CActorProgress id="ProtossWarpIn">
         <!-- Override -->

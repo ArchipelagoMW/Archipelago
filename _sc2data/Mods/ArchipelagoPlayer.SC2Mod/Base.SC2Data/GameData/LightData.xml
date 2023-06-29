@@ -902,4 +902,18 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
     </CLight>
+    <CLight id="AP_PortraitArbiter" parent="default">
+        <ToDInfoArray index="0" Id="PortraitArbiter" AmbientEnvironmentMultiplier="0.000000">
+            <DirectionalLight index="Key">
+                <Color value="0.862745,0.764706,0.647059"/>
+                <ColorMultiplier value="1.350000"/>
+                <SpecularColor value="0.823529,0.607843,0.274510"/>
+                <SpecColorMultiplier value="2.500000"/>
+                <Direction value="0.158979,0.604271,-0.780757"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.156863,0.392157,0.647059" ColorMultiplier="3.000000" Direction="-0.775286,0.358561,-0.519966"/>
+            <DirectionalLight index="Back" Color="0.274510,0.529412,0.862745" ColorMultiplier="10.000000" Direction="-0.712385,-0.624525,-0.320117"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>

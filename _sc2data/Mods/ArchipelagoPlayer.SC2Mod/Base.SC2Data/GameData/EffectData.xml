@@ -9106,4 +9106,99 @@
         <Abil value="AP_TimeWarp"/>
         <Target Value="CasterUnit"/>
     </CEffectIssueOrder>
+    <CEffectApplyBehavior id="AP_ArbiterMPCloakingFieldApply">
+        <ValidatorArray index="0" value="NotMothership"/>
+        <ValidatorArray value="AP_NotMothershipCore"/>
+        <ValidatorArray value="AP_NotArbiterMP"/>
+        <!-- TODO: Add Vanilla Arbiter for Void -->
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ArbiterMPCloakFieldEffect"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_ArbiterMPCloakingFieldSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="-;Self,Neutral,Enemy,Structure,Missile,Dead,Hidden"/>
+        <AreaArray Radius="5" Effect="AP_ArbiterMPCloakingFieldApply"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_ArbiterMPRecallApplyPostRecallBehavior">
+        <ValidatorArray index="0" value=""/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ArbiterMPRecalled"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_ArbiterMPRecallApplyPreRecallBehavior">
+        <ValidatorArray index="0" value="NotLarvaEgg"/>
+        <ValidatorArray value="NotLarva"/>
+        <ValidatorArray value="AP_NotAbducted"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ArbiterMPRecalling"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_ArbiterMPRecallInitialSet">
+        <ValidatorArray value="NotLarvaEgg"/>
+        <ValidatorArray value="NotLarva"/>
+        <EffectArray value="AP_ArbiterMPRecallApplyPreRecallBehavior"/>
+        <EffectArray value="AP_ArbiterMPRecallMagazineIterate"/>
+    </CEffectSet>
+    <CEffectEnumMagazine id="AP_ArbiterMPRecallMagazineIterate">
+        <EditorCategories value=""/>
+        <EffectExternal value="AP_ArbiterMPRecallApplyPreRecallBehavior"/>
+    </CEffectEnumMagazine>
+    <CEffectEnumArea id="AP_ArbiterMPRecallSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Self,Ally,Neutral,Enemy,Structure,Missile,Item,Uncommandable,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="3" Effect="AP_ArbiterMPRecallInitialSet"/>
+        <MinCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_ArbiterMPRecallSet">
+        <ValidatorArray value="NotLarvaEgg"/>
+        <ValidatorArray value="NotLarva"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ArbiterMPRecallTeleport"/>
+        <EffectArray value="AP_ArbiterMPRecallApplyPostRecallBehavior"/>
+    </CEffectSet>
+    <CEffectTeleport id="AP_ArbiterMPRecallTeleport">
+        <EditorCategories value="Race:Protoss"/>
+        <PlacementArc value="360"/>
+        <PlacementAround Effect="AP_ArbiterMPRecallSearch" Value="SourcePoint"/>
+        <PlacementRange value="15"/>
+        <SourceLocation Effect="AP_ArbiterMPRecallSearch" Value="TargetPoint"/>
+        <TargetLocation Effect="AP_ArbiterMPRecallSearch" Value="SourcePoint"/>
+        <TeleportFlags index="TestCliff" value="1"/>
+        <TeleportFlags index="TestFog" value="0"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="AP_ArbiterMPStasisFieldApply">
+        <ValidatorArray value="NotFrenzied"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ArbiterMPStasisField"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_ArbiterMPStasisFieldSearch">
+        <EditorCategories value="Race:PrimalZerg"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Structure,Missile,Item,Dead,Hidden"/>
+        <AreaArray Radius="5" Effect="AP_ArbiterMPStasisFieldSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_ArbiterMPStasisFieldSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ArbiterMPStasisFieldApply"/>
+        <EffectArray value="AP_ArbiterMPStasisFieldTimerApply"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_ArbiterMPStasisFieldTimerApply">
+        <ValidatorArray value="NotFrenzied"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_ArbiterMPStasisFieldTimedLife"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_ArbiterMPWeaponDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_ArbiterMPWeaponLaunch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_ArbiterMPWeaponDamage"/>
+        <AmmoUnit value="AP_ArbiterMPWeaponMissile"/>
+        <Movers Link="MissileDefault" IfRangeLTE="1"/>
+        <Movers Link="AP_ArbiterMPWeaponMissile" IfRangeLTE="4"/>
+    </CEffectLaunchMissile>
 </Catalog>

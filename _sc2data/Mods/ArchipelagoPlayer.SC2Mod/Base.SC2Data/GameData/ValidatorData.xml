@@ -1066,6 +1066,7 @@
         <CombineArray value="AP_HasNoLiberatorYoink"/>
         <CombineArray value="AP_LiberatorNotRecallingMothership"/>
         <CombineArray value="AP_LiberatorNotRecallingMothershipCore"/>
+        <CombineArray value="AP_IsNotArbiterRecalling"/>
         <CombineArray value="AP_LiberatorAGNotOutOfRange"/>
     </CValidatorCombine>
     <CValidatorUnitCompareBehaviorCount id="AP_LiberatorNotRecallingMothership">
@@ -1958,7 +1959,8 @@
         <ResultFailed value="CantTargetThatUnit"/>
     </CValidatorUnitCompareBehaviorCount>
     <CValidatorCombine id="AP_IsNotRecallingCombine">
-        <CombineArray value="AP_Dummy"/>
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotArbiterRecalling"/>
     </CValidatorCombine>
     <CValidatorUnitFilters id="AP_Dummy"/>
     <CValidatorCombine id="AP_NotDummy">
@@ -2771,4 +2773,20 @@
         <CombineArray value="AP_IsVanillaNexus"/>
         <CombineArray value="AP_IsAPNexus"/>
     </CValidatorCombine>
+    <CValidatorCombine id="AP_NoRecallingBehaviors">
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotArbiterRecalling"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_IsBrutalisk">
+        <!-- TODO: Override in campaign -->
+        <CombineArray value="AP_NotDummy"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_NotArbiterMP">
+        <Value value="AP_ArbiterMP"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotArbiterRecalling">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_ArbiterMPRecalling"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

@@ -2027,6 +2027,31 @@
         <Range value="4"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_AscendantSacrifice"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ArbiterMPRecall">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ArbiterMPRecallSearch"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Charge Link=""/>
+            <Cooldown Link=""/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CursorEffect value="AP_ArbiterMPRecallSearch"/>
+        <AINotifyEffect value=""/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ArbiterMPRecall"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ArbiterMPStasisField">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_ArbiterMPStasisFieldSearch"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="9"/>
+        <CursorEffect value="AP_ArbiterMPStasisFieldSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ArbiterMPStasisField"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->
@@ -2851,30 +2876,30 @@
     </CAbilRally>
     <CAbilWarpTrain id="AP_ChampionWarpTrain">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
-<!--        <InfoArray index="Train1" Time="5" Unit="FenixChampion">-->
-<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain1" Location="Player" TimeUse="60"/>-->
-<!--            <Button DefaultButtonFace="WarpInFenixChampion" State="Restricted" Requirements="FenixChampionNotActive"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Train2" Time="5" Unit="VorazunChampion">-->
-<!--            <Cooldown Location="Player" TimeUse="60"/>-->
-<!--            <Button DefaultButtonFace="WarpInDarkTemplarChampion" State="Restricted" Requirements="VorazunChampionNotActive"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Train4" Time="5" Unit="AlarakChampion">-->
-<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain4" Location="Player" TimeUse="60"/>-->
-<!--            <Button DefaultButtonFace="WarpInDarkArchonChampion" State="Restricted" Requirements="AlarakChampionNotActive"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Train6" Time="5" Unit="KaraxChampion">-->
-<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain6" Location="Player" TimeUse="60"/>-->
-<!--            <Button DefaultButtonFace="WarpInVulcanChampion" State="Restricted" Requirements="KaraxChampionNotActive"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Train7" Time="5" Unit="ArtanisVoid">-->
-<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain7" Location="Player" TimeUse="60"/>-->
-<!--            <Button DefaultButtonFace="WarpInArtanisChampion" State="Restricted" Requirements="ArtanisChampionNotActive"/>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Train8" Time="5" Unit="ZeratulVoidAiur01">-->
-<!--            <Cooldown Link="Abil/AP_ChampionWarpTrain8" Location="Player" TimeUse="60"/>-->
-<!--            <Button DefaultButtonFace="WarpInZeratulChampion" State="Restricted" Requirements="ZeratulChampionEnabledAndNotActive"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train1" Time="5" Unit="FenixChampion">-->
+        <!--            <Cooldown Link="Abil/AP_ChampionWarpTrain1" Location="Player" TimeUse="60"/>-->
+        <!--            <Button DefaultButtonFace="WarpInFenixChampion" State="Restricted" Requirements="FenixChampionNotActive"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Train2" Time="5" Unit="VorazunChampion">-->
+        <!--            <Cooldown Location="Player" TimeUse="60"/>-->
+        <!--            <Button DefaultButtonFace="WarpInDarkTemplarChampion" State="Restricted" Requirements="VorazunChampionNotActive"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Train4" Time="5" Unit="AlarakChampion">-->
+        <!--            <Cooldown Link="Abil/AP_ChampionWarpTrain4" Location="Player" TimeUse="60"/>-->
+        <!--            <Button DefaultButtonFace="WarpInDarkArchonChampion" State="Restricted" Requirements="AlarakChampionNotActive"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Train6" Time="5" Unit="KaraxChampion">-->
+        <!--            <Cooldown Link="Abil/AP_ChampionWarpTrain6" Location="Player" TimeUse="60"/>-->
+        <!--            <Button DefaultButtonFace="WarpInVulcanChampion" State="Restricted" Requirements="KaraxChampionNotActive"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Train7" Time="5" Unit="ArtanisVoid">-->
+        <!--            <Cooldown Link="Abil/AP_ChampionWarpTrain7" Location="Player" TimeUse="60"/>-->
+        <!--            <Button DefaultButtonFace="WarpInArtanisChampion" State="Restricted" Requirements="ArtanisChampionNotActive"/>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Train8" Time="5" Unit="ZeratulVoidAiur01">-->
+        <!--            <Cooldown Link="Abil/AP_ChampionWarpTrain8" Location="Player" TimeUse="60"/>-->
+        <!--            <Button DefaultButtonFace="WarpInZeratulChampion" State="Restricted" Requirements="ZeratulChampionEnabledAndNotActive"/>-->
+        <!--        </InfoArray>-->
         <Flags index="WarpTrainersButton" value="0"/>
     </CAbilWarpTrain>
     <CAbilMorph id="FactoryReactorMorph">
@@ -4206,29 +4231,29 @@
     <CAbilTrain id="AP_NexusTrain">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
         <Activity value="UI/Warping"/>
-<!--        <InfoArray index="Train1" Time="17">-->
-<!--            <Button DefaultButtonFace="Probe"/>-->
-<!--            <Unit value="Probe"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train1" Time="17">-->
+        <!--            <Button DefaultButtonFace="Probe"/>-->
+        <!--            <Unit value="Probe"/>-->
+        <!--        </InfoArray>-->
         <Alert value="TrainWorkerComplete"/>
     </CAbilTrain>
     <CAbilTrain id="AP_NexusTrainMothership">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
         <Activity value="UI/Warping"/>
-<!--        <InfoArray index="Train1" Time="160">-->
-<!--            <Button DefaultButtonFace="Mothership" State="Restricted" Requirements="MothershipRequirements"/>-->
-<!--            <Unit value="Mothership"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train1" Time="160">-->
+        <!--            <Button DefaultButtonFace="Mothership" State="Restricted" Requirements="MothershipRequirements"/>-->
+        <!--            <Unit value="Mothership"/>-->
+        <!--        </InfoArray>-->
         <Alert value="MothershipComplete"/>
     </CAbilTrain>
     <CAbilTrain id="AP_NexusTrainMothershipCore">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
         <Activity value="UI/Warping"/>
         <Offset value="0,0"/>
-<!--        <InfoArray index="Train1" Time="30">-->
-<!--            <Button DefaultButtonFace="MothershipCore" State="Restricted" Requirements="MothershipCoreRequirements"/>-->
-<!--            <Unit value="MothershipCore"/>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Train1" Time="30">-->
+        <!--            <Button DefaultButtonFace="MothershipCore" State="Restricted" Requirements="MothershipCoreRequirements"/>-->
+        <!--            <Unit value="MothershipCore"/>-->
+        <!--        </InfoArray>-->
     </CAbilTrain>
     <CAbilRally id="AP_RallyNexus">
         <OrderArray index="0">
