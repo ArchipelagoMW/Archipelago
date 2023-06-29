@@ -417,9 +417,9 @@ def loadRandoPreset(world, player, args):
     args.powerBombQty = world.power_bomb_qty[player].value / float(10)
     args.minorQty = world.minor_qty[player].value
     args.energyQty = defaultMultiValues["energyQty"][world.energy_qty[player].value]
-    args.objectiveRandom = world.objectiveRandom[player].value
-    args.objectiveList = list(world.objectiveList[player].value)
-    args.nbObjective = world.nbObjective[player].value
+    args.objectiveRandom = world.custom_objective[player].value
+    args.objectiveList = list(world.custom_objective_list[player].value)
+    args.nbObjective = world.custom_objective_count[player].value
     args.objective = list(world.objective[player].value)
     args.tourian = defaultMultiValues["tourian"][world.tourian[player].value]
     #args.minimizerN
