@@ -13,9 +13,9 @@ from .data.recipe_data import all_cooking_recipes, CookingRecipe, RecipeSource, 
     StarterSource, ShopSource, SkillSource
 from .data.villagers_data import all_villagers_by_name, Villager
 from .items import all_items, Group
-from .mods.logic.buildings import modded_buildings
-from .mods.logic.quests import modded_quests
-from .mods.logic.special_orders import modded_special_orders
+from .mods.logic.buildings import get_modded_building_rules
+from .mods.logic.quests import get_modded_quest_rules
+from .mods.logic.special_orders import get_modded_special_orders_rules
 from .mods.logic.skullcavernelevator import has_skull_cavern_elevator_to_floor
 from .mods.mod_data import ModNames
 from .mods.logic import magic, skills
@@ -277,7 +277,7 @@ class StardewLogic:
             ArtisanGood.oak_resin: self.has(Machine.tapper),
             Ingredient.oil: self.can_spend_money_at(Region.pierre_store, 200) | (self.has(Machine.oil_maker) & (self.has(Vegetable.corn) | self.has(Flower.sunflower) | self.has(Seed.sunflower))),
             Machine.oil_maker: self.has_farming_level(8) & self.has(Loot.slime) & self.has(Material.hardwood) & self.has(MetalBar.gold),
-            Craftable.oil_of_garlic: (self.has_skill_level(Skill.combat, 6) & self.has(Vegetable.garlic) & self.has(Ingredient.oil)) | (self.can_reach_region(Region.mines_dwarf_shop)),
+            Craftable.oil_of_garlic: (self.has_skill_level(Skill.combat, 6) & self.has(Vegetable.garlic) & self.has(Ingredient.oil)) | (self.can_spend_money_at(Region.mines_dwarf_shop)),
             Geode.omni: self.can_mine_in_the_mines_floor_41_80() | self.can_reach_region(Region.desert) | self.can_do_panning() | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.has_building(Building.fish_pond)) | self.can_reach_region(Region.volcano_floor_10),
             Animal.ostrich: self.has_building(Building.barn) & self.has(AnimalProduct.ostrich_egg) & self.has(Machine.ostrich_incubator),
             AnimalProduct.ostrich_egg: self.can_forage(Generic.any, Region.island_north, True),
@@ -396,7 +396,7 @@ class StardewLogic:
             Building.cellar: self.can_spend_money(100000) & self.has_house(2),
         })
 
-        self.building_rules.update(modded_buildings(self, self.options))
+        self.building_rules.update(get_modded_building_rules(self, self.options[options.Mods]))
 
         self.quest_rules.update({
             Quest.introductions: self.can_reach_region(Region.town),
@@ -453,7 +453,7 @@ class StardewLogic:
                                     self.can_meet(NPC.wizard) & self.can_meet(NPC.willy),
         })
 
-        self.quest_rules.update(modded_quests(self, self.options))
+        self.quest_rules.update(get_modded_quest_rules(self, self.options))
 
         self.festival_rules.update({
             FestivalCheck.egg_hunt: self.has_season(Season.spring) & self.can_reach_region(Region.town) & self.can_win_egg_hunt(),
@@ -526,7 +526,7 @@ class StardewLogic:
             SpecialOrder.qis_prismatic_grange: self.has(Loot.bug_meat) & self.can_spend_money(80000), # All colors can be bought except purple
         })
 
-        self.special_order_rules.update(modded_special_orders(self, self.options))
+        self.special_order_rules.update(get_modded_special_orders_rules(self, self.options))
 
     def has(self, items: Union[str, (Iterable[str], Sized)], count: Optional[int] = None) -> StardewRule:
         if isinstance(items, str):
@@ -968,7 +968,7 @@ class StardewLogic:
                  self.can_progress_easily_in_the_mines_from_floor(previous_previous_elevator)))
 
     def can_progress_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
-        tier = int(floor / 50)
+        tier = floor // 50
         rules = []
         weapon_rule = self.has_great_weapon()
         rules.append(weapon_rule)
@@ -981,17 +981,7 @@ class StardewLogic:
         return And(rules)
 
     def can_progress_easily_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
-        tier = int(floor / 50) + 1
-        rules = []
-        weapon_rule = self.has_great_weapon()
-        rules.append(weapon_rule)
-        rules.append(self.can_cook())
-        if self.options[options.ToolProgression] == options.ToolProgression.option_progressive:
-            rules.append(self.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
-        if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
-            combat_tier = min(10, max(0, tier * 2 + 6))
-            rules.append(self.has_skill_level(Skill.combat, combat_tier))
-        return And(rules)
+        return self.can_progress_in_the_skull_cavern_from_floor(floor + 50)
 
     def can_mine_to_skull_cavern_floor(self, floor: int) -> StardewRule:
         previous_elevator = max(floor - 25, 0)
