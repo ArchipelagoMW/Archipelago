@@ -7,3 +7,4 @@ schema>=0.7.5
 kivy>=2.2.0
 bsdiff4>=1.2.3
 platformdirs>=3.5.1
+certifi>=2023.5.7
