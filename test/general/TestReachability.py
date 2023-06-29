@@ -33,7 +33,6 @@ class TestBase(unittest.TestCase):
 
     def testDefaultAllStateCanReachEverything(self):
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            # Final Fantasy logic is controlled by finalfantasyrandomizer.com
             unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
             with self.subTest("Game", game=game_name):
                 world = setup_solo_multiworld(world_type)
