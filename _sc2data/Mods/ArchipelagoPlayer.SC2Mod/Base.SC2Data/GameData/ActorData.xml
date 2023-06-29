@@ -12288,6 +12288,74 @@
         <Model value="TimeWarp"/>
         <AutoScaleFactor value="0.750000"/>
     </CActorModel>
+    <CActorModel id="AP_CorsairGenericAttackLaunchModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor {32,32,255 2.000000}"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorUnit id="AP_CorsairMP" parent="GenericUnitStandard" unitName="AP_CorsairMP">
+        <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap AP_CorsairMPWarpInStargate"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="$Spell"/>
+        <On Terms="AnimDone; AnimName Spell" Send="ModelSwap AP_CorsairMP"/>
+        <On Terms="AnimDone; AnimName Spell" Send="AnimClear Spell"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Corsair_Land"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_CorsairMPWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_CorsairMPDeath" SoundLink="AP_Corsair_Explode"/>
+        <PlacementModel value="AP_CorsairMPPlacement"/>
+        <PortraitModel value="AP_CorsairPortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Corsair.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-Corsair.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="AP_Corsair_Ready"/>
+        <SoundArray index="Help" value="AP_Corsair_Help"/>
+        <SoundArray index="What" value="AP_Corsair_What"/>
+        <SoundArray index="Yes" value="AP_Corsair_Yes"/>
+        <SoundArray index="Attack" value="AP_Corsair_Attack"/>
+        <SoundArray index="Pissed" value="AP_Corsair_Pissed"/>
+        <SoundArray index="Movement" value="AP_CorsairMP_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-Corsair.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Corsair.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Corsair-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Corsair-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Corsair-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_Corsair_Land" parent="SoundOneShot"/>
+    <CActorAction id="CorsairMPAttack2" parent="GenericAttack" effectAttack="AP_NeutronFlare">
+        <LaunchAssets Model="AP_CorsairMPAttackLaunch" Sound="AP_CorsairMP_AttackLaunch"/>
+        <LaunchModel value="AP_CorsairGenericAttackLaunchModel"/>
+        <ImpactMap index="None" Model="AP_CorsairMPAttackImpact" Sound="AP_CorsairMP_AttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_CorsairMPDisruptionWebImpact" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.AP_CorsairMPDisruptionWebCreatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_CorsairMPDisruptionWebCreatePersistent.Stop" Send="AnimBracketStop BSD"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorSound id="AP_CorsairMPDisruptionWebLaunchSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_CorsairMPDisruptionWebCreatePersistent.Start" Send="Create"/>
+        <Sound value="AP_CorsairMP_DisruptionWebLaunch"/>
+    </CActorSound>
+    <CActorSound id="AP_CorsairMP_DisruptionWebLoopSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_CorsairMPDisruptionWebCreatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_CorsairMPDisruptionWebCreatePersistent.Stop" Send="Destroy"/>
+        <Sound value="AP_CorsairMP_DisruptionWebLoop"/>
+    </CActorSound>
+    <CActorSplat id="AP_CorsairMPDisruptionWebCursorSplat" parent="ProtossCursorSplat" abil="AP_CorsairMPDisruptionWeb"/>
+    <CActorRange id="AP_CorsairMPDisruptionWebRange" parent="RangeAbil" abil="AP_CorsairMPDisruptionWeb">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->

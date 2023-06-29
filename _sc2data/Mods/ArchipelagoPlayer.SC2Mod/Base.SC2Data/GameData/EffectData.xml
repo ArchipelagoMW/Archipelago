@@ -9201,4 +9201,41 @@
         <Movers Link="MissileDefault" IfRangeLTE="1"/>
         <Movers Link="AP_ArbiterMPWeaponMissile" IfRangeLTE="4"/>
     </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="AP_CorsairMPDisruptionWebApply">
+        <EditorCategories value=""/>
+        <ResponseFlags index="Flee" value="1"/>
+        <Behavior value="AP_CorsairMPDisruptionWeb"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_CorsairMPDisruptionWebCreatePersistent">
+        <EditorCategories value=""/>
+        <InitialEffect value="AP_CorsairMPDisruptionWebSearch"/>
+        <PeriodCount value="40"/>
+        <PeriodicEffectArray value="AP_CorsairMPDisruptionWebSearch"/>
+        <PeriodicPeriodArray value="0.25"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumTransport id="AP_CorsairMPDisruptionWebIterateTransport">
+        <ValidatorArray value="AP_IsAnyBunker"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Marker Link="Effect/DisablingCloudIterateTransport"/>
+        <Effect value="AP_CorsairMPDisruptionWebApply"/>
+    </CEffectEnumTransport>
+    <CEffectEnumArea id="AP_CorsairMPDisruptionWebSearch">
+        <EditorCategories value=""/>
+        <SearchFilters value="Ground;Player,Ally,Item,Dead,Hidden"/>
+        <AreaArray Radius="3" Effect="AP_CorsairMPDisruptionWebSet"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_CorsairMPDisruptionWebSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_CorsairMPDisruptionWebApply"/>
+        <EffectArray value="AP_CorsairMPDisruptionWebIterateTransport"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_NeutronFlare" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Light" value="5"/>
+        <Kind value="Splash"/>
+        <Amount value="5"/>
+        <AreaArray Radius="1.25" Fraction="1"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Air,Visible;Player,Ally,Neutral"/>
+    </CEffectDamage>
 </Catalog>

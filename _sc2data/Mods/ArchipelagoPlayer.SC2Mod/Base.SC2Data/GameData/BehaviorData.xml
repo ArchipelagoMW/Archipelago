@@ -3370,4 +3370,21 @@
             <BehaviorLinkDisableArray value="Detector12"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CorsairDisableFakeWeapon">
+        <InfoFlags index="Hidden" value="1"/>
+        <DisableValidatorArray value="AP_CorsairFakeWeaponBehaviorDisable"/>
+        <Modification>
+            <WeaponDisableArray value="AP_CorsairFakeWeapon"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_CorsairMPDisruptionWeb">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-disruptionweb.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="0.3"/>
+        <Modification>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

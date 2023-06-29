@@ -2,6 +2,8 @@
 Button/Hotkey/AP_250mmStrikeCannons=C
 Button/Hotkey/AP_AWrp=C
 Button/Hotkey/AP_ApolloCloakOnNova=C
+Button/Hotkey/AP_ArbiterMPRecall=R
+Button/Hotkey/AP_ArbiterMPStasisField=F
 Button/Hotkey/AP_ArmorpiercingMode=E
 Button/Hotkey/AP_Armory=A
 Button/Hotkey/AP_AscendantSacrifice=R
@@ -217,5 +219,4 @@ Button/Hotkey/AP_Wraith=A
 Button/Hotkey/AP_WraithCloakOff=D
 Button/Hotkey/AP_WraithCloakOn=C
 Button/Hotkey/AP_YamatoGun=Y
-Button/Hotkey/AP_ArbiterMPRecall=R
-Button/Hotkey/AP_ArbiterMPStasisField=F
+Button/Hotkey/AP_CorsairMPDisruptionWeb=D

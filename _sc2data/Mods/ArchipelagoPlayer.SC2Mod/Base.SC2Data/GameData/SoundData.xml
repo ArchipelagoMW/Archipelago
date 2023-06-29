@@ -5262,15 +5262,6 @@
         <Pitch value="-2.000000,2.000000"/>
         <Volume value="-9.000000,-9.000000"/>
     </CSound>
-    <CSound id="AP_ArbiterMP_AttackImpact" parent="Combat">
-        <EditorCategories value="Race:Protoss"/>
-        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact00.wav" FacialGroup=""/>
-        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact01.wav" FacialGroup=""/>
-        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact02.wav" FacialGroup=""/>
-        <AssetArray File="Assets\Sounds\ArbiterMP_AttackImpact03.wav" FacialGroup=""/>
-        <Pitch value="-1.000000,1.000000"/>
-        <Volume value="-9.000000,-7.000000"/>
-    </CSound>
     <CSound id="AP_ArbiterMP_CloakFieldOff" parent="Spell">
         <EditorCategories value="Race:Protoss"/>
         <AssetArray File="Assets\Sounds\Protoss\Mothership\Mothership_CloakOff0.wav"/>
@@ -5415,5 +5406,157 @@
         <Pitch value="-1.000000,1.000000"/>
         <Volume value="-2.000000,-2.000000"/>
         <EditorCategories value="Race:Protoss"/>
+    </CSound>
+    <CSound id="AP_CorsairMP_AttackImpact" parent="Combat">
+        <AssetArray File="Assets\Sounds\Uni_ElectricalArcs_01.wav"/>
+        <AssetArray File="Assets\Sounds\Uni_ElectricalArcs_03.wav"/>
+        <AssetArray File="Assets\Sounds\Uni_ElectricalArcs_04.wav"/>
+        <AssetArray File="Assets\Sounds\Uni_ElectricalArcs_05.wav"/>
+        <AssetArray File="Assets\Sounds\Uni_ElectricalArcs_07.wav"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_CorsairMP_AttackLaunch" parent="Combat">
+        <AssetArray File="Assets\Sounds\Protoss\Interceptor\Interceptor_AttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Interceptor\Interceptor_AttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Interceptor\Interceptor_AttackLaunch2.wav"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_CorsairMP_DisruptionWebLaunch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\CorsairMP_DisruptionWebLaunch01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\CorsairMP_DisruptionWebLaunch02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\CorsairMP_DisruptionWebLaunch03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\CorsairMP_DisruptionWebLaunch04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\CorsairMP_DisruptionWebLaunch05_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\CorsairMP_DisruptionWebLaunch06_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-3.000000"/>
+        <DupePrioritization value="Oldest"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Spread value="60.000000"/>
+    </CSound>
+    <CSound id="AP_CorsairMP_DisruptionWebLoop" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray>
+            <File value="Assets\Sounds\CorsairMP_DisruptionWebLoop01_1ch.wav"/>
+            <LoopCount value="-1"/>
+            <Pitch value="-1.000000,1.000000"/>
+            <FacialGroup value=""/>
+        </AssetArray>
+        <AssetArray>
+            <File value="Assets\Sounds\CorsairMP_DisruptionWebLoop02_1ch.wav"/>
+            <LoopCount value="-1"/>
+            <Pitch value="-1.000000,1.000000"/>
+            <FacialGroup value=""/>
+        </AssetArray>
+        <AssetArray>
+            <File value="Assets\Sounds\CorsairMP_DisruptionWebLoop03_1ch.wav"/>
+            <LoopCount value="-1"/>
+            <Pitch value="-1.000000,1.000000"/>
+            <FacialGroup value=""/>
+        </AssetArray>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-3.000000"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="500" Volume="-0.120000"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Spread value="10.000000"/>
+        <Volume value="-18.000000,-18.000000"/>
+    </CSound>
+    <CSound id="AP_CorsairMP_Movement" parent="Movement">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Corsair_MoveStart01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Corsair_MoveStart02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Corsair_MoveStart03.wav" FacialGroup=""/>
+        <DupeMuteCount value="4"/>
+        <DupeThresholdPoints/>
+        <DupeThresholdPoints Count="3" Volume="-3.000000"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-8.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_Corsair_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Corsair_Attack00"/>
+        <AssetArray TemplateParam="Corsair_Attack01"/>
+        <AssetArray TemplateParam="Corsair_Attack02"/>
+        <AssetArray TemplateParam="Corsair_Attack03"/>
+        <AssetArray TemplateParam="Corsair_Attack04"/>
+        <AssetArray TemplateParam="Corsair_Attack05"/>
+        <AssetArray TemplateParam="Corsair_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Corsair_Explode" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge9.wav" Pitch="-3.000000,3.000000"/>
+        <DupeDestroyCount value="5"/>
+        <Pitch value="5.000000,7.000000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Corsair_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="Corsair_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Corsair_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="Corsair_Pissed00"/>
+        <AssetArray TemplateParam="Corsair_Pissed01"/>
+        <AssetArray TemplateParam="Corsair_Pissed02"/>
+        <AssetArray TemplateParam="Corsair_Pissed03"/>
+        <AssetArray TemplateParam="Corsair_Pissed04"/>
+        <AssetArray TemplateParam="Corsair_Pissed05"/>
+        <AssetArray TemplateParam="Corsair_Pissed06"/>
+        <AssetArray TemplateParam="Corsair_Pissed07"/>
+        <AssetArray File="LocalizedData\Sounds\VO\Protoss\Corsair_Pissed08_ALT.ogg" FacialGroup=""/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Corsair_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="Corsair_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Corsair_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Corsair_What00"/>
+        <AssetArray TemplateParam="Corsair_What01"/>
+        <AssetArray TemplateParam="Corsair_What02"/>
+        <AssetArray TemplateParam="Corsair_What03"/>
+        <AssetArray TemplateParam="Corsair_What04"/>
+        <AssetArray TemplateParam="Corsair_What05"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Corsair_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="Corsair_Yes00"/>
+        <AssetArray TemplateParam="Corsair_Yes01"/>
+        <AssetArray TemplateParam="Corsair_Yes02"/>
+        <AssetArray TemplateParam="Corsair_Yes03"/>
+        <AssetArray TemplateParam="Corsair_Yes04"/>
+        <AssetArray TemplateParam="Corsair_Yes05"/>
+        <AssetArray TemplateParam="Corsair_Yes06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_Corsair_Land" parent="FlyingUnit_Land">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Phoenix_Land_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Phoenix_Land_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Phoenix_Land_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Phoenix_Land_04.wav" FacialGroup=""/>
+        <Pitch value="2.000000,-3.000000"/>
+        <Volume value="-7.000000,-6.000000"/>
     </CSound>
 </Catalog>

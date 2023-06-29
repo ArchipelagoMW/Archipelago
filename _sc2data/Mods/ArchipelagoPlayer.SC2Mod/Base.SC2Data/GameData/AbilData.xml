@@ -2902,6 +2902,26 @@
         <!--        </InfoArray>-->
         <Flags index="WarpTrainersButton" value="0"/>
     </CAbilWarpTrain>
+    <CAbilEffectTarget id="AP_CorsairMPDisruptionWeb">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_CorsairMPDisruptionWebCreatePersistent"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="NoDeceleration" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Range value="9"/>
+        <AutoCastFilters value="Visible;Player,Ally,Neutral"/>
+        <AutoCastRange value="9"/>
+        <AutoCastValidatorArray value="AP_IsNotDisruptionWebbed"/>
+        <AutoCastValidatorArray value="TargetIsGround"/>
+        <AutoCastValidatorArray value="TargetCanAttack"/>
+        <AutoCastValidatorArray value="AP_DisruptionWebFilters"/>
+        <CursorEffect value="AP_CorsairMPDisruptionWebSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_CorsairMPDisruptionWeb"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

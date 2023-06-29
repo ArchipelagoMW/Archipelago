@@ -2789,4 +2789,21 @@
         <WhichUnit Value="Caster"/>
         <Behavior value="AP_ArbiterMPRecalling"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotDisruptionWebbed">
+        <Behavior value="AP_CorsairMPDisruptionWeb"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_DisruptionWebFilters">
+        <CombineArray value="TargetAttacksAir"/>
+        <CombineArray value="TargetAttacksGround"/>
+    </CValidatorCombine>
+    <CValidatorLocationEnumArea id="AP_CorsairFakeWeaponBehaviorDisable">
+        <WhichLocation Value="CasterUnit"/>
+        <AreaArray>
+            <Compare value="GT"/>
+            <Count value="0"/>
+            <Radius value="9"/>
+            <Validator value="IsFlying"/>
+        </AreaArray>
+        <SearchFilters value="-;Player,Ally,Neutral"/>
+    </CValidatorLocationEnumArea>
 </Catalog>

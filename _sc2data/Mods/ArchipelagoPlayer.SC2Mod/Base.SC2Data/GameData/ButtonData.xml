@@ -2155,4 +2155,8 @@
         <Icon value="Assets\Textures\btn-ability-protoss-stasisfield.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-protoss-stasisfield.dds"/>
     </CButton>
+    <CButton id="AP_CorsairMPDisruptionWeb">
+        <Icon value="Assets\Textures\btn-ability-protoss-disruptionweb.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-disruptionweb.dds"/>
+    </CButton>
 </Catalog>

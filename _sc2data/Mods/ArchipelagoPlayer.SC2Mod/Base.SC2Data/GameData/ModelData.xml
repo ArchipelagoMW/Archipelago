@@ -10504,4 +10504,58 @@
         <ScaleMax value="1.500000,1.500000,1.500000"/>
         <ScaleMin value="1.500000,1.500000,1.500000"/>
     </CModel>
+    <CModel id="AP_CorsairMP" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Corsair_Void\Corsair_Void.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow05"/>
+        <Radius value="0.750000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.400000"/>
+        <SelectionRadius value="0.882000"/>
+        <ShadowRadius value="0.882000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow05"/>
+        <UnitGlossaryCamera value="Star2CameraLow05"/>
+    </CModel>
+    <CModel id="AP_CorsairMPAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\PhoenixMissileImpact\PhoenixMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_CorsairMPAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Terran\MarineWeaponLaunch\MarineWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_CorsairMPDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Corsair_Death\Corsair_Death.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <Radius value="0.750000"/>
+        <SelectionRadius value="0.750000"/>
+        <ShadowRadius value="0.750000"/>
+        <VariationCount value="2"/>
+    </CModel>
+    <CModel id="AP_CorsairMPDisruptionWebImpact" parent="RacePersistentSpellFX" Race="Protoss">
+        <Model value="Assets\Effects\Protoss\Corsair_DisruptionWeb\Corsair_DisruptionWeb.m3"/>
+    </CModel>
+    <CModel id="AP_CorsairMPPlacement" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Corsair_Placement\Corsair_Placement.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.750000"/>
+        <ShadowRadius value="0.750000"/>
+    </CModel>
+    <CModel id="AP_CorsairMPWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Corsair_WarpIn\Corsair_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.750000"/>
+        <ShadowRadius value="0.750000"/>
+    </CModel>
+    <CModel id="AP_CorsairPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\CorsairEx2Portrait\CorsairEx2Portrait.m3"/>
+        <Image value="Assets\Textures\CorsairPortrait_Static.dds"/>
+        <Lighting value="PortraitCorsair"/>
+    </CModel>
 </Catalog>

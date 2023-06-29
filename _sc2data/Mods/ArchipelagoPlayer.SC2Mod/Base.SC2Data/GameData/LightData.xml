@@ -916,4 +916,20 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
     </CLight>
+    <CLight id="AP_PortraitCorsair" parent="default">
+        <ToDInfoArray index="0" Id="PortraitCorsair" AmbientColor="0.078431,0.000000,0.000000">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.875000"/>
+            <Param index="ShadowPenumbraSize" value="0.064000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.941177,0.737255,0.419608"/>
+                <ColorMultiplier value="0.912000"/>
+                <SpecColorMultiplier value="3.000000"/>
+                <Direction value="0.614787,0.633746,-0.469472"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.031373,0.321569,0.866667" ColorMultiplier="2.000000" Direction="-0.679599,0.696411,-0.230559"/>
+            <DirectionalLight index="Back" Color="0.015686,0.184314,0.623529" ColorMultiplier="10.000000" Direction="-0.733792,-0.676886,-0.058086"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>
