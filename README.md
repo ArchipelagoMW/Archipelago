@@ -43,6 +43,10 @@ Currently, the following games are supported:
 * The Legend of Zelda: Link's Awakening DX
 * Clique
 * Adventure
+* DLC Quest
+* Noita
+* Undertale
+* Bumper Stickers
 * Mega Man Battle Network 3: Blue Version
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).

@@ -4,8 +4,8 @@
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `Links Awakening DX`
 - Software capable of loading and playing GBC ROM files
-    - Currently only [RetroArch](https://retroarch.com?page=platforms) 1.10.3 or newer) is supported.
-    - Bizhawk support will come at a later date.
+    - [RetroArch](https://retroarch.com?page=platforms) 1.10.3 or newer.
+    - [BizHawk](https://tasvideos.org/BizHawk) 2.8 or newer.
 - Your American 1.0 ROM file, probably named `Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc`
 
 ## Installation Procedures
@@ -65,7 +65,7 @@ client, and will also create your ROM in the same place as your patch file.
 
 ### Connect to the client
 
-##### RetroArch 1.10.3 or newer
+#### RetroArch 1.10.3 or newer
 
 You only have to do these steps once. Note, RetroArch 1.9.x will not work as it is older than 1.10.3.
 
@@ -76,6 +76,15 @@ You only have to do these steps once. Note, RetroArch 1.9.x will not work as it 
 
 ![Screenshot of Network Commands setting](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
 4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - Gameboy / Color (SameBoy)".
+
+#### BizHawk 2.8 or newer (older versions untested)
+
+1. Load the ROM.
+2. Navigate to the folder Archipelago is installed in, then `data/lua`, and drag+drop `connector_ladx_bizhawk.lua` onto
+   the main EmuHawk window.
+    - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to
+      `connector_ladx_bizhawk.lua` with the file picker.
+3. Keep the Lua Console open during gameplay (minimizing it is fine!)
 
 ### Connect to the Archipelago Server
 
