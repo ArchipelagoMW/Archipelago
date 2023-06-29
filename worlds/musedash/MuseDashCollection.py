@@ -49,8 +49,8 @@ class MuseDashCollections:
     def __init__(self, start_item_id: int, items_per_location: int):
         self.MUSIC_SHEET_CODE = start_item_id
 
-        self.vfx_trap_items = {k: (v + start_item_id) for (k,v) in self.vfx_trap_items.items()}
-        self.sfx_trap_items = {k: (v + start_item_id) for (k,v) in self.sfx_trap_items.items()}
+        self.vfx_trap_items = {k: (v + start_item_id) for (k, v) in self.vfx_trap_items.items()}
+        self.sfx_trap_items = {k: (v + start_item_id) for (k, v) in self.sfx_trap_items.items()}
 
         item_id_index = start_item_id + 50
         location_id_index = start_item_id
@@ -99,7 +99,7 @@ class MuseDashCollections:
                 location_id_index += 1
 
     def get_songs_with_settings(self, dlc_songs: bool, streamer_mode_active: bool,
-                                    diff_lower: int, diff_higher: int) -> List[str]:
+                                diff_lower: int, diff_higher: int) -> List[str]:
         """Gets a list of all songs that match the filter settings. Difficulty thresholds are inclusive."""
         filtered_list = []
 
