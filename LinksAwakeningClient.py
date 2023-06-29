@@ -1,4 +1,5 @@
 import ModuleUpdate
+
 ModuleUpdate.update()
 
 import Utils
@@ -29,6 +30,7 @@ from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
 from worlds.ladx.Tracker import LocationTracker, MagpieBridge
+
 
 class GameboyException(Exception):
     pass
@@ -76,7 +78,7 @@ class LAClientConstants:
     wGameplayType = 0xDB95
     # RO: Starts at 0, increases every time an item is received from the server and processed
     wLinkSyncSequenceNumber = 0xDDF6
-    wLinkStatusBits = 0xDDF7          # RW:
+    wLinkStatusBits = 0xDDF7  # RW:
     #      Bit0: wLinkGive* contains valid data, set from script cleared from ROM.
     wLinkHealth = 0xDB5A
     wLinkGiveItem = 0xDDF8  # RW
@@ -91,11 +93,10 @@ class LAClientConstants:
     # RO, which player to send to, but it's just the X position of the NPC used, so 0x18 is player 0
     # wLinkSendShopTarget = 0xDDFF
 
-
-    wRecvIndex = 0xDDFD # Two bytes
+    wRecvIndex = 0xDDFD  # Two bytes
     wCheckAddress = 0xC0FF - 0x4
     WRamCheckSize = 0x4
-    WRamSafetyValue = bytearray([0]*WRamCheckSize)
+    WRamSafetyValue = bytearray([0] * WRamCheckSize)
 
     MinGameplayValue = 0x06
     MaxGameplayValue = 0x1A
@@ -148,7 +149,8 @@ class RAGameboy:
 
     async def check_safe_gameplay(self, throw=True):
         async def check_wram():
-            check_values = await self.async_read_memory(LAClientConstants.wCheckAddress, LAClientConstants.WRamCheckSize)
+            check_values = await self.async_read_memory(LAClientConstants.wCheckAddress,
+                                                        LAClientConstants.WRamCheckSize)
 
             if check_values != LAClientConstants.WRamSafetyValue:
                 if throw:
@@ -164,7 +166,8 @@ class RAGameboy:
         gameplay_value = await self.async_read_memory(LAClientConstants.wGameplayType)
         gameplay_value = gameplay_value[0]
         # In gameplay or credits
-        if not (LAClientConstants.MinGameplayValue <= gameplay_value <= LAClientConstants.MaxGameplayValue) and gameplay_value != 0x1:
+        if not (
+                LAClientConstants.MinGameplayValue <= gameplay_value <= LAClientConstants.MaxGameplayValue) and gameplay_value != 0x1:
             if throw:
                 logger.info("invalid emu state")
                 raise InvalidEmulatorStateError()
@@ -306,7 +309,7 @@ class LinksAwakeningClient():
                         if status.count(b" ") < 2:
                             await asyncio.sleep(1.0)
                             continue
-                        
+
                         GET_STATUS, PLAYING, info = status.split(b" ", 2)
                         if status.count(b",") < 2:
                             await asyncio.sleep(1.0)
@@ -363,7 +366,7 @@ class LinksAwakeningClient():
 
         next_index += 1
         self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
-                                  item_id, from_player])
+            item_id, from_player])
         status |= 1
         status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
         self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
@@ -375,7 +378,8 @@ class LinksAwakeningClient():
         logger.info("Ready!")
 
     async def is_victory(self):
-        return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
+        return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[
+            LAClientConstants.wGameplayType] == 1
 
     async def main_tick(self, item_get_cb, win_cb, deathlink_cb, collect_cb):
         await self.tracker.readChecks(item_get_cb)
@@ -383,7 +387,8 @@ class LinksAwakeningClient():
         await self.gps_tracker.read_location()
         await collect_cb()
 
-        current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
+        current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[
+            LAClientConstants.wLinkHealth]
         if self.deathlink_debounce and current_health != 0:
             self.deathlink_debounce = False
         elif not self.deathlink_debounce and current_health == 0:
@@ -410,6 +415,7 @@ class LinksAwakeningClient():
 
 all_tasks = set()
 
+
 def create_task_log_exception(awaitable) -> asyncio.Task:
     async def _log_exception(awaitable):
         try:
@@ -419,24 +425,33 @@ def create_task_log_exception(awaitable) -> asyncio.Task:
             pass
         finally:
             all_tasks.remove(task)
+
     task = asyncio.create_task(_log_exception(awaitable))
     all_tasks.add(task)
 
 
 class LinksAwakeningContext(CommonContext):
-    # Don't allow start check, boss items, bridge to be collected
-    collected_blacklist = {"Tarin's Gift (Mabe Village)",
-                           'Moldorm Heart Container (Tail Cave)',
-                           'Genie Heart Container (Bottle Grotto)',
-                           'Slime Eye Heart Container (Key Cavern)',
-                           "Angler Fish Heart Container (Angler's Tunnel)",
-                           "Slime Eel Heart Container (Catfish's Maw)",
-                           'Facade Heart Container (Face Shrine)',
-                           "Evil Eagle Heart Container (Eagle's Tower)",
-                           'Hot Head Heart Container (Turtle Rock)',
-                           'Kiki (Ukuku Prairie)',
-                           'Tunic Fairy Item 1 (Color Dungeon)',
-                           'Tunic Fairy Item 2 (Color Dungeon)'}
+    collected_blacklist = {
+        # The game gets upset if Tarin's Gift isn't collected before
+        # any memory-adjusting things happen
+        "Tarin's Gift (Mabe Village)",
+        # The game uses heart container checks (Boss victory items)
+        # to determine whether to spawn the boss. No free instruments!
+        'Moldorm Heart Container (Tail Cave)',
+        'Genie Heart Container (Bottle Grotto)',
+        'Slime Eye Heart Container (Key Cavern)',
+        "Angler Fish Heart Container (Angler's Tunnel)",
+        "Slime Eel Heart Container (Catfish's Maw)",
+        'Facade Heart Container (Face Shrine)',
+        "Evil Eagle Heart Container (Eagle's Tower)",
+        'Hot Head Heart Container (Turtle Rock)',
+        # The kiki check determines if the bridge is built. On trading mode,
+        # you need the item to give to kiki even if kiki is collected.
+        'Kiki (Ukuku Prairie)',
+        # The color dungeon acts differently than the main, there is no heart
+        # container check.
+        'Tunic Fairy Item 1 (Color Dungeon)',
+        'Tunic Fairy Item 2 (Color Dungeon)'}
     tags = {"AP"}
     game = "Links Awakening DX"
     items_handling = 0b101
@@ -485,12 +500,14 @@ class LinksAwakeningContext(CommonContext):
 
                 if self.ctx.magpie_enabled:
                     button = Button(text="", size=(30, 30), size_hint_x=None,
-                                    on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                                    on_press=lambda _: webbrowser.open(
+                                        'https://magpietracker.us/?enable_autotracker=1'))
                     image = Image(size=(16, 16), texture=magpie_logo())
                     button.add_widget(image)
 
                     def set_center(_, center):
                         image.center = center
+
                     button.bind(center=set_center)
 
                     self.connect_layout.add_widget(button)
@@ -552,8 +569,6 @@ class LinksAwakeningContext(CommonContext):
                 if len(args["checked_locations"]) > 0:
                     self.examine_collected_checks = True
 
-
-
     async def mark_locations_as_checked(self):
         # Don't allow collecting an item until you've got your first check
         if not self.client.tracker.has_start_item() or not self.examine_collected_checks or not self.collect_enabled:
@@ -561,7 +576,7 @@ class LinksAwakeningContext(CommonContext):
         checks = list(self.checked_locations)
         await self.get_location_checks_from_server(checks=checks)
         # A bunch of checks to make sure things are initialized
-        if self.client.tracker is not None and self.locations_info is not None and self.client.gameboy is not None\
+        if self.client.tracker is not None and self.locations_info is not None and self.client.gameboy is not None \
                 and len(self.locations_info) > 0:
             for check in checks:
                 if check in self.locations_info:
@@ -625,7 +640,7 @@ class LinksAwakeningContext(CommonContext):
 
         if self.magpie_enabled:
             self.magpie_task = asyncio.create_task(self.magpie.serve())
-        
+
         # yield to allow UI to start
         await asyncio.sleep(0)
 
@@ -654,11 +669,12 @@ async def main():
     parser = get_base_parser(description="Link's Awakening Client.")
     parser.add_argument("--url", help="Archipelago connection url")
     parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
-    parser.add_argument("--no-collect", dest='collect', default=True, action='store_false', help="Disable check collection")
+    parser.add_argument("--no-collect", dest='collect', default=True, action='store_false',
+                        help="Disable check collection")
 
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a .apladx Archipelago Binary Patch file')
-                        
+
     args = parser.parse_args()
     logger.info(args)
 
@@ -688,6 +704,7 @@ async def main():
 
     await ctx.exit_event.wait()
     await ctx.shutdown()
+
 
 if __name__ == '__main__':
     colorama.init()
