@@ -174,12 +174,12 @@ class SMWorld(World):
                 isAdvancement = False
 
             itemClass = ItemManager.Items[item.Type].Class
-            smitem = SMItem(item.Name, 
-                            ItemClassification.progression if isAdvancement else ItemClassification.filler, 
+            smitem = SMItem(item.Name,
+                            ItemClassification.progression if isAdvancement else ItemClassification.filler,
                             item.Type,
-                            None if itemClass == 'Boss' else self.item_name_to_id[item.Name], 
+                            None if itemClass == 'Boss' else self.item_name_to_id[item.Name],
                             player=self.player)
-                        
+
             if itemClass == 'Boss':
                 self.locked_items[item.Name] = smitem
             elif item.Category == 'Nothing':
@@ -192,10 +192,10 @@ class SMWorld(World):
         for (location, item) in self.locked_items.items():
             self.multiworld.get_location(location, self.player).place_locked_item(item)
             self.multiworld.get_location(location, self.player).address = None
-    
+
     def evalSMBool(self, smbool, maxDiff):
         return smbool.bool == True and smbool.difficulty <= maxDiff
-    
+
     def add_entrance_rule(self, entrance, player, func):
         add_rule(entrance, lambda state: self.evalSMBool(func(state.smbm[player]), state.smbm[player].maxDiff))
 
@@ -221,12 +221,12 @@ class SMWorld(World):
                 add_accessFrom_rule(location, self.player, value.AccessFrom)
             if value.PostAvailable is not None:
                 add_postAvailable_rule(location, self.player, value.PostAvailable)
-                
+
         for accessPoint in Logic.accessPoints:
             if not accessPoint.Escape:
                 for key, value1 in accessPoint.intraTransitions.items():
                     set_entrance_rule(self.multiworld.get_entrance(accessPoint.Name + "->" + key, self.player), self.player, value1)
-        
+
     def create_region(self, world: MultiWorld, player: int, name: str, locations=None, exits=None):
         ret = Region(name, player, world)
         if locations:
@@ -238,7 +238,7 @@ class SMWorld(World):
             for exit in exits:
                 ret.exits.append(Entrance(player, exit, ret))
         return ret
-    
+
     def create_regions(self):
         # create locations
         for name in locationsDict:
@@ -248,9 +248,9 @@ class SMWorld(World):
         regions = []
         for accessPoint in Logic.accessPoints:
             if not accessPoint.Escape:
-                regions.append(self.create_region(  self.multiworld, 
-                                                    self.player, 
-                                                    accessPoint.Name, 
+                regions.append(self.create_region(  self.multiworld,
+                                                    self.player,
+                                                    accessPoint.Name,
                                                     None,
                                                     [accessPoint.Name + "->" + key for key in accessPoint.intraTransitions.keys()]))
 
@@ -261,9 +261,9 @@ class SMWorld(World):
         # this is required in AP because a location cant have multiple parent regions
         locationRegions = []
         for locationName, value in locationsDict.items():
-            locationRegions.append(self.create_region(  self.multiworld, 
-                                                        self.player, 
-                                                        locationName, 
+            locationRegions.append(self.create_region(  self.multiworld,
+                                                        self.player,
+                                                        locationName,
                                                         [locationName]))
             for key in value.AccessFrom.keys():
                 currentRegion = self.multiworld.get_region(key, self.player)
@@ -320,7 +320,7 @@ class SMWorld(World):
                 return "Super Missile"
         else:
             return "Nothing"
-        
+
     def pre_fill(self):
         if len(self.NothingPool) > 0:
             nonChozoLoc = []
@@ -371,8 +371,8 @@ class SMWorld(World):
                                         itemLoc.item.type if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
                                         'ArchipelagoItem']),
                                         copy.copy(locationsDict[itemLoc.name] if itemLoc.game == self.game else
-                                                  locationsDict[first_local_collected_loc.name]), 
-                                        itemLoc.item.player, 
+                                                  locationsDict[first_local_collected_loc.name]),
+                                        itemLoc.item.player,
                                         True)
                                         for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player
                                     ]
@@ -387,7 +387,7 @@ class SMWorld(World):
         escapeOk = self.variaRando.randoExec.graphBuilder.escapeGraph(self.variaRando.container, self.variaRando.randoExec.areaGraph, self.variaRando.randoExec.randoSettings.maxDiff, escapeTrigger)
         if (not escapeOk):
             logger.warning(f"Escape Rando forced to 'Off' for player {self.multiworld.get_player_name(self.player)} because could not find a solution for escape")
-        
+
         # if we couldn't find an area layout then the escape graph is not created either
         # and getDoorConnections will crash if random escape is activated.
         self.variaRando.doors = GraphUtils.getDoorConnections(self.variaRando.randoExec.areaGraph,
@@ -406,7 +406,7 @@ class SMWorld(World):
 
         for item in progitempool:
             new_state.collect(item, True)
-        
+
         bossesLoc = ['Draygon', 'Kraid', 'Ridley', 'Phantoon', 'Mother Brain']
         for player in world.get_game_players("Super Metroid"):
             for bossLoc in bossesLoc:
@@ -548,9 +548,17 @@ class SMWorld(World):
         vanillaItemTypesCount = 21
         for itemLoc in self.multiworld.get_locations():
             if itemLoc.player == self.player and "Boss" not in locationsDict[itemLoc.name].Class:
-                # item to place in this SM world: write full item data to tables
+                SMZ3NameToSMType = {
+                    "ETank": "ETank", "Missile": "Missile", "Super": "Super", "PowerBomb": "PowerBomb", "Bombs": "Bomb",
+                    "Charge": "Charge", "Ice": "Ice", "HiJump": "HiJump", "SpeedBooster": "SpeedBooster",
+                    "Wave": "Wave", "Spazer": "Spazer", "SpringBall": "SpringBall", "Varia": "Varia", "Plasma": "Plasma",
+                    "Grapple": "Grapple", "Morph": "Morph", "ReserveTank": "Reserve", "Gravity": "Gravity",
+                    "XRay": "XRayScope", "SpaceJump": "SpaceJump", "ScrewAttack": "ScrewAttack"
+                }
                 if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items:
                     itemId = ItemManager.Items[itemLoc.item.type].Id
+                elif itemLoc.item.game == "SMZ3" and itemLoc.item.name in SMZ3NameToSMType.keys():
+                    itemId = ItemManager.Items[SMZ3NameToSMType[itemLoc.item.name]].Id
                 else:
                     itemId = ItemManager.Items["ArchipelagoItem"].Id + idx
                     multiWorldItems.append({"sym": symbols["message_item_names"],
