@@ -24,6 +24,7 @@ location_table = {loc_name: offset[object_type_table[loc_name]] + obj_id for loc
                   object_id_table.items()}
 
 weapons = ("Claw", "Bomb", "Sword", "Axe")
+crest_warps = [51, 52, 53, 76, 96, 108, 158, 171, 175, 191, 275, 276, 277, 308, 334, 336, 396, 397]
 
 
 def process_rules(spot, access):
@@ -87,7 +88,22 @@ def create_regions(self):
                 if connect_room.id == link["target_room"]:
                     connection = Entrance(self.player, entrance_names[link["entrance"]] if "entrance" in link and
                                           link["entrance"] != -1 else f"{region.name} to {connect_room.name}", region)
+                    if "entrance" in link and link["entrance"] != -1:
+                        spoiler = False
+                        if link["entrance"] in crest_warps:
+                            if self.multiworld.crest_shuffle[self.player]:
+                                spoiler = True
+                        elif self.multiworld.map_shuffle[self.player] == "everything":
+                            spoiler = True
+                        elif "Subregion" in region.name and self.multiworld.map_shuffle[self.player] not in ("dungeons",
+                                                                                                             "none"):
+                            spoiler = True
+                        elif "Subregion" not in region.name and self.multiworld.map_shuffle[self.player] not in ("none",
+                                                                                                           "overworld"):
+                            spoiler = True
 
+                        self.multiworld.spoiler.set_entrance(entrance_names[link["entrance"]], connect_room.name,
+                                                             'both', self.player)
                     if link["access"]:
                         process_rules(connection, link["access"])
                     region.exits.append(connection)
