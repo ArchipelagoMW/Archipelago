@@ -10,8 +10,8 @@ from .player_logic import WitnessPlayerLogic
 from .Options import is_option_enabled, get_option_value
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic
-from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule
+from worlds.AutoWorld import LogicMixin
+from worlds.generic.Rules import set_rule
 
 
 class WitnessLogic(LogicMixin):

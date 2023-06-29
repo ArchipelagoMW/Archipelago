@@ -1,3 +1,4 @@
+import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable
 
@@ -48,10 +49,14 @@ class Component:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.display_name})"
 
+processes = weakref.WeakSet()
+
 def launch_subprocess(func: Callable, name: str = None):
+    global processes
     import multiprocessing
-    process = multiprocessing.Process(target=func, name=name, daemon=True)
+    process = multiprocessing.Process(target=func, name=name)
     process.start()
+    processes.add(process)
 
 class SuffixIdentifier:
     suffixes: Iterable[str]
@@ -101,7 +106,7 @@ components: List[Component] = [
     # Pokémon Emerald
     Component('Pokemon Emerald Client', 'PokemonEmeraldClient', file_identifier=SuffixIdentifier('.apemerald')),
     # TLoZ
-    Component('Zelda 1 Client', 'Zelda1Client'),
+    Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
@@ -113,6 +118,9 @@ components: List[Component] = [
               file_identifier=SuffixIdentifier('.apzl')),
     # Kingdom Hearts 2
     Component('KH2 Client', "KH2Client"),
+
+    #MegaMan Battle Network 3
+    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
 ]
 
 

@@ -42,7 +42,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -342,6 +342,10 @@ def get_default_options() -> OptionsType:
         },
         "wargroove_options": {
             "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
+        },
+        "mmbn3_options": {
+            "rom_file": "Mega Man Battle Network 3 - Blue Version (USA).gba",
+            "rom_start": True
         },
         "adventure_options": {
             "rom_file": "ADVNTURE.BIN",
@@ -770,10 +774,10 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     return buffer
 
 
-_faf_tasks: "Set[asyncio.Task[None]]" = set()
+_faf_tasks: "Set[asyncio.Task[typing.Any]]" = set()
 
 
-def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str] = None) -> None:
+def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = None) -> None:
     """
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
@@ -786,7 +790,7 @@ def async_start(co: Coroutine[typing.Any, typing.Any, bool], name: Optional[str]
     # ```
     # This implementation follows the pattern given in that documentation.
 
-    task = asyncio.create_task(co, name=name)
+    task: asyncio.Task[typing.Any] = asyncio.create_task(co, name=name)
     _faf_tasks.add(task)
     task.add_done_callback(_faf_tasks.discard)
 
