@@ -201,8 +201,10 @@ class L2ACWorld(World):
                 rom_bytearray[offset:offset + 1] = self.o.party_starting_level.value.to_bytes(1, "little")
             for offset in range(0x02B39A, 0x02B457, 0x1B):
                 rom_bytearray[offset:offset + 3] = self.o.party_starting_level.xp.to_bytes(3, "little")
+            rom_bytearray[0x03AE49:0x03AE49 + 1] = self.o.boss.sprite.to_bytes(1, "little")
             rom_bytearray[0x05699E:0x05699E + 147] = self.get_goal_text_bytes()
             rom_bytearray[0x056AA3:0x056AA3 + 24] = self.o.default_party.event_script
+            rom_bytearray[0x072740:0x072740 + 1] = self.o.boss.music.to_bytes(1, "little")
             rom_bytearray[0x072742:0x072742 + 1] = self.o.boss.value.to_bytes(1, "little")
             rom_bytearray[0x072748:0x072748 + 1] = self.o.boss.flag.to_bytes(1, "little")
             rom_bytearray[0x09D59B:0x09D59B + 256] = self.get_node_connection_table()
