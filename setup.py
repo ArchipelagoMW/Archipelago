@@ -71,7 +71,6 @@ non_apworlds: set = {
     "DLCQuest",
     "Dark Souls III",
     "Final Fantasy",
-    "Hollow Knight",
     "Hylics 2",
     "Kingdom Hearts 2",
     "Lufia II Ancient Cave",
@@ -90,6 +89,9 @@ non_apworlds: set = {
     "Zillion",
 }
 
+# LogicMixin is broken before 3.10 import revamp
+if sys.version_info < (3,10):
+    non_apworlds.add("Hollow Knight")
 
 def download_SNI():
     print("Updating SNI")
