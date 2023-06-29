@@ -339,6 +339,10 @@ def get_default_options() -> OptionsType:
         "wargroove_options": {
             "root_directory": "C:/Program Files (x86)/Steam/steamapps/common/Wargroove"
         },
+        "mmbn3_options": {
+            "rom_file": "Mega Man Battle Network 3 - Blue Version (USA).gba",
+            "rom_start": True
+        },
         "adventure_options": {
             "rom_file": "ADVNTURE.BIN",
             "display_msgs": True,
