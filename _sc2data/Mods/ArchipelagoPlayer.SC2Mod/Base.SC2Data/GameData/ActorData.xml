@@ -12321,7 +12321,6 @@
         <SoundArray index="Yes" value="AP_Corsair_Yes"/>
         <SoundArray index="Attack" value="AP_Corsair_Attack"/>
         <SoundArray index="Pissed" value="AP_Corsair_Pissed"/>
-        <SoundArray index="Movement" value="AP_CorsairMP_Movement"/>
         <UnitIcon value="Assets\Textures\btn-unit-protoss-Corsair.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Protoss-Corsair.dds"/>
@@ -13177,6 +13176,62 @@
         <On Terms="UnitBirth" Send="AnimSetTimeScaleAbsolute Lifetime 1.000000"/>
         <Model value="MothershipCoreWeaponWeapon"/>
     </CActorMissile>
+    <CActorUnit id="AP_ScoutMP" parent="GenericUnitStandard" unitName="AP_ScoutMP">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap AP_ScoutMPWarpInStargate"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="$Spell"/>
+        <On Terms="Behavior.WarpInEffect.Off" Send="ModelSwap AP_ScoutMP"/>
+        <BuildModel value="AP_ScoutMPWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ScoutMPDeath" SoundLink="AP_Scout_Explode"/>
+        <PortraitModel value="AP_ScoutMPPortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="AP\Assets\Textures\Wireframe-Protoss-Scout.dds"/>
+        </GroupIcon>
+        <HeroIcon value="AP\Assets\Textures\btn-unit-protoss-scout.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="40"/>
+        <SoundArray index="Ready" value="AP_ScoutMP_Ready"/>
+        <SoundArray index="Help" value="AP_ScoutMP_Help"/>
+        <SoundArray index="What" value="AP_ScoutMP_What"/>
+        <SoundArray index="Yes" value="AP_ScoutMP_Yes"/>
+        <SoundArray index="Attack" value="AP_ScoutMP_Attack"/>
+        <SoundArray index="Pissed" value="AP_ScoutMP_Pissed"/>
+        <UnitIcon value="AP\Assets\Textures\btn-unit-protoss-scout.dds"/>
+        <Wireframe>
+            <Image value="AP\Assets\Textures\Wireframe-Protoss-Scout.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="AP\Assets\Textures\Wireframe-Protoss-Scout-Shield01.dds"/>
+            <Image value="AP\Assets\Textures\Wireframe-Protoss-Scout-Shield02.dds"/>
+            <Image value="AP\Assets\Textures\Wireframe-Protoss-Scout-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="AP_ScoutMPAirLeftAttack" parent="GenericAttack" effectImpact="AP_ScoutMPAirU" effectLaunch="AP_ScoutMPAirLMLeft">
+        <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
+        <LaunchAssets Sound="AP_ScoutMP_AirAttackLaunch"/>
+        <Missile value="AP_ScoutMPAirLeftAttackMissile"/>
+        <ImpactMap index="None" Model="AP_ScoutMPAirLeftAttackImpact" Sound="AP_ScoutMP_AirAttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_ScoutMPAirLeftAttackMissile" parent="GenericAttackMissile" unitName="AP_ScoutMPAirWeaponLeft"/>
+    <CActorAction id="AP_ScoutMPAirRightAttack" parent="GenericAttack" effectImpact="AP_ScoutMPAirU" effectLaunch="AP_ScoutMPAirLMRight">
+        <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
+        <Missile value="AP_ScoutMPAirRightAttackMissile"/>
+    </CActorAction>
+    <CActorMissile id="AP_ScoutMPAirRightAttackMissile" parent="GenericAttackMissile" unitName="AP_ScoutMPAirWeaponRight"/>
+    <CActorAction id="AP_ScoutMPGroundAttack" parent="GenericAttack" effectLaunch="AP_ScoutMPGround">
+        <LaunchAssets Model="AP_ScoutMPGroundAttackLaunch" Sound="AP_ScoutMPGroundAttackLaunch"/>
+        <LaunchModel value="AP_ScoutMPGroundAttackModel"/>
+        <ImpactMap index="None" Model="AP_ScoutMPGroundAttackImpact" Sound="AP_ScoutMP_GroundAttackImpact"/>
+        <ImpactModel value="AP_ScoutMPGroundAttackModel"/>
+    </CActorAction>
+    <CActorModel id="AP_ScoutMPGroundAttackModel" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Flags index="SuppressCreationErrors" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Model value="GenericAttackModel"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>

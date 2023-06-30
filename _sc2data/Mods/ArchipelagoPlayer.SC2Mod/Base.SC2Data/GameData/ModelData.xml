@@ -10558,4 +10558,66 @@
         <Image value="Assets\Textures\CorsairPortrait_Static.dds"/>
         <Lighting value="PortraitCorsair"/>
     </CModel>
+    <CModel id="AP_ScoutMP" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Scout\Scout.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow05"/>
+        <Radius value="0.750000"/>
+        <SelectionRadius value="0.750000"/>
+        <ShadowRadius value="0.750000"/>
+        <TechPurchaseCamera value="Star2CameraLow05"/>
+        <UnitGlossaryCamera value="Star2CameraLow05"/>
+    </CModel>
+    <CModel id="AP_ScoutMPAirLeftAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ScoutAirMissileImpact\ScoutAirMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ScoutMPAirWeaponLeft" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\ScoutAirMissile\ScoutAirMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ScoutMPAirWeaponRight" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\ScoutAirMissile\ScoutAirMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ScoutMPDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\DarkScoutDeath\DarkScoutDeath.m3"/>
+        <LowQualityModel value="ProtossMediumUnitDeathLow"/>
+        <Occlusion value="Show"/>
+        <Radius value="0.750000"/>
+        <SelectionRadius value="0.750000"/>
+        <ShadowRadius value="0.750000"/>
+    </CModel>
+    <CModel id="AP_ScoutMPGroundAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\ScoutWeaponImpact\ScoutWeaponImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ScoutMPGroundAttackLaunch" parent="LaunchFX">
+        <Model value="Assets\Effects\Protoss\ScoutWeaponLaunch\ScoutWeaponLaunch.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ScoutMPPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\ScoutPortrait\ScoutPortrait.m3"/>
+    </CModel>
+    <CModel id="AP_ScoutMPWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\ScoutWarpIn\ScoutWarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="0.750000"/>
+        <ShadowRadius value="0.750000"/>
+    </CModel>
+    <CModel id="AP_ScoutMPWarpInStargate" parent="PersistentSpellFX">
+        <Model value="Assets\Units\Protoss\ScoutWarpInStargate\ScoutWarpInStargate.m3"/>
+        <Occlusion value="Show"/>
+        <SelectionRadius value="0.750000"/>
+        <Radius value="0.750000"/>
+        <TechPurchaseCamera value="Star2CameraLow07"/>
+        <UnitGlossaryCamera value="Star2CameraLow07"/>
+        <PlanetPanelCamera value="Star2CameraLow07"/>
+        <ShadowRadius value="0.750000"/>
+    </CModel>
 </Catalog>

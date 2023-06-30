@@ -1309,4 +1309,40 @@
             <YawPitchRoll value="MAX"/>
         </MotionPhases>
     </CMoverMissile>
+    <CMoverMissile id="AP_ScoutMPAirWeaponLeft">
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Acceleration value="10"/>
+            <Speed value="5"/>
+            <MaxSpeed value="15"/>
+            <Outro value="0.4,0.85"/>
+            <ThrowRotationType value="ThrowForward"/>
+            <ThrowVector value="-0.4,-1,0"/>
+        </MotionPhases>
+        <MotionPhases Outro="1,1.5" ThrowVector="-0.4,-1,0"/>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="60"/>
+            <MaxSpeed value="40"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+    </CMoverMissile>
+    <CMoverMissile id="AP_ScoutMPAirWeaponRight">
+        <MotionPhases>
+            <Driver value="Throw"/>
+            <Acceleration value="10"/>
+            <Speed value="5"/>
+            <MaxSpeed value="15"/>
+            <Outro value="0.4,0.85"/>
+            <ThrowRotationType value="ThrowForward"/>
+            <ThrowVector value="0.4,-1,0"/>
+        </MotionPhases>
+        <MotionPhases Outro="1,1.5" ThrowVector="0.4,-1,0"/>
+        <MotionPhases>
+            <Driver value="Guidance"/>
+            <Acceleration value="60"/>
+            <MaxSpeed value="40"/>
+            <YawPitchRoll value="MAX"/>
+        </MotionPhases>
+    </CMoverMissile>
 </Catalog>

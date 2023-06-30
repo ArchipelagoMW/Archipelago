@@ -9238,4 +9238,40 @@
         <ExcludeArray Value="Target"/>
         <SearchFilters value="Air,Visible;Player,Ally,Neutral"/>
     </CEffectDamage>
+    <CEffectCreatePersistent id="AP_ScoutMPAir">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <PeriodCount value="2"/>
+        <PeriodicEffectArray value="AP_ScoutMPAirLMLeft"/>
+        <PeriodicEffectArray value="AP_ScoutMPAirLMRight"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectLaunchMissile id="AP_ScoutMPAirLMLeft">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_ScoutMPAirU"/>
+        <AmmoUnit value="AP_ScoutMPAirWeaponLeft"/>
+        <Movers Link="MissileDefault" IfRangeLTE="1"/>
+        <Movers Link="AP_ScoutMPAirWeaponLeft" IfRangeLTE="4"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_ScoutMPAirLMRight">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_ScoutMPAirU"/>
+        <AmmoUnit value="AP_ScoutMPAirWeaponRight"/>
+        <Movers Link="MissileDefault" IfRangeLTE="1"/>
+        <Movers Link="AP_ScoutMPAirWeaponRight" IfRangeLTE="4"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_ScoutMPAirU" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Armored" value="7"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="7"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_ScoutMPGround" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Visible"/>
+        <Kind value="Ranged"/>
+        <Amount value="8"/>
+    </CEffectDamage>
 </Catalog>

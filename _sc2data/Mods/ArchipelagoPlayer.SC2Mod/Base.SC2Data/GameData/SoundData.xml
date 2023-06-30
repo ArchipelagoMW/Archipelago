@@ -5559,4 +5559,95 @@
         <Pitch value="2.000000,-3.000000"/>
         <Volume value="-7.000000,-6.000000"/>
     </CSound>
+    <CSound id="AP_ScoutMPGroundAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_GroundAttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_GroundAttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_GroundAttackLaunch2.wav"/>
+        <Pitch value="-1.000000,2.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_ScoutMP_AirAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackImpact3.wav"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_ScoutMP_AirAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackLaunch0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackLaunch1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackLaunch2.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_AirAttackLaunch3.wav"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-1.000000,1.500000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_ScoutMP_Attack" parent="ProtossAck">
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Attack00.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Attack01.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Attack02.ogg"/>
+        <Volume value="0.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_ScoutMP_GroundAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_GroundAttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_GroundAttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Scout\Scout_GroundAttackImpact2.wav"/>
+        <Pitch value="0.000000,3.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_ScoutMP_Help" parent="ProtossHelp">
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Help00.ogg"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ScoutMP_Pissed" parent="Pissed">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Pissed00.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Pissed01.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Pissed02.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Pissed03.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Pissed04.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Pissed05.ogg"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ScoutMP_Ready" parent="ProtossReady">
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Ready00.ogg"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ScoutMP_What" parent="ProtossAck">
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_What00.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_What01.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_What02.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_What03.ogg"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_ScoutMP_Yes" parent="ProtossAck">
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Yes00.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Yes01.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Yes02.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Yes03.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Yes04.ogg"/>
+        <AssetArray File="AP\LocalizedData\Sounds\ProtossVO\CampaignUnits\Scout\Scout_Yes05.ogg"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Scout_Explode" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge9.wav" Pitch="-3.000000,3.000000"/>
+        <DupeDestroyCount value="5"/>
+        <Pitch value="5.000000,7.000000"/>
+        <Volume value="-4.000000,-2.000000"/>
+    </CSound>
 </Catalog>

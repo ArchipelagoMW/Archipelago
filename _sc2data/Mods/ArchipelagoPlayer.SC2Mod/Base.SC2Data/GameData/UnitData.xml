@@ -13122,6 +13122,74 @@
         <TechTreeProducedUnitArray value="Tempest"/>
         <TechTreeProducedUnitArray value="Scout"/>
     </CUnit>
+    <CUnit id="AP_ScoutMP">
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <LifeStart value="150"/>
+        <LifeMax value="150"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossPlating"/>
+        <ShieldsStart value="100"/>
+        <ShieldsMax value="100"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Mover value="Fly"/>
+        <Speed value="2.8125"/>
+        <Acceleration value="1.875"/>
+        <StationaryTurningRate value="539.4726"/>
+        <TurningRate value="539.4726"/>
+        <Sight value="9"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-3"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="275"/>
+        <CostResource index="Vespene" value="125"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="80"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="Warpable"/>
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <WeaponArray Link="AP_ScoutMPGround"/>
+        <WeaponArray Link="AP_ScoutMPAir"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+        </CardLayouts>
+        <Radius value="0.75"/>
+        <SeparationRadius value="0.75"/>
+        <SubgroupPriority value="19"/>
+        <MinimapRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <GlossaryStrongArray value="Battlecruiser"/>
+        <GlossaryStrongArray value="BroodLord"/>
+        <GlossaryWeakArray value="VikingFighter"/>
+        <GlossaryWeakArray value="Goliath"/>
+        <GlossaryWeakArray value="MissileTurret"/>
+        <GlossaryWeakArray value="Mutalisk"/>
+    </CUnit>
+    <CUnit id="AP_ScoutMPAirWeaponLeft" parent="MISSILE">
+        <Race value="Prot"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_ScoutMPAirWeaponRight" parent="MISSILE">
+        <Race value="Prot"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
     <CUnit id="TechLab">
         <!-- Override -->
         <!-- Add-on stealing -->
