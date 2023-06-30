@@ -46,7 +46,7 @@ class RandoExec(object):
                 DoorsManager.randomize(self.graphSettings.allowGreyDoors, self.player)
             self.areaGraph = self.graphBuilder.createGraph(self.randoSettings.maxDiff)
             services = RandoServices(self.areaGraph, self.restrictions)
-            setup = RandoSetup(self.graphSettings, Logic.locations, services, self.player)
+            setup = RandoSetup(self.graphSettings, Logic.locations[:], services, self.player)
             self.setup = setup
             container = setup.createItemLocContainer(endDate, vcr)
             if container is None:
@@ -66,6 +66,7 @@ class RandoExec(object):
                 self.errorMsg += '; '.join(setup.errorMsgs)
             if self.errorMsg == "":
                 self.errorMsg += "Unable to process settings; "
+            raise Exception(self.errorMsg)
         self.areaGraph.printGraph()
         return container
 
