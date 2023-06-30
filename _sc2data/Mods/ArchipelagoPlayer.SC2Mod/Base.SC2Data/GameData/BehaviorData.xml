@@ -3387,4 +3387,17 @@
             <AbilClassDisableArray index="CAbilAttack" value="1"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_LightningBomb">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-disintegration.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_BattlecruiserNotJumping"/>
+        <!-- TODO: Check these abilities -->
+<!--        <RemoveValidatorArray value="NoPurificationNova"/>-->
+<!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <TimeScaleSource Value="Global"/>
+        <Duration value="20"/>
+        <Period value="0.4"/>
+        <PeriodicEffect value="AP_LightningBombDamage"/>
+    </CBehaviorBuff>
 </Catalog>

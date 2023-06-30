@@ -12356,6 +12356,26 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorModel id="AP_LightningBomb" parent="ModelAnimationStyleContinuous">
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_LightningBomb.On" Send="Create"/>
+        <On Terms="Behavior.AP_LightningBomb.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="DisintegrationState"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorAction id="AP_LightningBombAttack" parent="GenericAttack" effectImpact="AP_LightningBombAB" effectLaunch="AP_LightningBombLM">
+        <LaunchAssets Sound="AP_Tempest_Disintegration_Launch"/>
+        <Missile value="AP_LightningBombAttackMissile"/>
+        <ImpactMap index="None" Model="DisintegrationImpact" Sound="AP_Tempest_Disintegration_Impact"/>
+    </CActorAction>
+    <CActorMissile id="AP_LightningBombAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="AP_LightningBombWeapon">
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap TalDarimLightningBombAttackMissile"/>
+        <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap TalDarimLightningBombAttackMissile"/>
+        <Model value="DisintegrationMissile"/>
+    </CActorMissile>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -13192,12 +13212,6 @@
         <HeroIcon value="AP\Assets\Textures\btn-unit-protoss-scout.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
         <NameOffset value="40"/>
-        <SoundArray index="Ready" value="AP_ScoutMP_Ready"/>
-        <SoundArray index="Help" value="AP_ScoutMP_Help"/>
-        <SoundArray index="What" value="AP_ScoutMP_What"/>
-        <SoundArray index="Yes" value="AP_ScoutMP_Yes"/>
-        <SoundArray index="Attack" value="AP_ScoutMP_Attack"/>
-        <SoundArray index="Pissed" value="AP_ScoutMP_Pissed"/>
         <UnitIcon value="AP\Assets\Textures\btn-unit-protoss-scout.dds"/>
         <Wireframe>
             <Image value="AP\Assets\Textures\Wireframe-Protoss-Scout.dds"/>
@@ -13211,19 +13225,16 @@
     <CActorAction id="AP_ScoutMPAirLeftAttack" parent="GenericAttack" effectImpact="AP_ScoutMPAirU" effectLaunch="AP_ScoutMPAirLMLeft">
         <LaunchAttachQuery Methods="AMFilterWeaponLeft"/>
         <LaunchAssets Sound="AP_ScoutMP_AirAttackLaunch"/>
-        <Missile value="AP_ScoutMPAirLeftAttackMissile"/>
-        <ImpactMap index="None" Model="AP_ScoutMPAirLeftAttackImpact" Sound="AP_ScoutMP_AirAttackImpact"/>
+        <ImpactMap index="None" Sound="AP_ScoutMP_AirAttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_ScoutMPAirLeftAttackMissile" parent="GenericAttackMissile" unitName="AP_ScoutMPAirWeaponLeft"/>
     <CActorAction id="AP_ScoutMPAirRightAttack" parent="GenericAttack" effectImpact="AP_ScoutMPAirU" effectLaunch="AP_ScoutMPAirLMRight">
         <LaunchAttachQuery Methods="AMFilterWeaponRight"/>
-        <Missile value="AP_ScoutMPAirRightAttackMissile"/>
     </CActorAction>
     <CActorMissile id="AP_ScoutMPAirRightAttackMissile" parent="GenericAttackMissile" unitName="AP_ScoutMPAirWeaponRight"/>
     <CActorAction id="AP_ScoutMPGroundAttack" parent="GenericAttack" effectLaunch="AP_ScoutMPGround">
-        <LaunchAssets Model="AP_ScoutMPGroundAttackLaunch" Sound="AP_ScoutMPGroundAttackLaunch"/>
         <LaunchModel value="AP_ScoutMPGroundAttackModel"/>
-        <ImpactMap index="None" Model="AP_ScoutMPGroundAttackImpact" Sound="AP_ScoutMP_GroundAttackImpact"/>
+        <ImpactMap index="None" Sound="AP_ScoutMP_GroundAttackImpact"/>
         <ImpactModel value="AP_ScoutMPGroundAttackModel"/>
     </CActorAction>
     <CActorModel id="AP_ScoutMPGroundAttackModel" parent="ModelAnimationStyleOneShotNoOrphan">
@@ -13232,6 +13243,139 @@
         <Model value="GenericAttackModel"/>
         <ModelFlags index="AllowHitTest" value="0"/>
     </CActorModel>
+    <CActorUnit id="AP_TempestPurifier" parent="GenericUnitStandard" unitName="AP_TempestPurifier">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="GlobalLoopMacro"/>
+        <Macros value="GlobalLoopMacroMore"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Tempest_Land"/>
+        <On Terms="ActorCreation" Send="Create AP_TempestPurifierStormSphereAttachment"/>
+        <On Terms="ActorCreation" Target="AP_TempestPurifierStormSphereAttachment" Send="Signal Birth"/>
+        <On Terms="Effect.TempestPurifierLaunchMissile.Start; At Caster" Target="AP_TempestPurifierStormSphereAttachment" Send="Signal Fire"/>
+        <On Terms="Effect.TempestPurifierLaunchMissileGround.Start; At Caster" Target="AP_TempestPurifierStormSphereAttachment" Send="Signal Fire"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap TempestPurifierWarpInStargate"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="$Spell"/>
+        <On Terms="AnimDone; AnimName Spell" Send="ModelSwap TempestPurifier"/>
+        <On Terms="AnimDone; AnimName Spell" Send="AnimClear Spell"/>
+        <HostSiteOps Ops="SOpBankerCarrier"/>
+        <AnimBlendTime value="0.750000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="AP_TempestPurifierWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_TempestPurifierDeath" SoundLink="AP_Tempest_Explode"/>
+        <DeathCustoms>
+            <ActorModel value="TempestPurifierDeathRagdoll"/>
+            <ModelLink value="AP_TempestPurifierDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="AP_TempestPurifierPlacement"/>
+        <PortraitModel value="AP_TempestPurifierPortrait"/>
+        <BarWidth value="156"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-protoss-tempest-purifier.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\Btn-unit-protoss-tempest-purifier.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="AP_TempestVoid_Ready"/>
+        <SoundArray index="Help" value="AP_TempestVoid_Help"/>
+        <SoundArray index="What" value="AP_TempestVoid_What"/>
+        <SoundArray index="Yes" value="AP_TempestVoid_Yes"/>
+        <SoundArray index="Attack" value="AP_TempestVoid_Attack"/>
+        <SoundArray index="Pissed" value="AP_TempestVoid_Pissed"/>
+        <SoundArray index="Movement" value="AP_Tempest_Movement"/>
+        <UnitIcon value="Assets\Textures\Btn-unit-protoss-tempest-purifier.dds"/>
+        <UnitModelFrameActor value="TempestPurifierUnitModelFrameActor"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-protoss-tempest-purifier.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-protoss-tempest-purifier-shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-protoss-tempest-purifier-shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-protoss-tempest-purifier-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_TempestPurifierStormSphereAttachment" parent="ModelAddition">
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+        <On Terms="Signal.*.Birth" Send="AnimPlay Rearm Stand,Work,Start 0 0.000000 0.000000 1.750000 AsDuration"/>
+        <On Terms="Signal.*.Fire" Send="$Death"/>
+        <On Terms="AnimDone; AnimName Death" Send="AnimPlay Rearm Stand,Work,Start 0 0.000000 0.000000 3.050000 AsDuration"/>
+        <On Terms="UnitDeathCustomize" Send="Destroy"/>
+        <Macros value="GlobalLoopMacroMore"/>
+    </CActorModel>
+    <CActorAction id="AP_TempestPurifierAttack" parent="GenericAttack" effectImpact="AP_TempestPurifierDamage" effectLaunch="AP_TempestPurifierLaunchMissile">
+        <LaunchAttachQuery Methods="AMFilterWeapon"/>
+        <LaunchAssets Sound="AP_Tempest_AirAttackLaunch"/>
+        <Missile value="AP_TempestPurifierAttackMissile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpUpDefault"/>
+        <ImpactMap index="None" Model="AP_TempestPurifierAttackImpact" Sound="AP_Tempest_AirAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ImpactPhysics Name="KineticOverloadImpact" MatchKeys="Basic" Physics="AP_TempestPurifierAttackForce"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorForceSphere id="AP_TempestPurifierAttackForce">
+        <HostSiteOps Ops="SOpRandomPointInSphereDot25"/>
+        <Magnitude value="31.500000,22.500000"/>
+        <Duration value="0.450000"/>
+        <On Terms="ActorCreation" Send="ForceSetRadius 2.000000 0.450000"/>
+    </CActorForceSphere>
+    <CActorAction id="AP_TempestPurifierAttackGround" parent="GenericAttack" effectImpact="AP_TempestPurifierDamageGround" effectLaunch="AP_TempestPurifierLaunchMissileGround">
+        <LaunchAttachQuery Methods="AMFilterWeapon"/>
+        <LaunchAssets Sound="AP_Tempest_GroundAttackLaunch"/>
+        <Missile value="AP_TempestPurifierAttackGroundMissile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpUpDefault"/>
+        <ImpactMap index="None" Model="AP_TempestPurifierGroundAttackImpact" Sound="AP_Tempest_GroundAttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ImpactPhysics Name="KineticOverloadImpact" MatchKeys="Basic" Physics="AP_TempestPurifierAttackForce"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorMissile id="AP_TempestPurifierAttackGroundMissile" unitName="AP_TempestPurifierWeaponGround">
+        <Aliases value="_Unit"/>
+        <Aliases value="_Missile"/>
+        <On Terms="UnitBirth.AP_TempestPurifierWeaponGround" Send="Create"/>
+        <On Terms="UnitBirth" Send="AnimBracketStart Lifetime Birth Walk"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Model value="AP_TempestPurifierWeaponGround"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <PreHost value="_ActorAction"/>
+    </CActorMissile>
+    <CActorMissile id="AP_TempestPurifierAttackMissile" unitName="AP_TempestPurifierWeapon">
+        <Aliases value="_Unit"/>
+        <Aliases value="_Missile"/>
+        <Macros value="GlobalLoopMacro"/>
+        <Macros value="GlobalLoopMacroMore"/>
+        <On Terms="UnitBirth.AP_TempestPurifierWeapon" Send="Create"/>
+        <On Terms="UnitBirth" Send="AnimBracketStart Lifetime Birth Walk"/>
+        <On Terms="UnitDeath" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Model value="AP_TempestWeapon"/>
+        <PreHost value="_ActorAction"/>
+    </CActorMissile>
+    <CActorSound id="AP_Tempest_Death" parent="SoundOneShot">
+        <Sound value="Tempest_Death"/>
+<!--        <On Terms="UnitDeath.Tempest; PassChance 25.000000" Send="Create"/>-->
+        <On Terms="UnitDeath.AP_TempestPurifier; PassChance 25.000000" Send="Create"/>
+    </CActorSound>
+    <CActorRange id="AP_LightningBombRange" parent="RangeAbil" abil="AP_LightningBomb">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>

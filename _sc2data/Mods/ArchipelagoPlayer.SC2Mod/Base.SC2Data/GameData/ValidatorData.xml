@@ -2806,4 +2806,23 @@
         </AreaArray>
         <SearchFilters value="-;Player,Ally,Neutral"/>
     </CValidatorLocationEnumArea>
+    <CValidatorUnitCompareBehaviorCount id="AP_HyperjumpTeleport">
+        <Behavior value="AP_HyperjumpTeleport"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HyperjumpTeleportIn">
+        <Behavior value="AP_HyperjumpTeleportIn"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_HyperjumpTeleportOut">
+        <Behavior value="AP_HyperjumpTeleportOut"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_BattlecruiserNotJumping">
+        <CombineArray value="AP_HyperjumpTeleport"/>
+        <CombineArray value="AP_HyperjumpTeleportIn"/>
+        <CombineArray value="AP_HyperjumpTeleportOut"/>
+        <Type value="And"/>
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_TargetNotHaveTempestDisintegration">
+        <ResultFailed value="Error,Error/AP_TempestDisintegration"/>
+        <Behavior value="AP_LightningBomb"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

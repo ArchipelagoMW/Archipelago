@@ -2159,4 +2159,9 @@
         <Icon value="Assets\Textures\btn-ability-protoss-disruptionweb.dds"/>
         <AlertIcon value="Assets\Textures\btn-ability-protoss-disruptionweb.dds"/>
     </CButton>
+    <CButton id="AP_LightningBomb">
+        <Icon value="Assets\Textures\btn-ability-protoss-disintegration.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-disintegration.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

@@ -5650,4 +5650,168 @@
         <Pitch value="5.000000,7.000000"/>
         <Volume value="-4.000000,-2.000000"/>
     </CSound>
+    <CSound id="AP_TempestVoid_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="TempestVoid_Attack00"/>
+        <AssetArray TemplateParam="TempestVoid_Attack01"/>
+        <AssetArray TemplateParam="TempestVoid_Attack02"/>
+        <AssetArray TemplateParam="TempestVoid_Attack03"/>
+        <AssetArray TemplateParam="TempestVoid_Attack04"/>
+        <AssetArray TemplateParam="TempestVoid_Attack05"/>
+        <AssetArray TemplateParam="TempestVoid_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TempestVoid_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="TempestVoid_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_TempestVoid_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="TempestVoid_Pissed00"/>
+        <AssetArray TemplateParam="TempestVoid_Pissed01"/>
+        <AssetArray TemplateParam="TempestVoid_Pissed02"/>
+        <AssetArray TemplateParam="TempestVoid_Pissed03"/>
+        <AssetArray TemplateParam="TempestVoid_Pissed04"/>
+        <AssetArray TemplateParam="TempestVoid_Pissed05"/>
+        <AssetArray TemplateParam="TempestVoid_Pissed06"/>
+        <AssetArray TemplateParam="TempestVoid_Pissed07"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TempestVoid_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="TempestVoid_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_TempestVoid_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="TempestVoid_What00"/>
+        <AssetArray TemplateParam="TempestVoid_What01"/>
+        <AssetArray TemplateParam="TempestVoid_What02"/>
+        <AssetArray TemplateParam="TempestVoid_What03"/>
+        <AssetArray TemplateParam="TempestVoid_What04"/>
+        <AssetArray TemplateParam="TempestVoid_What05"/>
+        <AssetArray TemplateParam="TempestVoid_What06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_TempestVoid_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="TempestVoid_Yes00"/>
+        <AssetArray TemplateParam="TempestVoid_Yes01"/>
+        <AssetArray TemplateParam="TempestVoid_Yes02"/>
+        <AssetArray TemplateParam="TempestVoid_Yes03"/>
+        <AssetArray TemplateParam="TempestVoid_Yes04"/>
+        <AssetArray TemplateParam="TempestVoid_Yes05"/>
+        <AssetArray TemplateParam="TempestVoid_Yes06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Tempest_AirAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_08.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_09.wav" FacialGroup=""/>
+        <DupeHistoryCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="6"/>
+        <Pitch value="0.000000,1.000000"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Tempest_AirAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_08.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_09.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_10.wav" FacialGroup=""/>
+        <DupeHistoryCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="8"/>
+        <Pitch value="1.000000,3.000000"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Tempest_Death" parent="Death">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="LocalizedData\Sounds\VO\zVO_ProtossTempest_CarrierShip_040.ogg" FacialGroup=""/>
+        <Exclusivity value="Tempest_DeathDX_Exclusivity"/>
+        <Volume value="1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Tempest_Disintegration_Impact" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Tempest_DisintegrationImpact01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_DisintegrationImpact02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_DisintegrationImpact03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_DisintegrationImpact04.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Tempest_Disintegration_Launch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Tempest_DisintegrationLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_DisintegrationLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_DisintegrationLaunch03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_DisintegrationLaunch04.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_Tempest_Explode" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge9.wav" Pitch="-3.000000,3.000000"/>
+        <DupeDestroyCount value="5"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Tempest_GroundAttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackImpact_04.wav" FacialGroup=""/>
+        <DupeHistoryCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="6"/>
+        <Pitch value="-1.000000,0.000000"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Tempest_GroundAttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_AirAttackLaunch_05.wav" FacialGroup=""/>
+        <DupeHistoryCount value="6"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="8"/>
+        <Pitch value="0.000000,1.000000"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Tempest_Movement" parent="Movement">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Tempest_MovementB_00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_MovementB_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Tempest_MovementB_02.wav" FacialGroup=""/>
+        <DupeHistoryCount value="4"/>
+        <DupeMuteCount value="8"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-14.000000,-14.000000"/>
+    </CSound>
 </Catalog>

@@ -9274,4 +9274,54 @@
         <Kind value="Ranged"/>
         <Amount value="8"/>
     </CEffectDamage>
+    <CEffectApplyBehavior id="AP_LightningBombAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_LightningBomb"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_LightningBombDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="10"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_LightningBombLM">
+        <ValidatorArray index="0" value="AP_TargetNotHaveTempestDisintegration"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_LightningBombAB"/>
+        <AmmoUnit value="AP_LightningBombWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_TempestPurifierDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="60"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_TempestPurifierDamageGround">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <ArmorReduction value="1"/>
+        <Visibility value="Visible"/>
+        <Flags index="Notification" value="1"/>
+        <Kind value="Ranged"/>
+        <Amount value="60"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_TempestPurifierLaunchMissile">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_TempestPurifierDamage"/>
+        <AmmoUnit value="AP_TempestPurifierWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="AP_TempestPurifierLaunchMissileGround">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_TempestPurifierDamageGround"/>
+        <AmmoUnit value="AP_TempestPurifierWeaponGround"/>
+    </CEffectLaunchMissile>
 </Catalog>

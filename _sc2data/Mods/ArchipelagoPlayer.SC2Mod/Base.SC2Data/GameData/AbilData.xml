@@ -4298,6 +4298,17 @@
             <SetValidators value="Failure"/>
         </InfoArray>
     </CAbilRally>
+    <CAbilEffectTarget id="AP_LightningBomb">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_LightningBombLM"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="90"/>
+        </Cost>
+        <TargetFilters value="-;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="15"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_LightningBomb"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

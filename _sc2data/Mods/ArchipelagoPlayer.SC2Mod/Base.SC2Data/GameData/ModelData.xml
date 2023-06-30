@@ -10620,4 +10620,86 @@
         <PlanetPanelCamera value="Star2CameraLow07"/>
         <ShadowRadius value="0.750000"/>
     </CModel>
+    <CModel id="AP_TempestPurifier" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Tempest_Purifier\Tempest_Purifier.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow07"/>
+        <Radius value="1.000000"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+        <SelectionOffset value="0.000000,0.000000,-0.750000"/>
+        <SelectionRadius value="1.000000"/>
+        <ShadowRadius value="1.000000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow07"/>
+        <UnitGlossaryCamera value="Star2CameraLow07"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\TempestPlasmaMissileImpact\TempestPlasmaMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Tempest_Purifier_Death\Tempest_Purifier_Death.m3"/>
+        <LowQualityModel value="ProtossLargeUnitDeathLow"/>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,00"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="1.200000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,01"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="1.200000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Events>
+            <Variation value="1"/>
+            <Anim value="Death,02"/>
+            <Name value="Uni_DeathFXincidentallFire"/>
+            <Type value="Sound"/>
+            <Time value="0.600000"/>
+            <Payload value="Uni_DeathFXincidentallFire"/>
+        </Events>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierDeathRagdoll" parent="UnitDeathRagdoll" Race="Protoss">
+        <Model value="Assets\Units\Protoss\TempestEx1DeathRagdoll\TempestEx1DeathRagdoll.m3"/>
+        <PhysicsDeathMotionFactor value="1.200000,0.200000"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierGroundAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\TempestGroundMissileImpact\TempestGroundMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierPlacement">
+        <Model value="Assets\Units\Protoss\Tempest_Purifier_Placement\Tempest_Purifier_Placement.m3"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\StarCruiser_TempestEx2Portrait\StarCruiser_TempestEx2Portrait.m3"/>
+        <Flags index="Facial" value="1"/>
+        <Image value="Assets\Textures\starcruisertempestportrait_static.dds"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Tempest_Purifier_WarpIn\Tempest_Purifier_WarpIn.m3"/>
+        <ScaleMax value="0.900000,0.900000,0.900000"/>
+        <ScaleMin value="0.900000,0.900000,0.900000"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierWeaponGround" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\TempestGroundMissile\TempestGroundMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_TempestWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\TempestPlasmaMissile\TempestPlasmaMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_TempestPurifierStormSphereAttachment" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\TempestPlasmaMissile\TempestPlasmaMissile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
 </Catalog>
