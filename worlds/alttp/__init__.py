@@ -36,7 +36,7 @@ class ALTTPWeb(WebWorld):
         "English",
         "multiworld_en.md",
         "multiworld/en",
-        ["Farrak Kilhn"]
+        ["Farrak Kilhn", "Berserker"]
     )
 
     setup_de = Tutorial(

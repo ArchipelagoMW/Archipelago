@@ -4,7 +4,7 @@ from typing import Any, Callable, List, Sequence
 import random
 import typing
 from BaseClasses import Location
-from .Item import Item, ItemType
+from .Item import Item, ItemType, lookup_id_to_name
 from .Location import LocationType
 from .Region import IReward, RewardType, SMRegion, Z3Region
 from .Regions.Zelda.EasternPalace import EasternPalace
@@ -351,6 +351,29 @@ class Patch:
                 not (item.IsDungeonItem() and location.Region.IsRegionItem(item) and item.World == self.myWorld) else itemDungeon
             
             return value.value
+        elif (location.APLocation.item.game == "A Link to the Past"):
+            if location.APLocation.item.code + 84000 in lookup_id_to_name:
+                ALTTPBottleContentCodeToSMZ3ItemCode = {
+                    ItemType.RedContent.value: ItemType.BottleWithRedPotion.value,
+                    ItemType.GreenContent.value: ItemType.BottleWithGreenPotion.value,
+                    ItemType.BlueContent.value: ItemType.BottleWithBluePotion.value,
+                    ItemType.BeeContent.value: ItemType.BottleWithBee.value,
+                }
+                return ALTTPBottleContentCodeToSMZ3ItemCode.get(location.APLocation.item.code, location.APLocation.item.code)
+            else:
+                return ItemType.Something.value
+        elif (location.APLocation.item.game == "Super Metroid"):
+            SMNameToSMZ3Code = {
+                "Energy Tank": ItemType.ETank, "Missile": ItemType.Missile, "Super Missile": ItemType.Super,
+                "Power Bomb": ItemType.PowerBomb, "Bomb": ItemType.Bombs, "Charge Beam": ItemType.Charge,
+                "Ice Beam": ItemType.Ice, "Hi-Jump Boots": ItemType.HiJump, "Speed Booster": ItemType.SpeedBooster,
+                "Wave Beam": ItemType.Wave, "Spazer": ItemType.Spazer, "Spring Ball": ItemType.SpringBall,
+                "Varia Suit": ItemType.Varia, "Plasma Beam": ItemType.Plasma, "Grappling Beam": ItemType.Grapple,
+                "Morph Ball": ItemType.Morph, "Reserve Tank": ItemType.ReserveTank, "Gravity Suit": ItemType.Gravity,
+                "X-Ray Scope": ItemType.XRay, "Space Jump": ItemType.SpaceJump, "Screw Attack": ItemType.ScrewAttack,
+                "Nothing": ItemType.Something, "No Energy": ItemType.Something, "Generic": ItemType.Something
+            }
+            return SMNameToSMZ3Code.get(location.APLocation.item.name, ItemType.Something).value
         else:
             return ItemType.Something.value
 
