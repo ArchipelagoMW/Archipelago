@@ -59,7 +59,10 @@ Abil/Name/AP_CommandCenterTransport=Load-Unload (Command Center)
 Abil/Name/AP_CorsairMPDisruptionWeb=Disruption Web
 Abil/Name/AP_CyberneticsCoreResearch=Research
 Abil/Name/AP_D8Charge=G-4 Charge
+Abil/Name/AP_DarkArchonConfusion=Confusion
 Abil/Name/AP_DarkArchonMerge=Dark Archon Merge
+Abil/Name/AP_DarkArchonMergeable=Dark Archon Mergeable
+Abil/Name/AP_DarkArchonMindControl=Mind Control
 Abil/Name/AP_DarkTemplarShadowFury=Shadow Fury
 Abil/Name/AP_DarkTemplarVoidStasis=Void Stasis
 Abil/Name/AP_DefensiveMatrix=Defensive Matrix
@@ -266,9 +269,6 @@ Abil/Name/AP_healRedirect=heal Redirect
 Abil/Name/AP_que1=Queue (1)
 Abil/Name/AP_stopProtossBuilding=stop Protoss Building
 Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
-Abil/Name/AP_DarkArchonConfusion=Confusion
-Abil/Name/AP_DarkArchonMergeable=Dark Archon Mergeable
-Abil/Name/AP_DarkArchonMindControl=Mind Control
 Abil/Name/MercCompoundResearch2=Research
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
@@ -277,6 +277,7 @@ Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
 Behavior/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Behavior/Name/AP_330mmBarrageCannons=330mm Barrage Cannon
+Behavior/Name/AP_AlarakLightningStrikes=Lightning Strikes
 Behavior/Name/AP_ArbiterMPCloakFieldEffect=Cloaking Field
 Behavior/Name/AP_ArbiterMPStasisField=Stasis Field
 Behavior/Name/AP_BansheeCloak=Cloak
@@ -287,6 +288,8 @@ Behavior/Name/AP_BurstCapacitorsDamageBuff=Burst Capacitors
 Behavior/Name/AP_CarrierInterceptorBombs=Carrier Interceptor Bombs
 Behavior/Name/AP_CarrierRepairDroneRecall=Carrier Repair Drone Recall
 Behavior/Name/AP_CorsairMPDisruptionWeb=Disruption Web
+Behavior/Name/AP_DarkArchonConfusion=Confusion
+Behavior/Name/AP_DarkArchonMindControl=Mind Controlled
 Behavior/Name/AP_DarkTemplarRecentlyRecalled=Recently Recalled
 Behavior/Name/AP_DarkTemplarVoidStasis=Void Stasis
 Behavior/Name/AP_DefensiveMatrix=Defensive Matrix
@@ -369,15 +372,17 @@ Behavior/Name/AP_VoidPhoenixPhasingArmorBuff=Phasing Armor
 Behavior/Name/AP_VoidRayVoidDamageBoost=Prismatic Alignment
 Behavior/Name/AP_VoidStalkerBlinkShieldRestore=Shadow Regeneration
 Behavior/Name/AP_WraithCloak=Cloak
-Behavior/Name/AP_DarkArchonConfusion=Confusion
-Behavior/Name/AP_DarkArchonMindControl=Mind Controlled
+Behavior/Name/AP_AlarakStalkerPhasingArmorBuff=Phase Armor
+Behavior/Name/AP_PhaseBlinkDamage=Phase Blink
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
+Behavior/Tooltip/AP_AlarakLightningStrikes=Alarak's next Deadly Charge also deals <d ref="Effect,AlarakLightningStrikesDamage,Amount"/> damage to <d ref="Effect,AlarakLightningStrikesSearch,AreaArray[0].MaxCount"/> enemy units near the primary target.
 Behavior/Tooltip/AP_ArbiterMPCloakFieldEffect=This unit is cloaked unless revealed by <c val="FFE303">Detectors</c> or effects.
 Behavior/Tooltip/AP_BansheeCloak=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_BansheeCloakCrossSpectrumDampeners=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_CorsairMPDisruptionWeb=This unit cannot attack.
+Behavior/Tooltip/AP_DarkArchonConfusion=This unit may attack its allies.
 Behavior/Tooltip/AP_DarkTemplarRecentlyRecalled=This unit has been recently recalled to a Dark Shrine and cannot be recalled again.
 Behavior/Tooltip/AP_DarkTemplarVoidStasis=This unit or structure cannot move, attack, or be damaged.
 Behavior/Tooltip/AP_DefensiveMatrix=While active, the Defensive Matrix blocks all incoming damage, up to a maximum of 200.
@@ -434,7 +439,7 @@ Behavior/Tooltip/AP_ViperConsumeStructure=A Viper is consuming this structure to
 Behavior/Tooltip/AP_VoidPhoenixPhasingArmorBuff=This unit is immune to damage.
 Behavior/Tooltip/AP_VoidStalkerBlinkShieldRestore=This unit is regenerating shields.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
-Behavior/Tooltip/AP_DarkArchonConfusion=This unit may attack its allies.
+Behavior/Tooltip/AP_PhaseBlinkDamage=This unit's next attack will deal double the damage.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AWrp=Archon Merge
@@ -442,6 +447,7 @@ Button/Name/AP_AberrationTowering=Towering
 Button/Name/AP_AblativeScales=Kinetic Foam
 Button/Name/AP_AdvancedHealingAI=Advanced Healing AI
 Button/Name/AP_AdvancedWeaponryRaven=Hunter-Seeker Missile
+Button/Name/AP_AlarakStalkerPhasingArmor=Phasing Armor
 Button/Name/AP_AllPurposeLaserBattery=ATX Laser Battery
 Button/Name/AP_AncillaryCarapaceHydralisk=Ancillary Carapace
 Button/Name/AP_ApolloCloakOnNova=Cloak
@@ -499,6 +505,7 @@ Button/Name/AP_CombatShield=Combat Shield
 Button/Name/AP_CommandCenter=Build Command Center
 Button/Name/AP_CommandCenterOrbRelay=Build Command Center with Orbital Relay
 Button/Name/AP_CommandCenterUnloadAll=Unload All
+Button/Name/AP_CommanderPrestigeAlarakMechBuff=Reliquary of Souls
 Button/Name/AP_CorpserPassive=Infest Roachlings
 Button/Name/AP_CorsairMPDisruptionWeb=Disruption Web
 Button/Name/AP_CripplingPsionicStorm=Crippling Psionic Storm
@@ -511,6 +518,8 @@ Button/Name/AP_CycloneRapidFireLaunchers=Rapid Fire Launchers
 Button/Name/AP_CycloneResearchLockOnAir=Research Mag-Field Accelerator
 Button/Name/AP_CycloneResearchLockOnDamageUpgrade=Research Mag-Field Accelerator
 Button/Name/AP_D8Charge=G-4 Cluster Bombs
+Button/Name/AP_DarkArchonConfusion=Confusion
+Button/Name/AP_DarkArchonMindControl=Mind Control
 Button/Name/AP_DarkShrineAssignRally=Rally
 Button/Name/AP_DarkTemplarRecall=Emergency Recall
 Button/Name/AP_DefensiveMatrix=Defensive Matrix
@@ -828,8 +837,7 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_DarkArchonConfusion=Confusion
-Button/Name/AP_DarkArchonMindControl=Mind Control
+Button/Name/AP_SlayerBlink=Phase Blink
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -837,6 +845,7 @@ Button/Tooltip/AP_AberrationTowering=Aberrations can walk over smaller units.
 Button/Tooltip/AP_AblativeScales=Increases Marauder life by 25.
 Button/Tooltip/AP_AdvancedHealingAI=The Medivac can heal two targets at once.
 Button/Tooltip/AP_AdvancedWeaponryRaven=Adds a Hunter-Seeker Missile weapon that automatically attacks enemy units and does not cost energy.
+Button/Tooltip/AP_AlarakStalkerPhasingArmor=Prevents the Slayer from taking damage for <d ref="Behavior,AP_AlarakStalkerPhasingArmorBuff,Duration"/> seconds after being attacked. Cannot occur more than once every <d ref="Behavior,AP_AlarakStalkerPhasingArmor,DamageResponse.Cost.Cooldown.TimeUse"/> seconds.
 Button/Tooltip/AP_AllPurposeLaserBattery=Battlecruisers can attack while moving and do same damage to both ground and air targets.
 Button/Tooltip/AP_AncillaryCarapaceHydralisk=Hydralisk gains +20 maximum life.
 Button/Tooltip/AP_ApolloCloakOnNova=Cloaks Nova for <d ref="Behavior,AP_NovaApolloCloak,Duration"/> seconds, preventing enemy units from seeing or attacking her. A cloaked unit will only be revealed by detectors or effects.
@@ -910,6 +919,8 @@ Button/Tooltip/AP_CommandCenter=Primary structure. Used to train SCVs and receiv
 Button/Tooltip/AP_CommandCenterFlying=Primary structure. Used to train SCVs and receive gathered resources. Can upgrade into an Orbital Command or Planetary Fortress.
 Button/Tooltip/AP_CommandCenterOrbRelay=Primary structure. Used to train SCVs and receive gathered resources. Can use the Lift Off, Calldown: MULE, and Scanner Sweep abilities.<n/><n/><c val="ffff8a">Enables:</c><n/>- SCVs
 Button/Tooltip/AP_CommandCenterUnloadAll=Unloads all units.
+Button/Tooltip/AP_CommanderPrestigeAlarakMechBuff=This unit can collect up to <d ref="Behavior,CommanderPrestigeAlarakMechBuff,MaxPoints"/> Supplicant souls, increasing attack speed by <d ref="Behavior,CommanderPrestigeAlarakMechBuff,Modification.UnifiedAttackSpeedFactor*100"/>% and damage by <d ref="Behavior,CommanderPrestigeAlarakMechBuff,Modification.UnifiedDamageDealtFraction[Melee]*100"/>% for each soul collected.
+Button/Tooltip/AP_CommanderPrestigeAlarakMechBuffCharges=<d ref="$BehaviorStackCount:CommanderPrestigeAlarakMechBuff$"/>
 Button/Tooltip/AP_CorpserPassive=Enemies damaged by the Roach become infested and will spawn two Roachlings if killed quickly.
 Button/Tooltip/AP_CorsairMP=Nerazim Faction<n/>Air superiority starfighter. Can use Disruption Web.<n/><n/><c val="ffff8a">Can attack air units.</c>
 Button/Tooltip/AP_CorsairMPDisruptionWeb=Creates a web of energy on the ground that prevents enemy structures and ground units from attacking for <d time="10"/>.
@@ -923,6 +934,8 @@ Button/Tooltip/AP_CycloneRapidFireLaunchers=Improves the Lock On ability to fire
 Button/Tooltip/AP_CycloneResearchLockOnAir=Allows the Cyclone's Typhoon Missile Pods and Lock On ability to target air units.
 Button/Tooltip/AP_CycloneResearchLockOnDamageUpgrade=Increases <c val="ffff8a">Cyclone</c> Lock On damage. Deals 600 over <d ref="Effect,AP_LockOnCP,PeriodCount * Effect,AP_LockOnCP,PeriodicPeriodArray[0]"/> seconds to ground and flying targets.
 Button/Tooltip/AP_D8Charge=Timed explosive that does heavy area damage.
+Button/Tooltip/AP_DarkArchonConfusion=Forces enemy units in the target area to attack each other for <d ref="Behavior,AP_DarkArchonConfusion,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
+Button/Tooltip/AP_DarkArchonMindControl=Permanently takes control of a target enemy unit.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
 Button/Tooltip/AP_DarkShrine=Dark Templar tech structure.
 Button/Tooltip/AP_DarkShrineAssignRally=Sends recalled Avengers to the designated point.
 Button/Tooltip/AP_DarkTemplar=Deadly warrior-assassin. Permanently cloaked. <n/><n/><c val="ffff8a">Can attack ground units.</c>
@@ -1195,6 +1208,7 @@ Button/Tooltip/AP_SiegeTank=Heavy tank. Long-range artillery in Siege Mode.<n/><
 Button/Tooltip/AP_SiegeTankJumpJet=Repositions the Siege Tank to a target location. Can be used to jump up and down cliffs.
 Button/Tooltip/AP_SiegeTankSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SingularityAnchor=Wraith starts with 100 additional energy.
+Button/Tooltip/AP_Slayer=Ranged attack strider. Can use Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Button/Tooltip/AP_Snipe=A careful shot, dealing 45 damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
 Button/Tooltip/AP_SpartanCompany=Heavy-fire support unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_SpecterPsiRound=Fires a psi-charged bullet, dealing <d ref="Effect,AP_SpecterPsiRoundDamage,Amount"/> damage.<n/><n/><c val="#ColorAttackInfo">Mechanical units are immune.</c>
@@ -1307,8 +1321,7 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_DarkArchonConfusion=Forces enemy units in the target area to attack each other for <d ref="Behavior,AP_DarkArchonConfusion,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
-Button/Tooltip/AP_DarkArchonMindControl=Permanently takes control of a target enemy unit.<n/><n/><c val="#ColorAttackInfo">Heroic units are immune.</c>
+Button/Tooltip/AP_SlayerBlink=Teleports the Slayer to a nearby target location. Ability can only be used once every <d ref="Abil,AP_BlinkSlayer,Cost[0].Cooldown.TimeUse"/> seconds. After using Phase Blink, the Slayer's next attack within <d ref="Behavior,AP_PhaseBlinkDamage,Duration"/> seconds will deal double damage.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -1328,6 +1341,12 @@ Effect/Name/AP_AcidSalivaLM=Needle Spines (Missile)
 Effect/Name/AP_AcidSalivaSet=Acid Saliva
 Effect/Name/AP_AcidSalivaU=Needle Spines
 Effect/Name/AP_AcidSpinesLM=Acid Spines
+Effect/Name/AP_AlarakTheStrongestSurviveDummyAttackMissile=AlarakTheStrongestSurviveDummyAttackMissile
+Effect/Name/AP_AlarakTheStrongestSurviveDummyAttackMissileImpact=AlarakTheStrongestSurviveDummyAttackMissileImpact
+Effect/Name/AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile=AlarakTheStrongestSurviveDummySecondaryAttackMissile
+Effect/Name/AP_AlarakTheStrongestSurviveSearch=AlarakTheStrongestSurviveSearch
+Effect/Name/AP_AlarakTheStrongestSurviveSearchImpact=AlarakTheStrongestSurviveSearchImpact
+Effect/Name/AP_AlarakTheStrongestSurviveStealLife=AlarakTheStrongestSurviveStealLife
 Effect/Name/AP_AnnihilatorParticleDisruptors=Annihilator Particle Disruptors
 Effect/Name/AP_AnnihilatorSplashDamage=Annihilator Splash Damage
 Effect/Name/AP_AnnihilatorSplashSearch=Annihilator Splash Search
@@ -1516,6 +1535,17 @@ Effect/Name/AP_DRBattlecruiserGLM=ATS Launch Missile
 Effect/Name/AP_DRBattlecruiserGU=ATS Damage
 Effect/Name/AP_DRCannonsA=Cannons
 Effect/Name/AP_DRCannonsG=Cannons
+Effect/Name/AP_DarkArachonConfusionInitialApplyBehavior=Dark Arachon Confusion Initial Apply Behavior
+Effect/Name/AP_DarkArchonConfusionApply=Dark Archon Confusion Apply
+Effect/Name/AP_DarkArchonConfusionAttack=Dark Archon Confusion Attack
+Effect/Name/AP_DarkArchonConfusionAttackSearch=Dark Archon Confusion Attack Search
+Effect/Name/AP_DarkArchonConfusionEnd=Dark Archon Confusion End
+Effect/Name/AP_DarkArchonConfusionEndSet=Dark Archon Confusion End Set
+Effect/Name/AP_DarkArchonConfusionSearch=Dark Archon Confusion Search
+Effect/Name/AP_DarkArchonConfusionStopInitial=Dark Archon Confusion Stop Initial
+Effect/Name/AP_DarkArchonMindControlApply=Dark Archon Mind Control (Apply)
+Effect/Name/AP_DarkArchonMindControlSet=Dark Archon Mind Control (Set)
+Effect/Name/AP_DarkArchonWeaponDamage=Dark Archon Weapon Damage
 Effect/Name/AP_DarkTemplarRecallCreatePrecursor=Dark Templar Recall Create Precursor
 Effect/Name/AP_DarkTemplarRecallDestroyPrecusor=Dark Templar Recall Destroy Precusor
 Effect/Name/AP_DarkTemplarRecallHeal=Dark Templar Recall Heal
@@ -1769,6 +1799,7 @@ Effect/Name/AP_IrradiateInitialDamageApply=Irradiate Initial Damage Apply
 Effect/Name/AP_IrradiatePeriodicDamage=Irradiate Periodic Damage
 Effect/Name/AP_IrradiateSearchArea=Irradiate Search Area
 Effect/Name/AP_IrradiateSet=Irradiate Set
+Effect/Name/AP_IssueAIOrderSuicide=Issue AI Order Suicide
 Effect/Name/AP_JavelinMissileLaunchersDamage=Anti Air (Damage)
 Effect/Name/AP_JavelinMissileLaunchersLM=Anti Air (Launch Missile)
 Effect/Name/AP_JavelinMissileLaunchersPersistent=Anti Air (Persistent)
@@ -2351,20 +2382,8 @@ Effect/Name/AP_YoinkStartSetVikingGround=Yoink Start Set Viking Ground
 Effect/Name/AP_heal=Heal
 Effect/Name/BileDuctsApplyBehavior3=Bile Ducts Apply Behavior
 Effect/Name/BileDuctsDamage3=Bile Ducts Damage
-Effect/Name/AP_DarkArachonConfusionInitialApplyBehavior=Dark Arachon Confusion Initial Apply Behavior
-Effect/Name/AP_DarkArchonConfusionApply=Dark Archon Confusion Apply
-Effect/Name/AP_DarkArchonConfusionAttack=Dark Archon Confusion Attack
-Effect/Name/AP_DarkArchonConfusionAttackSearch=Dark Archon Confusion Attack Search
-Effect/Name/AP_DarkArchonConfusionEnd=Dark Archon Confusion End
-Effect/Name/AP_DarkArchonConfusionEndSet=Dark Archon Confusion End Set
-Effect/Name/AP_DarkArchonConfusionSearch=Dark Archon Confusion Search
-Effect/Name/AP_DarkArchonConfusionStopInitial=Dark Archon Confusion Stop Initial
-Effect/Name/AP_DarkArchonMindControlApply=Dark Archon Mind Control (Apply)
-Effect/Name/AP_DarkArchonMindControlSet=Dark Archon Mind Control (Set)
-Effect/Name/AP_DarkArchonWeaponDamage=Dark Archon Weapon Damage
 Effect/Name/GravitonBeamUnburrow2=Anti Gravity
 Effect/Name/GravitonBeamUnburrowCancel2=Anti Gravity
-Effect/Name/AP_IssueAIOrderSuicide=Issue AI Order Suicide
 Effect/Name/Kill2=Kill
 Effect/Name/NeuralParasiteApplyTimedLife2=Neural Parasite
 Effect/Name/NeuralParasiteDroneCheck2=Neural Parasite Drone Check
@@ -2456,6 +2475,7 @@ Unit/Name/AP_D8ClusterBomb=G-4 Clusterbomb
 Unit/Name/AP_D8ClusterBombWeapon=G-4 Cluster Bomb Weapon
 Unit/Name/AP_DRBattlecruiserALMWeapon=Duke's Revenge Battlecruiser Air Weapon
 Unit/Name/AP_DRBattlecruiserGLMWeapon=Duke's Revenge Battlecruiser Ground Weapon
+Unit/Name/AP_DarkArchon=Dark Archon
 Unit/Name/AP_DarkShrine=Dark Shrine
 Unit/Name/AP_DarkTemplar=Dark Templar
 Unit/Name/AP_DarkTemplarAiur=Avenger
@@ -2609,6 +2629,7 @@ Unit/Name/AP_SiegeBreaker=Siege Breaker
 Unit/Name/AP_SiegeBreakerSieged=Siege Breaker
 Unit/Name/AP_SiegeTank=Siege Tank
 Unit/Name/AP_SiegeTankSieged=Siege Tank
+Unit/Name/AP_Slayer=Slayer
 Unit/Name/AP_SpartanCompany=Spartan Company
 Unit/Name/AP_SpartanCompanyAWeapon=Spartan Company Anti-Air
 Unit/Name/AP_Spectre=Spectre
@@ -2671,8 +2692,10 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
-Unit/Name/AP_DarkArchon=Dark Archon
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
+Unit/Name/AP_ACAlarakSlayerWarpIn=Warp In Slayer
+Unit/Name/AP_ACAlarakSlayer=Slayer
+Unit/Name/AP_ACAlarakSlayerDescription=Ranged attack strider. Can use Phase Blink and Phasing Armor.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
@@ -2898,6 +2921,7 @@ Upgrade/Name/AP_ShieldWall=Combat Shield
 Upgrade/Name/AP_ShrikeTurret=Shrike Turret
 Upgrade/Name/AP_SiegeTankShapedBlast=Shaped Blast
 Upgrade/Name/AP_SiegeTech=Siege Tech
+Upgrade/Name/AP_SlayerConfig=Slayer Configuration
 Upgrade/Name/AP_SpectreTooltipUpgrade=Spectre Tooltip Upgrade
 Upgrade/Name/AP_StabilizerMedPacks=Stabilizer Medpacks
 Upgrade/Name/AP_StalkerExtraBlinkRange=Stalker Extra Blink Range
@@ -2955,6 +2979,7 @@ Upgrade/Name/AP_UltrasonicPulse=Psionic Lash
 Upgrade/Name/AP_VanadiumPlating=Vanadium Plating
 Upgrade/Name/AP_VikingJotunBoosters=Jotun Boosters
 Upgrade/Name/AP_VoidCasualRallyBlock=Void Casual Rally Block
+Upgrade/Name/AP_VoidDarkArchonDarkAmulet=Void Dark Archon Dark Amulet
 Upgrade/Name/AP_VoidHighTemplarArchonAdvanced=Void High Templar Archon Advanced
 Upgrade/Name/AP_VoidHighTemplarCloak=Void High Templar Dark Archon
 Upgrade/Name/AP_VoidHighTemplarTerazine=Void High Templar Ascendant
@@ -2969,7 +2994,6 @@ Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
 Upgrade/Name/BlackOps2=Black Ops
 Upgrade/Name/TempestRangeUpgrade2=Quantum Reactor
-Upgrade/Name/AP_VoidDarkArchonDarkAmulet=Void Dark Archon Dark Amulet
 Upgrade/Name/VoidStoryUnitGlobalUpgrade2=Void Story Unit Global Upgrade
 Weapon/Name/AP_90mmCannons=90mm Cannons
 Weapon/Name/AP_ATALaserBattery=ATA Laser Battery
@@ -2999,6 +3023,7 @@ Weapon/Name/AP_DRBattlecruiserFakeG=ATG Laser Battery
 Weapon/Name/AP_DRBattlecruiserG=ATS Laser Battery
 Weapon/Name/AP_DRCannonsA=Revenger Cannons
 Weapon/Name/AP_DRCannonsG=Revenger Cannons
+Weapon/Name/AP_DarkArchonWeapon=Chaotic Torrent
 Weapon/Name/AP_DarkTemplarTaldarim=Bane Blades
 Weapon/Name/AP_DevilDogFlameThrower=Firestorm Flamethrower
 Weapon/Name/AP_Diamondback=Eviscerator Rail Gun
@@ -3114,7 +3139,6 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
-Weapon/Name/AP_DarkArchonWeapon=Chaotic Torrent
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

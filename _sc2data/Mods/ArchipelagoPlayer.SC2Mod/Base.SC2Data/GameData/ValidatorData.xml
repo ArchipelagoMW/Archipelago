@@ -2825,4 +2825,20 @@
         <ResultFailed value="Error,Error/AP_TempestDisintegration"/>
         <Behavior value="AP_LightningBomb"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorPlayerRequirement id="AP_HaveAlarakStalkerPhasingArmor">
+        <Find value="1"/>
+        <Value value="AP_HaveAlarakStalkerPhasingArmor"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsSupplicant">
+        <Value value="AP_Supplicant"/>
+        <ResultNoUnit value="CantTargetThatUnit,Error/NeedSupplicant"/>
+    </CValidatorUnitType>
+    <CValidatorPlayerRequirement id="AP_HaveAlarakLightningStrikes">
+        <Find value="1"/>
+        <Value value="AP_HaveAlarakLightningStrikes"/>
+    </CValidatorPlayerRequirement>
+    <CValidatorPlayerRequirement id="AP_AlarakSupplicantSacrificeCDR">
+        <Find value="1"/>
+        <Value value="AP_HaveAlarakSupplicantSacrificeCDR"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

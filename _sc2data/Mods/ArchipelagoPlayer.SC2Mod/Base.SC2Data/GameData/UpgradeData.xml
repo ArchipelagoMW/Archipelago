@@ -4360,4 +4360,43 @@
         <EffectArray Reference="Unit,AP_DarkArchon,EnergyStart" Value="100"/>
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
     </CUpgrade>
+    <CUpgrade id="AP_SlayerConfig">
+        <Flags index="UpgradeCheat" value="0"/>
+<!--        <EffectArray Operation="Set" Reference="Unit,AP_Slayer,Name" Value="Unit/Name/AP_ACAlarakSlayer"/>-->
+        <EffectArray Operation="Set" Reference="Button,AP_Slayer,Name" Value="Unit/Name/AP_ACAlarakSlayerWarpIn"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Slayer,AlertName" Value="Unit/Name/AP_ACAlarakSlayerWarpIn"/>
+        <EffectArray Operation="Set" Reference="Actor,AP_Slayer,HighlightTooltip" Value="Unit/Name/AP_ACAlarakSlayer"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Slayer,Tooltip" Value="Unit/Name/AP_ACAlarakSlayerDescription"/>
+        <EffectArray Operation="Set" Reference="Button,AP_Slayer,AlertTooltip" Value="Unit/Name/AP_ACAlarakSlayerDescription"/>
+        <EffectArray Operation="Set" Reference="Unit,AP_Slayer,Description" Value="Unit/Name/AP_ACAlarakSlayerDescription"/>
+<!--        <EffectArray Operation="Set" Reference="Effect,AP_SlayerEntropyLanceSearchSet,EffectArray[0]" Value="AP_AlarakParticleDisruptorsU"/>-->
+<!--        <EffectArray Operation="Set" Reference="Weapon,AP_SlayerParticleDisruptors,DisplayEffect" Value="AP_AlarakParticleDisruptorsU"/>-->
+        <EffectArray Operation="Set" Reference="Button,AP_ResearchSlayerTeleport,Name" Value="Button/Name/AP_ResearchSlayerTeleport"/>
+        <AffectedUnitArray value="AP_Slayer"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_AlarakStalkerForceBlast">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-ability-protoss-blinkcharges.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Slayer"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AlarakStalkerPhasingArmor">
+        <Icon value="Assets\Textures\btn-upgrade-protoss-alarak-stalkerphasingarmor.dds"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AlarakSupplicantSacrificeLightningStrikes">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Supplicant"/>
+        <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_SupplicantSacrifice"/>
+    <CUpgrade id="AP_CommanderPrestigeAlarakMech"/>
 </Catalog>

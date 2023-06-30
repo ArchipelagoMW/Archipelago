@@ -3441,21 +3441,21 @@
             <AbilClassDisableArray index="CAbilResearch" value="1"/>
             <AbilClassDisableArray index="CAbilTrain" value="1"/>
             <AbilClassDisableArray index="CAbilWarpTrain" value="1"/>
-<!--            <AbilLinkDisableArray value="SpectreNuke"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationArchon"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationColossus"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationHighTemplar"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationImmortal"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationPhoenix"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationProbe"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationStalker"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationVoidRay"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationWarpPrism"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationZealot"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationAdept"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationOracle"/>-->
-<!--            <AbilLinkDisableArray value="HallucinationDisruptor"/>-->
         </Modification>
+        <!--            <AbilLinkDisableArray value="SpectreNuke"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationArchon"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationColossus"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationHighTemplar"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationImmortal"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationPhoenix"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationProbe"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationStalker"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationVoidRay"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationWarpPrism"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationZealot"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationAdept"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationOracle"/>-->
+        <!--            <AbilLinkDisableArray value="HallucinationDisruptor"/>-->
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_ObserverTargetLock">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
@@ -3468,5 +3468,60 @@
         </Modification>
         <MaxStackCount value="3"/>
         <InfoIcon value="Assets\Textures\btn-ability-protoss-targetlock.dds"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AlarakLightningStrikes">
+        <InfoIcon value="Assets\Textures\BTN-Upgrade-Protoss-Alarak-SupplicantSacrifice-LightingStrike.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="30"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AlarakStalkerPhasingArmor">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="AP_HaveAlarakStalkerPhasingArmor"/>
+        <DamageResponse Handled="AP_AlarakStalkerPhasingArmorBuffApply">
+            <Chance value="1"/>
+            <Cost>
+                <Cooldown TimeUse="5"/>
+            </Cost>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AlarakStalkerPhasingArmorBuff">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-phaseshift2.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Duration value="2"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorAttribute id="AP_CommanderPrestigeAlarakMechBuff">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <MaxPoints value="10"/>
+        <Modification UnifiedAttackSpeedFactor="0.1">
+            <UnifiedDamageDealtFraction index="Spell" value="0.1"/>
+            <UnifiedDamageDealtFraction index="Melee" value="0.1"/>
+            <UnifiedDamageDealtFraction index="Ranged" value="0.1"/>
+            <UnifiedDamageDealtFraction index="Splash" value="0.1"/>
+        </Modification>
+    </CBehaviorAttribute>
+    <CBehaviorBuff id="AP_AscendantSacrificeSelfBuff">
+        <BehaviorFlags index="Permanent" value="1"/>
+        <InfoIcon value="Assets\Textures\tip_rakshir.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <MaxStackCount value="10"/>
+        <Modification>
+            <DamageDealtFraction index="Spell" value="0.25"/>
+            <DamageDealtFraction index="Splash" value="0.25"/>
+            <VitalMaxArray index="Shields" value="100"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PhaseBlinkDamage">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="8"/>
+        <Modification>
+            <DamageDealtFraction index="Ranged" value="1"/>
+        </Modification>
     </CBehaviorBuff>
 </Catalog>

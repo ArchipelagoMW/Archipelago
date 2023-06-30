@@ -2951,6 +2951,30 @@
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_DarkArchonMindControl"/>
         <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_BlinkSlayer">
+        <Name value="Abil/Name/Blink"/>
+        <AbilSetId value="Blnk"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DataCollection value="Blink"/>
+        <Effect index="0" value="AP_PhaseBlinkSet"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Charge Link="Abil/Blink"/>
+            <Cooldown Link="Blink" TimeUse="8"/>
+        </Cost>
+        <InterruptCost>
+            <Charge Link="Abil/Blink"/>
+            <Cooldown Link="Abil/Blink"/>
+        </InterruptCost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <Marker Link="Abil/Blink"/>
+        <AINotifyEffect value="Blink"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Blink" Requirements="AP_UseBlinkSlayer">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

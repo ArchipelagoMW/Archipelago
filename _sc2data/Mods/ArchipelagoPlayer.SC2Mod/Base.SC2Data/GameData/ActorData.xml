@@ -5204,6 +5204,42 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorModel id="AP_AlarakLightningStrike" parent="BuffContinuous">
+        <On Terms="Behavior.AP_AlarakLightningStrikes.On" Send="Create"/>
+        <On Terms="Behavior.AP_AlarakLightningStrikes.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginSoft"/>
+        <Model value="AP_Alarak_COOP_LightningStrikes_PowerUp"/>
+    </CActorModel>
+    <CActorAction id="AP_AlarakTheStrongestSurviveDummyAttack" parent="GenericAttack" effectImpact="AP_AlarakTheStrongestSurviveDummyAttackMissileImpact" effectLaunch="AP_AlarakTheStrongestSurviveDummyAttackMissile">
+        <LaunchAttachQuery Methods="Center"/>
+        <Missile value="AP_AlarakTheStrongestSurviveDummyAttackMissile"/>
+        <ImpactSiteOps Ops="SOpAttachCenterSoft"/>
+        <ImpactAttachQuery Methods="Center"/>
+        <ImpactMap index="None" Model="AP_Alarak_COOP_Sacrifice_Missile_Impact"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorMissile id="AP_AlarakTheStrongestSurviveDummyAttackMissile" parent="GenericAttackMissile" unitName="AP_AlarakTheStrongestSurviveDummyAttackMissile">
+        <Model value="AP_Alarak_COOP_Sacrifice_Missile"/>
+    </CActorMissile>
+    <CActorAction id="AP_AlarakTheStrongestSurviveDummySecondaryAttack" parent="GenericAttack" effectImpact="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissileImpact" effectLaunch="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile">
+        <LaunchAttachQuery Methods="Center"/>
+        <Missile value="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile"/>
+        <ImpactSiteOps Ops="SOpAttachHarness"/>
+        <ImpactMap index="None" Model="AP_Alarak_COOP_Sacrifice_Missile_Impact_Small"/>
+        <ShieldFlashType value="Full"/>
+    </CActorAction>
+    <CActorMissile id="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile" parent="GenericAttackMissile" unitName="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile">
+        <Model value="AP_Alarak_COOP_Sacrifice_Missile"/>
+        <Scale value="0.500000"/>
+    </CActorMissile>
+    <CActorModel id="AP_AlarakTheStrongestSurviveSearchImpact" parent="ModelAnimationStyleOneShot">
+        <InheritType value="OneShot"/>
+        <On Terms="Effect.AP_AlarakTheStrongestSurviveSearchImpact.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpTargetPointStationary"/>
+        <Model value="AP_Alarak_COOP_Sacrifice_Impact"/>
+        <Scale value="2.000000"/>
+    </CActorModel>
     <CActorAction id="AscendantSacrificeDummy1Attack2" parent="GenericAttack" effectImpact="AP_AscendantSacrificeLM1ImpactDummy" effectLaunch="AP_AscendantSacrificeLM1">
         <LaunchSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
         <Missile value="AP_AscendantSacrificeDummy1AttackMissile"/>
@@ -5277,6 +5313,9 @@
         <Sound value="Stalker_Blink"/>
     </CActorSound>
     <CActorRange id="AP_Blink_Range" parent="RangeAbil" abil="AP_Blink">
+        <Abil Link="AP_BlinkDummy"/>
+    </CActorRange>
+    <CActorRange id="AP_BlinkSlayer_Range" parent="RangeAbil" abil="AP_BlinkSlayer">
         <Abil Link="AP_BlinkDummy"/>
     </CActorRange>
     <CActorRange id="AP_BlinkMultiple_Range" parent="RangeAbil" abil="AP_BlinkMultiple">
@@ -12417,12 +12456,6 @@
         <HeroIcon value="Assets\Textures\btn-unit-protoss-darkarchon.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
         <SoundArray index="Birth" value=""/>
-        <SoundArray index="Ready" value="AP_DarkArchon_Ready"/>
-        <SoundArray index="Help" value="AP_DarkArchon_Help"/>
-        <SoundArray index="What" value="AP_DarkArchon_What"/>
-        <SoundArray index="Yes" value="AP_DarkArchon_Yes"/>
-        <SoundArray index="Attack" value="AP_DarkArchon_Attack"/>
-        <SoundArray index="Pissed" value="AP_DarkArchon_Pissed"/>
         <UnitIcon value="Assets\Textures\btn-unit-protoss-darkarchon.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\wireframe-protoss-darkarchon.dds"/>
@@ -13488,6 +13521,99 @@
         <Icon value="Assets\Textures\RadarIcon2.dds"/>
         <IconArcLength value="3.250000"/>
     </CActorRange>
+    <CActorUnit id="AP_Slayer" parent="GenericUnitBase" unitName="AP_Slayer">
+        <Aliases value="_UnitMedium"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkStalker"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkStalker"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Stalker_Land"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <Model value="AP_Stalker_Taldarim_Alarak"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="StalkerWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_Stalker_Taldarim_Death_Alarak"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
+        <DeathCustoms ModelLink="DarkStalkerDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="StalkerDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+            <BodySquibs Name="BloodReduced" Model="ProtossRobotBloodSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowMedium"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
+        <PlacementModel value="StalkerPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_Taldarim_Stalker_Portrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleLarge"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="3.1328"/>
+        <BarOffset value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Stalker-taldarim.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-alarak-taldarim-stalker.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="StalkerTaldarim_Ready"/>
+        <SoundArray index="Help" value="StalkerTaldarim_Help"/>
+        <SoundArray index="What" value="StalkerTaldarim_What"/>
+        <SoundArray index="Yes" value="StalkerTaldarim_Yes"/>
+        <SoundArray index="Attack" value="StalkerTaldarim_Attack"/>
+        <SoundArray index="Pissed" value="StalkerTaldarim_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-alarak-taldarim-stalker.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Stalker-taldarim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Stalker-taldarim-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Stalker-taldarim-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Stalker-taldarim-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>

@@ -223,3 +223,4 @@ Button/Hotkey/AP_WraithCloakOn=C
 Button/Hotkey/AP_YamatoGun=Y
 Button/Hotkey/AP_DarkArchonConfusion=F
 Button/Hotkey/AP_DarkArchonMindControl=R
+Button/Hotkey/AP_SlayerBlink=B

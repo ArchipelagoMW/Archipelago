@@ -715,8 +715,8 @@ bool gt_LowerForcefieldArea_Func (bool testConds, bool runActions) {
     point lv_nullifier2Position;
     unit lv_stalker1;
     point lv_stalker1Position;
-    unit lv_stalker2;
-    point lv_stalker2Position;
+    unit lv_AP_Slayer;
+    point lv_AP_SlayerPosition;
     point lv_stalkerTarget;
 
     // Automatic Variable Declarations
@@ -724,7 +724,7 @@ bool gt_LowerForcefieldArea_Func (bool testConds, bool runActions) {
     lv_nullifier1 = UnitFromId(716);
     lv_nullifier2 = UnitFromId(717);
     lv_stalker1 = UnitFromId(90);
-    lv_stalker2 = UnitFromId(619);
+    lv_AP_Slayer = UnitFromId(619);
 
     // Actions
     if (!runActions) {
@@ -734,9 +734,9 @@ bool gt_LowerForcefieldArea_Func (bool testConds, bool runActions) {
     lv_nullifier1Position = UnitGetPosition(lv_nullifier1);
     lv_nullifier2Position = UnitGetPosition(lv_nullifier2);
     lv_stalker1Position = UnitGetPosition(lv_stalker1);
-    lv_stalker2Position = UnitGetPosition(lv_stalker2);
+    lv_AP_SlayerPosition = UnitGetPosition(lv_AP_Slayer);
     while (true) {
-        if ((UnitIsAlive(lv_nullifier1) == false) && (UnitIsAlive(lv_nullifier2) == false) && (UnitIsAlive(lv_stalker1) == false) && (UnitIsAlive(lv_stalker2) == false)) {
+        if ((UnitIsAlive(lv_nullifier1) == false) && (UnitIsAlive(lv_nullifier2) == false) && (UnitIsAlive(lv_stalker1) == false) && (UnitIsAlive(lv_AP_Slayer) == false)) {
             return true;
         }
 
@@ -762,13 +762,13 @@ bool gt_LowerForcefieldArea_Func (bool testConds, bool runActions) {
         if ((UnitGroupCount(UnitGroupAlliance(gv_p3_TEMPLE, c_unitAllianceEnemy, RegionCircle(UnitGetPosition(gv_artifact), 13.0), UnitFilter(0, 0, (1 << c_targetFilterMissile) | (1 << c_targetFilterBuried) | (1 << c_targetFilterCloaked), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0), c_unitCountAlive) >= 1)) {
             lv_stalkerTarget = UnitGetPosition(libNtve_gf_ClosestUnitToPoint(UnitGetPosition(gv_artifact), UnitGroupAlliance(gv_p3_TEMPLE, c_unitAllianceEnemy, RegionCircle(UnitGetPosition(gv_artifact), 14.0), UnitFilter(0, 0, (1 << c_targetFilterMissile) | (1 << c_targetFilterBuried) | (1 << c_targetFilterCloaked), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0)));
             UnitIssueOrder(lv_stalker1, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalkerTarget), c_orderQueueReplace);
-            UnitIssueOrder(lv_stalker2, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalkerTarget), c_orderQueueReplace);
+            UnitIssueOrder(lv_AP_Slayer, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalkerTarget), c_orderQueueReplace);
             UnitIssueOrder(lv_stalker1, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalker1Position), c_orderQueueAddToEnd);
-            UnitIssueOrder(lv_stalker2, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalker2Position), c_orderQueueAddToEnd);
+            UnitIssueOrder(lv_AP_Slayer, OrderTargetingPoint(AbilityCommand("attack", 0), lv_AP_SlayerPosition), c_orderQueueAddToEnd);
         }
         else {
             UnitIssueOrder(lv_stalker1, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalker1Position), c_orderQueueReplace);
-            UnitIssueOrder(lv_stalker2, OrderTargetingPoint(AbilityCommand("attack", 0), lv_stalker2Position), c_orderQueueReplace);
+            UnitIssueOrder(lv_AP_Slayer, OrderTargetingPoint(AbilityCommand("attack", 0), lv_AP_SlayerPosition), c_orderQueueReplace);
         }
     }
     return true;

@@ -9394,10 +9394,10 @@
         <ValidatorArray value="IsNotEgg"/>
         <ValidatorArray value="NotLarva"/>
         <!-- TODO: Void campaign integration -->
-<!--        <ValidatorArray value="NotInfestedSpire"/>-->
-<!--        <ValidatorArray value="NoDarkArchonMindControlPrevention"/>-->
-<!--        <ValidatorArray value="NoVoidShade"/>-->
-<!--        <ValidatorArray value="NoTerrazineShadow"/>-->
+        <!--        <ValidatorArray value="NotInfestedSpire"/>-->
+        <!--        <ValidatorArray value="NoDarkArchonMindControlPrevention"/>-->
+        <!--        <ValidatorArray value="NoVoidShade"/>-->
+        <!--        <ValidatorArray value="NoTerrazineShadow"/>-->
         <EditorCategories value=""/>
         <EffectArray value="AP_DarkArchonMindControlApply"/>
         <EffectArray value="AP_DarkArchonMindControlRemoveTargetLock"/>
@@ -9419,4 +9419,129 @@
     <CEffectModifyUnit id="AP_IssueAIOrderSuicide">
         <EditorCategories value="Race:Protoss"/>
     </CEffectModifyUnit>
+    <CEffectApplyBehavior id="AP_AlarakLightningStrikesAB">
+        <ValidatorArray index="0" value="AP_HaveAlarakLightningStrikes"/>
+        <ValidatorArray value="AP_IsSupplicant"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_AlarakLightningStrikes"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_AlarakStalkerPhasingArmorBuffApply">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_AlarakStalkerPhasingArmorBuff"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_AlarakSupplicantDevotionCDR">
+        <ValidatorArray value="AP_IsSupplicant"/>
+        <ValidatorArray value="AP_AlarakSupplicantSacrificeCDR"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_AlarakSupplicantDevotionCDR_A"/>
+        <EffectArray value="AP_AlarakSupplicantDevotionCDR_B"/>
+    </CEffectSet>
+    <CEffectModifyPlayer id="AP_AlarakSupplicantDevotionCDR_A">
+        <EditorCategories value="Race:Protoss"/>
+        <!-- TODO: Implement me! -->
+        <Cost Abil="AP_AlarakACDeadlyCharge">
+            <Cooldown>
+                <Link value="Abil/AlarakACDeadlyCharge"/>
+                <Location value="Player"/>
+                <Operation value="Add"/>
+                <TimeUse value="-10"/>
+            </Cooldown>
+        </Cost>
+    </CEffectModifyPlayer>
+    <CEffectModifyPlayer id="AP_AlarakSupplicantDevotionCDR_B">
+        <EditorCategories value="Race:Protoss"/>
+        <!-- TODO: Implement me! -->
+        <Cost Abil="AP_AlarakKnockback">
+            <Cooldown>
+                <Link value="Abil/AlarakKnockback"/>
+                <Location value="Player"/>
+                <Operation value="Add"/>
+                <TimeUse value="-5"/>
+            </Cooldown>
+        </Cost>
+    </CEffectModifyPlayer>
+    <CEffectLaunchMissile id="AP_AlarakTheStrongestSurviveDummyAttackMissile">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetUnit"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <FinishEffect value="AP_AlarakTheStrongestSurviveDummyAttackMissileImpact"/>
+        <AmmoUnit value="AP_AlarakTheStrongestSurviveDummyAttackMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_AlarakTheStrongestSurviveDummyAttackMissileImpact">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectSet>
+    <CEffectLaunchMissile id="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetUnit"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <FinishEffect value="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissileImpact"/>
+        <AmmoUnit value="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissileImpact">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_AlarakTheStrongestSurviveSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="-;Self,Ally,Neutral,Enemy,Structure,Worker,RawResource,HarvestableResource,Missile,Item,Stasis,Dead,Hidden,MapBoss"/>
+        <TargetSorts>
+            <SortArray value="AP_HighestUnitLevel"/>
+            <SortArray value="AP_CommanderPrestigeAlarakMechLowestStacks"/>
+            <SortArray value="AP_LowestAscendantStacks"/>
+        </TargetSorts>
+        <AreaArray Radius="15" Effect="AP_AlarakTheStrongestSurviveSearchImpact"/>
+        <MinCount value="1"/>
+        <MaxCount value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_AlarakTheStrongestSurviveSearchImpact">
+        <ValidatorArray value="NotWarpingIn"/>
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_AlarakTheStrongestSurviveStealShield"/>
+        <EffectArray value="AP_AlarakTheStrongestSurviveStealLife"/>
+        <EffectArray value="AP_AlarakSupplicantDevotionCDR"/>
+        <EffectArray value="AP_AlarakLightningStrikesAB"/>
+        <EffectArray value="AP_AlarakTheStrongestSurviveDummyAttackMissile"/>
+        <EffectArray value="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile"/>
+        <EffectArray value="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile"/>
+    </CEffectSet>
+    <CEffectCreateHealer id="AP_AlarakTheStrongestSurviveStealLife">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchUnit Value="Target"/>
+        <ImpactUnit Value="Caster"/>
+        <Flags index="Channeled" value="0"/>
+        <DrainVitalCostFactor value="1"/>
+        <RechargeVitalRate value="500000"/>
+    </CEffectCreateHealer>
+    <CEffectCreateHealer id="AP_AlarakTheStrongestSurviveStealShield">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchUnit Value="Target"/>
+        <ImpactUnit Value="Caster"/>
+        <Flags index="Channeled" value="0"/>
+        <DrainVital value="Shields"/>
+        <DrainVitalCostFactor value="1"/>
+        <RechargeVital value="Shields"/>
+        <RechargeVitalRate value="500000"/>
+    </CEffectCreateHealer>
+    <CEffectApplyBehavior id="AP_PhaseBlinkDamageAB">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_PhaseBlinkDamage"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_PhaseBlinkDamageRB">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_PhaseBlinkDamage"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_PhaseBlinkSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_Blink"/>
+        <EffectArray value="AP_PhaseBlinkDamageAB"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_AlarakParticleDisruptorsU" parent="DU_WEAP_MISSILE">
+        <!-- Coop damage level. Campiagn has 10 + 4 -->
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Armored" value="5"/>
+        <Amount value="13"/>
+    </CEffectDamage>
 </Catalog>

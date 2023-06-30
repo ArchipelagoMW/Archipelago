@@ -1407,7 +1407,23 @@
         <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_NotCountUpgradeVoidCasualRallyBlockCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveAlarakStalkerPhasingArmor">
+        <EditorCategories value="Race:Protoss,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUpgradeAlarakStalkerPhasingArmorCompleteOnly"/>
+    </CRequirement>
     <CRequirementNot id="AP_NotCountUpgradeVoidCasualRallyBlockCompleteOnly">
         <OperandArray index="0" value="AP_CountUpgradeVoidCasualRallyBlockCompleteOnly"/>
     </CRequirementNot>
+    <CRequirement id="AP_HaveAlarakLightningStrikes">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAlarakSupplicantSacrificeLightningStrikesCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveAlarakSupplicantSacrificeCDR">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <!-- Vanilla is L14 Alarak check. Redirect it to a separate upgrade-->
+        <NodeArray index="Show" Link="AP_CountUpgradeSupplicantSacrificeCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_CommanderPrestigeAlarakMech">
+        <NodeArray index="Show" Link="AP_CountUpgradeCommanderPrestigeAlarakMechCompleteOnly"/>
+    </CRequirement>
 </Catalog>

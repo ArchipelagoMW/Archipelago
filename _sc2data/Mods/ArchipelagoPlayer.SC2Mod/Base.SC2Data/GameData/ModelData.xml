@@ -10766,4 +10766,102 @@
         <Flags index="TeenSafe" value="1"/>
         <Lighting value="ArchonDeath"/>
     </CModel>
+    <CModel id="AP_Alarak_COOP_LightningStrikes_PowerUp" parent="RacePersistentSpellFX" Race="Protoss">
+        <Model value="Assets\Effects\Protoss\Alarak_COOP_LightningStrikes_PowerUp\Alarak_COOP_LightningStrikes_PowerUp.m3"/>
+        <Events>
+            <Anim value="Birth,00"/>
+            <Name value="Alarak_LightningCharge_Start"/>
+            <Type value="Sound"/>
+            <Time value="0.007000"/>
+            <Payload value="AP_Alarak_LightningCharge_Start"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Alarak_LightningCharge_Stand"/>
+            <Type value="Sound"/>
+            <Time value="0.013000"/>
+            <Payload value="AP_Alarak_LightningCharge_Stand"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Alarak_LightningCharge_Stand"/>
+            <Type value="Sound"/>
+            <Time value="0.267000"/>
+            <Payload value="AP_Alarak_LightningCharge_Stand"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Alarak_LightningCharge_Stand"/>
+            <Type value="Sound"/>
+            <Time value="0.523000"/>
+            <Payload value="AP_Alarak_LightningCharge_Stand"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,00"/>
+            <Name value="Alarak_LightningCharge_Stand"/>
+            <Type value="Sound"/>
+            <Time value="0.849000"/>
+            <Payload value="AP_Alarak_LightningCharge_Stand"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,01"/>
+            <Name value="Alarak_LightningCharge_Stand"/>
+            <Type value="Sound"/>
+            <Time value="0.005000"/>
+            <Payload value="AP_Alarak_LightningCharge_Stand"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,01"/>
+            <Name value="Alarak_LightningCharge_Stand"/>
+            <Type value="Sound"/>
+            <Time value="0.208000"/>
+            <Payload value="AP_Alarak_LightningCharge_Stand"/>
+        </Events>
+        <Events>
+            <Anim value="Stand,01"/>
+            <Name value="Alarak_LightningCharge_Stand"/>
+            <Type value="Sound"/>
+            <Time value="0.512000"/>
+            <Payload value="AP_Alarak_LightningCharge_Stand"/>
+        </Events>
+        <Events>
+            <Anim value="Death,00"/>
+            <Name value="Alarak_LightningCharge_Stop"/>
+            <Type value="Sound"/>
+            <Time value="0.013000"/>
+            <Payload value="AP_Alarak_LightningCharge_Stop"/>
+        </Events>
+    </CModel>
+    <CModel id="AP_Alarak_COOP_Sacrifice_Impact" parent="RaceImpactFX" Race="Protoss">
+        <Model value="Assets\Effects\Protoss\Alarak_COOP_Sacrifice_Impact\Alarak_COOP_Sacrifice_Impact.m3"/>
+    </CModel>
+    <CModel id="AP_Alarak_COOP_Sacrifice_Missile" parent="RaceMissileFX" Race="Protoss">
+        <Model value="Assets\Effects\Protoss\Alarak_COOP_Sacrifice_Missile\Alarak_COOP_Sacrifice_Missile.m3"/>
+    </CModel>
+    <CModel id="AP_Alarak_COOP_Sacrifice_Missile_Impact" parent="RaceImpactFX" Race="Protoss">
+        <Model value="Assets\Effects\Protoss\Alarak_COOP_Sacrifice_Missile_Impact\Alarak_COOP_Sacrifice_Missile_Impact.m3"/>
+    </CModel>
+    <CModel id="AP_Alarak_COOP_Sacrifice_Missile_Impact_Small" parent="RaceImpactFX" Race="Protoss">
+        <Model value="Assets\Effects\Protoss\Alarak_COOP_Sacrifice_Missile_Impact\Alarak_COOP_Sacrifice_Missile_Impact.m3"/>
+        <ScaleMax value="0.500000,0.500000,0.500000"/>
+        <ScaleMin value="0.500000,0.500000,0.500000"/>
+    </CModel>
+    <CModel id="AP_DarkStalker" parent="Stalker">
+        <Model value="Assets\Units\Protoss\Stalker_TalDarim\Stalker_TalDarim.m3"/>
+    </CModel>
+    <CModel id="AP_DarkStalkerDeath" parent="StalkerDeath">
+        <Model value="Assets\Units\Protoss\Stalker_TalDarim_Death\Stalker_TalDarim_Death.m3"/>
+        <Flags index="TeenSafe" value="1"/>
+        <LowQualityModel value="ProtossTaldarimUnitDeathLow"/>
+    </CModel>
+    <CModel id="AP_Taldarim_Stalker_Portrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\Taldarim_Stalker_Portrait\Taldarim_Stalker_Portrait.m3"/>
+        <Image value="Assets\Textures\stalker_taldarim_static.dds"/>
+    </CModel>
+    <CModel id="AP_Stalker_Taldarim_Alarak" parent="StalkerBase">
+        <Model value="Assets\Units\Protoss\Stalker_TalDarim\Stalker_TalDarim.m3"/>
+    </CModel>
+    <CModel id="AP_Stalker_Taldarim_Death_Alarak" parent="StalkerDeathBase">
+        <Model value="Assets\Units\Protoss\Stalker_TalDarim_Death\Stalker_TalDarim_Death.m3"/>
+    </CModel>
 </Catalog>

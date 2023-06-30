@@ -2174,4 +2174,19 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-mindcontrol.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_AlarakStalkerPhasingArmor">
+        <Icon value="Assets\Textures\btn-upgrade-protoss-alarak-stalkerphasingarmor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-protoss-alarak-stalkerphasingarmor.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_CommanderPrestigeAlarakMechBuff">
+        <Icon value="Assets\Textures\btn-ability-alarak-reliquaryofsouls.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-alarak-reliquaryofsouls.dds"/>
+        <ChargeText value="Button/Tooltip/AP_CommanderPrestigeAlarakMechBuffCharges"/>
+    </CButton>
+    <CButton id="AP_SlayerBlink">
+        <Icon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

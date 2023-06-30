@@ -2381,4 +2381,20 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_VoidCasualRallyBlock" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAlarakStalkerPhasingArmorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AlarakStalkerPhasingArmor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAlarakSupplicantSacrificeLightningStrikesCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AlarakSupplicantSacrificeLightningStrikes" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeSupplicantSacrificeCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_SupplicantSacrifice" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeCommanderPrestigeAlarakMechCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_CommanderPrestigeAlarakMech" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

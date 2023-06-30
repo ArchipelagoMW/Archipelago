@@ -5898,4 +5898,79 @@
         <Flags index="NeedsUpdate" value="1"/>
         <Flags index="NeedsTTS" value="1"/>
     </CSound>
+    <CSound id="AP_StalkerTaldarim_PhaseArmor_Off" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Immortal_BarrierOff_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Immortal_BarrierOff_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Immortal_BarrierOff_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Immortal_BarrierOff_04.wav" FacialGroup=""/>
+        <Pitch value="2.000000,3.000000"/>
+        <Volume value="-15.000000,-15.000000"/>
+    </CSound>
+    <CSound id="AP_StalkerTaldarim_PhaseArmor_On" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Mirage_PhoenixPurifier_CloakOn01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mirage_PhoenixPurifier_CloakOn02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mirage_PhoenixPurifier_CloakOn03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mirage_PhoenixPurifier_CloakOn04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Mirage_PhoenixPurifier_CloakOn05_1ch.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-6.000000,-6.000000"/>
+    </CSound>
+    <CSound id="AP_Alarak_LightningCharge_Start" parent="Spell">
+        <EditorCategories value="Race:Neutral"/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap06.wav" FacialGroup=""/>
+        <Flags index="Download" value="0"/>
+        <Flags index="Purgable" value="0"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="4.000000,6.000000"/>
+        <Select value="Random"/>
+        <Volume value="-20.000000,-14.000000"/>
+    </CSound>
+    <CSound id="AP_Alarak_LightningCharge_Stop" parent="Spell">
+        <EditorCategories value="Race:Neutral"/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap08.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap09.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Keystone_ElectricitySparkZap10.wav" FacialGroup=""/>
+        <Flags index="Download" value="0"/>
+        <Flags index="Purgable" value="0"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="4.000000,6.000000"/>
+        <Select value="Random"/>
+        <Volume value="-20.000000,-14.000000"/>
+    </CSound>
+    <CSound id="AP_Alarak_LightningCharge_Stand" parent="Spell">
+        <EditorCategories value="Race:Neutral"/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_08.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_09.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\EmpGenerator_Electric_Arc_10.wav" FacialGroup=""/>
+        <Flags index="Download" value="0"/>
+        <Flags index="Purgable" value="0"/>
+        <DupeDestroyCount value="5"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="4"/>
+        <Pitch value="-3.000000,2.000000"/>
+        <Select value="Random"/>
+        <Volume value="-22.000000,-16.000000"/>
+    </CSound>
 </Catalog>

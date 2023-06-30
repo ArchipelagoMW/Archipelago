@@ -15,4 +15,17 @@
         <WhichUnit Value="Target"/>
         <Behavior value="AP_DarkArchonConfusion"/>
     </CTargetSortBehaviorCount>
+    <CTargetSortField id="AP_HighestUnitLevel">
+        <Descending value="1"/>
+        <Field value="Level"/>
+        <Value value="0"/>
+    </CTargetSortField>
+    <CTargetSortBehaviorCount id="AP_CommanderPrestigeAlarakMechLowestStacks">
+        <WhichUnit Value="Target"/>
+        <Behavior value="AP_CommanderPrestigeAlarakMechBuff"/>
+    </CTargetSortBehaviorCount>
+    <CTargetSortBehaviorCount id="AP_LowestAscendantStacks">
+        <WhichUnit Value="Target"/>
+        <Behavior value="AP_AscendantSacrificeSelfBuff"/>
+    </CTargetSortBehaviorCount>
 </Catalog>
