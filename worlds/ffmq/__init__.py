@@ -45,6 +45,8 @@ class FFMQWorld(World):
     create_regions = create_regions
     set_rules = set_rules
 
+    data_version = 1
+    
     web = FFMQWebWorld()
 
     def __init__(self, world, player: int):
