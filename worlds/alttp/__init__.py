@@ -724,6 +724,23 @@ class ALTTPWorld(World):
                         res.append(item)
         return res
 
+    def fill_slot_data(self):
+        slot_data = {}
+        for option_name in alttp_options:
+            option = getattr(self.multiworld, option_name)[self.player]
+            slot_data[option_name] = option.value
+
+        slot_data.update({
+            'mode': self.multiworld.mode[self.player],
+            'goal': self.multiworld.goal[self.player],
+            'dark_room_logic': self.multiworld.dark_room_logic[self.player],
+            'mm_medalion': self.multiworld.required_medallions[self.player][0],
+            'tr_medalion': self.multiworld.required_medallions[self.player][1],
+            'shop_shuffle': self.multiworld.shop_shuffle[self.player]}
+        )
+
+        return slot_data
+
 
 def get_same_seed(world, seed_def: tuple) -> str:
     seeds: typing.Dict[tuple, str] = getattr(world, "__named_seeds", {})
