@@ -1,3 +1,2 @@
 nest-asyncio >= 1.5.5
 six >= 1.16.0
-apsc2 >= 5.6

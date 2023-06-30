@@ -90,6 +90,7 @@ Name: "client/wargroove"; Description: "Wargroove"; Types: full playing
 Name: "client/zl";        Description: "Zillion"; Types: full playing
 Name: "client/tloz";      Description: "The Legend of Zelda"; Types: full playing
 Name: "client/advn";      Description: "Adventure"; Types: full playing
+Name: "client/ut";        Description: "Undertale"; Types: full playing
 Name: "client/text";      Description: "Text, to !command and chat"; Types: full playing
 
 [Dirs]
@@ -135,6 +136,7 @@ Source: "{#source_path}\ArchipelagoZelda1Client.exe"; DestDir: "{app}"; Flags: i
 Source: "{#source_path}\ArchipelagoWargrooveClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/wargroove
 Source: "{#source_path}\ArchipelagoKH2Client.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/kh2
 Source: "{#source_path}\ArchipelagoAdventureClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/advn
+Source: "{#source_path}\ArchipelagoUndertaleClient.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: client/ut
 Source: "vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
@@ -155,6 +157,7 @@ Name: "{group}\{#MyAppName} The Legend of Zelda Client"; Filename: "{app}\Archip
 Name: "{group}\{#MyAppName} Kingdom Hearts 2 Client"; Filename: "{app}\ArchipelagoKH2Client.exe"; Components: client/kh2
 Name: "{group}\{#MyAppName} Adventure Client"; Filename: "{app}\ArchipelagoAdventureClient.exe"; Components: client/advn
 Name: "{group}\{#MyAppName} Wargroove Client"; Filename: "{app}\ArchipelagoWargrooveClient.exe"; Components: client/wargroove
+Name: "{group}\{#MyAppName} Undertale Client"; Filename: "{app}\ArchipelagoUndertaleClient.exe"; Components: client/ut
 
 Name: "{commondesktop}\{#MyAppName} Folder"; Filename: "{app}"; Tasks: desktopicon
 Name: "{commondesktop}\{#MyAppName} Server"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon; Components: server
@@ -172,6 +175,7 @@ Name: "{commondesktop}\{#MyAppName} The Legend of Zelda Client"; Filename: "{app
 Name: "{commondesktop}\{#MyAppName} Wargroove Client"; Filename: "{app}\ArchipelagoWargrooveClient.exe"; Tasks: desktopicon; Components: client/wargroove
 Name: "{commondesktop}\{#MyAppName} Kingdom Hearts 2 Client"; Filename: "{app}\ArchipelagoKH2Client.exe"; Tasks: desktopicon; Components: client/kh2
 Name: "{commondesktop}\{#MyAppName} Adventure Client"; Filename: "{app}\ArchipelagoAdventureClient.exe"; Tasks: desktopicon; Components: client/advn
+Name: "{commondesktop}\{#MyAppName} Undertale Client"; Filename: "{app}\ArchipelagoUndertaleClient.exe"; Tasks: desktopicon; Components: client/ut
 
 [Run]
 
@@ -185,6 +189,8 @@ Type: dirifempty; Name: "{app}"
 [InstallDelete]
 Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
 Type: filesandordirs; Name: "{app}\lib\worlds\rogue-legacy*"
+Type: filesandordirs; Name: "{app}\SNI\lua*"
+Type: filesandordirs; Name: "{app}\EnemizerCLI*"
 #include "installdelete.iss"
 
 [Registry]
