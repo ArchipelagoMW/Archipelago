@@ -312,7 +312,5 @@ class KDL3SNIClient(SNIClient):
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
 
-        # KDL3_TODO: make the game show items received visually
-
         if game_state[0] != 0xFF:
             await self.pop_item(ctx)

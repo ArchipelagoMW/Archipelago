@@ -32,7 +32,7 @@ def generate_valid_level(level, stage, possible_stages, slot_random):
 
 
 def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bool) -> dict:
-    levels = {
+    levels: typing.Dict[int, typing.List[typing.Optional[int]]] = {
         1: [None for _ in range(7)],
         2: [None for _ in range(7)],
         3: [None for _ in range(7)],
@@ -56,7 +56,8 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
 
             except Exception:
                 raise Exception(
-                    f"Invalid connection: {connection.entrance} => {connection.exit} for player {world.player} ({world.multiworld.player_name[world.player]})")
+                    f"Invalid connection: {connection.entrance} =>"
+                    f" {connection.exit} for player {world.player} ({world.multiworld.player_name[world.player]})")
 
     for level in range(1, 6):
         for stage in range(6):
@@ -119,7 +120,8 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
     return levels
 
 
-def generate_locations_from_stages(stages: typing.List[int], consumables: bool) -> typing.Dict[str, typing.Optional[int]]:
+def generate_locations_from_stages(stages: typing.List[int],
+                                   consumables: bool) -> typing.Dict[str, typing.Optional[int]]:
     locations = dict()
     for stage in stages[:-1]:
         locations[location_table[stage]] = stage
@@ -165,14 +167,14 @@ def create_levels(world: World) -> None:
                                                                    world.multiworld.consumables[world.player]),
                                     KDL3Location)
 
-    for boss_flag, purification, id, level in zip(["Level 1 Boss", "Level 2 Boss",
-                                                   "Level 3 Boss", "Level 4 Boss", "Level 5 Boss"],
-                                                  [LocationName.grass_land_whispy, LocationName.ripple_field_acro,
-                                                   LocationName.sand_canyon_poncon, LocationName.cloudy_park_ado,
-                                                   LocationName.iceberg_dedede],
-                                                  [0x770200, 0x770201, 0x770202, 0x770203, 0x770204],
-                                                  [level1, level2, level3, level4, level5]):
-        level.add_locations({boss_flag: None, purification: id, }, KDL3Location)
+    for boss_flag, purification, idx, level in zip(["Level 1 Boss", "Level 2 Boss",
+                                                    "Level 3 Boss", "Level 4 Boss", "Level 5 Boss"],
+                                                   [LocationName.grass_land_whispy, LocationName.ripple_field_acro,
+                                                    LocationName.sand_canyon_poncon, LocationName.cloudy_park_ado,
+                                                    LocationName.iceberg_dedede],
+                                                   [0x770200, 0x770201, 0x770202, 0x770203, 0x770204],
+                                                   [level1, level2, level3, level4, level5]):
+        level.add_locations({boss_flag: None, purification: idx, }, KDL3Location)
 
     level6.add_locations({LocationName.goals[world.multiworld.goal[world.player]]: None}, KDL3Location)
 

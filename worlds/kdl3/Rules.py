@@ -1,6 +1,7 @@
 from worlds.generic.Rules import set_rule, add_rule
 from .Locations import location_table, level_consumables
 from .Names import LocationName
+from .Items import copy_ability_table
 import typing
 
 if typing.TYPE_CHECKING:
@@ -154,7 +155,7 @@ def set_rules(world: "KDL3World") -> None:
     add_rule(world.multiworld.get_location(LocationName.iceberg_shiro, world.player),
              lambda state: state.has("Nago", world.player) and can_reach_nago(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.iceberg_angel, world.player),
-             lambda state: state.has_all(world.item_name_groups["Copy Ability"], world.player))
+             lambda state: state.has_all([ability for ability in copy_ability_table.keys()], world.player))
     # cleaner than writing out 8 ands
 
     # Consumables

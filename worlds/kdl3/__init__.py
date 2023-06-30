@@ -41,7 +41,7 @@ class KDL3World(World):
     Join Kirby and his Animal Friends on an adventure to collect Heart Stars and drive Dark Matter away from Dream Land!
     """
 
-    game: str = "Kirby's Dream Land 3"
+    game = "Kirby's Dream Land 3"
     option_definitions = kdl3_options
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location_table[location]: location for location in location_table}
@@ -107,7 +107,7 @@ class KDL3World(World):
         filler_amount = math.floor(filler_items * (self.multiworld.filler_percentage[self.player] / 100.0))
         trap_amount = math.floor(filler_amount * (self.multiworld.trap_percentage[self.player] / 100.0))
         filler_amount -= trap_amount
-        nonrequired_heart_stars = filler_items - filler_amount - trap_amount
+        non_required_heart_stars = filler_items - filler_amount - trap_amount
         self.required_heart_stars[self.player] = required_heart_stars
         # handle boss requirements here
         requirements = [required_heart_stars]
@@ -126,7 +126,7 @@ class KDL3World(World):
                          for _ in range(filler_amount + (remaining_items - total_heart_stars))])
         itempool.extend([self.create_item(self.get_trap_item_name())
                          for _ in range(trap_amount)])
-        itempool.extend([self.create_item("Heart Star", True) for _ in range(nonrequired_heart_stars)])
+        itempool.extend([self.create_item("Heart Star", True) for _ in range(non_required_heart_stars)])
         self.multiworld.itempool += itempool
 
     set_rules = set_rules
@@ -149,7 +149,7 @@ class KDL3World(World):
                     self.boss_butch_bosses[self.player][i] = True
 
     def generate_output(self, output_directory: str):
-        rompath = ""
+        rom_path = ""
         try:
             world = self.multiworld
             player = self.player
@@ -160,19 +160,19 @@ class KDL3World(World):
                       self.player_levels[self.player],
                       self.boss_butch_bosses[self.player])
 
-            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
-            rom.write_to_file(rompath)
+            rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
+            rom.write_to_file(rom_path)
             self.rom_name = rom.name
 
-            patch = KDL3DeltaPatch(os.path.splitext(rompath)[0] + KDL3DeltaPatch.patch_file_ending, player=player,
-                                   player_name=world.player_name[player], patched_path=rompath)
+            patch = KDL3DeltaPatch(os.path.splitext(rom_path)[0] + KDL3DeltaPatch.patch_file_ending, player=player,
+                                   player_name=world.player_name[player], patched_path=rom_path)
             patch.write()
         except Exception:
             raise
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
-            if os.path.exists(rompath):
-                os.unlink(rompath)
+            if os.path.exists(rom_path):
+                os.unlink(rom_path)
 
     def modify_multidata(self, multidata: dict):
         # wait for self.rom_name to be available.

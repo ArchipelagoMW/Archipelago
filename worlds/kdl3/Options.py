@@ -86,6 +86,7 @@ class BossShuffle(PlandoBosses):
     locations = LocationName.level_names.keys()
 
     duplicate_bosses = True
+
     @classmethod
     def can_place_boss(cls, boss: str, location: str) -> bool:
         # Kirby has no logic about requiring bosses in specific locations (since we load in their stage)
