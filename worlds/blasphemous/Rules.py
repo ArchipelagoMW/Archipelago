@@ -471,22 +471,28 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D01Z01S01[S]", player),
-        lambda state: state._blasphemous_can_break_holes(player) or \
-            state.has("Purified Hand of the Nun", player))
+        lambda state: (
+            state._blasphemous_can_break_holes(player)
+            or state.has("Purified Hand of the Nun", player)
+        ))
 
 
     # D01Z01S02 (The Holy Line)
     # Items
     set_rule(world.get_location("THL: Across blood platforms", player),
-        lambda state: state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player))
+        lambda state: (
+            state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player)
+        ))
     # No doors
 
 
     # D01Z01S03 (The Holy Line)
     # Items
     set_rule(world.get_location("THL: Underground chest", player),
-        lambda state: state.has_all({"Blood Perpetuated in Sand", "Dash Ability"}, player) and \
-            state._blasphemous_can_water_jump(player))
+        lambda state: (
+            state.has_all({"Blood Perpetuated in Sand", "Dash Ability"}, player)
+            and state._blasphemous_can_water_jump(player)
+        ))
     # No doors
 
 
@@ -516,29 +522,34 @@ def rules(blasphemousworld):
     set_rule(world.get_location("Albero: Tirso's 6th reward", player),
         lambda state: state.has_group("tirso", player, 6))
     set_rule(world.get_location("Albero: Tirso's final reward", player),
-        lambda state: state.has_group("tirso", player, 6) and \
-            state._blasphemous_can_beat_boss("Mercy", difficulty, player) and \
-                state._blasphemous_can_beat_boss("Convent", difficulty, player) and \
-                    state._blasphemous_can_beat_boss("Grievance", difficulty, player) and \
-                        state._blasphemous_can_beat_boss("Mothers", difficulty, player) and \
-                            state._blasphemous_can_beat_boss("Canvases", difficulty, player) and \
-                                state._blasphemous_can_beat_boss("Prison", difficulty, player))
+        lambda state: (
+            state.has_group("tirso", player, 6)
+            and state._blasphemous_can_beat_boss("Mercy", difficulty, player)
+            and state._blasphemous_can_beat_boss("Convent", difficulty, player)
+            and state._blasphemous_can_beat_boss("Grievance", difficulty, player)
+            and state._blasphemous_can_beat_boss("Mothers", difficulty, player)
+            and state._blasphemous_can_beat_boss("Canvases", difficulty, player)
+            and state._blasphemous_can_beat_boss("Prison", difficulty, player)
+        ))
     # No doors
 
 
     # D01Z02S03 (Albero)
     # Items
     set_rule(world.get_location("Albero: Child of Moonlight", player),
-        lambda state: state.has("RodeGOTPElevator", player) or \
-            state._blasphemous_pillar(player) or \
-                state.has("Cante Jondo of the Three Sisters", player) or \
-                    state.has("D01Z02S03[NW]", player) and \
-                        (state._blasphemous_can_cross_gap(difficulty, player, 2) or \
-                            state.has("Lorquiana", player) or \
-                                state._blasphemous_aubade(player) or \
-                                    state.has("Cantina of the Blue Rose", player) or \
-                                        state._blasphemous_can_air_stall(difficulty, player) or \
-                                            state._blasphemous_charge_beam(player)))
+        lambda state: (
+            state.has("RodeGOTPElevator", player)
+            or state._blasphemous_pillar(player)
+            or state.has("Cante Jondo of the Three Sisters", player)
+            or state.has("D01Z02S03[NW]", player) and (
+                state._blasphemous_can_cross_gap(difficulty, player, 2)
+                or state.has("Lorquiana", player)
+                or state._blasphemous_aubade(player)
+                or state.has("Cantina of the Blue Rose", player)
+                or state._blasphemous_can_air_stall(difficulty, player)
+                or state._blasphemous_charge_beam(player)
+            )
+        ))
     set_rule(world.get_location("Albero: Lvdovico's 1st reward", player),
         lambda state: state.has_group("tentudia", player, 1))
     set_rule(world.get_location("Albero: Lvdovico's 2nd reward", player),
@@ -549,24 +560,30 @@ def rules(blasphemousworld):
         lambda state: state.has("D04Z02S10[W]", player))
     # Doors
     set_rule(world.get_entrance("D01Z02S03[NW]", player),
-        lambda state: state.has("D02Z02S11[NW]", player) or \
-            state.has("D02Z02S11[NE]", player) or \
-                state.has("D02Z02S11[W]", player) or \
-                    state.has("D02Z02S11[E]", player) or \
-                        state.has("D02Z02S11[SE]", player))
+        lambda state: (
+            state.has("D02Z02S11[NW]", player)
+            or state.has("D02Z02S11[NE]", player)
+            or state.has("D02Z02S11[W]", player)
+            or state.has("D02Z02S11[E]", player)
+            or state.has("D02Z02S11[SE]", player)
+        ))
     set_rule(world.get_entrance("D01Z02S03[church]", player),
-        lambda state: state._blasphemous_can_beat_boss("Mercy", difficulty, player) or \
-            state._blasphemous_can_beat_boss("Convent", difficulty, player) or \
-                state._blasphemous_can_beat_boss("Grievance", difficulty, player))
+        lambda state: (
+            state._blasphemous_can_beat_boss("Mercy", difficulty, player)
+            or state._blasphemous_can_beat_boss("Convent", difficulty, player)
+            or state._blasphemous_can_beat_boss("Grievance", difficulty, player)
+        ))
 
 
     # D01BZ04S01 (Albero: Inside church)
     # Items
     set_rule(world.get_location("Albero: Final gift for Cleofas", player),
-        lambda state: state.has_group("marks", player, 3) and \
-            state.has("Cord of the True Burying", player) and \
-                state.has("D04Z02S10[W]", player) and \
-                    state.has("D06Z01S18[E]", player))
+        lambda state: (
+            state.has_group("marks", player, 3)
+            and state.has("Cord of the True Burying", player)
+            and state.has("D04Z02S10[W]", player)
+            and state.has("D06Z01S18[E]", player)
+        ))
     # No doors
 
 
@@ -617,7 +634,7 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("WotBC: Hidden alcove", player),
         lambda state: state.has("Dash Ability", player))
-    # No doors (shouldn't there be one though?)
+    # No doors
 
 
     # D01Z03S03 (Wasteland of the Buried Churches)
@@ -630,8 +647,10 @@ def rules(blasphemousworld):
     # D01Z03S05 (Wasteland of the Buried Churches)
     # Items
     set_rule(world.get_location("WotBC: Under broken bridge", player),
-        lambda state: state.has_any({"Blood Perpetuated in Sand", "Boots of Pleading"}, player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state.has_any({"Blood Perpetuated in Sand", "Boots of Pleading"}, player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
     # Doors
     set_rule(world.get_entrance("D01Z03S05[Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -647,10 +666,12 @@ def rules(blasphemousworld):
     # D01Z03S07 (Wasteland of the Buried Churches)
     # Items
     set_rule(world.get_location("WotBC: Cliffside Child of Moonlight", player),
-        lambda state: state._blasphemous_can_cross_gap(difficulty, player, 1) or \
-            state._blasphemous_aubade(player) or \
-                state._blasphemous_charge_beam(player) or \
-                    state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", "Cloistered Ruby"}, player))
+        lambda state: (
+            state._blasphemous_can_cross_gap(difficulty, player, 1)
+            or state._blasphemous_aubade(player)
+            or state._blasphemous_charge_beam(player)
+            or state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", "Cloistered Ruby"}, player)
+        ))
     # Doors
     set_rule(world.get_entrance("D01Z03S07[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -675,17 +696,23 @@ def rules(blasphemousworld):
     # D01Z04S13 (Mercy Dreams)
     # Items
     set_rule(world.get_location("MD: Behind gate to TSC", player),
-        lambda state: state.has("D01Z04S13[SE]", player) or \
-            state._blasphemous_can_dive_laser(difficulty, player) and \
-                (state._blasphemous_can_air_stall(difficulty, player) or \
-                    state.has_any({"The Young Mason's Wheel", "Purified Hand of the Nun"}, player) or \
-                        state._blasphemous_can_enemy_bounce(difficulty, enemy)))
+        lambda state: (
+            state.has("D01Z04S13[SE]", player)
+            or state._blasphemous_can_dive_laser(difficulty, player) and (
+                state._blasphemous_can_air_stall(difficulty, player)
+                or state.has_any({"The Young Mason's Wheel", "Purified Hand of the Nun"}, player)
+                or state._blasphemous_can_enemy_bounce(difficulty, enemy)
+                )
+        ))
     # Doors
     set_rule(world.get_entrance("D01Z04S13[SE]", player),
-        lambda state: state._blasphemous_can_dive_laser(difficulty, player) and \
-            (state._blasphemous_can_air_stall(difficulty, player) or \
-                state.has_any({"The Young Mason's Wheel", "Purified Hand of the Nun"}, player) or \
-                    state._blasphemous_can_enemy_bounce(difficulty, enemy)))
+        lambda state: (
+            state._blasphemous_can_dive_laser(difficulty, player) and (
+                state._blasphemous_can_air_stall(difficulty, player)
+                or state.has_any({"The Young Mason's Wheel", "Purified Hand of the Nun"}, player)
+                or state._blasphemous_can_enemy_bounce(difficulty, enemy)
+                )
+        ))
 
 
     # D01Z04S14 (Mercy Dreams)
@@ -699,29 +726,39 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D01Z04S15[W]", player),
-        lambda state: state.has("D01Z04S15[E]", player) or \
-            state.has("D01Z04S15[SW]", player) or \
-                state.has("D01Z04S15[SE]", player))
+        lambda state: (
+            state.has("D01Z04S15[E]", player)
+            or state.has("D01Z04S15[SW]", player)
+            or state.has("D01Z04S15[SE]", player)
+        ))
     set_rule(world.get_entrance("D01Z04S15[E]", player),
-        lambda state: state.has("D01Z04S15[W]", player) or \
-            state.has("D01Z04S15[SW]", player) or \
-                state.has("D01Z04S15[SE]", player))
+        lambda state: (
+            state.has("D01Z04S15[W]", player)
+            or state.has("D01Z04S15[SW]", player)
+            or state.has("D01Z04S15[SE]", player)
+        ))
     set_rule(world.get_entrance("D01Z04S15[SW]", player),
-        lambda state: state.has("D01Z04S15[W]", player) or \
-            state.has("D01Z04S15[E]", player) or \
-                state.has("D01Z04S15[SE]", player))
+        lambda state: (
+            state.has("D01Z04S15[W]", player)
+            or state.has("D01Z04S15[E]", player)
+            or state.has("D01Z04S15[SE]", player)
+        ))
     set_rule(world.get_entrance("D01Z04S15[SE]", player),
-        lambda state: state.has("D01Z04S15[W]", player) or \
-            state.has("D01Z04S15[E]", player) or \
-                state.has("D01Z04S15[SW]", player))
+        lambda state: (
+            state.has("D01Z04S15[W]", player)
+            or state.has("D01Z04S15[E]", player)
+            or state.has("D01Z04S15[SW]", player)
+        ))
 
 
     # D01Z04S16 (Mercy Dreams)
     # Items
     set_rule(world.get_location("MD: Cave Child of Moonlight", player),
-        lambda state: state.has_any({"Purified Hand of the Nun", "Cante Jondo of the Three Sisters"}, player) or \
-            state._blasphemous_pillar(player) or \
-                state._blasphemous_tirana(player))
+        lambda state: (
+            state.has_any({"Purified Hand of the Nun", "Cante Jondo of the Three Sisters"}, player)
+            or state._blasphemous_pillar(player)
+            or state._blasphemous_tirana(player)
+        ))
     # No doors
 
 
@@ -746,24 +783,30 @@ def rules(blasphemousworld):
     # D01Z05S05 (Desecrated Cistern)
     # Items
     set_rule(world.get_location("DC: Hidden alcove near fountain", player),
-        lambda state: state.has("Dash Ability", player) and \
-            state._blasphemous_can_water_jump(player))
+        lambda state: (
+            state.has("Dash Ability", player)
+            and state._blasphemous_can_water_jump(player)
+        ))
     # No doors
 
 
     # D01Z05S06 (Desecrated Cistern)
     # Items
     set_rule(world.get_location("DC: Upper east tunnel chest", player),
-        lambda state: state.has("D01Z05S06[Cherubs]", player) or \
-            state._blasphemous_can_water_jump(player))
+        lambda state: (
+            state.has("D01Z05S06[Cherubs]", player)
+            or state._blasphemous_can_water_jump(player)
+        ))
     set_rule(world.get_location("DC: Upper east Child of Moonlight", player),
-        lambda state: state.has("D01Z05S06[Cherubs]", player) or \
-            state._blasphemous_can_water_jump(player) or \
-                state._blasphemous_pillar(player) or \
-                    state.has("Cante Jondo of the Three Sisters", player) or \
-                        state._blasphemous_aubade(player) or \
-                            state._blasphemous_tirana(player) or \
-                                state._blasphemous_can_air_stall(difficulty, player))
+        lambda state: (
+            state.has("D01Z05S06[Cherubs]", player)
+            or state._blasphemous_can_water_jump(player)
+            or state._blasphemous_pillar(player)
+            or state.has("Cante Jondo of the Three Sisters", player)
+            or state._blasphemous_aubade(player)
+            or state._blasphemous_tirana(player)
+            or state._blasphemous_can_air_stall(difficulty, player)
+        ))
     # No doors
 
 
@@ -776,34 +819,45 @@ def rules(blasphemousworld):
     # D01Z05S13 (Desecrated Cistern)
     # Items
     set_rule(world.get_location("DC: Child of Moonlight, behind pillar", player),
-        lambda state: state.has("D01Z05S13[SW]", player) or \
-            state.has("D01Z05S13[E]", player) and \
-                state._blasphemous_can_survive_poison(difficulty, player, 3) and \
-                    state._blasphemous_can_water_jump(player))
+        lambda state: (
+            state.has("D01Z05S13[SW]", player)
+            or state.has("D01Z05S13[E]", player)
+            and state._blasphemous_can_survive_poison(difficulty, player, 3)
+            and state._blasphemous_can_water_jump(player)
+        ))
     # Doors
     set_rule(world.get_entrance("D01Z05S13[SW]", player),
         lambda state: state.has("D01Z05S13[E]", player))
     add_rule(world.get_entrance("D01Z05S13[SW]", player),
-        lambda state: state._blasphemous_can_survive_poison(difficulty, player, 3) and \
-            state._blasphemous_can_water_jump(player))
+        lambda state: (
+            state._blasphemous_can_survive_poison(difficulty, player, 3)
+            and state._blasphemous_can_water_jump(player)
+        ))
     set_rule(world.get_entrance("D01Z05S13[N]", player),
         lambda state: state.has("D01Z05S13[E]", player))
     add_rule(world.get_entrance("D01Z05S13[N]", player),
-        lambda state: state._blasphemous_can_survive_poison(difficulty, player, 3) and \
-            state._blasphemous_can_water_jump(player))
+        lambda state: (
+            state._blasphemous_can_survive_poison(difficulty, player, 3)
+            and state._blasphemous_can_water_jump(player)
+        ))
 
 
     # D01Z05S17 (Desecrated Cistern)
     # Items
     set_rule(world.get_location("DC: High ledge near elevator shaft", player),
-        lambda state: state.has("D01Z05S17[E]", player) or \
-            state._blasphemous_can_water_jump(player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 5))
+        lambda state: (
+            state.has("D01Z05S17[E]", player)
+            or state._blasphemous_can_water_jump(player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 5)
+        ))
     # Doors
     set_rule(world.get_entrance("D01Z05S17[E]", player),
-        lambda state: state.has("Dash Ability", player) and \
-            (state._blasphemous_can_water_jump(player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 5)))
+        lambda state: (
+            state.has("Dash Ability", player) and (
+                state._blasphemous_can_water_jump(player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 5)
+            )
+        ))
     
 
     # D01Z05S20 (Desecrated Cistern)
@@ -823,8 +877,10 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D01Z05S23[W]", player),
-        lambda state: state._blasphemous_chalice_rooms(player, 3) and \
-            state.has("Chalice of Inverted Verses", player))
+        lambda state: (
+            state._blasphemous_chalice_rooms(player, 3)
+            and state.has("Chalice of Inverted Verses", player)
+        ))
     
 
     # D01Z05S24 (Desecrated Cistern)
@@ -838,53 +894,95 @@ def rules(blasphemousworld):
     set_rule(world.get_location("DC: Elevator shaft ledge", player),
         lambda state: state.has("Linen of Golden Thread", player))
     set_rule(world.get_location("DC: Elevator shaft Child of Moonlight", player),
-        lambda state: state.has("Linen of Golden Thread", player) or \
-            (state._blasphemous_pillar(player) and \
-                (state.has("D01Z05S25[E]", player) or \
-                    state.has("D01Z05S25[W]", player) and \
-                        (state._blasphemous_can_walk_on_root(player) or \
-                            state._blasphemous_can_cross_gap(difficulty, player, 3)))))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            or (
+                state._blasphemous_pillar(player)
+                and (
+                    state.has("D01Z05S25[E]", player)
+                    or state.has("D01Z05S25[W]", player)
+                    and (
+                        state._blasphemous_can_walk_on_root(player)
+                        or state._blasphemous_can_cross_gap(difficulty, player, 3)
+                    )
+                )
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D01Z05S25[NE]", player),
-        lambda state: state.has("Linen of Golden Thread", player) or \
-            state.has("D01Z05S25[SW]", player) or \
-                state.has("D01Z05S25[SE]", player))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            or state.has("D01Z05S25[SW]", player)
+            or state.has("D01Z05S25[SE]", player)
+        ))
     set_rule(world.get_entrance("D01Z05S25[W]", player),
-        lambda state: (state.has("Linen of Golden Thread", player) and \
-            (state._blasphemous_can_walk_on_root(player) or \
-                state.has("Purified Hand of the Nun", player) or \
-                    state._blasphemous_can_air_stall(difficulty, player))) or \
-                        (state.has("D01Z05S25[E]", player) and \
-                            (state._blasphemous_can_walk_on_root(player) or \
-                                state._blasphemous_can_cross_gap(difficulty, player, 3))))
+        lambda state: (
+            (
+                state.has("Linen of Golden Thread", player)
+                and (
+                    state._blasphemous_can_walk_on_root(player)
+                    or state.has("Purified Hand of the Nun", player)
+                    or state._blasphemous_can_air_stall(difficulty, player)
+                )
+            )
+            or (
+                state.has("D01Z05S25[E]", player)
+                and (
+                    state._blasphemous_can_walk_on_root(player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 3)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D01Z05S25[E]", player),
-        lambda state: state._blasphemous_can_break_tirana(difficulty, player) and \
-            (state.has("Linen of Golden Thread", player) or \
-                state.has("D01Z05S25[W]", player) and \
-                    (state._blasphemous_can_walk_on_root(player) or \
-                        state._blasphemous_can_cross_gap(difficulty, player, 3))))
+        lambda state: (
+            state._blasphemous_can_break_tirana(difficulty, player)
+            and (
+                state.has("Linen of Golden Thread", player)
+                or state.has("D01Z05S25[W]", player)
+                and (
+                    state._blasphemous_can_walk_on_root(player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 3)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D01Z05S25[SW]", player),
-        lambda state: state.has("D01Z05S25[SE]", player) or \
-            state.has("D01Z05S25[NE]", player) or \
-                state.has("Linen of Golden Thread", player))
+        lambda state: (
+            state.has("D01Z05S25[SE]", player)
+            or state.has("D01Z05S25[NE]", player)
+            or state.has("Linen of Golden Thread", player)
+        ))
     set_rule(world.get_entrance("D01Z05S25[SE]", player),
-        lambda state: state.has("D01Z05S25[SW]", player) or \
-            state.has("D01Z05S25[NE]", player) or \
-                state.has("Linen of Golden Thread", player))
+        lambda state: (
+            state.has("D01Z05S25[SW]", player)
+            or state.has("D01Z05S25[NE]", player)
+            or state.has("Linen of Golden Thread", player)
+        ))
     set_rule(world.get_entrance("D01Z05S25[EchoesW]", player),
         lambda state: state.has("D01Z05S25[EchoesE]", player))
     add_rule(world.get_entrance("D01Z05S25[EchoesW]", player),
-        lambda state: (state.has("D01Z05S25[EchoesE]", player) and \
-            (state.has("Blood Perpetuated in Sand", player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 8))) or \
-                    state.has_all({"Linen of Golden Thread", "Purified Hand of the Nun"}, player))
+        lambda state: (
+            (
+                state.has("D01Z05S25[EchoesE]", player)
+                and (
+                    state.has("Blood Perpetuated in Sand", player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 8)
+                )
+            )
+            or state.has_all({"Linen of Golden Thread", "Purified Hand of the Nun"}, player)
+        ))
     set_rule(world.get_entrance("D01Z05S25[EchoesE]", player),
         lambda state: state.has("D01Z05S25[EchoesW]", player))
     add_rule(world.get_entrance("D01Z05S25[EchoesE]", player),
-        lambda state: (state.has("D01Z05S25[EchoesW]", player) and \
-            (state.has("Blood Perpetuated in Sand", player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 8))) or \
-                    state.has_all({"Linen of Golden Thread", "Purified Hand of the Nun"}, player))
+        lambda state: (
+            (
+                state.has("D01Z05S25[EchoesW]", player)
+                and (
+                    state.has("Blood Perpetuated in Sand", player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 8)
+                )
+            )
+            or state.has_all({"Linen of Golden Thread", "Purified Hand of the Nun"}, player)
+        ))
 
 
     # D01Z06S01 (Petrous)
@@ -897,64 +995,108 @@ def rules(blasphemousworld):
     # D02Z01S01 (Where Olive Trees Wither)
     # Items
     set_rule(world.get_location("WOTW: Below Prie Dieu", player),
-        lambda state: state.has("D02Z01S01[W]", player) or \
-            state.has("D02Z01S01[CherubsL]", player) or \
-                state.has("D02Z01S01[SW]", player) or \
-                    state.has("D02Z01S01[CherubsR]", player) or \
-                        state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D02Z01S01[W]", player)
+            or state.has("D02Z01S01[CherubsL]", player)
+            or state.has("D02Z01S01[SW]", player)
+            or state.has("D02Z01S01[CherubsR]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_location("WOTW: Gemino's gift", player),
-        lambda state: state.has("D02Z01S01[W]", player) or \
-            state.has("D02Z01S01[CherubsL]", player) or \
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-                    ((state.has("D02Z01S01[SW]", player) or \
-                        state.has("D02Z01S01[CherubsR]", player)) and \
-                            state._blasphemous_can_dawn_jump(difficulty, player)))
+        lambda state: (
+            state.has("D02Z01S01[W]", player)
+            or state.has("D02Z01S01[CherubsL]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            or (
+                (
+                    state.has("D02Z01S01[SW]", player)
+                    or state.has("D02Z01S01[CherubsR]", player)
+                )
+                and state._blasphemous_can_dawn_jump(difficulty, player)
+            )
+        ))
     set_rule(world.get_location("WOTW: Gemino's reward", player),
-        lambda state: state.has("Golden Thimble Filled with Burning Oil", player) and \
-            (state.has("D02Z01S01[W]", player) or \
-                state.has("D02Z01S01[CherubsL]", player) or \
-                    state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-                        ((state.has("D02Z01S01[SW]", player) or \
-                            state.has("D02Z01S01[CherubsR]", player)) and \
-                                state._blasphemous_can_dawn_jump(difficulty, player))))
+        lambda state: (
+            state.has("Golden Thimble Filled with Burning Oil", player)
+            and (
+                state.has("D02Z01S01[W]", player)
+                or state.has("D02Z01S01[CherubsL]", player)
+                or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+                or (
+                    (
+                        state.has("D02Z01S01[SW]", player)
+                        or state.has("D02Z01S01[CherubsR]", player)
+                    )
+                    and state._blasphemous_can_dawn_jump(difficulty, player)
+                )
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z01S01[SW]", player),
-        lambda state: state.has("OpenedWOTWCave", player) and \
-            (state.has("D02Z01S01[W]", player) or \
-                state.has("D02Z01S01[CherubsL]", player) or \
-                    state.has("D02Z01S01[CherubsR]", player) or \
-                        state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)))
+        lambda state: (
+            state.has("OpenedWOTWCave", player)
+            and (
+                state.has("D02Z01S01[W]", player)
+                or state.has("D02Z01S01[CherubsL]", player)
+                or state.has("D02Z01S01[CherubsR]", player)
+                or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            )
+        ))
     set_rule(world.get_entrance("D02Z01S01[W]", player),
-        lambda state: state.has("D02Z01S01[CherubsL]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-                ((state.has("D02Z01S01[SW]", player) or \
-                    state.has("D02Z01S01[CherubsR]", player)) and \
-                        state._blasphemous_can_dawn_jump(difficulty, player)))
+        lambda state: (
+            state.has("D02Z01S01[CherubsL]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            or (
+                (
+                    state.has("D02Z01S01[SW]", player)
+                    or state.has("D02Z01S01[CherubsR]", player)
+                )
+                and state._blasphemous_can_dawn_jump(difficulty, player)
+            )
+        ))
 
 
     # D02Z01S02 (Where Olive Trees Wither)
     # Items
     set_rule(world.get_location("WOTW: Upper east Child of Moonlight", player),
-        lambda state: state.has("D02Z01S02[NE]", player) or \
-            (state.has("D02Z01S02[NW]", player) or \
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)) and \
-                    (state._blasphemous_can_walk_on_root(player) or \
-                        state._blasphemous_can_cross_gap(difficulty, player, 4) or \
-                            state._blasphemous_pillar(player)))
+        lambda state: (
+            state.has("D02Z01S02[NE]", player)
+            or (
+                state.has("D02Z01S02[NW]", player)
+                or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            )
+            and (
+                state._blasphemous_can_walk_on_root(player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 4)
+                or state._blasphemous_pillar(player)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z01S02[NW]", player),
-        lambda state: state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-            (state.has("D02Z01S02[NE]", player) and \
-                state._blasphemous_can_walk_on_root(player) and \
-                    state._blasphemous_can_cross_gap(difficulty, player, 5)))
+        lambda state: (
+            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            or (
+                state.has("D02Z01S02[NE]", player)
+                and state._blasphemous_can_walk_on_root(player)
+                and state._blasphemous_can_cross_gap(difficulty, player, 5)
+            )
+        ))
     set_rule(world.get_entrance("D02Z01S02[NE]", player),
-        lambda state: (state.has("Purified Hand of the Nun", player) and \
-            state._blasphemous_can_enemy_bounce(difficulty, enemy)) or \
-                (state.has("D02Z01S02[NW]", player) or \
-                    state.has("Wall Climb Ability", player) or \
-                        state.has("Purified Hand of the Nun", player)) and \
-                            (state._blasphemous_can_walk_on_root(player) or \
-                                state._blasphemous_can_cross_gap(difficulty, player, 10)))
+        lambda state: (
+            (
+                state.has("Purified Hand of the Nun", player)
+                and state._blasphemous_can_enemy_bounce(difficulty, enemy)
+            )
+            or (
+                state.has("D02Z01S02[NW]", player)
+                or state.has("Wall Climb Ability", player)
+                or state.has("Purified Hand of the Nun", player)
+            )
+            and (
+                state._blasphemous_can_walk_on_root(player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 10)
+            )
+        ))
     set_rule(world.get_entrance("D02Z01S02[]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
@@ -963,62 +1105,100 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D02Z01S03[W]", player),
-        lambda state: state.has("D02Z01S03[SE]", player) or \
-            state.has("D02Z01S03[Cherubs]", player) or \
-                state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z01S03[SE]", player)
+            or state.has("D02Z01S03[Cherubs]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D02Z01S03[SE]", player),
-        lambda state: state.has("D02Z01S03[W]", player) or \
-            state.has("D02Z01S03[Cherubs]", player) or \
-                state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z01S03[W]", player)
+            or state.has("D02Z01S03[Cherubs]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
 
 
     # D02Z01S04 (Where Olive Trees Wither)
     # Items
     set_rule(world.get_location("WOTW: Gift for the tomb", player),
-        lambda state: state.has("Golden Thimble Filled with Burning Oil", player) and \
-            (state.has("D02Z01S01[W]", player) or \
-                state.has("D02Z01S01[CherubsL]", player) or \
-                    state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-                        ((state.has("D02Z01S01[SW]", player) or \
-                            state.has("D02Z01S01[CherubsR]", player)) and \
-                                state._blasphemous_can_dawn_jump(difficulty, player))))
+        lambda state: (
+            state.has("Golden Thimble Filled with Burning Oil", player)
+            and (
+                state.has("D02Z01S01[W]", player)
+                or state.has("D02Z01S01[CherubsL]", player)
+                or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+                or (
+                    (
+                        state.has("D02Z01S01[SW]", player)
+                        or state.has("D02Z01S01[CherubsR]", player)
+                    )
+                    and state._blasphemous_can_dawn_jump(difficulty, player)
+                )
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z01S04[-N]", player),
-        lambda state: state.has("Golden Thimble Filled with Burning Oil", player) and \
-            (state.has("D02Z01S01[W]", player) or \
-                state.has("D02Z01S01[CherubsL]", player) or \
-                    state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-                        ((state.has("D02Z01S01[SW]", player) or \
-                            state.has("D02Z01S01[CherubsR]", player)) and \
-                                state._blasphemous_can_dawn_jump(difficulty, player))))
+        lambda state: (
+            state.has("Golden Thimble Filled with Burning Oil", player)
+            and (
+                state.has("D02Z01S01[W]", player)
+                or state.has("D02Z01S01[CherubsL]", player)
+                or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+                or (
+                    (
+                        state.has("D02Z01S01[SW]", player)
+                        or state.has("D02Z01S01[CherubsR]", player)
+                    ) 
+                    and state._blasphemous_can_dawn_jump(difficulty, player)
+                )
+            )
+        ))
 
 
     # D02Z01S06 (Where Olive Trees Wither)
     # Items
     set_rule(world.get_location("WOTW: Underground ledge", player),
-        lambda state: state.has_all({"Wall Climb Ability", "Blood Perpetuated in Sand"}, player) and \
-            (state.has("Dash Ability", player) or \
-                state.has("D02Z01S06[Cherubs]", player)) or \
-                    state.has("Purified Hand of the Nun", player) and \
-                        (state.has("D02Z01S06[Cherubs]", player) or \
-                            state.has("D02Z01S06[E]", player) or \
-                                state.has_any({"Wall Climb Ability", "Dash Ability"}, player)))
+        lambda state: (
+            state.has_all({"Wall Climb Ability", "Blood Perpetuated in Sand"}, player)
+            and (
+                state.has("Dash Ability", player)
+                or state.has("D02Z01S06[Cherubs]", player)
+            )
+            or state.has("Purified Hand of the Nun", player)
+            and (
+                state.has("D02Z01S06[Cherubs]", player)
+                or state.has("D02Z01S06[E]", player)
+                or state.has_any({"Wall Climb Ability", "Dash Ability"}, player)
+            )
+        ))
     set_rule(world.get_location("WOTW: Underground Child of Moonlight", player),
-        lambda state: (state.has("D02Z01S06[W]", player) or \
-            state.has("Dash Ability", player) or \
-                state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player)) and \
-                    (state._blasphemous_pillar(player) or \
-                        state.has("Cante Jondo of the Three Sisters", player)) or \
-                            (state.has("D02Z01S06[W]", player) or \
-                                state.has_any({"Purified Hand of the Nun", "Dash Ability"}, player)) and \
-                                    state.has("Wall Climb Ability", player) and \
-                                        (state.has_any({"Lorquiana", "Cantina of the Blue Rose"}, player) or \
-                                            state._blasphemous_aubade(player) or \
-                                                state._blasphemous_can_air_stall(difficulty, player)))
+        lambda state: (
+            (
+                state.has("D02Z01S06[W]", player)
+                or state.has("Dash Ability", player)
+                or state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            )
+            and (
+                state._blasphemous_pillar(player)
+                or state.has("Cante Jondo of the Three Sisters", player)
+            )
+            or (
+                state.has("D02Z01S06[W]", player)
+                or state.has_any({"Purified Hand of the Nun", "Dash Ability"}, player)
+            )
+            and state.has("Wall Climb Ability", player)
+            and (
+                state.has_any({"Lorquiana", "Cantina of the Blue Rose"}, player)
+                or state._blasphemous_aubade(player)
+                or state._blasphemous_can_air_stall(difficulty, player)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z01S06[W]", player),
-        lambda state: state.has("Dash Ability", player) or \
-            state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("Dash Ability", player)
+            or state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D02Z01S06[E]", player),
         lambda state: state.has("Wall Climb Ability", player))
     # Event
@@ -1036,62 +1216,88 @@ def rules(blasphemousworld):
     # D02Z01S09 (Where Olive Trees Wither)
     # Items
     set_rule(world.get_location("WOTW: Upper east statue", player),
-        lambda state: state._blasphemous_can_walk_on_root(player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 11) or \
-                state.has("Purified Hand of the Nun", player) and \
-                    state._blasphemous_can_enemy_bounce(difficulty, enemy))
+        lambda state: (
+            state._blasphemous_can_walk_on_root(player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 11)
+            or state.has("Purified Hand of the Nun", player)
+            and state._blasphemous_can_enemy_bounce(difficulty, enemy)
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z01S09[-CherubsL]", player),
         lambda state: state.has("Linen of Golden Thread", player))
     set_rule(world.get_entrance("D02Z01S09[-CherubsR]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state._blasphemous_can_walk_on_root(player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 2) or \
-                    state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
-                        state._blasphemous_can_air_stall(difficulty, player)))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state._blasphemous_can_walk_on_root(player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 2)
+                or state._blasphemous_can_enemy_bounce(difficulty, enemy)
+                and state._blasphemous_can_air_stall(difficulty, player)
+            )
+        ))
 
 
     # D02Z02S01 (Graveyard of the Peaks)
     # No items
     # Doors
     set_rule(world.get_entrance("D02Z02S01[W]", player),
-        lambda state: state.has("D02Z02S01[NW]", player) or \
-            state.has("D02Z02S01[Cherubs]", player) or \
-                state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D02Z02S01[NW]", player)
+            or state.has("D02Z02S01[Cherubs]", player)
+            or state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D02Z02S01[NW]", player),
-        lambda state: state.has("D02Z02S01[Cherubs]", player) or \
-            state.has("Wall Climb Ability", player) and \
-                (state.has("D02Z02S01[W]", player) or \
-                    state.has("Dash Ability", player)))
+        lambda state: (
+            state.has("D02Z02S01[Cherubs]", player)
+            or state.has("Wall Climb Ability", player)
+            and (
+                state.has("D02Z02S01[W]", player)
+                or state.has("Dash Ability", player)
+            )
+        ))
     set_rule(world.get_entrance("D02Z02S01[E]", player),
-        lambda state: state.has("D02Z02S01[NW]", player) or \
-            state.has("D02Z02S01[Cherubs]", player) or \
-                state.has_any({"Wall Climb Ability", "Dash Ability"}, player))
+        lambda state: (
+            state.has("D02Z02S01[NW]", player)
+            or state.has("D02Z02S01[Cherubs]", player)
+            or state.has_any({"Wall Climb Ability", "Dash Ability"}, player)
+        ))
 
 
     # D02Z02S02 (Graveyard of the Peaks)
     # Items
     set_rule(world.get_location("GotP: Center shaft Child of Moonlight", player),
-        lambda state: state.has("D02Z02S02[CherubsL]", player) or \
-            state.has("D02Z02S02[CherubsR]", player) or \
-                ((state.has("D02Z02S02[NW]", player) or \
-                    state.has("D02Z02S02[NE]", player) or \
-                        state.has("Wall Climb Ability", player)) and \
-                            (state.has_any({"Purified Hand of the Nun", "Cante Jondo of the Three Sisters"}, player) or \
-                                state._blasphemous_pillar(player) or \
-                                    state._blasphemous_tirana(player) or \
-                                        state._blasphemous_can_dive_laser(difficulty, player))))
+        lambda state: (
+            state.has("D02Z02S02[CherubsL]", player)
+            or state.has("D02Z02S02[CherubsR]", player)
+            or (
+                (
+                    state.has("D02Z02S02[NW]", player)
+                    or state.has("D02Z02S02[NE]", player)
+                    or state.has("Wall Climb Ability", player)
+                )
+                and (
+                    state.has_any({"Purified Hand of the Nun", "Cante Jondo of the Three Sisters"}, player)
+                    or state._blasphemous_pillar(player)
+                    or state._blasphemous_tirana(player)
+                    or state._blasphemous_can_dive_laser(difficulty, player)
+                )
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z02S02[NW]", player),
-        lambda state: state.has("D02Z02S02[NE]", player) or \
-            state.has("D02Z02S02[CherubsL]", player) or \
-                state.has("D02Z02S02[CherubsR]", player) or \
-                    state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z02S02[NE]", player)
+            or state.has("D02Z02S02[CherubsL]", player)
+            or state.has("D02Z02S02[CherubsR]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D02Z02S02[NE]", player),
-        lambda state: state.has("D02Z02S02[NW]", player) or \
-            state.has("D02Z02S02[CherubsL]", player) or \
-                state.has("D02Z02S02[CherubsR]", player) or \
-                    state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z02S02[NW]", player)
+            or state.has("D02Z02S02[CherubsL]", player)
+            or state.has("D02Z02S02[CherubsR]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D02Z02S02[-CherubsR]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
@@ -1099,34 +1305,60 @@ def rules(blasphemousworld):
     # D02Z02S03 (Graveyard of the Peaks)
     # Items
     set_rule(world.get_location("GotP: Lower east shaft", player),
-        lambda state: state.has("D02Z02S03[NW]", player) or \
-            state.has("D02Z02S03[NE]", player) or \
-                state.has("Wall Climb Ability", player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 2))
+        lambda state: (
+            state.has("D02Z02S03[NW]", player)
+            or state.has("D02Z02S03[NE]", player)
+            or state.has("Wall Climb Ability", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 2)
+        ))
     set_rule(world.get_location("GotP: Center east shaft", player),
-        lambda state: state.has("D02Z02S03[NW]", player) or \
-            state.has("D02Z02S03[NE]", player) or \
-                state.has_any({"Wall Climb Ability", "Purified Hand of the Nun"}, player))
+        lambda state: (
+            state.has("D02Z02S03[NW]", player)
+            or state.has("D02Z02S03[NE]", player)
+            or state.has_any({"Wall Climb Ability", "Purified Hand of the Nun"}, player)
+        ))
     set_rule(world.get_location("GotP: Upper east shaft", player),
-        lambda state: (state._blasphemous_can_climb_on_root(player) and \
-            state.has("Purified Hand of the Nun", player)) or \
-                (state.has("Blood Perpetuated in Sand", player) and \
-                    (state.has("Purified Hand of the Nun", player) or \
-                        state._blasphemous_can_climb_on_root(player))))
+        lambda state: (
+            (
+                state._blasphemous_can_climb_on_root(player)
+                and state.has("Purified Hand of the Nun", player)
+            )
+            or (
+                state.has("Blood Perpetuated in Sand", player)
+                and (
+                    state.has("Purified Hand of the Nun", player)
+                    or state._blasphemous_can_climb_on_root(player)
+                )
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z02S03[NW]", player),
-        lambda state: state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-            state.has("D02Z02S03[NE]", player) and \
-                state._blasphemous_can_walk_on_root(player))
+        lambda state: (
+            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            or state.has("D02Z02S03[NE]", player)
+            and state._blasphemous_can_walk_on_root(player)
+        ))
     set_rule(world.get_entrance("D02Z02S03[NE]", player),
-        lambda state: state.has("Wall Climb Ability", player) and \
-            (state._blasphemous_can_cross_gap(difficulty, player, 11) or \
-                (state.has("Blood Perpetuated in Sand", player) and \
-                    (state._blasphemous_can_walk_on_root(player) or \
-                        state._blasphemous_can_cross_gap(difficulty, player, 7))) or \
-                            (state._blasphemous_can_walk_on_root(player) and \
-                                (state.has("Purified Hand of the Nun", player) or \
-                                    state._blasphemous_can_air_stall(difficulty, player)))))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            and (
+                state._blasphemous_can_cross_gap(difficulty, player, 11)
+                or (
+                    state.has("Blood Perpetuated in Sand", player)
+                    and (
+                        state._blasphemous_can_walk_on_root(player)
+                        or state._blasphemous_can_cross_gap(difficulty, player, 7)
+                    )
+                )
+                or (
+                    state._blasphemous_can_walk_on_root(player)
+                    and (
+                        state.has("Purified Hand of the Nun", player)
+                        or state._blasphemous_can_air_stall(difficulty, player)
+                    )
+                )
+            )
+        ))
     set_rule(world.get_entrance("D02Z02S03[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
@@ -1136,83 +1368,135 @@ def rules(blasphemousworld):
     set_rule(world.get_location("GotP: Lower west shaft", player),
         lambda state: state.has("D02Z02S04[E]", player))
     set_rule(world.get_location("GotP: Upper west shaft", player),
-        lambda state: state.has("D02Z02S04[NE]", player) or \
-            ((state.has("D02Z02S04[W]", player) or \
-                state.has("D02Z02S04[E]", player) and \
-                    state.has("Dash Ability", player)) and \
-                        (state.has("Purified Hand of the Nun", player) or \
-                            state.has("Wall Climb Ability", player))) or \
-                                (state.has("D02Z02S04[SE]", player) and \
-                                    (state.has("Wall Climb Ability", player) or \
-                                        state.has("Purified Hand of the Nun", player) and \
-                                            state._blasphemous_can_enemy_upslash(difficulty, enemy, player))))
+        lambda state:
+        (
+            state.has("D02Z02S04[NE]", player)
+            or (
+                (
+                    state.has("D02Z02S04[W]", player)
+                    or state.has("D02Z02S04[E]", player)
+                    and state.has("Dash Ability", player)
+                )
+                and (
+                    state.has("Purified Hand of the Nun", player)
+                    or state.has("Wall Climb Ability", player)
+                )
+            )
+            or (
+                state.has("D02Z02S04[SE]", player)
+                and (
+                    state.has("Wall Climb Ability", player)
+                    or state.has("Purified Hand of the Nun", player)
+                    and state._blasphemous_can_enemy_upslash(difficulty, enemy, player)
+                )
+            )
+        ))
     set_rule(world.get_location("GotP: West shaft Child of Moonlight", player),
-        lambda state: (state.has("D02Z02S04[NE]", player) or \
-            state.has("D02Z02S04[W]", player) or \
-                state.has("D02Z02S04[E]", player) and \
-                    state.has("Dash Ability", player) or \
-                        state.has("D02Z02S04[SE]", player) and \
-                            (state.has("Wall Climb Ability", player) or \
-                                state.has("Purified Hand of the Nun", player) and \
-                                    state._blasphemous_can_enemy_upslash(difficulty, enemy, player))) and \
-                                        (state.has("Blood Perpetuated in Sand", player) and \
-                                            state.has("Dash Ability", player) or \
-                                                state.has("Purified Hand of the Nun", player) and \
-                                                    state._blasphemous_can_enemy_bounce(difficulty, enemy) or \
-                                                        state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Cantina of the Blue Rose"}, player) or \
-                                                            state._blasphemous_aubade(player)) or \
-                                                                (state.has("D02Z02S04[NE]", player) or \
-                                                                    state.has("D02Z02S04[W]", player) or \
-                                                                        state.has("D02Z02S04[E]", player) and \
-                                                                            state.has("Dash Ability", player) or \
-                                                                                state.has("D02Z02S04[SE]", player)) and \
-                                                                                    state._blasphemous_pillar(player))
+        lambda state: 
+        (
+            (
+                state.has("D02Z02S04[NE]", player)
+                or state.has("D02Z02S04[W]", player)
+                or state.has("D02Z02S04[E]", player)
+                and state.has("Dash Ability", player)
+                or state.has("D02Z02S04[SE]", player)
+                and (
+                    state.has("Wall Climb Ability", player)
+                    or state.has("Purified Hand of the Nun", player)
+                    and state._blasphemous_can_enemy_upslash(difficulty, enemy, player)
+                )
+            )
+            and (
+                state.has("Blood Perpetuated in Sand", player)
+                and state.has("Dash Ability", player)
+                or state.has("Purified Hand of the Nun", player)
+                and state._blasphemous_can_enemy_bounce(difficulty, enemy)
+                or state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Cantina of the Blue Rose"}, player)
+                or state._blasphemous_aubade(player)
+            )
+            or (
+                state.has("D02Z02S04[NE]", player)
+                or state.has("D02Z02S04[W]", player)
+                or state.has("D02Z02S04[E]", player)
+                and state.has("Dash Ability", player)
+                or state.has("D02Z02S04[SE]", player)
+            )
+            and state._blasphemous_pillar(player)
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z02S04[W]", player),
-        lambda state: state.has("D02Z02S04[NE]", player) or \
-            state.has("D02Z02S04[E]", player) and \
-                state.has("Dash Ability", player) or \
-                    state.has("D02Z02S04[SE]", player) and \
-                        (state.has("Wall Climb Ability", player) or \
-                            state.has("Purified Hand of the Nun", player) and \
-                                state._blasphemous_can_enemy_upslash(difficulty, enemy, player)))
+        lambda state: (
+            state.has("D02Z02S04[NE]", player)
+            or state.has("D02Z02S04[E]", player)
+            and state.has("Dash Ability", player)
+            or state.has("D02Z02S04[SE]", player)
+            and (
+                state.has("Wall Climb Ability", player)
+                or state.has("Purified Hand of the Nun", player)
+                and state._blasphemous_can_enemy_upslash(difficulty, enemy, player)
+            )
+        ))
     set_rule(world.get_entrance("D02Z02S04[SE]", player),
-        lambda state: state.has("D02Z02S04[NE]", player) or \
-            state.has("D02Z02S04[W]", player) or \
-                state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D02Z02S04[NE]", player)
+            or state.has("D02Z02S04[W]", player)
+            or state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D02Z02S04[NE]", player),
-        lambda state: ((state.has("D02Z02S04[W]", player) or \
-            state.has("D02Z02S04[E]", player) and \
-                state.has("Dash Ability", player)) and \
-                    state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)) or \
-                        (state.has("D02Z02S04[SE]", player) and \
-                            (state.has("Wall Climb Ability", player) or \
-                                state.has("Purified Hand of the Nun", player) and \
-                                    state._blasphemous_can_enemy_upslash(difficulty, enemy, player))))
+        lambda state: (
+            (
+                (
+                    state.has("D02Z02S04[W]", player)
+                    or state.has("D02Z02S04[E]", player)
+                    and state.has("Dash Ability", player)
+                )
+                and state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            )
+            or (
+                state.has("D02Z02S04[SE]", player)
+                and (
+                    state.has("Wall Climb Ability", player)
+                    or state.has("Purified Hand of the Nun", player)
+                    and state._blasphemous_can_enemy_upslash(difficulty, enemy, player)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D02Z02S04[-CherubsL]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D02Z02S04[NE]", player) or \
-                state.has("D02Z02S04[W]", player) or \
-                    state.has("D02Z02S04[SE]", player) or \
-                        state.has("Dash Ability", player)))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D02Z02S04[NE]", player)
+                or state.has("D02Z02S04[W]", player)
+                or state.has("D02Z02S04[SE]", player)
+                or state.has("Dash Ability", player)
+            )
+        ))
 
 
     # D02Z02S05 (Graveyard of the Peaks)
     # Items
     set_rule(world.get_location("GotP: Center shaft ledge", player),
-        lambda state: state.has("D02Z02S05[NW]", player) or \
-            state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z02S05[NW]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z02S05[W]", player),
-        lambda state: state.has("Purified Hand of the Nun", player) and \
-            state._blasphemous_can_enemy_bounce(difficulty, enemy))
+        lambda state: (
+            state.has("Purified Hand of the Nun", player)
+            and state._blasphemous_can_enemy_bounce(difficulty, enemy)
+        ))
     set_rule(world.get_entrance("D02Z02S05[E]", player),
-        lambda state: state.has("D02Z02S05[NW]", player) or \
-            state.has("D02Z02S05[E]", player) or \
-                state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z02S05[NW]", player)
+            or state.has("D02Z02S05[E]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D02Z02S05[NW]", player),
-        lambda state: state.has("D02Z02S05[NW]", player) or \
-            state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z02S05[NW]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D02Z02S05[-CherubsL]", player),
         lambda state: state.has("Linen of Golden Thread", player))
     set_rule(world.get_entrance("D02Z02S05[-CherubsR]", player),
@@ -1222,15 +1506,19 @@ def rules(blasphemousworld):
     # D02Z02S08 (Graveyard of the Peaks)
     # Items
     set_rule(world.get_location("GotP: Shop cave hidden hole", player),
-        lambda state: state.has("D02Z02S08[CherubsR]", player) or \
-            state.has("Blood Perpetuated in Sand", player) or \
-                state._blasphemous_can_break_holes(player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 8))
+        lambda state: (
+            state.has("D02Z02S08[CherubsR]", player)
+            or state.has("Blood Perpetuated in Sand", player)
+            or state._blasphemous_can_break_holes(player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 8)
+        ))
     set_rule(world.get_location("GotP: Shop cave Child of Moonlight", player),
-        lambda state: state.has("D02Z02S08[CherubsR]", player) or \
-            state.has("Blood Perpetuated in Sand", player) or \
-                state._blasphemous_pillar(player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 8))
+        lambda state: (
+            state.has("D02Z02S08[CherubsR]", player)
+            or state.has("Blood Perpetuated in Sand", player)
+            or state._blasphemous_pillar(player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 8)
+        ))
     # No doors
 
 
@@ -1238,9 +1526,11 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D02Z02S11[E]", player),
-        lambda state: state.has("D02Z02S11[NW]", player) or \
-            state.has("D02Z02S11[NE]", player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 6))
+        lambda state: (
+            state.has("D02Z02S11[NW]", player)
+            or state.has("D02Z02S11[NE]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 6)
+        ))
     set_rule(world.get_entrance("D02Z02S11[NW]", player),
         lambda state: state.has("D02Z02S11[NE]", player))
     set_rule(world.get_entrance("D02Z02S11[NE]", player),
@@ -1262,19 +1552,27 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D02Z03S02[W]", player),
-        lambda state: state.has("D02Z03S02[NW]", player) or \
-            state.has("D02Z03S02[NE]", player) or \
-                state.has("D02Z03S02[N]", player) or \
-                    state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D02Z03S02[NW]", player)
+            or state.has("D02Z03S02[NE]", player)
+            or state.has("D02Z03S02[N]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D02Z03S02[NW]", player),
-        lambda state: state.has("D02Z03S02[NE]", player) or \
-            state.has("D02Z03S02[N]", player))
+        lambda state: (
+            state.has("D02Z03S02[NE]", player)
+            or state.has("D02Z03S02[N]", player)
+        ))
     set_rule(world.get_entrance("D02Z03S02[NE]", player),
-        lambda state: state.has("D02Z03S02[NW]", player) or \
-            state.has("D02Z03S02[N]", player))
+        lambda state: (
+            state.has("D02Z03S02[NW]", player)
+            or state.has("D02Z03S02[N]", player)
+        ))
     set_rule(world.get_entrance("D02Z03S02[N]", player),
-        lambda state: state.has("D02Z03S02[NW]", player) or \
-            state.has("D02Z03S02[NE]", player))
+        lambda state: (
+            state.has("D02Z03S02[NW]", player)
+            or state.has("D02Z03S02[NE]", player)
+        ))
     add_rule(world.get_entrance("D02Z03S02[N]", player),
         lambda state: state.has("OpenedConventLadder", player))
 
@@ -1282,29 +1580,41 @@ def rules(blasphemousworld):
     # D02Z03S03 (Convent of Our Lady of the Charred Visage)
     # Items
     set_rule(world.get_location("CoOLotCV: Snowy window ledge", player),
-        lambda state: state.has("D02Z03S03[NW]", player) or \
-            state.has("Blood Perpetuated in Sand", player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state.has("D02Z03S03[NW]", player)
+            or state.has("Blood Perpetuated in Sand", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z03S03[NW]", player),
-        lambda state: state.has("Blood Perpetuated in Sand", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state.has("Blood Perpetuated in Sand", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
 
 
     # D02Z03S05 (Convent of Our Lady of the Charred Visage)
     # Items
     set_rule(world.get_location("CoOLotCV: Center miasma room", player),
-        lambda state: state.has("Dash Ability", player) and \
-            (state.has("D02Z03S05[S]", player) or \
-                state.has("D02Z03S05[NE]", player) or \
-                    state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)))
+        lambda state: (
+            state.has("Dash Ability", player)
+            and (
+                state.has("D02Z03S05[S]", player)
+                or state.has("D02Z03S05[NE]", player)
+                or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D02Z03S05[S]", player),
-        lambda state: state.has("D02Z03S05[NE]", player) or \
-            state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z03S05[NE]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D02Z03S05[NE]", player),
-        lambda state: state.has("D02Z03S05[S]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D02Z03S05[S]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
 
 
     # D02Z03S10 (Convent of Our Lady of the Charred Visage)
@@ -1323,8 +1633,10 @@ def rules(blasphemousworld):
     # D02Z03S12 (Convent of Our Lady of the Charred Visage)
     # Items
     set_rule(world.get_location("CoOLotCV: Lower west statue", player),
-        lambda state: state._blasphemous_can_survive_poison(difficulty, player, 1) and \
-            state.has("Dash Ability", player))
+        lambda state: (
+            state._blasphemous_can_survive_poison(difficulty, player, 1)
+            and state.has("Dash Ability", player)
+        ))
     # No doors
 
 
@@ -1332,11 +1644,15 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D02Z03S18[NW]", player),
-        lambda state: state.has("D02Z03S18[NE]", player) or \
-            state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z03S18[NE]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D02Z03S18[NE]", player),
-        lambda state: state.has("D02Z03S18[NW]", player) or \
-            state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D02Z03S18[NW]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
 
 
     # D02Z03S20 (Convent of Our Lady of the Charred Visage)
@@ -1368,58 +1684,92 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D03Z01S02[W]", player),
-        lambda state: state.has("Wall Climb Ability", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
     set_rule(world.get_entrance("D03Z01S02[E]", player),
-        lambda state: state.has("Wall Climb Ability", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 7))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 7)
+        ))
 
 
     # D03Z01S03 (Mountains of the Endless Dusk)
     # Items
     set_rule(world.get_location("MotED: Platform above chasm", player),
-        lambda state: state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player) and \
-            (state.has("D03Z01S03[W]", player) or \
-                state.has("D03Z01S03[SW]", player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 9)))
+        lambda state: (
+            state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player)
+            and (
+                state.has("D03Z01S03[W]", player)
+                or state.has("D03Z01S03[SW]", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 9)
+            )
+        ))
     set_rule(world.get_location("MotED: 1st meeting with Redento", player),
-        lambda state: state.has("D03Z01S03[W]", player) or \
-            state.has("D03Z01S03[SW]", player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 9))
+        lambda state: (
+            state.has("D03Z01S03[W]", player)
+            or state.has("D03Z01S03[SW]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 9)
+        ))
     set_rule(world.get_location("MotED: Child of Moonlight, above chasm", player),
-        lambda state: state.has("D03Z01S03[W]", player) or \
-            state.has("D03Z01S03[SW]", player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 9))
+        lambda state: (
+            state.has("D03Z01S03[W]", player)
+            or state.has("D03Z01S03[SW]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 9)
+        ))
     set_rule(world.get_location("MotED: Amanecida of the Golden Blades", player),
-        lambda state: state._blasphemous_can_beat_boss("Jondo", difficulty, player) and \
-            (state.has("D03Z01S03[W]", player) or \
-                state.has("D03Z01S03[SW]", player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 9)))
+        lambda state: (
+            state._blasphemous_can_beat_boss("Jondo", difficulty, player)
+            and (
+                state.has("D03Z01S03[W]", player)
+                or state.has("D03Z01S03[SW]", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 9)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D03Z01S03[W]", player),
-        lambda state: state.has("Wall Climb Ability", player) and \
-            (state.has("D03Z01S03[SW]", player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 9)))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            and (
+                state.has("D03Z01S03[SW]", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 9)
+            )
+        ))
     set_rule(world.get_entrance("D03Z01S03[E]", player),
         lambda state: state.has("Wall Climb Ability", player))
     set_rule(world.get_entrance("D03Z01S03[SW]", player),
-        lambda state: state.has("D03Z01S03[W]", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 9))
+        lambda state: (
+            state.has("D03Z01S03[W]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 9)
+        ))
     set_rule(world.get_entrance("D03Z01S03[-WestL]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D03Z01S03[W]", player) or \
-                state.has("D03Z01S03[SW]", player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 9)))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D03Z01S03[W]", player)
+                or state.has("D03Z01S03[SW]", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 9)
+            )
+        ))
     set_rule(world.get_entrance("D03Z01S03[-WestR]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D03Z01S03[W]", player) or \
-                state.has("D03Z01S03[SW]", player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 9)))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D03Z01S03[W]", player)
+                or state.has("D03Z01S03[SW]", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 9)
+            )
+        ))
     set_rule(world.get_entrance("D03Z01S03[-EastL]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D03Z01S03[W]", player) or \
-                state.has("D03Z01S03[SW]", player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 5)))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D03Z01S03[W]", player)
+                or state.has("D03Z01S03[SW]", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 5)
+            )
+        ))
     set_rule(world.get_entrance("D03Z01S03[-EastR]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
@@ -1427,8 +1777,10 @@ def rules(blasphemousworld):
     # D03Z01S04 (Mountains of the Endless Dusk)
     # Items
     set_rule(world.get_location("MotED: Blood platform alcove", player),
-        lambda state: state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player) or \
-            state._blasphemous_upwarp_skips_allowed(difficulty))
+        lambda state: (
+            state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player)
+            or state._blasphemous_upwarp_skips_allowed(difficulty)
+        ))
     # No doors
 
 
@@ -1449,155 +1801,221 @@ def rules(blasphemousworld):
     # D03Z02S01 (Jondo)
     # Items
     set_rule(world.get_location("Jondo: Upper east chest", player),
-        lambda state: state.has("D03Z02S01[Cherubs]", player) or \
-            state._blasphemous_can_climb_on_root(player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 8) or \
-                    state.has("Purified Hand of the Nun", player) and \
-                        state._blasphemous_can_enemy_bounce(difficulty, enemy))
+        lambda state: (
+            state.has("D03Z02S01[Cherubs]", player)
+            or state._blasphemous_can_climb_on_root(player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 8)
+            or state.has("Purified Hand of the Nun", player)
+            and state._blasphemous_can_enemy_bounce(difficulty, enemy)
+        ))
     # Doors
     set_rule(world.get_entrance("D03Z02S01[W]", player),
-        lambda state: state.has("Wall Climb Ability", player) or \
-            state.has("Purified Hand of the Nun", player) and \
-                state._blasphemous_can_enemy_bounce(difficulty, enemy))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            or state.has("Purified Hand of the Nun", player)
+            and state._blasphemous_can_enemy_bounce(difficulty, enemy)
+        ))
     set_rule(world.get_entrance("D03Z02S01[N]", player),
-        lambda state: state.has("Wall Climb Ability", player) or \
-            state.has("Purified Hand of the Nun", player))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            or state.has("Purified Hand of the Nun", player)
+        ))
 
 
     # D03Z02S02 (Jondo)
     # No items
     # Doors
     set_rule(world.get_entrance("D03Z02S02[W]", player),
-        lambda state: state.has("D03Z02S02[CherubsL]", player) or \
-            state.has("Purified Hand of the Nun", player) and \
-                (state.has("D03Z02S02[E]", player) or \
-                    state.has("D03Z02S02[CherubsR]", player) or \
-                        state.has("Wall Climb Ability", player) or \
-                            state._blasphemous_can_enemy_bounce(difficulty, enemy)))
+        lambda state: (
+            state.has("D03Z02S02[CherubsL]", player)
+            or state.has("Purified Hand of the Nun", player)
+            and (
+                state.has("D03Z02S02[E]", player)
+                or state.has("D03Z02S02[CherubsR]", player)
+                or state.has("Wall Climb Ability", player)
+                or state._blasphemous_can_enemy_bounce(difficulty, enemy)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S02[E]", player),
-        lambda state: state.has("Wall Climb Ability", player) or \
-            state.has("Purified Hand of the Nun", player) and \
-                state._blasphemous_can_enemy_bounce(difficulty, enemy))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            or state.has("Purified Hand of the Nun", player)
+            and state._blasphemous_can_enemy_bounce(difficulty, enemy)
+        ))
     
     # D03Z02S03 (Jondo)
     # No items
     # Doors
     set_rule(world.get_entrance("D03Z02S03[W]", player),
-        lambda state: state.has("Dash Ability", player) and \
-            (state.has("D03Z02S03[E]", player) or \
-                state.has("D03Z02S03[N]", player) or \
-                    state.has("D03Z02S03[SE2]", player)))
+        lambda state: (
+            state.has("Dash Ability", player)
+            and (
+                state.has("D03Z02S03[E]", player)
+                or state.has("D03Z02S03[N]", player)
+                or state.has("D03Z02S03[SE2]", player)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S03[E]", player),
-        lambda state: (state._blasphemous_can_air_stall(difficulty, player) or \
-                state.has_any({"Purified Hand of the Nun", "Boots of Pleading"}, player)) and \
-                (state.has("Dash Ability", player) or \
-                    state.has("D03Z02S03[N]", player) or \
-                        state.has("D03Z02S03[SE2]", player)))
+        lambda state: (
+            (
+                state._blasphemous_can_air_stall(difficulty, player)
+                or state.has_any({"Purified Hand of the Nun", "Boots of Pleading"}, player)
+            )
+            and (
+                state.has("Dash Ability", player)
+                or state.has("D03Z02S03[N]", player)
+                or state.has("D03Z02S03[SE2]", player)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S03[N]", player),
-        lambda state: state.has("D03Z02S03[W]", player) and \
-            state.has("Dash Ability", player) or \
-                state.has("D03Z02S03[E]", player) or \
-                    state.has("D03Z02S03[SE2]", player))
+        lambda state: (
+            state.has("D03Z02S03[W]", player)
+            and state.has("Dash Ability", player)
+            or state.has("D03Z02S03[E]", player)
+            or state.has("D03Z02S03[SE2]", player)
+        ))
     set_rule(world.get_entrance("D03Z02S03[SE2]", player),
-        lambda state: state.has("D03Z02S03[W]", player) and \
-            state.has("Dash Ability", player) or \
-                state.has("D03Z02S03[E]", player) or \
-                    state.has("D03Z02S03[N]", player))
+        lambda state: (
+            state.has("D03Z02S03[W]", player)
+            and state.has("Dash Ability", player)
+            or state.has("D03Z02S03[E]", player)
+            or state.has("D03Z02S03[N]", player)
+        ))
     set_rule(world.get_entrance("D03Z02S03[SW]", player),
-        lambda state: state.has("D03Z02S03[SE]", player) or \
-            state.has("D03Z02S03[SSL]", player) or \
-                state.has("D03Z02S03[SSR]", player) or \
-                    state.has("BrokeJondoBellW", player) and \
-                        state.has("BrokeJondoBellE", player) and \
-                            (state.has("D03Z02S03[W]", player) and \
-                                state.has("Dash Ability", player) or \
-                                    state.has("D03Z02S03[E]", player) or \
-                                        state.has("D03Z02S03[N]", player) or \
-                                            state.has("D03Z02S03[SE2]", player)))
+        lambda state: (
+            state.has("D03Z02S03[SE]", player)
+            or state.has("D03Z02S03[SSL]", player)
+            or state.has("D03Z02S03[SSR]", player)
+            or state.has("BrokeJondoBellW", player)
+            and state.has("BrokeJondoBellE", player)
+            and (
+                state.has("D03Z02S03[W]", player)
+                and state.has("Dash Ability", player)
+                or state.has("D03Z02S03[E]", player)
+                or state.has("D03Z02S03[N]", player)
+                or state.has("D03Z02S03[SE2]", player)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S03[SE]", player),
-        lambda state: state.has("D03Z02S03[SW]", player) or \
-            state.has("D03Z02S03[SSL]", player) or \
-                state.has("D03Z02S03[SSR]", player) or \
-                    state.has("BrokeJondoBellW", player) and \
-                        state.has("BrokeJondoBellE", player) and \
-                            (state.has("D03Z02S03[W]", player) and \
-                                state.has("Dash Ability", player) or \
-                                    state.has("D03Z02S03[E]", player) or \
-                                        state.has("D03Z02S03[N]", player) or \
-                                            state.has("D03Z02S03[SE2]", player)))
+        lambda state: (
+            state.has("D03Z02S03[SW]", player)
+            or state.has("D03Z02S03[SSL]", player)
+            or state.has("D03Z02S03[SSR]", player)
+            or state.has("BrokeJondoBellW", player)
+            and state.has("BrokeJondoBellE", player)
+            and (
+                state.has("D03Z02S03[W]", player)
+                and state.has("Dash Ability", player)
+                or state.has("D03Z02S03[E]", player)
+                or state.has("D03Z02S03[N]", player)
+                or state.has("D03Z02S03[SE2]", player)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S03[SSL]", player),
-        lambda state: state.has("D03Z02S03[SW]", player) or \
-            state.has("D03Z02S03[SE]", player) or \
-                state.has("D03Z02S03[SSR]", player) or \
-                    state.has("BrokeJondoBellW", player) and \
-                        state.has("BrokeJondoBellE", player) and \
-                            (state.has("D03Z02S03[W]", player) and \
-                                state.has("Dash Ability", player) or \
-                                    state.has("D03Z02S03[E]", player) or \
-                                        state.has("D03Z02S03[N]", player) or \
-                                            state.has("D03Z02S03[SE2]", player)))
+        lambda state: (
+            state.has("D03Z02S03[SW]", player)
+            or state.has("D03Z02S03[SE]", player)
+            or state.has("D03Z02S03[SSR]", player)
+            or state.has("BrokeJondoBellW", player)
+            and state.has("BrokeJondoBellE", player)
+            and (
+                state.has("D03Z02S03[W]", player)
+                and state.has("Dash Ability", player)
+                or state.has("D03Z02S03[E]", player)
+                or state.has("D03Z02S03[N]", player)
+                or state.has("D03Z02S03[SE2]", player)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S03[SSC]", player),
-        lambda state: state.has("D03Z02S03[SW]", player) or \
-            state.has("D03Z02S03[SE]", player) or \
-                state.has("D03Z02S03[SSL]", player) or \
-                    state.has("D03Z02S03[SSR]", player) or \
-                        state.has("BrokeJondoBellW", player) and \
-                            state.has("BrokeJondoBellE", player) and \
-                                (state.has("D03Z02S03[W]", player) and \
-                                    state.has("Dash Ability", player) or \
-                                        state.has("D03Z02S03[E]", player) or \
-                                            state.has("D03Z02S03[N]", player) or \
-                                                state.has("D03Z02S03[SE2]", player)))
+        lambda state: (
+            state.has("D03Z02S03[SW]", player)
+            or state.has("D03Z02S03[SE]", player)
+            or state.has("D03Z02S03[SSL]", player)
+            or state.has("D03Z02S03[SSR]", player)
+            or state.has("BrokeJondoBellW", player)
+            and state.has("BrokeJondoBellE", player)
+            and (
+                state.has("D03Z02S03[W]", player)
+                and state.has("Dash Ability", player)
+                or state.has("D03Z02S03[E]", player)
+                or state.has("D03Z02S03[N]", player)
+                or state.has("D03Z02S03[SE2]", player)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S03[SSR]", player),
-        lambda state: state.has("D03Z02S03[SW]", player) or \
-            state.has("D03Z02S03[SE]", player) or \
-                state.has("D03Z02S03[SSL]", player) or \
-                    state.has("BrokeJondoBellW", player) and \
-                        state.has("BrokeJondoBellE", player) and \
-                            (state.has("D03Z02S03[W]", player) and \
-                                state.has("Dash Ability", player) or \
-                                    state.has("D03Z02S03[E]", player) or \
-                                        state.has("D03Z02S03[N]", player) or \
-                                            state.has("D03Z02S03[SE2]", player)))
+        lambda state: (
+            state.has("D03Z02S03[SW]", player)
+            or state.has("D03Z02S03[SE]", player)
+            or state.has("D03Z02S03[SSL]", player)
+            or state.has("BrokeJondoBellW", player)
+            and state.has("BrokeJondoBellE", player)
+            and (
+                state.has("D03Z02S03[W]", player)
+                and state.has("Dash Ability", player)
+                or state.has("D03Z02S03[E]", player)
+                or state.has("D03Z02S03[N]", player)
+                or state.has("D03Z02S03[SE2]", player)
+            )
+        ))
 
 
     # D03Z02S04 (Jondo)
     # Items
     set_rule(world.get_location("Jondo: Lower east under chargers", player),
-        lambda state: state.has("D03Z02S04[NE]", player) or \
-            state.has("D03Z02S04[S]", player) or \
-                state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D03Z02S04[NE]", player)
+            or state.has("D03Z02S04[S]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     # Doors
     set_rule(world.get_entrance("D03Z02S04[NW]", player),
         lambda state: state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
     set_rule(world.get_entrance("D03Z02S04[NE]", player),
-        lambda state: state.has("Wall Climb Ability", player) or \
-            (state.has("D03Z02S04[S]", player) and \
-                state.has("Purified Hand of the Nun", player)))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            or (
+                state.has("D03Z02S04[S]", player)
+                and state.has("Purified Hand of the Nun", player)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S04[S]", player),
-        lambda state: state.has("D03Z02S04[NE]", player) or \
-            state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D03Z02S04[NE]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
 
 
     # D03Z02S05 (Jondo)
     # Items
     set_rule(world.get_location("Jondo: Upper east Child of Moonlight", player),
-        lambda state: state.has("D03Z02S05[E]", player) or \
-            state.has("D03Z02S05[S]", player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 5) or \
-                    (state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
-                        state._blasphemous_can_cross_gap(difficulty, player, 3)))
+        lambda state: (
+            state.has("D03Z02S05[E]", player)
+            or state.has("D03Z02S05[S]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 5)
+            or (
+                state._blasphemous_can_enemy_bounce(difficulty, enemy)
+                and state._blasphemous_can_cross_gap(difficulty, player, 3)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D03Z02S05[E]", player),
-        lambda state: state.has("D03Z02S05[S]", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 5) or \
-                (state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
-                    state._blasphemous_can_cross_gap(difficulty, player, 3)))
+        lambda state: (
+            state.has("D03Z02S05[S]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 5)
+            or (
+                state._blasphemous_can_enemy_bounce(difficulty, enemy)
+                and state._blasphemous_can_cross_gap(difficulty, player, 3)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S05[S]", player),
-        lambda state: state.has("D03Z02S05[E]", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 5) or \
-                (state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
-                    state._blasphemous_can_cross_gap(difficulty, player, 3)))
+        lambda state: (
+            state.has("D03Z02S05[E]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 5)
+            or (
+                state._blasphemous_can_enemy_bounce(difficulty, enemy)
+                and state._blasphemous_can_cross_gap(difficulty, player, 3)
+            )
+        ))
     # Event
     set_rule(world.get_location("BrokeJondoBellE", player),
         lambda state: state._blasphemous_broke_jondo_bell_e(difficulty, enemy, player))
@@ -1613,16 +2031,22 @@ def rules(blasphemousworld):
     # D03Z02S08 (Jondo)
     # Items
     set_rule(world.get_location("Jondo: Lower west bell alcove", player),
-        lambda state: state.has("D03Z02S08[N]", player) or \
-            state.has("D03Z02S08[W]", player) or \
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D03Z02S08[N]", player)
+            or state.has("D03Z02S08[W]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     # Doors
     set_rule(world.get_entrance("D03Z02S08[W]", player),
-        lambda state: state.has("D03Z02S08[N]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D03Z02S08[N]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D03Z02S08[N]", player),
-        lambda state: state.has("D03Z02S08[W]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D03Z02S08[W]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
 
 
     # D03Z02S09 (Jondo)
@@ -1631,13 +2055,17 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D03Z02S09[W]", player),
         lambda state: state.has("Dash Ability", player))
     set_rule(world.get_entrance("D03Z02S09[N]", player),
-        lambda state: state.has("D03Z02S09[S]", player) or \
-            state.has("D03Z02S09[Cherubs]", player) or \
-                state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D03Z02S09[S]", player)
+            or state.has("D03Z02S09[Cherubs]", player)
+            or state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D03Z02S09[S]", player),
-        lambda state: state.has("D03Z02S09[N]", player) or \
-            state.has("D03Z02S09[Cherubs]", player) or \
-                state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D03Z02S09[N]", player)
+            or state.has("D03Z02S09[Cherubs]", player)
+            or state.has("Dash Ability", player)
+        ))
     # Event
     set_rule(world.get_location("BrokeJondoBellW", player),
         lambda state: state._blasphemous_broke_jondo_bell_w(player))
@@ -1653,34 +2081,54 @@ def rules(blasphemousworld):
     # D03Z02S11 (Jondo)
     # Items
     set_rule(world.get_location("Jondo: Spike tunnel statue", player),
-        lambda state: state.has("Dash Ability", player) and \
-            (state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-                state.has("D03Z02S11[E]", player) and \
-                    state._blasphemous_can_cross_gap(difficulty, player, 2)))
+        lambda state: (
+            state.has("Dash Ability", player)
+            and (
+                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+                or state.has("D03Z02S11[E]", player)
+                and state._blasphemous_can_cross_gap(difficulty, player, 2)
+            )
+        ))
     set_rule(world.get_location("Jondo: Spike tunnel Child of Moonlight", player),
-        lambda state: state.has("Dash Ability", player) and \
-            (state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-                state.has("D03Z02S11[W]", player) and \
-                    (state._blasphemous_can_cross_gap(difficulty, player, 2) and \
-                        state._blasphemous_can_enemy_bounce(difficulty, enemy) or \
-                            state._blasphemous_can_cross_gap(difficulty, player, 3)) or \
-                                state.has("D03Z02S11[E]", player) and \
-                                    (state._blasphemous_can_cross_gap(difficulty, player, 1) or \
-                                        state._blasphemous_can_enemy_bounce(difficulty, enemy))))
+        lambda state: (
+            state.has("Dash Ability", player)
+            and (
+                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+                or state.has("D03Z02S11[W]", player)
+                and (
+                    state._blasphemous_can_cross_gap(difficulty, player, 2)
+                    and state._blasphemous_can_enemy_bounce(difficulty, enemy)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 3)
+                )
+                or state.has("D03Z02S11[E]", player)
+                and (
+                    state._blasphemous_can_cross_gap(difficulty, player, 1)
+                    or state._blasphemous_can_enemy_bounce(difficulty, enemy)
+                )
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D03Z02S11[W]", player),
-        lambda state: state.has("Dash Ability", player) and \
-            (state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 2)))
+        lambda state: (
+            state.has("Dash Ability", player)
+            and (
+                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 2)
+            )
+        ))
     set_rule(world.get_entrance("D03Z02S11[E]", player),
-        lambda state: state.has("Dash Ability", player) and \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("Dash Ability", player)
+            and state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
 
     # D03Z02S13 (Jondo)
     # Items
     set_rule(world.get_location("Jondo: Upper west tree root", player),
-        lambda state: state._blasphemous_can_walk_on_root(player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state._blasphemous_can_walk_on_root(player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
     # Doors
     set_rule(world.get_entrance("D03Z02S13[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -1690,13 +2138,17 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D03Z03S01[NL]", player),
-        lambda state: state.has("D03Z03S01[NR]", player) or \
-            state.has("D03Z03S01[NC]", player) or \
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D03Z03S01[NR]", player)
+            or state.has("D03Z03S01[NC]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D03Z03S01[NR]", player),
-        lambda state: state.has("D03Z03S01[NL]", player) or \
-            state.has("D03Z03S01[NC]", player) or \
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D03Z03S01[NL]", player)
+            or state.has("D03Z03S01[NC]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
 
 
     # D03Z03S02 (Grievance Ascends)
@@ -1705,8 +2157,10 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_can_survive_poison(difficulty, player, 1))
     # Doors
     set_rule(world.get_entrance("D03Z03S02[W]", player),
-        lambda state: state.has("D03Z03S02[NE]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D03Z03S02[NE]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D03Z03S02[NE]", player),
         lambda state: state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
 
@@ -1724,32 +2178,46 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D03Z03S04[NW]", player),
-        lambda state: state.has("D03Z03S04[NE]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) and \
-                (state.has("D03Z03S04[E]", player) or \
-                    state.has("D03Z03S04[SW]", player) or \
-                        state.has("Blood Perpetuated in Sand", player) or \
-                            state._blasphemous_can_cross_gap(difficulty, player, 10)))
+        lambda state: (
+            state.has("D03Z03S04[NE]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            and (
+                state.has("D03Z03S04[E]", player)
+                or state.has("D03Z03S04[SW]", player)
+                or state.has("Blood Perpetuated in Sand", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 10)
+            )
+        ))
     set_rule(world.get_entrance("D03Z03S04[NE]", player),
-        lambda state: state.has("Wall Climb Ability", player) and \
-            (state.has("D03Z03S04[NW]", player) or \
-                state.has("D03Z03S04[E]", player) or \
-                    state.has("D03Z03S04[SW]", player) or \
-                        state.has("Blood Perpetuated in Sand", player) or \
-                            state._blasphemous_can_cross_gap(difficulty, player, 10)))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            and (
+                state.has("D03Z03S04[NW]", player)
+                or state.has("D03Z03S04[E]", player)
+                or state.has("D03Z03S04[SW]", player)
+                or state.has("Blood Perpetuated in Sand", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 10)
+            )
+        ))
     set_rule(world.get_entrance("D03Z03S04[E]", player),
-        lambda state: state.has("D03Z03S04[NW]", player) or \
-            state.has("D03Z03S04[NE]", player) or \
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player) and \
-                    (state.has("D03Z03S04[SW]", player) or \
-                        state.has("Blood Perpetuated in Sand", player) or \
-                            state._blasphemous_can_cross_gap(difficulty, player, 10)))
+        lambda state: (
+            state.has("D03Z03S04[NW]", player)
+            or state.has("D03Z03S04[NE]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            and (
+                state.has("D03Z03S04[SW]", player)
+                or state.has("Blood Perpetuated in Sand", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 10)
+            )
+        ))
     set_rule(world.get_entrance("D03Z03S04[SW]", player),
-        lambda state: state.has("D03Z03S04[NW]", player) or \
-            state.has("D03Z03S04[NE]", player) or \
-                state.has("D03Z03S04[E]", player) or \
-                    state.has("Blood Perpetuated in Sand", player) or \
-                        state._blasphemous_can_cross_gap(difficulty, player, 10))
+        lambda state: (
+            state.has("D03Z03S04[NW]", player)
+            or state.has("D03Z03S04[NE]", player)
+            or state.has("D03Z03S04[E]", player)
+            or state.has("Blood Perpetuated in Sand", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 10)
+        ))
     set_rule(world.get_entrance("D03Z03S04[SE]", player),
         lambda state: state.has("Blood Perpetuated in Sand", player))
     set_rule(world.get_entrance("D03Z03S04[-Cherubs]", player),
@@ -1786,26 +2254,38 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D03Z03S07[NW]", player),
-        lambda state: state.has("D03Z03S07[NE]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D03Z03S07[NE]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D03Z03S07[NE]", player),
-        lambda state: state.has("D03Z03S07[NE]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D03Z03S07[NE]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
 
 
     # D03Z03S08 (Grievance Ascends)
     # Items
     set_rule(world.get_location("GA: End of blood bridge", player),
-        lambda state: state.has("Blood Perpetuated in Sand", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 11))
+        lambda state: (
+            state.has("Blood Perpetuated in Sand", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 11)
+        ))
     set_rule(world.get_location("GA: Blood bridge Child of Moonlight", player),
-        lambda state: (state.has("Blood Perpetuated in Sand", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 11)) and \
-                (state.has_any({"Purified Hand of the Nun", "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet"}, player) or \
-                    state._blasphemous_pillar(player) or \
-                        state._blasphemous_tirana(player) or \
-                            state._blasphemous_aubade(player) and \
-                                state._blasphemous_can_air_stall(difficulty, player)))
+        lambda state: (
+            (
+                state.has("Blood Perpetuated in Sand", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 11)
+            )
+            and (
+                state.has_any({"Purified Hand of the Nun", "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet"}, player)
+                or state._blasphemous_pillar(player)
+                or state._blasphemous_tirana(player)
+                or state._blasphemous_aubade(player)
+                and state._blasphemous_can_air_stall(difficulty, player)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D03Z03S08[-CherubsL]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -1816,11 +2296,13 @@ def rules(blasphemousworld):
     # D03Z03S09 (Grievance Ascends)
     # Items
     set_rule(world.get_location("GA: Lower east Child of Moonlight", player),
-        lambda state: state._blasphemous_can_climb_on_root(player) or \
-            state.has_any({"Purified Hand of the Nun", "Lorquiana", "Zarabanda of the Safe Haven", "Cante Jondo of the Three Sisters"}, player) or \
-                state._blasphemous_pillar(player) or \
-                    state._blasphemous_aubade(player) or \
-                        state._blasphemous_tirana(player))
+        lambda state: (
+            state._blasphemous_can_climb_on_root(player)
+            or state.has_any({"Purified Hand of the Nun", "Lorquiana", "Zarabanda of the Safe Haven", "Cante Jondo of the Three Sisters"}, player)
+            or state._blasphemous_pillar(player)
+            or state._blasphemous_aubade(player)
+            or state._blasphemous_tirana(player)
+        ))
     # No doors
 
 
@@ -1829,10 +2311,14 @@ def rules(blasphemousworld):
     set_rule(world.get_location("GA: Altasgracias' gift", player),
         lambda state: state.has_group("egg", player, 3))
     set_rule(world.get_location("GA: Empty giant egg", player),
-        lambda state: state.has_group("egg", player, 3) and \
-            state.has("Hatched Egg of Deformity", player) and \
-                (state.has("D01Z02S01[W]", player) or \
-                    state.has("D01Z02S01[E]", player)))
+        lambda state: (
+            state.has_group("egg", player, 3)
+            and state.has("Hatched Egg of Deformity", player)
+            and (
+                state.has("D01Z02S01[W]", player)
+                or state.has("D01Z02S01[E]", player)
+            )
+        ))
     # No doors
 
 
@@ -1850,31 +2336,41 @@ def rules(blasphemousworld):
     # D04Z01S01 (Patio of the Silent Steps)
     # Items
     set_rule(world.get_location("PotSS: First area ledge", player),
-        lambda state: state.has("D04Z01S01[NE]", player) or \
-            state.has("D04Z01S01[N]", player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state.has("D04Z01S01[NE]", player)
+            or state.has("D04Z01S01[N]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
     # Doors
     set_rule(world.get_entrance("D04Z01S01[NE]", player),
-        lambda state: state.has("D04Z01S01[N]", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state.has("D04Z01S01[N]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
     set_rule(world.get_entrance("D04Z01S01[N]", player),
-        lambda state: state.has("D04Z01S01[NE]", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state.has("D04Z01S01[NE]", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
 
 
     # D04Z01S02 (Patio of the Silent Steps)
     # Items
     set_rule(world.get_location("PotSS: Second area ledge", player),
-        lambda state: state._blasphemous_can_climb_on_root(player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state._blasphemous_can_climb_on_root(player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
     # No doors
 
 
     # D04Z01S03 (Patio of the Silent Steps)
     # Items
     set_rule(world.get_location("PotSS: Third area upper ledge", player),
-        lambda state: state._blasphemous_can_walk_on_root(player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state._blasphemous_can_walk_on_root(player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
     # No doors
 
 
@@ -1889,11 +2385,17 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D04Z01S05[N]", player),
-        lambda state: (state.has("Blood Perpetuated in Sand", player) and \
-            state._blasphemous_can_climb_on_root(player)) or \
-                state.has("Purified Hand of the Nun", player) and \
-                    (state.has("Blood Perpetuated in Sand", player) or \
-                        state._blasphemous_can_climb_on_root(player)))
+        lambda state: (
+            (
+                state.has("Blood Perpetuated in Sand", player)
+                and state._blasphemous_can_climb_on_root(player)
+            )
+            or state.has("Purified Hand of the Nun", player)
+            and (
+                state.has("Blood Perpetuated in Sand", player)
+                or state._blasphemous_can_climb_on_root(player)
+            )
+        ))
     set_rule(world.get_entrance("D04Z01S05[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
@@ -1911,87 +2413,127 @@ def rules(blasphemousworld):
     # Items
     if world.purified_hand[player]:
         set_rule(world.get_location("MoM: Western room ledge", player),
-            lambda state: state.has("D04Z02S01[N]", player) or \
-                state.has("D04Z02S01[NE]", player) and \
-                    state.has("Dash Ability", player) and \
-                        state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+            lambda state: (
+                state.has("D04Z02S01[N]", player)
+                or state.has("D04Z02S01[NE]", player)
+                and state.has("Dash Ability", player)
+                and state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            ))
     set_rule(world.get_location("MoM: Lower west Child of Moonlight", player),
-        lambda state: state.has("D04Z02S01[N]", player) or \
-            state._blasphemous_pillar(player) or \
-                state.has("D04Z02S01[NE]", player) and \
-                    state.has("Dash Ability", player) and \
-                        (state.has("Wall Climb Ability", player) or \
-                            state._blasphemous_can_cross_gap(difficulty, player, 1)))
+        lambda state: (
+            state.has("D04Z02S01[N]", player)
+            or state._blasphemous_pillar(player)
+            or state.has("D04Z02S01[NE]", player)
+            and state.has("Dash Ability", player)
+            and (
+                state.has("Wall Climb Ability", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 1)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D04Z02S01[N]", player),
-        lambda state: state.has("D04Z02S04[NE]", player) and \
-            state.has("Dash Ability", player) and \
-                state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D04Z02S04[NE]", player)
+            and state.has("Dash Ability", player)
+            and state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D04Z02S01[NE]", player),
-        lambda state: state.has("D04Z02S01[N]", player) or \
-            state.has("Dash Ability", player) and \
-                state._blasphemous_can_cross_gap(difficulty, player, 1))
+        lambda state: (
+            state.has("D04Z02S01[N]", player)
+            or state.has("Dash Ability", player)
+            and state._blasphemous_can_cross_gap(difficulty, player, 1)
+        ))
 
 
     # D04Z02S02 (Mother of Mothers)
     # No items
     # Doors
     set_rule(world.get_entrance("D04Z02S02[NE]", player),
-        lambda state: (state.has("Purified Hand of the Nun", player) and \
-            state._blasphemous_upwarp_skips_allowed(difficulty)) or \
-                (state.has("Purified Hand of the Nun", player) and \
-                    state._blasphemous_can_enemy_upslash(difficulty, enemy, player)) or \
-                        (state._blasphemous_can_enemy_upslash(difficulty, enemy, player) and \
-                            state._blasphemous_upwarp_skips_allowed(difficulty) and \
-                                (state.has("Wall Climb Ability", player) or \
-                                    state.has("D04Z02S02[N]", player))))
+        lambda state: (
+            (
+                state.has("Purified Hand of the Nun", player)
+                and state._blasphemous_upwarp_skips_allowed(difficulty)
+            )
+            or (
+                state.has("Purified Hand of the Nun", player)
+                and state._blasphemous_can_enemy_upslash(difficulty, enemy, player)
+            )
+            or (
+                state._blasphemous_can_enemy_upslash(difficulty, enemy, player)
+                and state._blasphemous_upwarp_skips_allowed(difficulty)
+                and (
+                    state.has("Wall Climb Ability", player)
+                    or state.has("D04Z02S02[N]", player)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D04Z02S02[N]", player),
-        lambda state: state.has("D04Z02S02[NE]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D04Z02S02[NE]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
 
 
     # D04Z02S04 (Mother of Mothers)
     # No items
     # Doors
     set_rule(world.get_entrance("D04Z02S04[NW]", player),
-        lambda state: state.has("D04Z02S04[NE]", player) or \
-            state.has("D04Z02S04[N]", player) or \
-                state.has("D04Z02S04[Cherubs]", player) or \
-                    state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D04Z02S04[NE]", player)
+            or state.has("D04Z02S04[N]", player)
+            or state.has("D04Z02S04[Cherubs]", player)
+            or state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D04Z02S04[NE]", player),
-        lambda state: state.has("D04Z02S04[NW]", player) or \
-            state.has("D04Z02S04[N]", player) or \
-                state.has("D04Z02S04[Cherubs]", player) or \
-                    state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D04Z02S04[NW]", player)
+            or state.has("D04Z02S04[N]", player)
+            or state.has("D04Z02S04[Cherubs]", player)
+            or state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D04Z02S04[N]", player),
-        lambda state: (state.has("D04Z02S04[NW]", player) or \
-            state.has("D04Z02S04[NE]", player) or \
-                state.has("D04Z02S04[Cherubs]", player) or \
-                    state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player)) and \
-                        state.has("OpenedMOMLadder", player))
+        lambda state: (
+            (
+                state.has("D04Z02S04[NW]", player)
+                or state.has("D04Z02S04[NE]", player)
+                or state.has("D04Z02S04[Cherubs]", player)
+                or state.has_all({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+            )
+            and state.has("OpenedMOMLadder", player)
+        ))
 
 
     # D04Z02S06 (Mother of Mothers)
     # Items
     set_rule(world.get_location("MoM: Outside Cleofas' room", player),
-        lambda state: state.has("D04Z02S06[NW]", player) or \
-            state.has("D04Z02S06[N]", player) or \
-                state.has("D04Z02S06[NE]", player) or \
-                    state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D04Z02S06[NW]", player)
+            or state.has("D04Z02S06[N]", player)
+            or state.has("D04Z02S06[NE]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     # Doors
     set_rule(world.get_entrance("D04Z02S06[NW]", player),
-        lambda state: state.has("D04Z02S06[N]", player) or \
-            state.has("D04Z02S06[NE]", player) or \
-                state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D04Z02S06[N]", player)
+            or state.has("D04Z02S06[NE]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D04Z02S06[N]", player),
-        lambda state: (state.has("D04Z02S06[NW]", player) or \
-            state.has("D04Z02S06[NE]", player) or \
-                state.has("Wall Climb Ability", player)) and \
-                    state.has("OpenedARLadder", player))
+        lambda state: (
+            (
+                state.has("D04Z02S06[NW]", player)
+                or state.has("D04Z02S06[NE]", player)
+                or state.has("Wall Climb Ability", player)
+            )
+            and state.has("OpenedARLadder", player)
+        ))
     set_rule(world.get_entrance("D04Z02S06[NE]", player),
-        lambda state: state.has("D04Z02S06[NW]", player) or \
-            state.has("D04Z02S06[N]", player) or \
-                state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D04Z02S06[NW]", player)
+            or state.has("D04Z02S06[N]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D04Z02S06[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
     # Event
@@ -2002,8 +2544,10 @@ def rules(blasphemousworld):
     # D04Z02S07 (Mother of Mothers)
     # Items
     set_rule(world.get_location("MoM: East chandelier platform", player),
-        lambda state: state.has("Blood Perpetuated in Sand", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state.has("Blood Perpetuated in Sand", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
     # No doors
 
 
@@ -2017,8 +2561,10 @@ def rules(blasphemousworld):
     # D04Z02S16 (Mother of Mothers)
     # Items
     set_rule(world.get_location("MoM: Giant chandelier statue", player),
-        lambda state: state.has("Wall Climb Ability", player) and \
-            state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player))
+        lambda state: (
+            state.has("Wall Climb Ability", player)
+            and state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player)
+        ))
     # Doors
     set_rule(world.get_entrance("D04Z02S16[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -2035,8 +2581,10 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D04Z02S21[W]", player),
-        lambda state: state.has("D04Z02S21[NE]", player) or \
-            state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D04Z02S21[NE]", player)
+            or state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player)
+        ))
     set_rule(world.get_entrance("D04Z02S21[NE]", player),
         lambda state: state.has_any({"Purified Hand of the Nun", "Wall Climb Ability"}, player))
 
@@ -2069,9 +2617,11 @@ def rules(blasphemousworld):
     # D04Z04S01 (All the Tears of the Sea)
     # Items
     set_rule(world.get_location("AtTotS: Miriam's gift", player),
-        lambda state: state._blasphemous_miriam(player) and \
-            state.has("Dash Ability", player) and \
-                state.has("Wall Climb Ability", player))
+        lambda state: (
+            state._blasphemous_miriam(player)
+            and state.has("Dash Ability", player)
+            and state.has("Wall Climb Ability", player)
+        ))
     # No doors
 
 
@@ -2079,10 +2629,14 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D05Z01S03[Frontal]", player),
-        lambda state: state.has("Key Grown from Twisted Wood", player) and \
-            state.has("D05Z01S23[E]", player) and \
-                (state.has("D05Z01S11[NW]", player) or \
-                    state.has("D05Z01S11[NE]", player)))
+        lambda state: (
+            state.has("Key Grown from Twisted Wood", player)
+            and state.has("D05Z01S23[E]", player)
+            and (
+                state.has("D05Z01S11[NW]", player)
+                or state.has("D05Z01S11[NE]", player)
+            )
+        ))
 
 
     # D05Z01S05 (Library of the Negated Words)
@@ -2090,10 +2644,16 @@ def rules(blasphemousworld):
     set_rule(world.get_location("LotNW: Hidden floor", player),
         lambda state: state._blasphemous_can_break_holes(player))
     set_rule(world.get_location("LotNW: Root ceiling platform", player),
-        lambda state: (state._blasphemous_can_climb_on_root(player) or \
-            state.has("Purified Hand of the Nun", player)) and \
-                (state.has("D05Z01S05[NE]", player) or \
-                    state.has("Blood Perpetuated in Sand", player)))
+        lambda state: (
+            (
+                state._blasphemous_can_climb_on_root(player)
+                or state.has("Purified Hand of the Nun", player)
+            )
+            and (
+                state.has("D05Z01S05[NE]", player)
+                or state.has("Blood Perpetuated in Sand", player)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D05Z01S05[NE]", player),
         lambda state: state.has("Blood Perpetuated in Sand", player))
@@ -2102,8 +2662,10 @@ def rules(blasphemousworld):
     # D05Z01S06 (Library of the Negated Words)
     # Items
     set_rule(world.get_location("LotNW: Miasma hallway chest", player),
-        lambda state: state.has("D05Z01S06[W]", player) or \
-            state._blasphemous_can_survive_poison(difficulty, player, 3))
+        lambda state: (
+            state.has("D05Z01S06[W]", player)
+            or state._blasphemous_can_survive_poison(difficulty, player, 3)
+        ))
     # Doors
     set_rule(world.get_entrance("D05Z01S06[W]", player),
         lambda state: state._blasphemous_can_survive_poison(difficulty, player, 3))
@@ -2115,32 +2677,46 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D05Z01S07[NW]", player),
-        lambda state: state.has("Blood Perpetuated in Sand", player) and \
-            (state._blasphemous_can_climb_on_root(player) or \
-                state.has("Purified Hand of the Nun", player)) or \
-                    (state._blasphemous_can_climb_on_root(player) and \
-                        state._blasphemous_can_cross_gap(difficulty, player, 3)) or \
-                            state._blasphemous_can_cross_gap(difficulty, player, 7))
+        lambda state: (
+            state.has("Blood Perpetuated in Sand", player)
+            and (
+                state._blasphemous_can_climb_on_root(player)
+                or state.has("Purified Hand of the Nun", player)
+            )
+            or (
+                state._blasphemous_can_climb_on_root(player)
+                and state._blasphemous_can_cross_gap(difficulty, player, 3)
+            )
+            or state._blasphemous_can_cross_gap(difficulty, player, 7)
+        ))
 
 
     # D05Z01S10 (Library of the Negated Words)
     # Items
     set_rule(world.get_location("LotNW: Platform puzzle chest", player),
-        lambda state: state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player) or \
-            state._blasphemous_can_enemy_bounce(difficulty, enemy) and \
-                state._blasphemous_can_cross_gap(difficulty, player, 2))
+        lambda state: (
+            state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun"}, player)
+            or state._blasphemous_can_enemy_bounce(difficulty, enemy)
+            and state._blasphemous_can_cross_gap(difficulty, player, 2)
+        ))
     # No doors
 
 
     # D05Z01S11 (Library of the Negated Words)
     # Items
     set_rule(world.get_location("LotNW: Silence for Diosdado", player),
-        lambda state: (state.has("D05Z01S11[NW]", player) or \
-            state.has("D05Z01S11[NE]", player)) and \
-                state.has("D05Z01S23[E]", player))
+        lambda state: (
+            (
+                state.has("D05Z01S11[NW]", player)
+                or state.has("D05Z01S11[NE]", player)
+            )
+            and state.has("D05Z01S23[E]", player)
+        ))
     set_rule(world.get_location("LotNW: Lowest west upper ledge", player),
-        lambda state: state.has("D05Z01S11[NW]", player) or \
-            state.has("D05Z01S11[NE]", player))
+        lambda state: (
+            state.has("D05Z01S11[NW]", player)
+            or state.has("D05Z01S11[NE]", player)
+        ))
     # Doors
     set_rule(world.get_entrance("D05Z01S11[SW]", player),
         lambda state: state._blasphemous_can_break_tirana(difficulty, player))
@@ -2153,12 +2729,16 @@ def rules(blasphemousworld):
     # D05Z01S21 (Library of the Negated Words)
     # Items
     set_rule(world.get_location("LotNW: Elevator Child of Moonlight", player),
-        lambda state: state.has("Zarabanda of the Safe Haven", player) or \
-            state.has("Blood Perpetuated in Sand", player) and \
-                (state._blasphemous_can_walk_on_root(player) or \
-                    state.has("Purified Hand of the Nun", player) or \
-                        state._blasphemous_can_cross_gap(difficulty, player, 5) and \
-                            state._blasphemous_pillar(player)))
+        lambda state: (
+            state.has("Zarabanda of the Safe Haven", player)
+            or state.has("Blood Perpetuated in Sand", player)
+            and (
+                state._blasphemous_can_walk_on_root(player)
+                or state.has("Purified Hand of the Nun", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 5)
+                and state._blasphemous_pillar(player)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D05Z01S21[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
@@ -2175,8 +2755,10 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D05Z02S09[E]", player),
-        lambda state: state.has("Bead of Red Wax", player, 3) and \
-            state.has("Bead of Blue Wax", player, 3))
+        lambda state: (
+            state.has("Bead of Red Wax", player, 3)
+            and state.has("Bead of Blue Wax", player, 3)
+        ))
 
 
     # D05Z02S10 (The Sleeping Canvases)
@@ -2225,112 +2807,185 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D06Z01S01[SW]", player),
-        lambda state: (state.has("D06Z01S01[SE]", player) or \
-            state.has("D06Z01S01[W]", player) or \
-                state.has("D06Z01S01[E]", player) or \
-                    state.has("D06Z01S01[NNW]", player) or \
-                        state.has("D06Z01S01[NNE]", player) or \
-                            state.has("D06Z01S01[N]", player)) or \
-                                state.has("Linen of Golden Thread", player) and \
-                                    (state.has("D06Z01S01[NW]", player) or \
-                                        state.has("D06Z01S01[NE]", player)))
+        lambda state: (
+            (
+                state.has("D06Z01S01[SE]", player)
+                or state.has("D06Z01S01[W]", player)
+                or state.has("D06Z01S01[E]", player)
+                or state.has("D06Z01S01[NNW]", player)
+                or state.has("D06Z01S01[NNE]", player)
+                or state.has("D06Z01S01[N]", player)
+            )
+            or state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D06Z01S01[NW]", player)
+                or state.has("D06Z01S01[NE]", player)
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S01[SE]", player),
-        lambda state: (state.has("D06Z01S01[SW]", player) or \
-            state.has("D06Z01S01[W]", player) or \
-                state.has("D06Z01S01[E]", player) or \
-                    state.has("D06Z01S01[NNW]", player) or \
-                        state.has("D06Z01S01[NNE]", player) or \
-                            state.has("D06Z01S01[N]", player)) or \
-                                state.has("Linen of Golden Thread", player) and \
-                                    (state.has("D06Z01S01[NW]", player) or \
-                                        state.has("D06Z01S01[NE]", player)))
+        lambda state: (
+            (
+                state.has("D06Z01S01[SW]", player)
+                or state.has("D06Z01S01[W]", player)
+                or state.has("D06Z01S01[E]", player)
+                or state.has("D06Z01S01[NNW]", player)
+                or state.has("D06Z01S01[NNE]", player)
+                or state.has("D06Z01S01[N]", player)
+            )
+            or state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D06Z01S01[NW]", player)
+                or state.has("D06Z01S01[NE]", player)
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S01[W]", player),
-        lambda state: (state.has("D06Z01S01[E]", player) or \
-            state.has("D06Z01S01[NNW]", player) or \
-                state.has("D06Z01S01[NNE]", player) or \
-                    state.has("D06Z01S01[N]", player)) or \
-                        state.has_group("masks", player, 1) and \
-                            (state.has("D06Z01S01[SW]", player) or \
-                                state.has("D06Z01S01[SE]", player)) or \
-                                    state.has("Linen of Golden Thread", player) and \
-                                        (state.has("D06Z01S01[NW]", player) or \
-                                            state.has("D06Z01S01[NE]", player) and \
-                                                (state._blasphemous_can_walk_on_root(player) or \
-                                                    state._blasphemous_can_cross_gap(difficulty, player, 1))))
+        lambda state: (
+            (
+                state.has("D06Z01S01[E]", player)
+                or state.has("D06Z01S01[NNW]", player)
+                or state.has("D06Z01S01[NNE]", player)
+                or state.has("D06Z01S01[N]", player)
+            )
+            or state.has_group("masks", player, 1)
+            and (
+                state.has("D06Z01S01[SW]", player)
+                or state.has("D06Z01S01[SE]", player)
+            )
+            or state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D06Z01S01[NW]", player)
+                or state.has("D06Z01S01[NE]", player)
+                and (
+                    state._blasphemous_can_walk_on_root(player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 1)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S01[E]", player),
-        lambda state: (state.has("D06Z01S01[W]", player) or \
-            state.has("D06Z01S01[NNW]", player) or \
-                state.has("D06Z01S01[NNE]", player) or \
-                    state.has("D06Z01S01[N]", player)) or \
-                        state.has_group("masks", player, 1) and \
-                            (state.has("D06Z01S01[SW]", player) or \
-                                state.has("D06Z01S01[SE]", player)) or \
-                                    state.has("Linen of Golden Thread", player) and \
-                                        (state.has("D06Z01S01[NW]", player) or \
-                                            state.has("D06Z01S01[NE]", player) and \
-                                                (state._blasphemous_can_walk_on_root(player) or \
-                                                    state._blasphemous_can_cross_gap(difficulty, player, 1))))
+        lambda state: (
+            (
+                state.has("D06Z01S01[W]", player)
+                or state.has("D06Z01S01[NNW]", player)
+                or state.has("D06Z01S01[NNE]", player)
+                or state.has("D06Z01S01[N]", player)
+            )
+            or state.has_group("masks", player, 1)
+            and (
+                state.has("D06Z01S01[SW]", player)
+                or state.has("D06Z01S01[SE]", player)
+            )
+            or state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D06Z01S01[NW]", player)
+                or state.has("D06Z01S01[NE]", player)
+                and (
+                    state._blasphemous_can_walk_on_root(player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 1)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S01[NW]", player),
-        lambda state: state.has("D06Z01S01[NE]", player) and \
-            (state._blasphemous_can_walk_on_root(player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 8)) or \
-                    state.has("Linen of Golden Thread", player) and \
-                        (state.has("D06Z01S01[NNW]", player) or \
-                            state.has("D06Z01S01[NNE]", player) and \
-                                (state._blasphemous_can_walk_on_root(player) or \
-                                    state._blasphemous_can_cross_gap(difficulty, player, 3))))
+        lambda state: (
+            state.has("D06Z01S01[NE]", player)
+            and (
+                state._blasphemous_can_walk_on_root(player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 8)
+            )
+            or state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D06Z01S01[NNW]", player)
+                or state.has("D06Z01S01[NNE]", player)
+                and (
+                    state._blasphemous_can_walk_on_root(player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 3)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S01[NE]", player),
-        lambda state: state.has("D06Z01S01[NW]", player) or \
-            (state._blasphemous_can_walk_on_root(player) or \
-                state._blasphemous_can_cross_gap(difficulty, player, 8)) or \
-                    state.has("Linen of Golden Thread", player) and \
-                        (state.has("D06Z01S01[NNW]", player) or \
-                            state.has("D06Z01S01[NNE]", player) and \
-                                (state._blasphemous_can_walk_on_root(player) or \
-                                    state._blasphemous_can_cross_gap(difficulty, player, 3))))
+        lambda state: (
+            state.has("D06Z01S01[NW]", player)
+            or (
+                state._blasphemous_can_walk_on_root(player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 8)
+            )
+            or state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D06Z01S01[NNW]", player)
+                or state.has("D06Z01S01[NNE]", player)
+                and (
+                    state._blasphemous_can_walk_on_root(player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 3)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S01[NNW]", player),
-        lambda state: (state.has("D06Z01S01[NNE]", player) or \
-            state.has("D06Z01S01[N]", player)) or \
-                state.has_group("masks", player, 2) and \
-                    (state.has("D06Z01S01[SW]", player) or \
-                        state.has("D06Z01S01[SE]", player) or \
-                            state.has("D06Z01S01[W]", player) or \
-                                state.has("D06Z01S01[E]", player) or \
-                                    state.has("Linen of Golden Thread", player) and \
-                                        (state.has("D06Z01S01[NW]", player) or \
-                                            state.has("D06Z01S01[NE]", player))))
+        lambda state: (
+            (
+                state.has("D06Z01S01[NNE]", player)
+                or state.has("D06Z01S01[N]", player)
+            )
+            or state.has_group("masks", player, 2)
+            and (
+                state.has("D06Z01S01[SW]", player)
+                or state.has("D06Z01S01[SE]", player)
+                or state.has("D06Z01S01[W]", player)
+                or state.has("D06Z01S01[E]", player)
+                or state.has("Linen of Golden Thread", player)
+                and (
+                    state.has("D06Z01S01[NW]", player)
+                    or state.has("D06Z01S01[NE]", player)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S01[NNE]", player),
-        lambda state: (state.has("D06Z01S01[NNW]", player) or \
-            state.has("D06Z01S01[N]", player)) or \
-                state.has_group("masks", player, 2) and \
-                    (state.has("D06Z01S01[SW]", player) or \
-                        state.has("D06Z01S01[SE]", player) or \
-                            state.has("D06Z01S01[W]", player) or \
-                                state.has("D06Z01S01[E]", player) or \
-                                    state.has("Linen of Golden Thread", player) and \
-                                        (state.has("D06Z01S01[NW]", player) or \
-                                            state.has("D06Z01S01[NE]", player))))
+        lambda state: (
+            (
+                state.has("D06Z01S01[NNW]", player)
+                or state.has("D06Z01S01[N]", player)
+            )
+            or state.has_group("masks", player, 2)
+            and (
+                state.has("D06Z01S01[SW]", player)
+                or state.has("D06Z01S01[SE]", player)
+                or state.has("D06Z01S01[W]", player)
+                or state.has("D06Z01S01[E]", player)
+                or state.has("Linen of Golden Thread", player)
+                and (
+                    state.has("D06Z01S01[NW]", player)
+                    or state.has("D06Z01S01[NE]", player)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S01[N]", player),
-        lambda state: state.has_group("masks", player, 3) and \
-            (state.has("D06Z01S01[SW]", player) or \
-                state.has("D06Z01S01[SE]", player) or \
-                    state.has("D06Z01S01[W]", player) or \
-                        state.has("D06Z01S01[E]", player) or \
-                            state.has("D06Z01S01[NNW]", player) or \
-                                state.has("D06Z01S01[NNE]", player) or \
-                                    state.has("Linen of Golden Thread", player) and \
-                                        (state.has("D06Z01S01[NW]", player) or \
-                                            state.has("D06Z01S01[NE]", player))))
+        lambda state: (
+            state.has_group("masks", player, 3)
+            and (
+                state.has("D06Z01S01[SW]", player)
+                or state.has("D06Z01S01[SE]", player)
+                or state.has("D06Z01S01[W]", player)
+                or state.has("D06Z01S01[E]", player)
+                or state.has("D06Z01S01[NNW]", player)
+                or state.has("D06Z01S01[NNE]", player)
+                or state.has("Linen of Golden Thread", player)
+                and (
+                    state.has("D06Z01S01[NW]", player)
+                    or state.has("D06Z01S01[NE]", player)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S01[-Cherubs]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D06Z01S01[SW]", player) or \
-                state.has("D06Z01S01[SE]", player) or \
-                    state.has("D06Z01S01[W]", player) or \
-                        state.has("D06Z01S01[E]", player) or \
-                            state.has("D06Z01S01[NW]", player) or \
-                                state.has("D06Z01S01[NE]", player) or \
-                                    state.has("D06Z01S01[NNW]", player) or \
-                                        state.has("D06Z01S01[NNE]", player)))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D06Z01S01[SW]", player)
+                or state.has("D06Z01S01[SE]", player)
+                or state.has("D06Z01S01[W]", player)
+                or state.has("D06Z01S01[E]", player)
+                or state.has("D06Z01S01[NW]", player)
+                or state.has("D06Z01S01[NE]", player)
+                or state.has("D06Z01S01[NNW]", player)
+                or state.has("D06Z01S01[NNE]", player))
+        ))
 
 
     # D06Z01S03 (Archcathedral Rooftops)
@@ -2348,53 +3003,91 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D06Z01S04[SW]", player),
-        lambda state: state.has("D06Z01S04[W]", player) or \
-            state.has("D06Z01S04[Health]", player))
+        lambda state: (
+            state.has("D06Z01S04[W]", player)
+            or state.has("D06Z01S04[Health]", player)
+        ))
     set_rule(world.get_entrance("D06Z01S04[W]", player),
-        lambda state: state.has("D06Z01S04[SW]", player) or \
-            state.has("D06Z01S04[Health]", player))
+        lambda state: (
+            state.has("D06Z01S04[SW]", player)
+            or state.has("D06Z01S04[Health]", player)
+        ))
     set_rule(world.get_entrance("D06Z01S04[Health]", player),
-        lambda state: state.has("D06Z01S04[SW]", player) or \
-            state.has("D06Z01S04[W]", player))
+        lambda state: (
+            state.has("D06Z01S04[SW]", player)
+            or state.has("D06Z01S04[W]", player)
+        ))
     add_rule(world.get_entrance("D06Z01S04[Health]", player),
-        lambda state: (state.has("Wall Climb Ability", player) and \
-            state._blasphemous_can_survive_poison(difficulty, player, 2) and \
-                (state.has("Purified Hand of the Nun", player) or \
-                    (state.has("Blood Perpetuated in Sand", player) and \
-                        state._blasphemous_can_climb_on_root(player)))))
+        lambda state: (
+            (
+                state.has("Wall Climb Ability", player)
+                and state._blasphemous_can_survive_poison(difficulty, player, 2)
+                and (
+                    state.has("Purified Hand of the Nun", player)
+                    or (
+                        state.has("Blood Perpetuated in Sand", player)
+                        and state._blasphemous_can_climb_on_root(player)
+                    )
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S04[NW]", player),
-        lambda state: state.has("D06Z01S04[NE]", player) or \
-            state.has("D06Z01S04[Cherubs]", player))
+        lambda state: (
+            state.has("D06Z01S04[NE]", player)
+            or state.has("D06Z01S04[Cherubs]", player)
+        ))
     add_rule(world.get_entrance("D06Z01S04[NW]", player),
-        lambda state: state.has("D06Z01S04[Cherubs]", player) or \
-            (state.has("D06Z01S04[SW]", player) or \
-                state.has("D06Z01S04[W]", player) or \
-                    state.has("D06Z01S04[Health]", player)) and \
-                        state.has("Wall Climb Ability", player) and \
-                            state._blasphemous_can_survive_poison(difficulty, player, 2) and \
-                                (state.has_any({"Dash Ability", "Purified Hand of the Nun"}, player) and \
-                                    (state._blasphemous_can_dawn_jump(difficulty, player) or \
-                                        state._blasphemous_can_climb_on_root(player))))
+        lambda state: (
+            state.has("D06Z01S04[Cherubs]", player)
+            or (
+                state.has("D06Z01S04[SW]", player)
+                or state.has("D06Z01S04[W]", player)
+                or state.has("D06Z01S04[Health]", player)
+            )
+            and state.has("Wall Climb Ability", player)
+            and state._blasphemous_can_survive_poison(difficulty, player, 2)
+            and (
+                state.has_any({"Dash Ability", "Purified Hand of the Nun"}, player)
+                and (
+                    state._blasphemous_can_dawn_jump(difficulty, player)
+                    or state._blasphemous_can_climb_on_root(player)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S04[NE]", player),
-        lambda state: state.has("D06Z01S04[NW]", player) or \
-            state.has("D06Z01S04[Cherubs]", player))
+        lambda state: (
+            state.has("D06Z01S04[NW]", player)
+            or state.has("D06Z01S04[Cherubs]", player)
+        ))
     add_rule(world.get_entrance("D06Z01S04[NE]", player),
-        lambda state: (state.has("D06Z01S04[SW]", player) or \
-            state.has("D06Z01S04[W]", player) or \
-                state.has("D06Z01S04[Health]", player)) and \
-                    state.has("Wall Climb Ability", player) and \
-                        state._blasphemous_can_survive_poison(difficulty, player, 2) and \
-                            (state.has_any({"Dash Ability", "Purified Hand of the Nun"}, player) and \
-                                (state._blasphemous_can_dawn_jump(difficulty, player) or \
-                                    state._blasphemous_can_climb_on_root(player))))
+        lambda state: (
+            (
+                state.has("D06Z01S04[SW]", player)
+                or state.has("D06Z01S04[W]", player)
+                or state.has("D06Z01S04[Health]", player)
+            )
+            and state.has("Wall Climb Ability", player)
+            and state._blasphemous_can_survive_poison(difficulty, player, 2)
+            and (
+                state.has_any({"Dash Ability", "Purified Hand of the Nun"}, player)
+                and (
+                    state._blasphemous_can_dawn_jump(difficulty, player)
+                    or state._blasphemous_can_climb_on_root(player)
+                )
+            )
+        ))
 
 
     # D06Z01S06 (Archcathedral Rooftops)
     # Items
     set_rule(world.get_location("AR: Second soldier fight", player),
-        lambda state: state._blasphemous_can_beat_boss("Legionary", difficulty, player) and \
-            (state.has("D06Z01S06[WW]", player) or \
-                state.has("D06Z01S06[E]", player)))
+        lambda state: (
+            state._blasphemous_can_beat_boss("Legionary", difficulty, player)
+            and (
+                state.has("D06Z01S06[WW]", player)
+                or state.has("D06Z01S06[E]", player)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D06Z01S06[WW]", player),
         lambda state: state.has("D06Z01S06[E]", player))
@@ -2439,144 +3132,244 @@ def rules(blasphemousworld):
     # D06Z01S12 (Archcathedral Rooftops)
     # Items
     set_rule(world.get_location("AR: Upper west shaft ledge", player),
-        lambda state: state.has("D06Z01S12[NW]", player) or \
-            state.has("D06Z01S12[NE]", player) or \
-                state.has("D06Z01S12[NE2]", player) or \
-                    state.has("D06Z01S12[W]", player) or \
-                        state.has("D06Z01S12[E]", player) or \
-                            state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D06Z01S12[NW]", player)
+            or state.has("D06Z01S12[NE]", player)
+            or state.has("D06Z01S12[NE2]", player)
+            or state.has("D06Z01S12[W]", player)
+            or state.has("D06Z01S12[E]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_location("AR: Upper west shaft chest", player),
-        lambda state: state.has("D06Z01S12[NE2]", player) or \
-            (state.has("D06Z01S12[NW]", player) or \
-                state.has("D06Z01S12[NE]", player)) and \
-                    state.has("Purified Hand of the Nun", player))
+        lambda state: (
+            state.has("D06Z01S12[NE2]", player)
+            or (
+                state.has("D06Z01S12[NW]", player)
+                or state.has("D06Z01S12[NE]", player)
+            )
+            and state.has("Purified Hand of the Nun", player)
+        ))
     set_rule(world.get_location("AR: Upper west shaft Child of Moonlight", player),
-        lambda state: state.has("D06Z01S12[W]", player) or \
-            state.has("D06Z01S12[E]", player) or \
-                state.has("D06Z01S12[NW]", player) or \
-                    state.has("D06Z01S12[NE]", player) or \
-                        state.has("D06Z01S12[NE2]", player) or \
-                            state.has("Wall Climb Ability", player) and \
-                                state.has_any({"Purified Hand of the Nun", "Taranto to my Sister"}, player))
+        lambda state: (
+            state.has("D06Z01S12[W]", player)
+            or state.has("D06Z01S12[E]", player)
+            or state.has("D06Z01S12[NW]", player)
+            or state.has("D06Z01S12[NE]", player)
+            or state.has("D06Z01S12[NE2]", player)
+            or state.has("Wall Climb Ability", player)
+            and state.has_any({"Purified Hand of the Nun", "Taranto to my Sister"}, player)
+        ))
     # Doors
     set_rule(world.get_entrance("D06Z01S12[W]", player),
-        lambda state: state.has("D06Z01S12[NW]", player) or \
-            state.has("D06Z01S12[NE]", player) or \
-                state.has("D06Z01S12[NE2]", player) or \
-                    state.has("D06Z01S12[E]", player) or \
-                        state.has_all({"Wall Climb Ability", "Purified Hand of the Nun"}, player))
+        lambda state: (
+            state.has("D06Z01S12[NW]", player)
+            or state.has("D06Z01S12[NE]", player)
+            or state.has("D06Z01S12[NE2]", player)
+            or state.has("D06Z01S12[E]", player)
+            or state.has_all({"Wall Climb Ability", "Purified Hand of the Nun"}, player)
+        ))
     set_rule(world.get_entrance("D06Z01S12[E]", player),
-        lambda state: state.has("D06Z01S12[NW]", player) or \
-            state.has("D06Z01S12[NE]", player) or \
-                state.has("D06Z01S12[NE2]", player) or \
-                    state.has("D06Z01S12[W]", player) or \
-                        state.has_all({"Wall Climb Ability", "Purified Hand of the Nun"}, player))
+        lambda state: (
+            state.has("D06Z01S12[NW]", player)
+            or state.has("D06Z01S12[NE]", player)
+            or state.has("D06Z01S12[NE2]", player)
+            or state.has("D06Z01S12[W]", player)
+            or state.has_all({"Wall Climb Ability", "Purified Hand of the Nun"}, player)
+        ))
     set_rule(world.get_entrance("D06Z01S12[NW]", player),
-        lambda state: state.has("D06Z01S12[NE]", player) or \
-            state.has("D06Z01S12[NE2]", player))
+        lambda state: (
+            state.has("D06Z01S12[NE]", player)
+            or state.has("D06Z01S12[NE2]", player)
+        ))
     add_rule(world.get_entrance("D06Z01S12[NW]", player),
-        lambda state: state.has("D06Z01S12[NE]", player) or \
-            state.has_any({"Wall Climb Ability", "Purified Hand of the Nun"}, player))
+        lambda state: (
+            state.has("D06Z01S12[NE]", player)
+            or state.has_any({"Wall Climb Ability", "Purified Hand of the Nun"}, player)
+        ))
     set_rule(world.get_entrance("D06Z01S12[NE]", player),
-        lambda state: state.has("D06Z01S12[NW]", player) or \
-            state.has("D06Z01S12[NE2]", player))
+        lambda state: (
+            state.has("D06Z01S12[NW]", player)
+            or state.has("D06Z01S12[NE2]", player)
+        ))
     add_rule(world.get_entrance("D06Z01S12[NE]", player),
-        lambda state: state.has("D06Z01S12[NW]", player) or \
-            state.has_any({"Wall Climb Ability", "Purified Hand of the Nun"}, player))
+        lambda state: (
+            state.has("D06Z01S12[NW]", player)
+            or state.has_any({"Wall Climb Ability", "Purified Hand of the Nun"}, player)
+        ))
 
 
     # D06Z01S15 (Archcathedral Rooftops)
     # Items
     set_rule(world.get_location("AR: Upper east shaft ledge", player),
-        lambda state: state.has("D06Z01S15[SW]", player) and \
-            state.has("Wall Climb Ability", player) and \
-                (state._blasphemous_can_cross_gap(difficulty, player, 10) or \
-                    state._blasphemous_can_climb_on_root(player) and \
-                        (state.has("Blood Perpetuated in Sand", player) or \
-                            state.has("Purified Hand of the Nun", player) and \
-                                state._blasphemous_can_air_stall(difficulty, player))))
+        lambda state: (
+            state.has("D06Z01S15[SW]", player)
+            and state.has("Wall Climb Ability", player)
+            and (
+                state._blasphemous_can_cross_gap(difficulty, player, 10)
+                or state._blasphemous_can_climb_on_root(player)
+                and (
+                    state.has("Blood Perpetuated in Sand", player)
+                    or state.has("Purified Hand of the Nun", player)
+                    and state._blasphemous_can_air_stall(difficulty, player)
+                )
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D06Z01S15[NW]", player),
         lambda state: state.has("D06Z01S15[NE]", player))
     add_rule(world.get_entrance("D06Z01S15[NW]", player),
-        lambda state: state.has("D06Z01S15[SW]", player) or \
-            state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D06Z01S15[SW]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
     set_rule(world.get_entrance("D06Z01S15[NE]", player),
         lambda state: state.has("D06Z01S15[NW]", player))
     add_rule(world.get_entrance("D06Z01S15[NE]", player),
-        lambda state: state.has("D06Z01S15[SW]", player) or \
-            state.has("Wall Climb Ability", player))
+        lambda state: (
+            state.has("D06Z01S15[SW]", player)
+            or state.has("Wall Climb Ability", player)
+        ))
 
 
     # D06Z01S16 (Archcathedral Rooftops)
     # No items
     # Doors
     set_rule(world.get_entrance("D06Z01S16[W]", player),
-        lambda state: (state.has("D06Z01S16[CherubsL]", player) and \
-            (state.has("Purified Hand of the Nun", player) or \
-                state.has("Wall Climb Ability", player) and \
-                    (state._blasphemous_can_walk_on_root(player) or \
-                        state._blasphemous_can_air_stall(difficulty, player)))) or \
-                            (state.has("D06Z01S16[CherubsR]", player) and \
-                                (state.has("Purified Hand of the Nun", player) or \
-                                    state._blasphemous_can_air_stall(difficulty, player) and \
-                                        (state._blasphemous_can_walk_on_root(player) or \
-                                            state.has("The Young Mason's Wheel", player)) and \
-                                                (state.has("Wall Climb Ability", player) or \
-                                                    state._blasphemous_can_dawn_jump(difficulty, player)))) or \
-                                                        (state.has("D06Z01S16[E]", player) and \
-                                                            (state._blasphemous_can_walk_on_root(player) or \
-                                                                state._blasphemous_can_cross_gap(difficulty, player, 7)) and \
-                                                                    (state.has("Wall Climb Ability", player) or \
-                                                                        state._blasphemous_can_cross_gap(difficulty, player, 5))))
+        lambda state: (
+            (
+                state.has("D06Z01S16[CherubsL]", player)
+                and (
+                    state.has("Purified Hand of the Nun", player)
+                    or state.has("Wall Climb Ability", player)
+                    and (
+                        state._blasphemous_can_walk_on_root(player)
+                        or state._blasphemous_can_air_stall(difficulty, player)
+                    )
+                )
+            )
+            or (
+                state.has("D06Z01S16[CherubsR]", player)
+                and (
+                    state.has("Purified Hand of the Nun", player)
+                    or state._blasphemous_can_air_stall(difficulty, player)
+                    and (
+                        state._blasphemous_can_walk_on_root(player)
+                        or state.has("The Young Mason's Wheel", player)
+                    )
+                    and (
+                        state.has("Wall Climb Ability", player)
+                        or state._blasphemous_can_dawn_jump(difficulty, player)
+                    )
+                )
+            )
+            or (
+                state.has("D06Z01S16[E]", player)
+                and (
+                    state._blasphemous_can_walk_on_root(player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 7)
+                )
+                and (
+                    state.has("Wall Climb Ability", player) or 
+                    state._blasphemous_can_cross_gap(difficulty, player, 5)
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S16[E]", player),
-        lambda state: ((state.has("D06Z01S16[W]", player) or \
-            state.has("D06Z01S16[CherubsL]", player)) and \
-                (state._blasphemous_can_walk_on_root(player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 5))) or \
-                        (state.has("D06Z01S16[CherubsR]", player) and \
-                            (state.has("Purified Hand of the Nun", player) or \
-                                state._blasphemous_can_air_stall(difficulty, player) and \
-                                    (state._blasphemous_can_walk_on_root(player) and \
-                                        state.has("The Young Mason's Wheel", player)))))
+        lambda state: (
+            (
+                (
+                    state.has("D06Z01S16[W]", player)
+                    or state.has("D06Z01S16[CherubsL]", player)
+                )
+                and (
+                    state._blasphemous_can_walk_on_root(player)
+                    or state._blasphemous_can_cross_gap(difficulty, player, 5)
+                )
+            )
+            or (
+                state.has("D06Z01S16[CherubsR]", player)
+                and (
+                    state.has("Purified Hand of the Nun", player)
+                    or state._blasphemous_can_air_stall(difficulty, player)
+                    and (
+                        state._blasphemous_can_walk_on_root(player)
+                        and state.has("The Young Mason's Wheel", player)
+                    )
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S16[-CherubsL]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D06Z01S16[W]", player) or \
-                (state.has("D06Z01S16[CherubsR]", player) and \
-                    (state.has("Purified Hand of the Nun", player) or \
-                        state._blasphemous_can_air_stall(difficulty, player) and \
-                            (state._blasphemous_can_walk_on_root(player) or \
-                                state.has("The Young Mason's Wheel", player)))) or \
-                                    (state.has("D06Z01S16[E]", player) and \
-                                        (state._blasphemous_can_walk_on_root(player) or \
-                                            state._blasphemous_can_cross_gap(difficulty, player, 7)))))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D06Z01S16[W]", player)
+                or (
+                    state.has("D06Z01S16[CherubsR]", player)
+                    and (
+                        state.has("Purified Hand of the Nun", player)
+                        or state._blasphemous_can_air_stall(difficulty, player)
+                        and (
+                            state._blasphemous_can_walk_on_root(player)
+                            or state.has("The Young Mason's Wheel", player)
+                        )
+                    )
+                )
+                or (
+                    state.has("D06Z01S16[E]", player)
+                    and (
+                        state._blasphemous_can_walk_on_root(player)
+                        or state._blasphemous_can_cross_gap(difficulty, player, 7)
+                    )
+                )
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S16[-CherubsR]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D06Z01S16[E]", player) or \
-                (state.has("D06Z01S16[CherubsL]", player) and \
-                    (state._blasphemous_can_air_stall(difficulty, player) or \
-                        state._blasphemous_can_walk_on_root(player) or \
-                            state.has("Purified Hand of the Nun", player))) or \
-                                (state.has("D06Z01S16[W]", player) and \
-                                    (state._blasphemous_can_walk_on_root(player) or \
-                                        state._blasphemous_can_cross_gap(difficulty, player, 1)))))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D06Z01S16[E]", player)
+                or (
+                    state.has("D06Z01S16[CherubsL]", player)
+                    and (
+                        state._blasphemous_can_air_stall(difficulty, player)
+                        or state._blasphemous_can_walk_on_root(player)
+                        or state.has("Purified Hand of the Nun", player)
+                    )
+                )
+                or (
+                    state.has("D06Z01S16[W]", player)
+                    and (
+                        state._blasphemous_can_walk_on_root(player)
+                        or state._blasphemous_can_cross_gap(difficulty, player, 1)
+                    )
+                )
+            )
+        ))
 
 
     # D06Z01S17 (Archcathedral Rooftops)
     # No items
     # Doors
     set_rule(world.get_entrance("D06Z01S17[W]", player),
-        lambda state: (state.has("D06Z01S17[E]", player) or \
-            state.has("D06Z01S17[CherubsR]", player)) and \
-                state.has("Blood Perpetuated in Sand", player) or \
-                    state.has("D06Z01S17[CherubsL]", player) and \
-                        state.has("Purified Hand of the Nun", player))
+        lambda state: (
+            (
+                state.has("D06Z01S17[E]", player)
+                or state.has("D06Z01S17[CherubsR]", player)
+            )
+            and state.has("Blood Perpetuated in Sand", player)
+            or state.has("D06Z01S17[CherubsL]", player)
+            and state.has("Purified Hand of the Nun", player)
+        ))
     set_rule(world.get_entrance("D06Z01S17[E]", player),
-        lambda state: state.has("D06Z01S17[CherubsR]", player) or \
-            state.has("Blood Perpetuated in Sand", player) and \
-                (state.has("D06Z01S17[W]", player) or \
-                    state.has("D06Z01S17[CherubsL]", player) and \
-                        state.has("Purified Hand of the Nun", player)))
+        lambda state: (
+            state.has("D06Z01S17[CherubsR]", player)
+            or state.has("Blood Perpetuated in Sand", player)
+            and (
+                state.has("D06Z01S17[W]", player)
+                or state.has("D06Z01S17[CherubsL]", player)
+                and state.has("Purified Hand of the Nun", player)
+            )
+        ))
     set_rule(world.get_entrance("D06Z01S17[-Cherubs]", player),
         lambda state: state.has("Linen of Golden Thread", player))
 
@@ -2618,18 +3411,26 @@ def rules(blasphemousworld):
     # D08Z01S01 (Bridge of the Three Cavalries)
     # Items
     set_rule(world.get_location("BotTC: Esdras, of the Anointed Legion", player),
-        lambda state: state.has_group("wounds", player, 3) and \
-            state._blasphemous_can_beat_boss("Bridge", difficulty, player))
+        lambda state: (
+            state.has_group("wounds", player, 3)
+            and state._blasphemous_can_beat_boss("Bridge", difficulty, player)
+        ))
     set_rule(world.get_location("BotTC: Esdras' gift", player),
-        lambda state: state.has_group("wounds", player, 3) and \
-            state._blasphemous_can_beat_boss("Bridge", difficulty, player))
+        lambda state: (
+            state.has_group("wounds", player, 3)
+            and state._blasphemous_can_beat_boss("Bridge", difficulty, player)
+        ))
     # Doors
     set_rule(world.get_entrance("D08Z01S01[W]", player),
         lambda state: state._blasphemous_can_beat_boss("Bridge", difficulty, player))
     set_rule(world.get_entrance("D08Z01S01[E]", player),
-        lambda state: state.has_group("wounds", player, 3) and \
-            (state.has("D08Z01S01[Cherubs]", player) or \
-                state._blasphemous_can_beat_boss("Bridge", difficulty, player)))
+        lambda state: (
+            state.has_group("wounds", player, 3)
+            and (
+                state.has("D08Z01S01[Cherubs]", player)
+                or state._blasphemous_can_beat_boss("Bridge", difficulty, player)
+            )
+        ))
 
 
     # D08Z01S02 (Bridge of the Three Cavalries)
@@ -2686,91 +3487,109 @@ def rules(blasphemousworld):
     set_rule(world.get_location("WotHP: Upper east room, center gold cell", player),
         lambda state: state.has("D09Z01S02[Cell5]", player))
     set_rule(world.get_location("WotHP: Upper east room, lift puzzle", player),
-        lambda state: state.has("D09Z01S02[NW]", player) or \
-            state.has("D09Z01S02[N]", player) or \
-                state.has("D09Z01S02[Cell1]", player) or \
-                    state.has("D09Z01S02[Cell6]", player) or \
-                        state.has("D09Z01S02[Cell4]", player) or \
-                            state.has("D09Z01S02[Cell3]", player) or \
-                                state.has("D09Z01S02[Cell22]", player) or \
-                                    state.has("D09Z01S02[Cell23]", player))
+        lambda state: (
+            state.has("D09Z01S02[NW]", player)
+            or state.has("D09Z01S02[N]", player)
+            or state.has("D09Z01S02[Cell1]", player)
+            or state.has("D09Z01S02[Cell6]", player)
+            or state.has("D09Z01S02[Cell4]", player)
+            or state.has("D09Z01S02[Cell3]", player)
+            or state.has("D09Z01S02[Cell22]", player)
+            or state.has("D09Z01S02[Cell23]", player)
+        ))
     # Doors
     set_rule(world.get_entrance("D09Z01S02[SW]", player),
         lambda state: state.has("D09Z01S02[Cell2]", player))
     set_rule(world.get_entrance("D09Z01S02[NW]", player),
-        lambda state: state.has("D09Z01S02[N]", player) or \
-            state.has("D09Z01S02[Cell1]", player) or \
-                state.has("D09Z01S02[Cell6]", player) or \
-                    state.has("D09Z01S02[Cell4]", player) or \
-                        state.has("D09Z01S02[Cell3]", player) or \
-                            state.has("D09Z01S02[Cell22]", player) or \
-                                state.has("D09Z01S02[Cell23]", player))
+        lambda state: (
+            state.has("D09Z01S02[N]", player)
+            or state.has("D09Z01S02[Cell1]", player)
+            or state.has("D09Z01S02[Cell6]", player)
+            or state.has("D09Z01S02[Cell4]", player)
+            or state.has("D09Z01S02[Cell3]", player)
+            or state.has("D09Z01S02[Cell22]", player)
+            or state.has("D09Z01S02[Cell23]", player)
+        ))
     set_rule(world.get_entrance("D09Z01S02[N]", player),
-        lambda state: state.has("D09Z01S02[NW]", player) or \
-            state.has("D09Z01S02[Cell1]", player) or \
-                state.has("D09Z01S02[Cell6]", player) or \
-                    state.has("D09Z01S02[Cell4]", player) or \
-                        state.has("D09Z01S02[Cell3]", player) or \
-                            state.has("D09Z01S02[Cell22]", player) or \
-                                state.has("D09Z01S02[Cell23]", player))
+        lambda state: (
+            state.has("D09Z01S02[NW]", player)
+            or state.has("D09Z01S02[Cell1]", player)
+            or state.has("D09Z01S02[Cell6]", player)
+            or state.has("D09Z01S02[Cell4]", player)
+            or state.has("D09Z01S02[Cell3]", player)
+            or state.has("D09Z01S02[Cell22]", player)
+            or state.has("D09Z01S02[Cell23]", player)
+        ))
     set_rule(world.get_entrance("D09Z01S02[Cell1]", player),
-        lambda state: state.has("D09Z01S02[NW]", player) or \
-            state.has("D09Z01S02[N]", player) or \
-                state.has("D09Z01S02[Cell6]", player) or \
-                    state.has("D09Z01S02[Cell4]", player) or \
-                        state.has("D09Z01S02[Cell3]", player) or \
-                            state.has("D09Z01S02[Cell22]", player) or \
-                                state.has("D09Z01S02[Cell23]", player))
+        lambda state: (
+            state.has("D09Z01S02[NW]", player)
+            or state.has("D09Z01S02[N]", player)
+            or state.has("D09Z01S02[Cell6]", player)
+            or state.has("D09Z01S02[Cell4]", player)
+            or state.has("D09Z01S02[Cell3]", player)
+            or state.has("D09Z01S02[Cell22]", player)
+            or state.has("D09Z01S02[Cell23]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S02[Cell1]", player),
         lambda state: state.has("Key of the Secular", player))
     set_rule(world.get_entrance("D09Z01S02[Cell6]", player),
-        lambda state: state.has("D09Z01S02[NW]", player) or \
-            state.has("D09Z01S02[N]", player) or \
-                state.has("D09Z01S02[Cell1]", player) or \
-                    state.has("D09Z01S02[Cell4]", player) or \
-                        state.has("D09Z01S02[Cell3]", player) or \
-                            state.has("D09Z01S02[Cell22]", player) or \
-                                state.has("D09Z01S02[Cell23]", player))
+        lambda state: (
+            state.has("D09Z01S02[NW]", player)
+            or state.has("D09Z01S02[N]", player)
+            or state.has("D09Z01S02[Cell1]", player)
+            or state.has("D09Z01S02[Cell4]", player)
+            or state.has("D09Z01S02[Cell3]", player)
+            or state.has("D09Z01S02[Cell22]", player)
+            or state.has("D09Z01S02[Cell23]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S02[Cell6]", player),
         lambda state: state.has("Key of the Scribe", player))
     set_rule(world.get_entrance("D09Z01S02[Cell4]", player),
-        lambda state: state.has("D09Z01S02[NW]", player) or \
-            state.has("D09Z01S02[N]", player) or \
-                state.has("D09Z01S02[Cell1]", player) or \
-                    state.has("D09Z01S02[Cell6]", player) or \
-                        state.has("D09Z01S02[Cell3]", player) or \
-                            state.has("D09Z01S02[Cell22]", player) or \
-                                state.has("D09Z01S02[Cell23]", player))
+        lambda state: (
+            state.has("D09Z01S02[NW]", player)
+            or state.has("D09Z01S02[N]", player)
+            or state.has("D09Z01S02[Cell1]", player)
+            or state.has("D09Z01S02[Cell6]", player)
+            or state.has("D09Z01S02[Cell3]", player)
+            or state.has("D09Z01S02[Cell22]", player)
+            or state.has("D09Z01S02[Cell23]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S02[Cell4]", player),
         lambda state: state.has("Key of the Inquisitor", player))
     set_rule(world.get_entrance("D09Z01S02[Cell2]", player),
         lambda state: state.has("D09Z01S02[SW]", player))
     set_rule(world.get_entrance("D09Z01S02[Cell3]", player),
-        lambda state: state.has("D09Z01S02[NW]", player) or \
-            state.has("D09Z01S02[N]", player) or \
-                state.has("D09Z01S02[Cell1]", player) or \
-                    state.has("D09Z01S02[Cell6]", player) or \
-                        state.has("D09Z01S02[Cell4]", player) or \
-                            state.has("D09Z01S02[Cell22]", player) or \
-                                state.has("D09Z01S02[Cell23]", player))
+        lambda state: (
+            state.has("D09Z01S02[NW]", player)
+            or state.has("D09Z01S02[N]", player)
+            or state.has("D09Z01S02[Cell1]", player)
+            or state.has("D09Z01S02[Cell6]", player)
+            or state.has("D09Z01S02[Cell4]", player)
+            or state.has("D09Z01S02[Cell22]", player)
+            or state.has("D09Z01S02[Cell23]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S02[Cell3]", player),
         lambda state: state.has("Key of the Secular", player))
     set_rule(world.get_entrance("D09Z01S02[Cell22]", player),
-        lambda state: state.has("D09Z01S02[NW]", player) or \
-            state.has("D09Z01S02[N]", player) or \
-                state.has("D09Z01S02[Cell1]", player) or \
-                    state.has("D09Z01S02[Cell6]", player) or \
-                        state.has("D09Z01S02[Cell4]", player) or \
-                            state.has("D09Z01S02[Cell3]", player) or \
-                                state.has("D09Z01S02[Cell23]", player))
+        lambda state: (
+            state.has("D09Z01S02[NW]", player)
+            or state.has("D09Z01S02[N]", player)
+            or state.has("D09Z01S02[Cell1]", player)
+            or state.has("D09Z01S02[Cell6]", player)
+            or state.has("D09Z01S02[Cell4]", player)
+            or state.has("D09Z01S02[Cell3]", player)
+            or state.has("D09Z01S02[Cell23]", player)
+        ))
     set_rule(world.get_entrance("D09Z01S02[Cell23]", player),
-        lambda state: state.has("D09Z01S02[NW]", player) or \
-            state.has("D09Z01S02[N]", player) or \
-                state.has("D09Z01S02[Cell1]", player) or \
-                    state.has("D09Z01S02[Cell6]", player) or \
-                        state.has("D09Z01S02[Cell4]", player) or \
-                            state.has("D09Z01S02[Cell3]", player) or \
-                                state.has("D09Z01S02[Cell22]", player))
+        lambda state: (
+            state.has("D09Z01S02[NW]", player)
+            or state.has("D09Z01S02[N]", player)
+            or state.has("D09Z01S02[Cell1]", player)
+            or state.has("D09Z01S02[Cell6]", player)
+            or state.has("D09Z01S02[Cell4]", player)
+            or state.has("D09Z01S02[Cell3]", player)
+            or state.has("D09Z01S02[Cell22]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S02[Cell23]", player),
         lambda state: state.has("Key of the Secular", player))
 
@@ -2781,8 +3600,10 @@ def rules(blasphemousworld):
         lambda state: state._blasphemous_can_beat_boss("Prison", difficulty, player))
     # Doors
     set_rule(world.get_entrance("D09Z01S03[W]", player),
-        lambda state: state.has("D09Z01S03[N]", player) and \
-            state._blasphemous_can_beat_boss("Prison", difficulty, player))
+        lambda state: (
+            state.has("D09Z01S03[N]", player)
+            and state._blasphemous_can_beat_boss("Prison", difficulty, player)
+        ))
     
 
     # D09Z01S05 (Wall of the Holy Prohibitions)
@@ -2802,30 +3623,40 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D09Z01S07[SW]", player),
-        lambda state: state.has("D09Z01S07[SE]", player) or \
-            state.has("D09Z01S07[W]", player) or \
-                state.has("D09Z01S07[E]", player))
+        lambda state: (
+            state.has("D09Z01S07[SE]", player)
+            or state.has("D09Z01S07[W]", player)
+            or state.has("D09Z01S07[E]", player)
+        ))
     set_rule(world.get_entrance("D09Z01S07[SE]", player),
-        lambda state: state.has("D09Z01S07[SW]", player) or \
-            state.has("D09Z01S07[W]", player) or \
-                state.has("D09Z01S07[E]", player))
+        lambda state: (
+            state.has("D09Z01S07[SW]", player)
+            or state.has("D09Z01S07[W]", player)
+            or state.has("D09Z01S07[E]", player)
+        ))
     set_rule(world.get_entrance("D09Z01S07[W]", player),
-        lambda state: state.has("D09Z01S07[SW]", player) or \
-            state.has("D09Z01S07[SE]", player) or \
-                state.has("D09Z01S07[E]", player))
+        lambda state: (
+            state.has("D09Z01S07[SW]", player)
+            or state.has("D09Z01S07[SE]", player)
+            or state.has("D09Z01S07[E]", player)
+        ))
     set_rule(world.get_entrance("D09Z01S07[E]", player),
-        lambda state: state.has("D09Z01S07[SW]", player) or \
-            state.has("D09Z01S07[SE]", player) or \
-                state.has("D09Z01S07[W]", player))
+        lambda state: (
+            state.has("D09Z01S07[SW]", player)
+            or state.has("D09Z01S07[SE]", player)
+            or state.has("D09Z01S07[W]", player)
+        ))
     set_rule(world.get_entrance("D09Z01S07[NW]", player),
         lambda state: state.has("D09Z01S07[N]", player))
     set_rule(world.get_entrance("D09Z01S07[N]", player),
         lambda state: state.has("D09Z01S07[NW]", player))
     set_rule(world.get_entrance("D09Z01S07[NE]", player),
-        lambda state: state.has("D09Z01S07[SW]", player) or \
-            state.has("D09Z01S07[SE]", player) or \
-                state.has("D09Z01S07[W]", player) or \
-                    state.has("D09Z01S07[E]", player))
+        lambda state: (
+            state.has("D09Z01S07[SW]", player)
+            or state.has("D09Z01S07[SE]", player)
+            or state.has("D09Z01S07[W]", player)
+            or state.has("D09Z01S07[E]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S07[NE]", player),
         lambda state: state.has("Blood Perpetuated in Sand", player))
 
@@ -2833,104 +3664,156 @@ def rules(blasphemousworld):
     # D09Z01S08 (Wall of the Holy Prohibitions)
     # Items
     set_rule(world.get_location("WotHP: Collapsing floor ledge", player),
-        lambda state: (state.has("D09Z01S08[W]", player) or \
-            state.has("D09Z01S08[Cell18]", player)) and \
-                state.has("OpenedWOTHPGate", player))
+        lambda state: (
+            (
+                state.has("D09Z01S08[W]", player)
+                or state.has("D09Z01S08[Cell18]", player)
+            )
+            and state.has("OpenedWOTHPGate", player)
+        ))
     # Doors
     set_rule(world.get_entrance("D09Z01S08[W]", player),
         lambda state: state.has("D09Z01S08[Cell14]", player))
     add_rule(world.get_entrance("D09Z01S08[W]", player),
         lambda state: state.has("OpenedWOTHPGate", player))
     set_rule(world.get_entrance("D09Z01S08[S]", player),
-        lambda state: state.has("D09Z01S08[W]", player) or \
-            state.has("D09Z01S08[Cell14]", player))
+        lambda state: (
+            state.has("D09Z01S08[W]", player)
+            or state.has("D09Z01S08[Cell14]", player)
+        ))
     set_rule(world.get_entrance("D09Z01S08[SE]", player),
-        lambda state: state.has("D09Z01S08[Cell15]", player) or \
-            state.has("D09Z01S08[Cell16]", player) or \
-                state.has("D09Z01S08[Cell18]", player) or \
-                    state.has("D09Z01S08[Cell17]", player) and \
-                        state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D09Z01S08[Cell15]", player)
+            or state.has("D09Z01S08[Cell16]", player)
+            or state.has("D09Z01S08[Cell18]", player)
+            or state.has("D09Z01S08[Cell17]", player)
+            and state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D09Z01S08[NE]", player),
-        lambda state: state.has("D09Z01S08[Cell7]", player) or \
-            state.has("D09Z01S08[Cell17]", player) and \
-                state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D09Z01S08[Cell7]", player)
+            or state.has("D09Z01S08[Cell17]", player)
+            and state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D09Z01S08[Cell14]", player),
         lambda state: state.has("D09Z01S08[W]", player))
     set_rule(world.get_entrance("D09Z01S08[Cell15]", player),
-        lambda state: state.has("Key of the Scribe", player) and \
-            (state.has("D09Z01S08[SE]", player) or \
-                state.has("D09Z01S08[Cell16]", player) or \
-                    state.has("D09Z01S08[Cell18]", player) or \
-                        state.has("D09Z01S08[Cell17]", player) and \
-                            state.has("Dash Ability", player)))
+        lambda state: (
+            state.has("Key of the Scribe", player)
+            and (
+                state.has("D09Z01S08[SE]", player)
+                or state.has("D09Z01S08[Cell16]", player)
+                or state.has("D09Z01S08[Cell18]", player)
+                or state.has("D09Z01S08[Cell17]", player)
+                and state.has("Dash Ability", player)
+            )
+        ))
     set_rule(world.get_entrance("D09Z01S08[Cell7]", player),
-        lambda state: state.has("Key of the Inquisitor", player) and \
-            (state.has("D09Z01S08[NE]", player) or \
-                state.has("D09Z01S08[Cell17]", player) and \
-                    state.has("Dash Ability", player)))
+        lambda state: (
+            state.has("Key of the Inquisitor", player)
+            and (
+                state.has("D09Z01S08[NE]", player)
+                or state.has("D09Z01S08[Cell17]", player)
+                and state.has("Dash Ability", player)
+            )
+        ))
     set_rule(world.get_entrance("D09Z01S08[Cell16]", player),
-        lambda state: state.has("Key of the Inquisitor", player) and \
-            (state.has("D09Z01S08[SE]", player) or \
-                state.has("D09Z01S08[Cell15]", player) or \
-                    state.has("D09Z01S08[Cell18]", player) or \
-                        state.has("D09Z01S08[Cell17]", player) and \
-                            state.has("Dash Ability", player)))
+        lambda state: (
+            state.has("Key of the Inquisitor", player)
+            and (
+                state.has("D09Z01S08[SE]", player)
+                or state.has("D09Z01S08[Cell15]", player)
+                or state.has("D09Z01S08[Cell18]", player)
+                or state.has("D09Z01S08[Cell17]", player)
+                and state.has("Dash Ability", player)
+            )
+        ))
     set_rule(world.get_entrance("D09Z01S08[Cell18]", player),
-        lambda state: state.has("Key of the Scribe", player) and \
-            (state.has("D09Z01S08[SE]", player) or \
-                state.has("D09Z01S08[Cell15]", player) or \
-                    state.has("D09Z01S08[Cell16]", player) or \
-                        state.has("D09Z01S08[Cell17]", player) and \
-                            state.has("Dash Ability", player)))
+        lambda state: (
+            state.has("Key of the Scribe", player)
+            and (
+                state.has("D09Z01S08[SE]", player)
+                or state.has("D09Z01S08[Cell15]", player)
+                or state.has("D09Z01S08[Cell16]", player)
+                or state.has("D09Z01S08[Cell17]", player)
+                and state.has("Dash Ability", player)
+            )
+        ))
 
 
     # D09Z01S09 (Wall of the Holy Prohibitions)
     # Items
     set_rule(world.get_location("WotHP: Lower west room, top ledge", player),
-        lambda state: state.has("D09Z01S09[Cell24]", player) or \
-            state.has("Dash Ability", player) and \
-                (state.has("D09Z01S09[NW]", player) or \
-                    state.has("D09Z01S09[Cell19]", player)))
+        lambda state: (
+            state.has("D09Z01S09[Cell24]", player)
+            or state.has("Dash Ability", player)
+            and (
+                state.has("D09Z01S09[NW]", player)
+                or state.has("D09Z01S09[Cell19]", player)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D09Z01S09[SW]", player),
-        lambda state: state.has("D09Z01S09[Cell21]", player) or \
-            state.has("D09Z01S09[Cell20]", player) or \
-                state.has("D09Z01S09[E]", player) or \
-                    state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D09Z01S09[Cell21]", player)
+            or state.has("D09Z01S09[Cell20]", player)
+            or state.has("D09Z01S09[E]", player)
+            or state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D09Z01S09[NW]", player),
-        lambda state: state.has("D09Z01S09[Cell19]", player) or \
-            state.has("D09Z01S09[Cell24]", player))
+        lambda state: (
+            state.has("D09Z01S09[Cell19]", player)
+            or state.has("D09Z01S09[Cell24]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S09[NW]", player),
-        lambda state: state.has("D09Z01S09[Cell19]", player) or \
-            state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D09Z01S09[Cell19]", player)
+            or state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D09Z01S09[E]", player),
-        lambda state: state.has("D09Z01S09[Cell21]", player) or \
-            state.has("D09Z01S09[Cell20]", player) or \
-                state.has("D09Z01S09[SW]", player) or \
-                    state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D09Z01S09[Cell21]", player)
+            or state.has("D09Z01S09[Cell20]", player)
+            or state.has("D09Z01S09[SW]", player)
+            or state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D09Z01S09[Cell24]", player),
-        lambda state: state.has("D09Z01S09[NW]", player) or \
-            state.has("D09Z01S09[Cell19]", player))
+        lambda state: (
+            state.has("D09Z01S09[NW]", player)
+            or state.has("D09Z01S09[Cell19]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S09[Cell24]", player),
         lambda state: state.has("Dash Ability", player))
     set_rule(world.get_entrance("D09Z01S09[Cell24]", player),
-        lambda state: state.has("D09Z01S09[NW]", player) or \
-            state.has("D09Z01S09[Cell24]", player))
+        lambda state: (
+            state.has("D09Z01S09[NW]", player)
+            or state.has("D09Z01S09[Cell24]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S09[Cell19]", player),
-        lambda state: state.has("D09Z01S09[NW]", player) or \
-            state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D09Z01S09[NW]", player)
+            or state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D09Z01S09[Cell20]", player),
-        lambda state: state.has("Key of the Scribe", player) and \
-            (state.has("D09Z01S09[Cell21]", player) or \
-                state.has("D09Z01S09[SW]", player) or \
-                    state.has("D09Z01S09[E]", player) or \
-                        state.has("Dash Ability", player)))
+        lambda state: (
+            state.has("Key of the Scribe", player)
+            and (
+                state.has("D09Z01S09[Cell21]", player)
+                or state.has("D09Z01S09[SW]", player)
+                or state.has("D09Z01S09[E]", player)
+                or state.has("Dash Ability", player)
+            )
+        ))
     set_rule(world.get_entrance("D09Z01S09[Cell21]", player),
-        lambda state: state.has("Key of the Inquisitor", player) and \
-            (state.has("D09Z01S09[Cell20]", player) or \
-                state.has("D09Z01S09[SW]", player) or \
-                    state.has("D09Z01S09[E]", player) or \
-                        state.has("Dash Ability", player)))
+        lambda state: (
+            state.has("Key of the Inquisitor", player)
+            and (
+                state.has("D09Z01S09[Cell20]", player)
+                or state.has("D09Z01S09[SW]", player)
+                or state.has("D09Z01S09[E]", player)
+                or state.has("Dash Ability", player)
+            )
+        ))
 
 
     # D09Z01S10 (Wall of the Holy Prohibitions)
@@ -2938,31 +3821,41 @@ def rules(blasphemousworld):
     set_rule(world.get_location("WotHP: Lower east room, top bronze cell", player),
         lambda state: state.has("D09Z01S10[Cell13]", player))
     set_rule(world.get_location("WotHP: Lower east room, hidden ledge", player),
-        lambda state: state.has("D09Z01S10[W]", player) or \
-            state.has("D09Z01S10[Cell12]", player) or \
-                state.has("D09Z01S10[Cell10]", player) or \
-                    state.has("D09Z01S10[Cell11]", player))
+        lambda state: (
+            state.has("D09Z01S10[W]", player)
+            or state.has("D09Z01S10[Cell12]", player)
+            or state.has("D09Z01S10[Cell10]", player)
+            or state.has("D09Z01S10[Cell11]", player)
+        ))
     # Doors
     set_rule(world.get_entrance("D09Z01S10[W]", player),
-        lambda state: state.has("D09Z01S10[Cell12]", player) or \
-            state.has("D09Z01S10[Cell10]", player) or \
-                state.has("D09Z01S10[Cell11]", player))
+        lambda state: (
+            state.has("D09Z01S10[Cell12]", player)
+            or state.has("D09Z01S10[Cell10]", player)
+            or state.has("D09Z01S10[Cell11]", player)
+        ))
     set_rule(world.get_entrance("D09Z01S10[Cell12]", player),
-        lambda state: state.has("D09Z01S10[W]", player) or \
+        lambda state: (
+            state.has("D09Z01S10[W]", player) or \
             state.has("D09Z01S10[Cell10]", player) or \
-                state.has("D09Z01S10[Cell11]", player))
+                state.has("D09Z01S10[Cell11]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S10[Cell12]", player),
         lambda state: state.has("Key of the Secular", player))
     set_rule(world.get_entrance("D09Z01S10[Cell10]", player),
-        lambda state: state.has("D09Z01S10[W]", player) or \
-            state.has("D09Z01S10[Cell12]", player) or \
-                state.has("D09Z01S10[Cell11]", player))
+        lambda state: (
+            state.has("D09Z01S10[W]", player)
+            or state.has("D09Z01S10[Cell12]", player)
+            or state.has("D09Z01S10[Cell11]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S10[Cell10]", player),
         lambda state: state.has("Key of the Scribe", player))
     set_rule(world.get_entrance("D09Z01S10[Cell11]", player),
-        lambda state: state.has("D09Z01S10[W]", player) or \
-            state.has("D09Z01S10[Cell12]", player) or \
-                state.has("D09Z01S10[Cell10]", player))
+        lambda state: (
+            state.has("D09Z01S10[W]", player)
+            or state.has("D09Z01S10[Cell12]", player)
+            or state.has("D09Z01S10[Cell10]", player)
+        ))
     add_rule(world.get_entrance("D09Z01S10[Cell11]", player),
         lambda state: state.has("Key of the Scribe", player))
     
@@ -2971,31 +3864,41 @@ def rules(blasphemousworld):
     set_rule(world.get_location("WotHP: Upper east room, center cell ledge", player),
         lambda state: state.has("D09BZ01S01[Cell22]", player))
     set_rule(world.get_location("WotHP: Upper east room, center cell floor", player),
-        lambda state: state.has("D09BZ01S01[Cell22]", player) or \
-            state.has("D09BZ01S01[Cell23]", player))
+        lambda state: (
+            state.has("D09BZ01S01[Cell22]", player)
+            or state.has("D09BZ01S01[Cell23]", player)
+        ))
     set_rule(world.get_location("WotHP: Upper east room, top bronze cell", player),
         lambda state: state.has("D09BZ01S01[Cell1]", player))
     set_rule(world.get_location("WotHP: Upper east room, top silver cell", player),
         lambda state: state.has("D09BZ01S01[Cell6]", player))
     set_rule(world.get_location("WotHP: Upper west room, top silver cell", player),
-        lambda state: state.has("D09BZ01S01[Cell14]", player) or \
-            state.has("D09BZ01S01[Cell15]", player))
+        lambda state: (
+            state.has("D09BZ01S01[Cell14]", player)
+            or state.has("D09BZ01S01[Cell15]", player)
+        ))
     set_rule(world.get_location("WotHP: Upper west room, center gold cell", player),
         lambda state: state.has("D09BZ01S01[Cell16]", player))
     set_rule(world.get_location("WotHP: Lower west room, bottom gold cell", player),
-        lambda state: state.has("D09BZ01S01[Cell21]", player) and \
-            state.has("Blood Perpetuated in Sand", player) and \
-                state._blasphemous_can_climb_on_root(player) and \
-                    state._blasphemous_can_survive_poison(difficulty, player, 2) and \
-                        state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D09BZ01S01[Cell21]", player)
+            and state.has("Blood Perpetuated in Sand", player)
+            and state._blasphemous_can_climb_on_root(player)
+            and state._blasphemous_can_survive_poison(difficulty, player, 2)
+            and state.has("Dash Ability", player)
+        ))
     set_rule(world.get_location("WotHP: Lower east room, top silver cell", player),
         lambda state: state.has("D09BZ01S01[Cell10]", player))
     set_rule(world.get_location("WotHP: Lower east room, bottom silver cell", player),
-        lambda state: state.has("D09BZ01S01[Cell11]", player) and \
-            (state._blasphemous_can_survive_poison(difficulty, player, 1) and \
-                state.has("Dash Ability", player) or \
-                    state.has_any({"Debla of the Lights", "Taranto to my Sister", "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Cantina of the Blue Rose"}, player) or \
-                        state._blasphemous_aubade(player)))
+        lambda state: (
+            state.has("D09BZ01S01[Cell11]", player)
+            and (
+                state._blasphemous_can_survive_poison(difficulty, player, 1)
+                and state.has("Dash Ability", player)
+                or state.has_any({"Debla of the Lights", "Taranto to my Sister", "Cante Jondo of the Three Sisters", "Verdiales of the Forsaken Hamlet", "Cantina of the Blue Rose"}, player)
+                or state._blasphemous_aubade(player)
+            )
+        ))
     # Doors
     set_rule(world.get_entrance("D09BZ01S01[Cell2]", player),
         lambda state: state.has("D09BZ01S01[Cell3]", player))
@@ -3029,12 +3932,18 @@ def rules(blasphemousworld):
     set_rule(world.get_location("BotSS: Starting room ledge", player),
         lambda state: state.has("D17Z01S01[Cherubs3]", player))
     set_rule(world.get_location("BotSS: Starting room Child of Moonlight", player),
-        lambda state: state.has("D17Z01S01[Cherubs1]", player) or \
-            state.has("Taranto to my Sister", player) or \
-                (state._blasphemous_can_climb_on_root(player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 9)) and \
-                        (state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun", "Debla of the Lights", "Verdiales of the Forsaken Hamlet", "Cloistered Ruby"}, player) or \
-                            state._blasphemous_tirana(player)))
+        lambda state: (
+            state.has("D17Z01S01[Cherubs1]", player)
+            or state.has("Taranto to my Sister", player)
+            or (
+                state._blasphemous_can_climb_on_root(player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 9)
+            )
+            and (
+                state.has_any({"Blood Perpetuated in Sand", "Purified Hand of the Nun", "Debla of the Lights", "Verdiales of the Forsaken Hamlet", "Cloistered Ruby"}, player)
+                or state._blasphemous_tirana(player)
+            )
+        ))
 
 
     # D17Z01S02 (Brotherhood of the Silent Sorrow)
@@ -3043,13 +3952,19 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D17Z01S02[W]", player),
         lambda state: state.has("Dash Ability", player))
     set_rule(world.get_entrance("D17Z01S02[E]", player),
-        lambda state: state.has("D17Z01S02[N]", player) or \
-            state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D17Z01S02[N]", player)
+            or state.has("Dash Ability", player)
+        ))
     set_rule(world.get_entrance("D17Z01S02[N]", player),
-        lambda state: state.has("Blood Perpetuated in Sand", player) and \
-            (state.has("D17Z01S02[E]", player) or \
-                state.has("D17Z01S02[W]", player) and \
-                    state.has("Dash Ability", player)))
+        lambda state: (
+            state.has("Blood Perpetuated in Sand", player)
+            and (
+                state.has("D17Z01S02[E]", player)
+                or state.has("D17Z01S02[W]", player)
+                and state.has("Dash Ability", player)
+            )
+        ))
 
 
     # D17Z01S03 (Brotherhood of the Silent Sorrow)
@@ -3102,48 +4017,70 @@ def rules(blasphemousworld):
     # D17Z01S14 (Brotherhood of the Silent Sorrow)
     # Items
     set_rule(world.get_location("BotSS: Outside church", player),
-        lambda state: state.has("D17Z01S14[W]", player) or \
-            state.has("Blood Perpetuated in Sand", player))
+        lambda state: (
+            state.has("D17Z01S14[W]", player)
+            or state.has("Blood Perpetuated in Sand", player)
+        ))
     # Doors
     set_rule(world.get_entrance("D17Z01S14[W]", player),
-        lambda state: state.has("Incomplete Scapular", player) and \
-            (state.has("Blood Perpetuated in Sand", player)))
+        lambda state: (
+            state.has("Incomplete Scapular", player)
+            and state.has("Blood Perpetuated in Sand", player)
+        ))
     set_rule(world.get_entrance("D17Z01S14[E]", player),
         lambda state: state.has("Blood Perpetuated in Sand", player))
     set_rule(world.get_entrance("D17Z01S14[-Cherubs1]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D17Z01S14[W]", player) or \
-                state.has("Blood Perpetuated in Sand", player) or \
-                    state._blasphemous_can_cross_gap(difficulty, player, 11)))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D17Z01S14[W]", player)
+                or state.has("Blood Perpetuated in Sand", player)
+                or state._blasphemous_can_cross_gap(difficulty, player, 11)
+            )
+        ))
     set_rule(world.get_entrance("D17Z01S14[-Cherubs2]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D17Z01S14[E]", player) and \
-                state._blasphemous_can_cross_gap(difficulty, player, 8) or \
-                    state.has("D17Z01S14[W]", player) and \
-                        state._blasphemous_can_cross_gap(difficulty, player, 10) or \
-                            state.has("Blood Perpetuated in Sand", player)))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D17Z01S14[E]", player)
+                and state._blasphemous_can_cross_gap(difficulty, player, 8)
+                or state.has("D17Z01S14[W]", player)
+                and state._blasphemous_can_cross_gap(difficulty, player, 10)
+                or state.has("Blood Perpetuated in Sand", player)
+            )
+        ))
     set_rule(world.get_entrance("D17Z01S14[-Cherubs3]", player),
-        lambda state: state.has("Linen of Golden Thread", player) and \
-            (state.has("D17Z01S14[E]", player) or \
-                state.has("Blood Perpetuated in Sand", player)))
+        lambda state: (
+            state.has("Linen of Golden Thread", player)
+            and (
+                state.has("D17Z01S14[E]", player)
+                or state.has("Blood Perpetuated in Sand", player)
+            )
+        ))
 
 
     # D17Z01S15 (Brotherhood of the Silent Sorrow)
     # Items
     set_rule(world.get_location("BotSS: Esdras' final gift", player),
-        lambda state: state._blasphemous_can_beat_boss("Bridge", difficulty, player) and \
-            state.has_group("wounds", player, 3))
+        lambda state: (
+            state._blasphemous_can_beat_boss("Bridge", difficulty, player)
+            and state.has_group("wounds", player, 3)
+        ))
     set_rule(world.get_location("BotSS: Crisanta's gift", player),
-        lambda state: state._blasphemous_can_beat_boss("Rooftops", difficulty, player) and \
-            state.has("Apodictic Heart of Mea Culpa", player))
+        lambda state: (
+            state._blasphemous_can_beat_boss("Rooftops", difficulty, player)
+            and state.has("Apodictic Heart of Mea Culpa", player)
+        ))
     # No doors
 
 
     # D17BZ02S01 (Brotherhood of the Silent Sorrow - Platforming challenge)
     # Items
     set_rule(world.get_location("BotSS: Platforming gauntlet", player),
-        lambda state: state.has("D17BZ02S01[FrontR]", player) or \
-            state.has_all({"Dash Ability", "Wall Climb Ability"}, player))
+        lambda state: (
+            state.has("D17BZ02S01[FrontR]", player)
+            or state.has_all({"Dash Ability", "Wall Climb Ability"}, player)
+        ))
     # Doors
     set_rule(world.get_entrance("D17BZ02S01[FrontR]", player),
         lambda state: state.has_all({"Dash Ability", "Wall Climb Ability"}, player))
@@ -3159,8 +4096,10 @@ def rules(blasphemousworld):
     # D20Z01S09 (Echoes of Salt)
     # Items
     set_rule(world.get_location("EoS: Lantern jump near elevator", player),
-        lambda state: state.has("D20Z01S09[W]", player) or \
-            state.has("Dash Ability", player))
+        lambda state: (
+            state.has("D20Z01S09[W]", player)
+            or state.has("Dash Ability", player)
+        ))
     # Doors
     set_rule(world.get_entrance("D20Z01S09[W]", player),
         lambda state: state.has("Dash Ability", player))
@@ -3181,8 +4120,10 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D20Z02S03[NE]", player),
-        lambda state: state._blasphemous_can_walk_on_root(player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 5))
+        lambda state: (
+            state._blasphemous_can_walk_on_root(player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 5)
+        ))
 
 
     # D20Z02S04 (Mourning and Havoc)
@@ -3198,23 +4139,29 @@ def rules(blasphemousworld):
     # No items
     # Doors
     set_rule(world.get_entrance("D20Z02S05[NW]", player),
-        lambda state: state.has("Nail Uprooted from Dirt", player) or \
-            state._blasphemous_can_cross_gap(difficulty, player, 3))
+        lambda state: (
+            state.has("Nail Uprooted from Dirt", player)
+            or state._blasphemous_can_cross_gap(difficulty, player, 3)
+        ))
 
 
     # D20Z02S06 (Mourning and Havoc)
     # No items
     # Doors
     set_rule(world.get_entrance("D20Z02S06[NW]", player),
-        lambda state: state.has("D20Z02S06[NE]", player) or \
-            state.has("Purified Hand of the Nun", player) or \
-                state._blasphemous_can_climb_on_root(player) or \
-                    state._blasphemous_can_dive_laser(difficulty, player))
+        lambda state: (
+            state.has("D20Z02S06[NE]", player)
+            or state.has("Purified Hand of the Nun", player)
+            or state._blasphemous_can_climb_on_root(player)
+            or state._blasphemous_can_dive_laser(difficulty, player)
+        ))
     set_rule(world.get_entrance("D20Z02S06[NE]", player),
-        lambda state: state.has("D20Z02S06[NW]", player) or \
-            state.has("Purified Hand of the Nun", player) or \
-                state._blasphemous_can_climb_on_root(player) or \
-                    state._blasphemous_can_dive_laser(difficulty, player))
+        lambda state: (
+            state.has("D20Z02S06[NW]", player)
+            or state.has("Purified Hand of the Nun", player)
+            or state._blasphemous_can_climb_on_root(player)
+            or state._blasphemous_can_dive_laser(difficulty, player)
+        ))
 
 
     # D20Z02S08 (Mourning and Havoc)
@@ -3232,35 +4179,55 @@ def rules(blasphemousworld):
     set_rule(world.get_entrance("D20Z02S11[NW]", player),
         lambda state: state.has("D20Z02S11[E]", player))
     set_rule(world.get_entrance("D20Z02S11[NW]", player),
-        lambda state: state._blasphemous_mourning_skips_allowed(difficulty) and \
-            (state.has("Purified Hand of the Nun", player) or \
-                state._blasphemous_can_break_tirana(difficulty, player) or \
-                    state.has("D20Z02S11[E]", player)))
+        lambda state: (
+            state._blasphemous_mourning_skips_allowed(difficulty)
+            and (
+                state.has("Purified Hand of the Nun", player)
+                or state._blasphemous_can_break_tirana(difficulty, player)
+                or state.has("D20Z02S11[E]", player)
+            )
+        ))
     set_rule(world.get_entrance("D20Z02S11[E]", player),
-        lambda state: state._blasphemous_mourning_skips_allowed(difficulty) and \
-            (state.has("Purified Hand of the Nun", player) or \
-                state._blasphemous_can_break_tirana(difficulty, player) or \
-                    state.has("D20Z02S11[NW]", player) and \
-                        state._blasphemous_can_cross_gap(difficulty, player, 5)))
+        lambda state: (
+            state._blasphemous_mourning_skips_allowed(difficulty)
+            and (
+                state.has("Purified Hand of the Nun", player)
+                or state._blasphemous_can_break_tirana(difficulty, player)
+                or state.has("D20Z02S11[NW]", player)
+                and state._blasphemous_can_cross_gap(difficulty, player, 5)
+            )
+        ))
     
 
     # Misc Items
     set_rule(world.get_location("Second red candle", player),
-        lambda state: state.has("Bead of Red Wax", player) and \
-            (state.can_reach(world.get_region("D02Z03S06", player), player) or \
-                    state.has("D05Z01S02[W]", player)))
+        lambda state: (
+            state.has("Bead of Red Wax", player)
+            and (
+                state.can_reach(world.get_region("D02Z03S06", player), player)
+                or state.has("D05Z01S02[W]", player)
+            )
+        ))
     set_rule(world.get_location("Third red candle", player),
-        lambda state: state.has("Bead of Red Wax", player) and \
-            state.has("D05Z01S02[W]", player) and \
-                state.can_reach(world.get_region("D02Z03S06", player), player))
+        lambda state: (
+            state.has("Bead of Red Wax", player)
+            and state.has("D05Z01S02[W]", player)
+            and state.can_reach(world.get_region("D02Z03S06", player), player)
+        ))
     set_rule(world.get_location("Second blue candle", player),
-        lambda state: state.has("Bead of Blue Wax", player) and \
-            (state.has("OpenedBOTSSLadder", player) or \
-                state.can_reach(world.get_region("D01Z04S16", player), player)))
+        lambda state: (
+            state.has("Bead of Blue Wax", player)
+            and (
+                state.has("OpenedBOTSSLadder", player)
+                or state.can_reach(world.get_region("D01Z04S16", player), player)
+            )
+        ))
     set_rule(world.get_location("Third blue candle", player),
-        lambda state: state.has("Bead of Blue Wax", player) and \
-            state.has("OpenedBOTSSLadder", player) and \
-                state.can_reach(world.get_region("D01Z04S16", player), player))
+        lambda state: (
+            state.has("Bead of Blue Wax", player)
+            and state.has("OpenedBOTSSLadder", player)
+            and state.can_reach(world.get_region("D01Z04S16", player), player)
+        ))
     set_rule(world.get_location("Defeat 1 Amanecida", player),
         lambda state: state._blasphemous_amanecida_rooms(difficulty, player, 1))
     set_rule(world.get_location("Defeat 2 Amanecidas", player),
@@ -3272,47 +4239,75 @@ def rules(blasphemousworld):
     set_rule(world.get_location("Defeat all Amanecidas", player),
         lambda state: state._blasphemous_amanecida_rooms(difficulty, player, 4))
     set_rule(world.get_location("Confessor Dungeon 1 main", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 1))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 1)
+        ))
     set_rule(world.get_location("Confessor Dungeon 2 main", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 2))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 2)
+        ))
     set_rule(world.get_location("Confessor Dungeon 3 main", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 3))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 3)
+        ))
     set_rule(world.get_location("Confessor Dungeon 4 main", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 4))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 4)
+        ))
     set_rule(world.get_location("Confessor Dungeon 5 main", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 5))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 5)
+        ))
     set_rule(world.get_location("Confessor Dungeon 6 main", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 6))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 6)
+        ))
     set_rule(world.get_location("Confessor Dungeon 7 main", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 7))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 7)
+        ))
     set_rule(world.get_location("Confessor Dungeon 1 extra", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 1))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 1)
+        ))
     set_rule(world.get_location("Confessor Dungeon 2 extra", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 2))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 2)
+        ))
     set_rule(world.get_location("Confessor Dungeon 3 extra", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 3))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 3)
+        ))
     set_rule(world.get_location("Confessor Dungeon 4 extra", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 4))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 4)
+        ))
     set_rule(world.get_location("Confessor Dungeon 5 extra", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 5))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 5)
+        ))
     set_rule(world.get_location("Confessor Dungeon 6 extra", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 6))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 6)
+        ))
     set_rule(world.get_location("Confessor Dungeon 7 extra", player),
-        lambda state: state.has("Weight of True Guilt", player) and \
-            state._blasphemous_guilt_rooms(player, 7))
+        lambda state: (
+            state.has("Weight of True Guilt", player)
+            and state._blasphemous_guilt_rooms(player, 7)
+        ))
     set_rule(world.get_location("Skill 1, Tier 1", player),
         lambda state: state._blasphemous_sword_rooms(player, 1))
     set_rule(world.get_location("Skill 1, Tier 2", player),
