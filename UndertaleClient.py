@@ -406,16 +406,17 @@ async def game_watcher(ctx: UndertaleContext):
             ctx.syncing = False
         if ctx.got_deathlink:
             ctx.got_deathlink = False
-            with open(os.path.join(ctx.save_game_folder, "/WelcomeToTheDead.youDied"), "w") as f:
+            with open(os.path.join(ctx.save_game_folder, "WelcomeToTheDead.youDied"), "w") as f:
                 f.close()
         sending = []
         victory = False
         found_routes = 0
         for root, dirs, files in os.walk(path):
             for file in files:
-                if "DontBeMad.mad" in file and "DeathLink" in ctx.tags:
+                if "DontBeMad.mad" in file:
                     os.remove(root+"/"+file)
-                    await ctx.send_death()
+                    if "DeathLink" in ctx.tags:
+                        await ctx.send_death()
                 if "scout" == file:
                     sending = []
                     try:
@@ -427,7 +428,7 @@ async def game_watcher(ctx: UndertaleContext):
                         await ctx.send_msgs([{"cmd": "LocationScouts", "locations": sending,
                                                           "create_as_hint": int(2)}])
                     finally:
-                        pass
+                        os.remove(root+"/"+file)
                 if "check.spot" in file:
                     sending = []
                     try:
