@@ -128,6 +128,10 @@ class MuseDashCollections:
         if len(difficulty) <= 0 or difficulty == "?" or difficulty == "¿":
             return None
 
+        # 0 is used as a filler and no songs actually have a 0 difficulty song.
+        if difficulty == "0":
+            return None
+
         # Curse the 2023 april fools update. Used on 3rd Avenue.
         if difficulty == "〇":
             return 10

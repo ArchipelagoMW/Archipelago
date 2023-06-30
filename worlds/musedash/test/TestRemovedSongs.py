@@ -4,7 +4,7 @@ from . import MuseDashTestBase
 # This ends up with only 25 valid songs that can be chosen.
 # These tests ensure that this won't fail generation
 
-class TestWorstCaseHighDifficulty(MuseDashTestBase):
+class TestRemovedSongs(MuseDashTestBase):
     options = {
         "starting_song_count": 10,
         "allow_just_as_planned_dlc_songs": True,
@@ -16,7 +16,7 @@ class TestWorstCaseHighDifficulty(MuseDashTestBase):
         "FM 17314 SUGAR RADIO"
     ]
 
-    def test_songs_have_difficulty(self) -> None:
+    def test_remove_songs_are_not_generated(self) -> None:
         # This test is done on a world where every song should be added.
         muse_dash_world = self.multiworld.worlds[1]
 
