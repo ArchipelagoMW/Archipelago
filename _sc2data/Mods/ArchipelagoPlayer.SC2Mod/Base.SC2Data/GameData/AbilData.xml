@@ -2922,6 +2922,35 @@
         <CursorEffect value="AP_CorsairMPDisruptionWebSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_CorsairMPDisruptionWeb"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_DarkArchonConfusion">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_DarkArchonConfusionSearch"/>
+        <Cost>
+            <Vital index="Energy" value="75"/>
+            <Cooldown TimeUse="2"/>
+        </Cost>
+        <Range value="9"/>
+        <CursorEffect value="AP_DarkArchonConfusionSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="DarkArchonConfusion"/>
+    </CAbilEffectTarget>
+    <CAbilMergeable id="AP_DarkArchonMergeable">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Cancelable value="0"/>
+    </CAbilMergeable>
+    <CAbilEffectTarget id="AP_DarkArchonMindControl">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_DarkArchonMindControlSet"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Cost>
+            <Vital index="Energy" value="100"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <TargetFilters value="Visible;Player,Ally,Neutral,Robotic,Structure,Heroic,Missile,Stasis,Dead,Invulnerable"/>
+        <Range value="7"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_DarkArchonMindControl"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="FactoryReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

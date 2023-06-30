@@ -2164,4 +2164,14 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-disintegration.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_DarkArchonConfusion">
+        <Icon value="Assets\Textures\btn-ability-protoss-confusion.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-confusion.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_DarkArchonMindControl">
+        <Icon value="Assets\Textures\btn-ability-protoss-mindcontrol.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-mindcontrol.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

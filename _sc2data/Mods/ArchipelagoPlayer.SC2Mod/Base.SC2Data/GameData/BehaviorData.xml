@@ -3393,11 +3393,80 @@
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <DisableValidatorArray value="AP_BattlecruiserNotJumping"/>
         <!-- TODO: Check these abilities -->
-<!--        <RemoveValidatorArray value="NoPurificationNova"/>-->
-<!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
+        <!--        <RemoveValidatorArray value="NoPurificationNova"/>-->
+        <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
         <TimeScaleSource Value="Global"/>
         <Duration value="20"/>
         <Period value="0.4"/>
         <PeriodicEffect value="AP_LightningBombDamage"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkArchonConfusion">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-confusion.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Period value="1"/>
+        <InitialEffect value="AP_DarkArchonConfusionStopInitialSet"/>
+        <PeriodicEffect value="AP_DarkArchonConfusionAttackSearch"/>
+        <ExpireEffect value="AP_DarkArchonConfusionEndSet"/>
+        <Modification>
+            <StateFlags index="Passive" value="1"/>
+            <StateFlags index="IgnorePlayerAlliedFlags" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkArchonConfusionInitial">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="0.0625"/>
+        <FinalEffect value="AP_DarkArchonConfusionAttackSearch"/>
+        <Modification>
+            <StateFlags index="Passive" value="1"/>
+            <AbilClassDisableArray index="CAbilAttack" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DarkArchonMindControl">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-mindcontrol.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Player Value="Caster"/>
+        <Modification>
+            <StateFlags index="SuppressRequirements" value="1"/>
+            <AbilClassDisableArray index="CAbilBuild" value="1"/>
+            <AbilClassDisableArray index="CAbilMerge" value="1"/>
+            <AbilClassDisableArray index="CAbilResearch" value="1"/>
+            <AbilClassDisableArray index="CAbilTrain" value="1"/>
+            <AbilClassDisableArray index="CAbilWarpTrain" value="1"/>
+<!--            <AbilLinkDisableArray value="SpectreNuke"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationArchon"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationColossus"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationHighTemplar"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationImmortal"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationPhoenix"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationProbe"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationStalker"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationVoidRay"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationWarpPrism"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationZealot"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationAdept"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationOracle"/>-->
+<!--            <AbilLinkDisableArray value="HallucinationDisruptor"/>-->
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ObserverTargetLock">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Modification>
+            <DamageTakenFraction index="Spell" value="0.3"/>
+            <DamageTakenFraction index="Melee" value="0.3"/>
+            <DamageTakenFraction index="Ranged" value="0.3"/>
+            <DamageTakenFraction index="Splash" value="0.3"/>
+            <DamageTakenFraction index="NoProc" value="0.3"/>
+        </Modification>
+        <MaxStackCount value="3"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-targetlock.dds"/>
     </CBehaviorBuff>
 </Catalog>

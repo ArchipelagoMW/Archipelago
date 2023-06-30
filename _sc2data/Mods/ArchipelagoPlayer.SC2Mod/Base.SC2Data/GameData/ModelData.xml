@@ -10702,4 +10702,68 @@
         <Model value="Assets\Effects\Protoss\TempestPlasmaMissile\TempestPlasmaMissile.m3"/>
         <EditorCategories value="Race:Protoss"/>
     </CModel>
+    <CModel id="AP_DarkArchon" parent="ArchonBase">
+        <Model value="Assets\Units\Protoss\Void_DarkArchon\Void_DarkArchon.m3"/>
+        <LowQualityModel value=""/>
+        <Lighting value="Archon"/>
+        <TextureDeclares Prefix="archon_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+        </TextureDeclares>
+    </CModel>
+    <CModel id="AP_DarkArchonAttackBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\DarkArchon_Beam\DarkArchon_Beam.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_DarkArchonConfusionCastModel">
+        <Model value="Assets\Effects\Protoss\DarkArchon_Confusion_Cast\DarkArchon_Confusion_Cast.m3"/>
+    </CModel>
+    <CModel id="AP_DarkArchonConfusionCastImpactModel">
+        <Model value="Assets\Effects\Protoss\DarkArchon_Confusion\DarkArchon_Confusion.m3"/>
+    </CModel>
+    <CModel id="AP_DarkArchonConfusionModel">
+        <Model value="Assets\Effects\Protoss\DarkArchon_Confusion_State\DarkArchon_Confusion_State.m3"/>
+    </CModel>
+    <CModel id="AP_DarkArchonDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Void_DarkArchon_Death\Void_DarkArchon_Death.m3"/>
+        <LowQualityModel value="ProtossLargeTaldarimUnitDeathLow"/>
+        <Flags index="TeenSafe" value="1"/>
+    </CModel>
+    <CModel id="AP_DarkArchonEx2Portrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\DarkArchonEx2Portrait\DarkArchonEx2Portrait.m3"/>
+        <Image value="Assets\Textures\darkarchonportrait_static.dds"/>
+        <Lighting value="DarkArchonEx2Portrait"/>
+    </CModel>
+    <CModel id="AP_DarkArchonMindControlBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\DarkArchon_MindControl_Beam\DarkArchon_MindControl_Beam.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_DarkArchonMindControlState" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\DarkArchon_MindControl_State\DarkArchon_MindControl_State.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_DarkArchonPlacement" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Void_DarkArchon_Placement\Void_DarkArchon_Placement.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_DarkArchonWarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Void_DarkArchon_WarpIn\Void_DarkArchon_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+        <SelectionRadius value="0.555400"/>
+        <ShadowRadius value="0.555400"/>
+    </CModel>
+    <CModel id="AP_DarkProtossArchonDeath" parent="ArchonDeathBase">
+        <Model value="Assets\Units\Protoss\Void_DarkArchon_Death\Void_DarkArchon_Death.m3"/>
+        <LowQualityModel value="ProtossLargeTaldarimUnitDeathLow"/>
+        <Flags index="TeenSafe" value="1"/>
+        <Lighting value="ArchonDeath"/>
+    </CModel>
 </Catalog>

@@ -4208,7 +4208,7 @@
         <EffectArray Reference="Unit,AP_RoboticsFacilityWarp,ShieldRegenRate" Value=".05"/>
         <EffectArray Reference="Unit,AP_RoboticsBay,ShieldRegenRate" Value=".05"/>
         <EffectArray Reference="Unit,AP_DarkShrine,ShieldRegenRate" Value=".05"/>
-<!--        <EffectArray Reference="Unit,AP_TwilightCouncil,ShieldRegenRate" Value=".05"/>-->
+        <!--        <EffectArray Reference="Unit,AP_TwilightCouncil,ShieldRegenRate" Value=".05"/>-->
         <EffectArray Reference="Unit,AP_Probe,ShieldRegenRate" Value=".05"/>
         <EffectArray Reference="Unit,AP_Zealot,ShieldRegenRate" Value=".05"/>
         <EffectArray Reference="Unit,AP_ZealotAiur,ShieldRegenRate" Value=".05"/>
@@ -4353,5 +4353,11 @@
     <CUpgrade id="AP_VoidCasualRallyBlock">
         <AffectedUnitArray value="AP_Nexus"/>
         <LeaderAlias value=""/>
+    </CUpgrade>
+    <CUpgrade id="AP_VoidDarkArchonDarkAmulet">
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_DarkArchon,EnergyStart" Value="100"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
     </CUpgrade>
 </Catalog>

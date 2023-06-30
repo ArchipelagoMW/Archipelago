@@ -5814,4 +5814,88 @@
         <Pitch value="-2.000000,0.000000"/>
         <Volume value="-14.000000,-14.000000"/>
     </CSound>
+    <CSound id="AP_DarkArchonConfusionImpactActorSound" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\DarkArchon_Confusion00.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\DarkArchon_Confusion01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\DarkArchon_Confusion02.wav" FacialGroup=""/>
+        <Flags index="Purgable" value="0"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_DarkArchonMindControlSound" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\DarkArchon_MindControl00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\DarkArchon_MindControl01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\DarkArchon_MindControl02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\DarkArchon_MindControl03.wav" FacialGroup=""/>
+        <Flags index="Purgable" value="0"/>
+        <DupeMuteCount value="6"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_DarkArchon_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="DarkArchon_Attack00"/>
+        <AssetArray TemplateParam="DarkArchon_Attack01"/>
+        <AssetArray TemplateParam="DarkArchon_Attack02"/>
+        <AssetArray TemplateParam="DarkArchon_Attack03"/>
+        <AssetArray TemplateParam="DarkArchon_Attack04"/>
+        <AssetArray TemplateParam="DarkArchon_Attack05"/>
+        <AssetArray TemplateParam="DarkArchon_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_DarkArchon_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="DarkArchon_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_DarkArchon_MindControlVO" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="DarkArchon_Yes01"/>
+        <AssetArray TemplateParam="DarkArchon_Yes03"/>
+        <AssetArray File="LocalizedData\Sounds\VO\Protoss\DarkArchon_Attack01.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\Protoss\DarkArchon_Attack02.ogg" FacialGroup=""/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Chance value="25"/>
+    </CSound>
+    <CSound id="AP_DarkArchon_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="DarkArchon_Pissed00"/>
+        <AssetArray TemplateParam="DarkArchon_Pissed01"/>
+        <AssetArray TemplateParam="DarkArchon_Pissed02"/>
+        <AssetArray TemplateParam="DarkArchon_Pissed03"/>
+        <AssetArray TemplateParam="DarkArchon_Pissed04"/>
+        <AssetArray TemplateParam="DarkArchon_Pissed05"/>
+        <AssetArray TemplateParam="DarkArchon_Pissed06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_DarkArchon_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="DarkArchon_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_DarkArchon_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="DarkArchon_What00"/>
+        <AssetArray TemplateParam="DarkArchon_What01"/>
+        <AssetArray TemplateParam="DarkArchon_What02"/>
+        <AssetArray TemplateParam="DarkArchon_What03"/>
+        <AssetArray TemplateParam="DarkArchon_What04"/>
+        <AssetArray TemplateParam="DarkArchon_What05"/>
+        <AssetArray TemplateParam="DarkArchon_What06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_DarkArchon_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="DarkArchon_Yes00"/>
+        <AssetArray TemplateParam="DarkArchon_Yes01"/>
+        <AssetArray TemplateParam="DarkArchon_Yes02"/>
+        <AssetArray TemplateParam="DarkArchon_Yes03"/>
+        <AssetArray TemplateParam="DarkArchon_Yes04"/>
+        <AssetArray TemplateParam="DarkArchon_Yes05"/>
+        <AssetArray TemplateParam="DarkArchon_Yes06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
 </Catalog>

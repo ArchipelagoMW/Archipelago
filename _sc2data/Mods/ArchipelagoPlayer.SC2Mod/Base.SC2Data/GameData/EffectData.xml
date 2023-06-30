@@ -9324,4 +9324,99 @@
         <ImpactEffect value="AP_TempestPurifierDamageGround"/>
         <AmmoUnit value="AP_TempestPurifierWeaponGround"/>
     </CEffectLaunchMissile>
+    <CEffectApplyBehavior id="AP_DarkArachonConfusionInitialApplyBehavior">
+        <EditorCategories value=""/>
+        <Behavior value="AP_DarkArchonConfusionInitial"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_DarkArchonConfusionApply">
+        <ValidatorArray index="0" value="NotFrenzied"/>
+        <ValidatorArray value="NotWarpPrism"/>
+        <ValidatorArray value="NotOverlord"/>
+        <ValidatorArray value="NotMedivac"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_DarkArchonConfusion"/>
+    </CEffectApplyBehavior>
+    <CEffectIssueOrder id="AP_DarkArchonConfusionAttack">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Abil value="attack"/>
+        <Target Value="TargetUnit"/>
+    </CEffectIssueOrder>
+    <CEffectEnumArea id="AP_DarkArchonConfusionAttackSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <TargetSorts>
+            <SortArray value="TSRandom"/>
+            <SortArray value="AP_TSConfused"/>
+        </TargetSorts>
+        <AreaArray MaxCount="1" Radius="4" Effect="AP_DarkArchonConfusionAttack"/>
+    </CEffectEnumArea>
+    <CEffectIssueOrder id="AP_DarkArchonConfusionEnd">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="AP_DarkArchonConfusionEndSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_DarkArchonConfusionEnd"/>
+        <EffectArray value="AP_IssueAIOrderSuicide"/>
+    </CEffectSet>
+    <CEffectEnumArea id="AP_DarkArchonConfusionSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2" Effect="AP_DarkArchonConfusionApply"/>
+    </CEffectEnumArea>
+    <CEffectIssueOrder id="AP_DarkArchonConfusionStopInitial">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+    <CEffectSet id="AP_DarkArchonConfusionStopInitialSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_DarkArchonConfusionStopInitial"/>
+        <EffectArray value="AP_DarkArchonConfusionAttackSearch"/>
+        <EffectArray value="AP_DarkArachonConfusionInitialApplyBehavior"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_DarkArchonMindControlApply">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_DarkArchonMindControl"/>
+    </CEffectApplyBehavior>
+    <CEffectRemoveBehavior id="AP_DarkArchonMindControlRemoveTargetLock">
+        <EditorCategories value="Race:Protoss"/>
+        <BehaviorLink value="AP_ObserverTargetLock"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_DarkArchonMindControlSet">
+        <ValidatorArray value="noMarkers"/>
+        <ValidatorArray value="NotWarpingIn"/>
+        <ValidatorArray value="NotFrenzied"/>
+        <ValidatorArray value="HasNoCargo"/>
+        <ValidatorArray value="NotPointDefenseDrone"/>
+        <ValidatorArray value="IsNotEgg"/>
+        <ValidatorArray value="NotLarva"/>
+        <!-- TODO: Void campaign integration -->
+<!--        <ValidatorArray value="NotInfestedSpire"/>-->
+<!--        <ValidatorArray value="NoDarkArchonMindControlPrevention"/>-->
+<!--        <ValidatorArray value="NoVoidShade"/>-->
+<!--        <ValidatorArray value="NoTerrazineShadow"/>-->
+        <EditorCategories value=""/>
+        <EffectArray value="AP_DarkArchonMindControlApply"/>
+        <EffectArray value="AP_DarkArchonMindControlRemoveTargetLock"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_DarkArchonWeaponDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="18"/>
+        <AreaArray Radius="0.25" Fraction="1"/>
+        <AreaArray Radius="0.5" Fraction="0.5"/>
+        <AreaArray Radius="1" Fraction="0.25"/>
+        <ExcludeArray Value="Outer"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="-;Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <SearchFlags index="OffsetByUnitRadius" value="0"/>
+        <SearchFlags index="SameCliff" value="0"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="AP_IssueAIOrderSuicide">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectModifyUnit>
 </Catalog>

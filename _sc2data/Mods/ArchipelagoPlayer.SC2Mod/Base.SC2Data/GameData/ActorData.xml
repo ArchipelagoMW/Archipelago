@@ -12368,7 +12368,6 @@
     </CActorModel>
     <CActorAction id="AP_LightningBombAttack" parent="GenericAttack" effectImpact="AP_LightningBombAB" effectLaunch="AP_LightningBombLM">
         <LaunchAssets Sound="AP_Tempest_Disintegration_Launch"/>
-        <Missile value="AP_LightningBombAttackMissile"/>
         <ImpactMap index="None" Model="DisintegrationImpact" Sound="AP_Tempest_Disintegration_Impact"/>
     </CActorAction>
     <CActorMissile id="AP_LightningBombAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="AP_LightningBombWeapon">
@@ -12376,6 +12375,121 @@
         <On Terms="ActorCreation; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap TalDarimLightningBombAttackMissile"/>
         <Model value="DisintegrationMissile"/>
     </CActorMissile>
+    <CActorUnit id="AP_DarkArchon" parent="GenericUnitBase" unitName="AP_DarkArchon">
+        <Aliases value="_UnitLarge"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundLarge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Abil.AP_ArchonWarp.Start" Send="AnimBracketStart Merging Stand,Work,Start Stand,Work"/>
+        <On Terms="Abil.AP_ArchonWarp.Stop" Send="AnimBracketStop Merging"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Target="ArchonAttackBeam" Send="Destroy"/>
+        <On Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="Abil.attack.ReadyStop" Target="ArchonAttackBeam" Send="Destroy"/>
+        <On Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On Terms="Behavior.PowerUserWarpable.Off" Send="ModelSwap Archon"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkProtossArchon"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkProtossArchon"/>
+        <On Terms="Abil.AP_ArchonWarp.Start; ValidateUnit AP_NoDarkProtoss" Send="SetTintColor 255,255,64"/>
+        <On Terms="Abil.AP_ArchonWarp.Stop; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkProtossArchon"/>
+        <On Terms="Abil.AP_ArchonWarp.Stop; ValidateUnit AP_NoDarkProtoss" Send="SetTintColor 255,255,255"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Archon_Land"/>
+        <On Terms="Abil.AP_DarkArchonConfusion.SourceCastStart" Send="AnimPlay Confusion Attack,02"/>
+        <On Terms="Abil.AP_DarkArchonConfusion.SourceCastStart" Send="Create AP_DarkArchonConfusionCastModel"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_DarkArchonWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_DarkArchonDeath" SoundLink="Archon_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="ProtossMediumUnitDeath" SoundLink="Archon_Explode"/>
+        <DeathCustoms ModelLink="AP_DarkProtossArchonDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathLarge" Name="Hallucination"/>
+        <PlacementModel value="AP_DarkArchonPlacement"/>
+        <PortraitModel value="AP_DarkArchonEx2Portrait"/>
+        <AbilSoundArray AbilCmd="AP_DarkArchonMindControl,0" Sound="AP_DarkArchon_MindControlVO"/>
+        <BarOffset value="120"/>
+        <BarWidth value="66"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-darkarchon.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-darkarchon.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Ready" value="AP_DarkArchon_Ready"/>
+        <SoundArray index="Help" value="AP_DarkArchon_Help"/>
+        <SoundArray index="What" value="AP_DarkArchon_What"/>
+        <SoundArray index="Yes" value="AP_DarkArchon_Yes"/>
+        <SoundArray index="Attack" value="AP_DarkArchon_Attack"/>
+        <SoundArray index="Pissed" value="AP_DarkArchon_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-darkarchon.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-darkarchon.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-darkarchon-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-darkarchon-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-darkarchon-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_Archon_Land" parent="SoundOneShot">
+        <Sound value="Archon_Land"/>
+    </CActorSound>
+    <CActorAction id="DarkArchonAttack2" parent="GenericAttack" effectAttack="AP_DarkArchonWeaponDamage">
+        <LaunchAssets Sound="Archon_AttackLaunch"/>
+        <Beam value="AP_DarkArchonAttackBeam"/>
+        <BeamScope value="Caster"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance VoidRaySOpForwardLaunch"/>
+        <ImpactMap index="None" Model="" Sound="Archon_AttackImpact"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_DarkArchonAttackBeam">
+        <Macros value="ActionTargetTeleportDestroy"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death ContentPlayOnce"/>
+        <On Terms="ActorOrphan" Send="AnimBracketStop BSD"/>
+        <On Terms="AnimBracketState.*.AfterClosing; AnimName BSD" Send="Destroy"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_DarkArchonConfusionCastModel" parent="ModelAnimationStyleOneShot">
+        <HostSiteOps Ops="SOpAttachWeapon"/>
+    </CActorModel>
+    <CActorModel id="AP_DarkArchonConfusionCastImpactModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_DarkArchonConfusionSearch" Send="Create"/>
+    </CActorModel>
+    <CActorSound id="AP_DarkArchonConfusionImpactActorSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_DarkArchonConfusionSearch" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="AP_DarkArchonConfusionModel" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_DarkArchonConfusion.On" Send="Create"/>
+        <On Terms="Behavior.AP_DarkArchonConfusion.Off" Send="Destroy"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+    </CActorModel>
+    <CActorBeamSimple id="AP_DarkArchonMindControlBeam" parent="BeamSimpleAnimationStyleOneShot">
+        <On Terms="Effect.AP_DarkArchonMindControlApply.Start" Send="Create"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachHead"/>
+        <HostImpact Subject="_Unit" Scope="Target" Actor="Find"/>
+        <HostImpactSiteOps Ops="SOpAttachHead"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_DarkArchonMindControlSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_DarkArchonMindControl.On" Send="Create"/>
+    </CActorSound>
+    <CActorModel id="AP_DarkArchonMindControlState" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_DarkArchonMindControl.On" Send="Create"/>
+        <On Terms="Behavior.AP_DarkArchonMindControl.On" Target="::Main" Send="SetSoundSuffix _MC"/>
+        <On Terms="Behavior.AP_DarkArchonMindControl.On" Target="::Main" Send="PlayUnitSound Ready"/>
+        <On Terms="Behavior.AP_DarkArchonMindControl.Off" Target="::Main" Send="SetSoundSuffix"/>
+        <On Terms="Behavior.AP_DarkArchonMindControl.Off" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorRange id="AP_DarkArchonConfusionRange" parent="RangeAbil" abil="AP_DarkArchonConfusion"/>
+    <CActorSplat id="AP_DarkArchonConfusionCursorSplat" parent="ProtossCursorSplat" abil="AP_DarkArchonConfusion"/>
+    <CActorRange id="AP_DarkArchonMindControlRange" parent="RangeAbil" abil="AP_DarkArchonMindControl"/>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -13321,9 +13435,8 @@
     <CActorAction id="AP_TempestPurifierAttack" parent="GenericAttack" effectImpact="AP_TempestPurifierDamage" effectLaunch="AP_TempestPurifierLaunchMissile">
         <LaunchAttachQuery Methods="AMFilterWeapon"/>
         <LaunchAssets Sound="AP_Tempest_AirAttackLaunch"/>
-        <Missile value="AP_TempestPurifierAttackMissile"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpUpDefault"/>
-        <ImpactMap index="None" Model="AP_TempestPurifierAttackImpact" Sound="AP_Tempest_AirAttackImpact"/>
+        <ImpactMap index="None" Sound="AP_Tempest_AirAttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
         <ImpactPhysics Name="KineticOverloadImpact" MatchKeys="Basic" Physics="AP_TempestPurifierAttackForce"/>
         <ShieldFlashType value="Full"/>
@@ -13337,7 +13450,6 @@
     <CActorAction id="AP_TempestPurifierAttackGround" parent="GenericAttack" effectImpact="AP_TempestPurifierDamageGround" effectLaunch="AP_TempestPurifierLaunchMissileGround">
         <LaunchAttachQuery Methods="AMFilterWeapon"/>
         <LaunchAssets Sound="AP_Tempest_GroundAttackLaunch"/>
-        <Missile value="AP_TempestPurifierAttackGroundMissile"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpUpDefault"/>
         <ImpactMap index="None" Model="AP_TempestPurifierGroundAttackImpact" Sound="AP_Tempest_GroundAttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
@@ -13369,7 +13481,7 @@
     </CActorMissile>
     <CActorSound id="AP_Tempest_Death" parent="SoundOneShot">
         <Sound value="Tempest_Death"/>
-<!--        <On Terms="UnitDeath.Tempest; PassChance 25.000000" Send="Create"/>-->
+        <!--        <On Terms="UnitDeath.Tempest; PassChance 25.000000" Send="Create"/>-->
         <On Terms="UnitDeath.AP_TempestPurifier; PassChance 25.000000" Send="Create"/>
     </CActorSound>
     <CActorRange id="AP_LightningBombRange" parent="RangeAbil" abil="AP_LightningBomb">
