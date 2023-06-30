@@ -22,8 +22,7 @@ class MuseDashCollections:
         "MuseDash ka nanika hi",
         "Rush-Hour",
         "Find this Month's Featured Playlist",
-        "PeroPero in the Universe",
-        "CHAOS Glitch"
+        "PeroPero in the Universe"
     ]
 
     album_items: Dict[str, AlbumData] = {}
