@@ -96,31 +96,30 @@ joke_hints = [
 
 
 def get_always_hint_items(multiworld: MultiWorld, player: int):
-    priority = [
+    always = [
         "Boat",
-        "Mountain Bottom Floor Final Room Entry (Door)",
-        "Caves Mountain Shortcut (Door)",
-        "Caves Swamp Shortcut (Door)",
         "Caves Exits to Main Island",
         "Progressive Dots",
     ]
 
     difficulty = get_option_value(multiworld, player, "puzzle_randomization")
     discards = is_option_enabled(multiworld, player, "shuffle_discarded_panels")
+    wincon = get_option_value(multiworld, player, "victory_condition")
 
     if discards:
         if difficulty == 1:
-            priority.append("Arrows")
+            always.append("Arrows")
         else:
-            priority.append("Triangles")
+            always.append("Triangles")
 
-    return priority
+    if wincon == 0:
+        always.append("Mountain Bottom Floor Final Room Entry (Door)")
+
+    return always
 
 
 def get_always_hint_locations(multiworld: MultiWorld, player: int):
     return {
-        "Swamp Purple Underwater",
-        "Shipwreck Vault Box",
         "Challenge Vault Box",
         "Mountain Bottom Floor Discard",
         "Theater Eclipse EP",
@@ -131,6 +130,8 @@ def get_always_hint_locations(multiworld: MultiWorld, player: int):
 
 def get_priority_hint_items(multiworld: MultiWorld, player: int):
     priority = {
+        "Caves Mountain Shortcut (Door)",
+        "Caves Swamp Shortcut (Door)",
         "Negative Shapers",
         "Sound Dots",
         "Colored Dots",
@@ -157,16 +158,18 @@ def get_priority_hint_items(multiworld: MultiWorld, player: int):
         if get_option_value(multiworld, player, "doors") >= 2:
             priority.add("Desert Laser")
             lasers.remove("Desert Laser")
-            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 2))
+            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 5))
 
         else:
-            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 3))
+            priority.update(multiworld.per_slot_randoms[player].sample(lasers, 6))
 
     return priority
 
 
 def get_priority_hint_locations(multiworld: MultiWorld, player: int):
     return {
+        "Swamp Purple Underwater",
+        "Shipwreck Vault Box",
         "Town RGB Room Left",
         "Town RGB Room Right",
         "Treehouse Green Bridge 7",
@@ -264,7 +267,8 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
 
     multiworld.per_slot_randoms[player].shuffle(hints)  # shuffle always hint order in case of low hint amount
 
-    next_random_hint_is_item = multiworld.per_slot_randoms[player].randint(0, 2)
+    remaining_hints = hint_amount - len(hints)
+    priority_hint_amount = int(max(0.0, min(len(priority_hint_pairs) / 2, remaining_hints / 2)))
 
     prog_items_in_this_world = sorted(list(prog_items_in_this_world))
     locations_in_this_world = sorted(list(loc_in_this_world))
@@ -272,18 +276,21 @@ def make_hints(multiworld: MultiWorld, player: int, hint_amount: int):
     multiworld.per_slot_randoms[player].shuffle(prog_items_in_this_world)
     multiworld.per_slot_randoms[player].shuffle(locations_in_this_world)
 
+    priority_hint_list = list(priority_hint_pairs.items())
+    multiworld.per_slot_randoms[player].shuffle(priority_hint_list)
+    for _ in range(0, priority_hint_amount):
+        next_priority_hint = priority_hint_list.pop()
+        loc = next_priority_hint[0]
+        item = next_priority_hint[1]
+
+        if item[1]:
+            hints.append((f"{item[0]} can be found at {loc}.", item[2]))
+        else:
+            hints.append((f"{loc} contains {item[0]}.", item[2]))
+
+    next_random_hint_is_item = multiworld.per_slot_randoms[player].randint(0, 2)
+
     while len(hints) < hint_amount:
-        if priority_hint_pairs:
-            loc = multiworld.per_slot_randoms[player].choice(list(priority_hint_pairs.keys()))
-            item = priority_hint_pairs[loc]
-            del priority_hint_pairs[loc]
-
-            if item[1]:
-                hints.append((f"{item[0]} can be found at {loc}.", item[2]))
-            else:
-                hints.append((f"{loc} contains {item[0]}.", item[2]))
-            continue
-
         if next_random_hint_is_item:
             if not prog_items_in_this_world:
                 next_random_hint_is_item = not next_random_hint_is_item

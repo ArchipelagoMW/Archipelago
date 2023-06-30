@@ -61,7 +61,7 @@ class SummonEXP(Range):
 
 
 class Schmovement(Choice):
-    """Level of Progressive Movement You Start With"""
+    """Level of Progressive Movement Abilities You Start With"""
     display_name = "Schmovement"
     option_level_0 = 0
     option_level_1 = 1
@@ -72,7 +72,7 @@ class Schmovement(Choice):
 
 
 class RandomGrowth(Range):
-    """Amount of Random Growth Abilities You Start With"""
+    """Amount of Random Progressive Movement Abilities You Start With"""
     display_name = "Random Starting Growth"
     range_start = 0
     range_end = 20
@@ -80,7 +80,7 @@ class RandomGrowth(Range):
 
 
 class KeybladeMin(Range):
-    """Minimum Stats for the Keyblade"""
+    """Minimum Stats for Keyblades"""
     display_name = "Keyblade Minimum Stats"
     range_start = 0
     range_end = 20
@@ -88,7 +88,7 @@ class KeybladeMin(Range):
 
 
 class KeybladeMax(Range):
-    """Maximum Stats for the Keyblade"""
+    """Maximum Stats for Keyblades"""
     display_name = "Keyblade Max Stats"
     range_start = 0
     range_end = 20
@@ -97,11 +97,16 @@ class KeybladeMax(Range):
 
 class Visitlocking(Choice):
     """Determines the level of visit locking
-    No Visit Locking:No visit locks(everything is sphere 1.Not Recommended)# BK is making a lot of money
-    Second Visit Locking:Start with 13 visit locking items for every first visit.
-    First and Second Visit Locking:One item for First Visit Two For Second Visit"""
+
+    No Visit Locking: Start with all 25 visit locking items.
+
+
+    Second Visit Locking: Start with 13 visit locking items for every first visit.
+
+
+    First and Second Visit Locking: One item for First Visit Two For Second Visit"""
     display_name = "Visit locking"
-    option_no_visit_locking = 0  # starts with 27 visit locking
+    option_no_visit_locking = 0  # starts with 25 visit locking
     option_second_visit_locking = 1  # starts with 13 (no icecream/picture)
     option_first_and_second_visit_locking = 2  # starts with nothing
     default = 2
@@ -123,8 +128,8 @@ class SuperBosses(Toggle):
 
 class Cups(Choice):
     """Olympus Cups Toggles
-        No Cups: No Cups.
-        Cups: Has every cup except Paradox.
+        No Cups: All Cups are placed into Excluded Locations.
+        Cups: Hades Paradox Cup is placed into Excluded Locations
         Cups and Hades Paradox: Has Every Cup On."""
     display_name = "Olympus Cups"
     option_no_cups = 0
@@ -135,10 +140,13 @@ class Cups(Choice):
 
 class LevelDepth(Choice):
     """Determines How many locations you want on levels
-    Level 50:23 checks spread through 50 levels
-    Level 99:23 checks spread through 99 levels
-    Level 50 sanity:check per level for 50 levels
-    Level 99 sanity:check per level for 99 levels
+
+    Level 50: 23 checks spread through 50 levels.
+    Level 99: 23 checks spread through 99 levels.
+
+    Level 50 sanity: 49 checks spread through 50 levels.
+    Level 99 sanity: 98 checks spread through 99 levels.
+
     Level 1: no checks on levels(checks are replaced with stats)"""
     display_name = "Level Depth"
     option_level_50 = 0
@@ -156,13 +164,17 @@ class PromiseCharm(Toggle):
 
 
 class KeybladeAbilities(Choice):
-    """Action:Has Action Abilities on Keyblades
-    Support:Has Support Abilities on Keyblades"""
+    """
+    Action: Action Abilities in the Keyblade Slot Pool.
+
+    Support: Support Abilities in the Keyblade Slot Pool.
+
+    Both: Action and Support Abilities in the Keyblade Slot Pool."""
     display_name = "Keyblade Abilities"
     option_support = 0
     option_action = 1
     option_both = 2
-    default = 2
+    default = 0
 
 
 class BlacklistKeyblade(OptionSet):
@@ -170,11 +182,14 @@ class BlacklistKeyblade(OptionSet):
     display_name = "Blacklist Keyblade Abilities"
     valid_keys = set(SupportAbility_Table.keys()).union(ActionAbility_Table.keys())
 
+
 class Goal(Choice):
     """Win Condition
-    Three Proofs: Obtain the Three Proofs and Have a Gold Crown on Sora's Head.
-    Lucky Emblem Hunt: Acquire The Amount of Lucky Emblems you have set.
-    Hitlist: Kill the Superbosses on the "Hitlist" then synth ultima weapon."""
+    Three Proofs: Get a Gold Crown on Sora's Head.
+
+    Lucky Emblem Hunt: Find Required Amount of Lucky Emblems .
+
+    Hitlist (Bounty Hunt): Find Required Amount of Bounties"""
     display_name = "Goal"
     option_three_proofs = 0
     option_lucky_emblem_hunt = 1
@@ -190,16 +205,18 @@ class FinalXemnas(Toggle):
 
 
 class LuckyEmblemsRequired(Range):
-    """Number of Lucky Emblems to collect to Open The Final Door bosses.
+    """Number of Lucky Emblems to collect to Win/Unlock Final Xemnas Door.
+
     If Goal is not Lucky Emblem Hunt this does nothing."""
     display_name = "Lucky Emblems Required"
     range_start = 1
     range_end = 60
-    default = 25
+    default = 30
 
 
 class LuckyEmblemsAmount(Range):
     """Number of Lucky Emblems that are in the pool.
+
     If Goal is not Lucky Emblem Hunt this does nothing."""
     display_name = "Lucky Emblems Available"
     range_start = 1
@@ -208,8 +225,9 @@ class LuckyEmblemsAmount(Range):
 
 
 class BountyRequired(Range):
-    """Number of Bounties that are Required.
-        If Goal is not Hitlist this does nothing."""
+    """Number of Bounties to collect to Win/Unlock Final Xemnas Door.
+
+    If Goal is not Hitlist this does nothing."""
     display_name = "Bounties Required"
     range_start = 1
     range_end = 24
@@ -218,7 +236,8 @@ class BountyRequired(Range):
 
 class BountyAmount(Range):
     """Number of Bounties that are in the pool.
-        If Goal is not Hitlist this does nothing."""
+
+    If Goal is not Hitlist this does nothing."""
     display_name = "Bounties Available"
     range_start = 1
     range_end = 24
@@ -226,30 +245,30 @@ class BountyAmount(Range):
 
 
 KH2_Options: typing.Dict[str, type(Option)] = {
+    "LevelDepth":             LevelDepth,
     "Sora_Level_EXP":         SoraEXP,
-    "Final_Form_EXP":         FinalEXP,
-    "Master_Form_EXP":        MasterEXP,
-    "Limit_Form_EXP":         LimitEXP,
-    "Wisdom_Form_EXP":        WisdomEXP,
     "Valor_Form_EXP":         ValorEXP,
+    "Wisdom_Form_EXP":        WisdomEXP,
+    "Limit_Form_EXP":         LimitEXP,
+    "Master_Form_EXP":        MasterEXP,
+    "Final_Form_EXP":         FinalEXP,
     "Summon_EXP":             SummonEXP,
     "Schmovement":            Schmovement,
-    "Keyblade_Minimum":       KeybladeMin,
-    "Keyblade_Maximum":       KeybladeMax,
-    "Visitlocking":           Visitlocking,
-    "RandomVisitLockingItem": RandomVisitLockingItem,
-    "SuperBosses":            SuperBosses,
-    "LevelDepth":             LevelDepth,
-    "Promise_Charm":          PromiseCharm,
-    "KeybladeAbilities":      KeybladeAbilities,
-    "BlacklistKeyblade":      BlacklistKeyblade,
     "RandomGrowth":           RandomGrowth,
+    "Promise_Charm":          PromiseCharm,
     "Goal":                   Goal,
     "FinalXemnas":            FinalXemnas,
     "LuckyEmblemsAmount":     LuckyEmblemsAmount,
     "LuckyEmblemsRequired":   LuckyEmblemsRequired,
     "BountyAmount":           BountyAmount,
     "BountyRequired":         BountyRequired,
+    "Keyblade_Minimum":       KeybladeMin,
+    "Keyblade_Maximum":       KeybladeMax,
+    "Visitlocking":           Visitlocking,
+    "RandomVisitLockingItem": RandomVisitLockingItem,
+    "SuperBosses":            SuperBosses,
+    "KeybladeAbilities":      KeybladeAbilities,
+    "BlacklistKeyblade":      BlacklistKeyblade,
     "Cups":                   Cups,
 
 }

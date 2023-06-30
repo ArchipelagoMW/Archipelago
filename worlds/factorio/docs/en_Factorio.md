@@ -39,6 +39,6 @@ EnergyLink is an energy storage supported by certain games that is shared across
 In Factorio, if enabled in the player settings, EnergyLink Bridge buildings can be crafted and placed, which allow
 depositing excess energy and supplementing energy deficits, much like Accumulators.
 
-Each placed EnergyLink Bridge provides 1 MW of throughput. The shared storage has unlimited capacity, but 25% of energy
+Each placed EnergyLink Bridge provides 10 MW of throughput. The shared storage has unlimited capacity, but 25% of energy
 is lost during depositing. The amount of energy currently in the shared storage is displayed in the Archipelago client.
 It can also be queried by typing `/energy-link` in-game.

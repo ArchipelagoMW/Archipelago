@@ -44,7 +44,7 @@ class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
         return textwrap.dedent(action.help)
 
 
-def main():
+def get_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('rom', nargs="?", default='AP_LttP.sfc', help='Path to an ALttP rom to adjust.')
@@ -85,9 +85,6 @@ def main():
     parser.add_argument('--ow_palettes', default='default',
                         choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
                                  'sick'])
-    # parser.add_argument('--link_palettes', default='default',
-    #                     choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
-    #                              'sick'])
     parser.add_argument('--shield_palettes', default='default',
                         choices=['default', 'random', 'blackout', 'puke', 'classic', 'grayscale', 'negative', 'dizzy',
                                  'sick'])
@@ -107,8 +104,19 @@ def main():
                              Alternatively, can be a ALttP Rom patched with a Link
                              sprite that will be extracted.
                              ''')
+    parser.add_argument('--oof', help='''\
+                             Path to a sound effect to replace Link's "oof" sound.
+                             Needs to be in a .brr format and have a length of no
+                             more than 2673 bytes, created from a 16-bit signed PCM
+                             .wav at 12khz. https://github.com/boldowa/snesbrr
+                             ''')
     parser.add_argument('--names', default='', type=str)
     parser.add_argument('--update_sprites', action='store_true', help='Update Sprite Database, then exit.')
+    return parser
+
+
+def main():
+    parser = get_argparser()
     args = parser.parse_args()
     args.music = not args.disablemusic
     # set up logger
@@ -126,6 +134,13 @@ def main():
         if args.sprite is not None and not os.path.isfile(args.sprite) and not Sprite.get_sprite_from_name(args.sprite):
             input('Could not find link sprite sheet at given location. \nPress Enter to exit.')
             sys.exit(1)
+        if args.oof is not None and not os.path.isfile(args.oof):
+            input('Could not find oof sound effect at given location. \nPress Enter to exit.')
+            sys.exit(1)
+        if args.oof is not None and os.path.getsize(args.oof) > 2673:
+            input('"oof" sound effect cannot exceed 2673 bytes. \nPress Enter to exit.')
+            sys.exit(1)
+            
 
         args, path = adjust(args=args)
         if isinstance(args.sprite, Sprite):
@@ -165,7 +180,7 @@ def adjust(args):
         world = getattr(args, "world")
 
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.menuspeed, args.music,
-                       args.sprite, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
+                       args.sprite, args.oof, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
                        deathlink=args.deathlink, allowcollect=args.allowcollect)
     path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
     rom.write_to_file(path)
@@ -180,7 +195,7 @@ def adjustGUI():
     from tkinter import Tk, LEFT, BOTTOM, TOP, \
         StringVar, Frame, Label, X, Entry, Button, filedialog, messagebox, ttk
     from argparse import Namespace
-    from Main import __version__ as MWVersion
+    from Utils import __version__ as MWVersion
     adjustWindow = Tk()
     adjustWindow.wm_title("Archipelago %s LttP Adjuster" % MWVersion)
     set_icon(adjustWindow)
@@ -227,6 +242,7 @@ def adjustGUI():
         guiargs.sprite = rom_vars.sprite
         if rom_vars.sprite_pool:
             guiargs.world = AdjusterWorld(rom_vars.sprite_pool)
+        guiargs.oof = rom_vars.oof
 
         try:
             guiargs, path = adjust(args=guiargs)
@@ -265,6 +281,7 @@ def adjustGUI():
         else:
             guiargs.sprite = rom_vars.sprite
         guiargs.sprite_pool = rom_vars.sprite_pool
+        guiargs.oof = rom_vars.oof
         persistent_store("adjuster", GAME_ALTTP, guiargs)
         messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
 
@@ -481,6 +498,36 @@ class BackgroundTaskProgressNullWindow(BackgroundTask):
         self.stop()
 
 
+class AttachTooltip(object):
+
+    def __init__(self, parent, text):
+        self._parent = parent
+        self._text = text
+        self._window = None
+        parent.bind('<Enter>', lambda event : self.show())
+        parent.bind('<Leave>', lambda event : self.hide())
+
+    def show(self):
+        if self._window or not self._text:
+            return
+        self._window = Toplevel(self._parent)
+        #remove window bar controls
+        self._window.wm_overrideredirect(1)
+        #adjust positioning
+        x, y, *_ = self._parent.bbox("insert")
+        x = x + self._parent.winfo_rootx() + 20
+        y = y + self._parent.winfo_rooty() + 20
+        self._window.wm_geometry("+{0}+{1}".format(x,y))
+        #show text
+        label = Label(self._window, text=self._text, justify=LEFT)
+        label.pack(ipadx=1)
+
+    def hide(self):
+        if self._window:
+            self._window.destroy()
+            self._window = None
+
+
 def get_rom_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
     if not adjuster_settings:
@@ -522,6 +569,7 @@ def get_rom_options_frame(parent=None):
         "reduceflashing": True,
         "deathlink": False,
         "sprite": None,
+        "oof": None,
         "quickswap": True,
         "menuspeed": 'normal',
         "heartcolor": 'red',
@@ -598,12 +646,50 @@ def get_rom_options_frame(parent=None):
     spriteEntry.pack(side=LEFT)
     spriteSelectButton.pack(side=LEFT)
 
+    oofDialogFrame = Frame(romOptionsFrame)
+    oofDialogFrame.grid(row=1, column=1)
+    baseOofLabel = Label(oofDialogFrame, text='"OOF" Sound:')
+
+    vars.oofNameVar = StringVar()
+    vars.oof = adjuster_settings.oof
+
+    def set_oof(oof_param):
+        nonlocal vars
+        if isinstance(oof_param, str) and os.path.isfile(oof_param) and os.path.getsize(oof_param) <= 2673:
+            vars.oof = oof_param
+            vars.oofNameVar.set(oof_param.rsplit('/',1)[-1])
+        else:
+            vars.oof = None
+            vars.oofNameVar.set('(unchanged)')
+
+    set_oof(adjuster_settings.oof)
+    oofEntry = Label(oofDialogFrame, textvariable=vars.oofNameVar)
+
+    def OofSelect():
+        nonlocal vars
+        oof_file = filedialog.askopenfilename(
+            filetypes=[("BRR files", ".brr"),
+                       ("All Files", "*")])
+        try:
+            set_oof(oof_file)
+        except Exception:
+            set_oof(None)
+
+    oofSelectButton = Button(oofDialogFrame, text='...', command=OofSelect)
+    AttachTooltip(oofSelectButton,
+                  text="Select a .brr file no more than 2673 bytes.\n" + \
+                  "This can be created from a <=0.394s 16-bit signed PCM .wav file at 12khz using snesbrr.")
+
+    baseOofLabel.pack(side=LEFT)
+    oofEntry.pack(side=LEFT)
+    oofSelectButton.pack(side=LEFT)
+
     vars.quickSwapVar = IntVar(value=adjuster_settings.quickswap)
     quickSwapCheckbutton = Checkbutton(romOptionsFrame, text="L/R Quickswapping", variable=vars.quickSwapVar)
     quickSwapCheckbutton.grid(row=1, column=0, sticky=E)
 
     menuspeedFrame = Frame(romOptionsFrame)
-    menuspeedFrame.grid(row=1, column=1, sticky=E)
+    menuspeedFrame.grid(row=6, column=1, sticky=E)
     menuspeedLabel = Label(menuspeedFrame, text='Menu speed')
     menuspeedLabel.pack(side=LEFT)
     vars.menuspeedVar = StringVar()
@@ -1055,7 +1141,6 @@ class SpriteSelector():
     @property
     def custom_sprite_dir(self):
         return user_path("data", "sprites", "custom")
-
 
 def get_image_for_sprite(sprite, gif_only: bool = False):
     if not sprite.valid:
