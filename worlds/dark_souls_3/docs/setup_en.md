@@ -21,9 +21,7 @@ This client has only been tested with the Official Steam version of the game at 
 
 ## Downpatching Dark Souls III
 
-Download the 1.15 crash-fix executable from the [speedsouls wiki](https://wiki.speedsouls.com/darksouls3:Crash_Fix) and use it to replace DarkSoulsIII.exe in your installation. This modified executable also fixes a memory leak that may otherwise cause the game to crash.
-
-An alternate method is to download version 1.15 from the Steam console. Follow instructions from the [speedsouls wiki](https://wiki.speedsouls.com/darksouls3:Downpatching). Your download command, including the correct depot and manifest ids, is "download_depot 374320 374321 4471176929659548333"
+Follow instructions from the [speedsouls wiki](https://wiki.speedsouls.com/darksouls3:Downpatching). Your download command, including the correct depot and manifest ids, will be "download_depot 374320 374321 4471176929659548333"
 
 ## Installing the Archipelago mod
 
