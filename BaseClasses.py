@@ -838,20 +838,23 @@ class Region:
         for location, address in locations.items():
             self.locations.append(location_type(self.player, location, address, self))
 
-    def add_exits(self, exits: Dict[str, Optional[str]], rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
+    def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
+                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
-        :param exits: exits from the region. format is {"connecting_region", "exit_name"}
+        :param exits: exits from the region. format is {"connecting_region": "exit_name"}. if a non dict is provided,
+        created entrances will be named "self.name -> connecting_region"
         :param rules: rules for the exits from this region. format is {"connecting_region", rule}
         """
-        for exiting_region, name in exits.items():
-            ret = Entrance(self.player, name, self) if name \
-                else Entrance(self.player, f"{self.name} -> {exiting_region}", self)
-            if rules and exiting_region in rules:
-                ret.access_rule = rules[exiting_region]
-            self.exits.append(ret)
-            ret.connect(self.multiworld.get_region(exiting_region, self.player))
+        if not isinstance(exits, Dict):
+            exits = dict.fromkeys(exits)
+        for connecting_region, name in exits.items():
+            entrance = Entrance(self.player, name if name else f"{self.name} -> {connecting_region}", self)
+            if rules and connecting_region in rules:
+                entrance.access_rule = rules[connecting_region]
+            self.exits.append(entrance)
+            entrance.connect(self.multiworld.get_region(connecting_region, self.player))
 
     def __repr__(self):
         return self.__str__()

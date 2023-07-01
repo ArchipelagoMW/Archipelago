@@ -142,4 +142,4 @@ change to green. Congratulations on successfully joining a multiworld game!
 ## Hosting a MultiWorld game
 
 The recommended way to host a game is to use our hosting service on the [seed generation page](/generate). Or check out
-the Archipelago website guide for more information: [Archipelago Website Guide](/tutorial/Archipelago/using_website/en)
+the Archipelago website guide for more information: [Archipelago Setup Guide](/tutorial/Archipelago/setup/en)

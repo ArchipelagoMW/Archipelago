@@ -1,5 +1,4 @@
-import os
-from Utils import cache_argsless
+from functools import lru_cache
 from itertools import accumulate
 from typing import *
 from fractions import Fraction
@@ -141,116 +140,87 @@ class lazy(object):
         return res
 
 
+@lru_cache(maxsize=None)
 def get_adjustment_file(adjustment_file):
     data = get_data(__name__, adjustment_file).decode('utf-8')
     return [line.strip() for line in data.split("\n")]
 
 
-@cache_argsless
 def get_disable_unrandomized_list():
     return get_adjustment_file("settings/Disable_Unrandomized.txt")
 
 
-@cache_argsless
 def get_early_utm_list():
     return get_adjustment_file("settings/Early_UTM.txt")
 
 
-@cache_argsless
 def get_symbol_shuffle_list():
     return get_adjustment_file("settings/Symbol_Shuffle.txt")
 
 
-@cache_argsless
 def get_door_panel_shuffle_list():
     return get_adjustment_file("settings/Door_Panel_Shuffle.txt")
 
 
-@cache_argsless
 def get_doors_simple_list():
     return get_adjustment_file("settings/Doors_Simple.txt")
 
 
-@cache_argsless
 def get_doors_complex_list():
     return get_adjustment_file("settings/Doors_Complex.txt")
 
 
-@cache_argsless
 def get_doors_max_list():
     return get_adjustment_file("settings/Doors_Max.txt")
 
 
-@cache_argsless
 def get_laser_shuffle():
     return get_adjustment_file("settings/Laser_Shuffle.txt")
 
 
-@cache_argsless
 def get_audio_logs():
     return get_adjustment_file("settings/Audio_Logs.txt")
 
 
-@cache_argsless
 def get_ep_all_individual():
     return get_adjustment_file("settings/EP_Shuffle/EP_All.txt")
 
 
-@cache_argsless
 def get_ep_obelisks():
     return get_adjustment_file("settings/EP_Shuffle/EP_Sides.txt")
 
 
-@cache_argsless
 def get_ep_easy():
     return get_adjustment_file("settings/EP_Shuffle/EP_Easy.txt")
 
 
-@cache_argsless
 def get_ep_no_eclipse():
     return get_adjustment_file("settings/EP_Shuffle/EP_NoEclipse.txt")
 
 
-@cache_argsless
 def get_ep_no_caves():
     return get_adjustment_file("settings/EP_Shuffle/EP_NoCavesEPs.txt")
 
 
-@cache_argsless
 def get_ep_no_mountain():
     return get_adjustment_file("settings/EP_Shuffle/EP_NoMountainEPs.txt")
 
 
-@cache_argsless
 def get_ep_no_videos():
     return get_adjustment_file("settings/EP_Shuffle/EP_Videos.txt")
 
 
-@cache_argsless
 def get_sigma_normal_logic():
     return get_adjustment_file("WitnessLogic.txt")
 
 
-@cache_argsless
 def get_sigma_expert_logic():
     return get_adjustment_file("WitnessLogicExpert.txt")
 
 
-@cache_argsless
 def get_vanilla_logic():
     return get_adjustment_file("WitnessLogicVanilla.txt")
 
 
-@cache_argsless
 def get_items():
     return get_adjustment_file("WitnessItems.txt")
-
-
-def get_logic_file(filepath: str):
-    if filepath == "WitnessLogic.txt":
-        return get_sigma_normal_logic()
-    if filepath == "WitnessLogicExpert.txt":
-        return get_sigma_expert_logic()
-    if filepath == "WitnessLogicVanilla.txt":
-        return get_vanilla_logic()
-    return get_adjustment_file(filepath)
