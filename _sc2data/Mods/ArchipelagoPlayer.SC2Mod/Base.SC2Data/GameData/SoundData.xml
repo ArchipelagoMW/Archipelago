@@ -5191,10 +5191,10 @@
     </CSound>
     <CSound id="AP_SOAMatrixOverloadOff" parent="Spell">
         <EditorCategories value="Race:Protoss"/>
-        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_Off01_1ch.wav" FacialGroup=""/>
-        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_Off02_1ch.wav" FacialGroup=""/>
-        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_Off03_1ch.wav" FacialGroup=""/>
-        <Chance value="0"/>
+        <AssetArray File="AP\Assets\Sounds\SOA_MatrixOverload_Off01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_MatrixOverload_Off02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_MatrixOverload_Off03_1ch.wav" FacialGroup=""/>
+<!--        <Chance value="0"/> Vanilla mutes this? -->
         <DupeMaximumMethod value="Replace"/>
         <DupeMuteCount value="4"/>
         <Pitch value="0.000000,0.500000"/>
@@ -5204,9 +5204,9 @@
     </CSound>
     <CSound id="AP_SOAMatrixOverloadOn" parent="Spell">
         <EditorCategories value="Race:Protoss"/>
-        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_On01_1ch.wav" FacialGroup=""/>
-        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_On02_1ch.wav" FacialGroup=""/>
-        <AssetArray File="Assets\Sounds\SOA_MatrixOverload_On03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_MatrixOverload_On01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_MatrixOverload_On02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_MatrixOverload_On03_1ch.wav" FacialGroup=""/>
         <DupeMuteCount value="4"/>
         <Pitch value="0.000000,0.500000"/>
         <Volume value="-24.000000,-24.000000"/>
