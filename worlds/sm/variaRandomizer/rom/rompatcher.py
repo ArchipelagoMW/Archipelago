@@ -279,11 +279,12 @@ class RomPatcher:
 
             # apply area patches
             if self.settings["area"] == True:
+                areaPatches = list(RomPatcher.IPSPatches['Area'])
                 if not self.settings["areaLayout"]:
                     for p in ['area_rando_layout.ips', 'Sponge_Bath_Blinking_Door', 'east_ocean.ips', 'aqueduct_bomb_blocks.ips']:
-                       RomPatcher.IPSPatches['Area'].remove(p)
-                    RomPatcher.IPSPatches['Area'].append('area_rando_layout_base.ips')
-                for patchName in RomPatcher.IPSPatches['Area']:
+                       areaPatches.remove(p)
+                    areaPatches.append('area_rando_layout_base.ips')
+                for patchName in areaPatches:
                     self.applyIPSPatch(patchName)
             else:
                 self.applyIPSPatch('area_ids_alt.ips')
@@ -1064,7 +1065,7 @@ class RomPatcher:
         objectives.writeIntroObjectives(self.romFile, tourian)
         self.writeItemsMasks(itemLocs)
         # hack bomb_torizo.ips to wake BT in all cases if necessary, ie chozo bots objective is on, and nothing at bombs
-        if objectives.isGoalActive("activate chozo robots") and RomPatches.has(RomPatches.BombTorizoWake):
+        if objectives.isGoalActive("activate chozo robots") and RomPatches.has(self.player, RomPatches.BombTorizoWake):
             bomb = next((il for il in itemLocs if il.Location.Name == "Bomb"), None)
             if bomb is not None and bomb.Item.Category == "Nothing":
                 for addrName in ["BTtweaksHack1", "BTtweaksHack2"]:

@@ -15,15 +15,13 @@ class SMBoolManager(object):
     countItems = ['Missile', 'Super', 'PowerBomb', 'ETank', 'Reserve']
 
     percentItems = ['Bomb', 'Charge', 'Ice', 'HiJump', 'SpeedBooster', 'Wave', 'Spazer', 'SpringBall', 'Varia', 'Plasma', 'Grapple', 'Morph', 'Gravity', 'XRayScope', 'SpaceJump', 'ScrewAttack']
-    def __init__(self, player=0, maxDiff=sys.maxsize, onlyBossLeft = False, lastAP = 'Landing Site'):
+    def __init__(self, player=0, maxDiff=sys.maxsize, onlyBossLeft = False):
         self._items = { }
         self._counts = { }
 
         self.player = player
         self.maxDiff = maxDiff
         self.onlyBossLeft = onlyBossLeft
-
-        self.lastAP = lastAP
 
         # cache related
         #self.cacheKey = 0
@@ -32,7 +30,7 @@ class SMBoolManager(object):
         Logic.factory('vanilla')
         self.helpers = Logic.HelpersGraph(self)
         self.doorsManager = DoorsManager()
-        self.objectives = Objectives.objDict[player]
+        self.objectives = Objectives.objDict[player] if player in Objectives.objDict.keys() else Objectives(player)
         self.createFacadeFunctions()
         self.createKnowsFunctions(player)
         self.resetItems()
@@ -91,9 +89,12 @@ class SMBoolManager(object):
         return itemsDict
 
     def withItem(self, item, func):
-        self.addItem(item)
+        addAndRemoveItem = self.isCountItem(item) or not self.haveItem(item)
+        if addAndRemoveItem:
+            self.addItem(item)
         ret = func(self)
-        self.removeItem(item)
+        if addAndRemoveItem:
+            self.removeItem(item)
         return ret
 
     def resetItems(self):

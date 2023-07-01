@@ -135,7 +135,7 @@ def autogen(config: dict):
             with Locker("autogen"):
 
                 with multiprocessing.Pool(config["GENERATORS"], initializer=init_db,
-                                          initargs=(config["PONY"],)) as generator_pool:
+                                          initargs=(config["PONY"],), maxtasksperchild=10) as generator_pool:
                     with db_session:
                         to_start = select(generation for generation in Generation if generation.state == STATE_STARTED)
 

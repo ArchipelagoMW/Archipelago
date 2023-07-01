@@ -373,6 +373,8 @@ def loadRandoPreset(world, player, args):
     args.gravityBehaviour = defaultMultiValues["gravityBehaviour"][world.gravity_behaviour[player].value]
     args.nerfedCharge = world.nerfed_charge[player].value
     args.area = world.area_randomization[player].current_key
+    if (args.area == "true"):
+        args.area = "full"
     if args.area != "off":
         args.areaLayoutBase = not world.area_layout[player].value
     args.escapeRando = world.escape_rando[player].value
@@ -415,7 +417,10 @@ def loadRandoPreset(world, player, args):
     args.powerBombQty = world.power_bomb_qty[player].value / float(10)
     args.minorQty = world.minor_qty[player].value
     args.energyQty = defaultMultiValues["energyQty"][world.energy_qty[player].value]
-    args.objective = world.objective[player].value
+    args.objectiveRandom = world.custom_objective[player].value
+    args.objectiveList = list(world.custom_objective_list[player].value)
+    args.nbObjective = world.custom_objective_count[player].value
+    args.objective = list(world.objective[player].value)
     args.tourian = defaultMultiValues["tourian"][world.tourian[player].value]
     #args.minimizerN
     #args.minimizerTourian

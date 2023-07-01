@@ -6,7 +6,7 @@ import typing
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components
+from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
@@ -18,7 +18,13 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items, valid_ingredients, progressive_rows
 
-components.append(Component("Factorio Client", "FactorioClient"))
+
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="FactorioClient")
+
+
+components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
 
 
 class FactorioWeb(WebWorld):
@@ -69,6 +75,7 @@ class Factorio(World):
     required_client_version = (0, 4, 0)
 
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
+    tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
     tech_mix: int = 0
     skip_silo: bool = False
     science_locations: typing.List[FactorioScienceLocation]
@@ -78,6 +85,7 @@ class Factorio(World):
         self.advancement_technologies = set()
         self.custom_recipes = {}
         self.science_locations = []
+        self.tech_tree_layout_prerequisites = {}
 
     generate_output = generate_mod
 

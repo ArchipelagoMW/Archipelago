@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Range, DeathLink, DefaultOnToggle
+from Options import Choice, Range, DeathLink, Toggle, DefaultOnToggle, StartInventoryPool
 from .Creatures import all_creatures, Definitions
 
 
@@ -33,6 +33,12 @@ class SwimRule(Choice):
 class EarlySeaglide(DefaultOnToggle):
     """Make sure 2 of the Seaglide Fragments are available in or near the Safe Shallows (Sphere 1 Locations)."""
     display_name = "Early Seaglide"
+
+
+class FreeSamples(Toggle):
+    """Get free items with your blueprints.
+    Items that can go into your inventory are awarded when you unlock their blueprint through Archipelago."""
+    display_name = "Free Samples"
 
 
 class Goal(Choice):
@@ -100,8 +106,10 @@ class SubnauticaDeathLink(DeathLink):
 options = {
     "swim_rule": SwimRule,
     "early_seaglide": EarlySeaglide,
+    "free_samples": FreeSamples,
     "goal": Goal,
     "creature_scans": CreatureScans,
     "creature_scan_logic": AggressiveScanLogic,
     "death_link": SubnauticaDeathLink,
+    "start_inventory_from_pool": StartInventoryPool,
 }

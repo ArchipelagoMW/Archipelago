@@ -105,6 +105,8 @@ def set_rules(hylics2world):
         lambda state: state._hylics2_has_upper_house_key(player))
     add_rule(world.get_location("New Muldul: Upper House Chest 2", player),
         lambda state: state._hylics2_has_upper_house_key(player))
+    add_rule(world.get_location("New Muldul: Pot above Vault", player),
+        lambda state: state._hylics2_can_air_dash(player))
 
     # New Muldul Vault
     add_rule(world.get_location("New Muldul: Rescued Blerol 1", player),

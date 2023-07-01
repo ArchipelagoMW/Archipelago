@@ -1,4 +1,4 @@
-# Stardew Valley Randomizer Setup Guide
+# DLCQuest Randomizer Setup Guide
 
 ## Required Software
 
@@ -19,7 +19,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [DLC Quest Player Settings Page](../player-settings)
+You can customize your settings by visiting the [DLC Quest Player Settings Page](/games/DLCQuest/player-settings)
 
 ## Joining a MultiWorld Game
 
@@ -32,6 +32,7 @@ You can customize your settings by visiting the [DLC Quest Player Settings Page]
 
 
 - Run "DLCQuestipelagoInstaller.exe"
+
 ![image](https://i.imgur.com/2sPhMgs.png)
 - The installer should describe what it is doing each step of the way, and will ask for your input when necessary.
   - It will allow you to choose where to install your modded game, and offer a default location
@@ -44,7 +45,7 @@ You can customize your settings by visiting the [DLC Quest Player Settings Page]
 
 
 - Run BepInEx.NET.Framework.Launcher.exe. If you opted for a desktop shortcut, you will find it with an icon and a more recognizable name.
-- ![image](https://i.imgur.com/ZUiFrhf.png)
+![image](https://i.imgur.com/ZUiFrhf.png)
 
 
 - Your game should launch alongside a modloader console, which will contain important debugging information if you run into problems.

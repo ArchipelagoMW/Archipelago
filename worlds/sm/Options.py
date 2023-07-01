@@ -1,5 +1,5 @@
 import typing
-from Options import Choice, Range, OptionDict, OptionList, Option, Toggle, DefaultOnToggle
+from Options import Choice, Range, OptionDict, OptionList, OptionSet, Option, Toggle, DefaultOnToggle
 from .variaRandomizer.utils.objectives import _goals
 
 class StartItemsRemovesFromPool(Toggle):
@@ -127,6 +127,7 @@ class AreaRandomization(Choice):
     option_off = 0
     option_light = 1
     option_full = 2
+    alias_true = 2
     default = 0
 
 class AreaLayout(Toggle):
@@ -214,7 +215,11 @@ class Hud(Toggle):
     display_name = "Hud"
 
 class Animals(Toggle):
-    """Replace saving the animals in the escape sequence by a random surprise."""
+    """
+    Replace saving the animals in the escape sequence by a random surprise.
+    Note: This setting is not available when Escape Randomization is enabled, as it is replaced by Animals Challenges
+    (see Escape Randomization help for more information).
+    """
     display_name = "Animals"
 
 class NoMusic(Toggle):
@@ -285,19 +290,54 @@ class Tourian(Choice):
     option_Disabled = 2
     default = 0  
 
-class Objective(OptionList):
+class CustomObjective(Toggle):
     """
-    Choose which objectives are required to sink the Golden Four statue and to open access to Tourian.
-    You can choose from 0 to 5 objectives.
+    Use randomized custom objectives. You can choose which objectives are available for the randomizer to choose from. If enabled, the randomizer 
+    will choose "Custom objective count" objectives from "Custom objective list". Otherwise, only objective is used. Default is disabled.
+    """
+    display_name = "Custom objectives"
+
+class CustomObjectiveCount(Range):
+    """
+    By default you need to complete 4 objectives from the list to access Tourian. You can choose between 1 and 5. This setting is ignored if
+    ""Custom objectives"" is set to false.
+    """
+    display_name = "Custom objective count"
+    range_start = 1
+    range_end = 5
+    default = 4
+
+class CustomObjectiveList(OptionSet):
+    """
+    If ""Custom objectives"" is enabled, "Custom Objective count" will be used to pick an amount of objective from the list.
+    This setting is ignored if ""Custom objectives"" is set to false.
     Note: If you leave the list empty no objective is required to access Tourian, ie. it's open.
     Note: See the Tourian parameter to enable fast Tourian or trigger the escape when all objectives are completed.
     Note: Current percentage of collected items is displayed in the inventory pause menu.
-    Note: Collect 100% items is excluded by default when randomizing the objectives list as it requires you to complete all the objectives.
+    Note: Collect 100% items is excluded by default as it requires you to complete all the objectives.
     Note: In AP, Items% and areas objectives are counted toward location checks, not items collected or received, except for "collect all upgrades"
+    
+    Format as a comma-separated list of objective names: ["kill three G4", "collect 75% items"] or ["random"] to specify the whole list except
+    "collect 100% items" and "nothing". The default is ["random"]. A full list of supported objectives can be found at:
+    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/variaRandomizer/utils/objectives.py
+    """
+    display_name = "Custom objective list"
+    default = ["random"]
+    valid_keys = frozenset([name for name in _goals.keys()] + ["random"])
+    #valid_keys_casefold = True
 
-    Format as a comma-separated list of objective names: ["kill three G4", "collect 75% items"].
+class Objective(OptionSet):
+    """
+    If ""Custom objectives"" is disabled, choose which objectives are required to sink the Golden Four statue and to open access to Tourian.
+    You can choose from 0 to 5 objectives. Up to the first 5 objectives from the list will be selected.
+    Note: If you leave the list empty no objective is required to access Tourian, ie. it's open.
+    Note: See the Tourian parameter to enable fast Tourian or trigger the escape when all objectives are completed.
+    Note: Current percentage of collected items is displayed in the inventory pause menu.
+    Note: In AP, Items% and areas objectives are counted toward location checks, not items collected or received, except for "collect all upgrades"
+    
+    Format as a comma-separated list of objective names: ["kill three G4", "collect 75% items"]. The default is ["kill all G4"].
     A full list of supported objectives can be found at:
-    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/utils/objectives.py
+    https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/sm/variaRandomizer/utils/objectives.py
     """
     display_name = "Objectives"
     default = ["kill all G4"]
@@ -385,6 +425,9 @@ sm_options: typing.Dict[str, type(Option)] = {
     "custom_preset": CustomPreset,
     "varia_custom_preset": VariaCustomPreset,
     "tourian": Tourian,
+    "custom_objective": CustomObjective,
+    "custom_objective_list": CustomObjectiveList,
+    "custom_objective_count": CustomObjectiveCount,
     "objective": Objective,
     "relaxed_round_robin_cf": RelaxedRoundRobinCF,
     }
