@@ -5213,7 +5213,6 @@
     </CActorModel>
     <CActorAction id="AP_AlarakTheStrongestSurviveDummyAttack" parent="GenericAttack" effectImpact="AP_AlarakTheStrongestSurviveDummyAttackMissileImpact" effectLaunch="AP_AlarakTheStrongestSurviveDummyAttackMissile">
         <LaunchAttachQuery Methods="Center"/>
-        <Missile value="AP_AlarakTheStrongestSurviveDummyAttackMissile"/>
         <ImpactSiteOps Ops="SOpAttachCenterSoft"/>
         <ImpactAttachQuery Methods="Center"/>
         <ImpactMap index="None" Model="AP_Alarak_COOP_Sacrifice_Missile_Impact"/>
@@ -5224,7 +5223,6 @@
     </CActorMissile>
     <CActorAction id="AP_AlarakTheStrongestSurviveDummySecondaryAttack" parent="GenericAttack" effectImpact="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissileImpact" effectLaunch="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile">
         <LaunchAttachQuery Methods="Center"/>
-        <Missile value="AP_AlarakTheStrongestSurviveDummySecondaryAttackMissile"/>
         <ImpactSiteOps Ops="SOpAttachHarness"/>
         <ImpactMap index="None" Model="AP_Alarak_COOP_Sacrifice_Missile_Impact_Small"/>
         <ShieldFlashType value="Full"/>
@@ -12523,6 +12521,400 @@
     <CActorRange id="AP_DarkArchonConfusionRange" parent="RangeAbil" abil="AP_DarkArchonConfusion"/>
     <CActorSplat id="AP_DarkArchonConfusionCursorSplat" parent="ProtossCursorSplat" abil="AP_DarkArchonConfusion"/>
     <CActorRange id="AP_DarkArchonMindControlRange" parent="RangeAbil" abil="AP_DarkArchonMindControl"/>
+    <CActorSimple id="AP_GlazeStasisSimple">
+        <EditorCategories value=""/>
+        <Supporter Subject="_Selectable"/>
+        <On Terms="Behavior.AP_OracleStasisTrapTarget.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="ModelMaterialApply AP_GlazeStasis"/>
+        <On Terms="Behavior.AP_OracleStasisTrapTarget.Off" Target="_Unit" Send="ModelMaterialRemove AP_GlazeStasis"/>
+        <On Terms="Behavior.AP_OracleStasisTrapTarget.Off" Send="Destroy"/>
+    </CActorSimple>
+    <CActorModelMaterial id="AP_GlazeStasis" parent="GlazeParent">
+        <Model value="GlazeStasis"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModelMaterial>
+    <CActorUnit id="AP_Oracle" parent="GenericUnitBase" unitName="AP_Oracle">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="GlobalLoopMacro"/>
+        <Macros value="GlobalLoopMacroMore"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <Remove Terms="Abil.OracleRevelation.SourceCastStart" Send="Create Oracle_RevelationCast_Sound"/>
+        <Remove Terms="Abil.OracleRevelation.SourceCastStart" Send="Create Oracle_RevelationCast2_Sound"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Oracle_Land"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap OracleWarpInStargate"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="$Spell 0 0.000000 0.000000 2.100000 AsDuration"/>
+        <On Terms="Behavior.WarpInEffect.Off" Send="ModelSwap Oracle"/>
+        <On Terms="Behavior.WarpInEffect.Off" Send="AnimClear Spell"/>
+        <On Terms="Behavior.WarpInEffect.Off" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="Behavior.WarpInEffect.Off" Send="AnimBracketStart GL_BSD_A GLbirth,A GLstand,A GLdeath,A"/>
+        <On Terms="Behavior.OracleCloakField.On" Send="AnimBracketStart Cloaking Stand,Work,Start Stand,Work Stand,Work,End"/>
+        <On Terms="Behavior.OracleCloakField.Off" Send="AnimBracketStop Cloaking"/>
+<!--        <On Terms="Abil.Scryer.SourceCastStart" Send="$Spell"/>-->
+<!--        <On Terms="Abil.ResourceStun.SourceCastStart" Send="$Spell"/>-->
+        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="AnimPlay Spell Stand,Work,Start"/>
+        <On Terms="Abil.*.SourceCastStart" Send="Create OracleCastLaunch"/>
+        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create Oracle_RevelationCast_Sound"/>
+        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create Oracle_RevelationCast2_Sound"/>
+        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create Oracle_Spell_Revelation_StandWorkStart2_Sound"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; IsStatus OracleMoving 1; !ValidateUnit IsHallucination" Send="DeathCustomize Variation0"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitMovementUpdate.*.Stand" Send="StatusSet OracleMoving 0"/>
+        <On Terms="UnitMovementUpdate.*.Walk" Send="StatusSet OracleMoving 1"/>
+        <On Terms="Behavior.AP_OracleWeapon.On" Send="Create AP_OracleCastLaunch"/>
+        <On Terms="Behavior.AP_OracleWeapon.On" Send="Create AP_Oracle_PulsarBeamModeOn_Sound"/>
+        <On Terms="Behavior.AP_OracleWeapon.On" Send="Create AP_Oracle_PulsarBeamModeOn2_Sound"/>
+        <On Terms="Behavior.AP_OracleWeapon.On" Send="Create AP_Oracle_PulsarBeamModeOn3_Sound"/>
+        <On Terms="Behavior.AP_OracleWeapon.Off" Send="Create AP_Oracle_PulsarBeamModeOff_Sound"/>
+        <On Terms="Behavior.AP_OracleWeapon.Off" Send="Create AP_Oracle_PulsarBeamModeOff2_Sound"/>
+        <On Terms="Behavior.AP_LightofAiur.On" Send="AnimBracketStart Envisioning Stand,Work,Start Stand,Work Stand,Work,End"/>
+        <On Terms="Behavior.AP_LightofAiur.Off" Send="AnimBracketStop Envisioning"/>
+        <On Terms="Behavior.AP_LightofAiur.On" Send="StatusSet MorphDeath 1"/>
+        <On Terms="Behavior.AP_LightofAiur.Off" Send="StatusSet MorphDeath 0"/>
+        <On Terms="UnitDeathCustomize; IsStatus MorphDeath 1; !ValidateUnit IsHallucination" Send="DeathCustomize Variation1"/>
+        <On Terms="Behavior.AP_LightofAiur.On" Send="Create Oracle_EnvisionCast1_Sound"/>
+        <On Terms="Behavior.AP_LightofAiur.On" Send="Create Oracle_EnvisionCast2_Sound"/>
+        <On Terms="Behavior.AP_LightofAiur.On" Send="Create Oracle_EnvisionCast3_Sound"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveVoidShade" Send="DeathCustomize Shadow"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap Oracle_Taldarim"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap Oracle_Taldarim"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss; UnitWalking" Send="DeathCustomize Variation2"/>
+        <Model value="Oracle"/>
+        <AnimBlendTime value="0.400000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="0"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <Baselines index="Walk" BlendIn="1.500000" BlendOut="2.000000"/>
+        <BuildModel value="OracleWarpIn"/>
+        <DeathArray index="Normal" ModelLink="OracleDeath" SoundLink="Oracle_Explode"/>
+        <DeathCustoms ModelLink="OracleDeathWalk" VoiceLink="Oracle_Death" Name="Variation0"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
+        <DeathCustoms>
+            <ActorModel value="UnitDeathRagdollFlier"/>
+            <ModelLink value="OracleDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="ProtossTinyRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ModelLink="OracleDeathMorph" VoiceLink="Oracle_Death" Name="Variation1"/>
+        <DeathCustoms>
+            <ModelLink value="DeathVoidShadowSmall"/>
+            <SoundLink value="ShadowUnit_DeathFX"/>
+            <VoiceLink value="ShadowUnit_DeathVox"/>
+            <Name value="Shadow"/>
+        </DeathCustoms>
+        <DeathCustoms ModelLink="Oracle_Taldarim_Death" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="Oracle_Taldarim_Death_Walk" Name="Variation2"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionFlier"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="Oracle"/>
+        <PortraitModel value="OraclePortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="50"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Oracle.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-oracle.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="60"/>
+        <SoundArray index="Ready" value="Oracle_Ready"/>
+        <SoundArray index="Help" value="Oracle_Help"/>
+        <SoundArray index="What" value="Oracle_What"/>
+        <SoundArray index="Yes" value="Oracle_Yes"/>
+        <SoundArray index="Attack" value="Oracle_Attack"/>
+        <SoundArray index="Pissed" value="Oracle_Pissed"/>
+        <SoundArray index="Movement" value="Oracle_Movement"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-oracle.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-Oracle.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Oracle-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Oracle-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Oracle-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="AP_OracleAttack" parent="GenericAttack" effectImpact="OracleShotDamage" effectLaunch="OracleShotLaunchMissile">
+        <LaunchAssets Sound="PhotonCannon_AttackLaunch"/>
+        <Missile value="AP_OracleAttackMissile"/>
+        <ImpactMap index="None" Model="OracleAttackImpact" Sound="PhotonCannon_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_OracleAttackMissile" parent="GenericAttackMissile" unitName="OracleWeapon">
+        <On Terms="UnitBirth" Send="AnimSetTimeScaleAbsolute Lifetime 1.000000"/>
+        <Scale value="1.600000"/>
+    </CActorMissile>
+    <CActorModel id="AP_OracleCastLaunch" parent="ModelAnimationStyleOneShot">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="OracleCastLaunch"/>
+    </CActorModel>
+    <CActorModel id="AP_OracleEnvision" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_LightofAiur.On" Send="Create"/>
+        <On Terms="Behavior.AP_LightofAiur.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="OracleEnvision"/>
+    </CActorModel>
+    <CActorModel id="AP_OraclePhaseShift" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_OraclePhaseShift.On" Send="Create"/>
+        <On Terms="Behavior.AP_OraclePhaseShift.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetTintColor {255,255,255 0.500000}"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="SetOpacity 0.500000"/>
+        <On Terms="Behavior.AP_OraclePhaseShift.Off" Target="_Unit" Send="SetTintColor 255,255,255"/>
+        <On Terms="Behavior.AP_OraclePhaseShift.Off" Target="_Unit" Send="SetOpacity 1.000000"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="OraclePhaseShift"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorSound id="AP_OraclePhaseShiftOffSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_OraclePhaseShift.Off" Send="Create"/>
+        <Sound value="Terran_CloakOff"/>
+    </CActorSound>
+    <CActorSound id="AP_OraclePhaseShiftOnSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_OraclePhaseShift.On" Send="Create"/>
+        <Sound value="Terran_CloakOn"/>
+    </CActorSound>
+    <CActorModel id="AP_OracleRevelationBehaviorModel" parent="ModelAnimationStyleContinuous">
+        <Macros value="GlobalLoopMacro"/>
+        <Macros value="GlobalLoopMacroMore"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_OracleRevelation.On" Send="Create"/>
+        <On Terms="Behavior.AP_OracleRevelation.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="OracleRevelationBehaviorModel"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorSplat id="AP_OracleRevelationCursorSplat" parent="ProtossCursorSplat" abil="AP_OracleRevelation"/>
+    <CActorModel id="AP_OracleRevelationModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_OracleRevelationSearch.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDeath"/>
+        <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
+        <HostSiteOps Ops="SOpShadow OracleRevelationOffSet"/>
+        <Model value="OracleRevelationModel"/>
+    </CActorModel>
+    <CActorSiteOpLocalOffset id="AP_OracleRevelationOffSet">
+        <LocalOffset value="0.000000,0.000000,0.500000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorRange id="AP_OracleRevelationRange" parent="RangeAbil" abil="AP_OracleRevelation">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+        <IconArcLength value="3.250000"/>
+    </CActorRange>
+    <CActorUnit id="AP_OracleStasisTrap" parent="GenericUnitBase" unitName="AP_OracleStasisTrap">
+        <On Terms="ActorCreation" Send="Create AP_OracleStasisTrapRange"/>
+        <On Terms="ActorCreation" Send="$Birth PlayForever 0.000000 -1.000000 5.000000 AsDuration"/>
+        <On Terms="UnitBirth" Send="AnimClear Birth"/>
+        <On Terms="Effect.OracleStasisTrapActivateSet.Start" Send="AnimPlay Work Death PlayForever"/>
+        <On Terms="Effect.OracleStasisTrapActivateSet.Start" Send="Create Oracle_StasisTrap_Explode"/>
+        <Model value="OracleStasisTrap"/>
+        <BuildModel value="OracleStasisTrap"/>
+        <PlacementModel value="OracleStasisTrap"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <DeathArray index="Normal" ModelLink="StasisTrapDeath" SoundLink="AP_Oracle_StasisTrap_Explode"/>
+        <DeathCustoms index="1" ModelLink="AP_ProtossSmallUnitDeathLow" Name="AntiGravProtoss"/>
+        <PlacementActorModel value="AP_OracleStasisTrapPlacementModel"/>
+        <PlaceholderActorModel value="PlaceholderModelOracleStasisTrap"/>
+        <PortraitModel value="StasisWardPortrait"/>
+        <BarOffset value="40"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-stasisward.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-ability-protoss-oracle-stasisward.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
+        <SoundArray index="What" value="Oracle_StasisTrap_What"/>
+        <UnitIcon value="Assets\Textures\btn-ability-protoss-oracle-stasisward.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-stasisward.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-stasisward-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-stasisward-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-stasisward-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorBeamSimple id="AP_OracleStasisTrapBuildBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.AP_OracleStasisTrapBuildBeamOn.Start; At Caster" Send="Create"/>
+        <On Terms="Abil.AP_OracleStasisTrapBuild.WorkerStop" Send="AnimBracketStop BSD"/>
+        <On Terms="Abil.AP_OracleStasisTrapBuild.WorkerCancel" Send="AnimBracketStop BSD"/>
+        <Model value="OracleStasisTrapBuildBeam"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <HostLaunch Subject="_Unit" Scope="Caster"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Unit" Scope="Target"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_OracleStasisTrapBuildBeamFinish_ActorSound" parent="SoundOneShot">
+        <On Terms="Abil.AP_OracleStasisTrapBuild.WorkerStop" Send="Create"/>
+        <On Terms="Abil.AP_OracleStasisTrapBuild.WorkerCancel" Send="Create"/>
+        <Sound value="Oracle_StasisTrap_Finished"/>
+    </CActorSound>
+    <CActorSound id="AP_OracleStasisTrapBuildBeamStart_ActorSound" parent="SoundOneShot">
+        <On Terms="Abil.AP_OracleStasisTrapBuild.WorkerStart" Send="Create"/>
+        <Sound value="Oracle_StasisTrap_Start"/>
+    </CActorSound>
+    <CActorSound id="AP_OracleStasisTrapBuildBeam_ActorSound" parent="SoundContinuous">
+        <On Terms="Abil.AP_OracleStasisTrapBuild.WorkerStart" Send="Create"/>
+        <On Terms="Abil.AP_OracleStasisTrapBuild.WorkerStop" Send="Destroy"/>
+        <On Terms="Abil.AP_OracleStasisTrapBuild.WorkerCancel" Send="Destroy"/>
+        <Sound value="Oracle_StasisWardBeam_Loop"/>
+    </CActorSound>
+    <CActorModel id="AP_OracleStasisTrapExplosion" parent="ModelAnimationStyleOneShotNoOrphan">
+        <Model value="OracleStasisTrapExplosion"/>
+        <On Terms="Effect.AP_OracleStasisTrapActivateCP.Start; At Caster" Send="Create"/>
+    </CActorModel>
+    <CActorModel id="AP_OracleStasisTrapPlacementModel">
+        <Model value="PlacementModel"/>
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Filter index="Neutral" value="1"/>
+        <Filter index="Enemy" value="1"/>
+        <FogVisibility value="Visible"/>
+        <On Terms="ActorCreation; ModelIsLowQuality" Send="SetOpacity 0.300000"/>
+        <On Terms="ActorCreation" Send="AnimGroupApply Placement"/>
+        <On Terms="ActorCreation" Send="$Stand PlayForever"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <On Terms="Signal.*.HidePlacement" Send="SetVisibility"/>
+        <On Terms="Signal.*.ShowPlacement" Send="SetVisibility 1"/>
+        <On Terms="ActorCreation" Send="Create AP_OracleStasisTrapRange"/>
+        <On Terms="ActorDestruction" Target="AP_OracleStasisTrapRange" Send="Destroy"/>
+        <HostSiteOps Ops="SOpTipabilityFloorScope"/>
+    </CActorModel>
+    <CActorRange id="AP_OracleStasisTrapRange">
+        <Inherits index="CloakEffect" value="1"/>
+        <Range value="3.000000"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+    </CActorRange>
+    <CActorSiteOpRotationExplicit id="AP_OracleStasisTrapRotation">
+        <EditorCategories value=""/>
+        <Forward value="0.000000,-0.050000,-1.000000"/>
+        <IsLocal value="1"/>
+    </CActorSiteOpRotationExplicit>
+    <CActorSound id="AP_OracleStasisTrapTarger_ActorSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_OracleStasisTrapTarget.On" Send="Create"/>
+        <Sound value="Oracle_StasisTrap_Target2"/>
+    </CActorSound>
+    <CActorModel id="AP_OracleStasisTrapTarget" parent="ModelAnimationStyleContinuous">
+        <Model value="OracleStasisTrapTarget"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Behavior.AP_OracleStasisTrapTarget.On" Send="Create"/>
+        <On Terms="Behavior.AP_OracleStasisTrapTarget.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <AutoScaleFactor value="1.000000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorRange id="AP_OracleStasisTrapTargetRange" parent="RangeAbil" abil="AP_OracleStasisTrap">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+    </CActorRange>
+    <CActorModel id="AP_OracleWarpInStargate" parent="ModelAddition">
+        <On Terms="ActorCreation; ValidateUnit IsChronoSurged" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.On" Send="AnimSetTimeScale BSD 0.200000"/>
+        <On Terms="Behavior.AP_SOASuperChrono.Off" Send="AnimSetTimeScale BSD 1.000000"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="OracleWarpInStargate"/>
+    </CActorModel>
+    <CActorAction id="AP_OracleWeaponAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_OracleWeaponCreatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.OracleWeaponDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.AP_OracleWeaponCreatePersistent.Stop" Send="Destroy"/>
+        <Beam value="AP_OracleWeaponAttackBeam"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+        <ActionFlags index="LaunchForceSite" value="1"/>
+        <Lifetime value="-1.000000"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_OracleWeaponAttackBeam" parent="BeamSimpleAnimationStyleContinuousClosingFull">
+        <Macros value="GlobalLoopMacro"/>
+        <Macros value="ActionTargetTeleportDestroy"/>
+        <On Terms="Effect.AP_OracleWeaponCreatePersistent.Stop; At Effect" Send="AnimBracketStop BSD"/>
+        <Model value="RipFieldAttackBeam"/>
+        <Scale value="0.600000"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_OracleWeaponAttackLoop" parent="SoundContinuous">
+        <On Terms="Effect.AP_OracleWeaponCreatePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_OracleWeaponCreatePersistent.Stop" Send="Destroy"/>
+        <Sound value="Oracle_PulsarBeamWeaponLoop"/>
+    </CActorSound>
+    <CActorSound id="AP_OracleWeaponAttackStart" parent="SoundOneShot">
+        <On Terms="Effect.AP_OracleWeaponCreatePersistent.Start" Send="Create"/>
+        <Sound value="Sentry_WeaponStart"/>
+    </CActorSound>
+    <CActorSound id="AP_OracleWeaponAttackStop" parent="SoundOneShot">
+        <On Terms="Effect.AP_OracleWeaponCreatePersistent.Stop" Send="Create"/>
+        <Sound value="Sentry_WeaponEnd"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_Death" parent="SoundOneShot">
+        <On Terms="UnitDeath.AP_Oracle; PassChance 25.000000; !ValidateUnit IsHallucination" Send="Create"/>
+        <Sound value="Oracle_Death"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_EnvisionCast1_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_EnvisionCast1"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_EnvisionCast2_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_EnvisionCast2"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_EnvisionCast3_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_EnvisionCast3"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_Land" parent="SoundOneShot">
+        <Sound value="Oracle_Land"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_PulsarBeamModeOff2_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_PulsarBeamModeOff2"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_PulsarBeamModeOff_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_PulsarBeamModeOff"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_PulsarBeamModeOn2_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_PulsarBeamModeOn2"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_PulsarBeamModeOn3_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_PulsarBeamModeOn3"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_PulsarBeamModeOn_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_PulsarBeamModeOn"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_RevelationCast2_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_RevelationCast2"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_RevelationCast_Sound" parent="SoundOneShot">
+        <Sound value="Oracle_RevelationCast"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_RevelationLaunch2_Sound" parent="SoundOneShot">
+        <On Terms="Effect.AP_OracleRevelationSearch.Start" Send="Create"/>
+        <Sound value="Oracle_RevelationCast2"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_RevelationLaunch_Sound" parent="SoundOneShot">
+        <On Terms="Effect.AP_OracleRevelationSearch.Start" Send="Create"/>
+        <Sound value="Oracle_RevelationCast"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_Spell_Revelation_StandWorkStart2_Sound" parent="SoundOneShot">
+        <Sound value="Spell_Revelation_StandWorkStart2"/>
+    </CActorSound>
+    <CActorSound id="AP_Oracle_StasisTrap_Explode" parent="SoundOneShot"/>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->

@@ -1863,4 +1863,31 @@
         <Period value="1.754"/>
         <Effect value="AP_DarkArchonWeaponDamage"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Oracle">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Disabled" value="1"/>
+        <Icon value="Assets\Textures\btn-ability-protoss-oraclepulsarcannonon.dds"/>
+        <DisplayEffect value="AP_OracleWeaponDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="4"/>
+        <RangeSlop value="0"/>
+        <TeleportResetRange value="0"/>
+        <Period value="0.86"/>
+        <Backswing value="0.75"/>
+        <Effect value="AP_OracleWeaponCreatePersistent"/>
+        <LegacyOptions index="CanRetargetWhileChanneling" value="1"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Slowing"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="AP_OracleDummyWeapon">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="Hidden" value="1"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireCallForHelpFilters value="-;Player,Ally,Neutral,Enemy"/>
+        <Range value="8"/>
+        <ChaseFilters value="-;Player,Ally,Neutral,Enemy"/>
+        <Period value="5"/>
+        <LegacyOptions index="FaceTargetWhileInCooldown" value="0"/>
+        <MinScanRange value="8"/>
+    </CWeaponLegacy>
 </Catalog>

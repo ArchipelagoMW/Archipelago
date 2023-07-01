@@ -4362,15 +4362,15 @@
     </CUpgrade>
     <CUpgrade id="AP_SlayerConfig">
         <Flags index="UpgradeCheat" value="0"/>
-<!--        <EffectArray Operation="Set" Reference="Unit,AP_Slayer,Name" Value="Unit/Name/AP_ACAlarakSlayer"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Unit,AP_Slayer,Name" Value="Unit/Name/AP_ACAlarakSlayer"/>-->
         <EffectArray Operation="Set" Reference="Button,AP_Slayer,Name" Value="Unit/Name/AP_ACAlarakSlayerWarpIn"/>
         <EffectArray Operation="Set" Reference="Button,AP_Slayer,AlertName" Value="Unit/Name/AP_ACAlarakSlayerWarpIn"/>
         <EffectArray Operation="Set" Reference="Actor,AP_Slayer,HighlightTooltip" Value="Unit/Name/AP_ACAlarakSlayer"/>
         <EffectArray Operation="Set" Reference="Button,AP_Slayer,Tooltip" Value="Unit/Name/AP_ACAlarakSlayerDescription"/>
         <EffectArray Operation="Set" Reference="Button,AP_Slayer,AlertTooltip" Value="Unit/Name/AP_ACAlarakSlayerDescription"/>
         <EffectArray Operation="Set" Reference="Unit,AP_Slayer,Description" Value="Unit/Name/AP_ACAlarakSlayerDescription"/>
-<!--        <EffectArray Operation="Set" Reference="Effect,AP_SlayerEntropyLanceSearchSet,EffectArray[0]" Value="AP_AlarakParticleDisruptorsU"/>-->
-<!--        <EffectArray Operation="Set" Reference="Weapon,AP_SlayerParticleDisruptors,DisplayEffect" Value="AP_AlarakParticleDisruptorsU"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Effect,AP_SlayerEntropyLanceSearchSet,EffectArray[0]" Value="AP_AlarakParticleDisruptorsU"/>-->
+        <!--        <EffectArray Operation="Set" Reference="Weapon,AP_SlayerParticleDisruptors,DisplayEffect" Value="AP_AlarakParticleDisruptorsU"/>-->
         <EffectArray Operation="Set" Reference="Button,AP_ResearchSlayerTeleport,Name" Value="Button/Name/AP_ResearchSlayerTeleport"/>
         <AffectedUnitArray value="AP_Slayer"/>
         <LeaderAlias value=""/>
@@ -4399,4 +4399,26 @@
     </CUpgrade>
     <CUpgrade id="AP_SupplicantSacrifice"/>
     <CUpgrade id="AP_CommanderPrestigeAlarakMech"/>
+    <CUpgrade id="AP_OracleEnergyUpgrade">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-ResearchBosonicCore.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Oracle,EnergyStart" Value="25"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Oracle"/>
+    </CUpgrade>
+    <CUpgrade id="AP_RestoreShields">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-missing-kaeo.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="300"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Oracle,EnergyStart" Value="25"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Oracle"/>
+    </CUpgrade>
 </Catalog>

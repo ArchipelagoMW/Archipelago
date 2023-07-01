@@ -2189,4 +2189,44 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_ActivateStasisWard">
+        <Icon value="Assets\Textures\btn-ability-protoss-stasistrap.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-stasistrap.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_OracleAttack">
+        <Tooltip value="Button/Tooltip/Attack"/>
+        <Icon value="Assets\Textures\btn-command-attack.dds"/>
+        <AlertTooltip value="Button/Tooltip/Attack"/>
+        <AlertIcon value="Assets\Textures\btn-command-attack.dds"/>
+        <Hotkey value="Button/Hotkey/Attack"/>
+        <TintRacially value="1"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_OracleBuildStasisTrap">
+        <Icon value="Assets\Textures\btn-ability-protoss-oracle-stasisward.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-oracle-stasisward.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_OracleRevelation">
+        <Icon value="Assets\Textures\btn-ability-protoss-preordain.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-preordain.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_OracleWeaponOff">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-OraclePulsarCannonOff.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-OraclePulsarCannonOff.dds"/>
+        <HotkeySet value="PulsarBeam"/>
+    </CButton>
+    <CButton id="AP_OracleWeaponOn">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-OraclePulsarCannonOn.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-OraclePulsarCannonOn.dds"/>
+        <HotkeySet value="PulsarBeam"/>
+    </CButton>
+    <CButton id="AP_PermanentlyCloakedStasis">
+        <Icon value="Assets\Textures\btn-upgrade-vorazun-stasiswardpermanentlycloaked.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-vorazun-stasiswardpermanentlycloaked.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeyAlias value="PermanentlyCloakedObserver"/>
+    </CButton>
 </Catalog>

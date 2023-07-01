@@ -270,6 +270,11 @@ Abil/Name/AP_que1=Queue (1)
 Abil/Name/AP_stopProtossBuilding=stop Protoss Building
 Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
 Abil/Name/MercCompoundResearch2=Research
+Abil/Name/AP_OracleRevelation=Oracle Revelation
+Abil/Name/AP_OracleStasisTrap=Oracle Stasis Ward
+Abil/Name/AP_OracleStasisTrapActivate=Activate
+Abil/Name/AP_OracleStasisTrapBuild=Build Stasis Ward
+Abil/Name/AP_OracleWeapon=Oracle Weapon
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
 Actor/AddonIndicator/AP_TechLab=T
@@ -278,6 +283,7 @@ Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
 Behavior/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Behavior/Name/AP_330mmBarrageCannons=330mm Barrage Cannon
 Behavior/Name/AP_AlarakLightningStrikes=Lightning Strikes
+Behavior/Name/AP_AlarakStalkerPhasingArmorBuff=Phase Armor
 Behavior/Name/AP_ArbiterMPCloakFieldEffect=Cloaking Field
 Behavior/Name/AP_ArbiterMPStasisField=Stasis Field
 Behavior/Name/AP_BansheeCloak=Cloak
@@ -332,6 +338,7 @@ Behavior/Name/AP_NoxiousDamage=Noxious Cloud
 Behavior/Name/AP_ParalyticSpines=Paralytic Spines
 Behavior/Name/AP_PersonalCloakingFree=Cloak
 Behavior/Name/AP_PersonalDefensiveMatrix=Ionic Force Field
+Behavior/Name/AP_PhaseBlinkDamage=Phase Blink
 Behavior/Name/AP_PredatorCloaking=Cloak
 Behavior/Name/AP_PsiDisruption=Psi Disruption
 Behavior/Name/AP_PsiStorm=Psionic Storm
@@ -372,8 +379,9 @@ Behavior/Name/AP_VoidPhoenixPhasingArmorBuff=Phasing Armor
 Behavior/Name/AP_VoidRayVoidDamageBoost=Prismatic Alignment
 Behavior/Name/AP_VoidStalkerBlinkShieldRestore=Shadow Regeneration
 Behavior/Name/AP_WraithCloak=Cloak
-Behavior/Name/AP_AlarakStalkerPhasingArmorBuff=Phase Armor
-Behavior/Name/AP_PhaseBlinkDamage=Phase Blink
+Behavior/Name/AP_OracleRevelation=Revealed
+Behavior/Name/AP_OracleStasisTrapTarget=Stasis
+Behavior/Name/AP_OracleWeapon=Pulsar Beam
 Behavior/Tooltip/AP_250mmStrikeCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_330mmBarrageCannons=Target is currently stunned and unable to use any abilities.
 Behavior/Tooltip/AP_AP_NovaArmorBlinkSuitBlinkCloaked=This unit is cloaked and will only be revealed by detectors or effects.
@@ -411,6 +419,7 @@ Behavior/Tooltip/AP_NoxiousDamage=Taking damage over time.
 Behavior/Tooltip/AP_ParalyticSpines=This unit's attack speed is slowed.
 Behavior/Tooltip/AP_PersonalCloakingFree=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_PersonalDefensiveMatrix=Nova is absorbing a portion of the damage dealt to her.
+Behavior/Tooltip/AP_PhaseBlinkDamage=This unit's next attack will deal double the damage.
 Behavior/Tooltip/AP_PredatorCloaking=This unit is cloaked and will only be revealed by detectors or effects.
 Behavior/Tooltip/AP_PsiDisruption=Attack and movement speeds halved.
 Behavior/Tooltip/AP_PsiStorm=Target is under the effects of Psionic Storm and will take massive damage while in this area of effect.
@@ -439,7 +448,9 @@ Behavior/Tooltip/AP_ViperConsumeStructure=A Viper is consuming this structure to
 Behavior/Tooltip/AP_VoidPhoenixPhasingArmorBuff=This unit is immune to damage.
 Behavior/Tooltip/AP_VoidStalkerBlinkShieldRestore=This unit is regenerating shields.
 Behavior/Tooltip/AP_WraithCloak=This unit is cloaked and will only be revealed by detector units or effects.
-Behavior/Tooltip/AP_PhaseBlinkDamage=This unit's next attack will deal double the damage.
+Behavior/Tooltip/AP_OracleRevelation=This unit or structure is providing vision for the caster.
+Behavior/Tooltip/AP_OracleStasisTrapTarget=This unit cannot move, attack, or be damaged.
+Behavior/Tooltip/AP_OracleWeapon=This Oracle's weapon is enabled and can attack ground units.
 Button/Name/AP_250mmStrikeCannons=250mm Strike Cannons
 Button/Name/AP_330mmBarrageCannons=330mm Barrage Cannons
 Button/Name/AP_AWrp=Archon Merge
@@ -741,6 +752,7 @@ Button/Name/AP_ShrikeTurret=Shrike Turret
 Button/Name/AP_SiegeTank=Build Siege Tank
 Button/Name/AP_SiegeTankJumpJet=Jump Jets
 Button/Name/AP_SingularityAnchor=Tomahawk Power Cells
+Button/Name/AP_SlayerBlink=Phase Blink
 Button/Name/AP_Snipe=Sniper Round
 Button/Name/AP_SpecterPsiRound=Spectre Psi Round
 Button/Name/AP_Spectre=Train Spectre
@@ -837,7 +849,13 @@ Button/Name/AP_Wraith=Build Wraith
 Button/Name/AP_WraithCloakOff=Decloak
 Button/Name/AP_WraithCloakOn=Cloak
 Button/Name/AP_YamatoGun=Yamato Cannon
-Button/Name/AP_SlayerBlink=Phase Blink
+Button/Name/AP_ActivateStasisWard=Stasis
+Button/Name/AP_OracleAttack=Attack
+Button/Name/AP_OracleBuildStasisTrap=Stasis Ward
+Button/Name/AP_OracleRevelation=Revelation
+Button/Name/AP_OracleWeaponOff=Deactivate Pulsar Beam
+Button/Name/AP_OracleWeaponOn=Activate Pulsar Beam
+Button/Name/AP_PermanentlyCloakedStasis=Permanently Cloaked
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1209,6 +1227,7 @@ Button/Tooltip/AP_SiegeTankJumpJet=Repositions the Siege Tank to a target locati
 Button/Tooltip/AP_SiegeTankSieged=Heavy tank. Long-range artillery in Siege Mode.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
 Button/Tooltip/AP_SingularityAnchor=Wraith starts with 100 additional energy.
 Button/Tooltip/AP_Slayer=Ranged attack strider. Can use Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_SlayerBlink=Teleports the Slayer to a nearby target location. Ability can only be used once every <d ref="Abil,AP_BlinkSlayer,Cost[0].Cooldown.TimeUse"/> seconds. After using Phase Blink, the Slayer's next attack within <d ref="Behavior,AP_PhaseBlinkDamage,Duration"/> seconds will deal double damage.
 Button/Tooltip/AP_Snipe=A careful shot, dealing 45 damage. Ignores armor.<n/><n/><c val="#ColorAttackInfo">Can only target biological units.</c>
 Button/Tooltip/AP_SpartanCompany=Heavy-fire support unit.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_SpecterPsiRound=Fires a psi-charged bullet, dealing <d ref="Effect,AP_SpecterPsiRoundDamage,Amount"/> damage.<n/><n/><c val="#ColorAttackInfo">Mechanical units are immune.</c>
@@ -1321,7 +1340,14 @@ Button/Tooltip/AP_Wraith=Highly mobile flying unit. Excellent at surgical strike
 Button/Tooltip/AP_WraithCloakOff=Decloaks the selected unit, making it visible to enemies.
 Button/Tooltip/AP_WraithCloakOn=Cloaks the unit, preventing enemy units from seeing or attacking it. A cloaked unit will only be revealed by detectors or effects.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_WraithCloak,Modification.VitalRegenArray[2] + Unit,AP_Wraith,EnergyRegenRate)" precision="1"/> energy per second.</c>
 Button/Tooltip/AP_YamatoGun=Blasts a target with a devastating plasma cannon, causing 300 damage.
-Button/Tooltip/AP_SlayerBlink=Teleports the Slayer to a nearby target location. Ability can only be used once every <d ref="Abil,AP_BlinkSlayer,Cost[0].Cooldown.TimeUse"/> seconds. After using Phase Blink, the Slayer's next attack within <d ref="Behavior,AP_PhaseBlinkDamage,Duration"/> seconds will deal double damage.
+Button/Tooltip/AP_ActivateStasisWard=Traps nearby enemies in stasis for <d ref="Behavior,AP_OracleStasisTrapTarget,Duration"/> seconds. Trapped units cannot be attacked or affected by abilities.
+Button/Tooltip/AP_Oracle=Flying Caster.<n/><n/><c val="ffff8a">Can attack ground units.</c><n/><c val="FFE303">Detector</c>
+Button/Tooltip/AP_OracleBuildStasisTrap=Places a cloaked Stasis Ward at the target location. Once activated by an enemy ground unit, the ward traps nearby enemies in stasis for <d ref="Behavior,AP_OracleStasisTrapTarget,Duration"/> seconds. Trapped units cannot be attacked or affected by abilities.
+Button/Tooltip/AP_OracleRevelation=Causes enemy units and structures within the target area to grant vision for <d ref="Behavior,AP_OracleRevelation,Duration"/> seconds. Reveals cloaked or burrowed units and structures.
+Button/Tooltip/AP_OracleStasisTrap=Ground unit trap. Cloak renders the Stasis Ward invisible to enemies without detection.
+Button/Tooltip/AP_OracleWeaponOff=Deactivates the Oracle's Pulsar Beam and prevents it from attacking.
+Button/Tooltip/AP_OracleWeaponOn=Charges the Oracle's Pulsar Beam and allows it to attack enemy ground units.<n/><n/><c val="f078ff">Drains <d ref="-1 * (Behavior,AP_OracleWeapon,Modification.VitalRegenArray[2] + Unit,AP_Oracle,EnergyRegenRate)" precision="1"/> energy per second.</c>
+Button/Tooltip/AP_PermanentlyCloakedStasis=The Stasis Ward is permanently cloaked.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -2391,10 +2417,25 @@ Effect/Name/NeuralParasiteDroneRemoveCheck2=Neural Parasite Drone Remove Check
 Effect/Name/NeuralParasiteLaunchMissile2=Neural Parasite (Launch Missile)
 Effect/Name/NeuralParasitePersistent2=Neural Parasite (Create Persistent)
 Effect/Name/NeuralParasitePersistentSet2=Neural Parasite Persistent Set
+Effect/Name/AP_OracleRevelationApplyBehavior=Oracle Revelation Apply Behavior
+Effect/Name/AP_OracleRevelationDummyDamage=OracleRevelationDummyDamage
+Effect/Name/AP_OracleRevelationSearch=Oracle Revelation Search
+Effect/Name/AP_OracleStasisTrapActivate=Oracle Stasis Ward Activate Search
+Effect/Name/AP_OracleStasisTrapActivateAB=Oracle Stasis Ward Activate AB
+Effect/Name/AP_OracleStasisTrapActivateSet=Oracle Stasis Ward Activate Set
+Effect/Name/AP_OracleStasisTrapHaltIssueOrder=Oracle Stasis Trap Halt Issue Order
+Effect/Name/AP_OracleStasisTrapReveal=Oracle Stasis Ward Reveal
+Effect/Name/AP_OracleStasisTrapSearchSet=Oracle Stasis Trap Search Set
+Effect/Name/AP_OracleStasisTrapStopIssueOrder=Oracle Stasis Trap Stop Issue Order
+Effect/Name/AP_OracleWeaponCreatePersistent=Oracle Weapon Create Persistent
+Effect/Name/AP_OracleWeaponDamage=Oracle Weapon Damage
 Effect/Name/RemoveCoreRecallingBehaviorVikingAir2=Remove Core Recalling Behavior Viking Air
 Effect/Name/RemoveCoreRecallingBehaviorVikingGround2=Remove Core Recalling Behavior Viking Ground
 Effect/Name/RemoveRecallingBehaviorVikingAir2=Remove Recalling Behavior Viking Air
 Effect/Name/RemoveRecallingBehaviorVikingGround2=Remove Recalling Behavior Viking Ground
+Effect/Name/AP_RevelationDestroy=Revelation (Destroy)
+Effect/Name/AP_RevelationPersistent=Revelation (Persistent)
+Effect/Name/AP_RevelationSet=Revelation (Set)
 Error/AP_AlreadyChronoBoosted=Target is already accelerated
 Error/AP_ImpalerBurrowed=Must Burrow to attack.
 Error/AP_LurkerBurrowed=Must Burrow to attack.
@@ -2429,6 +2470,9 @@ RequirementNode/Tooltip/AP_EqCountUpgradeTerranVehicleWeaponsLevel2CompleteOnly1
 RequirementNode/Tooltip/CountUnitAP_LurkerDenCompleteOnly845243641TechTreeCheat=Mutate Hydralisk Den into Lurker Den
 UI/AP_SpiderMineBuilding=Constructing
 UI/AP_Transforming=Transforming
+Unit/Name/AP_ACAlarakSlayer=Slayer
+Unit/Name/AP_ACAlarakSlayerDescription=Ranged attack strider. Can use Phase Blink and Phasing Armor.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Unit/Name/AP_ACAlarakSlayerWarpIn=Warp In Slayer
 Unit/Name/AP_ATALaserBatteryLMWeapon=ATA Laser Battery
 Unit/Name/AP_ATSLaserBatteryLMWeapon=ATS Laser Battery
 Unit/Name/AP_AcidSalivaWeapon=Acid Saliva
@@ -2693,9 +2737,8 @@ Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
-Unit/Name/AP_ACAlarakSlayerWarpIn=Warp In Slayer
-Unit/Name/AP_ACAlarakSlayer=Slayer
-Unit/Name/AP_ACAlarakSlayerDescription=Ranged attack strider. Can use Phase Blink and Phasing Armor.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Unit/Name/AP_Oracle=Oracle
+Unit/Name/AP_OracleStasisTrap=Stasis Ward
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain
@@ -2993,6 +3036,8 @@ Upgrade/Name/AP_WraithCloak=Wraith Cloak
 Upgrade/Name/AP_YamatoCannon=Yamato Cannon
 Upgrade/Name/AP_ZergBurrowMove=Zerg Burrow Move
 Upgrade/Name/BlackOps2=Black Ops
+Upgrade/Name/AP_OracleEnergyUpgrade=Bosonic Core
+Upgrade/Name/AP_RestoreShields=Restore Shields
 Upgrade/Name/TempestRangeUpgrade2=Quantum Reactor
 Upgrade/Name/VoidStoryUnitGlobalUpgrade2=Void Story Unit Global Upgrade
 Weapon/Name/AP_90mmCannons=90mm Cannons
@@ -3139,6 +3184,7 @@ Weapon/Name/AP_WraithA=Gemini Missiles
 Weapon/Name/AP_WraithG=Burst Lasers
 Weapon/Name/AP_WreckingCrewAssault=Gatling Cannon
 Weapon/Name/AP_WreckingCrewFighter=Lanzer Torpedoes
+Weapon/Name/AP_Oracle=Pulsar Beam
 Weapon/Tip/AP_D8Charge=Only used against structures.
 Weapon/Tip/AP_Impaler=<c val="#ColorAttackInfo">Must be burrowed to attack.</c>
 Weapon/Tip/AP_LocustFlyingLaunch=<c val="#ColorAttackInfo">Must be rooted or burrowed to attack.</c>

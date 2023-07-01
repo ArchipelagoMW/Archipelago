@@ -9544,4 +9544,130 @@
         <AttributeBonus index="Armored" value="5"/>
         <Amount value="13"/>
     </CEffectDamage>
+    <CEffectApplyBehavior id="AP_OracleRevelationApplyBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_OracleRevelation"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_OracleRevelationDummyDamage">
+        <EditorCategories value=""/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <Flags index="Notification" value="1"/>
+        <Flags index="NoDamageTimerReset" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_OracleRevelationSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Self,Player,Ally,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="6" Effect="AP_RevelationSet"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_OracleStasisTrapActivate">
+        <EditorCategories value="Race:Protoss"/>
+        <AINotifyFlags index="HurtEnemy" value="1"/>
+        <ImpactLocation Value="CasterUnit"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Structure,Missile,Destructible,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="5" Effect="AP_OracleStasisTrapSearchSet"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_OracleStasisTrapActivateAB">
+        <ValidatorArray index="0" value="NotFrenzied"/>
+        <ValidatorArray value="IsNotRecallingCombine"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_OracleStasisTrapTarget"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_OracleStasisTrapActivateCP">
+        <WhichLocation Value="CasterPoint"/>
+        <PeriodCount value="3"/>
+        <PeriodicEffectArray value="AP_OracleStasisTrapReveal"/>
+        <PeriodicEffectArray value="AP_OracleStasisTrapActivate"/>
+        <PeriodicEffectArray value="SuicideRemove"/>
+        <PeriodicPeriodArray value="0.5"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="1.66"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_OracleStasisTrapActivateSet">
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_OracleStasisTrapActivateCP"/>
+        <EffectArray value="AP_OracleStasisTrapCasterAB"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_OracleStasisTrapCasterAB">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_OracleStasisTrapCaster"/>
+    </CEffectApplyBehavior>
+    <CEffectIssueOrder id="AP_OracleStasisTrapHaltIssueOrder">
+        <EditorCategories value="Race:Terran"/>
+        <Abil value="TerranBuild"/>
+        <AbilCmdIndex value="30"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="AP_OracleStasisTrapReveal">
+        <WhichLocation Value="CasterUnit"/>
+        <ExpireDelay value="4"/>
+        <RevealRadius value="4"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_OracleStasisTrapSearchSet">
+        <ValidatorArray value="AP_ActivateStasisWardValidators"/>
+        <EditorCategories value="Race:Terran"/>
+        <EffectArray value="AP_OracleStasisTrapStopIssueOrder"/>
+        <EffectArray value="AP_OracleStasisTrapHaltIssueOrder"/>
+        <EffectArray value="AP_OracleStasisTrapActivateAB"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_OracleStasisTrapStopIssueOrder">
+        <ValidatorArray value="AP_OracleStasisTrapBuildingSet"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="stop"/>
+    </CEffectIssueOrder>
+    <CEffectCreatePersistent id="AP_OracleWeaponCreatePersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <Flags index="PersistUntilDestroyed" value="1"/>
+        <InitialEffect value="AP_OracleWeaponDamage"/>
+        <PeriodicValidator value="AP_OracleHasEnergy"/>
+        <PeriodicEffectArray value="AP_OracleWeaponDamage"/>
+        <PeriodicPeriodArray value="0.86"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_OracleWeaponDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Light" value="10"/>
+        <ArmorReduction value="0"/>
+        <Visibility value="Visible"/>
+        <Kind value="Spell"/>
+        <Amount value="15"/>
+    </CEffectDamage>
+    <CEffectDestroyPersistent id="AP_RevelationDestroy">
+        <EditorCategories value=""/>
+        <WhichLocation Value="TargetUnit"/>
+        <Effect value="AP_RevelationPersistent"/>
+        <Count value="1"/>
+        <Radius value="0.5"/>
+    </CEffectDestroyPersistent>
+    <CEffectCreatePersistent id="AP_RevelationPersistent">
+        <EditorCategories value=""/>
+        <WhichLocation Value="TargetUnit"/>
+        <ExpireDelay value="60"/>
+        <RevealRadius value="3"/>
+        <RevealFlags index="Unfog" value="1"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_RevelationSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_OracleRevelationApplyBehavior"/>
+        <EffectArray value="AP_RevelationPersistent"/>
+        <EffectArray value="AP_OracleRevelationDummyDamage"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_OracleStasisTrapCU">
+        <EditorCategories value="Race:Terran"/>
+        <WhichLocation Value="TargetPoint"/>
+        <SpawnUnit value="AP_OracleStasisTrap"/>
+    </CEffectCreateUnit>
+    <CEffectDamage id="AP_OracleStasisTrapBuildBeamOn">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetUnit"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_OracleStasisTrapBuildBeamOff">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="SourcePoint"/>
+    </CEffectDamage>
+    <CEffectDamage id="AP_OracleDummyWeapon">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectDamage>
 </Catalog>

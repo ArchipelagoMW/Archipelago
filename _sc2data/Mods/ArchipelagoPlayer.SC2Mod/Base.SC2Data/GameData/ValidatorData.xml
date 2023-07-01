@@ -2841,4 +2841,296 @@
         <Find value="1"/>
         <Value value="AP_HaveAlarakSupplicantSacrificeCDR"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotOracleStasisTrapped">
+        <Behavior value="AP_OracleStasisTrapTarget"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareVital id="AP_OracleHasEnergy">
+        <WhichUnit Value="Caster"/>
+        <ResultFailed value="NotEnoughEnergy"/>
+        <Compare value="GE"/>
+        <Value value="0.1"/>
+        <Vital value="Energy"/>
+    </CValidatorUnitCompareVital>
+    <CValidatorCombine id="AP_ActivateStasisWardValidators">
+        <CombineArray value="AP_IsNotPhasedUnit"/>
+        <CombineArray value="NotFrenzied"/>
+        <CombineArray value="AP_TargetNotUntargetable"/>
+        <CombineArray value="AP_IsNotDisguisedChangeling"/>
+<!--        <CombineArray value="NoTimeStopImmune"/>-->
+    </CValidatorCombine>
+    <CValidatorUnitBehaviorState id="AP_TargetNotUntargetable">
+        <BehaviorState value="Untargetable"/>
+    </CValidatorUnitBehaviorState>
+    <CValidatorCombine id="AP_IsNotPhasedUnit">
+        <Type value="And"/>
+        <CombineArray value="AP_Dummy"/>
+<!--        <CombineArray value="IsNotDisruptorPhased"/>-->
+<!--        <CombineArray value="IsNotAdeptShade"/>-->
+    </CValidatorCombine>
+    <CValidatorUnitCompareBehaviorCount id="AP_IsNotDisguisedChangeling">
+        <Compare value="NE"/>
+        <Value value="1"/>
+        <Behavior value="ChangelingDisable"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_OracleStasisTrapBuildingSet">
+        <CombineArray value="AP_ProbeBuildingCombine"/>
+        <CombineArray value="AP_ZergBuildingCombine"/>
+        <CombineArray value="AP_TerranBuildingCombine"/>
+        <!-- TODO: AP Workers? -->
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_ProbeBuildingCombine">
+        <CombineArray value="AP_ProbeBuildingNexus"/>
+        <CombineArray value="AP_ProbeBuildingPylon"/>
+        <CombineArray value="AP_ProbeBuildingAssimilator"/>
+        <CombineArray value="AP_ProbeBuildingCyberneticsCore"/>
+        <CombineArray value="AP_ProbeBuildingForge"/>
+        <CombineArray value="AP_ProbeBuildingGateway"/>
+        <CombineArray value="AP_ProbeBuildingPhotonCannon"/>
+        <CombineArray value="AP_ProbeBuildingTwilightCouncil"/>
+        <CombineArray value="AP_ProbeBuildingStargate"/>
+        <CombineArray value="AP_ProbeBuildingRoboticsFacility"/>
+        <CombineArray value="AP_ProbeBuildingRoboticsBay"/>
+        <CombineArray value="AP_ProbeBuildingTemplarArchives"/>
+        <CombineArray value="AP_ProbeBuildingFleetBeacon"/>
+        <CombineArray value="AP_ProbeBuildingDarkShrine"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingNexus">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingPylon">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="1"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingAssimilator">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="2"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingCyberneticsCore">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="14"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingForge">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="4"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingGateway">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="3"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingPhotonCannon">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="7"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingTwilightCouncil">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="6"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingStargate">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="9"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingRoboticsFacility">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="13"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingRoboticsBay">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="12"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingTemplarArchives">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="10"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingFleetBeacon">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="5"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_ProbeBuildingDarkShrine">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ProtossBuild"/>
+        <AbilCmdIndex value="11"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_ZergBuildingCombine">
+        <CombineArray value="AP_DroneBuildingHatchery"/>
+        <CombineArray value="AP_DroneBuildingExtractor"/>
+        <CombineArray value="AP_DroneBuildingEvolutionChamber"/>
+        <CombineArray value="AP_DroneBuildingSpawningPool"/>
+        <CombineArray value="AP_DroneBuildingRoachWarren"/>
+        <CombineArray value="AP_DroneBuildingBanelingNest"/>
+        <CombineArray value="AP_DroneBuildingSpineCrawler"/>
+        <CombineArray value="AP_DroneBuildingSporeCrawler"/>
+        <CombineArray value="AP_DroneBuildingHydraliskDen"/>
+        <CombineArray value="AP_DroneBuildingInfestationPit"/>
+        <CombineArray value="AP_DroneBuildingSpire"/>
+        <CombineArray value="AP_DroneBuildingNydusNetwork"/>
+        <CombineArray value="AP_DroneBuildingUltraliskCavern"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingHatchery">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingExtractor">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="2"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingEvolutionChamber">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="4"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingSpawningPool">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="3"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingRoachWarren">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="13"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingBanelingNest">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="10"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingSpineCrawler">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="14"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingSporeCrawler">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="15"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingHydraliskDen">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="5"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingInfestationPit">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="8"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingSpire">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="6"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingNydusNetwork">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="9"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_DroneBuildingUltraliskCavern">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="ZergBuild"/>
+        <AbilCmdIndex value="7"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorCombine id="AP_TerranBuildingCombine">
+        <CombineArray value="AP_SCVBuildingCommandCenter"/>
+        <CombineArray value="AP_SCVBuildingRefinery"/>
+        <CombineArray value="AP_SCVBuildingSupplyDepot"/>
+        <CombineArray value="AP_SCVBuildingBarracks"/>
+        <CombineArray value="AP_SCVBuildingEngineeringBay"/>
+        <CombineArray value="AP_SCVBuildingBunker"/>
+        <CombineArray value="AP_SCVBuildingMissileTurret"/>
+        <CombineArray value="AP_SCVBuildingSensorTower"/>
+        <CombineArray value="AP_SCVBuildingGhostAcademy"/>
+        <CombineArray value="AP_SCVBuildingFactory"/>
+        <CombineArray value="AP_SCVBuildingArmory"/>
+        <CombineArray value="AP_SCVBuildingStarport"/>
+        <CombineArray value="AP_SCVBuildingFusionCore"/>
+    </CValidatorCombine>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingCommandCenter">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingRefinery">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="2"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingSupplyDepot">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="1"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingBarracks">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="3"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingEngineeringBay">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="4"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingBunker">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="6"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingMissileTurret">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="5"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingSensorTower">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="8"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingGhostAcademy">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="9"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingFactory">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="10"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingArmory">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="13"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingStarport">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="11"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorUnitOrderQueue id="AP_SCVBuildingFusionCore">
+        <WhichUnit Value="Target"/>
+        <AbilLink value="TerranBuild"/>
+        <AbilCmdIndex value="15"/>
+    </CValidatorUnitOrderQueue>
+    <CValidatorLocationEnumArea id="AP_ActivateStasisWardTargetInRange">
+        <ResultFailed value="CantFindEnoughTargets"/>
+        <WhichLocation Value="SourceUnit"/>
+        <AreaArray>
+            <Compare value="GE"/>
+            <Count value="1"/>
+            <Radius value="3"/>
+            <Validator value="AP_ActivateStasisWardValidators"/>
+        </AreaArray>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+        <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Dead,Hidden"/>
+    </CValidatorLocationEnumArea>
 </Catalog>

@@ -1235,7 +1235,7 @@
         <AutoCastRange value="5"/>
         <AutoCastValidatorArray value="NotLarvaEgg"/>
         <AutoCastValidatorArray value="IsNotNeuralParasited"/>
-        <AutoCastValidatorArray value="IsNotDisguisedChangeling"/>
+        <AutoCastValidatorArray value="AP_IsNotDisguisedChangeling"/>
         <AutoCastValidatorArray value="NotHallucinationOrNotDetected"/>
         <AutoCastValidatorArray value="noMarkers"/>
         <PrepTime value="1.5"/>
@@ -4362,6 +4362,75 @@
         <Range value="15"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_LightningBomb"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_OracleRevelation">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_OracleRevelationSearch"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+            <Cooldown TimeUse="2.5"/>
+        </Cost>
+        <Range value="9"/>
+        <CastOutroTime value="0.5"/>
+        <CursorEffect value="AP_OracleRevelationSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_OracleRevelation"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_OracleStasisTrap">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_OracleStasisTrapCU"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Placeholder value="AP_OracleStasisTrap"/>
+        <Range value="4"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_OracleBuildStasisTrap"/>
+        <PlaceUnit value="AP_OracleStasisTrap"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_OracleStasisTrapActivate">
+        <Effect index="0" value="AP_OracleStasisTrapActivateSet"/>
+        <Flags index="AutoCast" value="1"/>
+        <Flags index="AutoCastOn" value="1"/>
+        <Flags index="ReExecutable" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="0.5"/>
+        </Cost>
+        <Arc value="360"/>
+        <AutoCastRange value="3"/>
+        <AutoCastValidatorArray value="AP_ActivateStasisWardTargetInRange"/>
+        <PrepTime value="0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ActivateStasisWard"/>
+    </CAbilEffectInstant>
+    <CAbilBuild id="AP_OracleStasisTrapBuild">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <FlagArray index="RequireFacing" value="1"/>
+        <InfoArray index="Build1" Unit="AP_OracleStasisTrap" Time="5">
+            <Vital index="Energy" value="50"/>
+            <Button DefaultButtonFace="AP_OracleBuildStasisTrap">
+                <Flags index="ShowInGlossary" value="1"/>
+            </Button>
+        </InfoArray>
+        <Range value="5"/>
+        <EffectArray index="Start" value="AP_OracleStasisTrapBuildBeamOn"/>
+        <EffectArray index="Finish" value="AP_OracleStasisTrapBuildBeamOff"/>
+        <EffectArray index="Cancel" value="AP_OracleStasisTrapBuildBeamOff"/>
+    </CAbilBuild>
+    <CAbilBehavior id="AP_OracleWeapon">
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="On" DefaultButtonFace="AP_OracleWeaponOn">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="Off" DefaultButtonFace="AP_OracleWeaponOff">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <Flags index="Toggle" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="4"/>
+        </Cost>
+        <BehaviorArray value="AP_OracleWeapon"/>
+    </CAbilBehavior>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
