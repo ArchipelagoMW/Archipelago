@@ -21,7 +21,7 @@ class MessengerRegion(Region):
                 locations.append("Shop Chest")
             shop_locations = {f"The Shop - {shop_loc}": world.location_name_to_id[f"The Shop - {shop_loc}"]
                               for shop_loc in SHOP_ITEMS}
-            shop_locations.update(*{figurine: world.location_name_to_id[figurine] for figurine in FIGURINES})
+            shop_locations.update(**{figurine: world.location_name_to_id[figurine] for figurine in FIGURINES})
             self.add_locations(shop_locations, MessengerShopLocation)
         elif self.name == "Tower HQ":
             locations.append("Money Wrench")
