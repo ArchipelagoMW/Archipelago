@@ -23,6 +23,7 @@ from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, \
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
+import ssl
 
 if typing.TYPE_CHECKING:
     import kvui
@@ -31,6 +32,12 @@ logger = logging.getLogger("Client")
 
 # without terminal, we have to use gui mode
 gui_enabled = not sys.stdout or "--nogui" not in sys.argv
+
+
+@Utils.cache_argsless
+def get_ssl_context():
+    import certifi
+    return ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=certifi.where())
 
 
 class ClientCommandProcessor(CommandProcessor):
@@ -184,6 +191,10 @@ class CommonContext:
     server_locations: typing.Set[int]  # all locations the server knows of, missing_location | checked_locations
     locations_info: typing.Dict[int, NetworkItem]
 
+    # data storage
+    stored_data: typing.Dict[str, typing.Any]
+    stored_data_notification_keys: typing.Set[str]
+
     # internals
     # current message box through kvui
     _messagebox: typing.Optional["kvui.MessageBox"] = None
@@ -218,6 +229,9 @@ class CommonContext:
         self.checked_locations = set()  # server state
         self.server_locations = set()  # all locations the server knows of, missing_location | checked_locations
         self.locations_info = {}
+
+        self.stored_data = {}
+        self.stored_data_notification_keys = set()
 
         self.input_queue = asyncio.Queue()
         self.input_requests = 0
@@ -460,6 +474,21 @@ class CommonContext:
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
 
+    # data storage
+
+    def set_notify(self, *keys: str) -> None:
+        """Subscribe to be notified of changes to selected data storage keys.
+
+        The values can be accessed via the "stored_data" attribute of this context, which is a dictionary mapping the
+        names of the data storage keys to the latest values received from the server.
+        """
+        if new_keys := (set(keys) - self.stored_data_notification_keys):
+            self.stored_data_notification_keys.update(new_keys)
+            async_start(self.send_msgs([{"cmd": "Get",
+                                         "keys": list(new_keys)},
+                                        {"cmd": "SetNotify",
+                                         "keys": list(new_keys)}]))
+
     # DeathLink hooks
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
@@ -589,7 +618,8 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
 
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
-        socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None)
+        socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None,
+                                          ssl=get_ssl_context() if address.startswith("wss://") else None)
         if ctx.ui is not None:
             ctx.ui.update_address_bar(server_url.netloc)
         ctx.server = Endpoint(socket)
@@ -604,6 +634,7 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
     except websockets.InvalidMessage:
         # probably encrypted
         if address.startswith("ws://"):
+            # try wss
             await server_loop(ctx, "ws" + address[1:])
         else:
             ctx.handle_connection_loss(f"Lost connection to the multiworld server due to InvalidMessage"
@@ -728,6 +759,11 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         if ctx.locations_scouted:
             msgs.append({"cmd": "LocationScouts",
                          "locations": list(ctx.locations_scouted)})
+        if ctx.stored_data_notification_keys:
+            msgs.append({"cmd": "Get",
+                         "keys": list(ctx.stored_data_notification_keys)})
+            msgs.append({"cmd": "SetNotify",
+                         "keys": list(ctx.stored_data_notification_keys)})
         if msgs:
             await ctx.send_msgs(msgs)
         if ctx.finished_game:
@@ -791,7 +827,12 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         # we can skip checking "DeathLink" in ctx.tags, as otherwise we wouldn't have been send this
         if "DeathLink" in tags and ctx.last_death_link != args["data"]["time"]:
             ctx.on_deathlink(args["data"])
+
+    elif cmd == "Retrieved":
+        ctx.stored_data.update(args["keys"])
+
     elif cmd == "SetReply":
+        ctx.stored_data[args["key"]] = args["value"]
         if args["key"] == "EnergyLink":
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:
@@ -832,10 +873,9 @@ def get_base_parser(description: typing.Optional[str] = None):
     return parser
 
 
-if __name__ == '__main__':
-    # Text Mode to use !hint and such with games that have no text entry
-
+def run_as_textclient():
     class TextContext(CommonContext):
+        # Text Mode to use !hint and such with games that have no text entry
         tags = {"AP", "TextOnly"}
         game = ""  # empty matches any game since 0.3.2
         items_handling = 0b111  # receive all items for /received
@@ -850,11 +890,10 @@ if __name__ == '__main__':
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
                 self.game = self.slot_info[self.slot].game
-        
+
         async def disconnect(self, allow_autoreconnect: bool = False):
             self.game = ""
             await super().disconnect(allow_autoreconnect)
-
 
     async def main(args):
         ctx = TextContext(args.connect, args.password)
@@ -867,7 +906,6 @@ if __name__ == '__main__':
 
         await ctx.exit_event.wait()
         await ctx.shutdown()
-
 
     import colorama
 
@@ -888,3 +926,7 @@ if __name__ == '__main__':
 
     asyncio.run(main(args))
     colorama.deinit()
+
+
+if __name__ == '__main__':
+    run_as_textclient()
