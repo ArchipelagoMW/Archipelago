@@ -828,13 +828,41 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
-    def add_locations(self, locations: Dict[str, Optional[int]], location_type: Optional[typing.Type[Location]] = None) -> None:
-        """Adds locations to the Region object, where location_type is your Location class and locations is a dict of
-        location names to address."""
+    def add_locations(self, locations: Dict[str, Optional[int]],
+                      location_type: Optional[typing.Type[Location]] = None) -> None:
+        """
+        Adds locations to the Region object, where location_type is your Location class and locations is a dict of
+        location names to address.
+        
+        :param locations: dictionary of locations to be created and added to this Region `{name: ID}`
+        :param location_type: Location class to be used to create the locations with"""
         if location_type is None:
             location_type = Location
         for location, address in locations.items():
             self.locations.append(location_type(self.player, location, address, self))
+    
+    def connect(self, exiting_region: Region, name: Optional[str] = None,
+                rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
+        """
+        Connects this Region to another Region, placing the provided rule on the connection.
+        
+        :param exiting_region: Region object to connect to path is `self -> exiting_region`
+        :param name: name of the connection being created
+        :param rule: callable to determine access of this connection to go from self to the exiting_region"""
+        _exit = self.create_exit(name) if name else self.create_exit(f"{self.name} -> {exiting_region}")
+        if rule:
+            _exit.access_rule = rule
+        _exit.connect(exiting_region)
+    
+    def create_exit(self, name: str) -> Entrance:
+        """
+        Creates and returns an Entrance object as an exit of this region.
+        
+        :param name: name of the Entrance being created
+        """
+        _exit = Entrance(self.player, name, self)
+        self.exits.append(_exit)
+        return _exit
 
     def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
                   rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
@@ -848,10 +876,9 @@ class Region:
         if not isinstance(exits, Dict):
             exits = dict.fromkeys(exits)
         for connecting_region, name in exits.items():
-            entrance = Entrance(self.player, name if name else f"{self.name} -> {connecting_region}", self)
+            entrance = self.create_exit(name) if name else self.create_exit(f"{self.name} -> {connecting_region}")
             if rules and connecting_region in rules:
                 entrance.access_rule = rules[connecting_region]
-            self.exits.append(entrance)
             entrance.connect(self.multiworld.get_region(connecting_region, self.player))
 
     def __repr__(self):
