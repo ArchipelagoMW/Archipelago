@@ -437,8 +437,8 @@ class KH2FightRules(KH2Rules):
             RegionName.ThousandHeartless:     lambda state: self.get_thousand_heartless_rules(state),
             RegionName.DataDemyx:             lambda state: self.get_data_demyx_rules(state),
             RegionName.Sephi:                 lambda state: self.get_sephiroth_rules(state),
-            RegionName.CorFirstFight:         lambda state: self.get_cor_first_fight_rules(state),
-            RegionName.CorSecondFight:        lambda state: self.get_cor_second_fight_rules(state),
+            RegionName.CorFirstFight:         lambda state: self.get_cor_first_fight_rules(state) or self.get_cor_skip_first_rules(state),
+            RegionName.CorSecondFight:        lambda state: self.get_cor_second_fight_rules(state) or self.get_cor_skip_second_rules(state),
             RegionName.Transport:             lambda state: self.get_transport_rules(state),
             RegionName.Scar:                  lambda state: self.get_scar_rules(state),
             RegionName.GroundShaker:          lambda state: self.get_groundshaker_rules(state),
@@ -736,49 +736,54 @@ class KH2FightRules(KH2Rules):
             "hard":   self.kh2_has_any(defensive_tool, state),
         }
         return cerberus_rules[self.fight_logic]
+
     def get__rules(self, state: CollectionState) -> bool:
         # easy,normal:defensive option, offensive magic
         # hard:defensive option
         _rules = {
-            "easy":   self.
-            "normal": self.
-            "hard":   self.
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
         }
         return _rules[self.fight_logic]
+
     def get__rules(self, state: CollectionState) -> bool:
         # easy,normal:defensive option, offensive magic
         # hard:defensive option
         _rules = {
-            "easy":   self.
-            "normal": self.
-            "hard":   self.
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
         }
         return _rules[self.fight_logic]
+
     def get__rules(self, state: CollectionState) -> bool:
         # easy,normal:defensive option, offensive magic
         # hard:defensive option
         _rules = {
-            "easy":   self.
-            "normal": self.
-            "hard":   self.
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
         }
         return _rules[self.fight_logic]
+
     def get__rules(self, state: CollectionState) -> bool:
         # easy,normal:defensive option, offensive magic
         # hard:defensive option
         _rules = {
-            "easy":   self.
-            "normal": self.
-            "hard":   self.
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
         }
         return _rules[self.fight_logic]
+
     def get__rules(self, state: CollectionState) -> bool:
         # easy,normal:defensive option, offensive magic
         # hard:defensive option
         _rules = {
-            "easy":   self.
-            "normal": self.
-            "hard":   self.
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
         }
         return _rules[self.fight_logic]
 
@@ -1189,7 +1194,25 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
+    def get_cor_skip_first_rules(self, state: CollectionState) -> bool:
+        # if option is not allow skips return false else run rules
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
     def get_cor_second_fight_rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get_cor_skip_second_rules(self, state: CollectionState) -> bool:
+        # if option is not allow skips return false else run rules
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1206,68 +1229,161 @@ class KH2FightRules(KH2Rules):
         return _rules[self.fight_logic]
 
     def get_scar_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+        # easy: reflect,thunder,fire
+        # normal:reflect,fire
+        # hard:reflect
+        scar_rules = {
+            "easy":   self.kh2_has_all({ItemName.ReflectElement, ItemName.ThunderElement, ItemName.FireElement}, state),
+            "normal": self.kh2_has_all({ItemName.ReflectElement, ItemName.FireElement}, state),
+            "hard":   state.has(ItemName.ReflectElement, self.player),
         }
-        return _rules[self.fight_logic]
+        return scar_rules[self.fight_logic]
 
     def get_groundshaker_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+        # easy:berserk charge,cure,2 air combo plus,reflect
+        # normal:berserk charge,reflect,cure
+        # hard:berserk charge or 2 air combo plus. reflect
+        groundshaker_rules = {
+            "easy":   state.has(ItemName.AirComboPlus, self.player, 2) and self.kh2_has_all({ItemName.BerserkCharge, ItemName.CureElement, ItemName.ReflectElement}, state),
+            "normal": self.kh2_has_all({ItemName.BerserkCharge, ItemName.ReflectElement, ItemName.CureElement}, state),
+            "hard":   (state.has(ItemName.BerserkCharge, self.player) or state.has(ItemName.AirComboPlus, self.player, 2)) and state.has(ItemName.ReflectElement, self.player),
         }
-        return _rules[self.fight_logic]
+        return groundshaker_rules[self.fight_logic]
 
     def get_data_saix_rules(self, state: CollectionState) -> bool:
+        # easy:guard,2 gap closers,thunder,blizzard,2 donald limit,reflega,2 ground finisher,aerial dodge 3,glide 3,final 7,firaga,scom
+        # normal:guard,1 gap closers,thunder,blizzard,1 donald limit,reflega,1 ground finisher,aerial dodge 3,glide 3,final 7,firaga
+        # hard:aerial dodge 3,glide 3,guard,reflect,blizzard,1 gap closer,1 ground finisher
+        easy_data_saix = {
+            ItemName.Guard:           1,
+            ItemName.SlideDash:       1,
+            ItemName.FlashStep:       1,
+            ItemName.ThunderElement:  1,
+            ItemName.BlizzardElement: 1,
+            ItemName.FlareForce:      1,
+            ItemName.Fantasia:        1,
+            ItemName.FireElement:     3,
+            ItemName.ReflectElement:  3,
+            ItemName.GuardBreak:      1,
+            ItemName.Explosion:       1,
+            ItemName.AerialDodge:     3,
+            ItemName.Glide:           3,
+            ItemName.SecondChance:    1,
+            ItemName.OnceMore:        1
+        }
+        normal_data_saix = {
+            ItemName.Guard:           1,
+            ItemName.ThunderElement:  1,
+            ItemName.BlizzardElement: 1,
+            ItemName.FireElement:     3,
+            ItemName.ReflectElement:  3,
+            ItemName.AerialDodge:     3,
+            ItemName.Glide:           3,
+        }
+        hard_data_saix = {
+            ItemName.Guard:           1,
+            ItemName.BlizzardElement: 1,
+            ItemName.ReflectElement:  1,
+            ItemName.AerialDodge:     3,
+            ItemName.Glide:           3,
+        }
         _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+            "easy":   self.kh2_dict_count(easy_data_saix, state) and self.kh2_can_reach(LocationName.Finallvl7, state),
+            "normal": self.kh2_dict_count(normal_data_saix, state) and self.kh2_set_any_sum({gap_closer, ground_finisher, donald_limit}, state) >= 3 and self.kh2_can_reach(LocationName.Finallvl7, state),
+            "hard":   self.kh2_dict_count(hard_data_saix, state) and self.kh2_set_any_sum({gap_closer, ground_finisher}, state) >= 2
         }
         return _rules[self.fight_logic]
 
-    def get_twilight_thorn_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
-        }
-        return _rules[self.fight_logic]
+    @staticmethod
+    def get_twilight_thorn_rules() -> bool:
+        return True
 
-    def get_axel_one_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
-        }
-        return _rules[self.fight_logic]
+    @staticmethod
+    def get_axel_one_rules() -> bool:
+        return True
 
-    def get_axel_two_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
-        }
-        return _rules[self.fight_logic]
+    @staticmethod
+    def get_axel_two_rules() -> bool:
+        return True
 
     def get_data_roxas_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
+        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
+        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
+        easy_data_roxas_tools = {
+            ItemName.Guard:          1,
+            ItemName.ReflectElement: 3,
+            ItemName.SlideDash:      1,
+            ItemName.FlashStep:      1,
+            ItemName.GuardBreak:     1,
+            ItemName.Explosion:      1,
+            ItemName.DodgeRoll:      3,
+            ItemName.FinishingPlus:  1,
+            ItemName.SecondChance:   1,
+            ItemName.OnceMore:       1,
         }
-        return _rules[self.fight_logic]
+        normal_data_roxas_tools = {
+            ItemName.Guard:          1,
+            ItemName.ReflectElement: 2,
+            ItemName.SlideDash:      1,
+            ItemName.FlashStep:      1,
+            ItemName.GuardBreak:     1,
+            ItemName.Explosion:      1,
+            ItemName.DodgeRoll:      3,
+            ItemName.FinishingPlus:  1,
+        }
+        hard_data_roxas_tools = {
+            ItemName.Guard:          1,
+            ItemName.ReflectElement: 1,
+            ItemName.DodgeRoll:      2,
+            ItemName.FinishingPlus:  1,
+        }
+        data_roxas_rules = {
+            "easy":   self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum(donald_limit, state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum({donald_limit, gap_closer}, state) >= 2,
+            "hard":   self.kh2_dict_count(hard_data_roxas_tools, state) and self.kh2_set_any_sum({gap_closer, ground_finisher}, state) >= 2
+        }
 
     def get_data_axel_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom,blizzaga
+        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,blizzaga
+        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus,blizzara
+        easy_data_axel_tools = {
+            ItemName.Guard:          1,
+            ItemName.ReflectElement: 3,
+            ItemName.SlideDash:      1,
+            ItemName.FlashStep:      1,
+            ItemName.GuardBreak:     1,
+            ItemName.Explosion:      1,
+            ItemName.DodgeRoll:      3,
+            ItemName.FinishingPlus:  1,
+            ItemName.SecondChance:   1,
+            ItemName.OnceMore:       1,
+            ItemName.BlizzardElement:3,
         }
-        return _rules[self.fight_logic]
+        normal_data_axel_tools = {
+            ItemName.Guard:          1,
+            ItemName.ReflectElement: 2,
+            ItemName.SlideDash:      1,
+            ItemName.FlashStep:      1,
+            ItemName.GuardBreak:     1,
+            ItemName.Explosion:      1,
+            ItemName.DodgeRoll:      3,
+            ItemName.FinishingPlus:  1,
+            ItemName.BlizzardElement: 3,
+        }
+        hard_data_axel_tools = {
+            ItemName.Guard:          1,
+            ItemName.ReflectElement: 1,
+            ItemName.DodgeRoll:      2,
+            ItemName.FinishingPlus:  1,
+            ItemName.BlizzardElement: 2,
+        }
+        data_axel_rules = {
+            "easy":   self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum(donald_limit, state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum({donald_limit, gap_closer}, state) >= 2,
+            "hard":   self.kh2_dict_count(hard_data_axel_tools, state) and self.kh2_set_any_sum({gap_closer, ground_finisher}, state) >= 2
+        }
 
     def get_roxas_rules(self, state: CollectionState) -> bool:
         _rules = {
