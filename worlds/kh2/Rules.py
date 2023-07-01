@@ -424,39 +424,39 @@ class KH2FightRules(KH2Rules):
             RegionName.Thresholder:           lambda state: self.get_thresholder_rules(state),
             RegionName.Beast:                 lambda state: self.get_beast_rules(),
             RegionName.DarkThorn:             lambda state: self.get_dark_thorn_rules(state),
-            RegionName.Xaldin:                lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataXaldin:            lambda state: self.get_genie_jafar_rules(state),
-            RegionName.HostileProgram:        lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Mcp:                   lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataLarxene:           lambda state: self.get_genie_jafar_rules(state),
-            RegionName.PrisonKeeper:          lambda state: self.get_genie_jafar_rules(state),
-            RegionName.OogieBoogie:           lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Experiment:            lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataVexen:             lambda state: self.get_genie_jafar_rules(state),
-            RegionName.HBDemyx:               lambda state: self.get_genie_jafar_rules(state),
-            RegionName.ThousandHeartless:     lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataDemyx:             lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Sephi:                 lambda state: self.get_genie_jafar_rules(state),
-            RegionName.CorFirstFight:         lambda state: self.get_genie_jafar_rules(state),
-            RegionName.CorSecondFight:        lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Transport:             lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Scar:                  lambda state: self.get_genie_jafar_rules(state),
-            RegionName.GroundShaker:          lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataSaix:              lambda state: self.get_genie_jafar_rules(state),
-            RegionName.TwilightThorn:         lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Axel1:                 lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Axel2:                 lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataRoxas:             lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataAxel:              lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Roxas:                 lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Xigbar:                lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Luxord:                lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Saix:                  lambda state: self.get_genie_jafar_rules(state),
-            RegionName.Xemnas:                lambda state: self.get_genie_jafar_rules(state),
-            RegionName.ArmoredXemnas:         lambda state: self.get_genie_jafar_rules(state),
-            RegionName.ArmoredXemnas2:        lambda state: self.get_genie_jafar_rules(state),
-            RegionName.FinalXemnas:           lambda state: self.get_genie_jafar_rules(state),
-            RegionName.DataXemnas:            lambda state: self.get_genie_jafar_rules(state),
+            RegionName.Xaldin:                lambda state: self.get_xaldin_rules(state),
+            RegionName.DataXaldin:            lambda state: self.get_data_xaldin_rules(state),
+            RegionName.HostileProgram:        lambda state: self.get_hostile_program_rules(state),
+            RegionName.Mcp:                   lambda state: self.get_mcp_rules(state),
+            RegionName.DataLarxene:           lambda state: self.get_data_larxene_rules(state),
+            RegionName.PrisonKeeper:          lambda state: self.get_prison_keeper_rules(state),
+            RegionName.OogieBoogie:           lambda state: self.get_oogie_rules(),
+            RegionName.Experiment:            lambda state: self.get_experiment_rules(state),
+            RegionName.DataVexen:             lambda state: self.get_data_vexen_rules(state),
+            RegionName.HBDemyx:               lambda state: self.get_demyx_rules(state),
+            RegionName.ThousandHeartless:     lambda state: self.get_thousand_heartless_rules(state),
+            RegionName.DataDemyx:             lambda state: self.get_data_demyx_rules(state),
+            RegionName.Sephi:                 lambda state: self.get_sephiroth_rules(state),
+            RegionName.CorFirstFight:         lambda state: self.get_cor_first_fight_rules(state),
+            RegionName.CorSecondFight:        lambda state: self.get_cor_second_fight_rules(state),
+            RegionName.Transport:             lambda state: self.get_transport_rules(state),
+            RegionName.Scar:                  lambda state: self.get_scar_rules(state),
+            RegionName.GroundShaker:          lambda state: self.get_groundshaker_rules(state),
+            RegionName.DataSaix:              lambda state: self.get_data_saix_rules(state),
+            RegionName.TwilightThorn:         lambda state: self.get_twilight_thorn_rules(state),
+            RegionName.Axel1:                 lambda state: self.get_axel_one_rules(state),
+            RegionName.Axel2:                 lambda state: self.get_axel_two_rules(state),
+            RegionName.DataRoxas:             lambda state: self.get_data_roxas_rules(state),
+            RegionName.DataAxel:              lambda state: self.get_data_axel_rules(state),
+            RegionName.Roxas:                 lambda state: self.get_roxas_rules(state),
+            RegionName.Xigbar:                lambda state: self.get_xigbar_rules(state),
+            RegionName.Luxord:                lambda state: self.get_luxord_rules(state),
+            RegionName.Saix:                  lambda state: self.get_saix_rules(state),
+            RegionName.Xemnas:                lambda state: self.get_xemnas_rules(state),
+            RegionName.ArmoredXemnas:         lambda state: self.get_armored_xemnas_one_rules(state),
+            RegionName.ArmoredXemnas2:        lambda state: self.get_armored_xemnas_two_rules(state),
+            RegionName.FinalXemnas:           lambda state: self.get_final_xemnas_rules(state),
+            RegionName.DataXemnas:            lambda state: self.get_data_xemnas_rules(state),
         }
 
     def set_kh2_fight_rules(self) -> None:
@@ -736,6 +736,51 @@ class KH2FightRules(KH2Rules):
             "hard":   self.kh2_has_any(defensive_tool, state),
         }
         return cerberus_rules[self.fight_logic]
+    def get__rules(self, state: CollectionState) -> bool:
+        # easy,normal:defensive option, offensive magic
+        # hard:defensive option
+        _rules = {
+            "easy":   self.
+            "normal": self.
+            "hard":   self.
+        }
+        return _rules[self.fight_logic]
+    def get__rules(self, state: CollectionState) -> bool:
+        # easy,normal:defensive option, offensive magic
+        # hard:defensive option
+        _rules = {
+            "easy":   self.
+            "normal": self.
+            "hard":   self.
+        }
+        return _rules[self.fight_logic]
+    def get__rules(self, state: CollectionState) -> bool:
+        # easy,normal:defensive option, offensive magic
+        # hard:defensive option
+        _rules = {
+            "easy":   self.
+            "normal": self.
+            "hard":   self.
+        }
+        return _rules[self.fight_logic]
+    def get__rules(self, state: CollectionState) -> bool:
+        # easy,normal:defensive option, offensive magic
+        # hard:defensive option
+        _rules = {
+            "easy":   self.
+            "normal": self.
+            "hard":   self.
+        }
+        return _rules[self.fight_logic]
+    def get__rules(self, state: CollectionState) -> bool:
+        # easy,normal:defensive option, offensive magic
+        # hard:defensive option
+        _rules = {
+            "easy":   self.
+            "normal": self.
+            "hard":   self.
+        }
+        return _rules[self.fight_logic]
 
     def get_olympus_pete_rules(self, state: CollectionState) -> bool:
         # easy:gap closer,defensive option,drive form
@@ -938,107 +983,205 @@ class KH2FightRules(KH2Rules):
         }
         normal_data_larxene = {
             ItemName.FireElement:    3,
+            ItemName.ReflectElement: 3,
+            ItemName.Guard:          1,
+            ItemName.AerialDodge:    3,
+            ItemName.Glide:          3,
+        }
+        hard_data_larxene = {
+            ItemName.FireElement:    2,
+            ItemName.ReflectElement: 1,
+            ItemName.Guard:          1,
+            ItemName.AerialDodge:    2,
+            ItemName.Glide:          2,
+        }
+        data_larxene_rules = {
+            "easy":   self.kh2_dict_count(easy_data_larxene, state) and self.kh2_can_reach(LocationName.Finallvl7, state),
+            "normal": self.kh2_dict_count(normal_data_larxene, state) and self.kh2_set_any_sum({gap_closer, ground_finisher, donald_limit}, state) >= 3 and self.kh2_can_reach(LocationName.Finallvl7, state),
+            "hard":   self.kh2_dict_count(hard_data_larxene, state) and self.kh2_set_any_sum({gap_closer, donald_limit}, state) >= 2 and self.kh2_can_reach(LocationName.Finallvl5, state),
+        }
+        return data_larxene_rules[self.fight_logic]
+
+    def get_prison_keeper_rules(self, state: CollectionState) -> bool:
+        # easy:defensive tool,drive form, party limit
+        # normal:two of those things
+        # hard:one of those things
+        prison_keeper_rules = {
+            "easy":   self.kh2_set_any_sum({defensive_tool, drive_form, party_limit}, state) >= 3,
+            "normal": self.kh2_set_any_sum({defensive_tool, drive_form, party_limit}, state) >= 2,
+            "hard":   self.kh2_set_any_sum({defensive_tool, drive_form, party_limit}, state) >= 1,
+        }
+        return prison_keeper_rules[self.fight_logic]
+
+    @staticmethod
+    def get_oogie_rules():
+        # fight is free
+        return True
+
+    def get_experiment_rules(self, state: CollectionState) -> bool:
+        # easy:drive form,defensive tool,summon,party limit
+        # normal:3 of those things
+        # hard 2 of those things
+        experiment_rules = {
+            "easy":   self.kh2_set_any_sum({drive_form, defensive_tool, party_limit, summons}, state) >= 4,
+            "normal": self.kh2_set_any_sum({drive_form, defensive_tool, party_limit, summons}, state) >= 3,
+            "hard":   self.kh2_set_any_sum({drive_form, defensive_tool, party_limit, summons}, state) >= 2,
+        }
+        return experiment_rules[self.fight_logic]
+
+    def get_data_vexen_rules(self, state: CollectionState) -> bool:
+        # easy: final 7,firaga,scom,both donald limits, refelga,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3,dodge roll 3,quick run 3
+        # normal:final 7,firaga, donald limit, refelga,guard,1 gap closers,1 ground finisher,aerial dodge 3,glide 3,dodge roll 3,quick run 3
+        # hard:final 5,fira, donald limit, reflect,gap closer,aerial dodge 2,glide 2,dodge roll 2,quick run 2
+        easy_data_vexen = {
+            ItemName.FireElement:    3,
             ItemName.SecondChance:   1,
             ItemName.OnceMore:       1,
             ItemName.Fantasia:       1,
             ItemName.FlareForce:     1,
             ItemName.ReflectElement: 3,
             ItemName.Guard:          1,
-            #ItemName.SlideDash:      1,
-            #ItemName.FlashStep:      1,
+            ItemName.SlideDash:      1,
+            ItemName.FlashStep:      1,
             ItemName.AerialDodge:    3,
             ItemName.Glide:          3,
-            #ItemName.GuardBreak:     1,
-            #ItemName.Explosion:      1
+            ItemName.GuardBreak:     1,
+            ItemName.Explosion:      1,
+            ItemName.DodgeRoll:      3,
+            ItemName.QuickRun:       3,
         }
-        hard_data_larxene = {
+        normal_data_vexen = {
+            ItemName.FireElement:    3,
+            ItemName.ReflectElement: 3,
+            ItemName.Guard:          1,
+            ItemName.AerialDodge:    3,
+            ItemName.Glide:          3,
+            ItemName.DodgeRoll:      3,
+            ItemName.QuickRun:       3,
+        }
+        hard_data_vexen = {
             ItemName.FireElement:    2,
             ItemName.ReflectElement: 1,
-            ItemName.QuickRun:       2,
+            ItemName.Guard:          1,
+            ItemName.AerialDodge:    2,
+            ItemName.Glide:          2,
+            ItemName.DodgeRoll:      3,
+            ItemName.QuickRun:       3,
         }
-        _rules = {
-            "easy":   self.kh2_dict_count(easy_data_larxene, state) and self.kh2_can_reach(LocationName.Finallvl7),
-            "normal": self,
-            "hard":   self,
+        data_vexen_rules = {
+            "easy":   self.kh2_dict_count(easy_data_vexen, state) and self.kh2_can_reach(LocationName.Finallvl7, state),
+            "normal": self.kh2_dict_count(normal_data_vexen, state) and self.kh2_set_any_sum({gap_closer, ground_finisher, donald_limit}, state) >= 3 and self.kh2_can_reach(LocationName.Finallvl7, state),
+            "hard":   self.kh2_dict_count(hard_data_vexen, state) and self.kh2_set_any_sum({gap_closer, donald_limit}, state) >= 2 and self.kh2_can_reach(LocationName.Finallvl5, state),
         }
-        return _rules[self.fight_logic]
-
-    def get_prison_keeper_rules(self, state: CollectionState) -> bool:
-        #easy:defensive tool,drive form, party limit
-        #normal:two of those things
-        #hard:one of those things
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
-        }
-        return _rules[self.fight_logic]
-
-    def get_oogie_boogie_rules(self, state: CollectionState) -> bool:
-        #true
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
-        }
-        return _rules[self.fight_logic]
-
-    def get_experiment_rules(self, state: CollectionState) -> bool:
-        #easy:drive form,defensive tool,party summon,party limit
-        #normal:3 of those things
-        #hard 2 of those things
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
-        }
-        return _rules[self.fight_logic]
-
-    def get_data_vexen_rules(self, state: CollectionState) -> bool:
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
-        }
-        return _rules[self.fight_logic]
+        return data_vexen_rules[self.fight_logic]
 
     def get_demyx_rules(self, state: CollectionState) -> bool:
-        #defensive option,drive form,party limit
-        #defrnsive option,drive form
-        #defensive option
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+        # defensive option,drive form,party limit
+        # defrnsive option,drive form
+        # defensive option
+        demyx_rules = {
+            "easy":   self.kh2_set_any_sum({defensive_tool, drive_form, party_limit}, state) >= 3,
+            "normal": self.kh2_set_any_sum({defensive_tool, drive_form}, state) >= 2,
+            "hard":   self.kh2_set_any_sum({defensive_tool}, state) >= 1,
         }
-        return _rules[self.fight_logic]
+        return demyx_rules[self.fight_logic]
 
     def get_thousand_heartless_rules(self, state: CollectionState) -> bool:
-        #easy:scom,limit form,guard,magnera
-        #normal:limit form,guard
-        #guard
-        _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+        # easy:scom,limit form,guard,magnera
+        # normal:limit form,guard
+        # guard
+        easy_thousand_heartless_rules = {
+            ItemName.SecondChance:  1,
+            ItemName.OnceMore:      1,
+            ItemName.Guard:         2,
+            ItemName.MagnetElement: 2,
         }
-        return _rules[self.fight_logic]
+        normal_thousand_heartless_rules = {
+            ItemName.LimitForm: 1,
+            ItemName.Guard:     1,
+        }
+        thousand_heartless_rules = {
+            "easy":   self.kh2_dict_count(easy_thousand_heartless_rules, state),
+            "normal": self.kh2_dict_count(normal_thousand_heartless_rules, state),
+            "hard":   state.has(ItemName.Guard, self.player),
+        }
+        return thousand_heartless_rules[self.fight_logic]
 
     def get_data_demyx_rules(self, state: CollectionState) -> bool:
-        #easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom
-        #normal:remove form boost and scom
-        #hard:wisdom 6,relfect,guard,duck flare,fira
+        # easy:wisdom 7,1 form boosts,reflera,firaga,duck flare,guard,scom,finishing plus
+        # normal:remove form boost and scom
+        # hard:wisdom 6,relfect,guard,duck flare,fira,finishing plus
+        easy_data_demyx = {
+            ItemName.FormBoost:      1,
+            ItemName.ReflectElement: 2,
+            ItemName.FireElement:    3,
+            ItemName.FlareForce:     1,
+            ItemName.Guard:          1,
+            ItemName.SecondChance:   1,
+            ItemName.OnceMore:       1,
+            ItemName.FinishingPlus:  1,
+        }
+        normal_data_demyx = {
+            ItemName.ReflectElement: 2,
+            ItemName.FireElement:    3,
+            ItemName.FlareForce:     1,
+            ItemName.Guard:          1,
+            ItemName.FinishingPlus:  1,
+        }
+        hard_data_demyx = {
+            ItemName.ReflectElement: 1,
+            ItemName.FireElement:    2,
+            ItemName.FlareForce:     1,
+            ItemName.Guard:          1,
+            ItemName.FinishingPlus:  1,
+        }
         _rules = {
-            "easy":   self,
-            "normal": self,
-            "hard":   self,
+            "easy":   self.kh2_dict_count(easy_data_demyx, state) and self.kh2_can_reach(LocationName.Wisdomlvl7, state),
+            "normal": self.kh2_dict_count(normal_data_demyx, state) and self.kh2_can_reach(LocationName.Wisdomlvl7, state),
+            "hard":   self.kh2_dict_count(hard_data_demyx, state) and self.kh2_can_reach(LocationName.Wisdomlvl6, state),
         }
         return _rules[self.fight_logic]
 
     def get_sephiroth_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,limit 5,reflega,donald limit, guard,both 2 groumd finishet
-        # normal:one gap closer,final 5,fira,reflect, donald limit,guard
-        # hard:defensive tool,gap closer
+        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
+        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
+        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
+        easy_sephiroth_tools = {
+            ItemName.Guard:          1,
+            ItemName.ReflectElement: 3,
+            ItemName.SlideDash:      1,
+            ItemName.FlashStep:      1,
+            ItemName.GuardBreak:     1,
+            ItemName.Explosion:      1,
+            ItemName.DodgeRoll:      3,
+            ItemName.FinishingPlus:  1,
+            ItemName.SecondChance:   1,
+            ItemName.OnceMore:       1,
+        }
+        normal_sephiroth_tools = {
+            ItemName.Guard:          1,
+            ItemName.ReflectElement: 2,
+            ItemName.SlideDash:      1,
+            ItemName.FlashStep:      1,
+            ItemName.GuardBreak:     1,
+            ItemName.Explosion:      1,
+            ItemName.DodgeRoll:      3,
+            ItemName.FinishingPlus:  1,
+        }
+        hard_sephiroth_tools = {
+            ItemName.Guard:          1,
+            ItemName.ReflectElement: 1,
+            ItemName.DodgeRoll:      2,
+            ItemName.FinishingPlus:  1,
+        }
+        sephiroth_rules = {
+            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum(donald_limit, state) >= 1,
+            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_set_any_sum({donald_limit, gap_closer}, state) >= 2,
+            "hard":   self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_set_any_sum({gap_closer, ground_finisher}, state) >= 2,
+        }
+        return sephiroth_rules[self.fight_logic]
+
+    def get_cor_first_fight_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1046,7 +1189,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_cor_second_fight_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1054,7 +1197,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_transport_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1062,7 +1205,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_scar_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1070,7 +1213,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_groundshaker_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1078,7 +1221,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_data_saix_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1086,7 +1229,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_twilight_thorn_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1094,7 +1237,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_axel_one_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1102,7 +1245,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_axel_two_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1110,7 +1253,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_data_roxas_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1118,7 +1261,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_data_axel_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1126,7 +1269,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_roxas_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1134,7 +1277,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_xigbar_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1142,7 +1285,7 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_luxord_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
@@ -1150,7 +1293,47 @@ class KH2FightRules(KH2Rules):
         }
         return _rules[self.fight_logic]
 
-    def get__rules(self, state: CollectionState) -> bool:
+    def get_saix_rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get_xemnas_rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get_armored_xemnas_one_rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get_armored_xemnas_two_rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get_final_xemnas_rules(self, state: CollectionState) -> bool:
+        _rules = {
+            "easy":   self,
+            "normal": self,
+            "hard":   self,
+        }
+        return _rules[self.fight_logic]
+
+    def get_data_xemnas_rules(self, state: CollectionState) -> bool:
         _rules = {
             "easy":   self,
             "normal": self,
