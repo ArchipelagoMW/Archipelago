@@ -726,7 +726,7 @@ class ALTTPWorld(World):
 
     def fill_slot_data(self):
         slot_data = {}
-        if not multiworld.is_race:
+        if not self.multiworld.is_race:
             for option_name in alttp_options:
                 option = getattr(self.multiworld, option_name)[self.player]
                 slot_data[option_name] = option.value
