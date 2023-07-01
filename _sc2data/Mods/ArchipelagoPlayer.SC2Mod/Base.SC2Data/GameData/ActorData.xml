@@ -13437,8 +13437,8 @@
         </GroupIcon>
         <HeroIcon value="Assets\Textures\BTN-Building-Protoss-StarWarpGate.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
-        <SoundArray index="Ready" value="StargateWarp_Ready"/>
-        <SoundArray index="What" value="StargateWarp_What"/>
+        <SoundArray index="Ready" value="AP_StargateWarp_Ready"/>
+        <SoundArray index="What" value="AP_StargateWarp_What"/>
         <SoundArray index="Construction" value="Protoss_ConstructionWhat"/>
         <UnitIcon value="Assets\Textures\BTN-Building-Protoss-StarWarpGate.dds"/>
         <Wireframe>

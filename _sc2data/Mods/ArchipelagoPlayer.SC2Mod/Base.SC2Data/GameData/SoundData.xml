@@ -5973,4 +5973,14 @@
         <Select value="Random"/>
         <Volume value="-22.000000,-16.000000"/>
     </CSound>
+    <CSound id="AP_StargateWarp_What" parent="Voice">
+        <AssetArray File="Assets\Sounds\Protoss\Stargate\Stargate_What.ogg"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_StargateWarp_Ready" parent="Ready">
+        <AssetArray File="Assets\Sounds\Protoss\Stargate\Stargate_What.ogg"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
 </Catalog>
