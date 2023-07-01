@@ -4088,6 +4088,7 @@
     </CActorModel>
     <CActorSound id="AP_CarrierInterceptorLaunch" parent="SoundOneShot">
         <On Terms="Abil.AP_CarrierHangar.Launch" Send="Create"/>
+        <On Terms="Abil.AP_CarrierAiurHanger.Launch" Send="Create"/>
         <!--        <On Terms="Abil.AP_CarrierHangarVoid.Launch" Send="Create"/>-->
         <Sound value="Carrier_InterceptorLaunch"/>
     </CActorSound>
