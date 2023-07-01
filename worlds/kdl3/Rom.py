@@ -1,4 +1,5 @@
 import typing
+from pkgutil import get_data
 
 import Utils
 from typing import Optional
@@ -9,6 +10,7 @@ from worlds.Files import APDeltaPatch
 from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
     get_gooey_palette
 from .Compression import hal_decompress
+import bsdiff4
 
 KDL3UHASH = "201e7658f6194458a3869dde36bf8ec2"
 KDL3JHASH = "b2f2d004ea640c3db66df958fce122b2"
@@ -108,6 +110,11 @@ stage_tiles = {
     ]
 }
 
+heart_star_address = 0x2D0000
+heart_star_size = 456
+consumable_address = 0x2F91DD
+consumable_size = 698
+
 stage_palettes = [0x60964, 0x60B64, 0x60D64, 0x60F64, 0x61164]
 
 music_choices = [
@@ -115,7 +122,6 @@ music_choices = [
     3,  # Boss 2 (Unused)
     4,  # Boss 3 (Miniboss)
     7,  # Dedede
-    8,  # Heart Star
     9,  # Event 2 (used once)
     10,  # Field 1
     11,  # Field 2
@@ -541,63 +547,6 @@ room_pointers = [
 ]
 
 
-def handle_level_sprites(stages, sprites, palettes):
-    palette_by_level = list()
-    for palette in palettes:
-        palette_by_level.extend(palette[10:16])
-    for i in range(5):
-        for j in range(6):
-            palettes[i][10 + j] = palette_by_level[stages[i][j] - 1]
-        palettes[i] = [x for palette in palettes[i] for x in palette]
-    tiles_by_level = list()
-    for spritesheet in sprites:
-        decompressed = hal_decompress(spritesheet)
-        tiles = [decompressed[i:i + 32] for i in range(0, 2304, 32)]
-        tiles_by_level.extend([[tiles[x] for x in stage_tiles[stage]] for stage in stage_tiles])
-    for world in range(5):
-        levels = [stages[world][x] - 1 for x in range(6)]
-        world_tiles = [typing.Optional[bytes] for _ in range(72)]
-        for i in range(6):
-            for x in range(12):
-                world_tiles[stage_tiles[i][x]] = tiles_by_level[levels[i]][x]
-        sprites[world] = list()
-        for tile in world_tiles:
-            sprites[world].extend(tile)
-        # insert our fake compression
-        sprites[world][0:0] = [0xe3, 0xff]
-        sprites[world][1026:1026] = [0xe3, 0xff]
-        sprites[world][2052:2052] = [0xe0, 0xff]
-        sprites[world].append(0xff)
-    return sprites, palettes
-
-
-class KDL3DeltaPatch(APDeltaPatch):
-    hash = [KDL3UHASH, KDL3JHASH]
-    game = "Kirby's Dream Land 3"
-    patch_file_ending = ".apkdl3"
-
-    @classmethod
-    def get_source_data(cls) -> bytes:
-        return get_base_rom_bytes()
-
-    def patch(self, target: str):
-        super().patch(target)
-        rom = RomData(target)
-        if rom.read_bytes(0x3D014, 1)[0] > 0:
-            stages = [struct.unpack("HHHHHHH", rom.read_bytes(0x3D020 + x * 14, 14)) for x in range(5)]
-            palettes = [rom.read_bytes(full_pal, 512) for full_pal in stage_palettes]
-            palettes = [[palette[i:i + 32] for i in range(0, 512, 32)] for palette in palettes]
-            sprites = [rom.read_bytes(offset, level_sprites[offset]) for offset in level_sprites]
-            sprites, palettes = handle_level_sprites(stages, sprites, palettes)
-            for addr, palette in zip(stage_palettes, palettes):
-                rom.write_bytes(addr, palette)
-            for addr, level_sprite in zip([0x1CA000, 0x1CA920, 0x1CB230, 0x1CBB40, 0x1CC450], sprites):
-                rom.write_bytes(addr, level_sprite)
-            rom.write_bytes(0x460A, [0x00, 0xA0, 0x39, 0x20, 0xA9, 0x39, 0x30, 0xB2, 0x39, 0x40, 0xBB, 0x39,
-                                     0x50, 0xC4, 0x39])
-            rom.write_to_file(target)
-
-
 class RomData:
     def __init__(self, file, name=None):
         self.file = bytearray()
@@ -623,6 +572,88 @@ class RomData:
     def read_from_file(self, file):
         with open(file, 'rb') as stream:
             self.file = bytearray(stream.read())
+
+
+def handle_level_sprites(stages, sprites, palettes):
+    palette_by_level = list()
+    for palette in palettes:
+        palette_by_level.extend(palette[10:16])
+    for i in range(5):
+        for j in range(6):
+            palettes[i][10 + j] = palette_by_level[stages[i][j] - 1]
+        palettes[i] = [x for palette in palettes[i] for x in palette]
+    tiles_by_level = list()
+    for spritesheet in sprites:
+        decompressed = hal_decompress(spritesheet)
+        tiles = [decompressed[i:i + 32] for i in range(0, 2304, 32)]
+        tiles_by_level.extend([[tiles[x] for x in stage_tiles[stage]] for stage in stage_tiles])
+    for world in range(5):
+        levels = [stages[world][x] - 1 for x in range(6)]
+        world_tiles: typing.List[typing.Optional[bytes]] = [None for _ in range(72)]
+        for i in range(6):
+            for x in range(12):
+                world_tiles[stage_tiles[i][x]] = tiles_by_level[levels[i]][x]
+        sprites[world] = list()
+        for tile in world_tiles:
+            sprites[world].extend(tile)
+        # insert our fake compression
+        sprites[world][0:0] = [0xe3, 0xff]
+        sprites[world][1026:1026] = [0xe3, 0xff]
+        sprites[world][2052:2052] = [0xe0, 0xff]
+        sprites[world].append(0xff)
+    return sprites, palettes
+
+
+def write_heart_star_sprites(rom: RomData):
+    compressed = rom.read_bytes(heart_star_address, heart_star_size)
+    decompressed = hal_decompress(compressed)
+    patch = get_data(__name__, os.path.join(os.path.dirname(__file__), "data", "APHeartStar.bsdiff4"))
+    patched = bytearray(bsdiff4.patch(decompressed, patch))
+    patched[0:0] = [0xE3, 0xFF]
+    patched.append(0xFF)
+    rom.write_bytes(0x1CD000, patched)
+    rom.write_bytes(0x3F0EBF, [0x00, 0xD0, 0x39])
+
+
+def write_consumable_sprites(rom: RomData):
+    compressed = rom.read_bytes(consumable_address, consumable_size)
+    decompressed = hal_decompress(compressed)
+    patch = get_data(__name__, os.path.join(os.path.dirname(__file__), "data", "APConsumable.bsdiff4"))
+    patched = bytearray(bsdiff4.patch(decompressed, patch))
+    patched[0:0] = [0xE3, 0xFF]
+    patched.append(0xFF)
+    rom.write_bytes(0x1CD500, patched)
+    rom.write_bytes(0x3F0DAE, [0x00, 0xD5, 0x39])
+
+
+class KDL3DeltaPatch(APDeltaPatch):
+    hash = [KDL3UHASH, KDL3JHASH]
+    game = "Kirby's Dream Land 3"
+    patch_file_ending = ".apkdl3"
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        return get_base_rom_bytes()
+
+    def patch(self, target: str):
+        super().patch(target)
+        rom = RomData(target)
+        write_heart_star_sprites(rom)
+        if rom.read_bytes(0x3D014, 1)[0] > 0:
+            stages = [struct.unpack("HHHHHHH", rom.read_bytes(0x3D020 + x * 14, 14)) for x in range(5)]
+            palettes = [rom.read_bytes(full_pal, 512) for full_pal in stage_palettes]
+            palettes = [[palette[i:i + 32] for i in range(0, 512, 32)] for palette in palettes]
+            sprites = [rom.read_bytes(offset, level_sprites[offset]) for offset in level_sprites]
+            sprites, palettes = handle_level_sprites(stages, sprites, palettes)
+            for addr, palette in zip(stage_palettes, palettes):
+                rom.write_bytes(addr, palette)
+            for addr, level_sprite in zip([0x1CA000, 0x1CA920, 0x1CB230, 0x1CBB40, 0x1CC450], sprites):
+                rom.write_bytes(addr, level_sprite)
+            rom.write_bytes(0x460A, [0x00, 0xA0, 0x39, 0x20, 0xA9, 0x39, 0x30, 0xB2, 0x39, 0x40, 0xBB, 0x39,
+                                     0x50, 0xC4, 0x39])
+        if rom.read_bytes(0x3D018, 1)[0] > 0:
+            write_consumable_sprites(rom)
+        rom.write_to_file(target)
 
 
 def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, shuffled_levels, bb_boss_enabled):
@@ -851,7 +882,10 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
             shuffled_music = music_choices.copy()
             multiworld.per_slot_randoms[player].shuffle(shuffled_music)
             music_map = dict(zip(music_choices, shuffled_music))
+            # Avoid putting star twinkle in the pool
             music_map[5] = multiworld.per_slot_randoms[player].choice(music_choices)
+            # Heart Star music doesn't work on regular stages
+            music_map[8] = multiworld.per_slot_randoms[player].choice(music_choices)
             for room in room_pointers:
                 old_music = rom.read_byte(room + 2)
                 rom.write_byte(room + 2, music_map[old_music])
@@ -879,12 +913,13 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
     # boss requirements
     rom.write_bytes(0x3D000, struct.pack("HHHHH", boss_requirements[0], boss_requirements[1], boss_requirements[2],
                                          boss_requirements[3], boss_requirements[4]))
+    rom.write_bytes(0x3D00A, struct.pack("H", heart_stars_required if multiworld.goal_speed[player] == 1 else 0xFFFF))
+    rom.write_byte(0x3D00C, multiworld.goal_speed[player])
     rom.write_byte(0x3D010, multiworld.death_link[player])
     rom.write_byte(0x3D012, multiworld.goal[player])
     rom.write_byte(0x3D014, multiworld.stage_shuffle[player])
     rom.write_byte(0x3D016, multiworld.ow_boss_requirement[player])
-    rom.write_bytes(0x3D00A, struct.pack("H", heart_stars_required if multiworld.goal_speed[player] == 1 else 0xFFFF))
-    rom.write_byte(0x3D00C, multiworld.goal_speed[player])
+    rom.write_byte(0x3D018, multiworld.consumables[player])
 
     for level in shuffled_levels:
         for i in range(len(shuffled_levels[level])):
