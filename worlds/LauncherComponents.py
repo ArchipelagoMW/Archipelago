@@ -88,7 +88,7 @@ components: List[Component] = [
     # SNI
     Component('SNI Client', 'SNIClient',
               file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3',
-                                               '.apsmw', '.apl2ac')),
+                                               '.apsmw', '.apl2ac', '.apkdl3')),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),

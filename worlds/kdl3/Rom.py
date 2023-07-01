@@ -607,7 +607,7 @@ def handle_level_sprites(stages, sprites, palettes):
 def write_heart_star_sprites(rom: RomData):
     compressed = rom.read_bytes(heart_star_address, heart_star_size)
     decompressed = hal_decompress(compressed)
-    patch = get_data(__name__, os.path.join(os.path.dirname(__file__), "data", "APHeartStar.bsdiff4"))
+    patch = get_data(__name__, os.path.join("data", "APHeartStar.bsdiff4"))
     patched = bytearray(bsdiff4.patch(decompressed, patch))
     patched[0:0] = [0xE3, 0xFF]
     patched.append(0xFF)
@@ -618,7 +618,7 @@ def write_heart_star_sprites(rom: RomData):
 def write_consumable_sprites(rom: RomData):
     compressed = rom.read_bytes(consumable_address, consumable_size)
     decompressed = hal_decompress(compressed)
-    patch = get_data(__name__, os.path.join(os.path.dirname(__file__), "data", "APConsumable.bsdiff4"))
+    patch = get_data(__name__, os.path.join("data", "APConsumable.bsdiff4"))
     patched = bytearray(bsdiff4.patch(decompressed, patch))
     patched[0:0] = [0xE3, 0xFF]
     patched.append(0xFF)
