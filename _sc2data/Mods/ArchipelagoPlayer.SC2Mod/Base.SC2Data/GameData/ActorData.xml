@@ -12541,7 +12541,7 @@
         <Macros value="PhysicsDeathsVoidAir"/>
         <Remove Terms="Abil.OracleRevelation.SourceCastStart" Send="Create Oracle_RevelationCast_Sound"/>
         <Remove Terms="Abil.OracleRevelation.SourceCastStart" Send="Create Oracle_RevelationCast2_Sound"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create Oracle_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Oracle_Land"/>
         <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap OracleWarpInStargate"/>
         <On Terms="Behavior.WarpInEffect.On" Send="$Spell 0 0.000000 0.000000 2.100000 AsDuration"/>
         <On Terms="Behavior.WarpInEffect.Off" Send="ModelSwap Oracle"/>
@@ -12553,10 +12553,10 @@
 <!--        <On Terms="Abil.Scryer.SourceCastStart" Send="$Spell"/>-->
 <!--        <On Terms="Abil.ResourceStun.SourceCastStart" Send="$Spell"/>-->
         <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="AnimPlay Spell Stand,Work,Start"/>
-        <On Terms="Abil.*.SourceCastStart" Send="Create OracleCastLaunch"/>
-        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create Oracle_RevelationCast_Sound"/>
-        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create Oracle_RevelationCast2_Sound"/>
-        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create Oracle_Spell_Revelation_StandWorkStart2_Sound"/>
+        <On Terms="Abil.*.SourceCastStart" Send="Create AP_OracleCastLaunch"/>
+        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create AP_Oracle_RevelationCast_Sound"/>
+        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create AP_Oracle_RevelationCast2_Sound"/>
+        <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create AP_Oracle_Spell_Revelation_StandWorkStart2_Sound"/>
         <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
         <On Terms="UnitDeathCustomize; IsStatus OracleMoving 1; !ValidateUnit IsHallucination" Send="DeathCustomize Variation0"/>
         <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
@@ -12573,9 +12573,9 @@
         <On Terms="Behavior.AP_LightofAiur.On" Send="StatusSet MorphDeath 1"/>
         <On Terms="Behavior.AP_LightofAiur.Off" Send="StatusSet MorphDeath 0"/>
         <On Terms="UnitDeathCustomize; IsStatus MorphDeath 1; !ValidateUnit IsHallucination" Send="DeathCustomize Variation1"/>
-        <On Terms="Behavior.AP_LightofAiur.On" Send="Create Oracle_EnvisionCast1_Sound"/>
-        <On Terms="Behavior.AP_LightofAiur.On" Send="Create Oracle_EnvisionCast2_Sound"/>
-        <On Terms="Behavior.AP_LightofAiur.On" Send="Create Oracle_EnvisionCast3_Sound"/>
+        <On Terms="Behavior.AP_LightofAiur.On" Send="Create AP_Oracle_EnvisionCast1_Sound"/>
+        <On Terms="Behavior.AP_LightofAiur.On" Send="Create AP_Oracle_EnvisionCast2_Sound"/>
+        <On Terms="Behavior.AP_LightofAiur.On" Send="Create AP_Oracle_EnvisionCast3_Sound"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveVoidShade" Send="DeathCustomize Shadow"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_HaveTerrazineShadow" Send="DeathCustomize Shadow"/>
         <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap Oracle_Taldarim"/>
@@ -12706,7 +12706,7 @@
         <On Terms="Effect.AP_OracleRevelationSearch.Start" Send="Create"/>
         <On Terms="ActorCreation" Send="TimerSet 1.500000 DelayDeath"/>
         <On Terms="TimerExpired; TimerName DelayDeath" Send="Destroy"/>
-        <HostSiteOps Ops="SOpShadow OracleRevelationOffSet"/>
+        <HostSiteOps Ops="SOpShadow AP_OracleRevelationOffSet"/>
         <Model value="OracleRevelationModel"/>
     </CActorModel>
     <CActorSiteOpLocalOffset id="AP_OracleRevelationOffSet">
