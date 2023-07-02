@@ -34,8 +34,5 @@ def has_woods_rune_to_depth(vanilla_logic, floor: int) -> StardewRule:
 
 def can_chop_to_depth(vanilla_logic, floor: int) -> StardewRule:
     previous_elevator = max(floor - 10, 0)
-    previous_previous_elevator = max(floor - 20, 0)
-    return ((has_woods_rune_to_depth(vanilla_logic, previous_elevator) &
-             can_reach_woods_depth(vanilla_logic, previous_elevator)) |
-            (has_woods_rune_to_depth(vanilla_logic, previous_previous_elevator) &
-             can_reach_woods_depth(vanilla_logic, previous_previous_elevator)))
+    return (has_woods_rune_to_depth(vanilla_logic, previous_elevator) &
+            can_reach_woods_depth(vanilla_logic, previous_elevator))
