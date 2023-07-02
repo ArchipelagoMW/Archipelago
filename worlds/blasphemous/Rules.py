@@ -379,7 +379,7 @@ def can_beat_boss(state: CollectionState, boss: str, logic: int, player: int) ->
     elif boss == "Patio":
         return (
             has_boss_strength("amanecida")
-            and state.has_all({"D01BZ01S01[Santos]", "D06Z01S18[E]"}, player)
+            and state.has_all({"D01BZ07S01[Santos]", "D06Z01S18[E]"}, player)
             and state.has_any({"D04Z01S04[W]", "D04Z01S04[E]", "D04Z01S04[Cherubs]"}, player)
         )
     elif boss == "Wall":
