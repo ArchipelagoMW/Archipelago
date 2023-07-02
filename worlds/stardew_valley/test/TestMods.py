@@ -174,3 +174,19 @@ class TestModEntranceRando(unittest.TestCase):
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
                                  f"Connections are duplicated in randomization. Seed = {seed}")
+
+
+class TestModTraps(SVTestBase):
+    def test_given_traps_when_generate_then_all_traps_in_pool(self):
+        trap_option = options.TrapItems
+        for value in trap_option.options:
+            if value == "no_traps":
+                continue
+            world_options = self.allsanity_options()
+            world_options.update({options.TrapItems.internal_name: trap_option.options[value], Mods: "Magic"})
+            multi_world = setup_solo_multiworld(world_options)
+            trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups]
+            multiworld_items = [item.name for item in multi_world.get_items()]
+            for item in trap_items:
+                with self.subTest(f"Option: {value}, Item: {item}"):
+                    self.assertIn(item, multiworld_items)
