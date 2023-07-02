@@ -1194,7 +1194,7 @@ class Spoiler:
             if len(sphere_data) == 0:  # No 'visible' locations in sphere to show.
                 continue
 
-            self.playthrough[sphere_index] = sphere_data
+            self.playthrough[str(sphere_index)] = sphere_data
             sphere_index += 1
 
         if create_paths:
