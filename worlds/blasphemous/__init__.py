@@ -221,23 +221,16 @@ class BlasphemousWorld(World):
         player = self.player
         world = self.multiworld
         
-        menu = Region("Menu", player, world)
-        misc = Region("Misc", player, world)
-
-        world.regions.append(menu)
-        world.regions.append(misc)
+        menu_region = Region("Menu", player, world)
+        misc_region = Region("Misc", player, world)
+        world.regions += [menu_region, misc_region]
 
         for room in room_table:
-            reg = Region(room, player, world)
-            world.regions.append(reg)
+            region = Region(room, player, world)
+            world.regions.append(region)
 
-        ent = Entrance(player, "Misc", world.get_region(self.start_room, player))
-        ent.connect(misc)
-        world.get_region(self.start_room, player).exits.append(ent)
-
-        ent2 = Entrance(player, "New Game", menu)
-        ent2.connect(world.get_region(self.start_room, player))
-        menu.exits.append(ent2)
+        menu_region.add_exits({self.start_room: "New Game"})
+        world.get_region(self.start_room, player).add_exits({"Misc": "Misc"})
 
         for door in door_table:
             if door.get("OriginalDoor") is None:
@@ -247,41 +240,39 @@ class BlasphemousWorld(World):
                     self.door_connections[door["Id"]] = door["OriginalDoor"]
                     self.door_connections[door["OriginalDoor"]] = door["Id"]
 
-                parent: Region = self.get_room_from_door(door["Id"])
-                target: Region = self.get_room_from_door(door["OriginalDoor"])
-                exit: Entrance = Entrance(player, door["Id"], parent)
+                parent_region: Region = self.get_room_from_door(door["Id"])
+                target_region: Region = self.get_room_from_door(door["OriginalDoor"])
+                parent_region.add_exits({
+                    target_region.name: door["Id"]
+                }, {
+                    target_region.name: lambda x: door.get("VisibilityFlags") != 1
+                })
 
-                if door.get("VisibilityFlags") == 1:
-                    set_rule(exit, lambda x: False)
-
-                exit.connect(target)
-                parent.exits.append(exit)
-
-        for loc in location_table:
+        for index, loc in enumerate(location_table):
             if not world.boots_of_pleading[player] and loc["name"] == "BotSS: 2nd meeting with Redento":
                 continue
             if not world.purified_hand[player] and loc["name"] == "MoM: Western room ledge":
                 continue
 
-            reg: Region = world.get_region(loc["room"], player)
-
-            id = base_id + location_table.index(loc)
-            reg.locations.append(BlasphemousLocation(player, loc["name"], id, reg))
+            region: Region = world.get_region(loc["room"], player)
+            region.add_locations({loc["name"]: base_id + index})
+            #id = base_id + location_table.index(loc)
+            #reg.locations.append(BlasphemousLocation(player, loc["name"], id, reg))
 
         for e, r in event_table.items():
-            reg: Region = world.get_region(r, player)
-            event = BlasphemousLocation(player, e, None, reg)
+            region: Region = world.get_region(r, player)
+            event = BlasphemousLocation(player, e, None, region)
             event.show_in_spoiler = False
             event.place_locked_item(self.create_event(e))
-            reg.locations.append(event)
+            region.locations.append(event)
 
         for door in door_table:
-            reg: Region = self.get_room_from_door(self.door_connections[door["Id"]])
-            event = BlasphemousLocation(player, door["Id"], None, reg)
+            region: Region = self.get_room_from_door(self.door_connections[door["Id"]])
+            event = BlasphemousLocation(player, door["Id"], None, region)
             event.show_in_spoiler = False
             event.place_locked_item(self.create_event(door["Id"]))
             add_rule(event, lambda state: state.can_reach(self.get_connected_door(door["Id"])), player)
-            reg.locations.append(event)
+            region.locations.append(event)
         
         victory = Location(player, "His Holiness Escribar", None, world.get_region("D07Z01S03", player))
         victory.place_locked_item(self.create_event("Victory"))
@@ -290,7 +281,7 @@ class BlasphemousWorld(World):
         if world.ending[self.player].value == 1:
             set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8))
         elif world.ending[self.player].value == 2:
-            set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8) and \
+            set_rule(victory, lambda state: state.has("Thorn Upgrade", player, 8) and
                 state.has("Holy Wound of Abnegation", player))
 
         world.completion_condition[self.player] = lambda state: state.has("Victory", player)
