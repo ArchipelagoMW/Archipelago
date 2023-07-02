@@ -4720,7 +4720,7 @@
         <Flags index="PersistUntilDestroyed" value="1"/>
         <InitialEffect value="AP_NovaDominationApplySet"/>
         <FinalEffect value="AP_NovaDominationRemoveSet"/>
-        <PeriodicValidator value="Domination"/>
+        <PeriodicValidator value="AP_Domination"/>
         <PeriodicPeriodArray value="0.2"/>
     </CEffectCreatePersistent>
     <CEffectRemoveBehavior id="AP_NovaDominationRB">
@@ -9670,4 +9670,217 @@
     <CEffectDamage id="AP_OracleDummyWeapon">
         <EditorCategories value="Race:Protoss"/>
     </CEffectDamage>
+    <CEffectCreatePersistent id="AP_SOAMothershipBlinkCP">
+        <EditorCategories value="Race:Protoss"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_SOAMothershipBlinkTeleport"/>
+        <PeriodicPeriodArray value="0.375"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_SOAMothershipBlinkStrikeCP">
+        <EditorCategories value="Race:Protoss"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="7"/>
+        <PeriodicEffectArray value="AP_SOAMothershipBlinkStrikeTeleport"/>
+        <PeriodicEffectArray value="SOAMothershipBlinkStrikeTeleportAB"/>
+        <PeriodicEffectArray value="AP_SOAMothershipBlinkStrikeLM"/>
+        <PeriodicEffectArray value="AP_SOAMothershipBlinkStrikeLM"/>
+        <PeriodicEffectArray value="AP_SOAMothershipBlinkStrikeLM"/>
+        <PeriodicEffectArray value="AP_SOAMothershipBlinkStrikeLM"/>
+        <PeriodicEffectArray value="AP_SOAMothershipBlinkStrikeLM"/>
+        <PeriodicPeriodArray value="0.375"/>
+        <PeriodicPeriodArray value="0"/>
+        <PeriodicPeriodArray value="0.375"/>
+        <PeriodicPeriodArray value="0.375"/>
+        <PeriodicPeriodArray value="0.375"/>
+        <PeriodicPeriodArray value="0.375"/>
+        <PeriodicPeriodArray value="0.375"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="AP_SOAMothershipBlinkStrikeDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <ResponseFlags index="Acquire" value="0"/>
+        <ResponseFlags index="Flee" value="0"/>
+        <AttributeBonus index="Armored" value="50"/>
+        <Kind value="Spell"/>
+        <Amount value="50"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_SOAMothershipBlinkStrikeImpactSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="-;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_SOAMothershipBlinkStrikeDamage"/>
+    </CEffectEnumArea>
+    <CEffectLaunchMissile id="AP_SOAMothershipBlinkStrikeLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="AP_SOAMothershipBlinkStrikeImpactSearch"/>
+        <AmmoUnit value="AP_SOAMothershipBlinkStrikeMissile"/>
+    </CEffectLaunchMissile>
+    <CEffectTeleport id="AP_SOAMothershipBlinkStrikeTeleport">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <TargetLocation Value="TargetPoint"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="AP_SOAMothershipBlinkStrikeTeleportAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_SOAMothershipBlinkStrikeTeleportHeight"/>
+    </CEffectApplyBehavior>
+    <CEffectTeleport id="AP_SOAMothershipBlinkTeleport">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <TargetLocation Value="TargetPoint"/>
+    </CEffectTeleport>
+    <CEffectApplyBehavior id="AP_SOAMothershipGravitonPulseAB">
+        <ValidatorArray index="0" value="noMarkers"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_SOAMothershipGravitonPulse"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="AP_SOAMothershipGravitonPulseCP">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <InitialDelay value="0.1875"/>
+        <PeriodCount value="13"/>
+        <PeriodicEffectArray value="AP_SOAMothershipGravitonPulseSearch"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_SOAMothershipGravitonPulseRaiseAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_SOAMothershipGravitonPulseRaise"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_SOAMothershipGravitonPulseSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Heroic,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray RadiusBonus="0.5" Effect="AP_SOAMothershipGravitonPulseSet"/>
+        <SearchFlags index="ExtendByUnitRadius" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_SOAMothershipGravitonPulseSet">
+        <EffectArray value="AP_SOAMothershipGravitonPulseAB"/>
+        <EffectArray value="AP_SOAMothershipGravitonPulseRaiseAB"/>
+    </CEffectSet>
+    <CEffectSet id="AP_SOAMothershipLineAttackCasterImpactDummy"/>
+    <CEffectLaunchMissile id="AP_SOAMothershipLineAttackCasterLM">
+        <ValidatorArray index="0" value="CasterNotDead"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <LaunchEffect value="AP_SOAMothershipLineAttackScanCP"/>
+        <ImpactEffect value="AP_SOAMothershipLineAttackCasterImpactDummy"/>
+        <Flags index="2D" value="1"/>
+        <AmmoUnit value="AP_SOAMothershipLineAttackWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="AP_SOAMothershipLineAttackDamage">
+        <ValidatorArray value="noMarkers"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Flags index="Notification" value="1"/>
+        <Amount value="200"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="AP_SOAMothershipLineAttackInitialCP">
+        <WhichLocation Value="CasterPoint"/>
+        <PeriodCount value="1"/>
+        <PeriodicEffectArray value="AP_SOAMothershipLineAttackCasterLM"/>
+        <PeriodicOffsetArray value="0,-10,0"/>
+        <PeriodicPeriodArray value="0"/>
+    </CEffectCreatePersistent>
+    <CEffectCreatePersistent id="AP_SOAMothershipLineAttackScanCP">
+        <EditorCategories value="Race:Protoss"/>
+        <Marker>
+            <MatchFlags index="Id" value="1"/>
+        </Marker>
+        <WhichLocation Value="SourceUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <PeriodCount value="10"/>
+        <PeriodicEffectArray value="AP_SOAMothershipLineAttackSearch"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_SOAMothershipLineAttackSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="-;Self,Player,Ally,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1" Effect="AP_SOAMothershipLineAttackDamage"/>
+        <RevealerParams Duration="1" ShapeExpansion="0.5">
+            <RevealFlags index="Unfog" value="1"/>
+        </RevealerParams>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_SOAMothershipTimedLifeAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_SOAMothershipTimedLife"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_SOAMothershipv4BeamDamage" parent="DU_WEAP_MISSILE">
+        <ValidatorArray value="MothershipRangeCheck"/>
+        <ValidatorArray value="NotHidden"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Visibility value="Visible"/>
+        <Amount value="38"/>
+        <Death value="Fire"/>
+    </CEffectDamage>
+    <CEffectModifyUnit id="AP_SOAMothershipv4BeamDummy">
+        <ValidatorArray value="MothershipRangeCheck"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectModifyUnit>
+    <CEffectCreatePersistent id="AP_SOAMothershipv4BeamPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialEffect value="AP_SOAMothershipv4BeamDummy"/>
+        <PeriodCount value="3"/>
+        <PeriodicValidator value="CasterNotDead"/>
+        <PeriodicEffectArray value="AP_SOAMothershipv4BeamDamage"/>
+        <PeriodicPeriodArray value="0.375"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_SOAMothershipv4BeamSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_SOAMothershipv4BeamPersistent"/>
+        <EffectArray value="AP_SOAMothershipv4SecondaryBeamPersistent"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_SOAMothershipv4SecondaryBeamPersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <InitialDelay value="0.25"/>
+        <InitialEffect value="AP_SOAMothershipv4BeamDummy"/>
+        <PeriodCount value="3"/>
+        <PeriodicValidator value="MothershipRangeCheckCombine"/>
+        <PeriodicEffectArray value="AP_SOAMothershipv4BeamDamage"/>
+        <PeriodicPeriodArray value="0.375"/>
+    </CEffectCreatePersistent>
+    <CEffectApplyBehavior id="AP_SOAMothershipv4WarpAwayAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Source"/>
+        <Behavior value="AP_SOAMothershipWarpAway"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_VoidSentryBlackHoleAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_VoidSentryBlackHole"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyForce id="AP_VoidSentryBlackHoleForce">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetPoint"/>
+        <WhichUnit Effect="AP_VoidSentryBlackHoleImpactSet"/>
+        <Amount value="-1"/>
+    </CEffectApplyForce>
+    <CEffectCreatePersistent id="AP_VoidSentryBlackHoleForceOffset">
+        <EditorCategories value="Race:Protoss"/>
+        <OffsetVectorStartLocation Effect="AP_VoidSentryBlackHoleSearch" Value="TargetPoint"/>
+        <InitialEffect value="AP_VoidSentryBlackHoleForce"/>
+        <InitialOffset value="0.5,0.15,0"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_VoidSentryBlackHoleImpactSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_VoidSentryBlackHoleAB"/>
+        <EffectArray value="AP_VoidSentryBlackHoleForceOffset"/>
+    </CEffectSet>
+    <CEffectCreatePersistent id="AP_VoidSentryBlackHolePersistent">
+        <EditorCategories value="Race:Protoss"/>
+        <PeriodCount value="128"/>
+        <PeriodicEffectArray value="AP_VoidSentryBlackHoleSearch"/>
+        <PeriodicPeriodArray value="0.0625"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="AP_VoidSentryBlackHoleSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchLocation Value="TargetPoint"/>
+        <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="4" Effect="AP_VoidSentryBlackHoleImpactSet"/>
+    </CEffectEnumArea>
 </Catalog>

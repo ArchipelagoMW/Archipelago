@@ -57,6 +57,45 @@
             <FacialFile value="LocalizedData\Sounds\VO\Protoss\^TemplateParam1^.fxe"/>
         </AssetArrayTemplate>
     </CSound>
+    <CSound default="1" id="AP_MindControlled_Death_MC" parent="ProtossDeath">
+        <AssetArray File="LocalizedData\Sounds\ProtossUnitVO\Executor\Alert_ProtossForcesUnderAttack.ogg" FacialGroup=""/>
+        <Category value="User11"/>
+        <Pitch value="2.000000,2.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+        <Chance value="0"/>
+    </CSound>
+    <CSound default="1" id="AP_MindControlled_Help_MC" parent="ProtossHelp">
+        <AssetArray File="LocalizedData\Sounds\ProtossUnitVO\Executor\Alert_ProtossForcesUnderAttack.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound default="1" id="AP_MindControlled_Pissed_MC" parent="ProtossPissed">
+        <AssetArray File="AP\LocalizedData\Sounds\VO\Protoss\DarkArchon_Yes_MC00.ogg" FacialGroup=""/>
+        <Category value="User11"/>
+        <Pitch value="2.000000,2.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+        <Chance value="0"/>
+    </CSound>
+    <CSound default="1" id="AP_MindControlled_Ready_MC" parent="ProtossReady">
+        <AssetArray File="AP\LocalizedData\Sounds\VO\Protoss\DarkArchon_Ready_MC00.ogg" FacialGroup=""/>
+        <Category value="User11"/>
+        <Pitch value="2.000000,2.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound default="1" id="AP_MindControlled_What_MC" parent="ProtossAck">
+        <AssetArray File="AP\LocalizedData\Sounds\VO\Protoss\DarkArchon_What_MC02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\LocalizedData\Sounds\VO\Protoss\DarkArchon_What_MC05.ogg" FacialGroup=""/>
+        <AssetArray File="AP\LocalizedData\Sounds\VO\Protoss\DarkArchon_Attack_MC03.ogg" FacialGroup=""/>
+        <Category value="User11"/>
+        <Pitch value="2.000000,2.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound default="1" id="AP_MindControlled_Yes_MC" parent="ProtossAck">
+        <AssetArray File="AP\LocalizedData\Sounds\VO\Protoss\DarkArchon_Yes_MC00.ogg" FacialGroup=""/>
+        <AssetArray File="AP\LocalizedData\Sounds\VO\Protoss\DarkArchon_Yes_MC04.ogg" FacialGroup=""/>
+        <AssetArray File="AP\LocalizedData\Sounds\VO\Protoss\DarkArchon_Attack_MC04.ogg" FacialGroup=""/>
+        <Category value="User11"/>
+        <Pitch value="2.000000,2.000000"/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
     <CSound id="AP_Medic_Attack" parent="TerranAck">
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack00.ogg" FacialAnim="Medic_Attack00"/>
         <AssetArray File="AP\LocalizedData\Sounds\TerranVO\CampaignUnits\Medic\Medic_Attack01.ogg" FacialAnim="Medic_Attack01"/>
@@ -5194,7 +5233,7 @@
         <AssetArray File="AP\Assets\Sounds\SOA_MatrixOverload_Off01_1ch.wav" FacialGroup=""/>
         <AssetArray File="AP\Assets\Sounds\SOA_MatrixOverload_Off02_1ch.wav" FacialGroup=""/>
         <AssetArray File="AP\Assets\Sounds\SOA_MatrixOverload_Off03_1ch.wav" FacialGroup=""/>
-<!--        <Chance value="0"/> Vanilla mutes this? -->
+        <!--        <Chance value="0"/> Vanilla mutes this? -->
         <DupeMaximumMethod value="Replace"/>
         <DupeMuteCount value="4"/>
         <Pitch value="0.000000,0.500000"/>
@@ -5982,5 +6021,251 @@
         <AssetArray File="Assets\Sounds\Protoss\Stargate\Stargate_What.ogg"/>
         <EditorCategories value="Race:Protoss"/>
         <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_BlackHole_End" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Mothership\Mothership_VortexEnd0.wav" FacialGroup=""/>
+        <DupeMuteCount value="6"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="250" Volume="-12.000000"/>
+        <OffsetFadeIn Time="400"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Spread value="10.000000"/>
+    </CSound>
+    <CSound id="AP_BlackHole_Loop1" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Mothership_BlackHole_Loop.wav" FacialGroup=""/>
+        <Flags index="Purgable" value="0"/>
+        <LoopCount value="-1"/>
+        <OffsetFadeIn Volume="-96.000000"/>
+        <OffsetFadeIn Time="250"/>
+        <Pitch value="-4.000000,-3.000000"/>
+        <Spread value="20.000000"/>
+        <SustainFade index="1" Time="750"/>
+        <Volume value="1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_BlackHole_Start1" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Mothership\Mothership_VortexStart0.wav" FacialGroup=""/>
+        <Flags index="Purgable" value="0"/>
+        <DupeMuteCount value="6"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Spread value="10.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="MothershipVoid_Attack00"/>
+        <AssetArray TemplateParam="MothershipVoid_Attack01"/>
+        <AssetArray TemplateParam="MothershipVoid_Attack02"/>
+        <AssetArray TemplateParam="MothershipVoid_Attack03"/>
+        <AssetArray TemplateParam="MothershipVoid_Attack04"/>
+        <AssetArray TemplateParam="MothershipVoid_Attack05"/>
+        <AssetArray TemplateParam="MothershipVoid_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Spread value="130.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_AttackImpact00.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_AttackImpact01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_AttackImpact02.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_AttackImpactLoop" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Keystone_StandB_loop.wav" FacialGroup=""/>
+        <DupeMuteCount value="3"/>
+        <LoopCount value="-1"/>
+        <Pitch value="0.000000,0.300000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_AttackLaunch00.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_AttackLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_AttackLaunch02.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_Attack_MC" parent="AP_MindControlled_Yes_MC"/>
+    <CSound id="AP_MothershipVoid_Death_MC" parent="AP_MindControlled_Death_MC"/>
+    <CSound id="AP_MothershipVoid_Help" parent="ProtossHelp">
+        <AssetArray TemplateParam="MothershipVoid_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Spread value="130.000000"/>
+        <Volume value="0.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_Help_MC" parent="AP_MindControlled_Help_MC"/>
+    <CSound id="AP_MothershipVoid_MoveStart" parent="Movement">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_MoveStart00_LR.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_MoveStart01_LR.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_MoveStart02_LR.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Spread value="90.000000"/>
+        <Volume value="-4.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="MothershipVoid_Pissed00"/>
+        <AssetArray TemplateParam="MothershipVoid_Pissed01"/>
+        <AssetArray TemplateParam="MothershipVoid_Pissed02"/>
+        <AssetArray TemplateParam="MothershipVoid_Pissed03"/>
+        <AssetArray TemplateParam="MothershipVoid_Pissed04"/>
+        <AssetArray TemplateParam="MothershipVoid_Pissed05"/>
+        <AssetArray TemplateParam="MothershipVoid_Pissed06"/>
+        <AssetArray TemplateParam="MothershipVoid_Pissed07"/>
+        <AssetArray TemplateParam="MothershipVoid_Pissed08"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Spread value="130.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_Pissed_MC" parent="AP_MindControlled_Pissed_MC"/>
+    <CSound id="AP_MothershipVoid_PreDeathExplosion" parent="Death">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_PreDeathExplosion00.wav" FacialGroup=""/>
+        <Pitch value="3.000000,3.000000"/>
+        <Volume value="6.000000,6.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="MothershipVoid_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Spread value="130.000000"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_Ready_MC" parent="AP_MindControlled_Ready_MC"/>
+    <CSound id="AP_MothershipVoid_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="MothershipVoid_What00"/>
+        <AssetArray TemplateParam="MothershipVoid_What01"/>
+        <AssetArray TemplateParam="MothershipVoid_What02"/>
+        <AssetArray TemplateParam="MothershipVoid_What03"/>
+        <AssetArray TemplateParam="MothershipVoid_What04"/>
+        <AssetArray TemplateParam="MothershipVoid_What05"/>
+        <AssetArray TemplateParam="MothershipVoid_What06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Spread value="130.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_What_MC" parent="AP_MindControlled_What_MC"/>
+    <CSound id="AP_MothershipVoid_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="MothershipVoid_Yes00"/>
+        <AssetArray TemplateParam="MothershipVoid_Yes01"/>
+        <AssetArray TemplateParam="MothershipVoid_Yes02"/>
+        <AssetArray TemplateParam="MothershipVoid_Yes03"/>
+        <AssetArray TemplateParam="MothershipVoid_Yes04"/>
+        <AssetArray TemplateParam="MothershipVoid_Yes05"/>
+        <AssetArray TemplateParam="MothershipVoid_Yes06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+        <Spread value="130.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_Yes_MC" parent="AP_MindControlled_Yes_MC"/>
+    <CSound id="AP_Mothership_BlinkDown" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Mothership_BlinkDown01.wav" FacialGroup=""/>
+        <Pitch value="0.000000,0.300000"/>
+        <Spread value="30.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Mothership_BlinkUp" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Mothership_BlinkUp01.wav" FacialGroup=""/>
+        <Pitch value="0.000000,0.300000"/>
+        <Spread value="10.000000"/>
+    </CSound>
+    <CSound id="AP_Mothership_Explode" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge4.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge5.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge6.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge7.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge8.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionLarge9.wav" Pitch="-3.000000,3.000000"/>
+        <DupeDestroyCount value="5"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_SOAMothership_BlinkStrikeLaunchSound" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\PhotonCannon\PhotonCannon_AttackLaunch1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\PhotonCannon\PhotonCannon_AttackLaunch2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\PhotonCannon\PhotonCannon_AttackLaunch3.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\PhotonCannon\PhotonCannon_AttackLaunch4.wav" FacialGroup=""/>
+        <Pitch value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_SOAMothership_BlinkStrikeImpactSound" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\SiegeTank_ImpactMedium0.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\SiegeTank_ImpactMedium1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\SiegeTank_ImpactMedium2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\SiegeTank_ImpactMedium3.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Terran\SharedEffects\Explosions\SiegeTank_ImpactMedium4.wav" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_SOAMothership_GravitonPulseEnd" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Phoenix\Phoenix_AntiGravEnd0.wav"/>
+        <DupeMuteCount value="5"/>
+    </CSound>
+    <CSound id="AP_SOAMothership_GravitonPulseLaunch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackLaunch0.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackLaunch1.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackLaunch2.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\Karass\Karass_AttackLaunch3.wav" FacialGroup=""/>
+        <Pitch value="-4.000000,-4.000000"/>
+        <Volume value="3.000000,3.000000"/>
+    </CSound>
+    <CSound id="AP_SOAMothership_GravitonPulseLoop" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Phoenix\Phoenix_AntiGravLoop0.wav"/>
+        <DupeMuteCount value="5"/>
+        <LoopCount value="-1"/>
+    </CSound>
+    <CSound id="AP_SOAMothership_GravitonPulseStart" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Phoenix\Phoenix_AntiGravStart0.wav"/>
+        <DupeMuteCount value="5"/>
+    </CSound>
+    <CSound id="AP_VoidMothership_ThermalLance_AttackLaunch" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\VoidMothership_ThermalLance_AttackLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\VoidMothership_ThermalLance_AttackLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\VoidMothership_ThermalLance_AttackLaunch03.wav" FacialGroup=""/>
+        <Pitch value="7.000000,7.000000"/>
+        <Spread value="5.000000"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_VoidMothership_ThermalLance_BeamDeath" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch01_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch02_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch03_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch04_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch05_1ch.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\SOA_SolarLance_Launch06_1ch.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="1.000000,3.000000"/>
+        <Spread value="30.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_PreDeathExplosion" parent="Death">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_PreDeathExplosion00.wav" FacialGroup=""/>
+        <Pitch value="3.000000,3.000000"/>
+        <Volume value="6.000000,6.000000"/>
+    </CSound>
+    <CSound id="AP_MothershipVoid_DeathExplosion" parent="Death">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\MothershipVoid_DeathExplosion00_LR.wav" FacialGroup=""/>
+        <Spread value="30.000000"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="2.000000,2.000000"/>
     </CSound>
 </Catalog>

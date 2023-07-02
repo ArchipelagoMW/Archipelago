@@ -1890,4 +1890,19 @@
         <LegacyOptions index="FaceTargetWhileInCooldown" value="0"/>
         <MinScanRange value="8"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_SOAMothershipv4Weapon">
+        <EditorCategories value="Race:Protoss"/>
+        <Options index="OnlyFireWhileInAttackOrder" value="0"/>
+        <Options index="OnlyFireAtAttackOrderTarget" value="0"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-airweaponslevel0.dds"/>
+        <DisplayEffect value="AP_SOAMothershipv4BeamDamage"/>
+        <DisplayAttackCount value="6"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="7"/>
+        <Arc value="360"/>
+        <Period value="2.21"/>
+        <DamagePoint value="0"/>
+        <Effect value="AP_SOAMothershipv4BeamSet"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
 </Catalog>

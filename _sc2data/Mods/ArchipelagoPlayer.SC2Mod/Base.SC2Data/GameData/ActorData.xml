@@ -12551,8 +12551,8 @@
         <On Terms="Behavior.WarpInEffect.Off" Send="AnimBracketStart GL_BSD_A GLbirth,A GLstand,A GLdeath,A"/>
         <On Terms="Behavior.OracleCloakField.On" Send="AnimBracketStart Cloaking Stand,Work,Start Stand,Work Stand,Work,End"/>
         <On Terms="Behavior.OracleCloakField.Off" Send="AnimBracketStop Cloaking"/>
-<!--        <On Terms="Abil.Scryer.SourceCastStart" Send="$Spell"/>-->
-<!--        <On Terms="Abil.ResourceStun.SourceCastStart" Send="$Spell"/>-->
+        <!--        <On Terms="Abil.Scryer.SourceCastStart" Send="$Spell"/>-->
+        <!--        <On Terms="Abil.ResourceStun.SourceCastStart" Send="$Spell"/>-->
         <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="AnimPlay Spell Stand,Work,Start"/>
         <On Terms="Abil.*.SourceCastStart" Send="Create AP_OracleCastLaunch"/>
         <On Terms="Abil.AP_OracleRevelation.SourceCastStart" Send="Create AP_Oracle_RevelationCast_Sound"/>
@@ -12651,7 +12651,6 @@
     </CActorUnit>
     <CActorAction id="AP_OracleAttack" parent="GenericAttack" effectImpact="OracleShotDamage" effectLaunch="OracleShotLaunchMissile">
         <LaunchAssets Sound="PhotonCannon_AttackLaunch"/>
-        <Missile value="AP_OracleAttackMissile"/>
         <ImpactMap index="None" Model="OracleAttackImpact" Sound="PhotonCannon_AttackImpact"/>
         <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
     </CActorAction>
@@ -12839,7 +12838,6 @@
         <On Terms="Effect.AP_OracleWeaponCreatePersistent.Start" Send="Create"/>
         <On Terms="Effect.OracleWeaponDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
         <On Terms="Effect.AP_OracleWeaponCreatePersistent.Stop" Send="Destroy"/>
-        <Beam value="AP_OracleWeaponAttackBeam"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeNoVizEnhance SOpForwardLaunchGuide"/>
         <AcquisitionYawHalfArc value="10.000000"/>
         <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
@@ -12916,6 +12914,19 @@
         <Sound value="Spell_Revelation_StandWorkStart2"/>
     </CActorSound>
     <CActorSound id="AP_Oracle_StasisTrap_Explode" parent="SoundOneShot"/>
+    <CActorSound id="AP_Mothership_BlinkDownSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_SOAMothershipBlinkStrikeTeleport.Start" Send="Create"/>
+        <On Terms="Effect.AP_SOAMothershipBlinkTeleport.Start" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Sound value="AP_Mothership_BlinkDown"/>
+    </CActorSound>
+    <CActorSound id="AP_Mothership_BlinkUpSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_SOAMothershipBlinkCP.Start; At Source" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="AP_Mothership_BlinkUp"/>
+    </CActorSound>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -13438,8 +13449,6 @@
         </GroupIcon>
         <HeroIcon value="Assets\Textures\BTN-Building-Protoss-StarWarpGate.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-armor-protoss-buildingplating.dds"/>
-        <SoundArray index="Ready" value="AP_StargateWarp_Ready"/>
-        <SoundArray index="What" value="AP_StargateWarp_What"/>
         <SoundArray index="Construction" value="Protoss_ConstructionWhat"/>
         <UnitIcon value="Assets\Textures\BTN-Building-Protoss-StarWarpGate.dds"/>
         <Wireframe>
@@ -14007,6 +14016,408 @@
             <Image value="Assets\Textures\Wireframe-Protoss-Stalker-taldarim-Shield03.dds"/>
         </WireframeShield>
     </CActorUnit>
+    <CActorRange id="AP_SOAMothershipBlinkRange" parent="RangeAbil" abil="AP_SOAMothershipBlink"/>
+    <CActorModel id="AP_ProtossGuideVisualQuadRedLaunch" parent="GuideVisualQuadModel">
+        <Model value="ProtossGuideVisualQuadRedLaunch"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_ProtossGuideVisualQuadRedCenter" parent="GuideVisualQuadModel">
+        <Model value="ProtossGuideVisualQuadRedCenter"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_ProtossGuideVisualQuadRedImpact" parent="GuideVisualQuadModel">
+        <Model value="ProtossGuideVisualQuadRedImpact"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorModel id="AP_ProtossGuideVisualQuadRedDecoration" parent="GuideVisualQuadModel">
+        <Model value="ProtossGuideVisualQuadRedDecoration"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModel>
+    <CActorQuad id="AP_SOAMothershipLineAttackGuide" parent="ZergGuideVisualQuadDown" abil="AP_SOAMothershipLineAttack">
+        <LaunchActor value="AP_ProtossGuideVisualQuadRedLaunch"/>
+        <CenterActor value="AP_ProtossGuideVisualQuadRedCenter"/>
+        <ImpactActor value="AP_ProtossGuideVisualQuadRedImpact"/>
+        <Height value="11.000000"/>
+        <Width value="2.000000"/>
+        <Decoration Actor="AP_ProtossGuideVisualQuadRedDecoration" SpawnInterval="0.500000" TravelSpeed="10.000000">
+            <Flags index="UseLaunchActorScale" value="1"/>
+        </Decoration>
+    </CActorQuad>
+    <CActorSplat id="AP_VoidSentryBlackHoleCursorSplat" parent="ProtossCursorSplat" abil="AP_VoidSentryBlackHole">
+        <Model value="AP_VoidSentryBlackHoleCursorSplat"/>
+    </CActorSplat>
+    <CActorRange id="AP_VoidSentryBlackHoleRange" parent="RangeAbil" abil="AP_VoidSentryBlackHole">
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+    </CActorRange>
+    <CActorAction id="AP_SOAMothershipBlinkStrikeAttack" parent="GenericAttack" effectImpact="AP_SOAMothershipBlinkStrikeImpactSearch" effectLaunch="AP_SOAMothershipBlinkStrikeLM">
+        <LaunchSiteOps Ops="SOpAttachHardPoint"/>
+        <LaunchAssets Sound="AP_SOAMothership_BlinkStrikeLaunchSound"/>
+        <Missile value="AP_SOAMothershipBlinkStrikeMissile"/>
+        <ImpactSiteOps Ops="SOpTargetPointStationary"/>
+        <ImpactMap index="None" Model="SOAOrbitalStrikeImpactCrater" Sound="AP_SOAMothership_BlinkStrikeImpactSound"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_SOAMothershipBlinkStrikeBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.AP_SOAMothershipBlinkStrikeTeleport.Start" Send="Create"/>
+        <On Terms="Effect.AP_SOAMothershipBlinkStrikeCP.Stop" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <Model value="AP_SOAMothershipBlinkStrikeBeam"/>
+        <HostLaunch Subject="_Unit"/>
+        <HostLaunchSiteOps Ops="SOpAttachHardPoint"/>
+        <HostImpactSiteOps Ops="SOpTargetPointStationary"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_SOAMothershipBlinkStrikeIn" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_SOAMothershipBlinkStrikeTeleport.Start" Send="Create"/>
+        <On Terms="Effect.AP_SOAMothershipBlinkTeleport.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimSetTimeScale BSD 2.000000"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorModel>
+    <CActorMissile id="AP_SOAMothershipBlinkStrikeMissile" parent="GenericAttackMissile" unitName="AP_SOAMothershipBlinkStrikeMissile"/>
+    <CActorModel id="AP_SOAMothershipBlinkStrikeOut" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_SOAMothershipBlinkStrikeCP.Start" Send="Create"/>
+        <On Terms="Effect.AP_SOAMothershipBlinkCP.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="AnimSetTimeScale BSD 2.000000"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorModel>
+    <CActorModel id="AP_SOAMothershipGravitonPulseBubble" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_SOAMothershipGravitonPulse.On" Send="Create"/>
+        <On Terms="Behavior.AP_SOAMothershipGravitonPulse.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay Flail Flail PlayForever"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.250000"/>
+        <On Terms="ActorDestruction" Target="_Unit" Send="AnimClear Flail"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_SOAMothershipGravitonPulseBubble"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorSound id="AP_SOAMothershipGravitonPulseEndSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_SOAMothershipGravitonPulse.Off" Send="Create"/>
+        <Sound value="AP_SOAMothership_GravitonPulseEnd"/>
+    </CActorSound>
+    <CActorModel id="AP_SOAMothershipGravitonPulseImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_SOAMothershipGravitonPulseCP.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+        <Model value="AP_SOAMothershipGravitonPulseImpact"/>
+    </CActorModel>
+    <CActorSound id="AP_SOAMothershipGravitonPulseLaunch" parent="SoundOneShot">
+        <On Terms="Effect.AP_SOAMothershipGravitonPulseCP.Start" Send="Create"/>
+        <Sound value="AP_SOAMothership_GravitonPulseLaunch"/>
+    </CActorSound>
+    <CActorSound id="AP_SOAMothershipGravitonPulseLoopSound" parent="SoundContinuous">
+        <On Terms="Behavior.AP_SOAMothershipGravitonPulse.On" Send="Create"/>
+        <On Terms="Behavior.AP_SOAMothershipGravitonPulse.Off" Send="Destroy"/>
+        <Sound value="AP_SOAMothership_GravitonPulseLoop"/>
+    </CActorSound>
+    <CActorSound id="AP_SOAMothershipGravitonPulseStartSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_SOAMothershipGravitonPulse.On" Send="Create"/>
+        <Sound value="AP_SOAMothership_GravitonPulseStart"/>
+    </CActorSound>
+    <CActorAction id="AP_SOAMothershipLineAttack" parent="GenericAttack" effectImpact="AP_SOAMothershipLineAttackCasterImpactDummy" effectLaunch="AP_SOAMothershipLineAttackCasterLM">
+        <LaunchSiteOps Ops="SOpCasterPoint SOpShadow"/>
+        <Missile value="AP_SOAMothershipLineAttackMissile"/>
+        <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
+        <ImpactMap index="None" Model="AP_SOAMothershipLineAttackImpact"/>
+    </CActorAction>
+    <CActorModel id="AP_SOAMothershipLineAttackGroundFire" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_SOAMothershipLineAttackSearch.Start" Send="Create"/>
+        <HostSiteOps Ops="SOpShadow"/>
+    </CActorModel>
+    <CActorModel id="AP_SOAMothershipLineAttackImpact" parent="ModelAnimationStyleOneShot">
+        <On Terms="Effect.AP_SOAMothershipLineAttackDamage.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <AutoScaleFactor value="1.000000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+    </CActorModel>
+    <CActorMissile id="AP_SOAMothershipLineAttackMissile" parent="GenericAttackMissile" unitName="AP_SOAMothershipLineAttackWeapon">
+        <On Terms="ActorCreation" Send="Create AP_SOAMothershipLineAttackMissileBeam"/>
+        <On Terms="ActorDestruction" Target="AP_SOAMothershipLineAttackMissileBeam" Send="Destroy"/>
+    </CActorMissile>
+    <CActorBeamSimple id="AP_SOAMothershipLineAttackMissileBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="ActorCreation" Send="Create AP_VoidMothership_ThermalLance_AttackLaunchSound"/>
+        <On Terms="ActorDestruction" Send="Create AP_VoidMothership_ThermalLance_BeamDeathSound"/>
+        <HostLaunch Subject="_Unit" Scope="Caster" Actor="Find"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Missile"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_VoidMothership_ThermalLance_AttackLaunchSound" parent="SoundOneShot">
+        <Sound value="AP_VoidMothership_ThermalLance_AttackLaunch"/>
+    </CActorSound>
+    <CActorSound id="AP_VoidMothership_ThermalLance_BeamDeathSound" parent="SoundOneShot">
+        <Sound value="AP_VoidMothership_ThermalLance_BeamDeath"/>
+    </CActorSound>
+    <CActorUnit id="AP_SOAMothershipv4" parent="GenericUnitBase" unitName="AP_SOAMothershipv4">
+        <Aliases value="_UnitHuge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+<!--        <On Terms="Abil.Vortex.SourceCastStart" Send="$Spell"/>-->
+        <On Terms="Effect.AP_SOAMothershipBlinkCP.Start" Send="SetOpacity 0.050000 0.375000"/>
+        <On Terms="Effect.AP_SOAMothershipBlinkTeleport.Stop" Send="SetOpacity 1.000000 0.625000"/>
+<!--        <On Terms="Abil.MassRecall.SourceCastStart" Send="$Spell"/>-->
+<!--        <On Terms="Effect.MothershipMassRecallTeleport.Start" Send="CombatRevealClearTimers"/>-->
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Mothership_Land"/>
+<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create"/>-->
+<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="SetScale 0.010000"/>-->
+<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="SetScale 1.000000 0.500000"/>-->
+<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCoreTeleportIn"/>-->
+<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEnd"/>-->
+<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEnd2"/>-->
+<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEnd3"/>-->
+<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEndHit"/>-->
+<!--        <On Terms="Abil.MothershipCoreTeleport.SourceCastStart" Send="SetScale 0.010000 0.500000"/>-->
+<!--        <On Terms="Abil.MothershipCoreTeleport.SourceCastStart" Send="Create MothershipCoreTeleportOut"/>-->
+<!--        <On Terms="Abil.MothershipCoreTeleport.SourceFinishStart" Send="Create MothershipCoreTeleportIn"/>-->
+<!--        <On Terms="Abil.MothershipCoreTeleport.SourceCastStart" Send="TimerSet 0.500000 ShrinkDelay"/>-->
+        <On Terms="TimerExpired; TimerName ShrinkDelay" Target="::Main" Send="SetScale 1.000000 0.500000"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap AP_MothershipTaldarimWarpInStargateBig"/>
+        <On Terms="Behavior.WarpInEffect.On" Send="$Spell"/>
+        <On Terms="AnimDone; AnimName Spell" Send="ModelSwap AP_TaldarimMothership"/>
+        <On Terms="AnimDone; AnimName Spell" Send="AnimBracketStart GL_BSD GLbirth GLstand GLdeath"/>
+        <On Terms="AnimDone; AnimName Spell" Send="AnimClear Spell"/>
+        <Model value="AP_TaldarimMothership"/>
+        <Baselines index="Walk" AnimProps="Walk,01"/>
+        <BuildModel value="AP_MotherShipTaldarimWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_TaldarimMothershipDeath" SoundLink="AP_Mothership_Explode" VoiceLink=""/>
+        <DeathCustoms>
+            <ActorModel value="AP_MothershipDeathRagdoll"/>
+            <ModelLink value="AP_MothershipDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="BasicHeavy" Model="ProtossLargeRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="FireHeavy"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathActorModel value="AP_TaldarimMothershipDeathModel"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="AP_MothershipTaldarimPlacement"/>
+        <PortraitModel value="AP_MothershipTaldarimPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.250000,0.500000"/>
+            <RangeDown value="5.000000"/>
+            <RangeDownFade value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMassive3"/>
+        </TerrainSquibs>
+        <BarOffset value="180"/>
+        <BarWidth value="216"/>
+        <GlossaryAnim value="GLstand"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-Mothership.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="Mothership_GroupWhat"/>
+        <GroupSoundArray index="Yes" value="Mothership_GroupYes"/>
+        <GroupSoundArray index="Attack" value="Mothership_GroupAttack"/>
+        <GroupSoundArray index="Board" value="Mothership_GroupBoard"/>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-mothership-taldarim.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="130"/>
+        <SoundArray index="Ready" value="AP_MothershipVoid_Ready"/>
+        <SoundArray index="Help" value="AP_MothershipVoid_Help"/>
+        <SoundArray index="What" value="AP_MothershipVoid_What"/>
+        <SoundArray index="Yes" value="AP_MothershipVoid_Yes"/>
+        <SoundArray index="Attack" value="AP_MothershipVoid_Attack"/>
+        <SoundArray index="Pissed" value="AP_MothershipVoid_Pissed"/>
+        <SoundArray index="Movement" value="AP_MothershipVoid_MoveStart"/>
+        <SoundArray index="Turning" value="Mothership_Turning"/>
+        <SoundArray index="Board" value="Mothership_Board"/>
+        <SoundArray index="Click" value="Mothership_Click"/>
+        <SoundArray index="ClickError" value="Mothership_ClickError"/>
+        <SoundArray index="Highlight" value="Mothership_Highlight"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-mothership-taldarim.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-mothership-taldarim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-Mothership-taldarim-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Mothership-taldarim-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-Mothership-taldarim-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_MothershipDeathRagdoll" parent="UnitDeathRagdollFlier">
+        <Model value="MothershipDeathRagdoll"/>
+        <On Terms="ActorCreation" Send="Create AP_MothershipDeathRagdollDetonationForce"/>
+    </CActorModel>
+    <CActorForceSphere id="AP_MothershipDeathRagdollDetonationForce" parent="DeathRagdollDetonationForce">
+        <!-- This ragdoll's damage points can be too far out on the edges, so we stick to the center more. -->
+        <HostSiteOps Ops="SOpAttachCenter SOpForwardCasterCenter SOpRotVariancerForward60 SOpMoveByDot5To1 SOpMoveDownByDot25ToDot75 SOpPointSouthWorld"/>
+        <Magnitude value="30.000000,30.000000"/>
+        <Radius value="2.250000,0.750000"/>
+        <ForceFlags index="FallOff" value="0"/>
+    </CActorForceSphere>
+    <CActorModel id="AP_TaldarimMothershipDeathModel" parent="UnitDeathModel">
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorModel>
+    <CActorSound id="AP_Mothership_Land" parent="SoundOneShot">
+        <Sound value="Mothership_Land"/>
+    </CActorSound>
+    <CActorAction id="AP_SOAMothershipv4Attack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_SOAMothershipv4BeamPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_SOAMothershipv4BeamDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.AP_SOAMothershipv4BeamPersistent.Stop" Send="Destroy WhenReady"/>
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMClosest2ToTarget AP_AMPatternSOAMothershipv4Beam"/>
+        <LaunchAssets Sound="AP_MothershipVoid_AttackLaunch"/>
+        <Beam value="AP_SOAMothershipv4AttackBeam"/>
+        <ImpactMap index="None" Model="AP_SOAMothershipv4AttackImpact" Sound="AP_MothershipVoid_AttackImpact"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+        <Lifetime value="-1.000000"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_SOAMothershipv4AttackBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Macros value="ActionTargetTeleportDestroy"/>
+        <On Terms="Effect.AP_SOAMothershipv4BeamPersistent.Stop" Send="AnimBracketStop BSD"/>
+    </CActorBeamSimple>
+    <CActorSound id="AP_SOAMothershipv4AttackImpact" parent="SoundContinuous">
+        <On Terms="Effect.AP_SOAMothershipv4BeamDamage.Start; EffectExecuteIndex 1" Send="Create"/>
+        <On Terms="Effect.AP_SOAMothershipv4BeamPersistent.Stop" Send="Destroy"/>
+        <Sound value="AP_MothershipVoid_AttackImpactLoop"/>
+    </CActorSound>
+    <CActorAction id="AP_SOAMothershipv4SecondaryAttack" parent="GenericAttackBase">
+        <On Terms="Effect.AP_SOAMothershipv4SecondaryBeamPersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_SOAMothershipv4BeamDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
+        <On Terms="Effect.AP_SOAMothershipv4BeamPersistent.Stop" Send="Destroy WhenReady"/>
+        <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMClosest2ToTarget AP_AMPatternSOAMothershipv4Beam"/>
+        <Beam value="AP_SOAMothershipv4SecondaryAttackBeam"/>
+        <ImpactMap index="None" Model="AP_SOAMothershipv4AttackImpact"/>
+        <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
+        <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
+        <Lifetime value="-1.000000"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_SOAMothershipv4SecondaryAttackBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <Macros value="ActionTargetTeleportDestroy"/>
+        <On Terms="Effect.AP_SOAMothershipv4SecondaryBeamPersistent.Stop" Send="AnimBracketStop BSD"/>
+        <Model value="AP_SOAMothershipv4AttackBeam"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_SOAMothershipv4WarpAway" parent="ModelAnimationStyleOneShot">
+        <On Terms="Behavior.AP_SOAMothershipWarpAway.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Selectable" Send="SetOpacity 0.000000 0.750000"/>
+        <On Terms="ActorCreation" Send="Create AP_SOAMothershipv4WarpAwaySound"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="AP_SOAMothershipv4WarpAway"/>
+    </CActorModel>
+    <CActorSound id="AP_SOAMothershipv4WarpAwaySound" parent="SoundOneShot">
+        <Sound value="Mothership_RecallStart"/>
+    </CActorSound>
+    <CActorSound id="SOAMothershipv4WarpAwaySound2" parent="SoundOneShot">
+        <Sound value="Mothership_RecallStart"/>
+    </CActorSound>
+    <CActorModel id="AP_SOAMothershipv4WarpIn" parent="ModelAnimationStyleOneShot">
+        <On Terms="Behavior.AP_SOAMothershipTimedLife.On" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create AP_SOAMothershipv4WarpInSound"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="AP_SOAMothershipBlinkStrikeIn"/>
+    </CActorModel>
+    <CActorSound id="AP_SOAMothershipv4WarpInSound" parent="SoundOneShot">
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <!-- This sound doesn't exist -->
+        <Sound value="SOAMothership_BlinkStrikeInSound"/>
+    </CActorSound>
+    <CActorModel id="AP_VoidSentryBlackHole" parent="ModelAnimationStyleContinuous">
+        <On Terms="Effect.AP_VoidSentryBlackHolePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_VoidSentryBlackHolePersistent.Stop" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <Model value="AP_VoidSentryBlackHole"/>
+    </CActorModel>
+    <CActorSound id="AP_VoidSentryBlackHoleBirthSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_VoidSentryBlackHolePersistent.Start" Send="Create"/>
+        <Sound value="AP_BlackHole_Start1"/>
+        <Layers>
+            <Sound value="BlackHole_Start2"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="-6.000000,-6.000000"/>
+            <PlayDelay value="25,75"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Start3"/>
+            <PitchSource value="Actor"/>
+            <PlayDelaySource value="Actor"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="-6.000000,-6.000000"/>
+            <PlayDelay value="75,125"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_VoidSentryBlackHoleDeathSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_VoidSentryBlackHolePersistent.Stop" Send="Create"/>
+        <Sound value="AP_BlackHole_End"/>
+    </CActorSound>
+    <CActorSimple id="AP_VoidSentryBlackHoleFlail">
+        <EditorCategories value=""/>
+        <Supporter Subject="_Selectable"/>
+        <On Terms="Behavior.AP_VoidSentryBlackHole.On" Send="Create"/>
+        <On Terms="ActorCreation" Target="_Unit" Send="AnimPlay Flail Flail PlayForever"/>
+        <On Terms="Behavior.AP_VoidSentryBlackHole.Off" Target="_Unit" Send="AnimClear Flail"/>
+    </CActorSimple>
+    <CActorSound id="AP_VoidSentryBlackHoleLoopSound" parent="SoundContinuous">
+        <On Terms="Effect.AP_VoidSentryBlackHolePersistent.Start" Send="Create"/>
+        <On Terms="Effect.AP_VoidSentryBlackHolePersistent.Stop" Send="Destroy"/>
+        <Sound value="AP_BlackHole_Loop1"/>
+        <Layers>
+            <Sound value="BlackHole_Loop2"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-2.000000,-2.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Loop3"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-5.000000,-5.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Loop4"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-1.000000,-1.000000"/>
+        </Layers>
+        <Layers>
+            <Sound value="BlackHole_Loop5"/>
+            <PitchSource value="Sound"/>
+            <PlayDelaySource value="Sound"/>
+            <VolumeSource value="Actor"/>
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="-6.000000,-6.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorTurret id="AP_MothershipRotateTurret">
+        <On Terms="TurretEnable.AP_MothershipRotate" Send="Create"/>
+        <Terms value="Cap 1"/>
+    </CActorTurret>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
@@ -19215,7 +19626,6 @@
     <CActorAction id="AP_VoidStalkerRailgunWeaponAttack" parent="GenericAttack" effectAttack="AP_VoidStalkerRailgunWeapon">
         <LaunchAttachQuery Methods="AMFilterWeapon"/>
         <LaunchAssets Model="AP_DiamondbackAttackLaunch" Sound="Diamondback_AttackImpact"/>
-        <Beam value="AP_VoidStalkerRailgunWeaponAttackBeam"/>
         <ImpactMap index="None" Model="DiamondbackAttackImpact" Sound="DiamondbackAttackImpact"/>
     </CActorAction>
     <CActorBeamSimple id="AP_VoidStalkerRailgunWeaponAttackBeam" parent="GenericAttackBeam">

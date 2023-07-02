@@ -2229,4 +2229,17 @@
         <EditorCategories value="Race:Protoss"/>
         <HotkeyAlias value="PermanentlyCloakedObserver"/>
     </CButton>
+    <CButton id="AP_SOAMothershipBlink">
+        <Icon value="Assets\Textures\btn-ability-protoss-blink-color.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_SOAMothershipLineAttack">
+        <Icon value="Assets\Textures\btn-ability-protoss-thermallance.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-thermallance.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_VoidSentryBlackHole">
+        <Icon value="Assets\Textures\btn-ability-protoss-blackhole-redcolor.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

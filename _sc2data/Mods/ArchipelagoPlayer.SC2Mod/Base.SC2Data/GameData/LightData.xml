@@ -954,4 +954,26 @@
             <DirectionalLight index="Back" Color="1.000000,0.737255,0.725490" ColorMultiplier="21.627001" Direction="0.033046,0.099167,0.994522"/>
         </ToDInfoArray>
     </CLight>
+    <CLight id="AP_MothershipTaldarimPortrait" parent="default">
+        <ToDInfoArray index="0" Id="MothershipCorePortrait" AmbientColor="0.176471,0.145098,0.219608">
+            <Param index="HDRExposure" value="1.700000"/>
+            <Param index="HDRSpecMultiplier" value="3.000000"/>
+            <Param index="HDREmisMultiplier" value="1.100000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.960784,0.729412,0.729412"/>
+                <ColorMultiplier value="3.758000"/>
+                <SpecularColor value="0.956863,0.733333,0.733333"/>
+                <SpecColorMultiplier value="7.328000"/>
+                <Direction value="0.924635,0.250525,-0.286859"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill">
+                <Color value="0.913726,0.368627,0.227451"/>
+                <ColorMultiplier value="0.813000"/>
+                <SpecColorMultiplier value="108.389999"/>
+                <Direction value="-0.969798,0.200306,0.139173"/>
+            </DirectionalLight>
+            <DirectionalLight index="Back" Color="0.827451,0.866667,0.972549" ColorMultiplier="1.334000" Direction="-0.554186,0.792932,0.253251"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>

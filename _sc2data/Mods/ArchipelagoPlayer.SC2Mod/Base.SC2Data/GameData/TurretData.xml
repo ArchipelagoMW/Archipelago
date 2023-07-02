@@ -173,4 +173,11 @@
         <YawRate value="720"/>
         <Fidget DelayMax="30" DelayMin="10"/>
     </CTurret>
+    <CTurret id="AP_MothershipRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="7.207"/>
+        <YawIdleRate value="-7.207"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
 </Catalog>

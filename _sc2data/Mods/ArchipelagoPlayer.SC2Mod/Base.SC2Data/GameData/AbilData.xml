@@ -4431,6 +4431,29 @@
         </Cost>
         <BehaviorArray value="AP_OracleWeapon"/>
     </CAbilBehavior>
+    <CAbilEffectTarget id="AP_SOAMothershipBlink">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_SOAMothershipBlinkCP"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="8"/>
+        </Cost>
+        <Range value="10"/>
+        <Arc value="360"/>
+        <UninterruptibleArray index="Channel" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SOAMothershipBlink"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_SOAMothershipLineAttack">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_SOAMothershipLineAttackInitialCP"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_SOAMothershipLineAttack"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -5255,5 +5278,17 @@
         <Arc value="360"/>
         <AINotifyEffect value="ChronoBoost"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="TimeWarp"/>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_VoidSentryBlackHole">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_VoidSentryBlackHolePersistent"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="50"/>
+        </Cost>
+        <Range value="10"/>
+        <Arc value="360"/>
+        <CursorEffect value="AP_VoidSentryBlackHoleSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryBlackHole"/>
     </CAbilEffectTarget>
 </Catalog>

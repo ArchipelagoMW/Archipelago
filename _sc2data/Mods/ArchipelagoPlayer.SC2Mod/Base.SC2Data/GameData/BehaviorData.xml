@@ -3528,7 +3528,7 @@
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-status-detector.dds"/>
         <RemoveValidatorArray value="AP_NotOracleStasisTrapped"/>
-<!--        <RemoveValidatorArray value="NoPurificationNova"/>-->
+        <!--        <RemoveValidatorArray value="NoPurificationNova"/>-->
         <Duration value="60"/>
         <FinalEffect value="AP_RevelationDestroy"/>
         <ExpireEffect value="AP_RevelationDestroy"/>
@@ -3624,6 +3624,83 @@
             <StateFlags index="Invulnerable" value="1"/>
             <AbilLinkEnableArray value="move"/>
             <AbilLinkEnableArray value="stop"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_MothershipTaldarimTurretDisabler">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisableValidatorArray value="IsWarpingIn"/>
+        <Duration value="6"/>
+        <Modification>
+            <TurretDisableArray value="AP_MothershipRotate"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_VoidSentryBlackHole">
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-blackhole.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="0.125"/>
+        <Modification Height="0.5" MoveSpeedMultiplier="3">
+            <StateFlags index="Stun" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <HeightTime index="Start" value="0.25"/>
+            <HeightTime index="Stop" value="0.25"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAMothershipGravitonPulse">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-gravitonbeam.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Modification>
+            <ModifyFlags index="Reveal" value="1"/>
+            <ModifyFlags index="Detected" value="1"/>
+            <StateFlags index="Stun" value="1"/>
+            <AbilLinkDisableArray value="heal"/>
+            <AbilLinkDisableArray value="AP_heal"/>
+            <!-- TODO: AI abilities -->
+<!--            <AbilLinkDisableArray value="MercMedicHeal"/>-->
+<!--            <AbilLinkDisableArray value="MengskMedicHeal"/>-->
+            <AbilLinkDisableArray value="MedivacHeal"/>
+            <AbilLinkDisableArray value="AP_MedivacHeal"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAMothershipGravitonPulseRaise">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <Duration value="9.75"/>
+        <TimeScaleSource Value="Global"/>
+        <Modification Height="1">
+            <HeightTime index="Start" value="1"/>
+            <HeightTime index="Stop" value="0.25"/>
+        </Modification>
+        <RemoveValidatorArray value="AP_NoFlashFreeze"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAMothershipTimedLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <Duration value="300"/>
+        <ExpireEffect value="AP_SOAMothershipv4WarpAwayAB"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAMothershipBlinkStrikeTeleportHeight">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="0.5"/>
+        <Modification Height="4">
+            <HeightTime index="Stop" value="2"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_SOAMothershipWarpAway">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="2"/>
+        <ExpireEffect value="SuicideRemove"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Benign" value="1"/>
+            <StateFlags index="Passive" value="1"/>
+            <StateFlags index="Stun" value="1"/>
         </Modification>
     </CBehaviorBuff>
 </Catalog>

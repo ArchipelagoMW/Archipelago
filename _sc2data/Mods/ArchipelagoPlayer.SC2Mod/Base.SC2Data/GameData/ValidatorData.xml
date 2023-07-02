@@ -3133,4 +3133,13 @@
         <SearchFlags index="ExtendByUnitRadius" value="1"/>
         <SearchFilters value="Ground,Visible;Player,Ally,Neutral,Structure,Missile,Dead,Hidden"/>
     </CValidatorLocationEnumArea>
+    <CValidatorCombine id="AP_NoFlashFreeze">
+        <!-- TODO: HotS Flash Freeze -->
+        <CombineArray value="AP_Dummy"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_Domination">
+        <Type value="And"/>
+        <CombineArray value="NotDead"/>
+        <CombineArray value="CasterNotDead"/>
+    </CValidatorCombine>
 </Catalog>

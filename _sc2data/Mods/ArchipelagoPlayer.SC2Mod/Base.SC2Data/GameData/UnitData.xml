@@ -13495,6 +13495,92 @@
             <ChanceArray index="Turn" value="5"/>
         </Fidget>
     </CUnit>
+    <CUnit id="AP_SOAMothershipLineAttackWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Prot"/>
+        <Mover value="MissileDefault"/>
+        <EditorCategories value="ObjectFamily:Campaign,ObjectType:Projectile"/>
+    </CUnit>
+    <CUnit id="AP_SOAMothershipv4">
+        <Description value="Button/Tooltip/CarrierTaldarim"/>
+        <DeathRevealRadius value="3"/>
+        <Facing value="94.9987"/>
+        <Race value="Prot"/>
+        <Mob value="Campaign"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Air" value="1"/>
+        <Collide index="Flying" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Mechanical" value="1"/>
+        <Attributes index="Psionic" value="1"/>
+        <Attributes index="Massive" value="1"/>
+        <LifeStart value="1000"/>
+        <LifeMax value="1000"/>
+        <LifeArmor value="2"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossBuildingPlating"/>
+        <EnergyStart value="50"/>
+        <EnergyMax value="200"/>
+        <EnergyRegenRate value="0.5625"/>
+        <ShieldsStart value="1000"/>
+        <ShieldsMax value="1000"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Mover value="Fly"/>
+        <Speed value="1.4062"/>
+        <Acceleration value="1.375"/>
+        <Deceleration value="1"/>
+        <Sight value="14"/>
+        <Height value="3.75"/>
+        <VisionHeight value="4"/>
+        <Food value="-10"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="1000"/>
+        <CostResource index="Vespene" value="1000"/>
+        <AttackTargetPriority value="20"/>
+        <KillXP value="50"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="AP_SOAMothershipLineAttack"/>
+        <AbilArray Link="AP_VoidSentryBlackHole"/>
+        <AbilArray Link="AP_SOAMothershipBlink"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="ProgressRally"/>
+        <BehaviorArray Link="AP_MothershipTaldarimTurretDisabler"/>
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <WeaponArray Link="AP_SOAMothershipv4Weapon" Turret="FreeRotate"/>
+        <WeaponArray Turret="AP_MothershipRotate"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="AP_VoidSentryBlackHole" Type="AbilCmd" AbilCmd="AP_VoidSentryBlackHole,0" Row="2" Column="0"/>
+            <LayoutButtons Face="AP_SOAMothershipLineAttack" Type="AbilCmd" AbilCmd="AP_SOAMothershipLineAttack,0" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_SOAMothershipBlink" Type="AbilCmd" AbilCmd="AP_SOAMothershipBlink,0" Row="2" Column="2"/>
+        </CardLayouts>
+        <Radius value="1.375"/>
+        <SeparationRadius value="1.375"/>
+        <ScoreMake value="800"/>
+        <ScoreKill value="800"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="50"/>
+        <MinimapRadius value="1.375"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Campaign"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="190"/>
+        <GlossaryStrongArray value="Marauder"/>
+        <GlossaryStrongArray value="Roach"/>
+        <GlossaryStrongArray value="Zealot"/>
+        <GlossaryWeakArray value="VikingFighter"/>
+        <GlossaryWeakArray value="Corruptor"/>
+        <GlossaryWeakArray value="VoidRay"/>
+        <HotkeyCategory value="Unit/Category/ProtossStory"/>
+    </CUnit>
     <CUnit id="TechLab">
         <!-- Override -->
         <!-- Add-on stealing -->

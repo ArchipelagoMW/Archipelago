@@ -66,4 +66,9 @@
         <Driver value="AP_LanceMissileLaunchersDamage"/>
         <Base value="::RollingIndex"/>
     </CAttachMethodPattern>
+    <CAttachMethodPattern id="AP_AMPatternSOAMothershipv4Beam">
+        <Keyword value="Weapon"/>
+        <Base value="::RollingIndex"/>
+        <Driver value="AP_SOAMothershipv4BeamDummy"/>
+    </CAttachMethodPattern>
 </Catalog>
