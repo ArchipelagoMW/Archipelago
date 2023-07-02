@@ -74,16 +74,17 @@ class BlasphemousWorld(World):
         player = self.player
 
         if world.starting_location[player].value == 6 and world.difficulty[player].value < 2:
-            raise Exception(f'[Blasphemous - "{world.get_player_name(player)}"] {world.starting_location[player]}'
-                            ' cannot be chosen if Difficulty is lower than Hard.')
+            raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
+                             " cannot be chosen if Difficulty is lower than Hard.")
 
-        if (world.starting_location[player].value == 0 or world.starting_location[player].value == 6) and world.dash_shuffle[player]:
-            raise Exception(f'[Blasphemous - "{world.get_player_name(player)}"] {world.starting_location[player]}'
-                            ' cannot be chosen if Shuffle Dash is enabled.')
+        if (world.starting_location[player].value == 0 or world.starting_location[player].value == 6) \
+            and world.dash_shuffle[player]:
+                raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
+                                 " cannot be chosen if Shuffle Dash is enabled.")
         
         if world.starting_location[player].value == 3 and world.wall_climb_shuffle[player]:
-            raise Exception(f'[Blasphemous - "{world.get_player_name(player)}"] {world.starting_location[player]}'
-                            ' cannot be chosen if Shuffle Wall Climb is enabled.')
+            raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
+                            " cannot be chosen if Shuffle Wall Climb is enabled.")
         
         if not world.dash_shuffle[player]:
             world.push_precollected(self.create_item("Dash Ability"))
