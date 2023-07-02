@@ -32,12 +32,16 @@ class DungeonItemData(ItemData):
         s = self.ladxr_id[:-1]
         return DungeonItemType.__dict__[s]
 
+
 class TradeItemData(ItemData):
     vanilla_location = None
+
     def __new__(cls, item_name, ladxr_id, classification, vanilla_location):
         self = super(ItemData, cls).__new__(cls, (item_name, ladxr_id, classification))
         self.vanilla_location = vanilla_location
         return self
+
+
 class LinksAwakeningItem(Item):
     game: str = Common.LINKS_AWAKENING
 
@@ -48,6 +52,7 @@ class LinksAwakeningItem(Item):
 
         super().__init__(item_data.item_name, classification, Common.BASE_ID + item_data.item_id, player)
         self.item_data = item_data
+
 
 # TODO: use _NAMES instead?
 class ItemName:
