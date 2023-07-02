@@ -1280,7 +1280,7 @@ class Spoiler:
             AutoWorld.call_all(self.multiworld, "write_spoiler", outfile)
 
             locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
-                         for location in self.multiworld.get_locations()]
+                         for location in self.multiworld.get_locations() if location.show_in_spoiler]
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(
                 ['%s: %s' % (location, item) for location, item in locations]))
