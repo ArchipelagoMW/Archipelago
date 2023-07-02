@@ -976,10 +976,9 @@ class StardewLogic:
         if self.options[options.ToolProgression] == options.ToolProgression.option_progressive:
             rules.append(self.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
         if self.options[options.SkillProgression] == options.SkillProgression.option_progressive:
-            combat_tier = min(10, max(0, tier * 2 + 6))
-            mining_tier = min(10, max(0, tier * 2 + 6))
-            rules.extend({self.has_skill_level(Skill.combat, combat_tier),
-                          self.has_skill_level(Skill.mining, mining_tier)})
+            skill_tier = min(10, max(0, tier * 2 + 6))
+            rules.extend({self.has_skill_level(Skill.combat, skill_tier),
+                          self.has_skill_level(Skill.mining, skill_tier)})
         return And(rules)
 
     def can_progress_easily_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
