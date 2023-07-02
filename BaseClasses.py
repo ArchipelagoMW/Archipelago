@@ -1188,9 +1188,15 @@ class Spoiler:
                                          chain.from_iterable(multiworld.precollected_items.values())
                                          if item.advancement])}
 
-        for i, sphere in enumerate(collection_spheres):
-            self.playthrough[str(i + 1)] = {
-                str(location): str(location.item) for location in sorted(sphere)}
+        sphere_index = 1
+        for sphere in collection_spheres:
+            sphere_data = {str(location): str(location.item) for location in sorted(sphere) if location.show_in_spoiler}
+            if len(sphere_data) == 0:  # No 'visible' locations in sphere to show.
+                continue
+
+            self.playthrough[sphere_index] = sphere_data
+            sphere_index += 1
+
         if create_paths:
             self.create_paths(state, collection_spheres)
 
@@ -1224,7 +1230,7 @@ class Spoiler:
             self.paths.update(
                 {str(location): get_path(state, location.parent_region)
                  for sphere in collection_spheres for location in sphere
-                 if location.player == player and location.show_in_spoiler})
+                 if location.player == player})
             if player in multiworld.get_game_players("A Link to the Past"):
                 # If Pyramid Fairy Entrance needs to be reached, also path to Big Bomb Shop
                 # Maybe move the big bomb over to the Event system instead?
@@ -1274,7 +1280,7 @@ class Spoiler:
             AutoWorld.call_all(self.multiworld, "write_spoiler", outfile)
 
             locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
-                         for location in self.multiworld.get_locations() if location.show_in_spoiler]
+                         for location in self.multiworld.get_locations()]
             outfile.write('\n\nLocations:\n\n')
             outfile.write('\n'.join(
                 ['%s: %s' % (location, item) for location, item in locations]))
