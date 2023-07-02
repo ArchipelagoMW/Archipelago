@@ -9,7 +9,7 @@ from jinja2 import pass_context, runtime
 from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
-from NetUtils import SlotType
+from NetUtils import SlotType, NetworkSlot
 from Utils import restricted_loads
 from worlds import lookup_any_item_id_to_name, lookup_any_location_id_to_name, network_data_package
 from worlds.alttp import Items
@@ -264,16 +264,17 @@ def get_static_room_data(room: Room):
     multidata = Context.decompress(room.seed.multidata)
     # in > 100 players this can take a bit of time and is the main reason for the cache
     locations: Dict[int, Dict[int, Tuple[int, int, int]]] = multidata['locations']
-    names: Dict[int, Dict[int, str]] = multidata["names"]
-    games = {}
+    names: Dict[int, Dict[int, str]] = multidata.get("names", {})
+    games = multidata.get("games", {})
     groups = {}
     custom_locations = {}
     custom_items = {}
     if "slot_info" in multidata:
-        games = {slot: slot_info.game for slot, slot_info in multidata["slot_info"].items()}
-        groups = {slot: slot_info.group_members for slot, slot_info in multidata["slot_info"].items()
+        slot_info_dict: Dict[int, NetworkSlot] = multidata["slot_info"]
+        games = {slot: slot_info.game for slot, slot_info in slot_info_dict.items()}
+        groups = {slot: slot_info.group_members for slot, slot_info in slot_info_dict.items()
                   if slot_info.type == SlotType.group}
-
+        names = {0: {slot: slot_info.name for slot, slot_info in slot_info_dict.items()}}
         for game in games.values():
             if game not in multidata["datapackage"]:
                 continue
@@ -290,8 +291,7 @@ def get_static_room_data(room: Room):
                 {id_: name for name, id_ in game_data["location_name_to_id"].items()})
             custom_items.update(
                 {id_: name for name, id_ in game_data["item_name_to_id"].items()})
-    elif "games" in multidata:
-        games = multidata["games"]
+
     seed_checks_in_area = checks_in_area.copy()
 
     use_door_tracker = False
