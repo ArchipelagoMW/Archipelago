@@ -125,7 +125,7 @@ class FightLogic(Choice):
     option_normal = 1
     option_hard = 2
     option_none = 3
-    default = 1
+    default = 0
 
 
 class FinalFormLogic(Choice):
@@ -160,7 +160,7 @@ class RandomVisitLockingItem(Range):
 class SuperBosses(Toggle):
     """Terra, Sephiroth and Data Fights Toggle."""
     display_name = "Super Bosses"
-    default = False
+    default = True
 
 
 class Cups(Choice):
@@ -172,7 +172,7 @@ class Cups(Choice):
     option_no_cups = 0
     option_cups = 1
     option_cups_and_hades_paradox = 2
-    default = 1
+    default = 2
 
 
 class LevelDepth(Choice):
@@ -231,7 +231,7 @@ class Goal(Choice):
     option_three_proofs = 0
     option_lucky_emblem_hunt = 1
     option_hitlist = 2
-    default = 0
+    default = 1
 
 
 class FinalXemnas(Toggle):
