@@ -8,7 +8,7 @@ from ...strings.season_names import Season
 from ...strings.region_names import Region
 
 
-def get_modded_quest_rules(vanilla_logic, active_mods: Union[bool, int, str]):
+def get_modded_quest_rules(vanilla_logic, active_mods):
     quests = {}
     if ModNames.juna in active_mods:
         quests.update({

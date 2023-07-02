@@ -9,7 +9,7 @@ from ...strings.villager_names import ModNPC
 from ..mod_data import ModNames
 
 
-def get_modded_special_orders_rules(vanilla_logic, active_mods: Union[bool, int, str]):
+def get_modded_special_orders_rules(vanilla_logic, active_mods):
     special_orders = {}
     if ModNames.juna in active_mods:
         special_orders.update({

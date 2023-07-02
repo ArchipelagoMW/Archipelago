@@ -13,7 +13,7 @@ from ...stardew_rule import Count, StardewRule, False_
 from ... import options
 
 
-def append_mod_skill_level(skills_items: List[str], active_mods: Union[bool, int, str]):
+def append_mod_skill_level(skills_items: List[str], active_mods):
     if ModNames.luck_skill in active_mods:
         skills_items.append("Luck Level")
     if ModNames.socializing_skill in active_mods:

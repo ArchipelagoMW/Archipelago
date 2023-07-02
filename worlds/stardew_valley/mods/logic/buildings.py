@@ -4,7 +4,7 @@ from ..mod_data import ModNames
 from ...strings.metal_names import MetalBar
 
 
-def get_modded_building_rules(vanilla_logic, active_mods: Union[bool, int, str]):
+def get_modded_building_rules(vanilla_logic, active_mods):
     buildings = {}
     if ModNames.tractor in active_mods:
         buildings.update({
