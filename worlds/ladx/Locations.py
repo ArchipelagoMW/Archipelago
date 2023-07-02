@@ -122,7 +122,9 @@ class GameStateAdapater:
 
     def get(self, item, default):
         # Don't allow any money usage if you can't get back wasted rupees
-        if item == "RUPEES" and not can_farm_rupees(self.state, self.player):
+        if item == "RUPEES":
+            if can_farm_rupees(self.state, self.player):
+                return self.state.prog_items["RUPEES", self.player]
             return 0
         elif item.endswith("_USED"):
             return 0
