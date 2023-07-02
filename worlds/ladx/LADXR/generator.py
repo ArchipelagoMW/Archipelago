@@ -241,9 +241,37 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     # TODO: hints bad
 
     world_setup = logic.world_setup
+    from BaseClasses import ItemClassification
 
 
-    hints.addHints(rom, rnd, item_list)
+    #our_world = multiworld[player_id]
+    JUNK_HINT = 0.33
+    RANDOM_HINT= 0.66
+    # USEFUL_HINT = 1.0
+    # TODO: filter events, filter unshuffled keys
+    all_items = multiworld.get_items()
+    our_items = [item for item in all_items if item.player == player_id]
+    our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
+    def gen_hint():
+        chance = rnd.uniform(0, 1)
+        if chance < JUNK_HINT:
+            return None
+        elif chance < RANDOM_HINT:
+            location = rnd.choice(our_items).location
+        else: # USEFUL_HINT
+            location = rnd.choice(our_useful_items).location
+
+        if location.item.player == player_id:
+            name = "Your"
+        else:
+            name = f"{multiworld.player_name[location.item.player]}'s"
+        hint = f"{name} {location.item} is at {location.name}"
+        if location.player != player_id or True:
+            hint += f" in {multiworld.player_name[location.player]}'s world"
+        print(hint)
+        return hint
+
+    hints.addHints(rom, rnd, gen_hint)
 
     if world_setup.goal == "raft":
         patches.goal.setRaftGoal(rom)

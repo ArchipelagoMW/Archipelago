@@ -455,7 +455,8 @@ class LinksAwakeningWorld(World):
             rnd=self.multiworld.per_slot_randoms[self.player],
             player_name=name_for_rom,
             player_names=all_names,
-            player_id = self.player)
+            player_id = self.player,
+            multiworld=self.multiworld)
       
         with open(out_path, "wb") as handle:
             rom.save(handle, name="LADXR")
