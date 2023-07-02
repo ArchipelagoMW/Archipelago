@@ -83,8 +83,8 @@ class LinksAwakeningWorld(World):
     player_options = None
 
     rupees = {
-        ItemName.RUPEES_20: 0,
-        ItemName.RUPEES_50: 0,
+        ItemName.RUPEES_20: 20,
+        ItemName.RUPEES_50: 50,
         ItemName.RUPEES_100: 100,
         ItemName.RUPEES_200: 200,
         ItemName.RUPEES_500: 500,
