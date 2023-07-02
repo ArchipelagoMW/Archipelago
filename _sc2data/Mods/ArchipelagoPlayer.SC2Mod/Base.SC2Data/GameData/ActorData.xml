@@ -13745,6 +13745,30 @@
         <On Terms="UnitBirth" Send="AnimSetTimeScaleAbsolute Lifetime 1.000000"/>
         <Model value="MothershipCoreWeaponWeapon"/>
     </CActorMissile>
+    <CActorAction id="AP_MothershipCoreWeaponAttack" parent="GenericAttack" effectImpact="AP_MothershipCoreWeaponDamage" effectLaunch="AP_MothershipCoreWeaponLM">
+        <ImpactMap index="None" Sound=""/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <LaunchAttachQuery Methods="TurretZ"/>
+        <LaunchAssets Sound=""/>
+        <LaunchSiteOps Ops="SOpForwardTargetPoint SOp2DRotation AP_MothershipCoreWeaponAttackOffset"/>
+        <ImpactPhysics Name="PurifyImpact" MatchKeys="Basic" Physics="AP_MothershipCoreAttackForce"/>
+    </CActorAction>
+    <CActorSiteOpLocalOffset id="AP_MothershipCoreWeaponAttackOffset">
+        <LocalOffset value="-0.700000,0.000000,3.700000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorForceSphere id="AP_MothershipCoreAttackSecondaryForce">
+        <HostSiteOps Ops="SOpIncomingMissile SOpRandomPointInSphereDot25"/>
+        <Magnitude value="31.500000,9.000000"/>
+        <Radius value="0.750000,0.250000"/>
+        <Duration value="0.150000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_MothershipCoreAttackForce">
+        <HostSiteOps Ops="SOpIncomingMissileDot25"/>
+        <Magnitude value="18.000000,9.000000"/>
+        <Radius value="1.150000,0.500000"/>
+        <Duration value="0.150000"/>
+        <On Terms="ActorCreation" Send="Create AP_MothershipCoreAttackSecondaryForce"/>
+    </CActorForceSphere>
     <CActorUnit id="AP_ScoutMP" parent="GenericUnitStandard" unitName="AP_ScoutMP">
         <Aliases value="_UnitLarge"/>
         <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap AP_ScoutMPWarpInStargate"/>
