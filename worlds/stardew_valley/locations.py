@@ -294,10 +294,11 @@ def extend_backpack_locations(randomized_locations: List[LocationData], world_op
 
 
 def extend_elevator_locations(randomized_locations: List[LocationData], world_options):
+    if world_options[options.TheMinesElevatorsProgression] == options.TheMinesElevatorsProgression.option_vanilla:
+        return
     elevator_locations = [location for location in locations_by_tag[LocationTags.ELEVATOR]]
     filtered_elevator_locations = filter_modded_locations(world_options, elevator_locations)
-    if not world_options[options.TheMinesElevatorsProgression] == options.TheMinesElevatorsProgression.option_vanilla:
-        randomized_locations.extend(filtered_elevator_locations)
+    randomized_locations.extend(filtered_elevator_locations)
 
 
 def create_locations(location_collector: StardewLocationCollector,
