@@ -3,9 +3,6 @@ from __future__ import annotations
 import argparse
 import asyncio
 import copy
-import functools
-import logging
-import zlib
 import collections
 import datetime
 import functools
@@ -162,7 +159,7 @@ class Context:
     read_data: typing.Dict[str, object]
     stored_data_notification_clients: typing.Dict[str, typing.Set[Client]]
     slot_info: typing.Dict[int, NetworkSlot]
-
+    generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
     item_names: typing.Dict[int, str] = Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
@@ -226,7 +223,7 @@ class Context:
         self.save_dirty = False
         self.tags = ['AP']
         self.games: typing.Dict[int, str] = {}
-        self.minimum_client_versions: typing.Dict[int, Utils.Version] = {}
+        self.minimum_client_versions: typing.Dict[int, Version] = {}
         self.seed_name = ""
         self.groups = {}
         self.group_collected: typing.Dict[int, typing.Set[int]] = {}
@@ -384,15 +381,17 @@ class Context:
 
     def _load(self, decoded_obj: dict, game_data_packages: typing.Dict[str, typing.Any],
               use_embedded_server_options: bool):
+
         self.read_data = {}
         mdata_ver = decoded_obj["minimum_versions"]["server"]
-        if mdata_ver > Utils.version_tuple:
+        if mdata_ver > version_tuple:
             raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
-                               f"however this server is of version {Utils.version_tuple}")
+                               f"however this server is of version {version_tuple}")
+        self.generator_version = Version(*decoded_obj["version"])
         clients_ver = decoded_obj["minimum_versions"].get("clients", {})
         self.minimum_client_versions = {}
         for player, version in clients_ver.items():
-            self.minimum_client_versions[player] = max(Utils.Version(*version), min_client_version)
+            self.minimum_client_versions[player] = max(Version(*version), min_client_version)
 
         self.slot_info = decoded_obj["slot_info"]
         self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
@@ -758,7 +757,8 @@ async def on_client_connected(ctx: Context, client: Client):
         # tags are for additional features in the communication.
         # Name them by feature or fork, as you feel is appropriate.
         'tags': ctx.tags,
-        'version': Utils.version_tuple,
+        'version': version_tuple,
+        'generator_version': ctx.generator_version,
         'permissions': get_permissions(ctx),
         'hint_cost': ctx.hint_cost,
         'location_check_points': ctx.location_check_points,
@@ -2254,12 +2254,15 @@ async def main(args: argparse.Namespace):
                 if not isinstance(e, ImportError):
                     logging.error(f"Failed to load tkinter ({e})")
                 logging.info("Pass a multidata filename on command line to run headless.")
-                exit(1)
+                # when cx_Freeze'd the built-in exit is not available, so we import sys.exit instead
+                import sys
+                sys.exit(1)
             raise
 
         if not data_filename:
             logging.info("No file selected. Exiting.")
-            exit(1)
+            import sys
+            sys.exit(1)
 
     try:
         ctx.load(data_filename, args.use_embedded_options)
