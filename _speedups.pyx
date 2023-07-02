@@ -1,5 +1,5 @@
-# cython: language_level=3
-# distutils: language = c++
+#cython: language_level=3
+#distutils: language = c++
 
 """
 Provides faster implementation of some core parts.

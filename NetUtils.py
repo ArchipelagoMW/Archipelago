@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import typing
 import enum
+import warnings
 from json import JSONEncoder, JSONDecoder
 
 import websockets
@@ -362,7 +363,8 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
                     all_locations[source_slot].add(location_id)
         return all_locations
 
-    def get_checked(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int):
+    def get_checked(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
+                    ) -> typing.List[int]:
         checked = state[team, slot]
         if not checked:
             # This optimizes the case where everyone connects to a fresh game at the same time.
@@ -371,7 +373,8 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
                 location_id in self[slot] if
                 location_id in checked]
 
-    def get_missing(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int):
+    def get_missing(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
+                    ) -> typing.List[int]:
         checked = state[team, slot]
         if not checked:
             # This optimizes the case where everyone connects to a fresh game at the same time.
@@ -380,7 +383,8 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
                 location_id in self[slot] if
                 location_id not in checked]
 
-    def get_remaining(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int):
+    def get_remaining(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
+                      ) -> typing.List[int]:
         checked = state[team, slot]
         player_locations = self[slot]
         return sorted([player_locations[location_id][0] for
@@ -392,6 +396,13 @@ if typing.TYPE_CHECKING:  # type-check with pure python implementation until we 
     LocationStore = _LocationStore
 else:
     try:
+        import pyximport
+        pyximport.install()
+    except ImportError:
+        pyximport = None
+    try:
         from _speedups import LocationStore
     except ImportError:
+        warnings.warn("_speedups not available. Falling back to pure python LocationStore. "
+                      "Install a matching C++ compiler for your platform to compile _speedups.")
         LocationStore = _LocationStore
