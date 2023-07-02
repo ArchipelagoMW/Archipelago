@@ -1729,7 +1729,7 @@ def create_regions(self):
     connect(multiworld, player, "Celadon Game Corner", "Celadon Game Corner-Hidden Stairs", lambda state: (not state.multiworld.extra_key_items[player]) or state.has("Hideout Key", player), one_way=True)
     connect(multiworld, player, "Celadon Game Corner-Hidden Stairs", "Celadon Game Corner", one_way=True)
     connect(multiworld, player, "Rocket Hideout B1F-SE", "Rocket Hideout B1F", one_way=True)
-    connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N", lambda state: logic.has_badges(state, state.multiworld.elite_four_badges_condition[player].value, player) and logic.has_pokemon(state, state.multiworld.elite_four_pokedex_condition[player].total, player) and logic.has_key_items(state, state.multiworld.elite_four_key_items_condition[player].total, player))
+    connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N", lambda state: logic.has_badges(state, state.multiworld.elite_four_badges_condition[player].value, player) and logic.has_pokemon(state, state.multiworld.elite_four_pokedex_condition[player].total, player) and logic.has_key_items(state, state.multiworld.elite_four_key_items_condition[player].total, player) and (state.has("Pokedex", player, int(state.multiworld.elite_four_pokedex_condition[player].total > 1) * state.multiworld.require_pokedex[player].value)))
     connect(multiworld, player, "Pokemon Mansion 3F", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SW", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 3F-Wild", one_way=True)

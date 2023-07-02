@@ -361,6 +361,8 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Require_Pokedex_A"]] = 1
         data[rom_addresses["Require_Pokedex_B"]] = 1
         data[rom_addresses["Require_Pokedex_C"]] = 1
+    else:
+        data[rom_addresses["Require_Pokedex_D"]] = 0x18  # jr
     if self.multiworld.dexsanity[self.player]:
         data[rom_addresses["Option_Dexsanity_A"]] = 1
         data[rom_addresses["Option_Dexsanity_B"]] = 1
