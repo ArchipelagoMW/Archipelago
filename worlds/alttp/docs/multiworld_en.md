@@ -2,14 +2,18 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - A Link to the Past Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for
+`SNI Client - A Link to the Past Patch Setup`
+- [SNI](https://github.com/alttpo/sni/releases). This is automatically included with your Archipelago installation above.
+- SNI is not compatible with (Q)Usb2Snes.
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-       [BizHawk](http://tasvideos.org/BizHawk.html), or
+       [BizHawk](https://tasvideos.org/BizHawk), or
        [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer). Or,
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note: 
-modded SNES minis are currently not supported by SNI**
+modded SNES minis are currently not supported by SNI. Some users have claimed success with QUsb2Snes for this system,
+but it is not supported.**
 - Your Japanese v1.0 ROM file, probably named `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
 
 ## Installation Procedures
@@ -26,38 +30,6 @@ modded SNES minis are currently not supported by SNI**
     4. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**
     5. Browse for your emulator's `.exe` file and click **Open**. This file should be located inside the folder you
        extracted in step one.
-
-## Create a Config (.yaml) File
-
-### What is a config file and why do I need one?
-
-Your config file contains a set of configuration options which provide the generator with information about how it
-should generate your game. Each player of a multiworld will provide their own config file. This setup allows each player
-to enjoy an experience customized for their taste, and different players in the same multiworld can all have different
-options.
-
-### Where do I get a config file?
-
-The [Player Settings](/games/A%20Link%20to%20the%20Past/player-settings) page on the website allows you to configure
-your personal settings and export a config file from them.
-
-### Verifying your config file
-
-If you would like to validate your config file to make sure it works, you may do so on the
-[YAML Validator](/mysterycheck) page.
-
-## Generating a Single-Player Game
-
-1. Navigate to the [Player Settings](/games/A%20Link%20to%20the%20Past/player-settings) page, configure your options,
-   and click the "Generate Game" button.
-2. You will be presented with a "Seed Info" page.
-3. Click the "Create New Room" link.
-4. You will be presented with a server page, from which you can download your patch file.
-5. Double-click on your patch file, and SNIClient will launch automatically, create your ROM from the patch file, and
-   open your emulator for you.
-6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
-
-## Joining a MultiWorld Game
 
 ### Obtain your patch file and create your ROM
 
@@ -82,24 +54,21 @@ first time launching, you may be prompted to allow it to communicate through the
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit.
+    - Look in the Archipelago folder for `/SNI/lua/`.
 6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of 
 the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
 
 ##### BizHawk
 
-1. Ensure you have the BSNES core loaded. You may do this by clicking on the Tools menu in BizHawk and following these
-   menu options:  
-   `Config --> Cores --> SNES --> BSNES`  
-   Once you have changed the loaded core, you must restart BizHawk.
+1. Ensure you have the BSNES core loaded. This is done with the main menubar, under:
+    - (≤ 2.8) `Config` 〉 `Cores` 〉 `SNES` 〉 `BSNES`
+    - (≥ 2.9) `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`
 2. Load your ROM file if it hasn't already been loaded.
-3. Click on the Tools menu and click on **Lua Console**
-4. Click Script -> Open Script...
-5. Select the `Connector.lua` file you downloaded above
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
-
+   If you changed your core preference after loading the ROM, don't forget to reload it (default hotkey: Ctrl+R).
+3. Drag+drop the `Connector.lua` file that you downloaded above onto the main EmuHawk window.
+    - Look in the Archipelago folder for `/SNI/lua/`.
+    - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `Connector.lua`
+      with the file picker.
 
 ##### RetroArch 1.10.1 or newer
 
@@ -141,18 +110,3 @@ The client will attempt to reconnect to the new server address, and should momen
 When the client shows both SNES Device and Server as connected, you're ready to begin playing. Congratulations on
 successfully joining a multiworld game! You can execute various commands in your client. For more information regarding
 these commands you can use `/help` for local client commands and `!help` for server commands.
-
-## Hosting a MultiWorld game
-
-The recommended way to host a game is to use our [hosting service](/generate). The process is relatively simple:
-
-1. Collect config files from your players.
-2. Create a zip file containing your players' config files.
-3. Upload that zip file to the website linked above.
-4. Wait a moment while the seed is generated.
-5. When the seed is generated, you will be redirected to a "Seed Info" page.
-6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players, so
-   they may download their patch files from there.
-7. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the progress of all
-   players in the game. Any observers may also be given the link to this page.
-8. Once all players have joined, you may begin playing.

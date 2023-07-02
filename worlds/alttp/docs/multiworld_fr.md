@@ -13,7 +13,7 @@
 - Une solution logicielle ou matérielle capable de charger et de lancer des fichiers ROM de SNES
     - Un émulateur capable d'éxécuter des scripts Lua
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-      [BizHawk](http://tasvideos.org/BizHawk.html))
+      [BizHawk](https://tasvideos.org/BizHawk))
     - Un SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), ou une autre solution matérielle
       compatible
 - Le fichier ROM de la v1.0 japonaise, sûrement nommé `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
