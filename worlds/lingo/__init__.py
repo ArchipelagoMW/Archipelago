@@ -10,7 +10,7 @@ from .items import LingoItem, StaticLingoItems
 from .locations import LingoLocation, StaticLingoLocations
 from .Options import lingo_options, get_option_value
 from .testing import LingoTestOptions
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 from .rules import LingoLogic, set_rules
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
