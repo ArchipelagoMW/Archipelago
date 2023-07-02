@@ -1,14 +1,10 @@
 from argparse import Namespace
 
 from BaseClasses import MultiWorld
-from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
-from worlds.alttp.EntranceShuffle import link_entrances
+from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.InvertedRegions import mark_dark_world_regions
-from worlds.alttp.ItemPool import difficulties, generate_itempool
+from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import ItemFactory
-from worlds.alttp.Regions import create_regions
-from worlds.alttp.Shops import create_shops
-from worlds.alttp.Rules import set_rules
 from test.TestBase import TestBase
 from worlds import AutoWorld
 
