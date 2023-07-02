@@ -1191,7 +1191,7 @@ class Spoiler:
         sphere_index = 1
         for sphere in collection_spheres:
             sphere_data = {str(location): str(location.item) for location in sorted(sphere) if location.show_in_spoiler}
-            if len(sphere_data) == 0:  # No 'visible' locations in sphere to show.
+            if not sphere_data:  # No 'visible' locations in sphere to show.
                 continue
 
             self.playthrough[str(sphere_index)] = sphere_data
