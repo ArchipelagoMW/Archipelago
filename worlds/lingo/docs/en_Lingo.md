@@ -34,27 +34,10 @@ puzzles are also location checks, including the achievement panels for each area
 ## What about wall snipes?
 
 "Wall sniping" refers to the fact that you are able to solve puzzles on the other side of opaque walls. This randomizer
-does not change how wall snipes work, and will generally not require the use of wall snipes. The exceptions to this are:
+does not change how wall snipes work, but it will never require the use of them. There are three puzzles from the base
+game that you would ordinarily be expected to wall snipe. The randomizer moves these panels out of the wall or otherwise
+reveals them so that a snipe is not necessary.
 
-* In the Courtyard, there is a row of four puzzles that say FIRST, SECOND, THIRD, and FOURTH. FOURTH is behind an opaque
-  wall, but its existence can be inferred from the others. Solving this puzzle while standing in the Courtyard is in
-  logic.
-    * As an aside, this snipe is different from the others in that it is possible to see the face of the panel by going
-      through the nearby door (if it is open), entering the area from the roof, or entering the area through a painting
-      using painting shuffle. Solving the panel in either of those ways does not require a wall snipe and is still in
-      logic.
-* In the maze outside The Lab, there is a hidden OPEN puzzle within a wall that ordinarily opens the entrance to lab.
-  Its existence can be inferred from the nearby black puzzles with the solutions "OPEN" and "BEHIND". Solving this
-  puzzle while standing in the OPEN BEHIND room is in logic.
-* In the hallway outside The Undeterred (blue room), there is a row of doors that reveal numbered puzzles. These puzzles
-  number from one to nine. There is also a zero puzzle hidden behind a wall. Its existence can be inferred from the
-  presence of the other numbers. ZERO is actually behind both a black wall and a white door. The white door opens after
-  all of the NINEs have been collected (or upon receiving the appropriate item, in door shuffle mode), revealing the
-  black wall. Solving the ZERO puzzle through the black wall is in logic, but solving it while the white door is still
-  present is not in logic.
-
-Any other snipe is considered out of logic. This includes sniping The Bearer's MIDDLE while standing outside The Bold,
-sniping The Colorful without opening all of the color doors, and sniping WELCOME from next to WELCOME BACK.
-
-When panel shuffle is enabled, these puzzles are made visible to the player, because it would otherwise be impossible to
-solve them. Thus, when panel shuffle is enabled, no sniping is ever required.
+Because of this, all wall snipes are considered out of logic. This includes sniping The Bearer's MIDDLE while standing
+outside The Bold, sniping The Colorful without opening all of the color doors, and sniping WELCOME from next to WELCOME
+BACK.
