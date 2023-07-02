@@ -83,6 +83,8 @@ class TestDefaultForms(KH2TestFormBase):
             self.assertEqual((self.can_reach_location(self.driveFormMap[form][0])), False, form)
 
     def testDefaultFinalForm(self):
+        allPossibleForms = self.allForms + self.autoForms
+        self.collect_by_name(allPossibleForms)
         self.collect_by_name(ItemName.FinalForm)
         self.assertEqual((self.can_reach_location(LocationName.Finallvl2)), True)
         self.assertEqual((self.can_reach_location(LocationName.Finallvl3)), True)
