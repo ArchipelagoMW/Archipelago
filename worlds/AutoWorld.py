@@ -203,6 +203,9 @@ class World(metaclass=AutoWorldRegister):
     location_names: ClassVar[Set[str]]
     """set of all potential location names"""
 
+    random: random.Random
+    """This world's random object. Should be used for any randomization needed in world for this player slot."""
+
     zip_path: ClassVar[Optional[pathlib.Path]] = None
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]

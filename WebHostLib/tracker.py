@@ -305,11 +305,9 @@ def get_static_room_data(room: Room):
     player_checks_in_area = {playernumber: {areaname: len(multidata["checks_in_area"][playernumber][areaname])
     if areaname != "Total" else multidata["checks_in_area"][playernumber]["Total"]
                                             for areaname in ordered_areas}
-                             for playernumber in range(1, len(names[0]) + 1)
-                             if playernumber not in groups}
+                             for playernumber in multidata["checks_in_area"]}
     player_location_to_area = {playernumber: get_location_table(multidata["checks_in_area"][playernumber])
-                               for playernumber in range(1, len(names[0]) + 1)
-                               if playernumber not in groups}
+                               for playernumber in multidata["checks_in_area"]}
     saving_second = get_saving_second(multidata["seed_name"])
     result = locations, names, use_door_tracker, player_checks_in_area, player_location_to_area, \
              multidata["precollected_items"], games, multidata["slot_data"], groups, saving_second, \
@@ -380,10 +378,11 @@ def _get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, w
     specific_tracker = game_specific_trackers.get(games[tracked_player], None)
     if specific_tracker and not want_generic:
         tracker =  specific_tracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                seed_checks_in_area, checks_done, slot_data[tracked_player], saving_second)
+                                    seed_checks_in_area, checks_done, slot_data[tracked_player], saving_second)
     else:
-        tracker =  __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player, player_name,
-                                      seed_checks_in_area, checks_done, saving_second, custom_locations, custom_items)
+        tracker =  __renderGenericTracker(multisave, room, locations, inventory, tracked_team, tracked_player,
+                                          player_name, seed_checks_in_area, checks_done, saving_second,
+                                          custom_locations, custom_items)
 
     return (saving_second - datetime.datetime.now().second) % 60 or 60, tracker
 
@@ -1373,10 +1372,10 @@ def _get_multiworld_tracker_data(tracker: UUID) -> typing.Optional[typing.Dict[s
         if player in groups:
             continue
         player_locations = locations[player]
-        checks_done[team][player]["Total"] = sum(1 for loc in locations_checked if loc in player_locations)
+        checks_done[team][player]["Total"] = len(locations_checked)
         percent_total_checks_done[team][player] = int(checks_done[team][player]["Total"] /
-                                                      checks_in_area[player]["Total"] * 100) \
-            if checks_in_area[player]["Total"] else 100
+                                                      len(player_locations) * 100) \
+            if player_locations else 100
 
     activity_timers = {}
     now = datetime.datetime.utcnow()
