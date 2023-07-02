@@ -1224,7 +1224,7 @@ class Spoiler:
             self.paths.update(
                 {str(location): get_path(state, location.parent_region)
                  for sphere in collection_spheres for location in sphere
-                 if location.player == player})
+                 if location.player == player and location.show_in_spoiler})
             if player in multiworld.get_game_players("A Link to the Past"):
                 # If Pyramid Fairy Entrance needs to be reached, also path to Big Bomb Shop
                 # Maybe move the big bomb over to the Event system instead?
