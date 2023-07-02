@@ -347,7 +347,7 @@ class StardewLogic:
             ArtisanGood.truffle_oil: self.has(AnimalProduct.truffle) & self.has(Machine.oil_maker),
             AnimalProduct.truffle: self.has_animal(Animal.pig) & self.has_spring_summer_or_fall(),
             Ingredient.vinegar: self.can_spend_money_at(Region.pierre_store, 200),
-            AnimalProduct.void_egg: self.can_spend_money_at(Region.sewers, 5000) | (self.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
+            AnimalProduct.void_egg: self.can_spend_money_at(Region.sewer, 5000) | (self.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
             Loot.void_essence: self.can_mine_in_the_mines_floor_81_120() | self.can_mine_in_the_skull_cavern(),
             ArtisanGood.void_mayonnaise: self.has(Machine.mayonnaise_machine) & self.has(AnimalProduct.void_egg),
             Ingredient.wheat_flour: self.can_spend_money_at(Region.pierre_store, 100) |

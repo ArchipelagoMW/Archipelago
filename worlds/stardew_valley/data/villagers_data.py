@@ -36,7 +36,7 @@ ranch = (Region.ranch,)
 mines_dwarf_shop = (Region.mines_dwarf_shop,)
 desert = (Region.desert,)
 oasis = (Region.oasis,)
-sewers = (Region.sewers,)
+sewers = (Region.sewer,)
 island = (Region.island_east,)
 secret_woods = (Region.secret_woods,)
 

@@ -27,7 +27,7 @@ class Region:
     mines_dwarf_shop = "Mines Dwarf Shop"
     skull_cavern_entrance = "Skull Cavern Entrance"
     skull_cavern = "Skull Cavern"
-    sewers = "Sewers"
+    sewer = "Sewer"
     mutant_bug_lair = "Mutant Bug Lair"
     witch_swamp = "Witch's Swamp"
     witch_hut = "Witch's Hut"

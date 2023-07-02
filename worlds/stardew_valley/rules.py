@@ -45,7 +45,7 @@ def set_rules(multi_world: MultiWorld, player: int, world_options: StardewOption
                                  (logic.has_skill_level(Skill.fishing, 6) & logic.can_spend_money(7500)).simplify())
 
         materials = [None, "Copper", "Iron", "Gold", "Iridium"]
-        tool = [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.watering_can]
+        tool = [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.watering_can, Tool.trash_can]
         for (previous, material), tool in itertools.product(zip(materials[:4], materials[1:]), tool):
             if previous is None:
                 MultiWorldRules.add_rule(multi_world.get_location(f"{material} {tool} Upgrade", player),
@@ -158,9 +158,9 @@ def set_entrance_rules(logic, multi_world, player, world_options: StardewOptions
                              logic.received("Bridge Repair") | (magic.can_blink(logic)).simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.enter_secret_woods, player),
                              logic.has_tool(Tool.axe, "Iron") | (magic.can_blink(logic)).simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.forest_to_sewers, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.forest_to_sewer, player),
                              logic.has_rusty_key().simplify())
-    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.town_to_sewers, player),
+    MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.town_to_sewer, player),
                              logic.has_rusty_key().simplify())
     MultiWorldRules.set_rule(multi_world.get_entrance(Entrance.take_bus_to_desert, player),
                              logic.received("Bus Repair").simplify())
