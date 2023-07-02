@@ -32,7 +32,7 @@ class BlasphemousWorld(World):
 
     game: str = "Blasphemous"
     web = BlasphemousWeb()
-    data_version = 1
+    data_version = 2
 
     item_name_to_id = {item["name"]: (base_id + index) for index, item in enumerate(item_table)}
     location_name_to_id = {loc["name"]: (base_id + index) for index, loc in enumerate(location_table)}
@@ -95,18 +95,17 @@ class BlasphemousWorld(World):
             for loc in junk_locations:
                 world.exclude_locations[player].value.add(loc)
 
-        if world.starting_location[player].value == 1:
-            self.start_room = "D01Z02S01"
-        if world.starting_location[player].value == 2:
-            self.start_room = "D02Z03S09"
-        if world.starting_location[player].value == 3:
-            self.start_room = "D03Z03S11"
-        if world.starting_location[player].value == 4:
-            self.start_room = "D04Z03S01"
-        if world.starting_location[player].value == 5:
-            self.start_room = "D06Z01S09"
-        if world.starting_location[player].value == 6:
-            self.start_room = "D20Z02S09"
+        start_rooms: Dict[int, str] = {
+            0: "D17Z01S01",
+            1: "D01Z02S01",
+            2: "D02Z03S09",
+            3: "D03Z03S11",
+            4: "D04Z03S01",
+            5: "D06Z01S09",
+            6: "D20Z02S09"
+        }
+
+        self.start_room = start_rooms[world.starting_location[player].value]
 
 
     def create_items(self):
