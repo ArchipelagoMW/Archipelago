@@ -2397,4 +2397,22 @@
         <Flags index="TechTreeCheat" value="0"/>
         <Count Link="AP_CommanderPrestigeAlarakMech" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementLT id="AP_LTCountUnitScarabQueuedOrBetterAtUnit5">
+        <OperandArray index="0" value="AP_CountUnitScarabQueuedOrBetterAtUnit"/>
+        <OperandArray index="1" value="5"/>
+    </CRequirementLT>
+    <CRequirementCountUnit id="AP_CountUnitScarabQueuedOrBetterAtUnit">
+        <Count Link="AP_Scarab" State="QueuedOrBetterAtUnit"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUnit>
+    <CRequirementEq id="AP_EqCountUnitScarabCompleteOnlyAtUnit0">
+        <Tooltip value=""/>
+        <OperandArray index="0" value="AP_CountUnitScarabCompleteOnlyAtUnit"/>
+        <OperandArray index="1" value="0"/>
+    </CRequirementEq>
+    <CRequirementCountUnit id="AP_CountUnitScarabCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_Scarab" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountUnit>
 </Catalog>

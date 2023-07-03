@@ -10878,7 +10878,6 @@
     <CModel id="AP_MothershipTaldarimPortrait" parent="Portrait" Race="Protoss">
         <Model value="Assets\Portraits\Protoss\MothershipTalDarimEx2Portrait\MothershipTalDarimEx2Portrait.m3"/>
         <Image value="Assets\Textures\mothershiptaldarimportrait_static.dds"/>
-        <Lighting value="AP_MothershipTaldarimPortrait"/>
     </CModel>
     <CModel id="AP_SOAMothershipBlinkStrikeBeam" parent="PersistentSpellFX">
         <Model value="Assets\Effects\Protoss\MothershipPhotonBeam\MothershipPhotonBeam.m3"/>
@@ -11038,5 +11037,88 @@
         <SelectionRadius value="2.500000"/>
         <ShadowRadius value="2.500000"/>
         <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_Reaver" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Reaver\Reaver.m3"/>
+        <AttachProps>
+            <Id value="Ref_Center"/>
+            <SquibType value="Metal"/>
+            <RadiusTarget value="0.750000"/>
+            <RadiusShield value="1.000000"/>
+        </AttachProps>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid09"/>
+        <Radius value="0.800000"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SelectionRadius value="1.029000"/>
+        <ShadowRadius value="0.800000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraMid09"/>
+        <Tipability value="1.000000"/>
+        <TipabilityLength value="1.800000"/>
+        <TipabilityWidth value="1.200000"/>
+        <TextureDeclares Prefix="reaver_">
+            <Adaptions TriggerOnSubstring="_Diffuse" Slot="main"/>
+        </TextureDeclares>
+        <UnitGlossaryCamera value="Star2CameraMid09"/>
+    </CModel>
+    <CModel id="AP_ReaverDeath" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Reaver_Death\Reaver_Death.m3"/>
+        <LowQualityModel value="ProtossLargeUnitDeathLow"/>
+        <Events>
+            <Variation value="0"/>
+            <Anim value="Death,00"/>
+            <Name value="Reaver_DeathExplosion"/>
+            <Type value="Sound"/>
+            <Time value="1.370000"/>
+            <Payload value="AP_Reaver_DeathExplosion"/>
+        </Events>
+        <VariationCount value="2"/>
+    </CModel>
+    <CModel id="AP_ReaverDeathRagdoll" parent="UnitDeathRagdoll" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Reaver_Ragdoll_Death\Reaver_Ragdoll_Death.m3"/>
+        <Events>
+            <Variation value="0"/>
+            <Anim value="Death,00"/>
+            <Name value="Reaver_DeathExplosion"/>
+            <Type value="Sound"/>
+            <Time value="1.370000"/>
+            <Payload value="AP_Reaver_DeathExplosion"/>
+        </Events>
+        <VariationCount value="2"/>
+    </CModel>
+    <CModel id="AP_ReaverPlacement">
+        <Model value="Assets\Units\Protoss\Reaver_Placement\Reaver_Placement.m3"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+    </CModel>
+    <CModel id="AP_ReaverPortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\ReaverEx2Portrait\ReaverEx2Portrait.m3"/>
+        <Image value="Assets\Textures\ReaverPortrait_Static.dds"/>
+        <Lighting value="AP_PortraitReaver"/>
+    </CModel>
+    <CModel id="AP_ReaverWarpIn">
+        <Model value="Assets\Units\Protoss\Reaver_WarpIn\Reaver_WarpIn.m3"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+    </CModel>
+    <CModel id="AP_Scarab" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Test\InvisibleUnit\InvisibleUnit.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraLow03"/>
+        <Radius value="0.250000"/>
+        <SelectionRadius value="0.294000"/>
+        <ShadowRadius value="0.294000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraLow03"/>
+        <UnitGlossaryCamera value="Star2CameraLow03"/>
+    </CModel>
+    <CModel id="AP_ScarabAttackImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\Reaver_Missile_Impact\Reaver_Missile_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_ScarabWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\Reaver_Missile\Reaver_Missile.m3"/>
     </CModel>
 </Catalog>

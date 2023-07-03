@@ -2242,4 +2242,9 @@
         <Icon value="Assets\Textures\btn-ability-protoss-blackhole-redcolor.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_ReaverScarabs">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-ScarabShot.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-ScarabShot.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

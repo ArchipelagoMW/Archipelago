@@ -1426,4 +1426,12 @@
     <CRequirement id="AP_CommanderPrestigeAlarakMech">
         <NodeArray index="Show" Link="AP_CountUpgradeCommanderPrestigeAlarakMechCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_ArmScarab">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_LTCountUnitScarabQueuedOrBetterAtUnit5"/>
+    </CRequirement>
+    <CRequirement id="AP_ScarabNotArmed">
+        <EditorCategories value="Race:Protoss,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_EqCountUnitScarabCompleteOnlyAtUnit0"/>
+    </CRequirement>
 </Catalog>

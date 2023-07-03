@@ -3142,4 +3142,8 @@
         <CombineArray value="NotDead"/>
         <CombineArray value="CasterNotDead"/>
     </CValidatorCombine>
+    <CValidatorPlayerRequirement id="AP_ScarabNotArmed">
+        <WhichPlayer Value="Caster"/>
+        <Value value="AP_ScarabNotArmed"/>
+    </CValidatorPlayerRequirement>
 </Catalog>

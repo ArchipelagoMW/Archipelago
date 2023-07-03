@@ -14084,7 +14084,6 @@
         <On Terms="Effect.AP_SOAMothershipBlinkStrikeTeleport.Start" Send="Create"/>
         <On Terms="Effect.AP_SOAMothershipBlinkStrikeCP.Stop" Send="Destroy"/>
         <Host Subject="_Unit"/>
-        <Model value="AP_SOAMothershipBlinkStrikeBeam"/>
         <HostLaunch Subject="_Unit"/>
         <HostLaunchSiteOps Ops="SOpAttachHardPoint"/>
         <HostImpactSiteOps Ops="SOpTargetPointStationary"/>
@@ -14112,7 +14111,6 @@
         <On Terms="ActorDestruction" Target="_Unit" Send="AnimClear Flail"/>
         <Host Subject="_Unit"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="AP_SOAMothershipGravitonPulseBubble"/>
         <AutoScaleFactor value="1.000000"/>
     </CActorModel>
     <CActorSound id="AP_SOAMothershipGravitonPulseEndSound" parent="SoundOneShot">
@@ -14122,7 +14120,6 @@
     <CActorModel id="AP_SOAMothershipGravitonPulseImpact" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_SOAMothershipGravitonPulseCP.Start" Send="Create"/>
         <HostSiteOps Ops="SOpShadow"/>
-        <Model value="AP_SOAMothershipGravitonPulseImpact"/>
     </CActorModel>
     <CActorSound id="AP_SOAMothershipGravitonPulseLaunch" parent="SoundOneShot">
         <On Terms="Effect.AP_SOAMothershipGravitonPulseCP.Start" Send="Create"/>
@@ -14139,9 +14136,7 @@
     </CActorSound>
     <CActorAction id="AP_SOAMothershipLineAttack" parent="GenericAttack" effectImpact="AP_SOAMothershipLineAttackCasterImpactDummy" effectLaunch="AP_SOAMothershipLineAttackCasterLM">
         <LaunchSiteOps Ops="SOpCasterPoint SOpShadow"/>
-        <Missile value="AP_SOAMothershipLineAttackMissile"/>
         <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow"/>
-        <ImpactMap index="None" Model="AP_SOAMothershipLineAttackImpact"/>
     </CActorAction>
     <CActorModel id="AP_SOAMothershipLineAttackGroundFire" parent="ModelAnimationStyleOneShot">
         <On Terms="Effect.AP_SOAMothershipLineAttackSearch.Start" Send="Create"/>
@@ -14177,24 +14172,24 @@
         <Macros value="TerrainSquibAnimations"/>
         <Macros value="PhysicsDeathsSwarmAir"/>
         <Macros value="PhysicsDeathsVoidAir"/>
-<!--        <On Terms="Abil.Vortex.SourceCastStart" Send="$Spell"/>-->
+        <!--        <On Terms="Abil.Vortex.SourceCastStart" Send="$Spell"/>-->
         <On Terms="Effect.AP_SOAMothershipBlinkCP.Start" Send="SetOpacity 0.050000 0.375000"/>
         <On Terms="Effect.AP_SOAMothershipBlinkTeleport.Stop" Send="SetOpacity 1.000000 0.625000"/>
-<!--        <On Terms="Abil.MassRecall.SourceCastStart" Send="$Spell"/>-->
-<!--        <On Terms="Effect.MothershipMassRecallTeleport.Start" Send="CombatRevealClearTimers"/>-->
+        <!--        <On Terms="Abil.MassRecall.SourceCastStart" Send="$Spell"/>-->
+        <!--        <On Terms="Effect.MothershipMassRecallTeleport.Start" Send="CombatRevealClearTimers"/>-->
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Mothership_Land"/>
-<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create"/>-->
-<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="SetScale 0.010000"/>-->
-<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="SetScale 1.000000 0.500000"/>-->
-<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCoreTeleportIn"/>-->
-<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEnd"/>-->
-<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEnd2"/>-->
-<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEnd3"/>-->
-<!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEndHit"/>-->
-<!--        <On Terms="Abil.MothershipCoreTeleport.SourceCastStart" Send="SetScale 0.010000 0.500000"/>-->
-<!--        <On Terms="Abil.MothershipCoreTeleport.SourceCastStart" Send="Create MothershipCoreTeleportOut"/>-->
-<!--        <On Terms="Abil.MothershipCoreTeleport.SourceFinishStart" Send="Create MothershipCoreTeleportIn"/>-->
-<!--        <On Terms="Abil.MothershipCoreTeleport.SourceCastStart" Send="TimerSet 0.500000 ShrinkDelay"/>-->
+        <!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create"/>-->
+        <!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="SetScale 0.010000"/>-->
+        <!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="SetScale 1.000000 0.500000"/>-->
+        <!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCoreTeleportIn"/>-->
+        <!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEnd"/>-->
+        <!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEnd2"/>-->
+        <!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEnd3"/>-->
+        <!--        <On Terms="AbilMorph.*.Finish; MorphFrom MothershipCore" Send="Create MothershipCore_UpgradeToMothershipEndHit"/>-->
+        <!--        <On Terms="Abil.MothershipCoreTeleport.SourceCastStart" Send="SetScale 0.010000 0.500000"/>-->
+        <!--        <On Terms="Abil.MothershipCoreTeleport.SourceCastStart" Send="Create MothershipCoreTeleportOut"/>-->
+        <!--        <On Terms="Abil.MothershipCoreTeleport.SourceFinishStart" Send="Create MothershipCoreTeleportIn"/>-->
+        <!--        <On Terms="Abil.MothershipCoreTeleport.SourceCastStart" Send="TimerSet 0.500000 ShrinkDelay"/>-->
         <On Terms="TimerExpired; TimerName ShrinkDelay" Target="::Main" Send="SetScale 1.000000 0.500000"/>
         <On Terms="Behavior.WarpInEffect.On" Send="ModelSwap AP_MothershipTaldarimWarpInStargateBig"/>
         <On Terms="Behavior.WarpInEffect.On" Send="$Spell"/>
@@ -14294,8 +14289,7 @@
         <On Terms="Effect.AP_SOAMothershipv4BeamPersistent.Stop" Send="Destroy WhenReady"/>
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMClosest2ToTarget AP_AMPatternSOAMothershipv4Beam"/>
         <LaunchAssets Sound="AP_MothershipVoid_AttackLaunch"/>
-        <Beam value="AP_SOAMothershipv4AttackBeam"/>
-        <ImpactMap index="None" Model="AP_SOAMothershipv4AttackImpact" Sound="AP_MothershipVoid_AttackImpact"/>
+        <ImpactMap index="None" Sound="AP_MothershipVoid_AttackImpact"/>
         <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
         <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
         <Lifetime value="-1.000000"/>
@@ -14314,7 +14308,6 @@
         <On Terms="Effect.AP_SOAMothershipv4BeamDamage.Start; FromEffectTreeDescendant" Send="ActionDamage"/>
         <On Terms="Effect.AP_SOAMothershipv4BeamPersistent.Stop" Send="Destroy WhenReady"/>
         <LaunchAttachQuery Methods="AMFilterWeaponSetA0 AMClosest2ToTarget AP_AMPatternSOAMothershipv4Beam"/>
-        <Beam value="AP_SOAMothershipv4SecondaryAttackBeam"/>
         <ImpactMap index="None" Model="AP_SOAMothershipv4AttackImpact"/>
         <ActionFlags index="AlignedImpactsAndDamages" value="1"/>
         <ActionFlags index="ImpactMonitorsTeleports" value="1"/>
@@ -14331,11 +14324,97 @@
         <On Terms="ActorCreation" Send="Create AP_SOAMothershipv4WarpAwaySound"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachOrigin"/>
-        <Model value="AP_SOAMothershipv4WarpAway"/>
     </CActorModel>
     <CActorSound id="AP_SOAMothershipv4WarpAwaySound" parent="SoundOneShot">
         <Sound value="Mothership_RecallStart"/>
     </CActorSound>
+    <CActorUnit id="AP_Reaver" parent="GenericUnitStandard" unitName="AP_Reaver">
+        <Aliases value="_UnitLarge"/>
+        <Aliases value="_UnitLarge"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="WeaponStart.AP_ReaverScarabsLaunch.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On Terms="Effect.AP_ScarabLM.Start; At Caster" Send="AnimPlay Attack Attack"/>
+        <On Terms="Effect.AP_ScarabLaunchPersistentInitial.Start; At Caster" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Effect.AP_ScarabLaunchPersistentInitial.Start; At Caster" Send="TimerKill CoverDelay"/>
+        <On Terms="Effect.AP_ScarabLaunchPersistentInitial.Start; At Caster" Send="TimerSet 5.000000 CoverDelay"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Reaver_Land"/>
+        <On Terms="Effect.AP_ScarabLaunchPersistentInitial.Start; At Caster" Send="StatusSet Cover 1"/>
+        <On Terms="TimerExpired; TimerName CoverDelay" Send="AnimBracketStop Cover"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <!-- This unit doesn't exists -->
+        <On Terms="UnitBirth.AP_ReaverBurrowed" Send="Create"/>
+        <On Terms="UnitRevive.AP_ReaverBurrowed" Send="Create"/>
+        <On Terms="UnitBirth.AP_ReaverBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On Terms="UnitRevive.AP_ReaverBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Reaver" Send="TerrainSquibActivateGroup RippleStandard"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ReaverBurrowed" Send="TerrainSquibDeactivate"/>
+        <On Terms="AbilMorph.*.Cancel; MorphFrom AP_Reaver; MorphTo AP_ReaverBurrowed" Send="AnimClear Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Reaver; MorphFrom AP_ReaverBurrowed" Send="AnimBracketStop Burrow"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Reaver; MorphFrom AP_ReaverBurrowed" Send="AnimClear Burrow"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_ReaverWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_ReaverDeath" SoundLink="AP_Reaver_Death"/>
+        <DeathCustoms ModelLink="ProtossLargeUnitDeathLow" Name="AntiGravProtoss"/>
+        <DeathCustoms ModelLink="AP_ReaverDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+            <BodySquibs Name="BloodReduced" Model="ProtossRobotBloodSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PlacementModel value="AP_ReaverPlacement"/>
+        <PortraitModel value="AP_ReaverPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="1.000000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleImmortal"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="1.875"/>
+        <BarOffset value="70"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-reaver.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Reaver_Ready"/>
+        <SoundArray index="Help" value="AP_Reaver_Help"/>
+        <SoundArray index="What" value="AP_Reaver_What"/>
+        <SoundArray index="Yes" value="AP_Reaver_Yes"/>
+        <SoundArray index="Attack" value="AP_Reaver_Attack"/>
+        <SoundArray index="Pissed" value="AP_Reaver_Pissed"/>
+        <SoundArray index="Movement" value="AP_Reaver_moveStart"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-reaver.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-reaver.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-reaver-shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-protoss-reaver-shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-protoss-reaver-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_Reaver_Land" parent="SoundOneShot"/>
     <CActorSound id="SOAMothershipv4WarpAwaySound2" parent="SoundOneShot">
         <Sound value="Mothership_RecallStart"/>
     </CActorSound>
@@ -14356,7 +14435,6 @@
         <On Terms="Effect.AP_VoidSentryBlackHolePersistent.Start" Send="Create"/>
         <On Terms="Effect.AP_VoidSentryBlackHolePersistent.Stop" Send="AnimBracketStop BSD"/>
         <On Terms="ActorCreation" Send="SetOpacity 0.500000"/>
-        <Model value="AP_VoidSentryBlackHole"/>
     </CActorModel>
     <CActorSound id="AP_VoidSentryBlackHoleBirthSound" parent="SoundOneShot">
         <On Terms="Effect.AP_VoidSentryBlackHolePersistent.Start" Send="Create"/>
@@ -14442,6 +14520,51 @@
         <On Terms="TurretEnable.AP_MothershipRotate" Send="Create"/>
         <Terms value="Cap 1"/>
     </CActorTurret>
+    <CActorUnit id="AP_Scarab" parent="GenericUnitStandard" unitName="AP_Scarab">
+        <DeathArray index="Normal" ModelLink="AP_ScarabAttackImpact" SoundLink=""/>
+        <BarOffset value="25"/>
+        <BarWidth value="36"/>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Movement" value="InterceptorWeaponBirth"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-interceptor.dds"/>
+    </CActorUnit>
+    <CActorAction id="AP_ScarabAttack" parent="GenericAttack" effectImpact="AP_ScarabExplodeTargetDamage" effectLaunch="AP_ScarabLM">
+        <LaunchAssets Sound="AP_Reaver_AttackLaunch"/>
+        <Missile value="AP_ScarabAttackMissile"/>
+        <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
+        <ImpactMap index="None" Model="AP_ScarabAttackImpact" Sound="AP_Reaver_ScarabExplode"/>
+        <ImpactPhysics Name="Explosion" MatchKeys="Basic" Physics="AP_ScarabExplosionForce"/>
+        <ShieldFlashType value="Header"/>
+    </CActorAction>
+    <CActorForceSphere id="AP_ScarabExplosionUpForce">
+        <Host Subject="_ImpactGuide"/>
+        <HostSiteOps Ops="SOpRandomPointInCircleDot2"/>
+        <Magnitude value="23.000000,10.000000"/>
+        <Radius value="2.150000,0.200000"/>
+        <Duration value="0.150000"/>
+        <Field value="Directional"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_ScarabExplosionForce">
+        <Host Subject="_ImpactGuide"/>
+        <HostSiteOps Ops="SOpRandomPointInSphereDot15"/>
+        <!--On Terms="Effect.ScarabHeroExplodeTargetDamage.Start" Send="Create"/>
+        <On Terms="Effect.ScarabExplodeTargetDamage.Start" Send="Create"/-->
+        <On Terms="ActorCreation" Send="Create AP_ScarabExplosionUpForce"/>
+        <Magnitude value="25.000000,12.000000"/>
+        <Radius value="2.150000,0.200000"/>
+        <Duration value="0.150000"/>
+    </CActorForceSphere>
+    <CActorMissile id="AP_ScarabAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="AP_ScarabWeapon">
+        <Macros value="GlobalLoopMacro"/>
+    </CActorMissile>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>

@@ -9883,4 +9883,62 @@
         <SearchFilters value="-;Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray Radius="4" Effect="AP_VoidSentryBlackHoleImpactSet"/>
     </CEffectEnumArea>
+    <CEffectApplyBehavior id="AP_ScarabApplyReveal">
+        <Behavior value="AP_ScarabReveal"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_ScarabExplode">
+        <!-- This Validator breaks Reaver drops (Loading Reaver before Scarab explodes), therefore got disabled -->
+        <!-- There are no Reaver drops in Vanilla, but they exist in AP -->
+<!--        <ValidatorArray value="CasterIsNotHidden"/>-->
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ScarabExplodeTargetDamage"/>
+        <EffectArray value="Suicide"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_ScarabExplodeTargetDamage" parent="DU_WEAP">
+        <AttributeBonus index="Structure" value="50"/>
+        <Kind value="Ranged"/>
+        <KindSplash value="Splash"/>
+        <Amount value="100"/>
+        <Death value="Blast"/>
+        <AreaArray Radius="0.25" Fraction="0.8"/>
+        <AreaArray Radius="0.5" Fraction="0.6"/>
+        <AreaArray Radius="1" Fraction="0.5"/>
+        <AreaArray Radius="1.5" Fraction="0.25"/>
+        <ExcludeArray Value="Target"/>
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_ScarabLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_ScarabExplode"/>
+        <AmmoUnit value="AP_ScarabWeapon"/>
+        <ImpactRange value="1"/>
+    </CEffectLaunchMissile>
+    <CEffectCreatePersistent id="AP_ScarabLaunchPersistent">
+        <ValidatorArray value="AP_ScarabNotArmed"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="TargetUnit"/>
+        <TimeScaleSource Value="Caster"/>
+        <Flags index="Channeled" value="1"/>
+        <PeriodCount value="1"/>
+        <PeriodicValidator value="CasterNotDead"/>
+        <PeriodicEffectArray value="AP_ScarabLaunchSet"/>
+        <PeriodicPeriodArray value="0.75"/>
+    </CEffectCreatePersistent>
+    <CEffectSet id="AP_ScarabLaunchPersistentInitial">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ScarabLaunchPersistent"/>
+    </CEffectSet>
+    <CEffectSet id="AP_ScarabLaunchSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_ScarabApplyReveal"/>
+        <EffectArray value="AP_ScarabUM"/>
+        <EffectArray value="AP_ScarabLM"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_ScarabTimedLife">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectApplyBehavior>
+    <CEffectUseMagazine id="AP_ScarabUM">
+        <EditorCategories value="Race:Protoss"/>
+        <AmmoEffect value="AP_ScarabTimedLife"/>
+    </CEffectUseMagazine>
 </Catalog>

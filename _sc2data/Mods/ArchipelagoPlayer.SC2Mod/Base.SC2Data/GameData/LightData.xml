@@ -976,4 +976,23 @@
         </ToDInfoArray>
         <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
     </CLight>
+    <CLight id="AP_PortraitReaver" parent="default">
+        <ToDInfoArray index="0" Id="PortraitReaver" AmbientColor="0.262745,0.156863,0.184314" Colorize="1">
+            <Param index="HDRExposure" value="1.480000"/>
+            <Param index="HDRBloomThreshold" value="1.950000"/>
+            <Param index="HDREmisMultiplier" value="5.400000"/>
+            <Param index="ColorizationHue" value="-0.110000"/>
+            <Param index="ColorizationBlend" value="0.200000"/>
+            <DirectionalLight index="Key">
+                <Color value="0.968628,0.729412,0.466667"/>
+                <ColorMultiplier value="2.000000"/>
+                <SpecularColor value="0.956863,0.886275,0.921569"/>
+                <SpecColorMultiplier value="3.000000"/>
+                <Direction value="0.970205,-0.156270,-0.185153"/>
+            </DirectionalLight>
+            <DirectionalLight index="Fill" Color="0.000000,0.501961,1.000000" ColorMultiplier="2.000000" Direction="-0.744137,0.211131,0.633786"/>
+            <DirectionalLight index="Back" Color="0.615686,0.639216,0.815686" ColorMultiplier="5.000000" Direction="-0.827570,-0.049312,0.559193"/>
+        </ToDInfoArray>
+        <EditorCategories value="LightGroup:PortraitsUnitsProtoss"/>
+    </CLight>
 </Catalog>

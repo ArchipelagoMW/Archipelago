@@ -4454,6 +4454,21 @@
         <Arc value="360"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_SOAMothershipLineAttack"/>
     </CAbilEffectTarget>
+    <CAbilArmMagazine id="AP_ReaverHangar">
+        <AbilSetId value="ReaverHanger"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Leash value="20"/>
+        <InfoArray index="Ammo1" Time="8" CountStart="5" Unit="AP_Scarab">
+            <Charge Link="AP_ReaverScarabs" Location="Unit"/>
+            <Button DefaultButtonFace="AP_ReaverScarabs" Requirements="AP_ArmScarab">
+                <Flags index="ToSelection" value="1"/>
+            </Button>
+            <Flags index="AutoBuild" value="1"/>
+            <Flags index="AutoBuildOn" value="1"/>
+        </InfoArray>
+        <Alert value="TrainComplete"/>
+        <MaxCount value="5"/>
+    </CAbilArmMagazine>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

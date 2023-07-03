@@ -3658,8 +3658,8 @@
             <AbilLinkDisableArray value="heal"/>
             <AbilLinkDisableArray value="AP_heal"/>
             <!-- TODO: AI abilities -->
-<!--            <AbilLinkDisableArray value="MercMedicHeal"/>-->
-<!--            <AbilLinkDisableArray value="MengskMedicHeal"/>-->
+            <!--            <AbilLinkDisableArray value="MercMedicHeal"/>-->
+            <!--            <AbilLinkDisableArray value="MengskMedicHeal"/>-->
             <AbilLinkDisableArray value="MedivacHeal"/>
             <AbilLinkDisableArray value="AP_MedivacHeal"/>
         </Modification>
@@ -3702,5 +3702,26 @@
             <StateFlags index="Passive" value="1"/>
             <StateFlags index="Stun" value="1"/>
         </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ScarabReveal">
+        <Alignment value="Negative"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="NotCloaked"/>
+        <Duration value="7"/>
+        <Modification>
+            <ModifyFlags index="Reveal" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_ScarabTimedLife">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="0.0625"/>
+        <InitialEffect value="SuicideRemove"/>
+        <ExpireEffect value="SuicideRemove"/>
+        <Modification>
+            <StateFlags index="Summoned" value="1"/>
+        </Modification>
+        <KillCredit Value="Caster"/>
     </CBehaviorBuff>
 </Catalog>

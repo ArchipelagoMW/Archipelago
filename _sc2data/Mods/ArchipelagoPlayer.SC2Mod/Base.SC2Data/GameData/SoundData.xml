@@ -6262,4 +6262,95 @@
         <Pitch value="-1.000000,1.000000"/>
         <Volume value="2.000000,2.000000"/>
     </CSound>
+    <CSound id="AP_Reaver_Attack" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Reaver_Attack00.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Attack01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Attack02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Attack03.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Attack04.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Reaver_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_AttackLaunch00.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_AttackLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_AttackLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_AttackLaunch03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_AttackLaunch04.wav" FacialGroup=""/>
+        <DupeMaximumMethod value="Replace"/>
+        <Pitch value="-3.000000,0.000000"/>
+        <Volume value="-6.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_Reaver_Death" parent="ProtossDeath">
+        <AssetArray File="AP\Assets\Sounds\Reaver_Death00.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Death01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Death02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Death03.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Reaver_Help" parent="ProtossHelp">
+        <AssetArray File="LocalizedData\Sounds\ProtossUnitVO\Executor\Alert_ProtossForcesUnderAttack.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Reaver_Pissed" parent="ProtossPissed">
+        <AssetArray File="AP\Assets\Sounds\Reaver_Pissed00.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Pissed01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Pissed03.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Reaver_Ready" parent="ProtossReady">
+        <AssetArray File="AP\Assets\Sounds\Reaver_Ready00.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="2.000000,2.000000"/>
+    </CSound>
+    <CSound id="AP_Reaver_ScarabExplode" parent="Death">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_ScarabImpact00.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_ScarabImpact01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_ScarabImpact02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_ScarabImpact03.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_ScarabImpact04.wav" FacialGroup=""/>
+        <Category value="Combat"/>
+        <Pitch value="-4.000000,0.000000"/>
+        <Volume value="0.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Reaver_What" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Reaver_What00.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_What01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_What02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_What04.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Pissed02.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Reaver_Yes" parent="ProtossAck_Void">
+        <AssetArray File="AP\Assets\Sounds\Reaver_Yes00.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Yes01.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Yes02.ogg" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Yes03.ogg" FacialGroup=""/>
+        <Pitch value="-0.300000,0.300000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Reaver_moveStart" parent="Movement">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Move00.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Move01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Move02.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Move03.wav" FacialGroup=""/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-8.000000,-8.000000"/>
+    </CSound>
+    <CSound id="AP_Reaver_Land" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Land00.wav" Volume="-3.000000,-3.000000" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Land01.wav" FacialGroup=""/>
+        <AssetArray File="AP\Assets\Sounds\Reaver_Land02.wav" Volume="-1.000000,-1.000000" FacialGroup=""/>
+        <Category value="Combat"/>
+        <DupeDestroyCount value="5"/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-6.000000,-4.000000"/>
+    </CSound>
 </Catalog>
