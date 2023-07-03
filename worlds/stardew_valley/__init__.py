@@ -276,7 +276,7 @@ class StardewValleyWorld(World):
                 instance_mod_versions[mod] = mod_versions[mod]
 
         excluded_options = [options.BundleRandomization, options.BundlePrice,
-                            options.NumberOfPlayerBuffs, options.Mods]
+                            options.NumberOfMovementBuffs, options.NumberOfLuckBuffs, options.Mods]
         slot_data = dict(self.options.options)
         for option in excluded_options:
             slot_data.pop(option.internal_name)
