@@ -9889,7 +9889,7 @@
     <CEffectSet id="AP_ScarabExplode">
         <!-- This Validator breaks Reaver drops (Loading Reaver before Scarab explodes), therefore got disabled -->
         <!-- There are no Reaver drops in Vanilla, but they exist in AP -->
-<!--        <ValidatorArray value="CasterIsNotHidden"/>-->
+        <!--        <ValidatorArray value="CasterIsNotHidden"/>-->
         <EditorCategories value="Race:Protoss"/>
         <EffectArray value="AP_ScarabExplodeTargetDamage"/>
         <EffectArray value="Suicide"/>
@@ -9941,4 +9941,164 @@
         <EditorCategories value="Race:Protoss"/>
         <AmmoEffect value="AP_ScarabTimedLife"/>
     </CEffectUseMagazine>
+    <CEffectApplyBehavior id="AP_PurificationNovaApply">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_PurificationNova"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_PurificationNovaApplySpeed">
+        <EditorCategories value=""/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_PurificationNovaSpeedBoost"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_PurificationNovaCooldownVisualAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_PurificationNovaCooldownVisual"/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="AP_PurificationNovaDamage">
+        <ValidatorArray value="AP_DisruptorDamageFilter"/>
+        <EditorCategories value=""/>
+        <ResponseFlags index="Acquire" value="1"/>
+        <ResponseFlags index="Flee" value="1"/>
+        <ShieldBonus value="55"/>
+        <Amount value="145"/>
+        <Death value="Electrocute"/>
+    </CEffectDamage>
+    <CEffectIssueOrder id="AP_PurificationNovaMorph">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="AP_PurificationNovaMorph"/>
+    </CEffectIssueOrder>
+    <CEffectIssueOrder id="AP_PurificationNovaMorphBack">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="AP_PurificationNovaMorphBack"/>
+    </CEffectIssueOrder>
+    <CEffectDamage id="AP_PurificationNovaNotificationDamage">
+        <ValidatorArray value="AP_TargetHasVisionOfSource"/>
+        <EditorCategories value=""/>
+        <Flags index="Notification" value="1"/>
+        <SearchFlags index="CallForHelp" value="1"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_PurificationNovaNotificationSearch">
+        <ValidatorArray value="CasterIsVisible"/>
+        <EditorCategories value=""/>
+        <SearchFilters value="Ground;Self,Player,Ally,RawResource,HarvestableResource,Missile,Item,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="10" Effect="AP_PurificationNovaNotificationDamage"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_PurificationNovaSearch">
+        <ValidatorArray value="CasterIsVisible"/>
+        <EditorCategories value=""/>
+        <SearchFilters value="Ground;Self,Missile,Item,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="2.5" Effect="AP_PurificationNovaDamage"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_PurificationNovaSearchSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_PurificationNovaSearch"/>
+        <EffectArray value="AP_PurificationNovaMorphBack"/>
+    </CEffectSet>
+    <CEffectSet id="AP_PurificationNovaSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_PurificationNovaMorph"/>
+        <EffectArray value="AP_PurificationNovaApply"/>
+        <EffectArray value="AP_PurificationNovaApplySpeed"/>
+        <EffectArray value="AP_PurificationNovaCooldownVisualAB"/>
+    </CEffectSet>
+    <CEffectCreateUnit id="AP_PurificationNovaTargettedCU">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_PurificationNovaTargettedSpawnSet"/>
+        <SpawnUnit value="AP_DisruptorPhased"/>
+        <SpawnRange value="1"/>
+    </CEffectCreateUnit>
+    <CEffectApplyBehavior id="AP_PurificationNovaTargettedCasterAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_PurificationNovaTargettedCaster"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_PurificationNovaTargettedInitialSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_PurificationNovaTargettedCasterAB"/>
+        <EffectArray value="AP_PurificationNovaTargettedCU"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_PurificationNovaTargettedIssueOrder">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="move"/>
+        <Target Effect="AP_PurificationNovaTargettedCU" Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectEnumArea id="AP_PurificationNovaTargettedSearch">
+        <ValidatorArray value="CasterIsVisible"/>
+        <EditorCategories value=""/>
+        <LaunchLocation Value="TargetUnit"/>
+        <ImpactLocation Value="TargetUnit"/>
+        <SearchFilters value="Ground;Self,Missile,Item,Dead,Hidden,Invulnerable"/>
+        <AreaArray Radius="1.5" Effect="AP_PurificationNovaDamage"/>
+        <SearchFlags index="SameCliff" value="1"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_PurificationNovaTargettedSearchSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_PurificationNovaTargettedSearch"/>
+        <EffectArray value="Kill"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_PurificationNovaTargettedSpawnAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_PurificationNovaTargettedTarget"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_PurificationNovaTargettedSpawnSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_PurificationNovaTargettedSpawnAB"/>
+        <EffectArray value="AP_PurificationNovaTargettedIssueOrder"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_DisruptorWeaponDamage">
+        <EditorCategories value="Race:Protoss"/>
+        <Amount value="9"/>
+    </CEffectDamage>
+    <CEffectEnumArea id="AP_OverchargePushSearch">
+        <ValidatorArray value="AP_IsDisruptor"/>
+        <EditorCategories value=""/>
+        <SearchFilters value="-;Self,Neutral,Enemy,Structure,RawResource,HarvestableResource,Missile,Item,Dead,Hidden"/>
+        <AreaArray Radius="1" Effect="AP_OverchargeApplyPush"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_OverchargeSearchSet">
+        <EditorCategories value=""/>
+        <EffectArray value="AP_OverchargePushSearch"/>
+        <EffectArray value="AP_OverchargeSearch"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_OverchargeApplyPush">
+        <EditorCategories value=""/>
+        <Behavior value="AP_DisruptorPush"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyForce id="AP_OverchargeForce">
+        <EditorCategories value=""/>
+        <WhichLocation Value="CasterUnit"/>
+        <Amount value="1"/>
+    </CEffectApplyForce>
+    <CEffectEnumArea id="AP_OverchargeSearch">
+        <SearchFilters value="-;Self,Player,Ally,Neutral,RawResource,HarvestableResource,Missile,Item,Stasis,Dead,Hidden,Invulnerable"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="AP_ChargedBlastSearch">
+        <SearchFilters value="Ground;Self,Player,Ally,Neutral,RawResource,HarvestableResource,Missile,Item,Dead,Hidden,Invulnerable"/>
+    </CEffectEnumArea>
+    <CEffectSet id="AP_ChargedBlastSet">
+        <EffectArray value="AP_ChargedBlastMoveOrder"/>
+        <!-- This Effect doesn't exist -->
+        <EffectArray value="AP_ChargedBlastCooldownVisualAB"/>
+        <TargetLocationType value="Point"/>
+        <ValidatorArray value="TargetIsPathable"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_ChargedBlastMoveOrder">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Abil value="move"/>
+        <Player Value="Caster"/>
+        <Target Value="TargetPoint"/>
+    </CEffectIssueOrder>
 </Catalog>

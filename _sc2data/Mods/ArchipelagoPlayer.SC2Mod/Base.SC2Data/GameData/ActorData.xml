@@ -5457,6 +5457,10 @@
     <CActorSound id="AP_CocoonCancelOrCocoonComplete" parent="SoundOneShot">
         <Sound value="CocoonCancelOrCocoonComplete"/>
     </CActorSound>
+    <CActorSplat id="AP_ChargedBlastCursor" parent="ProtossCursorSplat" abil="AP_ChargedBlastTargeted">
+        <Model value="VoidProtossAOECursorSplat"/>
+    </CActorSplat>
+    <CActorRange id="AP_ChargedBlastRange" parent="RangeAbil" abil="AP_ChargedBlastTargeted"/>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -12927,6 +12931,300 @@
         <HostSiteOps Ops="SOpAttachOriginStationary"/>
         <Sound value="AP_Mothership_BlinkUp"/>
     </CActorSound>
+    <CActorUnit id="AP_Disruptor" parent="GenericUnitStandard" unitName="AP_Disruptor">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="ChargingAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Disruptor_Land"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Behavior.AP_PurificationNovaCooldownVisual.On" Send="AnimBracketStop Work"/>
+        <On Terms="Behavior.AP_PurificationNovaCooldownVisual.Off" Send="AnimBracketStart Work Stand,Work,Start Stand,Work Stand,Work,End"/>
+        <On Terms="Behavior.AP_PurificationNova.On" Send="ModelSwap PurificationNovaModelSwap"/>
+        <On Terms="Behavior.AP_PurificationNova.Off" Send="ModelSwap Disruptor"/>
+        <On Terms="Behavior.AP_PurificationNova.On" Send="Create PurificationNovaBirth"/>
+        <On Terms="AbilCooldown.AP_PurificationNovaTargeted.Spend" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="AbilCooldown.AP_PurificationNovaTargeted.Regen" Send="AnimBracketStop Cover"/>
+        <Model value="Disruptor"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="Disruptor"/>
+        <DeathArray index="Normal" ModelLink="DisruptorDeath" SoundLink="AP_Disruptor_Death"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <DeathCustoms ActorModel="DisruptorDeathRagdoll" ModelLink="DisruptorDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="BloodReduced"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollWithTeamColor" ModelLink="DisruptorDeathRagdoll" Name="RagdollSpineCrawlerHurl">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <DeathActorModel value="DisruptorDeath"/>
+        <PlacementModel value="Disruptor"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_DisruptorPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="90"/>
+        <BarWidth value="65"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-protoss-disruptor.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value="Zealot_GroupWhat"/>
+        <GroupSoundArray index="Yes" value="Zealot_GroupYes"/>
+        <GroupSoundArray index="Attack" value="Zealot_GroupAttack"/>
+        <GroupSoundArray index="Movement" value="AP_Disruptor_Movement"/>
+        <GroupSoundArray index="Board" value="Zealot_GroupBoard"/>
+        <HeroIcon value="Assets\Textures\Btn-unit-protoss-disruptor.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Pusher_Ready"/>
+        <SoundArray index="Help" value="AP_Pusher_Help"/>
+        <SoundArray index="What" value="AP_Pusher_What"/>
+        <SoundArray index="Yes" value="AP_Pusher_Yes"/>
+        <SoundArray index="Attack" value="AP_Pusher_Attack"/>
+        <SoundArray index="Pissed" value="AP_Pusher_Pissed"/>
+        <SoundArray index="Movement" value="AP_Disruptor_Movement"/>
+        <SoundArray index="Turning" value="Observer_Turning"/>
+        <SoundArray index="Board" value="Observer_Board"/>
+        <SoundArray index="Click" value="Observer_Click"/>
+        <SoundArray index="ClickError" value="Observer_ClickError"/>
+        <SoundArray index="Highlight" value="Observer_Highlight"/>
+        <UnitIcon value="Assets\Textures\Btn-unit-protoss-disruptor.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-protoss-disruptor.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-protoss-disruptor-shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-protoss-disruptor-shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-protoss-disruptor-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_Disruptor_Land" parent="SoundOneShot"/>
+    <CActorAction id="AP_DisruptorAttack" parent="GenericAttack" effectAttack="AP_DisruptorWeaponDamage">
+        <LaunchSiteOps Ops="SOpAttachCenter"/>
+        <LaunchAttachQuery Methods="Center"/>
+        <Beam value="AP_DisruptorAttackBeam"/>
+        <ImpactMap index="None" Sound="AP_Disruptor_AttackImpact"/>
+    </CActorAction>
+    <CActorBeamSimple id="AP_DisruptorAttackBeam" parent="GenericAttackBeam">
+        <Model value="AP_DisruptorAttackBeam"/>
+    </CActorBeamSimple>
+    <CActorBeamSimple id="AP_DisruptorBeam" parent="BeamSimpleAnimationStyleContinuous">
+        <On Terms="Effect.AP_PurificationNovaTargettedSpawnSet.Start; At Target" Send="Create"/>
+        <Model value="DisruptorBeam"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <HostLaunch Subject="_Unit" Scope="Caster"/>
+        <HostLaunchSiteOps Ops="SOpAttachCenter"/>
+        <HostImpact Subject="_Unit" Scope="Target"/>
+        <HostImpactSiteOps Ops="SOpAttachCenter"/>
+    </CActorBeamSimple>
+    <CActorModel id="AP_DisruptorDeath">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="CreepEngulfment" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="ActorCreation; ScopeContains _RedTintDeath" Send="SetTintColor 255,0,0"/>
+        <On Terms="ActorCreation; ScopeContains _GreenTintDeath" Send="SetTintColor 0,255,0"/>
+        <On Terms="ActorCreation; ScopeContains _BlueTintDeath" Send="SetTintColor 0,0,255"/>
+        <On Terms="ActorCreation; ScopeContains _YellowTintDeath" Send="SetTintColor 255,255,0"/>
+        <On Terms="ActorCreation; ScopeContains _CyanTintDeath" Send="SetTintColor 0,255,255"/>
+        <On Terms="ActorCreation; ScopeContains _PurpleTintDeath" Send="SetTintColor 255,0,255"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="AnimCopy ::Creator"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionGround"/>
+        <Model value="UnitDeathModel"/>
+        <ModelFlags index="SuppressMissingAttachErrors" value="1"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+    </CActorModel>
+    <CActorModel id="AP_DisruptorDeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <Remove Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionGround"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorForceSphere id="AP_DisruptorExplosionForce">
+        <On Terms="Effect.AP_PurificationNovaSearch.Start" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create AP_DisruptorExplosionUpForce"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="40.000000,3.000000"/>
+        <Radius value="3.000000,0.200000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_DisruptorExplosionUpForce">
+        <Host Subject="::Creator"/>
+        <Field value="Directional"/>
+        <Duration value="0.150000"/>
+        <Magnitude value="12.000000,1.000000"/>
+        <Radius value="3.000000,0.200000"/>
+    </CActorForceSphere>
+    <CActorUnit id="AP_DisruptorPhased" parent="GenericUnitStandard" unitName="AP_DisruptorPhased">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="ChargingAnim"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Model value="PurificationNovaModelSwap"/>
+        <DeathArray index="Normal" SoundLink="Disruptor_Death"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <DeathActorModel value="UnitDeathModelWithDeathMotionGround"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_DisruptorPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="90"/>
+        <BarWidth value="65"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-disruptorphasemod.dds"/>
+        </GroupIcon>
+        <HighlightTooltip value="Unit/Name/AP_DisruptorPhased"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_Pusher_Ready"/>
+        <SoundArray index="Help" value="AP_Pusher_Help"/>
+        <SoundArray index="What" value="AP_Pusher_What"/>
+        <SoundArray index="Yes" value="AP_Pusher_Yes"/>
+        <SoundArray index="Attack" value="AP_Pusher_Attack"/>
+        <SoundArray index="Pissed" value="AP_Pusher_Pissed"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <UnitIcon value="Assets\Textures\Btn-unit-protoss-disruptor.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-disruptorphasemod.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorRange id="AP_DisruptorPurificationNovaTargettedRange">
+        <On Terms="SelectionLocalUpdate.AP_Disruptor.Start" Send="Create"/>
+        <On Terms="SelectionLocalUpdate.AP_Disruptor.Stop" Send="Destroy"/>
+        <Range value="12.000000"/>
+        <Icon value="Assets\Textures\RadarIcon2.dds"/>
+    </CActorRange>
+    <CActorSound id="AP_Disruptor_DisruptionOvercharge_Attack" parent="SoundOneShot">
+        <On Terms="Effect.AP_PurificationNovaSearch.Start" Send="Create"/>
+        <On Terms="Effect.AP_PurificationNovaTargettedSearch.Start" Send="Create"/>
+        <Layers Sound="AP_Disruptor_DisruptionOvercharge_Discharge">
+            <Chance value="100"/>
+            <Pitch value="0.000000,0.000000"/>
+            <PlayDelay value="0,0"/>
+            <Volume value="0.000000,0.000000"/>
+        </Layers>
+    </CActorSound>
+    <CActorSound id="AP_Disruptor_DisruptionOvercharge_LoopSound" parent="SoundContinuous">
+        <On Terms="Behavior.AP_Overcharge.On" Send="Create"/>
+        <On Terms="Behavior.AP_Overcharge.Off" Send="Destroy"/>
+        <On Terms="Behavior.AP_PurificationNovaTargettedTarget.On" Send="Create"/>
+        <On Terms="Behavior.AP_PurificationNovaTargettedTarget.Off" Send="Destroy"/>
+        <Sound value="AP_Disruptor_DisruptionOvercharge_Loop"/>
+    </CActorSound>
+    <CActorSound id="AP_Disruptor_DisruptionOvercharge_StartSound" parent="SoundOneShot">
+        <On Terms="Behavior.AP_PurificationNova.On" Send="Create"/>
+        <On Terms="Behavior.AP_PurificationNovaTargettedTarget.On" Send="Create"/>
+        <Sound value="AP_Disruptor_DisruptionOvercharge_Start"/>
+    </CActorSound>
+    <CActorSound id="AP_Disruptor_DisruptionOvercharge_StopSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_PurificationNovaSearch.Start" Send="Create"/>
+        <On Terms="Effect.AP_PurificationNovaTargettedSearch.Start" Send="Create"/>
+        <Sound value="AP_Disruptor_DisruptionOvercharge_Stop"/>
+    </CActorSound>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -14397,12 +14695,6 @@
         </GroupIcon>
         <HeroIcon value="Assets\Textures\BTN-Unit-Protoss-Immortal.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
-        <SoundArray index="Ready" value="AP_Reaver_Ready"/>
-        <SoundArray index="Help" value="AP_Reaver_Help"/>
-        <SoundArray index="What" value="AP_Reaver_What"/>
-        <SoundArray index="Yes" value="AP_Reaver_Yes"/>
-        <SoundArray index="Attack" value="AP_Reaver_Attack"/>
-        <SoundArray index="Pissed" value="AP_Reaver_Pissed"/>
         <SoundArray index="Movement" value="AP_Reaver_moveStart"/>
         <UnitIcon value="Assets\Textures\btn-unit-protoss-reaver.dds"/>
         <Wireframe>
@@ -14415,6 +14707,46 @@
         </WireframeShield>
     </CActorUnit>
     <CActorSound id="AP_Reaver_Land" parent="SoundOneShot"/>
+    <CActorModel id="AP_PurificationNova" parent="ModelAnimationStyleOneShot">
+        <FogVisibility value="Hidden"/>
+        <On Terms="Effect.AP_PurificationNovaSearch.Start; At Caster" Send="Create"/>
+        <On Terms="Effect.AP_PurificationNovaTargettedSearch.Start; At Target" Send="Create"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachCenter" HoldPosition="1" HoldRotation="1"/>
+        <Model value="PurificationNova"/>
+    </CActorModel>
+    <CActorForceSphere id="AP_PurificationNovaForce">
+        <On Terms="Effect.AP_PurificationNovaDamage.Start; At Target" Send="Create"/>
+        <On Terms="ActorCreation" Send="Create AP_PurificationNovaForceUp"/>
+        <HostSiteOps Ops="SOpShadow SOpRandomPointInCircleDot25"/>
+        <Duration value="0.300000"/>
+        <Magnitude value="16.000000,8.000000"/>
+        <Radius value="2.100000,0.300000"/>
+    </CActorForceSphere>
+    <CActorForceSphere id="AP_PurificationNovaForceUp">
+        <HostSiteOps Ops="SOpShadow SOpRotVariancerUp35"/>
+        <Magnitude value="15.000000,5.000000"/>
+        <Radius value="1.900000,0.300000"/>
+        <Field value="Directional"/>
+        <Duration value="0.500000"/>
+    </CActorForceSphere>
+    <CActorModel id="AP_PurificationNovaImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_PurificationNovaDamage.Start; At Target" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="PurificationNovaImpact"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_PurificationNovaRangeIndicator" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_PurificationNova.On" Send="Create"/>
+        <On Terms="Behavior.AP_PurificationNova.Off" Send="Destroy"/>
+        <On Terms="Behavior.AP_PurificationNovaTargettedTarget.On" Send="Create"/>
+        <On Terms="Behavior.AP_PurificationNovaTargettedTarget.Off" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="PurificationNovaRangeIndicator"/>
+    </CActorModel>
     <CActorSound id="SOAMothershipv4WarpAwaySound2" parent="SoundOneShot">
         <Sound value="Mothership_RecallStart"/>
     </CActorSound>
@@ -14538,9 +14870,8 @@
     </CActorUnit>
     <CActorAction id="AP_ScarabAttack" parent="GenericAttack" effectImpact="AP_ScarabExplodeTargetDamage" effectLaunch="AP_ScarabLM">
         <LaunchAssets Sound="AP_Reaver_AttackLaunch"/>
-        <Missile value="AP_ScarabAttackMissile"/>
         <ImpactSiteOps Ops="SOpAttachHarness SOpAttachVolumeStandard SOpForwardLaunchGuide"/>
-        <ImpactMap index="None" Model="AP_ScarabAttackImpact" Sound="AP_Reaver_ScarabExplode"/>
+        <ImpactMap index="None" Sound="AP_Reaver_ScarabExplode"/>
         <ImpactPhysics Name="Explosion" MatchKeys="Basic" Physics="AP_ScarabExplosionForce"/>
         <ShieldFlashType value="Header"/>
     </CActorAction>

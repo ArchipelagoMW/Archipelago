@@ -6353,4 +6353,123 @@
         <Pitch value="-2.000000,0.000000"/>
         <Volume value="-6.000000,-4.000000"/>
     </CSound>
+    <CSound id="AP_Disruptor_Death" parent="ProtossDeath">
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall3.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Protoss\SharedEffects\Explosions\Protoss_ExplosionSmall4.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,0.000000"/>
+        <Volume value="-2.000000,1.000000"/>
+    </CSound>
+    <CSound id="AP_Disruptor_DisruptionOvercharge_Attack" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Disruptor_Attack_01.ogg" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Attack_02.ogg" FacialGroup=""/>
+        <Pitch value="-3.000000,-1.000000"/>
+        <Volume value="-1.000000,0.000000"/>
+    </CSound>
+    <CSound id="AP_Disruptor_DisruptionOvercharge_Loop" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Phoenix\Phoenix_AntiGravLoop0.wav"/>
+        <LoopCount value="-1"/>
+        <Pitch value="1.000000,3.000000"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
+    <CSound id="AP_Disruptor_DisruptionOvercharge_Start" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Disruptor_Overcharge_Start_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Overcharge_Start_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Overcharge_Start_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Overcharge_Start_04.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Disruptor_DisruptionOvercharge_Stop" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Disruptor_Overcharge_End_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Overcharge_End_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Overcharge_End_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Overcharge_End_04.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-1.000000,-1.000000"/>
+    </CSound>
+    <CSound id="AP_Disruptor_Movement" parent="Movement">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Disruptor_Mv_Start_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Mv_Start_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Mv_Start_03.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,0.000000"/>
+        <Volume value="-5.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Pusher_Attack" parent="ProtossAck">
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_019.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_020.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_021.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_022.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_023.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Pusher_Help" parent="ProtossHelp">
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_026.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_027.ogg" FacialGroup=""/>
+        <Volume value="-2.000000,-2.000000"/>
+    </CSound>
+    <CSound id="AP_Pusher_Pissed" parent="ProtossAck">
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_028.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_029.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_030.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_031.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_032.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_033.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_034.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_042.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_043.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_044.ogg" FacialGroup=""/>
+        <Select value="Sequential"/>
+    </CSound>
+    <CSound id="AP_Pusher_Ready" parent="ProtossReady">
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_006.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_040.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Pusher_What" parent="ProtossAck">
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_007.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_008.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_009.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_010.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_011.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Pusher_Yes" parent="ProtossAck">
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_012.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_013.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_014.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_015.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_016.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_017.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_018.ogg" FacialGroup=""/>
+        <AssetArray File="LocalizedData\Sounds\VO\RobotPusher_Pusher_024.ogg" FacialGroup=""/>
+    </CSound>
+    <CSound id="AP_Disruptor_Land" parent="Land">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\WarpPrism_Land_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarpPrism_Land_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarpPrism_Land_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarpPrism_Land_04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\WarpPrism_Land_05.wav" FacialGroup=""/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-6.000000,-5.000000"/>
+    </CSound>
+    <CSound id="AP_Disruptor_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Protoss\Probe\Probe_AttackImpact0.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Probe\Probe_AttackImpact1.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Probe\Probe_AttackImpact2.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Probe\Probe_AttackImpact3.wav"/>
+        <AssetArray File="Assets\Sounds\Protoss\Probe\Probe_AttackImpact4.wav"/>
+        <Pitch value="-2.000000,6.000000"/>
+        <Volume value="-9.000000,-9.000000"/>
+    </CSound>
+    <CSound id="AP_Disruptor_DisruptionOvercharge_Discharge" parent="Spell">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Disruptor_Discharge_01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Discharge_02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Discharge_03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Disruptor_Discharge_06.wav" FacialGroup=""/>
+        <Pitch value="-2.000000,1.000000"/>
+    </CSound>
 </Catalog>

@@ -2247,4 +2247,12 @@
         <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-ScarabShot.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_PurificationNovaTargeted">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-PurificationNova.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-PurificationNova.dds"/>
+    </CButton>
+    <CButton id="AP_PurificationNova">
+        <Icon value="Assets\Textures\BTN-Ability-Protoss-PurificationNova.dds"/>
+        <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-PurificationNova.dds"/>
+    </CButton>
 </Catalog>

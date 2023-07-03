@@ -3146,4 +3146,39 @@
         <WhichPlayer Value="Caster"/>
         <Value value="AP_ScarabNotArmed"/>
     </CValidatorPlayerRequirement>
+    <CValidatorUnitType id="AP_IsAPDisruptor">
+        <Value value="AP_Disruptor"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsDisruptor">
+        <CombineArray value="AP_IsAPDisruptor"/>
+    </CValidatorCombine>
+    <CValidatorLocationVision id="AP_TargetHasVisionOfSource">
+        <WhichLocation Value="SourceUnit"/>
+        <WhichPlayer Value="Target"/>
+    </CValidatorLocationVision>
+    <CValidatorCombine id="AP_DisruptorDamageFilter">
+        <CombineArray value="AP_IsNotDisruptor"/>
+        <CombineArray value="AP_DisruptorPhasedDamageFilter"/>
+        <CombineArray value="AP_IsNotFriendly"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_IsNotAPDisruptor">
+        <Value value="AP_Disruptor"/>
+        <Find value="0"/>
+    </CValidatorUnitType>
+    <CValidatorCombine id="AP_IsNotDisruptor">
+        <Type value="And"/>
+        <CombineArray value="AP_IsNotAPDisruptor"/>
+    </CValidatorCombine>
+    <CValidatorCombine id="AP_DisruptorPhasedDamageFilter">
+        <CombineArray value="AP_APDisruptorPhasedDamageFilter"/>
+    </CValidatorCombine>
+    <CValidatorUnitType id="AP_APDisruptorPhasedDamageFilter">
+        <Value value="AP_DisruptorPhased"/>
+    </CValidatorUnitType>
+    <CValidatorUnitFilters id="AP_IsNotFriendly">
+        <Filters value="-;Self,Player,Ally"/>
+    </CValidatorUnitFilters>
+    <CValidatorUnitCompareBehaviorCount id="AP_NoPurificationNova">
+        <Behavior value="AP_PurificationNova"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>

@@ -3393,7 +3393,7 @@
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
         <DisableValidatorArray value="AP_BattlecruiserNotJumping"/>
         <!-- TODO: Check these abilities -->
-        <!--        <RemoveValidatorArray value="NoPurificationNova"/>-->
+        <RemoveValidatorArray value="AP_NoPurificationNova"/>
         <!--        <RemoveValidatorArray value="NotOracleStasisTrapped"/>-->
         <TimeScaleSource Value="Global"/>
         <Duration value="20"/>
@@ -3528,7 +3528,7 @@
         <Alignment value="Negative"/>
         <InfoIcon value="Assets\Textures\btn-status-detector.dds"/>
         <RemoveValidatorArray value="AP_NotOracleStasisTrapped"/>
-        <!--        <RemoveValidatorArray value="NoPurificationNova"/>-->
+        <RemoveValidatorArray value="AP_NoPurificationNova"/>
         <Duration value="60"/>
         <FinalEffect value="AP_RevelationDestroy"/>
         <ExpireEffect value="AP_RevelationDestroy"/>
@@ -3723,5 +3723,89 @@
             <StateFlags index="Summoned" value="1"/>
         </Modification>
         <KillCredit Value="Caster"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PurificationNova">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-arcshield.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <Duration value="4"/>
+        <Period value="0.125"/>
+        <PeriodicEffect value="AP_PurificationNovaNotificationSearch"/>
+        <ExpireEffect value="AP_PurificationNovaSearchSet"/>
+        <Modification>
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Benign" value="1"/>
+            <StateFlags index="Passive" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PurificationNovaCooldownVisual">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="28"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PurificationNovaSpeedBoost">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="4"/>
+        <Modification MoveSpeedBonus="1.5"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PurificationNovaTargettedCaster">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-arcshield.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Duration value="3"/>
+        <Modification MoveSpeedBonus="-2.2382"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_PurificationNovaTargettedTarget">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-arcshield.dds"/>
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <RemoveValidatorArray value="CasterNotDead"/>
+        <RemoveValidatorArray value="CasterIsNotHidden"/>
+        <Duration value="3"/>
+        <Period value="0.125"/>
+        <PeriodicEffect value="AP_PurificationNovaNotificationSearch"/>
+        <FinalEffect value="Suicide"/>
+        <ExpireEffect value="AP_PurificationNovaTargettedSearchSet"/>
+        <Modification MoveSpeedBonus="2">
+            <StateFlags index="Invulnerable" value="1"/>
+            <StateFlags index="Benign" value="1"/>
+            <StateFlags index="Passive" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_Overcharge">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="6"/>
+        <Period value="0.25"/>
+        <PeriodicEffect value="AP_OverchargeSearchSet"/>
+        <Modification>
+            <StateFlags index="Benign" value="1"/>
+            <StateFlags index="Passive" value="1"/>
+            <StateFlags index="SuppressCollision" value="1"/>
+        </Modification>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <DamageResponse Chance="1" ModifyFraction="0"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_DisruptorPush">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_IsDisruptor"/>
+        <Duration value="0.125"/>
+        <Period value="0.0625"/>
+        <InitialEffect value="AP_OverchargeForce"/>
+        <PeriodicEffect value="AP_OverchargeForce"/>
     </CBehaviorBuff>
 </Catalog>

@@ -4469,6 +4469,59 @@
         <Alert value="TrainComplete"/>
         <MaxCount value="5"/>
     </CAbilArmMagazine>
+    <CAbilEffectInstant id="AP_PurificationNova">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_PurificationNovaSet"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PurificationNova"/>
+        <SharedFlags index="RegisterChargeEvent" value="1"/>
+        <SharedFlags index="RegisterCooldownEvent" value="1"/>
+    </CAbilEffectInstant>
+    <CAbilMorph id="AP_PurificationNovaMorph">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PurificationNova"/>
+        <InfoArray Unit="AP_DisruptorPhased"/>
+        <Flags index="Transient" value="1"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_PurificationNovaMorphBack">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="PurificationNova"/>
+        <Flags index="Transient" value="1"/>
+        <InfoArray Unit="AP_Disruptor"/>
+    </CAbilMorph>
+    <CAbilEffectTarget id="AP_PurificationNovaTargeted">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <SharedFlags index="RegisterChargeEvent" value="1"/>
+        <SharedFlags index="RegisterCooldownEvent" value="1"/>
+        <Effect index="0" value="AP_PurificationNovaTargettedInitialSet"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Charge Link="Abil/PurificationNovaTargetted"/>
+            <Cooldown Link="Abil/PurificationNovaTargetted" TimeUse="30"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PurificationNovaTargeted">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_ChargedBlastTargeted">
+        <Alignment value="Negative"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="ChargedBlastSet"/>
+        <Flags index="RangeUsePathing" value="1"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Cost>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Range value="15"/>
+        <Arc value="360"/>
+        <CursorEffect value="AP_ChargedBlastSearch"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_ChargedBlast"/>
+    </CAbilEffectTarget>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->

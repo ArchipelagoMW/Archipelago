@@ -11121,4 +11121,42 @@
     <CModel id="AP_ScarabWeapon" parent="MissileFX">
         <Model value="Assets\Effects\Protoss\Reaver_Missile\Reaver_Missile.m3"/>
     </CModel>
+    <CModel id="AP_DisruptorPortrait" parent="DisruptorPortraitBase">
+        <Model value="Assets\Portraits\Protoss\DisruptorEx2_Portrait\DisruptorEx2_Portrait.m3"/>
+        <Image value="Assets\Textures\DisruptorPortrait_Static.dds"/>
+        <Lighting value="DisruptorPortrait"/>
+    </CModel>
+    <CModel id="AP_PurificationNova" parent="OneShotSpellFX">
+        <Model value="Assets\Effects\Protoss\Disruptor_PurificationNova\Disruptor_PurificationNova.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Radius value="2.500000"/>
+        <RadiusLoose value="2.500000"/>
+        <ScaleMax value="0.700000,0.700000,0.700000"/>
+        <ScaleMin value="0.700000,0.700000,0.700000"/>
+    </CModel>
+    <CModel id="AP_PurificationNovaImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\Disruptor_PurificationNova_Impact\Disruptor_PurificationNova_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_PurificationNovaModelSwap" parent="Unit">
+        <Model value="Assets\Units\Protoss\Disruptor_PhaseMode\Disruptor_PhaseMode.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Radius value="0.375000"/>
+        <SelectionRadius value="0.416500"/>
+        <ShadowRadius value="0.416500"/>
+    </CModel>
+    <CModel id="AP_PurificationNovaRangeIndicator" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\Disruptor_PhaseMode_Cursor\Disruptor_PhaseMode_Cursor.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Radius value="2.500000"/>
+        <RadiusLoose value="2.500000"/>
+        <ScaleMax value="0.750000,0.750000,0.750000"/>
+        <ScaleMin value="0.750000,0.750000,0.750000"/>
+    </CModel>
+    <CModel id="AP_DisruptorAttackBeam" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Protoss\TempestGroundBeam\TempestGroundBeam.m3"/>
+        <LowQualityModel value="ArchonAttackBeamLow"/>
+        <EditorCategories value="Race:Protoss"/>
+        <RadiusLoose value="1.000000"/>
+    </CModel>
 </Catalog>
