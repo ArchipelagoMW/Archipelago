@@ -416,7 +416,7 @@ CheckDupingItems = {
     }
 }
 
-Progression_Dicts = {
+ItemClassification_Dict = {
     # Items that are classified as progression
     "Progression":     {
         # abilities
@@ -468,8 +468,10 @@ Progression_Dicts = {
                 ItemName.TornadoFusion,
                 ItemName.HadesCupTrophy]]
         for item_name in set_
-
     },
+
+}
+visit_locking_dict={
     "2VisitLocking":   [
         ItemName.CastleKey,
         ItemName.BattlefieldsofWar,
@@ -502,8 +504,7 @@ Progression_Dicts = {
         ItemName.NamineSketches:     1,
     }
 }
-
-exclusionItem_table = {
+exclusion_item_table = {
     "StatUps": {
         ItemName.MaxHPUp,
         ItemName.MaxMPUp,
@@ -557,7 +558,7 @@ item_groups: typing.Dict[str, list] = {
     "Ground Finisher": [ItemName.GuardBreak, ItemName.Explosion,
                         ItemName.FinishingLeap],
     "Visit Lock":      [item_name for item_name in
-                        Progression_Dicts["2VisitLocking"]],
+                        visit_locking_dict["2VisitLocking"]],
     "Keyblade":        [item_name for item_name in Keyblade_Table.keys()],
     "Fire":            [ItemName.FireElement],
     "Blizzard":        [ItemName.BlizzardElement],

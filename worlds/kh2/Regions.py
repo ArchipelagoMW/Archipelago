@@ -1079,7 +1079,7 @@ def create_region(world: MultiWorld, player: int, active_locations, name: str, l
         for location in locations:
             loc_id = active_locations.get(location, 0)
             if loc_id:
-                location = KH2Location(player, location, loc_id.code, ret)
+                location = KH2Location(player, location, loc_id, ret)
                 ret.locations.append(location)
 
     return ret

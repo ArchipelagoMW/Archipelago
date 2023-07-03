@@ -4,7 +4,7 @@ import ModuleUpdate
 import json
 import Utils
 from pymem import pymem
-from worlds.kh2.Items import exclusionItem_table, CheckDupingItems
+from worlds.kh2.Items import exclusion_item_table, CheckDupingItems
 from worlds.kh2 import all_locations, item_dictionary_table, exclusion_table
 
 from worlds.kh2.WorldLocations import *
@@ -146,7 +146,7 @@ class KH2Context(CommonContext):
             "Defense Boost": 0x24FB,
             "AP Boost":      0x24F8}
 
-        self.AbilityCodeList = [self.kh2_item_name_to_id[item] for item in exclusionItem_table["Ability"]]
+        self.AbilityCodeList = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
 
         self.bitmask_item_code = [

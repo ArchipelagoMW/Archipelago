@@ -3,7 +3,7 @@ import logging
 
 from .Rules import *
 from .Items import *
-from .Locations import all_locations, setup_locations, exclusion_table, AllWeaponSlot
+from .Locations import all_locations, exclusion_table, AllWeaponSlot
 from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
 from .Options import KH2_Options
@@ -35,11 +35,11 @@ class KH2World(World):
     required_client_version = (0, 4, 0)
     option_definitions = KH2_Options
     # item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
-    base_offset = 0x130000
+    # base_offset = 0x130000
     item_name_to_id = {item: item_id
-                       for item_id, item in enumerate(item_dictionary_table.keys(), base_offset)}
+                       for item_id, item in enumerate(item_dictionary_table.keys(), 0x130000)}
     location_name_to_id = {item: location
-                           for location, item in enumerate(all_locations.keys(), base_offset)}
+                           for location, item in enumerate(all_locations.keys(), 0x130000)}
     item_name_groups = item_groups
 
     def __init__(self, multiworld: "MultiWorld", player: int):
@@ -95,8 +95,8 @@ class KH2World(World):
         """
         Returns created KH2Item
         """
-        #data = item_dictionary_table[name]
-        if name in Progression_Dicts["Progression"]:
+        # data = item_dictionary_table[name]
+        if name in ItemClassification_Dict["Progression"]:
             item_classification = ItemClassification.progression
         else:
             item_classification = ItemClassification.filler
@@ -109,7 +109,7 @@ class KH2World(World):
         """
         Fills ItemPool and manages schmovement, random growth, visit locking and random starting visit locking.
         """
-        self.visitlocking_dict = Progression_Dicts["AllVisitLocking"].copy()
+        self.visitlocking_dict = visit_locking_dict["AllVisitLocking"].copy()
         if self.multiworld.Schmovement[self.player] != "level_0":
             for _ in range(self.multiworld.Schmovement[self.player].value):
                 for name in {ItemName.HighJump, ItemName.QuickRun, ItemName.DodgeRoll, ItemName.AerialDodge,
@@ -127,7 +127,7 @@ class KH2World(World):
                 self.multiworld.push_precollected(self.create_item(random_growth))
 
         if self.multiworld.Visitlocking[self.player] == "no_visit_locking":
-            for item, amount in Progression_Dicts["AllVisitLocking"].items():
+            for item, amount in visit_locking_dict["AllVisitLocking"].items():
                 for _ in range(amount):
                     self.multiworld.push_precollected(self.create_item(item))
                     self.item_quantity_dict[item] -= 1
@@ -136,7 +136,7 @@ class KH2World(World):
                         self.visitlocking_dict.pop(item)
 
         elif self.multiworld.Visitlocking[self.player] == "second_visit_locking":
-            for item in Progression_Dicts["2VisitLocking"]:
+            for item in visit_locking_dict["2VisitLocking"]:
                 self.item_quantity_dict[item] -= 1
                 self.visitlocking_dict[item] -= 1
                 if self.visitlocking_dict[item] == 0:
@@ -229,8 +229,7 @@ class KH2World(World):
         """
         Creates the Regions and Connects them.
         """
-        location_table = setup_locations()
-        create_regions(self.multiworld, self.player, location_table)
+        create_regions(self.multiworld, self.player, self.location_name_to_id)
         connect_regions(self.multiworld, self.player)
 
     def set_rules(self):
@@ -375,7 +374,7 @@ class KH2World(World):
         """
         for item, value in self.multiworld.start_inventory[self.player].value.items():
             if item in ActionAbility_Table \
-                    or item in SupportAbility_Table or exclusionItem_table["StatUps"] \
+                    or item in SupportAbility_Table or exclusion_item_table["StatUps"] \
                     or item in DonaldAbility_Table or item in GoofyAbility_Table:
                 # cannot have more than the quantity for abilties
                 if value > item_dictionary_table[item].quantity:

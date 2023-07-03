@@ -2,7 +2,7 @@ from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import MultiWorld, CollectionState
 from .logic import *
-from .Items import exclusionItem_table
+from .Items import exclusion_item_table
 from .Locations import STT_Checks, exclusion_table
 from .Names import LocationName, ItemName, RegionName
 from ..generic.Rules import add_rule, forbid_items, set_rule
@@ -199,15 +199,15 @@ class KH2Rules:
 
         #  Forbid Abilities on popups due to game limitations
         for location in exclusion_table["Popups"]:
-            forbid_items(world.get_location(location, player), exclusionItem_table["Ability"])
-            forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
+            forbid_items(world.get_location(location, player), exclusion_item_table["Ability"])
+            forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
 
         for location in STT_Checks:
-            forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
+            forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
 
         # Santa's house also breaks with stat ups
         for location in {LocationName.SantasHouseChristmasTownMap, LocationName.SantasHouseAPBoost}:
-            forbid_items(world.get_location(location, player), exclusionItem_table["StatUps"])
+            forbid_items(world.get_location(location, player), exclusion_item_table["StatUps"])
 
     def set_kh2_goal(self):
         if self.world.multiworld.Goal[self.player] == "three_proofs":
