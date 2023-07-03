@@ -9,7 +9,7 @@ config file.
 
 A vast number of optional objectives in stardew valley can be shuffled around the multiworld. Most of these are optional, and the player can customize their experience in their YAML file.
 
-For these objectives, if they have a vanilla reward, this reward will instead be an item in the multiworld. For the remaining number of such objectives, there are a number of "Resource Pack" items, which are simply a stack of an item that may be useful to the player.
+For these objectives, if they have a vanilla reward, this reward will instead be an item in the multiworld. For the remaining number of such objectives, there are a number of "Resource Pack" items, which are simply an item or a stack of items that may be useful to the player.
 
 ## What is the goal of Stardew Valley?
 
@@ -21,6 +21,8 @@ The player can choose from a number of goals, using their YAML settings.
 - Get the achievement "Master Angler", which requires catching every fish in the game
 - Get the achievement "A Complete Collection", which requires donating all the artifacts and minerals to the museum
 - Get the achievement "Full House", which requires getting married and having two kids.
+- Get recognized as the "Greatest Walnut Hunter" by Mr Qi, which requires finding all 130 golden walnuts on ginger island
+- Achieve Perfection in your save file
 
 ## What are location check in Stardew Valley?
 
@@ -39,6 +41,8 @@ There also are a number of location checks that are optional, and individual pla
 - Skill Levels
 - Arcade Machines
 - Help Wanted quests
+- Participating in Festivals
+- Special Orders from the town board, or from Mr Qi
 - Fishsanity: Catching individual fish
 - Museumsanity: Donating individual items to the museum, or reaching the museum milestones for donations
 - Friendsanity: Reaching specific friendship levels with NPCs
@@ -46,7 +50,7 @@ There also are a number of location checks that are optional, and individual pla
 ## Which items can be in another player's world?
 
 Every normal reward from the above locations can be in another player's world.
-For the locations which do not include a normal reward, Resource Packs are instead added to the pool. These can contain ores, seeds, fertilizers, warp totems, etc.
+For the locations which do not include a normal reward, Resource Packs and traps are instead added to the pool. Traps are optional.
 
 A player can enable some settings that will add some items to the pool that are relevant to progression
 - Seasons Randomizer:
@@ -58,6 +62,8 @@ A player can enable some settings that will add some items to the pool that are 
 - Museumsanity:
   - The items that are normally obtained from museum donation milestones are added to the item pool. Some items, like the magic rock candy, are duplicated for convenience.
   - The Traveling Merchant now sells artifacts and minerals, with a bias towards undonated ones, to mitigate randomness. She will sell these items as the player receives "Traveling Merchant Metal Detector" items.
+- TV Channels
+- Babies
 
 There are a few extra vanilla items, which are added to the pool for convenience, but do not have a matching location. These include
 - Wizard Buildings
@@ -79,6 +85,39 @@ If an item is received while offline, it will be in the mailbox as soon as the p
 Some items will be directly attached to the letter, while some others will instead be a world-wide unlock, and the letter only serves to tell the player about it.
 
 In some cases, like receiving Carpenter and Wizard buildings, the player will still need to go ask Robin to construct the building that they have received, so they can choose its position. This construction will be completely free.
+
+## Mods
+
+Starting in version 4.x.x, some Stardew Valley mods unrelated to Archipelago are officially "supported".
+This means that, for these specific mods, if you decide to include them in your yaml settings, the multiworld will be generated with the assumption that you will install and play with these mods.
+The multiworld will contain related items and locations for these mods, the specifics will vary from mod to mod
+
+List of supported mods:
+
+- Skills
+  - Luck Skill
+  - Magic
+  - Socializing Skill
+  - Archaeology
+  - Cooking Skill
+  - Binning Skill
+- NPCs
+  - Ayeisha - The Postal Worker (Custom NPC)
+  - Mister Ginger (cat npc)
+  - Juna - Roommate NPC
+  - Professor Jasper Thomas
+  - Alec Revisited
+  - Custom NPC - Yoba
+  - Custom NPC Eugene
+  - 'Prophet' Wellwick
+  - Shiko - New Custom NPC
+  - Delores - Custom NPC
+  - Custom NPC - Riley
+- Other
+  - DeepWoods
+  - Tractor Mod
+  - Bigger Backpack
+  - Skull Cavern Elevator
 
 ## Multiplayer
 
