@@ -66,11 +66,11 @@ class LingoLogic(LogicMixin):
         """
         Determines whether a panel can be solved
         """
-        if start_room != room and not self.can_reach(room, "Region", player):
+        if start_room != room and not self.has(f"{room} (Reached)", player):
             return False
         panel_object = StaticLingoLogic.PANELS_BY_ROOM[room][panel]
         for req_room in panel_object.required_rooms:
-            if not self.can_reach(req_room, "Region", player):
+            if not self.has(f"{req_room} (Reached)", player):
                 return False
         for req_door in panel_object.required_doors:
             if not self._lingo_can_open_door(start_room, room if req_door.room is None else req_door.room,
