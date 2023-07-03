@@ -201,7 +201,7 @@ class AlecEntrance:
 
 
 class YobaEntrance:
-    secret_woods_to_clearing = "Woods to Yoba Clearing"
+    secret_woods_to_clearing = "Woods to Yoba's Clearing"
 
 
 class JunaEntrance:
