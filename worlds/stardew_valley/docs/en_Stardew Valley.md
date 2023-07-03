@@ -14,24 +14,24 @@ For these objectives, if they have a vanilla reward, this reward will instead be
 ## What is the goal of Stardew Valley?
 
 The player can choose from a number of goals, using their YAML settings.
-- Complete the Community Center
-- Succeed Grandpa's Evaluation with 4 lit candles
-- Reach the bottom of the Pelican Town Mineshaft
-- Complete the "Cryptic Note" quest, by meeting Mr Qi on floor 100 of the Skull Cavern
-- Get the achievement "Master Angler", which requires catching every fish in the game
-- Get the achievement "A Complete Collection", which requires donating all the artifacts and minerals to the museum
-- Get the achievement "Full House", which requires getting married and having two kids.
-- Get recognized as the "Greatest Walnut Hunter" by Mr Qi, which requires finding all 130 golden walnuts on ginger island
-- Achieve Perfection in your save file
+- Complete the [Community Center](https://stardewvalleywiki.com/Bundles)
+- Succeed [Grandpa's Evaluation](https://stardewvalleywiki.com/Grandpa) with 4 lit candles
+- Reach the bottom of the [Pelican Town Mineshaft](https://stardewvalleywiki.com/The_Mines)
+- Complete the [Cryptic Note](https://stardewvalleywiki.com/Secret_Notes#Secret_Note_.2310) quest, by meeting Mr Qi on floor 100 of the Skull Cavern
+- Get the achievement [Master Angler](https://stardewvalleywiki.com/Fish), which requires catching every fish in the game
+- Get the achievement [A Complete Collection](https://stardewvalleywiki.com/Museum), which requires donating all the artifacts and minerals to the museum
+- Get the achievement [Full House](https://stardewvalleywiki.com/Children), which requires getting married and having two kids.
+- Get recognized as the [Greatest Walnut Hunter](https://stardewvalleywiki.com/Golden_Walnut) by Mr Qi, which requires finding all 130 golden walnuts on ginger island
+- Achieve [Perfection](https://stardewvalleywiki.com/Perfection) in your save file
 
 ## What are location check in Stardew Valley?
 
 Location checks in Stardew Valley always include:
-- Community Center Bundles
-- Mineshaft chest rewards
-- Story Quests
-- Traveling Merchant items
-- Isolated objectives such as the beach bridge, Old Master Cannoli, Grim Reaper Statue, etc
+- [Community Center Bundles](https://stardewvalleywiki.com/Bundles)
+- [Mineshaft chest rewards](https://stardewvalleywiki.com/The_Mines#Remixed_Rewards)
+- [Story Quests](https://stardewvalleywiki.com/Quests#List_of_Story_Quests)
+- [Traveling Merchant items](https://stardewvalleywiki.com/Traveling_Cart)
+- Isolated objectives such as the [beach bridge](https://stardewvalleywiki.com/The_Beach#Tide_Pools), [Old Master Cannoli](https://stardewvalleywiki.com/Secret_Woods#Old_Master_Cannoli), [Grim Reaper Statue](https://stardewvalleywiki.com/Golden_Scythe), etc
 
 There also are a number of location checks that are optional, and individual players choose to include them or not in their shuffling:
 - Tools and Fishing Rod Upgrades
@@ -66,8 +66,8 @@ A player can enable some settings that will add some items to the pool that are 
 - Babies
 
 There are a few extra vanilla items, which are added to the pool for convenience, but do not have a matching location. These include
-- Wizard Buildings
-- Return Scepter
+- [Wizard Buildings](https://stardewvalleywiki.com/Wizard%27s_Tower#Buildings)
+- [Return Scepter](https://stardewvalleywiki.com/Return_Scepter)
 
 And lastly, some Archipelago-exclusive items exist in the pool, which are designed around game balance and QoL. These include:
 - Arcade Machine buffs (Only if the arcade machines are randomized)
@@ -95,29 +95,29 @@ The multiworld will contain related items and locations for these mods, the spec
 List of supported mods:
 
 - Skills
-  - Luck Skill
-  - Magic
-  - Socializing Skill
-  - Archaeology
-  - Cooking Skill
-  - Binning Skill
+  - [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521)
+  - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007)
+  - [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142)
+  - [Archaeology](https://www.nexusmods.com/stardewvalley/mods/15793)
+  - [Cooking Skill](https://www.nexusmods.com/stardewvalley/mods/522)
+  - [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073)
 - NPCs
-  - Ayeisha - The Postal Worker (Custom NPC)
-  - Mister Ginger (cat npc)
-  - Juna - Roommate NPC
-  - Professor Jasper Thomas
-  - Alec Revisited
-  - Custom NPC - Yoba
-  - Custom NPC Eugene
-  - 'Prophet' Wellwick
-  - Shiko - New Custom NPC
-  - Delores - Custom NPC
-  - Custom NPC - Riley
+  - [Ayeisha - The Postal Worker (Custom NPC)](https://www.nexusmods.com/stardewvalley/mods/6427)
+  - [Mister Ginger (cat npc)](https://www.nexusmods.com/stardewvalley/mods/5295)
+  - [Juna - Roommate NPC](https://www.nexusmods.com/stardewvalley/mods/8606)
+  - [Professor Jasper Thomas](https://www.nexusmods.com/stardewvalley/mods/5599)
+  - [Alec Revisited](https://www.nexusmods.com/stardewvalley/mods/10697)
+  - [Custom NPC - Yoba](https://www.nexusmods.com/stardewvalley/mods/14871)
+  - [Custom NPC Eugene](https://www.nexusmods.com/stardewvalley/mods/9222)
+  - ['Prophet' Wellwick](https://www.nexusmods.com/stardewvalley/mods/6462)
+  - [Shiko - New Custom NPC](https://www.nexusmods.com/stardewvalley/mods/3732)
+  - [Delores - Custom NPC](https://www.nexusmods.com/stardewvalley/mods/5510)
+  - [Custom NPC - Riley](https://www.nexusmods.com/stardewvalley/mods/5811)
 - Other
-  - DeepWoods
-  - Tractor Mod
-  - Bigger Backpack
-  - Skull Cavern Elevator
+  - [DeepWoods](https://www.nexusmods.com/stardewvalley/mods/2571)
+  - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401)
+  - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845)
+  - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963)
 
 ## Multiplayer
 
