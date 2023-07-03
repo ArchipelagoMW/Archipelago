@@ -12091,6 +12091,154 @@
             <ChanceArray index="Turn" value="10"/>
         </Fidget>
     </CUnit>
+    <CUnit id="AP_Adept">
+        <Description value="Button/Tooltip/AP_WarpInAdept"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="90"/>
+        <LifeMax value="90"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossArmor"/>
+        <ShieldsStart value="90"/>
+        <ShieldsMax value="90"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Speed value="2.5"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="9"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="100"/>
+        <CostResource index="Vespene" value="50"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="ProgressRally"/>
+        <AbilArray Link="AP_AdeptPhaseShift"/>
+        <AbilArray Link="AP_AdeptPhaseShiftCancel"/>
+        <BehaviorArray Link="AP_SOAHeroicShieldProcBuff"/>
+        <WeaponArray Link="AP_Adept"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AP_AdeptPhaseShift" Type="AbilCmd" AbilCmd="AP_AdeptPhaseShift,0" Row="2" Column="0"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="ProgressRally,Rally1" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_AdeptPhaseShiftCancel,0" Row="2" Column="4"/>
+        </CardLayouts>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="2"/>
+        <ScoreMake value="100"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="17"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <TacticalAIThink value="AIThinkAdept"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="20"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryWeakArray value="Roach"/>
+        <GlossaryWeakArray value="Zealot"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+        <TauntDuration index="Dance" value="5"/>
+    </CUnit>
+    <CUnit id="AP_AdeptPhaseShift">
+        <DeathRevealRadius value="3"/>
+        <ReviveType value="Adept"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Phased" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <LifeStart value="90"/>
+        <LifeMax value="90"/>
+        <LifeArmor value="1"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossArmor"/>
+        <ShieldsStart value="50"/>
+        <ShieldsMax value="50"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Speed value="2.25"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="9"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <AttackTargetPriority value="20"/>
+        <DamageDealtXP value="1"/>
+        <DamageTakenXP value="1"/>
+        <KillXP value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="Warpable"/>
+        <AbilArray Link="ProgressRally"/>
+        <AbilArray Link="AP_AdeptShadePhaseShiftCancel"/>
+        <BehaviorArray Link="AP_AdeptPsionicTransferDamageBuff"/>
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="move,AcquireMove" Row="0" Column="4"/>
+            <LayoutButtons Face="AcquireMove" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="ProgressRally,Rally1" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_AdeptShadePhaseShiftCancel,0" Row="2" Column="4"/>
+        </CardLayouts>
+        <InnerRadius value="0.375"/>
+        <CargoSize value="2"/>
+        <ScoreKill value="100"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="16"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:Melee"/>
+        <LeaderAlias value="Adept"/>
+        <HotkeyAlias value="Adept"/>
+        <HotkeyCategory value="Unit/Category/ProtossUnits"/>
+        <KillDisplay value="Never"/>
+        <RankDisplay value="Never"/>
+        <AIEvaluateAlias value="Adept"/>
+    </CUnit>
+    <CUnit id="AP_AdeptWeapon" parent="MISSILE">
+        <Race value="Prot"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
+    <CUnit id="AP_AdeptUpgradeWeapon" parent="MISSILE_INVULNERABLE">
+        <Race value="Prot"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->

@@ -11159,4 +11159,35 @@
         <EditorCategories value="Race:Protoss"/>
         <RadiusLoose value="1.000000"/>
     </CModel>
+    <CModel id="AP_Adept" parent="AdeptBase">
+        <Model value="Assets\Units\Protoss\Purifier_Adept\Purifier_Adept.m3"/>
+    </CModel>
+    <CModel id="AP_AdeptDeath" parent="AdeptDeathBase">
+        <Model value="Assets\Units\Protoss\Purifier_Adept_Death\Purifier_Adept_Death.m3"/>
+    </CModel>
+    <CModel id="AP_AdeptPlacement" parent="Placement" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Purifier_Adept_Placement\Purifier_Adept_Placement.m3"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_AdeptPsionicTransferDamageDebuff" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\HybridCorruptionCloud_Impact\HybridCorruptionCloud_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_AdeptSoulMissileImpact" parent="ImpactFX">
+        <Model value="Assets\Effects\Protoss\AdeptSoulMissileImpact\AdeptSoulMissileImpact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Lighting value=""/>
+    </CModel>
+    <CModel id="AP_AdeptWarpIn" parent="AdeptWarpInBase">
+        <Model value="Assets\Units\Protoss\Purifier_Adept_WarpIn\Purifier_Adept_WarpIn.m3"/>
+    </CModel>
+    <CModel id="AP_ShadePortrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\Purifier_AdeptPortrait\Purifier_AdeptPortrait.m3"/>
+        <Image value="Assets\Textures\AdeptPortrait_Static.dds"/>
+        <Lighting value="AdeptPortrait"/>
+    </CModel>
+    <CModel id="AP_AdeptPsionicTransferDamageDebuff" parent="PersistentSpellFX">
+        <Model value="Assets\Effects\Zerg\HybridCorruptionCloud_Impact\HybridCorruptionCloud_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
 </Catalog>

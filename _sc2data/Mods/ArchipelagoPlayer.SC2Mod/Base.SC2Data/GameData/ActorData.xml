@@ -5238,6 +5238,246 @@
         <Model value="AP_Alarak_COOP_Sacrifice_Impact"/>
         <Scale value="2.000000"/>
     </CActorModel>
+    <CActorUnit id="AP_Adept" parent="GenericUnitStandard" unitName="AP_Adept">
+        <Aliases value="_UnitSmall"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create Adept_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
+        <On Terms="Abil.AdeptPhaseShift.SourceCastStart; !UnitWalking" Send="$Spell"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Effect.AP_AdeptPhaseShiftTeleport.Stop" Send="Create AP_AdeptSpiritIn"/>
+        <On Terms="Effect.AP_AdeptPhaseShiftTeleport.Stop" Send="Create AP_AdeptSpiritInSound"/>
+        <On Terms="Behavior.AP_AdeptPhaseShiftCaster.On" Send="Create AP_AdeptSpiritSpawn"/>
+        <On Terms="Behavior.AP_AdeptPhaseShiftCaster.On" Send="AnimBracketStart Cover Cover,Start Cover Cover,End"/>
+        <On Terms="Behavior.AP_AdeptPhaseShiftCaster.Off" Send="AnimBracketStop Cover"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Spell" Send="AnimClear Spell"/>
+        <On Terms="Signal.*.NeuralLinkStarted" Send="RefSetFromMsg ::actor.NeuralLinkSite ::Sender"/>
+        <On Terms="Effect.AP_AdeptPhaseShiftTeleportSet.Start" Target="::actor.NeuralLinkSite" Send="Signal BreakLinkInstant"/>
+        <On Terms="UnitDeathCustomize; !ValidateUnit IsHallucination" Send="Create AP_AdeptProtossSpiritDeathModel"/>
+        <On Terms="Effect.AP_AdeptPhaseShiftTeleportSet.Start" Send="CombatRevealClearTimers"/>
+        <Model value="AP_Adept"/>
+        <AnimBlendTime value="0.200000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AP_AdeptWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_AdeptDeath" SoundLink="Adept_DeathFX"/>
+        <DeathCustoms ActorModel="AP_AdeptDeathRagdoll" ModelLink="AdeptDeathRagdoll" Name="RagdollBasic">
+            <BodySquibs Name="BloodReduced"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollSiegeTank" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollBaneling" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollUltraUnburrow" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms ActorModel="SpineCrawlerHurlDeathRagdollWithTeamColor" ModelLink="AdeptDeathRagdoll" Name="RagdollSpineCrawlerHurl">
+            <BodySquibs Name="None"/>
+        </DeathCustoms>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathSmall" Name="Hallucination"/>
+        <PlacementModel value="AP_AdeptPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AdeptPortrait"/>
+        <TerrainSquibs>
+            <MovementDistance value="0.150000,0.150000"/>
+            <IdlePeriod value="0.100000,0.250000"/>
+            <RangeUp value="0.600000"/>
+            <RangeDown value="0.600000"/>
+            <AttachQuery Methods="AMFilterCenter"/>
+            <Visuals TerrainPhysicsMaterial="Water" ActorModel="TerrainSquibHarnessContinuous" ModelLink="WaterRippleMedium"/>
+        </TerrainSquibs>
+        <WalkAnimMoveSpeed value="2.5"/>
+        <AbilSoundArray AbilCmd="AP_AdeptPhaseShift,0" Sound="Adept_PsionicTransferVO"/>
+        <BarOffset value="60"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-collection-adept-collectoredition.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="Adept_Ready"/>
+        <SoundArray index="Help" value="Adept_Help"/>
+        <SoundArray index="What" value="Adept_What"/>
+        <SoundArray index="Yes" value="Adept_Yes"/>
+        <SoundArray index="Attack" value="Adept_Attack"/>
+        <SoundArray index="Pissed" value="Adept_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-collection-adept-collectoredition.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-collection-adept-collectoredition.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-collection-adept-collectoredition-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-collection-adept-collectoredition-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-collection-adept-collectoredition-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="AP_AdeptAttack" parent="GenericAttack" effectImpact="AP_AdeptDamage" effectLaunch="AP_AdeptLM">
+        <LaunchAssets Sound="Adept_AttackLaunch"/>
+        <Missile value="AP_AdeptAttackMissile"/>
+        <ImpactMap index="None" Model="AdeptImpact" Sound="Adept_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_AdeptAttackMissile" parent="GenericAttackMissile" unitName="AP_AdeptWeapon">
+        <Model value="AdeptWeapon"/>
+    </CActorMissile>
+    <CActorModel id="AP_AdeptDeathRagdoll">
+        <Aliases value="_Main"/>
+        <Aliases value="_Unit"/>
+        <Aliases value="_DeathModel"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="DeadAnimationRemoveMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasMacro"/>
+        <Macros value="UnitDeathRagdollTerminateExtrasRemovalMacro"/>
+        <Flags index="SuppressSaveLoad" value="1"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="CastShadows" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <Remove Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Send="RefClear ::Host"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,255,255 0.600000"/>
+        <On Terms="ActorCreation" Send="SetTeamColor {0,0,0 0.000000} {0,0,0 0.000000}"/>
+        <On Terms="ActorCreation" Target="ModelPretargetGround" Send="Destroy"/>
+        <On Terms="ActorCreation" Target="GroundPreSelection" Send="Destroy"/>
+        <On Terms="Signal.*.ClearDeathModel" Send="Destroy"/>
+        <On Terms="TimerExpired; TimerName TerminateExtras" Send="Signal TerminateExtras"/>
+        <On Terms="Signal.*.TerminateExtras" Send="PhysicsImpactsEnable"/>
+        <On Terms="Signal.*.TerminateExtras" Target="_BodySquib" Send="Signal Terminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="PhysicsTerminate"/>
+        <On Terms="AnimDone; AnimName Death" Send="Destroy"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.700000 TerminateExtras"/>
+        <Host Subject="::Creator"/>
+        <HostSiteOps Ops="SOpDeathMotionGround"/>
+        <Model value="UnitDeathModelNoTeamColor"/>
+        <ModelFlags index="UpdateVisibility" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <EventDataSound Name="NydusCanalThud" Actor="UnitSound" Sound="NydusWorm_DeathThud"/>
+        <EventDataSound Name="ZergExplosionSlime" Actor="UnitSound" Sound="Zerg_ExplosionSlime"/>
+        <EventDataSound Name="ZergPreExplosionSmall" Actor="UnitSound" Sound="Zerg_PreExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionTiny" Actor="UnitSound" Sound="Zerg_ExplosionTiny"/>
+        <EventDataSound Name="ZergExplosionSmall" Actor="UnitSound" Sound="Zerg_ExplosionSmall"/>
+        <EventDataSound Name="ZergExplosionMedium" Actor="UnitSound" Sound="Zerg_ExplosionMedium"/>
+        <EventDataSound Name="ZergExplosionLarge" Actor="UnitSound" Sound="Zerg_ExplosionLarge"/>
+        <EventDataSound Name="ProtossPreExplosionSmall" Actor="UnitSound" Sound="Protoss_PreExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionSmall" Actor="UnitSound" Sound="Protoss_ExplosionSmall"/>
+        <EventDataSound Name="ProtossExplosionMedium" Actor="UnitSound" Sound="Protoss_ExplosionMedium"/>
+        <EventDataSound Name="ProtossExplosionLarge" Actor="UnitSound" Sound="Protoss_ExplosionLarge"/>
+        <EventDataSound Name="TerranPreExplosionSmall" Actor="UnitSound" Sound="Terran_PreExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionSmall" Actor="UnitSound" Sound="Terran_ExplosionSmall"/>
+        <EventDataSound Name="TerranExplosionMedium" Actor="UnitSound" Sound="Terran_ExplosionMedium"/>
+        <EventDataSound Name="TerranExplosionLarge" Actor="UnitSound" Sound="Terran_ExplosionLarge"/>
+        <PhysicsImpactDefault ActorModel="PhysicsImpactHarness" ActorSound="PhysicsImpactSound" OccuranceThrottlingDistance="0.500000,0.500000"/>
+    </CActorModel>
+    <CActorUnit id="AP_AdeptPhaseShift" parent="GenericUnitStandard" unitName="AP_AdeptPhaseShift">
+        <Aliases value="_UnitSmall"/>
+        <Model value="AdeptSpirit"/>
+        <AnimBlendTime value="0.200000"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="AdeptWarpIn"/>
+        <DeathArray index="Normal" ModelLink="AdeptSpiritDeath" SoundLink="Adept_DeathFX"/>
+        <PlacementModel value="AP_AdeptPlacement"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AdeptPortrait"/>
+        <WalkAnimMoveSpeed value="2.25"/>
+        <BarOffset value="60"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-unit-protoss-adept.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AdeptShade_Ready"/>
+        <SoundArray index="Help" value="AdeptShade_Help"/>
+        <SoundArray index="What" value="AdeptShade_What"/>
+        <SoundArray index="Yes" value="AdeptShade_Yes"/>
+        <SoundArray index="Attack" value="AdeptShade_Attack"/>
+        <SoundArray index="Pissed" value="AdeptShade_Pissed"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-adept.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-adept.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-adept-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-adept-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-adept-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorModel id="AP_AdeptProtossSpiritDeathModel" parent="ModelAnimationStyleOneShot">
+        <InheritType value="OneShot"/>
+        <Inherits index="Visibility" value="1"/>
+        <Host Subject="_Unit"/>
+        <Model value="AdeptProtossSpiritDeathModel"/>
+    </CActorModel>
+    <CActorModel id="AP_AdeptPsionicTransferDamageDebuff" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.AP_AdeptPsionicTransferDamageDebuff.On" Send="Create"/>
+        <On Terms="Behavior.AP_AdeptPsionicTransferDamageDebuff.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="ActorCreation" Send="SetTintColor 37,121,205"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="AP_AdeptPsionicTransferDamageDebuff"/>
+        <AutoScaleFactor value="1.000000"/>
+    </CActorModel>
+    <CActorModel id="AP_AdeptSpiritIn" parent="ModelAnimationStyleOneShot">
+        <InheritType value="OneShot"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="AdeptSpiritIn"/>
+    </CActorModel>
+    <CActorSound id="AP_AdeptSpiritInSound" parent="SoundOneShot">
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Sound value="Adept_PsionicTransferEnd"/>
+    </CActorSound>
+    <CActorModel id="AP_AdeptSpiritOut" parent="ModelAnimationStyleOneShot">
+        <Inherits index="Visibility" value="1"/>
+        <On Terms="Effect.AP_AdeptPhaseShiftTeleport.Start; At Effect" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="AdeptSpiritOut"/>
+    </CActorModel>
+    <CActorSound id="AP_AdeptSpiritOutSound" parent="SoundOneShot">
+        <On Terms="Effect.AP_AdeptPhaseShiftTeleport.Start; At Effect" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Sound value="Adept_PsionicTransferEnd"/>
+    </CActorSound>
+    <CActorModel id="AP_AdeptSpiritSpawn" parent="ModelAnimationStyleOneShot">
+        <Inherits index="Visibility" value="1"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="AdeptSpiritSpawn"/>
+    </CActorModel>
+    <CActorAction id="AP_AdeptUpgradeAttack" parent="GenericAttack" effectImpact="AP_AdeptDamage" effectLaunch="AP_AdeptUpgradeLM">
+        <LaunchAssets Sound="Adept_AttackLaunch"/>
+        <Missile value="AP_AdeptUpgradeAttackMissile"/>
+        <ImpactMap index="None" Model="AdeptImpact" Sound="Adept_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_AdeptUpgradeAttackMissile" parent="GenericAttackMissile" unitName="AP_AdeptUpgradeWeapon">
+        <Model value="AdeptWeapon"/>
+    </CActorMissile>
+    <CActorSound id="AP_Adept_Death" parent="SoundOneShot">
+        <On Terms="UnitDeathCustomize.AP_Adept; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <Sound value="Adept_Death"/>
+    </CActorSound>
+    <CActorSound id="AP_Adept_Land" parent="SoundOneShot">
+        <Sound value="Adept_Land"/>
+    </CActorSound>
     <CActorAction id="AscendantSacrificeDummy1Attack2" parent="GenericAttack" effectImpact="AP_AscendantSacrificeLM1ImpactDummy" effectLaunch="AP_AscendantSacrificeLM1">
         <LaunchSiteOps Ops="SOpTargetUnit SOpAttachCenter"/>
         <Missile value="AP_AscendantSacrificeDummy1AttackMissile"/>
@@ -15050,7 +15290,6 @@
     <CActorPower id="AP_WarpPrismPower">
         <On Terms="Behavior.AP_WarpPrismPowerSource.Create; !Option Model Low" Send="Create"/>
         <On Terms="Behavior.AP_WarpPrismPowerSource.Destroy; !Option Model Low" Send="Destroy"/>
-        <PowerSource value="AP_WarpPrismPowerSource"/>
         <VisualArray value="WarpPrismUnpoweredVisual"/>
         <VisualArray value="WarpPrismPowerVisual"/>
     </CActorPower>

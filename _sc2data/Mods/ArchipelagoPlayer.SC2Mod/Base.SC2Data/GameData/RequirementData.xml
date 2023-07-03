@@ -1434,4 +1434,8 @@
         <EditorCategories value="Race:Protoss,TechType:Unit"/>
         <NodeArray index="Use" Link="AP_EqCountUnitScarabCompleteOnlyAtUnit0"/>
     </CRequirement>
+    <CRequirement id="AP_AdeptPhaseShifting">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountBehaviorAdeptPhaseShiftCasterCompleteOnlyAtUnit"/>
+    </CRequirement>
 </Catalog>

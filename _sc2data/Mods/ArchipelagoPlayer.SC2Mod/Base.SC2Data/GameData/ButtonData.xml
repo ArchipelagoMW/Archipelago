@@ -2288,4 +2288,9 @@
         <AlertIcon value="Assets\Textures\btn-unit-protoss-warpprism.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_AdeptPhaseShift">
+        <Icon value="Assets\Textures\btn-ability-protoss-psionictransfer.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-psionictransfer.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

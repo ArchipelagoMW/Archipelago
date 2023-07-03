@@ -1427,4 +1427,6 @@
         </MotionPhases>
         <MotionOverlays Type="Wave" Axis="1,0,0" Wavelength="6,0.1"/>
     </CMoverMissile>
+    <CMoverMissile id="AP_AdeptWeapon" parent="MissileDefault"/>
+    <CMoverMissile id="AP_AdeptUpgradeWeapon" parent="MissileDefault"/>
 </Catalog>

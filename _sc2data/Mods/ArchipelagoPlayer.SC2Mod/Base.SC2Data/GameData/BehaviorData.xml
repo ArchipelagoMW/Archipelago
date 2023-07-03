@@ -3816,4 +3816,76 @@
         <Radius value="3.75"/>
         <PowerLink value="PowerSource"/>
     </CBehaviorPowerSource>
+    <CBehaviorBuff id="AP_AdeptPhaseShift">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Modification MoveSpeedBonus="1.75">
+            <StateFlags index="Benign" value="1"/>
+            <StateFlags index="Passive" value="1"/>
+            <StateFlags index="SuppressAttack" value="1"/>
+            <StateFlags index="SuppressPassenger" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AdeptPhaseShiftCancelDummy">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="0.125"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AdeptPhaseShiftCaster">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <DisableValidatorArray value="AP_NotBeingAbducted"/>
+<!--        <DisableValidatorArray value="KD8CasterKnockingBack"/>-->
+        <Duration value="10.0625"/>
+        <FinalEffect value="AP_AdeptPhaseShiftCancel"/>
+        <ExpireEffect value="AP_AdeptPhaseShiftCancel"/>
+        <Modification>
+            <StateFlags index="SuppressPassenger" value="1"/>
+        </Modification>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AdeptPhaseShiftTimer">
+        <Alignment value="Positive"/>
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <DisableValidatorArray value="AP_CasterNotAbducted"/>
+        <DisableValidatorArray value="AP_KD8CasterKnockingBack"/>
+        <RemoveValidatorArray value="CasterNotDead"/>
+        <RemoveValidatorArray value="AP_CasterIsNotPhaseShifting"/>
+        <Duration value="10"/>
+        <FinalEffect value="AP_PhaseShiftTimerCancelSet"/>
+        <ExpireEffect value="AP_AdeptPhaseShiftTeleportSet"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AdeptPsionicTransferDamageBuff">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-psionictransfer.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Period value="0.2"/>
+        <PeriodicEffect value="AP_AdeptPsionicTransferDamageSearch"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AdeptPsionicTransferDamageDebuff">
+        <Alignment value="Negative"/>
+        <InfoIcon value="Assets\Textures\btn-ability-protoss-psionictransfer.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="5"/>
+        <DamageResponse Handled="AP_AdeptPsionicTransferDamage">
+            <Chance value="1"/>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="AP_AdeptDeathCheck">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Duration value="0.0625"/>
+        <Modification>
+            <DeathResponse Chance="1" Effect="AP_AdeptUpgradeDeathSearch"/>
+        </Modification>
+    </CBehaviorBuff>
 </Catalog>

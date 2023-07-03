@@ -10101,4 +10101,207 @@
         <Player Value="Caster"/>
         <Target Value="TargetPoint"/>
     </CEffectIssueOrder>
+    <CEffectDamage id="AP_AdeptDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <AttributeBonus index="Light" value="10"/>
+        <Kind value="Ranged"/>
+        <Amount value="20"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_AdeptLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_AdeptDamage"/>
+        <AmmoUnit value="AP_AdeptWeapon"/>
+        <Movers Link="AP_AdeptWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectCreateUnit id="AP_AdeptPhaseShiftCU">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichLocation Value="CasterUnit"/>
+        <CreateFlags index="DropOff" value="0"/>
+        <CreateFlags index="OffsetByRadius" value="0"/>
+        <CreateFlags index="PlacementIgnoreBlockers" value="1"/>
+        <CreateFlags index="TechComplete" value="0"/>
+        <CreateFlags index="UseFood" value="0"/>
+        <SpawnEffect value="AP_AdeptPhaseShiftSpawnSet"/>
+        <SpawnUnit value="AP_AdeptPhaseShift"/>
+        <SpawnRange value="1"/>
+    </CEffectCreateUnit>
+    <CEffectRemoveBehavior id="AP_AdeptPhaseShiftCancel">
+        <EditorCategories value="Race:Protoss"/>
+        <BehaviorLink value="AP_AdeptPhaseShiftCaster"/>
+    </CEffectRemoveBehavior>
+    <CEffectApplyBehavior id="AP_AdeptPhaseShiftCancelAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_AdeptPhaseShiftCancelDummy"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="AP_AdeptPhaseShiftCasterAB">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_AdeptPhaseShiftCaster"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_AdeptPhaseShiftInitialSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_AdeptPhaseShiftCasterAB"/>
+        <EffectArray value="AP_AdeptPhaseShiftCU"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectIssueOrder id="AP_AdeptPhaseShiftIssueOrder">
+        <EditorCategories value="Race:Protoss"/>
+        <Abil value="move"/>
+        <Target Effect="AP_AdeptPhaseShiftCU" Value="TargetPoint"/>
+    </CEffectIssueOrder>
+    <CEffectDamage id="AP_AdeptPhaseShiftKillDummy">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="TargetUnit"/>
+        <Flags index="Kill" value="1"/>
+        <Flags index="NoKillCredit" value="1"/>
+    </CEffectDamage>
+    <CEffectSet id="AP_AdeptPhaseShiftRemoveDisablesSet">
+        <EditorCategories value="Race:Protoss"/>
+        <!-- TODO: Verify this! -->
+        <EffectArray value="AP_PhaseNeuralParasiteRemove"/>
+<!--        <EffectArray value="AP_PhaseMothershipRecalledRemove"/>-->
+<!--        <EffectArray value="AP_PhaseMothershipRecallingRemove"/>-->
+        <EffectArray value="AP_PhaseFungalGrowthRemove"/>
+        <EffectArray value="AP_PhaseFungalMovementRemove"/>
+        <EffectArray value="AP_PhaseDestroyGravitonBeamPersistant"/>
+        <EffectArray value="AP_PhaseDestroyVanillaGravitonBeamPersistant"/>
+        <EffectArray value="AP_PhaseStasisTrapRemove"/>
+    </CEffectSet>
+    <CEffectModifyUnit id="AP_AdeptPhaseShiftSelect">
+        <ImpactUnit Value="Caster"/>
+        <SelectTransferUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Target"/>
+        <SelectTransferFlags index="DeselectSource" value="1"/>
+        <SelectTransferFlags index="IncludeControlGroups" value="1"/>
+        <FacingLocation Effect="AP_AdeptPhaseShiftTeleportSet" Value="SourceUnit"/>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="AP_AdeptPhaseShiftSpawnAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_AdeptPhaseShift"/>
+    </CEffectApplyBehavior>
+    <CEffectSet id="AP_AdeptPhaseShiftSpawnSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_AdeptPhaseShiftSpawnAB"/>
+        <EffectArray value="AP_AdeptPhaseShiftTimerSpawnAB"/>
+        <EffectArray value="AP_AdeptPhaseShiftIssueOrder"/>
+    </CEffectSet>
+    <CEffectTeleport id="AP_AdeptPhaseShiftTeleport">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <MinDistance value="0"/>
+        <TargetLocation Effect="AP_AdeptPhaseShiftTeleportSet" Value="TargetPoint"/>
+    </CEffectTeleport>
+    <CEffectSet id="AP_AdeptPhaseShiftTeleportSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_AdeptPhaseShiftRemoveDisablesSet"/>
+        <EffectArray value="AP_AdeptPhaseShiftSelect"/>
+        <EffectArray value="AP_AdeptPhaseShiftKillDummy"/>
+        <EffectArray value="AP_AdeptPhaseShiftTeleport"/>
+        <EffectArray value="AP_AdeptPhaseUnitOrderQueue"/>
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_AdeptPhaseShiftTimerSpawnAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_AdeptPhaseShiftTimer"/>
+    </CEffectApplyBehavior>
+    <CEffectModifyUnit id="AP_AdeptPhaseUnitOrderQueue">
+        <EditorCategories value="Race:Protoss"/>
+        <LaunchUnit Effect="AP_AdeptPhaseShiftTeleportSet"/>
+        <ImpactUnit Value="Caster"/>
+        <CopyOrderCount value="50"/>
+        <CopyRallyCount value="50"/>
+    </CEffectModifyUnit>
+    <CEffectDamage id="AP_AdeptPsionicTransferDamage">
+        <ImpactLocation Effect="AP_AdeptPsionicTransferDamageAB" Value="TargetUnit"/>
+        <Amount value="5"/>
+    </CEffectDamage>
+    <CEffectApplyBehavior id="AP_AdeptPsionicTransferDamageAB">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_AdeptPsionicTransferDamageDebuff"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_AdeptPsionicTransferDamageSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <SearchFilters value="-;Self,Player,Ally,Structure,Missile,Stasis,Dead,Invulnerable"/>
+        <AreaArray Radius="1" Effect="AP_AdeptPsionicTransferDamageAB"/>
+    </CEffectEnumArea>
+    <CEffectRemoveBehavior id="AP_AdeptShadePhaseShiftCancel">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_AdeptPhaseShiftTimer"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_AdeptShadePhaseShiftCancelCasterBehavior">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <BehaviorLink value="AP_AdeptPhaseShiftCaster"/>
+    </CEffectRemoveBehavior>
+    <CEffectDestroyPersistent id="AP_PhaseDestroyGravitonBeamPersistant">
+        <WhichLocation Effect="AP_AdeptPhaseShiftTimerSpawnAB"/>
+        <Effect value="AP_GravitonBeam"/>
+        <Count value="1"/>
+        <Radius value="1"/>
+    </CEffectDestroyPersistent>
+    <CEffectDestroyPersistent id="AP_PhaseDestroyVanillaGravitonBeamPersistant">
+        <WhichLocation Effect="AP_AdeptPhaseShiftTimerSpawnAB"/>
+        <Effect value="GravitonBeam"/>
+        <Count value="1"/>
+        <Radius value="1"/>
+    </CEffectDestroyPersistent>
+    <CEffectRemoveBehavior id="AP_PhaseFungalGrowthRemove">
+        <EditorCategories value=""/>
+        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>
+        <BehaviorLink value="AP_FungalGrowth"/>
+    </CEffectRemoveBehavior>
+    <CEffectRemoveBehavior id="AP_PhaseFungalMovementRemove">
+        <EditorCategories value=""/>
+        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>
+        <BehaviorLink value="AP_FungalGrowthMovement"/>
+    </CEffectRemoveBehavior>
+<!--    <CEffectRemoveBehavior id="AP_PhaseMothershipRecalledRemove">-->
+<!--        <EditorCategories value=""/>-->
+<!--        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>-->
+<!--        <BehaviorLink value="MothershipRecalled"/>-->
+<!--    </CEffectRemoveBehavior>-->
+<!--    <CEffectRemoveBehavior id="AP_PhaseMothershipRecallingRemove">-->
+<!--        <EditorCategories value=""/>-->
+<!--        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>-->
+<!--        <BehaviorLink value="MothershipRecalling"/>-->
+<!--    </CEffectRemoveBehavior>-->
+    <CEffectRemoveBehavior id="AP_PhaseNeuralParasiteRemove">
+        <EditorCategories value=""/>
+        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>
+        <BehaviorLink value="NeuralParasite"/>
+    </CEffectRemoveBehavior>
+    <CEffectSet id="AP_PhaseShiftTimerCancelSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_AdeptShadePhaseShiftCancelCasterBehavior"/>
+        <EffectArray value="AP_AdeptPhaseShiftKillDummy"/>
+    </CEffectSet>
+    <CEffectRemoveBehavior id="AP_PhaseStasisTrapRemove">
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>
+        <BehaviorLink value="AP_OracleStasisTrapTarget"/>
+    </CEffectRemoveBehavior>
+    <CEffectLaunchMissile id="AP_AdeptUpgradeLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_AdeptUpgradeSet"/>
+        <AmmoUnit value="AP_AdeptUpgradeWeapon"/>
+        <Movers Link="AP_AdeptUpgradeWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_AdeptUpgradeSet">
+        <EditorCategories value="Race:Protoss"/>
+        <EffectArray value="AP_AdeptUpgradeApplyDeathCheck"/>
+        <EffectArray value="AP_AdeptDamage"/>
+    </CEffectSet>
+    <CEffectApplyBehavior id="AP_AdeptUpgradeApplyDeathCheck">
+        <EditorCategories value="Race:Protoss"/>
+        <Behavior value="AP_AdeptDeathCheck"/>
+    </CEffectApplyBehavior>
+    <CEffectEnumArea id="AP_AdeptUpgradeDeathSearch">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactLocation Value="TargetPoint"/>
+        <!-- AP Adepts can hit air unlike the MP ones -->
+        <SearchFilters value="-;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AreaArray MaxCount="2" Radius="4" Effect="AP_AdeptLM"/>
+    </CEffectEnumArea>
 </Catalog>

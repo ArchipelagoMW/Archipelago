@@ -1932,4 +1932,12 @@
         <LegacyOptions index="NoDeceleration" value="1"/>
         <AllowedMovement value="Moving"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_Adept">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_AdeptDamage"/>
+        <TargetFilters value="Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Period value="2.25"/>
+        <Effect value="AP_AdeptLM"/>
+    </CWeaponLegacy>
 </Catalog>

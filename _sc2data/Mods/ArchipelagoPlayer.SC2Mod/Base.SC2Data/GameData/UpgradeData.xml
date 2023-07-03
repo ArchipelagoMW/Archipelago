@@ -4434,4 +4434,31 @@
         <AffectedUnitArray value="AP_WarpPrismPhasing"/>
         <AffectedUnitArray value="AP_WarpPrism"/>
     </CUpgrade>
+    <CUpgrade id="AP_AdeptKillBounce">
+        <Icon value="Assets\Textures\btn-techupgrade-terran-consumption.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Operation="Set" Reference="Weapon,AP_Adept,Effect" Value="AP_AdeptUpgradeLM"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Adept"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AdeptPiercingAttack">
+        <Icon value="Assets\Textures\btn-ability-protoss-phasedisruptor.dds"/>
+        <EffectArray Reference="Weapon,AP_Adept,RateMultiplier" Value="0.45"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:AttackBonus"/>
+        <AffectedUnitArray value="AP_Adept"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AdeptShieldUpgrade">
+        <Icon value="Assets\Textures\BTN-Upgrade-Protoss-AdeptShieldUpgrade.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Adept,ShieldsMax" Value="50"/>
+        <EffectArray Reference="Unit,AP_Adept,ShieldsStart" Value="50"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
+        <AffectedUnitArray value="AP_Adept"/>
+    </CUpgrade>
 </Catalog>

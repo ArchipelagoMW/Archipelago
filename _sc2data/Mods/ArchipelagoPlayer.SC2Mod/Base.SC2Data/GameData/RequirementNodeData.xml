@@ -2415,4 +2415,9 @@
         <Tooltip value=""/>
         <Count Link="AP_Scarab" State="CompleteOnlyAtUnit"/>
     </CRequirementCountUnit>
+    <CRequirementCountBehavior id="AP_CountBehaviorAdeptPhaseShiftCasterCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_AdeptPhaseShiftCaster" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
 </Catalog>

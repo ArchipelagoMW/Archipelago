@@ -2052,6 +2052,32 @@
         <CursorEffect value="AP_ArbiterMPStasisFieldSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_ArbiterMPStasisField"/>
     </CAbilEffectTarget>
+    <CAbilEffectTarget id="AP_AdeptPhaseShift">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Protoss"/>
+        <Effect index="0" value="AP_AdeptPhaseShiftInitialSet"/>
+        <Flags index="BestUnit" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="TransientPreferred" value="1"/>
+        <Cost>
+            <Cooldown TimeUse="16"/>
+        </Cost>
+        <Range value="500"/>
+        <Arc value="360"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_AdeptPhaseShift">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="AP_AdeptPhaseShiftCancel">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="AP_AdeptPhaseShiftCancelAB"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Cancel" Requirements="AP_AdeptPhaseShifting"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="AP_AdeptShadePhaseShiftCancel">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Cancel"/>
+    </CAbilEffectInstant>
     <CAbilMorph id="BarracksReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Barracks-like so for AP_Barracks AP_BarracksReactorMorph is called instead -->

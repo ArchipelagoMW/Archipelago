@@ -3181,4 +3181,15 @@
     <CValidatorUnitCompareBehaviorCount id="AP_NoPurificationNova">
         <Behavior value="AP_PurificationNova"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_NotBeingAbducted">
+        <Behavior value="AP_Yoink"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterNotAbducted">
+        <WhichUnit Value="Caster"/>
+        <Behavior value="AP_Yoink"/>
+    </CValidatorUnitCompareBehaviorCount>
+    <CValidatorUnitCompareBehaviorCount id="AP_CasterIsNotPhaseShifting">
+        <WhichUnit Effect="AP_AdeptPhaseShiftCU" Value="Caster"/>
+        <Behavior value="AP_AdeptPhaseShiftCancelDummy"/>
+    </CValidatorUnitCompareBehaviorCount>
 </Catalog>
