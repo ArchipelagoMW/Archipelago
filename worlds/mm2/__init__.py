@@ -2,7 +2,10 @@ from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule
 import Names
-from .Items import item_table, item_names
+from .Items import item_table, item_names, MM2Item, filler_item_table, filler_item_weights, robot_master_weapon_table, \
+    stage_access_table, item_item_table
+from .Locations import location_table, MM2Location
+from .Rom import get_base_rom_bytes, get_base_rom_path, RomData
 from typing import Dict
 import os
 import math
@@ -27,13 +30,15 @@ class MM2WebWorld(WebWorld):
 
 class MM2World(World):
     """
-    In the year 200X, Mega Man once again faces off against 8 Robot Masters created by the evil Dr. Wily.
+    In the year 200X, following his prior defeat by Mega Man, Dr. Wily has returned to take over the world with his own
+    group of Robot Masters. Mega Man once again sets out to defeat the eight Robot Masters and stop Dr. Wily.
+
     """
 
     game: str = "Mega Man 2"
-    #option_definitions = kdl3_options
+    #option_definitions = mm2_options
     item_name_to_id = {item: item_table[item].code for item in item_table}
-    location_name_to_id = {location_table[location]: location for location in location_table}
+    location_name_to_id = location_table
     item_name_groups = item_names
     data_version = 0
     web = MM2WebWorld()
@@ -57,7 +62,7 @@ class MM2World(World):
         if item.progression and not force_non_progression:
             classification = ItemClassification.progression_skip_balancing \
                 if item.skip_balancing else ItemClassification.progression
-        return KDL3Item(name, classification, item.code, self.player)
+        return MM2Item(name, classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choices(list(filler_item_weights.keys()),
@@ -65,53 +70,19 @@ class MM2World(World):
 
     def create_items(self) -> None:
         itempool = []
-        itempool.extend([self.create_item(name) for name in copy_ability_table])
-        itempool.extend([self.create_item(name) for name in animal_friend_table])
-        required_percentage = self.multiworld.heart_stars_required[self.player].value / 100.0
-        remaining_items = (len(location_table) if self.multiworld.consumables[self.player]
-                           else len(location_table) - len(consumable_locations)) - len(itempool)
-        total_heart_stars = self.multiworld.total_heart_stars[self.player].value
-        required_heart_stars = max(math.floor(total_heart_stars * required_percentage),
-                                   1)  # ensure at least 1 heart star required
-        filler_items = total_heart_stars - required_heart_stars
-        filler_amount = math.floor(filler_items * (self.multiworld.filler_percentage[self.player].value / 100.0))
-        nonrequired_heart_stars = filler_items - filler_amount
-        self.required_heart_stars[self.player] = required_heart_stars
-        # handle boss requirements here
-        requirements = [required_heart_stars]
-        for i in range(4):
-            requirements.append(self.multiworld.per_slot_randoms[self.player].randint(
-                min(3, required_heart_stars), required_heart_stars))
-        if self.multiworld.boss_requirement_random[self.player].value:
-            self.multiworld.per_slot_randoms[self.player].shuffle(requirements)
-        else:
-            requirements.sort()
-        self.boss_requirements[self.player] = requirements
-        itempool.extend([self.create_item("Heart Star") for _ in range(required_heart_stars)])
-        itempool.extend([self.create_item(self.get_filler_item_name())
-                         for _ in range(filler_amount + (remaining_items - total_heart_stars))])
-        itempool.extend([self.create_item("Heart Star", True) for _ in range(nonrequired_heart_stars)])
+        itempool.extend([name for name in robot_master_weapon_table.keys()])
+        itempool.extend([name for name in stage_access_table.keys()])
+        itempool.extend([name for name in item_item_table.keys()])
+
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
         print("NotImplemented")
 
     def generate_basic(self) -> None:
-        self.topology_present = self.multiworld.stage_shuffle[self.player].value > 0
-        goal = self.multiworld.goal[self.player].value
-        goal_location = self.multiworld.get_location(LocationName.goals[goal], self.player)
-        goal_location.place_locked_item(KDL3Item("Love-Love Rod", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 1 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 1 Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 2 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 2 Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 3 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 3 Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 4 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 4 Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.get_location("Level 5 Boss", self.player) \
-            .place_locked_item(KDL3Item("Level 5 Boss Purified", ItemClassification.progression, None, self.player))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
+        goal_location = self.multiworld.get_location(Names.dr_wily, self.player)
+        goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def generate_output(self, output_directory: str):
         rompath = ""

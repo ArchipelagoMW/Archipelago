@@ -13,14 +13,25 @@ class MM2Item(Item):
 
 
 robot_master_weapon_table = {
-    Names.crash_bomber: ItemData(0x880001, True),
-    Names.metal_blade: ItemData(0x880002, True),
-    Names.quick_boomerang: ItemData(0x880003, True),
+    Names.atomic_fire: ItemData(0x880001, True),
+    Names.air_shooter: ItemData(0x880002, True),
+    Names.leaf_shield: ItemData(0x880003, True),
     Names.bubble_lead: ItemData(0x880004, True),
-    Names.atomic_fire: ItemData(0x880005, True),
-    Names.leaf_shield: ItemData(0x880006, True),
-    Names.time_stopper: ItemData(0x880007, True),
-    Names.air_shooter: ItemData(0x880008, True)
+    Names.quick_boomerang: ItemData(0x880005, True),
+    Names.time_stopper: ItemData(0x880006, True),
+    Names.metal_blade: ItemData(0x880007, True),
+    Names.crash_bomber: ItemData(0x880008, True),
+}
+
+stage_access_table = {
+    Names.heat_man_stage: ItemData(0x880101, True),
+    Names.air_man_stage: ItemData(0x880102, True),
+    Names.wood_man_stage: ItemData(0x880103, True),
+    Names.bubble_man_stage: ItemData(0x880104, True),
+    Names.quick_man_stage: ItemData(0x880105, True),
+    Names.flash_man_stage: ItemData(0x880106, True),
+    Names.metal_man_stage: ItemData(0x880107, True),
+    Names.crash_man_stage: ItemData(0x880108, True),
 }
 
 item_item_table = {
@@ -45,12 +56,14 @@ filler_item_weights = {
 
 item_table = {
     **robot_master_weapon_table,
+    **stage_access_table,
     **item_item_table,
     **filler_item_table,
 }
 
 item_names = {
     "Weapons": {name for name in robot_master_weapon_table.keys()},
+    "Stages": {name for name in stage_access_table.keys()},
     "Items": {name for name in item_item_table.keys()}
 }
 
