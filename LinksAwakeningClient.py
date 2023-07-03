@@ -597,7 +597,6 @@ class LinksAwakeningContext(CommonContext):
                 time.sleep(1.0)
 
 def run_game(romfile: str) -> None:
-
     auto_start = typing.cast(typing.Union[bool, str],
                             Utils.get_options()["ladx_options"].get("rom_start", True))
     if auto_start is True:
@@ -647,6 +646,8 @@ async def main():
     if gui_enabled:
         ctx.run_gui()
     ctx.run_cli()
+
+    # Down below run_gui so that we get errors out of the process
     if args.diff_file:
         run_game(rom_file)
 
