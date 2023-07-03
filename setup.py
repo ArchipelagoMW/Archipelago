@@ -20,7 +20,7 @@ from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 try:
-    requirement = 'cx-Freeze==6.14.9'
+    requirement = 'cx-Freeze>=6.15.2'
     import pkg_resources
     try:
         pkg_resources.require(requirement)
@@ -589,7 +589,7 @@ cx_Freeze.setup(
     ext_modules=[],  # required to disable auto-discovery with setuptools>=61
     options={
         "build_exe": {
-            "packages": ["websockets", "worlds", "kivy"],
+            "packages": ["worlds", "kivy"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
