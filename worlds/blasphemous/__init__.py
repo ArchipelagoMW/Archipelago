@@ -90,20 +90,26 @@ class BlasphemousWorld(World):
             locations: List[int] = [ 0, 1, 2, 3, 4, 5, 6 ]
             invalid: bool = False
 
+            if world.difficulty[player].value < 2:
+                locations.remove(6)
+
+            if world.dash_shuffle[player]:
+                locations.remove(0)
+                if 6 in locations:
+                    locations.remove(6)
+
+            if world.wall_climb_shuffle[player]:
+                locations.remove(3)
+
             if world.starting_location[player].value == 6 and world.difficulty[player].value < 2:
                 invalid = True
-                locations.remove(6)
 
             if (world.starting_location[player].value == 0 or world.starting_location[player].value == 6) \
                 and world.dash_shuffle[player]:
                     invalid = True
-                    locations.remove(0)
-                    if 6 in locations:
-                        locations.remove(6)
             
             if world.starting_location[player].value == 3 and world.wall_climb_shuffle[player]:
                 invalid = True
-                locations.remove(3)
 
             if invalid:
                 world.starting_location[player].value = world.random.choice(locations)
