@@ -1,7 +1,8 @@
 import zipfile
 from typing import *
 
-from flask import request, flash, redirect, url_for, render_template, Markup
+from flask import request, flash, redirect, url_for, render_template
+from markupsafe import Markup
 
 from WebHostLib import app
 
@@ -91,7 +92,7 @@ def roll_options(options: Dict[str, Union[dict, str]],
                         rolled_results[f"{filename}/{i + 1}"] = roll_settings(yaml_data,
                                                                               plando_options=plando_options)
             except Exception as e:
-                results[filename] = f"Failed to generate mystery in {filename}: {e}"
+                results[filename] = f"Failed to generate options in {filename}: {e}"
             else:
                 results[filename] = True
     return results, rolled_results

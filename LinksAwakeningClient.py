@@ -18,7 +18,7 @@ import typing
 import urllib
 
 import colorama
-
+import struct
 
 from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
                           server_loop)
@@ -91,7 +91,7 @@ class LAClientConstants:
     # wLinkSendShopTarget = 0xDDFF
 
 
-    wRecvIndex = 0xDDFE  # 0xDB58
+    wRecvIndex = 0xDDFD # Two bytes
     wCheckAddress = 0xC0FF - 0x4
     WRamCheckSize = 0x4
     WRamSafetyValue = bytearray([0]*WRamCheckSize)
@@ -365,14 +365,13 @@ class LinksAwakeningClient():
                                   item_id, from_player])
         status |= 1
         status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
-        self.gameboy.write_memory(LAClientConstants.wRecvIndex, [next_index])
+        self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
 
     async def wait_for_game_ready(self):
         logger.info("Waiting on game to be in valid state...")
         while not await self.gameboy.check_safe_gameplay(throw=False):
             pass
         logger.info("Ready!")
-    last_index = 0
 
     async def is_victory(self):
         return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
@@ -381,11 +380,6 @@ class LinksAwakeningClient():
         await self.tracker.readChecks(item_get_cb)
         await self.item_tracker.readItems()
         await self.gps_tracker.read_location()
-
-        next_index = self.gameboy.read_memory(LAClientConstants.wRecvIndex)[0]
-        if next_index != self.last_index:
-            self.last_index = next_index
-            # logger.info(f"Got new index {next_index}")
 
         current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
         if self.deathlink_debounce and current_health != 0:
@@ -404,7 +398,7 @@ class LinksAwakeningClient():
         if await self.is_victory():
             await win_cb()
 
-        recv_index = (await self.gameboy.async_read_memory_safe(LAClientConstants.wRecvIndex))[0]
+        recv_index = struct.unpack(">H", self.gameboy.read_memory(LAClientConstants.wRecvIndex, 2))[0]
 
         # Play back one at a time
         if recv_index in self.recvd_checks:

@@ -199,6 +199,41 @@ class TestFillRestrictive(unittest.TestCase):
         # Unnecessary unreachable Item
         self.assertEqual(locations[1].item, items[0])
 
+    def test_minimal_mixed_fill(self):
+        """
+        Test that fill for 1 minimal and 1 non-minimal player will correctly place items in a way that lets
+        the non-minimal player get all items.
+        """
+
+        multi_world = generate_multi_world(2)
+        player1 = generate_player_data(multi_world, 1, 3, 3)
+        player2 = generate_player_data(multi_world, 2, 3, 3)
+
+        multi_world.accessibility[player1.id].value = multi_world.accessibility[player1.id].option_minimal
+        multi_world.accessibility[player2.id].value = multi_world.accessibility[player2.id].option_locations
+
+        multi_world.completion_condition[player1.id] = lambda state: True
+        multi_world.completion_condition[player2.id] = lambda state: state.has(player2.prog_items[2].name, player2.id)
+
+        set_rule(player1.locations[1], lambda state: state.has(player1.prog_items[0].name, player1.id))
+        set_rule(player1.locations[2], lambda state: state.has(player1.prog_items[1].name, player1.id))
+        set_rule(player2.locations[1], lambda state: state.has(player2.prog_items[0].name, player2.id))
+        set_rule(player2.locations[2], lambda state: state.has(player2.prog_items[1].name, player2.id))
+
+        # force-place an item that makes it impossible to have all locations accessible
+        player1.locations[0].place_locked_item(player1.prog_items[2])
+
+        # fill remaining locations with remaining items
+        location_pool = player1.locations[1:] + player2.locations
+        item_pool = player1.prog_items[:-1] + player2.prog_items
+        fill_restrictive(multi_world, multi_world.state, location_pool, item_pool)
+        multi_world.state.sweep_for_events()  # collect everything
+
+        # all of player2's locations and items should be accessible (not all of player1's)
+        for item in player2.prog_items:
+            self.assertTrue(multi_world.state.has(item.name, player2.id),
+                            f'{item} is unreachable in {item.location}')
+
     def test_reversed_fill(self):
         multi_world = generate_multi_world()
         player1 = generate_player_data(multi_world, 1, 2, 2)
