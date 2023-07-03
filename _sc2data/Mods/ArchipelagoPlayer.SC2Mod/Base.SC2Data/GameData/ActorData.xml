@@ -14275,7 +14275,7 @@
         <Model value="MothershipDeathRagdoll"/>
         <On Terms="ActorCreation" Send="Create AP_MothershipDeathRagdollDetonationForce"/>
     </CActorModel>
-    <CActorForceSphere id="AP_MothershipDeathRagdollDetonationForce" parent="DeathRagdollDetonationForce">
+    <CActorForceSphere id="AP_MothershipDeathRagdollDetonationForce" parent="AP_DeathRagdollDetonationForce">
         <!-- This ragdoll's damage points can be too far out on the edges, so we stick to the center more. -->
         <HostSiteOps Ops="SOpAttachCenter SOpForwardCasterCenter SOpRotVariancerForward60 SOpMoveByDot5To1 SOpMoveDownByDot25ToDot75 SOpPointSouthWorld"/>
         <Magnitude value="30.000000,30.000000"/>

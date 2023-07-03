@@ -6255,12 +6255,6 @@
         <Pitch value="1.000000,3.000000"/>
         <Spread value="30.000000"/>
     </CSound>
-    <CSound id="AP_MothershipVoid_PreDeathExplosion" parent="Death">
-        <EditorCategories value="Race:Protoss"/>
-        <AssetArray File="AP\Assets\Sounds\MothershipVoid_PreDeathExplosion00.wav" FacialGroup=""/>
-        <Pitch value="3.000000,3.000000"/>
-        <Volume value="6.000000,6.000000"/>
-    </CSound>
     <CSound id="AP_MothershipVoid_DeathExplosion" parent="Death">
         <EditorCategories value="Race:Protoss"/>
         <AssetArray File="AP\Assets\Sounds\MothershipVoid_DeathExplosion00_LR.wav" FacialGroup=""/>
