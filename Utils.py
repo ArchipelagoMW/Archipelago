@@ -268,6 +268,7 @@ def get_default_options() -> OptionsType:
         },
         "ladx_options": {
             "rom_file": "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc",
+            "rom_start": True,
         },
         "server_options": {
             "host": None,
