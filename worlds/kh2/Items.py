@@ -359,39 +359,37 @@ Wincon_Table = {
 # Equipped abilities have an offset of 0x8000 so check for if whatever || whatever+0x8000
 CheckDupingItems = {
     "Items":          {
-        Progression_Table.keys(),
-        Wincon_Table.keys(),
-        ItemName.MickyMunnyPouch,
-        ItemName.OletteMunnyPouch,
-        ItemName.HadesCupTrophy,
-        ItemName.UnknownDisk,
-        ItemName.OlympusStone,
+        item_name for set_ in [Progression_Table.keys(), Wincon_Table.keys(), [ItemName.MickyMunnyPouch,
+                                                                               ItemName.OletteMunnyPouch,
+                                                                               ItemName.HadesCupTrophy,
+                                                                               ItemName.UnknownDisk,
+                                                                               ItemName.OlympusStone, ]]
+        for item_name in set_
+
     },
     "Magic":          {
-        Magic_Table.keys(),
+        magic for magic in Magic_Table.keys()
     },
     "Bitmask":        {
-        Forms_Table.keys(),
-        Summon_Table.keys(),
-        Reports_Table.keys(),
+        item_name for set_ in [Forms_Table.keys(), Summon_Table.keys(), Reports_Table.keys()] for item_name in set_
     },
     "Weapons":        {
         "Keyblades": {
-            Keyblade_Table.keys()
+            keyblade for keyblade in Keyblade_Table.keys()
         },
         "Staffs":    {
-            Staffs_Table.keys()
+            staff for staff in Staffs_Table.keys()
         },
         "Shields":   {
-            Shields_Table.keys()
+            shield for shield in Shields_Table.keys()
         }
     },
     "Equipment":      {
         "Accessories": {
-            Accessory_Table.keys()
+            accessory for accessory in Accessory_Table.keys()
         },
         "Armor":       {
-            Armor_Table.keys()
+            armor for armor in Armor_Table.keys()
         }
     },
     "Stat Increases": {
@@ -404,73 +402,73 @@ CheckDupingItems = {
     },
     "Abilities":      {
         "Sora":   {
-            SupportAbility_Table.keys(),
-            ActionAbility_Table.keys(),
-            Movement_Table.keys(),
+            item_name for set_ in [SupportAbility_Table.keys(), ActionAbility_Table.keys(), Movement_Table.keys()] for item_name in set_
         },
         "Donald": {
-            DonaldAbility_Table.keys(),
+            donald_ability for donald_ability in DonaldAbility_Table.keys()
         },
         "Goofy":  {
-            GoofyAbility_Table.keys(),
+            goofy_ability for goofy_ability in GoofyAbility_Table.keys()
         }
     },
     "Boosts":         {
-        Boosts_Table.keys()
+        boost for boost in Boosts_Table.keys()
     }
 }
 
 Progression_Dicts = {
     # Items that are classified as progression
     "Progression":     {
-        # Wincons
-        Wincon_Table.keys(),
-        Progression_Table.keys(),
-        Forms_Table.keys(),
-        Magic_Table.keys(),
-        Summon_Table.keys(),
-        Movement_Table.keys(),
-        Keyblade_Table.keys(),
-        Staffs_Table.keys(),
-        Shields_Table.keys(),
         # abilities
-        ItemName.ComboMaster,
-        ItemName.ComboPlus,
-        ItemName.AirComboPlus,
-        ItemName.ReactionBoost,
-        ItemName.FinishingPlus,
-        ItemName.NegativeCombo,
-        ItemName.BerserkCharge,
-        ItemName.FormBoost,
-        ItemName.DriveConverter,
-        ItemName.LightDarkness,
-        ItemName.OnceMore,
-        ItemName.SecondChance,
-        ItemName.Guard,
-        ItemName.HorizontalSlash,
-        ItemName.FinishingLeap,
-        ItemName.Slapshot,
-        ItemName.FlashStep,
-        ItemName.SlideDash,
-        ItemName.GuardBreak,
-        ItemName.Explosion,
-        ItemName.AerialSweep,
-        ItemName.AerialDive,
-        ItemName.AerialSpiral,
-        ItemName.AerialFinish,
-        ItemName.AutoValor,
-        ItemName.AutoWisdom,
-        ItemName.AutoLimit,
-        ItemName.AutoMaster,
-        ItemName.AutoFinal,
-        ItemName.TrinityLimit,
-        # Party Limits
-        ItemName.FlareForce,
-        ItemName.Fantasia,
-        ItemName.Teamwork,
-        ItemName.TornadoFusion,
+        item_name for set_ in [
+            Wincon_Table.keys(),
+            Progression_Table.keys(),
+            Forms_Table.keys(),
+            Magic_Table.keys(),
+            Summon_Table.keys(),
+            Movement_Table.keys(),
+            Keyblade_Table.keys(),
+            Staffs_Table.keys(),
+            Shields_Table.keys(),
+            [
+                ItemName.ComboMaster,
+                ItemName.ComboPlus,
+                ItemName.AirComboPlus,
+                ItemName.ReactionBoost,
+                ItemName.FinishingPlus,
+                ItemName.NegativeCombo,
+                ItemName.BerserkCharge,
+                ItemName.FormBoost,
+                ItemName.DriveConverter,
+                ItemName.LightDarkness,
+                ItemName.OnceMore,
+                ItemName.SecondChance,
+                ItemName.Guard,
+                ItemName.HorizontalSlash,
+                ItemName.FinishingLeap,
+                ItemName.Slapshot,
+                ItemName.FlashStep,
+                ItemName.SlideDash,
+                ItemName.GuardBreak,
+                ItemName.Explosion,
+                ItemName.AerialSweep,
+                ItemName.AerialDive,
+                ItemName.AerialSpiral,
+                ItemName.AerialFinish,
+                ItemName.AutoValor,
+                ItemName.AutoWisdom,
+                ItemName.AutoLimit,
+                ItemName.AutoMaster,
+                ItemName.AutoFinal,
+                ItemName.TrinityLimit,
+                # Party Limits
+                ItemName.FlareForce,
+                ItemName.Fantasia,
+                ItemName.Teamwork,
+                ItemName.TornadoFusion,
+                ItemName.HadesCupTrophy]]
+        for item_name in set_
 
-        ItemName.HadesCupTrophy,
     },
     "2VisitLocking":   [
         ItemName.CastleKey,
@@ -514,7 +512,9 @@ exclusionItem_table = {
         ItemName.AccessorySlotUp,
         ItemName.ItemSlotUp,
     },
-    "Ability": {SupportAbility_Table.keys(), ActionAbility_Table.keys()}
+    "Ability": {
+        item_name for set_ in [SupportAbility_Table.keys(), ActionAbility_Table.keys()] for item_name in set_
+    }
 }
 
 item_dictionary_table = {
