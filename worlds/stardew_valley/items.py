@@ -177,25 +177,24 @@ def create_unique_items(item_factory: StardewItemFactory, world_options: Stardew
     create_carpenter_buildings(item_factory, world_options, items)
     items.append(item_factory("Beach Bridge"))
     items.append(item_factory("Dark Talisman"))
-    items.extend(create_tv_channels(item_factory))
+    create_tv_channels(item_factory, items)
     create_special_quest_rewards(item_factory, items)
-    create_stardrops(item_factory, items, world_options)
+    create_stardrops(item_factory, world_options, items)
     create_museum_items(item_factory, world_options, items)
     create_arcade_machine_items(item_factory, world_options, items)
     items.append(item_factory(random.choice(items_by_group[Group.GALAXY_WEAPONS])))
-    items.append(item_factory("Friendship Bonus (2 <3)"))
     create_player_buffs(item_factory, world_options, items)
-    items.extend(create_traveling_merchant_items(item_factory))
+    create_traveling_merchant_items(item_factory, items)
     items.append(item_factory("Return Scepter"))
-    items.extend(create_seasons(item_factory, world_options))
-    items.extend(create_seeds(item_factory, world_options))
+    create_seasons(item_factory, world_options, items)
+    create_seeds(item_factory, world_options, items)
     create_friendsanity_items(item_factory, world_options, items)
-    items.extend(create_festival_rewards(item_factory, world_options))
-    create_babies(item_factory, random, items)
-    items.extend(create_special_order_board_rewards(item_factory, world_options))
-    items.extend(create_special_order_qi_rewards(item_factory, world_options))
-    items.extend(create_walnut_purchase_rewards(item_factory, world_options))
-    items.extend(create_magic_mod_spells(item_factory, world_options))
+    create_festival_rewards(item_factory, world_options, items)
+    create_babies(item_factory, items, random)
+    create_special_order_board_rewards(item_factory, world_options, items)
+    create_special_order_qi_rewards(item_factory, world_options, items)
+    create_walnut_purchase_rewards(item_factory, world_options, items)
+    create_magic_mod_spells(item_factory, world_options, items)
 
     return items
 
@@ -259,8 +258,7 @@ def create_wizard_buildings(item_factory: StardewItemFactory, world_options: Sta
         items.append(item_factory("Woods Obelisk"))
 
 
-def create_carpenter_buildings(item_factory: StardewItemFactory, world_options: StardewOptions,
-                               items: List[Item]):
+def create_carpenter_buildings(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.BuildingProgression] in {options.BuildingProgression.option_progressive,
                                                       options.BuildingProgression.option_progressive_early_shipping_bin}:
         items.append(item_factory("Progressive Coop"))
@@ -293,7 +291,7 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, items: List[I
     items.append(item_factory("Iridium Snake Milk"))
 
 
-def create_stardrops(item_factory: StardewItemFactory, items: List[Item], world_options: StardewOptions):
+def create_stardrops(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     items.append(item_factory("Stardrop"))  # The Mines level 100
     items.append(item_factory("Stardrop"))  # Old Master Cannoli
     if world_options[options.Fishsanity] != options.Fishsanity.option_none:
@@ -346,15 +344,14 @@ def create_friendsanity_items(item_factory: StardewItemFactory, world_options: S
                 items.append(item_factory(f"Pet <3"))
 
 
-def create_babies(item_factory: StardewItemFactory, random: Random, items: List[Item]):
+def create_babies(item_factory: StardewItemFactory, items: List[Item], random: Random):
     baby_items = [item for item in items_by_group[Group.BABY]]
     for i in range(2):
         chosen_baby = random.choice(baby_items)
         items.append(item_factory(chosen_baby))
 
 
-def create_arcade_machine_items(item_factory: StardewItemFactory, world_options: StardewOptions,
-                                items: List[Item]):
+def create_arcade_machine_items(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.ArcadeMachineLocations] == options.ArcadeMachineLocations.option_full_shuffling:
         items.append(item_factory("JotPK: Progressive Boots"))
         items.append(item_factory("JotPK: Progressive Boots"))
@@ -378,75 +375,70 @@ def create_player_buffs(item_factory: StardewItemFactory, world_options: options
     items.extend(item_factory(item) for item in [Buff.luck] * number_of_luck_buffs)
 
 
-def create_traveling_merchant_items(item_factory: StardewItemFactory) -> List[Item]:
-    return [
-        *(item_factory(item) for item in items_by_group[Group.TRAVELING_MERCHANT_DAY]),
-        *(item_factory(item) for item in ["Traveling Merchant Stock Size"] * 6),
-        *(item_factory(item) for item in ["Traveling Merchant Discount"] * 8),
-    ]
+def create_traveling_merchant_items(item_factory: StardewItemFactory, items: List[Item]):
+    items.extend([*(item_factory(item) for item in items_by_group[Group.TRAVELING_MERCHANT_DAY]),
+                  *(item_factory(item) for item in ["Traveling Merchant Stock Size"] * 6),
+                  *(item_factory(item) for item in ["Traveling Merchant Discount"] * 8)])
 
 
-def create_seasons(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+def create_seasons(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.SeasonRandomization] == options.SeasonRandomization.option_disabled:
-        return []
+        return
 
     if world_options[options.SeasonRandomization] == options.SeasonRandomization.option_progressive:
-        return [item_factory(item) for item in ["Progressive Season"] * 3]
+        items.extend([item_factory(item) for item in ["Progressive Season"] * 3])
+        return
 
-    return [item_factory(item) for item in items_by_group[Group.SEASON]]
+    items.extend([item_factory(item) for item in items_by_group[Group.SEASON]])
 
 
-def create_seeds(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+def create_seeds(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.SeedShuffle] == options.SeedShuffle.option_disabled:
-        return []
+        return
 
     include_ginger_island = world_options[options.ExcludeGingerIsland] != options.ExcludeGingerIsland.option_true
-    return [item_factory(item) for item in items_by_group[Group.SEED_SHUFFLE]
-            if include_ginger_island or Group.GINGER_ISLAND not in item.groups]
+    seed_items = [item_factory(item) for item in items_by_group[Group.SEED_SHUFFLE] if include_ginger_island or Group.GINGER_ISLAND not in item.groups]
+    items.extend(seed_items)
 
 
-def create_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+def create_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.FestivalLocations] == options.FestivalLocations.option_disabled:
-        return []
+        return
 
-    return [
-        *[item_factory(item) for item in items_by_group[Group.FESTIVAL] if
-          item.classification != ItemClassification.filler],
-        item_factory("Stardrop"),
-    ]
+    items.extend([*[item_factory(item) for item in items_by_group[Group.FESTIVAL] if item.classification != ItemClassification.filler],
+                  item_factory("Stardrop")])
 
 
-def create_walnut_purchase_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+def create_walnut_purchase_rewards(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true:
-        return []
+        return
 
-    return [
-        item_factory("Boat Repair"),
-        item_factory("Open Professor Snail Cave"),
-        item_factory("Ostrich Incubator Recipe"),
-        *[item_factory(item) for item in items_by_group[Group.WALNUT_PURCHASE]]
-    ]
+    items.extend([item_factory("Boat Repair"),
+                  item_factory("Open Professor Snail Cave"),
+                  item_factory("Ostrich Incubator Recipe"),
+                  *[item_factory(item) for item in items_by_group[Group.WALNUT_PURCHASE]]])
 
 
-def create_special_order_board_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+
+def create_special_order_board_rewards(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if world_options[options.SpecialOrderLocations] == options.SpecialOrderLocations.option_disabled:
-        return []
+        return
 
-    return [item_factory(item) for item in items_by_group[Group.SPECIAL_ORDER_BOARD]]
+    items.extend([item_factory(item) for item in items_by_group[Group.SPECIAL_ORDER_BOARD]])
 
 
-def create_special_order_qi_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
+def create_special_order_qi_rewards(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
     if (world_options[options.SpecialOrderLocations] != options.SpecialOrderLocations.option_board_qi or
             world_options[options.ExcludeGingerIsland] == options.ExcludeGingerIsland.option_true):
-        return []
+        return
     qi_gem_rewards = ["100 Qi Gems", "10 Qi Gems", "40 Qi Gems", "25 Qi Gems", "25 Qi Gems",
                       "40 Qi Gems", "20 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems"]
     qi_gem_items = [item_factory(reward) for reward in qi_gem_rewards]
-    return qi_gem_items
+    items.extend(qi_gem_items)
 
 
-def create_tv_channels(item_factory: StardewItemFactory) -> List[Item]:
-    return [item_factory(item) for item in items_by_group[Group.TV_CHANNEL]]
+def create_tv_channels(item_factory: StardewItemFactory, items: List[Item]):
+    items.extend([item_factory(item) for item in items_by_group[Group.TV_CHANNEL]])
 
 
 def create_filler_festival_rewards(item_factory: StardewItemFactory, world_options: StardewOptions) -> List[Item]:
@@ -457,10 +449,10 @@ def create_filler_festival_rewards(item_factory: StardewItemFactory, world_optio
             item.classification == ItemClassification.filler]
 
 
-def create_magic_mod_spells(item_factory: StardewItemFactory, world_options: StardewOptions):
-    if ModNames.magic in world_options[options.Mods]:
-        return [item_factory(item) for item in items_by_group[Group.MAGIC_SPELL]]
-    return []
+def create_magic_mod_spells(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
+    if ModNames.magic not in world_options[options.Mods]:
+        return []
+    items.extend([item_factory(item) for item in items_by_group[Group.MAGIC_SPELL]])
 
 
 def create_unique_filler_items(item_factory: StardewItemFactory, world_options: options.StardewOptions, random: Random,
