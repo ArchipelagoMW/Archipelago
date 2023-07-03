@@ -30,6 +30,7 @@ from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
 from worlds.ladx.Tracker import LocationTracker, MagpieBridge
 
+
 class GameboyException(Exception):
     pass
 
@@ -141,8 +142,8 @@ class RAGameboy():
         response, _ = self.socket.recvfrom(4096)
         return response
 
-    async def async_recv(self):
-        response = await asyncio.get_event_loop().sock_recv(self.socket, 4096)
+    async def async_recv(self):     
+        response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
         return response
 
     async def check_safe_gameplay(self, throw=True):
@@ -169,6 +170,8 @@ class RAGameboy():
                 raise InvalidEmulatorStateError()
             return False
         if not await check_wram():
+            if throw:
+                raise InvalidEmulatorStateError()
             return False
         return True
 
@@ -328,10 +331,6 @@ class LinksAwakeningClient():
 
     def reset_auth(self):
         auth = binascii.hexlify(self.gameboy.read_memory(0x0134, 12)).decode()
-
-        if self.auth:
-            assert (auth == self.auth)
-
         self.auth = auth
 
     async def wait_and_init_tracker(self):
@@ -373,8 +372,7 @@ class LinksAwakeningClient():
             if self.should_reset_auth:
                 self.should_reset_auth = False
                 raise GameboyException("Resetting due to wrong archipelago server")
-            pass
-        logger.info("Ready!")
+        logger.info("Game connection ready!")
 
     async def is_victory(self):
         return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
@@ -487,6 +485,7 @@ class LinksAwakeningContext(CommonContext):
     def event_invalid_slot(self):
         # The next time we try to connect, reset the game loop for new auth
         self.had_invalid_slot_data = True
+        self.auth = None
         CommonContext.event_invalid_slot(self)
 
     ENABLE_DEATHLINK = False
@@ -525,13 +524,12 @@ class LinksAwakeningContext(CommonContext):
             # We are connecting when previously we had the wrong ROM or server - just in case
             # re-read the ROM so that if the user had the correct address but wrong ROM, we
             # allow a successful reconnect
-            self.client.auth = None
             self.client.should_reset_auth = True
             self.had_invalid_slot_data = False
 
-        self.auth = self.client.auth
-        while self.auth == None:
+        while self.client.auth == None:
             await asyncio.sleep(0.1)
+        self.auth = self.client.auth
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
@@ -569,6 +567,14 @@ class LinksAwakeningContext(CommonContext):
                 self.found_checks.clear()
                 await self.client.wait_for_retroarch_connection()
                 self.client.reset_auth()
+
+                # If we find ourselves with new auth after the reset, reconnect
+                if self.auth and self.client.auth != self.auth:
+                    # It would be neat to reconnect here, but connection needs this loop to be running
+                    logger.info("Detected new ROM, disconnecting...")
+                    await self.disconnect()
+                    continue
+
                 await self.client.wait_and_init_tracker()
 
                 while True:
@@ -582,10 +588,11 @@ class LinksAwakeningContext(CommonContext):
                         self.magpie.set_checks(self.client.tracker.all_checks)
                         await self.magpie.set_item_tracker(self.client.item_tracker)
                         await self.magpie.send_gps(self.client.gps_tracker)
-                    
-            except GameboyException:
+                    if self.client.should_reset_auth:
+                        self.client.should_reset_auth = False
+                        raise GameboyException("Resetting due to wrong archipelago server")
+            except (GameboyException, asyncio.TimeoutError, TimeoutError, ConnectionResetError):
                 time.sleep(1.0)
-                pass
 
 
 async def main():
