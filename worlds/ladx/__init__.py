@@ -312,8 +312,8 @@ class LinksAwakeningWorld(World):
             allowed_locations_by_item[item] = all_dungeon_locs
 
         # Get the list of locations and shuffle
-        all_dungeon_locs_to_fill = list(all_dungeon_locs)
-        all_dungeon_locs_to_fill.sort()
+        all_dungeon_locs_to_fill = sorted(all_dungeon_locs)
+
         self.multiworld.random.shuffle(all_dungeon_locs_to_fill)
 
         # Get the list of items and sort by priority
