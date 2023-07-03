@@ -1,7 +1,7 @@
 import collections
 import datetime
 import typing
-from typing import Counter, Optional, Dict, Any, Tuple
+from typing import Counter, Optional, Dict, Any, Tuple, List
 from uuid import UUID
 
 from flask import render_template
@@ -264,7 +264,7 @@ def get_static_room_data(room: Room):
     multidata = Context.decompress(room.seed.multidata)
     # in > 100 players this can take a bit of time and is the main reason for the cache
     locations: Dict[int, Dict[int, Tuple[int, int, int]]] = multidata['locations']
-    names: Dict[int, Dict[int, str]] = multidata.get("names", {})
+    names: List[List[str]] = multidata.get("names", [])
     games = multidata.get("games", {})
     groups = {}
     custom_locations = {}
@@ -274,7 +274,7 @@ def get_static_room_data(room: Room):
         games = {slot: slot_info.game for slot, slot_info in slot_info_dict.items()}
         groups = {slot: slot_info.group_members for slot, slot_info in slot_info_dict.items()
                   if slot_info.type == SlotType.group}
-        names = {0: {slot: slot_info.name for slot, slot_info in slot_info_dict.items()}}
+        names = [[slot_info.name for slot, slot_info in sorted(slot_info_dict.items())]]
         for game in games.values():
             if game not in multidata["datapackage"]:
                 continue
