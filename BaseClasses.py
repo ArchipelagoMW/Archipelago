@@ -81,6 +81,7 @@ class MultiWorld():
 
     random: random.Random
     per_slot_randoms: Dict[int, random.Random]
+    """Deprecated. Please use `self.random` instead."""
 
     class AttributeProxy():
         def __init__(self, rule):
@@ -242,6 +243,7 @@ class MultiWorld():
                 setattr(self, option_key, getattr(args, option_key, {}))
 
             self.worlds[player] = world_type(self, player)
+            self.worlds[player].random = self.per_slot_randoms[player]
 
     def set_item_links(self):
         item_links = {}
