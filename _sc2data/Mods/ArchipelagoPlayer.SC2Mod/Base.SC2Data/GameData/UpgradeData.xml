@@ -4421,4 +4421,17 @@
         <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
         <AffectedUnitArray value="AP_Oracle"/>
     </CUpgrade>
+    <CUpgrade id="AP_GraviticDrive">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-graviticdrive.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreAmount value="200"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_WarpPrism,Speed" Value="0.875000"/>
+        <EffectArray Reference="Unit,AP_WarpPrism,Acceleration" Value="1.125"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_WarpPrismPhasing"/>
+        <AffectedUnitArray value="AP_WarpPrism"/>
+    </CUpgrade>
 </Catalog>

@@ -180,4 +180,11 @@
         <YawIdleRate value="-7.207"/>
         <Fidget DelayMax="30" DelayMin="10"/>
     </CTurret>
+    <CTurret id="AP_WarpPrismPhasingRotate">
+        <Idle value="Spin"/>
+        <YawArc value="360"/>
+        <YawRate value="71.8945"/>
+        <YawIdleRate value="-71.8945"/>
+        <Fidget DelayMax="30" DelayMin="10"/>
+    </CTurret>
 </Catalog>

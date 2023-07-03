@@ -3798,7 +3798,9 @@
         <DisplayDuration index="Self" value="1"/>
         <DisplayDuration index="Ally" value="1"/>
         <DisplayDuration index="Enemy" value="1"/>
-        <DamageResponse Chance="1" ModifyFraction="0"/>
+        <DamageResponse ModifyFraction="0">
+            <Chance value="1"/>
+        </DamageResponse>
     </CBehaviorBuff>
     <CBehaviorBuff id="AP_DisruptorPush">
         <EditorCategories value="AbilityorEffectType:Units"/>
@@ -3808,4 +3810,10 @@
         <InitialEffect value="AP_OverchargeForce"/>
         <PeriodicEffect value="AP_OverchargeForce"/>
     </CBehaviorBuff>
+    <CBehaviorPowerSource id="AP_WarpPrismPowerSource">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
+        <Radius value="3.75"/>
+        <PowerLink value="PowerSource"/>
+    </CBehaviorPowerSource>
 </Catalog>

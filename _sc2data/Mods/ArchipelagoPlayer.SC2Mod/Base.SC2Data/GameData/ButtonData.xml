@@ -2255,4 +2255,37 @@
         <Icon value="Assets\Textures\BTN-Ability-Protoss-PurificationNova.dds"/>
         <AlertIcon value="Assets\Textures\BTN-Ability-Protoss-PurificationNova.dds"/>
     </CButton>
+    <CButton id="AP_PhasingMode">
+        <Icon value="Assets\Textures\btn-unit-protoss-warpprismstationary.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-warpprismstationary.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeySet value="WarpPrismModes"/>
+    </CButton>
+    <CButton id="AP_TransportMode">
+        <Icon value="Assets\Textures\btn-unit-protoss-warpprism.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-warpprism.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <HotkeySet value="WarpPrismModes"/>
+    </CButton>
+    <CButton id="AP_WarpPrismLoad">
+        <Icon value="Assets\Textures\btn-ability-terran-load.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-load.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="BunkerLoad"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_WarpPrismUnloadAll">
+        <Icon value="Assets\Textures\btn-ability-terran-unloadall.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-unloadall.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+        <TintRacially value="1"/>
+        <HotkeyAlias value="BunkerUnloadAll"/>
+        <Universal value="1"/>
+    </CButton>
+    <CButton id="AP_WarpPrism">
+        <Icon value="Assets\Textures\btn-unit-protoss-warpprism.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-protoss-warpprism.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

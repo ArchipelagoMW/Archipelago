@@ -4536,15 +4536,14 @@
         <On Terms="WeaponStop.AP_ThermalLances.AttackStop" Send="AnimClear Attack"/>
         <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundLarge"/>
         <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
-        <!-- TODO: AP_Warp Prism? -->
-        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackLaunchSite" Send="Destroy"/>
-        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackImpactSite" Send="Destroy"/>
-        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeam" Send="Destroy"/>
-        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamImpact" Send="Destroy"/>
-        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackLaunchSiteReverse" Send="Destroy"/>
-        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackImpactSiteReverse" Send="Destroy"/>
-        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamReverse" Send="Destroy"/>
-        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamImpactReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusAttackLaunchSite" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusAttackImpactSite" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusAttackBeam" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusAttackBeamImpact" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusAttackLaunchSiteReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusAttackImpactSiteReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusAttackBeamReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusAttackBeamImpactReverse" Send="Destroy"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Colossus_Land"/>
         <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkColossus"/>
         <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
@@ -4730,15 +4729,14 @@
         <Macros value="TerrainSquibAnimations"/>
         <On Terms="Effect.AP_ThermalLancesForward.Start" Send="AnimBracketStart Attack Stand,Channel,Start Stand,Channel Stand,Channel,End"/>
         <On Terms="Effect.AP_ThermalLancesForward.Stop" Send="AnimBracketStop Attack"/>
-        <!-- TODO: AP_Warp Prism? -->
-        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackLaunchSite" Send="Destroy"/>
-        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackImpactSite" Send="Destroy"/>
-        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeam" Send="Destroy"/>
-        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamImpact" Send="Destroy"/>
-        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackLaunchSiteReverse" Send="Destroy"/>
-        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackImpactSiteReverse" Send="Destroy"/>
-        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamReverse" Send="Destroy"/>
-        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Target="AP_ColossusAttackBeamImpactReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusPurifierAttackLaunchSite" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusPurifierAttackImpactSite" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusPurifierAttackBeam" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusPurifierAttackBeamImpact" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusPurifierAttackLaunchSiteReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusPurifierAttackImpactSiteReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusPurifierAttackBeamReverse" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusPurifierAttackBeamImpactReverse" Send="Destroy"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Colossus_Land"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="AP_ColossusPurifierWarpIn"/>
@@ -4901,7 +4899,8 @@
         <On Terms="WeaponStart.AP_ColossusTaldarimChargedBeam.AttackStart" Send="AnimBracketStart Attack Stand,Channel,Start Stand,Channel Stand,Channel,End"/>
         <On Terms="Effect.AP_ColossusTaldarimLM.Launch" Send="AnimBracketStop Attack"/>
         <On Terms="TimerExpired; TimerName BeamDestroy" Target="AP_ColossusTaldarimChargedBeamPowerUpModel" Send="Destroy"/>
-        <On Terms="AbilTransport.WarpPrismTransport.CargoLoad" Target="AP_ColossusTaldarimAttackBeam" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusTaldarimAttackBeam" Send="Destroy"/>
+        <On Terms="AbilTransport.*.CargoLoad" Target="AP_ColossusTaldarimChargedBeamPowerUpModel" Send="Destroy"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Colossus_Land"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="AP_ColossusTaldarimWarpIn"/>
@@ -13006,7 +13005,6 @@
         <SoundArray index="Yes" value="AP_Pusher_Yes"/>
         <SoundArray index="Attack" value="AP_Pusher_Attack"/>
         <SoundArray index="Pissed" value="AP_Pusher_Pissed"/>
-        <SoundArray index="Movement" value="AP_Disruptor_Movement"/>
         <SoundArray index="Turning" value="Observer_Turning"/>
         <SoundArray index="Board" value="Observer_Board"/>
         <SoundArray index="Click" value="Observer_Click"/>
@@ -13026,12 +13024,9 @@
     <CActorAction id="AP_DisruptorAttack" parent="GenericAttack" effectAttack="AP_DisruptorWeaponDamage">
         <LaunchSiteOps Ops="SOpAttachCenter"/>
         <LaunchAttachQuery Methods="Center"/>
-        <Beam value="AP_DisruptorAttackBeam"/>
         <ImpactMap index="None" Sound="AP_Disruptor_AttackImpact"/>
     </CActorAction>
-    <CActorBeamSimple id="AP_DisruptorAttackBeam" parent="GenericAttackBeam">
-        <Model value="AP_DisruptorAttackBeam"/>
-    </CActorBeamSimple>
+    <CActorBeamSimple id="AP_DisruptorAttackBeam" parent="GenericAttackBeam"/>
     <CActorBeamSimple id="AP_DisruptorBeam" parent="BeamSimpleAnimationStyleContinuous">
         <On Terms="Effect.AP_PurificationNovaTargettedSpawnSet.Start; At Target" Send="Create"/>
         <Model value="DisruptorBeam"/>
@@ -13177,7 +13172,6 @@
         <GroupIcon>
             <Image value="Assets\Textures\wireframe-protoss-disruptorphasemod.dds"/>
         </GroupIcon>
-        <HighlightTooltip value="Unit/Name/AP_DisruptorPhased"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
         <SoundArray index="Ready" value="AP_Pusher_Ready"/>
         <SoundArray index="Help" value="AP_Pusher_Help"/>
@@ -14896,6 +14890,181 @@
     <CActorMissile id="AP_ScarabAttackMissile" parent="GenericAttackMissileWithDeathAnim" unitName="AP_ScarabWeapon">
         <Macros value="GlobalLoopMacro"/>
     </CActorMissile>
+    <CActorUnit id="AP_WarpPrism" parent="GenericUnitStandard" unitName="AP_WarpPrism">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpPrism; MorphTo AP_WarpPrismPhasing" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpPrismPhasing; MorphTo AP_WarpPrism" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpPrismPhasing; MorphTo AP_WarpPrism" Send="AnimPlay Work Work,End 0 0.000000"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Behavior.WarpInEffect15.On; !ValidateUnit AP_NoDarkProtoss" Send="ModelSwap WarpPrismWarpIn"/>
+        <On Terms="Behavior.WarpInEffect15.On; !ValidateUnit AP_NoDarkProtoss" Send="$Birth"/>
+        <On Terms="Behavior.WarpInEffect15.Off; !ValidateUnit AP_NoDarkProtoss" Send="ModelSwap WarpPrism"/>
+        <On Terms="Behavior.WarpInEffect15.Off; !ValidateUnit AP_NoDarkProtoss" Send="AnimBaselineStart"/>
+        <On Terms="Upgrade.DarkProtoss.Add" Send="ModelSwap DarkWarpPrism"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap AP_DarkWarpPrism"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpPrismPhasing; MorphTo AP_WarpPrism; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkWarpPrism"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_WarpPrism_Land"/>
+        <On Terms="Behavior.WarpInEffect15.On" Send="ModelSwap WarpPrismWarpIn"/>
+        <On Terms="Behavior.WarpInEffect15.On" Send="$Birth"/>
+        <On Terms="Behavior.WarpInEffect15.Off" Send="ModelSwap WarpPrism"/>
+        <On Terms="Behavior.WarpInEffect15.Off" Send="AnimBaselineStart"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <On Terms="Behavior.WarpInEffect15.Off; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkWarpPrism"/>
+        <Model value="WarpPrism"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="WarpPrismWarpIn"/>
+        <DeathArray index="Normal" ModelLink="WarpPrismDeath" SoundLink="WarpPrism_Explode"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
+        <DeathCustoms ModelLink="DarkWarpPrismDeath" Name="DarkProtoss"/>
+        <DeathCustoms>
+            <ActorModel value="WarpPrismDeathRagdoll"/>
+            <ModelLink value="WarpPrismDeathRagdoll"/>
+            <Name value="RagdollBasic"/>
+            <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollMidair" InheritsFrom="RagdollBasic"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="WarpPrism"/>
+        <PortraitModel value="WarpPrismPortrait"/>
+        <BarOffset value="55"/>
+        <BarWidth value="78"/>
+        <GlossaryAnim value="GLstand,A"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism00.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-warpprism.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="60"/>
+        <SoundArray index="Ready" value="WarpPrism_Ready"/>
+        <SoundArray index="What" value="WarpPrism_What"/>
+        <SoundArray index="Yes" value="WarpPrism_Yes"/>
+        <SoundArray index="Pissed" value="WarpPrism_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-warpprism.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism00.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism00-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism00-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism00-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_WarpPrism_Land" parent="SoundOneShot">
+        <Sound value="WarpPrism_Land"/>
+    </CActorSound>
+    <CActorUnit id="AP_WarpPrismPhasing" parent="GenericUnitStandard" unitName="AP_WarpPrismPhasing">
+        <Aliases value="_UnitLarge"/>
+        <Macros value="PhysicsDeathsSwarmAir"/>
+        <Macros value="PhysicsDeathsVoidAir"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpPrismPhasing; MorphTo AP_WarpPrism" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpPrism; MorphTo AP_WarpPrismPhasing" Send="Create"/>
+        <On Terms="UnitBirth.AP_WarpPrismPhasing" Send="AnimBracketStart Phasing Work,Start Work Work,End Instant"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WarpPrismPhasing" Send="AnimBracketStart Phasing Work,Start Work Work,End"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WarpPrism" Send="AnimBracketStop Phasing"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundMedium"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="ModelSwap DarkWarpPrism"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkWarpPrism"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpPrism; MorphTo AP_WarpPrismPhasing; ValidateUnit AP_NoDarkProtoss" Send="ModelSwap DarkWarpPrism"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomize DarkProtoss"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_WarpPrismPhasing_Land"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="Upgrade.AP_DarkProtoss.Add" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_NoDarkProtoss" Send="DeathCustomsEnablePhysics 0"/>
+        <On Terms="UnitBirth; ValidateUnit AP_HasPurifierProtoss" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Upgrade.AP_PurifierProtoss.Add" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="Signal.*.PurifierHack" Send="TextureSelectById PurifierHackDiffuse"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_IsTerrazineShadow" Send="DeathCustomize Hallucination"/>
+        <Model value="WarpPrism"/>
+        <ModelFlags index="OutlineEmitter" value="1"/>
+        <BuildModel value="WarpPrism"/>
+        <DeathArray index="Normal" ModelLink="WarpPrismOpenDeath" SoundLink="WarpPrism_Explode"/>
+        <DeathCustoms ModelLink="HallucinationDeath" SoundLink="Sentry_HallucinationDeathMedium" Name="Hallucination"/>
+        <DeathCustoms ModelLink="DarkWarpPrismOpenDeath" Name="DarkProtoss"/>
+        <DeathCustoms ModelLink="WarpPrismPhasingDeathRagdoll" Name="RagdollBasic" PhysicsMatchKeysOrdered="BasicAir,Basic">
+            <BodySquibs Name="Basic" Model="ProtossRobotSquibDeathRagdoll"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollNuke" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollFire" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Fire"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollAcid" InheritsFrom="RagdollBasic">
+            <BodySquibs Name="Acid"/>
+        </DeathCustoms>
+        <DeathCustoms Name="RagdollOverkillDPRH" InheritsFrom="RagdollBasic"/>
+        <DeathCustoms Name="RagdollOverkillDOI" InheritsFrom="RagdollBasic"/>
+        <PhysicsMatchKeysOrdered value="BasicAir,Basic"/>
+        <PlacementModel value="WarpPrism"/>
+        <PortraitModel value="WarpPrismPortrait"/>
+        <BarOffset value="55"/>
+        <BarWidth value="78"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism01.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-unit-protoss-warpprismstationary.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-airarmorlevel0.dds"/>
+        <NameOffset value="60"/>
+        <SoundArray index="Ready" value="WarpPrism_Ready"/>
+        <SoundArray index="What" value="WarpPrism_What"/>
+        <SoundArray index="Yes" value="WarpPrism_Yes"/>
+        <SoundArray index="Pissed" value="WarpPrism_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-warpprismstationary.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism01.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism01-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism01-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-WarpPrism01-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorSound id="AP_WarpPrismPhasing_Land" parent="SoundOneShot">
+        <Sound value="WarpPrismPhasing_Land"/>
+    </CActorSound>
+    <CActorPower id="AP_WarpPrismPower">
+        <On Terms="Behavior.AP_WarpPrismPowerSource.Create; !Option Model Low" Send="Create"/>
+        <On Terms="Behavior.AP_WarpPrismPowerSource.Destroy; !Option Model Low" Send="Destroy"/>
+        <PowerSource value="AP_WarpPrismPowerSource"/>
+        <VisualArray value="WarpPrismUnpoweredVisual"/>
+        <VisualArray value="WarpPrismPowerVisual"/>
+    </CActorPower>
+    <CActorPower id="AP_WarpPrismPowerLow">
+        <On Terms="Behavior.AP_WarpPrismPowerSource.Create; Option Model Low" Send="Create"/>
+        <On Terms="Behavior.AP_WarpPrismPowerSource.Destroy; Option Model Low" Send="Destroy"/>
+        <PowerSource value="AP_WarpPrismPowerSource"/>
+        <VisualArray value="WarpPrismUnpoweredVisualLow"/>
+        <VisualArray value="WarpPrismPowerVisualLow"/>
+    </CActorPower>
+    <CActorTurret id="AP_WarpPrismPhasingRotateTurret">
+        <On Terms="TurretEnable.AP_WarpPrismPhasingRotate" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpPrismPhasing" Send="Destroy"/>
+    </CActorTurret>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
@@ -20127,5 +20296,44 @@
         <On Terms="Behavior.AP_MatrixOverloadTarget.Off" Send="Create"/>
         <Host Subject="_Unit"/>
         <Sound value="AP_SOAMatrixOverloadOff"/>
+    </CActorSound>
+    <CActorModel id="UnloadFX">
+        <!-- Override -->
+        <!-- Add AP Trasports -->
+        <On Terms="AbilTransport.AP_MedivacTransport.CargoUnload" Send="Create"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoUnload" Send="Create"/>
+        <On Terms="AbilTransport.AP_HerculesTransport.CargoUnload" Send="Create"/>
+    </CActorModel>
+    <CActorModel id="AP_ShuttleTransportLoadModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="AbilTransport.AP_WarpPrismTransport.CargoLoad" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="ShuttleTransportLoadModel"/>
+    </CActorModel>
+    <CActorSound id="AP_ShuttleTransportLoadSound" parent="SoundOneShot">
+        <Sound value="Shuttle_Load"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.TransportLoad" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+    </CActorSound>
+    <CActorModel id="AP_ShuttleTransportUnloadModel" parent="ModelAnimationStyleOneShot">
+        <On Terms="Abil.AP_WarpPrismTransport.CargoUnload" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="ShuttleTransportUnloadModel"/>
+    </CActorModel>
+    <CActorSound id="AP_ShuttleTransportUnloadSound" parent="SoundOneShot">
+        <Sound value="Shuttle_Unload"/>
+        <On Terms="AbilTransport.AP_WarpPrismTransport.TransportUnload" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorSound>
+    <CActorSound id="AP_PhasingMode" parent="SoundOneShot">
+        <Sound value="WarpPrism_MorphToPhasing"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WarpPrismPhasing" Send="Create"/>
+    </CActorSound>
+    <CActorSound id="AP_TransportMode" parent="SoundOneShot">
+        <Sound value="WarpPrism_MorphToTransport"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_WarpPrism" Send="Create"/>
     </CActorSound>
 </Catalog>

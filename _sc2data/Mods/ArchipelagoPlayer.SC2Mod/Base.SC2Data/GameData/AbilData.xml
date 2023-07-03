@@ -4195,10 +4195,10 @@
     <CAbilTrain id="AP_RoboticsFacilityTrain">
         <EditorCategories value="Race:Protoss,AbilityorEffectType:Structures"/>
         <Activity value="UI/Warping"/>
-        <!--        <InfoArray index="Train1" Time="50" Effect="WarpInEffect15">-->
-        <!--            <Button DefaultButtonFace="WarpPrism" State="Restricted"/>-->
-        <!--            <Unit value="AP_WarpPrism"/>-->
-        <!--        </InfoArray>-->
+        <InfoArray index="Train1" Time="50" Effect="WarpInEffect15">
+            <Button DefaultButtonFace="AP_WarpPrism" State="Restricted"/>
+            <Unit value="AP_WarpPrism"/>
+        </InfoArray>
         <InfoArray index="Train2" Time="30" Effect="WarpInEffect15">
             <Button DefaultButtonFace="Observer" State="Restricted"/>
             <Unit value="AP_Observer"/>
@@ -4213,18 +4213,18 @@
         </InfoArray>
     </CAbilTrain>
     <CAbilWarpTrain id="AP_RoboticsFacilityWarpTrain">
-        <!--        <InfoArray index="Train1" Time="5" Unit="AP_WarpPrism">-->
-        <!--            <Charge>-->
-        <!--                <CountMax value="1"/>-->
-        <!--                <CountStart value="1"/>-->
-        <!--                <CountUse value="1"/>-->
-        <!--                <Link value="WarpGateTrain"/>-->
-        <!--                <TimeStart value="30"/>-->
-        <!--                <TimeUse value="40"/>-->
-        <!--                <Flags index="EnableChargeTimeQueuing" value="1"/>-->
-        <!--            </Charge>-->
-        <!--            <Button DefaultButtonFace="WarpPrism" State="Restricted"/>-->
-        <!--        </InfoArray>-->
+        <InfoArray index="Train1" Time="5" Unit="AP_WarpPrism">
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Link value="WarpGateTrain"/>
+                <TimeStart value="30"/>
+                <TimeUse value="40"/>
+                <Flags index="EnableChargeTimeQueuing" value="1"/>
+            </Charge>
+            <Button DefaultButtonFace="AP_WarpPrism" State="Restricted"/>
+        </InfoArray>
         <InfoArray index="Train2" Time="5" Unit="AP_Observer">
             <Charge>
                 <CountMax value="1"/>
@@ -4522,6 +4522,21 @@
         <CursorEffect value="AP_ChargedBlastSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_ChargedBlast"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_PhasingMode">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_PhasingMode"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_WarpPrismPhasing">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
         <!-- Exclude AP_Barracks from all Factory-like so for AP_Barracks AP_FactoryReactorMorph is called instead -->
@@ -5359,4 +5374,52 @@
         <CursorEffect value="AP_VoidSentryBlackHoleSearch"/>
         <CmdButtonArray index="Execute" DefaultButtonFace="AP_VoidSentryBlackHole"/>
     </CAbilEffectTarget>
+    <CAbilMorph id="AP_TransportMode">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_TransportMode"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="IgnoreFacing" value="1"/>
+        <InfoArray Unit="AP_WarpPrism">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Duration" value="1.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilTransport id="AP_WarpPrismTransport">
+        <AbilSetId value="ULdM"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <CmdButtonArray index="Load" DefaultButtonFace="MedivacLoad"/>
+        <CmdButtonArray index="UnloadAll" DefaultButtonFace="BunkerUnloadAll">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="UnloadAt" DefaultButtonFace="MedivacUnloadAll"/>
+        <CmdButtonArray index="UnloadUnit">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <CmdButtonArray index="LoadAll">
+            <Flags index="Hidden" value="1"/>
+        </CmdButtonArray>
+        <Flags index="CargoDeath" value="1"/>
+        <MaxCargoCount value="8"/>
+        <MaxCargoSize value="8"/>
+        <TotalCargoSpace value="8"/>
+        <UnloadPeriod value="1"/>
+        <TargetFilters value="Visible;Ally,Neutral,Enemy,Buried,UnderConstruction,Dead,Hidden"/>
+        <LoadValidatorArray value="AP_NotWidowMineTarget"/>
+    </CAbilTransport>
+    <CAbilAttack id="AP_AttackWarpPrism">
+        <AbilSetId value=""/>
+        <TargetMessage value="Abil/TargetMessage/AttackWarpPrism"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AttackWarpPrism">
+            <Flags index="ToSelection" value="0"/>
+        </CmdButtonArray>
+        <AcquireFilters value="-;Self,Player,Ally,Neutral,Enemy"/>
+        <SmartFilters value="-;Self,Player,Ally,Neutral,Enemy"/>
+        <MinAttackSpeedMultiplier value="0.25"/>
+        <MaxAttackSpeedMultiplier value="128"/>
+    </CAbilAttack>
 </Catalog>
