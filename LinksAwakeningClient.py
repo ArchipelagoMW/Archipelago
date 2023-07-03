@@ -142,7 +142,7 @@ class RAGameboy():
         response, _ = self.socket.recvfrom(4096)
         return response
 
-    async def async_recv(self):     
+    async def async_recv(self):
         response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), 1.0)
         return response
 
@@ -308,7 +308,7 @@ class LinksAwakeningClient():
                         if status.count(b" ") < 2:
                             await asyncio.sleep(1.0)
                             continue
-                        
+
                         GET_STATUS, PLAYING, info = status.split(b" ", 2)
                         if status.count(b",") < 2:
                             await asyncio.sleep(1.0)
@@ -556,7 +556,7 @@ class LinksAwakeningContext(CommonContext):
 
         if self.magpie_enabled:
             self.magpie_task = asyncio.create_task(self.magpie.serve())
-        
+
         # yield to allow UI to start
         await asyncio.sleep(0)
 
@@ -602,7 +602,7 @@ async def main():
 
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a .apladx Archipelago Binary Patch file')
-                        
+
     args = parser.parse_args()
     logger.info(args)
 
