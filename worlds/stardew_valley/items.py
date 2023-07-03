@@ -11,6 +11,7 @@ from . import options, data
 from .data.villagers_data import all_villagers
 from .mods.mod_data import ModNames
 from .options import StardewOptions
+from .strings.ap_names.buff_names import Buff
 
 ITEM_CODE_OFFSET = 717000
 
@@ -222,15 +223,14 @@ def create_mine_rewards(item_factory: StardewItemFactory, items: List[Item], ran
 
 
 def create_elevators(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
-    if (world_options[options.TheMinesElevatorsProgression] ==
-            options.TheMinesElevatorsProgression.option_progressive or
-            world_options[options.TheMinesElevatorsProgression] ==
-            options.TheMinesElevatorsProgression.option_progressive_from_previous_floor):
-        items.extend([item_factory(item) for item in ["Progressive Mine Elevator"] * 24])
-        if ModNames.deepwoods in world_options[options.Mods]:
-            items.extend([item_factory(item) for item in ["Progressive Wood Obelisk Sigils"] * 10])
-        if ModNames.skull_cavern_elevator in world_options[options.Mods]:
-            items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
+    if world_options[options.ElevatorProgression] == options.ElevatorProgression.option_vanilla:
+        return
+
+    items.extend([item_factory(item) for item in ["Progressive Mine Elevator"] * 24])
+    if ModNames.deepwoods in world_options[options.Mods]:
+        items.extend([item_factory(item) for item in ["Progressive Wood Obelisk Sigils"] * 10])
+    if ModNames.skull_cavern_elevator in world_options[options.Mods]:
+        items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
 
 
 def create_tools(item_factory: StardewItemFactory, world_options: StardewOptions, items: List[Item]):
@@ -372,9 +372,10 @@ def create_arcade_machine_items(item_factory: StardewItemFactory, world_options:
 
 
 def create_player_buffs(item_factory: StardewItemFactory, world_options: options.StardewOptions, items: List[Item]):
-    number_of_buffs: int = world_options[options.NumberOfPlayerBuffs]
-    items.extend(item_factory(item) for item in ["Movement Speed Bonus"] * number_of_buffs)
-    items.extend(item_factory(item) for item in ["Luck Bonus"] * number_of_buffs)
+    number_of_movement_buffs: int = world_options[options.NumberOfMovementBuffs]
+    number_of_luck_buffs: int = world_options[options.NumberOfLuckBuffs]
+    items.extend(item_factory(item) for item in [Buff.movement] * number_of_movement_buffs)
+    items.extend(item_factory(item) for item in [Buff.luck] * number_of_luck_buffs)
 
 
 def create_traveling_merchant_items(item_factory: StardewItemFactory) -> List[Item]:

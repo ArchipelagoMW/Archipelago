@@ -154,7 +154,7 @@ class TestRemixedMineRewards(SVTestBase):
 
 class TestProgressiveElevator(SVTestBase):
     options = {
-        options.TheMinesElevatorsProgression.internal_name: options.TheMinesElevatorsProgression.option_progressive,
+        options.ElevatorProgression.internal_name: options.ElevatorProgression.option_progressive,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
     }
@@ -205,13 +205,14 @@ class TestLocationAndItemCount(SVTestBase):
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
         options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
         options.BuildingProgression.internal_name: options.BuildingProgression.option_vanilla,
-        options.TheMinesElevatorsProgression.internal_name: options.TheMinesElevatorsProgression.option_vanilla,
+        options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
         options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,
         options.HelpWantedLocations.internal_name: 0,
         options.Fishsanity.internal_name: options.Fishsanity.option_none,
         options.Museumsanity.internal_name: options.Museumsanity.option_none,
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
-        options.NumberOfPlayerBuffs.internal_name: 12,
+        options.NumberOfMovementBuffs.internal_name: 12,
+        options.NumberOfLuckBuffs.internal_name: 12,
     }
 
     def test_minimal_location_maximal_items_still_valid(self):

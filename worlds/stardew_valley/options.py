@@ -217,13 +217,13 @@ class ToolProgression(Choice):
     option_progressive = 1
 
 
-class TheMinesElevatorsProgression(Choice):
-    """How is The Mines' Elevator progression handled?
-    Vanilla: You will unlock a new elevator floor every 5 floor in the mine.
-    Progressive: You will randomly find Progressive Mine Elevator to go deeper. Location are sent for reaching
-        every level multiple of 5.
-    Progressive from previous floor: Locations are sent for taking the ladder or stairs to every 5
-        levels, taking the elevator does not count."""
+class ElevatorProgression(Choice):
+    """How is Elevator progression handled?
+    Vanilla: You will unlock new elevator floors for yourself.
+    Progressive: You will randomly find Progressive Mine Elevators to go deeper. Locations are sent for reaching
+        every elevator level.
+    Progressive from previous floor: Same as progressive, but you must reach elevator floors on your own,
+        you cannot use the elevator to check elevator locations"""
     internal_name = "elevator_progression"
     display_name = "Elevator Progression"
     default = 2
@@ -398,12 +398,22 @@ class FriendsanityHeartSize(Range):
     # step = 1
 
 
-class NumberOfPlayerBuffs(Range):
-    """Number of buffs to the player of each type that exist as items in the pool.
-    Buffs include movement speed (+25% multiplier, stacks additively)
-    and daily luck bonus (0.025 flat value per buff)"""
-    internal_name = "player_buff_number"
-    display_name = "Number of Player Buffs"
+class NumberOfMovementBuffs(Range):
+    """Number of movement speed buffs to the player that exist as items in the pool.
+    Each movement speed buff is a +25% multiplier that stacks additively"""
+    internal_name = "movement_buff_number"
+    display_name = "Number of Movement Buffs"
+    range_start = 0
+    range_end = 12
+    default = 4
+    # step = 1
+
+
+class NumberOfLuckBuffs(Range):
+    """Number of luck buffs to the player that exist as items in the pool.
+    Each luck buff is a bonus to daily luck of 0.025"""
+    internal_name = "speed_buff_number"
+    display_name = "Number of Luck Buffs"
     range_start = 0
     range_end = 12
     default = 4
@@ -463,7 +473,7 @@ class ExperienceMultiplier(SpecialRange):
     internal_name = "experience_multiplier"
     display_name = "Experience Multiplier"
     range_start = 25
-    range_end = 400
+    range_end = 800
     # step = 25
     default = 200
 
@@ -483,7 +493,7 @@ class FriendshipMultiplier(SpecialRange):
     internal_name = "friendship_multiplier"
     display_name = "Friendship Multiplier"
     range_start = 25
-    range_end = 400
+    range_end = 800
     # step = 25
     default = 200
 
@@ -529,26 +539,6 @@ class Gifting(Toggle):
     default = 1
 
 
-class GiftTax(SpecialRange):
-    """Joja Prime will deliver gifts within one business day, for a price!
-    Sending a gift will cost a percentage of the item's monetary value as a tax on the sender"""
-    internal_name = "gift_tax"
-    display_name = "Gift Tax"
-    range_start = 0
-    range_end = 400
-    # step = 20
-    default = 20
-
-    special_range_names = {
-        "no tax": 0,
-        "soft tax": 20,
-        "rough tax": 40,
-        "full tax": 100,
-        "oppressive tax": 200,
-        "nightmare tax": 400,
-    }
-
-
 class Mods(OptionSet):
     """List of mods that will be considered for shuffling."""
     internal_name = "mods"
@@ -577,7 +567,7 @@ stardew_valley_option_classes = [
     SkillProgression,
     BuildingProgression,
     FestivalLocations,
-    TheMinesElevatorsProgression,
+    ElevatorProgression,
     ArcadeMachineLocations,
     SpecialOrderLocations,
     HelpWantedLocations,
@@ -585,7 +575,8 @@ stardew_valley_option_classes = [
     Museumsanity,
     Friendsanity,
     FriendsanityHeartSize,
-    NumberOfPlayerBuffs,
+    NumberOfMovementBuffs,
+    NumberOfLuckBuffs,
     ExcludeGingerIsland,
     TrapItems,
     MultipleDaySleepEnabled,
@@ -595,7 +586,6 @@ stardew_valley_option_classes = [
     DebrisMultiplier,
     QuickStart,
     Gifting,
-    GiftTax,
     Mods,
 ]
 stardew_valley_options: Dict[str, type(Option)] = {option.internal_name: option for option in

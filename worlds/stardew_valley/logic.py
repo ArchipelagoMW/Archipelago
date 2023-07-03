@@ -24,6 +24,7 @@ from .regions import vanilla_regions
 from .stardew_rule import False_, Reach, Or, True_, Received, Count, And, Has, TotalReceived, StardewRule
 from .strings.animal_names import Animal, coop_animals, barn_animals
 from .strings.animal_product_names import AnimalProduct
+from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.building_names import Building
@@ -913,8 +914,9 @@ class StardewLogic:
         return region_rule & ((tool_rule & foraging_rule) | magic_rule)
 
     def has_max_buffs(self) -> StardewRule:
-        num_buffs: int = self.options[options.NumberOfPlayerBuffs]
-        return self.received("Movement Speed Bonus", num_buffs) & self.received("Luck Bonus", num_buffs)
+        number_of_movement_buffs: int = self.options[options.NumberOfMovementBuffs]
+        number_of_luck_buffs: int = self.options[options.NumberOfLuckBuffs]
+        return self.received(Buff.movement, number_of_movement_buffs) & self.received(Buff.luck, number_of_luck_buffs)
 
     def get_weapon_rule_for_floor_tier(self, tier: int):
         if tier >= 4:
@@ -952,7 +954,7 @@ class StardewLogic:
         return And(rules)
 
     def has_mine_elevator_to_floor(self, floor: int) -> StardewRule:
-        if self.options[options.TheMinesElevatorsProgression] != options.TheMinesElevatorsProgression.option_vanilla:
+        if self.options[options.ElevatorProgression] != options.ElevatorProgression.option_vanilla:
             return self.received("Progressive Mine Elevator", count=int(floor / 5))
         return True_()
 
@@ -1333,10 +1335,10 @@ class StardewLogic:
         return self.received(Wallet.rusty_key)
 
     def can_win_egg_hunt(self) -> StardewRule:
-        number_of_buffs: int = self.options[options.NumberOfPlayerBuffs]
-        if self.options[options.FestivalLocations] == options.FestivalLocations.option_hard or number_of_buffs < 2:
+        number_of_movement_buffs: int = self.options[options.NumberOfMovementBuffs]
+        if self.options[options.FestivalLocations] == options.FestivalLocations.option_hard or number_of_movement_buffs < 2:
             return True_()
-        return self.received("Movement Speed Bonus", number_of_buffs // 2)
+        return self.received(Buff.movement, number_of_movement_buffs // 2)
 
     def can_succeed_luau_soup(self) -> StardewRule:
         if self.options[options.FestivalLocations] != options.FestivalLocations.option_hard:

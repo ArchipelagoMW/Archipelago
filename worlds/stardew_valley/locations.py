@@ -170,7 +170,6 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], world_
         randomized_locations.extend(filter_ginger_island(world_options, fish_locations))
 
 
-
 def extend_museumsanity_locations(randomized_locations: List[LocationData], museumsanity: int, random: Random):
     prefix = "Museumsanity: "
     if museumsanity == options.Museumsanity.option_none:
@@ -294,7 +293,7 @@ def extend_backpack_locations(randomized_locations: List[LocationData], world_op
 
 
 def extend_elevator_locations(randomized_locations: List[LocationData], world_options):
-    if world_options[options.TheMinesElevatorsProgression] == options.TheMinesElevatorsProgression.option_vanilla:
+    if world_options[options.ElevatorProgression] == options.ElevatorProgression.option_vanilla:
         return
     elevator_locations = [location for location in locations_by_tag[LocationTags.ELEVATOR]]
     filtered_elevator_locations = filter_modded_locations(world_options, elevator_locations)
@@ -355,5 +354,5 @@ def filter_modded_locations(world_options: options.StardewOptions, locations: Li
 
 def filter_disabled_locations(world_options: options.StardewOptions, locations: List[LocationData]) -> List[LocationData]:
     locations_first_pass = filter_ginger_island(world_options, locations)
-    locations_second_pass = filter_modded_locations(world_options,locations_first_pass)
+    locations_second_pass = filter_modded_locations(world_options, locations_first_pass)
     return locations_second_pass
