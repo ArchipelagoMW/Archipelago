@@ -319,7 +319,7 @@ class LinksAwakeningClient():
                     except (BlockingIOError, TimeoutError) as e:
                         await asyncio.sleep(0.1)
                         pass
-                logger.info(f"Connected to Retroarch {version} {info}")
+                logger.info(f"Connected to Retroarch {version.decode('ascii')} running {rom_name.decode('ascii')}")
                 self.gameboy.read_memory(0x1000)
                 return
             except ConnectionResetError:
@@ -366,10 +366,13 @@ class LinksAwakeningClient():
         status |= 1
         status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
         self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
-
+    should_reset_auth = False
     async def wait_for_game_ready(self):
         logger.info("Waiting on game to be in valid state...")
         while not await self.gameboy.check_safe_gameplay(throw=False):
+            if self.should_reset_auth:
+                self.should_reset_auth = False
+                raise GameboyException("Resetting due to wrong archipelago server")
             pass
         logger.info("Ready!")
 
@@ -480,6 +483,12 @@ class LinksAwakeningContext(CommonContext):
         message = [{"cmd": 'LocationChecks', "locations": self.found_checks}]
         await self.send_msgs(message)
 
+    had_invalid_slot_data = None
+    def event_invalid_slot(self):
+        # The next time we try to connect, reset the game loop for new auth
+        self.had_invalid_slot_data = True
+        CommonContext.event_invalid_slot(self)
+
     ENABLE_DEATHLINK = False
     async def send_deathlink(self):
         if self.ENABLE_DEATHLINK:
@@ -511,8 +520,18 @@ class LinksAwakeningContext(CommonContext):
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(LinksAwakeningContext, self).server_auth(password_requested)
+
+        if self.had_invalid_slot_data:
+            # We are connecting when previously we had the wrong ROM or server - just in case
+            # re-read the ROM so that if the user had the correct address but wrong ROM, we
+            # allow a successful reconnect
+            self.client.auth = None
+            self.client.should_reset_auth = True
+            self.had_invalid_slot_data = False
+
         self.auth = self.client.auth
-        await self.get_username()
+        while self.auth == None:
+            await asyncio.sleep(0.1)
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
@@ -563,7 +582,7 @@ class LinksAwakeningContext(CommonContext):
                         self.magpie.set_checks(self.client.tracker.all_checks)
                         await self.magpie.set_item_tracker(self.client.item_tracker)
                         await self.magpie.send_gps(self.client.gps_tracker)
-
+                    
             except GameboyException:
                 time.sleep(1.0)
                 pass
@@ -584,15 +603,9 @@ async def main():
         import Patch
         logger.info("patch file was supplied - creating rom...")
         meta, rom_file = Patch.create_rom_file(args.diff_file)
-        if "server" in meta:
-            args.url = meta["server"]
+        if "server" in meta and not args.connect:
+            args.connect = meta["server"]
         logger.info(f"wrote rom file to {rom_file}")
-
-    if args.url:
-        url = urllib.parse.urlparse(args.url)
-        args.connect = url.netloc
-        if url.password:
-            args.password = urllib.parse.unquote(url.password)
 
     ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
 
