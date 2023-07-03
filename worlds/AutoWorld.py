@@ -11,6 +11,7 @@ from BaseClasses import CollectionState
 from Options import AssembleOptions
 
 if TYPE_CHECKING:
+    import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
 
