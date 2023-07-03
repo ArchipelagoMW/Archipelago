@@ -73,18 +73,41 @@ class BlasphemousWorld(World):
         world = self.multiworld
         player = self.player
 
-        if world.starting_location[player].value == 6 and world.difficulty[player].value < 2:
-            raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
-                             " cannot be chosen if Difficulty is lower than Hard.")
-
-        if (world.starting_location[player].value == 0 or world.starting_location[player].value == 6) \
-            and world.dash_shuffle[player]:
+        if not world.starting_location[player].randomized:
+            if world.starting_location[player].value == 6 and world.difficulty[player].value < 2:
                 raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
-                                 " cannot be chosen if Shuffle Dash is enabled.")
-        
-        if world.starting_location[player].value == 3 and world.wall_climb_shuffle[player]:
-            raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
-                            " cannot be chosen if Shuffle Wall Climb is enabled.")
+                                " cannot be chosen if Difficulty is lower than Hard.")
+
+            if (world.starting_location[player].value == 0 or world.starting_location[player].value == 6) \
+                and world.dash_shuffle[player]:
+                    raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
+                                    " cannot be chosen if Shuffle Dash is enabled.")
+            
+            if world.starting_location[player].value == 3 and world.wall_climb_shuffle[player]:
+                raise Exception(f"[Blasphemous - '{world.get_player_name(player)}'] {world.starting_location[player]}"
+                                " cannot be chosen if Shuffle Wall Climb is enabled.")
+        else:
+            locations: List[int] = [ 0, 1, 2, 3, 4, 5, 6 ]
+            invalid: bool = False
+
+            if world.starting_location[player].value == 6 and world.difficulty[player].value < 2:
+                invalid = True
+                locations.remove(6)
+
+            if (world.starting_location[player].value == 0 or world.starting_location[player].value == 6) \
+                and world.dash_shuffle[player]:
+                    invalid = True
+                    locations.remove(0)
+                    if 6 in locations:
+                        locations.remove(6)
+            
+            if world.starting_location[player].value == 3 and world.wall_climb_shuffle[player]:
+                invalid = True
+                locations.remove(3)
+
+            if invalid:
+                world.starting_location[player].value = world.random.choice(locations)
+            
         
         if not world.dash_shuffle[player]:
             world.push_precollected(self.create_item("Dash Ability"))

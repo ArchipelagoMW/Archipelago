@@ -1,4 +1,22 @@
 from Options import Choice, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool
+import random
+
+
+class ChoiceIsRandom(Choice):
+    randomized: bool = False
+
+    @classmethod
+    def from_text(cls, text: str) -> Choice:
+        text = text.lower()
+        if text == "random":
+            cls.randomized = True
+            return cls(random.choice(list(cls.name_lookup)))
+        for option_name, value in cls.options.items():
+            if option_name == text:
+                return cls(value)
+        raise KeyError(
+            f'Could not find option "{text}" for "{cls.__name__}", '
+            f'known options are {", ".join(f"{option}" for option in cls.name_lookup.values())}')
 
 
 class PrieDieuWarp(DefaultOnToggle):
@@ -31,7 +49,7 @@ class Penitence(Toggle):
     display_name = "Penitence"
 
 
-class StartingLocation(Choice):
+class StartingLocation(ChoiceIsRandom):
     """Choose where to start the randomizer. Note that some starting locations cannot be chosen with certain 
     other options.
     Specifically, Brotherhood and Mourning And Havoc cannot be chosen if Shuffle Dash is enabled, and Grievance Ascends 
