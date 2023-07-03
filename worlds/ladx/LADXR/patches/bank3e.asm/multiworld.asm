@@ -36,14 +36,10 @@ MainLoop:
     or  a
     jr  z, .spawnDelay
     ld  b, a
-    ; Load the high memory address of the check into h
-    ld  a, [wLinkCollectCheckHigh]
-    ld  h, a
-    ; Load the low memory address of the check into l
-    ld  a, [wLinkCollectCheckLow]
-    ld  l, a
     ; Load the current state of the check into a
-    ld  a, [hl]
+    ld  hl, wLinkCollectCheckHigh
+    ld  a, [wLinkCollectCheckLow]
+    or  [hl]
     ; Bitwise or the accumulator and load it back into the check
     or  a, b
     ld  [hl], a
