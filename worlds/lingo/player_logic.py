@@ -169,9 +169,28 @@ class LingoPlayerLogic:
                 pdoor = static_logic.DOORS_BY_ROOM[painting_obj.required_door.room][painting_obj.required_door.door]
                 good_item_options.append(pdoor.item_name)
 
-            self.FORCED_GOOD_ITEM = world.per_slot_randoms[player].choice(good_item_options)
-            self.REAL_ITEMS.remove(self.FORCED_GOOD_ITEM)
-            self.REAL_LOCATIONS.remove("Starting Room - HI")
+            # Copied from The Witness -- remove any plandoed items from the possible good items set.
+            for v in world.plando_items[player]:
+                if v.get("from_pool", True):
+                    for item_key in {"item", "items"}:
+                        if item_key in v:
+                            if type(v[item_key]) is str:
+                                if v[item_key] in good_item_options:
+                                    good_item_options.remove(v[item_key])
+                            elif type(v[item_key]) is dict:
+                                for item, weight in v[item_key].items():
+                                    if weight and item in good_item_options:
+                                        good_item_options.remove(item)
+                            else:
+                                # Other type of iterable
+                                for item in v[item_key]:
+                                    if item in good_item_options:
+                                        good_item_options.remove(item)
+
+            if len(good_item_options) > 0:
+                self.FORCED_GOOD_ITEM = world.per_slot_randoms[player].choice(good_item_options)
+                self.REAL_ITEMS.remove(self.FORCED_GOOD_ITEM)
+                self.REAL_LOCATIONS.remove("Starting Room - HI")
 
     def randomize_paintings(self, world: MultiWorld, player: int, static_logic: StaticLingoLogic) -> bool:
         self.PAINTING_MAPPING.clear()
