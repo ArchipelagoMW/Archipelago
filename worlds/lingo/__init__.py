@@ -59,15 +59,15 @@ class LingoWorld(World):
     def _get_slot_data(self):
         return {
             'door_ids_by_item_id': {
-                data.code: data.door_ids for name, data in self.static_items.ALL_ITEM_TABLE.items()
+                data.code: data.door_ids for data in self.static_items.ALL_ITEM_TABLE.values()
                 if data.code is not None and len(data.door_ids) > 0
             },
             'painting_ids_by_item_id': {
-                data.code: data.painting_ids for name, data in self.static_items.ALL_ITEM_TABLE.items()
+                data.code: data.painting_ids for data in self.static_items.ALL_ITEM_TABLE.values()
                 if data.code is not None and len(data.painting_ids) > 0
             },
             'panel_ids_by_location_id': {
-                data.code: data.panel_ids() for name, data in self.static_locat.ALL_LOCATION_TABLE.items()
+                data.code: data.panel_ids() for data in self.static_locat.ALL_LOCATION_TABLE.values()
                 if data.code is not None
             },
             'seed': self.multiworld.per_slot_randoms[self.player].randint(0, 1000000),
