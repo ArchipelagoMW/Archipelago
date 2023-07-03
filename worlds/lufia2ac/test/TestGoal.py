@@ -4,7 +4,7 @@ from . import L2ACTestBase
 class TestDefault(L2ACTestBase):
 
     def test_everything(self) -> None:
-        self.collect_all_but(["Boss victory"])
+        self.collect_all_but(["Ancient key"])
         self.assertBeatable(True)
 
     def test_nothing(self) -> None:
@@ -17,7 +17,7 @@ class TestShuffleCapsuleMonsters(L2ACTestBase):
     }
 
     def test_everything(self) -> None:
-        self.collect_all_but(["Boss victory"])
+        self.collect_all_but(["Ancient key"])
         self.assertBeatable(True)
 
     def test_best_party(self) -> None:
@@ -25,7 +25,7 @@ class TestShuffleCapsuleMonsters(L2ACTestBase):
         self.assertBeatable(True)
 
     def test_no_darbi(self) -> None:
-        self.collect_all_but(["Boss victory", "DARBI"])
+        self.collect_all_but(["Ancient key", "DARBI"])
         self.assertBeatable(False)
 
 
@@ -35,7 +35,7 @@ class TestShufflePartyMembers(L2ACTestBase):
     }
 
     def test_everything(self) -> None:
-        self.collect_all_but(["Boss victory"])
+        self.collect_all_but(["Ancient key"])
         self.assertBeatable(True)
 
     def test_best_party(self) -> None:
@@ -43,15 +43,15 @@ class TestShufflePartyMembers(L2ACTestBase):
         self.assertBeatable(True)
 
     def test_no_dekar(self) -> None:
-        self.collect_all_but(["Boss victory", "Dekar"])
+        self.collect_all_but(["Ancient key", "Dekar"])
         self.assertBeatable(False)
 
     def test_no_guy(self) -> None:
-        self.collect_all_but(["Boss victory", "Guy"])
+        self.collect_all_but(["Ancient key", "Guy"])
         self.assertBeatable(False)
 
     def test_no_arty(self) -> None:
-        self.collect_all_but(["Boss victory", "Arty"])
+        self.collect_all_but(["Ancient key", "Arty"])
         self.assertBeatable(False)
 
 
@@ -62,7 +62,7 @@ class TestShuffleBoth(L2ACTestBase):
     }
 
     def test_everything(self) -> None:
-        self.collect_all_but(["Boss victory"])
+        self.collect_all_but(["Ancient key"])
         self.assertBeatable(True)
 
     def test_best_party(self) -> None:
@@ -70,17 +70,17 @@ class TestShuffleBoth(L2ACTestBase):
         self.assertBeatable(True)
 
     def test_no_dekar(self) -> None:
-        self.collect_all_but(["Boss victory", "Dekar"])
+        self.collect_all_but(["Ancient key", "Dekar"])
         self.assertBeatable(False)
 
     def test_no_guy(self) -> None:
-        self.collect_all_but(["Boss victory", "Guy"])
+        self.collect_all_but(["Ancient key", "Guy"])
         self.assertBeatable(False)
 
     def test_no_arty(self) -> None:
-        self.collect_all_but(["Boss victory", "Arty"])
+        self.collect_all_but(["Ancient key", "Arty"])
         self.assertBeatable(False)
 
     def test_no_darbi(self) -> None:
-        self.collect_all_but(["Boss victory", "DARBI"])
+        self.collect_all_but(["Ancient key", "DARBI"])
         self.assertBeatable(False)

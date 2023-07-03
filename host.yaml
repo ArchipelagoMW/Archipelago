@@ -167,7 +167,10 @@ zillion_options:
   # RetroArch doesn't make it easy to launch a game from the command line.
   # You have to know the path to the emulator core library on the user's computer.
   rom_start: "retroarch"
-
+mmbn3_options:
+  # File name of the MMBN3 Blue US rom
+  rom_file: "Mega Man Battle Network 3 - Blue Version (USA).gba"
+  rom_start: true
 adventure_options:
   # File name of the standard NTSC Adventure rom.
   # The licensed "The 80 Classic Games" CD-ROM contains this.
@@ -185,7 +188,3 @@ adventure_options:
   rom_args: " "
   # Set this to true to display item received messages in Emuhawk
   display_msgs: true
-
-
-
-
