@@ -127,7 +127,7 @@ class TestSpeedupsLocationStore(Base.TestLocationStore):
 
 @unittest.skipIf(LocationStore is _LocationStore, "_speedups not available")
 class TestSpeedupsLocationStoreConstructor(unittest.TestCase):
-    def test_init_float_key(self):
+    def test_float_key(self):
         with self.assertRaises(Exception):
             LocationStore({
                 1: {1: (1, 1, 1)},
@@ -135,20 +135,27 @@ class TestSpeedupsLocationStoreConstructor(unittest.TestCase):
                 3: {1: (1, 1, 1)}
             })
 
-    def test_init_string_key(self):
+    def test_string_key(self):
         with self.assertRaises(Exception):
             LocationStore({
                 "1": {1: (1, 1, 1)},
             })
 
-    def test_init_hole(self):
+    def test_hole(self):
         with self.assertRaises(Exception):
             LocationStore({
                 1: {1: (1, 1, 1)},
                 3: {1: (1, 1, 1)},
             })
 
-    def test_init_slot0(self):
+    def test_no_slot1(self):
+        with self.assertRaises(Exception):
+            LocationStore({
+                2: {1: (1, 1, 1)},
+                3: {1: (1, 1, 1)},
+            })
+
+    def test_slot0(self):
         with self.assertRaises(Exception):
             LocationStore({
                 0: {1: (1, 1, 1)},
@@ -158,4 +165,53 @@ class TestSpeedupsLocationStoreConstructor(unittest.TestCase):
             LocationStore({
                 0: {1: (1, 1, 1)},
                 2: {1: (1, 1, 1)},
+            })
+
+    def test_high_player_number(self):
+        with self.assertRaises(Exception):
+            LocationStore({
+                1 << 32: {1: (1, 1, 1)},
+            })
+
+    def test_no_players(self):
+        try:  # either is fine: raise during init, or behave like {}
+            store = LocationStore({})
+            self.assertEqual(len(store), 0)
+            with self.assertRaises(KeyError):
+                _ = store[1]
+        except ValueError:
+            pass
+
+    def test_no_locations(self):
+        try:  # either is fine: raise during init, or behave like {1: {}}
+            store = LocationStore({
+                1: {},
+            })
+            self.assertEqual(len(store), 1)
+            self.assertEqual(len(store[1]), 0)
+        except ValueError:
+            pass
+
+    def test_no_locations_for_1(self):
+        store = LocationStore({
+            1: {},
+            2: {1: (1, 2, 3)},
+        })
+        self.assertEqual(len(store), 2)
+        self.assertEqual(len(store[1]), 0)
+        self.assertEqual(len(store[2]), 1)
+
+    def test_no_locations_for_last(self):
+        store = LocationStore({
+            1: {1: (1, 2, 3)},
+            2: {},
+        })
+        self.assertEqual(len(store), 2)
+        self.assertEqual(len(store[1]), 1)
+        self.assertEqual(len(store[2]), 0)
+
+    def test_not_a_tuple(self):
+        with self.assertRaises(Exception):
+            LocationStore({
+                1: {1: None},
             })

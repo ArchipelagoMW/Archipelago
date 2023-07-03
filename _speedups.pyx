@@ -106,6 +106,9 @@ cdef class LocationStore:
                 count += 1
             sender_count += 1
 
+        if not count:
+            raise ValueError("No locations")
+
         if sender_count != max_sender:
             # we assume player 0 will never have locations
             raise ValueError("Player IDs not continuous")
@@ -136,6 +139,8 @@ cdef class LocationStore:
         self._proxies.append(None)  # player 0
         assert self.sender_index[0].count == 0
         for i in range(1, max_sender + 1):
+            if self.sender_index[i].count == 0 and self.sender_index[i].start >= count:
+                self.sender_index[i].start = 0  # do not point outside valid entries
             assert self.sender_index[i].start < count
             key = i  # allocate python integer
             proxy = PlayerLocationProxy(self, i)
