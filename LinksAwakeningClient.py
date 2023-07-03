@@ -9,16 +9,18 @@ if __name__ == "__main__":
 import asyncio
 import base64
 import binascii
+import colorama
 import io
-import logging
+import os
 import select
+import shlex
 import socket
+import struct
+import sys
+import subprocess
 import time
 import typing
-import urllib
 
-import colorama
-import struct
 
 from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
                           server_loop)
@@ -594,17 +596,38 @@ class LinksAwakeningContext(CommonContext):
             except (GameboyException, asyncio.TimeoutError, TimeoutError, ConnectionResetError):
                 time.sleep(1.0)
 
+def run_game(romfile: str) -> None:
+
+    auto_start = typing.cast(typing.Union[bool, str],
+                            Utils.get_options()["ladx_options"].get("rom_start", True))
+    if auto_start is True:
+        import webbrowser
+        webbrowser.open(romfile)
+    elif isinstance(auto_start, str):
+        args = shlex.split(auto_start)
+        # Specify full path to ROM as we are going to cd in popen
+        full_rom_path = os.path.realpath(romfile)
+        args.append(full_rom_path)
+        try:
+            # set cwd so that paths to lua scripts are always relative to our client
+            if getattr(sys, 'frozen', False):
+                # The application is frozen
+                script_dir = os.path.dirname(sys.executable)
+            else:
+                script_dir = os.path.dirname(os.path.realpath(__file__))
+
+            subprocess.Popen(args, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd=script_dir)
+        except FileNotFoundError:
+            logger.error(f"Couldn't launch ROM, {args[0]} is missing")
 
 async def main():
     parser = get_base_parser(description="Link's Awakening Client.")
     parser.add_argument("--url", help="Archipelago connection url")
     parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
-
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a .apladx Archipelago Binary Patch file')
 
     args = parser.parse_args()
-    logger.info(args)
 
     if args.diff_file:
         import Patch
@@ -613,6 +636,7 @@ async def main():
         if "server" in meta and not args.connect:
             args.connect = meta["server"]
         logger.info(f"wrote rom file to {rom_file}")
+
 
     ctx = LinksAwakeningContext(args.connect, args.password, args.magpie)
 
@@ -623,6 +647,8 @@ async def main():
     if gui_enabled:
         ctx.run_gui()
     ctx.run_cli()
+    if args.diff_file:
+        run_game(rom_file)
 
     await ctx.exit_event.wait()
     await ctx.shutdown()
