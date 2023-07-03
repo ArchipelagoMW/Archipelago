@@ -412,7 +412,7 @@ class NumberOfMovementBuffs(Range):
 class NumberOfLuckBuffs(Range):
     """Number of luck buffs to the player that exist as items in the pool.
     Each luck buff is a bonus to daily luck of 0.025"""
-    internal_name = "speed_buff_number"
+    internal_name = "luck_buff_number"
     display_name = "Number of Luck Buffs"
     range_start = 0
     range_end = 12
