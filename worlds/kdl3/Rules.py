@@ -65,10 +65,11 @@ def can_reach_nago(state: "CollectionState", player: int) -> bool:
 
 
 def set_rules(world: "KDL3World") -> None:
-    for level in range(1, len(world.player_levels[world.player]) + 1):
-        for stage in range(len(world.player_levels[world.player][level])):
-            if stage != 6:
-                if not world.multiworld.open_world[world.player]:
+    if not world.multiworld.open_world[world.player]:
+        for level in range(1, len(world.player_levels[world.player]) + 1):
+            for stage in range(len(world.player_levels[world.player][level])):
+                if stage != 6:
+                    # Cannot complete stage if we cannot complete the stage before it
                     set_rule(
                         world.multiworld.get_location(location_table[world.player_levels[world.player][level][stage]],
                                                       world.player),
@@ -76,6 +77,7 @@ def set_rules(world: "KDL3World") -> None:
                         else state.can_reach(
                             location_table[world.player_levels[world.player][level][stage - 1]], "Location",
                             world.player))
+                    # Cannot complete stage's heart star if we cannot complete the stage before it
                     set_rule(
                         world.multiworld.get_location(
                             location_table[world.player_levels[world.player][level][stage] + 0x100], world.player),
@@ -205,14 +207,16 @@ def set_rules(world: "KDL3World") -> None:
                                           range(1, 6)):
         set_rule(world.multiworld.get_location(boss_flag, world.player),
                  lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[world.player][i - 1])
-                                    and state.can_reach(location_table[world.player_levels[world.player][i][5]],
-                                                        "Location",
-                                                        world.player))
+                                    and (True if world.multiworld.open_world[world.player] else
+                                         state.can_reach(location_table[world.player_levels[world.player][i][5]],
+                                                         "Location",
+                                                         world.player)))
         set_rule(world.multiworld.get_location(purification, world.player),
                  lambda state, i=i: state.has("Heart Star", world.player, world.boss_requirements[world.player][i - 1])
-                                    and state.can_reach(location_table[world.player_levels[world.player][i][5]],
-                                                        "Location",
-                                                        world.player))
+                                    and (True if world.multiworld.open_world[world.player] else
+                                         state.can_reach(location_table[world.player_levels[world.player][i][5]],
+                                                         "Location",
+                                                         world.player)))
 
     if world.multiworld.strict_bosses[world.player]:
         for level in range(2, 6):
