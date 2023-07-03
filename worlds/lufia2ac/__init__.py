@@ -5,7 +5,7 @@ from enum import IntFlag
 from random import Random
 from typing import Any, ClassVar, Dict, get_type_hints, Iterator, List, Set, Tuple
 
-from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial
+from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import AssembleOptions
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
@@ -50,10 +50,11 @@ class L2ACWorld(World):
     item_name_groups: ClassVar[Dict[str, Set[str]]] = {
         "Blue chest items": {name for name, data in l2ac_item_table.items() if data.type is ItemType.BLUE_CHEST},
         "Capsule monsters": {name for name, data in l2ac_item_table.items() if data.type is ItemType.CAPSULE_MONSTER},
+        "Iris treasures": {name for name, data in l2ac_item_table.items() if data.type is ItemType.IRIS_TREASURE},
         "Party members": {name for name, data in l2ac_item_table.items() if data.type is ItemType.PARTY_MEMBER},
     }
-    data_version: ClassVar[int] = 1
-    required_client_version: Tuple[int, int, int] = (0, 3, 6)
+    data_version: ClassVar[int] = 2
+    required_client_version: Tuple[int, int, int] = (0, 4, 2)
 
     # L2ACWorld specific properties
     rom_name: bytearray
@@ -107,17 +108,20 @@ class L2ACWorld(World):
                 L2ACLocation(self.player, f"Chest access {i + 1}-{i + CHESTS_PER_SPHERE}", None, ancient_dungeon)
             chest_access.place_locked_item(prog_chest_access)
             ancient_dungeon.locations.append(chest_access)
-        treasures = L2ACLocation(self.player, "Iris Treasures", None, ancient_dungeon)
-        treasures.place_locked_item(L2ACItem("Treasures collected", ItemClassification.progression, None, self.player))
-        ancient_dungeon.locations.append(treasures)
+        for iris in self.item_name_groups["Iris treasures"]:
+            treasure_name: str = f"Iris treasure {self.item_name_to_id[iris] - self.item_name_to_id['Iris sword'] + 1}"
+            iris_treasure: Location = \
+                L2ACLocation(self.player, treasure_name, self.location_name_to_id[treasure_name], ancient_dungeon)
+            iris_treasure.place_locked_item(self.create_item(iris))
+            ancient_dungeon.locations.append(iris_treasure)
         self.multiworld.regions.append(ancient_dungeon)
 
         final_floor = Region("FinalFloor", self.player, self.multiworld, "Ancient Cave Final Floor")
         ff_reached = L2ACLocation(self.player, "Final Floor reached", None, final_floor)
         ff_reached.place_locked_item(L2ACItem("Final Floor access", ItemClassification.progression, None, self.player))
         final_floor.locations.append(ff_reached)
-        boss = L2ACLocation(self.player, "Boss", None, final_floor)
-        boss.place_locked_item(L2ACItem("Boss victory", ItemClassification.progression, None, self.player))
+        boss: Location = L2ACLocation(self.player, "Boss", self.location_name_to_id["Boss"], final_floor)
+        boss.place_locked_item(self.create_item("Ancient key"))
         final_floor.locations.append(boss)
         self.multiworld.regions.append(final_floor)
 
@@ -155,8 +159,9 @@ class L2ACWorld(World):
 
         set_rule(self.multiworld.get_entrance("FinalFloorEntrance", self.player),
                  lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
-        set_rule(self.multiworld.get_location("Iris Treasures", self.player),
-                 lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
+        for i in range(9):
+            set_rule(self.multiworld.get_location(f"Iris treasure {i + 1}", self.player),
+                     lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
         set_rule(self.multiworld.get_location("Boss", self.player),
                  lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
         if self.o.shuffle_capsule_monsters:
@@ -170,13 +175,14 @@ class L2ACWorld(World):
                 lambda state: state.has("Final Floor access", self.player)
         elif self.o.goal == Goal.option_iris_treasure_hunt:
             self.multiworld.completion_condition[self.player] = \
-                lambda state: state.has("Treasures collected", self.player)
+                lambda state: state.has_group("Iris treasures", self.player, int(self.o.iris_treasures_required))
         elif self.o.goal == Goal.option_boss:
             self.multiworld.completion_condition[self.player] = \
-                lambda state: state.has("Boss victory", self.player)
+                lambda state: state.has("Ancient key", self.player)
         elif self.o.goal == Goal.option_boss_iris_treasure_hunt:
             self.multiworld.completion_condition[self.player] = \
-                lambda state: state.has("Boss victory", self.player) and state.has("Treasures collected", self.player)
+                lambda state: (state.has("Ancient key", self.player) and
+                               state.has_group("Iris treasures", self.player, int(self.o.iris_treasures_required)))
 
     def generate_output(self, output_directory: str) -> None:
         rom_path: str = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
@@ -201,8 +207,10 @@ class L2ACWorld(World):
                 rom_bytearray[offset:offset + 1] = self.o.party_starting_level.value.to_bytes(1, "little")
             for offset in range(0x02B39A, 0x02B457, 0x1B):
                 rom_bytearray[offset:offset + 3] = self.o.party_starting_level.xp.to_bytes(3, "little")
+            rom_bytearray[0x03AE49:0x03AE49 + 1] = self.o.boss.sprite.to_bytes(1, "little")
             rom_bytearray[0x05699E:0x05699E + 147] = self.get_goal_text_bytes()
             rom_bytearray[0x056AA3:0x056AA3 + 24] = self.o.default_party.event_script
+            rom_bytearray[0x072740:0x072740 + 1] = self.o.boss.music.to_bytes(1, "little")
             rom_bytearray[0x072742:0x072742 + 1] = self.o.boss.value.to_bytes(1, "little")
             rom_bytearray[0x072748:0x072748 + 1] = self.o.boss.flag.to_bytes(1, "little")
             rom_bytearray[0x09D59B:0x09D59B + 256] = self.get_node_connection_table()

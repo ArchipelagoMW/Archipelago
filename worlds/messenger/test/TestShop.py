@@ -16,6 +16,7 @@ class ShopCostTest(MessengerTestBase):
             with self.subTest("has cost", loc=loc):
                 self.assertFalse(self.can_reach_location(loc))
 
+    def testShopPrices(self) -> None:
         prices: Dict[str, int] = self.multiworld.worlds[self.player].shop_prices
         for loc, price in prices.items():
             with self.subTest("prices", loc=loc):
@@ -48,6 +49,15 @@ class ShopCostMinTest(ShopCostTest):
         "shop_price": "random",
         "shuffle_seals": "false",
     }
+    
+    def testShopRules(self) -> None:
+        if self.multiworld.worlds[self.player].total_shards:
+            super().testShopRules()
+        else:
+            for loc in SHOP_ITEMS:
+                loc = f"The Shop - {loc}"
+                with self.subTest("has cost", loc=loc):
+                    self.assertTrue(self.can_reach_location(loc))
 
     def testDBoost(self) -> None:
         pass
