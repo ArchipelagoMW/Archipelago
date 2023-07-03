@@ -310,6 +310,11 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         self.buildtime = datetime.datetime.utcnow()
         super().run()
 
+        # delete in-place built modules, otherwise this interferes with future pyximport
+        for path in build_ext.get_output_mapping().values():
+            print(f"deleting temp {path}")
+            os.unlink(path)
+
         # need to finish download before copying
         sni_thread.join()
 
