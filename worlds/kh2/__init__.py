@@ -8,9 +8,8 @@ from .Names import ItemName, LocationName
 from .OpenKH import patch_kh2
 from .Options import KH2_Options
 from .Regions import create_regions, connect_regions
-#from .Rules import set_rules
+# from .Rules import set_rules
 from ..AutoWorld import World, WebWorld
-
 
 
 class KingdomHearts2Web(WebWorld):
@@ -35,8 +34,12 @@ class KH2World(World):
     data_version = 1
     required_client_version = (0, 4, 0)
     option_definitions = KH2_Options
-    item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
-    location_name_to_id = {item_name: data.code for item_name, data in all_locations.items() if data.code}
+    # item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
+    base_offset = 0x130000
+    item_name_to_id = {item: item_id
+                       for item_id, item in enumerate(item_dictionary_table.keys(), base_offset)}
+    location_name_to_id = {item: location
+                           for location, item in enumerate(all_locations.keys(), base_offset)}
     item_name_groups = item_groups
 
     def __init__(self, multiworld: "MultiWorld", player: int):
@@ -73,30 +76,32 @@ class KH2World(World):
             else:
                 for inner_values in values.values():
                     self.slotDataDuping = self.slotDataDuping.union(inner_values)
-        self.LocalItems = {location.address: item_dictionary_table[location.item.name].code
+        self.LocalItems = {location.address: self.item_name_to_id[location.item.name]
                            for location in self.multiworld.get_filled_locations(self.player)
                            if location.item.player == self.player
                            and location.item.name in self.slotDataDuping
                            and location.name not in AllWeaponSlot}
 
-        return {"hitlist":              self.hitlist,
-                "LocalItems":           self.LocalItems,
-                "Goal":                 self.multiworld.Goal[self.player].value,
-                "FinalXemnas":          self.multiworld.FinalXemnas[self.player].value,
-                "LuckyEmblemsRequired": self.multiworld.LuckyEmblemsRequired[self.player].value,
-                "BountyRequired":       self.multiworld.BountyRequired[self.player].value}
+        return {
+            "hitlist":              self.hitlist,
+            "LocalItems":           self.LocalItems,
+            "Goal":                 self.multiworld.Goal[self.player].value,
+            "FinalXemnas":          self.multiworld.FinalXemnas[self.player].value,
+            "LuckyEmblemsRequired": self.multiworld.LuckyEmblemsRequired[self.player].value,
+            "BountyRequired":       self.multiworld.BountyRequired[self.player].value
+        }
 
     def create_item(self, name: str, ) -> Item:
         """
         Returns created KH2Item
         """
-        data = item_dictionary_table[name]
+        #data = item_dictionary_table[name]
         if name in Progression_Dicts["Progression"]:
             item_classification = ItemClassification.progression
         else:
             item_classification = ItemClassification.filler
 
-        created_item = KH2Item(name, item_classification, data.code, self.player)
+        created_item = KH2Item(name, item_classification, self.item_name_to_id[name], self.player)
 
         return created_item
 
@@ -303,8 +308,11 @@ class KH2World(World):
         if self.multiworld.KeybladeAbilities[self.player] == "support":
             self.sora_keyblade_ability_pool = {
                 **{item: data for item, data in self.item_quantity_dict.items() if item in SupportAbility_Table},
-                **{ItemName.NegativeCombo: 1, ItemName.AirComboPlus: 1, ItemName.ComboPlus: 1,
-                   ItemName.FinishingPlus: 1}}
+                **{
+                    ItemName.NegativeCombo: 1, ItemName.AirComboPlus: 1, ItemName.ComboPlus: 1,
+                    ItemName.FinishingPlus: 1
+                }
+            }
 
         elif self.multiworld.KeybladeAbilities[self.player] == "action":
             self.sora_keyblade_ability_pool = {item: data for item, data in self.item_quantity_dict.items() if
@@ -323,8 +331,11 @@ class KH2World(World):
             self.sora_keyblade_ability_pool = {
                 **{item: data for item, data in self.item_quantity_dict.items() if item in SupportAbility_Table},
                 **{item: data for item, data in self.item_quantity_dict.items() if item in ActionAbility_Table},
-                **{ItemName.NegativeCombo: 1, ItemName.AirComboPlus: 1, ItemName.ComboPlus: 1,
-                   ItemName.FinishingPlus: 1}}
+                **{
+                    ItemName.NegativeCombo: 1, ItemName.AirComboPlus: 1, ItemName.ComboPlus: 1,
+                    ItemName.FinishingPlus: 1
+                }
+            }
 
         for ability in self.multiworld.BlacklistKeyblade[self.player].value:
             if ability in self.sora_keyblade_ability_pool:

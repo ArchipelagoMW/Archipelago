@@ -21,8 +21,9 @@ from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProc
 ModuleUpdate.update()
 
 kh2_loc_name_to_id = network_data_package["games"]["Kingdom Hearts 2"]["location_name_to_id"]
-
-
+kh2_loc_id_to_loc_name = {v: k for k, v in kh2_loc_name_to_id.items()}
+kh2_item_name_to_id = network_data_package["games"]["Kingdom Hearts 2"]["item_name_to_id"]
+kh2_item_id_to_name = {v: k for k, v in kh2_loc_name_to_id.items()}
 # class KH2CommandProcessor(ClientCommandProcessor):
 
 
@@ -42,10 +43,11 @@ class KH2Context(CommonContext):
         self.serverconneced = False
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
-        self.lookup_id_to_item: typing.Dict[int, str] = {data.code: item_name for item_name, data in
-                                                         item_dictionary_table.items() if data.code}
-        self.lookup_id_to_Location: typing.Dict[int, str] = {data.code: item_name for item_name, data in
-                                                             all_locations.items() if data.code}
+        self.kh2_loc_name_to_id = kh2_loc_name_to_id
+        self.kh2_item_name_to_id=kh2_item_name_to_id
+        self.lookup_id_to_item = kh2_item_id_to_name
+        self.lookup_id_to_location = kh2_loc_id_to_loc_name
+
         self.location_name_to_worlddata = {name: data for name, data, in all_world_locations.items()}
 
         self.location_table = {}
@@ -144,7 +146,7 @@ class KH2Context(CommonContext):
             "Defense Boost": 0x24FB,
             "AP Boost":      0x24F8}
 
-        self.AbilityCodeList = [self.item_name_to_data[item].code for item in exclusionItem_table["Ability"]]
+        self.AbilityCodeList = [self.kh2_item_name_to_id[item] for item in exclusionItem_table["Ability"]]
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
 
         self.bitmask_item_code = [
@@ -380,7 +382,7 @@ class KH2Context(CommonContext):
     async def verifyChests(self):
         try:
             for location in self.locations_checked:
-                locationName = self.lookup_id_to_Location[location]
+                locationName = self.lookup_id_to_location[location]
                 if locationName in self.chest_set:
                     if locationName in self.location_name_to_worlddata.keys():
                         locationData = self.location_name_to_worlddata[locationName]
@@ -415,8 +417,9 @@ class KH2Context(CommonContext):
     async def give_item(self, item, ItemType="ServerItems"):
         try:
             itemname = self.lookup_id_to_item[item]
-            itemcode = self.item_name_to_data[itemname]
-            if itemcode.ability:
+            itemdata = self.item_name_to_data[itemname]
+            itemcode = self.kh2_item_name_to_id[itemname]
+            if itemdata.ability:
                 abilityInvoType = 0
                 TwilightZone = 2
                 if ItemType == "LocalItems":
@@ -445,12 +448,12 @@ class KH2Context(CommonContext):
                                 self.kh2seedsave["GoofyInvo"][abilityInvoType])
                         self.kh2seedsave["GoofyInvo"][abilityInvoType] -= TwilightZone
 
-            elif itemcode.code in self.bitmask_item_code:
+            elif itemcode in self.bitmask_item_code:
 
                 if itemname not in self.kh2seedsave["AmountInvo"][ItemType]["Bitmask"]:
                     self.kh2seedsave["AmountInvo"][ItemType]["Bitmask"].append(itemname)
 
-            elif itemcode.memaddr in {0x3594, 0x3595, 0x3596, 0x3597, 0x35CF, 0x35D0}:
+            elif itemdata.memaddr in {0x3594, 0x3595, 0x3596, 0x3597, 0x35CF, 0x35D0}:
 
                 if itemname in self.kh2seedsave["AmountInvo"][ItemType]["Magic"]:
                     self.kh2seedsave["AmountInvo"][ItemType]["Magic"][itemname] += 1
@@ -789,12 +792,9 @@ def finishedGame(ctx: KH2Context, message):
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.finalxemnas:
                     return True
-                else:
-                    return False
-            else:
-                return True
-        else:
-            return False
+                return False
+            return True
+        return False
     elif ctx.kh2slotdata['Goal'] == 1:
         if int.from_bytes(ctx.kh2.read_bytes(ctx.kh2.base_address + ctx.Save + 0x3641, 1), "big") >= \
                 ctx.kh2slotdata['LuckyEmblemsRequired']:
@@ -804,12 +804,9 @@ def finishedGame(ctx: KH2Context, message):
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.finalxemnas:
                     return True
-                else:
-                    return False
-            else:
-                return True
-        else:
-            return False
+                return False
+            return True
+        return False
     elif ctx.kh2slotdata['Goal'] == 2:
         for boss in ctx.kh2slotdata["hitlist"]:
             if boss in message[0]["locations"]:
@@ -821,12 +818,9 @@ def finishedGame(ctx: KH2Context, message):
             if ctx.kh2slotdata['FinalXemnas'] == 1:
                 if ctx.finalxemnas:
                     return True
-                else:
-                    return False
-            else:
-                return True
-        else:
-            return False
+                return False
+            return True
+        return False
 
 
 async def kh2_watcher(ctx: KH2Context):
