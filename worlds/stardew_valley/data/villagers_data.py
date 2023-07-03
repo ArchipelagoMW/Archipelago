@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Tuple, Optional, Dict
-from worlds.stardew_valley.strings.region_names import Region
+from ..strings.region_names import Region
 from ..mods.mod_data import ModNames
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC

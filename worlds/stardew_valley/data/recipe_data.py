@@ -1,17 +1,17 @@
 from typing import Dict, List
 
-from worlds.stardew_valley.strings.animal_product_names import AnimalProduct
-from worlds.stardew_valley.strings.artisan_good_names import ArtisanGood
-from worlds.stardew_valley.strings.crop_names import Fruit, Vegetable
-from worlds.stardew_valley.strings.fish_names import Fish, WaterItem
-from worlds.stardew_valley.strings.flower_names import Flower
-from worlds.stardew_valley.strings.forageable_names import Forageable
-from worlds.stardew_valley.strings.ingredient_names import Ingredient
-from worlds.stardew_valley.strings.food_names import Meal, Beverage
-from worlds.stardew_valley.strings.region_names import Region
-from worlds.stardew_valley.strings.season_names import Season
-from worlds.stardew_valley.strings.skill_names import Skill
-from worlds.stardew_valley.strings.villager_names import NPC
+from ..strings.animal_product_names import AnimalProduct
+from ..strings.artisan_good_names import ArtisanGood
+from ..strings.crop_names import Fruit, Vegetable
+from ..strings.fish_names import Fish, WaterItem
+from ..strings.flower_names import Flower
+from ..strings.forageable_names import Forageable
+from ..strings.ingredient_names import Ingredient
+from ..strings.food_names import Meal, Beverage
+from ..strings.region_names import Region
+from ..strings.season_names import Season
+from ..strings.skill_names import Skill
+from ..strings.villager_names import NPC
 
 
 class RecipeSource:

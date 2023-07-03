@@ -3,7 +3,7 @@ from typing import List, Tuple, Union, Optional
 
 from . import season_data as season
 from .game_item import GameItem
-from worlds.stardew_valley.strings.region_names import Region
+from ..strings.region_names import Region
 
 
 @dataclass(frozen=True)

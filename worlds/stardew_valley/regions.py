@@ -3,8 +3,8 @@ from typing import Iterable, Dict, Protocol, List, Tuple, Set
 
 from BaseClasses import Region, Entrance
 from . import options
-from worlds.stardew_valley.strings.entrance_names import Entrance
-from worlds.stardew_valley.strings.region_names import Region
+from .strings.entrance_names import Entrance
+from .strings.region_names import Region
 from .region_classes import RegionData, ConnectionData, RandomizationFlag
 from .options import StardewOptions
 from .mods.mod_regions import ModDataList

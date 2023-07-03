@@ -6,7 +6,7 @@ from typing import List, Tuple, Union, Optional
 from . import common_data as common
 from .game_item import GameItem
 from .monster_data import Monster
-from worlds.stardew_valley.strings.region_names import Region
+from ..strings.region_names import Region
 from ..strings.geode_names import Geode
 
 

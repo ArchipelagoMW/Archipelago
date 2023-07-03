@@ -1,6 +1,6 @@
-from worlds.stardew_valley.strings.entrance_names import DeepWoodsEntrance, EugeneEntrance, \
+from ..strings.entrance_names import DeepWoodsEntrance, EugeneEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance, MagicEntrance, AyeishaEntrance, RileyEntrance
-from worlds.stardew_valley.strings.region_names import Region, DeepWoodsRegion, EugeneRegion, JasperRegion, \
+from ..strings.region_names import Region, DeepWoodsRegion, EugeneRegion, JasperRegion, \
     AlecRegion, YobaRegion, JunaRegion, MagicRegion, AyeishaRegion, RileyRegion
 from ..region_classes import RegionData, ConnectionData, RandomizationFlag, ModRegionData
 from .mod_data import ModNames
