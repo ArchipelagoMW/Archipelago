@@ -5258,7 +5258,6 @@
         <On Terms="Effect.AP_AdeptPhaseShiftTeleportSet.Start" Target="::actor.NeuralLinkSite" Send="Signal BreakLinkInstant"/>
         <On Terms="UnitDeathCustomize; !ValidateUnit IsHallucination" Send="Create AP_AdeptProtossSpiritDeathModel"/>
         <On Terms="Effect.AP_AdeptPhaseShiftTeleportSet.Start" Send="CombatRevealClearTimers"/>
-        <Model value="AP_Adept"/>
         <AnimBlendTime value="0.200000"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <BuildModel value="AP_AdeptWarpIn"/>
@@ -5324,7 +5323,6 @@
     </CActorUnit>
     <CActorAction id="AP_AdeptAttack" parent="GenericAttack" effectImpact="AP_AdeptDamage" effectLaunch="AP_AdeptLM">
         <LaunchAssets Sound="Adept_AttackLaunch"/>
-        <Missile value="AP_AdeptAttackMissile"/>
         <ImpactMap index="None" Model="AdeptImpact" Sound="Adept_AttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_AdeptAttackMissile" parent="GenericAttackMissile" unitName="AP_AdeptWeapon">
@@ -5428,7 +5426,6 @@
         <On Terms="ActorCreation" Send="SetTintColor 37,121,205"/>
         <Host Subject="_Selectable"/>
         <HostSiteOps Ops="SOpAttachCenter"/>
-        <Model value="AP_AdeptPsionicTransferDamageDebuff"/>
         <AutoScaleFactor value="1.000000"/>
     </CActorModel>
     <CActorModel id="AP_AdeptSpiritIn" parent="ModelAnimationStyleOneShot">
@@ -5465,7 +5462,6 @@
     </CActorModel>
     <CActorAction id="AP_AdeptUpgradeAttack" parent="GenericAttack" effectImpact="AP_AdeptDamage" effectLaunch="AP_AdeptUpgradeLM">
         <LaunchAssets Sound="Adept_AttackLaunch"/>
-        <Missile value="AP_AdeptUpgradeAttackMissile"/>
         <ImpactMap index="None" Model="AdeptImpact" Sound="Adept_AttackImpact"/>
     </CActorAction>
     <CActorMissile id="AP_AdeptUpgradeAttackMissile" parent="GenericAttackMissile" unitName="AP_AdeptUpgradeWeapon">
@@ -13459,6 +13455,14 @@
         <On Terms="Effect.AP_PurificationNovaTargettedSearch.Start" Send="Create"/>
         <Sound value="AP_Disruptor_DisruptionOvercharge_Stop"/>
     </CActorSound>
+    <CActorModelMaterial id="AP_Glaze_Alarak_COOP_Sacrifice" parent="GlazeParent">
+        <On Terms="Effect.AP_AlarakTheStrongestSurviveSearchImpact.Stop; At Caster" Send="Create"/>
+        <On Terms="ActorCreation" Send="ModelMaterialApplyTo ::Main"/>
+        <On Terms="ActorCreation" Send="AnimBracketStart Birth Birth"/>
+        <On Terms="AnimDone; AnimName Birth" Send="Destroy"/>
+        <Model value="AP_Glaze_Alarak_COOP_Sacrifice"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModelMaterial>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -15304,6 +15308,73 @@
         <On Terms="TurretEnable.AP_WarpPrismPhasingRotate" Send="Create"/>
         <On Terms="AbilMorph.*.Start; MorphFrom AP_WarpPrismPhasing" Send="Destroy"/>
     </CActorTurret>
+    <CActorUnit id="AP_Supplicant" parent="GenericUnitStandard" unitName="AP_Supplicant">
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="PhysicsDeathsVoidGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+<!--        <On Terms="UnitDeathCustomize; KilledByEffect AP_AscendantSacrificeKillSupplicant" Send="DeathCustomize Shadow"/>-->
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Adept_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Templar_LandSweetener"/>
+        <On Terms="Behavior.Hallucination.On" Send="Create HallucinationBirthSoundSmall"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit IsHallucination" Send="DeathCustomize Hallucination"/>
+        <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Spell" Send="AnimClear Spell"/>
+        <On Terms="Signal.*.NeuralLinkStarted" Send="RefSetFromMsg ::actor.NeuralLinkSite ::Sender"/>
+        <On Terms="Effect.AP_AdeptPhaseShiftTeleportSet.Start" Target="::actor.NeuralLinkSite" Send="Signal BreakLinkInstant"/>
+        <On Terms="Effect.AP_AlarakTheStrongestSurviveStealLife.Start" Send="StatusSet TakeLife 1"/>
+        <On Terms="Effect.AP_AlarakTheStrongestSurviveStealLife.Stop" Send="StatusSet TakeLife 0"/>
+        <On Terms="UnitDeathCustomize; IsStatus TakeLife 1" Send="DeathCustomize Shadow"/>
+        <BuildModel value="AP_Supplicant_WarpIn"/>
+        <DeathArray index="Normal" ModelLink="AP_Supplicant_Death" SoundLink="AP_Supplicant_DeathFX"/>
+        <DeathCustoms ModelLink="AP_Supplicant_Sacrifice_Death" Name="Shadow"/>
+        <PlacementModel value="AP_Supplicant_PlacementModel"/>
+        <PlacementSound value="Protoss_BuildingPlacementSmall"/>
+        <PortraitModel value="AP_Supplicant_Portrait"/>
+        <WalkAnimMoveSpeed value="3"/>
+        <BarOffset value="60"/>
+        <BarWidth value="42"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-protoss-supplicant-taldarim.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel0.dds"/>
+        <SoundArray index="Ready" value="AP_ZealotAlarak_Ready"/>
+        <SoundArray index="Help" value="AP_ZealotAlarak_Help"/>
+        <SoundArray index="What" value="AP_ZealotAlarak_What"/>
+        <SoundArray index="Yes" value="AP_ZealotAlarak_Yes"/>
+        <SoundArray index="Attack" value="AP_ZealotAlarak_Attack"/>
+        <SoundArray index="Pissed" value="AP_ZealotAlarak_Pissed"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-alarak-taldarim-supplicant.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-protoss-supplicant-taldarim.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\wireframe-protoss-supplicant-taldarim-shield01.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-supplicant-taldarim-shield02.dds"/>
+            <Image value="Assets\Textures\wireframe-protoss-supplicant-taldarim-shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <CActorAction id="AP_SupplicantAttack" parent="GenericAttack" effectImpact="AP_SupplicantDamage" effectLaunch="AP_SupplicantLM">
+        <LaunchSiteOps Ops="SOpAttachWeaponRight"/>
+        <LaunchAssets Model="AP_Supplicant_COOP_Missile_Launch" Sound="AP_Supplicant_AttackLaunch"/>
+        <Missile value="AP_SupplicantAttackMissile"/>
+        <ImpactMap index="None" Model="AP_SupplicantImpact" Sound="AP_Supplicant_AttackImpact"/>
+    </CActorAction>
+    <CActorMissile id="AP_SupplicantAttackMissile" parent="GenericAttackMissile" unitName="AP_SupplicantWeapon"/>
+    <CActorUnit id="AP_SupplicantWarpTrainCreator" parent="GenericUnitMinimal" unitName="AP_AlarakSupplicantWarpTrainCreator">
+        <Model value="Invisible"/>
+        <HighlightTooltip value="Unit/Name/AP_SupplicantWarpTrainCreator"/>
+    </CActorUnit>
+    <CActorUnit id="AP_SupplicantWarpTrainDummy" parent="GenericUnitMinimal" unitName="AP_AlarakSupplicantWarpTrainDummy">
+        <Model value="Invisible"/>
+        <BuildModel value="Invisible"/>
+        <PlacementModel value="AP_Supplicant_PlacementModel"/>
+        <PlacementActorModel value="SupplicantPlacementLeft"/>
+        <PlaceholderActorModel value="SupplicantPlacementLeft"/>
+        <HighlightTooltip value="Unit/Name/AP_SupplicantWarpTrainDummy"/>
+    </CActorUnit>
+    <CActorSound id="AP_Supplicant_Death" parent="SoundOneShot">
+        <On Terms="UnitDeathCustomize.AP_Supplicant; ValidateUnit IsNotHallucination; PassChance 25.000000" Send="Create"/>
+        <Sound value="AP_ZealotAlarak_Death"/>
+    </CActorSound>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>

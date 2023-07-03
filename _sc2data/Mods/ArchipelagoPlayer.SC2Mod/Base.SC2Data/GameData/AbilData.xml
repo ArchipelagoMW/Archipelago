@@ -5448,4 +5448,20 @@
         <MinAttackSpeedMultiplier value="0.25"/>
         <MaxAttackSpeedMultiplier value="128"/>
     </CAbilAttack>
+    <CAbilWarpTrain id="AP_WarpGateTrainSupplicantTrue">
+        <InfoArray index="Train12" Time="5" Unit="AP_Supplicant">
+            <Button DefaultButtonFace="AP_WarpInSupplicantHidden">
+                <Flags index="IgnoreUser" value="1"/>
+            </Button>
+        </InfoArray>
+        <Flags index="WarpTrainersButton" value="0"/>
+    </CAbilWarpTrain>
+    <CAbilWarpable id="AP_WarpableAnywhere">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <PowerUserBehavior value="AP_PowerUserWarpableAnywhere"/>
+        <Cancelable value="1"/>
+        <CmdButtonArray index="Cancel">
+            <Flags index="IgnoreUser" value="1"/>
+        </CmdButtonArray>
+    </CAbilWarpable>
 </Catalog>

@@ -6472,4 +6472,113 @@
         <AssetArray File="Assets\Sounds\Disruptor_Discharge_06.wav" FacialGroup=""/>
         <Pitch value="-2.000000,1.000000"/>
     </CSound>
+    <CSound id="AP_Supplicant_AttackImpact" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackImpact01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackImpact02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackImpact03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackImpact04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackImpact05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackImpact06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackImpact07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackImpact08.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_Supplicant_AttackLaunch" parent="Combat">
+        <EditorCategories value="Race:Protoss"/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch03.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch04.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch05.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch06.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch07.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch08.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch09.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Supplicant_AttackLaunch10.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-1.000000,1.000000"/>
+        <Volume value="-11.000000,-4.000000"/>
+    </CSound>
+    <CSound id="AP_Supplicant_DeathFX" parent="Combat">
+        <AssetArray File="Assets\Sounds\Adept_DeathFX00.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Adept_DeathFX01.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Adept_DeathFX02.wav" FacialGroup=""/>
+        <AssetArray File="Assets\Sounds\Adept_DeathFX03.wav" FacialGroup=""/>
+        <DupeDestroyCount value="3"/>
+        <DupeMaximumMethod value="Replace"/>
+        <DupeMuteCount value="3"/>
+        <Pitch value="-3.000000,-2.000000"/>
+        <Volume value="-7.000000,-7.000000"/>
+    </CSound>
+    <CSound id="AP_ZealotAlarak_Attack" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="ZealotAlarak_Attack00"/>
+        <AssetArray TemplateParam="ZealotAlarak_Attack01"/>
+        <AssetArray TemplateParam="ZealotAlarak_Attack02"/>
+        <AssetArray TemplateParam="ZealotAlarak_Attack03"/>
+        <AssetArray TemplateParam="ZealotAlarak_Attack04"/>
+        <AssetArray TemplateParam="ZealotAlarak_Attack05"/>
+        <AssetArray TemplateParam="ZealotAlarak_Attack06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_ZealotAlarak_Death" parent="AP_ProtossDeath">
+        <AssetArray TemplateParam="ZealotAlarak_Death00"/>
+        <AssetArray TemplateParam="ZealotAlarak_Death01"/>
+        <AssetArray TemplateParam="ZealotAlarak_Death02"/>
+        <AssetArray TemplateParam="ZealotAlarak_Death03"/>
+        <AssetArray TemplateParam="ZealotAlarak_Death04"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_ZealotAlarak_Help" parent="AP_ProtossHelp">
+        <AssetArray TemplateParam="ZealotAlarak_Help00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_ZealotAlarak_Pissed" parent="AP_ProtossPissed">
+        <AssetArray TemplateParam="ZealotAlarak_Pissed00"/>
+        <AssetArray TemplateParam="ZealotAlarak_Pissed01"/>
+        <AssetArray TemplateParam="ZealotAlarak_Pissed02"/>
+        <AssetArray TemplateParam="ZealotAlarak_Pissed03"/>
+        <AssetArray TemplateParam="ZealotAlarak_Pissed04"/>
+        <AssetArray TemplateParam="ZealotAlarak_Pissed05"/>
+        <AssetArray TemplateParam="ZealotAlarak_Pissed06"/>
+        <AssetArray TemplateParam="ZealotAlarak_Pissed07"/>
+        <AssetArray TemplateParam="ZealotAlarak_Pissed08"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_ZealotAlarak_Ready" parent="AP_ProtossReady">
+        <AssetArray TemplateParam="ZealotAlarak_Ready00"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_ZealotAlarak_What" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="ZealotAlarak_What00"/>
+        <AssetArray TemplateParam="ZealotAlarak_What01"/>
+        <AssetArray TemplateParam="ZealotAlarak_What02"/>
+        <AssetArray TemplateParam="ZealotAlarak_What03"/>
+        <AssetArray TemplateParam="ZealotAlarak_What04"/>
+        <AssetArray TemplateParam="ZealotAlarak_What05"/>
+        <AssetArray TemplateParam="ZealotAlarak_What06"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
+    <CSound id="AP_ZealotAlarak_Yes" parent="AP_ProtossAck_Void">
+        <AssetArray TemplateParam="ZealotAlarak_Yes00"/>
+        <AssetArray TemplateParam="ZealotAlarak_Yes01"/>
+        <AssetArray TemplateParam="ZealotAlarak_Yes02"/>
+        <AssetArray TemplateParam="ZealotAlarak_Yes03"/>
+        <AssetArray TemplateParam="ZealotAlarak_Yes04"/>
+        <AssetArray TemplateParam="ZealotAlarak_Yes05"/>
+        <Flags index="NeedsUpdate" value="1"/>
+        <Flags index="NeedsTTS" value="1"/>
+    </CSound>
 </Catalog>

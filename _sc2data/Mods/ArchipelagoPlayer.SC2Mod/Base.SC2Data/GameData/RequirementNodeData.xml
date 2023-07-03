@@ -2420,4 +2420,12 @@
         <Tooltip value=""/>
         <Count Link="AP_AdeptPhaseShiftCaster" State="CompleteOnlyAtUnit"/>
     </CRequirementCountBehavior>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAlarakSupplicantMaxShieldsCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AlarakSupplicantMaxShields" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeAlarakSupplicantShieldArmorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Count Link="AP_AlarakSupplicantShieldArmor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

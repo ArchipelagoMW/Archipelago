@@ -4461,4 +4461,34 @@
         <EditorCategories value="Race:Protoss,UpgradeType:SpellResearch"/>
         <AffectedUnitArray value="AP_Adept"/>
     </CUpgrade>
+    <CUpgrade id="AP_AlarakSupplicantMaxShields">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantextrashields.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldsMax" Value="25"/>
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldsStart" Value="25"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Supplicant"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AlarakSupplicantShieldArmor">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantarmor.dds"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldArmor" Value="2"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Supplicant"/>
+    </CUpgrade>
+    <CUpgrade id="AP_AlarakSupplicantShieldRegen">
+        <Flags index="TechTreeCheat" value="1"/>
+        <Alert value="ResearchComplete"/>
+        <Race value="Prot"/>
+        <ScoreResult value="BuildOrder"/>
+        <EffectArray Reference="Unit,AP_Supplicant,ShieldRegenRate" Value="2"/>
+        <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
+        <AffectedUnitArray value="AP_Supplicant"/>
+    </CUpgrade>
 </Catalog>

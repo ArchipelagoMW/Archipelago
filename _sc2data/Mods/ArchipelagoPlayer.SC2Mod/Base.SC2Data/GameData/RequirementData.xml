@@ -1438,4 +1438,12 @@
         <EditorCategories value="Race:Protoss,TechType:Ability"/>
         <NodeArray index="Show" Link="AP_CountBehaviorAdeptPhaseShiftCasterCompleteOnlyAtUnit"/>
     </CRequirement>
+    <CRequirement id="AP_HaveAlarakSupplicantMaxShields">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAlarakSupplicantMaxShieldsCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveSupplicantShieldArmor">
+        <EditorCategories value="Race:Protoss,TechType:Ability"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeAlarakSupplicantShieldArmorCompleteOnly"/>
+    </CRequirement>
 </Catalog>

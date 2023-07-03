@@ -1940,4 +1940,14 @@
         <Period value="2.25"/>
         <Effect value="AP_AdeptLM"/>
     </CWeaponLegacy>
+    <CWeaponLegacy id="AP_SupplicantWeapon">
+        <EditorCategories value="Race:Protoss"/>
+        <Icon value="Assets\Textures\btn-upgrade-protoss-groundweaponslevel0.dds"/>
+        <DisplayEffect value="AP_SupplicantDamage"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="3"/>
+        <Period value="1.65"/>
+        <DamagePoint value="0.125"/>
+        <Effect value="AP_SupplicantLM"/>
+    </CWeaponLegacy>
 </Catalog>

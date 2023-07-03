@@ -11186,8 +11186,61 @@
         <Image value="Assets\Textures\AdeptPortrait_Static.dds"/>
         <Lighting value="AdeptPortrait"/>
     </CModel>
-    <CModel id="AP_AdeptPsionicTransferDamageDebuff" parent="PersistentSpellFX">
-        <Model value="Assets\Effects\Zerg\HybridCorruptionCloud_Impact\HybridCorruptionCloud_Impact.m3"/>
+    <CModel id="AP_Supplicant" parent="Unit" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Supplicant\Supplicant.m3"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <SquibTypeDefault value="Metal"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_SupplicantImpact" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\Supplicant_COOP_Missile_Impact\Supplicant_COOP_Missile_Impact.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_SupplicantWeapon" parent="MissileFX">
+        <Model value="Assets\Effects\Protoss\Supplicant_COOP_Missile\Supplicant_COOP_Missile.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CModel>
+    <CModel id="AP_Supplicant_COOP_Missile_Launch" parent="LaunchFX">
+        <Model value="Assets\Effects\Protoss\Supplicant_COOP_Missile_Launch\Supplicant_COOP_Missile_Launch.m3"/>
+        <EditorCategories value="Race:Terran"/>
+    </CModel>
+    <CModel id="AP_Supplicant_Death" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Supplicant_Death\Supplicant_Death.m3"/>
+        <LowQualityModel value="ProtossSpiritDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_Supplicant_PlacementModel" parent="Placement">
+        <Model value="Assets\Units\Protoss\Supplicant_PlacementModel\Supplicant_PlacementModel.m3"/>
+        <EditorCategories value="Race:Protoss"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+    </CModel>
+    <CModel id="AP_Supplicant_Portrait" parent="Portrait" Race="Protoss">
+        <Model value="Assets\Portraits\Protoss\Supplicant_Portrait\Supplicant_Portrait.m3"/>
+        <Image value="Assets\Textures\supplicantportrait_static.dds"/>
+        <Lighting value="UnknownLight"/>
+    </CModel>
+    <CModel id="AP_Supplicant_Sacrifice_Death" parent="UnitDeath" Race="Protoss">
+        <Model value="Assets\Units\Protoss\Supplicant_Sacrifice_Death\Supplicant_Sacrifice_Death.m3"/>
+        <LowQualityModel value="ProtossSpiritDeathLow"/>
+        <Occlusion value="Show"/>
+    </CModel>
+    <CModel id="AP_Supplicant_WarpIn" parent="OneShotSpellFX">
+        <Model value="Assets\Units\Protoss\Supplicant_WarpIn\Supplicant_WarpIn.m3"/>
+        <LowQualityModel value="ProtossUnitBirth"/>
+        <EditorCategories value="Race:Protoss"/>
+        <Occlusion value="Show"/>
+        <PlanetPanelCamera value="Star2CameraMid05"/>
+        <ScaleMax value="0.850000,0.850000,0.850000"/>
+        <ScaleMin value="0.850000,0.850000,0.850000"/>
+        <TechPurchaseCamera value="Star2CameraMid05"/>
+        <UnitGlossaryCamera value="Star2CameraMid05"/>
+    </CModel>
+    <CModel id="AP_Glaze_Alarak_COOP_Sacrifice" parent="Glaze">
         <EditorCategories value="Race:Protoss"/>
     </CModel>
 </Catalog>

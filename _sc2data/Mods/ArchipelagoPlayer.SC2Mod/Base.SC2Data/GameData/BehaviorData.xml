@@ -3888,4 +3888,16 @@
             <DeathResponse Chance="1" Effect="AP_AdeptUpgradeDeathSearch"/>
         </Modification>
     </CBehaviorBuff>
+    <CBehaviorBuff id="AP_UnderConstructionOrDeadTracker">
+        <BehaviorFlags index="EnabledWhileDead" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <RemoveValidatorArray value="AP_UnderConstructionOrDead"/>
+    </CBehaviorBuff>
+    <CBehaviorPowerUser id="AP_PowerUserWarpableAnywhere">
+        <Alignment value="Positive"/>
+        <InfoIcon value="Assets\Textures\btn-building-protoss-pylon.dds"/>
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <PowerLink value="PowerSource"/>
+        <PoweredWhileUnderConstruction value="1"/>
+    </CBehaviorPowerUser>
 </Catalog>

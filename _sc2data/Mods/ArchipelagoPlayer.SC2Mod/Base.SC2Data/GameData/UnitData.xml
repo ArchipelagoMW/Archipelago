@@ -12239,6 +12239,41 @@
         <Race value="Prot"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Melee"/>
     </CUnit>
+    <CUnit id="AP_AlarakSupplicantWarpTrainCreator">
+        <Race value="Prot"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Uncursorable" value="1"/>
+        <FlagArray index="NoDraw" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="NoScore" value="1"/>
+        <FlagArray index="NoDeathEvent" value="1"/>
+        <AbilArray Link="AP_WarpGateTrainSupplicantTrue"/>
+        <CardLayouts>
+            <LayoutButtons Face="WarpInSupplicant" Type="AbilCmd" AbilCmd="AP_WarpGateTrainSupplicantTrue,11" Row="0" Column="0"/>
+        </CardLayouts>
+        <EditorCategories value="ObjectType:Other,ObjectFamily:FactionTaldarim"/>
+    </CUnit>
+    <CUnit id="AP_AlarakSupplicantWarpTrainDummy">
+        <Race value="Prot"/>
+        <FlagArray index="Uncommandable" value="1"/>
+        <FlagArray index="Uncursorable" value="1"/>
+        <FlagArray index="NoDraw" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+        <FlagArray index="NoDeathEvent" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Food value="-4"/>
+        <CostResource index="Minerals" value="150"/>
+        <AbilArray Link="Warpable"/>
+        <EffectArray index="Create" value="RefundFullResource"/>
+        <Radius value="1"/>
+        <InnerRadius value="0.75"/>
+        <EditorCategories value="ObjectType:Other,ObjectFamily:FactionTaldarim"/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->
@@ -14013,6 +14048,86 @@
     <CUnit id="AP_ScarabWeapon" parent="MISSILE_INVULNERABLE">
         <Race value="Prot"/>
         <EditorCategories value="ObjectType:Projectile,ObjectFamily:Campaign"/>
+    </CUnit>
+    <CUnit id="AP_Supplicant">
+        <Description value="Button/Tooltip/WarpInAP_Supplicant"/>
+        <DeathRevealRadius value="3"/>
+        <Race value="Prot"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="ArmySelect" value="1"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Locust" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Light" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Level value="20"/>
+        <LifeStart value="75"/>
+        <LifeMax value="75"/>
+        <LifeArmorName value="Unit/LifeArmorName/ProtossArmor"/>
+        <ShieldsStart value="125"/>
+        <ShieldsMax value="125"/>
+        <ShieldRegenDelay value="10"/>
+        <ShieldRegenRate value="2"/>
+        <ShieldArmorName value="Unit/ShieldArmorName/ProtossPlasmaShields"/>
+        <Speed value="3"/>
+        <Acceleration value="1000"/>
+        <LateralAcceleration value="46.0625"/>
+        <StationaryTurningRate value="999.8437"/>
+        <TurningRate value="999.8437"/>
+        <Sight value="9"/>
+        <Food value="-2"/>
+        <CostCategory value="Army"/>
+        <CostResource index="Minerals" value="75"/>
+        <AttackTargetPriority value="20"/>
+        <AbilArray Link="stop"/>
+        <AbilArray Link="attack"/>
+        <AbilArray Link="move"/>
+        <AbilArray Link="AP_WarpableAnywhere"/>
+        <AbilArray Link="ProgressRally"/>
+        <!--        <BehaviorArray Link="AllUnitBehaviorController"/>-->
+        <BehaviorArray Link="AP_UnderConstructionOrDeadTracker"/>
+        <WeaponArray Link="AP_SupplicantWeapon"/>
+        <EffectArray index="Birth" value="AP_SupplicantBirth"/>
+        <!--        <EffectArray index="Death" value="AlarakTheStrongestSurvivePrestigeMechBuffSearch"/>-->
+        <CardLayouts>
+            <LayoutButtons Face="Move" Type="AbilCmd" AbilCmd="move,Move" Row="0" Column="0"/>
+            <LayoutButtons Face="Stop" Type="AbilCmd" AbilCmd="stop,Stop" Row="0" Column="1"/>
+            <LayoutButtons Face="MoveHoldPosition" Type="AbilCmd" AbilCmd="move,HoldPos" Row="0" Column="2"/>
+            <LayoutButtons Face="Attack" Type="AbilCmd" AbilCmd="attack,Execute" Row="0" Column="4"/>
+            <LayoutButtons Face="MovePatrol" Type="AbilCmd" AbilCmd="move,Patrol" Row="0" Column="3"/>
+            <LayoutButtons Face="Rally" Type="AbilCmd" AbilCmd="ProgressRally,Rally1" Row="2" Column="4"/>
+            <!--            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_AdeptPhaseShiftCancel,Execute" Row="2" Column="4"/>-->
+            <!--            <LayoutButtons Face="AP_AlarakACMyLifefortheHighlord" Type="Passive" Row="2" Column="0"/>-->
+            <LayoutButtons Face="AP_AlarakSupplicantMaxShields" Type="Passive" Requirements="AP_HaveAlarakSupplicantMaxShields" Row="2" Column="2"/>
+            <LayoutButtons Face="AP_PHSupplicantShieldArmor" Type="Passive" Requirements="AP_HaveSupplicantShieldArmor" Row="2" Column="1"/>
+            <LayoutButtons Face="AP_AlarakSupplicantSacrificeCDR" Type="Passive" Requirements="AP_HaveAlarakSupplicantSacrificeCDR" Row="2" Column="3"/>
+        </CardLayouts>
+        <!--            <LayoutButtons Face="AP_SupplicantSacrificeCDRLocked" Type="Passive" Requirements="AlarakLevel15" Row="2" Column="3"/>-->
+        <InnerRadius value="0.375"/>
+        <CargoSize value="2"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="104"/>
+        <EditorCategories value="ObjectType:Unit,ObjectFamily:FactionTaldarim"/>
+        <TacticalAI value="Adept"/>
+        <TacticalAIThink value="AIThinkAdept"/>
+        <GlossaryCategory value="Unit/Category/ProtossUnits"/>
+        <GlossaryPriority value="20"/>
+        <GlossaryStrongArray value="Zergling"/>
+        <GlossaryStrongArray value="Stalker"/>
+        <GlossaryStrongArray value="Marine"/>
+        <GlossaryWeakArray value="Roach"/>
+        <GlossaryWeakArray value="Zealot"/>
+        <GlossaryWeakArray value="Marauder"/>
+        <HotkeyCategory value="Unit/Category/ProtossTaldarim"/>
+        <AIEvaluateAlias value="Adept"/>
+    </CUnit>
+    <CUnit id="AP_SupplicantWeapon" parent="MISSILE">
+        <Race value="Prot"/>
+        <EditorCategories value="ObjectType:Projectile,ObjectFamily:FactionTaldarim"/>
     </CUnit>
     <CUnit id="TechLab">
         <!-- Override -->

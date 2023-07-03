@@ -10161,8 +10161,8 @@
         <EditorCategories value="Race:Protoss"/>
         <!-- TODO: Verify this! -->
         <EffectArray value="AP_PhaseNeuralParasiteRemove"/>
-<!--        <EffectArray value="AP_PhaseMothershipRecalledRemove"/>-->
-<!--        <EffectArray value="AP_PhaseMothershipRecallingRemove"/>-->
+        <!--        <EffectArray value="AP_PhaseMothershipRecalledRemove"/>-->
+        <!--        <EffectArray value="AP_PhaseMothershipRecallingRemove"/>-->
         <EffectArray value="AP_PhaseFungalGrowthRemove"/>
         <EffectArray value="AP_PhaseFungalMovementRemove"/>
         <EffectArray value="AP_PhaseDestroyGravitonBeamPersistant"/>
@@ -10257,16 +10257,16 @@
         <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>
         <BehaviorLink value="AP_FungalGrowthMovement"/>
     </CEffectRemoveBehavior>
-<!--    <CEffectRemoveBehavior id="AP_PhaseMothershipRecalledRemove">-->
-<!--        <EditorCategories value=""/>-->
-<!--        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>-->
-<!--        <BehaviorLink value="MothershipRecalled"/>-->
-<!--    </CEffectRemoveBehavior>-->
-<!--    <CEffectRemoveBehavior id="AP_PhaseMothershipRecallingRemove">-->
-<!--        <EditorCategories value=""/>-->
-<!--        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>-->
-<!--        <BehaviorLink value="MothershipRecalling"/>-->
-<!--    </CEffectRemoveBehavior>-->
+    <!--    <CEffectRemoveBehavior id="AP_PhaseMothershipRecalledRemove">-->
+    <!--        <EditorCategories value=""/>-->
+    <!--        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>-->
+    <!--        <BehaviorLink value="MothershipRecalled"/>-->
+    <!--    </CEffectRemoveBehavior>-->
+    <!--    <CEffectRemoveBehavior id="AP_PhaseMothershipRecallingRemove">-->
+    <!--        <EditorCategories value=""/>-->
+    <!--        <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>-->
+    <!--        <BehaviorLink value="MothershipRecalling"/>-->
+    <!--    </CEffectRemoveBehavior>-->
     <CEffectRemoveBehavior id="AP_PhaseNeuralParasiteRemove">
         <EditorCategories value=""/>
         <WhichUnit Effect="AP_AdeptPhaseShiftTimerSpawnAB" Value="Caster"/>
@@ -10304,4 +10304,23 @@
         <SearchFilters value="-;Self,Player,Ally,Neutral,Missile,Stasis,Dead,Hidden,Invulnerable"/>
         <AreaArray MaxCount="2" Radius="4" Effect="AP_AdeptLM"/>
     </CEffectEnumArea>
+    <CEffectDamage id="AP_SupplicantDamage" parent="DU_WEAP">
+        <EditorCategories value="Race:Protoss"/>
+        <Kind value="Ranged"/>
+        <Amount value="5"/>
+        <Death value="Blast"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="AP_SupplicantLM">
+        <EditorCategories value="Race:Protoss"/>
+        <ImpactEffect value="AP_SupplicantDamage"/>
+        <AmmoUnit value="AP_SupplicantWeapon"/>
+        <Movers Link="AP_AdeptWeapon"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="AP_SupplicantBirth">
+        <EditorCategories value="Race:Protoss"/>
+    </CEffectSet>
+    <CEffectDamage id="AP_AlarakSupplicantMaxShieldsDisplayDummy">
+        <!-- See Upgrade AP_AlarakSupplicantMaxShields -->
+        <Amount value="25"/>
+    </CEffectDamage>
 </Catalog>

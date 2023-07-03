@@ -2293,4 +2293,28 @@
         <AlertIcon value="Assets\Textures\btn-ability-protoss-psionictransfer.dds"/>
         <EditorCategories value="Race:Protoss"/>
     </CButton>
+    <CButton id="AP_AlarakACMyLifefortheHighlord">
+        <Icon value="Assets\Textures\btn-ability-protoss-soulabsorbtion.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-soulabsorbtion.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_AlarakSupplicantMaxShields">
+        <Icon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantextrashields.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantextrashields.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_AlarakSupplicantSacrificeCDR">
+        <Icon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantsacrifice-cooldown.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantsacrifice-cooldown.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_PHSupplicantShieldArmor">
+        <Icon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantarmor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-protoss-alarak-supplicantarmor.dds"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
+    <CButton id="AP_SupplicantSacrificeCDRLocked" parent="AbilLocked">
+        <Tooltip value="Button/Tooltip/AbilLockedLevel15"/>
+        <EditorCategories value="Race:Protoss"/>
+    </CButton>
 </Catalog>

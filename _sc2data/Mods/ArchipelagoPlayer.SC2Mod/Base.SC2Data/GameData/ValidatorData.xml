@@ -3192,4 +3192,11 @@
         <WhichUnit Effect="AP_AdeptPhaseShiftCU" Value="Caster"/>
         <Behavior value="AP_AdeptPhaseShiftCancelDummy"/>
     </CValidatorUnitCompareBehaviorCount>
+    <CValidatorCombine id="AP_UnderConstructionOrDead">
+        <CombineArray value="AP_TargetIsUnderConstruction"/>
+        <CombineArray value="IsDead"/>
+    </CValidatorCombine>
+    <CValidatorUnitFilters id="AP_TargetIsUnderConstruction">
+        <Filters value="UnderConstruction;-"/>
+    </CValidatorUnitFilters>
 </Catalog>
