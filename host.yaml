@@ -190,5 +190,5 @@ adventure_options:
   display_msgs: true
 kdl3_options:
   # File name of the KDL3 US rom
-  rom_file: "Kirby's Dream Land 3 (USA).sfc"
+  rom_file: "Kirby's Dream Land 3.sfc"
   

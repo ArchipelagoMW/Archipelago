@@ -58,6 +58,7 @@ Name: "generator/dkc3";   Description: "Donkey Kong Country 3 ROM Setup"; Types:
 Name: "generator/smw";    Description: "Super Mario World ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/soe";    Description: "Secret of Evermore ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 3145728; Flags: disablenouninstallwarning
 Name: "generator/l2ac";   Description: "Lufia II Ancient Cave ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 2621440; Flags: disablenouninstallwarning
+Name: "generator/kdl3";   Description: "Kirby's Dream Land 3 ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 4194304; Flags: disablenouninstallwarning
 Name: "generator/lttp";   Description: "A Link to the Past ROM Setup and Enemizer"; Types: full hosting; ExtraDiskSpaceRequired: 5191680
 Name: "generator/oot";    Description: "Ocarina of Time ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 100663296; Flags: disablenouninstallwarning
 Name: "generator/zl";     Description: "Zillion ROM Setup"; Types: full hosting; ExtraDiskSpaceRequired: 150000; Flags: disablenouninstallwarning
@@ -74,6 +75,7 @@ Name: "client/sni/sm";    Description: "SNI Client - Super Metroid Patch Setup";
 Name: "client/sni/dkc3";  Description: "SNI Client - Donkey Kong Country 3 Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/smw";   Description: "SNI Client - Super Mario World Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/sni/l2ac";  Description: "SNI Client - Lufia II Ancient Cave Patch Setup"; Types: full playing; Flags: disablenouninstallwarning
+Name: "client/sni/kdl3";  Description: "SNI Client - Kirby's Dream Land 3 Setup"; Types: full playing; Flags: disablenouninstallwarning
 Name: "client/factorio";  Description: "Factorio"; Types: full playing
 Name: "client/kh2";       Description: "Kingdom Hearts 2"; Types: full playing
 Name: "client/minecraft"; Description: "Minecraft"; Types: full playing; ExtraDiskSpaceRequired: 226894278
@@ -111,6 +113,7 @@ Source: "{code:GetBN3ROMPath}"; DestDir: "{app}"; DestName: "Mega Man Battle Net
 Source: "{code:GetLADXROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"; Flags: external; Components: client/ladx or generator/ladx
 Source: "{code:GetTLoZROMPath}"; DestDir: "{app}"; DestName: "Legend of Zelda, The (U) (PRG0) [!].nes"; Flags: external; Components: client/tloz or generator/tloz
 Source: "{code:GetAdvnROMPath}"; DestDir: "{app}"; DestName: "ADVNTURE.BIN"; Flags: external; Components: client/advn
+Source: "{code:GetKDL3ROMPath}"; DestDir: "{app}"; DestName: "Kirby's Dream Land 3.sfc"; Flags: external; Components: generator/kdl3 or client/sni/kdl3
 Source: "{#source_path}\*"; Excludes: "*.sfc, *.log, data\sprites\alttpr, SNI, EnemizerCLI, Archipelago*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#source_path}\SNI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\SNI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: client/sni
 Source: "{#source_path}\EnemizerCLI\*"; Excludes: "*.sfc, *.log"; DestDir: "{app}\EnemizerCLI"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: generator/lttp
@@ -235,6 +238,11 @@ Root: HKCR; Subkey: "{#MyAppName}l2acpatch";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}l2acpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
 Root: HKCR; Subkey: "{#MyAppName}l2acpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
 
+Root: HKCR; Subkey: ".apkdl3";                                   ValueData: "{#MyAppName}kdl3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}kdl3patch";                     ValueData: "Archipelago Kirby's Dream Land 3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}kdl3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/sni
+Root: HKCR; Subkey: "{#MyAppName}kdl3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: ""; Components: client/sni
+
 Root: HKCR; Subkey: ".apmc";                                  ValueData: "{#MyAppName}mcdata";         Flags: uninsdeletevalue; ValueType: string;  ValueName: ""; Components: client/minecraft
 Root: HKCR; Subkey: "{#MyAppName}mcdata";                     ValueData: "Archipelago Minecraft Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: ""; Components: client/minecraft
 Root: HKCR; Subkey: "{#MyAppName}mcdata\DefaultIcon";         ValueData: "{app}\ArchipelagoMinecraftClient.exe,0";                           ValueType: string;  ValueName: ""; Components: client/minecraft
@@ -330,6 +338,9 @@ var SoERomFilePage: TInputFileWizardPage;
 var l2acrom: string;
 var L2ACROMFilePage: TInputFileWizardPage;
 
+var kdl3rom: string;
+var KDL3ROMFilePage:  TInputFileWizardPage;
+
 var ootrom: string;
 var OoTROMFilePage: TInputFileWizardPage;
 
@@ -424,6 +435,26 @@ begin
       log('existing ROM found');
       log(IntToStr(CompareStr(GetSMSMD5OfFile(rom), hash)));
       if CompareStr(GetSMSMD5OfFile(rom), hash) = 0 then
+        begin
+        log('existing ROM verified');
+        Result := rom;
+        exit;
+        end;
+      log('existing ROM failed verification');
+    end;
+end;
+
+function CheckKDL3Rom(name: string): string;
+var rom: string;
+begin
+  log('Handling ' + name)
+  rom := FileSearch(name, WizardDirValue());
+  if Length(rom) > 0 then
+    begin
+      log('existing ROM found');
+      log(IntToStr(CompareStr(GetSNESMD5OfFile(rom), '201e7658f6194458a3869dde36bf8ec2')));
+      log(IntToStr(CompareStr(GetSNESMD5OfFile(rom), 'b2f2d004ea640c3db66df958fce122b2')));
+      if CompareStr(GetSNESMD5OfFile(rom), '201e7658f6194458a3869dde36bf8ec2') * CompareStr(GetSNESMD5OfFile(rom), 'b2f2d004ea640c3db66df958fce122b2') = 0 then
         begin
         log('existing ROM verified');
         Result := rom;
@@ -566,6 +597,8 @@ begin
     Result := not (SoEROMFilePage.Values[0] = '')
   else if (assigned(L2ACROMFilePage)) and (CurPageID = L2ACROMFilePage.ID) then
     Result := not (L2ACROMFilePage.Values[0] = '')
+  else if (assigned(KDL3ROMFilePage)) and (CurPageID = KDL3ROMFilePage.ID) then
+    Result := not (KDL3ROMFilePage.Values[0] = '')
   else if (assigned(OoTROMFilePage)) and (CurPageID = OoTROMFilePage.ID) then
     Result := not (OoTROMFilePage.Values[0] = '')
   else if (assigned(BN3ROMFilePage)) and (CurPageID = BN3ROMFilePage.ID) then
@@ -810,6 +843,22 @@ begin
     Result := '';
  end;
 
+function GetKDL3ROMPath(Param: string): string;
+begin
+  if Length(kdl3rom) > 0 then
+    Result := kdl3rom
+  else if Assigned(KDL3ROMFilePage) then
+    begin
+      R := CompareStr(GetMD5OfFile(KDL3ROMFilePage.Values[0]), '201e7658f6194458a3869dde36bf8ec2') * CompareStr(GetMD5OfFile(KDL3ROMFilePage.Values[0]), 'b2f2d004ea640c3db66df958fce122b2');
+      if R <> 0 then
+        MsgBox('Kirby''s Dream Land 3 ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
+
+      Result := KDL3ROMFilePage.Values[0]
+    end
+  else
+    Result := '';
+end;
+
 procedure InitializeWizard();
 begin
   AddOoTRomPage();
@@ -865,6 +914,10 @@ begin
   advnrom := CheckSMSRom('ADVNTURE.BIN', '157bddb7192754a45372be196797f284');
   if Length(advnrom) = 0 then
     AdvnROMFilePage:= AddA26Page('ADVNTURE.BIN');
+
+  kdl3rom := CheckKDL3Rom('Kirby''s Dream Land 3.sfc');
+  if Length(kdl3rom) = 0 then
+    KDL3ROMFilePage:= AddRomPage('Kirby''s Dream Land 3.sfc');
 end;
 
 
@@ -883,6 +936,8 @@ begin
     Result := not (WizardIsComponentSelected('client/sni/l2ac') or WizardIsComponentSelected('generator/l2ac'));
   if (assigned(SoEROMFilePage)) and (PageID = SoEROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/soe'));
+  if (assigned(KDL3ROMFilePage)) and (PageID = KDL3ROMFilePage.ID) then
+    Result := not (WizardIsComponentSelected('client/sni/kdl3') or WizardIsComponentSelected('generator/kdl3'));
   if (assigned(OoTROMFilePage)) and (PageID = OoTROMFilePage.ID) then
     Result := not (WizardIsComponentSelected('generator/oot') or WizardIsComponentSelected('client/oot'));
   if (assigned(ZlROMFilePage)) and (PageID = ZlROMFilePage.ID) then
