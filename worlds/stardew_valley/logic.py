@@ -952,10 +952,7 @@ class StardewLogic:
         return And(rules)
 
     def has_mine_elevator_to_floor(self, floor: int) -> StardewRule:
-        if (self.options[options.TheMinesElevatorsProgression] ==
-                options.TheMinesElevatorsProgression.option_progressive or
-                self.options[options.TheMinesElevatorsProgression] ==
-                options.TheMinesElevatorsProgression.option_progressive_from_previous_floor):
+        if self.options[options.TheMinesElevatorsProgression] != options.TheMinesElevatorsProgression.option_vanilla:
             return self.received("Progressive Mine Elevator", count=int(floor / 5))
         return True_()
 
@@ -987,10 +984,11 @@ class StardewLogic:
     def can_mine_to_skull_cavern_floor(self, floor: int) -> StardewRule:
         previous_elevator = max(floor - 25, 0)
         previous_previous_elevator = max(floor - 50, 0)
+        has_mine_elevator = self.has_mine_elevator_to_floor(5) # Skull Cavern Elevator menu needs a normal elevator...
         return ((has_skull_cavern_elevator_to_floor(self, previous_elevator) &
                  self.can_progress_in_the_skull_cavern_from_floor(previous_elevator)) |
                 (has_skull_cavern_elevator_to_floor(self, previous_previous_elevator) &
-                 self.can_progress_easily_in_the_skull_cavern_from_floor(previous_previous_elevator)))
+                 self.can_progress_easily_in_the_skull_cavern_from_floor(previous_previous_elevator))) & has_mine_elevator
 
     def has_jotpk_power_level(self, power_level: int) -> StardewRule:
         if self.options[options.ArcadeMachineLocations] != options.ArcadeMachineLocations.option_full_shuffling:

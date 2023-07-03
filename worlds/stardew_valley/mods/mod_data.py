@@ -44,5 +44,5 @@ mod_versions = {
     ModNames.delores: "1.1.2",
     ModNames.ayeisha: "0.5.0-alpha",
     ModNames.riley: "1.2.2",
-    ModNames.skull_cavern_elevator: "1.0.0",
+    ModNames.skull_cavern_elevator: "1.5.0",
 }
