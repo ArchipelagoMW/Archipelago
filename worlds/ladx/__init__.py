@@ -193,6 +193,7 @@ class LinksAwakeningWorld(World):
                     if not self.multiworld.tradequest[self.player] and isinstance(item.item_data, TradeItemData):
                         location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
                         location.place_locked_item(item)
+                        location.show_in_spoiler = False
                         continue
 
                     if isinstance(item.item_data, DungeonItemData):
