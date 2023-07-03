@@ -171,14 +171,11 @@ def create_levels(world: World) -> None:
                                                                    world.multiworld.consumables[world.player]),
                                     KDL3Location)
 
-    for boss_flag, purification, idx, level in zip(["Level 1 Boss", "Level 2 Boss",
-                                                    "Level 3 Boss", "Level 4 Boss", "Level 5 Boss"],
-                                                   [LocationName.grass_land_whispy, LocationName.ripple_field_acro,
-                                                    LocationName.sand_canyon_poncon, LocationName.cloudy_park_ado,
-                                                    LocationName.iceberg_dedede],
-                                                   [0x770200, 0x770201, 0x770202, 0x770203, 0x770204],
-                                                   [level1, level2, level3, level4, level5]):
-        level.add_locations({boss_flag: None, purification: idx, }, KDL3Location)
+    for boss_flag, idx, level in zip(["Level 1 Boss", "Level 2 Boss",
+                                      "Level 3 Boss", "Level 4 Boss", "Level 5 Boss"],
+                                     [0x770200, 0x770201, 0x770202, 0x770203, 0x770204],
+                                     [level1, level2, level3, level4, level5]):
+        level.add_locations({boss_flag: None, location_table[idx]: idx, }, KDL3Location)
 
     level6.add_locations({LocationName.goals[world.multiworld.goal[world.player]]: None}, KDL3Location)
 
