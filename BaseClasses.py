@@ -8,6 +8,7 @@ import secrets
 import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import ChainMap, Counter, deque
+from collections.abc import Collection
 from enum import IntEnum, IntFlag
 from typing import Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, TypedDict, Union
 
@@ -363,7 +364,7 @@ class MultiWorld():
             for r_location in region.locations:
                 self._location_cache[r_location.name, player] = r_location
 
-    def get_regions(self, player=None):
+    def get_regions(self, player: Optional[int] = None) -> Collection[Region]:
         return self.regions if player is None else self._region_cache[player].values()
 
     def get_region(self, regionname: str, player: int) -> Region:
