@@ -24,12 +24,9 @@ def can_reach_woods_depth(vanilla_logic, depth: int) -> StardewRule:
 
 
 def has_woods_rune_to_depth(vanilla_logic, floor: int) -> StardewRule:
-    if (vanilla_logic.options[options.TheMinesElevatorsProgression] ==
-            options.TheMinesElevatorsProgression.option_progressive or
-            vanilla_logic.options[options.TheMinesElevatorsProgression] ==
-            options.TheMinesElevatorsProgression.option_progressive_from_previous_floor):
-        return vanilla_logic.received("Progressive Wood Obelisk Sigils", count=int(floor / 10))
-    return True_()
+    if vanilla_logic.options[options.ElevatorProgression] == options.ElevatorProgression.option_vanilla:
+        return True_()
+    return vanilla_logic.received("Progressive Wood Obelisk Sigils", count=int(floor / 10))
 
 
 def can_chop_to_depth(vanilla_logic, floor: int) -> StardewRule:
