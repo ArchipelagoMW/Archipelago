@@ -21,7 +21,7 @@ This client has only been tested with the Official Steam version of the game at 
 
 ## Downpatching Dark Souls III
 
-Follow instructions from the [speedsouls wiki](https://wiki.speedsouls.com/darksouls3:Downpatching). Your download command, including the correct depot and manifest ids, will be "download_depot 374320 374321 4471176929659548333"
+Follow instructions from the [speedsouls wiki](https://wiki.speedsouls.com/darksouls3:Downpatching) to download version 1.15. Your download command, including the correct depot and manifest ids, will be "download_depot 374320 374321 4471176929659548333"
 
 ## Installing the Archipelago mod
 
