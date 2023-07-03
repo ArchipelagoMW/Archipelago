@@ -39,6 +39,7 @@ class LingoWorld(World):
 
     base_id = 444400
     topology_present = True
+    data_version = 1
 
     static_logic = StaticLingoLogic()
     static_items = StaticLingoItems(base_id)
