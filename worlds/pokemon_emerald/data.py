@@ -13,6 +13,7 @@ import pkg_resources
 
 from BaseClasses import ItemClassification
 
+
 class Warp:
     """
     Represents warp events in the game like doorways or warp pads
@@ -41,7 +42,7 @@ class Warp:
         source_ids_string = ""
         for source_id in self.source_ids:
             source_ids_string += str(source_id) + ","
-        source_ids_string = source_ids_string[:-1] # Remove last ","
+        source_ids_string = source_ids_string[:-1]  # Remove last ","
 
         return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{self.dest_ids}{'!' if self.is_one_way else ''}"
 
@@ -292,6 +293,7 @@ def load_json_data(data_name: str) -> Union[List[str], Dict[str, Any]]:
 config: Dict[str, Any] = load_json_data("config.json")
 data = PokemonEmeraldData()
 
+
 def _init():
     extracted_data: Dict[str, any] = load_json_data("extracted_data.json")
     data.constants = extracted_data["constants"]
@@ -511,5 +513,6 @@ def _init():
             trainer_json["rom_address"],
             trainer_json["battle_script_rom_address"]
         ))
+
 
 _init()

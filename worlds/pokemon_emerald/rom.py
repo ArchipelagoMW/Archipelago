@@ -320,7 +320,7 @@ def _set_opponents(modified_data: PokemonEmeraldData, rom: bytearray) -> None:
         pokemon_data_size: int
         if trainer.party.pokemon_data_type in {TrainerPokemonDataTypeEnum.NO_ITEM_DEFAULT_MOVES, TrainerPokemonDataTypeEnum.ITEM_DEFAULT_MOVES}:
             pokemon_data_size = 8
-        else: # Custom Moves
+        else:  # Custom Moves
             pokemon_data_size = 16
 
         for i, pokemon in enumerate(trainer.party.pokemon):

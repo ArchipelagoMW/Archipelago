@@ -13,18 +13,18 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
 from .data import (PokemonEmeraldData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
-    data as emerald_data)
+                   data as emerald_data)
 from .items import (PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
-    offset_item_value, create_item_groups)
+                    offset_item_value, create_item_groups)
 from .locations import PokemonEmeraldLocation, create_location_label_to_id_map, create_locations_with_tags
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
-    RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility, HmCompatibility,
-    RandomizeStaticEncounters, option_definitions)
+                      RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
+                      HmCompatibility, RandomizeStaticEncounters, option_definitions)
 from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, get_base_rom_path, location_visited_event_to_id_map
 from .rules import (set_default_rules, set_overworld_item_rules, set_hidden_item_rules, set_npc_gift_rules,
-    set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
+                    set_enable_ferry_rules, add_hidden_item_itemfinder_rules, add_flash_rules)
 from .sanity_check import sanity_check
 from .util import int_to_bool_array, bool_array_to_int
 
@@ -87,7 +87,6 @@ class PokemonEmeraldWorld(World):
             'race': self.multiworld.is_race,
         }
 
-
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
         rom_path = get_base_rom_path()
@@ -104,7 +103,6 @@ class PokemonEmeraldWorld(World):
         if sanity_check() is False:
             raise AssertionError("Pokemon Emerald sanity check failed. See log for details.")
 
-
     def create_regions(self):
         tags = {"Badge", "HM", "KeyItem", "Rod", "Bike"}
         if self.multiworld.overworld_items[self.player].value == Toggle.option_true:
@@ -118,7 +116,6 @@ class PokemonEmeraldWorld(World):
 
         create_regions(self.multiworld, self.player)
         create_locations_with_tags(self.multiworld, self.player, tags)
-
 
     def create_items(self):
         item_locations: List[PokemonEmeraldLocation] = []
@@ -146,11 +143,15 @@ class PokemonEmeraldWorld(World):
             filter_tags.add("HM")
 
         if self.multiworld.badges[self.player].value == RandomizeBadges.option_shuffle:
-            self.badge_shuffle_info = [(location, self.create_item_by_code(location.default_item_code)) for location in
-                [location for location in item_locations if "Badge" in location.tags]]
+            self.badge_shuffle_info = [
+                (location, self.create_item_by_code(location.default_item_code))
+                for location in [location for location in item_locations if "Badge" in location.tags]
+            ]
         if self.multiworld.hms[self.player].value == RandomizeHms.option_shuffle:
-            self.hm_shuffle_info = [(location, self.create_item_by_code(location.default_item_code)) for location in
-                [location for location in item_locations if "HM" in location.tags]]
+            self.hm_shuffle_info = [
+                (location, self.create_item_by_code(location.default_item_code))
+                for location in [location for location in item_locations if "HM" in location.tags]
+            ]
 
         item_locations = [location for location in item_locations if len(filter_tags & location.tags) == 0]
         default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
@@ -190,6 +191,7 @@ class PokemonEmeraldWorld(World):
 
             # TMs should not have duplicates until every TM has been used already
             all_tm_choices = fill_item_candidates_by_category["TM"].copy()
+
             def refresh_tm_choices():
                 fill_item_candidates_by_category["TM"] = all_tm_choices.copy()
                 self.random.shuffle(fill_item_candidates_by_category["TM"])
@@ -207,7 +209,6 @@ class PokemonEmeraldWorld(World):
                     item = self.create_item_by_code(item_code)
 
                 self.multiworld.itempool.append(item)
-
 
     def set_rules(self):
         set_default_rules(self.multiworld, self.player)
@@ -229,7 +230,6 @@ class PokemonEmeraldWorld(World):
 
         if self.multiworld.require_flash[self.player].value == Toggle.option_true:
             add_flash_rules(self.multiworld, self.player)
-
 
     def generate_basic(self):
         victory_event_name = "EVENT_DEFEAT_CHAMPION"
@@ -286,7 +286,6 @@ class PokemonEmeraldWorld(World):
         if self.multiworld.key_items[self.player].value == Toggle.option_false:
             convert_unrandomized_items_to_events("KeyItem")
 
-
     def pre_fill(self):
         # Items which are shuffled between their own locations
         if self.multiworld.badges[self.player].value == RandomizeBadges.option_shuffle:
@@ -314,7 +313,6 @@ class PokemonEmeraldWorld(World):
             self.random.shuffle(hm_items)
 
             fill_restrictive(self.multiworld, collection_state, hm_locations, hm_items, True, True)
-
 
     def generate_output(self, output_directory: str):
         def randomize_abilities():
@@ -369,7 +367,7 @@ class PokemonEmeraldWorld(World):
 
                     if had_clean_pass:
                         break
-            else: # Not following evolutions
+            else:  # Not following evolutions
                 for species in self.modified_data.species:
                     if species is None:
                         continue
@@ -738,7 +736,7 @@ class PokemonEmeraldWorld(World):
         if self.multiworld.level_up_moves[self.player].value != LevelUpMoves.option_vanilla:
             randomize_learnsets()
 
-        randomize_tm_hm_compatibility() # Options are checked within this function
+        randomize_tm_hm_compatibility()  # Options are checked within this function
 
         min_catch_rate = min(self.multiworld.min_catch_rate[self.player].value, 255)
         for species in self.modified_data.species:
@@ -765,7 +763,6 @@ class PokemonEmeraldWorld(World):
             randomize_starters()
 
         generate_output(self.modified_data, self.multiworld, self.player, output_directory)
-
 
     def fill_slot_data(self):
         slot_data = self._get_pokemon_emerald_data()

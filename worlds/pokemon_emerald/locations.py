@@ -61,7 +61,7 @@ def create_locations_with_tags(multiworld: MultiWorld, player: int, tags) -> Non
 
     for region_name, region_data in data.regions.items():
         region = multiworld.get_region(region_name, player)
-        filtered_locations = [l for l in region_data.locations if len(tags & data.locations[l].tags) > 0]
+        filtered_locations = [loc for loc in region_data.locations if len(tags & data.locations[loc].tags) > 0]
 
         for location_name in filtered_locations:
             location_data = data.locations[location_name]

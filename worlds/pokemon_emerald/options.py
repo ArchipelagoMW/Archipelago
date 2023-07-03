@@ -471,9 +471,9 @@ class BetterShops(Toggle):
 class RemoveRoadblocks(OptionSet):
     """
     Removes specific NPCs that normally stand in your way until certain events are completed.
-    
+
     This can open up the world a bit and make your playthrough less linear, but careful how many you remove; it may make too much of your world accessible upon receiving Surf.
-    
+
     Possible values are:
     "Route 110 Aqua Grunts"
     "Route 112 Magma Grunts"

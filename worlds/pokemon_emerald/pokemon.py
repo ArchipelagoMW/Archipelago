@@ -54,16 +54,16 @@ _move_types = [
 ]
 
 _move_blacklist = frozenset({
-    0,   # MOVE_NONE
-    165, # Struggle
-    15,  # Cut
-    148, # Flash
-    249, # Rock Smash
-    70,  # Strength
-    57,  # Surf
-    19,  # Fly
-    291, # Dive
-    127  # Waterfall
+    0,    # MOVE_NONE
+    165,  # Struggle
+    15,   # Cut
+    148,  # Flash
+    249,  # Rock Smash
+    70,   # Strength
+    57,   # Surf
+    19,   # Fly
+    291,  # Dive
+    127   # Waterfall
 })
 
 _legendary_pokemon = frozenset({
@@ -122,7 +122,7 @@ def get_random_species(
 
 def get_random_type(random: Random):
     picked_type = random.randrange(0, 18)
-    while picked_type == 9: # Don't pick the ??? type
+    while picked_type == 9:  # Don't pick the ??? type
         picked_type = random.randrange(0, 18)
 
     return picked_type

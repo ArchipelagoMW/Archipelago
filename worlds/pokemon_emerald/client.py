@@ -80,7 +80,6 @@ class GBAContext(CommonContext):
         self.local_checked_locations = set()
         self.local_set_events = {event_name: False for event_name in TRACKER_EVENT_FLAGS}
 
-
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(GBAContext, self).server_auth(password_requested)
@@ -90,7 +89,6 @@ class GBAContext(CommonContext):
             return
         await self.send_connect()
 
-
     def run_gui(self):
         from kvui import GameManager
 
@@ -99,7 +97,6 @@ class GBAContext(CommonContext):
 
         self.ui = GBAManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-
 
     def on_package(self, cmd, args):
         if cmd == "Connected":
