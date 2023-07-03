@@ -849,7 +849,7 @@ begin
     Result := kdl3rom
   else if Assigned(KDL3ROMFilePage) then
     begin
-      R := CompareStr(GetMD5OfFile(KDL3ROMFilePage.Values[0]), '201e7658f6194458a3869dde36bf8ec2') * CompareStr(GetMD5OfFile(KDL3ROMFilePage.Values[0]), 'b2f2d004ea640c3db66df958fce122b2');
+      R := CompareStr(GetSNESMD5OfFile(KDL3ROMFilePage.Values[0]), '201e7658f6194458a3869dde36bf8ec2') * CompareStr(GetSNESMD5OfFile(KDL3ROMFilePage.Values[0]), 'b2f2d004ea640c3db66df958fce122b2');
       if R <> 0 then
         MsgBox('Kirby''s Dream Land 3 ROM validation failed. Very likely wrong file.', mbInformation, MB_OK);
 
