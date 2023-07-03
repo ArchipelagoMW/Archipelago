@@ -11,7 +11,6 @@ import cython
 from cpython cimport PyObject
 from typing import Any, Dict, Iterable, Iterator, Generator, Sequence, Tuple, TypeVar, Union, Set, List
 from cymem.cymem cimport Pool
-from libc.string cimport memset
 from libc.stdint cimport int64_t, uint32_t
 from libcpp.set cimport set as std_set
 
@@ -94,7 +93,7 @@ cdef class LocationStore:
         cdef size_t count = 0
         for sender, locations in locations_dict.items():
             # we don't require the dict to be sorted here
-            if sender < 0 or sender > MAX_PLAYER_ID:
+            if not isinstance(sender, int) or sender < 1 or sender > MAX_PLAYER_ID:
                 raise ValueError(f"Invalid player id {sender} for location")
             if max_sender == INVALID_SIZE:
                 max_sender = sender
@@ -102,20 +101,19 @@ cdef class LocationStore:
                 max_sender = max(max_sender, sender)
             for location, data in locations.items():
                 receiver = data[1]
-                if receiver < 0 or receiver > MAX_PLAYER_ID:
+                if receiver < 1 or receiver > MAX_PLAYER_ID:
                     raise ValueError(f"Invalid player id {receiver} for item")
                 count += 1
             sender_count += 1
 
         if sender_count != max_sender:
             # we assume player 0 will never have locations
-            raise ValueError(f"Player IDs not continuous")
+            raise ValueError("Player IDs not continuous")
 
         # allocate the arrays and invalidate index (0xff...)
         self.entries = <LocationEntry*>self._mem.alloc(count, sizeof(LocationEntry))
         self.sender_index = <IndexEntry*>self._mem.alloc(max_sender + 1, sizeof(IndexEntry))
         self._raw_proxies = <PyObject**>self._mem.alloc(max_sender + 1, sizeof(PyObject*))
-        memset(self.sender_index, 0xff, (max_sender + 1) * sizeof(IndexEntry))
 
         # build entries and index
         cdef size_t i = 0
@@ -136,6 +134,7 @@ cdef class LocationStore:
 
         # build pyobject caches
         self._proxies.append(None)  # player 0
+        assert self.sender_index[0].count == 0
         for i in range(1, max_sender + 1):
             assert self.sender_index[i].start < count
             key = i  # allocate python integer
