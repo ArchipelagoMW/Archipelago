@@ -350,7 +350,7 @@ def get_default_options() -> OptionsType:
             "rom_args": ""
         },
         "kdl3_options":{
-            "rom_file": "Kirby's Dream Land 3 (USA).sfc"
+            "rom_file": "Kirby's Dream Land 3.sfc"
         }
     }
     return options

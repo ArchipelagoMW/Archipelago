@@ -89,13 +89,13 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
                 loc = loc.title()
                 boss = boss.title()
                 levels[LocationName.level_names[loc]][6] = LocationName.boss_names[boss]
-                plando_bosses.append(boss)
+                plando_bosses.append(LocationName.boss_names[boss])
             else:
                 option = option.title()
                 for level in levels:
                     if levels[level][6] is None:
                         levels[level][6] = LocationName.boss_names[option]
-                        plando_bosses.append(option)
+                        plando_bosses.append(LocationName.boss_names[option])
 
     if boss_shuffle > 0:
         if boss_shuffle == 2:
@@ -116,6 +116,10 @@ def generate_valid_levels(world: World, enforce_world: bool, enforce_pattern: bo
         for level in levels:
             if levels[level][6] is None:
                 levels[level][6] = default_levels[level][6]
+
+    for level in levels:
+        for stage in range(7):
+            assert levels[level][stage] is not None, "Level tried to be sent with a None stage, incorrect plando?"
 
     return levels
 
