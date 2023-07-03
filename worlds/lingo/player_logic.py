@@ -135,8 +135,16 @@ class LingoPlayerLogic:
         # Create the paintings mapping, if painting shuffle is on.
         if get_option_value(world, player, "shuffle_paintings"):
             # Shuffle paintings until we get something workable.
-            while not self.randomize_paintings(world, player, static_logic):
-                pass
+            workable_paintings = False
+            for i in range(0, 20):
+                workable_paintings = self.randomize_paintings(world, player, static_logic)
+                if workable_paintings:
+                    break
+
+            if not workable_paintings:
+                raise Exception("This Lingo world was unable to generate a workable painting mapping after 20 "
+                                "iterations. This is very unlikely to happen on its own, and probably indicates some "
+                                "kind of logic error.")
 
         if get_option_value(world, player, "shuffle_doors") > 0 and test_options.disable_forced_good_item is False:
             # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
