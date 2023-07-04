@@ -588,6 +588,8 @@
     </CActorModel>
     <CActorUnit default="1" id="AP_MutaliskBase" parent="GenericUnitStandard">
         <Macros value="PhysicsDeathsSwarmAir"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_Mutalisk" Send="Create"/>
+        <On Terms="AbilMorph.*.Start; MorphFrom AP_Mutalisk" Send="Destroy"/>
         <On Terms="UnitDeathCustomize; ValidateUnit AP_IsKillerPhantasm" Send="DeathCustomize Hallucination"/>
         <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Mutalisk_Land"/>
         <HostSiteOps Ops="AP_SOpBankerMutalisk"/>
@@ -16291,6 +16293,75 @@
             <Image value="Assets\Textures\Wireframe-Zerg-UltraliskCavern.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorUnit id="AP_Spire" parent="ZergBuildingEx" unitName="AP_Spire">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_GreaterSpire" Send="StatusSet Morphing 1"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_GreaterSpire" Send="Create AP_SpireMorph"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_GreaterSpire" Target="SpireMorph" Send="Signal Started"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_GreaterSpire" Send="AnimPlay Morph Morph PlayForever 0.000000 0.000000 3.333000 AsDuration"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_GreaterSpire" Send="StatusSet Morphing 0"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_GreaterSpire" Target="AP_SpireMorph" Send="Signal Finished"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_GreaterSpire" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_GreaterSpire" Send="AnimClear ::Progress"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_GreaterSpire" Send="AnimBaselineStart"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_GreaterSpire" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 2.000000 AsDuration"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_GreaterSpire" Target="SpireMorph" Send="Signal Finished"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_GreaterSpire" Send="Destroy"/>
+        <On Terms="UnitDeathCustomize; IsStatus Morphing 1" Send="DeathCustomize Upgrade"/>
+        <On Terms="Behavior.AP_BuildingStasis.On" Send="TimerSet 0.330000 DelayCreation"/>
+        <On Terms="TimerExpired; TimerName DelayCreation" Target="SpireMorph" Send="AnimSetPausedAll"/>
+        <On Terms="Behavior.AP_BuildingStasis.Off" Target="AP_SpireMorph" Send="AnimSetPausedAll 0"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <Model value="Spire"/>
+        <BuildModel value="Spire"/>
+        <DeathArray index="Normal" ModelLink="SpireDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" ModelLink="SpireDeathUnderConstruction" SoundLink="Spire_Explode"/>
+        <DeathCustoms ModelLink="SpireDeathUnderConstruction" SoundLink="Spire_Explode" Name="Upgrade"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PlacementModel value="SpirePlacement"/>
+        <PortraitModel value="SpirePortrait"/>
+        <BarOffset value="190"/>
+        <BarWidth value="120"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-Spire.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-spire.dds"/>
+        <NameOffset value="70"/>
+        <SoundArray index="Ready" value="Spire_Ready"/>
+        <SoundArray index="What" value="Spire_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-spire.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-Spire.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="AP_SpireMorph">
+        <Model value="SpireMorph"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpShadow SpireMorphFacing"/>
+        <ModelFlags index="UseSyncSeed" value="1"/>
+        <Aliases value="_Snapshot"/>
+        <Inherits index="CloakEffect" value="1"/>
+        <Inherits index="Opacity" value="1"/>
+        <Inherits index="TeamColor" value="1"/>
+        <Inherits index="TintColor" value="1"/>
+        <Inherits index="Visibility" value="1"/>
+        <Inherits index="WarpGroup" value="1"/>
+        <!-- Morph,Start plays on creation, continues to Morph -->
+        <On Terms="ActorCreation" Send="AnimPlay MorphStart Morph,Start"/>
+        <On Terms="AnimDone; AnimName MorphStart" Send="AnimPlay Morph Morph PlayForever"/>
+        <!-- Finish signal comes from Cancel or Finish morph -->
+        <On Terms="Signal.*.Finished" Send="AnimClear MorphStart"/>
+        <On Terms="Signal.*.Finished" Send="AnimClear Morph"/>
+        <On Terms="Signal.*.Finished" Send="AnimPlay MorphEnd Morph,End"/>
+        <On Terms="AnimDone; AnimName MorphEnd" Send="Destroy"/>
+        <!-- If orphaned (Spire killed), same as finished -->
+        <On Terms="ActorOrphan" Send="AnimClear MorphStart"/>
+        <On Terms="ActorOrphan" Send="AnimClear Morph"/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <!-- If it gets the start signal twice, someone is starting and cancelling quickly, this is to destroy extras -->
+        <On Terms="Signal.*.Started; IsStatus Morphing 1" Send="Destroy"/>
+        <On Terms="Signal.*.Started" Send="StatusSet Morphing 1"/>
+    </CActorModel>
     <CActorModel id="WarpTrainModel">
         <!-- Override -->
         <On Terms="Abil.AP_StargateWarpTrain.TargetStart" Send="Create"/>
@@ -21572,6 +21643,7 @@
     <CActorStateMonitor id="ZergBloodSmallBuilding">
         <!-- Override -->
         <On Terms="UnitCreation.AP_GreaterSpire" Send="Create"/>
+        <On Terms="UnitCreation.AP_Spire" Send="Create"/>
     </CActorStateMonitor>
     <CActorStateMonitor id="MechaFlamesMediumBuilding">
         <!-- Override -->
@@ -21580,5 +21652,6 @@
         <On Terms="UnitCreation.AP_LurkerDen" Send="Create"/>
         <On Terms="UnitCreation.AP_ImpalerDen" Send="Create"/>
         <On Terms="UnitCreation.AP_InfestationPit" Send="Create"/>
+        <On Terms="UnitCreation.AP_Spire" Send="Create"/>
     </CActorStateMonitor>
 </Catalog>

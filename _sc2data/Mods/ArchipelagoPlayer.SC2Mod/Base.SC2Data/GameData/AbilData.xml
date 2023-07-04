@@ -4639,48 +4639,48 @@
     </CAbilEffectTarget>
     <CAbilResearch id="AP_SpireResearch">
         <EditorCategories value="Race:Zerg,AbilityorEffectType:Structures"/>
-<!--        <InfoArray index="Research1" Time="160" Upgrade="ZergFlyerWeaponsLevel1">-->
-<!--            <Resource index="Minerals" value="100"/>-->
-<!--            <Resource index="Vespene" value="100"/>-->
-<!--            <Button DefaultButtonFace="zergflyerattack1" State="Suppressed" Requirements="LearnZergFlyerAttack1">-->
-<!--                <Flags index="ToSelection" value="1"/>-->
-<!--            </Button>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research2" Time="190" Upgrade="ZergFlyerWeaponsLevel2">-->
-<!--            <Resource index="Minerals" value="175"/>-->
-<!--            <Resource index="Vespene" value="175"/>-->
-<!--            <Button DefaultButtonFace="zergflyerattack2" State="Suppressed" Requirements="LearnZergFlyerAttack2">-->
-<!--                <Flags index="ToSelection" value="1"/>-->
-<!--            </Button>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research3" Time="220" Upgrade="ZergFlyerWeaponsLevel3">-->
-<!--            <Resource index="Minerals" value="250"/>-->
-<!--            <Resource index="Vespene" value="250"/>-->
-<!--            <Button DefaultButtonFace="zergflyerattack3" State="Suppressed" Requirements="LearnZergFlyerAttack3">-->
-<!--                <Flags index="ToSelection" value="1"/>-->
-<!--            </Button>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research4" Time="160" Upgrade="ZergFlyerArmorsLevel1">-->
-<!--            <Resource index="Minerals" value="150"/>-->
-<!--            <Resource index="Vespene" value="150"/>-->
-<!--            <Button DefaultButtonFace="zergflyerarmor1" State="Suppressed" Requirements="LearnZergFlyerArmor1">-->
-<!--                <Flags index="ToSelection" value="1"/>-->
-<!--            </Button>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research5" Time="190" Upgrade="ZergFlyerArmorsLevel2">-->
-<!--            <Resource index="Minerals" value="225"/>-->
-<!--            <Resource index="Vespene" value="225"/>-->
-<!--            <Button DefaultButtonFace="zergflyerarmor2" State="Suppressed" Requirements="LearnZergFlyerArmor2">-->
-<!--                <Flags index="ToSelection" value="1"/>-->
-<!--            </Button>-->
-<!--        </InfoArray>-->
-<!--        <InfoArray index="Research6" Time="220" Upgrade="ZergFlyerArmorsLevel3">-->
-<!--            <Resource index="Minerals" value="300"/>-->
-<!--            <Resource index="Vespene" value="300"/>-->
-<!--            <Button DefaultButtonFace="zergflyerarmor3" State="Suppressed" Requirements="LearnZergFlyerArmor3">-->
-<!--                <Flags index="ToSelection" value="1"/>-->
-<!--            </Button>-->
-<!--        </InfoArray>-->
+        <!--        <InfoArray index="Research1" Time="160" Upgrade="ZergFlyerWeaponsLevel1">-->
+        <!--            <Resource index="Minerals" value="100"/>-->
+        <!--            <Resource index="Vespene" value="100"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerattack1" State="Suppressed" Requirements="LearnZergFlyerAttack1">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research2" Time="190" Upgrade="ZergFlyerWeaponsLevel2">-->
+        <!--            <Resource index="Minerals" value="175"/>-->
+        <!--            <Resource index="Vespene" value="175"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerattack2" State="Suppressed" Requirements="LearnZergFlyerAttack2">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research3" Time="220" Upgrade="ZergFlyerWeaponsLevel3">-->
+        <!--            <Resource index="Minerals" value="250"/>-->
+        <!--            <Resource index="Vespene" value="250"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerattack3" State="Suppressed" Requirements="LearnZergFlyerAttack3">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research4" Time="160" Upgrade="ZergFlyerArmorsLevel1">-->
+        <!--            <Resource index="Minerals" value="150"/>-->
+        <!--            <Resource index="Vespene" value="150"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerarmor1" State="Suppressed" Requirements="LearnZergFlyerArmor1">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research5" Time="190" Upgrade="ZergFlyerArmorsLevel2">-->
+        <!--            <Resource index="Minerals" value="225"/>-->
+        <!--            <Resource index="Vespene" value="225"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerarmor2" State="Suppressed" Requirements="LearnZergFlyerArmor2">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
+        <!--        <InfoArray index="Research6" Time="220" Upgrade="ZergFlyerArmorsLevel3">-->
+        <!--            <Resource index="Minerals" value="300"/>-->
+        <!--            <Resource index="Vespene" value="300"/>-->
+        <!--            <Button DefaultButtonFace="zergflyerarmor3" State="Suppressed" Requirements="LearnZergFlyerArmor3">-->
+        <!--                <Flags index="ToSelection" value="1"/>-->
+        <!--            </Button>-->
+        <!--        </InfoArray>-->
     </CAbilResearch>
     <CAbilMorph id="StarportReactorMorph">
         <!-- Override -->
@@ -5658,5 +5658,86 @@
                 <DurationArray index="Duration" value="1.5"/>
             </SectionArray>
         </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToGreaterSpire">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GreaterSpire" State="Suppressed" Requirements="AP_HaveHive"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="CancelMutateMorph"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_GreaterSpire">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="100"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="100"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="100"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <Activity value="UI/Mutating"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToGreaterSpireBroodlord">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GreaterSpireBroodlord" State="Suppressed" Requirements="AP_HaveHotSMutaliskBroodLordAndHaveHive"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_GreaterSpire">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="30"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <Activity value="UI/Mutating"/>
+    </CAbilMorph>
+    <CAbilMorph id="AP_UpgradeToGreaterSpireViper">
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:MorphsandBurrows"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="AP_GreaterSpireViper" State="Suppressed" Requirements="AP_HaveHotSMutaliskViperAndHaveHive"/>
+        <CmdButtonArray index="Cancel" DefaultButtonFace="Cancel"/>
+        <Flags index="BestUnit" value="1"/>
+        <Flags index="DisableAbils" value="1"/>
+        <Flags index="FastBuild" value="1"/>
+        <Flags index="Interruptible" value="1"/>
+        <Flags index="Produce" value="1"/>
+        <Flags index="ShowProgress" value="1"/>
+        <InfoArray Score="1" Unit="AP_GreaterSpire">
+            <SectionArray index="Abils">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="30"/>
+            </SectionArray>
+            <SectionArray index="Facing">
+                <DurationArray index="Delay" value="5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="30"/>
+            </SectionArray>
+        </InfoArray>
+        <Alert value="MorphComplete_Zerg"/>
+        <Activity value="UI/Mutating"/>
     </CAbilMorph>
 </Catalog>

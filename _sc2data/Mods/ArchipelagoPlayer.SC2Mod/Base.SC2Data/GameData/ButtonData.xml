@@ -2481,4 +2481,29 @@
         <AlertIcon value="Assets\Textures\btn-unit-zerg-swarmhost.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_GreaterSpireBroodlord">
+        <Icon value="Assets\Textures\btn-building-zerg-greaterspire.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-greaterspire.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_GreaterSpireViper">
+        <Icon value="Assets\Textures\btn-building-zerg-greaterspire.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-greaterspire.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MutaliskBroodlordPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-mutalisk-broodlord.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk-broodlord.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MutaliskPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_MutaliskViperPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-mutalisk-viper.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk-viper.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

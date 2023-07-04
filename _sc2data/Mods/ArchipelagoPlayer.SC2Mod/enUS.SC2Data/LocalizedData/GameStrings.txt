@@ -297,6 +297,9 @@ Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
 Abil/Name/MercCompoundResearch2=Research
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
+Abil/Name/AP_UpgradeToGreaterSpire=Morph Building (Spire -> Greater Spire)
+Abil/Name/AP_UpgradeToGreaterSpireBroodlord=Upgrade To Greater Spire Brood Lord
+Abil/Name/AP_UpgradeToGreaterSpireViper=Upgrade To Greater Spire Viper
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -657,6 +660,7 @@ Button/Name/AP_ImpalerPassive=Impaler
 Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
 Button/Name/AP_InfernalPreIgniter=Thermite Filaments
 Button/Name/AP_InfestorConsumption=Consumption
+Button/Name/AP_InfestorPassive=Infestor
 Button/Name/AP_Interceptor=Build Interceptor
 Button/Name/AP_Irradiate=Irradiate
 Button/Name/AP_JackhammerConcussionGrenade=Concussive Shells
@@ -842,8 +846,11 @@ Button/Name/AP_SupplicantSacrificeCDRLocked=Wrath of the Highlord
 Button/Name/AP_SupplyDepot=Build Supply Depot
 Button/Name/AP_SupplyDepotDrop=Calldown: Supply Depot
 Button/Name/AP_SupplyDrop=Calldown: Extra Supplies
+Button/Name/AP_SwarmHostCarrionPassive=Swarm Host
+Button/Name/AP_SwarmHostCreeperPassive=Swarm Host
 Button/Name/AP_SwarmHostDeepBurrow=Deep Tunnel
 Button/Name/AP_SwarmHostGenerateCreep=Generate Creep
+Button/Name/AP_SwarmHostPassive=Swarm Host
 Button/Name/AP_SwarmHostRoot=Root
 Button/Name/AP_SwarmHostRootBurrow=Burrow
 Button/Name/AP_SwarmHostUproot=Uproot
@@ -935,10 +942,11 @@ Button/Name/AP_zergflyerarmor3=Evolve Flyer Carapace Level 3
 Button/Name/AP_zergflyerattack1=Evolve Flyer Attacks Level 1
 Button/Name/AP_zergflyerattack2=Evolve Flyer Attacks Level 2
 Button/Name/AP_zergflyerattack3=Evolve Flyer Attacks Level 3
-Button/Name/AP_InfestorPassive=Infestor
-Button/Name/AP_SwarmHostCarrionPassive=Swarm Host
-Button/Name/AP_SwarmHostCreeperPassive=Swarm Host
-Button/Name/AP_SwarmHostPassive=Swarm Host
+Button/Name/AP_GreaterSpireBroodlord=Mutate into Greater Spire
+Button/Name/AP_GreaterSpireViper=Mutate into Greater Spire
+Button/Name/AP_MutaliskBroodlordPassive=Mutalisk
+Button/Name/AP_MutaliskPassive=Mutalisk
+Button/Name/AP_MutaliskViperPassive=Mutalisk
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1158,9 +1166,11 @@ Button/Tooltip/AP_ImpalerEgg=This cocoon contains a Hydralisk that is morphing i
 Button/Tooltip/AP_ImpalerPassive=Impaler Den enables you to morph Impalers from Hydralisks.
 Button/Tooltip/AP_IncineratorNozzles=Increases the Firebat's damage radius by 40%.
 Button/Tooltip/AP_InfernalPreIgniter=Hellions do an additional 10 damage to light armor.
+Button/Tooltip/AP_InfestationPit=<c val="ffff8a">Enables:</c><n/>- Infestors from Larvae<n/>- Swarm Hosts from Larvae
 Button/Tooltip/AP_InfestedAbomination=Aberrations are durable units that deal heavy damage.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
 Button/Tooltip/AP_Infestor=Infestation specialist. Can move while burrowed. Can use the Fungal Growth, Parasitic Domination, and Consumption abilities.<n/><n/><c val="ffff8a">Cannot attack.</c>
 Button/Tooltip/AP_InfestorConsumption=Drains up to 75 life from a friendly Zerg unit and gives the Infestor 2 energy for each point of life drained.
+Button/Tooltip/AP_InfestorPassive=Infestation Pit enables you to morph Infestors.
 Button/Tooltip/AP_Interceptor=Builds Interceptors that automatically attack the Carrier's target. Carriers may not attack without Interceptors.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_InterceptorUnit=Combat drones that automatically strafe their Carrier's target. Carriers may not attack without Interceptors.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
 Button/Tooltip/AP_Irradiate=Irradiates a single target, causing damage over time to target and any nearby units for <d ref="Behavior,Irradiate,Duration"/> seconds. Irradiate does not damage mechanical units, but nearby biological units will take damage from an Irradiated mechanical unit.
@@ -1387,8 +1397,11 @@ Button/Tooltip/AP_SupplyDepotDrop=Improved Supply Depot. Can be instantly deploy
 Button/Tooltip/AP_SupplyDepotLowered=Provides supply.<n/>Supply allows you to create more units.<n/>Supply Depots can be lowered to allow units to walk over them.
 Button/Tooltip/AP_SupplyDrop=Drops additional supplies, permanently increasing the supply output of the target Supply Depot by <d ref="Behavior,SupplyDrop,Modification.Food"/>.
 Button/Tooltip/AP_SwarmHost=Siege unit that attacks while rooted or burrowed by spawning Locusts. Locusts last <d ref="Behavior,LocustTimedLife,Duration"/> seconds.<n/><n/><c val="#ColorAttackInfo">Locusts can attack ground units.</c>
+Button/Tooltip/AP_SwarmHostCarrionPassive=Carrion Strain<n/><n/>Infestation Pit enables you to morph Swarm Hosts.
+Button/Tooltip/AP_SwarmHostCreeperPassive=Creeper Strain<n/><n/>Infestation Pit enables you to morph Swarm Hosts.
 Button/Tooltip/AP_SwarmHostDeepBurrow=Can travel quickly to any location with creep.
 Button/Tooltip/AP_SwarmHostGenerateCreep=Generates creep while Swarm Host is burrowed or rooted.
+Button/Tooltip/AP_SwarmHostPassive=Infestation Pit enables you to morph Swarm Hosts.
 Button/Tooltip/AP_SwarmHostRoot=Roots the Swarm Host. Prevents it from moving, but allows it to spawn Locusts.
 Button/Tooltip/AP_SwarmHostRootBurrow=Burrows the Swarm Host. Prevents it from moving, but allows it to spawn Locusts.
 Button/Tooltip/AP_SwarmHostUproot=Uproots the Swarm Host. Prevents it from spawning, but allows it to move about freely.
@@ -1491,11 +1504,12 @@ Button/Tooltip/AP_zergflyerarmor3=Maximizes the armor of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack1=Upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack2=Further upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack3=Maximizes the attacks of all Zerg air units.
-Button/Tooltip/AP_InfestationPit=<c val="ffff8a">Enables:</c><n/>- Infestors from Larvae<n/>- Swarm Hosts from Larvae
-Button/Tooltip/AP_InfestorPassive=Infestation Pit enables you to morph Infestors.
-Button/Tooltip/AP_SwarmHostCarrionPassive=Carrion Strain<n/><n/>Infestation Pit enables you to morph Swarm Hosts.
-Button/Tooltip/AP_SwarmHostCreeperPassive=Creeper Strain<n/><n/>Infestation Pit enables you to morph Swarm Hosts.
-Button/Tooltip/AP_SwarmHostPassive=Infestation Pit enables you to morph Swarm Hosts.
+Button/Tooltip/AP_GreaterSpireBroodlord=<c val="ffff8a">Enables:</c><n/>- Brood Lords from Mutalisks
+Button/Tooltip/AP_GreaterSpireViper=<c val="ffff8a">Enables:</c><n/>- Vipers from Mutalisks
+Button/Tooltip/AP_MutaliskBroodlordPassive=Broodlord Strain<n/><n/>Spire enables you to morph Mutalisks.
+Button/Tooltip/AP_MutaliskPassive=Spire enables you to morph Mutalisks.
+Button/Tooltip/AP_MutaliskViperPassive=Viper Strain<n/><n/>Spire enables you to morph Mutalisks.
+Button/Tooltip/AP_Spire=Contains upgrades for Zerg air units. Can mutate into a Greater Spire.<n/><n/><c val="ffff8a">Enables:</c><n/>- Mutalisks from Larvae
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -2853,6 +2867,7 @@ Unit/Name/AP_Impaler=Impaler
 Unit/Name/AP_ImpalerDen=Impaler Den
 Unit/Name/AP_ImpalerEgg=Impaler Cocoon
 Unit/Name/AP_ImpalerWeapon=Primal Lurker
+Unit/Name/AP_InfestationPit=Infestation Pit
 Unit/Name/AP_InfestedAbomination=Aberration
 Unit/Name/AP_Infestor=Infestor
 Unit/Name/AP_Interceptor=Interceptor
@@ -3023,8 +3038,8 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
-Unit/Name/AP_InfestationPit=Infestation Pit
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
+Unit/Name/AP_Spire=Spire
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain

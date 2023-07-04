@@ -2447,4 +2447,10 @@
         <Tooltip value=""/>
         <Count Link="AP_HotSHaveSwarmHost" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitHiveCompleteOnlyTechTreeCheat">
+        <Count Link="AP_Hive" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUnit id="AP_CountUnitHiveCompleteOnly">
+        <Count Link="AP_Hive" State="CompleteOnly"/>
+    </CRequirementCountUnit>
 </Catalog>

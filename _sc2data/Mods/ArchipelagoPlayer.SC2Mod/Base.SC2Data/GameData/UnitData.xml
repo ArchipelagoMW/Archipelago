@@ -14801,6 +14801,84 @@
         <GlossaryPriority value="10"/>
         <HotkeyCategory value="Unit/Category/ProtossUnits"/>
     </CUnit>
+    <CUnit id="AP_Spire">
+        <DeathRevealRadius value="3"/>
+        <Facing value="315"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="850"/>
+        <LifeMax value="850"/>
+        <LifeArmor value="1"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergBuildingArmor"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="250"/>
+        <CostResource index="Vespene" value="200"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5CancelToSelection"/>
+        <AbilArray Link="AP_UpgradeToGreaterSpireBroodlord"/>
+        <AbilArray Link="AP_SpireResearch"/>
+        <AbilArray Link="AP_UpgradeToGreaterSpireViper"/>
+        <BehaviorArray Link="OnCreep"/>
+        <BehaviorArray Link="AP_ZergBuildingNotOnCreep"/>
+        <BehaviorArray Link="AP_ZergBuildingDies6"/>
+        <CardLayouts>
+            <LayoutButtons Face="CancelMutateMorph" Type="AbilCmd" AbilCmd="AP_UpgradeToGreaterSpire,1" Row="2" Column="4"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5CancelToSelection,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <!--            <LayoutButtons Row="0" Column="0"/>-->
+            <!--            <LayoutButtons Face="zergflyerattack1" Type="AbilCmd" AbilCmd="SpireResearch,Research1" Row="0" Column="0"/>-->
+            <!--            <LayoutButtons Face="zergflyerattack2" Type="AbilCmd" AbilCmd="SpireResearch,Research2" Row="0" Column="0"/>-->
+            <!--            <LayoutButtons Face="zergflyerattack3" Type="AbilCmd" AbilCmd="SpireResearch,Research3" Row="0" Column="0"/>-->
+            <!--            <LayoutButtons Face="zergflyerarmor1" Type="AbilCmd" AbilCmd="SpireResearch,Research4" Row="0" Column="1"/>-->
+            <!--            <LayoutButtons Face="zergflyerarmor2" Type="AbilCmd" AbilCmd="SpireResearch,Research5" Row="0" Column="1"/>-->
+            <!--            <LayoutButtons Face="zergflyerarmor3" Type="AbilCmd" AbilCmd="SpireResearch,Research6" Row="0" Column="1"/>-->
+            <LayoutButtons Face="AP_MutaliskBroodlordPassive" Type="Passive" Requirements="AP_HaveHotSMutaliskBroodLord" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_MutaliskViperPassive" Type="Passive" Requirements="AP_HaveHotSMutaliskViper" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_MutaliskPassive" Type="Passive" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_GreaterSpireBroodlord" Type="AbilCmd" AbilCmd="AP_UpgradeToGreaterSpireBroodlord,0" Row="2" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_UpgradeToGreaterSpireBroodlord,1" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_GreaterSpireViper" Type="AbilCmd" AbilCmd="AP_UpgradeToGreaterSpireViper,0" Row="3" Column="0"/>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="AP_UpgradeToGreaterSpireViper,1" Row="2" Column="4"/>
+        </CardLayouts>
+        <Radius value="1"/>
+        <SeparationRadius value="1"/>
+        <Footprint value="Footprint2x2CreepContour"/>
+        <PlacementFootprint value="Footprint2x2Creep"/>
+        <ScoreMake value="400"/>
+        <ScoreKill value="450"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <TechAliasArray value="Alias_Spire"/>
+        <GlossaryPriority value="241"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <TechTreeUnlockedUnitArray value="Mutalisk"/>
+    </CUnit>
     <CUnit id="TechLab">
         <!-- Override -->
         <!-- Add-on stealing -->

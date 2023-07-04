@@ -1457,4 +1457,18 @@
     <CRequirement id="AP_HotSHaveSwarmHost">
         <NodeArray index="Show" Link="AP_OrCountUpgradeHotSHaveSwarmHostCompleteOnlyCountUpgradeHotSHaveSwarmHostSplitACompleteOnlyCountUpgradeHotSHaveSwarmHostSplitBCompleteOnly"/>
     </CRequirement>
+    <CRequirement id="AP_HaveHive">
+        <EditorCategories value="Race:Zerg,TechType:Unit"/>
+        <NodeArray index="Use" Link="AP_CountUnitHiveCompleteOnlyTechTreeCheat"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSMutaliskBroodLordAndHaveHive">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUnitHiveCompleteOnly"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HaveHotSMutaliskViperAndHaveHive">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Use" Link="AP_CountUnitHiveCompleteOnlyTechTreeCheat"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskViperCompleteOnly"/>
+    </CRequirement>
 </Catalog>
