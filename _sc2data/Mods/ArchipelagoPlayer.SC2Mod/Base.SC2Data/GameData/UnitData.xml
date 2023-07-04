@@ -12908,6 +12908,76 @@
         <GlossaryPriority value="37"/>
         <HotkeyCategory value="Unit/Category/ZergUnits"/>
     </CUnit>
+    <CUnit id="AP_EvolutionChamber">
+        <DeathRevealRadius value="3"/>
+        <Facing value="329.9963"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="750"/>
+        <LifeMax value="750"/>
+        <LifeArmor value="1"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergBuildingArmor"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="125"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5"/>
+        <AbilArray Link="AP_evolutionchamberresearch"/>
+        <BehaviorArray Link="OnCreep"/>
+        <BehaviorArray Link="AP_ZergBuildingNotOnCreep"/>
+        <BehaviorArray Link="AP_ZergBuildingDies6"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <!--            <LayoutButtons Face="AP_zerggroundarmor1" Type="AbilCmd" AbilCmd="AP_evolutionchamberresearch,3" Row="0" Column="2"/>-->
+            <!--            <LayoutButtons Face="AP_zerggroundarmor2" Type="AbilCmd" AbilCmd="AP_evolutionchamberresearch,4" Row="0" Column="2"/>-->
+            <!--            <LayoutButtons Face="AP_zerggroundarmor3" Type="AbilCmd" AbilCmd="AP_evolutionchamberresearch,5" Row="0" Column="2"/>-->
+            <!--            <LayoutButtons Face="AP_zergmeleeweapons1" Type="AbilCmd" AbilCmd="AP_evolutionchamberresearch,0" Row="0" Column="0"/>-->
+            <!--            <LayoutButtons Face="AP_zergmeleeweapons2" Type="AbilCmd" AbilCmd="AP_evolutionchamberresearch,1" Row="0" Column="0"/>-->
+            <!--            <LayoutButtons Face="AP_zergmeleeweapons3" Type="AbilCmd" AbilCmd="AP_evolutionchamberresearch,2" Row="0" Column="0"/>-->
+            <!--            <LayoutButtons Face="AP_zergmissileweapons1" Type="AbilCmd" AbilCmd="AP_evolutionchamberresearch,6" Row="0" Column="1"/>-->
+            <!--            <LayoutButtons Face="AP_zergmissileweapons2" Type="AbilCmd" AbilCmd="AP_evolutionchamberresearch,7" Row="0" Column="1"/>-->
+            <!--            <LayoutButtons Face="AP_zergmissileweapons3" Type="AbilCmd" AbilCmd="AP_evolutionchamberresearch,8" Row="0" Column="1"/>-->
+            <LayoutButtons Face="AP_SporeCrawlerPassive" Type="Passive" Requirements="AP_HotSHaveSporeCrawler" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_AberrationPassive" Type="Passive" Requirements="AP_HotSHaveAberration" Row="1" Column="1"/>
+        </CardLayouts>
+        <Radius value="1.5"/>
+        <SeparationRadius value="1.5"/>
+        <Footprint value="Footprint3x3CreepContour"/>
+        <PlacementFootprint value="Footprint3x3Creep"/>
+        <ScoreMake value="75"/>
+        <ScoreKill value="125"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <GlossaryPriority value="29"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <TechTreeUnlockedUnitArray value=""/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->

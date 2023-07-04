@@ -4499,4 +4499,11 @@
         <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
 <!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[0]" Value="SwarmHost"/>-->
     </CUpgrade>
+    <CUpgrade id="AP_HotSHaveSporeCrawler">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveAberration">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+<!--        <EffectArray Operation="Set" Reference="Unit,EvolutionChamber,TechTreeUnlockedUnitArray[0]" Value="InfestedAbomination"/>-->
+    </CUpgrade>
 </Catalog>

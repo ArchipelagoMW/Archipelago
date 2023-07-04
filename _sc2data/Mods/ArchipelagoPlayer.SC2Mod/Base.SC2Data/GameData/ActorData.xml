@@ -13848,6 +13848,28 @@
         <On Terms="AbilMorph.*.Finish; MorphTo AP_ImpalerDen" Send="Destroy"/>
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_ImpalerDen" Send="Destroy"/>
     </CActorModel>
+    <CActorUnit id="AP_EvolutionChamber" parent="ZergBuildingEx" unitName="AP_EvolutionChamber">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <Model value="EvolutionChamber"/>
+        <BuildModel value="EvolutionChamber"/>
+        <DeathArray index="Normal" ModelLink="EvolutionChamberDeath" SoundLink="EvolutionChamber_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="EvolutionChamberDeathUnderConstruction" SoundLink="EvolutionChamber_Explode"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PlacementModel value="EvolutionChamberPlacement"/>
+        <PortraitModel value="EvolutionChamberPortrait"/>
+        <BarOffset value="95"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-EvolutionChamber.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-evolutionchamber.dds"/>
+        <SoundArray index="Ready" value="EvolutionChamber_Ready"/>
+        <SoundArray index="What" value="EvolutionChamber_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-evolutionchamber.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-EvolutionChamber.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -21774,6 +21796,7 @@
         <On Terms="UnitCreation.AP_HydraliskDen" Send="Create"/>
         <On Terms="UnitCreation.AP_RoachWarren" Send="Create"/>
         <On Terms="UnitCreation.AP_BanelingNest" Send="Create"/>
+        <On Terms="UnitCreation.AP_EvolutionChamber" Send="Create"/>
     </CActorStateMonitor>
     <CActorStateMonitor id="ZergBloodSmallBuilding">
         <!-- Override -->
@@ -21791,5 +21814,6 @@
         <On Terms="UnitCreation.AP_HydraliskDen" Send="Create"/>
         <On Terms="UnitCreation.AP_RoachWarren" Send="Create"/>
         <On Terms="UnitCreation.AP_BanelingNest" Send="Create"/>
+        <On Terms="UnitCreation.AP_EvolutionChamber" Send="Create"/>
     </CActorStateMonitor>
 </Catalog>

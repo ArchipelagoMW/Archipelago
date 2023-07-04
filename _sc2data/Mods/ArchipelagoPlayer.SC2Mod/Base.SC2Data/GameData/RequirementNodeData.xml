@@ -2453,4 +2453,19 @@
     <CRequirementCountUnit id="AP_CountUnitHiveCompleteOnly">
         <Count Link="AP_Hive" State="CompleteOnly"/>
     </CRequirementCountUnit>
+    <CRequirementAnd id="AP_AndCountUpgradeHotSHaveSporeCrawlerCompleteOnlyCountUnitEvolutionChamberCompleteOnly">
+        <OperandArray value="AP_CountUpgradeHotSHaveSporeCrawlerCompleteOnly"/>
+        <OperandArray value="AP_CountUnitEvolutionChamberCompleteOnly"/>
+    </CRequirementAnd>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveSporeCrawlerCompleteOnly">
+        <Count Link="AP_HotSHaveSporeCrawler" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
+    <CRequirementCountUnit id="AP_CountUnitEvolutionChamberCompleteOnly">
+        <Count Link="AP_EvolutionChamber" State="CompleteOnly"/>
+    </CRequirementCountUnit>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveAberrationCompleteOnly">
+        <Count Link="AP_HotSHaveAberration" State="CompleteOnly"/>
+        <Flags index="TechTreeCheat" value="0"/>
+    </CRequirementCountUpgrade>
 </Catalog>

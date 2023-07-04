@@ -2561,4 +2561,65 @@
         <AlertIcon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_AberrationPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-aberration.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-aberration.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SporeCrawlerPassive">
+        <Icon value="Assets\Textures\btn-building-zerg-sporecrawler.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-sporecrawler.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_zerggroundarmor1">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level1.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_zerggroundarmor2">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level2.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zerggroundarmor1"/>
+    </CButton>
+    <CButton id="AP_zerggroundarmor3">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-groundcarapace-level3.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zerggroundarmor1"/>
+    </CButton>
+    <CButton id="AP_zergmeleeweapons1">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level1.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_zergmeleeweapons2">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level2.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zergmeleeweapons1"/>
+    </CButton>
+    <CButton id="AP_zergmeleeweapons3">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-meleeattacks-level3.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zergmeleeweapons1"/>
+    </CButton>
+    <CButton id="AP_zergmissileweapons1">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level1.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level1.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_zergmissileweapons2">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level2.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zergmissileweapons1"/>
+    </CButton>
+    <CButton id="AP_zergmissileweapons3">
+        <Icon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level3.dds"/>
+        <AlertIcon value="Assets\Textures\btn-upgrade-zerg-missileattacks-level3.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value="zergmissileweapons1"/>
+    </CButton>
 </Catalog>
