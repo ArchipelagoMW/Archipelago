@@ -36,6 +36,8 @@ location_table: Dict[int, LocationDict] = {
              'region': 4},
     200635: {'name': "New Muldul: Pot near Vault",
              'region': 4},
+    200785: {'name': "New Muldul: Pot above Vault",
+             'region': 4},
     200636: {'name': "New Muldul: Underground Pot",
              'region': 4},
     200637: {'name': "New Muldul: Underground Chest",

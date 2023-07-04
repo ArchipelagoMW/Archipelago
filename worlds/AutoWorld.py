@@ -11,6 +11,7 @@ from BaseClasses import CollectionState
 from Options import AssembleOptions
 
 if TYPE_CHECKING:
+    import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
 
@@ -202,6 +203,9 @@ class World(metaclass=AutoWorldRegister):
     """set of all potential item names"""
     location_names: ClassVar[Set[str]]
     """set of all potential location names"""
+
+    random: random.Random
+    """This world's random object. Should be used for any randomization needed in world for this player slot."""
 
     zip_path: ClassVar[Optional[pathlib.Path]] = None
     """If loaded from a .apworld, this is the Path to it."""

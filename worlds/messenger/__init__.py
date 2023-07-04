@@ -49,17 +49,14 @@ class MessengerWorld(World):
     base_offset = 0xADD_000
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(ALL_ITEMS, base_offset)}
-    seal_locs = [seal for seals in SEALS.values() for seal in seals]
-    mega_shard_locs = [shard for shards in MEGA_SHARDS.values() for shard in shards]
-    shop_locs = [f"The Shop - {shop_loc}" for shop_loc in SHOP_ITEMS]
     location_name_to_id = {location: location_id
                            for location_id, location in
                            enumerate([
                                *ALWAYS_LOCATIONS,
-                               *seal_locs,
-                               *mega_shard_locs,
+                               *[seal for seals in SEALS.values() for seal in seals],
+                               *[shard for shards in MEGA_SHARDS.values() for shard in shards],
                                *BOSS_LOCATIONS,
-                               *shop_locs,
+                               *[f"The Shop - {shop_loc}" for shop_loc in SHOP_ITEMS],
                                *FIGURINES,
                                "Money Wrench",
                            ], base_offset)}
@@ -105,7 +102,7 @@ class MessengerWorld(World):
             # make a list of all notes except those in the player's defined starting inventory, and adjust the
             # amount we need to put in the itempool and precollect based on that
             notes = [note for note in NOTES if note not in self.multiworld.precollected_items[self.player]]
-            self.multiworld.per_slot_randoms[self.player].shuffle(notes)
+            self.random.shuffle(notes)
             precollected_notes_amount = NotesNeeded.range_end - \
                 self.multiworld.notes_needed[self.player] - \
                 (len(NOTES) - len(notes))
@@ -127,13 +124,15 @@ class MessengerWorld(World):
             for i in range(self.required_seals):
                 seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
-
+        
+        remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
+        filler_pool = dict(list(FILLER.items())[2:]) if remaining_fill < 10 else FILLER
         itempool += [self.create_item(filler_item)
                      for filler_item in
-                     self.multiworld.random.choices(
-                         list(FILLER),
-                         weights=list(FILLER.values()),
-                         k=len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
+                     self.random.choices(
+                         list(filler_pool),
+                         weights=list(filler_pool.values()),
+                         k=remaining_fill
                      )]
 
         self.multiworld.itempool += itempool
