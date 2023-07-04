@@ -258,6 +258,8 @@ Abil/Name/AP_Unsiege=Unsiege
 Abil/Name/AP_UpgradeToGreaterSpire=Morph Building (Spire -> Greater Spire)
 Abil/Name/AP_UpgradeToGreaterSpireBroodlord=Upgrade To Greater Spire Brood Lord
 Abil/Name/AP_UpgradeToGreaterSpireViper=Upgrade To Greater Spire Viper
+Abil/Name/AP_UpgradeToImpalerDen=Upgrade To Impaler Den
+Abil/Name/AP_UpgradeToLurkerDen=Morph Building (Hydralisk Den -> Lurker Den)
 Abil/Name/AP_UpgradeToOrbital=Morph Building (COCE -> Orbital Command)
 Abil/Name/AP_UpgradeToPlanetaryFortress=Morph Building (COCE -> Planetary Fortress)
 Abil/Name/AP_UpgradeToRoboticsFacilityWarp=Upgrade To Robotics Facility Warp
@@ -300,8 +302,6 @@ Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
 Abil/Name/MercCompoundResearch2=Research
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
-Abil/Name/AP_UpgradeToImpalerDen=Upgrade To Impaler Den
-Abil/Name/AP_UpgradeToLurkerDen=Morph Building (Hydralisk Den -> Lurker Den)
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -647,9 +647,12 @@ Button/Name/AP_HotSRoachDamage=Hydriodic Bile
 Button/Name/AP_HotSRoachShield=Adaptive Plating
 Button/Name/AP_HunterCliffJumper=Cliff Jumper
 Button/Name/AP_HunterSeekerMissile=Seeker Missile
+Button/Name/AP_HydraliskDenImpalerPassive=Hydralisk
+Button/Name/AP_HydraliskDenLurkerPassive=Hydralisk
 Button/Name/AP_HydraliskFrenzy=Frenzy
 Button/Name/AP_HydraliskImpalerPassive=Hydralisk
 Button/Name/AP_HydraliskLurkerPassive=Hydralisk
+Button/Name/AP_HydraliskPassive=Hydralisk
 Button/Name/AP_Hyperjump=Tactical Jump
 Button/Name/AP_Immortal=Warp In Immortal
 Button/Name/AP_ImmortalAiur=Warp in Immortal
@@ -660,6 +663,7 @@ Button/Name/AP_ImmortalTaldarim=Warp in Vanguard
 Button/Name/AP_ImmortalTaldarimScatterCannon=Scatter Cannon
 Button/Name/AP_ImmortalityProtocol=Immortality Protocol
 Button/Name/AP_Impaler=Morph to Impaler
+Button/Name/AP_ImpalerDen=Mutate into Impaler Den
 Button/Name/AP_ImpalerPassive=Impaler
 Button/Name/AP_IncineratorNozzles=Incinerator Gauntlets
 Button/Name/AP_InfernalPreIgniter=Thermite Filaments
@@ -683,6 +687,7 @@ Button/Name/AP_LocustFlyingLaunch=Spawn Locusts
 Button/Name/AP_LocustLaunch=Spawn Locusts
 Button/Name/AP_LocustSpeed=Locust Speed
 Button/Name/AP_Lurker=Morph to Lurker
+Button/Name/AP_LurkerDen=Mutate into Lurker Den
 Button/Name/AP_LurkerPassive=Lurker
 Button/Name/AP_MaelstromRounds=Maelstrom Rounds
 Button/Name/AP_MagFieldLaunchers=Mag-Field Launchers
@@ -949,11 +954,9 @@ Button/Name/AP_zergflyerarmor3=Evolve Flyer Carapace Level 3
 Button/Name/AP_zergflyerattack1=Evolve Flyer Attacks Level 1
 Button/Name/AP_zergflyerattack2=Evolve Flyer Attacks Level 2
 Button/Name/AP_zergflyerattack3=Evolve Flyer Attacks Level 3
-Button/Name/AP_HydraliskDenImpalerPassive=Hydralisk
-Button/Name/AP_HydraliskDenLurkerPassive=Hydralisk
-Button/Name/AP_HydraliskPassive=Hydralisk
-Button/Name/AP_ImpalerDen=Mutate into Impaler Den
-Button/Name/AP_LurkerDen=Mutate into Lurker Den
+Button/Name/AP_RoachCorpserPassive=Roach
+Button/Name/AP_RoachPassive=Roach
+Button/Name/AP_RoachVilePassive=Roach
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1153,10 +1156,14 @@ Button/Tooltip/AP_HotSSplitterlingMedium=Suicide unit. Deals damage over a small
 Button/Tooltip/AP_HunterCliffJumper=This unit can jump up and down cliffs.
 Button/Tooltip/AP_HunterSeekerMissile=Missile that chases its target. Has enough fuel for <d ref="Behavior,AP_SeekerMissileTimeout,Duration"/> seconds. Deals up to <d ref="Effect,AP_SeekerMissileDamage,Amount"/> area damage.
 Button/Tooltip/AP_Hydralisk=High-damage ranged unit.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_HydraliskDen=<c val="ffff8a">Enables:</c><n/>- Hydralisks from Larvae
+Button/Tooltip/AP_HydraliskDenImpalerPassive=Impaler Strain<n/><n/>Hydralisk Den enables you to morph Hydralisks.
+Button/Tooltip/AP_HydraliskDenLurkerPassive=Lurker Strain<n/><n/>Hydralisk Den enables you to morph Hydralisks.
 Button/Tooltip/AP_HydraliskFrenzy=Attack speed increased by 50% for <d ref="Behavior,AP_HydraliskFrenzy,Duration"/> seconds.
 Button/Tooltip/AP_HydraliskImpalerPassive=Impaler Strain<n/><n/>Impaler Den enables you to morph Hydralisks.
 Button/Tooltip/AP_HydraliskLurkerEgg=This cocoon contains a Hydralisk that is morphing into a Lurker.
 Button/Tooltip/AP_HydraliskLurkerPassive=Lurker Strain<n/><n/>Lurker Den enables you to morph Hydralisks.
+Button/Tooltip/AP_HydraliskPassive=Hydralisk Den enables you to morph Hydralisks.
 Button/Tooltip/AP_Hyperjump=After <d time="6"/>, warps to the target location. Battlecruiser is invulnerable while warping.<n/><n/><c val="#ColorAttackInfo">Does not require vision.</c>
 Button/Tooltip/AP_Immortal=Assault strider. Can use Barrier to absorb damage.<n/><n/><c val="ffff8a">Can attack ground units.</c>
 Button/Tooltip/AP_ImmortalAiur=Aiur Faction<n/>Assault strider. Can use Barrier to absorb damage.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
@@ -1517,12 +1524,10 @@ Button/Tooltip/AP_zergflyerarmor3=Maximizes the armor of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack1=Upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack2=Further upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack3=Maximizes the attacks of all Zerg air units.
-Button/Tooltip/AP_HydraliskDen=<c val="ffff8a">Enables:</c><n/>- Hydralisks from Larvae
-Button/Tooltip/AP_HydraliskDenImpalerPassive=Impaler Strain<n/><n/>Hydralisk Den enables you to morph Hydralisks.
-Button/Tooltip/AP_HydraliskDenLurkerPassive=Lurker Strain<n/><n/>Hydralisk Den enables you to morph Hydralisks.
-Button/Tooltip/AP_HydraliskPassive=Hydralisk Den enables you to morph Hydralisks.
-Button/Tooltip/AP_ImpalerDen=<c val="ffff8a">Enables:</c><n/>- Impalers from Hydralisks
-Button/Tooltip/AP_LurkerDen=<c val="ffff8a">Enables:</c><n/>- Lurkers from Hydralisks
+Button/Tooltip/AP_RoachCorpserPassive=Corpser Strain<n/><n/>Roach Warren enables you to morph Roaches.
+Button/Tooltip/AP_RoachPassive=Roach Warren enables you to morph Roaches.
+Button/Tooltip/AP_RoachVilePassive=Vile Strain<n/><n/>Roach Warren enables you to morph Roaches.
+Button/Tooltip/AP_RoachWarren=<c val="ffff8a">Enables:</c><n/>- Roaches from Larvae
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -2866,6 +2871,7 @@ Unit/Name/AP_HunterSeekerWeapon=Seeker
 Unit/Name/AP_HurricaneMissileLeft=Hurricane Missile Left
 Unit/Name/AP_HurricaneMissileRight=Hurricane Missile Right
 Unit/Name/AP_Hydralisk=Hydralisk
+Unit/Name/AP_HydraliskDen=Hydralisk Den
 Unit/Name/AP_HydraliskImpaler=Hydralisk
 Unit/Name/AP_HydraliskLurker=Hydralisk
 Unit/Name/AP_HydraliskLurkerEgg=Lurker Cocoon
@@ -3052,8 +3058,8 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
-Unit/Name/AP_HydraliskDen=Hydralisk Den
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
+Unit/Name/AP_RoachWarren=Roach Warren
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain

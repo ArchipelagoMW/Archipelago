@@ -2531,4 +2531,19 @@
         <AlertIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_RoachCorpserPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-roach-corpser.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-roach-corpser.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_RoachPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-roach.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-roach.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_RoachVilePassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-roach-vile.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-roach-vile.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

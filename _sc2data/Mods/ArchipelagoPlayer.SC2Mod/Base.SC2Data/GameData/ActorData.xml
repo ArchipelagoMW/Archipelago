@@ -13758,14 +13758,14 @@
         <On Terms="AnimDone.*.Complete; AnimName Morph" Send="Destroy"/>
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="AnimClear Morph"/>
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>
-<!--        <On Terms="AbilMorph.*.Start; MorphTo LurkerDenMP" Send="Create LurkerDenMPMorph"/>-->
-<!--        <On Terms="AbilMorph.*.Start; MorphTo LurkerDenMP" Send="Signal MorphMP"/>-->
-<!--        <On Terms="Signal.*.MorphMP" Send="AnimPlay MorphMP Morph"/>-->
-<!--        <On Terms="AnimDone.*.Complete; AnimName MorphMP" Send="Create LurkerDenMP"/>-->
-<!--        <On Terms="AnimDone.*.Complete; AnimName MorphMP; IsStatus MorphAnim 0" Target="LurkerDenMP" Send="AnimPlay Waiting Build,A,Start PlayForever,NonLooping 0.000000 0.000000 0.000000"/>-->
-<!--        <On Terms="AnimDone.*.Complete; AnimName MorphMP" Send="Destroy"/>-->
-<!--        <On Terms="AbilMorph.*.Cancel; MorphTo LurkerDenMP" Send="AnimClear MorphMP"/>-->
-<!--        <On Terms="AbilMorph.*.Cancel; MorphTo LurkerDenMP" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>-->
+        <!--        <On Terms="AbilMorph.*.Start; MorphTo LurkerDenMP" Send="Create LurkerDenMPMorph"/>-->
+        <!--        <On Terms="AbilMorph.*.Start; MorphTo LurkerDenMP" Send="Signal MorphMP"/>-->
+        <!--        <On Terms="Signal.*.MorphMP" Send="AnimPlay MorphMP Morph"/>-->
+        <!--        <On Terms="AnimDone.*.Complete; AnimName MorphMP" Send="Create LurkerDenMP"/>-->
+        <!--        <On Terms="AnimDone.*.Complete; AnimName MorphMP; IsStatus MorphAnim 0" Target="LurkerDenMP" Send="AnimPlay Waiting Build,A,Start PlayForever,NonLooping 0.000000 0.000000 0.000000"/>-->
+        <!--        <On Terms="AnimDone.*.Complete; AnimName MorphMP" Send="Destroy"/>-->
+        <!--        <On Terms="AbilMorph.*.Cancel; MorphTo LurkerDenMP" Send="AnimClear MorphMP"/>-->
+        <!--        <On Terms="AbilMorph.*.Cancel; MorphTo LurkerDenMP" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>-->
         <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_ImpalerDen" Send="Create AP_ImpalerDenMorph"/>
         <On Terms="AbilMorph.*.Start; MorphTo AP_ImpalerDen" Send="Signal MorphImpaler"/>
@@ -15349,6 +15349,37 @@
         <HostSiteOps Ops="SOpAttachOrigin"/>
         <Model value="PurificationNovaRangeIndicator"/>
     </CActorModel>
+    <CActorUnit id="AP_RoachWarren" parent="ZergBuildingEx" unitName="AP_RoachWarren">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit HasZergGenericDeath" Send="DeathCustomize Detached"/>
+<!--        <On Terms="AbilMorph.*.Start; MorphTo ImpalerDen" Send="Create ImpalerDenMorph"/>-->
+<!--        <On Terms="AbilMorph.*.Start; MorphTo ImpalerDen" Send="Signal Morph"/>-->
+        <On Terms="Signal.*.Morph" Send="AnimPlay Morph Build,C,Stand"/>
+        <On Terms="AnimDone.*.Complete; AnimName Morph" Send="Create ImpalerDen"/>
+        <On Terms="AnimDone.*.Complete; AnimName Morph" Target="ImpalerDen" Send="AnimPlay Waiting Build,A,Start PlayForever,NonLooping 0.000000 0.000000 0.000000"/>
+        <On Terms="AnimDone.*.Complete; AnimName Morph" Send="Destroy"/>
+<!--        <On Terms="AbilMorph.*.Cancel; MorphTo ImpalerDen" Send="AnimClear Morph"/>-->
+<!--        <On Terms="AbilMorph.*.Cancel; MorphTo ImpalerDen" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>-->
+<!--        <On Terms="AbilMorph.*.Cancel; MorphTo ImpalerDen" Send="SetOpacity 1.000000"/>-->
+        <Model value="RoachWarren"/>
+        <BuildModel value="RoachWarren"/>
+        <DeathArray index="Normal" ModelLink="RoachWarrenDeath" SoundLink=""/>
+        <DeathArray index="UnderConstruction" ModelLink="RoachWarrenDeathUnderConstruction" SoundLink="RoachWarren_Explode"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PlacementModel value="RoachWarrenPlacement"/>
+        <PortraitModel value="RoachWarrenPortrait"/>
+        <BarOffset value="145"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-RoachWarren.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-roachwarren.dds"/>
+        <SoundArray index="Ready" value="RoachWarren_Ready"/>
+        <SoundArray index="What" value="RoachWarren_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-roachwarren.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-RoachWarren.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorSound id="SOAMothershipv4WarpAwaySound2" parent="SoundOneShot">
         <Sound value="Mothership_RecallStart"/>
     </CActorSound>
@@ -21719,6 +21750,7 @@
         <On Terms="UnitCreation.AP_ImpalerDen" Send="Create"/>
         <On Terms="UnitCreation.AP_InfestationPit" Send="Create"/>
         <On Terms="UnitCreation.AP_HydraliskDen" Send="Create"/>
+        <On Terms="UnitCreation.AP_RoachWarren" Send="Create"/>
     </CActorStateMonitor>
     <CActorStateMonitor id="ZergBloodSmallBuilding">
         <!-- Override -->
@@ -21734,5 +21766,6 @@
         <On Terms="UnitCreation.AP_InfestationPit" Send="Create"/>
         <On Terms="UnitCreation.AP_Spire" Send="Create"/>
         <On Terms="UnitCreation.AP_HydraliskDen" Send="Create"/>
+        <On Terms="UnitCreation.AP_RoachWarren" Send="Create"/>
     </CActorStateMonitor>
 </Catalog>
