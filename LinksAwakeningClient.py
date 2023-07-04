@@ -311,8 +311,11 @@ class LinksAwakeningClient():
         self.retroarch_port = retroarch_port
         pass
 
+    stop_bizhawk_spam = False
     async def wait_for_retroarch_connection(self):
-        logger.info("Waiting on connection to Retroarch...")
+        if not self.stop_bizhawk_spam:
+            logger.info("Waiting on connection to Retroarch...")
+            self.stop_bizhawk_spam = True
         self.gameboy = RAGameboy(self.retroarch_address, self.retroarch_port)
 
         while True:
@@ -342,7 +345,7 @@ class LinksAwakeningClient():
             except (BlockingIOError, TimeoutError, ConnectionResetError):
                 await asyncio.sleep(1.0)
                 pass
-
+        self.stop_bizhawk_spam = False
     async def reset_auth(self):
         auth = binascii.hexlify(await self.gameboy.async_read_memory(0x0134, 12)).decode()
         self.auth = auth
@@ -584,7 +587,8 @@ class LinksAwakeningContext(CommonContext):
         while True:
             try:
                 # TODO: cancel all client tasks
-                logger.info("(Re)Starting game loop")
+                if not self.stop_bizhawk_spam:
+                    logger.info("(Re)Starting game loop")
                 self.found_checks.clear()
                 # On restart of game loop, clear all checks, just in case we swapped ROMs
                 # this isn't totally neccessary, but is extra safety against cross-ROM contamination
