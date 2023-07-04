@@ -150,7 +150,8 @@ class Base:
                 _ = self.type({})
 
         def test_no_locations(self) -> None:
-            with warnings.catch_warnings(action="ignore"):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
                 store = self.type({
                     1: {},
                 })
