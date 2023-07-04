@@ -17,6 +17,7 @@ from worlds import AutoWorld
 class TestInvertedOWG(TestBase):
     def setUp(self):
         self.multiworld = MultiWorld(1)
+        self.multiworld.set_seed(None)
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
             setattr(args, name, {1: option.from_any(option.default)})
