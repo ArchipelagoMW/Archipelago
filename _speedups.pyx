@@ -5,6 +5,7 @@
 Provides faster implementation of some core parts.
 This is deliberately .pyx because using a non-compiled "pure python" may be slower.
 """
+
 # pip install cython cymem
 import cython
 from cpython cimport PyObject
