@@ -2254,12 +2254,15 @@ async def main(args: argparse.Namespace):
                 if not isinstance(e, ImportError):
                     logging.error(f"Failed to load tkinter ({e})")
                 logging.info("Pass a multidata filename on command line to run headless.")
-                exit(1)
+                # when cx_Freeze'd the built-in exit is not available, so we import sys.exit instead
+                import sys
+                sys.exit(1)
             raise
 
         if not data_filename:
             logging.info("No file selected. Exiting.")
-            exit(1)
+            import sys
+            sys.exit(1)
 
     try:
         ctx.load(data_filename, args.use_embedded_options)

@@ -7,7 +7,7 @@ import tempfile
 import time
 import zipfile
 import zlib
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
@@ -15,18 +15,9 @@ from Fill import balance_multiworld_progression, distribute_items_restrictive, d
 from Options import StartInventoryPool
 from Utils import __version__, get_options, output_path, version_tuple
 from worlds import AutoWorld
-from worlds.alttp.Regions import is_main_entrance
-from worlds.alttp.Shops import FillDisabledShopSlots
-from worlds.alttp.SubClasses import LTTPRegionType
 from worlds.generic.Rules import exclusion_rules, locality_rules
 
 __all__ = ["main"]
-
-ordered_areas = (
-    'Light World', 'Dark World', 'Hyrule Castle', 'Agahnims Tower', 'Eastern Palace', 'Desert Palace',
-    'Tower of Hera', 'Palace of Darkness', 'Swamp Palace', 'Skull Woods', 'Thieves Town', 'Ice Palace',
-    'Misery Mire', 'Turtle Rock', 'Ganons Tower', "Total"
-)
 
 
 def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = None):
@@ -313,35 +304,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             er_hint_data: Dict[int, Dict[int, str]] = {}
             AutoWorld.call_all(world, 'extend_hint_information', er_hint_data)
 
-            checks_in_area = {player: {area: list() for area in ordered_areas}
-                              for player in range(1, world.players + 1)}
-
-            for player in range(1, world.players + 1):
-                checks_in_area[player]["Total"] = 0
-
-            for location in world.get_filled_locations():
-                if type(location.address) is int:
-                    if location.game != "A Link to the Past":
-                        checks_in_area[location.player]["Light World"].append(location.address)
-                    else:
-                        main_entrance = location.parent_region.get_connecting_entrance(is_main_entrance)
-                        if location.parent_region.dungeon:
-                            dungeonname = {'Inverted Agahnims Tower': 'Agahnims Tower',
-                                           'Inverted Ganons Tower': 'Ganons Tower'} \
-                                .get(location.parent_region.dungeon.name, location.parent_region.dungeon.name)
-                            checks_in_area[location.player][dungeonname].append(location.address)
-                        elif location.parent_region.type == LTTPRegionType.LightWorld:
-                            checks_in_area[location.player]["Light World"].append(location.address)
-                        elif location.parent_region.type == LTTPRegionType.DarkWorld:
-                            checks_in_area[location.player]["Dark World"].append(location.address)
-                        elif main_entrance.parent_region.type == LTTPRegionType.LightWorld:
-                            checks_in_area[location.player]["Light World"].append(location.address)
-                        elif main_entrance.parent_region.type == LTTPRegionType.DarkWorld:
-                            checks_in_area[location.player]["Dark World"].append(location.address)
-                    checks_in_area[location.player]["Total"] += 1
-
-            FillDisabledShopSlots(world)
-
             def write_multidata():
                 import NetUtils
                 slot_data = {}
@@ -400,6 +362,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     game_world.game: worlds.network_data_package["games"][game_world.game]
                     for game_world in world.worlds.values()
                 }
+
+                checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
 
                 multidata = {
                     "slot_data": slot_data,

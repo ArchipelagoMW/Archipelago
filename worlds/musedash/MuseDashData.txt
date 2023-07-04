@@ -74,7 +74,7 @@ snooze|43-19|Just as Planned  Plus|False|5|7|10|
 Kuishinbo Hacker feat.Kuishinbo Akachan|43-20|Just as Planned  Plus|True|5|7|9|
 Inu no outa|43-21|Just as Planned  Plus|True|3|5|7|
 Prism Fountain|43-22|Just as Planned  Plus|True|7|9|11|
-Gospel|43-23|Just as Planned  Plus|False|4|6|10|
+Gospel|43-23|Just as Planned  Plus|False|4|6|9|
 East Ai Li Lovely|62-0|Happy Otaku Pack Vol.17|False|2|4|7|
 Mori Umi no Fune|62-1|Happy Otaku Pack Vol.17|True|5|7|9|
 Ooi|62-2|Happy Otaku Pack Vol.17|True|5|7|10|
@@ -450,3 +450,9 @@ Love Patrol|63-2|MUSE RADIO FM104|True|3|5|7|
 Mahorova|63-3|MUSE RADIO FM104|True|3|5|8|
 Yoru no machi|63-4|MUSE RADIO FM104|True|1|4|7|
 INTERNET YAMERO|63-5|MUSE RADIO FM104|True|6|8|10|
+Abracadabra|43-24|Just as Planned  Plus|False|6|8|10|
+Squalldecimator feat. EZ-Ven|43-25|Just as Planned  Plus|True|5|7|9|
+Amateras Rhythm|43-26|Just as Planned  Plus|True|6|8|11|
+Record one's Dream|43-27|Just as Planned  Plus|False|4|7|10|
+Lunatic|43-28|Just as Planned  Plus|True|5|8|10|
+Jiumeng|43-29|Just as Planned  Plus|True|3|6|8|

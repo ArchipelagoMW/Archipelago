@@ -19,7 +19,9 @@ class TestIncludedSongSizeDoesntGrow(MuseDashTestBase):
 
     def test_included_songs_plando(self) -> None:
         muse_dash_world = self.multiworld.worlds[1]
+        songs = muse_dash_world.included_songs.copy()
+        songs.append(muse_dash_world.victory_song_name)
 
-        assert "Operation Blade" in muse_dash_world.included_songs, f"Logical songs is missing a plando song"
-        assert "Autumn Moods" in muse_dash_world.included_songs, f"Logical songs is missing a plando song"
-        assert "Fireflies" in muse_dash_world.included_songs, f"Logical songs is missing a plando song"
+        assert "Operation Blade" in songs, "Logical songs is missing a plando song: Operation Blade"
+        assert "Autumn Moods" in songs, "Logical songs is missing a plando song: Autumn Moods"
+        assert "Fireflies" in songs, "Logical songs is missing a plando song: Fireflies"
