@@ -638,6 +638,8 @@ class KDL3DeltaPatch(APDeltaPatch):
     def patch(self, target: str):
         super().patch(target)
         rom = RomData(target)
+        target_language = rom.read_byte(0x3C020)
+        rom.write_byte(0x7FD9, target_language)
         write_heart_star_sprites(rom)
         if rom.read_bytes(0x3D014, 1)[0] > 0:
             stages = [struct.unpack("HHHHHHH", rom.read_bytes(0x3D020 + x * 14, 14)) for x in range(5)]
@@ -1059,8 +1061,8 @@ def patch_rom(multiworld, player, rom, heart_stars_required, boss_requirements, 
     from Main import __version__
     rom.name = bytearray(f'KDL3{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
-    rom.write_bytes(0x7FC0, rom.name)
-    rom.write_byte(0x7FD9, multiworld.game_language[player].value)
+    rom.write_bytes(0x3C000, rom.name)
+    rom.write_byte(0x3C020, multiworld.game_language[player].value)
 
     # handle palette
     if multiworld.kirby_flavor_preset[player] != 0:
