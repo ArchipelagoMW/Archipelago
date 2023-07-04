@@ -81,7 +81,7 @@ class Base:
             self.assertEqual(sorted(self.store[1].items())[0][1], self.store[1][11])
 
         def test_find_item(self):
-            self.assertEqual(sorted(self.store.find_item({}, 99)), [])
+            self.assertEqual(sorted(self.store.find_item(set(), 99)), [])
             self.assertEqual(sorted(self.store.find_item({3}, 1)), [])
             self.assertEqual(sorted(self.store.find_item({5}, 99)), [])
             self.assertEqual(sorted(self.store.find_item({3}, 99)),
