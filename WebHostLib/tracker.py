@@ -341,7 +341,7 @@ def _get_player_tracker(tracker: UUID, tracked_team: int, tracked_player: int, w
         precollected_items, games, slot_data, groups, saving_second, custom_locations, custom_items = \
         get_static_room_data(room)
     player_name = names[tracked_team][tracked_player - 1]
-    location_to_area = player_location_to_area[tracked_player]
+    location_to_area = player_location_to_area.get(tracked_player, {})
     inventory = collections.Counter()
     checks_done = {loc_name: 0 for loc_name in default_locations}
 
@@ -1508,8 +1508,8 @@ def get_LttP_multiworld_tracker(tracker: UUID):
                 checks_done[team][player][player_location_to_area[player][location]] += 1
                 checks_done[team][player]["Total"] += 1
         percent_total_checks_done[team][player] = int(
-            checks_done[team][player]["Total"] / seed_checks_in_area[player]["Total"] * 100) if \
-        seed_checks_in_area[player]["Total"] else 100
+            checks_done[team][player]["Total"] / len(player_locations) * 100) if \
+        player_locations else 100
 
     for (team, player), game_state in multisave.get("client_game_state", {}).items():
         if player in groups:
