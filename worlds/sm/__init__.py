@@ -345,6 +345,18 @@ class SMWorld(World):
                 loc.address = loc.item.code = None
 
     def post_fill(self):
+        def get_player_ItemLocation(progression_only: bool):
+            return [
+                    ItemLocation(copy.copy(ItemManager.Items[
+                        itemLoc.item.type if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
+                        'ArchipelagoItem']),
+                        copy.copy(locationsDict[itemLoc.name] if itemLoc.game == self.game else
+                                    locationsDict[first_local_collected_loc.name]),
+                        itemLoc.item.player,
+                        True)
+                        for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player and (not progression_only or itemLoc.item.advancement)
+                    ]
+        
         # Having a sorted itemLocs from collection order is required for escapeTrigger when Tourian is Disabled.
         # We cant use stage_post_fill for this as its called after worlds' post_fill.
         # get_spheres could be cached in multiworld?
@@ -366,21 +378,12 @@ class SMWorld(World):
             #used to simulate received items
             first_local_collected_loc = next(itemLoc for itemLoc in SMWorld.spheres if itemLoc.player == self.player)
 
-            playerItemsItemLocs =   [
-                                    ItemLocation(copy.copy(ItemManager.Items[
-                                        itemLoc.item.type if isinstance(itemLoc.item, SMItem) and itemLoc.item.type in ItemManager.Items else
-                                        'ArchipelagoItem']),
-                                        copy.copy(locationsDict[itemLoc.name] if itemLoc.game == self.game else
-                                                  locationsDict[first_local_collected_loc.name]),
-                                        itemLoc.item.player,
-                                        True)
-                                        for itemLoc in SMWorld.spheres if itemLoc.item.player == self.player
-                                    ]
-            for itemLoc in playerItemsItemLocs:
+            playerItemsItemLocs = get_player_ItemLocation(False)
+            playerProgItemsItemLocs = get_player_ItemLocation(True)
+
+            for itemLoc in playerItemsItemLocs + playerProgItemsItemLocs:
                 if itemLoc.Item.Class == "Boss":
                     itemLoc.Item.Class = "Minor"
-
-            playerProgItemsItemLocs = [itemLoc for itemLoc in playerItemsItemLocs if itemLoc.item.advancement]
 
             escapeTrigger = (playerItemsItemLocs, playerProgItemsItemLocs, 'Full')
 
