@@ -12595,7 +12595,6 @@
         <TechAliasArray value="Alias_Spire"/>
         <GlossaryPriority value="244"/>
         <HotkeyCategory value="Unit/Category/ZergUnits"/>
-        <TechTreeUnlockedUnitArray value="BroodLord"/>
     </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
@@ -15550,6 +15549,5 @@
         <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
         <GlossaryPriority value="10"/>
         <HotkeyCategory value="Unit/Category/ZergUnits"/>
-        <TechTreeUnlockedUnitArray value="Ultralisk"/>
     </CUnit>
 </Catalog>
