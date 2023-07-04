@@ -7,11 +7,13 @@ from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
 
 
+ID_START = 158000
+
+
 class StaticWitnessLocations:
     """
     Witness Location Constants that stay consistent across worlds
     """
-    ID_START = 158000
 
     GENERAL_LOCATIONS = {
         "Tutorial Front Left",
