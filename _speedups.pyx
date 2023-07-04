@@ -205,14 +205,16 @@ cdef class LocationStore:
                             yield entry.sender, entry.location, entry.item, entry.receiver, entry.flags
 
     def get_for_player(self, slot: int) -> Dict[int, Set[int]]:
-        import collections
         cdef ap_player_t receiver = slot
-        all_locations: Dict[int, Set[int]] = collections.defaultdict(set)
+        all_locations: Dict[int, Set[int]] = {}
         with nogil:
             for entry in self.entries[:self.entry_count]:
                 if entry.receiver == receiver:
                     with gil:
-                        all_locations[entry.sender].add(entry.location)
+                        sender: int = entry.sender
+                        if sender not in all_locations:
+                            all_locations[sender] = set()
+                        all_locations[sender].add(entry.location)
         return all_locations
 
     if TYPE_CHECKING:
