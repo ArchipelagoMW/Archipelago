@@ -13617,7 +13617,7 @@
         <Aliases value="_UnitHuge"/>
         <On Terms="AbilMorph.*.Finish; MorphTo GreaterSpire" Send="Create"/>
         <On Terms="AbilMorph.*.Finish; MorphTo GreaterSpire" Send="AnimPlay Morph Morph 0 0.000000 0.000000 2.000000 AsDuration"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
         <Model value="GreaterSpire"/>
         <BuildModel value="GreaterSpireBuild"/>
         <DeathArray index="Normal" ModelLink="GreaterSpireDeath" SoundLink=""/>
