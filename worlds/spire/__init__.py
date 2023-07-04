@@ -53,8 +53,6 @@ class SpireWorld(World):
             event_item = SpireItem(item, self.player)
             self.multiworld.get_location(event, self.player).place_locked_item(event_item)
 
-
-
     def set_rules(self):
         set_rules(self.multiworld, self.player)
 
