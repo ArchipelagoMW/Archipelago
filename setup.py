@@ -57,6 +57,7 @@ if __name__ == "__main__":
 
 from worlds.LauncherComponents import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
+from Cython.Build import cythonize
 
 
 # On  Python < 3.10 LogicMixin is not currently supported.
@@ -69,7 +70,6 @@ non_apworlds: set = {
     "ChecksFinder",
     "Clique",
     "DLCQuest",
-    "Dark Souls III",
     "Final Fantasy",
     "Hollow Knight",
     "Hylics 2",
@@ -293,16 +293,26 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         sni_thread = threading.Thread(target=download_SNI, name="SNI Downloader")
         sni_thread.start()
 
-        # pre build steps
+        # pre-build steps
         print(f"Outputting to: {self.buildfolder}")
         os.makedirs(self.buildfolder, exist_ok=True)
         import ModuleUpdate
         ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
         ModuleUpdate.update(yes=self.yes)
 
+        # auto-build cython modules
+        build_ext = self.distribution.get_command_obj("build_ext")
+        build_ext.inplace = True
+        self.run_command("build_ext")
+
         # regular cx build
         self.buildtime = datetime.datetime.utcnow()
         super().run()
+
+        # delete in-place built modules, otherwise this interferes with future pyximport
+        for path in build_ext.get_output_mapping().values():
+            print(f"deleting temp {path}")
+            os.unlink(path)
 
         # need to finish download before copying
         sni_thread.join()
@@ -586,10 +596,10 @@ cx_Freeze.setup(
     version=f"{version_tuple.major}.{version_tuple.minor}.{version_tuple.build}",
     description="Archipelago",
     executables=exes,
-    ext_modules=[],  # required to disable auto-discovery with setuptools>=61
+    ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["worlds", "kivy"],
+            "packages": ["worlds", "kivy", "_speedups", "cymem"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
