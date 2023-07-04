@@ -6788,13 +6788,13 @@
         <GroupIcon>
             <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
         </GroupIcon>
-        <HeroIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <HeroIcon value="Assets\Textures\btn-unit-terran-autoturretblackops.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-buildingarmor.dds"/>
         <SoundArray index="Birth" value="Raven_AutoTurretBirth"/>
         <SoundArray index="Ready" value="Raven_AutoTurretReady"/>
         <SoundArray index="What" value="Raven_AutoTurretWhat"/>
         <UnitFlags index="ShowBlobShadow" value="0"/>
-        <UnitIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <UnitIcon value="Assets\Textures\btn-unit-terran-autoturretblackops.dds"/>
         <Wireframe>
             <Image value="Assets\Textures\Wireframe-Terran-AutoTurret.dds"/>
         </Wireframe>

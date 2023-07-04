@@ -2916,7 +2916,7 @@
         <Model value="Assets\Effects\Terran\MagrailMunition_Missile\MagrailMunition_Missile.m3"/>
     </CModel>
     <CModel id="AP_RailGunTurret" parent="Building" Race="Terran">
-        <Model value="Assets\Buildings\Terran\AutoTurret\AutoTurret.m3"/>
+        <Model value="Assets\Buildings\Terran\AutoTurret_BlackOps\AutoTurret_BlackOps.m3"/>
         <AttachProps Id="Ref_Hardpoint">
             <Keys index="Turret" value="0"/>
         </AttachProps>
@@ -2932,7 +2932,7 @@
         <UnitGlossaryCamera value="Star2CameraMid05"/>
     </CModel>
     <CModel id="AP_RailGunTurretDeath" parent="BuildingDeath">
-        <Model value="Assets\Buildings\Terran\AutoTurretDeath\AutoTurretDeath.m3"/>
+        <Model value="Assets\Buildings\Terran\AutoTurret_BlackOps_Death\AutoTurret_BlackOps_Death.m3"/>
         <LowQualityModel value="TerranBuildingDeathLow"/>
         <EditorCategories value="Race:Terran"/>
         <Radius value="-1.000000"/>
