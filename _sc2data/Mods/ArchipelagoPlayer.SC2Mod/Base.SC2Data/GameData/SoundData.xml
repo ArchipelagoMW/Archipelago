@@ -6900,4 +6900,17 @@
         <AssetArray File="Assets\Sounds\ShieldBattery_What.wav" FacialGroup=""/>
         <Volume value="-3.000000,-3.000000"/>
     </CSound>
+    <CSound id="AP_LurkerDen_Explode" parent="Combat">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionLarge0.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionLarge1.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionLarge2.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionLarge3.wav" Pitch="-3.000000,3.000000"/>
+        <AssetArray File="Assets\Sounds\Zerg\SharedEffects\Explosions\Zerg_ExplosionLarge4.wav" Pitch="-3.000000,3.000000"/>
+    </CSound>
+    <CSound id="AP_LurkerDen_What" parent="Voice">
+        <EditorCategories value="Race:Zerg"/>
+        <AssetArray File="Assets\Sounds\Zerg\LurkerDen\LurkerDen_What0.ogg"/>
+        <Volume value="-3.000000,-3.000000"/>
+    </CSound>
 </Catalog>

@@ -402,7 +402,11 @@
         <On Terms="UnitBirth.AP_Hydralisk" Send="TerrainSquibActivateGroup RippleStandard"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_Hydralisk; MorphFrom AP_HydraliskBurrowed" Send="TerrainSquibActivateGroup RippleStandard"/>
         <On Terms="AbilMorph.*.Finish; MorphTo AP_HydraliskBurrowed; MorphFrom AP_Hydralisk" Send="TerrainSquibDeactivate"/>
-        <On Terms="UnitHeightUpdate.*.Land" Send="Create Hydra_Land"/>
+        <On Terms="UnitHeightUpdate.*.Land" Send="Create AP_Hydra_Land"/>
+        <On Terms="AbilMorph.AP_MorphRoachToImpaler.Start; MorphFrom AP_Hydralisk; !AbilKey BurrowDown" Send="Destroy"/>
+        <On Terms="AbilMorph.AP_MorphRoachToImpaler.Finish; MorphTo AP_Hydralisk; !AbilKey BurrowUp" Send="Create"/>
+        <On Terms="AbilMorph.AP_MorphHydraliskToLurker.Finish; MorphTo AP_Hydralisk; !AbilKey BurrowUp" Send="Create"/>
+        <On Terms="AbilMorph.AP_MorphHydraliskToLurker.Start; MorphFrom AP_Hydralisk; !AbilKey BurrowDown" Send="Destroy"/>
         <Model value="Hydralisk"/>
         <ModelFlags index="OutlineEmitter" value="1"/>
         <EventDataSound Name="HydraliskAttackImpactMelee" Actor="UnitSound" Sound="Hydralisk_AttackImpactMelee"/>
@@ -13638,6 +13642,38 @@
             <Image value="Assets\Textures\Wireframe-Zerg-GreaterSpire.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorUnit id="AP_ImpalerDen" parent="ZergBuilding" unitName="AP_ImpalerDen">
+        <Aliases value="_ZergBuildingMorphModel"/>
+        <Aliases value="_UnitHuge"/>
+        <Macros value="QueueAnim"/>
+        <On Terms="UnitDeathCustomize; AnimPlaying Waiting" Send="DeathCustomize Upgrade"/>
+        <On Terms="ProgressLevel.AP_ImpalerDenMorph.Start; Level 2" Send="AnimClear Waiting"/>
+        <On Terms="ProgressLevel.AP_ImpalerDenMorph.Start; Level 2" Send="AnimPlay Morph Morph 0 0.000000"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_ImpalerDen" Send="Create AP_HydraliskDen"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_ImpalerDen" Target="AP_HydraliskDen" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_ImpalerDen" Send="Destroy"/>
+        <BuildModel value="AP_ImpalerDenBuild"/>
+        <DeathArray index="Normal" ModelLink="LurkerDenDeath" SoundLink="AP_LurkerDen_Explode"/>
+        <DeathCustoms ModelLink="ZergBuildingDeath" Name="Upgrade"/>
+        <PlacementSound value="Zerg_BuildingPlacement"/>
+        <PortraitModel value="OverlordPortrait"/>
+        <BarOffset value="140"/>
+        <BarWidth value="160"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerDen.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
+        <LifeArmorIcon value="Assets\Textures\btn-armor-zerg-building.dds"/>
+        <NameOffset value="110"/>
+        <SoundArray index="Ready" value="LurkerDen_Ready"/>
+        <SoundArray index="What" value="AP_LurkerDen_What"/>
+        <SoundArray index="Construction" value="Zerg_BuildingMorphWhat"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-LurkerDen.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorTurret id="KhaydarinMonolithTurret2">
         <On Terms="TurretEnable.AP_KhaydarinMonolith" Send="Create"/>
     </CActorTurret>
@@ -13667,7 +13703,7 @@
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Target="AP_HydraliskDen" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>
         <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="Destroy"/>
         <BuildModel value="AP_LurkerDenBuild"/>
-        <DeathArray index="Normal" ModelLink="AP_LurkerDenDeath" SoundLink="LurkerDen_Explode"/>
+        <DeathArray index="Normal" ModelLink="AP_LurkerDenDeath" SoundLink="AP_LurkerDen_Explode"/>
         <DeathCustoms ModelLink="ZergBuildingDeath" Name="Upgrade"/>
         <PlacementSound value="Zerg_BuildingPlacement"/>
         <PortraitModel value="OverlordPortrait"/>
@@ -13679,8 +13715,8 @@
         <HeroIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
         <LifeArmorIcon value="Assets\Textures\btn-armor-zerg-building.dds"/>
         <NameOffset value="110"/>
-        <SoundArray index="Ready" value="LurkerDen_What"/>
-        <SoundArray index="What" value="LurkerDen_What"/>
+        <SoundArray index="Ready" value="AP_LurkerDen_What"/>
+        <SoundArray index="What" value="AP_LurkerDen_What"/>
         <SoundArray index="Construction" value="Zerg_BuildingMorphWhat"/>
         <UnitFlags index="ShowBlobShadow" value="0"/>
         <UnitIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
@@ -21517,5 +21553,6 @@
         <On Terms="UnitCreation.AP_UltraliskCavern" Send="Create"/>
         <On Terms="UnitCreation.AP_GreaterSpire" Send="Create"/>
         <On Terms="UnitCreation.AP_LurkerDen" Send="Create"/>
+        <On Terms="UnitCreation.AP_ImpalerDen" Send="Create"/>
     </CActorStateMonitor>
 </Catalog>
