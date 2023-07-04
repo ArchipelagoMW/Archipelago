@@ -501,6 +501,8 @@ class LinksAwakeningContext(CommonContext):
         # The next time we try to connect, reset the game loop for new auth
         self.had_invalid_slot_data = True
         self.auth = None
+        # Don't try to autoreconnect, it will just fail
+        self.disconnected_intentionally = True
         CommonContext.event_invalid_slot(self)
 
     ENABLE_DEATHLINK = False
