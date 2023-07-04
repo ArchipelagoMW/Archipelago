@@ -2546,4 +2546,19 @@
         <AlertIcon value="Assets\Textures\btn-unit-zerg-roach-vile.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_BanelingHunterPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-baneling-hunter.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-baneling-hunter.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_BanelingPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_BanelingSplitterlingPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-baneling.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

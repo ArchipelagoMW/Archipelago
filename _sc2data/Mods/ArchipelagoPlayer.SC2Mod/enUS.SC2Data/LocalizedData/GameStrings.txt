@@ -815,6 +815,9 @@ Button/Name/AP_ResearchMagFieldLaunchers=Research Mag-Field Launchers
 Button/Name/AP_ResearchSpiderMinesSC1=Research Spider Mines
 Button/Name/AP_RetributionField=Lightning Field
 Button/Name/AP_RipwaveMissiles=Ripwave Missiles
+Button/Name/AP_RoachCorpserPassive=Roach
+Button/Name/AP_RoachPassive=Roach
+Button/Name/AP_RoachVilePassive=Roach
 Button/Name/AP_RuptureUpgrade=Rupture
 Button/Name/AP_SOAMothershipBlink=Blink
 Button/Name/AP_SOAMothershipLineAttack=Thermal Lance
@@ -954,9 +957,9 @@ Button/Name/AP_zergflyerarmor3=Evolve Flyer Carapace Level 3
 Button/Name/AP_zergflyerattack1=Evolve Flyer Attacks Level 1
 Button/Name/AP_zergflyerattack2=Evolve Flyer Attacks Level 2
 Button/Name/AP_zergflyerattack3=Evolve Flyer Attacks Level 3
-Button/Name/AP_RoachCorpserPassive=Roach
-Button/Name/AP_RoachPassive=Roach
-Button/Name/AP_RoachVilePassive=Roach
+Button/Name/AP_BanelingHunterPassive=Baneling
+Button/Name/AP_BanelingPassive=Baneling
+Button/Name/AP_BanelingSplitterlingPassive=Baneling
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1352,6 +1355,10 @@ Button/Tooltip/AP_ResearchSpiderMinesSC1=Enables the Vulture to carry Spider Min
 Button/Tooltip/AP_RetributionField=The Predator unleashes a deadly field of electricity each time it attacks. Deals 20 damage.
 Button/Tooltip/AP_RipwaveMissiles=Viking missiles deal area damage.
 Button/Tooltip/AP_Roach=Assault unit. Regenerates life quickly when burrowed.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+Button/Tooltip/AP_RoachCorpserPassive=Corpser Strain<n/><n/>Roach Warren enables you to morph Roaches.
+Button/Tooltip/AP_RoachPassive=Roach Warren enables you to morph Roaches.
+Button/Tooltip/AP_RoachVilePassive=Vile Strain<n/><n/>Roach Warren enables you to morph Roaches.
+Button/Tooltip/AP_RoachWarren=<c val="ffff8a">Enables:</c><n/>- Roaches from Larvae
 Button/Tooltip/AP_RoboticsBay=Colossus tech structure.
 Button/Tooltip/AP_RoboticsFacility=Warps in Protoss robotic units.
 Button/Tooltip/AP_RoboticsFacilityWarp=Warps in Protoss robotic units.
@@ -1524,10 +1531,10 @@ Button/Tooltip/AP_zergflyerarmor3=Maximizes the armor of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack1=Upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack2=Further upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack3=Maximizes the attacks of all Zerg air units.
-Button/Tooltip/AP_RoachCorpserPassive=Corpser Strain<n/><n/>Roach Warren enables you to morph Roaches.
-Button/Tooltip/AP_RoachPassive=Roach Warren enables you to morph Roaches.
-Button/Tooltip/AP_RoachVilePassive=Vile Strain<n/><n/>Roach Warren enables you to morph Roaches.
-Button/Tooltip/AP_RoachWarren=<c val="ffff8a">Enables:</c><n/>- Roaches from Larvae
+Button/Tooltip/AP_BanelingHunterPassive=Hunter Strain<n/><n/>Baneling Nest enables you to morph Banelings from Zerglings.
+Button/Tooltip/AP_BanelingNest=<c val="ffff8a">Enables:</c><n/>- Banelings from Zerglings
+Button/Tooltip/AP_BanelingPassive=Baneling Nest enables you to morph Banelings from Zerglings.
+Button/Tooltip/AP_BanelingSplitterlingPassive=Splitter Strain<n/><n/>Baneling Nest enables you to morph Banelings from Zerglings.
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -2967,6 +2974,7 @@ Unit/Name/AP_ReleaseInterceptorsBeacon=Release Interceptors Beacon
 Unit/Name/AP_Roach=Roach
 Unit/Name/AP_RoachCorpserAcidSalivaWeapon=Roach Corpser Acid Saliva Weapon
 Unit/Name/AP_RoachVileAcidSalivaWeapon=Roach Vile Acid Saliva Weapon
+Unit/Name/AP_RoachWarren=Roach Warren
 Unit/Name/AP_Roachling=Roachling
 Unit/Name/AP_RoboticsBay=Robotics Bay
 Unit/Name/AP_RoboticsFacility=Robotics Facility
@@ -3058,8 +3066,8 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
+Unit/Name/AP_BanelingNest=Baneling Nest
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
-Unit/Name/AP_RoachWarren=Roach Warren
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain

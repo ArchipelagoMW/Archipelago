@@ -5702,6 +5702,28 @@
         <Model value="VoidProtossAOECursorSplat"/>
     </CActorSplat>
     <CActorRange id="AP_ChargedBlastRange" parent="RangeAbil" abil="AP_ChargedBlastTargeted"/>
+    <CActorUnit id="AP_BanelingNest" parent="ZergBuildingEx" unitName="AP_BanelingNest">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <Model value="BanelingNest"/>
+        <BuildModel value="BanelingNest"/>
+        <DeathArray index="Normal" ModelLink="BanelingNestDeath" SoundLink="BanelingNest_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="BanelingNestDeathUnderConstruction" SoundLink="BanelingNest_Explode"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PlacementModel value="BanelingNestPlacement"/>
+        <PortraitModel value="BanelingNestPortrait"/>
+        <BarOffset value="180"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-BanelingNest.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-banelingnest.dds"/>
+        <SoundArray index="Ready" value="BanelingNest_Ready"/>
+        <SoundArray index="What" value="BanelingNest_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-banelingnest.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-BanelingNest.dds"/>
+        </Wireframe>
+    </CActorUnit>
     <CActorUnit id="CommandCenter">
         <!-- Override -->
         <!-- Add AP_250mmStrikeCannons behavior -->
@@ -15351,16 +15373,16 @@
     </CActorModel>
     <CActorUnit id="AP_RoachWarren" parent="ZergBuildingEx" unitName="AP_RoachWarren">
         <Aliases value="_UnitHuge"/>
-        <On Terms="UnitDeathCustomize; ValidateUnit HasZergGenericDeath" Send="DeathCustomize Detached"/>
-<!--        <On Terms="AbilMorph.*.Start; MorphTo ImpalerDen" Send="Create ImpalerDenMorph"/>-->
-<!--        <On Terms="AbilMorph.*.Start; MorphTo ImpalerDen" Send="Signal Morph"/>-->
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <!--        <On Terms="AbilMorph.*.Start; MorphTo ImpalerDen" Send="Create ImpalerDenMorph"/>-->
+        <!--        <On Terms="AbilMorph.*.Start; MorphTo ImpalerDen" Send="Signal Morph"/>-->
         <On Terms="Signal.*.Morph" Send="AnimPlay Morph Build,C,Stand"/>
         <On Terms="AnimDone.*.Complete; AnimName Morph" Send="Create ImpalerDen"/>
         <On Terms="AnimDone.*.Complete; AnimName Morph" Target="ImpalerDen" Send="AnimPlay Waiting Build,A,Start PlayForever,NonLooping 0.000000 0.000000 0.000000"/>
         <On Terms="AnimDone.*.Complete; AnimName Morph" Send="Destroy"/>
-<!--        <On Terms="AbilMorph.*.Cancel; MorphTo ImpalerDen" Send="AnimClear Morph"/>-->
-<!--        <On Terms="AbilMorph.*.Cancel; MorphTo ImpalerDen" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>-->
-<!--        <On Terms="AbilMorph.*.Cancel; MorphTo ImpalerDen" Send="SetOpacity 1.000000"/>-->
+        <!--        <On Terms="AbilMorph.*.Cancel; MorphTo ImpalerDen" Send="AnimClear Morph"/>-->
+        <!--        <On Terms="AbilMorph.*.Cancel; MorphTo ImpalerDen" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>-->
+        <!--        <On Terms="AbilMorph.*.Cancel; MorphTo ImpalerDen" Send="SetOpacity 1.000000"/>-->
         <Model value="RoachWarren"/>
         <BuildModel value="RoachWarren"/>
         <DeathArray index="Normal" ModelLink="RoachWarrenDeath" SoundLink=""/>
@@ -21751,6 +21773,7 @@
         <On Terms="UnitCreation.AP_InfestationPit" Send="Create"/>
         <On Terms="UnitCreation.AP_HydraliskDen" Send="Create"/>
         <On Terms="UnitCreation.AP_RoachWarren" Send="Create"/>
+        <On Terms="UnitCreation.AP_BanelingNest" Send="Create"/>
     </CActorStateMonitor>
     <CActorStateMonitor id="ZergBloodSmallBuilding">
         <!-- Override -->
@@ -21767,5 +21790,6 @@
         <On Terms="UnitCreation.AP_Spire" Send="Create"/>
         <On Terms="UnitCreation.AP_HydraliskDen" Send="Create"/>
         <On Terms="UnitCreation.AP_RoachWarren" Send="Create"/>
+        <On Terms="UnitCreation.AP_BanelingNest" Send="Create"/>
     </CActorStateMonitor>
 </Catalog>
