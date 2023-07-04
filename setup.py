@@ -6,6 +6,7 @@ import shutil
 import sys
 import sysconfig
 import typing
+import warnings
 import zipfile
 import urllib.request
 import io
@@ -302,17 +303,28 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
 
         # auto-build cython modules
         build_ext = self.distribution.get_command_obj("build_ext")
-        build_ext.inplace = True
+        build_ext.inplace = False
         self.run_command("build_ext")
+        # find remains of previous in-place builds, try to delete and warn otherwise
+        for path in build_ext.get_outputs():
+            parts = os.path.split(path)[-1].split(".")
+            pattern = parts[0] + ".*." + parts[-1]
+            for match in Path().glob(pattern):
+                try:
+                    match.unlink()
+                    print(f"Removed {match}")
+                except Exception as ex:
+                    warnings.warn(f"Could not delete old build output: {match}\n"
+                                  f"{ex}\nPlease close all AP instances and delete manually.")
 
         # regular cx build
         self.buildtime = datetime.datetime.utcnow()
         super().run()
 
-        # delete in-place built modules, otherwise this interferes with future pyximport
-        for path in build_ext.get_output_mapping().values():
-            print(f"deleting temp {path}")
-            os.unlink(path)
+        # manually copy built modules to lib folder. cx_Freeze does not know they exist.
+        for src in build_ext.get_outputs():
+            print(f"copying {src} -> {self.libfolder}")
+            shutil.copy(src, self.libfolder, follow_symlinks=False)
 
         # need to finish download before copying
         sni_thread.join()
@@ -599,7 +611,7 @@ cx_Freeze.setup(
     ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["worlds", "kivy", "_speedups", "cymem"],
+            "packages": ["worlds", "kivy", "cymem"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
                          "pandas"],
