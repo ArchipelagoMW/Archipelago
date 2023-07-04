@@ -1,10 +1,10 @@
-from enum import Enum
+from enum import IntEnum
 from typing import NamedTuple
 
 from BaseClasses import Item
 
 
-class DS3ItemCategory(Enum):
+class DS3ItemCategory(IntEnum):
     WEAPON_UPGRADE_5 = 0
     WEAPON_UPGRADE_10 = 1
     WEAPON_UPGRADE_10_INFUSIBLE = 2

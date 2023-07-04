@@ -1,10 +1,10 @@
-from enum import Enum
+from enum import IntEnum
 from typing import Optional, NamedTuple, Dict
 
 from BaseClasses import Location, Region
 
 
-class DS3LocationCategory(Enum):
+class DS3LocationCategory(IntEnum):
     WEAPON = 0
     SHIELD = 1
     ARMOR = 2
