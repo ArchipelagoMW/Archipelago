@@ -1316,9 +1316,9 @@
     </CButton>
     <CButton id="AP_BuildRailGunTurret">
         <Tooltip value="Button/Tooltip/AP_RailGunTurret"/>
-        <Icon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <Icon value="Assets\Textures\btn-unit-terran-autoturretblackops.dds"/>
         <AlertTooltip value="Button/Tooltip/AP_RailGunTurret"/>
-        <AlertIcon value="Assets\Textures\btn-building-terran-autoturret.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-terran-autoturretblackops.dds"/>
         <EditorCategories value="Race:Terran"/>
     </CButton>
     <CButton id="AP_AdvancedWeaponryRaven">
