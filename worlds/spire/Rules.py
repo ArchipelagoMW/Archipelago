@@ -71,5 +71,4 @@ def set_rules(world: MultiWorld, player: int):
 
     set_rule(world.get_location("Heart Room", player), lambda state: state.has("Beat Act 3 Boss", player))
 
-    if world.logic[player] != 'no logic':
-        world.completion_condition[player] = lambda state: state.has("Victory", player)
+    world.completion_condition[player] = lambda state: state.has("Victory", player)
