@@ -13747,6 +13747,85 @@
             <Image value="Assets\Textures\Wireframe-Zerg-LurkerDen.dds"/>
         </Wireframe>
     </CActorUnit>
+    <CActorUnit id="AP_HydraliskDen" parent="ZergBuildingEx" unitName="AP_HydraliskDen">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="ActorCreation" Send="StatusSet MorphAnim 0"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_LurkerDen" Send="Create AP_LurkerDenMorph"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_LurkerDen" Send="Signal Morph"/>
+        <On Terms="Signal.*.Morph" Send="AnimPlay Morph Morph"/>
+        <On Terms="AnimDone.*.Complete; AnimName Morph" Send="Create AP_LurkerDen"/>
+        <On Terms="AnimDone.*.Complete; AnimName Morph; IsStatus MorphAnim 0" Target="AP_LurkerDen" Send="AnimPlay Waiting Build,A,Start PlayForever,NonLooping 0.000000 0.000000 0.000000"/>
+        <On Terms="AnimDone.*.Complete; AnimName Morph" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="AnimClear Morph"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>
+<!--        <On Terms="AbilMorph.*.Start; MorphTo LurkerDenMP" Send="Create LurkerDenMPMorph"/>-->
+<!--        <On Terms="AbilMorph.*.Start; MorphTo LurkerDenMP" Send="Signal MorphMP"/>-->
+<!--        <On Terms="Signal.*.MorphMP" Send="AnimPlay MorphMP Morph"/>-->
+<!--        <On Terms="AnimDone.*.Complete; AnimName MorphMP" Send="Create LurkerDenMP"/>-->
+<!--        <On Terms="AnimDone.*.Complete; AnimName MorphMP; IsStatus MorphAnim 0" Target="LurkerDenMP" Send="AnimPlay Waiting Build,A,Start PlayForever,NonLooping 0.000000 0.000000 0.000000"/>-->
+<!--        <On Terms="AnimDone.*.Complete; AnimName MorphMP" Send="Destroy"/>-->
+<!--        <On Terms="AbilMorph.*.Cancel; MorphTo LurkerDenMP" Send="AnimClear MorphMP"/>-->
+<!--        <On Terms="AbilMorph.*.Cancel; MorphTo LurkerDenMP" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>-->
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_ImpalerDen" Send="Create AP_ImpalerDenMorph"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_ImpalerDen" Send="Signal MorphImpaler"/>
+        <On Terms="Signal.*.MorphImpaler" Send="AnimPlay MorphImpaler Morph"/>
+        <On Terms="AnimDone.*.Complete; AnimName MorphImpaler" Send="Create AP_ImpalerDen"/>
+        <On Terms="AnimDone.*.Complete; AnimName MorphImpaler; IsStatus MorphAnim 0" Target="AP_ImpalerDen" Send="AnimPlay Waiting Build,A,Start PlayForever,NonLooping 0.000000 0.000000 0.000000"/>
+        <On Terms="AnimDone.*.Complete; AnimName MorphImpaler" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_ImpalerDen" Send="AnimClear MorphImpaler"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_ImpalerDen" Send="AnimPlay Rebirth Build,D,Start 0 0.000000 0.000000 0.300000 AsDuration"/>
+        <On Terms="Effect.HydraliskDenMorphFinishDummy.Start" Send="StatusSet MorphAnim 1"/>
+        <On Terms="Effect.HydraliskDenMorphFinishDummy.Start" Send="AnimClear Waiting"/>
+        <Model value="HydraliskDen"/>
+        <BuildModel value="HydraliskDen"/>
+        <DeathArray index="Normal" ModelLink="HydraliskDenDeath" SoundLink="HydraliskDen_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="HydraliskDenDeathUnderConstruction" SoundLink="HydraliskDen_Explode"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PlacementModel value="HydraliskDenPlacement"/>
+        <PortraitModel value="HydraliskDenPortrait"/>
+        <BarOffset value="140"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-HydraliskDen.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-hydraliskden.dds"/>
+        <SoundArray index="Ready" value="HydraliskDen_Ready"/>
+        <SoundArray index="What" value="HydraliskDen_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-hydraliskden.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-HydraliskDen.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorProgress id="AP_LurkerDenMorph">
+        <On Terms="ProgressLevel.AP_LurkerDenMorph.Start; Level 0" Send="SetTransferOverrideAnim Morph,Stand"/>
+        <On Terms="ProgressLevel.AP_LurkerDenMorph.Stop; Level 0" Send="SetTransferOverrideAnim"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="Destroy"/>
+        <StageArray AnimProps="Morph,Start" BlendTime="0.000000"/>
+        <StageArray AnimProps="Morph,Stand"/>
+        <StageArray AnimProps="Morph,End"/>
+        <Supporter Subject="AP_LurkerDenBuild"/>
+    </CActorProgress>
+    <CActorModel id="AP_LurkerDenBuild" parent="ModelAdditionNoAnims">
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_LurkerDen" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_LurkerDen" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_LurkerDen" Send="Destroy"/>
+    </CActorModel>
+    <CActorProgress id="AP_ImpalerDenMorph">
+        <On Terms="ProgressLevel.AP_ImpalerDenMorph.Start; Level 0" Send="SetTransferOverrideAnim Morph,Stand"/>
+        <On Terms="ProgressLevel.AP_ImpalerDenMorph.Stop; Level 0" Send="SetTransferOverrideAnim"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_ImpalerDen" Send="Destroy"/>
+        <StageArray AnimProps="Morph,Start" BlendTime="0.000000"/>
+        <StageArray AnimProps="Morph,Stand"/>
+        <StageArray AnimProps="Morph,End"/>
+        <Supporter Subject="AP_ImpalerDenBuild"/>
+    </CActorProgress>
+    <CActorModel id="AP_ImpalerDenBuild" parent="ModelAdditionNoAnims">
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <On Terms="AbilMorph.*.Start; MorphTo AP_ImpalerDen" Send="Create"/>
+        <On Terms="AbilMorph.*.Finish; MorphTo AP_ImpalerDen" Send="Destroy"/>
+        <On Terms="AbilMorph.*.Cancel; MorphTo AP_ImpalerDen" Send="Destroy"/>
+    </CActorModel>
     <CActorStateMonitor id="ProtossFlamesSmallBuilding">
         <!-- Override -->
         <!-- Add AP buildings -->
@@ -21639,6 +21718,7 @@
         <On Terms="UnitCreation.AP_LurkerDen" Send="Create"/>
         <On Terms="UnitCreation.AP_ImpalerDen" Send="Create"/>
         <On Terms="UnitCreation.AP_InfestationPit" Send="Create"/>
+        <On Terms="UnitCreation.AP_HydraliskDen" Send="Create"/>
     </CActorStateMonitor>
     <CActorStateMonitor id="ZergBloodSmallBuilding">
         <!-- Override -->
@@ -21653,5 +21733,6 @@
         <On Terms="UnitCreation.AP_ImpalerDen" Send="Create"/>
         <On Terms="UnitCreation.AP_InfestationPit" Send="Create"/>
         <On Terms="UnitCreation.AP_Spire" Send="Create"/>
+        <On Terms="UnitCreation.AP_HydraliskDen" Send="Create"/>
     </CActorStateMonitor>
 </Catalog>

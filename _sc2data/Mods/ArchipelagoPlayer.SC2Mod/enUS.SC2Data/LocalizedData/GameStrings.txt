@@ -255,6 +255,9 @@ Abil/Name/AP_UltraliskWeaponCooldown=Ultralisk Weapon Cooldown
 Abil/Name/AP_UltrasonicPulse=Ultrasonic Pulse
 Abil/Name/AP_UnburrowImpaler=Unburrow (Impaler)
 Abil/Name/AP_Unsiege=Unsiege
+Abil/Name/AP_UpgradeToGreaterSpire=Morph Building (Spire -> Greater Spire)
+Abil/Name/AP_UpgradeToGreaterSpireBroodlord=Upgrade To Greater Spire Brood Lord
+Abil/Name/AP_UpgradeToGreaterSpireViper=Upgrade To Greater Spire Viper
 Abil/Name/AP_UpgradeToOrbital=Morph Building (COCE -> Orbital Command)
 Abil/Name/AP_UpgradeToPlanetaryFortress=Morph Building (COCE -> Planetary Fortress)
 Abil/Name/AP_UpgradeToRoboticsFacilityWarp=Upgrade To Robotics Facility Warp
@@ -297,9 +300,8 @@ Abil/Name/AP_stopProtossPylon=stop Protoss Pylon
 Abil/Name/MercCompoundResearch2=Research
 Abil/Name/Stimpack2=Stimpack
 Abil/Name/StimpackRedirect2=Stimpack Redirect
-Abil/Name/AP_UpgradeToGreaterSpire=Morph Building (Spire -> Greater Spire)
-Abil/Name/AP_UpgradeToGreaterSpireBroodlord=Upgrade To Greater Spire Brood Lord
-Abil/Name/AP_UpgradeToGreaterSpireViper=Upgrade To Greater Spire Viper
+Abil/Name/AP_UpgradeToImpalerDen=Upgrade To Impaler Den
+Abil/Name/AP_UpgradeToLurkerDen=Morph Building (Hydralisk Den -> Lurker Den)
 Actor/AddonIndicator/AP_TechLab=T
 Actor/AddonIndicator/AP_TechReactor=TR
 Alert/Text/AP_TorrasqueReviveComplete=Morph complete.
@@ -607,6 +609,8 @@ Button/Name/AP_Goliath=Build Goliath
 Button/Name/AP_GravitonBeam=Graviton Beam
 Button/Name/AP_GravitonBeamVoidCampaign=Graviton Beam
 Button/Name/AP_GravitonCatapult=Graviton Catapult
+Button/Name/AP_GreaterSpireBroodlord=Mutate into Greater Spire
+Button/Name/AP_GreaterSpireViper=Mutate into Greater Spire
 Button/Name/AP_GroovedSpines=Grooved Spines
 Button/Name/AP_GuardianShield=Guardian Shield
 Button/Name/AP_HardenedShield=Hardened Shield
@@ -706,9 +710,12 @@ Button/Name/AP_Mothership=Warp In Mothership
 Button/Name/AP_MothershipCore=Warp In Mothership Core
 Button/Name/AP_MoveChampions=Move
 Button/Name/AP_MultiLockTargetingSystem=Multi-Lock Weapons System
+Button/Name/AP_MutaliskBroodlordPassive=Mutalisk
 Button/Name/AP_MutaliskBroodlordPassiveGreater=Mutalisk
+Button/Name/AP_MutaliskPassive=Mutalisk
 Button/Name/AP_MutaliskPassiveGreater=Mutalisk
 Button/Name/AP_MutaliskRapidRegeneration=Rapid Regeneration
+Button/Name/AP_MutaliskViperPassive=Mutalisk
 Button/Name/AP_MutaliskViperPassiveGreater=Mutalisk
 Button/Name/AP_NPSwarm=Parasitic Domination
 Button/Name/AP_NanoRepair=Nano-Repair
@@ -942,11 +949,11 @@ Button/Name/AP_zergflyerarmor3=Evolve Flyer Carapace Level 3
 Button/Name/AP_zergflyerattack1=Evolve Flyer Attacks Level 1
 Button/Name/AP_zergflyerattack2=Evolve Flyer Attacks Level 2
 Button/Name/AP_zergflyerattack3=Evolve Flyer Attacks Level 3
-Button/Name/AP_GreaterSpireBroodlord=Mutate into Greater Spire
-Button/Name/AP_GreaterSpireViper=Mutate into Greater Spire
-Button/Name/AP_MutaliskBroodlordPassive=Mutalisk
-Button/Name/AP_MutaliskPassive=Mutalisk
-Button/Name/AP_MutaliskViperPassive=Mutalisk
+Button/Name/AP_HydraliskDenImpalerPassive=Hydralisk
+Button/Name/AP_HydraliskDenLurkerPassive=Hydralisk
+Button/Name/AP_HydraliskPassive=Hydralisk
+Button/Name/AP_ImpalerDen=Mutate into Impaler Den
+Button/Name/AP_LurkerDen=Mutate into Lurker Den
 Button/Tooltip/AP_250mmStrikeCannons=Stuns target unit. Deals <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsDamage,Amount"/> damage over <d ref="Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodCount * Effect,AP_250mmStrikeCannonsCreatePersistent,PeriodicPeriodArray[0]"/> seconds.
 Button/Tooltip/AP_330mmBarrageCannons=Stuns all enemies in a small area. Deals <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsDamage,Amount"/> damage over <d ref="Effect,AP_330mmBarrageCannonsPersistent,PeriodCount * Effect,AP_330mmBarrageCannonsPersistent,PeriodicPeriodArray[0]"/> seconds in a larger area.
 Button/Tooltip/AP_AWrp=Sacrifices 2 Templar to create an Archon.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1098,6 +1105,8 @@ Button/Tooltip/AP_GravitonBeam=Makes the target unit float in the air, disabling
 Button/Tooltip/AP_GravitonBeamVoidCampaign=Makes the target unit float in the air, disabling its abilities. Effect lasts up to <d time="10"/>.<n/><n/><c val="#ColorAttackInfo">Massive units are immune.</c>
 Button/Tooltip/AP_GravitonCatapult=Makes the Carrier launch Interceptors more quickly.
 Button/Tooltip/AP_GreaterSpire=Contains upgrades for Zerg air units.<n/><n/><c val="ffff8a">Enables:</c><n/>- Brood Lords from Corruptors
+Button/Tooltip/AP_GreaterSpireBroodlord=<c val="ffff8a">Enables:</c><n/>- Brood Lords from Mutalisks
+Button/Tooltip/AP_GreaterSpireViper=<c val="ffff8a">Enables:</c><n/>- Vipers from Mutalisks
 Button/Tooltip/AP_GroovedSpines=Hydralisk gains +1 attack range.
 Button/Tooltip/AP_GuardianShield=Creates a range 4 aura that reduces all incoming attack damage to friendly units by 2. Lasts <d time="15"/>.
 Button/Tooltip/AP_HammerSecurity=Heavy assault infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
@@ -1221,9 +1230,12 @@ Button/Tooltip/AP_MothershipCore=Mobile flying caster. Can use Photon Overcharge
 Button/Tooltip/AP_MoveChampions=Orders selected units to move to the target area or follow the target unit. Moving units will not engage enemies.
 Button/Tooltip/AP_MultiLockTargetingSystem=The Goliath can target ground and air units simultaneously.
 Button/Tooltip/AP_Mutalisk=Air unit. Bounces its shot to strike multiple targets.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/AP_MutaliskBroodlordPassive=Broodlord Strain<n/><n/>Spire enables you to morph Mutalisks.
 Button/Tooltip/AP_MutaliskBroodlordPassiveGreater=Broodlord Strain<n/><n/>Greater Spire enables you to morph Mutalisks.
+Button/Tooltip/AP_MutaliskPassive=Spire enables you to morph Mutalisks.
 Button/Tooltip/AP_MutaliskPassiveGreater=Greater Spire enables you to morph Mutalisks.
 Button/Tooltip/AP_MutaliskRapidRegeneration=Mutalisk regenerates life quickly while out of combat.
+Button/Tooltip/AP_MutaliskViperPassive=Viper Strain<n/><n/>Spire enables you to morph Mutalisks.
 Button/Tooltip/AP_MutaliskViperPassiveGreater=Viper Strain<n/><n/>Greater Spire enables you to morph Mutalisks.
 Button/Tooltip/AP_NPSwarm=Target unit is permanently controlled by the Swarm.
 Button/Tooltip/AP_NanoRepair=Heals a friendly mechanical unit.<n/><n/><c val="f078ff">Heals 3 life per 1 energy.</c>
@@ -1376,6 +1388,7 @@ Button/Tooltip/AP_SpectreShadowClones=The Spectre creates a clone of himself.  T
 Button/Tooltip/AP_SpectreWeaponsFree=Orders selected units to fire at will. They will engage enemy units within range and chase them as normal.
 Button/Tooltip/AP_SpiderMine=Spider Mines pursue enemy units that come in range, and detonate for heavy area damage. Buried Spider Mines can only be seen by enemy Detectors.
 Button/Tooltip/AP_SpiderMineReplenish=Constructs a new Spider Mine to replace those used.<n/><n/>A Vulture can only carry 3 Spider Mines at a time.
+Button/Tooltip/AP_Spire=Contains upgrades for Zerg air units. Can mutate into a Greater Spire.<n/><n/><c val="ffff8a">Enables:</c><n/>- Mutalisks from Larvae
 Button/Tooltip/AP_SquadSight=Increases the non-melee attack range of all nearby friendly units by <d ref="Behavior,AP_ObserverSquadSight,Modification.RangedWeaponRange"/>.
 Button/Tooltip/AP_StabilizerMedPacks=Increases Medic heal speed. Reduces the amount of energy required for each heal.
 Button/Tooltip/AP_Stalker=Ranged attack strider. Can use Blink.<n/><n/><c val="ffff8a">Can attack ground and air units.</c>
@@ -1504,12 +1517,12 @@ Button/Tooltip/AP_zergflyerarmor3=Maximizes the armor of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack1=Upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack2=Further upgrades the attacks of all Zerg air units.
 Button/Tooltip/AP_zergflyerattack3=Maximizes the attacks of all Zerg air units.
-Button/Tooltip/AP_GreaterSpireBroodlord=<c val="ffff8a">Enables:</c><n/>- Brood Lords from Mutalisks
-Button/Tooltip/AP_GreaterSpireViper=<c val="ffff8a">Enables:</c><n/>- Vipers from Mutalisks
-Button/Tooltip/AP_MutaliskBroodlordPassive=Broodlord Strain<n/><n/>Spire enables you to morph Mutalisks.
-Button/Tooltip/AP_MutaliskPassive=Spire enables you to morph Mutalisks.
-Button/Tooltip/AP_MutaliskViperPassive=Viper Strain<n/><n/>Spire enables you to morph Mutalisks.
-Button/Tooltip/AP_Spire=Contains upgrades for Zerg air units. Can mutate into a Greater Spire.<n/><n/><c val="ffff8a">Enables:</c><n/>- Mutalisks from Larvae
+Button/Tooltip/AP_HydraliskDen=<c val="ffff8a">Enables:</c><n/>- Hydralisks from Larvae
+Button/Tooltip/AP_HydraliskDenImpalerPassive=Impaler Strain<n/><n/>Hydralisk Den enables you to morph Hydralisks.
+Button/Tooltip/AP_HydraliskDenLurkerPassive=Lurker Strain<n/><n/>Hydralisk Den enables you to morph Hydralisks.
+Button/Tooltip/AP_HydraliskPassive=Hydralisk Den enables you to morph Hydralisks.
+Button/Tooltip/AP_ImpalerDen=<c val="ffff8a">Enables:</c><n/>- Impalers from Hydralisks
+Button/Tooltip/AP_LurkerDen=<c val="ffff8a">Enables:</c><n/>- Lurkers from Hydralisks
 Effect/Name/AP_250mmStrikeCannonsApplyBehavior=250mm Strike Cannons (Apply Behavior)
 Effect/Name/AP_250mmStrikeCannonsCreatePersistent=250mm Strike Cannons (Create Persistent)
 Effect/Name/AP_250mmStrikeCannonsDamage=250mm Strike Cannons (Damage)
@@ -2977,6 +2990,7 @@ Unit/Name/AP_Spectre=Spectre
 Unit/Name/AP_SpectreNuke=Spectre Nuke
 Unit/Name/AP_SpectreShadowClone=Spectre Shadow
 Unit/Name/AP_SpiderMine=Spider Mine
+Unit/Name/AP_Spire=Spire
 Unit/Name/AP_Stalker=Stalker
 Unit/Name/AP_StalkerPurifier=Instigator
 Unit/Name/AP_StalkerSecondaryWeapon=Stalker Secondary Weapon
@@ -3038,8 +3052,8 @@ Unit/Name/AP_YamatoWeapon=Yamato
 Unit/Name/AP_YoinkMissile=Abduct Missile
 Unit/Name/AP_YoinkVikingAirMissile=Yoink Viking Air Missile
 Unit/Name/AP_YoinkVikingGroundMissile=Yoink Viking Ground Missile
+Unit/Name/AP_HydraliskDen=Hydralisk Den
 Unit/Name/NeuralParasiteWeapon2=Neural Parasite
-Unit/Name/AP_Spire=Spire
 Unit/ShieldArmorName/AP_NovaShieldArmor=Terran Energy Shields
 UnitKillRank/AP_Nova=Dominion Assassin
 UnitSubtitle/AP_HotSHunter=Hunter Strain

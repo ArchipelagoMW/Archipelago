@@ -10723,4 +10723,5 @@
         <ExpireDelay value="0.5"/>
         <FinalEffect value="AP_ZergBuildingSpawnBroodling6"/>
     </CEffectCreatePersistent>
+    <CEffectDamage id="AP_HydraliskDenMorphFinishDummy"/>
 </Catalog>

@@ -2506,4 +2506,29 @@
         <AlertIcon value="Assets\Textures\btn-unit-zerg-mutalisk-viper.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_HydraliskDenImpalerPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-hydralisk-impaler.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-hydralisk-impaler.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HydraliskDenLurkerPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-hydralisk-lurker.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-hydralisk-lurker.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_HydraliskPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-hydralisk.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-hydralisk.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_ImpalerDen">
+        <Icon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_LurkerDen">
+        <Icon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
+        <AlertIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>
