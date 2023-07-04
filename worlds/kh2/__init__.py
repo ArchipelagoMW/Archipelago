@@ -96,11 +96,13 @@ class KH2World(World):
         Returns created KH2Item
         """
         # data = item_dictionary_table[name]
-        if name in ItemClassification_Dict["progression_set"]:
+        if name in progression_set:
             item_classification = ItemClassification.progression
+        elif name in useful_set:
+            item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler
-        print(ItemClassification_Dict["Useful"])
+
         created_item = KH2Item(name, item_classification, self.item_name_to_id[name], self.player)
 
         return created_item

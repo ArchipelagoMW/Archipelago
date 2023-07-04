@@ -350,7 +350,77 @@ Wincon_Table = {
     ItemName.Victory:     ItemData(0, 263, 0x111),
     ItemName.Bounty:      ItemData(0, 461, 0x365E),  # Dummy 14
     # ItemName.UniversalKey:ItemData(,365,0x363F,0)#Tournament Poster
+}
 
+Events_Table = {
+    ItemName.HostileProgramEvent,
+    ItemName.McpEvent,
+    ItemName.ASLarxeneEvent,
+    ItemName.DataLarxeneEvent,
+    ItemName.BarbosaEvent,
+    ItemName.GrimReaper1Event,
+    ItemName.GrimReaper2Event,
+    ItemName.DataLuxordEvent,
+    ItemName.DataAxelEvent,
+    ItemName.CerberusEvent,
+    ItemName.OlympusPeteEvent,
+    ItemName.HydraEvent,
+    ItemName.Oc_pain_and_panic_cupEvent,
+    ItemName.Oc_cerberus_cupEvent,
+    ItemName.HadesEvent,
+    ItemName.ASZexionEvent,
+    ItemName.DataZexionEvent,
+    ItemName.Oc2_titan_cupEvent,
+    ItemName.Oc2_gof_cupEvent,
+    ItemName.Oc2CupsEvent,
+    ItemName.HadesCupEvents,
+    ItemName.PrisonKeeperEvent,
+    ItemName.OogieBoogieEvent,
+    ItemName.ExperimentEvent,
+    ItemName.ASVexenEvent,
+    ItemName.DataVexenEvent,
+    ItemName.ShanYuEvent,
+    ItemName.AnsemRikuEvent,
+    ItemName.StormRiderEvent,
+    ItemName.DataXigbarEvent,
+    ItemName.RoxasEvent,
+    ItemName.XigbarEvent,
+    ItemName.LuxordEvent,
+    ItemName.SaixEvent,
+    ItemName.XemnasEvent,
+    ItemName.ArmoredXemnasEvent,
+    ItemName.ArmoredXemnas2Event,
+    ItemName.FinalXemnasEvent,
+    ItemName.DataXemnasEvent,
+    ItemName.ThresholderEvent,
+    ItemName.BeastEvent,
+    ItemName.DarkThornEvent,
+    ItemName.XaldinEvent,
+    ItemName.DataXaldinEvent,
+    ItemName.TwinLordsEvent,
+    ItemName.GenieJafarEvent,
+    ItemName.ASLexaeusEvent,
+    ItemName.DataLexaeusEvent,
+    ItemName.ScarEvent,
+    ItemName.GroundShakerEvent,
+    ItemName.DataSaixEvent,
+    ItemName.HBDemyxEvent,
+    ItemName.ThousandHeartlessEvent,
+    ItemName.Mushroom13Event,
+    ItemName.SephiEvent,
+    ItemName.DataDemyxEvent,
+    ItemName.CorFirstFightEvent,
+    ItemName.CorSecondFightEvent,
+    ItemName.TransportEvent,
+    ItemName.OldPeteEvent,
+    ItemName.FuturePeteEvent,
+    ItemName.ASMarluxiaEvent,
+    ItemName.DataMarluxiaEvent,
+    ItemName.TerraEvent,
+    ItemName.TwilightThornEvent,
+    ItemName.Axel1Event,
+    ItemName.Axel2Event,
+    ItemName.DataRoxasEvent,
 }
 # Items that are prone to duping.
 # anchors for checking form keyblade
@@ -463,70 +533,43 @@ progression_set = {
             ItemName.Fantasia,
             ItemName.Teamwork,
             ItemName.TornadoFusion,
-            ItemName.HadesCupTrophy]]
+            ItemName.HadesCupTrophy],
+            Events_Table]
     for item_name in keys
 }
-ItemClassification_Dict = {
-    # Items that are classified as progression
-    "progression_set": {
-        # abilities
-        item_name for keys in [
-            Wincon_Table.keys(),
-            Progression_Table.keys(),
-            Forms_Table.keys(),
-            Magic_Table.keys(),
-            Summon_Table.keys(),
-            Movement_Table.keys(),
-            Keyblade_Table.keys(),
-            Staffs_Table.keys(),
-            Shields_Table.keys(),
-            [
-                ItemName.ComboMaster,
-                ItemName.ComboPlus,
-                ItemName.AirComboPlus,
-                ItemName.ReactionBoost,
-                ItemName.FinishingPlus,
-                ItemName.NegativeCombo,
-                ItemName.BerserkCharge,
-                ItemName.FormBoost,
-                ItemName.DriveConverter,
-                ItemName.LightDarkness,
-                ItemName.OnceMore,
-                ItemName.SecondChance,
-                ItemName.Guard,
-                ItemName.HorizontalSlash,
-                ItemName.FinishingLeap,
-                ItemName.Slapshot,
-                ItemName.FlashStep,
-                ItemName.SlideDash,
-                ItemName.GuardBreak,
-                ItemName.Explosion,
-                ItemName.AerialSweep,
-                ItemName.AerialDive,
-                ItemName.AerialSpiral,
-                ItemName.AerialFinish,
-                ItemName.AutoValor,
-                ItemName.AutoWisdom,
-                ItemName.AutoLimit,
-                ItemName.AutoMaster,
-                ItemName.AutoFinal,
-                ItemName.TrinityLimit,
-                # Party Limits
-                ItemName.FlareForce,
-                ItemName.Fantasia,
-                ItemName.Teamwork,
-                ItemName.TornadoFusion,
-                ItemName.HadesCupTrophy]]
-        for item_name in keys
-    },
-    "Useful":      {item_name for keys in [
-        SupportAbility_Table.keys(),
-        ActionAbility_Table.keys(),
-        DonaldAbility_Table.keys(),
-        GoofyAbility_Table.keys()]
-        for item_name in keys if item_name not in progression_set}
+party_filler_set = {
+    ItemName.GoofyAutoHealing,
+    ItemName.GoofyMPHaste,
+    ItemName.GoofyMPHastera,
+    ItemName.GoofyMPHastega,
+    ItemName.GoofyProtect,
+    ItemName.GoofyProtera,
+    ItemName.GoofyProtega,
+    ItemName.GoofyMPRage,
+    ItemName.GoofyDefender,
+    ItemName.GoofyDamageControl,
 
+    ItemName.DonaldFireBoost,
+    ItemName.DonaldBlizzardBoost,
+    ItemName.DonaldThunderBoost,
+    ItemName.DonaldMPHaste,
+    ItemName.DonaldMPHastera,
+    ItemName.DonaldMPHastega,
+    ItemName.DonaldAutoHealing,
+    ItemName.DonaldDamageControl,
+    ItemName.DonaldDraw,
+    ItemName.DonaldMPRage,
 }
+useful_set = {item_name for keys in [
+    SupportAbility_Table.keys(),
+    ActionAbility_Table.keys(),
+    DonaldAbility_Table.keys(),
+    GoofyAbility_Table.keys(),
+    Armor_Table.keys(),
+    Usefull_Table.keys(),
+    Accessory_Table.keys()]
+              for item_name in keys if item_name not in progression_set and item_name not in party_filler_set}
+
 visit_locking_dict = {
     "2VisitLocking":   [
         ItemName.CastleKey,
@@ -596,9 +639,6 @@ item_dictionary_table = {
     **GoofyAbility_Table,
 }
 
-# lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_dictionary_table.items() if
-#                                            data.code}
-
 item_groups: typing.Dict[str, list] = {
     "Drive Form":      [item_name for item_name in Forms_Table.keys()],
     "Growth":          [item_name for item_name in Movement_Table.keys()],
@@ -628,6 +668,3 @@ item_groups: typing.Dict[str, list] = {
         ItemName.PowerBoost, ItemName.MagicBoost,
         ItemName.DefenseBoost, ItemName.APBoost]
 }
-
-# lookup_kh2id_to_name: typing.Dict[int, str] = {data.kh2id: item_name for item_name, data in
-#                                               item_dictionary_table.items() if data.kh2id}
