@@ -34,13 +34,12 @@ class KH2World(World):
     data_version = 1
     required_client_version = (0, 4, 0)
     option_definitions = KH2_Options
-    # item_name_to_id = {name: data.code for name, data in item_dictionary_table.items()}
-    # base_offset = 0x130000
     item_name_to_id = {item: item_id
                        for item_id, item in enumerate(item_dictionary_table.keys(), 0x130000)}
     location_name_to_id = {item: location
                            for location, item in enumerate(all_locations.keys(), 0x130000)}
     item_name_groups = item_groups
+    item_name_to_id.update({event_name: None for event_name in Events_Table})
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
