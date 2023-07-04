@@ -69,7 +69,6 @@ non_apworlds: set = {
     "ChecksFinder",
     "Clique",
     "DLCQuest",
-    "Dark Souls III",
     "Final Fantasy",
     "Hollow Knight",
     "Hylics 2",
