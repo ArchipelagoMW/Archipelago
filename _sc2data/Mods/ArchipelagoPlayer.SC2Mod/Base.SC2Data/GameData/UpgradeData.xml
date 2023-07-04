@@ -4491,4 +4491,12 @@
         <EditorCategories value="Race:Protoss,UpgradeType:Talents"/>
         <AffectedUnitArray value="AP_Supplicant"/>
     </CUpgrade>
+    <CUpgrade id="AP_HotSHaveInfestor">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+<!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[1]" Value="Infestor"/>-->
+    </CUpgrade>
+    <CUpgrade id="AP_HotSHaveSwarmHost">
+        <EditorCategories value="Race:Zerg,UpgradeType:Talents"/>
+<!--        <EffectArray Operation="Set" Reference="Unit,InfestationPit,TechTreeUnlockedUnitArray[0]" Value="SwarmHost"/>-->
+    </CUpgrade>
 </Catalog>

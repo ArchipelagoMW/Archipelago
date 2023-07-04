@@ -12715,6 +12715,70 @@
         <HotkeyCategory value="Unit/Category/ZergStory"/>
         <TechTreeUnlockedUnitArray value="Impaler"/>
     </CUnit>
+    <CUnit id="AP_InfestationPit">
+        <DeathRevealRadius value="3"/>
+        <Facing value="329.9963"/>
+        <Race value="Zerg"/>
+        <Mob value="Multiplayer"/>
+        <FlagArray index="Turnable" value="0"/>
+        <FlagArray index="PreventDefeat" value="1"/>
+        <FlagArray index="PreventDestroy" value="1"/>
+        <FlagArray index="PenaltyRevealed" value="1"/>
+        <FlagArray index="UseLineOfSight" value="1"/>
+        <FlagArray index="TownAlert" value="1"/>
+        <FlagArray index="NoPortraitTalk" value="1"/>
+        <FlagArray index="ArmorDisabledWhileConstructing" value="1"/>
+        <FogVisibility value="Snapshot"/>
+        <PlaneArray index="Ground" value="1"/>
+        <Collide index="Burrow" value="1"/>
+        <Collide index="Ground" value="1"/>
+        <Collide index="Structure" value="1"/>
+        <Collide index="RoachBurrow" value="1"/>
+        <Collide index="ForceField" value="1"/>
+        <Collide index="Small" value="1"/>
+        <Attributes index="Armored" value="1"/>
+        <Attributes index="Biological" value="1"/>
+        <Attributes index="Structure" value="1"/>
+        <LifeStart value="850"/>
+        <LifeMax value="850"/>
+        <LifeArmor value="1"/>
+        <LifeRegenRate value="0.2734"/>
+        <LifeArmorName value="Unit/LifeArmorName/ZergBuildingArmor"/>
+        <StationaryTurningRate value="719.4726"/>
+        <TurningRate value="719.4726"/>
+        <Sight value="9"/>
+        <CostCategory value="Technology"/>
+        <CostResource index="Minerals" value="150"/>
+        <CostResource index="Vespene" value="100"/>
+        <AttackTargetPriority value="11"/>
+        <AbilArray Link="BuildInProgress"/>
+        <AbilArray Link="que5"/>
+        <BehaviorArray Link="OnCreep"/>
+        <BehaviorArray Link="AP_ZergBuildingNotOnCreep"/>
+        <BehaviorArray Link="AP_ZergBuildingDies6"/>
+        <CardLayouts>
+            <LayoutButtons Face="Cancel" Type="AbilCmd" AbilCmd="que5,CancelLast" Row="2" Column="4"/>
+            <LayoutButtons Face="CancelBuilding" Type="AbilCmd" AbilCmd="BuildInProgress,Cancel" Row="2" Column="4"/>
+            <LayoutButtons Face="AP_InfestorPassive" Type="Passive" Requirements="AP_HotSHaveInfestorSpawningPool" Row="1" Column="0"/>
+            <LayoutButtons Face="AP_SwarmHostCarrionPassive" Type="Passive" Requirements="AP_HotSHaveSwarmHostSplitA" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_SwarmHostCreeperPassive" Type="Passive" Requirements="AP_HotSHaveSwarmHostSplitB" Row="1" Column="1"/>
+            <LayoutButtons Face="AP_SwarmHostPassive" Type="Passive" Requirements="AP_HotSHaveSwarmHost" Row="1" Column="1"/>
+        </CardLayouts>
+        <Radius value="1.5"/>
+        <SeparationRadius value="1.5"/>
+        <Footprint value="Footprint3x3CreepContour"/>
+        <PlacementFootprint value="Footprint3x3Creep"/>
+        <ScoreMake value="200"/>
+        <ScoreKill value="250"/>
+        <ScoreResult value="BuildOrder"/>
+        <SubgroupPriority value="2"/>
+        <MinimapRadius value="1.5"/>
+        <EditorCategories value="ObjectType:Structure,ObjectFamily:Melee"/>
+        <GlossaryPriority value="237"/>
+        <HotkeyCategory value="Unit/Category/ZergUnits"/>
+        <TechTreeUnlockedUnitArray value="SwarmHostMP"/>
+        <TechTreeUnlockedUnitArray value=""/>
+    </CUnit>
     <CUnit id="Reactor">
         <!-- Override -->
         <!-- Add-on stealing -->

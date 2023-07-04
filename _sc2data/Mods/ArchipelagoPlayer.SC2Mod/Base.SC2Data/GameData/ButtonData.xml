@@ -2461,4 +2461,24 @@
         <AlertIcon value="Assets\Textures\btn-unit-zerg-impaler.dds"/>
         <EditorCategories value="Race:Zerg"/>
     </CButton>
+    <CButton id="AP_InfestorPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-infestor.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-infestor.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SwarmHostCarrionPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-swarmhost-carrion.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-swarmhost-carrion.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SwarmHostCreeperPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-swarmhost-creeper.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-swarmhost-creeper.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
+    <CButton id="AP_SwarmHostPassive">
+        <Icon value="Assets\Textures\btn-unit-zerg-swarmhost.dds"/>
+        <AlertIcon value="Assets\Textures\btn-unit-zerg-swarmhost.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+    </CButton>
 </Catalog>

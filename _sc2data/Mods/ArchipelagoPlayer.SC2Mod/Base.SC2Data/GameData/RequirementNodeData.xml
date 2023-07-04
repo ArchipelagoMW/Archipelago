@@ -2431,4 +2431,20 @@
     <CRequirementCountUpgrade id="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnlyTechTreeCheat">
         <Count Link="AP_HotSMutaliskBroodlord" State="CompleteOnly"/>
     </CRequirementCountUpgrade>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveInfestorCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSHaveInfestor" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
+    <CRequirementOr id="AP_OrCountUpgradeHotSHaveSwarmHostCompleteOnlyCountUpgradeHotSHaveSwarmHostSplitACompleteOnlyCountUpgradeHotSHaveSwarmHostSplitBCompleteOnly">
+        <Tooltip value=""/>
+        <OperandArray value="AP_CountUpgradeHotSHaveSwarmHostCompleteOnly"/>
+        <OperandArray value="AP_CountUpgradeHotSHaveSwarmHostSplitACompleteOnly"/>
+        <OperandArray value="AP_CountUpgradeHotSHaveSwarmHostSplitBCompleteOnly"/>
+    </CRequirementOr>
+    <CRequirementCountUpgrade id="AP_CountUpgradeHotSHaveSwarmHostCompleteOnly">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="AP_HotSHaveSwarmHost" State="CompleteOnly"/>
+    </CRequirementCountUpgrade>
 </Catalog>

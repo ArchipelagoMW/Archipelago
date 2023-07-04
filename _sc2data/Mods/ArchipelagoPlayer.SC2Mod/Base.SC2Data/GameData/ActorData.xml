@@ -13674,7 +13674,29 @@
             <Image value="Assets\Textures\Wireframe-Zerg-LurkerDen.dds"/>
         </Wireframe>
     </CActorUnit>
-    <CActorTurret id="KhaydarinMonolithTurret2">
+    <CActorUnit id="AP_InfestationPit" parent="ZergBuildingEx" unitName="AP_InfestationPit">
+        <Aliases value="_UnitHuge"/>
+        <On Terms="UnitDeathCustomize; ValidateUnit AP_HasZergGenericDeath" Send="DeathCustomize Detached"/>
+        <Model value="InfestationPit"/>
+        <BuildModel value="InfestationPit"/>
+        <DeathArray index="Normal" ModelLink="InfestationPitDeath" SoundLink="InfestationPit_Explode"/>
+        <DeathArray index="UnderConstruction" ModelLink="InfestationPitDeathUnderConstruction" SoundLink="InfestationPit_Explode"/>
+        <DeathCustoms ModelLink="ZergGenericBuildingDeath" Name="Detached"/>
+        <PlacementModel value="InfestationPitPlacement"/>
+        <PortraitModel value="InfestationPitPortrait"/>
+        <BarOffset value="90"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Zerg-InfestationPit.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-building-zerg-infestationpit.dds"/>
+        <SoundArray index="Ready" value="InfestationPit_Ready"/>
+        <SoundArray index="What" value="InfestationPit_What"/>
+        <UnitIcon value="Assets\Textures\btn-building-zerg-infestationpit.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Zerg-InfestationPit.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorTurret id="AP_KhaydarinMonolithTurret">
         <On Terms="TurretEnable.AP_KhaydarinMonolith" Send="Create"/>
     </CActorTurret>
     <CActorSound id="AP_KhaydarinMonolith_ChargeSound" parent="SoundContinuous">
@@ -13716,7 +13738,6 @@
         <LifeArmorIcon value="Assets\Textures\btn-armor-zerg-building.dds"/>
         <NameOffset value="110"/>
         <SoundArray index="Ready" value="AP_LurkerDen_What"/>
-        <SoundArray index="What" value="AP_LurkerDen_What"/>
         <SoundArray index="Construction" value="Zerg_BuildingMorphWhat"/>
         <UnitFlags index="ShowBlobShadow" value="0"/>
         <UnitIcon value="Assets\Textures\btn-building-zerg-lurkerden.dds"/>
@@ -13748,6 +13769,7 @@
         <On Terms="UnitCreation.AP_RoboticsFacility" Send="Create"/>
         <On Terms="UnitCreation.AP_Stargate" Send="Create"/>
         <On Terms="UnitCreation.AP_FleetBeacon" Send="Create"/>
+        <On Terms="UnitCreation.AP_KhaydarinMonolith" Send="Create"/>
     </CActorStateMonitor>
     <CActorUnit id="AP_Pylon" parent="ProtossBuildingEx" unitName="AP_Pylon">
         <Aliases value="_UnitLarge"/>
@@ -21543,6 +21565,9 @@
     <CActorStateMonitor id="ZergBloodMediumBuilding">
         <!-- Override -->
         <On Terms="UnitCreation.AP_UltraliskCavern" Send="Create"/>
+        <On Terms="UnitCreation.AP_LurkerDen" Send="Create"/>
+        <On Terms="UnitCreation.AP_ImpalerDen" Send="Create"/>
+        <On Terms="UnitCreation.AP_InfestationPit" Send="Create"/>
     </CActorStateMonitor>
     <CActorStateMonitor id="ZergBloodSmallBuilding">
         <!-- Override -->
@@ -21554,5 +21579,6 @@
         <On Terms="UnitCreation.AP_GreaterSpire" Send="Create"/>
         <On Terms="UnitCreation.AP_LurkerDen" Send="Create"/>
         <On Terms="UnitCreation.AP_ImpalerDen" Send="Create"/>
+        <On Terms="UnitCreation.AP_InfestationPit" Send="Create"/>
     </CActorStateMonitor>
 </Catalog>

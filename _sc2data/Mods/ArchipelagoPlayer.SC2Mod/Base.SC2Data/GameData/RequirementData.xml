@@ -1450,4 +1450,11 @@
         <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
         <NodeArray index="Show" Link="AP_CountUpgradeHotSMutaliskBroodlordCompleteOnlyTechTreeCheat"/>
     </CRequirement>
+    <CRequirement id="AP_HotSHaveInfestorSpawningPool">
+        <EditorCategories value="Race:Zerg,TechType:Upgrade"/>
+        <NodeArray index="Show" Link="AP_CountUpgradeHotSHaveInfestorCompleteOnly"/>
+    </CRequirement>
+    <CRequirement id="AP_HotSHaveSwarmHost">
+        <NodeArray index="Show" Link="AP_OrCountUpgradeHotSHaveSwarmHostCompleteOnlyCountUpgradeHotSHaveSwarmHostSplitACompleteOnlyCountUpgradeHotSHaveSwarmHostSplitBCompleteOnly"/>
+    </CRequirement>
 </Catalog>
